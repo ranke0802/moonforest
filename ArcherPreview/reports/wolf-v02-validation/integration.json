@@ -9,7 +9,7 @@
     },
     {
       "case": "source-pose-preservation",
-      "sampledPoses": 17,
+      "sampledPoses": 49,
       "unchangedNodeScale": true,
       "pitchAndBodyJumpPreserved": true,
       "lungeHeights": [
@@ -18,12 +18,12 @@
           "pelvis": 2.0950417518615723
         },
         {
-          "time": 1.65,
-          "pelvis": 1.7128055095672607
+          "time": 1.147,
+          "pelvis": 2.1189475059509277
         },
         {
-          "time": 2.35,
-          "pelvis": 2.91043758392334
+          "time": 2.263,
+          "pelvis": 3.2888686656951904
         },
         {
           "time": 3.1,
@@ -47,9 +47,9 @@
         "actor": [
           0,
           0,
-          0.1839877168812143
+          0
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
         "behavior": "strike"
       }
     },
@@ -63,11 +63,29 @@
       "captured": false,
       "hitPos": {
         "actor": [
-          0.2655848514188974,
+          0.2894757744957014,
           0,
-          0.3720062110157439
+          -0.054612337874477584
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "paw-swipe",
+      "fps": 30,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.4246917739510536
+        ],
+        "sourceTime": 0.43,
         "behavior": "strike"
       }
     },
@@ -119,9 +137,9 @@
         "actor": [
           0,
           0,
-          0.1839877168812143
+          0
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
         "behavior": "strike"
       }
     },
@@ -135,11 +153,29 @@
       "captured": false,
       "hitPos": {
         "actor": [
-          0.26558485141889737,
+          0.2894757744957014,
           0,
-          0.37200621101574405
+          -0.054612337874477584
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "paw-swipe",
+      "fps": 30,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.4246917739510536
+        ],
+        "sourceTime": 0.43,
         "behavior": "strike"
       }
     },
@@ -191,9 +227,9 @@
         "actor": [
           0,
           0,
-          0.1839877168812143
+          0
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
         "behavior": "strike"
       }
     },
@@ -207,11 +243,29 @@
       "captured": false,
       "hitPos": {
         "actor": [
-          0.2655848514188973,
+          0.2894757744957014,
           0,
-          0.37200621101574394
+          -0.054612337874477584
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "paw-swipe",
+      "fps": 30,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.4246917739510536
+        ],
+        "sourceTime": 0.43,
         "behavior": "strike"
       }
     },
@@ -263,9 +317,9 @@
         "actor": [
           0,
           0,
-          0.1839877168812143
+          0
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
         "behavior": "strike"
       }
     },
@@ -279,11 +333,29 @@
       "captured": false,
       "hitPos": {
         "actor": [
-          0.2655848514188975,
+          0.28947577449570133,
           0,
-          0.37200621101574405
+          -0.05461233787447757
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "paw-swipe",
+      "fps": 60,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.4246917739510537
+        ],
+        "sourceTime": 0.43,
         "behavior": "strike"
       }
     },
@@ -335,9 +407,9 @@
         "actor": [
           0,
           0,
-          0.1839877168812143
+          0
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
         "behavior": "strike"
       }
     },
@@ -351,11 +423,29 @@
       "captured": false,
       "hitPos": {
         "actor": [
-          0.26558485141889737,
+          0.28947577449570133,
           0,
-          0.3720062110157439
+          -0.05461233787447757
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "paw-swipe",
+      "fps": 60,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.4246917739510536
+        ],
+        "sourceTime": 0.43,
         "behavior": "strike"
       }
     },
@@ -407,9 +497,9 @@
         "actor": [
           0,
           0,
-          0.1839877168812143
+          0
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
         "behavior": "strike"
       }
     },
@@ -423,11 +513,29 @@
       "captured": false,
       "hitPos": {
         "actor": [
-          0.2655848514188973,
+          0.28947577449570133,
           0,
-          0.37200621101574405
+          -0.05461233787447757
         ],
-        "sourceTime": 1.55,
+        "sourceTime": 0.4,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "paw-swipe",
+      "fps": 60,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.4246917739510536
+        ],
+        "sourceTime": 0.43,
         "behavior": "strike"
       }
     },
@@ -504,7 +612,7 @@
         "geometry": 27,
         "materials": 23,
         "skeletons": 20,
-        "groups": 240,
+        "groups": 280,
         "morph": 20,
         "textures": 0,
         "nodes": 761,
@@ -594,7 +702,7 @@
         "geometry": 27,
         "materials": 23,
         "skeletons": 20,
-        "groups": 240,
+        "groups": 280,
         "morph": 20,
         "textures": 0,
         "nodes": 761,
@@ -684,7 +792,7 @@
         "geometry": 27,
         "materials": 23,
         "skeletons": 20,
-        "groups": 240,
+        "groups": 280,
         "morph": 20,
         "textures": 0,
         "nodes": 761,
@@ -774,7 +882,7 @@
         "geometry": 27,
         "materials": 23,
         "skeletons": 20,
-        "groups": 240,
+        "groups": 280,
         "morph": 20,
         "textures": 0,
         "nodes": 761,

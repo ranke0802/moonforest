@@ -1,0 +1,1 @@
+export{ao as clipPlaneVertexDeclaration}from"./babylon-game-BmUxks-L.js";

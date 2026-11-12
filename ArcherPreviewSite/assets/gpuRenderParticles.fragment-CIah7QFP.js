@@ -1,0 +1,1 @@
+export{n as gpuRenderParticlesPixelShaderWGSL}from"./babylon-lazy~moonforestV2~pbrMaterialLoadingAdapter~gpuRenderParticles.fragment~iblCopyVoxe~lr49srlz-DjSHomL2.js";

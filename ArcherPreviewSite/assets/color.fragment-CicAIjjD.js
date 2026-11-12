@@ -1,0 +1,1 @@
+export{pr as colorPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

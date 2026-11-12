@@ -1,0 +1,1 @@
+export{Vd as bonesDeclaration}from"./babylon-game-BmUxks-L.js";

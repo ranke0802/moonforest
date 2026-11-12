@@ -1,0 +1,1 @@
+export{it as boundingBoxRendererPixelShader}from"./babylon-game-BmUxks-L.js";

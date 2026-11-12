@@ -1,0 +1,1 @@
+export{_a as lightProxyVertexShaderWGSL}from"./babylon-game-BmUxks-L.js";

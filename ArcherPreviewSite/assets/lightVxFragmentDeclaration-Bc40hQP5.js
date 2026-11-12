@@ -1,0 +1,1 @@
+export{qi as lightVxFragmentDeclaration}from"./babylon-game-BmUxks-L.js";

@@ -1,0 +1,1 @@
+export{Od as morphTargetsVertexGlobalDeclarationWGSL}from"./babylon-game-BmUxks-L.js";

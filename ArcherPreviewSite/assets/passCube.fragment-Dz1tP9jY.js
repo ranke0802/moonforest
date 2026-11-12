@@ -1,0 +1,1 @@
+export{vn as passCubePixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

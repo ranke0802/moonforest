@@ -1,0 +1,1 @@
+export{Jn as particlesVertexShaderWGSL}from"./babylon-game-BmUxks-L.js";

@@ -1,0 +1,1 @@
+export{p as spritesPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

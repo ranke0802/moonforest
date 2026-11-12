@@ -1,0 +1,1 @@
+export{Yn as particlesPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

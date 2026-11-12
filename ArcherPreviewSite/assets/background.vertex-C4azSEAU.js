@@ -1,0 +1,1 @@
+export{oa as backgroundVertexShaderWGSL}from"./babylon-game-BmUxks-L.js";

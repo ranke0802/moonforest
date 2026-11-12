@@ -1,0 +1,1 @@
+export{Qn as particlesPixelShader}from"./babylon-game-BmUxks-L.js";

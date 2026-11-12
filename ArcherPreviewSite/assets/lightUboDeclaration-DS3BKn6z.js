@@ -1,0 +1,1 @@
+export{Li as lightUboDeclaration}from"./babylon-game-BmUxks-L.js";

@@ -1,0 +1,1 @@
+export{Zt as blackAndWhitePixelShader}from"./babylon-game-BmUxks-L.js";

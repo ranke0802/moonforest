@@ -1,0 +1,1 @@
+export{Ri as lightFragmentDeclaration}from"./babylon-game-BmUxks-L.js";

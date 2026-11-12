@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE,WOLF_SCALE} from '../src/wolf-spec.js';
 import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,sampleWhipTime,actionDuration} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const config=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
-const durations=Object.fromEntries(config.catalog.map(c=>[c.name,c.duration]));
+const durations=Object.fromEntries([...config.catalog,...WOLF_V02_AUTHORED_CLIPS].map(c=>[c.name,c.duration]));
 const rows=[];
 const start=(brain,id,speed=1)=>{brain.configureAttacks({custom:true,sequence:[id],speed});brain.startAction(id);return brain;};
 function advanceAttack(brain,dt=1/60,visit=()=>{}){
@@ -33,16 +34,17 @@ test('0.1 keeps its R8 source, texture, size, two authored attacks and legacy im
  const b=new WolfBrain(durations);assert.equal(b.plannedAttack(WOLF_BALANCE.pinDistance),WOLF_CLIPS.pin);assert.equal(b.plannedAttack(WOLF_BALANCE.lungeDistance),WOLF_CLIPS.lunge);
 });
 
-test('0.2 actions use approved R8 clips and bounded source slices with distinct gameplay identities',()=>{
- assert.deepEqual(WOLF_V02_ACTIONS.map(a=>a.id),['quick-bite','chain-bite','lunge','pin']);
+test('0.2 uses separately authored snap/swipe clips while preserving the full R8 lunge and pin',()=>{
+ assert.deepEqual(WOLF_V02_ACTIONS.map(a=>a.id),['quick-bite','chain-bite','paw-swipe','lunge','pin']);
  for(const action of WOLF_V02_ACTIONS){
-  assert.strictEqual(WOLF_V02_BY_ID[action.id],action);assert.ok(Object.values(WOLF_CLIPS).includes(action.sourceClip));
+  assert.strictEqual(WOLF_V02_BY_ID[action.id],action);assert.ok([...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)].includes(action.sourceClip));
   assert.ok(action.clipStart>=0&&action.clipStart<action.impact&&action.impact<action.clipEnd);
   assert.ok(action.clipEnd<=durations[action.sourceClip]+1e-5);
   assert.ok(action.range>0&&action.damage>0);assert.ok(action.label);
  }
- assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,WOLF_CLIPS.pin);assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
- assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,WOLF_CLIPS.pin);assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Snap_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Snap_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Forepaw_Swipe_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['fore.L.paw']);
  assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_CLIPS.lunge);
  assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,durations[WOLF_CLIPS.lunge]);
 });

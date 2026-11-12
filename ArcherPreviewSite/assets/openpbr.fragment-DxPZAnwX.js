@@ -1,0 +1,1 @@
+export{ni as openpbrPixelShader}from"./babylon-game-BmUxks-L.js";

@@ -1,0 +1,1 @@
+export{gi as pbrPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

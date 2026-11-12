@@ -1,0 +1,1 @@
+export{Cr as defaultPixelShader}from"./babylon-game-BmUxks-L.js";

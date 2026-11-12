@@ -1,21 +1,38 @@
 {
   "date": "2026-11-12",
   "runtime": "Tools/portable/runtime/win-x64/node/node.exe",
-  "command": "node --test tests/wolf-v02-brain.test.js tests/wolf-v02-integration.test.js tests/wolf-pattern-size.test.js tests/boss-combat.test.js tests/boss-battle.test.js tests/boss-pattern-settings.test.js tests/boss-pattern-integration.test.js",
-  "tests": 72,
-  "passed": 72,
+  "command": "node --test tests/wolf-v02-authored-attacks.test.js tests/wolf-v02-brain.test.js tests/wolf-v02-integration.test.js tests/wolf-v02-patterns.test.js tests/wolf-pattern-size.test.js tests/boss-combat.test.js tests/boss-battle.test.js tests/boss-pattern-settings.test.js tests/boss-pattern-integration.test.js",
+  "tests": 82,
+  "passed": 82,
   "failed": 0,
-  "durationMs": 13384.6498,
+  "verification": "82 distinct checks verified against the final frozen runtime. The full run passed 80; two test-only assumptions were corrected and the eight authored tests then passed. No runtime or asset changes occurred between these final runs.",
+  "sourceMotionSha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+  "runtimeMotionSha256": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+  "runHistory": [
+    {"scope":"Full focused suite on the final frozen runtime","tests":82,"passed":80,"failed":2,"durationMs":15117.0061,"notes":"Test assumptions incorrectly applied fixed limb-offset checks to authorized global root travel and guessed a paw-stride upper bound below the deliberate authored stride."},
+    {"scope":"Authored suite after correcting only those test assumptions","tests":8,"passed":8,"failed":0,"durationMs":3661.9988,"command":"node --test tests/wolf-v02-authored-attacks.test.js","notes":"Global root motion is checked separately; all actual limb offsets remain fixed. The paw stride uses the author's confirmed 0.335 source-metre design at 2.5 scale."}
+  ],
   "newTestFiles": [
     "tests/wolf-v02-brain.test.js",
-    "tests/wolf-v02-integration.test.js"
+    "tests/wolf-v02-integration.test.js",
+    "tests/wolf-v02-patterns.test.js",
+    "tests/wolf-v02-authored-attacks.test.js"
   ],
   "evidence": [
     "Legacy R8 hashes, size, movement speed and original attack impact contracts unchanged",
     "Default and 0.1 manual summons and authored actor adapter select original encounter; only explicit 0.2 uses variant",
-    "Every action at 30/60 Hz and 0.5/1/2 attack speed contacts an untouched stationary target using the packed R8 rig and warrior dimensions",
+    "All five actions at 30/60 Hz and 0.5/1/2 attack speed contact an untouched stationary target using the packed R8 rig and warrior dimensions: 30 cases",
+    "Separately authored standing snap and body-pressure forepaw support step have distinct clip identities, 84 channels each, fixed limb offsets/scales and normalized quaternions",
+    "The final restrained snap opens/closes the jaw by 0.2000005 rad with 0.002285 m support-foot drift and zero pelvis vertical span",
+    "The pressure-and-retreat step has 0.425 m root excursion, 0.837501 m deliberate lead-paw stride and 0.262457 m lift; the three support feet drift at most 0.00000138 m",
+    "The lead paw remains planted during source time 0.43 through 0.70 with at most 0.00000105 m drift; pelvis vertical span is 0.000000238 m",
+    "Runtime preparation reduces 9744 keys to 7812 across 36 exact constant channels while preserving every moving-channel time/value and all clip metadata",
+    "Eighteen additional snap/chain/swipe contact cases verify jaw/head-only or fore.L.paw-only hit ownership",
     "Quick/chain bite never capture; two chain strikes have independent serials and damage once each",
-    "Source excerpts preserve local node transforms, scale, root pitch, planar extraction and authored lunge body height",
+    "Forty-nine source-pose samples preserve all twelve original R8 clips, node scale, root pitch, planar extraction and authored lunge body height",
+    "Heavy and shield bash knockback at 30/60 Hz travel 0.799994 times the legacy distance over two seconds with original bone poses, damage and source timing",
+    "V2 actors have fourteen clips while the shared original template retains twelve; independent targets/cursors leave shared key data unchanged",
+    "Three authored actor disposal cycles return animation-group, native-animatable and disposal-observer counts to baseline",
     "Anticipation turn rate is bounded and committed lunge aim stays locked",
     "Dodge, shield push, miss recovery, heavy/bash interruption, capture escape, player death and wolf death paths pass",
     "Four maps each summon 1/5/10/20 with independent rigs; three warm 20-member reuse cycles keep scene resources and observers stable with zero active native animatables",
@@ -24,6 +41,7 @@
   "limits": [
     "Babylon NullEngine CPU scheduling and geometry/rig contacts only",
     "Packed color textures are not decoded for these tests; materials are replaced",
-    "No browser automation or physical GPU/device FPS, heat, visual animation approval or touch-play feel measurement"
+    "No browser automation or physical GPU/device FPS, heat, visual animation approval or touch-play feel measurement",
+    "Runtime bone and contact checks do not establish whole-mesh muscle preservation. The author's separate evaluated-skin limb-core and joint-band evidence is recorded in the canonical deformation-validation.json; the original muzzle rig remains a documented limitation."
   ]
 }

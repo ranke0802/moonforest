@@ -1,0 +1,1 @@
+export{r as volumetricLightingBlendVolumePixelShader}from"./babylon-lazy~moonforestV2~pbrMaterialLoadingAdapter~gpuRenderParticles.fragment~iblCopyVoxe~lr49srlz-DjSHomL2.js";

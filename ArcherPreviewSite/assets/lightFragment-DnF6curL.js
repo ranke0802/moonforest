@@ -1,0 +1,1 @@
+export{Qi as lightFragmentWGSL}from"./babylon-game-BmUxks-L.js";

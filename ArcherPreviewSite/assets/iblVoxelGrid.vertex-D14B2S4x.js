@@ -1,0 +1,1 @@
+export{x as iblVoxelGridVertexShader}from"./babylon-game-BmUxks-L.js";

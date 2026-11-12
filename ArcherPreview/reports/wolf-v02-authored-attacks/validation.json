@@ -1,0 +1,624 @@
+{
+  "scope": "CPU-only packed R8 rig and authored 0.2 animation sidecar validation in Babylon NullEngine. Materials replaced; visual quality, GPU and device/touch play remain unmeasured.",
+  "sourceMotionSha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+  "runtimeMotionSha256": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+  "cases": [
+    {
+      "case": "authored-data-contract",
+      "clip": "Wolf_Forepaw_Swipe_V02",
+      "duration": 1,
+      "channels": 84,
+      "normalizedQuaternions": true,
+      "fixedScalesAndBoneLengths": true
+    },
+    {
+      "case": "authored-data-contract",
+      "clip": "Wolf_Snap_Bite_V02",
+      "duration": 0.9,
+      "channels": 84,
+      "normalizedQuaternions": true,
+      "fixedScalesAndBoneLengths": true
+    },
+    {
+      "case": "lossless-constant-key-preparation",
+      "sourceDataSha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+      "originalKeys": 9744,
+      "runtimeKeys": 7812,
+      "reducedChannels": 36,
+      "movingKeysExact": true
+    },
+    {
+      "case": "actor-local-install-and-reuse",
+      "sourceClips": 12,
+      "totalClips": 14,
+      "repeats": 5,
+      "resources": {
+        "meshes": 32,
+        "geometry": 9,
+        "materials": 5,
+        "groups": 28,
+        "skeletons": 2,
+        "morph": 2,
+        "textures": 0,
+        "nodes": 77,
+        "native": 0,
+        "before": 0,
+        "after": 0,
+        "dispose": 1
+      },
+      "unchangedSharedTemplate": true,
+      "independentTargetsAndCursors": true
+    },
+    {
+      "case": "v02-knockback-reduction",
+      "fps": 30,
+      "id": "judgment",
+      "impulseRatio": 0.8,
+      "originalDistance": 5.688207000860441,
+      "variantDistance": 4.55053361366529,
+      "totalDistanceRatio": 0.7999943766070647,
+      "sourcePoseAndTimingUnchanged": true
+    },
+    {
+      "case": "v02-knockback-reduction",
+      "fps": 30,
+      "id": "shield-push",
+      "impulseRatio": 0.8,
+      "originalDistance": 5.688207000860441,
+      "variantDistance": 4.55053361366529,
+      "totalDistanceRatio": 0.7999943766070647,
+      "sourcePoseAndTimingUnchanged": true
+    },
+    {
+      "case": "v02-knockback-reduction",
+      "fps": 60,
+      "id": "judgment",
+      "impulseRatio": 0.8,
+      "originalDistance": 5.618591618140293,
+      "variantDistance": 4.494842833505923,
+      "totalDistanceRatio": 0.7999945785334864,
+      "sourcePoseAndTimingUnchanged": true
+    },
+    {
+      "case": "v02-knockback-reduction",
+      "fps": 60,
+      "id": "shield-push",
+      "impulseRatio": 0.8,
+      "originalDistance": 5.618591618140293,
+      "variantDistance": 4.494842833505923,
+      "totalDistanceRatio": 0.7999945785334864,
+      "sourcePoseAndTimingUnchanged": true
+    },
+    {
+      "case": "standing-snap-shape",
+      "jawAngularExcursion": 0.20000053126723716,
+      "supportFootDrift": 0.002284932102492329,
+      "pelvisVerticalSpan": 0,
+      "differenceFromPin": 5.845561314451223
+    },
+    {
+      "case": "body-pressure-support-step",
+      "rootExcursion": 0.42500000447034836,
+      "leadPawStep": 0.8375011682510429,
+      "leadPawLift": 0.26245710253715515,
+      "otherSupportFootDrift": 0.0000013764027641720162,
+      "plantedInterval": [
+        0.43,
+        0.7
+      ],
+      "leadFootDriftDuringSupport": 0.0000010536712127723508,
+      "pawSpan": {
+        "x": 3.5762786865234375e-7,
+        "y": 0.26245710253715515,
+        "z": 0.8375011682510376
+      },
+      "pelvisVerticalSpan": 2.384185791015625e-7,
+      "pressAndRetreat": true
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "quick-bite",
+      "fps": 30,
+      "speed": 0.5,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "chain-bite",
+      "fps": 30,
+      "speed": 0.5,
+      "strikes": 2,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        },
+        {
+          "serial": 4,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0.07295314222574234,
+            1.2014014720916748,
+            1.5943975448608398
+          ],
+          "distance": 0.5603715277539284,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "paw-swipe",
+      "fps": 30,
+      "speed": 0.5,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.43,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750046193599701,
+            0.4096788167953491,
+            1.775015950202942
+          ],
+          "distance": 0.7288576864121332,
+          "radius": 0.75,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "quick-bite",
+      "fps": 30,
+      "speed": 1,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "chain-bite",
+      "fps": 30,
+      "speed": 1,
+      "strikes": 2,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        },
+        {
+          "serial": 4,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0.07295314222574234,
+            1.2014014720916748,
+            1.5943975448608398
+          ],
+          "distance": 0.5603715277539284,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "paw-swipe",
+      "fps": 30,
+      "speed": 1,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.43,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750046193599701,
+            0.4096788167953491,
+            1.775015950202942
+          ],
+          "distance": 0.7288576864121332,
+          "radius": 0.75,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "quick-bite",
+      "fps": 30,
+      "speed": 2,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "chain-bite",
+      "fps": 30,
+      "speed": 2,
+      "strikes": 2,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        },
+        {
+          "serial": 4,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0.07295314222574234,
+            1.2014014720916748,
+            1.5943975448608398
+          ],
+          "distance": 0.5603715277539284,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "paw-swipe",
+      "fps": 30,
+      "speed": 2,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.43,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750046193599701,
+            0.4096788167953491,
+            1.775015950202942
+          ],
+          "distance": 0.7288576864121332,
+          "radius": 0.75,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "quick-bite",
+      "fps": 60,
+      "speed": 0.5,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "chain-bite",
+      "fps": 60,
+      "speed": 0.5,
+      "strikes": 2,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        },
+        {
+          "serial": 4,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0.07295314222574234,
+            1.2014014720916748,
+            1.5943975448608398
+          ],
+          "distance": 0.5603715277539284,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "paw-swipe",
+      "fps": 60,
+      "speed": 0.5,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.43,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750046193599701,
+            0.4096788167953491,
+            1.775015950202942
+          ],
+          "distance": 0.7288576864121332,
+          "radius": 0.75,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "quick-bite",
+      "fps": 60,
+      "speed": 1,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "chain-bite",
+      "fps": 60,
+      "speed": 1,
+      "strikes": 2,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        },
+        {
+          "serial": 4,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0.07295314222574234,
+            1.2014014720916748,
+            1.5943975448608398
+          ],
+          "distance": 0.5603715277539284,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "paw-swipe",
+      "fps": 60,
+      "speed": 1,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.43,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750046193599701,
+            0.4096788167953491,
+            1.775015950202942
+          ],
+          "distance": 0.7288576864121332,
+          "radius": 0.75,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "quick-bite",
+      "fps": 60,
+      "speed": 2,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "quick-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "chain-bite",
+      "fps": 60,
+      "speed": 2,
+      "strikes": 2,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0,
+            1.2014014720916748,
+            1.663164496421814
+          ],
+          "distance": 0.48683550357818595,
+          "radius": 0.6,
+          "contact": true
+        },
+        {
+          "serial": 4,
+          "action": "chain-bite",
+          "sourceTime": 0.4,
+          "part": "jaw",
+          "point": [
+            0.07295314222574234,
+            1.2014014720916748,
+            1.5943975448608398
+          ],
+          "distance": 0.5603715277539284,
+          "radius": 0.6,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-body-contact",
+      "id": "paw-swipe",
+      "fps": 60,
+      "speed": 2,
+      "strikes": 1,
+      "contacts": [
+        {
+          "serial": 2,
+          "action": "paw-swipe",
+          "sourceTime": 0.43,
+          "part": "fore.L.paw",
+          "point": [
+            0.3750046193599701,
+            0.4096788167953491,
+            1.775015950202942
+          ],
+          "distance": 0.7288576864121332,
+          "radius": 0.75,
+          "contact": true
+        }
+      ]
+    },
+    {
+      "case": "authored-group-disposal",
+      "cycles": 3,
+      "addedGroupsPerActor": 2,
+      "groupsReturnedToBaseline": true,
+      "nativeAndDisposalObserversStable": true
+    }
+  ]
+}

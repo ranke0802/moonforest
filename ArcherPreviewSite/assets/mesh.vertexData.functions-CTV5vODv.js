@@ -1,0 +1,1 @@
+export{mr as OptimizeIndices}from"./babylon-game-BmUxks-L.js";

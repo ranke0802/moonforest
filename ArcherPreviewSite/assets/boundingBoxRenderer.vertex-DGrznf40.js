@@ -1,0 +1,1 @@
+export{rt as boundingBoxRendererVertexShader}from"./babylon-game-BmUxks-L.js";

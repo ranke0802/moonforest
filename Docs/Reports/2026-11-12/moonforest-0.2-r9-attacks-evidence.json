@@ -1,0 +1,699 @@
+{
+  "date": "2026-11-12",
+  "release": "moonforest-0.2",
+  "revision": "R9 authored standing snap and braced body-pressure support step",
+  "source": {
+    "assetId": "wolf-v02-attacks-r9",
+    "manifestPath": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/manifest.json",
+    "clipsPath": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/clips.json",
+    "clipsSha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+    "animationGlbPath": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/models/wolf-v02-attacks-r9.glb",
+    "animationGlbSha256": "d21f104ec5ed1c1db0d3a71c8f917d9c0fc9a50053d5dea97be772a356f60e09",
+    "blendPath": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/blend/wolf-v02-attacks-r9.blend",
+    "blendSha256": "e8a2baf697be45e9f385237133b89bac875023c69624feb8c2d8ba1d477e350b",
+    "validationPath": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/deformation-validation.json",
+    "validationSha256": "38623b8ecb83e048a635150166f1bc81fd4c4cc74cbc834a5ef28d4850d5e5d0"
+  },
+  "runtime": {
+    "path": "ArcherPreview/src/wolf-v02-attack-clips.json",
+    "sha256": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+    "bytes": 537828,
+    "lossless": {
+      "originalKeys": 9744,
+      "runtimeKeys": 7812,
+      "removedKeys": 1932,
+      "reducedChannels": 36,
+      "movingKeysExact": true,
+      "quantization": false
+    },
+    "actorLocalClipCount": 14,
+    "originalTemplateClipCount": 12,
+    "staticJsonImport": true,
+    "sharedReadOnlyKeyTemplates": true,
+    "actorLocalTargetsAndCursors": true,
+    "architecture": [
+      {
+        "path": "ArcherPreview/src/wolf-v02-spec.js",
+        "sha256": "7144b7a76e576b6f9828607b816ce71f4420983461deee033bdb14633c97d16a"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-encounter.js",
+        "sha256": "bdc478c80ca2d51558912c0087b3082641c70698cab61e2364ec17a77f96b4cf"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-authored-clips.js",
+        "sha256": "101d295813beb4f2330ed2ac474e6541306664c43304459cbf72ca719e21420a"
+      }
+    ]
+  },
+  "baseline": {
+    "commit": "a40d4ed",
+    "deploymentManifestSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+    "protectedFiles": 2069,
+    "protectedBytes": 719067655,
+    "allReviewedFilesByteIdentical": true,
+    "wolfConfigSha256": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+    "meshTextureLodReferencesUnchanged": true,
+    "sourceOriginalClips": 12
+  },
+  "metrics": {
+    "boneCount": 28,
+    "sampleHz": 60,
+    "maximumBoneScaleError": 4.76837158203125e-7,
+    "maximumBoneLengthErrorMeters": 1.5670514624810394e-7,
+    "maximumAttachmentGapMeters": 5.462855929083633e-7,
+    "maximumRigidCoreLocalErrorMeters": 2.973128481120098e-7,
+    "maximumForelimbMuscleLocalErrorMeters": 6.414275513132014e-7,
+    "minimumForelimbMuscleThicknessRatio": 0.9999996737186737,
+    "maximumForelimbMuscleThicknessRatio": 1.0000005263145302
+  },
+  "deformation": {
+    "scope": "New R9 attacks at 60Hz on original R8 evaluated mesh; full original 4K renders reviewed separately",
+    "clipsJsonSha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+    "animationGlbSha256": "d21f104ec5ed1c1db0d3a71c8f917d9c0fc9a50053d5dea97be772a356f60e09",
+    "blendSha256": "e8a2baf697be45e9f385237133b89bac875023c69624feb8c2d8ba1d477e350b",
+    "clips": [
+      {
+        "clip": "Wolf_Snap_Bite_V02",
+        "sampleHz": 60,
+        "frames": 55,
+        "fixedBoneCount": 28,
+        "maximumBoneScaleError": 4.76837158203125e-7,
+        "maximumBoneLengthErrorMeters": 1.5670514624810394e-7,
+        "maximumConnectedAttachmentGapMeters": 4.838290242866939e-7,
+        "rigidCoreVertices": 2669,
+        "maximumRigidCoreLocalErrorMeters": 2.1397848752009626e-7,
+        "minimumSurfaceHeightMeters": 0.0009998057503253222,
+        "meshEdgeStrainMinimum": 0.0317714586853981,
+        "meshEdgeStrainMaximum": 485.0569152832031,
+        "rigidShaftEdgeStrainMinimum": 0.9997202754020691,
+        "rigidShaftEdgeStrainMaximum": 1.000164270401001,
+        "meshEdgeStrainP01Minimum": 0.5689185297489167,
+        "meshEdgeStrainP99Maximum": 3.8869234752655,
+        "jawRelativeAngularExcursionRadians": 0.20000095737584245,
+        "rootAxisExcursionMeters": [
+          0,
+          0,
+          0
+        ],
+        "pelvisAxisExcursionMeters": [
+          0,
+          0,
+          0
+        ],
+        "leftForepawAxisExcursionMeters": [
+          5.960464477539063e-8,
+          2.980232238769531e-7,
+          3.427267074584961e-7
+        ],
+        "forelimbMuscleCoresWeightAtLeast0999": {
+          "fore.L.upper": {
+            "vertices": 489,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.307694179756806
+            ],
+            "maximumLocalShapeErrorMeters": 2.1397848752009626e-7,
+            "minimumThicknessRatio": 0.9999997769304408,
+            "maximumThicknessRatio": 1.0000001485687289
+          },
+          "fore.L.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 5.662073281085878e-7,
+            "minimumThicknessRatio": 0.9999996737186737,
+            "maximumThicknessRatio": 1.000000405728369
+          },
+          "fore.L.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.556367380740858e-7,
+            "minimumThicknessRatio": 0.9999998293135164,
+            "maximumThicknessRatio": 1.0000003103308022
+          },
+          "fore.R.upper": {
+            "vertices": 479,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.30705440791582506
+            ],
+            "maximumLocalShapeErrorMeters": 2.0054350074271008e-7,
+            "minimumThicknessRatio": 0.9999997901488907,
+            "maximumThicknessRatio": 1.0000002476068142
+          },
+          "fore.R.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 5.723881868333825e-7,
+            "minimumThicknessRatio": 0.9999997259373707,
+            "maximumThicknessRatio": 1.0000005263145302
+          },
+          "fore.R.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.4353536517106087e-7,
+            "minimumThicknessRatio": 0.9999998552740775,
+            "maximumThicknessRatio": 1.000000331879063
+          }
+        },
+        "forelimbJointBandPhases": [
+          {
+            "time": 0.25,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.9389717848859213,
+            "strainP95": 1.6537174067018106,
+            "strainMinimum": 0.3417605707136606,
+            "strainMaximum": 5.562617063721752,
+            "maximumAbsoluteEdgeChangeMeters": 0.028306988586597026,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.4,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.6433147372065918,
+            "strainP95": 2.634910506965811,
+            "strainMinimum": 0.14238642204296376,
+            "strainMaximum": 83.24541114078086,
+            "maximumAbsoluteEdgeChangeMeters": 0.26806063655221646,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.5833333333333334,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.6686524549479349,
+            "strainP95": 2.441829913946993,
+            "strainMinimum": 0.14724320548155187,
+            "strainMaximum": 74.26404933985621,
+            "maximumAbsoluteEdgeChangeMeters": 0.2374054015001077,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.9,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.8248417904490785,
+            "strainP95": 1.8203921025495182,
+            "strainMinimum": 0.16764718588001337,
+            "strainMaximum": 7.919968243563606,
+            "maximumAbsoluteEdgeChangeMeters": 0.047303968627862514,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          }
+        ]
+      },
+      {
+        "clip": "Wolf_Forepaw_Swipe_V02",
+        "sampleHz": 60,
+        "frames": 61,
+        "fixedBoneCount": 28,
+        "maximumBoneScaleError": 4.76837158203125e-7,
+        "maximumBoneLengthErrorMeters": 1.548908709070318e-7,
+        "maximumConnectedAttachmentGapMeters": 5.462855929083633e-7,
+        "rigidCoreVertices": 2669,
+        "maximumRigidCoreLocalErrorMeters": 2.973128481120098e-7,
+        "minimumSurfaceHeightMeters": 0.0009997803717851639,
+        "meshEdgeStrainMinimum": 0.05318417027592659,
+        "meshEdgeStrainMaximum": 200.05165100097656,
+        "rigidShaftEdgeStrainMinimum": 0.9994187951087952,
+        "rigidShaftEdgeStrainMaximum": 1.0021001100540161,
+        "meshEdgeStrainP01Minimum": 0.6558804929256439,
+        "meshEdgeStrainP99Maximum": 2.636984157562255,
+        "jawRelativeAngularExcursionRadians": 0.16000378263674156,
+        "rootAxisExcursionMeters": [
+          0,
+          0.17000000178813934,
+          0
+        ],
+        "pelvisAxisExcursionMeters": [
+          0,
+          0.17000001668930054,
+          5.960464477539063e-8
+        ],
+        "leftForepawAxisExcursionMeters": [
+          7.450580596923828e-8,
+          0.3350004255771637,
+          0.10498283803462982
+        ],
+        "forelimbMuscleCoresWeightAtLeast0999": {
+          "fore.L.upper": {
+            "vertices": 489,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.307694179756806
+            ],
+            "maximumLocalShapeErrorMeters": 2.0478673911590722e-7,
+            "minimumThicknessRatio": 0.9999997867264203,
+            "maximumThicknessRatio": 1.0000001905717828
+          },
+          "fore.L.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 6.414275513132014e-7,
+            "minimumThicknessRatio": 0.9999996737186737,
+            "maximumThicknessRatio": 1.0000004086584153
+          },
+          "fore.L.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.978714100332993e-7,
+            "minimumThicknessRatio": 0.9999998367119065,
+            "maximumThicknessRatio": 1.0000004213892526
+          },
+          "fore.R.upper": {
+            "vertices": 479,
+            "restCrossSectionThicknessMeters": [
+              0.2917621470987797,
+              0.30705440791582506
+            ],
+            "maximumLocalShapeErrorMeters": 1.9959989743208012e-7,
+            "minimumThicknessRatio": 0.9999996793773385,
+            "maximumThicknessRatio": 1.0000002262907397
+          },
+          "fore.R.lower": {
+            "vertices": 160,
+            "restCrossSectionThicknessMeters": [
+              0.143204003572464,
+              0.14369392283984284
+            ],
+            "maximumLocalShapeErrorMeters": 5.43156804363498e-7,
+            "minimumThicknessRatio": 0.9999997449752014,
+            "maximumThicknessRatio": 1.0000004045360178
+          },
+          "fore.R.paw": {
+            "vertices": 239,
+            "restCrossSectionThicknessMeters": [
+              0.17543134838342667,
+              0.14663425241697392
+            ],
+            "maximumLocalShapeErrorMeters": 1.5715304497210764e-7,
+            "minimumThicknessRatio": 0.9999997222150977,
+            "maximumThicknessRatio": 1.000000366826296
+          }
+        },
+        "forelimbJointBandPhases": [
+          {
+            "time": 0.25,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.8595925592755461,
+            "strainP95": 2.64210809951911,
+            "strainMinimum": 0.08373141790934888,
+            "strainMaximum": 15.493526778019287,
+            "maximumAbsoluteEdgeChangeMeters": 0.10414619888823468,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.43333333333333335,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.6973714189576579,
+            "strainP95": 3.8873244694063476,
+            "strainMinimum": 0.12844597273933298,
+            "strainMaximum": 44.27449422007665,
+            "maximumAbsoluteEdgeChangeMeters": 0.13332222454283468,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 0.5833333333333334,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.6983110304527428,
+            "strainP95": 3.878331146313894,
+            "strainMinimum": 0.1237781810985631,
+            "strainMaximum": 43.3533119838516,
+            "maximumAbsoluteEdgeChangeMeters": 0.1299395715448641,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          },
+          {
+            "time": 1,
+            "edgeCount": 2583,
+            "sourceEdgeMinimumMeters": 0.001,
+            "strainP05": 0.8248417904490785,
+            "strainP95": 1.8203921025495182,
+            "strainMinimum": 0.16764718588001337,
+            "strainMaximum": 7.919968243563606,
+            "maximumAbsoluteEdgeChangeMeters": 0.047303968627862514,
+            "note": "Joint collars are interpolated skin; these ratios are separate from invariant rigid muscle cores."
+          }
+        ]
+      }
+    ]
+  },
+  "runtimeValidation": {
+    "path": "ArcherPreview/reports/wolf-v02-authored-attacks/validation.json",
+    "sha256": "06b3e2ef97659843ab6f8c2ff5d1836b33bc182c51dc9a8dc03dc6830944e659",
+    "caseCount": 29,
+    "contactMatrix": {
+      "cases": 18,
+      "fps": [
+        30,
+        60
+      ],
+      "speeds": [
+        0.5,
+        1,
+        2
+      ]
+    },
+    "knockback": [
+      {
+        "case": "v02-knockback-reduction",
+        "fps": 30,
+        "id": "judgment",
+        "impulseRatio": 0.8,
+        "originalDistance": 5.688207000860441,
+        "variantDistance": 4.55053361366529,
+        "totalDistanceRatio": 0.7999943766070647,
+        "sourcePoseAndTimingUnchanged": true
+      },
+      {
+        "case": "v02-knockback-reduction",
+        "fps": 30,
+        "id": "shield-push",
+        "impulseRatio": 0.8,
+        "originalDistance": 5.688207000860441,
+        "variantDistance": 4.55053361366529,
+        "totalDistanceRatio": 0.7999943766070647,
+        "sourcePoseAndTimingUnchanged": true
+      },
+      {
+        "case": "v02-knockback-reduction",
+        "fps": 60,
+        "id": "judgment",
+        "impulseRatio": 0.8,
+        "originalDistance": 5.618591618140293,
+        "variantDistance": 4.494842833505923,
+        "totalDistanceRatio": 0.7999945785334864,
+        "sourcePoseAndTimingUnchanged": true
+      },
+      {
+        "case": "v02-knockback-reduction",
+        "fps": 60,
+        "id": "shield-push",
+        "impulseRatio": 0.8,
+        "originalDistance": 5.618591618140293,
+        "variantDistance": 4.494842833505923,
+        "totalDistanceRatio": 0.7999945785334864,
+        "sourcePoseAndTimingUnchanged": true
+      }
+    ],
+    "shape": [
+      {
+        "case": "standing-snap-shape",
+        "jawAngularExcursion": 0.20000053126723716,
+        "supportFootDrift": 0.002284932102492329,
+        "pelvisVerticalSpan": 0,
+        "differenceFromPin": 5.845561314451223
+      },
+      {
+        "case": "body-pressure-support-step",
+        "rootExcursion": 0.42500000447034836,
+        "leadPawStep": 0.8375011682510429,
+        "leadPawLift": 0.26245710253715515,
+        "otherSupportFootDrift": 0.0000013764027641720162,
+        "plantedInterval": [
+          0.43,
+          0.7
+        ],
+        "leadFootDriftDuringSupport": 0.0000010536712127723508,
+        "pawSpan": {
+          "x": 3.5762786865234375e-7,
+          "y": 0.26245710253715515,
+          "z": 0.8375011682510376
+        },
+        "pelvisVerticalSpan": 2.384185791015625e-7,
+        "pressAndRetreat": true
+      }
+    ],
+    "lifecycle": [
+      {
+        "case": "actor-local-install-and-reuse",
+        "sourceClips": 12,
+        "totalClips": 14,
+        "repeats": 5,
+        "resources": {
+          "meshes": 32,
+          "geometry": 9,
+          "materials": 5,
+          "groups": 28,
+          "skeletons": 2,
+          "morph": 2,
+          "textures": 0,
+          "nodes": 77,
+          "native": 0,
+          "before": 0,
+          "after": 0,
+          "dispose": 1
+        },
+        "unchangedSharedTemplate": true,
+        "independentTargetsAndCursors": true
+      },
+      {
+        "case": "authored-group-disposal",
+        "cycles": 3,
+        "addedGroupsPerActor": 2,
+        "groupsReturnedToBaseline": true,
+        "nativeAndDisposalObserversStable": true
+      }
+    ]
+  },
+  "actions": [
+    {
+      "id": "quick-bite",
+      "label": "짧은 입질",
+      "sourceClip": "Wolf_Snap_Bite_V02",
+      "impact": 0.4,
+      "capture": false
+    },
+    {
+      "id": "chain-bite",
+      "label": "연속 입질",
+      "sourceClip": "Wolf_Snap_Bite_V02",
+      "impact": 0.4,
+      "capture": false
+    },
+    {
+      "id": "paw-swipe",
+      "label": "몸 낮춰 압박",
+      "sourceClip": "Wolf_Forepaw_Swipe_V02",
+      "impact": 0.43,
+      "capture": false
+    },
+    {
+      "id": "lunge",
+      "label": "측면 회피·도약 덮치기",
+      "sourceClip": "Run_Dodge_Lunge_R5",
+      "impact": 2.35,
+      "capture": false
+    },
+    {
+      "id": "pin",
+      "label": "앞발 제압·물기",
+      "sourceClip": "Pin_Throat_Bite_R5",
+      "impact": 1.2,
+      "capture": true
+    }
+  ],
+  "images": [
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-side.png",
+      "group": "snap",
+      "title": "입질 · 준비 0.25초",
+      "caption": "측면 · 서 있는 자세에서 머리와 목을 준비한다.",
+      "sha256": "a0d36800b85e258525f35b5d248c95759e5d2e39fc757dc6933decf8cb99271e",
+      "bytes": 502543,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-side.png",
+      "group": "snap",
+      "title": "입질 · 접촉 0.40초",
+      "caption": "측면 · 네 발을 지지하고 전사 몸 높이로 짧게 입질한다.",
+      "sha256": "963de323af8e384b3292d4c01d694b27700e6d8a2697fde9a94f9053ed9ea317",
+      "bytes": 493899,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-quarter.png",
+      "group": "pressure",
+      "title": "몸 낮춰 압박 · 준비 0.25초",
+      "caption": "사선 · 앞다리와 몸통의 지지 자세.",
+      "sha256": "62b27df059c55619f6926adfe691595a1e82db1c28ac2ba755e997796b797be0",
+      "bytes": 526015,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-quarter.png",
+      "group": "pressure",
+      "title": "몸 낮춰 압박 · 접촉 0.43초",
+      "caption": "사선 · 앞발을 짧게 내딛고 몸의 무게를 앞으로 싣는다.",
+      "sha256": "e3964c232ccff5a79f86d1a6e853f939d5412767974e3fddb6e4d62c04328d6f",
+      "bytes": 519689,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-quarter.png",
+      "group": "joint",
+      "title": "앞다리 · 준비",
+      "caption": "원본 색상 · 어깨, 위팔, 아래팔의 두께와 연결부.",
+      "sha256": "f0d1a6d1c01ba6eee5f343bbd25e7520797b19827ccbaf3c8eccde1a1be1a609",
+      "bytes": 555346,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-quarter.png",
+      "group": "joint",
+      "title": "앞다리 · 접촉",
+      "caption": "원본 색상 · 같은 방향에서 근육 덩어리와 관절 경계를 비교한다.",
+      "sha256": "f4b462ca1a17240c4bca5decd0a10acc6e7d21f4038fed1a4813bcfb42c2bb69",
+      "bytes": 555957,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-quarter-matcap.png",
+      "group": "joint",
+      "title": "앞다리 · 접촉 표면",
+      "caption": "Matcap · 표면 굴곡과 관절 주변을 따로 확인한다.",
+      "sha256": "78c1299c7c37b486d5438d5b57212e07a7f164c0d9c846f108ffa65531c6c55b",
+      "bytes": 489491,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-neutral-comparison-side.png",
+      "group": "jaw",
+      "title": "주둥이 · 중립",
+      "caption": "같은 측면에서 기존 주둥이 실루엣을 확인한다.",
+      "sha256": "3b06ee2b1ac9f297089f48285c5e93cbb2165f33b7b618b6c0ef49f36d4d7839",
+      "bytes": 507852,
+      "width": 720,
+      "height": 540
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-small-open-comparison-side.png",
+      "group": "jaw",
+      "title": "주둥이 · 허용한 작은 벌림",
+      "caption": "기존 가중치의 한계 안에서 입 벌림을 제한했다.",
+      "sha256": "14f667d4ed4c47bbff908337524f538691daba90c524f6b3980cff149b16ae26",
+      "bytes": 511955,
+      "width": 720,
+      "height": 540
+    }
+  ],
+  "gameUrl": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/moonforest-0.2.html",
+  "baselineUrl": "https://ranke0802.github.io/moonforest/ArcherPreviewSite/?character=moonforest-0.1&rev=a40d4ed",
+  "references": [
+    {
+      "title": "International Wolf Center · Wolf Ethogram",
+      "url": "https://wolf.org/wolf-info/wolf-ethogram/"
+    },
+    {
+      "title": "International Wolf Center · Snap",
+      "url": "https://wolf.org/wolf-info/wolf-ethogram/wolf-ethogram-r-s/"
+    },
+    {
+      "title": "Smithsonian National Zoo · Gray wolf",
+      "url": "https://www.nationalzoo.si.edu/animals/gray-wolf"
+    }
+  ],
+  "scope": {
+    "images": "Offline Blender actual original 4K colour / matcap review, 1.6m warrior reference beside 2.5-scale wolf; not Babylon game GPU captures",
+    "simulation": "Node/Babylon NullEngine with replaced materials; not physical-device performance",
+    "physicalDeviceFps": "unmeasured",
+    "physicalDeviceHeat": "unmeasured",
+    "wholeMeshZeroStretchClaim": false,
+    "biologicalAccuracyClaim": "Stylized giant-boss gameplay interpretation informed by primary behavior descriptions; not zoologically exact motion capture"
+  },
+  "focusedChecks": {
+    "path": "ArcherPreview/reports/wolf-v02-validation/test-summary.json",
+    "sha256": "84286d336731b4304eb48bd73683a795ebcd86111a4d7b056d0e587736029620",
+    "summary": {
+      "date": "2026-11-12",
+      "runtime": "Tools/portable/runtime/win-x64/node/node.exe",
+      "command": "node --test tests/wolf-v02-authored-attacks.test.js tests/wolf-v02-brain.test.js tests/wolf-v02-integration.test.js tests/wolf-v02-patterns.test.js tests/wolf-pattern-size.test.js tests/boss-combat.test.js tests/boss-battle.test.js tests/boss-pattern-settings.test.js tests/boss-pattern-integration.test.js",
+      "tests": 82,
+      "passed": 82,
+      "failed": 0,
+      "verification": "82 distinct checks verified against the final frozen runtime. The full run passed 80; two test-only assumptions were corrected and the eight authored tests then passed. No runtime or asset changes occurred between these final runs.",
+      "sourceMotionSha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+      "runtimeMotionSha256": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+      "runHistory": [
+        {
+          "scope": "Full focused suite on the final frozen runtime",
+          "tests": 82,
+          "passed": 80,
+          "failed": 2,
+          "durationMs": 15117.0061,
+          "notes": "Test assumptions incorrectly applied fixed limb-offset checks to authorized global root travel and guessed a paw-stride upper bound below the deliberate authored stride."
+        },
+        {
+          "scope": "Authored suite after correcting only those test assumptions",
+          "tests": 8,
+          "passed": 8,
+          "failed": 0,
+          "durationMs": 3661.9988,
+          "command": "node --test tests/wolf-v02-authored-attacks.test.js",
+          "notes": "Global root motion is checked separately; all actual limb offsets remain fixed. The paw stride uses the author's confirmed 0.335 source-metre design at 2.5 scale."
+        }
+      ],
+      "newTestFiles": [
+        "tests/wolf-v02-brain.test.js",
+        "tests/wolf-v02-integration.test.js",
+        "tests/wolf-v02-patterns.test.js",
+        "tests/wolf-v02-authored-attacks.test.js"
+      ],
+      "evidence": [
+        "Legacy R8 hashes, size, movement speed and original attack impact contracts unchanged",
+        "Default and 0.1 manual summons and authored actor adapter select original encounter; only explicit 0.2 uses variant",
+        "All five actions at 30/60 Hz and 0.5/1/2 attack speed contact an untouched stationary target using the packed R8 rig and warrior dimensions: 30 cases",
+        "Separately authored standing snap and body-pressure forepaw support step have distinct clip identities, 84 channels each, fixed limb offsets/scales and normalized quaternions",
+        "The final restrained snap opens/closes the jaw by 0.2000005 rad with 0.002285 m support-foot drift and zero pelvis vertical span",
+        "The pressure-and-retreat step has 0.425 m root excursion, 0.837501 m deliberate lead-paw stride and 0.262457 m lift; the three support feet drift at most 0.00000138 m",
+        "The lead paw remains planted during source time 0.43 through 0.70 with at most 0.00000105 m drift; pelvis vertical span is 0.000000238 m",
+        "Runtime preparation reduces 9744 keys to 7812 across 36 exact constant channels while preserving every moving-channel time/value and all clip metadata",
+        "Eighteen additional snap/chain/swipe contact cases verify jaw/head-only or fore.L.paw-only hit ownership",
+        "Quick/chain bite never capture; two chain strikes have independent serials and damage once each",
+        "Forty-nine source-pose samples preserve all twelve original R8 clips, node scale, root pitch, planar extraction and authored lunge body height",
+        "Heavy and shield bash knockback at 30/60 Hz travel 0.799994 times the legacy distance over two seconds with original bone poses, damage and source timing",
+        "V2 actors have fourteen clips while the shared original template retains twelve; independent targets/cursors leave shared key data unchanged",
+        "Three authored actor disposal cycles return animation-group, native-animatable and disposal-observer counts to baseline",
+        "Anticipation turn rate is bounded and committed lunge aim stays locked",
+        "Dodge, shield push, miss recovery, heavy/bash interruption, capture escape, player death and wolf death paths pass",
+        "Four maps each summon 1/5/10/20 with independent rigs; three warm 20-member reuse cycles keep scene resources and observers stable with zero active native animatables",
+        "Cancellation leaves no pending preparation waiters or late active actors and retries without duplicate model instances"
+      ],
+      "limits": [
+        "Babylon NullEngine CPU scheduling and geometry/rig contacts only",
+        "Packed color textures are not decoded for these tests; materials are replaced",
+        "No browser automation or physical GPU/device FPS, heat, visual animation approval or touch-play feel measurement",
+        "Runtime bone and contact checks do not establish whole-mesh muscle preservation. The author's separate evaluated-skin limb-core and joint-band evidence is recorded in the canonical deformation-validation.json; the original muzzle rig remains a documented limitation."
+      ]
+    }
+  }
+}

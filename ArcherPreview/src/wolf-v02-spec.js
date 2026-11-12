@@ -1,17 +1,20 @@
 import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE} from './wolf-spec.js';
+export const WOLF_V02_KNOCKBACK_SCALE=.8;
 
-// These are runtime excerpts/time remaps of approved R8 channels. No new rig,
-// bone scale, vertex data, texture or animation channel is authored here.
-const quick={sourceClip:WOLF_CLIPS.pin,clipStart:1.10,clipEnd:2.05,impact:1.55,commitTime:1.45,capture:false,damage:55,range:3.2,minDistance:2.2,maxDistance:2.8,preferredDistance:2.4,recovery:.85,whip:{source:[1.10,1.45,1.78,2.05],seconds:[0,.45,.57,.85]}};
+// The short snap and braced forward pressure are authored R9 actions on R8's
+// unchanged rig. The full lunge and pin retain their approved source clips.
+export const WOLF_V02_SNAP='Wolf_Snap_Bite_V02',WOLF_V02_SWIPE='Wolf_Forepaw_Swipe_V02';
+const quick={sourceClip:WOLF_V02_SNAP,clipStart:0,clipEnd:.90,impact:.40,commitTime:.30,capture:false,damage:55,range:3.2,minDistance:2.0,maxDistance:2.3,preferredDistance:2.15,recovery:.85,contactParts:['jaw','head'],whip:{source:[0,.30,.48,.90],seconds:[0,.36,.46,.90]}};
 export const WOLF_V02_ACTIONS=Object.freeze([
- {id:'quick-bite',label:'견제 물기',...quick},
- {id:'chain-bite',label:'두 번 압박 물기',...quick,damage:45,recovery:1.05,chain:true},
+ {id:'quick-bite',label:'짧은 입질',...quick},
+ {id:'chain-bite',label:'연속 입질',...quick,damage:45,recovery:1.05,chain:true},
+ {id:'paw-swipe',label:'몸 낮춰 압박',sourceClip:WOLF_V02_SWIPE,clipStart:0,clipEnd:1,impact:.43,commitTime:.32,capture:false,damage:65,range:3.2,minDistance:2.2,maxDistance:2.8,preferredDistance:2.4,recovery:.95,contactParts:['fore.L.paw'],whip:{source:[0,.32,.50,1],seconds:[0,.40,.52,1]}},
  {id:'lunge',label:'측면 회피·도약 덮치기',sourceClip:WOLF_CLIPS.lunge,clipStart:0,clipEnd:3.1,impact:2.35,commitTime:1.65,capture:false,damage:100,range:4,minDistance:24.7,maxDistance:26.2,preferredDistance:25.4,recovery:1.35,whip:{source:[0,1.65,2.55,3.1],seconds:[0,1.85,2.16,3.1]}},
  {id:'pin',label:'앞발 제압·물기',sourceClip:WOLF_CLIPS.pin,clipStart:0,clipEnd:3.4,impact:1.20,commitTime:.85,capture:true,damage:120,range:3.2,minDistance:8.7,maxDistance:9.5,preferredDistance:9.1,recovery:1.2,whip:{source:[0,.85,1.20,1.85,3.4],seconds:[0,.8,.98,1.85,3.4]}},
-].map(a=>Object.freeze({...a,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
+].map(a=>Object.freeze({...a,contactParts:a.contactParts?Object.freeze(a.contactParts):undefined,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
 export const WOLF_V02_BY_ID=Object.freeze(Object.fromEntries(WOLF_V02_ACTIONS.map(a=>[a.id,a])));
 const aliases={[WOLF_CLIPS.lunge]:'lunge',[WOLF_CLIPS.pin]:'pin'};
-const deck1=['quick-bite','pin','quick-bite','chain-bite'],deck2=['chain-bite','pin','quick-bite','chain-bite','pin'];
+const deck1=['quick-bite','paw-swipe','quick-bite','pin','chain-bite'],deck2=['chain-bite','paw-swipe','pin','quick-bite','paw-swipe','chain-bite'];
 const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
 export const actionDuration=action=>action.whip.seconds.at(-1);
 export function sampleWhipTime(action,elapsed){

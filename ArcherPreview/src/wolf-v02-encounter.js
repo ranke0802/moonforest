@@ -1,8 +1,9 @@
 import {Vector3} from '@babylonjs/core';
 import {WolfEncounter} from './wolf-encounter.js';
-import {WolfV02Brain} from './wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_KNOCKBACK_SCALE} from './wolf-v02-spec.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 import {playerDimensions} from './player-dimensions.js';
+import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
 
 // These envelopes include the contacting part and the player's body width.
 // Their centres always come from the post-navigation, authored skeletal pose.
@@ -47,6 +48,7 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   createBrain(durations){return new WolfV02Brain(durations);}
+  prepareAsset(){this.config=installWolfV02AttackClips(this.asset,this.config);}
 
   motionSpec(name){
     if(this.brain?.mode==='attack'&&this.brain.action){
@@ -114,7 +116,10 @@ export class WolfV02Encounter extends WolfEncounter{
       }
     }
     if(time>=this.previousWolfTime&&this.lastRoot&&!brain.stagger&&brain.mode!=='move'){
-      const x=(root[0]-this.lastRoot[0])*this.config.scale,z=(root[2]-this.lastRoot[2])*this.config.scale;
+      // The large 2.5x body amplified both authored fall travel and impulse.
+      // Keep the pose curve intact and shorten only the world displacement.
+      const fallScale=['down','recover'].includes(brain.mode)?WOLF_V02_KNOCKBACK_SCALE:1;
+      const x=(root[0]-this.lastRoot[0])*this.config.scale*fallScale,z=(root[2]-this.lastRoot[2])*this.config.scale*fallScale;
       const yaw=this.motionYaw;
       this.actor.position.x+=x*Math.cos(yaw)+z*Math.sin(yaw);
       this.actor.position.z+=z*Math.cos(yaw)-x*Math.sin(yaw);
@@ -128,7 +133,8 @@ export class WolfV02Encounter extends WolfEncounter{
   attackContactPoints(aim){
     const parts=this.v02ContactParts,points=this.v02ContactPoints;
     points.length=0;
-    for(const part of parts){part.point=this.nodes[part.name].getAbsolutePosition();points.push(part.point);}
+    const owners=this.brain.action?.contactParts;
+    for(const part of parts){if(owners&&!owners.includes(part.name))continue;part.point=this.nodes[part.name].getAbsolutePosition();points.push(part.point);}
     points.sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
     return points;
   }
@@ -165,9 +171,11 @@ export class WolfV02Encounter extends WolfEncounter{
 
   poseAndContacts(player,result,sample,shield){
     const serial=this.brain?.serial,hasImpact=this.pendingEvents?.some(event=>event.type==='attack');
+    const heavyBefore=this.heavyCount;
     const action=this.brain?.action?.id??null;
     this.v02ImpactOutcome=null;
     const hitStop=super.poseAndContacts(player,result,sample,shield);
+    if(this.heavyCount>heavyBefore)this.knockVelocity.scaleInPlace(WOLF_V02_KNOCKBACK_SCALE);
     if(hasImpact){
       const outcome=this.v02ImpactOutcome??{serial,hit:false,blocked:false,captured:false};
       this.v02LastOutcome={...outcome,action};

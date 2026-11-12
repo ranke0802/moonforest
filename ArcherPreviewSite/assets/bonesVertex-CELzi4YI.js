@@ -1,0 +1,1 @@
+export{Nd as bonesVertex}from"./babylon-game-BmUxks-L.js";

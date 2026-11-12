@@ -1,0 +1,1 @@
+export{a as _DDSTextureLoader}from"./babylon-lazy~screenSpaceCurvature.fragment~meshBlending.fragment~ddsTextureLoader~lod3D.fra~h64nf1sf-Cw7PoUJL.js";

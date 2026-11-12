@@ -38,7 +38,8 @@
     "village-exterior-shell-review": "Sources/environment/village-exterior-shell/2026-11-09",
     "approved-review-r2-2026-11-09": "Sources/environment/approved-geometry/2026-11-09-r2",
     "wolf-game-r8": "Sources/actors/tripo-monsters/wolf-game-r8",
-    "wolf-attack-r8": "Sources/actors/tripo-monsters/wolf-attack-r8"
+    "wolf-attack-r8": "Sources/actors/tripo-monsters/wolf-attack-r8",
+    "wolf-v02-attacks-r9": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9"
   },
   "inputs": [
     {
@@ -31603,6 +31604,812 @@
       "requiredBy": [
         "alpha-wolf-game-r8",
         "alpha-wolf-runtime-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/actions.json",
+      "bytes": 98266,
+      "sha256": "1a529dc0f8537d5565818956cca80beb8adf6b4e85cd6c3c857a55c1b70a734a",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/blend/wolf-v02-attacks-r9.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/blend/wolf-v02-attacks-r9.blend",
+      "bytes": 53636002,
+      "sha256": "e8a2baf697be45e9f385237133b89bac875023c69624feb8c2d8ba1d477e350b",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/clips.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/clips.json",
+      "bytes": 675486,
+      "sha256": "618bbdcc45e6487f638c24af8704075fc81d68284d176d7f6b2d3c723c1553b6",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/inspection.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/inspection.json",
+      "bytes": 14025,
+      "sha256": "efa565a10ba13709a45cd6c5e266f6674a5435fb194167f9b6993d3046f1df23",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/models/wolf-v02-attacks-r9.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/models/wolf-v02-attacks-r9.glb",
+      "bytes": 166528,
+      "sha256": "d21f104ec5ed1c1db0d3a71c8f917d9c0fc9a50053d5dea97be772a356f60e09",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/build_attacks.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/build_attacks.py",
+      "bytes": 14390,
+      "sha256": "bf5d4c980c8e34c40d389be512bc4e300ade9036649e15342b2e2d360431d871",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/extract_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/extract_clips.py",
+      "bytes": 5722,
+      "sha256": "3e814f4540da1773f63c3410daae7234f2ff1327bc51c66f34e3f485ea244252",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/inspect_r8.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/inspect_r8.py",
+      "bytes": 1467,
+      "sha256": "c67487fe8dbe9ba39d4f6b4d84d21fadb37e8826d986c5771968e6e7c05506ac",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/render-cases.json",
+      "bytes": 4389,
+      "sha256": "fe9f5cea3d9c04594b7b9803bbf4a4aff440e0b3abaa06525472965610ad1431",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-front.png",
+      "bytes": 479468,
+      "sha256": "3380b2939659a7c01ad2f9d57fbf9d570e743e7136088f23460fc85162ba6349",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-quarter.png",
+      "bytes": 519689,
+      "sha256": "e3964c232ccff5a79f86d1a6e853f939d5412767974e3fddb6e4d62c04328d6f",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-impact-side.png",
+      "bytes": 503665,
+      "sha256": "bdd7cfa6bf35cbf99f867cf4da0f15e5b131ba8605212d33b6998c21b4a6dc93",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-front.png",
+      "bytes": 488285,
+      "sha256": "c7f4193e1275e34a59f90e7dbf63efa67e284a6d06ea6105b2ceb06b688e0ab6",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-quarter.png",
+      "bytes": 526015,
+      "sha256": "62b27df059c55619f6926adfe691595a1e82db1c28ac2ba755e997796b797be0",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-prepare-side.png",
+      "bytes": 503692,
+      "sha256": "1479bd5eee99ec3cdf793a56c59adc536f010ee948575db0462c8d1194e103a3",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-recover-front.png",
+      "bytes": 488124,
+      "sha256": "c6b3e9db8a3a927cd43022891890e22f41f61e57966c11ba46f1b194419acd27",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-recover-quarter.png",
+      "bytes": 525789,
+      "sha256": "534a3a8a6ddabace8bd78d81c4775f1e0e8d206e8f83434dd56f5c05fd2c6c02",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-recover-side.png",
+      "bytes": 502288,
+      "sha256": "23b53e2f20db69766dcdadb470d736cebdaa4881f6480b9af3f627c0c90b9b13",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-front.png",
+      "bytes": 469835,
+      "sha256": "c9257a7c608c66bbf2eae29d3187e969df21e00729a3c9c8db970d50e7e83fb6",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-quarter.png",
+      "bytes": 517251,
+      "sha256": "2bf2df57e07b1a9ba1287998e916905a67d67cb8070b381ea6450f26701b5d4c",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-impact-side.png",
+      "bytes": 493899,
+      "sha256": "963de323af8e384b3292d4c01d694b27700e6d8a2697fde9a94f9053ed9ea317",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-front.png",
+      "bytes": 490786,
+      "sha256": "bad949f19e5a71b15623cad03a9039e753f15c1b10614fd8b7a3ff6a4f993f55",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-quarter.png",
+      "bytes": 527777,
+      "sha256": "56ea8d76011878344266ce7467ddf8604dd5131d49810d8c05f2feb533813453",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-prepare-side.png",
+      "bytes": 502543,
+      "sha256": "a0d36800b85e258525f35b5d248c95759e5d2e39fc757dc6933decf8cb99271e",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-recover-front.png",
+      "bytes": 488032,
+      "sha256": "07e4edacf994b9802f665f65219530aa97a3b5e2b2708c942d6934ae203ae3f0",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-recover-quarter.png",
+      "bytes": 525829,
+      "sha256": "d4342603ac43bbab6f3900f13038c80d6f17a2f86cce36b26fca12b98896205b",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-recover-side.png",
+      "bytes": 500014,
+      "sha256": "937801d58ec5be03b88486197334937393b95c2c0847315b899a4651b67a696c",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/render_review.py",
+      "bytes": 6887,
+      "sha256": "e75f936e05decb50100a4903b134684cf58f87c56c38c1102f95d9e426756e87",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/AUTHORING_NOTES.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/AUTHORING_NOTES.txt",
+      "bytes": 3518,
+      "sha256": "f4774e9d3b7df9548834c0a8d2225bcfed5c0827e97c9d644877fa33e552881d",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/deformation-validation.json",
+      "bytes": 11467,
+      "sha256": "38623b8ecb83e048a635150166f1bc81fd4c4cc74cbc834a5ef28d4850d5e5d0",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/manifest.json",
+      "bytes": 1993,
+      "sha256": "1dd5105c50ea06661c7ae9bd66e9aa2cbdd5f83dab6bffcf74d1bc50d4db34e2",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/closeup-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/closeup-cases.json",
+      "bytes": 1549,
+      "sha256": "50a18ceb3d586115c58dff76d3cd34b9d14cfe0d56b242ae00639e57539ba747",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/limb-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/limb-cases.json",
+      "bytes": 2364,
+      "sha256": "998805bf5af0c76c2886db1b6534e7fbd54cd5a114457abd269c603695eb8b8e",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-front-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-front-matcap.png",
+      "bytes": 463874,
+      "sha256": "8c17ff19da9f5fab86942ee2d271d9aa7e5f5861e7fd17ceb1ec87ed21ebc738",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-front.png",
+      "bytes": 533321,
+      "sha256": "1960638e10cb2b181e0cd30528239e57e0ea148b97454c0caa212dda12af983b",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-quarter-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-quarter-matcap.png",
+      "bytes": 488730,
+      "sha256": "91306da81ddb6f33d1f47a33864e6d5b1946f0cb3507461ff5210ec420934d24",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-quarter.png",
+      "bytes": 555300,
+      "sha256": "1e80576056de3f3a182047bb6c121068341bc0d89b4b1187f58edd48c0269d8f",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-side-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-side-matcap.png",
+      "bytes": 477488,
+      "sha256": "4af9101edbfda675a5c63c9f2cf9525bd0c504b351c7bf3dd09d9a580b8e18a8",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-follow-side.png",
+      "bytes": 536128,
+      "sha256": "fef9f5faa661365cf83bebfe4e349f1e51d38cbfcbc9c16c84a8552fd5191e15",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-front-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-front-matcap.png",
+      "bytes": 464516,
+      "sha256": "99c12bcd7144ba59663d7ff132d1a11de712bebb389c48e124f64490e66fab34",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-front.png",
+      "bytes": 533498,
+      "sha256": "3393425fe5141a71b62a3007c8cda7bad372184c5662f5e14742fe5cd342ae1e",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-quarter-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-quarter-matcap.png",
+      "bytes": 489491,
+      "sha256": "78c1299c7c37b486d5438d5b57212e07a7f164c0d9c846f108ffa65531c6c55b",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-quarter.png",
+      "bytes": 555957,
+      "sha256": "f4b462ca1a17240c4bca5decd0a10acc6e7d21f4038fed1a4813bcfb42c2bb69",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-side-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-side-matcap.png",
+      "bytes": 478327,
+      "sha256": "97f9cb307cf9de17bc6eb2f30ca66ee4dabd6b08ed5ee7e0c44d59fb7e018980",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-impact-side.png",
+      "bytes": 537744,
+      "sha256": "ea2faa85192fcb1f39eb732a07d7d7b8c1d70865120b73552fbdd89283c8566c",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-front-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-front-matcap.png",
+      "bytes": 467694,
+      "sha256": "b5a46c9fdabf9b7e595c7696554ca9212211be6dfa52a7fa3816b6e393dd9651",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-front.png",
+      "bytes": 529827,
+      "sha256": "ecc10bcca95076887c8656a40e45e77aa8e95959fadddcb4d8919ace64c2cdef",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-quarter-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-quarter-matcap.png",
+      "bytes": 485532,
+      "sha256": "b615b8f667274472b800e4676ab60fba0414456f8965a73f4755ca447f0fc14e",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-quarter.png",
+      "bytes": 555346,
+      "sha256": "f0d1a6d1c01ba6eee5f343bbd25e7520797b19827ccbaf3c8eccde1a1be1a609",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-side-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-side-matcap.png",
+      "bytes": 448363,
+      "sha256": "078f815c7910c96516f40782d4e85c4cd75e546f74f1e4bdc0436ff527d336de",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Forepaw_Swipe_V02-forelimb-prepare-side.png",
+      "bytes": 505726,
+      "sha256": "1d1a5e9c25c811d3744fc1b44428d2a242d575dd80b5a3f7995ea2968e3849a5",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-closed-closeup-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-closed-closeup-front.png",
+      "bytes": 500529,
+      "sha256": "737c7fc2ed00c85ec31a321cd63d668351a860c211b0274bfd14d4f1d7dca048",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-closed-closeup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-closed-closeup-quarter.png",
+      "bytes": 507591,
+      "sha256": "d2bd6e5be0961206c62cb90ebabc5f7fc0a406de77a63ccb9854e37b682a58b0",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-closed-closeup-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-closed-closeup-side.png",
+      "bytes": 496353,
+      "sha256": "2b1951ccd89ad857663e0d03d53dccee5beccd9cba492beaa518926eed5a1f98",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-open-closeup-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-open-closeup-front.png",
+      "bytes": 546550,
+      "sha256": "8d2ee2bd8f3c1ce9805aedffe50940071125b2cd2686b04fc9e3f6023a33d47c",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-open-closeup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-open-closeup-quarter.png",
+      "bytes": 544238,
+      "sha256": "f093bb09ebcebb4787edfd4d7e6aba70f76aeb89ebdb1e2342e3f30c79b42904",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-open-closeup-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-open-closeup-side.png",
+      "bytes": 523238,
+      "sha256": "2776dc00d7489f2b56da4102e9a649e85c842c1a764c58d39e6e45e451297832",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/audit_deformation.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/audit_deformation.py",
+      "bytes": 8273,
+      "sha256": "5a3caee339251d6bf7124a5d8aa4acd5eb31929adf40a467f68d31ab19f36006",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/probe_jaw.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/probe_jaw.py",
+      "bytes": 1216,
+      "sha256": "4dbad4b9a1c37a7f2e9f2c41dea8e3667283166ef65838941c3dfb3d7756df3f",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-neutral-comparison-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-neutral-comparison-side.png",
+      "bytes": 507852,
+      "sha256": "3b06ee2b1ac9f297089f48285c5e93cbb2165f33b7b618b6c0ef49f36d4d7839",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-small-open-comparison-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/review/Wolf_Snap_Bite_V02-jaw-small-open-comparison-side.png",
+      "bytes": 511955,
+      "sha256": "14f667d4ed4c47bbff908337524f538691daba90c524f6b3980cff149b16ae26",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/finalize_manifest.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9/scripts/finalize_manifest.py",
+      "bytes": 1140,
+      "sha256": "0fce337aacc2c451dfadc79135d4eb5c34126cb6e672a44d5aa4f13f5aaec6ee",
+      "origins": [
+        "New short attacks authored on registered wolf-attack-r8; original geometry, UVs, weights, bind and textures preserved"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-authored-attacks"
       ],
       "status": "bundled"
     }

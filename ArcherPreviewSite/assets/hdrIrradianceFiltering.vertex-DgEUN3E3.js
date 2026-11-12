@@ -1,0 +1,1 @@
+export{Lr as hdrIrradianceFilteringVertexShader}from"./babylon-game-BmUxks-L.js";

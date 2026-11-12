@@ -1,0 +1,1 @@
+export{ot as geometryPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

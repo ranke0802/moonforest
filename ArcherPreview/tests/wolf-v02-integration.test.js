@@ -25,6 +25,7 @@ import {caveObstacles} from '../src/witch-cave-layout.js';
 import {setWorldCharacter} from '../src/world-limits.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {createActorEncounterFactory} from '../src/actor-encounter-adapter.js';
+import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const base=new URL('../public/assets/',import.meta.url),rows=[];
 const maps=[['village',createVillageTerrain,villageObstacles],['great-plains',createGreatPlainsTerrain,plainsObstacles],['monster-forest',createMonsterForestTerrain,forestObstacles],['witch-cave',createWitchCaveTerrain,caveObstacles]];
@@ -70,25 +71,25 @@ test('only the explicit 0.2 world selects the new wolf encounter and 0.1/default
  rows.push({case:'release-routing',manualSummonAndAuthoredActor:true,legacyAndDefaultUseOriginal:true,onlyExplicitV02UsesVariant:true});
 });
 
-test('0.2 source excerpts preserve the full approved R8 local poses, root pitch and lunge body height',async t=>{
+test('0.2 preserves all twelve approved R8 local poses, root pitch and lunge body height',async t=>{
  const f=await fixture(t);plainWorld(f);const e=await begin(f,'lunge'),oracle=new WolfEncounter(f.world,()=>{},()=>{},()=>{},{loadAsset:()=>f.models.instantiate()});
  await oracle.summon(f.player,{position:Vector3.Zero(),rotationY:0});let checked=0;const lungeHeights=[];
- for(const action of WOLF_V02_ACTIONS)for(const time of [...new Set([action.clipStart,action.commitTime,action.impact,action.clipEnd,...(action.id==='lunge'?[2.02]:[])])]){
-  e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.startAction(action.id);e.brain.time=time;e.animator.transition(action.sourceClip,{clipTime:time,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();
-  oracle.actor.position.setAll(0);oracle.actor.rotation.y=0;oracle.brain.start(action.sourceClip,'attack');oracle.brain.time=time;oracle.animator.transition(action.sourceClip,{clipTime:time,actionId:oracle.brain.serial,blendDuration:0});oracle.animator.update(0);oracle.alignPose();
+ for(const clip of f.config.catalog)for(const time of [...new Set([0,clip.duration*.37,clip.duration*.73,clip.duration,...(clip.name===WOLF_CLIPS.lunge?[2.02]:[])])]){
+  e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.start(clip.name,'idle');e.brain.time=time;e.animator.transition(clip.name,{clipTime:time,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();
+  oracle.actor.position.setAll(0);oracle.actor.rotation.y=0;oracle.brain.start(clip.name,'idle');oracle.brain.time=time;oracle.animator.transition(clip.name,{clipTime:time,actionId:oracle.brain.serial,blendDuration:0});oracle.animator.update(0);oracle.alignPose();
   for(const name of ['root','pelvis','chest','head','jaw','fore.L.paw','fore.R.paw']){
    const a=name==='root'?e.animator.root:e.nodes[name],b=name==='root'?oracle.animator.root:oracle.nodes[name];
    assert.ok(Vector3.Distance(a.position,b.position)<1e-6);assert.ok(Vector3.Distance(a.scaling,b.scaling)<1e-6);assert.ok(Math.abs(Math.abs(a.rotationQuaternion.dot(b.rotationQuaternion))-1)<1e-6);
    assert.ok(Vector3.Distance(a.getAbsolutePosition(),b.getAbsolutePosition())<1e-5);
   }
   const root=e.animator.root.getAbsolutePosition();assert.ok(Math.abs(root.x-e.actor.position.x)<1e-5&&Math.abs(root.z-e.actor.position.z)<1e-5,'sampled planar root is cancelled exactly once');
-  if(action.id==='lunge')lungeHeights.push({time,pelvis:e.nodes.pelvis.getAbsolutePosition().y});checked++;
+  if(clip.name===WOLF_CLIPS.lunge)lungeHeights.push({time,pelvis:e.nodes.pelvis.getAbsolutePosition().y});checked++;
  }
  assert.ok(Math.max(...lungeHeights.map(p=>p.pelvis))-Math.min(...lungeHeights.map(p=>p.pelvis))>.5,'authored jump body height remains present');oracle.hide();
  rows.push({case:'source-pose-preservation',sampledPoses:checked,unchangedNodeScale:true,pitchAndBodyJumpPreserved:true,lungeHeights});
 });
 
-test('actual R8 attacks land at their authored contact poses once at 30/60 Hz and 0.5/1/2 speed',async t=>{
+test('actual 0.2 attacks land at their authored contact poses once at 30/60 Hz and 0.5/1/2 speed',async t=>{
  const f=await fixture(t);plainWorld(f);
  for(const fps of [30,60])for(const speed of [.5,1,2])for(const action of WOLF_V02_ACTIONS){
   const e=await begin(f,action.id,speed),initial=f.player.position.clone(),serialHits=new Map();let impacts=0,captured=false,frames=0,hitPos=null;
@@ -149,7 +150,7 @@ test('heavy/bash interrupt before impact, capture escape and death release input
 test('0.2 1/5/10/20 manual summons on all maps retain independent rigs, sampler tables and stable warm resources',async t=>{
  for(const map of maps)await t.test(map[0],async t=>{
   const f=await fixture(t,map);for(const n of [1,5,10,20])assert.equal(await f.battle.summon(f.player,n,'wolf'),true);
-  const enemies=[...f.battle.encounters],before=counts(f.scene);assert.equal(enemies.length,20);assert.equal(f.instances,20);assert.ok(enemies.every(e=>e.constructor===WolfV02Encounter&&e.animator.clips.size===12));
+  const enemies=[...f.battle.encounters],before=counts(f.scene);assert.equal(enemies.length,20);assert.equal(f.instances,20);assert.ok(enemies.every(e=>e.constructor===WolfV02Encounter&&e.animator.clips.size===12+WOLF_V02_AUTHORED_CLIPS.length));
   assert.equal(new Set(enemies.map(e=>e.asset.skeletons[0])).size,20);
   const body=e=>e.asset.meshes.find(m=>m.getTotalVertices()>1000&&!m.metadata?.moonforestOutline);assert.strictEqual(body(enemies[0]).geometry,body(enemies[1]).geometry);assert.notStrictEqual(body(enemies[0]).morphTargetManager,body(enemies[1]).morphTargetManager);
   const animators=enemies.map(e=>e.animator),channels=animators.map(a=>a.channels);

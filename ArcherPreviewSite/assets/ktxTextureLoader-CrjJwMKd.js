@@ -1,0 +1,1 @@
+export{Jr as _KTXTextureLoader}from"./babylon-game-BmUxks-L.js";

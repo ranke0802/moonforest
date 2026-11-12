@@ -1,0 +1,1 @@
+export{Ia as shadowMapFragmentWGSL}from"./babylon-game-BmUxks-L.js";

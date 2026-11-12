@@ -1,0 +1,1 @@
+export{wi as pbrVertexShaderWGSL}from"./babylon-game-BmUxks-L.js";

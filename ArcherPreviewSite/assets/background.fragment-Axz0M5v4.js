@@ -1,0 +1,1 @@
+export{ki as backgroundPixelShader}from"./babylon-game-BmUxks-L.js";

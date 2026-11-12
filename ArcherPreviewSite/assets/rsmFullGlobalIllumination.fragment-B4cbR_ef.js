@@ -1,0 +1,1 @@
+export{lt as rsmFullGlobalIlluminationPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

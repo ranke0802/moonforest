@@ -1,0 +1,1 @@
+export{xr as defaultPixelShaderWGSL}from"./babylon-game-BmUxks-L.js";

@@ -1,0 +1,1 @@
+export{ia as imageProcessingDeclarationWGSL}from"./babylon-game-BmUxks-L.js";

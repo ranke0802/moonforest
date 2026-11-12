@@ -1,0 +1,1 @@
+export{Hr as proceduralVertexShader}from"./babylon-game-BmUxks-L.js";
