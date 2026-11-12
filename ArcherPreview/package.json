@@ -13,8 +13,10 @@
     "prepare:village": "node scripts/pack-village-warrior.mjs && node scripts/pack-village.mjs && node scripts/pack-village-lods.mjs && node scripts/pack-village-toon.mjs && node scripts/pack-village-tree-refinement.mjs && node scripts/pack-village-ground.mjs && node scripts/pack-village-ktx2.mjs && node scripts/pack-village-meshopt.mjs",
     "build": "npm run prepare:resources && vite build",
     "build:village": "node scripts/build-village-site.mjs",
+    "build:moonforest-0.2": "node scripts/build-moonforest-0.2.mjs",
     "prepare:downloads": "node scripts/prepare-download-bundles.mjs",
     "sync:village": "node scripts/sync-village-site.mjs",
+    "sync:moonforest-0.2": "node scripts/sync-moonforest-0.2.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "pretest": "node scripts/prepare-download-bundles.mjs",
     "test": "node --test tests/*.test.js"

@@ -1,0 +1,1 @@
+export{Dd as morphTargetsVertexDeclarationWGSL}from"./babylon-game-D7DEFyT0.js";

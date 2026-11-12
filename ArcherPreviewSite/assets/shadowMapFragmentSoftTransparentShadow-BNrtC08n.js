@@ -1,0 +1,1 @@
+export{xa as shadowMapFragmentSoftTransparentShadow}from"./babylon-game-D7DEFyT0.js";

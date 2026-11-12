@@ -1,0 +1,1 @@
+export{t as volumetricLightingRenderVolumeVertexShaderWGSL}from"./babylon-lazy~moonforestV2~flowGraphGLTFDataProvider~glTFLoaderAnimation.pure~volumetricLigh~fez36m44-DCnbpG1O.js";

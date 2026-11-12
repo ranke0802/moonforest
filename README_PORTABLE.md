@@ -21,6 +21,15 @@ npm run portable:test     # small offline packaging/history regression fixtures
 npm run package           # create exports/portable/MoonForest-portable.zip
 ```
 
+MoonForest 0.1 remains the preserved `ArcherPreviewSite/index.html` release at
+`a40d4ed`. The separate 0.2 entry is `ArcherPreview/moonforest-0.2.html` in
+development and `ArcherPreviewSite/moonforest-0.2.html` when published. Inside
+`ArcherPreview`, use `npm run build:moonforest-0.2` and
+`npm run sync:moonforest-0.2` for an additive 0.2 deployment. These commands verify
+the preserved 0.1 inventory and reuse the same resource graph; they reject
+changes to protected 0.1 files. Do not use `sync:village` to publish 0.2.
+The 0.2 preferences and progress are written to a separate browser namespace.
+
 If the global Windows Node is older, use Launch.cmd / Package.cmd, or invoke the bundled Node directly:
 
 ```powershell

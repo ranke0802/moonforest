@@ -1,4 +1,5 @@
 import {WolfEncounter} from './wolf-encounter.js';
+import {WolfV02Encounter} from './wolf-v02-encounter.js';
 import {WOLF_BALANCE} from './wolf-spec.js';
 import { Vector3 } from '@babylonjs/core';
 import { BossEncounter } from './boss-encounter.js';
@@ -291,7 +292,7 @@ export class BossBattle {
     const models=phase===2?this.mourningModels:phase===1?this.elenaModels:kind==='wolf'?this.wolfModels:kind==='goblin'?this.goblinModels:this.models;
     const pool=phase===2?this.mourningPool:phase===1?this.elenaPool:kind==='wolf'?this.wolfPool:kind==='goblin'?this.goblinPool:this.pool;
     if(!pool[index]){
-      const Encounter=phase===2?MourningElenaEncounter:phase===1?ElenaEncounter:kind==='wolf'?WolfEncounter:kind==='goblin'?GoblinEncounter:BossEncounter;
+      const Encounter=phase===2?MourningElenaEncounter:phase===1?ElenaEncounter:kind==='wolf'?(this.world.release==='moonforest-0.2'?WolfV02Encounter:WolfEncounter):kind==='goblin'?GoblinEncounter:BossEncounter;
       const enemy=new Encounter(this.world,b=>this.bossChanged(b),this.onDamage,(duration,options)=>this.playerHit(duration,options),{combat:this.combat,loadAsset:()=>models.instantiate(),onDefeat:this.onDefeat});
       enemy.number=index+1;enemy.id=kind==='bear'?index+1:kind==='goblin'?`g${index+1}`:`${kind}-${index+1}`;pool.push(enemy);
     }

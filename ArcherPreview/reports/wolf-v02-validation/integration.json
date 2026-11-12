@@ -1,0 +1,858 @@
+{
+  "scope": "Actual packed R8 geometry/rig, authored sampler and Babylon NullEngine with real four-map terrain/navigation for lifecycle. Materials are replaced for CPU-only tests. GPU, physical-device FPS/heat and visual animation approval remain unmeasured.",
+  "cases": [
+    {
+      "case": "release-routing",
+      "manualSummonAndAuthoredActor": true,
+      "legacyAndDefaultUseOriginal": true,
+      "onlyExplicitV02UsesVariant": true
+    },
+    {
+      "case": "source-pose-preservation",
+      "sampledPoses": 17,
+      "unchangedNodeScale": true,
+      "pitchAndBodyJumpPreserved": true,
+      "lungeHeights": [
+        {
+          "time": 0,
+          "pelvis": 2.0950417518615723
+        },
+        {
+          "time": 1.65,
+          "pelvis": 1.7128055095672607
+        },
+        {
+          "time": 2.35,
+          "pelvis": 2.91043758392334
+        },
+        {
+          "time": 3.1,
+          "pelvis": 2.0125010013580322
+        },
+        {
+          "time": 2.02,
+          "pelvis": 3.5049889087677
+        }
+      ]
+    },
+    {
+      "case": "actual-contact",
+      "id": "quick-bite",
+      "fps": 30,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.1839877168812143
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "chain-bite",
+      "fps": 30,
+      "speed": 0.5,
+      "hits": 2,
+      "strikeSerials": 2,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0.2655848514188974,
+          0,
+          0.3720062110157439
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "lunge",
+      "fps": 30,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          -0.4277210900055172,
+          0,
+          23.5353279200272
+        ],
+        "sourceTime": 2.35,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "pin",
+      "fps": 30,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": true,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          7.200752094391058
+        ],
+        "sourceTime": 1.85,
+        "behavior": "followthrough"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "quick-bite",
+      "fps": 30,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.1839877168812143
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "chain-bite",
+      "fps": 30,
+      "speed": 1,
+      "hits": 2,
+      "strikeSerials": 2,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0.26558485141889737,
+          0,
+          0.37200621101574405
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "lunge",
+      "fps": 30,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          -0.5484653928768968,
+          0,
+          23.56720622832737
+        ],
+        "sourceTime": 2.35,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "pin",
+      "fps": 30,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": true,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          7.20075209439106
+        ],
+        "sourceTime": 1.85,
+        "behavior": "followthrough"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "quick-bite",
+      "fps": 30,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.1839877168812143
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "chain-bite",
+      "fps": 30,
+      "speed": 2,
+      "hits": 2,
+      "strikeSerials": 2,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0.2655848514188973,
+          0,
+          0.37200621101574394
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "lunge",
+      "fps": 30,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          -0.8158539577798627,
+          0,
+          23.576807604224708
+        ],
+        "sourceTime": 2.35,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "pin",
+      "fps": 30,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": true,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          7.200752094391058
+        ],
+        "sourceTime": 1.85,
+        "behavior": "followthrough"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "quick-bite",
+      "fps": 60,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.1839877168812143
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "chain-bite",
+      "fps": 60,
+      "speed": 0.5,
+      "hits": 2,
+      "strikeSerials": 2,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0.2655848514188975,
+          0,
+          0.37200621101574405
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "lunge",
+      "fps": 60,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          -0.39858752780721385,
+          0,
+          23.528883948189712
+        ],
+        "sourceTime": 2.35,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "pin",
+      "fps": 60,
+      "speed": 0.5,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": true,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          7.200752094391058
+        ],
+        "sourceTime": 1.85,
+        "behavior": "followthrough"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "quick-bite",
+      "fps": 60,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.1839877168812143
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "chain-bite",
+      "fps": 60,
+      "speed": 1,
+      "hits": 2,
+      "strikeSerials": 2,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0.26558485141889737,
+          0,
+          0.3720062110157439
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "lunge",
+      "fps": 60,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          -0.4277210900055172,
+          0,
+          23.5353279200272
+        ],
+        "sourceTime": 2.35,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "pin",
+      "fps": 60,
+      "speed": 1,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": true,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          7.200752094391058
+        ],
+        "sourceTime": 1.85,
+        "behavior": "followthrough"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "quick-bite",
+      "fps": 60,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          0.1839877168812143
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "chain-bite",
+      "fps": 60,
+      "speed": 2,
+      "hits": 2,
+      "strikeSerials": 2,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          0.2655848514188973,
+          0,
+          0.37200621101574405
+        ],
+        "sourceTime": 1.55,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "lunge",
+      "fps": 60,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": false,
+      "hitPos": {
+        "actor": [
+          -0.5484653928768968,
+          0,
+          23.56720622832737
+        ],
+        "sourceTime": 2.35,
+        "behavior": "strike"
+      }
+    },
+    {
+      "case": "actual-contact",
+      "id": "pin",
+      "fps": 60,
+      "speed": 2,
+      "hits": 1,
+      "strikeSerials": 1,
+      "captured": true,
+      "hitPos": {
+        "actor": [
+          0,
+          0,
+          7.20075209439106
+        ],
+        "sourceTime": 1.85,
+        "behavior": "followthrough"
+      }
+    },
+    {
+      "case": "defenses-and-miss",
+      "dodge": true,
+      "blockWithoutRecoil": true,
+      "missRecovery": true
+    },
+    {
+      "case": "lunge-aim-lock",
+      "turnBeforeCommit": 0.016,
+      "maximumTurn": 0.016,
+      "lockedAfterCommit": true
+    },
+    {
+      "case": "interrupt-escape-death",
+      "heavy": true,
+      "bash": true,
+      "escape": true,
+      "playerDeathRelease": true,
+      "wolfDeathRelease": true,
+      "rewardCount": 1
+    },
+    {
+      "case": "summon-lifecycle",
+      "map": "village",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "instances": 20,
+      "resources": {
+        "meshes": 320,
+        "geometry": 27,
+        "materials": 23,
+        "skeletons": 20,
+        "groups": 240,
+        "morph": 20,
+        "textures": 0,
+        "nodes": 761,
+        "activeAnimatables": 0,
+        "observers": {
+          "onClearColorChangedObservable": 0,
+          "onScenePerformancePriorityChangedObservable": 0,
+          "onDisposeObservable": 1,
+          "onBeforeRenderObservable": 0,
+          "onAfterRenderObservable": 0,
+          "onAfterRenderCameraObservable": 0,
+          "onBeforeAnimationsObservable": 0,
+          "onAfterAnimationsObservable": 0,
+          "onBeforeDrawPhaseObservable": 0,
+          "onAfterDrawPhaseObservable": 0,
+          "onReadyObservable": 0,
+          "onBeforeCameraRenderObservable": 0,
+          "onAfterCameraRenderObservable": 0,
+          "onBeforeActiveMeshesEvaluationObservable": 0,
+          "onAfterActiveMeshesEvaluationObservable": 0,
+          "onBeforeParticlesRenderingObservable": 0,
+          "onAfterParticlesRenderingObservable": 0,
+          "onDataLoadedObservable": 0,
+          "onNewCameraAddedObservable": 0,
+          "onCameraRemovedObservable": 0,
+          "onNewLightAddedObservable": 0,
+          "onLightRemovedObservable": 0,
+          "onNewGeometryAddedObservable": 0,
+          "onGeometryRemovedObservable": 0,
+          "onNewTransformNodeAddedObservable": 0,
+          "onTransformNodeRemovedObservable": 0,
+          "onNewMeshAddedObservable": 0,
+          "onMeshRemovedObservable": 0,
+          "onNewSkeletonAddedObservable": 0,
+          "onSkeletonRemovedObservable": 0,
+          "onNewParticleSystemAddedObservable": 0,
+          "onParticleSystemRemovedObservable": 0,
+          "onNewAnimationGroupAddedObservable": 0,
+          "onAnimationGroupRemovedObservable": 0,
+          "onNewMaterialAddedObservable": 0,
+          "onNewMultiMaterialAddedObservable": 0,
+          "onMaterialRemovedObservable": 0,
+          "onMultiMaterialRemovedObservable": 0,
+          "onNewTextureAddedObservable": 0,
+          "onTextureRemovedObservable": 0,
+          "onNewFrameGraphAddedObservable": 0,
+          "onFrameGraphRemovedObservable": 0,
+          "onNewObjectRendererAddedObservable": 0,
+          "onObjectRendererRemovedObservable": 0,
+          "onNewPostProcessAddedObservable": 0,
+          "onPostProcessRemovedObservable": 0,
+          "onNewEffectLayerAddedObservable": 0,
+          "onEffectLayerRemovedObservable": 0,
+          "onBeforeRenderTargetsRenderObservable": 0,
+          "onAfterRenderTargetsRenderObservable": 0,
+          "onBeforeStepObservable": 0,
+          "onAfterStepObservable": 0,
+          "onBeforeRenderingGroupObservable": 0,
+          "onAfterRenderingGroupObservable": 0,
+          "onMeshImportedObservable": 0,
+          "onAnimationFileImportedObservable": 0,
+          "onEnvironmentTextureChangedObservable": 0,
+          "onMeshUnderPointerUpdatedObservable": 0,
+          "onPrePointerObservable": 0,
+          "onPointerObservable": 0,
+          "onPreKeyboardObservable": 0,
+          "onKeyboardObservable": 0,
+          "onReadyTimeoutObservable": 0
+        }
+      },
+      "independentSkeletonsAndMorph": true,
+      "sharedGeometry": true
+    },
+    {
+      "case": "summon-lifecycle",
+      "map": "great-plains",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "instances": 20,
+      "resources": {
+        "meshes": 320,
+        "geometry": 27,
+        "materials": 23,
+        "skeletons": 20,
+        "groups": 240,
+        "morph": 20,
+        "textures": 0,
+        "nodes": 761,
+        "activeAnimatables": 0,
+        "observers": {
+          "onClearColorChangedObservable": 0,
+          "onScenePerformancePriorityChangedObservable": 0,
+          "onDisposeObservable": 1,
+          "onBeforeRenderObservable": 0,
+          "onAfterRenderObservable": 0,
+          "onAfterRenderCameraObservable": 0,
+          "onBeforeAnimationsObservable": 0,
+          "onAfterAnimationsObservable": 0,
+          "onBeforeDrawPhaseObservable": 0,
+          "onAfterDrawPhaseObservable": 0,
+          "onReadyObservable": 0,
+          "onBeforeCameraRenderObservable": 0,
+          "onAfterCameraRenderObservable": 0,
+          "onBeforeActiveMeshesEvaluationObservable": 0,
+          "onAfterActiveMeshesEvaluationObservable": 0,
+          "onBeforeParticlesRenderingObservable": 0,
+          "onAfterParticlesRenderingObservable": 0,
+          "onDataLoadedObservable": 0,
+          "onNewCameraAddedObservable": 0,
+          "onCameraRemovedObservable": 0,
+          "onNewLightAddedObservable": 0,
+          "onLightRemovedObservable": 0,
+          "onNewGeometryAddedObservable": 0,
+          "onGeometryRemovedObservable": 0,
+          "onNewTransformNodeAddedObservable": 0,
+          "onTransformNodeRemovedObservable": 0,
+          "onNewMeshAddedObservable": 0,
+          "onMeshRemovedObservable": 0,
+          "onNewSkeletonAddedObservable": 0,
+          "onSkeletonRemovedObservable": 0,
+          "onNewParticleSystemAddedObservable": 0,
+          "onParticleSystemRemovedObservable": 0,
+          "onNewAnimationGroupAddedObservable": 0,
+          "onAnimationGroupRemovedObservable": 0,
+          "onNewMaterialAddedObservable": 0,
+          "onNewMultiMaterialAddedObservable": 0,
+          "onMaterialRemovedObservable": 0,
+          "onMultiMaterialRemovedObservable": 0,
+          "onNewTextureAddedObservable": 0,
+          "onTextureRemovedObservable": 0,
+          "onNewFrameGraphAddedObservable": 0,
+          "onFrameGraphRemovedObservable": 0,
+          "onNewObjectRendererAddedObservable": 0,
+          "onObjectRendererRemovedObservable": 0,
+          "onNewPostProcessAddedObservable": 0,
+          "onPostProcessRemovedObservable": 0,
+          "onNewEffectLayerAddedObservable": 0,
+          "onEffectLayerRemovedObservable": 0,
+          "onBeforeRenderTargetsRenderObservable": 0,
+          "onAfterRenderTargetsRenderObservable": 0,
+          "onBeforeStepObservable": 0,
+          "onAfterStepObservable": 0,
+          "onBeforeRenderingGroupObservable": 0,
+          "onAfterRenderingGroupObservable": 0,
+          "onMeshImportedObservable": 0,
+          "onAnimationFileImportedObservable": 0,
+          "onEnvironmentTextureChangedObservable": 0,
+          "onMeshUnderPointerUpdatedObservable": 0,
+          "onPrePointerObservable": 0,
+          "onPointerObservable": 0,
+          "onPreKeyboardObservable": 0,
+          "onKeyboardObservable": 0,
+          "onReadyTimeoutObservable": 0
+        }
+      },
+      "independentSkeletonsAndMorph": true,
+      "sharedGeometry": true
+    },
+    {
+      "case": "summon-lifecycle",
+      "map": "monster-forest",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "instances": 20,
+      "resources": {
+        "meshes": 320,
+        "geometry": 27,
+        "materials": 23,
+        "skeletons": 20,
+        "groups": 240,
+        "morph": 20,
+        "textures": 0,
+        "nodes": 761,
+        "activeAnimatables": 0,
+        "observers": {
+          "onClearColorChangedObservable": 0,
+          "onScenePerformancePriorityChangedObservable": 0,
+          "onDisposeObservable": 1,
+          "onBeforeRenderObservable": 0,
+          "onAfterRenderObservable": 0,
+          "onAfterRenderCameraObservable": 0,
+          "onBeforeAnimationsObservable": 0,
+          "onAfterAnimationsObservable": 0,
+          "onBeforeDrawPhaseObservable": 0,
+          "onAfterDrawPhaseObservable": 0,
+          "onReadyObservable": 0,
+          "onBeforeCameraRenderObservable": 0,
+          "onAfterCameraRenderObservable": 0,
+          "onBeforeActiveMeshesEvaluationObservable": 0,
+          "onAfterActiveMeshesEvaluationObservable": 0,
+          "onBeforeParticlesRenderingObservable": 0,
+          "onAfterParticlesRenderingObservable": 0,
+          "onDataLoadedObservable": 0,
+          "onNewCameraAddedObservable": 0,
+          "onCameraRemovedObservable": 0,
+          "onNewLightAddedObservable": 0,
+          "onLightRemovedObservable": 0,
+          "onNewGeometryAddedObservable": 0,
+          "onGeometryRemovedObservable": 0,
+          "onNewTransformNodeAddedObservable": 0,
+          "onTransformNodeRemovedObservable": 0,
+          "onNewMeshAddedObservable": 0,
+          "onMeshRemovedObservable": 0,
+          "onNewSkeletonAddedObservable": 0,
+          "onSkeletonRemovedObservable": 0,
+          "onNewParticleSystemAddedObservable": 0,
+          "onParticleSystemRemovedObservable": 0,
+          "onNewAnimationGroupAddedObservable": 0,
+          "onAnimationGroupRemovedObservable": 0,
+          "onNewMaterialAddedObservable": 0,
+          "onNewMultiMaterialAddedObservable": 0,
+          "onMaterialRemovedObservable": 0,
+          "onMultiMaterialRemovedObservable": 0,
+          "onNewTextureAddedObservable": 0,
+          "onTextureRemovedObservable": 0,
+          "onNewFrameGraphAddedObservable": 0,
+          "onFrameGraphRemovedObservable": 0,
+          "onNewObjectRendererAddedObservable": 0,
+          "onObjectRendererRemovedObservable": 0,
+          "onNewPostProcessAddedObservable": 0,
+          "onPostProcessRemovedObservable": 0,
+          "onNewEffectLayerAddedObservable": 0,
+          "onEffectLayerRemovedObservable": 0,
+          "onBeforeRenderTargetsRenderObservable": 0,
+          "onAfterRenderTargetsRenderObservable": 0,
+          "onBeforeStepObservable": 0,
+          "onAfterStepObservable": 0,
+          "onBeforeRenderingGroupObservable": 0,
+          "onAfterRenderingGroupObservable": 0,
+          "onMeshImportedObservable": 0,
+          "onAnimationFileImportedObservable": 0,
+          "onEnvironmentTextureChangedObservable": 0,
+          "onMeshUnderPointerUpdatedObservable": 0,
+          "onPrePointerObservable": 0,
+          "onPointerObservable": 0,
+          "onPreKeyboardObservable": 0,
+          "onKeyboardObservable": 0,
+          "onReadyTimeoutObservable": 0
+        }
+      },
+      "independentSkeletonsAndMorph": true,
+      "sharedGeometry": true
+    },
+    {
+      "case": "summon-lifecycle",
+      "map": "witch-cave",
+      "counts": [
+        1,
+        5,
+        10,
+        20
+      ],
+      "warmRepeats": 3,
+      "instances": 20,
+      "resources": {
+        "meshes": 320,
+        "geometry": 27,
+        "materials": 23,
+        "skeletons": 20,
+        "groups": 240,
+        "morph": 20,
+        "textures": 0,
+        "nodes": 761,
+        "activeAnimatables": 0,
+        "observers": {
+          "onClearColorChangedObservable": 0,
+          "onScenePerformancePriorityChangedObservable": 0,
+          "onDisposeObservable": 1,
+          "onBeforeRenderObservable": 0,
+          "onAfterRenderObservable": 0,
+          "onAfterRenderCameraObservable": 0,
+          "onBeforeAnimationsObservable": 0,
+          "onAfterAnimationsObservable": 0,
+          "onBeforeDrawPhaseObservable": 0,
+          "onAfterDrawPhaseObservable": 0,
+          "onReadyObservable": 0,
+          "onBeforeCameraRenderObservable": 0,
+          "onAfterCameraRenderObservable": 0,
+          "onBeforeActiveMeshesEvaluationObservable": 0,
+          "onAfterActiveMeshesEvaluationObservable": 0,
+          "onBeforeParticlesRenderingObservable": 0,
+          "onAfterParticlesRenderingObservable": 0,
+          "onDataLoadedObservable": 0,
+          "onNewCameraAddedObservable": 0,
+          "onCameraRemovedObservable": 0,
+          "onNewLightAddedObservable": 0,
+          "onLightRemovedObservable": 0,
+          "onNewGeometryAddedObservable": 0,
+          "onGeometryRemovedObservable": 0,
+          "onNewTransformNodeAddedObservable": 0,
+          "onTransformNodeRemovedObservable": 0,
+          "onNewMeshAddedObservable": 0,
+          "onMeshRemovedObservable": 0,
+          "onNewSkeletonAddedObservable": 0,
+          "onSkeletonRemovedObservable": 0,
+          "onNewParticleSystemAddedObservable": 0,
+          "onParticleSystemRemovedObservable": 0,
+          "onNewAnimationGroupAddedObservable": 0,
+          "onAnimationGroupRemovedObservable": 0,
+          "onNewMaterialAddedObservable": 0,
+          "onNewMultiMaterialAddedObservable": 0,
+          "onMaterialRemovedObservable": 0,
+          "onMultiMaterialRemovedObservable": 0,
+          "onNewTextureAddedObservable": 0,
+          "onTextureRemovedObservable": 0,
+          "onNewFrameGraphAddedObservable": 0,
+          "onFrameGraphRemovedObservable": 0,
+          "onNewObjectRendererAddedObservable": 0,
+          "onObjectRendererRemovedObservable": 0,
+          "onNewPostProcessAddedObservable": 0,
+          "onPostProcessRemovedObservable": 0,
+          "onNewEffectLayerAddedObservable": 0,
+          "onEffectLayerRemovedObservable": 0,
+          "onBeforeRenderTargetsRenderObservable": 0,
+          "onAfterRenderTargetsRenderObservable": 0,
+          "onBeforeStepObservable": 0,
+          "onAfterStepObservable": 0,
+          "onBeforeRenderingGroupObservable": 0,
+          "onAfterRenderingGroupObservable": 0,
+          "onMeshImportedObservable": 0,
+          "onAnimationFileImportedObservable": 0,
+          "onEnvironmentTextureChangedObservable": 0,
+          "onMeshUnderPointerUpdatedObservable": 0,
+          "onPrePointerObservable": 0,
+          "onPointerObservable": 0,
+          "onPreKeyboardObservable": 0,
+          "onKeyboardObservable": 0,
+          "onReadyTimeoutObservable": 0
+        }
+      },
+      "independentSkeletonsAndMorph": true,
+      "sharedGeometry": true
+    },
+    {
+      "case": "cancel-retry",
+      "pendingWaiters": 0,
+      "modelsAfterRetry": 5,
+      "lateActivation": false
+    }
+  ]
+}

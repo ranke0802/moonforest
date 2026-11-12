@@ -2,16 +2,17 @@ import { normalizeAttackSpeed } from './controller.js';
 import { V2_LABELS, V2_MOTION_DEFAULTS } from './warrior-v2.js';
 
 const STORAGE_KEY='warrior-v2-motion-speeds-v2';
-export function setupMotionSpeedControls({getController,beforeOpen}) {
+export function setupMotionSpeedControls({getController,beforeOpen,storage}) {
+  if(storage===undefined)try{storage=globalThis.localStorage;}catch{}
   const $=selector=>document.querySelector(selector),dialog=$('#motion-speed-dialog');
   let saved={};
   try{
-    const current=localStorage.getItem(STORAGE_KEY);
-    saved=JSON.parse(current||localStorage.getItem('warrior-v2-motion-speeds')||'{}')||{};
+    const current=storage?.getItem(STORAGE_KEY);
+    saved=JSON.parse(current||storage?.getItem('warrior-v2-motion-speeds')||'{}')||{};
     if(!current){delete saved.attack;delete saved.dodge;}
   }catch{/* Use defaults when storage is unavailable. */}
   const speeds=Object.fromEntries(Object.keys(V2_LABELS).map(state=>[state,normalizeAttackSpeed(saved[state]??V2_MOTION_DEFAULTS[state])]));
-  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(speeds));}catch{/* Keep session values. */}
+  try{storage?.setItem(STORAGE_KEY,JSON.stringify(speeds));}catch{/* Keep session values. */}
   const fields=new Map();
   function sync(state){
     for(const {input,output} of fields.get(state)||[]){
@@ -22,7 +23,7 @@ export function setupMotionSpeedControls({getController,beforeOpen}) {
   }
   function setSpeed(state,value){
     speeds[state]=normalizeAttackSpeed(value);sync(state);
-    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(speeds));}catch{/* Keep session values. */}
+    try{storage?.setItem(STORAGE_KEY,JSON.stringify(speeds));}catch{/* Keep session values. */}
   }
   function bind(state,input,output,reset){
     if(!fields.has(state))fields.set(state,[]);

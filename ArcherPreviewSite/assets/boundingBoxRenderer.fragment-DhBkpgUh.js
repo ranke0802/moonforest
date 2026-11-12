@@ -1,0 +1,1 @@
+export{it as boundingBoxRendererPixelShader}from"./babylon-game-D7DEFyT0.js";

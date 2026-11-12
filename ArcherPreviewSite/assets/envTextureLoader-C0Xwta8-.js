@@ -1,0 +1,1 @@
+export{i as _ENVTextureLoader}from"./babylon-lazy~moonforestV2~flowGraphGLTFDataProvider~glTFLoaderAnimation.pure~volumetricLigh~fez36m44-DCnbpG1O.js";

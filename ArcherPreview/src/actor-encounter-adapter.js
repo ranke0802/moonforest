@@ -1,4 +1,5 @@
 import {WolfEncounter} from './wolf-encounter.js';
+import {WolfV02Encounter} from './wolf-v02-encounter.js';
 import {Vector3} from '@babylonjs/core';
 import {BossEncounter} from './boss-encounter.js';
 import {GoblinEncounter} from './goblin-encounter.js';
@@ -73,7 +74,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
   function create(definition,context={}){
     if(disposed)throw bossPreparationCancelled();
     if(typeof definition==='string')definition=getActorDefinition(definition);
-    const Encounter=encounters[definition.encounterType];if(!Encounter)throw new Error('Unsupported actor encounter: '+definition.encounterType);
+    const Encounter=definition.encounterType==='wolf'&&world.release==='moonforest-0.2'?WolfV02Encounter:encounters[definition.encounterType];if(!Encounter)throw new Error('Unsupported actor encounter: '+definition.encounterType);
     const profile=registeredProfile(definition);
     const entry=entryFor(definition),mapId=world.mapId,current=context.isCurrent??(()=>true),id='development-actor-'+(++serial),ownedAssets=new Set();
     entry.references++;

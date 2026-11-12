@@ -1,0 +1,1 @@
+import{i as e}from"./babylon-tools~moonforestV2~npc-world~developer-editor~developer-actors~cinematic-game~autho~ec31zlpl-BqltO0ki.js";var t=class{static get Now(){return e()&&window.performance&&window.performance.now?window.performance.now():Date.now()}};export{t};

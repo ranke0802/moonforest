@@ -1,0 +1,1 @@
+export{Or as gaussianSplattingFragmentDeclaration}from"./babylon-game-D7DEFyT0.js";

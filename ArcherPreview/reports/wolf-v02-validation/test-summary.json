@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-12",
+  "runtime": "Tools/portable/runtime/win-x64/node/node.exe",
+  "command": "node --test tests/wolf-v02-brain.test.js tests/wolf-v02-integration.test.js tests/wolf-pattern-size.test.js tests/boss-combat.test.js tests/boss-battle.test.js tests/boss-pattern-settings.test.js tests/boss-pattern-integration.test.js",
+  "tests": 72,
+  "passed": 72,
+  "failed": 0,
+  "durationMs": 13384.6498,
+  "newTestFiles": [
+    "tests/wolf-v02-brain.test.js",
+    "tests/wolf-v02-integration.test.js"
+  ],
+  "evidence": [
+    "Legacy R8 hashes, size, movement speed and original attack impact contracts unchanged",
+    "Default and 0.1 manual summons and authored actor adapter select original encounter; only explicit 0.2 uses variant",
+    "Every action at 30/60 Hz and 0.5/1/2 attack speed contacts an untouched stationary target using the packed R8 rig and warrior dimensions",
+    "Quick/chain bite never capture; two chain strikes have independent serials and damage once each",
+    "Source excerpts preserve local node transforms, scale, root pitch, planar extraction and authored lunge body height",
+    "Anticipation turn rate is bounded and committed lunge aim stays locked",
+    "Dodge, shield push, miss recovery, heavy/bash interruption, capture escape, player death and wolf death paths pass",
+    "Four maps each summon 1/5/10/20 with independent rigs; three warm 20-member reuse cycles keep scene resources and observers stable with zero active native animatables",
+    "Cancellation leaves no pending preparation waiters or late active actors and retries without duplicate model instances"
+  ],
+  "limits": [
+    "Babylon NullEngine CPU scheduling and geometry/rig contacts only",
+    "Packed color textures are not decoded for these tests; materials are replaced",
+    "No browser automation or physical GPU/device FPS, heat, visual animation approval or touch-play feel measurement"
+  ]
+}

@@ -1,0 +1,1 @@
+export{i as _HDRTextureLoader}from"./babylon-lazy~moonforestV2~pbrMaterialLoadingAdapter~gpuRenderParticles.fragment~iblCopyVoxe~lr49srlz-Dk8rMkPj.js";

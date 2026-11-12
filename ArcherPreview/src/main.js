@@ -6,7 +6,8 @@ import {DotMinimap} from './dot-minimap.js';
 import {setupMinimapTravel,applyMinimapArrivalPose} from './minimap-travel.js';
 import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
-import {releaseRoute,releaseSelectionUrl,releaseSelectionValue,MOONFOREST_RELEASE,MOONFOREST_RELEASE_LABEL} from './release-route.js';
+import {releaseRoute,releaseSelectionUrl,releaseSelectionValue,isMoonforestRelease} from './release-route.js';
+import {releaseStorage} from './release-storage.js';
 import {loadAuthoredMap} from './authored-map-loader.js';
 import {authoringCharacter,setupAuthoringNavigation} from './authoring-navigation.js';
 import {readStoryboardOpening,setupStoryboardOpening} from './storyboard-opening.js';
@@ -128,7 +129,7 @@ const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabl
 const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1';
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
-if(releaseEnabled){document.title=MOONFOREST_RELEASE_LABEL;document.documentElement.dataset.release=MOONFOREST_RELEASE;}
+if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
 let character = uiRoute.character;
 let uiTest=null;
 let commercialUi, hudLayout, developerTools;
@@ -174,6 +175,7 @@ let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
+equipmentStorage=releaseStorage(equipmentStorage,versionRoute.release);
 const movementSpeedSettings=setupMovementSpeedSettings({host:$('#common-speed-settings .settings-section-body'),storage:equipmentStorage,onChange:value=>controller?.setMovementSpeed?.(value)});
 const swordTrailSettings=setupSwordTrailSettings({host:$('.settings-display-options'),storage:equipmentStorage,onChange:value=>{swordTrail?.setEnabled(value);renderActivity.wake();frameLoop?.invalidate();}});
 if(import.meta.hot)import.meta.hot.dispose(()=>swordTrailSettings.dispose());
@@ -182,10 +184,11 @@ const frameRateControl=setupFrameRateControl({select:$('#frame-rate-select'),sto
 if(import.meta.hot)import.meta.hot.dispose(()=>frameRateControl.dispose());
 const plainsViewDistanceControl=setupPlainsViewDistanceControl({select:$('#plains-view-distance-select'),storage:equipmentStorage,onChange:value=>{if(world)applyPlainsViewDistance(world,value);renderActivity.wake();frameLoop?.invalidate();}});
 if(import.meta.hot)import.meta.hot.dispose(()=>plainsViewDistanceControl.dispose());
-const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,onChange:value=>boss?.setAttackSettings(value)});
+const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,release:versionRoute.release,onChange:value=>boss?.setAttackSettings(value)});
 const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onChange:value=>{if(world)setSceneCharacterStyles(world.scene,value);renderActivity.wake();frameLoop?.invalidate();}});
 let travelStorage;
 try { travelStorage=sessionStorage; } catch { /* Travel also works without state storage. */ }
+travelStorage=releaseStorage(travelStorage,versionRoute.release,{inherit:false});
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
 const journeyStorage=uiTestEnabled?uiTestStorage(equipmentStorage):equipmentStorage;
 if(uiTestEnabled)travelStorage=uiTestStorage(travelStorage);
@@ -229,7 +232,7 @@ const shieldInput=new ShieldHoldSources({
 });
 let toastTimer;
 let qualityMode = 'high';
-try { qualityMode = localStorage.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
+try { qualityMode = equipmentStorage?.getItem('archer-render-quality') || 'high'; } catch { /* Storage may be unavailable in private browsing. */ }
 if (!['high', 'balanced', 'battery'].includes(qualityMode)) qualityMode = 'high';
 let renderViewportKey='';
 const renderScaleControl=setupRenderScaleControl({host:$('.settings-display-options'),storage:equipmentStorage,touchDevice,onChange:()=>applyRenderQuality()});
@@ -279,7 +282,7 @@ const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:lo
 loadingView.setDiagnostics(()=>frameDiagnostics.snapshot());
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
-  try{return normalizeAttackSpeed(Number(localStorage.getItem(attackSpeedStorageKey())??1));}
+  try{return normalizeAttackSpeed(Number(equipmentStorage?.getItem(attackSpeedStorageKey())??1));}
   catch{return 1;}
 }
 let attackSpeed=readAttackSpeed();
@@ -291,7 +294,7 @@ function applyAttackSpeed(value) {
   $('#attack-speed').setAttribute('aria-valuetext', `${attackSpeed.toFixed(1)}배`);
 }
 applyAttackSpeed(attackSpeed);
-const motionSpeedControls=setupMotionSpeedControls({getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
+const motionSpeedControls=setupMotionSpeedControls({storage:equipmentStorage,getController:()=>isV2()?controller:null,beforeOpen:()=>{cancelAttackInput();input?.reset();}});
 const deathScreen=setupDeathScreen({beforeOpen:()=>{staminaNoticeAnchor.reset();staminaFeedback.reset(controller);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);cancelAttackInput();input?.reset();audio.stopAll();audio.play('death');},onRestart:()=>{world.authoredMonsters?.leaveMap();resetBeforeBoss();world.storyboardEvents?.emit('restart');}});
 
 function resizeScreenProjection(){
@@ -599,7 +602,7 @@ async function loadCharacter() {
     animator.update(0);
     $('#sword-select').disabled = !equipment; $('#shield-select').disabled = !equipment;
     $('#build-tag').textContent = isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':isVillage() ? 'VILLAGE / 03' : config.version || 'ARCHER / 01';
-    $('#character-select').value = releaseSelectionValue(releaseEnabled,character,uiTestEnabled);
+    $('#character-select').value = releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);
     $('#character-name').textContent = isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':isVillage() ? 'Violet Vanguard v3' : isV2() ? 'Violet Vanguard v2' : isWarrior() ? 'Violet Vanguard' : 'Azure Elf';
     $('#character-subtitle').textContent = isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage() ? (world.environment.mode==='village-fixture'?`개발 배치 검수 · 실제 모델 ${world.environment.sourceAssets} / 25 · 빈 부지는 윤곽 표시`:'숲의 경계 마을') : isWarrior() ? '보랏빛 선봉의 전사' : '푸른 숲의 궁수';
     $('#character-eyebrow').textContent = isWarrior() ? 'THE VIOLET VANGUARD' : 'THE MOONLIT RANGER';
@@ -879,6 +882,7 @@ try {
   engine.renderEvenInBackground=cinematicAuthoringPreview;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
+  world.release=versionRoute.release;
   world.weather=weatherSettings;weatherSettings.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
   if(releaseEnabled){
@@ -1018,7 +1022,7 @@ try {
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
-      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled);bindMapPortal(handoff?.from??null);
+      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);bindMapPortal(handoff?.from??null);
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();world.authoredPlacements?.update(0,actor);
       await skyReady;
@@ -1095,7 +1099,7 @@ try {
   world.scene.onDisposeObservable.addOnce(viewportResize);
   $('#quality-select').addEventListener('change', event => {
     qualityMode = event.target.value;
-    try { localStorage.setItem('archer-render-quality', qualityMode); } catch { /* Keep the current session choice. */ }
+    try { equipmentStorage?.setItem('archer-render-quality', qualityMode); } catch { /* Keep the current session choice. */ }
     applyRenderQuality();
   });
   $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
@@ -1139,11 +1143,11 @@ try {
   });
   for(const motion of BOSS_ACTIVE_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#boss-motion-list').append(li);}
   for(const motion of GOBLIN_MOTIONS){const li=document.createElement('li');li.textContent=`${motion.label} · ${motion.name}`;$('#goblin-motion-list').append(li);}
-  $('#character-select').value = releaseSelectionValue(releaseEnabled,character,uiTestEnabled);
+  $('#character-select').value = releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);
   $('#character-select').addEventListener('change', event => {
     if (loadingAsset) return;
-    if(event.target.value===MOONFOREST_RELEASE||releaseEnabled){
-      if(event.target.value===MOONFOREST_RELEASE&&releaseEnabled)return;
+    if(isMoonforestRelease(event.target.value)||releaseEnabled){
+      if(event.target.value===versionRoute.release&&releaseEnabled)return;
       let url=releaseSelectionUrl(location.href,event.target.value);
       if(event.target.value==='ui-test')url=uiTestSelectionUrl(url,event.target.value);
       mapDeparture.leave(url.href);return;
@@ -1161,11 +1165,11 @@ try {
   });
   $('#attack-speed').addEventListener('input', event => {
     applyAttackSpeed(Number(event.target.value));
-    try { localStorage.setItem(attackSpeedStorageKey(), String(attackSpeed)); } catch { /* Keep the session choice. */ }
+    try { equipmentStorage?.setItem(attackSpeedStorageKey(), String(attackSpeed)); } catch { /* Keep the session choice. */ }
   });
   $('#reset-attack-speed').addEventListener('click', () => {
     applyAttackSpeed(1);
-    try { localStorage.setItem(attackSpeedStorageKey(), '1'); } catch { /* Keep the session choice. */ }
+    try { equipmentStorage?.setItem(attackSpeedStorageKey(), '1'); } catch { /* Keep the session choice. */ }
   });
   const attackButton = $('#attack-button');
   let lastPointerAttack = -Infinity;

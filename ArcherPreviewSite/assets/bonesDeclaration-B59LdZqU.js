@@ -1,0 +1,1 @@
+export{Ad as bonesDeclarationWGSL}from"./babylon-game-D7DEFyT0.js";
