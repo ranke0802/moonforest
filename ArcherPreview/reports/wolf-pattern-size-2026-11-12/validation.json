@@ -1,0 +1,42 @@
+{
+  "scale": 2.5,
+  "restHeightMeters": 3.75,
+  "patterns": [
+    "Run_Dodge_Lunge_R5",
+    "Pin_Throat_Bite_R5"
+  ],
+  "attackSpeedRange": [
+    0.5,
+    2
+  ],
+  "speedChangesApplyOnNextAttack": true,
+  "walkingMetersPerSecond": 0.9,
+  "runningMetersPerSecond": 4.2,
+  "gaitPlaybackRate": 0.4,
+  "collisionRadius": 1.625,
+  "health": 900,
+  "damage": [
+    100,
+    120
+  ],
+  "sourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
+  "model": "./content/e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63.gltf",
+  "texture": "445fbd01f773332c1b5a01bf2381ddd417b3c49fd3358c093d6807b2a50f819a",
+  "originalMeshUvRigAndTwelveClipsRetained": true,
+  "relatedNodeTests": {
+    "passed": 167,
+    "failed": 0
+  },
+  "finalFocusedNodeTests": {
+    "passed": 42,
+    "failed": 0
+  },
+  "fourMapSummonCounts": [
+    1,
+    5,
+    10,
+    20
+  ],
+  "browserAutomationUsed": false,
+  "physicalDeviceGpuFpsAndHeat": "not measured"
+}

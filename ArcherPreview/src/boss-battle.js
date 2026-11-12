@@ -334,7 +334,7 @@ export class BossBattle {
         const occupied=this.spawnOccupants(player,others),placements=[];
         for(let index=0;index<count;index++){
           const enemy=this.manualEncounter(kind,index),position=positions[index],navigation=enemy.movementNavigation??this.world.navigation;
-          if(navigation){await preparation.pause();const safe=await navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied,preparation);preparation.check();position.x=safe.x;position.z=safe.z;}
+          if(navigation){await preparation.pause();const safe=await (enemy.findSummonPosition?enemy.findSummonPosition(position,radius,ENEMY_ARENA_RADIUS,occupied,preparation):navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied,preparation));preparation.check();position.x=safe.x;position.z=safe.z;}
           placements.push([...occupied]);occupied.push({x:position.x,z:position.z,radius});
         }
         return {positions,placements};

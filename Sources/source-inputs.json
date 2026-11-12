@@ -31581,8 +31581,8 @@
     {
       "id": "file:Sources/actors/tripo-monsters/wolf-game-r8/runtime-manifest.json",
       "path": "Sources/actors/tripo-monsters/wolf-game-r8/runtime-manifest.json",
-      "bytes": 318251,
-      "sha256": "551a3336a53b8f04778ff615f0bf780290444e66deedde867aa9344af30e17f0",
+      "bytes": 318364,
+      "sha256": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
       "origins": [
         "Derived from registered wolf-attack-r8; original mesh/UV/weights/binds and twelve clips preserved"
       ],

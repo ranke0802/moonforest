@@ -8,7 +8,7 @@ import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {BossModelLibrary} from '../src/boss-models.js';
 import {BossBattle} from '../src/boss-battle.js';
-import {WolfBrain,WOLF_CLIPS,WOLF_STYLE} from '../src/wolf-spec.js';
+import {WolfBrain,WOLF_CLIPS,WOLF_STYLE,WOLF_BALANCE,WOLF_SCALE} from '../src/wolf-spec.js';
 import {WolfGrab} from '../src/wolf-grab.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
@@ -21,9 +21,11 @@ import {plainsObstacles} from '../src/great-plains-layout.js';
 import {forestObstacles} from '../src/monster-forest-layout.js';
 import {caveObstacles} from '../src/witch-cave-layout.js';
 import {getActorDefinition} from '../src/actor-definitions.js';
+import {setWorldCharacter} from '../src/world-limits.js';
 const base=new URL('../public/assets/',import.meta.url),rows=[];
 const maps=[['village',createVillageTerrain,villageObstacles],['great-plains',createGreatPlainsTerrain,plainsObstacles],['monster-forest',createMonsterForestTerrain,forestObstacles],['witch-cave',createWitchCaveTerrain,caveObstacles]];
 async function fixture(t,map=maps[1]){
+ setWorldCharacter({'village':'warrior-v3','great-plains':'warrior-plains','monster-forest':'warrior-v4','witch-cave':'warrior-v5'}[map[0]]);t.after(()=>setWorldCharacter('warrior'));
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;new FreeCamera('camera',new Vector3(0,5,-10),scene);
  const config=JSON.parse(fs.readFileSync(new URL('alpha-wolf.json',base))),decoded=await readRuntimeGltf(new URL(config.model,base)),gltf=structuredClone(decoded.gltf);
  for(const key of ['extensionsUsed','extensionsRequired'])gltf[key]=(gltf[key]??[]).filter(x=>x!=='EXT_meshopt_compression'&&x!=='KHR_texture_basisu');
@@ -39,7 +41,7 @@ async function fixture(t,map=maps[1]){
 const counts=scene=>({mesh:scene.meshes.length,geometry:scene.geometries.length,skeleton:scene.skeletons.length,animation:scene.animationGroups.length,morph:scene.morphTargetManagers.length,textures:scene.textures.length,beforeRender:scene.onBeforeRenderObservable.observers.length});
 test.after(()=>{fs.mkdirSync('reports/wolf-r8-integration',{recursive:true});fs.writeFileSync('reports/wolf-r8-integration/validation.json',JSON.stringify({scope:'Packed R8 asset, actual terrain/navigation and Babylon NullEngine; GPU and real-device FPS/heat not measured',cases:rows},null,2));});
 test('R8 asset definition and style isolate the wolf without changing other boss defaults',()=>{
- const def=getActorDefinition('alpha-wolf.r8');assert.equal(def.assetId,'alpha-wolf');assert.equal(def.encounterType,'wolf');assert.equal(def.movement.runSpeed,4.2);assert.equal(def.movement.walkSpeed,.9);assert.deepEqual(def.style.defaults,WOLF_STYLE);
+ const def=getActorDefinition('alpha-wolf.r8');assert.equal(def.assetId,'alpha-wolf');assert.equal(def.encounterType,'wolf');assert.equal(WOLF_SCALE,2.5);assert.equal(def.movement.runSpeed,4.2);assert.equal(def.movement.walkSpeed,.9);assert.deepEqual(def.style.defaults,WOLF_STYLE);
  assert.match(fs.readFileSync('index.html','utf8'),/value="wolf"[^>]*>우두머리 늑대/);
 });
 test('authored attack events survive long frames exactly once, deaths never recover, blocked stun has no movement',()=>{
@@ -89,10 +91,10 @@ test('real jaw/paw contacts respect dodge and shield, heavy/bash knock down, cap
 });
 test('authored long lunge lands on a 10.4 m target once; carrier cancels only planar root, not body pitch/flight',async t=>{
  const f=await fixture(t);await f.battle.summon(f.player,1,'wolf');const e=f.battle.encounters[0],p=f.player;f.world.navigation=null;f.world.terrain={place(v){v.y=0;}};
- e.actor.position.set(0,0,0);e.actor.rotation.y=0;e.brain.start(WOLF_CLIPS.lunge,'attack');p.position.set(0,0,10.4);e.playerHp=500;let hits=0;const old=e.hitPlayer.bind(e);e.hitPlayer=(...args)=>{hits++;old(...args);};
+ e.actor.position.set(0,0,0);e.actor.rotation.y=0;e.brain.start(WOLF_CLIPS.lunge,'attack');p.position.set(0,0,WOLF_BALANCE.lungeDistance);e.playerHp=500;let hits=0;const old=e.hitPlayer.bind(e);e.hitPlayer=(...args)=>{hits++;old(...args);};
  for(let i=0;i<235;i++){e.update(.01,p);e.poseAndContacts(p,{state:'idle'},null,null);}
- assert.equal(hits,1);assert.ok(e.playerHp<500);assert.ok(e.actor.position.z>9&&e.actor.position.z<10);assert.ok(Math.abs(e.animator.root.getAbsolutePosition().z-e.actor.position.z)<.0005,JSON.stringify({root:e.animator.root.getAbsolutePosition().asArray(),actor:e.actor.position.asArray(),local:e.animator.root.position.asArray(),carrier:e.carrier.position.asArray(),parents:e.animator.nodes.map(n=>[n.name,n.parent?.name])}));
- rows.push({authoredLungeTargetMeters:10.4,biteHits:hits,actorMeters:e.actor.position.z,rootNotAppliedTwice:true,pitchAndFlightPreserved:true});
+ assert.equal(hits,1);assert.ok(e.playerHp<500);assert.ok(e.actor.position.z>9*WOLF_SCALE&&e.actor.position.z<10*WOLF_SCALE);assert.ok(Math.abs(e.animator.root.getAbsolutePosition().z-e.actor.position.z)<.001,JSON.stringify({root:e.animator.root.getAbsolutePosition().asArray(),actor:e.actor.position.asArray(),local:e.animator.root.position.asArray(),carrier:e.carrier.position.asArray()}));
+ rows.push({worldScale:WOLF_SCALE,authoredLungeTargetMeters:WOLF_BALANCE.lungeDistance,biteHits:hits,actorMeters:e.actor.position.z,rootNotAppliedTwice:true,pitchAndFlightPreserved:true});
 });
 test('warm wolf pool survives repeated four-map round trips and warning height follows the current terrain',async t=>{
  const f=await fixture(t);await f.battle.summon(f.player,5,'wolf');const enemies=[...f.battle.encounters],before=counts(f.scene);

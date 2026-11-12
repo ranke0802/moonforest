@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {NullEngine,Scene,TransformNode,Vector3,StandardMaterial,Quaternion} from '@babylonjs/core';
+import {NullEngine,Scene,TransformNode,Vector3,StandardMaterial,Quaternion,FreeCamera} from '@babylonjs/core';
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
@@ -14,6 +14,7 @@ import {ELENA_SPELLS,MOURNING_SPELLS,MOURNING_CAST_LEAD_IN,spellImpact} from '..
 import {mourningMorphs} from '../src/mourning-elena-animation.js';
 import {spellContains} from '../src/elena-ground-magic.js';
 import {setWorldCharacter} from '../src/world-limits.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 
 const base=new URL('../public/assets/',import.meta.url),cache=new Map();
 const near=(a,b,label,tolerance=2e-6)=>assert.ok(Math.abs(a-b)<tolerance,`${label}: ${a} != ${b}`);
@@ -21,6 +22,12 @@ const error=(a,b)=>Math.min(Math.hypot(...a.asArray().map((v,i)=>v-b.asArray()[i
 async function fixture(t){
   setWorldCharacter('warrior-v5');t.after(()=>setWorldCharacter('warrior'));
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;scene.useConstantAnimationDeltaTime=true;
+  // Complete only the headless backend's unsupported texture-array/fallback
+  // handles, as in the shader preparation fixture; this is not GPU validation.
+  Object.assign(engine.getCaps(),{textureFloat:true,canUseGLVertexID:true,maxVertexTextureImageUnits:16,maxTextureSize:4096});
+  engine.createRawTexture2DArray=(data,w,h,depth,format,mips,invertY,sampling,compression,type)=>{const texture=engine.createRawTexture(data,w,h,format,mips,invertY,sampling,compression,type);texture.depth=depth;texture.is2DArray=true;return texture;};
+  caveFogFallback(scene).getInternalTexture().isReady=true;
+  new FreeCamera('pattern-inspection',new Vector3(29,10,-13),scene);
   const loaded=[];
   async function library(name){
     const config=JSON.parse(readFileSync(new URL(name+'.json',base)));
@@ -50,6 +57,11 @@ function sourcePose(encounter){
   for(const {target,animation} of group.targetedAnimations){
     const property=animation.targetProperty;
     if(!['position','rotationQuaternion','scaling'].includes(property)||target.name.startsWith('DEF_Halo'))continue;
+    // The approved slam/hit hair repair deliberately follows the abdomen after
+    // native sampling. Only its registered guide nodes differ from raw keys.
+    if(encounter.animator.hairGuides?.guides.some(guide=>guide.bone===target)){
+      assert.ok(target[property].asArray().every(Number.isFinite));continue;
+    }
     assert.ok(error(target[property],animation.evaluate(encounter.brain.time*animation.framePerSecond))<3e-5,`${group.name}/${target.name}/${property}`);checked++;
   }
   assert.ok(checked>100);

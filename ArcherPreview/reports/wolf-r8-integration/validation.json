@@ -134,9 +134,10 @@
       "playerDeathReleasesCapture": true
     },
     {
-      "authoredLungeTargetMeters": 10.4,
+      "worldScale": 2.5,
+      "authoredLungeTargetMeters": 26,
       "biteHits": 1,
-      "actorMeters": 9.1,
+      "actorMeters": 23.6258216400706,
       "rootNotAppliedTwice": true,
       "pitchAndFlightPreserved": true
     },

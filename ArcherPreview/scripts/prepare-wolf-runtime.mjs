@@ -4,7 +4,7 @@ import {execFileSync} from 'node:child_process';
 import {sourcePath,projectPath,toolPath} from '../../Sources/resolve-source.mjs';
 import {splitGlb,hash} from './resource-pack.js';
 import {compressMeshopt} from './meshopt-lossless.js';
-import {WOLF_BALANCE,WOLF_CLIPS,WOLF_VERSION} from '../src/wolf-spec.js';
+import {WOLF_BALANCE,WOLF_CLIPS,WOLF_VERSION,WOLF_SCALE} from '../src/wolf-spec.js';
 
 const source=sourcePath('wolf-attack-r8'),out=projectPath('Sources/actors/tripo-monsters/wolf-game-r8'),assets=projectPath('ArcherPreview/public/assets'),content=path.join(assets,'content');fs.mkdirSync(out,{recursive:true});fs.mkdirSync(content,{recursive:true});
 const bytes=fs.readFileSync(path.join(source,'models/alpha-wolf-attack-r8.glb')),meta=JSON.parse(fs.readFileSync(path.join(source,'manifest.json')));if(hash(bytes)!==meta.modelSha256)throw Error('R8 source hash differs');
@@ -23,7 +23,7 @@ execFileSync(process.env.KTX_EXE??'C:/Program Files/KTX-Software/bin/ktx.exe',['
 const tex=fs.readFileSync(texture),texName=hash(tex)+'.ktx2';split.files.set(texName,{data:tex});original.images=[{uri:texName,mimeType:'image/ktx2'}];for(const t of original.textures){const source=t.source;t.extensions={...t.extensions,KHR_texture_basisu:{source}};delete t.source;}
 for(const key of ['extensionsUsed','extensionsRequired'])original[key]=[...new Set([...(original[key]??[]),'KHR_texture_basisu'])];
 const packed=await compressMeshopt(original,split.files);for(const [name,file]of packed.files)fs.writeFileSync(path.join(content,name),file.data);
-const config={name:'우두머리 늑대',version:WOLF_VERSION,sourceAssetId:'wolf-attack-r8',sourceSha256:hash(bytes),scale:1,height:1.5,animations:Object.fromEntries(Object.values(WOLF_CLIPS).map(name=>[name,name])),catalog,model:'./content/'+packed.model,resources:[...packed.files.keys()].map(name=>'./content/'+name),balance:WOLF_BALANCE,rendering:meta.rendering,texture:{width:4096,height:4096,format:'KTX2 UASTC sRGB',sourceSha256:hash(imageBytes),runtimeSha256:hash(tex)},geometryCompression:packed.stats};
+const config={name:'우두머리 늑대',version:WOLF_VERSION,sourceAssetId:'wolf-attack-r8',sourceSha256:hash(bytes),scale:WOLF_SCALE,height:1.5*WOLF_SCALE,animations:Object.fromEntries(Object.values(WOLF_CLIPS).map(name=>[name,name])),catalog,model:'./content/'+packed.model,resources:[...packed.files.keys()].map(name=>'./content/'+name),balance:WOLF_BALANCE,rendering:meta.rendering,texture:{width:4096,height:4096,format:'KTX2 UASTC sRGB',sourceSha256:hash(imageBytes),runtimeSha256:hash(tex)},geometryCompression:packed.stats};
 fs.writeFileSync(path.join(assets,'alpha-wolf.json'),JSON.stringify(config,null,2)+'\n');fs.writeFileSync(path.join(out,'runtime-manifest.json'),JSON.stringify(config,null,2)+'\n');
 fs.writeFileSync(path.join(out,'provenance.json'),JSON.stringify({sourceAssetId:'wolf-attack-r8',sourceSha256:hash(bytes),meshUvWeightsNormalsJointsMorphsAndAllTwelveClips:'Lossless Meshopt; no filters, quantization or reordering',textures:'4K UASTC without RDO; source JPEG preserved separately',runtimeModel:packed.model,geometryCompression:packed.stats},null,2)+'\n');
 console.log(JSON.stringify({model:packed.model,resources:packed.files.size,bytes:[...packed.files.values()].reduce((n,f)=>n+f.data.length,0),geometry:packed.stats}));
