@@ -1,6 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {WolfEncounter} from './wolf-encounter.js';
-import {WolfV02Brain,WOLF_V02_KNOCKBACK_SCALE,WOLF_V02_ORBIT,WOLF_V02_GAIT,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_BACK_RUN,WOLF_V02_AIR_REACTION} from './wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_COMBAT_PROFILES,WOLF_V02_KNOCKBACK_SCALE,WOLF_V02_ORBIT,WOLF_V02_GAIT,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_BACK_RUN,WOLF_V02_AIR_REACTION} from './wolf-v02-spec.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 import {playerDimensions} from './player-dimensions.js';
 import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
@@ -100,6 +100,8 @@ export class WolfV02Encounter extends WolfEncounter{
   constructor(...args){
     super(...args);
     this.combatVersion='moonforest-0.2';
+    // Only this alpha-boss profile breaks guard; regular canines remain blockable.
+    this.combatProfile=WOLF_V02_COMBAT_PROFILES.alphaWolf;
     this.combat.v02Impact??=new WolfV02PlayerImpact(this.world,this.combat);
     this.v14Air=new WolfV02AirReaction(this);
     this.v14Before=new Vector3();this.v14HeadingSerial=null;this.v14Yaw=0;
@@ -418,6 +420,10 @@ export class WolfV02Encounter extends WolfEncounter{
   receiveBossHit(options){
     const serial=this.brain.serial,before=this.playerHp,wasCaptured=this.grab.active,phase=this.v02RamPhase,key=phase?.key??serial,sourceTime=phase?wolfRamContactTime(this.brain):this.brain.time;
     if(phase&&!this.v02Ram.matches())return false;
+    const ignoresGuard=phase?.config.kind==='ram'&&this.combatProfile.ramIgnoresGuard===true;
+    // Wait for real forehead/body contact, not shield-only contact through air.
+    // Dodge, invulnerability and shared capture ownership retain their checks.
+    if(ignoresGuard&&!options.bodyContact)return false;
     if(this.v02ResolvedSerial===key)return false;
     if(options.bodyContact||options.shieldContact)this.v02ResolvedSerial=key;
     if(phase?.config.kind==='ram')this.v02RamAcceptedKnockdown=false;
@@ -425,9 +431,10 @@ export class WolfV02Encounter extends WolfEncounter{
     // dedicated full Pin action may acquire input/capture ownership.
     const capture=options.event?.capture===true&&this.brain.action?.capture===true;
     const event={...options.event,capture};
-    const resolved=super.receiveBossHit({...options,event,grab:false});
+    const action=ignoresGuard&&options.action?.state==='shieldPush'?{...options.action,state:'idle'}:options.action;
+    const resolved=super.receiveBossHit({...options,event,grab:false,action,shieldContact:ignoresGuard?false:options.shieldContact});
     const captured=!wasCaptured&&this.grab.active;
-    const blocked=resolved&&!captured&&(options.shieldContact||options.action?.state==='shieldPush');
+    const blocked=resolved&&!captured&&!ignoresGuard&&(options.shieldContact||options.action?.state==='shieldPush');
     if(phase&&(options.bodyContact||options.shieldContact))this.v02Ram.resolve(phase,{before,after:this.playerHp,blocked:!!blocked,acceptedKnockdown:phase.config.kind==='ram'&&this.v02RamAcceptedKnockdown,sourceTime});
     this.v02ImpactOutcome={serial,hit:this.playerHp<before||captured,blocked:!!blocked,captured};
     return resolved;

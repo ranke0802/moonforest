@@ -21,6 +21,12 @@ export const WOLF_V02_ORBIT=Object.freeze({right:'Wolf_Orbit_Step_V02',left:'Wol
 // R8's supported run feet travel 4.2 source metres per source second (17/30 s
 // per cycle). At 2.5x the cadence, rather than the stride, matches world speed.
 export const WOLF_V02_GAIT=Object.freeze({runSpeed:6.6,farRunSpeed:9.2,runAcceleration:8,runSourceSpeed:4.2,runPlaybackRate:6.6/(4.2*WOLF_SCALE),runSourceStart:1/30,runSourceDuration:17/30,orbitPlaybackRate:1.25,orbitFastPlaybackRate:1.8,orbitRadius:1.2});
+export const WOLF_V02_COMBAT_PROFILES=Object.freeze({alphaWolf:Object.freeze({ramIgnoresGuard:true}),regularWolf:Object.freeze({ramIgnoresGuard:false})});
+const ramSpeedSources=Object.freeze([0,.20,.28,.42,.60]),ramSpeedMultipliers=Object.freeze([1.5,1.5,2,2,1.5]);
+export function ramChargeMultiplier(sourceTime){
+ const t=Math.max(0,Math.min(.60,sourceTime));let i=0;while(i<ramSpeedSources.length-2&&t>ramSpeedSources[i+1])i++;
+ return ramSpeedMultipliers[i]+(ramSpeedMultipliers[i+1]-ramSpeedMultipliers[i])*(t-ramSpeedSources[i])/(ramSpeedSources[i+1]-ramSpeedSources[i]);
+}
 const quick={sourceClip:WOLF_V02_SNAP,clipStart:0,clipEnd:.80,impact:20/60,commitTime:.20,capture:false,damage:55,range:4,minDistance:2.8,maxDistance:3.15,preferredDistance:3.0,recovery:.60,authoredAttention:true,contactParts:['jaw','head'],whip:{source:[0,.20,.40,.80],seconds:[0,.26,.305,.68]}};
 export const WOLF_V02_ACTIONS=Object.freeze([
  {id:'quick-bite',label:'짧은 입질',...quick},
@@ -55,6 +61,21 @@ export function advanceWolfActionElapsed(action,elapsed,dt,speed){
  return dt<=prefix?elapsed+dt*speed:boundary+dt-prefix;
 }
 
+// Shared knots split the speed and whip curves: exact trapezoids, no frame allocations.
+const ramTravelKnots=Object.freeze([...new Set([...ramSpeedSources,...WOLF_V02_BY_ID.lunge.whip.source])].sort((a,b)=>a-b));
+export function ramChargeTravel(sourceTime,baseSpeed,castSpeed=1){
+ const end=clamp(sourceTime,0,.60);let travel=0,from=0;
+ for(let i=1;i<ramTravelKnots.length&&from<end;i++){
+  const to=Math.min(end,ramTravelKnots[i]);travel+=(ramChargeMultiplier(from)+ramChargeMultiplier(to))*.5*(whipElapsedAt(WOLF_V02_BY_ID.lunge,to)-whipElapsedAt(WOLF_V02_BY_ID.lunge,from));from=to;
+ }
+ return travel*baseSpeed/castSpeed;
+}
+function ramChargeStartElapsed(distance,reach,baseSpeed,castSpeed){
+ const target=Math.max(0,ramChargeTravel(.28,baseSpeed,castSpeed)-Math.max(0,distance-reach));let lo=0,hi=.28;
+ for(let i=0;i<14;i++){const mid=(lo+hi)*.5;if(ramChargeTravel(mid,baseSpeed,castSpeed)<target)lo=mid;else hi=mid;}
+ return whipElapsedAt(WOLF_V02_BY_ID.lunge,(lo+hi)*.5);
+}
+
 export class WolfV02Brain extends WolfBrain{
  constructor(durations,balance=WOLF_BALANCE,random=Math.random){
   super(durations,balance);this.random=random;this.behavior='rest';this.phase=1;this.planIndex=0;this.flankSide=1;this.lastOutcome=null;this.recoveryRemaining=0;this.observation=0;this.positionElapsed=0;this.boutStrikes=0;this.lastDistance=Infinity;this.circleTarget=0;this.circleElapsed=0;this.boutObserved=false;this.retreatCooldown=0;this.retreatPending=null;
@@ -76,7 +97,7 @@ export class WolfV02Brain extends WolfBrain{
   this.boutStrikes=continuation?this.boutStrikes+1:1;
   if(!continuation)this.boutObserved=false;
   if(action.ramPhases){this.ramAbortReason=null;this.ramRecoveryOrigin=null;this.ramAccepted=false;this.ramAcceptedClock=null;this.ramChaseClock=null;this.ramStartDistance=distance??this.lastDistance;this.time=action.clipStart;}
-  if(action.momentumRam){this.ramMaulHold=false;this.ramMaulCycle=0;this.ramLoopPoseKey=null;this.time=gait;this.ramRunClock=runClock;this.ramRunSpeed=speed;this.ramActualSpeed=speed;this.ramStage='charge';this.ramLayerElapsed=Math.max(0,whipElapsedAt(action,action.contactStart)-Math.max(0,(distance??4.5)-(this.ramReach??2.5))/speed*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
+  if(action.momentumRam){this.ramMaulHold=false;this.ramMaulCycle=0;this.ramLoopPoseKey=null;this.time=gait;this.ramRunClock=runClock;this.ramBaseRunSpeed=speed;this.ramRunSpeed=speed*1.5;this.ramActualSpeed=this.ramRunSpeed;this.ramStage='charge';this.ramLayerElapsed=ramChargeStartElapsed(distance??4.5,this.ramReach??2.5,speed,this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
   this.chainRemaining=action.chain&&this.boutStrikes<3&&!continuation?1:0;this.plannedId=null;this.positionElapsed=0;this.followupId=null;this.followChain=false;
   return action;
  }
@@ -188,10 +209,10 @@ export class WolfV02Brain extends WolfBrain{
   this.recoveryRemaining=this.followupId?(this.followChain?.30:.42):this.recoveryFull;
  }
  updateMomentumRam(dt){
-  const action=this.action;this.ramStageClock+=dt;this.ramLayerElapsed=Math.min(actionDuration(action),this.ramLayerElapsed+dt*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.actionElapsed=this.ramLayerElapsed;
+  const action=this.action,previousLayerTime=this.ramLayerTime;this.ramStageClock+=dt;this.ramLayerElapsed=Math.min(actionDuration(action),this.ramLayerElapsed+dt*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.actionElapsed=this.ramLayerElapsed;
   if(this.ramStage==='charge'&&this.ramAccepted){this.ramStage='chase';this.ramStageClock=0;this.ramChaseClock=this.combatClock;}
   if(this.ramStage==='charge'&&this.ramLayerTime>=.60&&!this.ramAccepted)this.abortRam('ram-miss');
-  if(this.ramStage==='charge'){this.ramContactTime=this.ramLayerTime;this.behavior='running-ram';}
+  if(this.ramStage==='charge'){this.ramContactTime=this.ramLayerTime;this.behavior='running-ram';this.ramRunSpeed=dt>0?(ramChargeTravel(this.ramLayerTime,this.ramBaseRunSpeed,this.castSpeed)-ramChargeTravel(previousLayerTime,this.ramBaseRunSpeed,this.castSpeed))/dt:this.ramBaseRunSpeed*ramChargeMultiplier(this.ramLayerTime);}
   else if(this.ramStage==='chase'){
    this.ramContactTime=.421;this.behavior='run-chase';
    const desired=Math.max(0,Math.min(this.approachSpeed??WOLF_V02_GAIT.farRunSpeed,this.ramChaseSpeed??WOLF_V02_GAIT.runSpeed)),change=24*dt;
@@ -333,7 +354,7 @@ export class WolfV02Brain extends WolfBrain{
   if(!this.boutObserved){this.beginStalk();return {events,speed:0};}
   this.plannedId??=this.stalkPlannedId??this.chooseAction(distance);this.positionElapsed+=dt;
   if(this.plannedId==='lunge'&&this.ramApproachVariant==='run-evade-ram'&&!this.ramEvaded&&distance<=5&&!this.sightBlocked){this.beginRamEvade();return {events,speed:0};}
-  const chosen=WOLF_V02_BY_ID[this.plannedId],ramEntry=chosen.momentumRam?(this.ramReach??2.5)+(this.approachSpeed??WOLF_V02_GAIT.runSpeed)*whipElapsedAt(chosen,chosen.contactStart)/(this.attackSettings?.speed??1)+.10:chosen.maxDistance,approach=distance>ramEntry+1e-5||this.sightBlocked;
+  const chosen=WOLF_V02_BY_ID[this.plannedId],ramEntry=chosen.momentumRam?(this.ramReach??2.5)+ramChargeTravel(chosen.contactStart,this.approachSpeed??WOLF_V02_GAIT.runSpeed,this.attackSettings?.speed??1)+.10:chosen.maxDistance,approach=distance>ramEntry+1e-5||this.sightBlocked;
   if(approach){
    const changed=this.state!==WOLF_CLIPS.run||this.mode!=='move';this.startIfChanged(WOLF_CLIPS.run,'move');
    // The glTF adds a duplicate first-frame hold. Only 0.2 skips that hold,
