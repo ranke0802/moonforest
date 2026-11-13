@@ -1,0 +1,2163 @@
+{
+  "label": "with-aim-final",
+  "runtimeSourcesUnchanged": true,
+  "runtimeSourceHashes": {
+    "player-melee-aim.js": "d4096aa42f87ec952c5aefd327870995427b3afd44bfa6b00885ee22de4a900b",
+    "player-strikes.js": "cdaa2c56c3d34b720bce592f4e4745c7d87f7fb1a89010a01f510dd3a4cb3ce5",
+    "melee-collision.js": "b97acb0e5ff4c820423e6bca8631d49685a77902074e3f1fdb3b8339a43075f5",
+    "wolf-v02-hurt.js": "5f69291920affe18bcaa4766ba1560d182bf2447eee17e97a4f1dd44944b841d",
+    "wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065"
+  },
+  "scope": "Actual packed native1.6mwarrior, controller press/hold/release, full visible shield-face and unmodified strike windows/anatomy gate on three genuine standing receiving clips. Observational gap instrumentation does not inject hits. NullEngine/CPU evidence only.",
+  "cases": [
+    {
+      "id": "fox",
+      "action": "normal",
+      "outside": false,
+      "accepted": true,
+      "height": 1.05,
+      "scale": 1.5323060479201924,
+      "stanceDistance": 1.116068717703068,
+      "actualDistance": 1.116068717703068,
+      "damage": 25,
+      "contactFrames": 7,
+      "minimumWeaponHurtGapMeters": -0.07225477437008078,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6666666666666671,
+        "playerState": "slash",
+        "sourceTime": 0.5700000000000003,
+        "shieldCenter": [
+          1.167432188987732,
+          0.9147301912307739,
+          0.3137718141078949
+        ],
+        "leftArmPivot": [
+          1.0288865566253662,
+          1.0535494089126587,
+          -0.05167333036661148
+        ],
+        "gap": -0.07225477437008078,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "pelvis",
+          "weaponLow": 0.5043382932156324,
+          "weaponHigh": 0.6208206669837236,
+          "hurtLow": 0.3301714370457096,
+          "hurtHigh": 0.643188283771913,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.1435762037093042,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              0.3056108491718769,
+              0.6208206669837236,
+              -0.08412724018096923
+            ],
+            [
+              -0.08561900470852851,
+              0.5043382932156324,
+              -0.6742063650846482
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.13902084873102336,
+              0.47374764075501385,
+              -0.27976284029424414
+            ],
+            [
+              -0.1376653449227998,
+              0.4996120800626087,
+              -0.1988255943593188
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.91,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 17,
+        "lastPhysicalAimError": 0.08094339305185752,
+        "fitSearches": {
+          "full": 3,
+          "local": 18
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 40,
+          "mean": 0.08399249999997664,
+          "maximum": 0.9128000000000611,
+          "activeCalls": 17,
+          "activeMean": 0.11091176470590118,
+          "activeMaximum": 0.20879999999988286
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/fox-r2.json",
+      "manifestSha256": "c75e0ebdfd20b283172253bde37dbef90ff14833e72b3947999b3ddfe2fb2013",
+      "hurtProfileSha256": "ebe05a3c5274400be50eb34b3c342c759593302baea9cab941a9abda9952295e"
+    },
+    {
+      "id": "fox",
+      "action": "normal",
+      "outside": true,
+      "accepted": true,
+      "height": 1.05,
+      "scale": 1.5323060479201924,
+      "stanceDistance": 1.116068717703068,
+      "actualDistance": 3.9160687177030677,
+      "damage": 0,
+      "contactFrames": 15,
+      "minimumWeaponHurtGapMeters": 2.3511367016906184,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6833333333333338,
+        "playerState": "slash",
+        "sourceTime": 0.6000000000000003,
+        "shieldCenter": [
+          3.99607253074646,
+          0.8849168419837952,
+          0.26918455958366394
+        ],
+        "leftArmPivot": [
+          3.8235695362091064,
+          1.0447481870651245,
+          -0.07041262090206146
+        ],
+        "gap": 2.3511367016906184,
+        "heightGap": 0.08342292201166929,
+        "closest": {
+          "window": "cut",
+          "capsule": "neck",
+          "weaponLow": 1.055024118417874,
+          "weaponHigh": 1.4002123887516558,
+          "hurtLow": 0.5010804830780107,
+          "hurtHigh": 0.9220842026636065,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.18998548917216446,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              3.035631271839142,
+              1.120852694902569,
+              0.226060958430171
+            ],
+            [
+              2.4733121574401857,
+              1.4002123887516558,
+              -0.12118199817836284
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.022634829447031102,
+              0.6910659722501751,
+              0.41005178989592084
+            ],
+            [
+              -0.013292797920196442,
+              0.7320987134914421,
+              0.43497239760835926
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 0,
+        "lastPhysicalAimError": null,
+        "fitSearches": {
+          "full": 0,
+          "local": 0
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 113,
+          "mean": 0.0029672566371899307,
+          "maximum": 0.011899999999968713,
+          "activeCalls": 0,
+          "activeMean": 0,
+          "activeMaximum": 0
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/fox-r2.json",
+      "manifestSha256": "c75e0ebdfd20b283172253bde37dbef90ff14833e72b3947999b3ddfe2fb2013",
+      "hurtProfileSha256": "ebe05a3c5274400be50eb34b3c342c759593302baea9cab941a9abda9952295e"
+    },
+    {
+      "id": "fox",
+      "action": "heavy",
+      "outside": false,
+      "accepted": true,
+      "height": 1.05,
+      "scale": 1.5323060479201924,
+      "stanceDistance": 1.116068717703068,
+      "actualDistance": 1.116068717703068,
+      "damage": 25,
+      "contactFrames": 2,
+      "minimumWeaponHurtGapMeters": -0.0222382030226444,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 1.3000000000000003,
+        "playerState": "judgment",
+        "sourceTime": 0.9900000000000007,
+        "shieldCenter": [
+          1.302794337272644,
+          1.29863440990448,
+          0.12833522260189056
+        ],
+        "leftArmPivot": [
+          0.9240273833274841,
+          1.4389324188232422,
+          -0.06694504618644714
+        ],
+        "gap": -0.0222382030226444,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "jump-cut",
+          "capsule": "neck",
+          "weaponLow": 0.8303570135943592,
+          "weaponHigh": 1.5281209147423507,
+          "hurtLow": 0.49810020998554777,
+          "hurtHigh": 0.9206325726816902,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.18998548917216446,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.5942584317922592,
+              0.8792727431319654,
+              -0.11146262320503592
+            ],
+            [
+              0.05103474736213687,
+              0.8303570135943592,
+              0.24629151168838143
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.021872395137336298,
+              0.6880856991577122,
+              0.4069338749494267
+            ],
+            [
+              -0.01178728869342649,
+              0.7306470835095258,
+              0.42881572637057586
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 1.17,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 33,
+        "lastPhysicalAimError": 0.03835425068975145,
+        "fitSearches": {
+          "full": 3,
+          "local": 32
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 78,
+          "mean": 0.02951025641025295,
+          "maximum": 0.17029999999977008,
+          "activeCalls": 33,
+          "activeMean": 0.06692424242423427,
+          "activeMaximum": 0.17029999999977008
+        }
+      },
+      "weaponStates": [
+        "judgment"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/fox-r2.json",
+      "manifestSha256": "c75e0ebdfd20b283172253bde37dbef90ff14833e72b3947999b3ddfe2fb2013",
+      "hurtProfileSha256": "ebe05a3c5274400be50eb34b3c342c759593302baea9cab941a9abda9952295e"
+    },
+    {
+      "id": "fox",
+      "action": "shield",
+      "outside": false,
+      "accepted": true,
+      "height": 1.05,
+      "scale": 1.5323060479201924,
+      "stanceDistance": 0.936068717703068,
+      "actualDistance": 0.936068717703068,
+      "damage": 10,
+      "contactFrames": 1,
+      "minimumWeaponHurtGapMeters": -0.05540806951144686,
+      "minimumVerticalSeparationMeters": -0.06482224635394668,
+      "closest": {
+        "time": 1.4,
+        "playerState": "shieldPush",
+        "sourceTime": 1.100000000000001,
+        "shieldCenter": [
+          0.2593890130519867,
+          0.906222403049469,
+          0.22226665914058685
+        ],
+        "leftArmPivot": [
+          0.5393334031105042,
+          1.1546404361724854,
+          -0.010697710327804089
+        ],
+        "gap": -0.05540806951144686,
+        "heightGap": -0.06482224635394668,
+        "closest": {
+          "window": "shield-push",
+          "capsule": "neck",
+          "weaponLow": 0.8201660209215879,
+          "weaponHigh": 1.0014670563207342,
+          "hurtLow": 0.49745150002135724,
+          "hurtHigh": 0.9202717957581525,
+          "bladeRadius": 0.06482224635394668,
+          "capsuleRadius": 0.18998548917216446,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.0987949698982723,
+              0.8201660209215879,
+              0.2878308941685315
+            ],
+            [
+              0.4224864010709123,
+              1.0014670563207342,
+              0.2594581106014589
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.02172078852139414,
+              0.6874369891935217,
+              0.40631387900595883
+            ],
+            [
+              -0.011478040697257441,
+              0.7302863065859881,
+              0.42755106770087736
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.26,
+        "maximumYawRadians": 0.78,
+        "maximumElbowExtensionRadians": 1.0471975511965976,
+        "minimumExtendedElbowBendRadians": 0.5485320893154497,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 63,
+        "lastPhysicalAimError": 0.007903057136283663,
+        "fitSearches": {
+          "full": 3,
+          "local": 62
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 84,
+          "mean": 0.17626547619041352,
+          "maximum": 3.5425999999997657,
+          "activeCalls": 63,
+          "activeMean": 0.23435714285707426,
+          "activeMaximum": 3.5425999999997657
+        }
+      },
+      "weaponStates": [
+        "shieldPush"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/fox-r2.json",
+      "manifestSha256": "c75e0ebdfd20b283172253bde37dbef90ff14833e72b3947999b3ddfe2fb2013",
+      "hurtProfileSha256": "ebe05a3c5274400be50eb34b3c342c759593302baea9cab941a9abda9952295e"
+    },
+    {
+      "id": "boar",
+      "action": "normal",
+      "outside": false,
+      "accepted": true,
+      "height": 2.5,
+      "scale": 3.856510686376047,
+      "stanceDistance": 2.1022387788362473,
+      "actualDistance": 2.1022387788362473,
+      "damage": 25,
+      "contactFrames": 7,
+      "minimumWeaponHurtGapMeters": -0.10429627532820232,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6666666666666671,
+        "playerState": "slash",
+        "sourceTime": 0.5700000000000003,
+        "shieldCenter": [
+          2.153602123260498,
+          0.9147301912307739,
+          0.3137718141078949
+        ],
+        "leftArmPivot": [
+          2.015056610107422,
+          1.0535494089126587,
+          -0.05167333036661148
+        ],
+        "gap": -0.10429627532820232,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "hind.L.upper",
+          "weaponLow": 0.5071651096835732,
+          "weaponHigh": 0.6223427503332496,
+          "hurtLow": 0.3803378036353656,
+          "hurtHigh": 1.1423988647490786,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.2588159321885798,
+          "lateralOffset": -0.2700926931414445,
+          "blade": [
+            [
+              1.2904743147492408,
+              0.6223427503332496,
+              -0.08412722817063334
+            ],
+            [
+              0.8988583853125571,
+              0.5071651096835732,
+              -0.6742063975274563
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.7641080255865089,
+              0.8835829325604987,
+              -1.6336546295977303
+            ],
+            [
+              0.779574389427124,
+              0.6391537358239454,
+              -1.044205475271997
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 1.17,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 19,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 3,
+          "local": 18
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 40,
+          "mean": 0.06991749999999683,
+          "maximum": 0.8115999999999985,
+          "activeCalls": 19,
+          "activeMean": 0.1313210526316078,
+          "activeMaximum": 0.8115999999999985
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/boar-r2.json",
+      "manifestSha256": "5791ff39f3119f9c742bc191d3717c26483c4c34cfa07ae0cd498ff86e64f340",
+      "hurtProfileSha256": "beca3e9f30318776606a4531abd1a630c003f385f628a67161c0d32e8658686b"
+    },
+    {
+      "id": "boar",
+      "action": "normal",
+      "outside": true,
+      "accepted": true,
+      "height": 2.5,
+      "scale": 3.856510686376047,
+      "stanceDistance": 2.1022387788362473,
+      "actualDistance": 4.902238778836248,
+      "damage": 0,
+      "contactFrames": 15,
+      "minimumWeaponHurtGapMeters": 2.357997653053962,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6833333333333338,
+        "playerState": "slash",
+        "sourceTime": 0.6000000000000003,
+        "shieldCenter": [
+          4.982242584228516,
+          0.8849168419837952,
+          0.26918455958366394
+        ],
+        "leftArmPivot": [
+          4.809739589691162,
+          1.0447481870651245,
+          -0.07041262090206146
+        ],
+        "gap": 2.357997653053962,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "pelvis",
+          "weaponLow": 1.055024118417874,
+          "weaponHigh": 1.4002123887516558,
+          "hurtLow": 0.5313977568132906,
+          "hurtHigh": 2.7019719039389467,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 1.0026927784577724,
+          "lateralOffset": -0.2700926931414445,
+          "blade": [
+            [
+              4.021801086902618,
+              1.120852694902569,
+              0.226060958430171
+            ],
+            [
+              3.4594819725036623,
+              1.4002123887516558,
+              -0.12118199817836284
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.0641493518997834,
+              1.534090535271063,
+              -1.1737218243861423
+            ],
+            [
+              0.07280654873343895,
+              1.6992791254811743,
+              -0.656799349821647
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 0,
+        "lastPhysicalAimError": null,
+        "fitSearches": {
+          "full": 0,
+          "local": 0
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 113,
+          "mean": 0.002841592920371097,
+          "maximum": 0.00959999999986394,
+          "activeCalls": 0,
+          "activeMean": 0,
+          "activeMaximum": 0
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/boar-r2.json",
+      "manifestSha256": "5791ff39f3119f9c742bc191d3717c26483c4c34cfa07ae0cd498ff86e64f340",
+      "hurtProfileSha256": "beca3e9f30318776606a4531abd1a630c003f385f628a67161c0d32e8658686b"
+    },
+    {
+      "id": "boar",
+      "action": "heavy",
+      "outside": false,
+      "accepted": true,
+      "height": 2.5,
+      "scale": 3.856510686376047,
+      "stanceDistance": 2.1022387788362473,
+      "actualDistance": 2.1022387788362473,
+      "damage": 25,
+      "contactFrames": 1,
+      "minimumWeaponHurtGapMeters": -0.11530214419322826,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 1.2833333333333337,
+        "playerState": "judgment",
+        "sourceTime": 0.9600000000000006,
+        "shieldCenter": [
+          2.3029019832611084,
+          1.4421212673187256,
+          0.09152970463037491
+        ],
+        "leftArmPivot": [
+          1.9312920570373535,
+          1.5729632377624512,
+          -0.12072762846946716
+        ],
+        "gap": -0.11530214419322826,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "jump-cut",
+          "capsule": "spine",
+          "weaponLow": 1.427940528869629,
+          "weaponHigh": 2.044739057386919,
+          "hurtLow": 0.7743397195620547,
+          "hurtHigh": 2.844592459828841,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 1.0026927784577724,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              1.4041433365345002,
+              1.427940528869629,
+              0.29456987099163234
+            ],
+            [
+              0.972338588476181,
+              1.916147102832794,
+              0.3204897845145315
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.019920607888537945,
+              1.777032498019827,
+              -0.27345435764419823
+            ],
+            [
+              0.043661202878830185,
+              1.8418996813710684,
+              0.22128526191438136
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.91,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 32,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 2,
+          "local": 31
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 77,
+          "mean": 0.024162337662328826,
+          "maximum": 0.11170000000038272,
+          "activeCalls": 32,
+          "activeMean": 0.055481249999999704,
+          "activeMaximum": 0.11170000000038272
+        }
+      },
+      "weaponStates": [
+        "judgment"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/boar-r2.json",
+      "manifestSha256": "5791ff39f3119f9c742bc191d3717c26483c4c34cfa07ae0cd498ff86e64f340",
+      "hurtProfileSha256": "beca3e9f30318776606a4531abd1a630c003f385f628a67161c0d32e8658686b"
+    },
+    {
+      "id": "boar",
+      "action": "shield",
+      "outside": false,
+      "accepted": true,
+      "height": 2.5,
+      "scale": 3.856510686376047,
+      "stanceDistance": 1.805136816380658,
+      "actualDistance": 1.805136816380658,
+      "damage": 10,
+      "contactFrames": 1,
+      "minimumWeaponHurtGapMeters": -0.04318781172803132,
+      "minimumVerticalSeparationMeters": -0.06482224635394668,
+      "closest": {
+        "time": 1.4,
+        "playerState": "shieldPush",
+        "sourceTime": 1.100000000000001,
+        "shieldCenter": [
+          1.0157214403152466,
+          1.0257964134216309,
+          -0.03729203715920448
+        ],
+        "leftArmPivot": [
+          1.408401608467102,
+          1.1546404361724854,
+          -0.010697710327804089
+        ],
+        "gap": -0.04318781172803132,
+        "heightGap": -0.06482224635394668,
+        "closest": {
+          "window": "shield-push",
+          "capsule": "spine",
+          "weaponLow": 1.21702206544661,
+          "weaponHigh": 1.2418317584388767,
+          "hurtLow": 0.7743397195620547,
+          "hurtHigh": 2.844592459828841,
+          "bladeRadius": 0.06482224635394668,
+          "capsuleRadius": 1.0026927784577724,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.8727796123121339,
+              1.21702206544661,
+              -0.1334339597485643
+            ],
+            [
+              1.0865463967339175,
+              1.2418317584388765,
+              0.0819624614422305
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.019920607888537945,
+              1.777032498019827,
+              -0.27345435764419823
+            ],
+            [
+              0.043661202878830185,
+              1.8418996813710684,
+              0.22128526191438136
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.26,
+        "maximumYawRadians": 0.41363636363636364,
+        "maximumElbowExtensionRadians": 1.0471975511965976,
+        "minimumExtendedElbowBendRadians": 0.6404457733491742,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 63,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 3,
+          "local": 62
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 84,
+          "mean": 0.16487499999998687,
+          "maximum": 4.617799999999988,
+          "activeCalls": 63,
+          "activeMean": 0.2191587301587268,
+          "activeMaximum": 4.617799999999988
+        }
+      },
+      "weaponStates": [
+        "shieldPush"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/boar-r2.json",
+      "manifestSha256": "5791ff39f3119f9c742bc191d3717c26483c4c34cfa07ae0cd498ff86e64f340",
+      "hurtProfileSha256": "beca3e9f30318776606a4531abd1a630c003f385f628a67161c0d32e8658686b"
+    },
+    {
+      "id": "gray-wolf",
+      "action": "normal",
+      "outside": false,
+      "accepted": true,
+      "height": 1.5750000000000002,
+      "scale": 2.025971578864725,
+      "stanceDistance": 1.1986510642974824,
+      "actualDistance": 1.1986510642974824,
+      "damage": 25,
+      "contactFrames": 7,
+      "minimumWeaponHurtGapMeters": -0.03632556882769389,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6666666666666671,
+        "playerState": "slash",
+        "sourceTime": 0.5700000000000003,
+        "shieldCenter": [
+          1.2500145435333252,
+          0.9147301912307739,
+          0.3137718141078949
+        ],
+        "leftArmPivot": [
+          1.1114689111709595,
+          1.0535494089126587,
+          -0.05167333036661148
+        ],
+        "gap": -0.03632556882769389,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "fore.L.upper",
+          "weaponLow": 0.5071651096835732,
+          "weaponHigh": 0.6223427503332496,
+          "hurtLow": 0.49711388400273365,
+          "hurtHigh": 0.9739619552090013,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.1395604595322985,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              0.3868866456151009,
+              0.6223427503332496,
+              -0.08412722817063334
+            ],
+            [
+              -0.004729283821582886,
+              0.5071651096835732,
+              -0.6742063975274563
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.18403812742747236,
+              0.8344014956767029,
+              0.2676472289017924
+            ],
+            [
+              0.1353649897814421,
+              0.6366743435350322,
+              0.0664144992999845
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.9366666666666665,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 19,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 3,
+          "local": 18
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 40,
+          "mean": 0.029212500000039655,
+          "maximum": 0.13370000000031723,
+          "activeCalls": 19,
+          "activeMean": 0.05930526315794276,
+          "activeMaximum": 0.13370000000031723
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/gray-wolf-r2.json",
+      "manifestSha256": "c137da6a8eebbe3ba9b41a469202f8b954b5730508d44d112db56b6752d65858",
+      "hurtProfileSha256": "20af35c0ac7553cffafcd579381adf738bab8455467ea489d58dc59928452344"
+    },
+    {
+      "id": "gray-wolf",
+      "action": "normal",
+      "outside": true,
+      "accepted": true,
+      "height": 1.5750000000000002,
+      "scale": 2.025971578864725,
+      "stanceDistance": 1.1986510642974824,
+      "actualDistance": 3.998651064297482,
+      "damage": 0,
+      "contactFrames": 15,
+      "minimumWeaponHurtGapMeters": 2.2522218882007534,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6833333333333338,
+        "playerState": "slash",
+        "sourceTime": 0.6000000000000003,
+        "shieldCenter": [
+          4.078654766082764,
+          0.8849168419837952,
+          0.26918455958366394
+        ],
+        "leftArmPivot": [
+          3.90615177154541,
+          1.0447481870651245,
+          -0.07041262090206146
+        ],
+        "gap": 2.2522218882007534,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "fore.L.upper",
+          "weaponLow": 1.055024118417874,
+          "weaponHigh": 1.4002123887516558,
+          "hurtLow": 0.49711388400273365,
+          "hurtHigh": 0.9739619552090013,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.1395604595322985,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              3.1182135071754455,
+              1.120852694902569,
+              0.226060958430171
+            ],
+            [
+              2.5558943927764894,
+              1.4002123887516558,
+              -0.12118199817836284
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.18403812742747236,
+              0.8344014956767029,
+              0.2676472289017924
+            ],
+            [
+              0.1353649897814421,
+              0.6366743435350322,
+              0.0664144992999845
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 0,
+        "lastPhysicalAimError": null,
+        "fitSearches": {
+          "full": 0,
+          "local": 0
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 113,
+          "mean": 0.0021168141592918807,
+          "maximum": 0.009599999999409192,
+          "activeCalls": 0,
+          "activeMean": 0,
+          "activeMaximum": 0
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/gray-wolf-r2.json",
+      "manifestSha256": "c137da6a8eebbe3ba9b41a469202f8b954b5730508d44d112db56b6752d65858",
+      "hurtProfileSha256": "20af35c0ac7553cffafcd579381adf738bab8455467ea489d58dc59928452344"
+    },
+    {
+      "id": "gray-wolf",
+      "action": "heavy",
+      "outside": false,
+      "accepted": true,
+      "height": 1.5750000000000002,
+      "scale": 2.025971578864725,
+      "stanceDistance": 1.1986510642974824,
+      "actualDistance": 1.1986510642974824,
+      "damage": 25,
+      "contactFrames": 2,
+      "minimumWeaponHurtGapMeters": -0.21084977110617326,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 1.3000000000000003,
+        "playerState": "judgment",
+        "sourceTime": 0.9900000000000007,
+        "shieldCenter": [
+          1.3853766918182373,
+          1.29863440990448,
+          0.12833522260189056
+        ],
+        "leftArmPivot": [
+          1.0066096782684326,
+          1.4389324188232422,
+          -0.06694504618644714
+        ],
+        "gap": -0.21084977110617326,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "jump-cut",
+          "capsule": "chest",
+          "weaponLow": 0.8945411282163114,
+          "weaponHigh": 1.5281209147423507,
+          "hurtLow": 0.8250854999155939,
+          "hurtHigh": 1.3888072413323431,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.2532464473580906,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.6023442928344012,
+              1.0643250847626478,
+              0.05095036964565519
+            ],
+            [
+              0.0284321702510119,
+              1.1611234421614558,
+              0.2759708321556449
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.07831899680997133,
+              1.0783319472736845,
+              0.17889625478363552
+            ],
+            [
+              -0.03405133542319126,
+              1.1355607939742525,
+              0.3601040476714185
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 1.17,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 33,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 3,
+          "local": 32
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 78,
+          "mean": 0.024146153846126815,
+          "maximum": 0.24859999999989668,
+          "activeCalls": 33,
+          "activeMean": 0.05453939393933207,
+          "activeMaximum": 0.24859999999989668
+        }
+      },
+      "weaponStates": [
+        "judgment"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/gray-wolf-r2.json",
+      "manifestSha256": "c137da6a8eebbe3ba9b41a469202f8b954b5730508d44d112db56b6752d65858",
+      "hurtProfileSha256": "20af35c0ac7553cffafcd579381adf738bab8455467ea489d58dc59928452344"
+    },
+    {
+      "id": "gray-wolf",
+      "action": "shield",
+      "outside": false,
+      "accepted": true,
+      "height": 1.5750000000000002,
+      "scale": 2.025971578864725,
+      "stanceDistance": 1.0186510642974822,
+      "actualDistance": 1.0186510642974822,
+      "damage": 10,
+      "contactFrames": 1,
+      "minimumWeaponHurtGapMeters": -0.04276579465830399,
+      "minimumVerticalSeparationMeters": -0.06482224635394668,
+      "closest": {
+        "time": 1.4,
+        "playerState": "shieldPush",
+        "sourceTime": 1.100000000000001,
+        "shieldCenter": [
+          0.3249660134315491,
+          1.0849614143371582,
+          -0.15565423667430878
+        ],
+        "leftArmPivot": [
+          0.6219156980514526,
+          1.1546404361724854,
+          -0.010697710327804089
+        ],
+        "gap": -0.04276579465830399,
+        "heightGap": -0.06482224635394668,
+        "closest": {
+          "window": "shield-push",
+          "capsule": "pelvis",
+          "weaponLow": 0.8339690143192958,
+          "weaponHigh": 0.8584050815795972,
+          "hurtLow": 0.6191224441145894,
+          "hurtHigh": 1.134333959246678,
+          "bladeRadius": 0.06482224635394668,
+          "capsuleRadius": 0.2383845593464796,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.23695828806096983,
+              0.8584050815795972,
+              -0.2577956116555745
+            ],
+            [
+              0.2457642270613249,
+              0.8339690143193008,
+              -0.14514938506618855
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.021827634433962934,
+              0.857507003461069,
+              -0.4001944371132738
+            ],
+            [
+              -0.019812943957204024,
+              0.8959493999001983,
+              -0.2798971682150874
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.26,
+        "maximumYawRadians": 0.26,
+        "maximumElbowExtensionRadians": 0.78,
+        "minimumExtendedElbowBendRadians": 0.6738493988428649,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 55,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 1,
+          "local": 62
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 84,
+          "mean": 0.16657023809518381,
+          "maximum": 2.853900000000067,
+          "activeCalls": 55,
+          "activeMean": 0.2371109090908662,
+          "activeMaximum": 2.853900000000067
+        }
+      },
+      "weaponStates": [
+        "shieldPush"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/gray-wolf-r2.json",
+      "manifestSha256": "c137da6a8eebbe3ba9b41a469202f8b954b5730508d44d112db56b6752d65858",
+      "hurtProfileSha256": "20af35c0ac7553cffafcd579381adf738bab8455467ea489d58dc59928452344"
+    },
+    {
+      "id": "stylized-wolf",
+      "action": "normal",
+      "outside": false,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 2.1059125964010286,
+      "stanceDistance": 1.2176284719432842,
+      "actualDistance": 1.2176284719432842,
+      "damage": 25,
+      "contactFrames": 8,
+      "minimumWeaponHurtGapMeters": -0.1687043366603712,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6833333333333338,
+        "playerState": "slash",
+        "sourceTime": 0.6000000000000003,
+        "shieldCenter": [
+          1.297632098197937,
+          0.8849168419837952,
+          0.26918455958366394
+        ],
+        "leftArmPivot": [
+          1.1251291036605835,
+          1.0447481870651245,
+          -0.07041262090206146
+        ],
+        "gap": -0.1687043366603712,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "fore.L.upper",
+          "weaponLow": 0.5071651096835732,
+          "weaponHigh": 0.797183836825192,
+          "hurtLow": 0.5361532168019341,
+          "hurtHigh": 0.9678578557627568,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.13093699974609369,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              0.39303934222459797,
+              0.747229240684637,
+              0.13743571137104718
+            ],
+            [
+              -0.1599154316050666,
+              0.6330356815118875,
+              -0.2791890679367951
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.2087427603507115,
+              0.8369208560166632,
+              0.341061940482534
+            ],
+            [
+              0.1705148673714933,
+              0.6670902165480277,
+              0.20023062926440216
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.9366666666666665,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 20,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 3,
+          "local": 19
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 41,
+          "mean": 0.03157804878056351,
+          "maximum": 0.1147000000000844,
+          "activeCalls": 20,
+          "activeMean": 0.061144999999896754,
+          "activeMaximum": 0.1147000000000844
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/stylized-wolf-r2.json",
+      "manifestSha256": "392648ddb78fa6e94ef0ea4e26c7c4a7986ccea975688d66ffa1901a91d979fe",
+      "hurtProfileSha256": "de39cee1742df3102cbed3ed242a344dc3d32ffd08390923d3eb0d4c91258fc0"
+    },
+    {
+      "id": "stylized-wolf",
+      "action": "normal",
+      "outside": true,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 2.1059125964010286,
+      "stanceDistance": 1.2176284719432842,
+      "actualDistance": 4.017628471943284,
+      "damage": 0,
+      "contactFrames": 15,
+      "minimumWeaponHurtGapMeters": 2.259379442543576,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6833333333333338,
+        "playerState": "slash",
+        "sourceTime": 0.6000000000000003,
+        "shieldCenter": [
+          4.09763240814209,
+          0.8849168419837952,
+          0.26918455958366394
+        ],
+        "leftArmPivot": [
+          3.9251294136047363,
+          1.0447481870651245,
+          -0.07041262090206146
+        ],
+        "gap": 2.259379442543576,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "fore.L.upper",
+          "weaponLow": 1.055024118417874,
+          "weaponHigh": 1.4002123887516558,
+          "hurtLow": 0.5361532168019341,
+          "hurtHigh": 0.9678578557627568,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.13093699974609369,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              3.1371911492347717,
+              1.120852694902569,
+              0.226060958430171
+            ],
+            [
+              2.5748720348358156,
+              1.4002123887516558,
+              -0.12118199817836284
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.2087427603507115,
+              0.8369208560166632,
+              0.341061940482534
+            ],
+            [
+              0.1705148673714933,
+              0.6670902165480277,
+              0.20023062926440216
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 0,
+        "lastPhysicalAimError": null,
+        "fitSearches": {
+          "full": 0,
+          "local": 0
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 113,
+          "mean": 0.002356637168159712,
+          "maximum": 0.01569999999992433,
+          "activeCalls": 0,
+          "activeMean": 0,
+          "activeMaximum": 0
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/stylized-wolf-r2.json",
+      "manifestSha256": "392648ddb78fa6e94ef0ea4e26c7c4a7986ccea975688d66ffa1901a91d979fe",
+      "hurtProfileSha256": "de39cee1742df3102cbed3ed242a344dc3d32ffd08390923d3eb0d4c91258fc0"
+    },
+    {
+      "id": "stylized-wolf",
+      "action": "heavy",
+      "outside": false,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 2.1059125964010286,
+      "stanceDistance": 1.2176284719432842,
+      "actualDistance": 1.2176284719432842,
+      "damage": 25,
+      "contactFrames": 2,
+      "minimumWeaponHurtGapMeters": -0.1872148417863939,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 1.3000000000000003,
+        "playerState": "judgment",
+        "sourceTime": 0.9900000000000007,
+        "shieldCenter": [
+          1.4043540954589844,
+          1.29863440990448,
+          0.12833522260189056
+        ],
+        "leftArmPivot": [
+          1.0255870819091797,
+          1.4389324188232422,
+          -0.06694504618644714
+        ],
+        "gap": -0.1872148417863939,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "jump-cut",
+          "capsule": "chest",
+          "weaponLow": 0.8945411282163114,
+          "weaponHigh": 1.5281209147423507,
+          "hurtLow": 0.8424660313069272,
+          "hurtHigh": 1.42576909012492,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.26323907455012857,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.621225075930357,
+              1.1067710738992318,
+              0.09155361785832794
+            ],
+            [
+              0.04008019241690641,
+              1.222289687591605,
+              0.2833906622724608
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.08664702044378814,
+              1.1057051058570557,
+              0.18769888578322114
+            ],
+            [
+              -0.042691803956757646,
+              1.1625300155747915,
+              0.36762768924004074
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 1.17,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 33,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 3,
+          "local": 32
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 78,
+          "mean": 0.026385897435899936,
+          "maximum": 0.12780000000020664,
+          "activeCalls": 33,
+          "activeMean": 0.055948484848517124,
+          "activeMaximum": 0.0819999999994252
+        }
+      },
+      "weaponStates": [
+        "judgment"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/stylized-wolf-r2.json",
+      "manifestSha256": "392648ddb78fa6e94ef0ea4e26c7c4a7986ccea975688d66ffa1901a91d979fe",
+      "hurtProfileSha256": "de39cee1742df3102cbed3ed242a344dc3d32ffd08390923d3eb0d4c91258fc0"
+    },
+    {
+      "id": "stylized-wolf",
+      "action": "shield",
+      "outside": false,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 2.1059125964010286,
+      "stanceDistance": 1.0376284719432842,
+      "actualDistance": 1.0376284719432842,
+      "damage": 10,
+      "contactFrames": 1,
+      "minimumWeaponHurtGapMeters": -0.03299020019566895,
+      "minimumVerticalSeparationMeters": -0.06482224635394668,
+      "closest": {
+        "time": 1.4,
+        "playerState": "shieldPush",
+        "sourceTime": 1.100000000000001,
+        "shieldCenter": [
+          0.32780921459198,
+          1.0470545291900635,
+          -0.07740859687328339
+        ],
+        "leftArmPivot": [
+          0.6408932209014893,
+          1.1546404361724854,
+          -0.010697710327804089
+        ],
+        "gap": -0.03299020019566895,
+        "heightGap": -0.06482224635394668,
+        "closest": {
+          "window": "shield-push",
+          "capsule": "pelvis",
+          "weaponLow": 0.915345458386622,
+          "weaponHigh": 0.9791105757441196,
+          "hurtLow": 0.646674335756043,
+          "hurtHigh": 1.1927109396672688,
+          "bladeRadius": 0.06482224635394668,
+          "capsuleRadius": 0.2540461156517928,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.21804362318736553,
+              0.9791105757441171,
+              -0.22535386676976624
+            ],
+            [
+              0.32978183552192913,
+              0.915345458386622,
+              0.06684661785965024
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.056813429487158694,
+              0.9007204514078359,
+              -0.41914778098894034
+            ],
+            [
+              -0.05482483972565544,
+              0.938664824015476,
+              -0.3004089566337808
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.26,
+        "maximumYawRadians": 0.3933333333333333,
+        "maximumElbowExtensionRadians": 1.0471975511965976,
+        "minimumExtendedElbowBendRadians": 0.6642302453128599,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 63,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 2,
+          "local": 62
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 84,
+          "mean": 0.20245000000003138,
+          "maximum": 2.552599999999984,
+          "activeCalls": 63,
+          "activeMean": 0.26921111111113577,
+          "activeMaximum": 2.552599999999984
+        }
+      },
+      "weaponStates": [
+        "shieldPush"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/stylized-wolf-r2.json",
+      "manifestSha256": "392648ddb78fa6e94ef0ea4e26c7c4a7986ccea975688d66ffa1901a91d979fe",
+      "hurtProfileSha256": "de39cee1742df3102cbed3ed242a344dc3d32ffd08390923d3eb0d4c91258fc0"
+    },
+    {
+      "id": "wolf-3",
+      "action": "normal",
+      "outside": false,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 1.9490699351117522,
+      "stanceDistance": 1.09346425337678,
+      "actualDistance": 1.09346425337678,
+      "damage": 25,
+      "contactFrames": 7,
+      "minimumWeaponHurtGapMeters": -0.028599713082406414,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6666666666666671,
+        "playerState": "slash",
+        "sourceTime": 0.5700000000000003,
+        "shieldCenter": [
+          1.1448277235031128,
+          0.9147301912307739,
+          0.3137718141078949
+        ],
+        "leftArmPivot": [
+          1.006282091140747,
+          1.0535494089126587,
+          -0.05167333036661148
+        ],
+        "gap": -0.028599713082406414,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "fore.L.upper",
+          "weaponLow": 0.5043382932156324,
+          "weaponHigh": 0.6208206669837236,
+          "hurtLow": 0.5521524693800676,
+          "hurtHigh": 0.9840779493067113,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.11442496217442387,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              0.2830063836872578,
+              0.6208206669837236,
+              -0.08412724018096923
+            ],
+            [
+              -0.10822347019314765,
+              0.5043382932156324,
+              -0.6742063650846482
+            ]
+          ],
+          "capsulePoints": [
+            [
+              0.14205928016048663,
+              0.8696529871322874,
+              0.2868469084504324
+            ],
+            [
+              0.09470800266704527,
+              0.6665774315544915,
+              0.10879978434062315
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.9366666666666665,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 19,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 2,
+          "local": 18
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 40,
+          "mean": 0.02429749999996602,
+          "maximum": 0.08119999999962602,
+          "activeCalls": 19,
+          "activeMean": 0.049278947368532645,
+          "activeMaximum": 0.08119999999962602
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/wolf-3-r2.json",
+      "manifestSha256": "a794e08fee92448d796d6167d6c677b0b36ff7881d81e9e65cdf05a6652d6b49",
+      "hurtProfileSha256": "3c891f4f05b076aa47632f8427771dd571d848e53a7c6102dffe2d6a57e14fa4"
+    },
+    {
+      "id": "wolf-3",
+      "action": "normal",
+      "outside": true,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 1.9490699351117522,
+      "stanceDistance": 1.09346425337678,
+      "actualDistance": 3.89346425337678,
+      "damage": 0,
+      "contactFrames": 15,
+      "minimumWeaponHurtGapMeters": 2.159239630141043,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 0.6833333333333338,
+        "playerState": "slash",
+        "sourceTime": 0.6000000000000003,
+        "shieldCenter": [
+          3.973468065261841,
+          0.8849168419837952,
+          0.26918455958366394
+        ],
+        "leftArmPivot": [
+          3.8009650707244873,
+          1.0447481870651245,
+          -0.07041262090206146
+        ],
+        "gap": 2.159239630141043,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "cut",
+          "capsule": "chest",
+          "weaponLow": 1.055024118417874,
+          "weaponHigh": 1.4002123887516558,
+          "hurtLow": 0.8008740263166371,
+          "hurtHigh": 1.3462138116235187,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.24363374188896902,
+          "lateralOffset": 0.2700926931414445,
+          "blade": [
+            [
+              3.0130268063545227,
+              1.120852694902569,
+              0.226060958430171
+            ],
+            [
+              2.4507076919555666,
+              1.4002123887516558,
+              -0.12118199817836284
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.022159326457578316,
+              1.044507768205606,
+              0.1402669636649066
+            ],
+            [
+              0.022760763947977238,
+              1.1025800697345498,
+              0.3241454620309315
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 0,
+        "lastPhysicalAimError": null,
+        "fitSearches": {
+          "full": 0,
+          "local": 0
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 113,
+          "mean": 0.002260176991174666,
+          "maximum": 0.025499999999738066,
+          "activeCalls": 0,
+          "activeMean": 0,
+          "activeMaximum": 0
+        }
+      },
+      "weaponStates": [
+        "slash"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/wolf-3-r2.json",
+      "manifestSha256": "a794e08fee92448d796d6167d6c677b0b36ff7881d81e9e65cdf05a6652d6b49",
+      "hurtProfileSha256": "3c891f4f05b076aa47632f8427771dd571d848e53a7c6102dffe2d6a57e14fa4"
+    },
+    {
+      "id": "wolf-3",
+      "action": "heavy",
+      "outside": false,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 1.9490699351117522,
+      "stanceDistance": 1.09346425337678,
+      "actualDistance": 1.09346425337678,
+      "damage": 25,
+      "contactFrames": 2,
+      "minimumWeaponHurtGapMeters": -0.25464121090050007,
+      "minimumVerticalSeparationMeters": -0.049516993742598166,
+      "closest": {
+        "time": 1.3000000000000003,
+        "playerState": "judgment",
+        "sourceTime": 0.9900000000000007,
+        "shieldCenter": [
+          1.280189871788025,
+          1.29863440990448,
+          0.12833522260189056
+        ],
+        "leftArmPivot": [
+          0.901422917842865,
+          1.4389324188232422,
+          -0.06694504618644714
+        ],
+        "gap": -0.25464121090050007,
+        "heightGap": -0.049516993742598166,
+        "closest": {
+          "window": "jump-cut",
+          "capsule": "chest",
+          "weaponLow": 0.8945411282163114,
+          "weaponHigh": 1.5281209147423507,
+          "hurtLow": 0.8008740263166371,
+          "hurtHigh": 1.3462138116235187,
+          "bladeRadius": 0.049516993742598166,
+          "capsuleRadius": 0.24363374188896902,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.49735071389377117,
+              0.9794331064894796,
+              -0.030256126779690418
+            ],
+            [
+              -0.06209588682949538,
+              1.0387909513011575,
+              0.2611311719220132
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.022159326457578316,
+              1.044507768205606,
+              0.1402669636649066
+            ],
+            [
+              0.022760763947977238,
+              1.1025800697345498,
+              0.3241454620309315
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 1.17,
+        "maximumYawRadians": 0,
+        "maximumElbowExtensionRadians": 0,
+        "minimumExtendedElbowBendRadians": null,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 33,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 2,
+          "local": 32
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 78,
+          "mean": 0.020891025641037394,
+          "maximum": 0.06890000000021246,
+          "activeCalls": 33,
+          "activeMean": 0.04683939393943905,
+          "activeMaximum": 0.06890000000021246
+        }
+      },
+      "weaponStates": [
+        "judgment"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/wolf-3-r2.json",
+      "manifestSha256": "a794e08fee92448d796d6167d6c677b0b36ff7881d81e9e65cdf05a6652d6b49",
+      "hurtProfileSha256": "3c891f4f05b076aa47632f8427771dd571d848e53a7c6102dffe2d6a57e14fa4"
+    },
+    {
+      "id": "wolf-3",
+      "action": "shield",
+      "outside": false,
+      "accepted": true,
+      "height": 1.6500000000000001,
+      "scale": 1.9490699351117522,
+      "stanceDistance": 0.9134642533767799,
+      "actualDistance": 0.9134642533767799,
+      "damage": 10,
+      "contactFrames": 1,
+      "minimumWeaponHurtGapMeters": -0.12062708086574755,
+      "minimumVerticalSeparationMeters": -0.06482224635394668,
+      "closest": {
+        "time": 1.4,
+        "playerState": "shieldPush",
+        "sourceTime": 1.100000000000001,
+        "shieldCenter": [
+          0.23131775856018066,
+          1.0470545291900635,
+          -0.15565423667430878
+        ],
+        "leftArmPivot": [
+          0.516728937625885,
+          1.1546404361724854,
+          -0.010697710327804089
+        ],
+        "gap": -0.12062708086574755,
+        "heightGap": -0.06482224635394668,
+        "closest": {
+          "window": "shield-push",
+          "capsule": "spine",
+          "weaponLow": 0.8711926185403468,
+          "weaponHigh": 0.924759940854978,
+          "hurtLow": 0.6430972562647699,
+          "hurtHigh": 1.162401313472513,
+          "bladeRadius": 0.06482224635394668,
+          "capsuleRadius": 0.24363374188896902,
+          "lateralOffset": 0,
+          "blade": [
+            [
+              0.16578867438739786,
+              0.9247599408549755,
+              -0.3120540730564505
+            ],
+            [
+              0.19339649460129038,
+              0.8711926185403468,
+              -0.05070305072213763
+            ]
+          ],
+          "capsulePoints": [
+            [
+              -0.0018320059304948446,
+              0.8867309981537389,
+              -0.11087571902119106
+            ],
+            [
+              0.009892987204941084,
+              0.918767571583544,
+              0.13346601778996306
+            ]
+          ]
+        }
+      },
+      "aim": {
+        "ancestry": {
+          "Right": true,
+          "Left": true
+        },
+        "checkedJointNames": [
+          "mixamorig:LeftHand",
+          "mixamorig:LeftForeArm",
+          "mixamorig:LeftArm",
+          "mixamorig:RightHand",
+          "mixamorig:RightForeArm",
+          "mixamorig:RightArm"
+        ],
+        "maximumPitchRadians": 0.26,
+        "maximumYawRadians": 0.26,
+        "maximumElbowExtensionRadians": 0.26,
+        "minimumExtendedElbowBendRadians": 1.539601596024087,
+        "armLocalPositionChange": 0,
+        "armLocalScaleChange": 0,
+        "restoreRotationMaximumError": 0,
+        "appliedFrames": 31,
+        "lastPhysicalAimError": 0,
+        "fitSearches": {
+          "full": 1,
+          "local": 62
+        },
+        "nativeApplyCpuMilliseconds": {
+          "calls": 84,
+          "mean": 0.0845750000000754,
+          "maximum": 1.0173000000004322,
+          "activeCalls": 31,
+          "activeMean": 0.1509419354840042,
+          "activeMaximum": 1.0173000000004322
+        }
+      },
+      "weaponStates": [
+        "shieldPush"
+      ],
+      "manifest": "/C:/dev/MoonForest/ArcherPreview/public/assets/wolf-3-r2.json",
+      "manifestSha256": "a794e08fee92448d796d6167d6c677b0b36ff7881d81e9e65cdf05a6652d6b49",
+      "hurtProfileSha256": "3c891f4f05b076aa47632f8427771dd571d848e53a7c6102dffe2d6a57e14fa4"
+    }
+  ],
+  "caseRefreshes": {
+    "boar": {
+      "source": "boar-r2-with-aim-final.json",
+      "height": 2.5,
+      "manifest": "boar-r2.json",
+      "manifestSha256": "5791ff39f3119f9c742bc191d3717c26483c4c34cfa07ae0cd498ff86e64f340",
+      "scope": "Only the four boar cases rerun after the requested2.5x uniform actor enlargement; other four forms retained unchanged."
+    }
+  }
+}

@@ -6,6 +6,7 @@ import {WOLF_CLIPS} from './wolf-spec.js';
 import {WOLF_V02_ACTIVE_CLIPS} from './wolf-v02-authored-clips.js';
 import {REGULAR_WOLF_VARIANTS,regularWolfBalance,regularWolfRuntimeProfile} from './regular-wolf-spec.js';
 import {playerDimensions} from './player-dimensions.js';
+import {RegularBoarBrain} from './regular-boar-brain.js';
 
 export class RegularWolfEncounter extends WolfV02Encounter{
  constructor(world,onChange,onDamage,onPlayerHit,options={}){
@@ -26,11 +27,18 @@ export class RegularWolfEncounter extends WolfV02Encounter{
   this.contactShapes=Object.fromEntries(Object.entries(this.runtimeProfile.contactShapes).map(([name,shape])=>[name,{offset:Vector3.FromArray(shape.offset),radius:shape.radius}]));
  }
  createBrain(durations){
-  const brain=new WolfV02Brain(durations,this.balance,Math.random,this.runtimeProfile);
+  const Brain=this.regularWolfId==='boar'?RegularBoarBrain:WolfV02Brain;
+  const brain=new Brain(durations,this.balance,Math.random,this.runtimeProfile);
   brain.ramReach=this.runtimeProfile.ramReach;return brain;
  }
  contactShape(name,kind){return this.contactShapes[kind==='ram'&&name==='head'?'headRam':kind==='maul'&&name==='jaw'?'jawMaul':name.includes('paw')?'paw':name]??this.contactShapes.head;}
- contactSeparation(){if(this.brain?.mode==='move')return this.radius+playerDimensions(this.player).moveRadius;return super.contactSeparation();}
+ contactSeparation(){
+  // Small animals must allow a real close-range strike. The legacy standing
+  // convenience gap is almost 30 cm wider than the warrior's actual body.
+  // Keep ram/dodge leases first, then use the same physical pair in idle/move.
+  if(this.v02Ram?.hasClearanceLease()||this.dodgeContactClearance)return super.contactSeparation();
+  return this.radius+playerDimensions(this.player).moveRadius;
+ }
  hurtCapsules(){this.v02Hurt??=new WolfV02HurtVolumes(this.nodes,this.config.scale,this.runtimeProfile.hurtVolumes);return this.v02Hurt.sample();}
  inspect(){return {...super.inspect(),source:this.config?.sourceAssetId,variant:this.regularWolfId,combatProfile:'regularWolf',fittedHeight:this.config?.height};}
 }

@@ -3,35 +3,35 @@
     "sourceSha256": "119523c4192a7bf2241b72d7fe1809a6f6ebef9980900f6469cd5d9ea6ed3504",
     "anatomySha256": "ec93ac43eff0e3ff884d9a1e78c80d337f97f2d7be1d60ff537de68614c13557",
     "motionSourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
-    "scale": 1.3506477192431499,
-    "height": 1.05
+    "scale": 2.025971578864725,
+    "height": 1.5750000000000002
   },
   "stylized-wolf": {
     "sourceSha256": "4605a7d16c50be921596733dc49ff70c14faa2bdb0f177da9cf2c6e0a1f86aea",
     "anatomySha256": "d686f11a7d3e13f7275f6fcd6073b29e6cb44d5db5f2ff0b56ab12032247baf5",
     "motionSourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
-    "scale": 1.403941730934019,
-    "height": 1.1
+    "scale": 2.1059125964010286,
+    "height": 1.6500000000000001
   },
   "wolf-3": {
     "sourceSha256": "7df9bfeefc22468cab94173cef5db5f4ec7d217df112498bb340187d25c4182c",
     "anatomySha256": "67378165b561b4c3565ba57c969d822c7b615aa6aab1450990e630fa2f2bb70a",
     "motionSourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
-    "scale": 1.2993799567411681,
-    "height": 1.1
+    "scale": 1.9490699351117522,
+    "height": 1.6500000000000001
   },
   "fox": {
     "sourceSha256": "54bd934bbd748ba482fb5bc79ca95ff02dc487fa9ec295d13305da32827c610e",
     "anatomySha256": "85f374ffc407113ea17b25c06c32285ca4a7a1a1113921b5a4965d60267e614c",
     "motionSourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
-    "scale": 1.0215373652801283,
-    "height": 0.7000000000000001
+    "scale": 1.5323060479201924,
+    "height": 1.05
   },
   "boar": {
     "sourceSha256": "94305479ccb9cb7ce23713a7f3183f294069f0229a72808589fddda808aa115c",
     "anatomySha256": "ca09cafbc4fb172f549bc25c8ec4eff43fba2acc4e4b18ed43f288c5a73298e5",
     "motionSourceSha256": "38057d9820c296c883a5545fc7528bffdda88e78387b9b5b1fe117b89cb09bce",
-    "scale": 1.542604274550419,
-    "height": 1
+    "scale": 3.856510686376047,
+    "height": 2.5
   }
 }

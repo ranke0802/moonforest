@@ -4,12 +4,12 @@
   "entries": [
     {
       "assetId": "boar",
-      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "version": "Regular quadrupeds R2 · 2.5x boar actor scale",
       "name": "멧돼지",
       "category": "monster",
       "contentHash": "280b64d4f75ee36e4cf5bb9c5156c4696c7f0038720608ada390ad4e6dcee3d6",
       "runtime": {
-        "manifest": "assets/boar.json",
+        "manifest": "assets/boar-r2.json",
         "assetKey": "boar",
         "model": "assets/content/280b64d4f75ee36e4cf5bb9c5156c4696c7f0038720608ada390ad4e6dcee3d6.gltf"
       },
@@ -102,21 +102,21 @@
         ],
         "posed": true
       },
-      "referenceHeight": 1,
+      "referenceHeight": 2.5,
       "units": {
         "world": "metres",
-        "metersPerSourceUnit": 1.542604274550419
+        "metersPerSourceUnit": 3.856510686376047
       },
       "reviewStatus": "candidate-awaiting-user-review"
     },
     {
       "assetId": "fox",
-      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "version": "Regular quadrupeds R2 · 1.5x actor scale",
       "name": "여우",
       "category": "monster",
       "contentHash": "7f502122f021a253580c2eccfff9d958f149f559a6425149cf467a0da2e97ecf",
       "runtime": {
-        "manifest": "assets/fox.json",
+        "manifest": "assets/fox-r2.json",
         "assetKey": "fox",
         "model": "assets/content/7f502122f021a253580c2eccfff9d958f149f559a6425149cf467a0da2e97ecf.gltf"
       },
@@ -209,21 +209,21 @@
         ],
         "posed": true
       },
-      "referenceHeight": 0.7000000000000001,
+      "referenceHeight": 1.05,
       "units": {
         "world": "metres",
-        "metersPerSourceUnit": 1.0215373652801283
+        "metersPerSourceUnit": 1.5323060479201924
       },
       "reviewStatus": "candidate-awaiting-user-review"
     },
     {
       "assetId": "gray-wolf",
-      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "version": "Regular quadrupeds R2 · 1.5x actor scale",
       "name": "회색 늑대",
       "category": "monster",
       "contentHash": "a868ad24abd64cfd8c6d7b5249c93f5a41df8987db755c649cce9f771ab96f05",
       "runtime": {
-        "manifest": "assets/gray-wolf.json",
+        "manifest": "assets/gray-wolf-r2.json",
         "assetKey": "gray-wolf",
         "model": "assets/content/a868ad24abd64cfd8c6d7b5249c93f5a41df8987db755c649cce9f771ab96f05.gltf"
       },
@@ -316,21 +316,21 @@
         ],
         "posed": true
       },
-      "referenceHeight": 1.05,
+      "referenceHeight": 1.5750000000000002,
       "units": {
         "world": "metres",
-        "metersPerSourceUnit": 1.3506477192431499
+        "metersPerSourceUnit": 2.025971578864725
       },
       "reviewStatus": "candidate-awaiting-user-review"
     },
     {
       "assetId": "stylized-wolf",
-      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "version": "Regular quadrupeds R2 · 1.5x actor scale",
       "name": "늑대 2",
       "category": "monster",
       "contentHash": "8698327f59ab91a06b2907b2fcc0225159a277b87d6015e749c840b19b17f27a",
       "runtime": {
-        "manifest": "assets/stylized-wolf.json",
+        "manifest": "assets/stylized-wolf-r2.json",
         "assetKey": "stylized-wolf",
         "model": "assets/content/8698327f59ab91a06b2907b2fcc0225159a277b87d6015e749c840b19b17f27a.gltf"
       },
@@ -423,21 +423,21 @@
         ],
         "posed": true
       },
-      "referenceHeight": 1.1,
+      "referenceHeight": 1.6500000000000001,
       "units": {
         "world": "metres",
-        "metersPerSourceUnit": 1.403941730934019
+        "metersPerSourceUnit": 2.1059125964010286
       },
       "reviewStatus": "candidate-awaiting-user-review"
     },
     {
       "assetId": "wolf-3",
-      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "version": "Regular quadrupeds R2 · 1.5x actor scale",
       "name": "늑대 3",
       "category": "monster",
       "contentHash": "9b2a762e8fbe62fc9fe872541b2fdb986d2184e24e9a7e795ca778549bd66eb2",
       "runtime": {
-        "manifest": "assets/wolf-3.json",
+        "manifest": "assets/wolf-3-r2.json",
         "assetKey": "wolf-3",
         "model": "assets/content/9b2a762e8fbe62fc9fe872541b2fdb986d2184e24e9a7e795ca778549bd66eb2.gltf"
       },
@@ -530,10 +530,10 @@
         ],
         "posed": true
       },
-      "referenceHeight": 1.1,
+      "referenceHeight": 1.6500000000000001,
       "units": {
         "world": "metres",
-        "metersPerSourceUnit": 1.2993799567411681
+        "metersPerSourceUnit": 1.9490699351117522
       },
       "reviewStatus": "candidate-awaiting-user-review"
     }

@@ -23,6 +23,8 @@ test('primary boss stays stable, ignores hidden/goblins, and all health data rem
  assert.equal(primaryHealthBoss([one,two],{x:0,z:0})?.id,1);assert.equal(primaryHealthBoss([one,two],{x:0,z:0},2)?.id,2,'small distance change does not flicker primary');
  assert.equal(primaryHealthBoss([one,two],{x:-10,z:0},1)?.id,1);assert.equal(primaryHealthBoss([one,{...two,fogVisible:false}],{x:0,z:0},2)?.id,1);
  assert.equal(primaryHealthBoss([boss(3,0,{kind:'goblin'}),boss(4,0,{renderVisible:false}),boss(5,0,{corpseGone:true})],{x:0,z:0}),null);
+ const regular=boss('boar-1',0,{kind:'wolf',regularWolfId:'boar'}),alpha=boss('wolf-1',5,{kind:'wolf'});
+ assert.equal(primaryHealthBoss([regular,alpha],{x:0,z:0}),alpha,'regular quadrupeds use ordinary world health bars');
 });
 
 test('real camera changes cannot move fixed battle/player HP into head anchors; hidden enemies remain hidden',t=>{

@@ -9,9 +9,9 @@ export class WolfV02PlayerImpact{
  constructor(world,combat){
   this.world=world;this.combat=combat;this.direction=new Vector3();this.velocity=new Vector3();this.previous=new Vector3();this.start=new Vector3();this.end=new Vector3();this.reset();
  }
- canBegin(player){return !this.active&&this.combat.hp>0&&!this.combat.grabOwner&&!!player?.metadata?.moonforestV02ImpactCarrier&&!this.world.scene?.isDisposed;}
+ canBegin(player,owner=null){return !this.active&&this.combat.hp>0&&!this.combat.grabOwner&&(this.combat.canStartWolfRam?.(owner,player)??true)&&!!player?.metadata?.moonforestV02ImpactCarrier&&!this.world.scene?.isDisposed;}
  begin({owner,serial,player,direction}){
-  if(!this.canBegin(player)||!owner?.active||owner.world!==this.world||owner.brain.serial!==serial)return false;
+  if(!this.canBegin(player,owner)||!owner?.active||owner.world!==this.world||owner.brain.serial!==serial)return false;
   const carrier=player.metadata.moonforestV02ImpactCarrier;if(carrier.isDisposed?.())return false;
   this.owner=owner;this.serial=serial;this.player=player;this.scene=this.world.scene;this.map=this.world.mapId;this.carrier=carrier;
   this.direction.copyFrom(direction);this.direction.y=0;if(this.direction.lengthSquared()<1e-8){this.reset();return false;}this.direction.normalize();

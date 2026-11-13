@@ -1,3 +1,4 @@
+import {PlayerMeleeAim} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
 import {validateStoryboard} from './storyboard-document.js';
 import './styles.css';
@@ -62,6 +63,7 @@ import {createLoadingView} from './loading-view.js';
 import {prepareStartupResources,prepareMapResources} from './startup-resources.js';
 import { BossBattle } from './boss-battle.js';
 import { BossSelection, bossSelectionHelp, summonSelectedBoss } from './boss-selection.js';
+import {MonsterSelection,MONSTER_NAMES,monsterSelectionHelp,summonSelectedMonster} from './monster-selection.js';
 import { loadTrainingGround } from './environment.js';
 import { loadVillage } from './village-environment.js';
 import { VILLAGE_SPAWN } from './village-layout.js';
@@ -138,6 +140,7 @@ let commercialUi, hudLayout, developerTools;
 let elenaReviewMode=new URLSearchParams(location.search).get('elenaReview');
 let elenaReview=null;
 const bossSelection=new BossSelection();
+const monsterSelection=new MonsterSelection();
 if (!validCharacters.includes(character)) character = 'archer';
 const isWarrior = () => character !== 'archer';
 const isV2 = () => character === 'warrior-v2' || isWorldCharacter(character);
@@ -160,7 +163,7 @@ const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.sear
 let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
-let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail;
+let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const staminaFeedback=new StaminaFailureFeedback();
 const staminaNoticeAnchor=new StaminaNoticeAnchor($('#toast'));
 const wolfMaulNotice=setupWolfMaulNotice($('#app'));
@@ -349,6 +352,14 @@ function updateSummonControls(encounter=boss) {
   text('#boss-selection-help',bossSelectionHelp(selection));
   const present=encounter?.encounters.some(enemy=>(enemy.summonKind??enemy.kind)===(selection.phase?'elena':selection.kind)&&(!selection.phase||enemy.phase===selection.phase));
   text('#summon-boss',encounter?.loading?'불러오는 중…':present?'보스 다시 소환':'보스 소환');
+  if($('#monster-kind'))updateMonsterSummonControls(encounter,disabled);
+}
+function updateMonsterSummonControls(encounter=boss,disabled=!ready||!isV2()||!!encounter?.loading){
+  const selection=monsterSelection.current(),present=encounter?.encounters.some(enemy=>(enemy.summonKind??enemy.kind)===selection.kind);
+  $('#monster-kind').value=selection.kind;$('#monster-kind').disabled=disabled;
+  $('#goblin-count').value=String(selection.count);$('#goblin-count').disabled=disabled;$('#summon-goblin').disabled=disabled;
+  text('#summon-goblin',encounter?.loading?'불러오는 중…':MONSTER_NAMES[selection.kind]+(present?' 다시 소환':' 소환'));
+  text('#monster-selection-help',monsterSelectionHelp(selection));
 }
 
 function leaveElenaReview() {
@@ -546,7 +557,7 @@ async function loadCharacter() {
     await migrateCachedGlb(config, manifestUrl);
     const modelUrl = new URL(config.model, manifestUrl);
     const rootUrl = new URL('.', modelUrl).href;
-    swordTrail?.clear();if (animator) animator.dispose();
+    meleeAim?.reset();meleeAim=null;swordTrail?.clear();if (animator) animator.dispose();
     equipment?.dispose(); equipment = null;
     if (container) { for (const mesh of container.meshes) world.shadows.removeShadowCaster(mesh, false); container.dispose(); }
     boss?.combat?.v02Impact?.reset();
@@ -606,6 +617,7 @@ async function loadCharacter() {
     shieldNode = container.transformNodes.find(node=>node.name==='Bunnyguard_Shield') || container.meshes.find(node=>node.name==='Bunnyguard_Shield');
     swordNode = container.transformNodes.find(node => node.name === 'Golden_Oathblade') || container.meshes.find(node => node.name === 'Golden_Oathblade');
     boss.playerNodes=Object.fromEntries(container.transformNodes.map(node=>[node.name,node]));
+    if(isV2())meleeAim=new PlayerMeleeAim(container);
     attackSources.clear();attackPointerTypes.clear(); shotTarget = null; shotActionId = null; hiddenArrowForAction = null;
     projectiles.clear();
     animator.transition('idle', { clipTime: 0, loop: true });
@@ -782,6 +794,7 @@ function render(dt) {
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
     const playerAnimationStart=frameDiagnostics.mark();
+    meleeAim?.restore();meleeAimDt=dt;
     animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
     frameDiagnostics.measure('playerAnimationMs',playerAnimationStart);
     const attacking = !result.captured&&!result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
@@ -794,6 +807,7 @@ function render(dt) {
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
       }else if(target&&Vector3.Distance(actor.position,target.actor.position)<(target.meleeAimDistance??4)){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
+      meleeAim?.begin(result,actor,target);
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);
@@ -941,7 +955,7 @@ try {
     const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');
     if(snapshot===healthSnapshot)return;healthSnapshot=snapshot;
     updateSummonControls(encounter);
-    $('#summon-goblin').textContent=encounter.loading?'불러오는 중…':encounter.encounters.some(e=>e.kind==='goblin')?'고블린 다시 소환':'고블린 소환';
+    if(!$('#monster-kind'))$('#summon-goblin').textContent=encounter.loading?'불러오는 중…':encounter.encounters.some(e=>e.kind==='goblin')?'고블린 다시 소환':'고블린 소환';
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
@@ -963,6 +977,7 @@ try {
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame)return;
     if(!ready||!isWarrior()||!combatResult){swordTrail?.clear();return;}
+    meleeAim?.apply(combatResult,actor,meleeAimDt);
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
     try{swordTrail?.update(sample,combatResult.state,elapsed,equipmentChoices.sword);}catch(error){swordTrail?.setEnabled(false);console.warn('[검격 잔상]',error);}
     const contactsStart=frameDiagnostics.mark();
@@ -1006,7 +1021,7 @@ try {
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
-      combatResult=null;strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
+      combatResult=null;meleeAim?.reset();strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();
     },
     release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
@@ -1139,12 +1154,14 @@ try {
   }
   $('#boss-kind').addEventListener('change',()=>{bossSelection.choose($('#boss-kind').value);updateSummonControls();});
   $('#boss-count').addEventListener('change',()=>{bossSelection.setCount($('#boss-count').value);updateSummonControls();});
+  $('#monster-kind')?.addEventListener('change',()=>{monsterSelection.choose($('#monster-kind').value);updateSummonControls();});
+  $('#goblin-count').addEventListener('change',()=>{if($('#monster-kind'))monsterSelection.setCount($('#goblin-count').value);updateSummonControls();});
   for(const [selector,count,kind] of [['#summon-boss','#boss-count','bear'],['#summon-goblin','#goblin-count','goblin']])$(selector).addEventListener('click',async()=>{
     if(!ready||!isV2()||boss.loading)return;
     try{
       input.reset();attackSources.clear();controller.cancelAttack();controller.staggerRemaining=0;leaveElenaReview();
-      const selection=kind==='bear'?bossSelection.current():null;
-      const summoned=await (selection?summonSelectedBoss(boss,actor,selection):boss.summon(actor,$(count).value,kind));
+      const selection=kind==='bear'?bossSelection.current():$('#monster-kind')?monsterSelection.current():null;
+      const summoned=await (selection?(kind==='bear'?summonSelectedBoss:summonSelectedMonster)(boss,actor,selection):boss.summon(actor,$(count).value,kind));
       if(!summoned)return;
       $('#summon-dialog').close();
       actionAudio.reset();

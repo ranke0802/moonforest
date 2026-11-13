@@ -1,0 +1,33 @@
+{
+  "scope": "Actual R2 wolf/fox, native warrior/controller and collision/contact pipeline. The overlap case places the second actor at the settling attacker; player position and damage gates are never fabricated.",
+  "cases": [
+    {
+      "name": "early taps and second attacker",
+      "taps": 5,
+      "realBites": 2,
+      "releaseAfter": 0.6833333333333673,
+      "ownerReleased": true,
+      "nativeDodgeAccepted": true
+    },
+    {
+      "name": "overlap misses cannot hold forever",
+      "taps": 5,
+      "realBites": 0,
+      "releaseAfter": 1.5000000000000746,
+      "reason": "maul-contact-lost",
+      "noPlayerTeleport": true,
+      "nativeDodgeAccepted": true
+    },
+    {
+      "name": "hide cleanup",
+      "otherHidePreservedOwner": true,
+      "ownerReleased": true
+    },
+    {
+      "name": "death cleanup",
+      "otherHidePreservedOwner": true,
+      "ownerReleased": true
+    }
+  ],
+  "passed": true
+}

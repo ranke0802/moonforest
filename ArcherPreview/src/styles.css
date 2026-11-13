@@ -159,7 +159,7 @@
 .game-settings #reset-motion-speeds{justify-self:start;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:#252b42;font-size:11px}
 .game-settings>footer{justify-content:center}
 .game-settings>footer span{font-size:11px}
-.boss-hud[data-kind="goblin"]{width:64px;font-size:8px}
+.boss-hud[data-kind="goblin"],.boss-hud[data-kind="monster"]{width:64px;font-size:8px}
 .boss-hud[data-kind="elena"]{width:210px;max-width:60vw;font-size:10px}
 .player-hud{position:absolute;left:0;top:0;z-index:4;width:100px;pointer-events:none;text-align:center;font-size:10px;line-height:1.6;font-weight:600;font-variant-numeric:tabular-nums;color:#e5ffef;text-shadow:0 1px 3px #000,0 0 4px #000}
 .player-hud[hidden]{display:none}

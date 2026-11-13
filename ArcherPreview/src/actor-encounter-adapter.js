@@ -1,4 +1,5 @@
 import {RegularWolfEncounter} from './regular-wolf-encounter.js';
+import {isRegularWolf,regularWolfManifest} from './regular-wolf-spec.js';
 import {bearEncounterSize} from './bear-size.js';
 import {WolfEncounter} from './wolf-encounter.js';
 import {WolfV02Encounter} from './wolf-v02-encounter.js';
@@ -53,7 +54,7 @@ function assetEstimate(asset,fallback){
 
 // A factory owns only the libraries it creates. Every actor is a normal cloned
 // encounter; resident Elena adoption is deliberately never used for this pool.
-export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.currentPlayer,libraryFactory=(scene,id)=>new BossModelLibrary(scene,id,{scoped:true}),onDefeat=()=>{},rewardsEnabled=false,interactNpc=()=>false,interaction=interactNpc,onActorHide=()=>{},getActivity=()=>({})}){
+export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.currentPlayer,libraryFactory=(scene,id)=>new BossModelLibrary(scene,isRegularWolf(id)?regularWolfManifest(id):id,{scoped:true}),onDefeat=()=>{},rewardsEnabled=false,interactNpc=()=>false,interaction=interactNpc,onActorHide=()=>{},getActivity=()=>({})}){
   const scene=world.scene,entries=new Map(),adapters=new Set();let disposed=false,serial=0;
   function entryFor(definition){
     const key=definition.assetId+'@'+definition.assetVersion;

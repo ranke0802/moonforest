@@ -6,7 +6,7 @@ import {playerDimensions} from './player-dimensions.js';
 import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
 import {segmentDistanceSquared} from './melee-collision.js';
 import {WolfV02LocomotionPose} from './wolf-v02-locomotion.js';
-import {WolfGrab} from './wolf-grab.js';
+import {WolfV02Grab} from './wolf-v02-grab.js';
 import {WolfRamSequence,wolfRamContactTime} from './wolf-v02-ram.js';
 import {rearDamage,facingYaw} from './combat-damage.js';
 import {WolfV02HurtVolumes,WolfV02ContactGate} from './wolf-v02-hurt.js';
@@ -45,52 +45,6 @@ function sampleYaw(clip,time){
   const f=Math.max(0,Math.min(frames.length-1,time*clip.fps));
   const i=Math.floor(f),j=Math.min(i+1,frames.length-1);
   return frames[i]+angleDelta(frames[j],frames[i])*(f-i);
-}
-
-// Capture follows the accelerated source action, not repeated pose-pass dt.
-// The player keeps its real position and can escape until the authored bite.
-class WolfV02Grab extends WolfGrab{
-  constructor(encounter,original){super(original.onControl,original.onImpact);this.encounter=encounter;this.maulHolding=false;this.contactPass=false;this.tapTimes=new Float64Array(5);this.maulHits=0;this.tapCount=0;}
-  get active(){return super.active&&!this.contactPass;}
-  get holding(){return this.maulHolding||super.holding;}
-  get canEscape(){return this.maulHolding||this.active&&!this.impacted;}
-  get escapePrompt(){return this.maulHolding?'회피를 눌러 탈출하세요':'';}
-  get escapeProgress(){return this.maulHolding?Math.min(1,this.tapCount/5):0;}
-  start(...args){const started=super.start(...args);if(started)this.captureClock=this.encounter.brain.actionElapsed;return started;}
-  startMaul(player){
-    const e=this.encounter,b=e.brain;
-    if(this.phase||e.combat.grabOwner||!e.v02Ram.authorized||!e.v02Ram.proneValid||!b.ramPawBraced||!e.playerAlive)return false;
-    this.maulHolding=true;this.maulHits=0;this.tapCount=0;this.lastTapClock=-Infinity;this.escapeQueued=false;
-    this.holdBrain=b;this.holdScene=e.world.scene;this.holdMap=e.world.mapId;b.ramMaulHold=true;
-    if(super.start(player,e.playerNodes,b.serial))return true;
-    this.maulHolding=false;b.ramMaulHold=false;return false;
-  }
-  releaseEscaped(){const b=this.encounter.brain;this.reset();b.lastOutcome='miss';b.requestRetreat('escape');b.abortRam('maul-escape');}
-  escape(){
-    if(this.maulHolding){
-      const now=this.encounter.brain.combatClock;if(now===this.lastTapClock)return false;this.lastTapClock=now;
-      let count=0;for(let i=0;i<this.tapCount;i++)if(now-this.tapTimes[i]<=1.5)this.tapTimes[count++]=this.tapTimes[i];
-      if(count<5)this.tapTimes[count++]=now;this.tapCount=count;
-      if(count>=5)this.escapeQueued=true;
-      if(this.escapeQueued&&this.maulHits>=2){this.releaseEscaped();return true;}return false;
-    }
-    const escaped=super.escape();if(escaped){this.encounter.brain.lastOutcome='miss';this.encounter.brain.requestRetreat('escape');}return escaped;
-  }
-  noteMaulHit(){if(!this.maulHolding)return;this.maulHits++;if(!this.encounter.playerAlive)this.reset();else if(this.maulHits>=2&&this.escapeQueued)this.releaseEscaped();}
-  reset(){
-    if(!this.phase)return;
-    this.phase=null;this.player=null;this.maulHolding=false;this.tapCount=0;this.escapeQueued=false;this.holdBrain=null;this.holdScene=null;this.holdMap=null;
-    this.encounter.brain.ramMaulHold=false;this.onControl(false);
-  }
-  update(dt,{interrupted,state,serial,clipTime}){
-    if(this.maulHolding){const e=this.encounter,b=e.brain;if(interrupted||!e.active||!e.playerAlive||serial!==this.serial||b!==this.holdBrain||this.player!==e.player||this.holdScene!==e.world.scene||this.holdMap!==e.world.mapId||e.combat.grabOwner!==e||b.mode!=='attack'||!b.action?.momentumRam)this.reset();return;}
-    if(!this.active)return;
-    const brain=this.encounter.brain;
-    if(interrupted||serial!==this.serial||state!==WOLF_CLIPS.pin){this.reset();return;}
-    this.time=Math.max(this.time,(brain.actionElapsed-this.captureClock)/Math.max(.5,brain.castSpeed??1));
-    if(!this.impacted&&clipTime>=1.85){this.impacted=true;this.onImpact();}
-    if(this.active&&clipTime>=3.35)this.reset();
-  }
 }
 
 // The 0.2 variant owns decisions, movement and bounded post-sampler attention /
@@ -251,7 +205,7 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   contactSeparation(){
-    if(this.v02Ram?.hasClearanceLease())return this.radius;
+    if(this.v02Ram?.hasClearanceLease())return this.runtimeProfile?.ramPairClearance??this.radius;
     if(this.brain?.mode==='ramRecover')return this.radius+playerDimensions(this.player).moveRadius;
     // Standing clearance is a navigation convenience wider than the player's
     // actual body. During a strike use the same physical movement capsule so

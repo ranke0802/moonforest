@@ -1,5 +1,5 @@
 import {RegularWolfEncounter} from './regular-wolf-encounter.js';
-import {REGULAR_WOLF_VARIANTS,isRegularWolf,regularWolfSize} from './regular-wolf-spec.js';
+import {REGULAR_WOLF_VARIANTS,isRegularWolf,regularWolfSize,regularWolfManifest} from './regular-wolf-spec.js';
 import {bearEncounterSize} from './bear-size.js';
 import {WolfEncounter} from './wolf-encounter.js';
 import {WolfV02Encounter} from './wolf-v02-encounter.js';
@@ -88,7 +88,7 @@ export class BossBattle {
     this.onDefeat=onDefeat;this.onDiagnosticEvent=onDiagnosticEvent;
     this.models = models ?? new BossModelLibrary(world.scene);
     this.wolfModels=wolfModels??new BossModelLibrary(world.scene,'alpha-wolf');this.wolfPool=[];
-    this.regularWolves=Object.fromEntries(Object.keys(REGULAR_WOLF_VARIANTS).map(id=>[id,{models:regularWolfModels[id]??new BossModelLibrary(world.scene,id),pool:[]}]));
+    this.regularWolves=Object.fromEntries(Object.keys(REGULAR_WOLF_VARIANTS).map(id=>[id,{models:regularWolfModels[id]??new BossModelLibrary(world.scene,regularWolfManifest(id)),pool:[]}]));
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
     this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;this.residentHome=ELENA_HOME;

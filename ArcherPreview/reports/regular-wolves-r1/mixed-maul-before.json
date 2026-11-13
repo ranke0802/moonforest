@@ -1,0 +1,187 @@
+{
+  "overlapped": true,
+  "captureEvents": [
+    {
+      "time": 8.78333333333335,
+      "captured": true
+    }
+  ],
+  "firstHold": 8.78333333333335,
+  "taps": 5,
+  "escaped": null,
+  "maxHits": 0,
+  "ownerChanges": 1,
+  "captured": true,
+  "owner": "fox-1",
+  "player": [
+    0.23224859179747914,
+    0,
+    8.58960626188772
+  ],
+  "enemies": [
+    {
+      "id": "gray-wolf-1",
+      "position": [
+        1.3390023573938268,
+        0,
+        8.768213103936636
+      ],
+      "mauls": 0,
+      "taps": 0,
+      "holding": false,
+      "ram": {
+        "serial": 7,
+        "active": false,
+        "phase": null,
+        "stage": "miss-brake",
+        "layerTime": 0.6,
+        "runPhase": 0,
+        "unwrapped": 1.6452832169777019,
+        "speed": 0.142086838942329,
+        "ramHit": false,
+        "authorized": false,
+        "critical": null,
+        "cancelReason": null,
+        "clearanceLease": false,
+        "chase": {
+          "acceptedClock": null,
+          "startClock": null,
+          "progress": 0,
+          "correction": [
+            0,
+            0
+          ],
+          "prone": false
+        },
+        "phases": [
+          {
+            "id": "ram",
+            "serial": "7:ram",
+            "resolved": false,
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null,
+            "blocked": false,
+            "acceptedKnockdown": false
+          },
+          {
+            "id": "maul-1",
+            "serial": "7:maul-1",
+            "resolved": false,
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null,
+            "blocked": false,
+            "acceptedKnockdown": false
+          },
+          {
+            "id": "maul-2",
+            "serial": "7:maul-2",
+            "resolved": false,
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null,
+            "blocked": false,
+            "acceptedKnockdown": false
+          }
+        ]
+      },
+      "contact": null
+    },
+    {
+      "id": "fox-1",
+      "position": [
+        0.009605635544914837,
+        0,
+        7.472726849343886
+      ],
+      "mauls": 0,
+      "queued": true,
+      "taps": 5,
+      "holding": true,
+      "ram": {
+        "serial": 7,
+        "active": true,
+        "phase": "maul-2",
+        "stage": "maul",
+        "layerTime": 0.6,
+        "runPhase": 2.049999999999998,
+        "unwrapped": 2.7076690181086205,
+        "speed": 0.8438512526942137,
+        "ramHit": true,
+        "authorized": true,
+        "critical": false,
+        "cancelReason": null,
+        "clearanceLease": true,
+        "chase": {
+          "acceptedClock": 7.783333333333311,
+          "startClock": 7.799999999999978,
+          "progress": 0,
+          "correction": [
+            0,
+            0
+          ],
+          "prone": true
+        },
+        "phases": [
+          {
+            "id": "ram",
+            "serial": "7:ram",
+            "resolved": true,
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994,
+            "blocked": false,
+            "acceptedKnockdown": true
+          },
+          {
+            "id": "maul-1",
+            "serial": "7:maul-1:4",
+            "resolved": false,
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null,
+            "blocked": false,
+            "acceptedKnockdown": false
+          },
+          {
+            "id": "maul-2",
+            "serial": "7:maul-2:4",
+            "resolved": false,
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null,
+            "blocked": false,
+            "acceptedKnockdown": false
+          }
+        ]
+      },
+      "contact": {
+        "serial": 7,
+        "phaseSerial": "7:maul-1:4",
+        "phase": "maul-1",
+        "action": "lunge",
+        "sourceTime": 1.8333333333333321,
+        "part": "jaw",
+        "distance": 0.5385877005450219,
+        "radius": 0.3294711359780527,
+        "bodyRadius": 0.28809887268420753,
+        "prone": true,
+        "body": [
+          [
+            0.22754572331905365,
+            0.27339857816696167,
+            8.593923568725586
+          ],
+          [
+            0.3451661467552185,
+            0.38713282346725464,
+            8.761977195739746
+          ]
+        ],
+        "swept": true,
+        "contact": false
+      }
+    }
+  ]
+}

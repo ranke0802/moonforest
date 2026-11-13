@@ -39,10 +39,10 @@ export class BossHealthBars {
         }
         element.style.left='0';element.style.top='0';
         element.dataset.bossId = String(boss.id);
-        element.dataset.kind = boss.kind;
+        element.dataset.kind = boss.regularWolfId?'monster':boss.kind;
         element.setAttribute('aria-label', `${boss.displayName??(boss.kind==='goblin'?'고블린':'곰 보스')} ${boss.number??boss.id} 체력`);
         item = { element, progress: element.querySelector('progress'), state: element.querySelector('.sr-only'), text: element.querySelector('span:last-child') };
-        item.progress.setAttribute('aria-label', boss.kind === 'goblin' ? '고블린 체력' : '보스 체력');
+        item.progress.setAttribute('aria-label', boss.regularWolfId?'일반 몬스터 체력':boss.kind === 'goblin' ? '고블린 체력' : '보스 체력');
         this.items.set(boss.id, item);
       }
       const snapshot = `${boss.brain.hp}:${boss.brain.maxHp}:${boss.brain.label}:${boss.brain.mode}:${boss.brain.stagger > 0}:${encounters.length}`;

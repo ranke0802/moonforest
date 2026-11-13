@@ -1,0 +1,374 @@
+{
+  "scope": "One native-controller solo ram/maul per regular form and alpha, current manifest routes, no map/angle matrix. Five real dodge inputs, owned prompt/control cleanup and a real subsequent dodge. Boar also receives one deliberate attacker-only separation after its first real bite to verify progress timeout; the victim is never teleported.",
+  "cases": [
+    {
+      "id": "gray-wolf",
+      "solo": {
+        "heldAt": 8.933333333333357,
+        "release": 9.783333333333399,
+        "heldSeconds": 0.8500000000000423,
+        "taps": 5,
+        "realBites": 2,
+        "reason": "maul-escape",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994
+          },
+          {
+            "name": "maul-1",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323
+          },
+          {
+            "name": "maul-2",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304
+          }
+        ]
+      }
+    },
+    {
+      "id": "stylized-wolf",
+      "solo": {
+        "heldAt": 8.950000000000024,
+        "release": 9.800000000000066,
+        "heldSeconds": 0.8500000000000423,
+        "taps": 5,
+        "realBites": 2,
+        "reason": "maul-escape",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994
+          },
+          {
+            "name": "maul-1",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323
+          },
+          {
+            "name": "maul-2",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304
+          }
+        ]
+      }
+    },
+    {
+      "id": "wolf-3",
+      "solo": {
+        "heldAt": 8.91666666666669,
+        "release": 9.750000000000064,
+        "heldSeconds": 0.8333333333333748,
+        "taps": 5,
+        "realBites": 2,
+        "reason": "maul-escape",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994
+          },
+          {
+            "name": "maul-1",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323
+          },
+          {
+            "name": "maul-2",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304
+          }
+        ]
+      }
+    },
+    {
+      "id": "fox",
+      "solo": {
+        "heldAt": 8.800000000000017,
+        "release": 9.483333333333384,
+        "heldSeconds": 0.6833333333333673,
+        "taps": 5,
+        "realBites": 2,
+        "reason": "maul-escape",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994
+          },
+          {
+            "name": "maul-1",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323
+          },
+          {
+            "name": "maul-2",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304
+          }
+        ]
+      }
+    },
+    {
+      "id": "boar",
+      "solo": {
+        "height": 2.5,
+        "scale": 3.856510686376047,
+        "manifest": "boar-r2",
+        "heldAt": 2.6833333333333287,
+        "release": 3.4666666666666592,
+        "heldSeconds": 0.7833333333333306,
+        "taps": 5,
+        "realBites": 2,
+        "reason": "maul-escape",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "mouthProbe": {
+          "sourceTime": 1.7833333333333323,
+          "actor": [
+            0,
+            0,
+            7.208811943509161
+          ],
+          "player": [
+            0,
+            0,
+            8.6
+          ],
+          "rootGap": 1.3911880564908383,
+          "jaw": [
+            0.21527052048473594,
+            0.0919488115029865,
+            8.37068116060313
+          ],
+          "body": [
+            [
+              -0.004702865611761808,
+              0.2779058814048767,
+              8.604317665100098
+            ],
+            [
+              0.11442528665065765,
+              0.39292532205581665,
+              8.771417617797852
+            ]
+          ],
+          "radius": 0.3922246612163608,
+          "contact": true
+        },
+        "lastMaulContact": {
+          "serial": 4,
+          "phaseSerial": "4:maul-2",
+          "phase": "maul-2",
+          "action": "lunge",
+          "sourceTime": 2.3333333333333304,
+          "part": "jaw",
+          "distance": 0.3708832024434697,
+          "radius": 0.3922246612163608,
+          "bodyRadius": 0.28809887268420753,
+          "prone": true,
+          "body": [
+            [
+              -0.004702865611761808,
+              0.2779058814048767,
+              8.604317665100098
+            ],
+            [
+              0.11442528665065765,
+              0.39292532205581665,
+              8.771417617797852
+            ]
+          ],
+          "swept": true,
+          "contact": true
+        },
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994
+          },
+          {
+            "name": "maul-1",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323
+          },
+          {
+            "name": "maul-2",
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304
+          }
+        ]
+      },
+      "afterOneRealBite": {
+        "height": 2.5,
+        "scale": 3.856510686376047,
+        "manifest": "boar-r2",
+        "heldAt": 2.9833333333333276,
+        "release": 4.733333333333322,
+        "heldSeconds": 1.7499999999999942,
+        "taps": 5,
+        "realBites": 1,
+        "reason": "maul-contact-lost",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "attackerOnlySeparationAt": 3.21666666666666,
+        "noVictimTeleport": true,
+        "mouthProbe": {
+          "sourceTime": 1.7833333333333323,
+          "actor": [
+            0,
+            0,
+            7.208811943509161
+          ],
+          "player": [
+            0,
+            0,
+            8.6
+          ],
+          "rootGap": 1.3911880564908383,
+          "jaw": [
+            0.21527052048473594,
+            0.0919488115029865,
+            8.37068116060313
+          ],
+          "body": [
+            [
+              -0.004702865611761808,
+              0.2779058814048767,
+              8.604317665100098
+            ],
+            [
+              0.11442528665065765,
+              0.39292532205581665,
+              8.771417617797852
+            ]
+          ],
+          "radius": 0.3922246612163608,
+          "contact": true
+        },
+        "lastMaulContact": {
+          "serial": 4,
+          "phaseSerial": "4:maul-1",
+          "phase": "maul-1",
+          "action": "lunge",
+          "sourceTime": 1.7833333333333323,
+          "part": "jaw",
+          "distance": 0.370883187366072,
+          "radius": 0.3922246612163608,
+          "bodyRadius": 0.28809887268420753,
+          "prone": true,
+          "body": [
+            [
+              -0.004702865611761808,
+              0.2779058814048767,
+              8.604317665100098
+            ],
+            [
+              0.11442528665065765,
+              0.39292532205581665,
+              8.771417617797852
+            ]
+          ],
+          "swept": true,
+          "contact": true
+        },
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994
+          },
+          {
+            "name": "maul-1",
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null
+          },
+          {
+            "name": "maul-2",
+            "hit": false,
+            "damage": 0,
+            "sourceTime": null
+          }
+        ]
+      }
+    },
+    {
+      "id": "wolf",
+      "solo": {
+        "heldAt": 9.683333333333394,
+        "release": 10.366666666666761,
+        "heldSeconds": 0.6833333333333673,
+        "taps": 5,
+        "realBites": 2,
+        "reason": "maul-escape",
+        "clockAdvanced": true,
+        "ownerCleared": true,
+        "promptCleared": true,
+        "nativeDodgeAccepted": true,
+        "phases": [
+          {
+            "name": "ram",
+            "hit": true,
+            "damage": 38,
+            "sourceTime": 0.2960328124999999
+          },
+          {
+            "name": "maul-1",
+            "hit": true,
+            "damage": 28,
+            "sourceTime": 1.7833333333333323
+          },
+          {
+            "name": "maul-2",
+            "hit": true,
+            "damage": 28,
+            "sourceTime": 2.3333333333333304
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true
+}
