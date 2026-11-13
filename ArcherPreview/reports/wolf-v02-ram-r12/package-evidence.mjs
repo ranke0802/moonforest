@@ -1,0 +1,4 @@
+import fs from 'node:fs';import path from 'node:path';import {gzipSync} from 'node:zlib';import {createHash} from 'node:crypto';
+const root=import.meta.dirname,files=['independent-gameplay.json','baseline-r11.json'],hash=b=>createHash('sha256').update(b).digest('hex'),rows=[];
+for(const name of files){const raw=fs.readFileSync(path.join(root,name)),gzip=gzipSync(raw,{level:9});fs.writeFileSync(path.join(root,name+'.gz'),gzip);rows.push({file:name,bytes:raw.length,sha256:hash(raw),compressed:name+'.gz',compressedBytes:gzip.length,compressedSha256:hash(gzip)});}
+const result={scope:'Lossless full CPU evidence. Generated per-frame data is compressed for Git; JSON can be recovered with any gzip tool. Summary and standalone HTML are separately included.',rows};fs.writeFileSync(path.join(root,'evidence-files.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(rows));

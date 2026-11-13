@@ -181,7 +181,7 @@ test('actual default bouts switch at half health without cutting the current str
   assert.ok(bouts.length>=3);assert.ok(hits>=3);assert.ok(bouts.every(b=>b.length>=1&&b.length<=3));
   if(hp>450)assert.ok(bouts.every(b=>b.length===1),'above half HP one completed strike must precede every stalk');
   else assert.ok(bouts.some(b=>b.length===3),'successful close contacts should permit the aggressive three-strike phase');
-  assert.ok([...clips].every(clip=>['Wolf_Predator_Diagonal_Bite_V02','Wolf_Predator_Reverse_Bite_V02',WOLF_CLIPS.pin,WOLF_CLIPS.lunge].includes(clip)));
+  assert.ok([...clips].every(clip=>['Wolf_Predator_Diagonal_Bite_V02','Wolf_Predator_Reverse_Bite_V02',WOLF_CLIPS.pin,WOLF_CLIPS.lunge,WOLF_V02_BY_ID.lunge.sourceClip].includes(clip)));
  }
  const e=await resetFeral(f,{distance:3.1,hp:451,sequence:['quick-bite']});
  while(e.brain.mode!=='attack'||e.brain.time<.10)stepWolfHunt(f,e,1/240);
@@ -193,7 +193,7 @@ test('actual default bouts switch at half health without cutting the current str
 test('the first actual support step holds its entry anchors through the transition and completes a full cycle in both phases',async t=>{
  const f=await wolfHuntFixture(t),rows=[];
  for(const hp of [451,450])for(const side of [-1,1])for(const radius of [3,5]){
-  const e=await resetFeral(f,{distance:radius,hp,behavior:'observe'});e.brain.observation=5;
+  const e=await resetFeral(f,{distance:radius,hp,behavior:'observe'});e.brain.random=()=>.5;e.brain.observation=5;
   for(let i=0;i<24;i++)stepWolfHunt(f,e,1/60);
   assert.equal(e.brain.behavior,'observe');assert.equal(e.animator.blend,1);
   const origin=e.actor.position.clone(),names=side>0?['fore.R.paw','hind.L.paw']:['fore.L.paw','hind.R.paw'],anchors=Object.fromEntries(names.map(n=>[n,e.nodes[n].getAbsolutePosition().clone()]));
@@ -209,7 +209,7 @@ test('the first actual support step holds its entry anchors through the transiti
   }
   rows.push({hp,side,radius,clip,frames:frames+1,sourceMax,coveredSource,firstHalfMaximumEntryAnchorDrift:firstHalfMax,samples});
  }
- const e=await resetFeral(f,{distance:3,hp:451,behavior:'observe'});e.brain.observation=5;for(let i=0;i<24;i++)stepWolfHunt(f,e,1/60);e.brain.beginStalk();stepWolfHunt(f,e,1/60);
+ const e=await resetFeral(f,{distance:3,hp:451,behavior:'observe'});e.brain.random=()=>.5;e.brain.observation=5;for(let i=0;i<24;i++)stepWolfHunt(f,e,1/60);e.brain.beginStalk();stepWolfHunt(f,e,1/60);
  const before=e.brain.time,rate=e.brain.flankPlaybackRate;e.brain.hp=450;stepWolfHunt(f,e,1/60);
  assert.equal(e.brain.phase,2);assert.equal(e.brain.flankPlaybackRate,rate);assert.ok(Math.abs(e.brain.time-before-rate/60)<1e-7,'crossing half health must not change a step already in progress');
  evidence.push({case:'first-step-transition-and-complete-cycle',rows,phaseChangeDuringStep:{snapshotRate:rate,unchanged:true}});

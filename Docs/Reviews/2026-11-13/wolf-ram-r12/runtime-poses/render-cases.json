@@ -1,0 +1,174 @@
+{
+  "scope": "Actual CPU-skinned R12 wolf and native warrior knockdown. Wolf original 4K colour atlas; warrior neutral review material. Identical offline framing, not game GPU UI.",
+  "blenderVersion": "4.5.14 LTS",
+  "rows": [
+    {
+      "case": "prepare",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\prepare-front.png",
+      "sourceTime": 2.4300000000000033,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "prepare",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\prepare-side.png",
+      "sourceTime": 2.4300000000000033,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "prepare",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\prepare-quarter.png",
+      "sourceTime": 2.4300000000000033,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "prepare",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\prepare-opposite.png",
+      "sourceTime": 2.4300000000000033,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\head-ram-front.png",
+      "sourceTime": 2.550000000000001,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\head-ram-side.png",
+      "sourceTime": 2.550000000000001,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\head-ram-quarter.png",
+      "sourceTime": 2.550000000000001,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\head-ram-opposite.png",
+      "sourceTime": 2.550000000000001,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "falling",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\falling-front.png",
+      "sourceTime": 3.0533333333333323,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "falling",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\falling-side.png",
+      "sourceTime": 3.0533333333333323,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "falling",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\falling-quarter.png",
+      "sourceTime": 3.0533333333333323,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "falling",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\falling-opposite.png",
+      "sourceTime": 3.0533333333333323,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-1-front.png",
+      "sourceTime": 3.65333333333333,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-1-side.png",
+      "sourceTime": 3.65333333333333,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-1-quarter.png",
+      "sourceTime": 3.65333333333333,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-1-opposite.png",
+      "sourceTime": 3.65333333333333,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-2-front.png",
+      "sourceTime": 4.203333333333329,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-2-side.png",
+      "sourceTime": 4.203333333333329,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-2-quarter.png",
+      "sourceTime": 4.203333333333329,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\ground-bite-2-opposite.png",
+      "sourceTime": 4.203333333333329,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "recover",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\recover-front.png",
+      "sourceTime": 4.753333333333327,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "recover",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\recover-side.png",
+      "sourceTime": 4.753333333333327,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "recover",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\recover-quarter.png",
+      "sourceTime": 4.753333333333327,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "recover",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-ram-r12\\runtime-poses\\recover-opposite.png",
+      "sourceTime": 4.753333333333327,
+      "clip": "Wolf_Ram_Ground_Maul_V02"
+    }
+  ]
+}

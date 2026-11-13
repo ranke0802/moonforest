@@ -1,0 +1,76 @@
+{
+  "scope": "Actual autonomous R12 charge from 35m, unmodified native player fall/recoil, two real prone contact phases and recovery. Intermediate skin data is regenerable and excluded from portable package exports.",
+  "sources": {
+    "wolf-v02-spec.js": "617548aa814ad36e086cd1a0ad9083e8fef2d48ec2b11a49504f6201eb2dec0e",
+    "wolf-v02-encounter.js": "7b730edf169f5d663348f49ea01cbd3831405ac81b3a6d3f04bfb83e603635e2",
+    "wolf-v02-authored-clips.js": "acf77d1f2c6b72a5d29829f61fe3e9a515eaf7d37aab0a030260859ca1cf1922",
+    "wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+    "wolf-v02-ram.js": "297894ee6067005c3986e87faee0607ae56f7f515245f2d7b4b771f985440ecd",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+  },
+  "sourceHashesUnchangedDuringExport": true,
+  "rows": [
+    {
+      "name": "prepare",
+      "elapsed": 9.000000000000027,
+      "sourceTime": 2.4300000000000033,
+      "clip": "Wolf_Ram_Ground_Maul_V02",
+      "playerState": "idle",
+      "playerClipTime": 1.533333301544182,
+      "bytes": 21713168,
+      "sha256": "29781b2cdb22f28949e5641f5d05a9c95768302692759e0b9d6070bf8f7b9f1a"
+    },
+    {
+      "name": "head-ram",
+      "elapsed": 9.033333333333362,
+      "sourceTime": 2.550000000000001,
+      "clip": "Wolf_Ram_Ground_Maul_V02",
+      "playerState": "idle",
+      "playerClipTime": 1.5666666348775151,
+      "bytes": 21720755,
+      "sha256": "78d644a1c74ea7219deade50dfbee197d08db0ce34d543ccd8c9a17b21b58610"
+    },
+    {
+      "name": "falling",
+      "elapsed": 9.533333333333387,
+      "sourceTime": 3.0533333333333323,
+      "clip": "Wolf_Ram_Ground_Maul_V02",
+      "playerState": "knockdown",
+      "playerClipTime": 0.49999999999999994,
+      "bytes": 21736789,
+      "sha256": "d21737b9a6c6a32f964e96dc2dbfa720190886adac5ab3258a4bc43a4bb95d5a"
+    },
+    {
+      "name": "ground-bite-1",
+      "elapsed": 10.133333333333416,
+      "sourceTime": 3.65333333333333,
+      "clip": "Wolf_Ram_Ground_Maul_V02",
+      "playerState": "knockdown",
+      "playerClipTime": 1.100000000000001,
+      "bytes": 21777052,
+      "sha256": "f5d966c336b751660091b8343bbcfae6004603e5ca552876ac27ea97b1683580"
+    },
+    {
+      "name": "ground-bite-2",
+      "elapsed": 10.683333333333444,
+      "sourceTime": 4.203333333333329,
+      "clip": "Wolf_Ram_Ground_Maul_V02",
+      "playerState": "knockdown",
+      "playerClipTime": 1.649999999999999,
+      "bytes": 21785065,
+      "sha256": "59f269f9b63aa0b68375fe35b03775831061da985d428de5eb9c21c7c0bc59d6"
+    },
+    {
+      "name": "recover",
+      "elapsed": 11.233333333333471,
+      "sourceTime": 4.753333333333327,
+      "clip": "Wolf_Ram_Ground_Maul_V02",
+      "playerState": "knockdown",
+      "playerClipTime": 2.199999999999997,
+      "bytes": 21774549,
+      "sha256": "51ad8f615d3aed346db291a59f256036258321d40ad67b997b00c390b1a3d211"
+    }
+  ]
+}

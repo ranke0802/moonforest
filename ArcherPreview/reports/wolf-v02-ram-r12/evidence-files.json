@@ -1,0 +1,21 @@
+{
+  "scope": "Lossless full CPU evidence. Generated per-frame data is compressed for Git; JSON can be recovered with any gzip tool. Summary and standalone HTML are separately included.",
+  "rows": [
+    {
+      "file": "independent-gameplay.json",
+      "bytes": 58969592,
+      "sha256": "4d9b41e3e84e47d824d734008b2388141581ae873c8820e039042eeff0b9e833",
+      "compressed": "independent-gameplay.json.gz",
+      "compressedBytes": 4697800,
+      "compressedSha256": "93f8f892a73fe89e0ced9db249bfa96c0b191c47da8eb7d241dcabe1d032d361"
+    },
+    {
+      "file": "baseline-r11.json",
+      "bytes": 1519256,
+      "sha256": "c13038a7c1de93a81b248d0429a7c9d1174ad3a2a207a60197f020685464f368",
+      "compressed": "baseline-r11.json.gz",
+      "compressedBytes": 219320,
+      "compressedSha256": "22de2caadcc60c56e0410fccd427e7dc661281f57a76cce9a28ecc107115fb22"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+import fs from 'node:fs';import path from 'node:path';import vm from 'node:vm';
+const root=path.resolve(import.meta.dirname,'../../..'),file='Docs/Reports/2026-11-13/MOONFOREST_0.2_늑대_R12_돌진_검토보고서.html',html=fs.readFileSync(path.join(root,file),'utf8');
+const blocks=[...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)],json=blocks.filter(m=>m[1].includes('application/json')),scripts=blocks.filter(m=>!m[1].includes('application/json'));
+for(const m of json)JSON.parse(m[2]);for(const m of scripts)new vm.Script(m[2]);
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);if(ids.length!==new Set(ids).size)throw Error('Duplicate ID');
+const resources=[...html.matchAll(/\b(?:src|poster)="([^"]+)"/g)].map(m=>m[1]);if(resources.some(p=>!p.startsWith('data:')))throw Error('External required media');
+const gallery=JSON.parse(json.find(m=>m[1].includes('gallery-data'))[2]),proof=JSON.parse(json.find(m=>m[1].includes('proof-data'))[2]);
+if(gallery.length!==6||gallery.some(p=>Object.values(p.images).length!==4||Object.values(p.images).some(u=>!u.startsWith('data:image/png;base64,'))))throw Error('Incomplete embedded contact views');
+if(proof.regression.pass!==proof.regression.tests||proof.regression.fail||proof.contacts.length!==24||proof.contacts.some(c=>c.hits.length!==3||c.hits.some(h=>!h.surfacesIntersect)))throw Error('Stale/incomplete report evidence');
+const result={file,bytes:Buffer.byteLength(html),inlineScripts:scripts.length,embeddedJson:json.length,embeddedContactImages:24,embeddedMedia:resources.length,uniqueIds:ids.length,syntax:true,externalRequiredMedia:false,checks:'Static DOM/inline script/JSON and data-URL validation only; no browser automation.'};fs.writeFileSync(path.join(import.meta.dirname,'html-validation.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

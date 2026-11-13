@@ -1,0 +1,11 @@
+# R12 independent baseline
+
+The source baseline is `ca6db93` (R11). Only the charge/lunge is authorized to change. The independent fixture uses the actual packed warrior-v2 model, configured 1.6 m height, `WarriorV2Controller`, `CharacterAnimator`, shared player combat and the actual wolf encounter. Player recoil/controller update and native animation precede after-animation wolf contacts as in `main.js`. No browser automation was used.
+
+`baseline-r11.json` records six autonomous cases at 30/60 Hz and 0.5/1/2 attack speed. Every case receives one 100-damage jaw strike against an upright chest (1.090–1.092 m). The real controller begins knockdown once; the real skeletal fall progresses afterward. There are no later ground-bite phases. This is baseline evidence of the rejected behavior, not an R12 acceptance result.
+
+`warrior-knockdown-timeline.json` records isolated native fall calibration. Normal knockdown lasts 2.266667 seconds; get-up lasts 0.966667 seconds. Existing recoil moves the player world anchor 0.28 m away from the wolf within 0.2 seconds. The real chest does not drop below 0.45 m until 0.833333 seconds after knockdown. The usable low-torso interval ends when get-up starts at 2.266667 seconds. At 1.5–2.2 seconds, the chest is approximately 0.17–0.19 m to the player's right, 0.22–0.29 m high, and 0.42 m behind the original player world anchor. The normal standing aim point is unsuitable for maul contact.
+
+The actual player bone map is supplied through `battle.playerNodes`, using `mixamorig:Hips`, `mixamorig:Spine`, `mixamorig:Spine1`, `mixamorig:Spine2`, `mixamorig:Neck`, and `mixamorig:Head`. R11's ordinary `attackBodyContact` ignores these bones and tests a standing vertical capsule. R12 ground bites must use real lowered torso geometry and a live knockdown-state adapter. `capture()` freezes the player's current animation and therefore cannot substitute for the fall.
+
+The two initial test gates cover scope preservation and native fall calibration only. Final coupled ram/maul acceptance remains pending the R12 motion and runtime contract. CPU contact and fixed-length skeleton measurements cannot establish natural motion, convincing head impact, visible prone-body mauling, material/skin quality, player feel, or device performance. Those require visual review of the corrected runtime skin and real play.

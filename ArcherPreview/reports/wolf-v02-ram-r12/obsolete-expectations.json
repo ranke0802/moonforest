@@ -1,0 +1,56 @@
+{
+  "baselineRevision": "ca6db93",
+  "scope": "Approved R12 lunge-only expectation updates. Original 0.1, all twelve R8 source clips, R9/R10/R11 source tables, other attack definitions, rig/skin, texture quality and LOD contracts remain protected.",
+  "changedTestPaths": [
+    {
+      "path": "tests/wolf-v02-brain.test.js",
+      "before": "The live lunge used the original 3.1s R8 clip and the whole accelerated action finished below1.6s.",
+      "after": "The live lunge uses the separate5.2s R12 composite with head40 then jaw30+30. Only its run-up follows cast speed; its2.58s post-ram source tail uses real time. Original WolfBrain/R8 timing assertions remain unchanged."
+    },
+    {
+      "path": "tests/wolf-v02-authored-attacks.test.js",
+      "before": "Six active authored clips, ten historical authored clips, eighteen actor clips.",
+      "after": "Seven active, eleven historical, nineteen actor clips. Explicit historical counts remain R9=2, R10=4, R11=4; R12 adds exactly one. All old raw channel, sampler, resource and original model/texture hash assertions remain."
+    },
+    {
+      "path": "tests/wolf-v02-hunt-integration.test.js",
+      "before": "Eighteen available roles; selecting the live lunge incidentally visited the original R8 lunge role.",
+      "after": "Nineteen available roles. The retained original R8 lunge is explicitly sampled as a historical source role. The test continues to state that all roles were not autonomously visited."
+    },
+    {
+      "path": "tests/wolf-v02-feral-integration.test.js",
+      "before": "The live attack-source whitelist had only R11 bites and the original R8 lunge/pin.",
+      "after": "The whitelist additionally includes the current R12 lunge source. Physical first-orbit support cases use deterministic RNG=.5 to avoid the existing almost3s bout needing an extra exit frame beyond its180-frame fixture deadline; anchor, source-coverage and phase thresholds are unchanged. Random2–3s behavior retains its separate varied-RNG gates."
+    },
+    {
+      "path": "tests/wolf-v02-integration.test.js",
+      "before": "The dummy-player lunge contact was counted without distinguishing its old100-damage bite from the new composite.",
+      "after": "The standing dummy explicitly receives head-ram40 only. It has no real warrior controller or prone skin and cannot authorize mauls. The new coupled real-warrior suite separately proves40+30+30. All twelve original R8 pose/carrier oracle comparisons remain."
+    },
+    {
+      "path": "tests/wolf-v02-predator-integration.test.js",
+      "before": "The autonomous contact matrix counted one lunge damage event, and the full old lunge had a below1.6s timing check.",
+      "after": "The dummy matrix explicitly requires head-owned ram40 and one event. The fast sidestep/flight measurement ends at ram impact and remains below1.1s; the later real-time fall/mauls are tested by the coupled suite. Every non-lunge R11 behavior/geometry assertion remains."
+    },
+    {
+      "path": "tests/wolf-v02-predator-runtime.test.js",
+      "before": "The whole lunge was required to finish below1.3s and scale entirely with cast speed; a standing dummy was expected to receive100 damage from jaw/head.",
+      "after": "Only the ram prefix is below1s and speed-scaled; its real-time maul tail is checked independently. Standing fixtures receive head-owned ram40 only, with no fabricated prone followup. Pin duration, bite threshold, damage, capture/escape and all other assertions remain unchanged."
+    }
+  ],
+  "unchangedTestPaths": [
+    "tests/wolf-v02-hunt.test.js",
+    "tests/wolf-v02-orbit-navigation.test.js",
+    "tests/wolf-v02-patterns.test.js",
+    "tests/helpers/wolf-hunt-fixture.js",
+    "tests/helpers/wolf-feral-fixture.js"
+  ],
+  "newHarnessNotes": [
+    "The actual warrior model, native CharacterAnimator, WarriorV2Controller, shared combat HP/recoil and wolf life/phase clocks are reset for each coupled case. Loaded geometry is reused to bound test-harness memory.",
+    "A fresh calibration fixture restores the global legacy character profile on disposal. Reused coupled cases explicitly restore warrior-plains before each case; this prevents the test-only21.5m arena cap contamination observed in the first complete run.",
+    "Fore/hind upper, lower, metatarsal and paw segment lengths remain strict through the prefix, mauls and recovery. Explicit non-limb prefix pose carriers are compared with the authored R12 translation oracle. The listed source4.45+ recovery carriers are compared with that exact authored trajectory, whose endpoint must match original WATCH0. Their inherited translation differences are recorded individually; no limb receives this exception.",
+    "Scale precision is1e-6 because the unchanged approved R8 bind/authored TRS contain sub-1e-6 residue around unit scale. Contact radii, skin-intersection requirements and foot support thresholds were not loosened."
+  ],
+  "standingDummyPolicy": "No fake prone nodes, injected successful down state or unconditional invulnerability bypass was added to recover the old100-damage standing result.",
+  "visualLimits": "Numeric CPU tests cannot establish convincing head impact, natural mauling/collapse, skin/material quality, controls, GPU cost, device FPS or heat. Root owns actual-color coupled runtime image review and device claims."
+}

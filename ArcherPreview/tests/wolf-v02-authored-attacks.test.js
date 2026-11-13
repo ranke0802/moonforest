@@ -14,7 +14,7 @@ import {WolfAnimator} from '../src/wolf-animation.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE} from '../src/wolf-v02-spec.js';
-import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_R9_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_PREDATOR_CLIPS,WOLF_V02_ALL_AUTHORED_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_R9_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_PREDATOR_CLIPS,WOLF_V02_RAM_CLIPS,WOLF_V02_ALL_AUTHORED_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
 import {createActorEncounterFactory} from '../src/actor-encounter-adapter.js';
 import {sourcePath} from '../../Sources/resolve-source.mjs';
 
@@ -81,7 +81,7 @@ test('new standing attacks have separate clip identities and finite fixed-scale 
  const names=WOLF_V02_AUTHORED_CLIPS.map(c=>c.name);assert.ok(names.includes('Wolf_Predator_Diagonal_Bite_V02'));assert.ok(!names.includes('Wolf_Snap_Bite_V02'));assert.ok(WOLF_V02_R9_CLIPS.some(c=>c.name==='Wolf_Snap_Bite_V02'));assert.ok(names.every(n=>!Object.values(WOLF_CLIPS).includes(n)));assert.equal(new Set(names).size,names.length);
  const base=JSON.parse(fs.readFileSync(new URL('alpha-wolf.json',assetBase)));assert.equal(WOLF_V02_AUTHORED_SOURCE,base.sourceSha256);
  assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');
- assert.equal(WOLF_V02_R9_CLIPS.length,2);assert.equal(WOLF_V02_FERAL_CLIPS.length,4);assert.equal(WOLF_V02_PREDATOR_CLIPS.length,4);assert.equal(WOLF_V02_ALL_AUTHORED_CLIPS.length,10);assert.equal(WOLF_V02_AUTHORED_CLIPS.length,6);
+ assert.equal(WOLF_V02_R9_CLIPS.length,2);assert.equal(WOLF_V02_FERAL_CLIPS.length,4);assert.equal(WOLF_V02_PREDATOR_CLIPS.length,4);assert.equal(WOLF_V02_RAM_CLIPS.length,1);assert.equal(WOLF_V02_ALL_AUTHORED_CLIPS.length,11);assert.equal(WOLF_V02_AUTHORED_CLIPS.length,7);
  for(const clip of WOLF_V02_R9_CLIPS){
   assert.ok(clip.duration>0&&clip.duration<=2);assert.equal(clip.fps,60);assert.ok(clip.channels.length>0);assert.ok(clip.rootTrack.length>1&&clip.yawTrack.length>1);
   const ids=new Set();
@@ -213,6 +213,6 @@ test('new snap, chain and swipe hit actual warrior body once per strike using on
 
 test('disposing authored actor adapters removes all six added animation groups and leaves the shared template intact',async t=>{
  const f=await fixture(t),baseline={groups:f.scene.animationGroups.length,native:f.scene._activeAnimatables.length,dispose:f.scene.onDisposeObservable.observers.length},factory=createActorEncounterFactory({world:f.world,battle:f.battle,getPlayer:()=>f.player,libraryFactory:()=>({library:f.models,owned:false})});f.player.position.setAll(0);
- try{for(let cycle=0;cycle<3;cycle++){const adapter=factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(0,0,4)});assert.equal(adapter.encounter.asset.animationGroups.length,18);await adapter.dispose();assert.equal(f.scene.animationGroups.length,baseline.groups);assert.equal(f.scene._activeAnimatables.length,baseline.native);assert.equal(f.scene.onDisposeObservable.observers.length,baseline.dispose);assert.equal(f.container.animationGroups.length,12);}}finally{await factory.dispose();}
+ try{for(let cycle=0;cycle<3;cycle++){const adapter=factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(0,0,4)});assert.equal(adapter.encounter.asset.animationGroups.length,19);await adapter.dispose();assert.equal(f.scene.animationGroups.length,baseline.groups);assert.equal(f.scene._activeAnimatables.length,baseline.native);assert.equal(f.scene.onDisposeObservable.observers.length,baseline.dispose);assert.equal(f.container.animationGroups.length,12);}}finally{await factory.dispose();}
  rows.push({case:'authored-group-disposal',cycles:3,addedGroupsPerActor:6,groupsReturnedToBaseline:true,nativeAndDisposalObserversStable:true});
 });

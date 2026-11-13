@@ -140,8 +140,8 @@ test('the live upper-body diagonal remains large after runtime attention and ret
 test('every autonomous attack engagement band contacts once with dodge, escape and capture ownership intact',async t=>{
  const f=await wolfHuntFixture(t),rows=[];
  for(const fps of [30,60])for(const speed of [.5,1,2])for(const action of WOLF_V02_ACTIONS)for(const band of ['minDistance','preferredDistance','maxDistance','approachOutside']){
-  const distance=band==='approachOutside'?action.maxDistance+.8:action[band],e=await begin(f,{distance,sequence:[action.id],speed,seed:601});setStandingEngagement(f,e);const initial=f.player.position.clone();let serial=null,actualId=null,damage=0,captured=false,frames=0,knockdowns=0,startDistance=null,circleStartDistance=null;const original=e.hitPlayer.bind(e),originalReaction=e.onPlayerHit;
-  e.hitPlayer=(...args)=>{const before=e.playerHp;original(...args);if(e.playerHp<before)damage++;};
+  const distance=band==='approachOutside'?action.maxDistance+.8:action[band],e=await begin(f,{distance,sequence:[action.id],speed,seed:601});setStandingEngagement(f,e);const initial=f.player.position.clone();let serial=null,actualId=null,damage=0,damageAmount=0,captured=false,frames=0,knockdowns=0,startDistance=null,circleStartDistance=null;const original=e.hitPlayer.bind(e),originalReaction=e.onPlayerHit;
+  e.hitPlayer=(...args)=>{const before=e.playerHp;original(...args);if(e.playerHp<before){damage++;damageAmount+=before-e.playerHp;}};
   e.onPlayerHit=(...args)=>{if(args[1]?.knockdown)knockdowns++;return originalReaction(...args);};
   try{for(;frames<fps*24;frames++){
    const expected=f.player.position.clone();stepWolfHunt(f,e,1/fps);assert.ok(f.player.position.equalsWithEpsilon(expected,1e-7),'wolf cannot teleport the player');
@@ -149,10 +149,11 @@ test('every autonomous attack engagement band contacts once with dodge, escape a
    if(serial===null&&e.brain.mode==='attack'){serial=e.brain.serial;actualId=e.brain.actionId;startDistance=Vector3.Distance(e.actor.position,f.player.position);}captured||=e.grab.active;
    if(serial!==null&&(e.brain.serial!==serial||e.brain.mode!=='attack')&&!e.grab.active)break;
   }}finally{e.hitPlayer=original;e.onPlayerHit=originalReaction;}
-  rows.push({id:action.id,band,fps,speed,distance,circleStartDistance,startDistance,actualId,damage,captured,knockdowns,frames,playerUnchanged:f.player.position.equalsWithEpsilon(initial,1e-7),contact:e.v02LastContact});
+  rows.push({id:action.id,band,fps,speed,distance,circleStartDistance,startDistance,actualId,damage,damageAmount,captured,knockdowns,frames,playerUnchanged:f.player.position.equalsWithEpsilon(initial,1e-7),contact:e.v02LastContact});
  }
  evidence.push({case:'autonomous-physical-contact-matrix',setup:'Requested engagement band is established after the actual rest/rise motion, before a fresh complete2–3s observation and autonomous selection/approach. The player is never moved and startAction is never called. Separate near/far observation cases retain the untouched complete summon path.',rows});
  assert.equal(rows.length,120);assert.deepEqual(rows.filter(r=>r.id!==r.actualId||r.damage!==1||r.captured!==WOLF_V02_BY_ID[r.id].capture||r.knockdowns!==(['lunge','pin'].includes(r.id)?1:0)||!r.playerUnchanged||r.frames>=r.fps*24),[]);
+ assert.ok(rows.filter(r=>r.id==='lunge').every(r=>r.damageAmount===40&&r.contact?.part==='head'),'standing dummies receive only head ram40; actual native prone-body mauls have a separate coupled integration test');
  const negatives=[];for(const mode of ['dodge','height','distant','behind','wall']){
   const a=WOLF_V02_BY_ID['quick-bite'],e=await begin(f,{distance:a.preferredDistance,sequence:['quick-bite']});until(f,e,()=>e.brain.mode==='attack'&&e.brain.time>=a.commitTime,{fps:240});const serial=e.brain.serial;
   if(mode==='height'){f.player.position.y=8;f.world.terrain.place=v=>{if(v!==f.player.position)v.y=0;};}if(mode==='distant')f.player.position.z+=12;if(mode==='behind')f.player.position.set(0,0,-a.preferredDistance);if(mode==='wall')f.world.navigation={segmentClear:()=>false,constrain(){},steer:(from,to)=>from};
@@ -223,12 +224,12 @@ test('far autonomous pursuit uses a fast matched gallop and the accelerated dodg
   assert.ok(attack);rows.push({distance,attack,moveFrames:moves.length,peakWorldSpeed:Math.max(0,...moves.map(m=>m.speed)),walkFrames:moves.filter(m=>m.clip===WOLF_CLIPS.walk).length});
   if(distance===35){
    const origin=e.actor.position.clone(),heading=e.actor.rotation.y,serial=e.brain.serial,samples=[];let wall=0;
-   for(let frame=0;frame<60*5&&e.brain.serial===serial&&e.brain.mode==='attack';frame++){
+   for(let frame=0;frame<60*5&&e.brain.serial===serial&&e.brain.mode==='attack'&&e.brain.time<WOLF_V02_BY_ID.lunge.impact;frame++){
     stepWolfHunt(f,e,1/60);wall+=1/60;if(e.brain.serial!==serial||e.brain.mode!=='attack')break;
     const p=e.actor.position,dx=p.x-origin.x,dz=p.z-origin.z;samples.push({wall,source:e.brain.time,lateral:dx*Math.cos(heading)-dz*Math.sin(heading),pelvisAboveActor:e.nodes.pelvis.getAbsolutePosition().y-p.y});
    }
    const lateral=Math.max(...samples.map(s=>s.lateral))-Math.min(...samples.map(s=>s.lateral)),flight=Math.max(...samples.map(s=>s.pelvisAboveActor))-Math.min(...samples.map(s=>s.pelvisAboveActor));
-   rows.at(-1).lunge={wallSeconds:wall,lateralMeters:lateral,pelvisFlightSpan:flight,samples};assert.equal(attack.id,'lunge');assert.ok(wall<1.6,'the visible dodge-leap is faster than its former3.1s playback');assert.ok(lateral>.5);assert.ok(flight>.5,'time remap must retain the visible jump body trajectory');
+   rows.at(-1).lunge={ramPrefixWallSeconds:wall,lateralMeters:lateral,pelvisFlightSpan:flight,samples};assert.equal(attack.id,'lunge');assert.ok(wall<1.1,'the head-ram run-up stays fast while later mauls use the real fall clock');assert.ok(lateral>.5);assert.ok(flight>.5,'time remap must retain the visible jump body trajectory');
   }
  }
  evidence.push({case:'actual-fast-approach-dodge-leap',rows});assert.ok(rows.every(r=>r.walkFrames===0&&r.peakWorldSpeed>=6.5));assert.ok(rows.at(-1).peakWorldSpeed>8.5);

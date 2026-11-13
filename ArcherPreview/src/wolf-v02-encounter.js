@@ -7,6 +7,8 @@ import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
 import {segmentDistanceSquared} from './melee-collision.js';
 import {WolfV02LocomotionPose} from './wolf-v02-locomotion.js';
 import {WolfGrab} from './wolf-grab.js';
+import {WolfRamSequence} from './wolf-v02-ram.js';
+import {rearDamage,facingYaw} from './combat-damage.js';
 
 // These are the physical part envelopes; player capsule radius is added once.
 // Their centres always come from the post-navigation, authored skeletal pose.
@@ -77,6 +79,12 @@ export class WolfV02Encounter extends WolfEncounter{
       else{this.brain.lastOutcome='miss';this.brain.requestRetreat('miss');this.grab.reset();}
       if(!this.playerAlive)this.grab.reset();
     };
+    this.v02Ram=new WolfRamSequence(this);this.v02RamPhase=null;
+    this.v02RamReaction=(duration,options)=>{
+      const accepted=this.v02RamOriginalReaction(duration,options);
+      if(options?.knockdown&&this.v02Ram.matches())this.v02RamAcceptedKnockdown=accepted===true;
+      return accepted;
+    };
   }
 
   createBrain(durations){return new WolfV02Brain(durations);}
@@ -118,7 +126,7 @@ export class WolfV02Encounter extends WolfEncounter{
     else if(this.brain.state===WOLF_V02_BRACE)this.v02Pose.plantBrace();
     else if(this.brain.mode==='move'&&this.brain.state===WOLF_CLIPS.run)this.v02Pose.plantRun();
     else this.v02Pose.resetPlants();
-    this.v02Pose.aim();
+    if(!(this.brain.mode==='ramRecover'&&this.brain.ramAccepted&&this.brain.action?.authoredAttention))this.v02Pose.aim();
   }
 
   motionSpec(name){
@@ -132,7 +140,19 @@ export class WolfV02Encounter extends WolfEncounter{
     return Number.isFinite(event?.damage)?event.damage:super.attackDamage(event);
   }
 
-  isHeavyAttack(event){return (event?.actionId??this.brain?.action?.id)==='lunge';}
+  isHeavyAttack(event){return this.v02RamPhase?this.v02RamPhase.config.kind==='ram':(event?.actionId??this.brain?.action?.id)==='lunge';}
+
+  hitPlayer(damage,source,options={}){
+    const phase=this.v02RamPhase;
+    if(!phase)return super.hitPlayer(damage,source,options);
+    if(!this.v02Ram.matches())return;
+    const maul=phase.config.kind==='maul';
+    if(this.v02Ram.critical===null)this.v02Ram.critical=rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y??0)).critical;
+    const scoped={...options,critical:this.v02Ram.critical,grabImpact:false,knockdown:!maul,superArmor:maul||options.superArmor};
+    if(maul)return super.hitPlayer(damage,source,scoped);
+    const original=this.onPlayerHit;this.v02RamOriginalReaction=original;this.v02RamAcceptedKnockdown=false;this.onPlayerHit=this.v02RamReaction;
+    try{return super.hitPlayer(damage,source,scoped);}finally{this.onPlayerHit=original;this.v02RamOriginalReaction=null;}
+  }
 
   pinBiteContact(){
     const player=this.player.position,d=playerDimensions(this.player),low=player.y+d.moveRadius,high=player.y+d.height-d.moveRadius,radius=.60+d.moveRadius;
@@ -154,6 +174,8 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   contactSeparation(){
+    if(this.v02Ram?.hasClearanceLease())return this.radius;
+    if(this.brain?.mode==='ramRecover')return this.radius+playerDimensions(this.player).moveRadius;
     // Standing clearance is a navigation convenience wider than the player's
     // actual body. During a strike use the same physical movement capsule so
     // separation cannot push an authored paw away before contact is tested.
@@ -167,12 +189,13 @@ export class WolfV02Encounter extends WolfEncounter{
     const brain=this.brain,clip=this.config.catalog.find(c=>c.name===brain.state);
     if(!clip)return;
     const action=brain.mode==='attack'?brain.action:null,time=brain.time;
+    if(brain.mode==='ramRecover'&&!this.knockTurn&&Number.isFinite(this.v02HeldYaw))this.actor.rotation.y=this.v02HeldYaw;
     if(this.lastSerial!==brain.serial||this.wolfClip!==clip.name){
       this.wolfClip=clip.name;
       this.motionYaw=this.knockTurn?this.knockTurn.start+this.knockTurn.delta:this.actor.rotation.y;
       // Every action has its own local root origin. A nonzero source start is
       // an origin, never a first-frame world displacement.
-      const start=action?.clipStart??0;
+      const start=brain.mode==='ramRecover'?brain.ramRecoveryOrigin:action?.clipStart??0;
       this.previousWolfTime=start;
       this.lastRoot=sampleRoot(clip,start);
       this.v02RootYaw=sampleYaw(clip,start);
@@ -258,13 +281,13 @@ export class WolfV02Encounter extends WolfEncounter{
 
   attackRange(spec){
     if(!this.v02EvaluatingContacts)return super.attackRange(spec);
-    const origin=this.actor.position,owners=this.brain.action?.contactParts;
+    const origin=this.actor.position,owners=this.v02RamPhase?.config.contactParts??this.brain.action?.contactParts,key=this.v02RamPhase?.key??this.brain.serial;
     let reach=0;
     for(const part of this.v02ContactParts){
       if(owners&&!owners.includes(part.name))continue;
       const p=this.nodes[part.name].getAbsolutePosition();
       reach=Math.max(reach,Math.hypot(p.x-origin.x,p.z-origin.z)+part.radius+playerDimensions(this.player).moveRadius);
-      if(this.v02ContactSerial===this.brain.serial)reach=Math.max(reach,Math.hypot(part.previous.x-origin.x,part.previous.z-origin.z)+part.radius+playerDimensions(this.player).moveRadius);
+      if(this.v02ContactSerial===key)reach=Math.max(reach,Math.hypot(part.previous.x-origin.x,part.previous.z-origin.z)+part.radius+playerDimensions(this.player).moveRadius);
     }
     // Broad phase follows the actual pose. It never replaces the capsule test.
     return Math.max(super.attackRange(spec),reach);
@@ -273,18 +296,23 @@ export class WolfV02Encounter extends WolfEncounter{
   attackContactPoints(aim){
     const parts=this.v02ContactParts,points=this.v02ContactPoints;
     points.length=0;
-    const owners=this.brain.action?.contactParts;
+    const owners=this.v02RamPhase?.config.contactParts??this.brain.action?.contactParts;
+    if(this.v02RamPhase?.config.kind==='maul'&&this.v02Ram.proneValid)aim.copyFrom(this.v02Ram.aim);
     for(const part of parts){if(owners&&!owners.includes(part.name))continue;part.point=this.nodes[part.name].getAbsolutePosition();points.push(part.point);}
     points.sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));
     return points;
   }
 
   attackBodyContact(event,aim,points){
+    if(this.v02RamPhase){
+      if(!this.v02Ram.canAttempt())return false;
+      if(this.v02RamPhase.config.kind==='maul')return this.v02Ram.maulContact(points,this.v02PreviousContactTime??this.brain.time,this.brain.time);
+    }
     const dimensions=playerDimensions(this.player),bodyRadius=dimensions.moveRadius;
     const low=bodyRadius,high=dimensions.height-bodyRadius,player=this.player.position;
-    const action=this.brain.action,time=this.brain.time,previousTime=this.v02PreviousContactTime;
+    const action=this.v02RamPhase?.config??this.brain.action,time=this.brain.time,previousTime=this.v02PreviousContactTime,key=this.v02RamPhase?.key??this.brain.serial;
     const maxPlayerStep=Math.min(2,Math.max(.8,32*Math.max(0,this.dt??0)));
-    const sweep=this.v02ContactSerial===this.brain.serial&&time>=previousTime&&time-previousTime<.65&&Vector3.DistanceSquared(player,this.v02PreviousPlayer)<=maxPlayerStep*maxPlayerStep;
+    const sweep=this.v02ContactSerial===key&&time>=previousTime&&time-previousTime<.65&&Vector3.DistanceSquared(player,this.v02PreviousPlayer)<=maxPlayerStep*maxPlayerStep;
     const start=action?.contactStart??action?.impact??time,end=action?.contactEnd??time;
     const alpha=t=>Math.max(0,Math.min(1,(t-previousTime)/Math.max(1e-9,time-previousTime)));
     const from=sweep?alpha(Math.max(start,previousTime)):1,to=sweep?alpha(Math.min(end,time)):1;
@@ -307,9 +335,11 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   receiveBossHit(options){
-    const serial=this.brain.serial,before=this.playerHp,wasCaptured=this.grab.active;
-    if(this.v02ResolvedSerial===serial)return false;
-    if(options.bodyContact||options.shieldContact)this.v02ResolvedSerial=serial;
+    const serial=this.brain.serial,before=this.playerHp,wasCaptured=this.grab.active,phase=this.v02RamPhase,key=phase?.key??serial,sourceTime=this.brain.time;
+    if(phase&&!this.v02Ram.matches())return false;
+    if(this.v02ResolvedSerial===key)return false;
+    if(options.bodyContact||options.shieldContact)this.v02ResolvedSerial=key;
+    if(phase?.config.kind==='ram')this.v02RamAcceptedKnockdown=false;
     // A subsection of the Pin animation is still an ordinary bite. Only the
     // dedicated full Pin action may acquire input/capture ownership.
     const capture=options.event?.capture===true&&this.brain.action?.capture===true;
@@ -317,16 +347,20 @@ export class WolfV02Encounter extends WolfEncounter{
     const resolved=super.receiveBossHit({...options,event,grab:false});
     const captured=!wasCaptured&&this.grab.active;
     const blocked=resolved&&!captured&&(options.shieldContact||options.action?.state==='shieldPush');
+    if(phase&&(options.bodyContact||options.shieldContact))this.v02Ram.resolve(phase,{before,after:this.playerHp,blocked:!!blocked,acceptedKnockdown:phase.config.kind==='ram'&&this.v02RamAcceptedKnockdown,sourceTime});
     this.v02ImpactOutcome={serial,hit:this.playerHp<before||captured,blocked:!!blocked,captured};
     return resolved;
   }
 
   poseAndContacts(player,result,sample,shield){
     if(!this.active||this.corpseGone)return;
+    this.player=player;
+    const ramPattern=this.brain.mode==='attack'&&!!this.brain.action?.ramPhases,phase=this.v02Ram.prepare(player,result);this.v02RamPhase=ramPattern?phase:null;
     const serial=this.brain?.serial;
-    const attack=this.brain.action,time=this.brain.time,previous=this.v02ContactSerial===serial?this.v02PreviousContactTime:time;
-    const inWindow=attack&&this.brain.mode==='attack'&&!this.brain.stagger&&this.brain.hp>0&&time>=(attack.contactStart??attack.impact)&&previous<=(attack.contactEnd??attack.impact)&&this.v02ResolvedSerial!==serial;
-    if(inWindow&&!this.pendingEvents.some(e=>e.type==='attack'))this.pendingEvents.push({type:'attack',name:attack.sourceClip,actionId:attack.id,range:attack.range,kind:'melee',damage:attack.damage,capture:attack.capture});
+    const attack=this.brain.action,time=this.brain.time,key=phase?.key??serial,window=ramPattern?phase?.config:attack,previous=this.v02ContactSerial===key?this.v02PreviousContactTime:time;
+    const inWindow=window&&this.brain.mode==='attack'&&!this.brain.stagger&&this.brain.hp>0&&time>=(window.contactStart??window.impact)&&previous<=(window.contactEnd??window.impact)&&this.v02ResolvedSerial!==key&&(!ramPattern||this.v02Ram.canAttempt());
+    if(ramPattern)this.pendingEvents=[];
+    if(inWindow&&!this.pendingEvents.some(e=>e.type==='attack'))this.pendingEvents.push({type:'attack',name:attack.sourceClip,actionId:attack.id,phaseId:phase?.config.id,range:attack.range,kind:'melee',damage:window.damage,capture:attack.capture});
     if(!inWindow)this.pendingEvents=[];
     const hasImpact=this.pendingEvents.some(event=>event.type==='attack');
     const heavyBefore=this.heavyCount;
@@ -334,7 +368,7 @@ export class WolfV02Encounter extends WolfEncounter{
     this.v02ImpactOutcome=null;
     this.v02EvaluatingContacts=true;
     let hitStop;
-    try{hitStop=super.poseAndContacts(player,result,sample,shield);}finally{this.v02EvaluatingContacts=false;}
+    try{hitStop=super.poseAndContacts(player,result,sample,shield);}finally{this.v02EvaluatingContacts=false;this.v02RamPhase=null;}
     if(this.heavyCount>heavyBefore){
       if(this.brain.hp>0||this.brain.state===WOLF_V02_DEATH){this.knockVelocity.setAll(0);this.knockTurn=null;}
       else this.knockVelocity.scaleInPlace(WOLF_V02_KNOCKBACK_SCALE);
@@ -345,15 +379,18 @@ export class WolfV02Encounter extends WolfEncounter{
       this.brain.noteAttackResult?.(outcome);
     }
     if(this.brain.mode==='attack'&&!this.brain.stagger&&this.brain.hp>0){
-      this.v02ContactSerial=this.brain.serial;this.v02PreviousContactTime=this.brain.time;
+      this.v02ContactSerial=key;this.v02PreviousContactTime=this.brain.time;
       this.v02PreviousPlayer.copyFrom(player.position);
       for(const part of this.v02ContactParts)part.previous.copyFrom(this.nodes[part.name].getAbsolutePosition());
     }else this.v02ContactSerial=null;
+    this.v02Ram.finish();this.v02RamPhase=null;
     return hitStop;
   }
 
   hide(){
     this.v02Pose?.restore();this.v02Pose?.resetPlants();
+    this.v02Ram?.reset();this.v02RamPhase=null;
+    this.v02RamAcceptedKnockdown=false;this.v02RamOriginalReaction=null;
     super.hide();
     this.v02ImpactOutcome=null;
     this.v02LastContact=null;
@@ -366,7 +403,7 @@ export class WolfV02Encounter extends WolfEncounter{
   inspect(){
     return {...super.inspect(),combatVersion:this.combatVersion,action:this.brain?.action?.id??null,
       phase:this.brain?.phase??null,behavior:this.brain?.behavior??null,contact:this.v02LastContact,bite:this.v02PinBiteContact,outcome:this.v02LastOutcome,
-      observation:{target:this.brain?.circleTarget??0,elapsed:this.brain?.circleElapsed??0,remaining:this.brain?.flankRemaining??0},retreat:{reason:this.brain?.retreatReason??null,cooldown:this.brain?.retreatCooldown??0},
+      observation:{target:this.brain?.circleTarget??0,elapsed:this.brain?.circleElapsed??0,remaining:this.brain?.flankRemaining??0},retreat:{reason:this.brain?.retreatReason??null,cooldown:this.brain?.retreatCooldown??0},ram:this.v02Ram?.inspect(),
       locomotion:{orbitSourceDistance:this.v02OrbitDistance??0,plantReachError:this.v02Pose?.maxReachError??0,releasedPlants:this.v02Pose?.releasedPlants??0}};
   }
 }

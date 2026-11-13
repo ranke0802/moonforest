@@ -1,0 +1,254 @@
+{
+  "status": "pass",
+  "baselineRevision": "ca6db93",
+  "tests": {
+    "tests": 14,
+    "pass": 14,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "legacyRegression": {
+    "tests": 64,
+    "pass": 64,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0
+  },
+  "additionalRegression": {
+    "tests": 7,
+    "pass": 7,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "testPath": "tests/wolf-v02-predator-runtime.test.js",
+    "testSha256": "b1b8781ee45f2dffedd57a32f2020ec6ae7d15c98d6da9c4c8084f18a1d61ddb"
+  },
+  "gates": [
+    {
+      "name": "scope-preservation",
+      "conditions": 1,
+      "description": "Unchanged other attacks, run/orbit cadence, approved wolf/player source inputs and dimensions.",
+      "status": "pass"
+    },
+    {
+      "name": "real-preimpact-defenses",
+      "conditions": 24,
+      "description": "Actual controller dodge/block, invulnerable ram and committed escape yield no damage/knockdown/mauls.",
+      "status": "pass"
+    },
+    {
+      "name": "live-prone-validation",
+      "conditions": 6,
+      "description": "Move-away, stand, actual fast get-up, missing nodes/result and ordinary invulnerability invalidate relevant mauls.",
+      "status": "pass"
+    },
+    {
+      "name": "strict-knockdown-ownership",
+      "conditions": 3,
+      "description": "Pre-existing down state or false/undefined callback cannot authorize mauls.",
+      "status": "pass"
+    },
+    {
+      "name": "lifecycle-cancellation",
+      "conditions": 5,
+      "description": "Wolf interrupt/death, player death, map exit and hide cancel remaining phases.",
+      "status": "pass"
+    },
+    {
+      "name": "native-player-fall-calibration",
+      "conditions": 2,
+      "description": "Actual packed warrior-v2, native animator/controller, normal fall/get-up and0.28m recoil.",
+      "status": "pass"
+    },
+    {
+      "name": "autonomous-band-fps-speed-matrix",
+      "conditions": 24,
+      "description": "Min/preferred/max/outside approach at30/60Hz and0.5/1/2 speed;40+30+30.",
+      "status": "pass"
+    },
+    {
+      "name": "phase-deduplication",
+      "conditions": 6,
+      "description": "Four extra pose passes per frame preserve clocks, root and one damage resolution per phase.",
+      "status": "pass"
+    },
+    {
+      "name": "bounded-hitches",
+      "conditions": 6,
+      "description": "100ms phase-window crossings retain clipped prone contacts; moved-away victims receive no phantom maul.",
+      "status": "pass"
+    },
+    {
+      "name": "rear-critical-coherence",
+      "conditions": 6,
+      "description": "One rear snapshot yields52+39+39 through the genuine native fall, with actual surface overlap.",
+      "status": "pass"
+    },
+    {
+      "name": "untouched-far-summon",
+      "conditions": 2,
+      "description": "35m untouched summon/rise/observe/approach to the coupled sequence.",
+      "status": "pass"
+    },
+    {
+      "name": "elevation-invariance",
+      "conditions": 12,
+      "description": "Both actors/terrain at+3m/-2m; prone state and contacts remain ground-relative.",
+      "status": "pass"
+    },
+    {
+      "name": "fixed-rig-and-foot-support",
+      "conditions": 1,
+      "description": "Fixed limb lengths/scales, authored carrier/WATCH0 oracles, named support episodes and recovery-to-watch seam.",
+      "status": "pass"
+    },
+    {
+      "name": "pooled-life-reset",
+      "conditions": 3,
+      "description": "Three actual lives, independent fresh phase resolutions, no resource growth or stale damage/control owner.",
+      "status": "pass"
+    }
+  ],
+  "sourceAndTestFilesUnchangedDuringRun": true,
+  "currentFilesStillMatchEvidence": true,
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "617548aa814ad36e086cd1a0ad9083e8fef2d48ec2b11a49504f6201eb2dec0e",
+    "src/wolf-v02-encounter.js": "7b730edf169f5d663348f49ea01cbd3831405ac81b3a6d3f04bfb83e603635e2",
+    "src/wolf-v02-ram.js": "297894ee6067005c3986e87faee0607ae56f7f515245f2d7b4b771f985440ecd",
+    "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "src/wolf-v02-authored-clips.js": "acf77d1f2c6b72a5d29829f61fe3e9a515eaf7d37aab0a030260859ca1cf1922",
+    "src/wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+    "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "src/animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+    "src/player-dimensions.js": "f4a8545e46490575c15600a6de04532e34cd9d1782faef1e976d10df493cc37f",
+    "src/boss-battle.js": "b774dd48bfc2cde1459e7e598018af1e8f6b52680c69170514459fe1fb060559",
+    "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+    "src/tree-view-surface.js": "8c30b7e5b3cf8b7df2a9fac91119ac6e04dc92236739cab7d320761b7471f588",
+    "src/melee-collision.js": "b97acb0e5ff4c820423e6bca8631d49685a77902074e3f1fdb3b8339a43075f5",
+    "tests/helpers/wolf-ram-fixture.js": "40297abc9779b83cc383dc2e21d09b0a0eeed26ac16ec2bbabb9336be9b0c7e1",
+    "tests/wolf-v02-ram-integration.test.js": "0b4dea36cc17db6e0e5aff37c52ce080b2e068b0b5cb3ccff5634c9cd9069c02",
+    "reports/wolf-v02-ram-r12/skin-contact.mjs": "26ab11f5a3783add4a22992eb869f2cbc88bfcb085f57755ddc719d1d753ddee"
+  },
+  "geometry": {
+    "matrixConditions": 24,
+    "actualSurfaceContacts": 72,
+    "actualSurfaceIntersections": 72,
+    "rearActualSurfaceContacts": 18,
+    "rearActualSurfaceIntersections": 18,
+    "method": "Actual CPU-deformed wolf head/jaw triangles against actual native-animated warrior skin triangles at the first HP damage frame. Maul target is weighted Hips/Spine/Spine1/Spine2 torso skin, not a standing proxy."
+  },
+  "chronology": {
+    "frontDamage": [
+      40,
+      30,
+      30
+    ],
+    "rearDamage": [
+      52,
+      39,
+      39
+    ],
+    "postRamSourceClock": "1x real time; cast speed affects run-up only",
+    "nativeKnockdownDuration": 2.2666666507720947,
+    "nativeGetUpDuration": 0.9666666388511658,
+    "firstMaulSecondsAfterRealRam": [
+      1.0666666666666629,
+      1.1666666666666625
+    ],
+    "secondMaulSecondsAfterRealRam": [
+      1.616666666666723,
+      1.7333333333333272
+    ],
+    "ordinaryPlayerRecoilMeters": 0.28,
+    "captureOrPlayerHold": false
+  },
+  "rigAndFeet": {
+    "boneCount": 28,
+    "attachmentChecks": 13428,
+    "postRamPoseChecks": 5292,
+    "prefixChecks": 1944,
+    "maximumNewAttachmentLengthErrorModelMeters": 0.000004148509795798283,
+    "maximumPrefixFixedLimbLengthErrorModelMeters": 0.000004541893529108609,
+    "maximumScaleError": 4.52994904476256e-7,
+    "maximumAuthoredCarrierRuntimeErrorModelMeters": 9.257639144254436e-17,
+    "maximumRecoveryCarrierWatchEndpointErrorModelMeters": 0.0000017664565654485033,
+    "recoveryCarrierDifferences": {
+      "spine": {
+        "maximumBindLengthDeviation": 0.0015037794014576278,
+        "maximumSourcePositionError": 5.55209177207853e-17,
+        "endpointWatchError": 7.531032171800622e-7
+      },
+      "chest": {
+        "maximumBindLengthDeviation": 0.002558892653480249,
+        "maximumSourcePositionError": 5.568095984292711e-17,
+        "endpointWatchError": 0.000001143367932024025
+      },
+      "neck": {
+        "maximumBindLengthDeviation": 0.0000036835655440881077,
+        "maximumSourcePositionError": 8.11394902550597e-20,
+        "endpointWatchError": 0.0000016633477688005938
+      },
+      "head": {
+        "maximumBindLengthDeviation": 0.0000025719167071613924,
+        "maximumSourcePositionError": 6.098529226250374e-20,
+        "endpointWatchError": 2.8478023101826984e-7
+      },
+      "jaw": {
+        "maximumBindLengthDeviation": 0.0000029335550759679307,
+        "maximumSourcePositionError": 5.203958669693608e-20,
+        "endpointWatchError": 7.161413221602442e-7
+      },
+      "fore.L.scapula": {
+        "maximumBindLengthDeviation": 0.0000013812093248577462,
+        "maximumSourcePositionError": 0,
+        "endpointWatchError": 1.788915277055348e-7
+      },
+      "fore.R.scapula": {
+        "maximumBindLengthDeviation": 0.0000011132753711395882,
+        "maximumSourcePositionError": 0,
+        "endpointWatchError": 2.2152168672261393e-7
+      },
+      "tail_1": {
+        "maximumBindLengthDeviation": 0.041477138205606806,
+        "maximumSourcePositionError": 9.257639144254436e-17,
+        "endpointWatchError": 2.695965718591656e-7
+      },
+      "tail_2": {
+        "maximumBindLengthDeviation": 0.0000016510455559393122,
+        "maximumSourcePositionError": 7.069146028698145e-20,
+        "endpointWatchError": 8.781368160729244e-7
+      },
+      "tail_3": {
+        "maximumBindLengthDeviation": 0.0000012397783062390033,
+        "maximumSourcePositionError": 1.1330569646892914e-19,
+        "endpointWatchError": 0.0000017664565654485033
+      }
+    },
+    "maulSupportMaximumWorldDriftMeters": 0.00011019364674314502,
+    "namedSupportMaximumWorldDriftMeters": 0.000259189864018563,
+    "watchTransitionMaximumWorldFootDriftMeters": 0.002119238032151571,
+    "interpretation": "Limb lengths and scales remain strict. Explicit inherited non-limb pose carriers follow authored R12 translations and the exact approved WATCH0 endpoint; they are not universally equated with bind translations."
+  },
+  "lifecycle": {
+    "cancellationConditions": 5,
+    "pooledLives": 3,
+    "extraPosePasses": 3952,
+    "resourceGrowth": false,
+    "staleCaptureOrHold": false
+  },
+  "resolvedFindings": [
+    "The former standing100-damage bite is replaced by head40, genuine fall, and two prone-body jaw30 phases.",
+    "Actual surface probes rejected the original broad engagement band and early contact windows despite passing bone capsules. The visible authored weight shift, honest narrow band and calibrated windows now meet all72 matrix skin contacts.",
+    "The original neutral end pose dragged feet by up to0.382m when blending to WATCH0. Authored recovery steps now reach the actual approved watch stance; the measured seam is reported above.",
+    "Test-only cumulative fresh-asset heap pressure was removed by bounded asset reuse with real controller/animator/combat resets. Global character-profile contamination in mixed calibration/reuse was fixed by restoring warrior-plains before each bout. These are harness findings, not device/game performance measurements."
+  ],
+  "obsoleteExpectations": "obsolete-expectations.json",
+  "fullEvidence": "independent-gameplay.json",
+  "limitations": [
+    "NullEngine uses replacement materials. Triangle intersection proves geometric surface overlap, not convincing impact, natural motion or material/skin quality.",
+    "Root separately reviewed the original-color coupled runtime images. This independent numeric report does not substitute for that visual review.",
+    "No browser automation was used. Device FPS, GPU cost, heat, controls and touch feel remain unmeasured.",
+    "The hitch gates validate temporal source-clipped torso contact; instantaneous skin intersections are asserted separately for all standard30/60Hz matrix and rear-hit frames."
+  ]
+}

@@ -5,6 +5,12 @@ export const WOLF_V02_KNOCKBACK_SCALE=.8;
 // remain historical sources; the full lunge/pin retain their original poses.
 export const WOLF_V02_SNAP='Wolf_Predator_Diagonal_Bite_V02',WOLF_V02_SWIPE='Wolf_Predator_Reverse_Bite_V02';
 export const WOLF_V02_BRACE='Wolf_Backward_Brace_V02',WOLF_V02_DEATH='Wolf_Staggered_Collapse_V02';
+export const WOLF_V02_RAM='Wolf_Ram_Ground_Maul_V02';
+export const WOLF_V02_RAM_PHASES=Object.freeze([
+ {id:'ram',kind:'ram',contactStart:2.54,contactEnd:2.73,impact:2.62,damage:40,contactParts:Object.freeze(['head'])},
+ {id:'maul-1',kind:'maul',contactStart:3.64,contactEnd:3.70,impact:3.65,damage:30,contactParts:Object.freeze(['jaw'])},
+ {id:'maul-2',kind:'maul',contactStart:4.19,contactEnd:4.25,impact:4.20,damage:30,contactParts:Object.freeze(['jaw'])},
+].map(Object.freeze));
 export const WOLF_V02_ORBIT=Object.freeze({right:'Wolf_Orbit_Step_V02',left:'Wolf_Orbit_Step_Left_V02'});
 // R8's supported run feet travel 4.2 source metres per source second (17/30 s
 // per cycle). At 2.5x the cadence, rather than the stride, matches world speed.
@@ -14,7 +20,7 @@ export const WOLF_V02_ACTIONS=Object.freeze([
  {id:'quick-bite',label:'짧은 입질',...quick},
  {id:'chain-bite',label:'연속 입질',...quick,damage:45,recovery:.68,chain:true},
  {id:'paw-swipe',label:'사선 돌진 물기',sourceClip:WOLF_V02_SWIPE,clipStart:0,clipEnd:52/60,impact:22/60,commitTime:.22,capture:false,damage:65,range:4,minDistance:2.8,maxDistance:3.25,preferredDistance:3.1,recovery:.65,authoredAttention:true,contactParts:['jaw','head'],whip:{source:[0,.22,26/60,52/60],seconds:[0,.26,.34,.72]}},
- {id:'lunge',label:'측면 회피·도약 덮치기',sourceClip:WOLF_CLIPS.lunge,clipStart:0,clipEnd:3.1,impact:2.62,contactStart:2.54,contactEnd:2.73,commitTime:1.65,capture:false,damage:100,range:4,minDistance:25.2,maxDistance:25.8,preferredDistance:25.5,recovery:1.10,contactParts:['jaw','head'],whip:{source:[0,.85,1.65,2.55,3.1],seconds:[0,.28,.60,.85,1.28]}},
+ {id:'lunge',label:'머리 들이받기·넘어진 적 물어뜯기',sourceClip:WOLF_V02_RAM,clipStart:0,clipEnd:5.20,impact:2.62,contactStart:2.54,contactEnd:2.73,commitTime:1.65,capture:false,damage:100,range:4,minDistance:25.5,maxDistance:25.55,preferredDistance:25.5,recovery:1.10,contactParts:['head'],authoredAttention:true,ramPhases:WOLF_V02_RAM_PHASES,postRamClock:2.62,abortRecoveryStart:4.32,missSourceClip:WOLF_CLIPS.lunge,missClipStart:2.73,missClipEnd:3.10,whip:{source:[0,.85,1.65,2.55,2.62,5.20],seconds:[0,.28,.60,.85,.9047272727272727,3.4847272727272727]}},
  {id:'pin',label:'앞발 제압·물기',sourceClip:WOLF_CLIPS.pin,clipStart:0,clipEnd:3.4,impact:1.20,commitTime:.85,capture:true,damage:120,range:3.2,minDistance:8.7,maxDistance:9.5,preferredDistance:9.1,recovery:1.05,contactParts:['jaw','head'],whip:{source:[0,.85,1.20,1.85,3.4],seconds:[0,.43,.60,.85,1.55]}},
 ].map(a=>Object.freeze({...a,contactStart:a.contactStart??(a.sourceClip===WOLF_V02_SNAP?.29:a.sourceClip===WOLF_V02_SWIPE?.32:a.capture?a.impact:a.impact-.03),contactEnd:a.contactEnd??(a.sourceClip===WOLF_V02_SNAP?.40:a.sourceClip===WOLF_V02_SWIPE?26/60:a.impact+.12),contactParts:a.contactParts?Object.freeze(a.contactParts):undefined,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
 export const WOLF_V02_BY_ID=Object.freeze(Object.fromEntries(WOLF_V02_ACTIONS.map(a=>[a.id,a])));
@@ -31,6 +37,13 @@ export function whipElapsedAt(action,sourceTime){
  const {source,seconds}=action.whip,t=clamp(sourceTime,source[0],source.at(-1));
  let i=0;while(i<source.length-2&&t>source[i+1])i++;
  return seconds[i]+(seconds[i+1]-seconds[i])*clamp((t-source[i])/(source[i+1]-source[i]),0,1);
+}
+export function advanceWolfActionElapsed(action,elapsed,dt,speed){
+ if(!action.ramPhases)return elapsed+dt*speed;
+ const boundary=whipElapsedAt(action,action.postRamClock);
+ if(elapsed>=boundary)return elapsed+dt;
+ const prefix=(boundary-elapsed)/speed;
+ return dt<=prefix?elapsed+dt*speed:boundary+dt-prefix;
 }
 
 export class WolfV02Brain extends WolfBrain{
@@ -51,8 +64,21 @@ export class WolfV02Brain extends WolfBrain{
   this.start(action.sourceClip,'attack');this.action=action;this.actionId=action.id;this.time=action.clipStart;this.actionElapsed=0;this.behavior='anticipation';this.attackCount++;this.lastOutcome=null;this.resolvedSerial=null;this.pinImpactPassed=false;
   this.boutStrikes=continuation?this.boutStrikes+1:1;
   if(!continuation)this.boutObserved=false;
+  if(action.ramPhases){this.ramAbortReason=null;this.ramRecoveryOrigin=null;this.ramAccepted=false;}
   this.chainRemaining=action.chain&&this.boutStrikes<3&&!continuation?1:0;this.plannedId=null;this.positionElapsed=0;this.followupId=null;this.followChain=false;
   return action;
+ }
+ abortRam(reason='ram-miss'){
+  if(!this.action?.ramPhases||this.mode!=='attack')return false;
+  this.ramAbortReason=reason;this.requestRetreat('miss');return true;
+ }
+ beginRamRecovery(){
+  const action=this.action;if(!action?.ramPhases)return;
+  // A victim leaving after the ram must not pull the low, planted maul pose
+  // back into the old airborne landing. Finish the authored recovery steps.
+  const accepted=this.ramAccepted===true;
+  this.start(accepted?action.sourceClip:action.missSourceClip,'ramRecover');this.action=action;this.actionId=action.id;
+  this.time=this.ramRecoveryOrigin=accepted?action.abortRecoveryStart:action.missClipStart;this.ramRecoveryEnd=accepted?action.clipEnd:action.missClipEnd;this.impacted=true;this.behavior='followthrough';
  }
  noteAttackResult({serial=this.serial,hit=false,blocked=false,captured=false}={}){
   if(serial!==this.serial||!this.action)return false;
@@ -148,8 +174,14 @@ export class WolfV02Brain extends WolfBrain{
    }else this.time=Math.min(duration,this.time+dt*(this.reactionPlaybackRate??1.6));
    return {events,speed:0};
   }
+  if(this.mode==='ramRecover'){
+   if(this.time>=this.ramRecoveryEnd)this.beginRecovery();else this.time=Math.min(this.ramRecoveryEnd,this.time+dt);
+   return {events,speed:0};
+  }
   if(this.mode==='attack'&&this.action){
-   const action=this.action,previous=this.time,next=Math.min(actionDuration(action),this.actionElapsed+dt*this.castSpeed);let source=sampleWhipTime(action,next);
+   const action=this.action;
+   if(action.ramPhases&&this.ramAbortReason&&this.time>=action.contactEnd){this.beginRamRecovery();return {events,speed:0};}
+   const previous=this.time,next=Math.min(actionDuration(action),advanceWolfActionElapsed(action,this.actionElapsed,dt,this.castSpeed));let source=sampleWhipTime(action,next);
    if(!this.impacted&&previous<=action.impact&&source>=action.impact){
     source=action.impact;this.actionElapsed=whipElapsedAt(action,source);this.impacted=true;
     events.push({type:'attack',name:action.sourceClip,actionId:action.id,range:action.range,kind:'melee',damage:action.damage,capture:action.capture});

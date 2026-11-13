@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE,WOLF_SCALE} from '../src/wolf-spec.js';
-import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,sampleWhipTime,actionDuration} from '../src/wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_RAM,sampleWhipTime,whipElapsedAt,actionDuration} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const config=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
@@ -34,7 +34,7 @@ test('0.1 keeps its R8 source, texture, size, two authored attacks and legacy im
  const b=new WolfBrain(durations);assert.equal(b.plannedAttack(WOLF_BALANCE.pinDistance),WOLF_CLIPS.pin);assert.equal(b.plannedAttack(WOLF_BALANCE.lungeDistance),WOLF_CLIPS.lunge);
 });
 
-test('0.2 uses separately authored torso-led predator bites while preserving the full R8 lunge and pin',()=>{
+test('0.2 retains predator bites and R8 pin while its separate R12 ram carries a bounded two-bite damage budget',()=>{
  assert.deepEqual(WOLF_V02_ACTIONS.map(a=>a.id),['quick-bite','chain-bite','paw-swipe','lunge','pin']);
  for(const action of WOLF_V02_ACTIONS){
   assert.strictEqual(WOLF_V02_BY_ID[action.id],action);assert.ok([...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)].includes(action.sourceClip));
@@ -45,8 +45,9 @@ test('0.2 uses separately authored torso-led predator bites while preserving the
  assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
  assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
  assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Predator_Reverse_Bite_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['jaw','head']);
- assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_CLIPS.lunge);
- assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,durations[WOLF_CLIPS.lunge]);
+ assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_V02_RAM);
+ assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,5.2);assert.equal(durations[WOLF_CLIPS.lunge],3.1);
+ assert.deepEqual(WOLF_V02_BY_ID.lunge.ramPhases.map(phase=>[phase.id,phase.damage,phase.contactParts]),[['ram',40,['head']],['maul-1',30,['jaw']],['maul-2',30,['jaw']]]);
 });
 
 test('30/60 Hz and 0.5/1/2 speed play every action once, retain source impact pose and snapshot speed',()=>{
@@ -66,6 +67,7 @@ test('30/60 Hz and 0.5/1/2 speed play every action once, retain source impact po
  for(const action of WOLF_V02_ACTIONS){
   const samples=rows.filter(r=>r.action===action.id&&r.fps===60),one=samples.find(r=>r.speed===1);
   for(const sample of samples)assert.ok(Math.abs(sample.impactAt*sample.speed-one.impactAt)<=.06,JSON.stringify({action:action.id,sample,one}));
+  if(action.id==='lunge')for(const sample of samples)assert.ok(Math.abs(sample.wallDuration-(whipElapsedAt(action,action.impact)/sample.speed+action.clipEnd-action.impact))<.08,'only the ram prefix follows cast speed; the native-fall/maul tail remains real time');
  }
 });
 
@@ -88,7 +90,8 @@ test('whipping remaps only source time with slow anticipation, rapid contact and
   const rates=source.slice(1).map((value,i)=>(value-source[i])/(seconds[i+1]-seconds[i]));
   const long=['lunge','pin'].includes(action.id);assert.ok(rates.every(r=>r>0));assert.ok(Math.max(...rates)>rates[0]*(long?1.15:1.3),'the attack has a faster physical contact phase');
   assert.ok(Math.max(...rates)>rates.at(-1)*(long?1.1:1.3),'followthrough slows after the fast contact phase');
-  if(long)assert.ok(actionDuration(action)<1.6,'R11 speeds the full preserved dodge/takedown, including anticipation');
+  if(action.id==='pin')assert.ok(actionDuration(action)<1.6,'pin keeps the faster full takedown');
+  if(action.id==='lunge'){assert.ok(whipElapsedAt(action,action.impact)<1);assert.ok(Math.abs(actionDuration(action)-whipElapsedAt(action,action.impact)-(action.clipEnd-action.impact))<1e-9,'the mauls retain a fixed real fall clock');}
   let last=action.clipStart;for(let i=0;i<=100;i++){const time=sampleWhipTime(action,actionDuration(action)*i/100);assert.ok(time>=last-1e-9&&time<=action.clipEnd+1e-9);last=time;}
  }
 });

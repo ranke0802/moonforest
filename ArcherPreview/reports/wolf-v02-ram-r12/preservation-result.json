@@ -1,0 +1,92 @@
+{
+  "scope": "R11 approved source and quality baseline. Normalize CRLF to LF when comparing committed text. Lunge-only scope; no other source/model/texture/LOD changes authorized.",
+  "baseline": "ca6db9350c6161a8be3beb2292b6ee07b0a1a0b3",
+  "checkedAt": "2026-11-13T04:02:03.982Z",
+  "allPreserved": true,
+  "rows": [
+    {
+      "path": "ArcherPreview/src/wolf-spec.js",
+      "basis": "committed R11 bytes",
+      "expected": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+      "actual": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/wolf-encounter.js",
+      "basis": "committed R11 bytes",
+      "expected": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+      "actual": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/wolf-animation.js",
+      "basis": "committed R11 bytes",
+      "expected": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+      "actual": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/wolf-v02-predator-clips.json",
+      "basis": "committed R11 bytes",
+      "expected": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+      "actual": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/wolf-v02-feral-clips.json",
+      "basis": "committed R11 bytes",
+      "expected": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "actual": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/wolf-v02-locomotion.js",
+      "basis": "committed R11 bytes",
+      "expected": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "actual": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/warrior-v2.js",
+      "basis": "committed R11 bytes",
+      "expected": "057145e42dd1cbdb7c7a56a8595d9bfd73d5d8704be525261ba1118e9cefb2ea",
+      "actual": "057145e42dd1cbdb7c7a56a8595d9bfd73d5d8704be525261ba1118e9cefb2ea",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/src/main.js",
+      "basis": "committed R11 bytes",
+      "expected": "203db090ed6a80cb4fbaf2f3f9c234df94ba9904d087e065d8d84e5057f3847c",
+      "actual": "203db090ed6a80cb4fbaf2f3f9c234df94ba9904d087e065d8d84e5057f3847c",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/public/assets/alpha-wolf.json",
+      "basis": "committed R11 bytes",
+      "expected": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+      "actual": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/public/assets/warrior-v2.json",
+      "basis": "committed R11 bytes",
+      "expected": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+      "actual": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreview/public/assets/resource-index.json",
+      "basis": "physical canonical prepared input before R12 edits",
+      "expected": "52bd74fecf648b3821a253810e28a9d40e2a1300491025b7e230c35b20ecb043",
+      "actual": "52bd74fecf648b3821a253810e28a9d40e2a1300491025b7e230c35b20ecb043",
+      "preserved": true
+    },
+    {
+      "path": "ArcherPreviewSite/deployment-files.json",
+      "basis": "committed R11 bytes",
+      "expected": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+      "actual": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+      "preserved": true
+    }
+  ]
+}

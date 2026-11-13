@@ -94,12 +94,13 @@ test('0.2 preserves all twelve approved R8 local poses, root pitch and lunge bod
 test('actual 0.2 attacks land at their authored contact poses once at 30/60 Hz and 0.5/1/2 speed',async t=>{
  const f=await fixture(t);plainWorld(f);
  for(const fps of [30,60])for(const speed of [.5,1,2])for(const action of WOLF_V02_ACTIONS){
-  const e=await begin(f,action.id,speed),initial=f.player.position.clone(),serialHits=new Map();let impacts=0,captured=false,frames=0,hitPos=null;
-  const original=e.hitPlayer.bind(e);e.hitPlayer=(...args)=>{const before=e.playerHp;original(...args);if(e.playerHp<before){impacts++;serialHits.set(e.brain.serial,(serialHits.get(e.brain.serial)??0)+1);hitPos={actor:e.actor.position.asArray(),sourceTime:e.brain.time,behavior:e.brain.behavior};}};
+  const e=await begin(f,action.id,speed),initial=f.player.position.clone(),serialHits=new Map();let impacts=0,totalDamage=0,captured=false,frames=0,hitPos=null;
+  const original=e.hitPlayer.bind(e);e.hitPlayer=(...args)=>{const before=e.playerHp;original(...args);if(e.playerHp<before){impacts++;totalDamage+=before-e.playerHp;serialHits.set(e.brain.serial,(serialHits.get(e.brain.serial)??0)+1);hitPos={actor:e.actor.position.asArray(),sourceTime:e.brain.time,behavior:e.brain.behavior};}};
   try{while(frames++<1800&&(e.brain.mode==='attack'||e.brain.behavior==='recovery'||e.grab.active)){frame(f,e,1/fps);captured||=e.grab.active;}}
   finally{e.hitPlayer=original;}
   assert.ok(frames<1800,'attack and recovery must finish');assert.equal(impacts,action.chain?2:1,JSON.stringify({id:action.id,speed,fps,actor:e.actor.position.asArray(),player:f.player.position.asArray(),brain:e.brain.inspect?.(),hitPos}));assert.ok([...serialHits.values()].every(n=>n===1),'each independent strike serial may damage once');
   assert.equal(captured,action.capture,action.id+' capture policy');assert.deepEqual(f.player.position.asArray(),initial.asArray(),'authored proxy root cannot teleport the player');
+  if(action.id==='lunge'){assert.equal(totalDamage,40,'a standing dummy cannot authorize actual prone maul followups');assert.equal(e.v02LastContact?.part,'head');}
   assert.equal(e.animator.inspectBindingCache().created,0);assert.equal(e.animator.inspectBindingCache().currentBindings,0);assert.equal(f.scene._activeAnimatables.length,0);
   rows.push({case:'actual-contact',id:action.id,fps,speed,hits:impacts,strikeSerials:serialHits.size,captured,hitPos});
  }

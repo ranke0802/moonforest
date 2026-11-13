@@ -1,0 +1,69 @@
+{
+  "scope": "Direct visual inspection of actual game CPU-skinned poses rendered offline in Blender. All six stages from front/side/quarter/opposite inspected in contact sheets, plus four full-size contact/recovery views and two joint closeups. Wolf original colour, player neutral material. No browser automation.",
+  "reviewedAt": "2026-11-13T04:00:34.418Z",
+  "sourceClipSha256": "3cc4de84cc719c592da5b6b3b9e17c5b326fe1943fd414018f53d90eabb34633",
+  "poseInputs": {
+    "wolf-v02-spec.js": "617548aa814ad36e086cd1a0ad9083e8fef2d48ec2b11a49504f6201eb2dec0e",
+    "wolf-v02-encounter.js": "7b730edf169f5d663348f49ea01cbd3831405ac81b3a6d3f04bfb83e603635e2",
+    "wolf-v02-authored-clips.js": "acf77d1f2c6b72a5d29829f61fe3e9a515eaf7d37aab0a030260859ca1cf1922",
+    "wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+    "wolf-v02-ram.js": "297894ee6067005c3986e87faee0607ae56f7f515245f2d7b4b771f985440ecd",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+  },
+  "images": [
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/contact-sheet-a.jpg",
+      "sha256": "070792f143ab4f6e384c59b4d2ae769f506e89f63934a490968db67d3d71139d"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/contact-sheet-b.jpg",
+      "sha256": "952b3cb921957fd7fc60d2108301bd7e70cbadd12b9edb602751d7fd2f5fcfac"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/head-ram-side.png",
+      "sha256": "62ba68247812772505b2f862fec9515a96c618e1f2f9ae3a0d4ca521b66293ed"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/ground-bite-1-side.png",
+      "sha256": "53819f88c1cfb2e52330b4a345e71263ba4f99c68f810846bda4e9efebe8b938"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/ground-bite-2-quarter.png",
+      "sha256": "298d9ef3a9babcedb99a1fd55a1bef040de2004a002a07998d7df9e75d735b1b"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/recover-opposite.png",
+      "sha256": "532c6aa39f7e77dab40a150402c8edd992960817fd09ea8540eccfb67cef19aa"
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-forelimbs-matcap.png",
+      "sha256": "6d5c3e5a1816d7d4548673304a59949029c960ab381676c13403e62fd8fcad70"
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-hindlimbs-matcap.png",
+      "sha256": "d8ceff2193e470e2592c762acadfc953d78a19e23f65479739d9d19b69f130a8"
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-side.png",
+      "sha256": "7531dd14792d36e6793a696381f1a11929f2efa9a0e38237bc1498ec18bf0045"
+    },
+    {
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-recovery-sheet.jpg",
+      "sha256": "b90b2ab2a101c4aadafaeaf7b2ae7f0c7c2916e6c9f3fa577bdcab7504fe3041"
+    }
+  ],
+  "observations": [
+    "Head/fur surface reaches standing native warrior before its existing fall progresses.",
+    "Both lowered jaw poses reach the actual prone torso; head is lowered through supported forelimb crouch, not bone scale.",
+    "Recovery shifts weight to supported diagonal feet and steps back toward original watch posture.",
+    "No new stretched limb shafts, detached paws or body/fur pulled into a limb observed in these views.",
+    "The existing angular elbow collar and overlapping fur remain visible, especially in matcap; this is distinct from fixed rigid-core length/thickness.",
+    "Final authored recovery endpoint was additionally inspected from front/side/quarter in R12-recovery-sheet; it resumes the approved asymmetric WATCH0 stance."
+  ],
+  "limits": [
+    "Offline shading is a neutral original-colour asset review, not the shared cartoon GPU pipeline screenshot. Runtime material/outline/LOD path was not changed.",
+    "Still views and CPU source checks do not certify device FPS, heat, touch feel or every continuous frame; source tempo video and numerical contact/recovery tests supplement them."
+  ]
+}

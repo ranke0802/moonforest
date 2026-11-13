@@ -1,0 +1,181 @@
+{
+  "revision": "ca6db93",
+  "actions": [
+    {
+      "id": "quick-bite",
+      "label": "짧은 입질",
+      "sourceClip": "Wolf_Predator_Diagonal_Bite_V02",
+      "clipStart": 0,
+      "clipEnd": 0.8,
+      "impact": 0.3333333333333333,
+      "commitTime": 0.2,
+      "capture": false,
+      "damage": 55,
+      "range": 4,
+      "minDistance": 2.8,
+      "maxDistance": 3.15,
+      "preferredDistance": 3,
+      "recovery": 0.6,
+      "authoredAttention": true,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.2,
+          0.4,
+          0.8
+        ],
+        "seconds": [
+          0,
+          0.24,
+          0.32,
+          0.66
+        ]
+      },
+      "contactStart": 0.29,
+      "contactEnd": 0.4
+    },
+    {
+      "id": "chain-bite",
+      "label": "연속 입질",
+      "sourceClip": "Wolf_Predator_Diagonal_Bite_V02",
+      "clipStart": 0,
+      "clipEnd": 0.8,
+      "impact": 0.3333333333333333,
+      "commitTime": 0.2,
+      "capture": false,
+      "damage": 45,
+      "range": 4,
+      "minDistance": 2.8,
+      "maxDistance": 3.15,
+      "preferredDistance": 3,
+      "recovery": 0.68,
+      "authoredAttention": true,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.2,
+          0.4,
+          0.8
+        ],
+        "seconds": [
+          0,
+          0.24,
+          0.32,
+          0.66
+        ]
+      },
+      "chain": true,
+      "contactStart": 0.29,
+      "contactEnd": 0.4
+    },
+    {
+      "id": "paw-swipe",
+      "label": "사선 돌진 물기",
+      "sourceClip": "Wolf_Predator_Reverse_Bite_V02",
+      "clipStart": 0,
+      "clipEnd": 0.8666666666666667,
+      "impact": 0.36666666666666664,
+      "commitTime": 0.22,
+      "capture": false,
+      "damage": 65,
+      "range": 4,
+      "minDistance": 2.8,
+      "maxDistance": 3.25,
+      "preferredDistance": 3.1,
+      "recovery": 0.65,
+      "authoredAttention": true,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.22,
+          0.43333333333333335,
+          0.8666666666666667
+        ],
+        "seconds": [
+          0,
+          0.26,
+          0.34,
+          0.72
+        ]
+      },
+      "contactStart": 0.32,
+      "contactEnd": 0.43333333333333335
+    },
+    {
+      "id": "pin",
+      "label": "앞발 제압·물기",
+      "sourceClip": "Pin_Throat_Bite_R5",
+      "clipStart": 0,
+      "clipEnd": 3.4,
+      "impact": 1.2,
+      "commitTime": 0.85,
+      "capture": true,
+      "damage": 120,
+      "range": 3.2,
+      "minDistance": 8.7,
+      "maxDistance": 9.5,
+      "preferredDistance": 9.1,
+      "recovery": 1.05,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.85,
+          1.2,
+          1.85,
+          3.4
+        ],
+        "seconds": [
+          0,
+          0.43,
+          0.6,
+          0.85,
+          1.55
+        ]
+      },
+      "contactStart": 1.2,
+      "contactEnd": 1.3199999999999998
+    }
+  ],
+  "gait": {
+    "runSpeed": 6.6,
+    "farRunSpeed": 9.2,
+    "runAcceleration": 8,
+    "runSourceSpeed": 4.2,
+    "runPlaybackRate": 0.6285714285714286,
+    "runSourceStart": 0.03333333333333333,
+    "runSourceDuration": 0.5666666666666667,
+    "orbitPlaybackRate": 1.25,
+    "orbitFastPlaybackRate": 1.8,
+    "orbitRadius": 1.2
+  },
+  "orbits": {
+    "right": "Wolf_Orbit_Step_V02",
+    "left": "Wolf_Orbit_Step_Left_V02"
+  },
+  "hashes": {
+    "public/assets/alpha-wolf.json": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+    "public/assets/warrior-v2.json": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+    "src/wolf-spec.js": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+    "src/wolf-encounter.js": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+    "src/wolf-animation.js": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+    "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+    "src/wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+    "src/player-dimensions.js": "f4a8545e46490575c15600a6de04532e34cd9d1782faef1e976d10df493cc37f"
+  }
+}

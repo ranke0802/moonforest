@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WOLF_BALANCE,WOLF_CLIPS} from '../src/wolf-spec.js';
-import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_SNAP,WOLF_V02_SWIPE,WOLF_V02_ORBIT,WOLF_V02_GAIT,actionDuration,sampleWhipTime} from '../src/wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_SNAP,WOLF_V02_SWIPE,WOLF_V02_ORBIT,WOLF_V02_GAIT,actionDuration,sampleWhipTime,whipElapsedAt} from '../src/wolf-v02-spec.js';
 import {wolfHuntFixture,beginWolfHunt,stepWolfHunt} from './helpers/wolf-hunt-fixture.js';
 
 const base=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
@@ -61,8 +61,8 @@ test('live heavy hits brace, blocked attacks play a hit motion, and lethal damag
  for(let i=0;i<300;i++)lethal.update(1/60,3);assert.equal(lethal.time,durations[WOLF_V02_DEATH]);assert.equal(lethal.hp,0);assert.ok(!lethal.visited.has(WOLF_CLIPS.recover));
 });
 
-test('the whole far combo accelerates monotonically while preserving its source contact frames and settings snapshot',()=>{
- assert.ok(actionDuration(WOLF_V02_BY_ID.lunge)<=1.3);assert.ok(actionDuration(WOLF_V02_BY_ID.pin)<=1.6);
+test('the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing',()=>{
+ const lunge=WOLF_V02_BY_ID.lunge,ramPrefix=whipElapsedAt(lunge,lunge.impact);assert.ok(ramPrefix<1);assert.ok(Math.abs(actionDuration(lunge)-ramPrefix-(lunge.clipEnd-lunge.impact))<1e-9);assert.ok(actionDuration(WOLF_V02_BY_ID.pin)<=1.6);
  for(const id of ['lunge','pin'])for(const fps of [30,60])for(const speed of [.5,1,2]){
   const a=WOLF_V02_BY_ID[id],b=awake();b.configureAttacks({speed});b.startAction(id);let prior=0,events=0,elapsed=0,sawPinBite=false;
   for(let i=0;i<1000&&b.mode==='attack';i++){
@@ -71,21 +71,22 @@ test('the whole far combo accelerates monotonically while preserving its source 
    for(const event of r.events){events++;assert.equal(b.time,a.impact);assert.equal(event.capture,a.capture);b.noteAttackResult({hit:true});}
    b.configureAttacks({speed:speed===2?.5:2});assert.equal(b.castSpeed,speed);
   }
-  assert.equal(events,1);assert.ok(elapsed<=actionDuration(a)/speed+4/fps+1e-7);if(id==='pin')assert.ok(sawPinBite,'accelerated capture must retain the exact authored throat-bite threshold');
+  const expectedDuration=id==='lunge'?ramPrefix/speed+a.clipEnd-a.impact:actionDuration(a)/speed;
+  assert.equal(events,1);assert.ok(elapsed<=expectedDuration+4/fps+1e-7);if(id==='lunge')assert.ok(elapsed>=expectedDuration-1/fps,'cast speed cannot shorten the real fall/maul tail');if(id==='pin')assert.ok(sawPinBite,'accelerated capture must retain the exact authored throat-bite threshold');
   let source=0;for(let i=0;i<=1000;i++){const next=sampleWhipTime(a,actionDuration(a)*i/1000);assert.ok(next>=source);source=next;}assert.equal(source,a.clipEnd);
  }
  for(const a of WOLF_V02_ACTIONS.filter(a=>[WOLF_V02_SNAP,WOLF_V02_SWIPE].includes(a.sourceClip)))assert.equal(a.authoredAttention,true,'upper-body authored diagonal motion owns the bite pose');
 });
 
-test('accelerated far takedowns use the real mouth, and an escaped or out-of-reach captured player cannot receive a phantom bite',async t=>{
+test('standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites',async t=>{
  const f=await wolfHuntFixture(t);
  for(const id of ['lunge','pin'])for(const fps of [30,60])for(const speed of [.5,1,2])for(const band of ['minDistance','preferredDistance','maxDistance']){
   const a=WOLF_V02_BY_ID[id],e=await beginWolfHunt(f,id,{z:a[band],speed}),onPlayerHit=e.onPlayerHit;let knockdowns=0;
   e.onPlayerHit=(duration,options)=>{if(options?.knockdown)knockdowns++;return onPlayerHit(duration,options);};
   try{
    for(let i=0;i<1800&&(e.brain.mode==='attack'||e.grab.active);i++)stepWolfHunt(f,e,1/fps);
-   assert.equal(500-e.playerHp,a.damage,JSON.stringify({id,fps,speed,band,contact:e.v02LastContact,bite:e.v02PinBiteContact}));assert.equal(knockdowns,1);
-   if(id==='lunge'){assert.ok(['jaw','head'].includes(e.v02LastContact.part));assert.ok(e.v02LastContact.distance<=e.v02LastContact.radius);}
+   assert.equal(500-e.playerHp,id==='lunge'?40:a.damage,JSON.stringify({id,fps,speed,band,contact:e.v02LastContact,bite:e.v02PinBiteContact}));assert.equal(knockdowns,1);
+   if(id==='lunge'){assert.equal(e.v02LastContact.part,'head');assert.ok(e.v02LastContact.distance<=e.v02LastContact.radius);}
    else{assert.equal(e.v02PinBiteContact.sourceTime,1.85);assert.equal(e.v02PinBiteContact.contact,true);assert.ok(e.v02PinBiteContact.separation<=e.v02PinBiteContact.radius);}
   }finally{e.onPlayerHit=onPlayerHit;}
  }

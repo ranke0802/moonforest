@@ -1,0 +1,188 @@
+{
+  "scope": "Approved R11 non-lunge behavior captured before R12 edits; exact metadata, gait and reaction/observation method preservation.",
+  "actions": [
+    {
+      "id": "quick-bite",
+      "label": "짧은 입질",
+      "sourceClip": "Wolf_Predator_Diagonal_Bite_V02",
+      "clipStart": 0,
+      "clipEnd": 0.8,
+      "impact": 0.3333333333333333,
+      "commitTime": 0.2,
+      "capture": false,
+      "damage": 55,
+      "range": 4,
+      "minDistance": 2.8,
+      "maxDistance": 3.15,
+      "preferredDistance": 3,
+      "recovery": 0.6,
+      "authoredAttention": true,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.2,
+          0.4,
+          0.8
+        ],
+        "seconds": [
+          0,
+          0.24,
+          0.32,
+          0.66
+        ]
+      },
+      "contactStart": 0.29,
+      "contactEnd": 0.4
+    },
+    {
+      "id": "chain-bite",
+      "label": "연속 입질",
+      "sourceClip": "Wolf_Predator_Diagonal_Bite_V02",
+      "clipStart": 0,
+      "clipEnd": 0.8,
+      "impact": 0.3333333333333333,
+      "commitTime": 0.2,
+      "capture": false,
+      "damage": 45,
+      "range": 4,
+      "minDistance": 2.8,
+      "maxDistance": 3.15,
+      "preferredDistance": 3,
+      "recovery": 0.68,
+      "authoredAttention": true,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.2,
+          0.4,
+          0.8
+        ],
+        "seconds": [
+          0,
+          0.24,
+          0.32,
+          0.66
+        ]
+      },
+      "chain": true,
+      "contactStart": 0.29,
+      "contactEnd": 0.4
+    },
+    {
+      "id": "paw-swipe",
+      "label": "사선 돌진 물기",
+      "sourceClip": "Wolf_Predator_Reverse_Bite_V02",
+      "clipStart": 0,
+      "clipEnd": 0.8666666666666667,
+      "impact": 0.36666666666666664,
+      "commitTime": 0.22,
+      "capture": false,
+      "damage": 65,
+      "range": 4,
+      "minDistance": 2.8,
+      "maxDistance": 3.25,
+      "preferredDistance": 3.1,
+      "recovery": 0.65,
+      "authoredAttention": true,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.22,
+          0.43333333333333335,
+          0.8666666666666667
+        ],
+        "seconds": [
+          0,
+          0.26,
+          0.34,
+          0.72
+        ]
+      },
+      "contactStart": 0.32,
+      "contactEnd": 0.43333333333333335
+    },
+    {
+      "id": "pin",
+      "label": "앞발 제압·물기",
+      "sourceClip": "Pin_Throat_Bite_R5",
+      "clipStart": 0,
+      "clipEnd": 3.4,
+      "impact": 1.2,
+      "commitTime": 0.85,
+      "capture": true,
+      "damage": 120,
+      "range": 3.2,
+      "minDistance": 8.7,
+      "maxDistance": 9.5,
+      "preferredDistance": 9.1,
+      "recovery": 1.05,
+      "contactParts": [
+        "jaw",
+        "head"
+      ],
+      "whip": {
+        "source": [
+          0,
+          0.85,
+          1.2,
+          1.85,
+          3.4
+        ],
+        "seconds": [
+          0,
+          0.43,
+          0.6,
+          0.85,
+          1.55
+        ]
+      },
+      "contactStart": 1.2,
+      "contactEnd": 1.3199999999999998
+    }
+  ],
+  "gait": {
+    "runSpeed": 6.6,
+    "farRunSpeed": 9.2,
+    "runAcceleration": 8,
+    "runSourceSpeed": 4.2,
+    "runPlaybackRate": 0.6285714285714286,
+    "runSourceStart": 0.03333333333333333,
+    "runSourceDuration": 0.5666666666666667,
+    "orbitPlaybackRate": 1.25,
+    "orbitFastPlaybackRate": 1.8,
+    "orbitRadius": 1.2
+  },
+  "orbit": {
+    "right": "Wolf_Orbit_Step_V02",
+    "left": "Wolf_Orbit_Step_Left_V02"
+  },
+  "brace": "Wolf_Backward_Brace_V02",
+  "death": "Wolf_Staggered_Collapse_V02",
+  "knockbackScale": 0.8,
+  "methods": {
+    "beginStalk": "beginStalk({preserveBudget=false}={}){\n  this.followupId=null;this.followChain=false;this.boutStrikes=0;this.plannedId=null;this.flankSide*=-1;this.suppressStalkStep=false;this.stalkBlocked=false;this.flankReversed=false;\n  this.start(this.flankSide>0?WOLF_V02_ORBIT.right:WOLF_V02_ORBIT.left,'idle');this.behavior='flank';\n  if(!preserveBudget||this.circleElapsed>=this.circleTarget){const sample=Number(this.random());this.circleTarget=2+clamp(Number.isFinite(sample)?sample:.5,0,1);this.circleElapsed=0;}\n  this.flankRemaining=Math.max(0,this.circleTarget-this.circleElapsed);this.flankBlockedObserve=false;this.flankRetry=0;\n  const cycles=this.phase===2?4:3;this.flankPlaybackRate=cycles*.90/Math.max(.01,this.circleTarget);\n }",
+    "hit": "hit(options={}){\n  const accepted=super.hit({...options,heavy:false,stun:0,interruptsBoss:false});if(!accepted)return false;\n  if(this.hp<=0){this.stagger=0;if(this.durations[WOLF_V02_DEATH])this.start(WOLF_V02_DEATH,'down');this.cancelBout();this.behavior='dead';return true;}\n  if(options.heavy||options.stun>0||options.interruptsBoss){\n   this.cancelBout();this.stagger=0;this.start(this.reactionClip(options.heavy),'hit');this.behavior=options.heavy?'brace':'hit';this.reactionPlaybackRate=options.heavy?1:1.6;this.reactionRetreated=!!options.heavy;\n   if(options.heavy){this.retreatPending=null;this.retreatCooldown=8;}else this.requestRetreat('hit');\n  }else if((options.damage??14)>=14)this.requestRetreat('hit');\n  return true;\n }",
+    "parry": "parry(){\n  if(this.hp<=0||['down','recover'].includes(this.mode))return false;\n  this.cancelBout();this.stagger=0;this.start(WOLF_CLIPS.hit,'hit');this.behavior='hit';this.reactionPlaybackRate=1.6;this.reactionRetreated=false;this.flash=this.flashDuration=.45;this.lastOutcome='blocked';this.requestRetreat('blocked');return true;\n }",
+    "beginRetreat": "beginRetreat(){\n  this.cancelBout();this.retreatReason=this.retreatPending;this.retreatPending=null;this.retreatCooldown=8;this.start(this.reactionClip(true),'retreat');this.behavior='retreat';\n }",
+    "beginRecovery": "beginRecovery(){\n  const action=this.action,outcome=this.lastOutcome??'miss';this.previousAction=action.id;this.previousOutcome=outcome;\n  if(outcome==='miss')this.requestRetreat('miss');\n  this.followupId=this.retreatPending&&this.retreatCooldown<=0?null:this.chooseFollowup(this.lastDistance);this.followChain=this.followupId==='chain-bite';\n  this.recoveryFull=action.recovery+(outcome==='miss'?(action.id==='lunge'?.5:.18):0);this.recoveryElapsed=0;\n  this.chainRemaining=0;this.start(WOLF_CLIPS.watch,'idle');this.behavior='recovery';\n  // A telegraphed attack always has a punishable ending, even when its custom\n  // attack-speed setting is 2x. A missed leap leaves the longest opening.\n  this.recoveryRemaining=this.followupId?(this.followChain?.30:.42):this.recoveryFull;\n }",
+    "chooseAction": "chooseAction(distance){\n  if(this.attackSettings?.custom){\n   const requested=this.attackSettings.sequence[(this.customAttackIndex??0)%this.attackSettings.sequence.length];\n   if(distance+1e-5>=WOLF_V02_BY_ID[requested].minDistance||!['lunge','pin'].includes(requested))return requested;\n   // A custom order may request a long attack at point-blank range. Keep the\n   // saved order intact, but substitute a reachable attack for this turn.\n  }\n  if(distance+1e-5>=WOLF_V02_BY_ID.lunge.minDistance)return 'lunge';\n  if(distance+1e-5>=WOLF_V02_BY_ID.pin.minDistance&&this.previousAction!=='pin')return 'pin';\n  const deck=this.phase===2?deck2:deck1;return deck[this.planIndex%deck.length];\n }",
+    "chooseFollowup": "chooseFollowup(distance){\n  if(this.lastOutcome!=='hit'||this.boutStrikes>=3)return null;\n  // Explicit editor sequences keep their order. An explicitly chosen chain\n  // retains its two bites even in phase 1; default phase 1 never selects it.\n  if(this.chainRemaining&&this.followupInReach('chain-bite',distance))return 'chain-bite';\n  if(this.attackSettings?.custom||this.phase!==2)return null;\n  const next=['quick-bite','chain-bite'].includes(this.action.id)?'paw-swipe':this.action.id==='paw-swipe'?'chain-bite':'quick-bite';\n  return this.followupInReach(next,distance)?next:null;\n }"
+  },
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "e54f7a934a74e5205f1c57c9a85771445ab44ee56d63c855c3a5e47d373693c6",
+    "src/wolf-v02-encounter.js": "4a0b68af380c67d37246fd7c2bfb388cb9b1e7615bea47b074115eb8315bc9c2",
+    "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4"
+  }
+}

@@ -1,0 +1,969 @@
+{
+  "scope": "R12 source/CPU verification and offline colour review; no browser automation or device FPS/heat certification.",
+  "generatedAt": "2026-11-13T04:19:12.180Z",
+  "regression": {
+    "scope": "Node/NullEngine actual-rig 3D attention, complete orbit entry/foot plant, autonomous contact, R12 actual head ram, native player fall, two prone jaw phases, defense/abort/ownership/damage budget, and preserved R11 behavior, four-map summon/resource lifecycle, preserved0.1 and shared combat regressions. No browser automation. DeviceFPS/heat/GPU and visual approval are not measured.",
+    "startedAt": "2026-11-13T04:17:30.523Z",
+    "finishedAt": "2026-11-13T04:18:43.861Z",
+    "command": [
+      "node",
+      "--test",
+      "tests/wolf-integration.test.js",
+      "tests/wolf-pattern-size.test.js",
+      "tests/wolf-v02-brain.test.js",
+      "tests/wolf-v02-patterns.test.js",
+      "tests/wolf-v02-authored-attacks.test.js",
+      "tests/wolf-v02-integration.test.js",
+      "tests/wolf-v02-hunt.test.js",
+      "tests/wolf-v02-hunt-integration.test.js",
+      "tests/wolf-v02-feral-integration.test.js",
+      "tests/wolf-v02-orbit-navigation.test.js",
+      "tests/wolf-v02-predator-runtime.test.js",
+      "tests/wolf-v02-predator-integration.test.js",
+      "tests/wolf-v02-ram-runtime.test.js",
+      "tests/wolf-v02-ram-integration.test.js",
+      "tests/boss-battle.test.js",
+      "tests/boss-combat.test.js",
+      "tests/combat-reconcile.test.js",
+      "tests/grab-escape.test.js",
+      "tests/release-v2.test.js"
+    ],
+    "exitCode": 0,
+    "tests": 161,
+    "pass": 161,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "sourceAndTestFilesUnchangedDuringRun": true,
+    "inputHashes": {
+      "src/wolf-v02-spec.js": "617548aa814ad36e086cd1a0ad9083e8fef2d48ec2b11a49504f6201eb2dec0e",
+      "src/wolf-v02-encounter.js": "7b730edf169f5d663348f49ea01cbd3831405ac81b3a6d3f04bfb83e603635e2",
+      "src/wolf-spec.js": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+      "src/wolf-encounter.js": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+      "src/wolf-animation.js": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+      "src/wolf-v02-authored-clips.js": "acf77d1f2c6b72a5d29829f61fe3e9a515eaf7d37aab0a030260859ca1cf1922",
+      "src/wolf-v02-attack-clips.json": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+      "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "src/wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+      "src/wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+      "src/wolf-v02-ram.js": "297894ee6067005c3986e87faee0607ae56f7f515245f2d7b4b771f985440ecd",
+      "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+      "src/animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+      "tests/helpers/wolf-ram-fixture.js": "40297abc9779b83cc383dc2e21d09b0a0eeed26ac16ec2bbabb9336be9b0c7e1",
+      "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+      "public/assets/alpha-wolf.json": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+      "tests/wolf-integration.test.js": "a68c876905cd288d23c261bd2800d7e1bb610b88ca3f2f0bff7084fb6eb23895",
+      "tests/wolf-pattern-size.test.js": "97a8b52fc20ee7a7021362e44558816a21c1c138618ee646df97cefb3436abee",
+      "tests/wolf-v02-brain.test.js": "172419cdc73417d0327c1abc044b5cec79ef9b7d9492a7dd186b37cc1a27cad1",
+      "tests/wolf-v02-patterns.test.js": "9f05cc72d04d8e019da3cccc03eb9809e0b21f5a9a986b0f45e279a0bdfcc11f",
+      "tests/wolf-v02-authored-attacks.test.js": "e92af20704696259c5dbf5a733cc5018b1d6228938340db53a997b6959972473",
+      "tests/wolf-v02-integration.test.js": "e46dd985b01fab0a5e7eb41792bc7c483e4720f72f78e7936dee98cac15344bf",
+      "tests/wolf-v02-hunt.test.js": "c853fad502077c4cba8c70b2c38e98d1ba6db159b5bb1c223eec89ff53cc323c",
+      "tests/wolf-v02-hunt-integration.test.js": "eec12cad24a0b1f9bb078bbc240c2a2ae418507ef6c0083e35821bd607d32a0e",
+      "tests/wolf-v02-feral-integration.test.js": "092446de9e59595312a328dba48dddbc8b5524ca05517cf53d1a6bcc48e6e378",
+      "tests/wolf-v02-orbit-navigation.test.js": "4057ad5f2cb54ef469bc25e132f09fc982a4124680fe17a51b0440f6d9c4a038",
+      "tests/wolf-v02-predator-runtime.test.js": "b1b8781ee45f2dffedd57a32f2020ec6ae7d15c98d6da9c4c8084f18a1d61ddb",
+      "tests/wolf-v02-predator-integration.test.js": "49c06333437cd5d2fd0cad47cebee6554e7675097e0e7e01ee9738a9dbf67e11",
+      "tests/wolf-v02-ram-runtime.test.js": "7ff3b7dbf77a535ff437fdc2720c97b8e5f6e565abfca4a35313383208674b43",
+      "tests/wolf-v02-ram-integration.test.js": "0b4dea36cc17db6e0e5aff37c52ce080b2e068b0b5cb3ccff5634c9cd9069c02",
+      "tests/boss-battle.test.js": "ba1bacd5dd2fafb91086f1cf1a9993ac3eb36ea2101478d4508202af7c15edac",
+      "tests/boss-combat.test.js": "394e6f43f5e876590aaa2a523aeaac6937a711fb7bd5e06dea9a24a0738c7d85",
+      "tests/combat-reconcile.test.js": "68814ff8b408d0f588709f2e8bb30ed1b3bcc89fcf69a6919177ba778eafaa5f",
+      "tests/grab-escape.test.js": "e209d0831344731eba16e09e9803faee6d8756d91b9767ee467074a013978366",
+      "tests/release-v2.test.js": "7892554bcefabc8a21b3f59ecff8c5d2bcbc1d36d00659c6c2b3c7ed650b2324",
+      "tests/helpers/wolf-hunt-fixture.js": "b2c9a972232667bf4cd8d169269d12d61e54ed41ba0002ee83510b81adeeccc1",
+      "tests/helpers/wolf-feral-fixture.js": "1888d353aef2bbb32e98cb3572b9fe48d7475a4eb9e6ff11606ae6672863e4a6"
+    },
+    "output": "combined-regression.txt"
+  },
+  "source": {
+    "id": "wolf-v02-ram-r12",
+    "clipsSha256": "3cc4de84cc719c592da5b6b3b9e17c5b326fe1943fd414018f53d90eabb34633",
+    "originalRig": true,
+    "bones": 28,
+    "activeClips": 19
+  },
+  "runtime": {
+    "phases": [
+      {
+        "id": "ram",
+        "kind": "ram",
+        "contactStart": 2.54,
+        "contactEnd": 2.73,
+        "impact": 2.62,
+        "damage": 40,
+        "contactParts": [
+          "head"
+        ]
+      },
+      {
+        "id": "maul-1",
+        "kind": "maul",
+        "contactStart": 3.64,
+        "contactEnd": 3.7,
+        "impact": 3.65,
+        "damage": 30,
+        "contactParts": [
+          "jaw"
+        ]
+      },
+      {
+        "id": "maul-2",
+        "kind": "maul",
+        "contactStart": 4.19,
+        "contactEnd": 4.25,
+        "impact": 4.2,
+        "damage": 30,
+        "contactParts": [
+          "jaw"
+        ]
+      }
+    ],
+    "min": 25.5,
+    "preferred": 25.5,
+    "max": 25.55,
+    "postRamClock": 2.62
+  },
+  "cases": [
+    {
+      "case": "real-player-preimpact-defenses-and-postcommit-escape",
+      "conditions": 24
+    },
+    {
+      "case": "live-prone-pose-and-each-phase-validation",
+      "conditions": 6
+    },
+    {
+      "case": "ram-specific-real-knockdown-ownership",
+      "conditions": 3
+    },
+    {
+      "case": "pending-phase-lifecycle-cancellation",
+      "conditions": 5
+    },
+    {
+      "case": "actual-warrior-headram-fall-prone-maul-matrix",
+      "conditions": 24
+    },
+    {
+      "case": "phase-deduplication-and-clock-ownership",
+      "conditions": 6
+    },
+    {
+      "case": "bounded-hitch-relative-source-window-and-escape",
+      "conditions": 6
+    },
+    {
+      "case": "ram-rear-critical-snapshot-through-real-fall",
+      "conditions": 6
+    },
+    {
+      "case": "untouched-far-summon-to-coupled-ram-maul",
+      "conditions": 2
+    },
+    {
+      "case": "actual-skeleton-contact-ground-elevation-invariance",
+      "conditions": 12
+    },
+    {
+      "case": "actual-runtime-fixed-anatomy-and-maul-support",
+      "conditions": null,
+      "checks": 13428,
+      "newPoseChecks": 5292,
+      "prefixChecks": 1944,
+      "maxLengthError": 0.000004148509795798283,
+      "maxScaleError": 4.52994904476256e-7,
+      "maxPrefixLengthError": 0.000004541893529108609,
+      "maxPrefixScaleError": 3.5762786865234375e-7,
+      "maxPrefixCarrierSourceError": 6.465564001006997e-19,
+      "prefixCarrierReferenceDeviation": 0.00008350221215946974,
+      "maxRecoveryCarrierSourceError": 9.257639144254436e-17,
+      "maxRecoveryCarrierEndpointError": 0.0000017664565654485033,
+      "scaleTolerance": 0.000001
+    },
+    {
+      "case": "three-pooled-lives-phase-reset-and-cleanup",
+      "conditions": 3
+    }
+  ],
+  "contactRuns": 24,
+  "uniqueContactConditions": 18,
+  "contacts": [
+    {
+      "fps": 30,
+      "speed": 0.5,
+      "distance": 25.5,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 1.3499999682108599,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.166666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.7333333333333354,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 0.5,
+      "distance": 25.5,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 1.3499999682108599,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.166666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.7333333333333354,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 0.5,
+      "distance": 25.55,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 1.3499999682108599,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.166666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.7333333333333354,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 0.5,
+      "distance": 30.55,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 0.0833332935969089,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.166666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.7333333333333354,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 1,
+      "distance": 25.5,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.5166666348775255,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.1,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.6666666666666685,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 1,
+      "distance": 25.5,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.5166666348775255,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.1,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.6666666666666685,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 1,
+      "distance": 25.55,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.5166666348775255,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.1,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.6666666666666685,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 1,
+      "distance": 30.55,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 1.1166666348775258,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.1,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.6666666666666685,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 2,
+      "distance": 25.5,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.08333330154419218,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.633333333333335,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 2,
+      "distance": 25.5,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.08333330154419218,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.633333333333335,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 2,
+      "distance": 25.55,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.08333330154419218,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.633333333333335,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 30,
+      "speed": 2,
+      "distance": 30.55,
+      "circleSeconds": 2.5,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.6833333015441921,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.6533333333333364,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666667,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.2200000000000015,
+          "damage": 30,
+          "nativeFallTime": 1.633333333333335,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 0.5,
+      "distance": 25.5,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.549999999999998,
+          "damage": 40,
+          "nativeFallTime": 1.3499999682108492,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.1500000000000008,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6999999999999988,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 0.5,
+      "distance": 25.5,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.549999999999998,
+          "damage": 40,
+          "nativeFallTime": 1.3499999682108492,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.1500000000000008,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6999999999999988,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 0.5,
+      "distance": 25.55,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.549999999999998,
+          "damage": 40,
+          "nativeFallTime": 1.3499999682108492,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.1500000000000008,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6999999999999988,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 0.5,
+      "distance": 30.55,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.549999999999998,
+          "damage": 40,
+          "nativeFallTime": 0.08333329359689468,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.1500000000000008,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6999999999999988,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 1,
+      "distance": 25.5,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 0.49999996821084897,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.100000000000001,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.649999999999999,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 1,
+      "distance": 25.5,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 0.49999996821084897,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.100000000000001,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.649999999999999,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 1,
+      "distance": 25.55,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 0.49999996821084897,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.100000000000001,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.649999999999999,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 1,
+      "distance": 30.55,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.550000000000001,
+          "damage": 40,
+          "nativeFallTime": 1.09999996821085,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.100000000000001,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.649999999999999,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 2,
+      "distance": 25.5,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.08333330154418239,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666678,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6166666666666658,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 2,
+      "distance": 25.5,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.08333330154418239,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666678,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6166666666666658,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 2,
+      "distance": 25.55,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.08333330154418239,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666678,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6166666666666658,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    },
+    {
+      "fps": 60,
+      "speed": 2,
+      "distance": 30.55,
+      "circleSeconds": 2.5166666666666666,
+      "hits": [
+        {
+          "sourceTime": 2.571317829457364,
+          "damage": 40,
+          "nativeFallTime": 0.6833333015441828,
+          "playerState": "idle",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 3.65333333333333,
+          "damage": 30,
+          "nativeFallTime": 1.0666666666666678,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        },
+        {
+          "sourceTime": 4.203333333333329,
+          "damage": 30,
+          "nativeFallTime": 1.6166666666666658,
+          "playerState": "knockdown",
+          "surfacesIntersect": true
+        }
+      ]
+    }
+  ],
+  "visual": {
+    "scope": "Direct visual inspection of actual game CPU-skinned poses rendered offline in Blender. All six stages from front/side/quarter/opposite inspected in contact sheets, plus four full-size contact/recovery views and two joint closeups. Wolf original colour, player neutral material. No browser automation.",
+    "reviewedAt": "2026-11-13T04:00:34.418Z",
+    "sourceClipSha256": "3cc4de84cc719c592da5b6b3b9e17c5b326fe1943fd414018f53d90eabb34633",
+    "poseInputs": {
+      "wolf-v02-spec.js": "617548aa814ad36e086cd1a0ad9083e8fef2d48ec2b11a49504f6201eb2dec0e",
+      "wolf-v02-encounter.js": "7b730edf169f5d663348f49ea01cbd3831405ac81b3a6d3f04bfb83e603635e2",
+      "wolf-v02-authored-clips.js": "acf77d1f2c6b72a5d29829f61fe3e9a515eaf7d37aab0a030260859ca1cf1922",
+      "wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+      "wolf-v02-ram.js": "297894ee6067005c3986e87faee0607ae56f7f515245f2d7b4b771f985440ecd",
+      "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+      "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+    },
+    "images": [
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/contact-sheet-a.jpg",
+        "sha256": "070792f143ab4f6e384c59b4d2ae769f506e89f63934a490968db67d3d71139d"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/contact-sheet-b.jpg",
+        "sha256": "952b3cb921957fd7fc60d2108301bd7e70cbadd12b9edb602751d7fd2f5fcfac"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/head-ram-side.png",
+        "sha256": "62ba68247812772505b2f862fec9515a96c618e1f2f9ae3a0d4ca521b66293ed"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/ground-bite-1-side.png",
+        "sha256": "53819f88c1cfb2e52330b4a345e71263ba4f99c68f810846bda4e9efebe8b938"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/ground-bite-2-quarter.png",
+        "sha256": "298d9ef3a9babcedb99a1fd55a1bef040de2004a002a07998d7df9e75d735b1b"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-ram-r12/runtime-poses/recover-opposite.png",
+        "sha256": "532c6aa39f7e77dab40a150402c8edd992960817fd09ea8540eccfb67cef19aa"
+      },
+      {
+        "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-forelimbs-matcap.png",
+        "sha256": "6d5c3e5a1816d7d4548673304a59949029c960ab381676c13403e62fd8fcad70"
+      },
+      {
+        "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-hindlimbs-matcap.png",
+        "sha256": "d8ceff2193e470e2592c762acadfc953d78a19e23f65479739d9d19b69f130a8"
+      },
+      {
+        "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-side.png",
+        "sha256": "7531dd14792d36e6793a696381f1a11929f2efa9a0e38237bc1498ec18bf0045"
+      },
+      {
+        "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-recovery-sheet.jpg",
+        "sha256": "b90b2ab2a101c4aadafaeaf7b2ae7f0c7c2916e6c9f3fa577bdcab7504fe3041"
+      }
+    ],
+    "observations": [
+      "Head/fur surface reaches standing native warrior before its existing fall progresses.",
+      "Both lowered jaw poses reach the actual prone torso; head is lowered through supported forelimb crouch, not bone scale.",
+      "Recovery shifts weight to supported diagonal feet and steps back toward original watch posture.",
+      "No new stretched limb shafts, detached paws or body/fur pulled into a limb observed in these views.",
+      "The existing angular elbow collar and overlapping fur remain visible, especially in matcap; this is distinct from fixed rigid-core length/thickness.",
+      "Final authored recovery endpoint was additionally inspected from front/side/quarter in R12-recovery-sheet; it resumes the approved asymmetric WATCH0 stance."
+    ],
+    "limits": [
+      "Offline shading is a neutral original-colour asset review, not the shared cartoon GPU pipeline screenshot. Runtime material/outline/LOD path was not changed.",
+      "Still views and CPU source checks do not certify device FPS, heat, touch feel or every continuous frame; source tempo video and numerical contact/recovery tests supplement them."
+    ]
+  },
+  "poseSources": {
+    "wolf-v02-spec.js": "617548aa814ad36e086cd1a0ad9083e8fef2d48ec2b11a49504f6201eb2dec0e",
+    "wolf-v02-encounter.js": "7b730edf169f5d663348f49ea01cbd3831405ac81b3a6d3f04bfb83e603635e2",
+    "wolf-v02-authored-clips.js": "acf77d1f2c6b72a5d29829f61fe3e9a515eaf7d37aab0a030260859ca1cf1922",
+    "wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+    "wolf-v02-ram.js": "297894ee6067005c3986e87faee0607ae56f7f515245f2d7b4b771f985440ecd",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+  }
+}

@@ -43,7 +43,8 @@
     "wolf-v02-feral-r10": "Sources/actors/tripo-monsters/wolf-v02-feral-r10",
     "wolf-feral-r10-review-reference": "Sources/references/wolf-feral-r10",
     "wolf-v02-predator-r11": "Sources/actors/tripo-monsters/wolf-v02-predator-r11",
-    "wolf-predator-r11-review-reference": "Sources/references/wolf-predator-r11"
+    "wolf-predator-r11-review-reference": "Sources/references/wolf-predator-r11",
+    "wolf-v02-ram-r12": "Sources/actors/tripo-monsters/wolf-v02-ram-r12"
   },
   "inputs": [
     {
@@ -38420,6 +38421,2515 @@
       ],
       "requiredBy": [
         "wolf-predator-r11-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/actions.json",
+      "bytes": 696049,
+      "sha256": "648877b4f497c5742ce68edc58b1927ff419672ae345834a9b4ca02f484fb457",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/audit.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/audit.log",
+      "bytes": 12760,
+      "sha256": "67ff2e46683ab85a204c03f9e0ddf5bbb8b29428b8e4e7977213566fd927ee22",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/AUTHORING_NOTES.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/AUTHORING_NOTES.txt",
+      "bytes": 4709,
+      "sha256": "8434e30717c44c3715204f927803d56e4228ada987b5571877b623ab5bcb9dac",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/blend/wolf-v02-ram-r12.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/blend/wolf-v02-ram-r12.blend",
+      "bytes": 57535580,
+      "sha256": "2b6f53268c37590b43f99bb68588512b596bdd19019464fd8daca3350be1628f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/build.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/build.log",
+      "bytes": 5140,
+      "sha256": "9c5c83680a63d0b98546b7a13e5e8c0bb2819d3ee63b46e3e956828590143cb2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/clips.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/clips.json",
+      "bytes": 1938061,
+      "sha256": "3cc4de84cc719c592da5b6b3b9e17c5b326fe1943fd414018f53d90eabb34633",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/deformation-validation.json",
+      "bytes": 18521,
+      "sha256": "645a6e9447213221db07e8c490687858425955bcd36837a8b317f632f3d82f31",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/encode.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/encode.log",
+      "bytes": 10031,
+      "sha256": "cca4f6dad9519c4aef4e64245179c860131d8ea8a6947874ba6d05f779a08a52",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/manifest.json",
+      "bytes": 7928,
+      "sha256": "3969bb7404d2a0ff0c0bcbe3408e15762558983e47447ee275255dce147cfb1d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/models/wolf-v02-ram-r12.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/models/wolf-v02-ram-r12.glb",
+      "bytes": 376484,
+      "sha256": "4650f39a51be9d4271bd9eb590de8624174c934e423632626a2c4940f9129ed8",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/package-review.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/package-review.log",
+      "bytes": 49,
+      "sha256": "f8d5a066bab6dd447cb195b8739ab0ddd542669a769424be9110416be36964c4",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/package.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/package.log",
+      "bytes": 49,
+      "sha256": "f8d5a066bab6dd447cb195b8739ab0ddd542669a769424be9110416be36964c4",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/playblast.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/playblast.log",
+      "bytes": 30611,
+      "sha256": "9d7dfa4284e88ade106aa4be0b659a26f03771874eecc78d83a6779257abb8ca",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/prefix-runtime-root-comparison.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/prefix-runtime-root-comparison.json",
+      "bytes": 313,
+      "sha256": "8c1589d1a01484b8a10b6ae7b7608cf2b8b47273c22100a9eb5f517b632f276f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/probe.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/probe.log",
+      "bytes": 1734,
+      "sha256": "660b71ba833fba32d58b6538b7bc0ae288a589c45f944974ab2fba317d4e6e80",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/render-recovery-motion.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/render-recovery-motion.log",
+      "bytes": 4873,
+      "sha256": "c44af56aa5e02801d70b63770f8878ca45ee13cc081f0f289adb2a890241f020",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/render-recovery.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/render-recovery.log",
+      "bytes": 1195,
+      "sha256": "20c344be66ed4295ed1ffda532950fb8ff1cafb0f0b2756b744b2d6886f94085",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/000.png",
+      "bytes": 225062,
+      "sha256": "bdabe6b4ce479afbea79d2df057a5d61e241f193dcc0e0dea412aefe94f75bf5",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/003.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/003.png",
+      "bytes": 224912,
+      "sha256": "ba68a2bfe85ba63995838920ed8b21f5d7a8be6d6d5fde807450c11dfd16ac0a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/006.png",
+      "bytes": 224970,
+      "sha256": "d85cb75640c85bf8dcac87b3d5f5a7d1f3487a1f9640934ebf62f9da8f471aae",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/009.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/009.png",
+      "bytes": 225056,
+      "sha256": "98b214d2b6fe25d5db460f38d8dea56bd8bec4649c7dcfb5a8f257a3117323b0",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/012.png",
+      "bytes": 224544,
+      "sha256": "6faf9efaae0e7a17a6d3561e1dd164b96e7486f49c1b7ebd78f50eabc57b54ca",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/015.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/015.png",
+      "bytes": 224191,
+      "sha256": "faab13fd6c7ab9f727dad69cf2be08c4ee088efaec49e2eb748aa99b3aa96219",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/018.png",
+      "bytes": 224398,
+      "sha256": "77c6daa5551760346ba5432cc28a92e1613ba5e1302b3ae9f8cfe54f29fda382",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/021.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/021.png",
+      "bytes": 222746,
+      "sha256": "c26ffb05a8f4f9301eb1dff02021d8d58c453f40e59175cf694e65266583e9a0",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/024.png",
+      "bytes": 225725,
+      "sha256": "fb9cc24812645bd6279e41dd998b192b1a6139de1cb243bfc677b336a99265e8",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/027.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/027.png",
+      "bytes": 226879,
+      "sha256": "f9b4d763694990aaf8e8d7e2cfad6ab81d8cfb8c770b71041a63e5fc51ae8319",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/030.png",
+      "bytes": 227784,
+      "sha256": "81a4d079e50d998d48c7259a3097098d373b0f74ed8c114ab69b1d1d04ef51a5",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/033.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/033.png",
+      "bytes": 227065,
+      "sha256": "c946649d84521ec23f5bc4ad5197fdfbea07009e19f0e4d95fa86ea0011a4c4e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/036.png",
+      "bytes": 226040,
+      "sha256": "0fc12714081a5830919d8c17ad475d8b28cee5103af627544d1dd036a0e17431",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/039.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/039.png",
+      "bytes": 226365,
+      "sha256": "1e708fa885679c6fc6c9298e6653bbea9936b11969e336b5cf09b0d70a17f01f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/042.png",
+      "bytes": 225953,
+      "sha256": "4311691918038c35cae89da959245200705f0540b9ed5b7b11f7de65c4a99b21",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/045.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/045.png",
+      "bytes": 225737,
+      "sha256": "808e94bb8008cbe81b60cd0118705b663092d9943ebcf7c84041f55acc53e718",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/048.png",
+      "bytes": 226057,
+      "sha256": "1c4a18ec47724455967834e53fb9f39f21b73910328c59cdaf45f7ab78726776",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/051.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/051.png",
+      "bytes": 224577,
+      "sha256": "bf2cf39a467bd69a68cfbb9b3b9d28ce5b39719c6be1eb45748682f5980a7a9a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/054.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/054.png",
+      "bytes": 224918,
+      "sha256": "7b232480b91f5e04f05986a105ec55b2107f14ae8d4dff43d812f05bf049559b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/057.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/057.png",
+      "bytes": 227353,
+      "sha256": "60360d74b638f4f433df32e813e81b25219bf5e7f87ae5150259e261c105c0e4",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/060.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/060.png",
+      "bytes": 226578,
+      "sha256": "628ba2616f289163b578d10de1860a06232dda779e80c1d889aeb61ab3c3a505",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/063.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/063.png",
+      "bytes": 224065,
+      "sha256": "5ce354a2378962ab10e5060cf05947c11a4d84d2700a06cbafe5f1d985e79a2d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/066.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/066.png",
+      "bytes": 225135,
+      "sha256": "1b46a0480dc0018cdbd766ca15a595173ab34234ecb71c28dc179c25e88f4238",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/069.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/069.png",
+      "bytes": 225647,
+      "sha256": "3ca7550be692cab67210217553627d0e9536650ad26139b33ee02620655c5ddc",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/072.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/072.png",
+      "bytes": 225511,
+      "sha256": "84e3a835ec927fae3c3b01c470809f8e8c26a8ae122a58d787f6961fe3bffbd0",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/075.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/075.png",
+      "bytes": 224481,
+      "sha256": "29d6f111505b089cbb44b459712fa688ea1e7bf3822929f1c4c3ee6c5d2b0247",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/078.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/078.png",
+      "bytes": 224174,
+      "sha256": "b39f4d27e1a5352603afc61593c293d17ea1a8c91e6d217a32f21eeb7df125fb",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/081.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/081.png",
+      "bytes": 221903,
+      "sha256": "0a2b442bf62409dfb66e08865fa2ab1d98d3672ab859f917ef795d1429c59e4d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/084.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/084.png",
+      "bytes": 219971,
+      "sha256": "ffe16600c64a20ba43cc94a13f304adff2314dcf012d309fc186642b73e3a3d9",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/087.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/087.png",
+      "bytes": 218689,
+      "sha256": "139d05da2d17fb44cebf70d7134e969d468a6f2ef7ff21b2518197e88062ea0b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/090.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/090.png",
+      "bytes": 219003,
+      "sha256": "6512925e710b3e73ac0a5c5b2bb3bce0be481fd8d8f2fa440570702ef9370dd3",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/093.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/093.png",
+      "bytes": 219769,
+      "sha256": "b8a0d4fa75e3e4d48141f7cdcf382f655026e42551290cf3acfc4baeb4f84210",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/096.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/096.png",
+      "bytes": 221044,
+      "sha256": "de3e124a7b07a5e449812b024033a702c049090909f3c09e6e1ea10268328ab6",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/099.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/099.png",
+      "bytes": 222314,
+      "sha256": "e04b82947896e17713e484e60dc6033f7b6d94685e819f150e2ea18170b35527",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/102.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/102.png",
+      "bytes": 226049,
+      "sha256": "089c8c0db4d36e6522212b57537d7ad8300910a824ee7feba95b6b23348ff851",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/105.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/105.png",
+      "bytes": 229617,
+      "sha256": "87190f5fc94f1f7a14171b4beed03b396db787b45eda6df7bd6db17be26265fe",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/108.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/108.png",
+      "bytes": 230037,
+      "sha256": "4c124e02e8f1d7f55f32ffa5fe54fd9bde97b2b0a6156d95b0257b0bb1eb9e0a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/111.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/111.png",
+      "bytes": 229246,
+      "sha256": "4e17b399fb39df8aefe52b4124c8e3a3af1fc8349b1768e7a03fd544db284812",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/114.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/114.png",
+      "bytes": 230076,
+      "sha256": "981eaeb9192414d26ad02ff02d8acbf5230898f3cfd2a231278ee72ecb4cadc7",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/117.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/117.png",
+      "bytes": 231272,
+      "sha256": "e953e299c290c75158e17798684e622cd6cfbf2479ede97c66046302f8c854fa",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/120.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/120.png",
+      "bytes": 230496,
+      "sha256": "83b51d0a6ab1c3b56621fadd441223ec4dc8df039bf6c70c98d4b0137b23c6f8",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/123.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/123.png",
+      "bytes": 230176,
+      "sha256": "a5374873692af7c0a5bb45bd5a44c604244beeee36765e55fa4e42d0ac63b0b1",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/126.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/126.png",
+      "bytes": 229659,
+      "sha256": "c6ed44c1c9eec54c1d2c7ed51542355ae8427802ae8ac7ecb1b5804598311e8f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/129.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/129.png",
+      "bytes": 229811,
+      "sha256": "db3dc035b99e5f7e77cdd01220340e0a80505d2f4f99248c065319ab6beea87e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/132.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/132.png",
+      "bytes": 230336,
+      "sha256": "147b5ca31133078445214378a2ccd4e566b1e2238043cbe4587cc5933ab84638",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/135.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/135.png",
+      "bytes": 230306,
+      "sha256": "6e69bf50c9a8ac6e5c46b2373e1cde3d901e597dc938bf89c20d0e2bfa71c003",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/138.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/138.png",
+      "bytes": 231066,
+      "sha256": "7bee9a2a25a0b0b0fa5ef540820a975c8b09b19a831bc5b4f2b20a05b72f7bea",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/141.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/141.png",
+      "bytes": 230606,
+      "sha256": "8dce2dc7879c6548074e5b22c20512be7e8c2d944c1c4d6b8768204c5b879556",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/144.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/144.png",
+      "bytes": 231153,
+      "sha256": "0a5cff49216bc8ee5330b53d3962ad47387574912eb07b2e0a8f296b582b0c22",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/147.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/147.png",
+      "bytes": 229535,
+      "sha256": "bb5ea2a861040dbb52e040f8f5b1ea1df78f13a834cce5bd692d605fbc0e3f7d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/150.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/150.png",
+      "bytes": 230018,
+      "sha256": "37faa31a62ba99fedf6816907d713bc03e5c7355fc3c984dc7857a1072b79469",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/153.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/153.png",
+      "bytes": 224488,
+      "sha256": "5749192271b6cb00ddf91d1caee72ae199cd65a54542b26107a054f81300af46",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/156.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/156.png",
+      "bytes": 221041,
+      "sha256": "f1b303abe9cfa4dd92308bf418efb99dd73608c91476a650482cd9432667e40a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/159.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/159.png",
+      "bytes": 221602,
+      "sha256": "74de93a873feb841b61410233f1a4207fd1fdccfcc8f87f3276e727eb88f8c1f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/162.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/162.png",
+      "bytes": 222155,
+      "sha256": "02ea74772580f7db70222e9b50d7661fc4969c5cb56d70d2e392a671f267ec5c",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/165.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/165.png",
+      "bytes": 222750,
+      "sha256": "7d5053015925fffd07dc33654209deaaed8817d3a1fb431b97412c68b3708709",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/168.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/168.png",
+      "bytes": 223585,
+      "sha256": "7d4ce035638cc4c4fee79c613c3b6b693a4fd4539861133955131560c768153c",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/171.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/171.png",
+      "bytes": 224371,
+      "sha256": "78a5ee58f184c2ddca951129d1a295413e5abc18f062c2ff12e10395515f015a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/174.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/174.png",
+      "bytes": 225180,
+      "sha256": "4dc2799fc5f6a7faefcb09d24b2d3315292ef8446c13dd6fa47d10ce8ae4ab98",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/177.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/177.png",
+      "bytes": 225651,
+      "sha256": "c6372dd0fa39319590ccb7036eb98154d47ca044aa99a146ade3fdbccf6981af",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/180.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/180.png",
+      "bytes": 225710,
+      "sha256": "4e5349beafdc0f20e50f69d464670be43729951f44fda31e5473708ed6c447ce",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/183.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/183.png",
+      "bytes": 225721,
+      "sha256": "1f38b36dcdae80bbcb735b7d13a07b90c2a6645a813487dca95269c0074f4c36",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/186.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/186.png",
+      "bytes": 225035,
+      "sha256": "fb66d7f0a98558341301d72b0a15390a96e5673420de8a8774ec2cba711fb15d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/189.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/189.png",
+      "bytes": 224709,
+      "sha256": "b6b53612d7f24cc693c5459f48e235459823f333f4b8c7b5906ad3c1eec3f518",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/192.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/192.png",
+      "bytes": 223944,
+      "sha256": "f407a22c0b658eaa263605e3f719eeb40bd6b98de9641e5ae0b341dbfbb08897",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/195.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/195.png",
+      "bytes": 224392,
+      "sha256": "f4151065cbda19202e0050cdd4cc66118ee184f9bbb79eb796d79030bd752562",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/198.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/198.png",
+      "bytes": 223916,
+      "sha256": "7024b80d0e0c210a4b7cbe4b42607c5f6bd7e876f2a4c576c135c17f53c32027",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/201.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/201.png",
+      "bytes": 223958,
+      "sha256": "f0fb4637fac0c32c8d0c27e6c2a0ff08a01c572c46272d6357a526ef34f244b9",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/204.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/204.png",
+      "bytes": 223628,
+      "sha256": "e7bd020cf6359162118caf21cc6a6f21423927201528720ebc833f37f798d03e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/207.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/207.png",
+      "bytes": 223769,
+      "sha256": "bea28c24cad7b62dea636f1e2e3a4be07c1106ef28b605e0ccd9a56c6f9415c4",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/210.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/210.png",
+      "bytes": 223773,
+      "sha256": "13484a1db1aaae9e4d2a51059c3b95ffddb1b22ffb17fcd1514cf448b0ca2b0c",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/213.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/213.png",
+      "bytes": 223427,
+      "sha256": "b974bc271f4c5be826eca604ded329bff80ea7b650a76db44d1799bdc488dcb8",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/216.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/216.png",
+      "bytes": 223395,
+      "sha256": "21b161cf7c60cb0f4af08369e679b30cc8c744dde165660369ac691e8b4ac258",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/219.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/219.png",
+      "bytes": 223386,
+      "sha256": "56444cbd1939c0bbeafbd9e740039725cb18abb9ebf669966bc96eef833df54f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/222.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/222.png",
+      "bytes": 222904,
+      "sha256": "ceb7316ee41bf781b657abf1fc185cc5bc8497b9e6f41753b7676eebaad07bee",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/225.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/225.png",
+      "bytes": 222723,
+      "sha256": "0434bae3632c568a7878ac5ce86e2f264a8dcd234ebc440ec87f2287b13d502c",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/228.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/228.png",
+      "bytes": 222679,
+      "sha256": "87b9377193dfbed9c223bd6f0abc48d39dd226d945919687dbac10174303dcf6",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/231.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/231.png",
+      "bytes": 222578,
+      "sha256": "5cd40af04fcd74f7e7e4959f87ab4849a9dff56d7dab02258cdb037341419f35",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/234.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/234.png",
+      "bytes": 223086,
+      "sha256": "4548e35ad76cb98eb4e9c10b22943a0912c38f3e0453dc529eac48fad1dab998",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/237.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/237.png",
+      "bytes": 223525,
+      "sha256": "834d1442ab614f21a98cb08ed26417678f555fabbc7c2be2f8c2eae1ca594acf",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/240.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/240.png",
+      "bytes": 223087,
+      "sha256": "5513d7b5ce173a43ede084bcbc22fbf4e4081490143ef955ea057ef66d30728a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/243.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/243.png",
+      "bytes": 222774,
+      "sha256": "883705f18b2bb1183a179f779b42b72c07279e02c11246de5a3f0ecae01ac667",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/246.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/246.png",
+      "bytes": 222964,
+      "sha256": "8c77470ad2106e78343eb3b26c654c981b046667d7de520c69b65100d6d62e98",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/249.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/249.png",
+      "bytes": 222894,
+      "sha256": "9ead779f79302fc500c87c6fda613d6154aa55c6bc9b08325559f02cb918fb0d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/252.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/252.png",
+      "bytes": 223369,
+      "sha256": "d3f450bb014268fca40b8a2f2d13b2b460beecd114cdc7ba50830d6ac7100a57",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/255.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/255.png",
+      "bytes": 223522,
+      "sha256": "49dac7d48745c6f9361393aece735fa3c2bba14cec9868e6c2f51a7c72195404",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/258.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/258.png",
+      "bytes": 223485,
+      "sha256": "b5952b7e94028c2b2d92274f1170db067ebe8e2ff5cfd94f09c82139a2dc2b51",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/261.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/261.png",
+      "bytes": 223717,
+      "sha256": "e3a9cf86a6fc34830d5c40d9edf14125918f7ba376a42329e4b9da67326035c2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/264.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/264.png",
+      "bytes": 223542,
+      "sha256": "33c78c16f05c702239c259250ea6b1347b53c2a9e9f3a10d3b662a3d8e72e09e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/267.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/267.png",
+      "bytes": 223131,
+      "sha256": "9fb71cb0ae3b80a7095bd6da19e35e08396bb265c52e3e88d2f8707962465614",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/270.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/270.png",
+      "bytes": 222806,
+      "sha256": "581df6868b9439ed154caf179e75c9c40eb9ab2406fcaee639ad92b33b03127b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/273.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/273.png",
+      "bytes": 223000,
+      "sha256": "7a16b9e7b4331526d523f3d8bc2e7c9f756ed840b72534a57a68220bab3703d2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/276.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/276.png",
+      "bytes": 223413,
+      "sha256": "2d6db07cd7bd808879181d7bb1f0dd873c9901ba7e65982e66e3f690289c6df1",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/279.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/279.png",
+      "bytes": 224191,
+      "sha256": "b778dd6b6c231f72f8df52816e52e47c25aa0e7ca9c164f0cf8b7d5765b242c2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/282.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/282.png",
+      "bytes": 225046,
+      "sha256": "93cf2f0f52a1c9ec268c983f6333e75c64bdd58f3949426ec7ec2a54cefde55b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/285.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/285.png",
+      "bytes": 226317,
+      "sha256": "6f3e1a1bfaeb7040fffe3fe2d80ec7c620cf326df0492d6421f3eb13a607d212",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/288.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/288.png",
+      "bytes": 226902,
+      "sha256": "66d62cefa29f89bb361fbd07cf4288e07bd9b28c280cafd1a61e0f677bb97b99",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/291.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/291.png",
+      "bytes": 228762,
+      "sha256": "4b2541782f557cdc67cb30e83f010aebfddb9279e8fdd918bc23e7ffd6b441fb",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/294.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/294.png",
+      "bytes": 229769,
+      "sha256": "3fca6d31b3879c03887b5237aa2e0042a74604bf43dbbb27b301a904ace0de3d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/297.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/297.png",
+      "bytes": 229262,
+      "sha256": "1eadf224b568168e81b7ca4c8222d3f8f196bc96e84e044bb5b4a3d083579ca3",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/300.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/300.png",
+      "bytes": 229484,
+      "sha256": "4fb9198cfff468283c865648fa458e03d387cf0bd8b940688f877c573cac28cb",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/303.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/303.png",
+      "bytes": 229896,
+      "sha256": "c0a5dd17e41c8f7751c303a01a32dee3dfe5b7cf4b099df899491d467c9e7417",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/306.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/306.png",
+      "bytes": 230034,
+      "sha256": "9c5382a3f314474d67b9b3f07f440d2092a42cfda549e1ebc617b0d5c1535bd3",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/309.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/309.png",
+      "bytes": 230034,
+      "sha256": "1b4ac344d45a3a5eda5d977466f845d06eac098cd3cd9c090a63360b47ae3dd3",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/312.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/frames/312.png",
+      "bytes": 230034,
+      "sha256": "bf5a498260eb7f2eb54134e1fbbc615e7f1502b7b9619012a459fc59dd469379",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/preview-timing.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/preview-timing.json",
+      "bytes": 572,
+      "sha256": "9e77956f8aef9ecbfca2e9c12665919ede35d93f0fee0f2aa543c2f74bbe6cfd",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-slow.gif",
+      "bytes": 8912267,
+      "sha256": "5418cb8838eb6ef9b2cc40cf9af160065c8b404f1fe5264912c319b1caa2fc87",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-source.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-source.ffconcat",
+      "bytes": 5062,
+      "sha256": "b026ec1f05a521a9e6de946c259010c639264a646055df12deb32a8dde32fe40",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-source.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-source.gif",
+      "bytes": 8912267,
+      "sha256": "2ca337912891b63ccfde54dc253eeb1545c847cb4e0fae8f9dea4cb8d9d00773",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-source.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-authored-source.mp4",
+      "bytes": 906916,
+      "sha256": "2b954c126e9b45fd6dc42273e00c73e2b8646102b5ccf1dca500cc118947895a",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-bite1-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-bite1-joint-sheet.jpg",
+      "bytes": 306037,
+      "sha256": "55e401befbf48f51c5f539ef072012784aee2d7c2ddc1e3c028c2f262b05f315",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-bite2-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-bite2-joint-sheet.jpg",
+      "bytes": 306143,
+      "sha256": "5644c8ded1896cb25e5794e5bbe62f5cf2329f5091df7d8064c7ada917a8c6e5",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-charge-ram-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-charge-ram-sheet.jpg",
+      "bytes": 322141,
+      "sha256": "ac969131120875cdd50300460d1d13fca6fa0d1fefc9ce8b08d802974c1714e7",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-default-tempo-preview.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-default-tempo-preview.ffconcat",
+      "bytes": 5062,
+      "sha256": "5b352b3efe847438a302f0a7adfb8a16f09082785ef401af55d923c6c7ead169",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-default-tempo-preview.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-default-tempo-preview.mp4",
+      "bytes": 629739,
+      "sha256": "7c121c8171d6985a5ee4c81b443fe9c027a56019b21b0d47d3a47d0116beae6e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-low-maul-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-low-maul-sheet.jpg",
+      "bytes": 319821,
+      "sha256": "e4cecc767e11995ab9a1ae4fd5569b941895be6ae1362946b882410e08c2ce51",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-ram-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-ram-joint-sheet.jpg",
+      "bytes": 296623,
+      "sha256": "132244d81dcfa589bc30d9a4ec6f93db006bfca236bf059124fa21afd5052df2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-ram-to-maul-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-ram-to-maul-filmstrip.jpg",
+      "bytes": 178774,
+      "sha256": "91e6ee4484ca2b0c05ca2a22e45d68e93d652b0384b0e89fab742bf5831bcee4",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-recovery-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-recovery-sheet.jpg",
+      "bytes": 80842,
+      "sha256": "b90b2ab2a101c4aadafaeaf7b2ae7f0c7c2916e6c9f3fa577bdcab7504fe3041",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/render-cases.json",
+      "bytes": 8226,
+      "sha256": "fcfa7d1df7e9dae99ce77c444cd0c6c54058a8e84bf4513816bc49a2e71c72b1",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-forelimbs-matcap.png",
+      "bytes": 512745,
+      "sha256": "6d5c3e5a1816d7d4548673304a59949029c960ab381676c13403e62fd8fcad70",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-forelimbs-quarter.png",
+      "bytes": 585141,
+      "sha256": "ceff2a42b9ad4428d79ca062f7732874482f3584e0bce05a7333e437328fe0b4",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-front.png",
+      "bytes": 440369,
+      "sha256": "bb119d69a91c222228beec031c9483c409a7ceaaefceef1aede7353f993cfc47",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-hindlimbs-matcap.png",
+      "bytes": 526403,
+      "sha256": "bbf267d97aed39f7a8a7c0b098c1cdee6cf69dc4a96222a87c920fe56c0e0b7e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-hindlimbs-quarter.png",
+      "bytes": 599080,
+      "sha256": "bf1ed4ab52cc37774cdf2f78ba69cedac5ee601cff406c4cf06c96b806d50020",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-muzzle-matcap.png",
+      "bytes": 499584,
+      "sha256": "bbb4c1b45a8216eb5ea80ec46c3cf3debd631689fdf1148d4c4a7c4a7694b2bd",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-muzzle-quarter.png",
+      "bytes": 571988,
+      "sha256": "e338a6fcab42d08a2612653c32447621d8b5a8a8cf9e9eebf14b7e48b3913215",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-quarter.png",
+      "bytes": 477298,
+      "sha256": "9f2e00ec16908d2d76ac3c13e4ea2d1dfd5bf32ee73867aac5c19c5add6e235e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite1-side.png",
+      "bytes": 453112,
+      "sha256": "7531dd14792d36e6793a696381f1a11929f2efa9a0e38237bc1498ec18bf0045",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-forelimbs-matcap.png",
+      "bytes": 512745,
+      "sha256": "52bd2040fede2d75f3b7b24440577387f7e9419aede2eee3e5dbee9278a3207b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-forelimbs-quarter.png",
+      "bytes": 585141,
+      "sha256": "2ac1b5fbebec4af20bd54a73bf124c796ce8a7321d74e74f7ea10dd6fb89cf4c",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-front.png",
+      "bytes": 440501,
+      "sha256": "d311a0a3619315928dd3b7a2abfc02bbea1e7f917557c20a0ebcc84a3350dad0",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-hindlimbs-matcap.png",
+      "bytes": 526403,
+      "sha256": "d8ceff2193e470e2592c762acadfc953d78a19e23f65479739d9d19b69f130a8",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-hindlimbs-quarter.png",
+      "bytes": 599080,
+      "sha256": "3722bfcb35399e029416ec2366db0ad25051914b9489dcb3c3e30dc84515620c",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-muzzle-matcap.png",
+      "bytes": 499584,
+      "sha256": "78b8af74634b2dbbeeea192b293e1d40578f718bb6d65f4cce710846bb10be61",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-muzzle-quarter.png",
+      "bytes": 571988,
+      "sha256": "405861ae90d82d582a86ff334d3166d8f415f85dc12b26f83cf2466cca7e9e2f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-quarter.png",
+      "bytes": 477302,
+      "sha256": "2c3506d1303c092c6d97ad8eba37e0dcbeaccbf6ff8a370d1206d6b7ca68ba9b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-bite2-side.png",
+      "bytes": 453100,
+      "sha256": "86d805a109e0f78061fc34b0dde68654d388aba95228cf4d2da7dd642232f551",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-dodge-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-dodge-front.png",
+      "bytes": 458664,
+      "sha256": "73065df0a32ec827517d3f54190fe68c66a3e1dd40fb865074ca2291f8506bc2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-dodge-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-dodge-quarter.png",
+      "bytes": 483053,
+      "sha256": "e055c70409d4e4f2179a0bedcf48b229656752c37b9c9455bd45e692b29066b1",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-dodge-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-dodge-side.png",
+      "bytes": 454901,
+      "sha256": "28d47187a437edb955b078c2d91c0afef1814bb9abcec3e43a1574925c39b5c3",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-land-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-land-front.png",
+      "bytes": 446118,
+      "sha256": "a2586fffb617739342b659a70f0558c41f458440c6eaf6bb4a7b671140039ba7",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-land-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-land-quarter.png",
+      "bytes": 482546,
+      "sha256": "f313b3125af10de915ad70e28e162cae7c7648fc106e60a19f65bb9a1fc6a50e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-land-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-land-side.png",
+      "bytes": 458439,
+      "sha256": "ea3cab47f872ef9d05e1bd6ce86c43524c372395df7a260ef72c9193d1978255",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-leap-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-leap-front.png",
+      "bytes": 465942,
+      "sha256": "618cf44285e2977b5088f9632b672d8a9e15ddeb5a4977c649a5bbb6fd69e379",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-leap-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-leap-quarter.png",
+      "bytes": 491634,
+      "sha256": "c7db5135a33f54734f84c08448f106f4df934967c28471fa4cc735492e067e5b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-leap-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-leap-side.png",
+      "bytes": 469083,
+      "sha256": "2ced7a6c6c1ac9c30736aa75985186cc9ed7b2ecc1ad513a6e3a8f21c91394a7",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-lower-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-lower-front.png",
+      "bytes": 440846,
+      "sha256": "a755f188b11cae224dac4bffa85d29bb82177bd67a70cc559eda1ad0525d05c3",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-lower-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-lower-quarter.png",
+      "bytes": 478788,
+      "sha256": "bb6aef620e1331002b994610353e7818906965fc336a0b707b0fcf714eb58504",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-lower-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-lower-side.png",
+      "bytes": 452931,
+      "sha256": "22cf34ce1730e81ce0c5974c4416578217769bcfb585bc3605b5e4f6bc6dc8e5",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-forelimbs-matcap.png",
+      "bytes": 516977,
+      "sha256": "a099e49917fa51f75785710bddfd481c1f234e125f27a8ea942fce59f223db72",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-forelimbs-quarter.png",
+      "bytes": 590743,
+      "sha256": "b9a85713235b927fb60d39f9e01fa134e680b92f65c0bcea8d10d7b2a40792d2",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-front.png",
+      "bytes": 438729,
+      "sha256": "689781906b739fa1611b12aa5d493b106bcd87fa8c3712f6560d01d70e13cf36",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-hindlimbs-matcap.png",
+      "bytes": 506023,
+      "sha256": "1b2e19a23b58a8a02b4e0794c10ebfa4d5a7fa361af850597d82216758a3f248",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-hindlimbs-quarter.png",
+      "bytes": 580763,
+      "sha256": "ce15d491107e5cda7dfcabd9a91e200683023dc8e5acbeeea3c4c840e14ef8f1",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-muzzle-matcap.png",
+      "bytes": 491619,
+      "sha256": "7866281152ace2d13603f0723a9119b58fa89e68fe0d4784d731e4c5fc23cc7f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-muzzle-quarter.png",
+      "bytes": 561426,
+      "sha256": "fd8d54612882c49b6ec16fdb95214605eb3e89fbcc2a566aa923fb5066be9f08",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-quarter.png",
+      "bytes": 473545,
+      "sha256": "cb38431924a45624c8372c0f6bbc17a7788caa273fe5acfc4e00dabac134a2ba",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-ram-side.png",
+      "bytes": 446742,
+      "sha256": "3e57b6bb600a95f0e400a1a213700365d1278dcdeae7afbe6e0c98f97a3e8424",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-recover-front.png",
+      "bytes": 458517,
+      "sha256": "10359c619fafdb37b6ddde1d5f111ebec8914cb94fb16e87fdf3d6ae9546c3fa",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-recover-quarter.png",
+      "bytes": 490861,
+      "sha256": "8d8fa2ceeb290f285944c1358c7898af2e45151bf290c88fc0df707b081c701d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-recover-side.png",
+      "bytes": 466374,
+      "sha256": "956007252428673d95eb18393112462c159c0a791dfde0829cbb316f3bbb3f63",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-tug1-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-tug1-front.png",
+      "bytes": 442634,
+      "sha256": "0e2113990b63b5326111a34a78885a10933b1cc2b05cb7397123a4a3ad6a4598",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-tug1-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-tug1-quarter.png",
+      "bytes": 476517,
+      "sha256": "53b98c5ce10ebca80434cfb633834e280cbe7723fe71ff4553cf836392c3bc07",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-tug1-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/Wolf_Ram_Ground_Maul_V02-tug1-side.png",
+      "bytes": 452420,
+      "sha256": "c03a800c791f48215789f53c866e99ff91dfd33ce4d1676f84ff55bbc3c6b509",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review.log",
+      "bytes": 13326,
+      "sha256": "d2a2f752587fa8d2fa55fd8f1c3fe7f0818ef7e283433929f8e8a762670cfe83",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/audit_deformation.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/audit_deformation.py",
+      "bytes": 12744,
+      "sha256": "25cf0b5782ed22ebaa66333962499c7b2ac7be22097d5d6adb965fbef10dbd56",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/build_ram.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/build_ram.py",
+      "bytes": 18758,
+      "sha256": "c56eeddec71549fda06b04f26390db882476bba468b54a7e2f79c8b7c2c4c0a6",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/extract_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/extract_clips.py",
+      "bytes": 7611,
+      "sha256": "5c79b786929a2a762ea34f6e2e16bcfcfc6a5276635243d2e41e225826310e79",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/finalize_manifest.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/finalize_manifest.py",
+      "bytes": 4517,
+      "sha256": "eb05b450c801261e84046030edd19716460d2a524b871e0bc14f716461c8909b",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/package_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/package_review.py",
+      "bytes": 3973,
+      "sha256": "e26b18d3115441736edc0bd4f6f2f8a73a9f28c9a1a03145a244277dddb9cdd1",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/probe_lunge.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/probe_lunge.py",
+      "bytes": 1954,
+      "sha256": "228bce064428a929274292320cf8230f5144742c5500d65dbf79e88ad52fc5e6",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/scripts/render_review.py",
+      "bytes": 7606,
+      "sha256": "afcf4e1a0ae643ef4290d0306a82cedace54c9638b98968bd2edb3599311444e",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/source-lunge-measurements.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/source-lunge-measurements.json",
+      "bytes": 140586,
+      "sha256": "4bfc7f3a05860657a19eb1afbc10a4ddf2256365761a7d6660ddd878dce64820",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/warrior-target-timeline.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/warrior-target-timeline.json",
+      "bytes": 231429,
+      "sha256": "ba9b31d8a317b77fffced94aa59df6a08674ad8a5848591577b0687aa882ba0f",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-recovery-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-ram-r12/review/R12-recovery-filmstrip.jpg",
+      "bytes": 185262,
+      "sha256": "3dc5095f6a7381b7ccb21a49a4d1328ce29ecce606ab63b7763f9950998fb19d",
+      "origins": [
+        "R12 charge/head ram and prone maul animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-ram-r12"
       ],
       "status": "bundled"
     }
