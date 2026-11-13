@@ -436,6 +436,8 @@ export class WolfV02Encounter extends WolfEncounter{
     const captured=!wasCaptured&&this.grab.active;
     const blocked=resolved&&!captured&&!ignoresGuard&&(options.shieldContact||options.action?.state==='shieldPush');
     if(phase&&(options.bodyContact||options.shieldContact))this.v02Ram.resolve(phase,{before,after:this.playerHp,blocked:!!blocked,acceptedKnockdown:phase.config.kind==='ram'&&this.v02RamAcceptedKnockdown,sourceTime});
+    const guardBroken=ignoresGuard&&(options.shieldContact||options.action?.state==='shieldPush')&&this.playerHp<before&&this.v02RamAcceptedKnockdown;
+    if(guardBroken)this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight+.4,0)),'BREAK',false,'guard-break');
     this.v02ImpactOutcome={serial,hit:this.playerHp<before||captured,blocked:!!blocked,captured};
     return resolved;
   }

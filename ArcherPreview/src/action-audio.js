@@ -75,6 +75,7 @@ export class ActionAudio {
     memory.key=key;memory.time=b.time;
   }
   damage(position,damage,heavy=false,kind='enemy',burstIndex=0,critical=false){
+    if(kind==='guard-break')return; // The confirmed hit already plays its impact sound.
     const name=kind==='heal'?'heal_tick':kind==='block'?'block':kind==='evade'?'evade_success':kind==='player'?'player_hit':heavy?'land':'boss_hit';
     if(name)this.audio.play(name,{position,rate:heavy?.8:1});
     if(critical)this.audio.play('critical',{position});

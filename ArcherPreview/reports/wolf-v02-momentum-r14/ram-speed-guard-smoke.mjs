@@ -23,7 +23,9 @@ try{
   if(regular||defense==='dodge'){assert.equal(e.playerHp,hp,name);assert.ok(!a.controller.captured);}
   else{assert.equal(hit,38,name);assert.equal(guardBroken,true,name);assert.ok(hitSpeed>12,name+' speed');assert.ok(e.grab.maulHits>=2,name+' two mauls');}
   if(defense==='hold')assert.ok(guardSeen,name+' real guard');
-  proof.cases.push({name,hz,guardSeen,initialSpeed,peakSpeed,hitSpeed,ramDamage:hit??0,knockdown:guardBroken,mauls:hit===null?0:e.grab.maulHits});
+  const breakNotices=a.damageEvents.filter(event=>event.value==='BREAK'&&event.kind==='guard-break');
+  assert.equal(breakNotices.length,!regular&&['hold','push'].includes(defense)?1:0,name+' confirmed break notice only once');
+  proof.cases.push({name,hz,guardSeen,initialSpeed,peakSpeed,hitSpeed,ramDamage:hit??0,knockdown:guardBroken,mauls:hit===null?0:e.grab.maulHits,breakNotices:breakNotices.length});
   a.f.battle.hide();assert.ok(!a.controller.captured);assert.equal(e.combat.grabOwner,null);assert.equal(a.impactCarrier.position.y,0);
  }
  console.log(JSON.stringify({...proof,resetReleased:true,passed:true}));

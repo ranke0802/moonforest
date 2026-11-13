@@ -80,6 +80,7 @@
 @media(max-height:500px) and (orientation:landscape){.action-controls[data-character="warrior-v2"]{right:calc(clamp(58px,9vw,100px) + env(safe-area-inset-right,0px));bottom:calc(64px + env(safe-area-inset-bottom,0px))}}
 
 .damage-number.evade{color:#c5ecff;font-size:14px;letter-spacing:1px}
+.damage-number.guard-break{color:#ffb168;font-size:clamp(22px,2.4vmin,30px);font-weight:900;letter-spacing:.08em;-webkit-text-stroke:.6px #2a160b;paint-order:stroke fill;text-shadow:0 2px 4px #000,0 0 8px #000}
 .damage-number.critical{color:#ffe58a;font-weight:800}.damage-number.player.critical{color:#ffb39d}
 .damage-number.heal{color:#8df3b1}
 .damage-number.gold{color:#f6d480}
