@@ -1,0 +1,541 @@
+{
+  "version": 1,
+  "release": "moonforest-0.2",
+  "entries": [
+    {
+      "assetId": "boar",
+      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "name": "멧돼지",
+      "category": "monster",
+      "contentHash": "280b64d4f75ee36e4cf5bb9c5156c4696c7f0038720608ada390ad4e6dcee3d6",
+      "runtime": {
+        "manifest": "assets/boar.json",
+        "assetKey": "boar",
+        "model": "assets/content/280b64d4f75ee36e4cf5bb9c5156c4696c7f0038720608ada390ad4e6dcee3d6.gltf"
+      },
+      "geometry": {
+        "triangles": 19006,
+        "uniqueMeshTriangles": 19006,
+        "vertices": 16337,
+        "materials": 1,
+        "textures": 1,
+        "images": 1,
+        "meshes": 1,
+        "renderNodes": 1,
+        "skinned": true,
+        "skins": 1,
+        "bones": 28,
+        "clips": 22,
+        "clipNames": [
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Get_Up_R5",
+          "Hit_Cower_R5",
+          "Knockback_Brace_R5",
+          "Knockdown_Fall_R5",
+          "Pin_Throat_Bite_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Run_Dodge_Lunge_R5",
+          "Wolf_Run_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Orbit_Step_Left_V02",
+          "Wolf_Orbit_Step_V02",
+          "Wolf_Backward_Brace_V02",
+          "Wolf_Predator_Diagonal_Bite_V02",
+          "Wolf_Predator_Reverse_Bite_V02",
+          "Wolf_Staggered_Collapse_V02",
+          "Wolf_Backward_Run_V02",
+          "Wolf_Close_Ram_Ground_Maul_V02",
+          "Wolf_Supported_Get_Up_V02",
+          "Wolf_Airborne_Knockback_Land_V02"
+        ],
+        "clipDurations": {
+          "Alert_Lie_R5": 1.8000000715255737,
+          "Circle_Watch_R5": 43.400001525878906,
+          "Get_Up_R5": 3.1000001430511475,
+          "Hit_Cower_R5": 1.2666666507720947,
+          "Knockback_Brace_R5": 1.5,
+          "Knockdown_Fall_R5": 1.5,
+          "Pin_Throat_Bite_R5": 3.4000000953674316,
+          "Rest_Lie_R5": 6.400000095367432,
+          "Rise_From_Lie_R5": 2.200000047683716,
+          "Run_Dodge_Lunge_R5": 3.1000001430511475,
+          "Wolf_Run_R5": 0.5666666626930237,
+          "Wolf_Walk_R5": 1.0666667222976685,
+          "Wolf_Orbit_Step_Left_V02": 0.9000000357627869,
+          "Wolf_Orbit_Step_V02": 0.9000000357627869,
+          "Wolf_Backward_Brace_V02": 0.9000000357627869,
+          "Wolf_Predator_Diagonal_Bite_V02": 0.800000011920929,
+          "Wolf_Predator_Reverse_Bite_V02": 0.8666666746139526,
+          "Wolf_Staggered_Collapse_V02": 1.649999976158142,
+          "Wolf_Backward_Run_V02": 0.6000000238418579,
+          "Wolf_Close_Ram_Ground_Maul_V02": 3.3333332538604736,
+          "Wolf_Supported_Get_Up_V02": 2.200000047683716,
+          "Wolf_Airborne_Knockback_Land_V02": 1.649999976158142
+        },
+        "morphTargets": 0,
+        "bounds": {
+          "min": [
+            -0.295166015625,
+            0,
+            -0.4913482666015625
+          ],
+          "max": [
+            0.295166015625,
+            0.64825439453125,
+            0.4913482666015625
+          ],
+          "size": [
+            0.59033203125,
+            0.64825439453125,
+            0.982696533203125
+          ]
+        },
+        "lods": []
+      },
+      "bounds": {
+        "size": [
+          0.59033203125,
+          0.64825439453125,
+          0.982696533203125
+        ],
+        "posed": true
+      },
+      "referenceHeight": 1,
+      "units": {
+        "world": "metres",
+        "metersPerSourceUnit": 1.542604274550419
+      },
+      "reviewStatus": "candidate-awaiting-user-review"
+    },
+    {
+      "assetId": "fox",
+      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "name": "여우",
+      "category": "monster",
+      "contentHash": "7f502122f021a253580c2eccfff9d958f149f559a6425149cf467a0da2e97ecf",
+      "runtime": {
+        "manifest": "assets/fox.json",
+        "assetKey": "fox",
+        "model": "assets/content/7f502122f021a253580c2eccfff9d958f149f559a6425149cf467a0da2e97ecf.gltf"
+      },
+      "geometry": {
+        "triangles": 19186,
+        "uniqueMeshTriangles": 19186,
+        "vertices": 13376,
+        "materials": 1,
+        "textures": 1,
+        "images": 1,
+        "meshes": 1,
+        "renderNodes": 1,
+        "skinned": true,
+        "skins": 1,
+        "bones": 28,
+        "clips": 22,
+        "clipNames": [
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Get_Up_R5",
+          "Hit_Cower_R5",
+          "Knockback_Brace_R5",
+          "Knockdown_Fall_R5",
+          "Pin_Throat_Bite_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Run_Dodge_Lunge_R5",
+          "Wolf_Run_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Orbit_Step_Left_V02",
+          "Wolf_Orbit_Step_V02",
+          "Wolf_Backward_Brace_V02",
+          "Wolf_Predator_Diagonal_Bite_V02",
+          "Wolf_Predator_Reverse_Bite_V02",
+          "Wolf_Staggered_Collapse_V02",
+          "Wolf_Backward_Run_V02",
+          "Wolf_Close_Ram_Ground_Maul_V02",
+          "Wolf_Supported_Get_Up_V02",
+          "Wolf_Airborne_Knockback_Land_V02"
+        ],
+        "clipDurations": {
+          "Alert_Lie_R5": 1.8000000715255737,
+          "Circle_Watch_R5": 43.400001525878906,
+          "Get_Up_R5": 3.1000001430511475,
+          "Hit_Cower_R5": 1.2666666507720947,
+          "Knockback_Brace_R5": 1.5,
+          "Knockdown_Fall_R5": 1.5,
+          "Pin_Throat_Bite_R5": 3.4000000953674316,
+          "Rest_Lie_R5": 6.400000095367432,
+          "Rise_From_Lie_R5": 2.200000047683716,
+          "Run_Dodge_Lunge_R5": 3.1000001430511475,
+          "Wolf_Run_R5": 0.5666666626930237,
+          "Wolf_Walk_R5": 1.0666667222976685,
+          "Wolf_Orbit_Step_Left_V02": 0.9000000357627869,
+          "Wolf_Orbit_Step_V02": 0.9000000357627869,
+          "Wolf_Backward_Brace_V02": 0.9000000357627869,
+          "Wolf_Predator_Diagonal_Bite_V02": 0.800000011920929,
+          "Wolf_Predator_Reverse_Bite_V02": 0.8666666746139526,
+          "Wolf_Staggered_Collapse_V02": 1.649999976158142,
+          "Wolf_Backward_Run_V02": 0.6000000238418579,
+          "Wolf_Close_Ram_Ground_Maul_V02": 3.3333332538604736,
+          "Wolf_Supported_Get_Up_V02": 2.200000047683716,
+          "Wolf_Airborne_Knockback_Land_V02": 1.649999976158142
+        },
+        "morphTargets": 0,
+        "bounds": {
+          "min": [
+            -0.21932218968868256,
+            0,
+            -0.4900054931640625
+          ],
+          "max": [
+            0.21932218968868256,
+            0.68524169921875,
+            0.4900054931640625
+          ],
+          "size": [
+            0.4386443793773651,
+            0.68524169921875,
+            0.980010986328125
+          ]
+        },
+        "lods": []
+      },
+      "bounds": {
+        "size": [
+          0.4386443793773651,
+          0.68524169921875,
+          0.980010986328125
+        ],
+        "posed": true
+      },
+      "referenceHeight": 0.7000000000000001,
+      "units": {
+        "world": "metres",
+        "metersPerSourceUnit": 1.0215373652801283
+      },
+      "reviewStatus": "candidate-awaiting-user-review"
+    },
+    {
+      "assetId": "gray-wolf",
+      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "name": "회색 늑대",
+      "category": "monster",
+      "contentHash": "a868ad24abd64cfd8c6d7b5249c93f5a41df8987db755c649cce9f771ab96f05",
+      "runtime": {
+        "manifest": "assets/gray-wolf.json",
+        "assetKey": "gray-wolf",
+        "model": "assets/content/a868ad24abd64cfd8c6d7b5249c93f5a41df8987db755c649cce9f771ab96f05.gltf"
+      },
+      "geometry": {
+        "triangles": 18932,
+        "uniqueMeshTriangles": 18932,
+        "vertices": 15013,
+        "materials": 1,
+        "textures": 1,
+        "images": 1,
+        "meshes": 1,
+        "renderNodes": 1,
+        "skinned": true,
+        "skins": 1,
+        "bones": 28,
+        "clips": 22,
+        "clipNames": [
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Get_Up_R5",
+          "Hit_Cower_R5",
+          "Knockback_Brace_R5",
+          "Knockdown_Fall_R5",
+          "Pin_Throat_Bite_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Run_Dodge_Lunge_R5",
+          "Wolf_Run_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Orbit_Step_Left_V02",
+          "Wolf_Orbit_Step_V02",
+          "Wolf_Backward_Brace_V02",
+          "Wolf_Predator_Diagonal_Bite_V02",
+          "Wolf_Predator_Reverse_Bite_V02",
+          "Wolf_Staggered_Collapse_V02",
+          "Wolf_Backward_Run_V02",
+          "Wolf_Close_Ram_Ground_Maul_V02",
+          "Wolf_Supported_Get_Up_V02",
+          "Wolf_Airborne_Knockback_Land_V02"
+        ],
+        "clipDurations": {
+          "Alert_Lie_R5": 1.8000000715255737,
+          "Circle_Watch_R5": 43.400001525878906,
+          "Get_Up_R5": 3.1000001430511475,
+          "Hit_Cower_R5": 1.2666666507720947,
+          "Knockback_Brace_R5": 1.5,
+          "Knockdown_Fall_R5": 1.5,
+          "Pin_Throat_Bite_R5": 3.4000000953674316,
+          "Rest_Lie_R5": 6.400000095367432,
+          "Rise_From_Lie_R5": 2.200000047683716,
+          "Run_Dodge_Lunge_R5": 3.1000001430511475,
+          "Wolf_Run_R5": 0.5666666626930237,
+          "Wolf_Walk_R5": 1.0666667222976685,
+          "Wolf_Orbit_Step_Left_V02": 0.9000000357627869,
+          "Wolf_Orbit_Step_V02": 0.9000000357627869,
+          "Wolf_Backward_Brace_V02": 0.9000000357627869,
+          "Wolf_Predator_Diagonal_Bite_V02": 0.800000011920929,
+          "Wolf_Predator_Reverse_Bite_V02": 0.8666666746139526,
+          "Wolf_Staggered_Collapse_V02": 1.649999976158142,
+          "Wolf_Backward_Run_V02": 0.6000000238418579,
+          "Wolf_Close_Ram_Ground_Maul_V02": 3.3333332538604736,
+          "Wolf_Supported_Get_Up_V02": 2.200000047683716,
+          "Wolf_Airborne_Knockback_Land_V02": 1.649999976158142
+        },
+        "morphTargets": 0,
+        "bounds": {
+          "min": [
+            -0.20664212107658386,
+            0,
+            -0.490570068359375
+          ],
+          "max": [
+            0.20664212107658386,
+            0.77740478515625,
+            0.490570068359375
+          ],
+          "size": [
+            0.4132842421531677,
+            0.77740478515625,
+            0.98114013671875
+          ]
+        },
+        "lods": []
+      },
+      "bounds": {
+        "size": [
+          0.4132842421531677,
+          0.77740478515625,
+          0.98114013671875
+        ],
+        "posed": true
+      },
+      "referenceHeight": 1.05,
+      "units": {
+        "world": "metres",
+        "metersPerSourceUnit": 1.3506477192431499
+      },
+      "reviewStatus": "candidate-awaiting-user-review"
+    },
+    {
+      "assetId": "stylized-wolf",
+      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "name": "늑대 2",
+      "category": "monster",
+      "contentHash": "8698327f59ab91a06b2907b2fcc0225159a277b87d6015e749c840b19b17f27a",
+      "runtime": {
+        "manifest": "assets/stylized-wolf.json",
+        "assetKey": "stylized-wolf",
+        "model": "assets/content/8698327f59ab91a06b2907b2fcc0225159a277b87d6015e749c840b19b17f27a.gltf"
+      },
+      "geometry": {
+        "triangles": 19716,
+        "uniqueMeshTriangles": 19716,
+        "vertices": 14923,
+        "materials": 1,
+        "textures": 1,
+        "images": 1,
+        "meshes": 1,
+        "renderNodes": 1,
+        "skinned": true,
+        "skins": 1,
+        "bones": 28,
+        "clips": 22,
+        "clipNames": [
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Get_Up_R5",
+          "Hit_Cower_R5",
+          "Knockback_Brace_R5",
+          "Knockdown_Fall_R5",
+          "Pin_Throat_Bite_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Run_Dodge_Lunge_R5",
+          "Wolf_Run_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Orbit_Step_Left_V02",
+          "Wolf_Orbit_Step_V02",
+          "Wolf_Backward_Brace_V02",
+          "Wolf_Predator_Diagonal_Bite_V02",
+          "Wolf_Predator_Reverse_Bite_V02",
+          "Wolf_Staggered_Collapse_V02",
+          "Wolf_Backward_Run_V02",
+          "Wolf_Close_Ram_Ground_Maul_V02",
+          "Wolf_Supported_Get_Up_V02",
+          "Wolf_Airborne_Knockback_Land_V02"
+        ],
+        "clipDurations": {
+          "Alert_Lie_R5": 1.8000000715255737,
+          "Circle_Watch_R5": 43.400001525878906,
+          "Get_Up_R5": 3.1000001430511475,
+          "Hit_Cower_R5": 1.2666666507720947,
+          "Knockback_Brace_R5": 1.5,
+          "Knockdown_Fall_R5": 1.5,
+          "Pin_Throat_Bite_R5": 3.4000000953674316,
+          "Rest_Lie_R5": 6.400000095367432,
+          "Rise_From_Lie_R5": 2.200000047683716,
+          "Run_Dodge_Lunge_R5": 3.1000001430511475,
+          "Wolf_Run_R5": 0.5666666626930237,
+          "Wolf_Walk_R5": 1.0666667222976685,
+          "Wolf_Orbit_Step_Left_V02": 0.9000000357627869,
+          "Wolf_Orbit_Step_V02": 0.9000000357627869,
+          "Wolf_Backward_Brace_V02": 0.9000000357627869,
+          "Wolf_Predator_Diagonal_Bite_V02": 0.800000011920929,
+          "Wolf_Predator_Reverse_Bite_V02": 0.8666666746139526,
+          "Wolf_Staggered_Collapse_V02": 1.649999976158142,
+          "Wolf_Backward_Run_V02": 0.6000000238418579,
+          "Wolf_Close_Ram_Ground_Maul_V02": 3.3333332538604736,
+          "Wolf_Supported_Get_Up_V02": 2.200000047683716,
+          "Wolf_Airborne_Knockback_Land_V02": 1.649999976158142
+        },
+        "morphTargets": 0,
+        "bounds": {
+          "min": [
+            -0.2078094184398651,
+            0,
+            -0.4914703369140625
+          ],
+          "max": [
+            0.2078094184398651,
+            0.78350830078125,
+            0.4914703369140625
+          ],
+          "size": [
+            0.4156188368797302,
+            0.78350830078125,
+            0.982940673828125
+          ]
+        },
+        "lods": []
+      },
+      "bounds": {
+        "size": [
+          0.4156188368797302,
+          0.78350830078125,
+          0.982940673828125
+        ],
+        "posed": true
+      },
+      "referenceHeight": 1.1,
+      "units": {
+        "world": "metres",
+        "metersPerSourceUnit": 1.403941730934019
+      },
+      "reviewStatus": "candidate-awaiting-user-review"
+    },
+    {
+      "assetId": "wolf-3",
+      "version": "Regular quadrupeds R1 · body-fitted alpha motions",
+      "name": "늑대 3",
+      "category": "monster",
+      "contentHash": "9b2a762e8fbe62fc9fe872541b2fdb986d2184e24e9a7e795ca778549bd66eb2",
+      "runtime": {
+        "manifest": "assets/wolf-3.json",
+        "assetKey": "wolf-3",
+        "model": "assets/content/9b2a762e8fbe62fc9fe872541b2fdb986d2184e24e9a7e795ca778549bd66eb2.gltf"
+      },
+      "geometry": {
+        "triangles": 19140,
+        "uniqueMeshTriangles": 19140,
+        "vertices": 14292,
+        "materials": 1,
+        "textures": 1,
+        "images": 1,
+        "meshes": 1,
+        "renderNodes": 1,
+        "skinned": true,
+        "skins": 1,
+        "bones": 28,
+        "clips": 22,
+        "clipNames": [
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Get_Up_R5",
+          "Hit_Cower_R5",
+          "Knockback_Brace_R5",
+          "Knockdown_Fall_R5",
+          "Pin_Throat_Bite_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Run_Dodge_Lunge_R5",
+          "Wolf_Run_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Orbit_Step_Left_V02",
+          "Wolf_Orbit_Step_V02",
+          "Wolf_Backward_Brace_V02",
+          "Wolf_Predator_Diagonal_Bite_V02",
+          "Wolf_Predator_Reverse_Bite_V02",
+          "Wolf_Staggered_Collapse_V02",
+          "Wolf_Backward_Run_V02",
+          "Wolf_Close_Ram_Ground_Maul_V02",
+          "Wolf_Supported_Get_Up_V02",
+          "Wolf_Airborne_Knockback_Land_V02"
+        ],
+        "clipDurations": {
+          "Alert_Lie_R5": 1.8000000715255737,
+          "Circle_Watch_R5": 43.400001525878906,
+          "Get_Up_R5": 3.1000001430511475,
+          "Hit_Cower_R5": 1.2666666507720947,
+          "Knockback_Brace_R5": 1.5,
+          "Knockdown_Fall_R5": 1.5,
+          "Pin_Throat_Bite_R5": 3.4000000953674316,
+          "Rest_Lie_R5": 6.400000095367432,
+          "Rise_From_Lie_R5": 2.200000047683716,
+          "Run_Dodge_Lunge_R5": 3.1000001430511475,
+          "Wolf_Run_R5": 0.5666666626930237,
+          "Wolf_Walk_R5": 1.0666667222976685,
+          "Wolf_Orbit_Step_Left_V02": 0.9000000357627869,
+          "Wolf_Orbit_Step_V02": 0.9000000357627869,
+          "Wolf_Backward_Brace_V02": 0.9000000357627869,
+          "Wolf_Predator_Diagonal_Bite_V02": 0.800000011920929,
+          "Wolf_Predator_Reverse_Bite_V02": 0.8666666746139526,
+          "Wolf_Staggered_Collapse_V02": 1.649999976158142,
+          "Wolf_Backward_Run_V02": 0.6000000238418579,
+          "Wolf_Close_Ram_Ground_Maul_V02": 3.3333332538604736,
+          "Wolf_Supported_Get_Up_V02": 2.200000047683716,
+          "Wolf_Airborne_Knockback_Land_V02": 1.649999976158142
+        },
+        "morphTargets": 0,
+        "bounds": {
+          "min": [
+            -0.1608276069164276,
+            0,
+            -0.49053955078125
+          ],
+          "max": [
+            0.1608276069164276,
+            0.8465576171875,
+            0.49053955078125
+          ],
+          "size": [
+            0.3216552138328552,
+            0.8465576171875,
+            0.9810791015625
+          ]
+        },
+        "lods": []
+      },
+      "bounds": {
+        "size": [
+          0.3216552138328552,
+          0.8465576171875,
+          0.9810791015625
+        ],
+        "posed": true
+      },
+      "referenceHeight": 1.1,
+      "units": {
+        "world": "metres",
+        "metersPerSourceUnit": 1.2993799567411681
+      },
+      "reviewStatus": "candidate-awaiting-user-review"
+    }
+  ]
+}

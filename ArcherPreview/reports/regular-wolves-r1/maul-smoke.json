@@ -1,0 +1,412 @@
+{
+  "scope": "Native controller/actual prone geometry, unguarded first ram and first two low mauls; at most 14 game seconds per form. CPU evidence, not visual or device GPU approval.",
+  "cases": [
+    {
+      "id": "fox",
+      "passed": true,
+      "seconds": 9.466666666666667,
+      "firstRam": {
+        "seconds": 7.799999999999978,
+        "damage": 16,
+        "accepted": true
+      },
+      "mauls": 2,
+      "brace": true,
+      "prone": true,
+      "braceProbe": {
+        "actor": [
+          0.28595977847655724,
+          0,
+          8.149246723897246
+        ],
+        "player": [
+          0.3429111303720779,
+          0,
+          8.577287713210719
+        ],
+        "torso": [
+          [
+            0.33820825815200806,
+            0.27339857816696167,
+            8.581604957580566
+          ],
+          [
+            0.4558286666870117,
+            0.38713282346725464,
+            8.749658584594727
+          ]
+        ],
+        "time": 1.716666666666666,
+        "pad": 0.024500000000000004,
+        "legs": [
+          {
+            "name": "fore.L",
+            "upper": [
+              0.304928183555603,
+              0.20926296710968018,
+              8.38949966430664
+            ],
+            "lower": [
+              0.3674752116203308,
+              0.06923220306634903,
+              8.343568801879883
+            ],
+            "end": [
+              0.24259138107299805,
+              0.024500003084540367,
+              8.195540428161621
+            ],
+            "foot": [
+              0.24259138107299805,
+              0.024500003084540367,
+              8.195540428161621
+            ],
+            "anchor": [
+              0.24259139597415924,
+              0.024500000000000008,
+              8.195540428161621
+            ],
+            "planted": true
+          },
+          {
+            "name": "fore.R",
+            "upper": [
+              0.20337775349617004,
+              0.2087668478488922,
+              8.420711517333984
+            ],
+            "lower": [
+              0.08920896798372269,
+              0.2039196789264679,
+              8.308585166931152
+            ],
+            "end": [
+              0.15746182203292847,
+              0.024500003084540367,
+              8.360156059265137
+            ],
+            "foot": [
+              0.15746182203292847,
+              0.024500003084540367,
+              8.360156059265137
+            ],
+            "anchor": [
+              0.15746182203292847,
+              0.024500000000000004,
+              8.360156059265137
+            ],
+            "planted": true
+          }
+        ],
+        "maxReachError": 0.07464445204586656,
+        "releases": 3
+      },
+      "damage": 40,
+      "ram": {
+        "serial": 7,
+        "active": true,
+        "phase": "maul-2",
+        "stage": "maul",
+        "layerTime": 0.6,
+        "runPhase": 2.3333333333333304,
+        "unwrapped": 4.160942304587591,
+        "speed": 0.2708333333336651,
+        "ramHit": true,
+        "authorized": true,
+        "critical": false,
+        "cancelReason": null,
+        "clearanceLease": true,
+        "chase": {
+          "acceptedClock": 7.799999999999978,
+          "startClock": 7.816666666666644,
+          "progress": 0,
+          "correction": [
+            0,
+            0
+          ],
+          "prone": true
+        },
+        "phases": [
+          {
+            "id": "ram",
+            "serial": "7:ram",
+            "resolved": true,
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994,
+            "blocked": false,
+            "acceptedKnockdown": true
+          },
+          {
+            "id": "maul-1",
+            "serial": "7:maul-1",
+            "resolved": true,
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323,
+            "blocked": false,
+            "acceptedKnockdown": false
+          },
+          {
+            "id": "maul-2",
+            "serial": "7:maul-2",
+            "resolved": true,
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304,
+            "blocked": false,
+            "acceptedKnockdown": false
+          }
+        ]
+      },
+      "contact": {
+        "serial": 7,
+        "phaseSerial": "7:maul-2",
+        "phase": "maul-2",
+        "action": "lunge",
+        "sourceTime": 2.3333333333333304,
+        "part": "jaw",
+        "distance": 0.17561312303099325,
+        "radius": 0.31568038154677097,
+        "bodyRadius": 0.28809887268420753,
+        "prone": true,
+        "body": [
+          [
+            0.33820825815200806,
+            0.27339857816696167,
+            8.581604957580566
+          ],
+          [
+            0.4558286666870117,
+            0.38713282346725464,
+            8.749658584594727
+          ]
+        ],
+        "swept": true,
+        "contact": true
+      },
+      "outcome": {
+        "serial": 7,
+        "hit": true,
+        "blocked": false,
+        "captured": false,
+        "action": "lunge"
+      },
+      "playerState": "knockdown",
+      "playerPosition": [
+        0.3429111303720779,
+        0,
+        8.577287713210719
+      ],
+      "actorPosition": [
+        0.28595977847655724,
+        0,
+        8.149246723897246
+      ]
+    },
+    {
+      "id": "boar",
+      "passed": true,
+      "seconds": 9.716666666666667,
+      "firstRam": {
+        "seconds": 7.899999999999977,
+        "damage": 16,
+        "accepted": true
+      },
+      "mauls": 2,
+      "brace": true,
+      "prone": true,
+      "braceProbe": {
+        "actor": [
+          0.3705060484644658,
+          0,
+          7.935536085594885
+        ],
+        "player": [
+          0.488824337342242,
+          0,
+          8.553634814773227
+        ],
+        "torso": [
+          [
+            0.4841214716434479,
+            0.27339857816696167,
+            8.557951927185059
+          ],
+          [
+            0.6017418503761292,
+            0.38713282346725464,
+            8.726005554199219
+          ]
+        ],
+        "time": 1.716666666666666,
+        "pad": 0.035,
+        "legs": [
+          {
+            "name": "fore.L",
+            "upper": [
+              0.7384737730026245,
+              0.36990827322006226,
+              8.139076232910156
+            ],
+            "lower": [
+              0.7872108817100525,
+              0.1429702490568161,
+              8.05832290649414
+            ],
+            "end": [
+              0.7036702632904053,
+              0.034999702125787735,
+              8.222254753112793
+            ],
+            "foot": [
+              0.7036702632904053,
+              0.034999702125787735,
+              8.222254753112793
+            ],
+            "anchor": [
+              0.7036705017089844,
+              0.035,
+              8.222254753112793
+            ],
+            "planted": true
+          },
+          {
+            "name": "fore.R",
+            "upper": [
+              0.2264571189880371,
+              0.3673582077026367,
+              8.328912734985352
+            ],
+            "lower": [
+              0.17223642766475677,
+              0.1370810866355896,
+              8.39547061920166
+            ],
+            "end": [
+              0.21525412797927856,
+              0.03499985858798027,
+              8.577787399291992
+            ],
+            "foot": [
+              0.21525412797927856,
+              0.03499985858798027,
+              8.577787399291992
+            ],
+            "anchor": [
+              0.21525408327579498,
+              0.035,
+              8.577786445617676
+            ],
+            "planted": true
+          }
+        ],
+        "maxReachError": 0.10435719370555085,
+        "releases": 7
+      },
+      "damage": 40,
+      "ram": {
+        "serial": 7,
+        "active": true,
+        "phase": "maul-2",
+        "stage": "maul",
+        "layerTime": 0.6,
+        "runPhase": 2.3333333333333304,
+        "unwrapped": 2.8703947338239955,
+        "speed": 0.24467159115529202,
+        "ramHit": true,
+        "authorized": true,
+        "critical": false,
+        "cancelReason": null,
+        "clearanceLease": true,
+        "chase": {
+          "acceptedClock": 7.899999999999977,
+          "startClock": 7.916666666666644,
+          "progress": 0,
+          "correction": [
+            0,
+            0
+          ],
+          "prone": true
+        },
+        "phases": [
+          {
+            "id": "ram",
+            "serial": "7:ram",
+            "resolved": true,
+            "hit": true,
+            "damage": 16,
+            "sourceTime": 0.33603281249999994,
+            "blocked": false,
+            "acceptedKnockdown": true
+          },
+          {
+            "id": "maul-1",
+            "serial": "7:maul-1",
+            "resolved": true,
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 1.7833333333333323,
+            "blocked": false,
+            "acceptedKnockdown": false
+          },
+          {
+            "id": "maul-2",
+            "serial": "7:maul-2",
+            "resolved": true,
+            "hit": true,
+            "damage": 12,
+            "sourceTime": 2.3333333333333304,
+            "blocked": false,
+            "acceptedKnockdown": false
+          }
+        ]
+      },
+      "contact": {
+        "serial": 7,
+        "phaseSerial": "7:maul-2",
+        "phase": "maul-2",
+        "action": "lunge",
+        "sourceTime": 2.3333333333333304,
+        "part": "jaw",
+        "distance": 0.30425005717254616,
+        "radius": 0.3297491880970688,
+        "bodyRadius": 0.28809887268420753,
+        "prone": true,
+        "body": [
+          [
+            0.4841214716434479,
+            0.27339857816696167,
+            8.557951927185059
+          ],
+          [
+            0.6017418503761292,
+            0.38713282346725464,
+            8.726005554199219
+          ]
+        ],
+        "swept": true,
+        "contact": true
+      },
+      "outcome": {
+        "serial": 7,
+        "hit": true,
+        "blocked": false,
+        "captured": false,
+        "action": "lunge"
+      },
+      "playerState": "knockdown",
+      "playerPosition": [
+        0.488824337342242,
+        0,
+        8.553634814773227
+      ],
+      "actorPosition": [
+        0.3705060484644658,
+        0,
+        7.935536085594885
+      ]
+    }
+  ],
+  "passed": true
+}

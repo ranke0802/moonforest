@@ -1,3 +1,5 @@
+import {RegularWolfEncounter} from './regular-wolf-encounter.js';
+import {bearEncounterSize} from './bear-size.js';
 import {WolfEncounter} from './wolf-encounter.js';
 import {WolfV02Encounter} from './wolf-v02-encounter.js';
 import {Vector3} from '@babylonjs/core';
@@ -14,7 +16,7 @@ import {ACTOR_DEFINITIONS,getActorDefinition,validateActorSpawn} from './actor-d
 const encounters={wolf:WolfEncounter,bear:BossEncounter,goblin:GoblinEncounter,elena:ElenaEncounter,mourning:MourningElenaEncounter,npc:GoblinEncounter};
 const positionOf=value=>value instanceof Vector3?value.clone():new Vector3(value.x,value.y??0,value.z);
 function registeredProfile(definition){
-  const reference=Object.values(ACTOR_DEFINITIONS).find(value=>value.encounterType===definition.encounterType);
+  const reference=ACTOR_DEFINITIONS[definition.actorDefinitionId]??Object.values(ACTOR_DEFINITIONS).find(value=>value.encounterType===definition.encounterType);
   if(!reference)throw new Error('Unsupported actor encounter: '+definition.encounterType);
   const movement=definition.movement??reference.movement;
   if(Object.keys(movement).length!==Object.keys(reference.movement).length||Object.keys(reference.movement).some(key=>movement[key]!==reference.movement[key]))
@@ -74,7 +76,8 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
   function create(definition,context={}){
     if(disposed)throw bossPreparationCancelled();
     if(typeof definition==='string')definition=getActorDefinition(definition);
-    const Encounter=definition.encounterType==='wolf'&&world.release==='moonforest-0.2'?WolfV02Encounter:encounters[definition.encounterType];if(!Encounter)throw new Error('Unsupported actor encounter: '+definition.encounterType);
+    if(definition.encounterType==='regular-wolf'&&world.release!=='moonforest-0.2')throw new Error('Regular wolves require MoonForest 0.2');
+    const Encounter=definition.encounterType==='regular-wolf'?RegularWolfEncounter:definition.encounterType==='wolf'&&world.release==='moonforest-0.2'?WolfV02Encounter:encounters[definition.encounterType];if(!Encounter)throw new Error('Unsupported actor encounter: '+definition.encounterType);
     const profile=registeredProfile(definition);
     const entry=entryFor(definition),mapId=world.mapId,current=context.isCurrent??(()=>true),id='development-actor-'+(++serial),ownedAssets=new Set();
     entry.references++;
@@ -82,7 +85,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
     const valid=()=>!retired&&!disposed&&world.scene===scene&&world.mapId===mapId&&!scene.isDisposed&&current();
     const check=()=>{if(!valid())throw bossPreparationCancelled();};
     const encounter=new Encounter(world,value=>battle.bossChanged?.(value),battle.onDamage??(()=>{}),(...args)=>battle.playerHit?.(...args),{
-      combat:battle.combat,
+      combat:battle.combat,...(definition.encounterType==='regular-wolf'?{regularWolfId:definition.variant}:{}),
       loadAsset:async()=>{
         check();await entry.library.load();check();
         if(entry.library.config.version!==definition.assetVersion)throw new Error('Actor asset version differs from its definition: '+definition.actorDefinitionId);
@@ -101,7 +104,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
     });
     const createBrain=encounter.createBrain.bind(encounter);
     encounter.createBrain=durations=>{const brain=createBrain(durations);if(definition.category!=='npc')brain.hp=brain.maxHp=profile.hp;return brain;};
-    function applyCollider(){for(const key of ['radius','stopDistance','separationRadius'])encounter[key]=profile.collider[key];}
+    function applyCollider(){for(const key of ['radius','stopDistance','separationRadius'])encounter[key]=profile.collider[key]*(definition.encounterType==='bear'?(encounter.bearSize?.sizeScale??1):1);}
     applyCollider();
     encounter.id=id;encounter.actorDefinitionId=definition.actorDefinitionId;encounter.retainAnimatorForPool=true;encounter.developmentActor=true;
     if(definition.category!=='npc'){
@@ -167,7 +170,8 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         preparation??=createBossPreparation({isCurrent:valid});
         const player=value.player??getPlayer();if(!player)throw new Error('Actor activation needs the current player');
         const position=value.position?positionOf(value.position):player.position.add(new Vector3(0,0,4));
-        const spawn=validateActorSpawn(definition,world,{position,player,occupied:value.occupied??[]});
+        const bearSize=definition.encounterType==='bear'?bearEncounterSize(world):null,spawnDefinition=bearSize?{...definition,collider:{...profile.collider,radius:profile.collider.radius*bearSize.sizeScale},spawn:{...definition.spawn,safeDistance:definition.spawn.safeDistance*bearSize.sizeScale}}:definition;
+        const spawn=validateActorSpawn(spawnDefinition,world,{position,player,occupied:value.occupied??[]});
         if(!spawn.valid)throw new Error('Unsafe actor spawn: '+spawn.reason);
         applyCollider();resetTransient();rewardGranted=false;spawnContext=value;
         await encounter.summon(player,{position,rotationY:value.rotationY,preparation,reuseAnimator:true});

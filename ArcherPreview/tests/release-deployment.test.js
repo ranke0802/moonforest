@@ -45,6 +45,23 @@ test('additive sync rejects changing a 0.1 path before writing any new file',asy
   await assert.rejects(syncMoonforestV2({...f,repository:f.root,writeReport:false}),/0.1 deployment path would change/);assert.equal(await readFile(join(f.site,'index.html'),'utf8'),'preserved 0.1 entry');await assert.rejects(readFile(join(f.site,'moonforest-0.2.html')),error=>error.code==='ENOENT');
  }finally{await f.cleanup();}
 });
+
+test('new actor content is explicit, hash-addressed and published without changing the 0.1 cache index',async()=>{
+ const f=await fixture();try{
+  const bytes=Buffer.from('new fitted actor'),path='assets/content/'+sha256(bytes)+'.bin',item=f.descriptor(path,bytes);
+  await mkdir(join(f.dist,'assets/content'),{recursive:true});await writeFile(join(f.dist,path),bytes);
+  f.manifest.files.push(item);f.manifest.bytes+=bytes.length;
+  await writeFile(join(f.dist,RELEASE_V2_MANIFEST),JSON.stringify(f.manifest));
+  await assert.rejects(syncMoonforestV2({...f,repository:f.root,writeReport:false}),/declared additions/);
+  f.manifest.additiveContent=[item];await writeFile(join(f.dist,RELEASE_V2_MANIFEST),JSON.stringify(f.manifest));
+  await syncMoonforestV2({...f,repository:f.root,writeReport:false});
+  const reviewed=await reviewedDeploymentUnion(f.site,{requireResourceIndex:true});assert.ok(reviewed.entries.some(row=>row.path===path));
+  const output=join(f.root,'published');await stagePages(f.root,output,{requireResourceIndex:true});assert.deepEqual(await readFile(join(output,'ArcherPreviewSite',path)),bytes);
+  for(const original of f.baselineFiles)assert.equal(sha256(await readFile(join(f.site,original.path))),original.sha256);
+  f.manifest.additiveContent=[{...item,sha256:'f'.repeat(64)}];await writeFile(join(f.site,RELEASE_V2_MANIFEST),JSON.stringify(f.manifest));
+  await assert.rejects(reviewedDeploymentUnion(f.site),/Invalid additive content descriptor/);
+ }finally{await f.cleanup();}
+});
 test('Pages rejects conflicting release graphs and changes to the frozen deployment inventory',async()=>{
  const f=await fixture();try{
   await syncMoonforestV2({...f,repository:f.root,writeReport:false});

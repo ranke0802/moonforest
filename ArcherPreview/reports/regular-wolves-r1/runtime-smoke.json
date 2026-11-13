@@ -1,0 +1,106 @@
+{
+  "scope": "Native CPU warrior, shared encounter/sampler and fitted model contact smoke; device GPU and visual approval are not measured.",
+  "cases": [
+    {
+      "id": "gray-wolf",
+      "height": 1.05,
+      "clips": 22,
+      "bite": {
+        "damage": 23,
+        "part": "head",
+        "sourceTime": 0.3037037037037037,
+        "actualDistance": 0.6453468726842075
+      },
+      "regularRamBlocked": true,
+      "breakNotices": 0,
+      "fallTravel": 0.45996895023970286,
+      "reusedAnimator": true,
+      "independentSkeletons": true,
+      "sharedGeometry": true,
+      "sharedMaterial": true,
+      "sharedProfile": true,
+      "modelLoads": 1
+    },
+    {
+      "id": "stylized-wolf",
+      "height": 1.1,
+      "clips": 22,
+      "bite": {
+        "damage": 23,
+        "part": "head",
+        "sourceTime": 0.3037037037037037,
+        "actualDistance": 0.6615388726842074
+      },
+      "regularRamBlocked": true,
+      "breakNotices": 0,
+      "fallTravel": 0.47899707331232033,
+      "reusedAnimator": true,
+      "independentSkeletons": true,
+      "sharedGeometry": true,
+      "sharedMaterial": true,
+      "sharedProfile": true,
+      "modelLoads": 1
+    },
+    {
+      "id": "wolf-3",
+      "height": 1.1,
+      "clips": 22,
+      "bite": {
+        "damage": 23,
+        "part": "head",
+        "sourceTime": 0.3037037037037037,
+        "actualDistance": 0.6156308935812971
+      },
+      "regularRamBlocked": true,
+      "breakNotices": 0,
+      "fallTravel": 0.44248195935319146,
+      "reusedAnimator": true,
+      "independentSkeletons": true,
+      "sharedGeometry": true,
+      "sharedMaterial": true,
+      "sharedProfile": true,
+      "modelLoads": 1
+    },
+    {
+      "id": "fox",
+      "height": 0.7000000000000001,
+      "clips": 22,
+      "bite": {
+        "damage": 23,
+        "part": "head",
+        "sourceTime": 0.3037037037037037,
+        "actualDistance": 0.5748775117908258
+      },
+      "regularRamBlocked": true,
+      "breakNotices": 0,
+      "fallTravel": 0.34748984836198726,
+      "reusedAnimator": true,
+      "independentSkeletons": true,
+      "sharedGeometry": true,
+      "sharedMaterial": true,
+      "sharedProfile": true,
+      "modelLoads": 1
+    },
+    {
+      "id": "boar",
+      "height": 1,
+      "clips": 22,
+      "bite": {
+        "damage": 23,
+        "part": "head",
+        "sourceTime": 0.3037037037037037,
+        "actualDistance": 0.8709140501627878
+      },
+      "regularRamBlocked": true,
+      "breakNotices": 0,
+      "fallTravel": 0.5261758059298325,
+      "reusedAnimator": true,
+      "independentSkeletons": true,
+      "sharedGeometry": true,
+      "sharedMaterial": true,
+      "sharedProfile": true,
+      "modelLoads": 1
+    }
+  ],
+  "passed": true
+}

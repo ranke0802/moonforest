@@ -17,7 +17,7 @@ export async function prepareWolfV02Telegraph(e,preparation){
  let profiles=cache.get(key);
  if(!profiles){
   profiles=new Map();const inverse=e.actor.getWorldMatrix().clone().invert(),point=new Vector3();
-  for(const action of WOLF_V02_ACTIONS){
+  for(const action of Object.values(e.runtimeProfile?.actions??WOLF_V02_ACTIONS)){
    const clip=e.config.catalog.find(clip=>clip.name===action.sourceClip);if(!clip)continue;
    await preparation.step('wolf-contact-preview-'+action.id,()=>{
     const phases=[];
@@ -25,7 +25,7 @@ export async function prepareWolfV02Telegraph(e,preparation){
      const samples=[];
      for(const time of [phase.contactStart,phase.impact,phase.contactEnd]){
       e.animator.transition(action.sourceClip,{clipTime:time,actionId:-1,blendDuration:0});e.animator.update(0);WolfEncounter.prototype.alignPose.call(e);
-      for(const name of phase.contactParts??action.contactParts){const shape=wolfContactShape(name,phase.kind);Vector3.TransformCoordinatesToRef(shape.offset,e.nodes[name].getWorldMatrix(),point);Vector3.TransformCoordinatesToRef(point,inverse,point);samples.push({name,time,point:point.asArray(),radius:shape.radius});}
+      for(const name of phase.contactParts??action.contactParts){const shape=e.contactShape(name,phase.kind);Vector3.TransformCoordinatesToRef(shape.offset,e.nodes[name].getWorldMatrix(),point);Vector3.TransformCoordinatesToRef(point,inverse,point);samples.push({name,time,point:point.asArray(),radius:shape.radius});}
      }
      phases.push({id:phase.id,kind:phase.kind??'strike',start:phase.contactStart,end:phase.contactEnd,samples});
     }

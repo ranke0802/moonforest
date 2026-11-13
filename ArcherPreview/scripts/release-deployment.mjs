@@ -22,6 +22,23 @@ export function assertDescriptor(bytes,item){
  if(!item||!Number.isSafeInteger(item.bytes)||item.bytes<0||!/^[a-f0-9]{64}$/.test(item.sha256)||bytes.length!==item.bytes||sha256(bytes)!==item.sha256)throw new Error('Deployment file differs from reviewed build: '+item?.path);
 }
 
+// 0.2 may append content-addressed actors without rewriting 0.1's cache index.
+// Every addition is explicitly reviewed and must match both its file descriptor
+// and hash filename. The original graph and its bundle set remain mandatory.
+export function assertDeploymentContentGraph(manifest,index){
+ const files=new Map(manifest.files.map(item=>[item.path,item])),expected=new Set(Object.keys(index.files).map(name=>'assets/content/'+name));
+ const additions=manifest.additiveContent??[];
+ if(!Array.isArray(additions)||additions.length&&manifest.release!==RELEASE_V2)throw new Error('Invalid additive content inventory');
+ for(const item of additions){
+  const actual=files.get(item.path);
+  if(!/^assets\/content\/[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/.test(item.path)||item.path.split('/').at(-1).slice(0,64)!==item.sha256||!actual||actual.sha256!==item.sha256||actual.bytes!==item.bytes||expected.has(item.path))throw new Error('Invalid additive content descriptor: '+item.path);
+  expected.add(item.path);
+ }
+ if([...files.keys()].filter(path=>path.startsWith('assets/content/')).some(path=>!expected.delete(path))||expected.size)throw new Error('Deployment content differs from the live resource index or declared additions');
+ const packs=new Set(index.bundles.map(pack=>'assets/'+pack.url));
+ if([...packs].some(path=>!files.has(path))||[...files.keys()].some(path=>path.startsWith('assets/bundles/')&&!packs.has(path)))throw new Error('Deployment bundle missing or obsolete');
+}
+
 // Each release retains its complete reviewed graph. The final site is their
 // union, with one physical copy of each shared content-addressed resource.
 export async function reviewedDeploymentUnion(site,{requireResourceIndex=false}={}){
@@ -56,10 +73,7 @@ export async function reviewedDeploymentUnion(site,{requireResourceIndex=false}=
    if(!unique.has('assets/resource-index.json'))throw new Error('Resource version index missing from deployment');
    const index=JSON.parse(await readFile(resolve(site,'assets/resource-index.json'),'utf8'));
    if(index.revision!==manifest.resourceRevision)throw new Error('Deployment resource revision mismatch');
-   const expected=new Set(Object.keys(index.files).map(name=>'assets/content/'+name));
-   if([...unique].filter(path=>path.startsWith('assets/content/')).some(path=>!expected.delete(path))||expected.size)throw new Error('Deployment content differs from the live resource index');
-   const packPaths=new Set(index.bundles.map(pack=>'assets/'+pack.url));
-   if(index.bundles.some(pack=>!unique.has('assets/'+pack.url))||[...unique].some(path=>path.startsWith('assets/bundles/')&&!packPaths.has(path)))throw new Error('Deployment bundle missing or obsolete');
+   assertDeploymentContentGraph(manifest,index);
    if(!verifiedGraphs.has(index.revision)){await verifyResourceBundles(site,index,{verifyFiles:false});verifiedGraphs.add(index.revision);}
   }
  }

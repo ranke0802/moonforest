@@ -35,8 +35,8 @@ export const WOLF_V02_HURT_VOLUMES=Object.freeze([
 ]);
 
 export class WolfV02HurtVolumes{
- constructor(nodes,scale){
-  this.bindings=WOLF_V02_HURT_VOLUMES.filter(fit=>nodes[fit.node]).map(fit=>({
+ constructor(nodes,scale,fits=WOLF_V02_HURT_VOLUMES){
+  this.bindings=fits.filter(fit=>nodes[fit.node]).map(fit=>({
    node:nodes[fit.node],a:Vector3.FromArray(fit.a),b:Vector3.FromArray(fit.b),
    volume:{name:fit.name,points:[[0,0,0],[0,0,0]],radius:fit.radius*scale},
   }));

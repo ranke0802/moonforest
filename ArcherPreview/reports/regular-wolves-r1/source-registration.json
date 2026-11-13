@@ -1,0 +1,3015 @@
+{
+  "sourceId": "regular-wolves-r1",
+  "directories": {
+    "regular-wolves-r1": "Sources/actors/tripo-monsters/regular-wolves-r1",
+    "regular-quadrupeds-r1": "Sources/actors/tripo-monsters/regular-quadrupeds-r1",
+    "regular-quadruped-textures-r1": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1",
+    "tripo-monsters-2026-11-11-v2": "Sources/actors/tripo-monsters/2026-11-11-v2"
+  },
+  "registered": [
+    "Sources/actors/tripo-monsters/2026-11-11-v2/originals/gray-wolf.glb",
+    "Sources/actors/tripo-monsters/2026-11-11-v2/originals/stylized-wolf.glb",
+    "Sources/actors/tripo-monsters/2026-11-11-v2/originals/wolf-3.glb",
+    "Sources/actors/tripo-monsters/2026-11-11-v2/originals/fox.glb",
+    "Sources/actors/tripo-monsters/2026-11-11-v2/originals/boar.glb",
+    "Sources/actors/tripo-monsters/2026-11-11-v2/manifest.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/alpha-structure.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/anatomy.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/binding.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/blend/gray-wolf-rig-r1.blend",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/contact-retarget.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/deformation-validation.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/fitted-weights.npz",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/manifest.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/models/gray-wolf-rig-r1.glb",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/runtime-manifest.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/README.txt",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/render-cases.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/audit_sources.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/build_rigs.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/debug_binding.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/fit_contacts.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/inspect_sources.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/refine_weights.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/render_review.py",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/source-inspection.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/anatomy.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/binding.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/blend/stylized-wolf-rig-r1.blend",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/contact-retarget.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/deformation-validation.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/fitted-weights.npz",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/manifest.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/models/stylized-wolf-rig-r1.glb",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/runtime-manifest.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/validation.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/anatomy.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/binding.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/blend/wolf-3-rig-r1.blend",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/contact-retarget.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/deformation-validation.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/fitted-weights.npz",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/manifest.json",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/models/wolf-3-rig-r1.glb",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-front.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-quarter.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-side.png",
+    "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/runtime-manifest.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/anatomy.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/binding.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/blend/boar-rig-r1.blend",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/contact-retarget.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/fitted-weights.npz",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/manifest.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/models/boar-rig-r1.glb",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/original-anatomy.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/runtime-manifest.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/validation.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/anatomy.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/binding.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/blend/fox-rig-r1.blend",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/contact-retarget.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/fitted-weights.npz",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/manifest.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/models/fox-rig-r1.glb",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/original-anatomy.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-front.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-quarter.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-side.png",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/runtime-manifest.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/validation.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/render-cases.json",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/build_rigs.py",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/finalize_profiles.py",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/fit_contacts.py",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/inspect_originals.py",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/refine_weights.py",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/render_review.py",
+    "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/validate_rigs.mjs",
+    "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/boar.ktx2",
+    "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/fox.ktx2",
+    "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/gray-wolf.ktx2",
+    "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/manifest.json",
+    "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/stylized-wolf.ktx2",
+    "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/wolf-3.ktx2"
+  ],
+  "inputs": [
+    {
+      "id": "file:Sources/actors/tripo-monsters/2026-11-11-v2/originals/gray-wolf.glb",
+      "path": "Sources/actors/tripo-monsters/2026-11-11-v2/originals/gray-wolf.glb",
+      "bytes": 2581476,
+      "sha256": "8b59a65740b1253961a7661cc73ef817901ec0b11399a44abc9ece9682428552",
+      "origins": [
+        "Tripo download: gray wolf 3d model.glb"
+      ],
+      "requiredBy": [
+        "monster-model-review",
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/2026-11-11-v2/originals/stylized-wolf.glb",
+      "path": "Sources/actors/tripo-monsters/2026-11-11-v2/originals/stylized-wolf.glb",
+      "bytes": 2600128,
+      "sha256": "6dd82aac12c3a6570f282447286f83bcac03dc5aebd1b8ecefcf90fc695fc512",
+      "origins": [
+        "Tripo download: stylized wolf 3d model.glb"
+      ],
+      "requiredBy": [
+        "monster-model-review",
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/2026-11-11-v2/originals/wolf-3.glb",
+      "path": "Sources/actors/tripo-monsters/2026-11-11-v2/originals/wolf-3.glb",
+      "bytes": 2469040,
+      "sha256": "00905aee3af6fc78b91885d4eb9930eadbf04a9412f52501c69202e979b2e2b3",
+      "origins": [
+        "Tripo download: wolf 3d model (1).glb"
+      ],
+      "requiredBy": [
+        "monster-model-review",
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/2026-11-11-v2/originals/fox.glb",
+      "path": "Sources/actors/tripo-monsters/2026-11-11-v2/originals/fox.glb",
+      "bytes": 2650516,
+      "sha256": "f6c0819afed32ec5abeb92be6a75537b8481802f014412f8577af79a8a64e78a",
+      "origins": [
+        "Tripo download: fox 3d model.glb"
+      ],
+      "requiredBy": [
+        "monster-model-review",
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/2026-11-11-v2/originals/boar.glb",
+      "path": "Sources/actors/tripo-monsters/2026-11-11-v2/originals/boar.glb",
+      "bytes": 2326252,
+      "sha256": "4c86dbaed6e465ac3724939526453f93354e70f4c52e73b3154d3de93564b73a",
+      "origins": [
+        "Tripo download: wild boar 3d model.glb"
+      ],
+      "requiredBy": [
+        "monster-model-review",
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/2026-11-11-v2/manifest.json",
+      "path": "Sources/actors/tripo-monsters/2026-11-11-v2/manifest.json",
+      "bytes": 12010,
+      "sha256": "71dc07a650debdd964689abd27e5116699c6526d2e53bb6b5498f011a551bdb6",
+      "origins": [
+        "monster-review-prepare.mjs"
+      ],
+      "requiredBy": [
+        "monster-model-review",
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/alpha-structure.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/alpha-structure.json",
+      "bytes": 12116,
+      "sha256": "2881d4b7aee2ef9d8babb72ecb1e4ace5a7cd02cdac2b0b2768474ebbbcf2d56",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/anatomy.json",
+      "bytes": 332803,
+      "sha256": "ec93ac43eff0e3ff884d9a1e78c80d337f97f2d7be1d60ff537de68614c13557",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/binding.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/binding.json",
+      "bytes": 17810,
+      "sha256": "5c046d81fc0f0fad612edc4d0957b5f8fb8dc9cd4452fd449c1bfd1f099a2dd0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/blend/gray-wolf-rig-r1.blend",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/blend/gray-wolf-rig-r1.blend",
+      "bytes": 40808613,
+      "sha256": "3bb6c1530a279f62455b40cec4698fee3752590c3e6ba0812b4ad4542f533340",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/contact-retarget.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/contact-retarget.json",
+      "bytes": 6381,
+      "sha256": "4dfd2e14e2205b0e2b68e6ba472709543379ba03b60b645300a1568844f79be7",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/deformation-validation.json",
+      "bytes": 3358,
+      "sha256": "5fcab2c5b7fbd9c22210abc9d8f0ff6469be846d74ef711f32a77e30f7cebec7",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/fitted-weights.npz",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/fitted-weights.npz",
+      "bytes": 165566,
+      "sha256": "73f3417038bff1392135ee38d42641234c6be3442d3eb7cb6473db78f0d7268a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/manifest.json",
+      "bytes": 1119,
+      "sha256": "fafb08c1d0d03ec25664e1516264df8c6f9714e49933efa7a4abd5e774d3dbbc",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/models/gray-wolf-rig-r1.glb",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/models/gray-wolf-rig-r1.glb",
+      "bytes": 7051940,
+      "sha256": "119523c4192a7bf2241b72d7fe1809a6f6ebef9980900f6469cd5d9ea6ed3504",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-front.png",
+      "bytes": 415134,
+      "sha256": "431c0c4651e5b8ebb612205da3bcbb8fe4421bec1c9a09b3136d0323e6624218",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-quarter.png",
+      "bytes": 435441,
+      "sha256": "2d6268c87107de8ed7deea1313089d4a65a6c921d56fb919b0f6e90232efcd15",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/bite-side.png",
+      "bytes": 453235,
+      "sha256": "e3e8b8bad3d1771b859b997cf70b8a8fe8dac91dc2f011dc35caccb2437b7f47",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-front.png",
+      "bytes": 393876,
+      "sha256": "cb5322e06f74d1d395be6f4b6d12788616f15777603d995e200fa1eddfde29a7",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-quarter.png",
+      "bytes": 402175,
+      "sha256": "215a0d1cc574b0d9324405b306913427a4cb2031a8071f1d0ec870bec4313aa1",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/collapse-side.png",
+      "bytes": 403141,
+      "sha256": "e25f6bd8e579db08de7fb342280afbb500b5ffab247949c28d434c7ed784e58d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-front.png",
+      "bytes": 419714,
+      "sha256": "0fff5d02583830026dfa6ffb2503323fff786ea79ebc0df96150f7d9d7bca29b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-quarter.png",
+      "bytes": 445090,
+      "sha256": "8067db5821d8545ac3ca7cd50bef8580e4cc8c8cdeed376f4a0e3c89d58151a0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/getup-side.png",
+      "bytes": 449908,
+      "sha256": "ba5c7c5b4bc2c26cc87a8c0ffe703d83600dc7362e700c3802c7605d358e9459",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-front.png",
+      "bytes": 392470,
+      "sha256": "d8f9ea79ffabc147c2d42f2a6607e9b4902de12954863f33a9691abbb8e27d90",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-quarter.png",
+      "bytes": 408079,
+      "sha256": "d4a125d15b6c593102fe443ba3e2e0dcebec6e670f0d226333fc791e05d0b33a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/lie-side.png",
+      "bytes": 414447,
+      "sha256": "408e38b71a0d15ddc555e6e66a55c55444cba5ac152ddc0cd925addaa97a00bc",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-front.png",
+      "bytes": 418196,
+      "sha256": "7cf222fbbf41e3557330cf40819ce92b8b572665f8e557cab7a215bfec949de4",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-quarter.png",
+      "bytes": 440263,
+      "sha256": "4d657ebd3922f8b6dac62014553925660b143864ac04ae814c983af20c58ac01",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/maul-side.png",
+      "bytes": 448346,
+      "sha256": "71ee7cfa8e9d2c2f687395314827bd7214f443e1eea8f9f782322e04fdccf407",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-front.png",
+      "bytes": 439374,
+      "sha256": "c37732197fc3c0c229861d7568ea6eae89a68e1796b1c4f94b650d13638540f8",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-quarter.png",
+      "bytes": 452960,
+      "sha256": "9758af3e7837549466f262f9d129750c9a8225e20038e2ef647c2bc273b0c9db",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/original-side.png",
+      "bytes": 467419,
+      "sha256": "a004916595c454f20cdc71bee23c1ad8937d2fa30f8d65c6ab20b610cc5f6dfc",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-front.png",
+      "bytes": 422723,
+      "sha256": "ab0ee5c21f1d685acb107dcfaa300819ec09470835ccfa6c30b7117c55e03e38",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-quarter.png",
+      "bytes": 437779,
+      "sha256": "c592120556224644b1b7c4121da64204a9a91a014e2f627e3ba45d87845024fd",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/run-side.png",
+      "bytes": 456129,
+      "sha256": "b4e481729c7c5c33e33104737d372133139fa2529e8af98b91515256236c1ada",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-front.png",
+      "bytes": 450384,
+      "sha256": "7353d2dd82d5b1e1e47480373332dab88a2e44253cbdaa89e296e9cd52d46592",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-quarter.png",
+      "bytes": 459396,
+      "sha256": "44a7c9160a1f8c0b597efa04b17c598e166a8a3f1c9ec7f158af7518be935fd4",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/stand-side.png",
+      "bytes": 453904,
+      "sha256": "c6a9b2f5dadbdff86419bb21135979129c4a75d42f15ae3848db757618e7cd90",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-front.png",
+      "bytes": 430681,
+      "sha256": "565634b932ff226b17f4696f81df852e9142b203c0b8291775e364bcc7a6d026",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-quarter.png",
+      "bytes": 440887,
+      "sha256": "621e39efae340934fb5029be9f313da3baaa0b0a72ad1574418e7ab571e08e9b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/review/walk-side.png",
+      "bytes": 456645,
+      "sha256": "9c5e4c6e128886187d1f6124864a0c662d489309cb6fecbeb4a3d0a8302d5977",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/runtime-manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/gray-wolf/runtime-manifest.json",
+      "bytes": 467136,
+      "sha256": "2c933f8cd648690415137dbba99bb6ed7977bef5d4cb9f508ed184bf5f09f3e5",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/README.txt",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/README.txt",
+      "bytes": 2513,
+      "sha256": "7298e1af28e68ff60bf8fafe1376e7e9bb184e39488ada00026ce3aa16030dd0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/render-cases.json",
+      "bytes": 15214,
+      "sha256": "0e83aeeb7dc9fde067735e5dd248dd185552e094142144c8a57b58fe7262d3b0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/audit_sources.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/audit_sources.py",
+      "bytes": 5116,
+      "sha256": "bda96a70f20c09b8c2a00b817b1b957830c646e1989ee1241727660ee1d2bd25",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/build_rigs.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/build_rigs.py",
+      "bytes": 16783,
+      "sha256": "ccd0b063c646e6a1644b0e68d7a5504c2c81fd441e9cd6320bac6f52fc12253c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/debug_binding.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/debug_binding.py",
+      "bytes": 1295,
+      "sha256": "8301661d2c78faec49c9268e876e0df61309dafcc843b1cf873afde298b434fd",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/fit_contacts.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/fit_contacts.py",
+      "bytes": 6931,
+      "sha256": "33b279a68b249ba7bccffef21837686f19ddbee1ef33e415b5e3d2c17819d689",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/inspect_sources.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/inspect_sources.py",
+      "bytes": 2658,
+      "sha256": "6a946b1e28cf48db413087ccbac247d8730f9be9d44b83ca4d44891cd0968d85",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/refine_weights.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/refine_weights.py",
+      "bytes": 5647,
+      "sha256": "d82922198e4c45fe7bbaa9bf769f6553108e56996c660f908c1a4052bda2926b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/scripts/render_review.py",
+      "bytes": 3774,
+      "sha256": "acba70f6ef6f21ee34b3a4ea0c0a7929796dde05555fe339ea5fc05c565ed32e",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/source-inspection.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/source-inspection.json",
+      "bytes": 1160,
+      "sha256": "53643d9c43397d731e2098f8d2df2342e925b505dd4d618044c577f1fb565f70",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/anatomy.json",
+      "bytes": 336117,
+      "sha256": "d686f11a7d3e13f7275f6fcd6073b29e6cb44d5db5f2ff0b56ab12032247baf5",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/binding.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/binding.json",
+      "bytes": 20727,
+      "sha256": "2e9997acef41434770c4e905a56e455aba0335cba1780cecbd7cf79caf6bc058",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/blend/stylized-wolf-rig-r1.blend",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/blend/stylized-wolf-rig-r1.blend",
+      "bytes": 40881025,
+      "sha256": "f197258412449d1908889a5085ed141c4cc8318de15ffbebab5eb879d081ede2",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/contact-retarget.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/contact-retarget.json",
+      "bytes": 6072,
+      "sha256": "901255536d23a7c9617663d80e29d6641b33113af9db40d3851fb3728e5f65cf",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/deformation-validation.json",
+      "bytes": 3366,
+      "sha256": "a9fe9b591277873c3e2ac390317b912084c2aa4b791643f2755f63f9c1eb6e45",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/fitted-weights.npz",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/fitted-weights.npz",
+      "bytes": 168068,
+      "sha256": "5ebfc2d30a8d011577eaf98813fcdd62e969cc221915f0f92a3b9ad2bbb315f6",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/manifest.json",
+      "bytes": 1133,
+      "sha256": "bee60776bc8d8b4e7ddfe05c12d7bff2adc180775e2046210d78a6b65bdef8eb",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/models/stylized-wolf-rig-r1.glb",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/models/stylized-wolf-rig-r1.glb",
+      "bytes": 7068432,
+      "sha256": "4605a7d16c50be921596733dc49ff70c14faa2bdb0f177da9cf2c6e0a1f86aea",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-front.png",
+      "bytes": 424852,
+      "sha256": "95a96110c37b060c841745d47f299d0fb28b4e83278c7681788d04ed2cf2c8dd",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-quarter.png",
+      "bytes": 452481,
+      "sha256": "dd398e84f88505600a4632d75fc818ab1d70f72c52e9fbe43fe8a65d54e9dcb1",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/bite-side.png",
+      "bytes": 475271,
+      "sha256": "8537c3168883650e8428a5b546e4582b0f17716bb72d4fd3b983b9a1554592dc",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-front.png",
+      "bytes": 399116,
+      "sha256": "6a02d5ae748553d7ddff9925aba397b6a179787e8ccb05a421a1510f36837392",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-quarter.png",
+      "bytes": 409817,
+      "sha256": "80100dd3bc00e0dcfa9c4ee5f1fd9ff889f6c850c00fdfb20dd3dc235162b142",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/collapse-side.png",
+      "bytes": 411637,
+      "sha256": "38e4cb6c8d0d51fbddbc357e069a3abab99d6289fe32676d95b04b124290ef3c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-front.png",
+      "bytes": 429358,
+      "sha256": "334096a80ce7d66496e78ab91157203f41499e02844e3a6886700f42c1fedf95",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-quarter.png",
+      "bytes": 465597,
+      "sha256": "360fe172c554ab190eec437a87bb9687785d721348e5430821abf5198393365c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/getup-side.png",
+      "bytes": 471472,
+      "sha256": "8412d8cab0f39f2112e037e6f2037edde68558190de395b6234145f460768a10",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-front.png",
+      "bytes": 400862,
+      "sha256": "5f1caed0f4a520f5c5b59b23b7b55868ca4f98c848930d0a425760a761c3ba8b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-quarter.png",
+      "bytes": 418426,
+      "sha256": "52c139bdf437bf4846caa3a285464c0d2000bc663ed72d15dd0b1c493fa32467",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/lie-side.png",
+      "bytes": 425653,
+      "sha256": "86651b1230a8c56a7890951bb4b2a6189768a407c1acfd248afa9ef37ed67e65",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-front.png",
+      "bytes": 429689,
+      "sha256": "8b4c24874326f8cc1cf3aeee700e6a08d22d9e123c89fc24bb1f26e9d9f40c8b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-quarter.png",
+      "bytes": 460262,
+      "sha256": "2b5a8239d4afebf738cc96ebb132f6997a11ab47922ae546d860d45db77e4936",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/maul-side.png",
+      "bytes": 472119,
+      "sha256": "594cd1d1e7c1d0cc3360650ce489c4d378f0142c9d59134936ed10b9e3800461",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-front.png",
+      "bytes": 451959,
+      "sha256": "62748972a1fcb95ba5d4cbbd38476b4f6f04b700161e3ba03ae40249eed2ad7d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-quarter.png",
+      "bytes": 471511,
+      "sha256": "e43c1ff95d77f445443bdc22da2a78a4c37c3f56be3e94ecfb862ffe18683972",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/original-side.png",
+      "bytes": 491085,
+      "sha256": "fe50b0458e4366ca08b0f2e4b0103346c822ec2be7f330556f3940394b9593a4",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-front.png",
+      "bytes": 436939,
+      "sha256": "fccb0167f51512ed6b59678ff67ecb7b7f31e5b84d3d73c2288af1c6e8522f34",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-quarter.png",
+      "bytes": 457788,
+      "sha256": "e1b55bb4607a6d6d6a4cacea1fbb1a773e7f509308e2d75557ab19cf8ba1a645",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/run-side.png",
+      "bytes": 472776,
+      "sha256": "787fff6b73d321e33a9254bdbaa8973df0fd3b8f9e372f74035a103d0d741e91",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-front.png",
+      "bytes": 471732,
+      "sha256": "d15ea69b34bbfa011482f94fcc96b4524b47442d5f4cd17fdd6cd823bcde1e31",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-quarter.png",
+      "bytes": 483214,
+      "sha256": "e54a7607969fb7b3d333b57d2d00e3d9f93fe9d870d334b68cb2afc339fe64ad",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/stand-side.png",
+      "bytes": 474115,
+      "sha256": "156a75d3b68e22ad273232242d1795cf71e77471bdb5a3c80a1dc9df78b30a1b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-front.png",
+      "bytes": 442192,
+      "sha256": "e594e105bfc0b9276cc555d6bb4d49f3c6b37149a5fe64484fc6bb4779a34316",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-quarter.png",
+      "bytes": 456939,
+      "sha256": "ab8bb15685c9189e0a770fb869abee338d96c34d3a071c74c4d2cc84e18f5eef",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/review/walk-side.png",
+      "bytes": 474278,
+      "sha256": "b3d31165b045f0608495477d52b6d3c73795f6267ddb93eb1e1e0bafa4f25914",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/runtime-manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/stylized-wolf/runtime-manifest.json",
+      "bytes": 466734,
+      "sha256": "0ddc9009aa121a16b02dd24e1ffd091c05fe2ad38a698a175bbfce7d4cb4f92f",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/validation.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/validation.json",
+      "bytes": 10686,
+      "sha256": "7b6ae1a156c96d952b85c8bb30b711877ce2a6ed7bcfcee98ac3cf8d1d7ec136",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/anatomy.json",
+      "bytes": 334795,
+      "sha256": "67378165b561b4c3565ba57c969d822c7b615aa6aab1450990e630fa2f2bb70a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/binding.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/binding.json",
+      "bytes": 22248,
+      "sha256": "92e336ca595d87317b4903ae0492a7aaa5eda294f5db9894b52c81c8a7d94859",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/blend/wolf-3-rig-r1.blend",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/blend/wolf-3-rig-r1.blend",
+      "bytes": 40663552,
+      "sha256": "f8af9c2f8a36016e6bb97ddfcead3cbf6869f11cb79e22665eda8328012cf904",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/contact-retarget.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/contact-retarget.json",
+      "bytes": 6415,
+      "sha256": "b27612213e3cd5ab95689da6e126b06754aa5ee082003aef7fa5b96afbec280e",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/deformation-validation.json",
+      "bytes": 3356,
+      "sha256": "7c0304996fea03aca86a334e215430cc378e67a42463c5df3e2011e2e7f58ae6",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/fitted-weights.npz",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/fitted-weights.npz",
+      "bytes": 153340,
+      "sha256": "dbbfe1915aafd3bfe45338c51d1a2a027654af1815e739f6be96f220974665bd",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/manifest.json",
+      "bytes": 1106,
+      "sha256": "8a8732cc3761acb191c547a5f70fe25894e5b6f5d89a51e8555cf661ad3f9e58",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/models/wolf-3-rig-r1.glb",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/models/wolf-3-rig-r1.glb",
+      "bytes": 6922228,
+      "sha256": "7df9bfeefc22468cab94173cef5db5f4ec7d217df112498bb340187d25c4182c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-front.png",
+      "bytes": 414287,
+      "sha256": "ab546ab97061d5009be45915a57cddf0fca11429190901497babfe869b0804b9",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-quarter.png",
+      "bytes": 445024,
+      "sha256": "632c902db344f7621973450c66569e074d035a181338435faf3addd432cdba21",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/bite-side.png",
+      "bytes": 464120,
+      "sha256": "9c8274e1e8050ccf2dc7961cf56db1a884f14c4b82ba381573ffe278c8f520f7",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-front.png",
+      "bytes": 394704,
+      "sha256": "a41a0e17accb013a0e99b1bac4b71661abdaf6454007ee3cfbf0624df1cf56ce",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-quarter.png",
+      "bytes": 407311,
+      "sha256": "e349c0f95a1b94b57882305b7ae8d758cb06e519a5001f5fb2d977fdb96346c4",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/collapse-side.png",
+      "bytes": 409642,
+      "sha256": "4de67cfdfbb07988384d7fdee69d333af631d8f1b4121d5ff9244b2ab803ecf5",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-front.png",
+      "bytes": 425334,
+      "sha256": "1b553d4e5de9dc55d1a31abb9618aebcd3460a3b6bebe1bc1157be8140a01011",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-quarter.png",
+      "bytes": 453904,
+      "sha256": "bed93bf3eef9e228443c8e2936f7e29ef354039c275b4a1f16427cad6b0bcce0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/getup-side.png",
+      "bytes": 459109,
+      "sha256": "9882be3f4af4b1d8598b771cbd126b63b89ae9add065f71689deba15f549ecef",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-front.png",
+      "bytes": 398474,
+      "sha256": "ac741f7ddf6dd6648268b24035456df78589f27b98f7d9ede8477fae8ccaf926",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-quarter.png",
+      "bytes": 411761,
+      "sha256": "77f75c402a99210d6f427ada0adabb90b1f0b2f4e97836943d17fd6e938c9054",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/lie-side.png",
+      "bytes": 417249,
+      "sha256": "47c5e18d6dd39fe5da37d9507bf9698537a7c8ada4742f499c9328b615c20e18",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-front.png",
+      "bytes": 420681,
+      "sha256": "9bdbfb080fb3aa757e5ca8037b5ab84123cd32fc83454fff931312707d0a7903",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-quarter.png",
+      "bytes": 448597,
+      "sha256": "22efdf81945f9a76a6f097ebb168a6c49609c0d7e21b9a57a14331704496e84c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/maul-side.png",
+      "bytes": 457538,
+      "sha256": "6bdeefb57599f7dfd4ee7558251eb2183783f522b3d66ceef39b21a15c5cb1cc",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-front.png",
+      "bytes": 438507,
+      "sha256": "702c5f6e1567fdace2ab645686e41aac20e6ffdb4db3362a05d94a4ecd8694b5",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-quarter.png",
+      "bytes": 461229,
+      "sha256": "f5bab3f01263ad3945cd1e0b8bf59da5e9adc937e4faeb465961c6fcd5c7de25",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/original-side.png",
+      "bytes": 480281,
+      "sha256": "87a1313146f08e306605c57d2087f2272514c651b837cf28452091cf5b8fac85",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-front.png",
+      "bytes": 428943,
+      "sha256": "d5512b883f4eaa65eae90637efa5982a9db0836b78bc9d6b149eded02581d3c6",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-quarter.png",
+      "bytes": 447115,
+      "sha256": "a1a4b3026705823f6fcac2df8f5fe29bfabb5825eedf2d893bb3403aaea04e3d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/run-side.png",
+      "bytes": 468746,
+      "sha256": "d211c1c0a4d0b05e46b247cbc6564761c02db4db9b9668d5111b1ea4258c999b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-front.png",
+      "bytes": 463031,
+      "sha256": "a9329a6a6dd7fb5dee6394b863e05e5e391c525037acbc9b69c9f08f1322b548",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-quarter.png",
+      "bytes": 471255,
+      "sha256": "5f2559bf8dfe6b3e8e65965c029d01c4c42bab8c2c3be50c12858099c8aed09d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/stand-side.png",
+      "bytes": 463338,
+      "sha256": "3ca1d8bcbe6b7921fa20c0211aa3027ade0d5845d660b0658a9948b7b2f961ed",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-front.png",
+      "bytes": 431470,
+      "sha256": "9a3b390ae929800a183933ca22d0e46010881c4c25f0b6eb37b5eafb95c5ce97",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-quarter.png",
+      "bytes": 448960,
+      "sha256": "6440501f0d2072740acac3c3316e6796bc2d3fa731de388777d5d2309aebd0c2",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/review/walk-side.png",
+      "bytes": 468279,
+      "sha256": "d9b03009ddea61c18c998cc2370f0b79e6abe8da4e0e78ad367cffc0c040042e",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/runtime-manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-wolves-r1/wolf-3/runtime-manifest.json",
+      "bytes": 466921,
+      "sha256": "96073dcc01eda39807ad75d5da0cb1093442f2b9a5517e15b3492ebe01a70238",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/anatomy.json",
+      "bytes": 336786,
+      "sha256": "ca09cafbc4fb172f549bc25c8ec4eff43fba2acc4e4b18ed43f288c5a73298e5",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/binding.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/binding.json",
+      "bytes": 1253,
+      "sha256": "11f6fe7231c0fb09bc3687b831f26c19ab9309e3bd3309caa62a0b8d106cf92c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/blend/boar-rig-r1.blend",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/blend/boar-rig-r1.blend",
+      "bytes": 40567224,
+      "sha256": "722b539aa767c882cec1c1a0859d18d5aaaa8b97ef39b226f57e5d29dc4c047d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/contact-retarget.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/contact-retarget.json",
+      "bytes": 6188,
+      "sha256": "050ea4291496f2d2aad41dd089e6933ac2e03c675faa732a9f6b859ce497c076",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/fitted-weights.npz",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/fitted-weights.npz",
+      "bytes": 136345,
+      "sha256": "2ca65cc6d26512bc1b9805d3acd99187a563dc2eb275e9ece3083061abd191ca",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/manifest.json",
+      "bytes": 1097,
+      "sha256": "8f44df3b17e70fa9409ce764204d1bbb84f2d214c1bdc53b3e839af0ba1b0cb2",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/models/boar-rig-r1.glb",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/models/boar-rig-r1.glb",
+      "bytes": 6828464,
+      "sha256": "94305479ccb9cb7ce23713a7f3183f294069f0229a72808589fddda808aa115c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/original-anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/original-anatomy.json",
+      "bytes": 5675,
+      "sha256": "92891860a24f58dd1a2b15b9ebcc639f6119fe86037dddae8f285b597f5253ae",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-front.png",
+      "bytes": 431177,
+      "sha256": "5520f878161c232cd524c14da6993bb11a1df8032f85801396a3d7d11a60b1de",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-quarter.png",
+      "bytes": 440208,
+      "sha256": "85fd5c2bb3b95604263e94ea5885019dcddd854eaeaeb700090a8e032e328882",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/bite-side.png",
+      "bytes": 450907,
+      "sha256": "627cff272c984b71113884b6018efd3595a91d6cfa5e22f5ea20fcd13ae32e08",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-front.png",
+      "bytes": 425789,
+      "sha256": "0cddba4b691b4d04c2cf8ffa70527b622eb412ac8cc35a1d96313a63ca25d264",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-quarter.png",
+      "bytes": 439787,
+      "sha256": "f29b427c7c11b00cf4d53b060ed992059a6fec2d58b4fcfe49e2c1e8902f5e40",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/collapse-side.png",
+      "bytes": 451091,
+      "sha256": "203baffe90e95a8303d5a9a49b92b719cb590323acd2ed754aa0f152597f3f23",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-front.png",
+      "bytes": 430082,
+      "sha256": "3e1bb70545fe3aeac9ac3526389d810df46ae24394b048f8a36da9f32bb7c687",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-quarter.png",
+      "bytes": 441178,
+      "sha256": "88a36f9db55d7d2b01a0e07cb31b01fde1b32d6738824667a3f6817da37cb148",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/getup-side.png",
+      "bytes": 447627,
+      "sha256": "e4244559ba94e1cb4334138389effe662190be1c575e73d53b8482edea26f882",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-front.png",
+      "bytes": 430751,
+      "sha256": "574768ddcdf0c43295c9f0d88b616c29d95738fd685694b6d01e0c1891b07d46",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-quarter.png",
+      "bytes": 439881,
+      "sha256": "e12f7173b36ef3adcaa09302e2560111411fc791c3ccd6f76c4c4e16a03c33e8",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/lie-side.png",
+      "bytes": 441221,
+      "sha256": "ba10e4d9ad0a66c7184f29ffb2ed19dff9d1156ab131ad695a9c2a31e262b3ff",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-front.png",
+      "bytes": 434838,
+      "sha256": "6e75fb530c8c7a8d075b778176ae9f09f4c3c283c27865c77ba9aacff5c9c0a1",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-quarter.png",
+      "bytes": 445300,
+      "sha256": "34a9846880e66c3242e827fa1e30e313ed2b6aa99ba68c7c52e69df096c03489",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/maul-side.png",
+      "bytes": 450213,
+      "sha256": "bd6725c0268df5732e024c76663ec3816db87b101307d277c3bff95de3bf565a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-front.png",
+      "bytes": 560393,
+      "sha256": "a19edce32a87468bc663279ed86f6efde42aa52fd81a6b2779102b3ce05d1f0a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-quarter.png",
+      "bytes": 571966,
+      "sha256": "911760976ed7794bf3e3125469a4a1c4fbc085a1a23a4dfaac50475d9246f672",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/original-side.png",
+      "bytes": 573993,
+      "sha256": "9b033f8949a3afdd40763bc7397b54b52269e3e0ac63a235504f8fe97fe8c394",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-front.png",
+      "bytes": 432673,
+      "sha256": "836937e7274c63773547d44ab832cfa5a037d3777b76301ec2e388490d01cecb",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-quarter.png",
+      "bytes": 440371,
+      "sha256": "89fa6d25249cbcda180c13156c0973bed186535c3ac401f2cc655fcf797e2b10",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/run-side.png",
+      "bytes": 442479,
+      "sha256": "dbea616da49de014aaf08997e8894f643f9dd7d2af1e1e220a426027c6384e94",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-front.png",
+      "bytes": 446612,
+      "sha256": "b78fc660b760db929c33e7799ae90bc9269c262fb01c8f5631cbfd6856818dc1",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-quarter.png",
+      "bytes": 452285,
+      "sha256": "1df340a9ba906766a0ca260ca94070248064dfe35d761198e1c1e8ca254b6c2c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/stand-side.png",
+      "bytes": 437629,
+      "sha256": "0f76fb4b585f25343cef6cde9a50d7e105458847c76a2cd1b4b7cb70c2e00e5f",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-front.png",
+      "bytes": 433201,
+      "sha256": "50220d8522df4c08a9747d72aac8b0dac24a7a3ed9a255084a35b8331b825890",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-quarter.png",
+      "bytes": 442382,
+      "sha256": "1acd1a8c37dd852ad9b51b9ccf83a3f8d3c5b88ae9bba6ead9a93b07d818c741",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/review/walk-side.png",
+      "bytes": 450242,
+      "sha256": "1c79193f92b7d667655db2972dc15741485adbcd7230c1313109f90d8d01df2d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/runtime-manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/runtime-manifest.json",
+      "bytes": 467592,
+      "sha256": "a86c152811a6daaa5a5d115f8a0b57b23c455504b9331f58281731820067c65b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/validation.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/validation.json",
+      "bytes": 777,
+      "sha256": "ebcd30779e0c4c42d1a6c2df8377f3a544bef9d93e8e34b3c1b28a7ae9274c40",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/anatomy.json",
+      "bytes": 335476,
+      "sha256": "85f374ffc407113ea17b25c06c32285ca4a7a1a1113921b5a4965d60267e614c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/binding.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/binding.json",
+      "bytes": 6365,
+      "sha256": "14ebf9dce7339b99adac8dbcece982b8e78b7a0fbd1d5435ef625ccff4988618",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/blend/fox-rig-r1.blend",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/blend/fox-rig-r1.blend",
+      "bytes": 40776017,
+      "sha256": "da922d2ff48e4305a7d478115e480b7a26bf71a7a4c92fbf4dccb62624c4912d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/contact-retarget.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/contact-retarget.json",
+      "bytes": 6028,
+      "sha256": "74b1bb96aa3d49ce8e4c586693921c0815d57b47c9c0c024b86bc073b5976db0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/fitted-weights.npz",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/fitted-weights.npz",
+      "bytes": 125487,
+      "sha256": "c5928613cdd24786d5ed6bf713ce06423df0b273b762539cdb9a10f2a14aa1a4",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/manifest.json",
+      "bytes": 1109,
+      "sha256": "3ae467ac7771fd6526d70cd3c5837f742b1381491f9af719daf6d431b9f8d6e9",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/models/fox-rig-r1.glb",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/models/fox-rig-r1.glb",
+      "bytes": 7081800,
+      "sha256": "54bd934bbd748ba482fb5bc79ca95ff02dc487fa9ec295d13305da32827c610e",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/original-anatomy.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/original-anatomy.json",
+      "bytes": 5734,
+      "sha256": "5a242cb075b150b5933b224c64fa7f048249b5b88f314f9c1e63b1a0313bc7b9",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-front.png",
+      "bytes": 410236,
+      "sha256": "08fe300771de3029da008918cea78199beebe2c745a57fcd11625a7b86aa6edd",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-quarter.png",
+      "bytes": 420116,
+      "sha256": "99eba1729b4ba96b03f925b3fe9a423e9f2623fcd7b50e20858f4cac24e332df",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/bite-side.png",
+      "bytes": 441640,
+      "sha256": "ffe09c5f5e68797a0c85b299d1f692b39b0fe399d577860bc6d52b2d547dc4e9",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-front.png",
+      "bytes": 406536,
+      "sha256": "39a42d66419cfd9fcc5fc626586ba3d1ea0afc5860714344bd9ab26df93aa894",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-quarter.png",
+      "bytes": 416797,
+      "sha256": "fd17b182661c749b05476670f6c98a4143cd0c832cc1761edebc398b7860f072",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/collapse-side.png",
+      "bytes": 423415,
+      "sha256": "16ee5e5e7a08042ea4b9aa864e599c6a03a316b4a2693a3d99588b0baae915aa",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-front.png",
+      "bytes": 410125,
+      "sha256": "5881c15d2c14d0b209c1c5d04d57a5ccb3b9151586c96f76bbc80cc00bae98a4",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-quarter.png",
+      "bytes": 434490,
+      "sha256": "06a49587b8e3564dda94ef2e2689ca25ff647332953e87dbd066ca4b01a34fd2",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/getup-side.png",
+      "bytes": 446172,
+      "sha256": "a66e40330bd036ddc2e65ef4e8ef213ea1103b43731afb39b7fd9cbd70bebd6f",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-front.png",
+      "bytes": 413704,
+      "sha256": "21a0e456b251ffcecfc7ec48244ef2ab43a1ea7b7f45ad8384a45f2af06aca91",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-quarter.png",
+      "bytes": 431123,
+      "sha256": "ac1927b402b5bb7a62e17d1d7e7898b9046a447a820b03e6ff3ca0423e136a11",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/lie-side.png",
+      "bytes": 436395,
+      "sha256": "15d425df8167406df624df7b9b33092c8d5917e214c0040c0a5bf6108a4b4c4c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-front.png",
+      "bytes": 412888,
+      "sha256": "d128952d33cdcd7fefe69d4561da3f3705778976ece2ca357afdd6d9e26d76fa",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-quarter.png",
+      "bytes": 425729,
+      "sha256": "0021105b4874f05dcdf1848402ef18b082bed1c9b31934e1c2389c02d5479024",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/maul-side.png",
+      "bytes": 441433,
+      "sha256": "73e7860fcd81c6ecc72a27204bdfacbc49df30c3ad75f236d387733b697daf05",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-front.png",
+      "bytes": 557730,
+      "sha256": "b93a29a895ed0eda3f4c59b14e4e62eed2468b4b9876dba55f78ce1415105c47",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-quarter.png",
+      "bytes": 574936,
+      "sha256": "ed2bd8f71e0ff7d89466ca13a343b0a9bb0fecf49e7b76d2714f11c22457687b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/original-side.png",
+      "bytes": 573318,
+      "sha256": "de38265f56f8580aa5682830d778f5e3c8e6d452acf7c37f0d993f82d081b09d",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-front.png",
+      "bytes": 422697,
+      "sha256": "15d2189d869f2aa345f060f6c7574da88c2a73a03b431ae9793376314810b9d8",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-quarter.png",
+      "bytes": 424251,
+      "sha256": "5904e35de74d2f64f37a3735201ebcf3025784c96af31c0acbb69ee55064e048",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/run-side.png",
+      "bytes": 446500,
+      "sha256": "5ec67bad2445b1c35d16597152c9ba19ab7993be04b9d7d406aadb73ddc42e6c",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-front.png",
+      "bytes": 439812,
+      "sha256": "bf53a99e6245571d7eb48f60dee58226ee3953ca1e84c2ab62ba37f71436bd69",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-quarter.png",
+      "bytes": 455592,
+      "sha256": "54a21ae44feb5e82c42234d85633c3b1f89128b44770b6b003229513747b2637",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/stand-side.png",
+      "bytes": 447791,
+      "sha256": "6f9c41bccb4c8e469e67508ba8fbc768b033df48a17a907ef5ac787e2f1ccc13",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-front.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-front.png",
+      "bytes": 429149,
+      "sha256": "f18a12d60c9af40a0d1c51ccb9b60b41cc00551bc615b78b894ce8eaec51fc5e",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-quarter.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-quarter.png",
+      "bytes": 429729,
+      "sha256": "cb42ac91d6c0cb97fd43c13b937b07efd651fbd28f3b34523b43976701371ea9",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-side.png",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/review/walk-side.png",
+      "bytes": 446676,
+      "sha256": "b4e2cdadc5ba2113802aeec51bc6c1676a060498e522bed29b58e3dd33c87e81",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/runtime-manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/runtime-manifest.json",
+      "bytes": 467144,
+      "sha256": "f7d733b2883f1ef4f387202fa7e1e4fc536b8d12389c4cb1a9a192ee50e95d99",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/validation.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/fox/validation.json",
+      "bytes": 794,
+      "sha256": "b3ad7ff8e20fb4d945c7349e55be96f246ad07e7bc5d33d837d310861d772e28",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/render-cases.json",
+      "bytes": 9639,
+      "sha256": "86d7aed6d3bb2bd7c1f2a6be722d44b52c441a8f5432193bfd7e0d89580c9c7f",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/build_rigs.py",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/build_rigs.py",
+      "bytes": 16814,
+      "sha256": "80a506337d87acf51ca4e081c3f5edc4b9494cf6b933ab2817d956f3a6a08b5b",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/finalize_profiles.py",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/finalize_profiles.py",
+      "bytes": 1300,
+      "sha256": "a9b3d87fe639395ebcecc6c4a1a246306cfa622b8e69459369fe4eb7a8e74d35",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/fit_contacts.py",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/fit_contacts.py",
+      "bytes": 6909,
+      "sha256": "5c996ebb4c0f785b2df5bb8cf7460438e0bd91ce842a908b6c01514e1fab94a0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/inspect_originals.py",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/inspect_originals.py",
+      "bytes": 2925,
+      "sha256": "21893448b72569fbbf8cdec4ef364bf857a528343a6303d37a62cd8049574bea",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/refine_weights.py",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/refine_weights.py",
+      "bytes": 6263,
+      "sha256": "565b69f451d2b6add4999bb5eca16a7ea505264ec50b42ba73473480e1fb94cd",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/render_review.py",
+      "bytes": 3709,
+      "sha256": "39352db32ceae6b832d49e733060e3a514062c23610aeead73fa7ffb4aad9eaf",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/validate_rigs.mjs",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/scripts/validate_rigs.mjs",
+      "bytes": 3863,
+      "sha256": "f461faf396f157b1967a40187c7a8853bac567809344c8f15e20dcd6cf6a6ae6",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadruped-textures-r1/boar.ktx2",
+      "path": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/boar.ktx2",
+      "bytes": 9657296,
+      "sha256": "577c85721044a7d3e6b58201094e1311ce0b8bc7a782bafadec473dc2df796e2",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadruped-textures-r1/fox.ktx2",
+      "path": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/fox.ktx2",
+      "bytes": 12718292,
+      "sha256": "0687ad19cadfb59cff676af8a8c681a62359761adf8d8bf96cbb8d62ace21e7a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadruped-textures-r1/gray-wolf.ktx2",
+      "path": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/gray-wolf.ktx2",
+      "bytes": 10253696,
+      "sha256": "2b2172d65ea23af3cb0b76ad61ea08487152af482f88eb4768124c62d53c9af0",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadruped-textures-r1/manifest.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/manifest.json",
+      "bytes": 2683,
+      "sha256": "25d01c11394b2c02267a927672e76549ad35ae7c2547fdff56965bf40ff87247",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadruped-textures-r1/stylized-wolf.ktx2",
+      "path": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/stylized-wolf.ktx2",
+      "bytes": 11049367,
+      "sha256": "a66589bb6da2396be286420dc247eba7eb7f544d953ed3380248c0e7dae28254",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadruped-textures-r1/wolf-3.ktx2",
+      "path": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1/wolf-3.ktx2",
+      "bytes": 10076570,
+      "sha256": "a328c19df0c9d6ab224c03052df3552db00fc7e604a171d4ca6ec3fbe178ca2a",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    }
+  ]
+}

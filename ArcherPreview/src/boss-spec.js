@@ -36,8 +36,8 @@ export const BOSS_DAMAGE={Axe_Spin_Attack:160,Flying_Fist_Kick:150,Left_Hook_fro
   Lunge_Spin_Kick:150,Right_Jab_from_Guard:80,Rising_Flying_Kick:140,Shield_Push_Left:100,Skill_01:180,Skill_02:300,Skill_03:160,Weapon_Combo:180};
 
 export class BossBrain {
-  constructor(durations,random=Math.random){
-    this.durations=durations;this.random=random;this.hp=this.maxHp=900;
+  constructor(durations,random=Math.random,{distanceScale=1}={}){
+    this.durations=durations;this.random=random;this.distanceScale=distanceScale;this.hp=this.maxHp=900;
     this.state='Block6';this.mode='idle';this.time=0;this.serial=1;this.wait=.65;
     this.stagger=0;this.flash=0;this.bag=[];this.attackCount=0;this.visited=new Set([this.state]);this.impacted=false;this.comboStep=0;
   }
@@ -75,6 +75,7 @@ export class BossBrain {
     this.stagger=1;this.interrupted=true;this.impacted=true;this.comboStep=0;this.flash=this.flashDuration=.45;return true;
   }
   update(dt,distance,playerAlive=true){
+    distance/=this.distanceScale;
     const events=[];dt=Math.max(0,dt);this.flash=Math.max(0,this.flash-dt);
     if(this.stagger>0){
       this.stagger=Math.max(0,this.stagger-dt);

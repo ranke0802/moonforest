@@ -1,7 +1,7 @@
 import {readFile,writeFile,mkdir,copyFile,lstat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {RELEASE_V2,RELEASE_V2_MANIFEST,sha256,deploymentPath,optionalBytes,assertDescriptor,reviewedDeploymentUnion} from './release-deployment.mjs';
+import {RELEASE_V2,RELEASE_V2_MANIFEST,sha256,deploymentPath,optionalBytes,assertDescriptor,reviewedDeploymentUnion,assertDeploymentContentGraph} from './release-deployment.mjs';
 
 export async function syncMoonforestV2({repository=resolve(import.meta.dirname,'../..'),dist=resolve(repository,'ArcherPreview/dist/moonforest-0.2'),site=resolve(repository,'ArcherPreviewSite'),writeReport=true}={}){
  const manifestBytes=await readFile(resolve(dist,RELEASE_V2_MANIFEST)),manifest=JSON.parse(manifestBytes),primaryBytes=await readFile(resolve(site,'deployment-files.json')),primary=JSON.parse(primaryBytes);
@@ -22,8 +22,8 @@ export async function syncMoonforestV2({repository=resolve(import.meta.dirname,'
   if(!staged)throw new Error('Missing staged release file: '+item.path);copies.push({from,target,path:item.path});
  }
  if(total!==manifest.bytes||total>=1_000_000_000||!unique.has('moonforest-0.2.html')||!unique.has('assets/resource-index.json'))throw new Error('MoonForest 0.2 deployment inventory mismatch');
- const index=JSON.parse(await readFile(resolve(site,'assets/resource-index.json'),'utf8')),expected=new Set(Object.keys(index.files).map(name=>'assets/content/'+name)),packs=new Set(index.bundles.map(pack=>'assets/'+pack.url));
- if([...unique].filter(path=>path.startsWith('assets/content/')).some(path=>!expected.delete(path))||expected.size||[...packs].some(path=>!unique.has(path))||[...unique].some(path=>path.startsWith('assets/bundles/')&&!packs.has(path)))throw new Error('MoonForest 0.2 resource graph mismatch');
+ const index=JSON.parse(await readFile(resolve(site,'assets/resource-index.json'),'utf8'));
+ assertDeploymentContentGraph(manifest,index);
  const combined=new Map(primary.files.map(item=>[item.path,item]));for(const item of manifest.files)combined.set(item.path,item);
  if([...combined.values()].reduce((sum,item)=>sum+item.bytes,0)>=1_000_000_000)throw new Error('Combined deployment exceeds the 1 GB budget');
  for(const item of copies){await mkdir(dirname(item.target),{recursive:true});await copyFile(item.from,item.target);}

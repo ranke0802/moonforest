@@ -23,6 +23,7 @@ import { createTerrainRing } from './terrain-mesh.js';
 import { prepareBossShaders } from './boss-shader-warmup.js';
 import { createBossPreparation,bossPreparationCancelled } from './boss-preparation.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
+import { bearEncounterSize } from './bear-size.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -95,6 +96,12 @@ export class BossEncounter {
       this.actor=new TransformNode('guardian-bear-world',this.world.scene);this.actor.setEnabled(false);
       this.carrier=new TransformNode('guardian-bear-root-offset',this.world.scene);this.carrier.parent=this.actor;
       for(const node of new Set([...this.asset.meshes,...this.asset.transformNodes]))if(!node.parent)node.parent=this.carrier;
+      if(this.kind==='bear'&&(this.bearSize=bearEncounterSize(this.world))){
+        // Keep the shared manifest/template and every source bone/clip intact.
+        this.config={...this.config,scale:this.bearSize.scale};this.sizeScale=this.bearSize.sizeScale;
+        for(const key of ['radius','stopDistance','separationRadius'])this[key]*=this.sizeScale;
+        this.renderRangePadding=this.bearSize.renderRangePadding;this.reviewFocusHeight=this.bearSize.reviewFocusHeight;
+      }
       this.actor.scaling.setAll(this.config.scale);this.assetPreparationStep=0;
       return this.asset;
       })();
@@ -220,7 +227,7 @@ export class BossEncounter {
       this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];if(!this.retainAnimatorForPool)this.animator.dispose();this.onChange(this);
     }
   }
-  createBrain(durations){return new BossBrain(durations);}
+  createBrain(durations){return new BossBrain(durations,Math.random,{distanceScale:this.bearSize?.sizeScale??1});}
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations,{bindingCacheSize:['bear','goblin'].includes(this.kind)?2:0});}
   prepareAsset(){}
   async prepareAuxiliary(){}
@@ -230,7 +237,7 @@ export class BossEncounter {
   movementPlan(player){return {target:player.position,stopDistance:this.stopDistance};}
   contactSeparation(){const dimensions=playerDimensions(this.player);return this.dodgeContactClearance?dodgeSeparation(this,dimensions):this.radius+dimensions.standingClearance;}
   motionSpec(name){return BOSS_BY_NAME[name];}
-  attackRange(spec){return bossAttackRange(spec);}
+  attackRange(spec){return bossAttackRange(spec)*(this.bearSize?.attackRangeScale??1);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
   isHeavyAttack(event){return BOSS_HEAVY_ATTACKS.has(event.name);}
   attackContactPoints(aim){return ['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));}
@@ -364,7 +371,7 @@ export class BossEncounter {
       // Downed/recovering bosses are always vulnerable within melee range, even
       // when an upright sword swing passes above the lying skeleton. The gate
       // still enforces strike windows, per-swing deduplication and burst timing.
-      const rangeContact=grounded&&distance<=BOSS_GROUNDED_HIT_RANGE;
+      const rangeContact=grounded&&distance<=(this.bearSize?.groundHitRange??BOSS_GROUNDED_HIT_RANGE);
       let contacts;
       if(this.brain.defense){
         // A contacting shield push breaks both block and evade states.

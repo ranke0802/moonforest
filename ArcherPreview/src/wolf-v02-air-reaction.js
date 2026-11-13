@@ -1,16 +1,21 @@
 import {Quaternion,Vector3} from '@babylonjs/core';
 import {WOLF_V02_AIR_REACTION,WOLF_V02_GET_UP} from './wolf-v02-spec.js';
 
-export const WOLF_V02_AIR_IMPULSE=Object.freeze({distance:1.65,start:.04,duration:.45,arc:.45,turnRate:2});
+export const WOLF_V02_AIR_IMPULSE=Object.freeze({distance:1.65,start:0,duration:.45,arc:.45,turnRate:2});
 const clamp=value=>Math.max(0,Math.min(1,value)),angle=(target,current)=>Math.atan2(Math.sin(target-current),Math.cos(target-current));
 export class WolfV02AirReaction{
  constructor(e){this.e=e;this.direction=new Vector3();this.previous=new Vector3();this.reset();}
  reset(){this.brain=null;this.scene=null;this.map=null;this.basis=false;this.elapsed=0;this.previousCurve=0;this.height=0;this.travelled=0;this.yaw=0;this.targetYaw=0;}
- begin(source,contact=null){
+ begin(source,contact=null,attackYaw=null){
   const e=this.e,clip=e.config.catalog.find(clip=>clip.name===WOLF_V02_AIR_REACTION),vector=clip?.endpointModelGlTF?.headMinusPelvis;
   if(!clip||!vector)return false;
   this.brain=e.brain;this.scene=e.world.scene;this.map=e.world.mapId;this.basis=true;this.previousCurve=this.height=this.travelled=0;this.previous.copyFrom(e.actor.position);
-  this.direction.copyFrom(e.actor.position).subtractInPlace(source);this.direction.y=0;if(this.direction.lengthSquared()<1e-8)this.direction.set(-Math.sin(e.actor.rotation.y),0,-Math.cos(e.actor.rotation.y));this.direction.normalize();
+  // A long wolf can overlap the attacker's root while its struck chest/head is
+  // still in front. Root-to-root direction then reverses the actual shield/blade
+  // impulse. Lock the confirmed attack's heading for the whole airborne fall.
+  if(Number.isFinite(attackYaw))this.direction.set(Math.sin(attackYaw),0,Math.cos(attackYaw));
+  else{this.direction.copyFrom(e.actor.position).subtractInPlace(source);this.direction.y=0;}
+  if(this.direction.lengthSquared()<1e-8)this.direction.set(-Math.sin(e.actor.rotation.y),0,-Math.cos(e.actor.rotation.y));this.direction.normalize();
   // Preserve impact momentum rather than forcing a fixed sideways heading.
   // A central blow gives a small natural diagonal turn; a flank blow gives more.
   this.startYaw=e.actor.rotation.y;const rx=(contact?.x??source.x)-e.actor.position.x,rz=(contact?.z??source.z)-e.actor.position.z,torque=rz*this.direction.x-rx*this.direction.z,sign=Math.abs(torque)>.02?Math.sign(torque):1;
@@ -20,8 +25,8 @@ export class WolfV02AirReaction{
  applyMotion(){
   if(!this.valid())return false;const e=this.e,b=e.brain;if(b.state!==WOLF_V02_AIR_REACTION&&b.state!==WOLF_V02_GET_UP)return false;
   const time=b.state===WOLF_V02_AIR_REACTION?b.time:Infinity,t=clamp((time-WOLF_V02_AIR_IMPULSE.start)/WOLF_V02_AIR_IMPULSE.duration),curve=t*(2-t),delta=curve-this.previousCurve;
-  if(delta>0){e.actor.position.x+=this.direction.x*WOLF_V02_AIR_IMPULSE.distance*delta;e.actor.position.z+=this.direction.z*WOLF_V02_AIR_IMPULSE.distance*delta;}this.previousCurve=curve;
-  const smooth=t*t*(3-2*t);this.yaw=this.startYaw+angle(this.targetYaw,this.startYaw)*smooth;e.actor.rotation.y=this.yaw;this.height=4*WOLF_V02_AIR_IMPULSE.arc*t*(1-t);return true;
+  if(delta>0){e.actor.position.x+=this.direction.x*WOLF_V02_AIR_IMPULSE.distance*(e.runtimeProfile?.spatialScale??1)*delta;e.actor.position.z+=this.direction.z*WOLF_V02_AIR_IMPULSE.distance*(e.runtimeProfile?.spatialScale??1)*delta;}this.previousCurve=curve;
+  const smooth=t*t*(3-2*t);this.yaw=this.startYaw+angle(this.targetYaw,this.startYaw)*smooth;e.actor.rotation.y=this.yaw;this.height=4*WOLF_V02_AIR_IMPULSE.arc*(e.runtimeProfile?.spatialScale??1)*t*(1-t);return true;
  }
  afterMotion(){if(!this.valid())return;const p=this.e.actor.position;if(this.e.brain.state===WOLF_V02_AIR_REACTION)this.travelled+=Math.hypot(p.x-this.previous.x,p.z-this.previous.z);this.previous.copyFrom(p);}
  alignWithHeight(){

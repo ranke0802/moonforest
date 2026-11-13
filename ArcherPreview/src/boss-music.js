@@ -10,7 +10,7 @@ export function bossMusicContext(encounters=[]){
       if(enemy.phase===2)return ELENA_MUSIC_KEYS.mourning;
       if(enemy.phase===1)selected=ELENA_MUSIC_KEYS.saint;
       else selected??='boss';
-    }else if(enemy.kind!=='goblin')selected??='boss';
+    }else if(enemy.kind!=='goblin'&&!enemy.regularWolfId)selected??='boss';
   }
   return selected;
 }

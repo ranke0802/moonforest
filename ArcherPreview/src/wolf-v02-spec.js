@@ -77,12 +77,12 @@ function ramChargeStartElapsed(distance,reach,baseSpeed,castSpeed){
 }
 
 export class WolfV02Brain extends WolfBrain{
- constructor(durations,balance=WOLF_BALANCE,random=Math.random){
-  super(durations,balance);this.random=random;this.behavior='rest';this.phase=1;this.planIndex=0;this.flankSide=1;this.lastOutcome=null;this.recoveryRemaining=0;this.observation=0;this.positionElapsed=0;this.boutStrikes=0;this.lastDistance=Infinity;this.circleTarget=0;this.circleElapsed=0;this.boutObserved=false;this.retreatCooldown=0;this.retreatPending=null;
+ constructor(durations,balance=WOLF_BALANCE,random=Math.random,profile={}){
+  super(durations,balance);this.actions=profile.actions??WOLF_V02_BY_ID;this.gait=profile.gait??WOLF_V02_GAIT;this.tactics=profile.tactics??WOLF_V02_TACTICS;this.modelScale=profile.modelScale??WOLF_SCALE;this.spatialScale=profile.spatialScale??1;this.random=random;this.behavior='rest';this.phase=1;this.planIndex=0;this.flankSide=1;this.lastOutcome=null;this.recoveryRemaining=0;this.observation=0;this.positionElapsed=0;this.boutStrikes=0;this.lastDistance=Infinity;this.circleTarget=0;this.circleElapsed=0;this.boutObserved=false;this.retreatCooldown=0;this.retreatPending=null;
   this.combatClock=0;this.recentDamageTimes=new Float64Array(32);this.recentDamageValues=new Float64Array(32);this.recentDamageCursor=0;this.recentDamage=0;this.tacticalCooldown=0;this.evadeCooldown=0;
  }
  configureAttacks(value={}){
-  const sequence=(Array.isArray(value.sequence)?value.sequence:[]).map(id=>aliases[id]??id).filter(id=>WOLF_V02_BY_ID[id]).slice(0,12),custom=value.custom===true&&sequence.length>0,speed=Number(value.speed),old=this.attackSettings;
+  const sequence=(Array.isArray(value.sequence)?value.sequence:[]).map(id=>aliases[id]??id).filter(id=>this.actions[id]).slice(0,12),custom=value.custom===true&&sequence.length>0,speed=Number(value.speed),old=this.attackSettings;
   if(old?.custom!==custom||old?.sequence.join('|')!==sequence.join('|')){this.customAttackIndex=0;this.plannedId=null;this.stalkPlannedId=null;this.orbitTargetRadius=null;}
   this.attackSettings={custom,sequence,speed:Number.isFinite(speed)?clamp(speed,.5,2):1};
  }
@@ -91,13 +91,13 @@ export class WolfV02Brain extends WolfBrain{
   if(mode!=='attack'){this.action=null;this.actionId=null;}
  }
  startAction(id,{continuation=false,distance}={}){
-  const action=WOLF_V02_BY_ID[aliases[id]??id];if(!action)throw new Error('알 수 없는 늑대 공격: '+id);
-  const carry=action.momentumRam&&this.state===WOLF_CLIPS.run&&this.mode==='move',gait=carry?this.time:WOLF_V02_GAIT.runSourceStart,runClock=carry?(this.gaitClock??gait-WOLF_V02_GAIT.runSourceStart):0,speed=carry?(this.approachSpeed??WOLF_V02_GAIT.runSpeed):WOLF_V02_GAIT.runSpeed;
+  const action=this.actions[aliases[id]??id];if(!action)throw new Error('알 수 없는 늑대 공격: '+id);
+  const carry=action.momentumRam&&this.state===WOLF_CLIPS.run&&this.mode==='move',gait=carry?this.time:this.gait.runSourceStart,runClock=carry?(this.gaitClock??gait-this.gait.runSourceStart):0,speed=carry?(this.approachSpeed??this.gait.runSpeed):this.gait.runSpeed;
   this.start(action.sourceClip,'attack');this.action=action;this.actionId=action.id;this.time=action.clipStart;this.actionElapsed=0;this.behavior='anticipation';this.attackCount++;this.lastOutcome=null;this.resolvedSerial=null;this.pinImpactPassed=false;
   this.boutStrikes=continuation?this.boutStrikes+1:1;
   if(!continuation)this.boutObserved=false;
   if(action.ramPhases){this.ramAbortReason=null;this.ramRecoveryOrigin=null;this.ramAccepted=false;this.ramAcceptedClock=null;this.ramChaseClock=null;this.ramStartDistance=distance??this.lastDistance;this.time=action.clipStart;}
-  if(action.momentumRam){this.ramMaulHold=false;this.ramMaulCycle=0;this.ramLoopPoseKey=null;this.time=gait;this.ramRunClock=runClock;this.ramBaseRunSpeed=speed;this.ramRunSpeed=speed*1.5;this.ramActualSpeed=this.ramRunSpeed;this.ramStage='charge';this.ramLayerElapsed=ramChargeStartElapsed(distance??4.5,this.ramReach??2.5,speed,this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
+  if(action.momentumRam){this.ramMaulHold=false;this.ramMaulCycle=0;this.ramLoopPoseKey=null;this.time=gait;this.ramRunClock=runClock;this.ramBaseRunSpeed=speed;this.ramRunSpeed=speed*1.5;this.ramActualSpeed=this.ramRunSpeed;this.ramStage='charge';this.ramLayerElapsed=ramChargeStartElapsed(distance??4.5*this.spatialScale,this.ramReach??2.5*this.spatialScale,speed,this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
   this.chainRemaining=action.chain&&this.boutStrikes<3&&!continuation?1:0;this.plannedId=null;this.positionElapsed=0;this.followupId=null;this.followChain=false;
   return action;
  }
@@ -129,20 +129,20 @@ export class WolfV02Brain extends WolfBrain{
  cancelBout(){this.chainRemaining=0;this.followupId=null;this.followChain=false;this.boutStrikes=0;this.plannedId=null;this.boutObserved=false;}
  reactionClip(brace=false){return brace&&this.durations[WOLF_V02_BRACE]?WOLF_V02_BRACE:brace?WOLF_CLIPS.brace:WOLF_CLIPS.hit;}
  recordDamage(damage){
-  if(this.hp<this.maxHp*WOLF_V02_TACTICS.healthyHpFraction){this.recentDamageValues.fill(0);this.recentDamage=0;this.tacticalRetreatPending=false;return;}
+  if(this.hp<this.maxHp*this.tactics.healthyHpFraction){this.recentDamageValues.fill(0);this.recentDamage=0;this.tacticalRetreatPending=false;return;}
   const index=this.recentDamageCursor++%this.recentDamageValues.length;this.recentDamageTimes[index]=this.combatClock;this.recentDamageValues[index]=damage;let sum=0;
-  for(let i=0;i<this.recentDamageValues.length;i++)if(this.combatClock-this.recentDamageTimes[i]<=WOLF_V02_TACTICS.recentDamageSeconds)sum+=this.recentDamageValues[i];
-  this.recentDamage=sum;if(!this.tacticalCooldown&&sum>=this.maxHp*WOLF_V02_TACTICS.recentDamageFraction)this.tacticalRetreatPending=true;
+  for(let i=0;i<this.recentDamageValues.length;i++)if(this.combatClock-this.recentDamageTimes[i]<=this.tactics.recentDamageSeconds)sum+=this.recentDamageValues[i];
+  this.recentDamage=sum;if(!this.tacticalCooldown&&sum>=this.maxHp*this.tactics.recentDamageFraction)this.tacticalRetreatPending=true;
  }
  beginTacticalRetreat(){
-  this.cancelBout();this.retreatPending=null;this.tacticalRetreatPending=false;this.tacticalCooldown=WOLF_V02_TACTICS.retreatCooldown;this.recentDamageValues.fill(0);this.recentDamage=0;
-  this.backRunTarget=Math.min(WOLF_V02_TACTICS.maximumRetreatRange,this.lastDistance+WOLF_V02_TACTICS.retreatDistance);this.backRunElapsed=0;this.backRunCycles=0;this.backRunDone=this.backRunBlocked=false;
+  this.cancelBout();this.retreatPending=null;this.tacticalRetreatPending=false;this.tacticalCooldown=this.tactics.retreatCooldown;this.recentDamageValues.fill(0);this.recentDamage=0;
+  this.backRunTarget=Math.min(this.tactics.maximumRetreatRange,this.lastDistance+this.tactics.retreatDistance);this.backRunElapsed=0;this.backRunCycles=0;this.backRunDone=this.backRunBlocked=false;
   if(this.lastDistance>=this.backRunTarget||!this.durations[WOLF_V02_BACK_RUN]){this.beginStalk();return;}
   this.start(WOLF_V02_BACK_RUN,'backRun');this.behavior='back-run';
  }
  beginRamEvade(counter=false){
   if(counter)this.lastEvadedActionId=this.playerThreatActionId;
-  this.evadeCooldown=WOLF_V02_TACTICS.evadeCooldown;this.ramEvaded=true;this.evadeCounterId=counter&&this.lastDistance<3.6?'quick-bite':'lunge';this.flankSide*=-1;
+  this.evadeCooldown=this.tactics.evadeCooldown;this.ramEvaded=true;this.evadeCounterId=counter&&this.lastDistance<3.6*this.spatialScale?'quick-bite':'lunge';this.flankSide*=-1;
   this.start(this.flankSide>0?WOLF_V02_ORBIT.right:WOLF_V02_ORBIT.left,'ramEvade');this.behavior='evade-counter';this.ramEvadeElapsed=0;this.stalkBlocked=false;this.flankReversed=false;
  }
  hit(options={}){
@@ -167,15 +167,15 @@ export class WolfV02Brain extends WolfBrain{
  chooseAction(distance){
   if(this.attackSettings?.custom){
    const requested=this.attackSettings.sequence[(this.customAttackIndex??0)%this.attackSettings.sequence.length];
-   if(requested==='lunge'&&distance>=2.85||distance+1e-5>=WOLF_V02_BY_ID[requested].minDistance||!['lunge','pin'].includes(requested))return requested;
+   if(requested==='lunge'&&distance>=2.85*this.spatialScale||distance+1e-5>=this.actions[requested].minDistance||!['lunge','pin'].includes(requested))return requested;
    // A custom order may request a long attack at point-blank range. Keep the
    // saved order intact, but substitute a reachable attack for this turn.
   }
-  if(distance>=6||distance>=2.85&&this.planIndex%3===0)return 'lunge';
-  if(distance+1e-5>=WOLF_V02_BY_ID.pin.minDistance&&this.previousAction!=='pin')return 'pin';
+  if(distance>=6*this.spatialScale||distance>=2.85*this.spatialScale&&this.planIndex%3===0)return 'lunge';
+  if(distance+1e-5>=this.actions.pin.minDistance&&this.previousAction!=='pin')return 'pin';
   const deck=this.phase===2?deck2:deck1;return deck[this.planIndex%deck.length];
  }
- followupInReach(id,distance){return distance<=WOLF_V02_BY_ID[id].maxDistance+1e-5;}
+ followupInReach(id,distance){return distance<=this.actions[id].maxDistance+1e-5;}
  chooseFollowup(distance){
   if(this.lastOutcome!=='hit'||this.boutStrikes>=3)return null;
   // Explicit editor sequences keep their order. An explicitly chosen chain
@@ -192,7 +192,7 @@ export class WolfV02Brain extends WolfBrain{
   this.start(this.flankSide>0?WOLF_V02_ORBIT.right:WOLF_V02_ORBIT.left,'idle');this.behavior='flank';
   if(!preserveBudget||this.circleElapsed>=this.circleTarget){const sample=Number(this.random());this.circleTarget=2+clamp(Number.isFinite(sample)?sample:.5,0,1);this.circleElapsed=0;}
   this.flankRemaining=Math.max(0,this.circleTarget-this.circleElapsed);this.flankBlockedObserve=false;this.flankRetry=0;
-  this.orbitTargetRadius=this.stalkPlannedId==='lunge'&&this.lastDistance>=2.85&&this.lastDistance<4?Math.min(4,this.lastDistance+1):null;
+  this.orbitTargetRadius=this.stalkPlannedId==='lunge'&&this.lastDistance>=2.85*this.spatialScale&&this.lastDistance<4*this.spatialScale?Math.min(4*this.spatialScale,this.lastDistance+this.spatialScale):null;
   const cycles=this.phase===2?4:3;this.flankPlaybackRate=cycles*.90/Math.max(.01,this.circleTarget);
  }
  beginRetreat(){
@@ -215,7 +215,7 @@ export class WolfV02Brain extends WolfBrain{
   if(this.ramStage==='charge'){this.ramContactTime=this.ramLayerTime;this.behavior='running-ram';this.ramRunSpeed=dt>0?(ramChargeTravel(this.ramLayerTime,this.ramBaseRunSpeed,this.castSpeed)-ramChargeTravel(previousLayerTime,this.ramBaseRunSpeed,this.castSpeed))/dt:this.ramBaseRunSpeed*ramChargeMultiplier(this.ramLayerTime);}
   else if(this.ramStage==='chase'){
    this.ramContactTime=.421;this.behavior='run-chase';
-   const desired=Math.max(0,Math.min(this.approachSpeed??WOLF_V02_GAIT.farRunSpeed,this.ramChaseSpeed??WOLF_V02_GAIT.runSpeed)),change=24*dt;
+   const desired=Math.max(0,Math.min(this.approachSpeed??this.gait.farRunSpeed,this.ramChaseSpeed??this.gait.runSpeed)),change=24*dt;
    this.ramRunSpeed+=clamp(desired-this.ramRunSpeed,-change,change);
    if(this.ramCatchReady){this.ramStage='settle';this.ramStageClock=0;this.state=action.maulSourceClip;this.time=action.maulClipStart;this.ramBodyOrigin=action.maulClipStart;this.ramRunSpeed=0;return {events:[],speed:0};}
    if(this.combatClock-this.ramAcceptedClock>1.55)this.abortRam('chase-unreachable');
@@ -233,13 +233,13 @@ export class WolfV02Brain extends WolfBrain{
    this.behavior='ram-miss';this.ramContactTime=.61;this.ramRunSpeed=Math.max(0,this.ramRunSpeed-24*dt);
    if(this.state!==WOLF_CLIPS.run||this.ramRunSpeed<=.05){this.beginRecovery();return {events:[],speed:0};}
   }
-  this.ramRunClock+=dt*this.ramRunSpeed/(WOLF_V02_GAIT.runSourceSpeed*WOLF_SCALE);this.time=WOLF_V02_GAIT.runSourceStart+this.ramRunClock%WOLF_V02_GAIT.runSourceDuration;
+  this.ramRunClock+=dt*this.ramRunSpeed/(this.gait.runSourceSpeed*this.modelScale);this.time=this.gait.runSourceStart+this.ramRunClock%this.gait.runSourceDuration;
   return {events:[],speed:this.ramRunSpeed,momentumRam:true};
  }
  update(dt,distance,playerAlive=true){
   dt=Number.isFinite(dt)?Math.max(0,dt):0;distance=Number.isFinite(distance)?Math.max(0,distance):Infinity;this.lastDistance=distance;this.phase=this.hp<=this.maxHp*.5?2:1;
   const events=[];this.combatClock+=dt;this.flash=Math.max(0,this.flash-dt);this.retreatCooldown=Math.max(0,this.retreatCooldown-dt);this.tacticalCooldown=Math.max(0,this.tacticalCooldown-dt);this.evadeCooldown=Math.max(0,this.evadeCooldown-dt);
-  if(this.hp<this.maxHp*WOLF_V02_TACTICS.healthyHpFraction&&(this.recentDamage||this.tacticalRetreatPending)){this.recentDamageValues.fill(0);this.recentDamage=0;this.tacticalRetreatPending=false;}
+  if(this.hp<this.maxHp*this.tactics.healthyHpFraction&&(this.recentDamage||this.tacticalRetreatPending)){this.recentDamageValues.fill(0);this.recentDamage=0;this.tacticalRetreatPending=false;}
   if(this.stagger>0&&this.hp>0){this.stagger=Math.max(0,this.stagger-dt);this.behavior='stagger';if(!this.stagger){this.start(WOLF_CLIPS.brace,'hit');this.wait=this.balance.cooldown;}return {events,speed:0};}
   if(['down','recover'].includes(this.mode)){
    const duration=this.durations[this.state]??1,finished=this.time>=duration;this.time=Math.min(duration,this.time+dt);this.behavior=this.hp<=0?'dead':this.mode;
@@ -255,7 +255,7 @@ export class WolfV02Brain extends WolfBrain{
    this.behavior='observe';if(this.state===WOLF_CLIPS.watch)this.time=0;return {events,speed:0};
   }
   if(this.tacticalRetreatPending&&this.mode!=='backRun'&&this.hp>=this.maxHp*.5){this.beginTacticalRetreat();return {events,speed:0};}
-  if(this.playerAttackThreat&&this.playerThreatActionId!==this.lastEvadedActionId&&distance<4.5&&!this.evadeCooldown&&!this.sightBlocked&&(this.mode==='backRun'||['observe','flank','position'].includes(this.behavior))){this.beginRamEvade(true);return {events,speed:0};}
+  if(this.playerAttackThreat&&this.playerThreatActionId!==this.lastEvadedActionId&&distance<4.5*this.spatialScale&&!this.evadeCooldown&&!this.sightBlocked&&(this.mode==='backRun'||['observe','flank','position'].includes(this.behavior))){this.beginRamEvade(true);return {events,speed:0};}
   if(this.mode==='backRun'){
    if(this.backRunDone||this.backRunBlocked){this.backRunDone=this.backRunBlocked=false;this.beginStalk();return {events,speed:0};}
    const duration=this.durations[this.state]??.6,previousCycles=Math.floor(this.backRunElapsed/duration);this.backRunElapsed+=dt;this.backRunCycles=Math.floor(this.backRunElapsed/duration);this.time=this.backRunElapsed%duration;
@@ -266,7 +266,7 @@ export class WolfV02Brain extends WolfBrain{
    const duration=this.durations[this.state]??.9;
    if(this.stalkBlocked&&!this.flankReversed){this.flankSide*=-1;this.start(this.flankSide>0?WOLF_V02_ORBIT.right:WOLF_V02_ORBIT.left,'ramEvade');this.flankReversed=true;this.stalkBlocked=false;}
    if(this.stalkBlocked||this.time>=duration){this.boutObserved=true;this.plannedId=this.stalkPlannedId=this.evadeCounterId;this.start(WOLF_CLIPS.watch,'idle');this.behavior='position';return {events,speed:0};}
-   this.time=Math.min(duration,this.time+dt*WOLF_V02_TACTICS.evadePlaybackRate);return {events,speed:0,flank:{authored:true,facePlayer:true,side:this.flankSide,radius:distance}};
+   this.time=Math.min(duration,this.time+dt*this.tactics.evadePlaybackRate);return {events,speed:0,flank:{authored:true,facePlayer:true,side:this.flankSide,radius:distance}};
   }
   if(this.mode==='retreat'){
    const duration=this.durations[this.state]??.9;
@@ -353,16 +353,16 @@ export class WolfV02Brain extends WolfBrain{
   }
   if(!this.boutObserved){this.beginStalk();return {events,speed:0};}
   this.plannedId??=this.stalkPlannedId??this.chooseAction(distance);this.positionElapsed+=dt;
-  if(this.plannedId==='lunge'&&this.ramApproachVariant==='run-evade-ram'&&!this.ramEvaded&&distance<=5&&!this.sightBlocked){this.beginRamEvade();return {events,speed:0};}
-  const chosen=WOLF_V02_BY_ID[this.plannedId],ramEntry=chosen.momentumRam?(this.ramReach??2.5)+ramChargeTravel(chosen.contactStart,this.approachSpeed??WOLF_V02_GAIT.runSpeed,this.attackSettings?.speed??1)+.10:chosen.maxDistance,approach=distance>ramEntry+1e-5||this.sightBlocked;
+  if(this.plannedId==='lunge'&&this.ramApproachVariant==='run-evade-ram'&&!this.ramEvaded&&distance<=5*this.spatialScale&&!this.sightBlocked){this.beginRamEvade();return {events,speed:0};}
+  const chosen=this.actions[this.plannedId],ramEntry=chosen.momentumRam?(this.ramReach??2.5*this.spatialScale)+ramChargeTravel(chosen.contactStart,this.approachSpeed??this.gait.runSpeed,this.attackSettings?.speed??1)+.10:chosen.maxDistance,approach=distance>ramEntry+1e-5||this.sightBlocked;
   if(approach){
    const changed=this.state!==WOLF_CLIPS.run||this.mode!=='move';this.startIfChanged(WOLF_CLIPS.run,'move');
    // The glTF adds a duplicate first-frame hold. Only 0.2 skips that hold,
    // looping the preserved gallop keys from frame 1 through frame 18.
-   const desired=distance>12?WOLF_V02_GAIT.farRunSpeed:WOLF_V02_GAIT.runSpeed,previous=changed?WOLF_V02_GAIT.runSpeed:this.approachSpeed??WOLF_V02_GAIT.runSpeed,change=WOLF_V02_GAIT.runAcceleration*dt;
-   this.approachSpeed=previous+clamp(desired-previous,-change,change);this.approachPlaybackRate=this.approachSpeed/(WOLF_V02_GAIT.runSourceSpeed*WOLF_SCALE);
-   this.gaitClock=(changed?0:this.gaitClock??Math.max(0,this.time-WOLF_V02_GAIT.runSourceStart))+dt*this.approachPlaybackRate;
-   this.time=WOLF_V02_GAIT.runSourceStart+this.gaitClock%WOLF_V02_GAIT.runSourceDuration;
+   const desired=distance>12*this.spatialScale?this.gait.farRunSpeed:this.gait.runSpeed,previous=changed?this.gait.runSpeed:this.approachSpeed??this.gait.runSpeed,change=this.gait.runAcceleration*dt;
+   this.approachSpeed=previous+clamp(desired-previous,-change,change);this.approachPlaybackRate=this.approachSpeed/(this.gait.runSourceSpeed*this.modelScale);
+   this.gaitClock=(changed?0:this.gaitClock??Math.max(0,this.time-this.gait.runSourceStart))+dt*this.approachPlaybackRate;
+   this.time=this.gait.runSourceStart+this.gaitClock%this.gait.runSourceDuration;
    return {events,speed:this.approachSpeed,retreat:false,stopDistance:this.sightBlocked||chosen.momentumRam?0:chosen.preferredDistance};
   }
   this.planIndex++;if(this.attackSettings?.custom)this.customAttackIndex=(this.customAttackIndex??0)+1;this.startAction(chosen.id,{distance});
