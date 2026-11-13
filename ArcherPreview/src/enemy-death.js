@@ -2,9 +2,9 @@ import {prepareEnemyExteriorOutline,isRuntimeOutline} from './character-outlines
 import {configureCharacterExteriorStencil} from './character-ink-stencil.js';
 import {orderEnemyFadeInkAfterSurfaces} from './character-render-cost.js';
 
-export const CORPSE_FADE_SECONDS=5;
+export const CORPSE_FADE_SECONDS=10;
 export const MOURNING_DEATH_HOLD_SECONDS=.65;
-export const MOURNING_CORPSE_SECONDS=10;
+export const MOURNING_CORPSE_SECONDS=CORPSE_FADE_SECONDS;
 export class EnemyDeath {
   constructor(){this.reset();}
   reset({holdPose=false,clipSeconds=5.2,holdSeconds=MOURNING_DEATH_HOLD_SECONDS}={}){

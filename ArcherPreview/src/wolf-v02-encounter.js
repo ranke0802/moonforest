@@ -144,7 +144,7 @@ export class WolfV02Encounter extends WolfEncounter{
 
   async summon(...args){
     const result=await super.summon(...args),duration=this.animator?.durations[WOLF_V02_DEATH];
-    if(duration){this.death.reset({holdPose:true,clipSeconds:duration,holdSeconds:.65});this.death.duration=5;}
+    if(duration)this.death.reset({holdPose:true,clipSeconds:duration,holdSeconds:.65});
     return result;
   }
 

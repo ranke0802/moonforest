@@ -28,5 +28,11 @@ try{
   proof.cases.push({name,hz,guardSeen,initialSpeed,peakSpeed,hitSpeed,ramDamage:hit??0,knockdown:guardBroken,mauls:hit===null?0:e.grab.maulHits,breakNotices:breakNotices.length});
   a.f.battle.hide();assert.ok(!a.controller.captured);assert.equal(e.combat.grabOwner,null);assert.equal(a.impactCarrier.position.y,0);
  }
+ const e=await a.summon({distance:3}),defeat=e.onDefeat;let rewards=0,previousOpacity=1;
+ e.onDefeat=value=>{rewards++;defeat(value);};e.brain.hit({damage:9999,heavy:true});
+ assert.equal(e.brain.hp,0);assert.equal(e.death.duration,10);
+ for(let i=0;i<599;i++){a.step(1/60);assert.ok(e.death.opacity<=previousOpacity);previousOpacity=e.death.opacity;assert.equal(e.corpseGone,false);}
+ a.step(.02);assert.equal(e.corpseGone,true);assert.equal(e.death.opacity,0);assert.equal(e.actor.isEnabled(),false);assert.equal(rewards,1);
+ proof.corpse={seconds:e.death.duration,hidden:true,rewards};
  console.log(JSON.stringify({...proof,resetReleased:true,passed:true}));
 }finally{await a.dispose();}

@@ -57,11 +57,11 @@ function assertOpaque(enemy,snapshot,opacity=1){
   for(const s of snapshot){near(s.mesh.visibility,opacity,s.mesh.name+' opacity');assert.equal(s.mesh.material,s.material);assert.equal(s.material.alpha,s.alpha);assert.equal(s.mesh.metadata?.outlinePixels,s.pixels);assert.equal(s.material.metadata?.elenaStyle?.brightness,s.brightness);if(isRuntimeOutline(s.mesh))assert.equal(s.pixels,.5);}
 }
 
-test('death clock eases other enemies out in five seconds and finishes lament at ten seconds',()=>{
-  const d=new EnemyDeath();assert.equal(d.duration,CORPSE_FADE_SECONDS);assert.equal(d.advance(2.5),true);near(d.opacity,.5);d.advance(2.5);assert.equal(d.finished,true);assert.equal(d.opacity,0);
+test('death clock eases all enemies out by ten seconds, retaining authored lament hold',()=>{
+  const d=new EnemyDeath();assert.equal(d.duration,CORPSE_FADE_SECONDS);assert.equal(d.advance(5),true);near(d.opacity,.5);d.advance(5);assert.equal(d.finished,true);assert.equal(d.opacity,0);
   d.reset({holdPose:true,clipSeconds:5.2});near(d.duration,MOURNING_CORPSE_SECONDS);near(d.fadeStart,5.2+MOURNING_DEATH_HOLD_SECONDS);assert.equal(d.finished,false);
   assert.equal(d.advance(5.2),true);assert.equal(d.finished,false);assert.equal(d.opacity,1);assert.equal(d.advance(.64),false);assert.equal(d.finished,false);d.advance(.011);assert.equal(d.finished,false);assert.ok(d.opacity<1);d.advance(10-d.elapsed-.001);assert.equal(d.finished,false);assert.ok(d.opacity>0);d.advance(.002);assert.equal(d.finished,true);assert.equal(d.opacity,0);assert.equal(d.advance(10),false);
-  d.reset();assert.equal(d.holdPose,false);assert.equal(d.duration,5);assert.equal(d.opacity,1);assert.equal(d.finished,false);d.advance(Number.NaN);assert.equal(d.elapsed,0);
+  d.reset();assert.equal(d.holdPose,false);assert.equal(d.duration,10);assert.equal(d.opacity,1);assert.equal(d.finished,false);d.advance(Number.NaN);assert.equal(d.elapsed,0);
 });
 
 test('r9 death plays once for 5.2 seconds at every attack-speed setting, then smoothly fades body and ink until ten seconds',async t=>{
