@@ -1,0 +1,7 @@
+{
+  "scope": "Bounded CPU work reduction; not a device FPS/GPU benchmark",
+  "hurtVolumes": {"capsules":18,"samePoseQueries":10,"uncachedPointTransforms":360,"cachedPointTransforms":36,"parentAndBoneMatrixInvalidationPassed":true,"geometryAndRadiiPreserved":true},
+  "otherChanges": ["Skip identical second RUN animation sample", "Cache immutable action motion descriptors", "Group hurt volumes by bone world matrix", "Retain shared key tables and actor-owned sampler/pose state", "No new render passes, textures or per-actor frame observers"],
+  "preservation": "Approved mesh, UV, normals, weights, 28 joints, textures, LOD and frozen0.1 retained",
+  "deviceFpsHeatGpu": "User review pending"
+}

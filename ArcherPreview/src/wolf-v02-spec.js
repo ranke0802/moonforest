@@ -6,6 +6,7 @@ export const WOLF_V02_KNOCKBACK_SCALE=.8;
 export const WOLF_V02_SNAP='Wolf_Predator_Diagonal_Bite_V02',WOLF_V02_SWIPE='Wolf_Predator_Reverse_Bite_V02';
 export const WOLF_V02_BRACE='Wolf_Backward_Brace_V02',WOLF_V02_DEATH='Wolf_Staggered_Collapse_V02';
 export const WOLF_V02_GET_UP='Wolf_Supported_Get_Up_V02',WOLF_V02_BACK_RUN='Wolf_Backward_Run_V02';
+export const WOLF_V02_AIR_REACTION='Wolf_Airborne_Knockback_Land_V02';
 export const WOLF_V02_RAM='Wolf_Ram_Ground_Maul_V02';
 export const WOLF_V02_CLOSE_RAM='Wolf_Close_Ram_Ground_Maul_V02';
 export const WOLF_V02_RAM_PHASES=Object.freeze([
@@ -15,17 +16,18 @@ export const WOLF_V02_RAM_PHASES=Object.freeze([
 ].map(Object.freeze));
 const closeOffset=112/60;
 export const WOLF_V02_CLOSE_RAM_PHASES=Object.freeze(WOLF_V02_RAM_PHASES.map(phase=>Object.freeze({...phase,contactStart:phase.contactStart-closeOffset,contactEnd:phase.contactEnd-closeOffset,impact:phase.impact-closeOffset})));
+export const WOLF_V02_MOMENTUM_RAM_PHASES=Object.freeze([Object.freeze({...WOLF_V02_CLOSE_RAM_PHASES[0],contactStart:.28,contactEnd:.42,impact:.34}),...WOLF_V02_CLOSE_RAM_PHASES.slice(1)]);
 export const WOLF_V02_ORBIT=Object.freeze({right:'Wolf_Orbit_Step_V02',left:'Wolf_Orbit_Step_Left_V02'});
 // R8's supported run feet travel 4.2 source metres per source second (17/30 s
 // per cycle). At 2.5x the cadence, rather than the stride, matches world speed.
 export const WOLF_V02_GAIT=Object.freeze({runSpeed:6.6,farRunSpeed:9.2,runAcceleration:8,runSourceSpeed:4.2,runPlaybackRate:6.6/(4.2*WOLF_SCALE),runSourceStart:1/30,runSourceDuration:17/30,orbitPlaybackRate:1.25,orbitFastPlaybackRate:1.8,orbitRadius:1.2});
-const quick={sourceClip:WOLF_V02_SNAP,clipStart:0,clipEnd:.80,impact:20/60,commitTime:.20,capture:false,damage:55,range:4,minDistance:2.8,maxDistance:3.15,preferredDistance:3.0,recovery:.60,authoredAttention:true,contactParts:['jaw','head'],whip:{source:[0,.20,.40,.80],seconds:[0,.24,.32,.66]}};
+const quick={sourceClip:WOLF_V02_SNAP,clipStart:0,clipEnd:.80,impact:20/60,commitTime:.20,capture:false,damage:55,range:4,minDistance:2.8,maxDistance:3.15,preferredDistance:3.0,recovery:.60,authoredAttention:true,contactParts:['jaw','head'],whip:{source:[0,.20,.40,.80],seconds:[0,.26,.305,.68]}};
 export const WOLF_V02_ACTIONS=Object.freeze([
  {id:'quick-bite',label:'짧은 입질',...quick},
  {id:'chain-bite',label:'연속 입질',...quick,damage:45,recovery:.68,chain:true},
- {id:'paw-swipe',label:'사선 돌진 물기',sourceClip:WOLF_V02_SWIPE,clipStart:0,clipEnd:52/60,impact:22/60,commitTime:.22,capture:false,damage:65,range:4,minDistance:2.8,maxDistance:3.25,preferredDistance:3.1,recovery:.65,authoredAttention:true,contactParts:['jaw','head'],whip:{source:[0,.22,26/60,52/60],seconds:[0,.26,.34,.72]}},
- {id:'lunge',label:'머리 들이받기·넘어진 적 물어뜯기',sourceClip:WOLF_V02_CLOSE_RAM,variant:'grounded-ram',clipStart:0,clipEnd:200/60,impact:2.62-closeOffset,contactStart:2.54-closeOffset,contactEnd:2.73-closeOffset,commitTime:.36,capture:false,damage:100,range:4,minDistance:3.80,maxDistance:4.20,preferredDistance:4.0,recovery:1.10,contactParts:['head'],authoredAttention:true,ramPhases:WOLF_V02_CLOSE_RAM_PHASES,postRamClock:2.62-closeOffset,abortRecoveryStart:4.32-closeOffset,missSourceClip:WOLF_CLIPS.lunge,missClipStart:2.73,missClipEnd:3.10,whip:{source:[0,.28,.50,2.55-closeOffset,2.62-closeOffset,200/60],seconds:[0,.32,.50,.64,.6947272727272727,3.2747272727272727]}},
- {id:'pin',label:'앞발 제압·물기',sourceClip:WOLF_CLIPS.pin,clipStart:0,clipEnd:3.4,impact:1.20,commitTime:.85,capture:true,damage:120,range:3.2,minDistance:8.7,maxDistance:9.5,preferredDistance:9.1,recovery:1.05,contactParts:['jaw','head'],whip:{source:[0,.85,1.20,1.85,3.4],seconds:[0,.43,.60,.85,1.55]}},
+ {id:'paw-swipe',label:'사선 돌진 물기',sourceClip:WOLF_V02_SWIPE,clipStart:0,clipEnd:52/60,impact:22/60,commitTime:.22,capture:false,damage:65,range:4,minDistance:2.8,maxDistance:3.25,preferredDistance:3.1,recovery:.65,authoredAttention:true,contactParts:['jaw','head'],whip:{source:[0,.22,26/60,52/60],seconds:[0,.28,.325,.74]}},
+ {id:'lunge',label:'질주 박치기·추격 물어뜯기',sourceClip:WOLF_CLIPS.run,maulSourceClip:WOLF_V02_CLOSE_RAM,momentumRam:true,variant:'gallop-ram',clipStart:0,clipEnd:.60,impact:.34,contactStart:.28,contactEnd:.42,commitTime:.20,capture:false,damage:100,range:4,minDistance:3.8,maxDistance:6.5,preferredDistance:4.5,recovery:1.10,contactParts:['head'],authoredAttention:true,ramPhases:WOLF_V02_MOMENTUM_RAM_PHASES,postRamClock:.34,maulClipStart:1.50,maulClipEnd:200/60,abortRecoveryStart:4.32-closeOffset,whip:{source:[0,.10,.28,.34,.42,.60],seconds:[0,.16,.26,.285,.36,.49]}},
+ {id:'pin',label:'앞발 제압·물기',sourceClip:WOLF_CLIPS.pin,clipStart:0,clipEnd:3.4,impact:1.20,commitTime:.85,capture:true,damage:120,range:3.2,minDistance:8.7,maxDistance:9.5,preferredDistance:9.1,recovery:1.05,contactParts:['jaw','head'],whip:{source:[0,.85,1.20,1.85,3.4],seconds:[0,.50,.57,.68,1.58]}},
 ].map(a=>Object.freeze({...a,contactStart:a.contactStart??(a.sourceClip===WOLF_V02_SNAP?.29:a.sourceClip===WOLF_V02_SWIPE?.32:a.capture?a.impact:a.impact-.03),contactEnd:a.contactEnd??(a.sourceClip===WOLF_V02_SNAP?.40:a.sourceClip===WOLF_V02_SWIPE?26/60:a.impact+.12),contactParts:a.contactParts?Object.freeze(a.contactParts):undefined,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
 export const WOLF_V02_BY_ID=Object.freeze(Object.fromEntries(WOLF_V02_ACTIONS.map(a=>[a.id,a])));
 export const WOLF_V02_CLOSE_RAM_ACTION=WOLF_V02_BY_ID.lunge;
@@ -69,15 +71,18 @@ export class WolfV02Brain extends WolfBrain{
  }
  startAction(id,{continuation=false,distance}={}){
   const action=WOLF_V02_BY_ID[aliases[id]??id];if(!action)throw new Error('알 수 없는 늑대 공격: '+id);
+  const carry=action.momentumRam&&this.state===WOLF_CLIPS.run&&this.mode==='move',gait=carry?this.time:WOLF_V02_GAIT.runSourceStart,runClock=carry?(this.gaitClock??gait-WOLF_V02_GAIT.runSourceStart):0,speed=carry?(this.approachSpeed??WOLF_V02_GAIT.runSpeed):WOLF_V02_GAIT.runSpeed;
   this.start(action.sourceClip,'attack');this.action=action;this.actionId=action.id;this.time=action.clipStart;this.actionElapsed=0;this.behavior='anticipation';this.attackCount++;this.lastOutcome=null;this.resolvedSerial=null;this.pinImpactPassed=false;
   this.boutStrikes=continuation?this.boutStrikes+1:1;
   if(!continuation)this.boutObserved=false;
   if(action.ramPhases){this.ramAbortReason=null;this.ramRecoveryOrigin=null;this.ramAccepted=false;this.ramAcceptedClock=null;this.ramChaseClock=null;this.ramStartDistance=distance??this.lastDistance;this.time=action.clipStart;}
+  if(action.momentumRam){this.time=gait;this.ramRunClock=runClock;this.ramRunSpeed=speed;this.ramActualSpeed=speed;this.ramStage='charge';this.ramLayerElapsed=Math.max(0,whipElapsedAt(action,action.contactStart)-Math.max(0,(distance??4.5)-(this.ramReach??2.5))/speed*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
   this.chainRemaining=action.chain&&this.boutStrikes<3&&!continuation?1:0;this.plannedId=null;this.positionElapsed=0;this.followupId=null;this.followChain=false;
   return action;
  }
  abortRam(reason='ram-miss'){
   if(!this.action?.ramPhases||this.mode!=='attack')return false;
+  if(this.action.momentumRam){this.ramAbortReason=reason;this.lastOutcome='miss';this.requestRetreat('miss');this.ramStage='miss-brake';return true;}
   this.ramAbortReason=reason;this.requestRetreat('miss');return true;
  }
  beginRamRecovery(){
@@ -123,10 +128,10 @@ export class WolfV02Brain extends WolfBrain{
   const grounded=['down','recover'].includes(this.mode),before=this.hp;
   const accepted=super.hit({...options,heavy:false,stun:0,interruptsBoss:false});if(!accepted)return false;
   this.recordDamage(before-this.hp);
-  if(this.hp<=0){this.stagger=0;if(this.durations[WOLF_V02_DEATH])this.start(WOLF_V02_DEATH,'down');this.cancelBout();this.behavior='dead';return true;}
+  if(this.hp<=0){this.stagger=0;const clip=options.heavy&&this.durations[WOLF_V02_AIR_REACTION]?WOLF_V02_AIR_REACTION:WOLF_V02_DEATH;if(this.durations[clip])this.start(clip,'down');this.cancelBout();this.behavior='dead';return true;}
   if(grounded)return true;
   if(options.heavy){
-   this.cancelBout();this.stagger=0;this.start(WOLF_V02_DEATH,'down');this.behavior='down';this.nonlethalDownHold=.30;this.retreatPending=null;this.retreatCooldown=8;return true;
+   this.cancelBout();this.stagger=0;this.start(this.durations[WOLF_V02_AIR_REACTION]?WOLF_V02_AIR_REACTION:WOLF_V02_DEATH,'down');this.behavior='down';this.nonlethalDownHold=.30;this.retreatPending=null;this.retreatCooldown=8;return true;
   }
   if(options.stun>0||options.interruptsBoss){
    this.cancelBout();this.stagger=0;this.start(this.reactionClip(options.heavy),'hit');this.behavior=options.heavy?'brace':'hit';this.reactionPlaybackRate=options.heavy?1:1.6;this.reactionRetreated=!!options.heavy;
@@ -182,6 +187,33 @@ export class WolfV02Brain extends WolfBrain{
   // attack-speed setting is 2x. A missed leap leaves the longest opening.
   this.recoveryRemaining=this.followupId?(this.followChain?.30:.42):this.recoveryFull;
  }
+ updateMomentumRam(dt){
+  const action=this.action;this.ramStageClock+=dt;this.ramLayerElapsed=Math.min(actionDuration(action),this.ramLayerElapsed+dt*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.actionElapsed=this.ramLayerElapsed;
+  if(this.ramStage==='charge'&&this.ramAccepted){this.ramStage='chase';this.ramStageClock=0;this.ramChaseClock=this.combatClock;}
+  if(this.ramStage==='charge'&&this.ramLayerTime>=.60&&!this.ramAccepted)this.abortRam('ram-miss');
+  if(this.ramStage==='charge'){this.ramContactTime=this.ramLayerTime;this.behavior='running-ram';}
+  else if(this.ramStage==='chase'){
+   this.ramContactTime=.421;this.behavior='run-chase';
+   const desired=Math.max(0,Math.min(this.approachSpeed??WOLF_V02_GAIT.farRunSpeed,this.ramChaseSpeed??WOLF_V02_GAIT.runSpeed)),change=24*dt;
+   this.ramRunSpeed+=clamp(desired-this.ramRunSpeed,-change,change);
+   if(this.ramCatchReady){this.ramStage='settle';this.ramStageClock=0;this.state=action.maulSourceClip;this.time=action.maulClipStart;this.ramBodyOrigin=action.maulClipStart;this.ramRunSpeed=0;return {events:[],speed:0};}
+   if(this.combatClock-this.ramAcceptedClock>1.55)this.abortRam('chase-unreachable');
+  }else if(this.ramStage==='settle'){
+   this.behavior='settle-prone';this.ramContactTime=this.time;this.time=action.maulClipStart;
+   if(this.ramStageClock>=.20&&this.ramVictimProne){this.ramStage='maul';this.ramStageClock=0;}
+   else if(this.combatClock-this.ramAcceptedClock>1.6)this.abortRam('victim-not-prone-in-time');
+   return {events:[],speed:0};
+  }else if(this.ramStage==='maul'){
+   this.behavior='maul';this.time=Math.min(action.maulClipEnd,this.time+dt);this.ramContactTime=this.time;
+   if(this.time>=action.maulClipEnd)this.beginRecovery();return {events:[],speed:0};
+  }
+  if(this.ramStage==='miss-brake'){
+   this.behavior='ram-miss';this.ramContactTime=.61;this.ramRunSpeed=Math.max(0,this.ramRunSpeed-24*dt);
+   if(this.state!==WOLF_CLIPS.run||this.ramRunSpeed<=.05){this.beginRecovery();return {events:[],speed:0};}
+  }
+  this.ramRunClock+=dt*this.ramRunSpeed/(WOLF_V02_GAIT.runSourceSpeed*WOLF_SCALE);this.time=WOLF_V02_GAIT.runSourceStart+this.ramRunClock%WOLF_V02_GAIT.runSourceDuration;
+  return {events:[],speed:this.ramRunSpeed,momentumRam:true};
+ }
  update(dt,distance,playerAlive=true){
   dt=Number.isFinite(dt)?Math.max(0,dt):0;distance=Number.isFinite(distance)?Math.max(0,distance):Infinity;this.lastDistance=distance;this.phase=this.hp<=this.maxHp*.5?2:1;
   const events=[];this.combatClock+=dt;this.flash=Math.max(0,this.flash-dt);this.retreatCooldown=Math.max(0,this.retreatCooldown-dt);this.tacticalCooldown=Math.max(0,this.tacticalCooldown-dt);this.evadeCooldown=Math.max(0,this.evadeCooldown-dt);
@@ -232,6 +264,7 @@ export class WolfV02Brain extends WolfBrain{
   }
   if(this.mode==='attack'&&this.action){
    const action=this.action;
+   if(action.momentumRam)return this.updateMomentumRam(dt);
    if(action.ramPhases&&this.ramAbortReason&&(this.ramAccepted||this.time>=action.contactEnd)){this.beginRamRecovery();return {events,speed:0};}
    if(action.ramPhases&&this.ramAccepted){
     const age=this.combatClock-this.ramAcceptedClock,chase=WOLF_V02_RAM_CHASE;
@@ -299,18 +332,19 @@ export class WolfV02Brain extends WolfBrain{
   if(!this.boutObserved){this.beginStalk();return {events,speed:0};}
   this.plannedId??=this.stalkPlannedId??this.chooseAction(distance);this.positionElapsed+=dt;
   if(this.plannedId==='lunge'&&this.ramApproachVariant==='run-evade-ram'&&!this.ramEvaded&&distance<=5&&!this.sightBlocked){this.beginRamEvade();return {events,speed:0};}
-  const chosen=WOLF_V02_BY_ID[this.plannedId],approach=distance>chosen.maxDistance+1e-5||this.sightBlocked;
+  const chosen=WOLF_V02_BY_ID[this.plannedId],ramEntry=chosen.momentumRam?(this.ramReach??2.5)+(this.approachSpeed??WOLF_V02_GAIT.runSpeed)*whipElapsedAt(chosen,chosen.contactStart)/(this.attackSettings?.speed??1)+.10:chosen.maxDistance,approach=distance>ramEntry+1e-5||this.sightBlocked;
   if(approach){
    const changed=this.state!==WOLF_CLIPS.run||this.mode!=='move';this.startIfChanged(WOLF_CLIPS.run,'move');
    // The glTF adds a duplicate first-frame hold. Only 0.2 skips that hold,
    // looping the preserved gallop keys from frame 1 through frame 18.
    const desired=distance>12?WOLF_V02_GAIT.farRunSpeed:WOLF_V02_GAIT.runSpeed,previous=changed?WOLF_V02_GAIT.runSpeed:this.approachSpeed??WOLF_V02_GAIT.runSpeed,change=WOLF_V02_GAIT.runAcceleration*dt;
    this.approachSpeed=previous+clamp(desired-previous,-change,change);this.approachPlaybackRate=this.approachSpeed/(WOLF_V02_GAIT.runSourceSpeed*WOLF_SCALE);
-   const clock=changed?0:Math.max(0,this.time-WOLF_V02_GAIT.runSourceStart);
-   this.time=WOLF_V02_GAIT.runSourceStart+(clock+dt*this.approachPlaybackRate)%WOLF_V02_GAIT.runSourceDuration;
-   return {events,speed:this.approachSpeed,retreat:false,stopDistance:this.sightBlocked?0:chosen.preferredDistance};
+   this.gaitClock=(changed?0:this.gaitClock??Math.max(0,this.time-WOLF_V02_GAIT.runSourceStart))+dt*this.approachPlaybackRate;
+   this.time=WOLF_V02_GAIT.runSourceStart+this.gaitClock%WOLF_V02_GAIT.runSourceDuration;
+   return {events,speed:this.approachSpeed,retreat:false,stopDistance:this.sightBlocked||chosen.momentumRam?0:chosen.preferredDistance};
   }
   this.planIndex++;if(this.attackSettings?.custom)this.customAttackIndex=(this.customAttackIndex??0)+1;this.startAction(chosen.id,{distance});
+  if(chosen.momentumRam)return this.updateMomentumRam(dt);
   return {events,speed:0};
  }
  get label(){return this.hp<=0?'격파':this.stagger?'경직':this.behavior==='recovery'?'빈틈 · 반격 기회':this.action?.label??({flank:'측면 압박',position:'거리 조절',observe:'경계'}[this.behavior]??super.label);}

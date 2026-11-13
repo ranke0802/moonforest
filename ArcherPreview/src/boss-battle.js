@@ -391,7 +391,7 @@ export class BossBattle {
     this.mourningWarmRequested=false;
     this.revision++; this.active = false; this.updating = true;
     for (const boss of this.allPooled) boss.hide();
-    this.encounters = []; this.potions.cancel(); this.playerReaction.reset();
+    this.encounters = []; this.potions.cancel(); this.playerReaction.reset();this.combat.v02Impact?.reset();
     this.updating = false; this.lastHit = null; this.onChange(this);
   }
   resetBattle() { this.hide(); this.combat.reset(); this.onChange(this); }

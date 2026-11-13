@@ -41,12 +41,17 @@ export class WolfV02HurtVolumes{
    volume:{name:fit.name,points:[[0,0,0],[0,0,0]],radius:fit.radius*scale},
   }));
   this.capsules=this.bindings.map(binding=>binding.volume);this.scratch=new Vector3();
+  const groups=new Map();for(const binding of this.bindings){let group=groups.get(binding.node);if(!group){group={node:binding.node,flag:null,bindings:[]};groups.set(binding.node,group);}group.bindings.push(binding);}
+  this.groups=[...groups.values()];this.transforms=0;this.reused=0;
  }
  sample(){
-  for(const binding of this.bindings){
-   const matrix=binding.node.getWorldMatrix(),points=binding.volume.points;
+  for(const group of this.groups){
+   const matrix=group.node.getWorldMatrix();
+   if(Number.isFinite(matrix.updateFlag)&&group.flag===matrix.updateFlag){this.reused+=group.bindings.length;continue;}group.flag=matrix.updateFlag;
+   for(const binding of group.bindings){const points=binding.volume.points;
    Vector3.TransformCoordinatesToRef(binding.a,matrix,this.scratch);points[0][0]=this.scratch.x;points[0][1]=this.scratch.y;points[0][2]=this.scratch.z;
    Vector3.TransformCoordinatesToRef(binding.b,matrix,this.scratch);points[1][0]=this.scratch.x;points[1][1]=this.scratch.y;points[1][2]=this.scratch.z;
+   this.transforms+=2;}
   }
   return this.capsules;
  }

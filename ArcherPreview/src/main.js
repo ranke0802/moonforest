@@ -546,6 +546,7 @@ async function loadCharacter() {
     swordTrail?.clear();if (animator) animator.dispose();
     equipment?.dispose(); equipment = null;
     if (container) { for (const mesh of container.meshes) world.shadows.removeShadowCaster(mesh, false); container.dispose(); }
+    boss?.combat?.v02Impact?.reset();
     if (actor) actor.dispose();
     container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, null, modelUrl.pathname.endsWith('.gltf') ? '.gltf' : '.glb');
     container.addAllToScene();
@@ -555,7 +556,15 @@ async function loadCharacter() {
     if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}
     syncCaveFog(true);
     // World movement is separate from exported root motion, including the authored death fall.
-    for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = actor;
+    let playerModelParent=actor;
+    if(versionRoute.release==='moonforest-0.2'&&isV2()){
+      // The ground anchor stays terrain-owned. A single identity carrier lets
+      // an accepted wolf ram lift the complete model without altering its rig.
+      const carrier=new TransformNode('player-v02-impact-carrier',world.scene);
+      carrier.parent=actor;actor.metadata={...actor.metadata,moonforestV02ImpactCarrier:carrier};
+      playerModelParent=carrier;
+    }
+    for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = playerModelParent;
     const dimensions=configurePlayerSize(actor,config,{warrior:isV2()});
     cameraPitch.setBodyScale(dimensions.ratio);
     actor.rotation.y = config.forwardYaw || 0;
@@ -736,6 +745,7 @@ function render(dt) {
       const recoiled=boss.playerReaction.update(dt,actor);
       staminaFeedback.advance(dt);applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
       if(recoiled)constrainPlayerPosition(beforeRecoil);
+      boss.combat.v02Impact?.advance(dt,actor,constrainPlayerPosition);
     }
     const rawMovement=input.value();
     if(elenaReview){

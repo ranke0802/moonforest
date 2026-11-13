@@ -19,7 +19,7 @@ export class WolfV02LocomotionPose{
   this.e=encounter;this.slots=new Map();this.edited=false;this.sample=-1;
   this.parent=Quaternion.Identity();this.world=Quaternion.Identity();this.delta=Quaternion.Identity();this.local=Quaternion.Identity();this.desired=Quaternion.Identity();
   this.a=new Vector3();this.b=new Vector3();this.c=new Vector3();this.d=new Vector3();this.v=new Vector3();this.bend=new Vector3();this.knee=new Vector3();this.from=new Vector3();this.to=new Vector3();this.forward=new Vector3();this.right=new Vector3();
-  for(const name of ['neck','head',...['fore.L','fore.R','hind.L','hind.R'].flatMap(n=>[n+'.upper',n+'.lower',n.startsWith('hind')?n+'.metatarsal':n+'.paw',n+'.paw'])]){
+  for(const name of ['pelvis','spine','chest','neck','head',...['fore.L','fore.R','hind.L','hind.R'].flatMap(n=>[n+'.upper',n+'.lower',n.startsWith('hind')?n+'.metatarsal':n+'.paw',n+'.paw'])]){
    const node=encounter.nodes[name];if(node&&!this.slots.has(node))this.slots.set(node,{node,original:Quaternion.Identity(),changed:false,branch:[]});
   }
   // The sampler already orders this actor's imported nodes parent first. Cache
@@ -31,9 +31,13 @@ export class WolfV02LocomotionPose{
   const brace=encounter.config.catalog.find(clip=>clip.name===WOLF_V02_BRACE);
   this.legs=['fore.L','fore.R','hind.L','hind.R'].map(name=>({name,upper:encounter.nodes[name+'.upper'],lower:encounter.nodes[name+'.lower'],end:encounter.nodes[name+(name.startsWith('hind')?'.metatarsal':'.paw')],foot:encounter.nodes[name+'.paw'],anchor:new Vector3(),previous:new Vector3(),offset:new Vector3(),endWorld:Quaternion.Identity(),footWorld:Quaternion.Identity(),planted:false,braceSupport:braceSupport(brace,name)}));
   this.maxReachError=0;this.releasedPlants=0;this.serial=null;
+  this.alertPosition=Vector3.Zero();this.emphasis=Quaternion.Identity();
+  this.motionProfile={alertDropRatio:.065,diagonalYaw:.09,diagonalRoll:.045,...encounter.config.motionProfile};
+  this.alertDrop=Math.min(.04,Vector3.Distance(this.legs[0].upper.getAbsolutePosition(),this.legs[0].lower.getAbsolutePosition())/encounter.config.scale*this.motionProfile.alertDropRatio);
  }
  restore(){
-  if(this.edited&&this.sample===this.e.animator.samples)for(const slot of this.slots.values())if(slot.changed)slot.node.rotationQuaternion.copyFrom(slot.original);
+  if(this.edited&&this.sample===this.e.animator.samples)for(const slot of this.slots.values()){if(slot.changed)slot.node.rotationQuaternion.copyFrom(slot.original);if(slot.positionChanged)slot.node.position.copyFrom(this.alertPosition);}
+  for(const slot of this.slots.values())slot.positionChanged=false;
   for(const slot of this.slots.values())slot.changed=false;
   this.edited=false;
  }
@@ -48,7 +52,28 @@ export class WolfV02LocomotionPose{
   this.remember(node);node.parent.getWorldMatrix().decompose(undefined,this.parent);this.parent.conjugateInPlace();this.parent.multiplyToRef(rotation,this.local);node.rotationQuaternion.copyFrom(this.local).normalize();this.refresh(node);
  }
  rotateWorld(node,rotation){node.getWorldMatrix().decompose(undefined,this.world);rotation.multiplyToRef(this.world,this.desired);this.setWorldRotation(node,this.desired);}
- turnToward(node,radians){Quaternion.RotationAxisToRef(up,radians,this.delta);this.rotateWorld(node,this.delta);}
+ turnToward(node,radians){if(Math.abs(radians)<1e-7)return;Quaternion.RotationAxisToRef(up,radians,this.delta);this.rotateWorld(node,this.delta);}
+ alertCrouch(){
+  const e=this.e,b=e.brain;
+  if(b.hp<=0||b.stagger||b.behavior!=='flank')return;
+  const pelvis=e.nodes.pelvis,slot=this.slots.get(pelvis);if(!slot)return;
+  this.alertPosition.copyFrom(pelvis.position);slot.positionChanged=true;this.edited=true;this.sample=e.animator.samples;
+  pelvis.position.y-=this.alertDrop;this.refresh(pelvis);
+ }
+ groundAlertFeet(){
+  const e=this.e;
+  for(const leg of this.legs){if(leg.planted)continue;const p=leg.foot.getAbsolutePosition(),floor=(e.world.terrain?.heightAt?.(p.x,p.z)??e.actor.position.y)+.008;if(p.y>=floor)continue;
+   this.plant(leg);leg.anchor.y=floor;this.solveLeg(leg);leg.planted=false;
+  }
+ }
+ attackEmphasis(){
+  const e=this.e,b=e.brain,a=b.action;
+  if(b.mode!=='attack'||!a||a.momentumRam||a.id==='pin')return;
+  // Enlarge the existing diagonal upper-body rotation, never limb lengths.
+  const time=b.time,peak=a.impact,width=.17,weight=Math.max(0,1-Math.abs(time-peak)/width);if(!weight)return;
+  const sign=a.id==='paw-swipe'?-1:1,node=e.nodes.chest;
+  this.remember(node);Quaternion.RotationYawPitchRollToRef(sign*this.motionProfile.diagonalYaw*weight,0,sign*this.motionProfile.diagonalRoll*weight,this.emphasis);node.rotationQuaternion.multiplyToRef(this.emphasis,this.local);node.rotationQuaternion.copyFrom(this.local);this.refresh(node);
+ }
  aimJoint(node,head,player,height,yawLimit,pitchLimit,fraction=1){
   let p=head.getAbsolutePosition();Vector3.TransformNormalToRef(up,head.getWorldMatrix(),this.forward);
   let yaw=Math.atan2(this.forward.x,this.forward.z),target=Math.atan2(player.x-p.x,player.z-p.z);

@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+const root=path.resolve(import.meta.dirname,'../../..'),baseline=JSON.parse(fs.readFileSync(path.join(import.meta.dirname,'preserved-baseline.json'))),hash=b=>createHash('sha256').update(b).digest('hex');
+const rows=Object.entries(baseline.files).map(([p,b])=>{const raw=fs.readFileSync(path.join(root,p)),bytes=b.basis.startsWith('committed')?Buffer.from(raw.toString('utf8').replaceAll('\r\n','\n')):raw;return {path:p,basis:b.basis,expected:b.sha256,actual:hash(bytes),preserved:hash(bytes)===b.sha256};});
+const read=name=>fs.readFileSync(path.join(root,'ArcherPreview/src',name),'utf8').replaceAll('\r\n','\n');
+const base=name=>execFileSync('git',['show',baseline.commit+':ArcherPreview/src/'+name],{cwd:root,maxBuffer:3*1024*1024});
+let main=read('main.js');
+main=main.replace('    boss?.combat?.v02Impact?.reset();\n','').replace('      boss.combat.v02Impact?.advance(dt,actor,constrainPlayerPosition);\n','');
+const carrierStart=main.indexOf('    let playerModelParent=actor;'),carrierEnd=main.indexOf('    const dimensions=configurePlayerSize',carrierStart);
+if(carrierStart<0||carrierEnd<carrierStart)throw Error('Missing scoped0.2carrier setup');
+main=main.slice(0,carrierStart)+'    for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = actor;\n'+main.slice(carrierEnd);
+const battle=read('boss-battle.js').replace('this.playerReaction.reset();this.combat.v02Impact?.reset();','this.playerReaction.reset();');
+rows.push(...[['main.js',main],['boss-battle.js',battle]].map(([name,restored])=>({path:'ArcherPreview/src/'+name,basis:'R14 optional hooks removed; all remaining shared logic must equal committed R13',expected:hash(base(name)),actual:hash(Buffer.from(restored)),preserved:hash(base(name))===hash(Buffer.from(restored))})));
+const result={baseline:baseline.commit,scope:baseline.scope,checkedAt:new Date().toISOString(),allPreserved:rows.every(r=>r.preserved),rows};fs.writeFileSync(path.join(import.meta.dirname,'preservation-result.json'),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify({allPreserved:result.allPreserved,files:rows.length,changed:rows.filter(r=>!r.preserved).map(r=>r.path)}));if(!result.allPreserved)process.exitCode=1;

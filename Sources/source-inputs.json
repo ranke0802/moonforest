@@ -46,7 +46,9 @@
     "wolf-predator-r11-review-reference": "Sources/references/wolf-predator-r11",
     "wolf-v02-ram-r12": "Sources/actors/tripo-monsters/wolf-v02-ram-r12",
     "wolf-v02-knockdown-r13": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13",
-    "wolf-combat-r13-review-reference": "Sources/references/wolf-combat-r13"
+    "wolf-combat-r13-review-reference": "Sources/references/wolf-combat-r13",
+    "wolf-v02-momentum-r14": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14",
+    "wolf-combat-r14-approved-reference": "Sources/references/wolf-combat-r14"
   },
   "inputs": [
     {
@@ -42635,6 +42637,903 @@
       ],
       "requiredBy": [
         "moonforest-0.2-wolf-combat-r13-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/actions.json",
+      "bytes": 110582,
+      "sha256": "7350b566da10137c58e9a69e87a539259485dd73045a4d31d27a046d63fcc8e9",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/blend/wolf-v02-momentum-r14.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/blend/wolf-v02-momentum-r14.blend",
+      "bytes": 66414984,
+      "sha256": "189ac7a38158c70effff9bc0c446189631bedfba415410bb50c79f4d841199b1",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/clips.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/clips.json",
+      "bytes": 620757,
+      "sha256": "6dca03b9bee20a23fa1e66d4c41a41b1bfe57812a8c2ccda6da00cc59cfba809",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/deformation-validation.json",
+      "bytes": 30793,
+      "sha256": "2eb9f47453b12015ed10df69aa61eb643be061bdce5bb56acb9875406286d8fd",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/manifest.json",
+      "bytes": 4559,
+      "sha256": "ef8e5a874106d4cce59d4288d3c93297fa24645f9a1bfaab4e71d7c675db09a7",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/models/wolf-v02-momentum-r14.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/models/wolf-v02-momentum-r14.glb",
+      "bytes": 137024,
+      "sha256": "1cbb4800e9261972536927bc18c7abfd684e9110dc5c790b3b2649123c89b46a",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/overlay-skin-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/overlay-skin-validation.json",
+      "bytes": 13715,
+      "sha256": "a10a0cadece228e066f8d90e9fef7364ed6e3f86df4ef01bad24413fbbcb61ba",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/overlay-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/overlay-validation.json",
+      "bytes": 17638,
+      "sha256": "6db6d1b799f52e1276bb54e8ef5a1f014d045e93f4580c9a056f5c4258c1b6fd",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-forelimbs-matcap.png",
+      "bytes": 502084,
+      "sha256": "0adf52884436771ee37e57a7975ec7ee58c912f4247bef847b11fd0dee6509ce",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-forelimbs-quarter.png",
+      "bytes": 540565,
+      "sha256": "1aa75b7048bbc40b13e0be4b061957c55714f12aa8b44601e5aabd0540cbd277",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-front.png",
+      "bytes": 452396,
+      "sha256": "ee1b6fd37d102b07bff78cba5d5081665c2343a9fc2bf57ca7266a352fd460dd",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-hindlimbs-matcap.png",
+      "bytes": 471680,
+      "sha256": "c15aad05d66667791fa5ea6bde6c3192f9ca803b4ebf53e49806cef7a5d37f7e",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-hindlimbs-quarter.png",
+      "bytes": 519028,
+      "sha256": "916bfb11f29faad4bff84f79dfb7a89b3f0f2eda251a4973ea9850821487fba8",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-quarter.png",
+      "bytes": 495301,
+      "sha256": "e6557fb73b8d94f32e78e54d4199e6cc0116d7717e66c0e6cee91fa867726c87",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-airturn-side.png",
+      "bytes": 455237,
+      "sha256": "625b859fd70fde8bc0496006be97cf85f5334d93ae04a9b2b4931846293d1884",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-impact-front.png",
+      "bytes": 445302,
+      "sha256": "b0d1c2c9f43e6ccf881d5414a6d0518652fd4ad91d555028019c339155991bae",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-impact-quarter.png",
+      "bytes": 495286,
+      "sha256": "3c8734b5c970de4aec88bd3b026b9afad5ed523b417ac1343561473274af692f",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-impact-side.png",
+      "bytes": 460214,
+      "sha256": "bf363249f43204d828b8c935a8eaafeb8b5ff561b2b75809524c995c130c4fd7",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-forelimbs-matcap.png",
+      "bytes": 485672,
+      "sha256": "acf5d01c02c9436152ae7878b9e434f091cb7c88af72abcf2401fe28e7bdd677",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-forelimbs-quarter.png",
+      "bytes": 531714,
+      "sha256": "3bc9e51843df0bee2862c5b9d8bd7c82930e614af2ec074e9967d47d51f553e5",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-front.png",
+      "bytes": 442297,
+      "sha256": "8bb355bf0f14530e864a3c2a0aca1a74d67a7d173056a5ee0fbe081006812a8e",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-hindlimbs-matcap.png",
+      "bytes": 482641,
+      "sha256": "49e55b36a346042f0e846387806dec6aa600f4a0d81e932387298d4e8bb57d82",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-hindlimbs-quarter.png",
+      "bytes": 525711,
+      "sha256": "491a355b942c74e84f5519e7fe978b8c227c1b4d116d437c39bbec4033faecd2",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-quarter.png",
+      "bytes": 472448,
+      "sha256": "9154092874b300c9b43eb0338f60f0117a37564d8ce023586cf01cce5577f98f",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-landing-side.png",
+      "bytes": 427690,
+      "sha256": "2c99fd12313eba3f6c75d9651ad52f954a9d43e3918f0fc90e79f12c3f8134a9",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-liftoff-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-liftoff-front.png",
+      "bytes": 444274,
+      "sha256": "c8405d14d5d399d673e677d49f5036590951ee100df1706ee6ca080148d3aef3",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-liftoff-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-liftoff-quarter.png",
+      "bytes": 493388,
+      "sha256": "5b90c3142d3318a2c76590dae1a93a2ca858275748a3330cd44fbb415b60b06d",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-liftoff-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-liftoff-side.png",
+      "bytes": 458593,
+      "sha256": "7d144fdf258fdf7984be66c53119330c65123243c59bd61cf9cc2c302ecbaa60",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-settled-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-settled-front.png",
+      "bytes": 441125,
+      "sha256": "a1f4e91500276e18a87271de3db9d45aab448685e77a1635f12180c00ce5baaf",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-settled-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-settled-quarter.png",
+      "bytes": 471965,
+      "sha256": "6d93b144eda3b0990c7d8e4e2a01f184c2630d777781116fee95eb86f6855fca",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-settled-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-settled-side.png",
+      "bytes": 425265,
+      "sha256": "ca21f3f8ea236178e29e739a4bbe556eabe187330f3c512f46bc30fd6f8c55b9",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-forelimbs-matcap.png",
+      "bytes": 489232,
+      "sha256": "1c5603c7196df711689c2e3dad9172983dc370a5263d139bbb3e07af47dcd4af",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-forelimbs-quarter.png",
+      "bytes": 532429,
+      "sha256": "c4d37351f48ce9715dda7682a871f94d33f40f2943e9376aadf658c842788e4a",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-front.png",
+      "bytes": 441153,
+      "sha256": "5affc43c37d9dea7e18a1775a34c24779e16294ee0b594f8329633c0020cc138",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-hindlimbs-matcap.png",
+      "bytes": 481622,
+      "sha256": "aa6250075093e5acb28a3132503bdc4a9676b184daff95741c693afb6c036a14",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-hindlimbs-quarter.png",
+      "bytes": 521569,
+      "sha256": "6f0c6edc3611f9fe177fd08833a07ce92ec622f8be63d206cb6c594125eba66f",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-quarter.png",
+      "bytes": 471891,
+      "sha256": "4b37362c4732b85e60eb386eeb2417a22eea3f3e4faa3a90c76de9d33ad5702b",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-knockback-side-support-side.png",
+      "bytes": 425225,
+      "sha256": "21362b144e3e9cbd579984a9a2a10ea141cb26e300f0f9f9bc2b00e4a481a972",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-front.png",
+      "bytes": 444406,
+      "sha256": "87c7ed2b3cc25921220abf215a5ca217e3238c8b9324056b56955545c3bd765d",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-neck-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-neck-quarter.png",
+      "bytes": 533501,
+      "sha256": "8a9649d57f2869004b5ac211effeeb9235fde2bec68e34d14b8a5aeb2bd391c8",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-quarter.png",
+      "bytes": 496433,
+      "sha256": "72682723c41129ad234abe2d2d58523fb6e09a82515052d172cb0cd480ad825a",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.000-side.png",
+      "bytes": 461625,
+      "sha256": "b4dbc3499ee14cd444e6a194b5fad1d0a84d7e10c414d5b7f518772e0d4b1b36",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-front.png",
+      "bytes": 443385,
+      "sha256": "6a49a0809b38ee0c015edeb09c5e4cfb82e71cb598d88fe434ff16bc2c0831ac",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-neck-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-neck-quarter.png",
+      "bytes": 535090,
+      "sha256": "fe16e3f98be76c49995dc298d25bf9850aef12c62aa74cc9a335168652d1cd15",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-quarter.png",
+      "bytes": 495255,
+      "sha256": "266c47bd084346f850ff197a9ad2fc5b7e1276c36ef9ed1456e880777e249285",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.100-side.png",
+      "bytes": 464604,
+      "sha256": "b52e1011f5c5f64a07108fdfbbe1c09eb9fca994220f6df3bf8603858b1df143",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-front.png",
+      "bytes": 442144,
+      "sha256": "d15b7f486385d173315f8b32316d862de0e31edf4bcfba713712b386eeb1c8c4",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-neck-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-neck-quarter.png",
+      "bytes": 533309,
+      "sha256": "aaf950c4b4d13aaa160ef6ee028256d087652b9729cae0f6864da15a0ce5919e",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-quarter.png",
+      "bytes": 490255,
+      "sha256": "c29ebb017355cff5fb3017c3b0eeafb65b98b4cf0e87ed6c2f82406a08ed0086",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.267-side.png",
+      "bytes": 455855,
+      "sha256": "0b8e26891a965e1109f6ac6996f6b17d87d9dedad4ed1b14c2b2a991cdb88af6",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-front.png",
+      "bytes": 446286,
+      "sha256": "008c9a27a7d2b5edb1be42039116c9e4bb8870e3d79aa1c652c93517693075e6",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-neck-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-neck-quarter.png",
+      "bytes": 533062,
+      "sha256": "4a60309bc7599f0d2980d4641c9969df8b98a9984fff1371c456ab114ad68670",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-quarter.png",
+      "bytes": 494330,
+      "sha256": "e61318c88e3ff8b0889ae0c578094207753ebd3e49f553e6cdae7a20e48b1042",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/review/R14-run-ram-phase0.367-side.png",
+      "bytes": 465318,
+      "sha256": "fa18afdd1849580a0884625a785e9009f9f05168f11285229f887ef4ec3edac6",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/run-overlay-reach-probe.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/run-overlay-reach-probe.json",
+      "bytes": 16827,
+      "sha256": "b5a85b7a3762000397780c8f5c118cc38b0ca48e51ea9ac9a3a3cd7683bf2935",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/run-ram-overlay.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/run-ram-overlay.json",
+      "bytes": 8914,
+      "sha256": "a663056a8d9c23279802bde95b2ed7f9120da4512c772637acd4865343a90e79",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/audit_deformation.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/audit_deformation.py",
+      "bytes": 8768,
+      "sha256": "450e66bf5cbac4c836ac5cb88691a0e75b122fec9c3d804b151706617fbdc36d",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/audit_overlay_skin.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/audit_overlay_skin.py",
+      "bytes": 5693,
+      "sha256": "7e8dfcbb90548070359ef3e68c14c50482600e825e839982bd3d12c6d0687b5f",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/build_overlay.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/build_overlay.py",
+      "bytes": 6589,
+      "sha256": "77b144864cb1d6c5155eaac38831f54d618a3de6c5b8cfff6f238631363cf9ab",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/build_reaction.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/build_reaction.py",
+      "bytes": 11112,
+      "sha256": "43e647aa7ae2e94bb3f212d7841122bbcf211fb315622ef41b3d5ba5009668e6",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/export_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/export_clips.py",
+      "bytes": 1189,
+      "sha256": "551603880a2e16264d1481dd726695c819633ac487ff2b2e3ee7787beb9f5a8d",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/extract_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/extract_clips.py",
+      "bytes": 5362,
+      "sha256": "6ca543362092a0072d18fe21e3c0d3815619117f2f1926decadf037726fe3c8f",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/finalize_manifest.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/finalize_manifest.py",
+      "bytes": 3923,
+      "sha256": "7b450c59ca53effc91803b3b26af3572ff90381882bea7f224ab20b5df2af889",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/probe_run_overlay.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/probe_run_overlay.py",
+      "bytes": 3453,
+      "sha256": "0c1137c60c6f7beb3dbe5d6ffd74f4a677c14ce3020e66e5630ea49db36bfbc8",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/render_review.py",
+      "bytes": 6131,
+      "sha256": "f5ef85bd5f39fe75cedcb57aed83da3ae9357217a4c6caeafaf78ea5099919c3",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/update_overlay_text.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-momentum-r14/scripts/update_overlay_text.py",
+      "bytes": 988,
+      "sha256": "a4f82406eb5b7d5ffca261685e05649fcca5638c2b08c94a4feb978dc99dc94c",
+      "origins": [
+        "R14 animation-only derivative of approved R8 rig and R13 support poses: continuous-RUN neck/head/jaw overlay and airborne reaction. Original mesh/UV/normals/weights/binds/4K textures and12clips preserved."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-combat-r14/01_질주_박치기_추격_시안.png",
+      "path": "Sources/references/wolf-combat-r14/01_질주_박치기_추격_시안.png",
+      "bytes": 2202432,
+      "sha256": "596317779bdd4180e3871044f4bb46f305a2bf0863d9c38f4dd10ee697dc4014",
+      "origins": [
+        "User-approved visual motion direction, two concept boards. Reference only; not game art or implementation evidence."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-combat-r14/02_늑대_후방_넉백_착지_시안.png",
+      "path": "Sources/references/wolf-combat-r14/02_늑대_후방_넉백_착지_시안.png",
+      "bytes": 2221142,
+      "sha256": "c5bb9631261dc893fd6276343db81edf83c6ea8ed3c220823613a6734e0c2ab7",
+      "origins": [
+        "User-approved visual motion direction, two concept boards. Reference only; not game art or implementation evidence."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-combat-r14/approval.json",
+      "path": "Sources/references/wolf-combat-r14/approval.json",
+      "bytes": 1083,
+      "sha256": "3f4e8641de6b62849912888ed59aa88b403f35e1e1917466525dde4c33800522",
+      "origins": [
+        "User-approved visual motion direction, two concept boards. Reference only; not game art or implementation evidence."
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-momentum-r14-review"
       ],
       "status": "bundled"
     }

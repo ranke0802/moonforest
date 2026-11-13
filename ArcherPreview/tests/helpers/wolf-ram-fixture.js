@@ -1,14 +1,15 @@
 import fs from 'node:fs';
-import {Vector3,StandardMaterial} from '@babylonjs/core';
+import {Vector3,StandardMaterial,TransformNode} from '@babylonjs/core';
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import {readRuntimeGltf} from './read-runtime-gltf.js';
 import {wolfHuntFixture} from './wolf-hunt-fixture.js';
 import {CharacterAnimator} from '../../src/animation.js';
 import {WarriorV2Controller} from '../../src/warrior-v2.js';
-import {configurePlayerSize} from '../../src/player-dimensions.js';
+import {configurePlayerSize,playerDimensions} from '../../src/player-dimensions.js';
 import {orderPoseNodes,refreshPoseMatrices} from '../../src/pose-matrices.js';
 import {dodgeDistanceAt} from '../../src/dodge.js';
-import {setWorldCharacter} from '../../src/world-limits.js';
+import {setWorldCharacter,ARENA_RADIUS} from '../../src/world-limits.js';
+import {villageTravelLimit,clampVillageExit} from '../../src/map-travel.js';
 
 // The same real warrior asset, 1.6 m scaling, controller, native animator and
 // after-animation contact ordering as main.js. No standing capsule replaces
@@ -23,7 +24,12 @@ export async function wolfRamFixture(t){
  const loader=new GLTFFileLoader();loader.skipMaterials=true;
  const playerAsset=await loader.loadAssetContainerAsync(f.scene,{json:gltf},'');playerAsset.addAllToScene();
  for(const group of playerAsset.animationGroups)group.stop();
- for(const node of new Set([...playerAsset.meshes,...playerAsset.transformNodes]))if(!node.parent)node.parent=f.player;
+ let impactCarrier=null,modelParent=f.player;
+ if(f.world.release==='moonforest-0.2'){
+  impactCarrier=new TransformNode('player-v02-impact-carrier',f.scene);impactCarrier.parent=f.player;modelParent=impactCarrier;
+  f.player.metadata={...f.player.metadata,moonforestV02ImpactCarrier:impactCarrier};
+ }
+ for(const node of new Set([...playerAsset.meshes,...playerAsset.transformNodes]))if(!node.parent)node.parent=modelParent;
  const dimensions=configurePlayerSize(f.player,config,{warrior:true});f.player.rotation.y=Math.PI;
  const paint=new StandardMaterial('ram-warrior-test-paint',f.scene);
  for(const mesh of playerAsset.meshes)if(mesh.getTotalVertices()){mesh.material=paint;mesh.alwaysSelectAsActiveMesh=true;if(mesh.skeleton){mesh.numBoneInfluencers=mesh.isVerticesDataPresent('matricesWeightsExtra')?8:4;mesh.skeleton.useTextureToStoreBoneMatrices=true;mesh.computeBonesUsingShaders=true;}}
@@ -35,6 +41,11 @@ export async function wolfRamFixture(t){
  let elapsed=0,result={state:'idle',clipTime:0,loop:true},contactStop=0,renderContacts=false;
  const rollDirection=new Vector3(1,0,0);
  const reactions=[],damages=[];
+ const constrainPlayerPosition=previous=>{
+  const limit=f.world.mapId==='village'?villageTravelLimit(previous,ARENA_RADIUS):ARENA_RADIUS;
+  f.world.navigation?.constrain(f.player.position,previous,playerDimensions(f.player).moveRadius,limit);
+  if(f.world.mapId==='village')clampVillageExit(f.player.position,previous);
+ };
  const receivePlayerHit=(duration,options={})=>{
   const accepted='captured' in options?(options.captured?(controller.capture(),true):(controller.releaseCapture(),true)):
    options.knockdown?controller.knockdown(options):controller.hit(duration,options);
@@ -46,7 +57,7 @@ export async function wolfRamFixture(t){
   if(renderContacts){contactStop=f.battle.poseAndContacts(f.player,result,null,playerNodes.Bunnyguard_Shield);controller.pauseOnImpact(contactStop||0);}
  });
  animator.transition('idle',result);animator.update(0);f.scene.render();
- const api={f,get controller(){return controller;},get animator(){return animator;},playerAsset,playerNodes,config,playerGltf:decoded.gltf,reactions,damages,
+ const api={f,get controller(){return controller;},get animator(){return animator;},playerAsset,playerNodes,config,playerGltf:decoded.gltf,reactions,damages,impactCarrier,constrainPlayerPosition,nativeImpactPrelude:true,
   get elapsed(){return elapsed;},get result(){return result;},
   resetPlayer(){
    setWorldCharacter('warrior-plains');
@@ -58,7 +69,9 @@ export async function wolfRamFixture(t){
   },
   dodge(direction=Vector3.Right()){rollDirection.copyFrom(direction).normalize();return controller.dodge();},
   step(dt,input={x:0,y:0}){
-   elapsed+=dt;f.battle.playerReaction.update(dt,f.player);
+   elapsed+=dt;const beforeRecoil=f.player.position.clone(),recoiled=f.battle.playerReaction.update(dt,f.player);
+   if(recoiled)constrainPlayerPosition(beforeRecoil);
+   f.battle.combat.v02Impact?.advance(dt,f.player,constrainPlayerPosition);
    result=controller.update(dt,{x:0,y:0,...input,alive:f.battle.playerAlive});
    if(result.rollFrom!=null){const distance=(dodgeDistanceAt(result.rollTo,config.dodge)-dodgeDistanceAt(result.rollFrom,config.dodge))*dimensions.ratio;f.player.position.addInPlace(rollDirection.scale(distance));}
    animator.transition(result.state,result);animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
@@ -84,7 +97,7 @@ export async function wolfRamFixture(t){
    }
    return {count,low,high,centroid:sum.map(value=>value/count)};
   },
-  async dispose(){f.scene.onAfterAnimationsObservable.remove(observer);animator.dispose();playerAsset.dispose();loader.dispose();await f.dispose();}
+  async dispose(){f.battle.combat.v02Impact?.reset();f.scene.onAfterAnimationsObservable.remove(observer);animator.dispose();playerAsset.dispose();loader.dispose();await f.dispose();}
  };
  if(t)t.after(()=>api.dispose());return api;
 }

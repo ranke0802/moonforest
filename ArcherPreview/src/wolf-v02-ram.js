@@ -2,12 +2,13 @@ import {Vector3} from '@babylonjs/core';
 import {segmentDistanceSquared} from './melee-collision.js';
 import {playerDimensions} from './player-dimensions.js';
 import {WOLF_V02_RAM_PHASES,WOLF_V02_RAM_CHASE} from './wolf-v02-spec.js';
+export const wolfRamContactTime=brain=>brain.action?.momentumRam?(brain.ramContactTime??0):brain.time;
 
 // Per-actor attack authorization and a bounded actual-pose capsule history.
 // The normal standing capsule is never a substitute for a prone victim.
 export class WolfRamSequence{
  constructor(encounter){
-  this.e=encounter;this.a=new Vector3();this.b=new Vector3();this.previousA=new Vector3();this.previousB=new Vector3();this.aim=new Vector3();
+  this.e=encounter;this.a=new Vector3();this.b=new Vector3();this.previousA=new Vector3();this.previousB=new Vector3();this.aim=new Vector3();this.launchDirection=new Vector3();
   this.point=[0,0,0];this.capsuleA=[0,0,0];this.capsuleB=[0,0,0];
   this.phases=WOLF_V02_RAM_PHASES.map(config=>({config,key:null,resolved:false,hit:false,damage:0,sourceTime:null,blocked:false,acceptedKnockdown:false}));
   this.reset();
@@ -36,7 +37,7 @@ export class WolfRamSequence{
   this.proneValid=this.geometryValid&&result?.state==='knockdown'&&result.knockedDown===true&&!result.captured&&!this.e.combat.grabOwner&&this.e.playerAlive;
  }
  prepare(player,result){
-  const b=this.e.brain,pattern=b.mode==='attack'&&!!b.action?.ramPhases;
+  const b=this.e.brain,pattern=b.mode==='attack'&&!!b.action?.ramPhases,time=wolfRamContactTime(b);
   this.readTarget(player,result);
   b.ramVictimProne=this.proneValid;
   if(this.leaseBrain&&(this.leaseBrain!==b||this.leasePlayer!==player||this.leaseScene!==this.e.world.scene||this.leaseMap!==this.e.world.mapId||b.hp<=0))this.clearLease();
@@ -44,22 +45,22 @@ export class WolfRamSequence{
   if(this.brain!==b||this.serial!==b.serial)this.begin(b,player);
   if(this.targetPlayer!==player||this.patternScene!==this.e.world.scene||this.patternMap!==this.e.world.mapId){this.cancel('context-changed');this.active=false;this.current=null;return null;}
   this.active=true;
-  this.current=b.time<=this.phases[0].config.contactEnd?this.phases[0]:b.time<=this.phases[1].config.contactEnd?this.phases[1]:b.time<=this.phases[2].config.contactEnd?this.phases[2]:null;
-  if(this.sourceHistory&&b.time>=this.lastSource&&b.time-this.lastSource<=.1500001){
-   for(const phase of this.phases)if(!phase.resolved&&this.lastSource<=phase.config.contactEnd&&b.time>=phase.config.contactStart){this.current=phase;break;}
+  this.current=b.action.momentumRam?(b.ramStage==='charge'?this.phases[0]:b.ramStage==='maul'?(time<=this.phases[1].config.contactEnd?this.phases[1]:time<=this.phases[2].config.contactEnd?this.phases[2]:null):null):time<=this.phases[0].config.contactEnd?this.phases[0]:time<=this.phases[1].config.contactEnd?this.phases[1]:time<=this.phases[2].config.contactEnd?this.phases[2]:null;
+  if(this.current&&this.sourceHistory&&time>=this.lastSource&&time-this.lastSource<=.1500001){
+   for(const phase of this.phases)if(!phase.resolved&&this.lastSource<=phase.config.contactEnd&&time>=phase.config.contactStart){this.current=phase;break;}
   }
-  if(b.time>this.phases[0].config.contactEnd&&!this.authorized&&this.current!==this.phases[0])this.cancel('ram-not-confirmed');
+  if(!b.action.momentumRam&&time>this.phases[0].config.contactEnd&&!this.authorized&&this.current!==this.phases[0])this.cancel('ram-not-confirmed');
   if(this.authorized&&(result?.state==='getUp'||result?.captured||!this.e.playerAlive||this.e.combat.grabOwner)){
    // Natural get-up after the final bite must not seek back into recovery.
    // Only an unresolved, still-valid future bite needs victim cancellation.
-   let pending=false;for(const phase of this.phases)if(phase.config.kind==='maul'&&!phase.resolved&&b.time<=phase.config.contactEnd){pending=true;break;}
+   let pending=false;for(const phase of this.phases)if(phase.config.kind==='maul'&&!phase.resolved&&time<=phase.config.contactEnd){pending=true;break;}
    if(pending)this.cancel('victim-unavailable');
   }
   return this.current;
  }
  canAttempt(){
   if(!this.matches()||!this.current||this.current.resolved||this.cancelReason)return false;
-  return this.current.config.kind==='ram'?this.targetStanding:this.authorized&&this.proneValid;
+  return this.current.config.kind==='ram'?this.targetStanding&&(!this.e.brain.action.momentumRam||this.e.combat.v02Impact.canBegin(this.e.player)):this.authorized&&this.proneValid&&(!this.e.brain.action.momentumRam||this.e.brain.ramPawBraced===true);
  }
  cancel(reason){this.cancelReason??=reason;this.authorized=false;this.historyValid=false;this.e.brain.abortRam(reason);}
  clearLease(){this.leaseBrain=null;this.leasePlayer=null;this.leaseScene=null;this.leaseMap=null;}
@@ -77,13 +78,14 @@ export class WolfRamSequence{
   phase.resolved=true;phase.hit=after<before;phase.damage=Math.max(0,before-after);phase.blocked=blocked;phase.sourceTime=sourceTime;phase.acceptedKnockdown=acceptedKnockdown===true;
   if(phase.config.kind==='ram'){
    this.authorized=this.matches()&&this.targetStanding&&phase.hit&&!blocked&&phase.acceptedKnockdown&&this.e.playerAlive&&!this.e.combat.grabOwner;
+   if(this.authorized&&this.e.brain.action.momentumRam){this.launchDirection.copyFrom(this.e.player.position).subtractInPlace(this.e.actor.position);this.authorized=this.e.combat.v02Impact.begin({owner:this.e,serial:this.serial,player:this.e.player,direction:this.launchDirection});}
    if(this.authorized){this.e.brain.ramAccepted=true;this.e.brain.impacted=true;this.e.brain.ramAcceptedClock=this.e.brain.combatClock;this.e.brain.ramAcceptedSource=sourceTime;this.leaseBrain=this.e.brain;this.leasePlayer=this.e.player;this.leaseScene=this.e.world.scene;this.leaseMap=this.e.world.mapId;}
    else this.cancel(blocked?'ram-blocked':'ram-not-confirmed');
   }
  }
  finish(){
   const phase=this.current;
-  if(this.matches()){this.lastSource=this.e.brain.time;this.sourceHistory=true;}else this.sourceHistory=false;
+  if(this.matches()){this.lastSource=wolfRamContactTime(this.e.brain);this.sourceHistory=true;}else this.sourceHistory=false;
   if(this.matches()&&phase?.config.kind==='maul'&&this.proneValid){this.previousA.copyFrom(this.a);this.previousB.copyFrom(this.b);this.historyKey=phase.key;this.historyValid=true;}
   else this.historyValid=false;
  }
@@ -127,5 +129,5 @@ export class WolfRamSequence{
   e.v02LastContact={serial:this.serial,phaseSerial:phase.key,phase:config.id,action:'lunge',sourceTime:bestTime,part:bestPart,distance:best,radius:bestRadius,bodyRadius:this.bodyRadius,prone:true,body:[this.a.asArray(),this.b.asArray()],swept:sweep,contact};
   return contact;
  }
- inspect(){return {serial:this.serial,active:this.matches(),phase:this.current?.config.id??null,ramHit:this.phases[0].hit,authorized:this.authorized,critical:this.critical,cancelReason:this.cancelReason,clearanceLease:!!this.leaseBrain,chase:{acceptedClock:this.e.brain.ramAcceptedClock??null,startClock:this.e.brain.ramChaseClock??null,progress:this.chaseProgress,correction:[this.chaseCorrectionX,this.chaseCorrectionZ],prone:this.proneValid},phases:this.phases.map(phase=>({id:phase.config.id,serial:phase.key,resolved:phase.resolved,hit:phase.hit,damage:phase.damage,sourceTime:phase.sourceTime,blocked:phase.blocked,acceptedKnockdown:phase.acceptedKnockdown}))};}
+ inspect(){const b=this.e.brain;return {serial:this.serial,active:this.matches(),phase:this.current?.config.id??null,stage:b.ramStage??null,layerTime:b.ramLayerTime??null,runPhase:b.time,unwrapped:b.ramRunClock??null,speed:b.ramActualSpeed??null,ramHit:this.phases[0].hit,authorized:this.authorized,critical:this.critical,cancelReason:this.cancelReason,clearanceLease:!!this.leaseBrain,chase:{acceptedClock:b.ramAcceptedClock??null,startClock:b.ramChaseClock??null,progress:this.chaseProgress,correction:[this.chaseCorrectionX,this.chaseCorrectionZ],prone:this.proneValid},phases:this.phases.map(phase=>({id:phase.config.id,serial:phase.key,resolved:phase.resolved,hit:phase.hit,damage:phase.damage,sourceTime:phase.sourceTime,blocked:phase.blocked,acceptedKnockdown:phase.acceptedKnockdown}))};}
 }

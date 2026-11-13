@@ -2,21 +2,24 @@ import {Animation,AnimationGroup,Quaternion,Vector3} from '@babylonjs/core';
 import feral from './wolf-v02-feral-clips.json' with {type:'json'};
 import predator from './wolf-v02-predator-clips.json' with {type:'json'};
 import combatR13 from './wolf-v02-combat-r13-clips.json' with {type:'json'};
+import momentumR14 from './wolf-v02-momentum-r14-clips.json' with {type:'json'};
 
 export const WOLF_V02_FERAL_CLIPS=feral.clips;
 export const WOLF_V02_PREDATOR_CLIPS=predator.clips;
 export const WOLF_V02_COMBAT_R13_CLIPS=combatR13.clips;
+export const WOLF_V02_MOMENTUM_R14_CLIPS=momentumR14.clips;
 // R9/R12 review-only keys live in wolf-v02-authored-history.js. Keeping their
 // imports out of this live module avoids loading them in the published game.
 // Historical R9/R10 attacks stay in their source data and review exports. Live
 // actors only prepare the current bites, support reactions and lateral gaits.
-export const WOLF_V02_ACTIVE_CLIPS=[...feral.clips.filter(c=>c.name==='Wolf_Orbit_Step_V02'||c.name==='Wolf_Orbit_Step_Left_V02'),...predator.clips,...combatR13.clips];
+export const WOLF_V02_ACTIVE_CLIPS=[...feral.clips.filter(c=>c.name==='Wolf_Orbit_Step_V02'||c.name==='Wolf_Orbit_Step_Left_V02'),...predator.clips,...combatR13.clips,...momentumR14.clips];
 export const WOLF_V02_AUTHORED_CLIPS=WOLF_V02_ACTIVE_CLIPS;
 export const WOLF_V02_AUTHORED_SOURCE=feral.sourceSha256;
 if(predator.sourceSha256!==feral.sourceSha256)throw Error('R11 motions require the same approved R8 rig');
 // R12 is historical data only; its source/binding is checked by its preserved
 // preparation and asset tests. Only active R11/R13 sources are guarded here.
 if(combatR13.sourceSha256!==feral.sourceSha256)throw Error('R13 motions require the same approved R8 rig');
+if(momentumR14.sourceSha256!==feral.sourceSha256)throw Error('R14 motions require the same approved R8 rig');
 const properties={translation:'position',rotation:'rotationQuaternion',scale:'scaling'};
 const installed=new WeakMap();
 // One immutable key-value table for the module. Actors own their animation
