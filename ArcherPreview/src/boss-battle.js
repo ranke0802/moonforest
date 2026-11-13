@@ -435,7 +435,10 @@ export class BossBattle {
     for (const boss of this.encounters) {
       if(!boss.active||boss.corpseGone)continue;
       const canceled = version !== this.actionVersion || this.grab.active;
-      hitStop = Math.max(hitStop, boss.poseAndContacts(player, canceled ? { state: 'idle', actionId: null } : result, canceled ? null : sample, shield) || 0);
+      // A mauling owner needs the real frozen knockdown pose for its own bite
+      // contact. Captured input never supplies a player weapon sample.
+      const maulOwner=boss===this.combat.grabOwner&&boss.grab.maulHolding;
+      hitStop = Math.max(hitStop, boss.poseAndContacts(player, canceled&&!maulOwner ? { state: 'idle', actionId: null } : result, canceled ? null : sample, shield) || 0);
     }
     return hitStop;
   }

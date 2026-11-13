@@ -85,6 +85,7 @@ import {applyCharacterSurfaceStyle,setSceneCharacterStyles} from './character-st
 import { applyHitFlash, PLAYER_STAGGER } from './hit-feedback.js';
 import {StaminaFailureFeedback,applyPlayerFlash} from './stamina-feedback.js';
 import {StaminaNoticeAnchor} from './stamina-notice-anchor.js';
+import {setupWolfMaulNotice} from './wolf-maul-notice.js';
 import {ShieldHoldSources,bindShieldHoldButton} from './shield-hold-input.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
@@ -162,6 +163,7 @@ let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elap
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail;
 const staminaFeedback=new StaminaFailureFeedback();
 const staminaNoticeAnchor=new StaminaNoticeAnchor($('#toast'));
+const wolfMaulNotice=setupWolfMaulNotice($('#app'));
 let simulateFrame=false,buttonSnapshot,healthSnapshot,bossHealthBars,playerHealthBar,playerHead;
 let screenProjection;
 let reconcilePlayback=()=>{};
@@ -361,6 +363,7 @@ function leaveElenaReview() {
 }
 
 function updateButtons() {
+  wolfMaulNotice.update(boss?.playerAlive?boss.grab:null);
   const dead = controller?.dead || false;
   const rejected=controller?.staminaRejectSerial??0;
   if(staminaFeedback.observe(controller)){toast('스테미나가 부족합니다.',{stamina:true});audio.play('ui_error');applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);}

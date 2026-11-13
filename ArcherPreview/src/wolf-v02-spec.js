@@ -76,7 +76,7 @@ export class WolfV02Brain extends WolfBrain{
   this.boutStrikes=continuation?this.boutStrikes+1:1;
   if(!continuation)this.boutObserved=false;
   if(action.ramPhases){this.ramAbortReason=null;this.ramRecoveryOrigin=null;this.ramAccepted=false;this.ramAcceptedClock=null;this.ramChaseClock=null;this.ramStartDistance=distance??this.lastDistance;this.time=action.clipStart;}
-  if(action.momentumRam){this.time=gait;this.ramRunClock=runClock;this.ramRunSpeed=speed;this.ramActualSpeed=speed;this.ramStage='charge';this.ramLayerElapsed=Math.max(0,whipElapsedAt(action,action.contactStart)-Math.max(0,(distance??4.5)-(this.ramReach??2.5))/speed*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
+  if(action.momentumRam){this.ramMaulHold=false;this.ramMaulCycle=0;this.ramLoopPoseKey=null;this.time=gait;this.ramRunClock=runClock;this.ramRunSpeed=speed;this.ramActualSpeed=speed;this.ramStage='charge';this.ramLayerElapsed=Math.max(0,whipElapsedAt(action,action.contactStart)-Math.max(0,(distance??4.5)-(this.ramReach??2.5))/speed*this.castSpeed);this.ramLayerTime=sampleWhipTime(action,this.ramLayerElapsed);this.ramContactTime=this.ramLayerTime;this.ramStageClock=0;}
   this.chainRemaining=action.chain&&this.boutStrikes<3&&!continuation?1:0;this.plannedId=null;this.positionElapsed=0;this.followupId=null;this.followChain=false;
   return action;
  }
@@ -205,6 +205,7 @@ export class WolfV02Brain extends WolfBrain{
    return {events:[],speed:0};
   }else if(this.ramStage==='maul'){
    this.behavior='maul';this.time=Math.min(action.maulClipEnd,this.time+dt);this.ramContactTime=this.time;
+   if(this.ramMaulHold&&this.time>=action.ramPhases[2].contactEnd+.015){this.ramMaulCycle++;this.ramLoopPoseKey=`${this.serial}:maul-loop:${this.ramMaulCycle}`;this.time=this.ramContactTime=action.maulClipStart;this.ramStageClock=0;}
    if(this.time>=action.maulClipEnd)this.beginRecovery();return {events:[],speed:0};
   }
   if(this.ramStage==='miss-brake'){

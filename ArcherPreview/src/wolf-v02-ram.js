@@ -24,6 +24,7 @@ export class WolfRamSequence{
   this.brain=brain;this.serial=brain.serial;this.active=true;this.authorized=false;this.critical=null;this.cancelReason=null;this.historyValid=false;this.historyKey=null;
   this.targetPlayer=player;this.patternScene=this.e.world.scene;this.patternMap=this.e.world.mapId;
   this.sourceHistory=false;this.lastSource=0;
+  this.maulCycle=0;
   this.chaseCorrectionX=this.chaseCorrectionZ=this.chaseProgress=0;this.chaseCorrectionReady=false;
   for(let i=0;i<this.phases.length;i++){const phase=this.phases[i];phase.config=brain.action.ramPhases[i];phase.key=`${brain.serial}:${phase.config.id}`;phase.resolved=phase.hit=phase.blocked=phase.acceptedKnockdown=false;phase.damage=0;phase.sourceTime=null;}
  }
@@ -34,7 +35,8 @@ export class WolfRamSequence{
   this.a.copyFrom(hips.getAbsolutePosition());this.b.copyFrom(chest.getAbsolutePosition());
   this.aim.copyFrom(this.a).addInPlace(this.b).scaleInPlace(.5);this.bodyRadius=playerDimensions(player).moveRadius;
   this.geometryValid=this.a.y-player.position.y<.45&&this.b.y-player.position.y<.45;
-  this.proneValid=this.geometryValid&&result?.state==='knockdown'&&result.knockedDown===true&&!result.captured&&!this.e.combat.grabOwner&&this.e.playerAlive;
+  const ownCapture=this.e.grab.maulHolding&&this.e.combat.grabOwner===this.e&&this.e.grab.player===player&&result?.captured===true;
+  this.proneValid=this.geometryValid&&result?.state==='knockdown'&&(ownCapture||result.knockedDown===true&&!result.captured&&!this.e.combat.grabOwner)&&this.e.playerAlive;
  }
  prepare(player,result){
   const b=this.e.brain,pattern=b.mode==='attack'&&!!b.action?.ramPhases,time=wolfRamContactTime(b);
@@ -45,12 +47,17 @@ export class WolfRamSequence{
   if(this.brain!==b||this.serial!==b.serial)this.begin(b,player);
   if(this.targetPlayer!==player||this.patternScene!==this.e.world.scene||this.patternMap!==this.e.world.mapId){this.cancel('context-changed');this.active=false;this.current=null;return null;}
   this.active=true;
+  if(this.maulCycle!==(b.ramMaulCycle??0)){
+   this.maulCycle=b.ramMaulCycle??0;this.historyValid=false;this.sourceHistory=false;
+   for(const phase of this.phases)if(phase.config.kind==='maul'){phase.key=`${b.serial}:${phase.config.id}:${this.maulCycle}`;phase.resolved=phase.hit=phase.blocked=false;phase.damage=0;phase.sourceTime=null;}
+  }
+  if(this.authorized&&b.action.momentumRam&&['settle','maul'].includes(b.ramStage)&&this.proneValid&&b.ramPawBraced&&!this.e.grab.maulHolding)this.e.grab.startMaul(player);
   this.current=b.action.momentumRam?(b.ramStage==='charge'?this.phases[0]:b.ramStage==='maul'?(time<=this.phases[1].config.contactEnd?this.phases[1]:time<=this.phases[2].config.contactEnd?this.phases[2]:null):null):time<=this.phases[0].config.contactEnd?this.phases[0]:time<=this.phases[1].config.contactEnd?this.phases[1]:time<=this.phases[2].config.contactEnd?this.phases[2]:null;
   if(this.current&&this.sourceHistory&&time>=this.lastSource&&time-this.lastSource<=.1500001){
    for(const phase of this.phases)if(!phase.resolved&&this.lastSource<=phase.config.contactEnd&&time>=phase.config.contactStart){this.current=phase;break;}
   }
   if(!b.action.momentumRam&&time>this.phases[0].config.contactEnd&&!this.authorized&&this.current!==this.phases[0])this.cancel('ram-not-confirmed');
-  if(this.authorized&&(result?.state==='getUp'||result?.captured||!this.e.playerAlive||this.e.combat.grabOwner)){
+  if(this.authorized&&(result?.state==='getUp'||result?.captured&&!this.e.grab.maulHolding||!this.e.playerAlive||this.e.combat.grabOwner&&this.e.combat.grabOwner!==this.e)){
    // Natural get-up after the final bite must not seek back into recovery.
    // Only an unresolved, still-valid future bite needs victim cancellation.
    let pending=false;for(const phase of this.phases)if(phase.config.kind==='maul'&&!phase.resolved&&time<=phase.config.contactEnd){pending=true;break;}
@@ -81,7 +88,7 @@ export class WolfRamSequence{
    if(this.authorized&&this.e.brain.action.momentumRam){this.launchDirection.copyFrom(this.e.player.position).subtractInPlace(this.e.actor.position);this.authorized=this.e.combat.v02Impact.begin({owner:this.e,serial:this.serial,player:this.e.player,direction:this.launchDirection});}
    if(this.authorized){this.e.brain.ramAccepted=true;this.e.brain.impacted=true;this.e.brain.ramAcceptedClock=this.e.brain.combatClock;this.e.brain.ramAcceptedSource=sourceTime;this.leaseBrain=this.e.brain;this.leasePlayer=this.e.player;this.leaseScene=this.e.world.scene;this.leaseMap=this.e.world.mapId;}
    else this.cancel(blocked?'ram-blocked':'ram-not-confirmed');
-  }
+  }else if(phase.hit)this.e.grab.noteMaulHit();
  }
  finish(){
   const phase=this.current;
