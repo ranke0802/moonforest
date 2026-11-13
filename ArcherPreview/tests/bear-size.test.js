@@ -23,7 +23,7 @@ function heightOf(enemy){
   return max-min;
 }
 
-test('0.2 shipped skinned bear has a 3m default guard pose and proportional geometry without changing 0.1 or source clips',async t=>{
+test('0.2 shipped skinned bear has a 4.5m default guard pose and proportional geometry without changing 0.1 or source clips',async t=>{
   const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;
   const loader=new GLTFFileLoader();loader.skipMaterials=true;
   t.after(()=>{loader.dispose();scene.dispose();engine.dispose();});
@@ -44,7 +44,8 @@ test('0.2 shipped skinned bear has a 3m default guard pose and proportional geom
     encounters.push(enemy);
   }
   const [old,bear]=encounters,q=BEAR_V02_SIZE.sizeScale,oldHeight=heightOf(old),height=heightOf(bear);
-  assert.ok(Math.abs(height-3)<1e-5,`actual skinned height ${height}`);
+  assert.ok(Math.abs(height-4.5)<1e-5,`actual skinned height ${height}`);
+  assert.ok(Math.abs(BEAR_V02_SIZE.scale/(3/BEAR_V02_SIZE.sourceHeight)-1.5)<1e-12,'1.5x the previous 3m actor scale');
   assert.ok(Math.abs(oldHeight-2.3436112135648726)<1e-5,`preserved 0.1 height ${oldHeight}`);
   assert.equal(old.config,config);assert.notEqual(bear.config,config);assert.equal(JSON.stringify(config),before);
   assert.equal(old.actor.scaling.x,1.45);assert.equal(bear.actor.scaling.x,BEAR_V02_SIZE.scale);

@@ -1,0 +1,82 @@
+/* Two original atlases; all numbers, maps, input and layout edits stay live. */
+#app[data-raster-hud]{--hud-v1-combat:url('./hud-v1-art/combat-press-4x4.png');--hud-v1-menu:url('./hud-v1-art/menu-press-4x4.png');--hud-v1-edge:max(18px,3vw);--hud-v1-top:clamp(20px,4vh,44px);font-family:MoonforestUI,'Malgun Gothic',sans-serif}
+#app[data-raster-hud]>.topbar>.brand{visibility:hidden;pointer-events:none}
+#app[data-raster-hud] [data-hud-sprite]{position:relative;isolation:isolate}
+#app[data-raster-hud] .hud-v1-sprite{position:absolute;inset:0;display:block;width:100%;height:100%;background-size:400% 400%;background-position:var(--hud-sprite-column,0%) var(--hud-sprite-row);background-repeat:no-repeat;pointer-events:none;z-index:0}
+#app[data-raster-hud] .hud-v1-combat{background-image:var(--hud-v1-combat)}
+#app[data-raster-hud] .hud-v1-menu{background-image:var(--hud-v1-menu)}
+#app[data-raster-hud] [data-hud-sprite-state=press]{--hud-sprite-column:33.333333%}
+#app[data-raster-hud] [data-hud-sprite-state=held]{--hud-sprite-column:66.666667%}
+#app[data-raster-hud] [data-hud-sprite-state=release]{--hud-sprite-column:100%}
+#app[data-raster-hud] [data-hud-sprite]:focus-visible{outline:2px solid #f1d99a!important;outline-offset:3px}
+#app[data-raster-hud] .action-controls[data-character] [data-hud-sprite]{background:none!important;border:0!important;box-shadow:none!important;padding:0;min-width:0;overflow:visible;transition:none;transform:none!important;color:#eee0bd}
+#app[data-raster-hud] .action-controls[data-character] [data-hud-sprite]:before,#app[data-raster-hud] .top-actions [data-hud-sprite]:before{content:none!important}
+#app[data-raster-hud] .top-actions [data-hud-sprite]:after{content:none!important}
+#app[data-raster-hud] [data-hud-sprite]>.commercial-action-art,#app[data-raster-hud] .action-controls[data-character] [data-hud-sprite]>svg{display:none!important}
+#app[data-raster-hud] .top-actions [data-hud-sprite]>.commercial-art,#app[data-raster-hud] .top-actions [data-hud-sprite]>img,#app[data-raster-hud] .top-actions [data-hud-sprite]>svg,#app[data-raster-hud] .top-actions [data-hud-sprite]>.uit-icon{display:none!important}
+#app[data-raster-hud] .action-controls[data-character] [data-hud-sprite]>span{opacity:0;pointer-events:none}
+#app[data-raster-hud] .action-controls[data-character] #potion-button>span{opacity:1;font-size:0}
+#app[data-raster-hud] #potion-count{position:absolute!important;right:8%;bottom:8%;z-index:2;display:grid;place-items:center;min-width:18px;min-height:18px;border:1px solid #cab984;border-radius:50%;background:#1d3027;color:#f2e5bd;font:11px MoonforestUI,sans-serif}
+#app[data-raster-hud] .top-actions [data-hud-sprite]>.hud-v1-sprite{opacity:1}
+#app[data-raster-hud] .top-actions [data-hud-sprite]{width:44px!important;height:44px!important;min-width:40px!important;min-height:40px!important;padding:0!important;background:none!important;border:0!important}
+#app[data-raster-hud] .top-actions{gap:5px}
+#app[data-raster-hud] .chapter-story [data-hud-sprite=story]{background:none;border:0;min-height:40px;min-width:110px;padding:4px 16px;overflow:visible}
+#app[data-raster-hud] [data-hud-sprite=story]>.hud-v1-sprite{z-index:-1;width:130%;height:200%;left:-15%;top:-50%}
+#app[data-raster-hud] #player-hud[data-hud=fixed]{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top));width:clamp(210px,26vw,330px);padding-left:38px;display:grid;grid-template-columns:minmax(85px,1fr) auto;column-gap:8px;row-gap:4px;transform:none;text-align:left;color:#eee2c3;font:clamp(10px,1vw,13px)/1.3 MoonforestUI,sans-serif}
+#app[data-raster-hud] #player-hud[data-hud=fixed][hidden]{display:none}
+#app[data-raster-hud] #player-hud:before{content:'';position:absolute;left:2px;top:-4px;width:27px;height:29px;border-radius:50%;box-shadow:inset 7px 0 #dfd1a2;transform:rotate(-22deg);pointer-events:none}
+#app[data-raster-hud] #player-hud>progress:first-child{grid-column:1;grid-row:1;align-self:center;height:12px;border-radius:0;border:1px solid #c4bd8a99;background:#13241a;box-shadow:none}
+#app[data-raster-hud] #player-health{grid-column:2;grid-row:1;white-space:nowrap;color:#eee2c3;font-size:inherit}
+#app[data-raster-hud] #player-hud>progress:first-child::-webkit-progress-value,#app[data-raster-hud] #player-hud[data-low=true]>progress:first-child::-webkit-progress-value{background:linear-gradient(#b4c58b,#819f65)}
+#app[data-raster-hud] #player-hud>progress:first-child::-moz-progress-bar,#app[data-raster-hud] #player-hud[data-low=true]>progress:first-child::-moz-progress-bar{background:#91ad73}
+#app[data-raster-hud] #player-hud #player-stamina{grid-column:1;grid-row:2;width:100%;height:2px;margin:0;border:0;border-radius:0;background:#493e26;box-shadow:none}
+#app[data-raster-hud] #player-stamina::-webkit-progress-value{background:#efce62}
+#app[data-raster-hud] #player-stamina::-moz-progress-bar{background:#efce62}
+#app[data-raster-hud] #gold-balance{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top) + 40px);padding:0;border:0;background:none;color:#e3cc95;font:12px MoonforestUI,sans-serif}
+#app[data-raster-hud] .chapter-stack{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top) + 78px);width:clamp(180px,25vw,300px);gap:6px}
+#app[data-raster-hud] .chapter-stack .uit-track{border:0;border-left:2px solid #cbb77f;background:linear-gradient(90deg,#19271dd9,#19271c80,transparent);padding:5px 10px;font-family:MoonforestUI,'Malgun Gothic',sans-serif;line-height:1.8}
+#app[data-raster-hud] #dot-minimap{top:calc(env(safe-area-inset-top) + 83px);right:calc(env(safe-area-inset-right) + var(--hud-v1-edge));width:clamp(96px,11vw,140px);padding:0!important;border:0!important;border-radius:0;background:none!important;box-shadow:none;contain:none}
+#app[data-raster-hud] #dot-minimap canvas{border-radius:50%;border:1px solid #c1ae7c;box-shadow:0 2px 7px #0006;overflow:hidden}
+#app[data-raster-hud] #dot-minimap>strong{margin-bottom:5px}
+#app[data-raster-hud] #dot-minimap>small{display:none}
+#app[data-raster-hud] .minimap-travel-launch{top:21px;border-radius:50%;height:calc(100% - 21px)}
+#app[data-raster-hud] .minimap-travel-launch span{font-size:0;background:none;min-height:0}
+#app[data-raster-hud] .action-controls[data-character]{inset:0;right:0;bottom:0;width:auto;height:auto;display:block;pointer-events:none;transform:none;scale:1}
+#app[data-raster-hud] .action-controls[data-character]>.action-button{pointer-events:auto}
+#app[data-raster-hud] .action-controls[data-character] #run-button{display:none}
+#app[data-raster-hud] .action-controls[data-character] [data-hud-sprite][hidden]{display:none}
+#app[data-raster-hud][data-hud-input=pc] #joystick,#app[data-raster-hud][data-hud-input=pc] #joystick-hint{display:none!important}
+#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #potion-button{position:absolute;left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));right:auto;top:auto;bottom:calc(env(safe-area-inset-bottom) + 24px);width:60px;height:60px;display:block}
+#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #attack-button,#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #guard-button,#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #dodge-button{position:absolute;top:auto;bottom:calc(env(safe-area-inset-bottom) + 18px);width:72px;height:40px;display:block}
+#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #attack-button{left:auto;right:190px}
+#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #guard-button{left:auto;right:112px}
+#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] #dodge-button{left:auto;right:20px;width:86px}
+#app[data-raster-hud][data-hud-input=pc] #attack-button>.hud-v1-sprite,#app[data-raster-hud][data-hud-input=pc] #guard-button>.hud-v1-sprite,#app[data-raster-hud][data-hud-input=pc] #dodge-button>.hud-v1-sprite{width:40px;height:40px}
+#app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] [data-hud-sprite]>kbd{display:block;position:absolute;left:40px;top:12px;z-index:1;font:10px MoonforestUI,sans-serif;color:#eadfbd;background:none;border:0;padding:0}
+#app[data-raster-hud][data-hud-input=pc] #potion-status{display:block;position:absolute;right:-8px;bottom:6px;font-size:10px}
+#app[data-raster-hud][data-hud-input=pc] .keyboard-hint{display:flex;left:auto;right:280px;bottom:calc(env(safe-area-inset-bottom) + 20px);gap:8px;transform:none;scale:1;font:10px MoonforestUI,sans-serif}
+#app[data-raster-hud][data-hud-input=pc] .keyboard-hint small{display:none}
+#app[data-raster-hud][data-hud-input=pc] .keyboard-hint strong{font-size:10px}
+#app[data-raster-hud][data-hud-input=touch]{--hud-v1-attack:clamp(76px,10vw,112px);--hud-v1-small:clamp(60px,7.2vw,80px);--hud-v1-potion:clamp(60px,6.4vw,72px)}
+#app[data-raster-hud][data-hud-input=touch] .keyboard-hint{display:none}
+#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #attack-button,#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #guard-button,#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #dodge-button,#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #potion-button{position:absolute;right:auto;bottom:auto;display:block;aspect-ratio:1;height:auto;transform:translate(-50%,-50%)!important}
+#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #attack-button{left:89%;top:79%;width:var(--hud-v1-attack)}
+#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #guard-button{left:80%;top:65%;width:var(--hud-v1-small)}
+#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #dodge-button{left:79%;top:86%;width:var(--hud-v1-small)}
+#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #potion-button{left:92%;top:60%;width:var(--hud-v1-potion)}
+#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] [data-hud-sprite]>kbd,#app[data-raster-hud][data-hud-input=touch] #potion-status{display:none}
+#app[data-raster-hud][data-hud-input=touch] .chapter-context{right:30%;bottom:42%;max-width:150px}
+#app[data-raster-hud][data-hud-input=touch] .joystick-hint{left:7%;bottom:10%;transform:none;scale:1}
+@media(orientation:portrait){
+ #app[data-raster-hud][data-hud-input=touch]{--hud-v1-edge:18px;--hud-v1-top:60px}
+ #app[data-raster-hud][data-hud-input=touch] #player-hud[data-hud=fixed]{width:clamp(190px,61vw,260px);font-size:10px}
+ #app[data-raster-hud][data-hud-input=touch] .chapter-stack{top:136px;width:190px;font-size:10px}
+ #app[data-raster-hud][data-hud-input=touch] #dot-minimap{top:65px;width:92px;right:12px}
+ #app[data-raster-hud][data-hud-input=touch] .top-actions{gap:1px}
+ #app[data-raster-hud][data-hud-input=touch] .top-actions [data-hud-sprite]{width:38px!important;height:40px!important;min-width:36px!important}
+}
+@media(max-height:540px){
+ #app[data-raster-hud]{--hud-v1-top:18px}
+ #app[data-raster-hud] .chapter-stack{top:88px;width:230px}
+ #app[data-raster-hud] #dot-minimap{top:64px;width:94px}
+}

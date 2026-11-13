@@ -4,12 +4,12 @@
   "entries": [
     {
       "assetId": "boar",
-      "version": "Regular quadrupeds R2 · 2.5x boar actor scale",
+      "version": "Regular quadrupeds R3 · boar at one third of R2 size",
       "name": "멧돼지",
       "category": "monster",
       "contentHash": "280b64d4f75ee36e4cf5bb9c5156c4696c7f0038720608ada390ad4e6dcee3d6",
       "runtime": {
-        "manifest": "assets/boar-r2.json",
+        "manifest": "assets/boar-r3.json",
         "assetKey": "boar",
         "model": "assets/content/280b64d4f75ee36e4cf5bb9c5156c4696c7f0038720608ada390ad4e6dcee3d6.gltf"
       },
@@ -102,10 +102,10 @@
         ],
         "posed": true
       },
-      "referenceHeight": 2.5,
+      "referenceHeight": 0.8333333333333334,
       "units": {
         "world": "metres",
-        "metersPerSourceUnit": 3.856510686376047
+        "metersPerSourceUnit": 1.2855035621253492
       },
       "reviewStatus": "candidate-awaiting-user-review"
     },

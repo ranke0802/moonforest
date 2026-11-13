@@ -6,9 +6,19 @@ import {WolfV02ShieldSweep} from './wolf-v02-shield.js';
 
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const angles=[-.26,-.13,0,.13,.26,.39,.52,.65,.78,.91,1.04,1.17];
-const shieldYaws=[-1.04,-.78,-.52,-.26,0,.26,.52,.78,1.04],swordYaws=[0];
+const aimYaws=[-1.04,-.78,-.52,-.26,0,.26,.52,.78,1.04];
 const swordLocal=[[-.002,.405,0],[-.002,-.951,0]],shieldLocal=[[-.66,0,.192],[.66,0,.192]];
 const body=/^(haunch|flank|ribcage|belly|mane|skull|muzzle|jaw|body|torso|pelvis|spine|chest|neck|head)/;
+const neck=/^(neck|mane)(\.|$)/;
+// Read the posed neck, rather than the animal's ground/root origin. Only the
+// selected upper-body branch is refreshed; no scene/mesh traversal is needed.
+export function meleeNeckPoint(target,out){
+ if(!target?.regularWolfId)return null;
+ (target.nodes?.head??target.nodes?.neck)?.computeWorldMatrix(true);
+ const capsule=target.hurtCapsules?.().find(part=>neck.test(part.name??''));
+ if(!capsule)return null;
+ const [a,b]=capsule.points;return out.set((a[0]+b[0])*.5,(a[1]+b[1])*.5,(a[2]+b[2])*.5);
+}
 function neighbors(center,step,low,high){
  const a=clamp(center-step,low,high),b=clamp(center,low,high),c=clamp(center+step,low,high);
  return a===b?b===c?[b]:[b,c]:b===c?[a,b]:[a,b,c];
@@ -35,12 +45,12 @@ export class PlayerMeleeAim{
   // Reuse the identical cached visible-face hull used by the real contact
   // sweep. A centreline cannot select the low edge of a held shield.
   this.shieldSweep=new WolfV02ShieldSweep();this.shieldLines=[];
-  this.representativeShieldProfile=[];this.bodyCapsules=[];
+  this.representativeShieldProfile=[];this.bodyCapsules=[];this.neckCapsules=[];
   this.representativeShieldLines=[];this.elbowPivot=new Vector3();this.elbowAxis=new Vector3();this.upperDirection=new Vector3();this.lowerDirection=new Vector3();this.extended=[[0,0,0],[0,0,0]];
   this.axis=new Vector3();this.up=new Vector3(0,1,0);this.localAxis=new Vector3();this.localUp=new Vector3();this.pivot=new Vector3();this.point=new Vector3();this.inverseParent=Matrix.Identity();this.localDelta=Quaternion.Identity();this.yawDelta=Quaternion.Identity();this.combinedDelta=Quaternion.Identity();
   this.endpoints=[[0,0,0],[0,0,0]];this.yawed=[[0,0,0],[0,0,0]];this.rotated=[[0,0,0],[0,0,0]];this.reset();
  }
- reset(){this.restore();this.action=null;this.target=null;this.pitch=this.yaw=this.extension=0;this.lastPitch=this.lastExtension=0;this.lastError=null;this.resetFit();}
+ reset(){this.restore();this.action=null;this.target=null;this.pitch=this.yaw=this.extension=0;this.lastPitch=this.lastYaw=this.lastExtension=0;this.lastError=this.lastNeckError=null;this.resetFit();}
  resetFit(){this.fitReady=false;this.fitClock=0;this.lastWideTime=-Infinity;this.fitPitch=this.fitYaw=this.fitExtension=0;this.fullFitCount=this.localFitCount=0;}
  restore(){for(const arm of Object.values(this.arms))if(arm&&(arm.changed||arm.elbow?.changed)){if(arm.changed)arm.node.rotationQuaternion.copyFrom(arm.original);if(arm.elbow?.changed){arm.elbow.node.rotationQuaternion.copyFrom(arm.elbow.original);arm.elbow.changed=false;}arm.changed=false;for(const node of arm.branch){node.markAsDirty();node.computeWorldMatrix();}}}
  begin(result,player,target){
@@ -59,8 +69,11 @@ export class PlayerMeleeAim{
   const side=result.state==='shieldPush'?'Left':'Right',arm=this.arms[side],weapon=this.weapons[side];if(!arm||!weapon)return;
   // Equipment must really descend from the adjusted shoulder.
   if(!arm.branch.includes(weapon))return;
+  if(target.preparePlayerMeleePose)target.preparePlayerMeleePose(player,result);
+  else (target.nodes?.head??target.nodes?.neck)?.computeWorldMatrix(true);
   const capsules=target.hurtCapsules?.();if(!capsules?.length)return;
-  this.bodyCapsules.length=0;for(const capsule of capsules)if(body.test(capsule.name??''))this.bodyCapsules.push(capsule);
+  this.bodyCapsules.length=this.neckCapsules.length=0;
+  for(const capsule of capsules)if(body.test(capsule.name??'')){this.bodyCapsules.push(capsule);if(neck.test(capsule.name??''))this.neckCapsules.push(capsule);}
   if(!this.bodyCapsules.length)return;
   this.fitClock+=Math.max(0,dt);
   const local=side==='Left'?shieldLocal:swordLocal;
@@ -84,34 +97,36 @@ export class PlayerMeleeAim{
   }
   const extensions=extensionLimit>.01?[0,extensionLimit*.5,extensionLimit]:[0];
   const margin=side==='Left'?playerDimensions(player).shieldStrikeRadius:playerDimensions(player).bladeRadius;
-  let best=0,bestYaw=0,bestExtension=0,bestScore=Infinity,bestError=Infinity;
+  let best=0,bestYaw=0,bestExtension=0,bestScore=Infinity,bestError=Infinity,bestNeckError=Infinity;
   const search=(pitches,yaws,elbows)=>{for(const extension of elbows)for(const yaw of yaws)for(const angle of pitches){
-   let error=Infinity;
+   let error=Infinity,neckError=Infinity;
    for(const line of lines){
     if(extension){rotate(line[0],this.elbowPivot,this.elbowAxis,extension,this.extended[0]);rotate(line[1],this.elbowPivot,this.elbowAxis,extension,this.extended[1]);}
     const span=extension?this.extended:line;
     rotate(span[0],this.pivot,this.up,yaw,this.yawed[0]);rotate(span[1],this.pivot,this.up,yaw,this.yawed[1]);
     rotate(this.yawed[0],this.pivot,this.axis,angle,this.rotated[0]);rotate(this.yawed[1],this.pivot,this.axis,angle,this.rotated[1]);
-    for(const capsule of this.bodyCapsules)error=Math.min(error,Math.max(0,Math.sqrt(segmentDistanceSquared(...this.rotated,...capsule.points))-capsule.radius-margin));
-    if(error===0)break;
+    for(const capsule of this.bodyCapsules){const gap=Math.max(0,Math.sqrt(segmentDistanceSquared(...this.rotated,...capsule.points))-capsule.radius-margin);error=Math.min(error,gap);if(neck.test(capsule.name??''))neckError=Math.min(neckError,gap);}
+    if(neckError===0)break;
    }
-   const score=error*error+(angle*angle+yaw*yaw+extension*extension)*.00025;
-   if(score<bestScore){bestScore=score;best=angle;bestYaw=yaw;bestExtension=extension;bestError=error;}
+   // Real contact takes priority. Among reachable poses prefer the neck; if it
+   // is physically out of reach retain a genuine torso hit, never stretch.
+   const score=(error>.003?1+error*error*40:0)+Math.min(.5,neckError*neckError)*.25+(angle*angle+yaw*yaw+extension*extension)*.00025;
+   if(score<bestScore){bestScore=score;best=angle;bestYaw=yaw;bestExtension=extension;bestError=error;bestNeckError=neckError;}
   }};
   if(this.fitReady){
    // Follow the prior fit with at most 3x3x3 nearby candidates. The complete
    // bounded grid is a warm-up/recovery operation, not per-frame work.
-   search(neighbors(this.fitPitch,.13,-.26,1.17),side==='Left'?neighbors(this.fitYaw,.26,-1.04,1.04):swordYaws,extensionLimit>.01?neighbors(this.fitExtension,.26,0,extensionLimit):[0]);this.localFitCount++;
+   search(neighbors(this.fitPitch,.13,-.26,1.17),neighbors(this.fitYaw,.26,-1.04,1.04),extensionLimit>.01?neighbors(this.fitExtension,.26,0,extensionLimit):[0]);this.localFitCount++;
   }
   const contactLead=time>=strikes[0].from-.28&&time<=end;
-  if(!this.fitReady||(bestError>.005&&contactLead&&this.fitClock-this.lastWideTime>=.15)){
-   search(angles,side==='Left'?shieldYaws:swordYaws,extensions);this.fitReady=true;this.lastWideTime=this.fitClock;this.fullFitCount++;
+  if(!this.fitReady||((bestError>.005||bestNeckError>.04)&&contactLead&&this.fitClock-this.lastWideTime>=.15)){
+   search(angles,aimYaws,extensions);this.fitReady=true;this.lastWideTime=this.fitClock;this.fullFitCount++;
   }
   this.fitPitch=best;this.fitYaw=bestYaw;this.fitExtension=bestExtension;
   const desired=best*envelope,limit=Math.max(0,dt)*8;this.pitch+=clamp(desired-this.pitch,-limit,limit);this.yaw+=clamp(bestYaw*envelope-this.yaw,-limit,limit);this.extension+=clamp(bestExtension*envelope-this.extension,-limit,limit);
   // The native clip can straighten faster than the additive slew rate. Its
   // CURRENT bend allowance always takes precedence over temporal smoothing.
-  this.extension=clamp(this.extension,0,extensionLimit);this.lastPitch=this.pitch;this.lastExtension=this.extension;this.lastError=bestError;
+  this.extension=clamp(this.extension,0,extensionLimit);this.lastPitch=this.pitch;this.lastYaw=this.yaw;this.lastExtension=this.extension;this.lastError=bestError;this.lastNeckError=bestNeckError;
   if(Math.abs(this.pitch)+Math.abs(this.yaw)+Math.abs(this.extension)<1e-6)return;
   if(side==='Left'&&arm.elbow&&Math.abs(this.extension)>1e-6){
    arm.elbow.original.copyFrom(arm.elbow.node.rotationQuaternion);const parentMatrix=arm.elbow.node.parent.getWorldMatrix();parentMatrix.invertToRef(this.inverseParent);

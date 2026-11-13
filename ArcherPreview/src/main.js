@@ -1,4 +1,4 @@
-import {PlayerMeleeAim} from './player-melee-aim.js';
+import {PlayerMeleeAim,meleeNeckPoint} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
 import {validateStoryboard} from './storyboard-document.js';
 import './styles.css';
@@ -23,8 +23,10 @@ import './game-selection.css';
 import './cave-story.css';
 import './commercial-ui.css';
 import './hud-layout.css';
+import './hud-raster-v1.css';
 import {setupCommercialUi} from './commercial-ui.js';
 import {setupHudLayout} from './hud-layout.js';
+import {setupHudRasterV1} from './hud-raster-v1.js';
 import {setupCaveStoryInspection} from './cave-story-inspection.js';
 import {setupGameSelection} from './game-selection.js';
 import {setupDeveloperToolSettings,createDeveloperToolSessions} from './tool-visibility-settings.js';
@@ -164,6 +166,7 @@ let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
+const meleeTargetPoint=new Vector3();
 const staminaFeedback=new StaminaFailureFeedback();
 const staminaNoticeAnchor=new StaminaNoticeAnchor($('#toast'));
 const wolfMaulNotice=setupWolfMaulNotice($('#app'));
@@ -374,6 +377,7 @@ function leaveElenaReview() {
 }
 
 function updateButtons() {
+  world?.hudRaster?.update({guarding:!!controller?.guarding,blocked:!ready||loadingAsset||!!mapTransition?.busy||!!frameLoop?.failed});
   wolfMaulNotice.update(boss?.playerAlive?boss.grab:null);
   const dead = controller?.dead || false;
   const rejected=controller?.staminaRejectSerial??0;
@@ -806,7 +810,7 @@ function render(dt) {
       if(isV2()&&Math.hypot(movement.x||0,movement.y||0)>.08){
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<(target.meleeAimDistance??4)){const d=target.actor.position.subtract(actor.position);actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
+      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<(target.meleeAimDistance??4)){const point=meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
       meleeAim?.begin(result,actor,target);
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
@@ -1090,7 +1094,7 @@ try {
     if(mapDeparture?.departing||mapTransition?.busy)return;
     const summonOpen=$('#summon-dialog').open,otherSettings=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true;
     world.toolLease?.setPaused(paused);
-    if(paused){input.reset();cancelAttackInput();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
+    if(paused){input.reset();cancelAttackInput();world.hudRaster?.clear();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
     world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();world.developmentToolSettings?.refresh();
@@ -1261,6 +1265,11 @@ try {
   }
   if(isWorldCharacter(character)){
     commercialUi=setupCommercialUi({root:$('#app'),onDiagnostics:()=>$('#diagnostic-expand')?.click()});
+    if(world.release==='moonforest-0.2'){
+      world.hudRaster=setupHudRasterV1({root:$('#app'),touchDevice,onLayoutChange:()=>hudLayout?.refresh()});
+      world.scene.onDisposeObservable.addOnce(()=>world.hudRaster?.dispose());
+      if(import.meta.hot)import.meta.hot.dispose(()=>world.hudRaster?.dispose());
+    }
     hudLayout=setupHudLayout({root:$('#app'),storage:equipmentStorage,getReady:()=>ready&&!loadingAsset&&!mapTransition?.busy&&!frameLoop?.failed&&!controller?.dead,resetInput:()=>{input?.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),onClose:message=>toast(message)});
     if(import.meta.hot)import.meta.hot.dispose(()=>{hudLayout?.dispose();commercialUi?.dispose();});
   }

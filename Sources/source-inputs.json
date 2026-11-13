@@ -52,7 +52,8 @@
     "regular-wolves-r1": "Sources/actors/tripo-monsters/regular-wolves-r1",
     "regular-quadrupeds-r1": "Sources/actors/tripo-monsters/regular-quadrupeds-r1",
     "regular-quadruped-textures-r1": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1",
-    "tripo-monsters-2026-11-11-v2": "Sources/actors/tripo-monsters/2026-11-11-v2"
+    "tripo-monsters-2026-11-11-v2": "Sources/actors/tripo-monsters/2026-11-11-v2",
+    "hud-ui-sprites-2026-11-13-v1": "Sources/ui/moonforest-hud/2026-11-13-v1"
   },
   "inputs": [
     {
@@ -46386,6 +46387,786 @@
       "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/runtime-manifest-r2.json",
       "bytes": 467621,
       "sha256": "5791ff39f3119f9c742bc191d3717c26483c4c34cfa07ae0cd498ff86e64f340",
+      "origins": [
+        "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-regular-wolves-r1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/asset-checks.json",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/asset-checks.json",
+      "bytes": 9368,
+      "sha256": "e39b88afdf1ca3a9d984e2179853a7bc03ff32a604bc7c10b0f8ec0e83fb54fd",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-held.png",
+      "bytes": 60012,
+      "sha256": "aa459cb1e0155f0d8556ed974bb3c68d2d3ba2a2fe69253ed6d52c1b3d3d4d0f",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-idle.png",
+      "bytes": 67894,
+      "sha256": "8f84618cf1ae521252f1460574c6424f65ba9e8d0ef898cc985bc3574563ea56",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-press.png",
+      "bytes": 65080,
+      "sha256": "eea8982994c401bee1a498004a60bf0c9fe669f9d4a26217c68f80eab60f9d39",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/attack-release.png",
+      "bytes": 66975,
+      "sha256": "6756d7f215b6126bd630bf4ce62929e125ccfb707aeda21abf2fafd2f48885a8",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-held.png",
+      "bytes": 63560,
+      "sha256": "29fb25a679596f29ee7a753961f98079e627e55d0e9a3ac53848105be35c0655",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-idle.png",
+      "bytes": 72282,
+      "sha256": "b392035fd291bcb7739a13bc8e827becf278f4484c2ec34769c02da78509f9c3",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-press.png",
+      "bytes": 68859,
+      "sha256": "36d7b94c2f6c6068b68cd8a5be845b24cef09c2eeae88392af44c060ce23526c",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/dodge-release.png",
+      "bytes": 70428,
+      "sha256": "13a30f7f93c8994494c63b2d60ee87b58ac7758c1550899546bea86542a69c22",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-held.png",
+      "bytes": 62063,
+      "sha256": "459cab52716dc57e2dc7ac0581955290cc4a4311f1c293b6679b739bd0b2c8cb",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-idle.png",
+      "bytes": 70511,
+      "sha256": "ffe2dd7422f66e8ef3563f37a7fe592c010cb0d14cbf774db49978f7b38568aa",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-press.png",
+      "bytes": 67216,
+      "sha256": "0c4db46483b45b87d7dcdfd0b2434cfa2c284606544cdafbec8e6a3097719412",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/guard-release.png",
+      "bytes": 68801,
+      "sha256": "656da0aaefbcda95307426708b3f73caedd3286c368ef86007e3d71599dbaa63",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-held.png",
+      "bytes": 85856,
+      "sha256": "0e71859c770ed09a5cd2aabeafc64ebc5ecf60e8af6cd8aa19b848e0507aa61b",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-idle.png",
+      "bytes": 94713,
+      "sha256": "a82dac1046c4b12b4ecd64abca19601007392dba84a540c93186d1dc7da72e88",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-press.png",
+      "bytes": 91086,
+      "sha256": "76d092706b014c882dbe1453e6dd45c29fb60a6e61424ad5af29fdd9c2210544",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/inventory-release.png",
+      "bytes": 92496,
+      "sha256": "c8d6b193c68f4555c4b69bca43ecad1629e8d9d584b91508b4e6413daebd1491",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-held.png",
+      "bytes": 91252,
+      "sha256": "0a18bfb4fc9e2ca307d16a7cf478aef7639cf5b9afef7fec06463580de953465",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-idle.png",
+      "bytes": 100869,
+      "sha256": "7199dee6960802a943d4ebf5fa933b618603f6a992b7b923fd92bca9fdeb62ec",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-press.png",
+      "bytes": 97117,
+      "sha256": "98b32702cf1447d604396dcff13d8b46dca7b490e72a7369aa736916572d6ba7",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/journal-release.png",
+      "bytes": 97508,
+      "sha256": "4aff982f13c0dddba3e31fcd3eb673444f87f0675716fa0095bdc44f3d7655bb",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-held.png",
+      "bytes": 68221,
+      "sha256": "d250fb1031d4ae1860338c18cdabfbedc71bdcca3b5b44a76d3b56ae8450ef5e",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-idle.png",
+      "bytes": 77481,
+      "sha256": "cef1fc608284362074baaeb3c1ed4a7fe44468e093a78e7613c629d7a16a311b",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-press.png",
+      "bytes": 74385,
+      "sha256": "b9a6f1ced57a439d6b04c84a37f6e26517d3cab2c9757c772cdaf7b5b34956bb",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/potion-release.png",
+      "bytes": 76098,
+      "sha256": "3affd05f893d0fd8d458b4c29bdc35f5301f98dcdfbb0cc53b7b3a1b2bd28f75",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-held.png",
+      "bytes": 96332,
+      "sha256": "1496946c81a7f49da284af0c9ef2f34d512379bfbb7febb73bc2aeb139d356ae",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-idle.png",
+      "bytes": 105734,
+      "sha256": "a8ee97b200aaf0c943f7d481968b7cb770a0c969c082ee9009fbd35a49a0a9ab",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-press.png",
+      "bytes": 101744,
+      "sha256": "b4d301c656b87e759037fd03b0dc7951c31b335e38b1af0449caece3329a851b",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/settings-release.png",
+      "bytes": 101709,
+      "sha256": "1b137d71bf7cddf8160f66cd5d078adf7d58ea3e8221f271f5a361b3501b47bf",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-held.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-held.png",
+      "bytes": 51651,
+      "sha256": "82e94dde4774574bfcee5a525384cd83f013a8d965c10c3b1004df4b34f5ca20",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-idle.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-idle.png",
+      "bytes": 58644,
+      "sha256": "f8f1e473f06a87e02f3f2fa4f237bfc8023f0d26a09f5354caf29b7fdd6d6948",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-press.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-press.png",
+      "bytes": 56668,
+      "sha256": "08eecf4051739d0e29e1ba9d10e4bd03beaa73244631b39c4df8a93a0a46d63e",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-release.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/frames/story-release.png",
+      "bytes": 58419,
+      "sha256": "1393841967b406f5a1017d2b3c8c06803f157ae408a9cb571df14d4fd4245b9d",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/generation-prompts.json",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/generation-prompts.json",
+      "bytes": 7342,
+      "sha256": "866a41f41f8da8f9a330fd3e3f1c36734098e5b2bea897745f600a16881d46c1",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/overlays/mobile-ui-transparent.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/overlays/mobile-ui-transparent.png",
+      "bytes": 682364,
+      "sha256": "66959ecce826905fc7551c26f1896824dcb026a3cdcd8ac2a71b3399512f6e17",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/overlays/pc-ui-transparent.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/overlays/pc-ui-transparent.png",
+      "bytes": 414707,
+      "sha256": "8fa8e9190dbffd2812e6eeb5f6ed7e024e50e8d9ada4aaa7ddecb96ca8c15a27",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/prepare-ui-assets.ps1",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/prepare-ui-assets.ps1",
+      "bytes": 7813,
+      "sha256": "556479674e9db9faabbff1eb30c39302b0ef4e856e81c2609d0f31df7179d906",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/preview.html",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/preview.html",
+      "bytes": 7993,
+      "sha256": "786b9bb0fd091ab78df3fe97284eb12964ad4f8a728a12a6195ad5c56c404511",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/raw/combat-states.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/raw/combat-states.png",
+      "bytes": 1633351,
+      "sha256": "ccedeaa7c9bf6f4228983ae1f03a2662866040bbd070adb925e8984032285297",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/raw/menu-states.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/raw/menu-states.png",
+      "bytes": 2005345,
+      "sha256": "f820db4c236d57c4a2342381a74b95ec5205ccec5f1377cf0629f2957c0e47d4",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/raw/mobile-overlay.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/raw/mobile-overlay.png",
+      "bytes": 583410,
+      "sha256": "5220c5a725e945b67cdfbdb221b6aac701a1d59182ca920dcc046856ea952939",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/raw/pc-overlay.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/raw/pc-overlay.png",
+      "bytes": 365769,
+      "sha256": "27716b7f2aad728f4e19323c681c35eb0736fff74b5d333c0b6050f8fc31662f",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/raw/reference-mobile.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/raw/reference-mobile.png",
+      "bytes": 2356526,
+      "sha256": "084cd017f2d2b56ecc9b1ff15d00bbc43c6523d2c841b11b48832710c0493a9a",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/raw/reference-pc.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/raw/reference-pc.png",
+      "bytes": 2225513,
+      "sha256": "fe6938ba895eff868789f6013348fba81838018dc6df946b204b76259dff1b56",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/README.md",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/README.md",
+      "bytes": 3472,
+      "sha256": "e43ce7341a32c71d2fed16bdf48b86bbcca5d37d48e3861e1d7e346479922613",
+      "origins": [
+        "MoonForest PC/mobile HUD implementation handoff, 2026-11-13; user decisions and canonical source paths."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/sheets/combat-press-4x4.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/sheets/combat-press-4x4.png",
+      "bytes": 1102021,
+      "sha256": "3f28a2e089061e846d46bcd00ce532cf0cb90f81fdb159eca83f3f0d61b582c5",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/sheets/menu-press-4x4.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/sheets/menu-press-4x4.png",
+      "bytes": 1366679,
+      "sha256": "844a22a7d90c239ae1b0493d91184dbf974987450cfe2f1d8af72987fe7401e8",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/sprites.json",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/sprites.json",
+      "bytes": 7988,
+      "sha256": "565ef72c997142270e013a7e1651366b21b5c6586c7129bae893026f75152cb8",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/build-demo.mjs",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/build-demo.mjs",
+      "bytes": 1150,
+      "sha256": "57a129f553d8c9421cc40b4e7b5148e544704876298ecaf93d8e27c2613cab30",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/demo/background.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/demo/background.png",
+      "bytes": 2751872,
+      "sha256": "3b0e754e912171251ab41a4b949e516ab552fd581b2c27d5f37cb01dbd0b69da",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/demo/minimap.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/demo/minimap.png",
+      "bytes": 82618,
+      "sha256": "77d8cf6891d357340639ffba0bff3269418a269ffb574f73d8ffa3bc7aec1b5a",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/demo/moon.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/demo/moon.png",
+      "bytes": 6604,
+      "sha256": "3aed29897441a29d05428357abbdeee4c25ae7c9ab0338571fe06ec71af65d6a",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/demo-template.html",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/demo-template.html",
+      "bytes": 31814,
+      "sha256": "52a7900ea59422a2af5209cf8382082bbb6bc7a64817099d9a6d85a888bb3d6e",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/fonts/galmuri-bold.woff2",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/fonts/galmuri-bold.woff2",
+      "bytes": 166352,
+      "sha256": "0cfd6ce25b9f531fab677a604d96bc062cc139166880a086da3b4d72b1bb2492",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/fonts/galmuri-regular.woff2",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/fonts/galmuri-regular.woff2",
+      "bytes": 505400,
+      "sha256": "8bad9322b3340bfb5cb26cb00f4752bf4c8e7d1b526bb07205f4af458eebed31",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/fonts/LICENSE.txt",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/fonts/LICENSE.txt",
+      "bytes": 4357,
+      "sha256": "902b1d8e49c2582320f177b0cc548e5aa4273fb551c9a600703cec4a81e63aa5",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/interactive-demo.html",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/interactive-demo.html",
+      "bytes": 8011707,
+      "sha256": "89e4ba431089dd6183144ccd0fc8c8302262aa76083498a3da3a98c02829ce88",
+      "origins": [
+        "MoonForest standalone HUD demonstration and transparent sprite review assets, 2026-11-13; original project Galmuri font, built-in image_gen artwork."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/HANDOFF_배포게임_UI적용.txt",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/HANDOFF_배포게임_UI적용.txt",
+      "bytes": 16361,
+      "sha256": "125cf27f9d761701b59a89088040361f1e99e54e91f83a0a2724da62165241c5",
+      "origins": [
+        "MoonForest PC/mobile HUD implementation handoff, 2026-11-13; user decisions and canonical source paths."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-13-v1/handoff.html",
+      "path": "Sources/ui/moonforest-hud/2026-11-13-v1/handoff.html",
+      "bytes": 18691,
+      "sha256": "d23f47d4e7cf7cb5cf9979a9f8eac882ec73e7bb95726e647c6ebe0833e91f84",
+      "origins": [
+        "MoonForest PC/mobile HUD implementation handoff, 2026-11-13; user decisions and canonical source paths."
+      ],
+      "requiredBy": [
+        "hud-ui-sprites-2026-11-13-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/runtime-manifest-r3.json",
+      "path": "Sources/actors/tripo-monsters/regular-quadrupeds-r1/boar/runtime-manifest-r3.json",
+      "bytes": 467663,
+      "sha256": "8f193c7dc719bdc9eb962f2bb7fb4e306748736addc306b892f5cffa3c2823ee",
       "origins": [
         "MoonForest original-colour body-fitted regular wolf rig and inherited approved canine motions, 2026-11-13"
       ],

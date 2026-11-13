@@ -5,7 +5,7 @@ import sourceLocks from './regular-wolf-source-locks.json' with {type:'json'};
 // Independently fitted quadrupeds share clip roles, never live skeletons.
 export const REGULAR_WOLF_VERSION='Regular quadrupeds R1 · body-fitted alpha motions';
 export const REGULAR_WOLF_SCALED_VERSION='Regular quadrupeds R2 · 1.5x actor scale';
-export const REGULAR_BOAR_SCALED_VERSION='Regular quadrupeds R2 · 2.5x boar actor scale';
+export const REGULAR_BOAR_SCALED_VERSION='Regular quadrupeds R3 · boar at one third of R2 size';
 const originalVariants={
  'gray-wolf':Object.freeze({id:'gray-wolf',label:'회색 늑대',height:1.05,width:.55820,length:1.32517}),
  'stylized-wolf':Object.freeze({id:'stylized-wolf',label:'늑대 2',height:1.1,width:.58350,length:1.37999}),
@@ -14,8 +14,8 @@ const originalVariants={
  boar:Object.freeze({id:'boar',label:'멧돼지',height:1,width:.9106487148102815,length:1.5159118727050183}),
 };
 const enlarged=new Set(['gray-wolf','stylized-wolf','wolf-3','fox']);
-export const regularWolfActorScale=id=>id==='boar'?2.5:enlarged.has(id)?1.5:1;
-export const regularWolfManifest=id=>regularWolfActorScale(id)>1?id+'-r2':id;
+export const regularWolfActorScale=id=>id==='boar'?2.5/3:enlarged.has(id)?1.5:1;
+export const regularWolfManifest=id=>id==='boar'?'boar-r3':enlarged.has(id)?id+'-r2':id;
 export const regularWolfVersion=id=>id==='boar'?REGULAR_BOAR_SCALED_VERSION:enlarged.has(id)?REGULAR_WOLF_SCALED_VERSION:REGULAR_WOLF_VERSION;
 export const REGULAR_WOLF_VARIANTS=Object.freeze(Object.fromEntries(Object.entries(originalVariants).map(([id,value])=>{
  const actorScale=regularWolfActorScale(id);return [id,Object.freeze({...value,actorScale,height:value.height*actorScale,width:value.width*actorScale,length:value.length*actorScale})];

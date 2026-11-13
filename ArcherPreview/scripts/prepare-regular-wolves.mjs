@@ -80,11 +80,13 @@ async function calibrate(split,config,anatomy){
  // An accepted ram owns the existing narrow pair-clearance lease. The
  // standing player radius must not stop a small mouth outside the prone body.
  const originalCatchDistance=Math.max(config.balance.radius+.02,point.z);
- // The large boar's conservative navigation circle includes barrel padding.
+ // The boar's conservative navigation circle includes barrel padding.
  // Its accepted-prone pair can use the measured body half-width plus a margin,
- // stepping 16 cm closer rather than enlarging teeth or moving the victim.
- const ramPairClearance=config.canineProfile.id==='boar'?Math.max(config.balance.radius-.18,anatomy.nativeDimensions[0]*config.scale*.5):undefined;
- const catchDistance=ramPairClearance===undefined?originalCatchDistance:Math.max(ramPairClearance+.04,originalCatchDistance-.16);
+ // Scale the approved 2.5 m body's paired margins with its current body size;
+ // the player capsule remains its actual size throughout contact calibration.
+ const pairScale=config.height/2.5;
+ const ramPairClearance=config.canineProfile.id==='boar'?Math.max(config.balance.radius-.18*pairScale,anatomy.nativeDimensions[0]*config.scale*.5):undefined;
+ const catchDistance=ramPairClearance===undefined?originalCatchDistance:Math.max(ramPairClearance+.04*pairScale,originalCatchDistance-.16*pairScale);
  asset.dispose();loader.dispose();scene.dispose();engine.dispose();return {attacks,ramReach,catchDistance,ramPairClearance,runRamOverlay:overlay};
 }
 

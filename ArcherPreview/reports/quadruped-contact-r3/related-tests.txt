@@ -1,0 +1,34 @@
+✔ unrelated pointer release or cancellation never interrupts the active HUD drag (14.7184ms)
+✔ stored hidden diagnostics apply on reveal and recalculate once on resize (1.4043ms)
+✔ closing the HUD editor restores focus outside the now-closed editor and settings dialog (1.4679ms)
+✔ layout documents strictly validate numbers, schema and movable combat controls (2.3875ms)
+✔ viewport resolver preserves neutral authored placement and clips moved groups inside screen (0.2779ms)
+✔ every HUD group and inner component accepts and restores up to 500 percent (15.5895ms)
+✔ popup position and size are saved with HUD layout (6.5203ms)
+✔ a closed popup has an inert draggable preview and saves its placement (4.8625ms)
+✔ a popup component is editable in the preview and never applied to a different screen or item (5.3029ms)
+✔ neutral layout scales with the viewport without scheduling continuous frame work (1.7541ms)
+✔ edited scale remains proportional across fullscreen viewport changes and reset restores the default (4.0358ms)
+✔ save, reload and cancel use independent game storage and reset held input at editor boundaries (5.3465ms)
+✔ combat buttons can move and reset independently (7.1952ms)
+✔ drag events in editing top layer move HUD without invoking the underlying combat button (2.5239ms)
+✔ directly pointing at another visible UI selects and moves that item (2.3279ms)
+✔ mouse corner drag and touch pinch resize the selected HUD group (3.7516ms)
+✔ invalid import is non-destructive; valid import restores all groups and exports editable data (2.9015ms)
+✔ layout download emits a JSON file with the current edited positions (3.8315ms)
+✔ unavailable storage keeps usable session settings and reports lack of persistence (2.8647ms)
+✔ native close and Escape cancellation discard drafts and release pause (4.3957ms)
+✔ swept capsule rejection preserves detailed contacts including lateral cuts and fast crossed frames (14.9864ms)
+✔ 0.2 normal dropdown contains goblin plus all five animals; bosses keep only four boss entries (11.9654ms)
+✔ each normal kind remembers its own quantity independently of bosses and maps (0.7323ms)
+✔ actual main UI changes normal labels/counts and preserves readiness guards (0.6304ms)
+✔ actual summon button routes a selected normal animal separately from the boss selector (0.3966ms)
+✔ wolf impact follows the confirmed attack heading, including an overlapped long-body root (0.7718ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1320.4376

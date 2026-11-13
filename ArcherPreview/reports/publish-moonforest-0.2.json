@@ -1,10 +1,27 @@
 {
   "release": "moonforest-0.2",
   "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "verifiedFiles": 2201,
-  "bytes": 797368407,
-  "reusedBytes": 797368407,
+  "verifiedFiles": 2204,
+  "bytes": 800322481,
+  "reusedBytes": 788920202,
   "changedPaths": [
+    "ArcherPreviewSite/assets/actor-editor-BzRe_-Ie.js",
+    "ArcherPreviewSite/assets/actor-encounter-adapter-Cpch1LlR.js",
+    "ArcherPreviewSite/assets/actor-population-DRLjSYRH.js",
+    "ArcherPreviewSite/assets/authored-monster-runtime-D1rxCZtn.js",
+    "ArcherPreviewSite/assets/boar-r3.json",
+    "ArcherPreviewSite/assets/cinematic-game-D8ohJTQu.js",
+    "ArcherPreviewSite/assets/cinematic-interaction-CxYfJgho.js",
+    "ArcherPreviewSite/assets/cinematic-scene-host-BWQRf9li.js",
+    "ArcherPreviewSite/assets/combat-press-4x4-CoKYKtci.png",
+    "ArcherPreviewSite/assets/developer-actors-CLChwdHU.js",
+    "ArcherPreviewSite/assets/menu-press-4x4-3CFIB5E5.png",
+    "ArcherPreviewSite/assets/moonforestV2-C6BwIZ43.js",
+    "ArcherPreviewSite/assets/moonforestV2-DQFzXusB.css",
+    "ArcherPreviewSite/assets/mourning-elena-encounter-LKu67zVn.js",
+    "ArcherPreviewSite/assets/npc-world-B6h9CwmM.js",
+    "ArcherPreviewSite/assets/npc-world-Cwvl7_OQ.js",
+    "ArcherPreviewSite/moonforest-0.2.html",
     "ArcherPreviewSite/deployment-files-moonforest-0.2.json"
   ]
 }

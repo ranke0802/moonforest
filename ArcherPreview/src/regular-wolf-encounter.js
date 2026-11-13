@@ -31,6 +31,19 @@ export class RegularWolfEncounter extends WolfV02Encounter{
   const brain=new Brain(durations,this.balance,Math.random,this.runtimeProfile);
   brain.ramReach=this.runtimeProfile.ramReach;return brain;
  }
+ update(dt,player){this.playerMeleePoseReady=false;return super.update(dt,player);}
+ preparePlayerMeleePose(player,result){
+  // Aim and damage consume the SAME final root/foot/attention pose. This is
+  // selected-target-only work, reused by its ordinary contact pass below.
+  this.playerMeleePoseReady=false;
+  const distance=super.prepareContactPose(player,result),p=this.actor.position,proof=this.playerMeleePose??={};
+  Object.assign(proof,{player,actionId:result.actionId,state:result.state,serial:this.brain.serial,time:this.brain.time,x:p.x,y:p.y,z:p.z,px:player.position.x,py:player.position.y,pz:player.position.z,distance});this.playerMeleePoseReady=true;
+ }
+ prepareContactPose(player,result){
+  const proof=this.playerMeleePose,p=this.actor.position,ready=this.playerMeleePoseReady;this.playerMeleePoseReady=false;
+  if(ready&&proof.player===player&&proof.actionId===result.actionId&&proof.state===result.state&&proof.serial===this.brain.serial&&proof.time===this.brain.time&&proof.x===p.x&&proof.y===p.y&&proof.z===p.z&&proof.px===player.position.x&&proof.py===player.position.y&&proof.pz===player.position.z)return proof.distance;
+  return super.prepareContactPose(player,result);
+ }
  contactShape(name,kind){return this.contactShapes[kind==='ram'&&name==='head'?'headRam':kind==='maul'&&name==='jaw'?'jawMaul':name.includes('paw')?'paw':name]??this.contactShapes.head;}
  contactSeparation(){
   // Small animals must allow a real close-range strike. The legacy standing

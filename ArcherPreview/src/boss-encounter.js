@@ -346,9 +346,7 @@ export class BossEncounter {
     this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*(1-Math.exp(-18*this.dt));
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
   }
-  poseAndContacts(player,result,sample,shield){
-    if(!this.active||this.corpseGone)return;
-    let hitStop=0;
+  prepareContactPose(player,result){
     this.player=player;
     this.alignPose();
     // Refresh once after both root corrections, before contacts consume the pose.
@@ -362,6 +360,13 @@ export class BossEncounter {
     if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
     this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
     if(this.animator?.ensurePoseCurrent)this.animator.ensurePoseCurrent();else refreshPoseMatrices(this.poseNodes);
+    this.contactPoseDirection=d;return distance;
+  }
+  poseAndContacts(player,result,sample,shield){
+    if(!this.active||this.corpseGone)return;
+    let hitStop=0;
+    const distance=this.prepareContactPose(player,result);
+    const d=this.contactPoseDirection;
     const needsSight=(sample&&this.playerAlive&&this.brain.hp>0)||this.pendingEvents.length>0;
     const clearSight=!needsSight||!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
     if(sample&&clearSight&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){

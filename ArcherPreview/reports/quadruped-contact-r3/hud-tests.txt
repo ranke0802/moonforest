@@ -1,0 +1,12 @@
+✔ eight sprite bindings reuse original live controls and never overwrite HUD data or saved transforms (6.1409ms)
+✔ press/held/release timing joins existing frames and respects multiple guard sources (1.4496ms)
+✔ cancel, focus loss, modal opening and blocked state clear cosmetic holds without dispatching actions (3.4893ms)
+✔ runtime CSS references exactly two atlases and retains live circular map plus distinct PC/touch layouts (17.0083ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 176.368

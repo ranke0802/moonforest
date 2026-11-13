@@ -1,0 +1,16 @@
+{
+  "sourceAssetId": "hud-ui-sprites-2026-11-13-v1",
+  "cellSize": 256,
+  "files": [
+    {
+      "name": "combat-press-4x4.png",
+      "bytes": 1102021,
+      "sha256": "3f28a2e089061e846d46bcd00ce532cf0cb90f81fdb159eca83f3f0d61b582c5"
+    },
+    {
+      "name": "menu-press-4x4.png",
+      "bytes": 1366679,
+      "sha256": "844a22a7d90c239ae1b0493d91184dbf974987450cfe2f1d8af72987fe7401e8"
+    }
+  ]
+}

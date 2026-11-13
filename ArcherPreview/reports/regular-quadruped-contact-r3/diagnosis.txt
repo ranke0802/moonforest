@@ -1,0 +1,30 @@
+The previous20-case smoke always used the first normal slash at one static
+flank pose. It did not cover the second Thrust_Slash action or native fox orbit.
+
+Exact R2 source d4096 reproduced the reported combo hole: at front1.15m,
+slash dealt25 but the following Thrust_Slash dealt0. Its two real weapon
+passes stayed .04496m/.00741m outside fitted anatomy. Sword correction could
+only pitch (swordYaws=[0]), while main aimed once at the actor root rather than
+the posed neck. Final receiving alignment also occurred after weapon aiming:
+measured raw-to-contact neck drift reached .208m in native orbit/evade.
+
+The root-owned combined correction uses neck-directed initial heading,
+bounded arm yaw, contact-first neck preference and the same final receiving
+pose before weapon sampling. Aim/contact neck drift is now0 in every recorded
+candidate contact frame. No hit volume, weapon window or native gate changed.
+
+Final actual queued slash/Thrust_Slash results:
+ standingfront:25/48; native movingfront:25/55;
+ native movingside during the real2s evade cooldown:25/23.
+ Ordinary movingside: firstslash25; a genuine incoming player stagger cancels
+ the queued second action. That remains an intended interruption, not a miss.
+ Outside4m: both normal actions miss. Neck preference may use another genuine
+ upper-body contact when the literal neck cannot be reached by the source arc.
+
+Six native shoulder/elbow/wrist local positions and scales remain exact;
+added rotations restore exactly. Standard V2 normal actions report moving=false,
+so main's later movement faceHeading is not an overwrite on these normal frames.
+
+verify.mjs checks the captured native proof without rerunning a broad matrix.
+These are read-only CPU/controller/contact observations, not visual approval or
+GPU/mobile performance evidence. Production changes belong to the parent task.

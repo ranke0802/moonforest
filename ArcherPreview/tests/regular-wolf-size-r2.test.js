@@ -30,10 +30,11 @@ function skinHeight(e){
  for(const m of e.asset.meshes){if(!m.getTotalVertices()||!m.skeleton)continue;const p=m.getPositionData(true,true),world=m.computeWorldMatrix(true);for(let i=0;i<p.length;i+=3){const y=Vector3.TransformCoordinates(Vector3.FromArray(p,i),world).y;low=Math.min(low,y);high=Math.max(high,y);}}
  return high-low;
 }
-test('R2 actor transforms enlarge four fitted skins 1.5x and boar 2.5x, preserving resources and real mouth contact',async t=>{
+test('versioned actor transforms retain four 1.5x skins and shrink boar to one third of R2, preserving resources and real mouth contact',async t=>{
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;t.after(()=>{scene.dispose();engine.dispose();});const proof=[];
  for(const id of ['gray-wolf','stylized-wolf','wolf-3','fox','boar']){
-  const factor=id==='boar'?2.5:1.5,old=read(id),config=read(regularWolfManifest(id)),profile=regularWolfRuntimeProfile(id,config),fit=profile.actions['quick-bite'],calibration=config.canineProfile.attacks['quick-bite'].calibration;
+  const factor=id==='boar'?2.5/3:1.5,old=read(id),config=read(regularWolfManifest(id)),profile=regularWolfRuntimeProfile(id,config),fit=profile.actions['quick-bite'],calibration=config.canineProfile.attacks['quick-bite'].calibration;
+  if(id==='boar'){assert.equal(regularWolfManifest(id),'boar-r3');near(config.scale,read('boar-r2').scale/3,'boar scale one third of published R2');near(config.height,read('boar-r2').height/3,'boar height one third of published R2');}
   assert.equal(config.scale,old.scale*factor);assert.equal(config.height,old.height*factor);assert.equal(config.model,old.model);assert.deepEqual(config.resources,old.resources);assert.deepEqual(config.texture,old.texture);assert.equal(config.sourceSha256,old.sourceSha256);assert.deepEqual(config.canineProfile.hurtVolumes,old.canineProfile.hurtVolumes);
   for(const [name,shape]of Object.entries(config.canineProfile.contactShapes)){near(shape.radius,old.canineProfile.contactShapes[name].radius*factor,id+' '+name+' radius');assert.deepEqual(shape.offset,old.canineProfile.contactShapes[name].offset);}
   const oldRate=4.2/(old.canineProfile.runSourceSpeed*old.scale);near(profile.gait.runPlaybackRate,oldRate/factor,id+' stride cadence');assert.equal(regularWolfActorScale(id),factor);
