@@ -1,0 +1,102 @@
+{
+  "sources": {
+    "wolf-v02-spec.js": "e54f7a934a74e5205f1c57c9a85771445ab44ee56d63c855c3a5e47d373693c6",
+    "wolf-v02-encounter.js": "4a0b68af380c67d37246fd7c2bfb388cb9b1e7615bea47b074115eb8315bc9c2",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "wolf-v02-authored-clips.js": "258381685307280343cd67f7a2a151f619440dd3de0b2ae069e5944ee1a64ea2",
+    "wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+    "wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97"
+  },
+  "rows": [
+    {
+      "name": "quick-bite-runtime-impact",
+      "clip": "Wolf_Predator_Diagonal_Bite_V02",
+      "sourceTime": 0.3333333333333333,
+      "meshCount": 7
+    },
+    {
+      "name": "quick-bite-runtime-followthrough",
+      "clip": "Wolf_Predator_Diagonal_Bite_V02",
+      "sourceTime": 0.5156862745098044,
+      "meshCount": 7
+    },
+    {
+      "name": "paw-swipe-runtime-impact",
+      "clip": "Wolf_Predator_Reverse_Bite_V02",
+      "sourceTime": 0.36666666666666664,
+      "meshCount": 7
+    },
+    {
+      "name": "paw-swipe-runtime-followthrough",
+      "clip": "Wolf_Predator_Reverse_Bite_V02",
+      "sourceTime": 0.5473684210526321,
+      "meshCount": 7
+    },
+    {
+      "name": "orbit-3m-runtime",
+      "clip": "Wolf_Orbit_Step_V02",
+      "sourceTime": 0.23582895071746598,
+      "meshCount": 7
+    },
+    {
+      "name": "orbit-5m-runtime",
+      "clip": "Wolf_Orbit_Step_Left_V02",
+      "sourceTime": 0.3497935268471207,
+      "meshCount": 7
+    },
+    {
+      "name": "running-runtime",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.5208465608465612,
+      "meshCount": 7
+    },
+    {
+      "name": "far-orbit-run-00",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.04402116402116402,
+      "meshCount": 7
+    },
+    {
+      "name": "far-orbit-run-02",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.06603174603174604,
+      "meshCount": 7
+    },
+    {
+      "name": "far-orbit-run-04",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.0888888888888889,
+      "meshCount": 7
+    },
+    {
+      "name": "far-orbit-run-08",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.1371428571428572,
+      "meshCount": 7
+    },
+    {
+      "name": "far-orbit-run-16",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.2438095238095239,
+      "meshCount": 7
+    },
+    {
+      "name": "far-orbit-run-24",
+      "clip": "Wolf_Run_R5",
+      "sourceTime": 0.3602116402116404,
+      "meshCount": 7
+    },
+    {
+      "name": "brace-runtime",
+      "clip": "Wolf_Backward_Brace_V02",
+      "sourceTime": 0.35000000000000026,
+      "meshCount": 7
+    },
+    {
+      "name": "death-runtime",
+      "clip": "Wolf_Staggered_Collapse_V02",
+      "sourceTime": 1.65,
+      "meshCount": 7
+    }
+  ]
+}

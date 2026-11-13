@@ -1,0 +1,10 @@
+{
+  "file": "Docs/Reports/2026-11-13/MOONFOREST_0.2_늑대_R11_검토보고서.html",
+  "bytes": 7716851,
+  "inlineScripts": 1,
+  "embeddedMedia": 10,
+  "uniqueIds": 4,
+  "syntax": true,
+  "externalRequiredMedia": false,
+  "checks": "Static DOM/inline script and data-URL validation only; no browser automation."
+}

@@ -1,10 +1,15 @@
 import {Quaternion,Vector3} from '@babylonjs/core';
 import {playerDimensions} from './player-dimensions.js';
-import {WOLF_V02_GAIT} from './wolf-v02-spec.js';
+import {WOLF_V02_GAIT,WOLF_V02_BRACE} from './wolf-v02-spec.js';
 
 const up=new Vector3(0,1,0),clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const angleDelta=(to,from)=>Math.atan2(Math.sin(to-from),Math.cos(to-from));
 const RUN_STANCE=Object.freeze({'fore.L':[.58-17/30,.72-17/30],'fore.R':[.1216666667,.2616666667],'hind.L':[.2916666667,.3916666667],'hind.R':[.3583333333,.4583333333]});
+function braceSupport(clip,name){
+ const phases=clip?.supportPhases;
+ if(Array.isArray(phases))return phases.filter(phase=>phase.feet.includes(name+'.paw')).map(phase=>[phase.start,phase.end]);
+ return phases?.[name]??((name==='fore.R'||name==='hind.L')?[[0,.04],[.40,.90]]:[[0,.43],[.82,.90]]);
+}
 
 // A single post-sampler pose owner. All vectors, quaternions and original-pose
 // slots live with the actor. The next animation sample always starts from its
@@ -23,7 +28,8 @@ export class WolfV02LocomotionPose{
   for(const slot of this.slots.values())for(const node of encounter.animator.nodes){
    for(let ancestor=node;ancestor;ancestor=ancestor.parent)if(ancestor===slot.node){slot.branch.push(node);break;}
   }
-  this.legs=['fore.L','fore.R','hind.L','hind.R'].map(name=>({name,upper:encounter.nodes[name+'.upper'],lower:encounter.nodes[name+'.lower'],end:encounter.nodes[name+(name.startsWith('hind')?'.metatarsal':'.paw')],foot:encounter.nodes[name+'.paw'],anchor:new Vector3(),previous:new Vector3(),offset:new Vector3(),endWorld:Quaternion.Identity(),footWorld:Quaternion.Identity(),planted:false}));
+  const brace=encounter.config.catalog.find(clip=>clip.name===WOLF_V02_BRACE);
+  this.legs=['fore.L','fore.R','hind.L','hind.R'].map(name=>({name,upper:encounter.nodes[name+'.upper'],lower:encounter.nodes[name+'.lower'],end:encounter.nodes[name+(name.startsWith('hind')?'.metatarsal':'.paw')],foot:encounter.nodes[name+'.paw'],anchor:new Vector3(),previous:new Vector3(),offset:new Vector3(),endWorld:Quaternion.Identity(),footWorld:Quaternion.Identity(),planted:false,braceSupport:braceSupport(brace,name)}));
   this.maxReachError=0;this.releasedPlants=0;this.serial=null;
  }
  restore(){
@@ -55,6 +61,7 @@ export class WolfV02LocomotionPose{
  aim(){
   const e=this.e,b=e.brain;
   if(!e.player||b.hp<=0||b.stagger||['down','recover'].includes(b.mode)||b.behavior==='rest')return;
+  if(b.mode==='attack'&&b.action?.authoredAttention)return;
   const head=e.nodes.head,neck=e.nodes.neck,player=e.player.position;
   const height=playerDimensions(e.player).bodyAimHeight;
   if(b.mode==='attack'){
@@ -75,6 +82,15 @@ export class WolfV02LocomotionPose{
    const range=RUN_STANCE[leg.name],phase=b.time-WOLF_V02_GAIT.runSourceStart,stance=phase>=range[0]&&phase<=range[1];
    if(!stance){leg.planted=false;continue;}
    this.plant(leg,firstSample||e.animator.blend<1);this.solveLeg(leg);
+  }
+ }
+ plantBrace(){
+  const e=this.e,b=e.brain,firstSample=this.serial!==b.serial;
+  if(firstSample){this.resetPlants();this.serial=b.serial;}
+  for(const leg of this.legs){
+   let stance=false;for(const range of leg.braceSupport)if(b.time>=range[0]&&b.time<=range[1]){stance=true;break;}
+   if(!stance){leg.planted=false;continue;}
+   this.plant(leg,firstSample);this.solveLeg(leg);
   }
  }
  plant(leg,usePrevious=false){

@@ -8,12 +8,12 @@ import {playerDimensions} from '../src/player-dimensions.js';
 
 async function stalk(f,distance=3.1){
  await f.battle.summon(f.player,1,'wolf');const e=f.battle.encounters[0];e.actor.position.setAll(0);e.actor.rotation.y=0;f.player.position.set(0,0,distance);
- e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='observe';e.brain.observation=5;
+ e.brain.random=()=>.5;e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='observe';e.brain.observation=5;
  for(let i=0;i<20;i++)stepWolfHunt(f,e,1/60);
  e.brain.flankSide=-1;e.brain.beginStalk();return e;
 }
 
-test('an obstructed player-centered stride tries the genuinely opposite gait once before attacking',async t=>{
+test('an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack',async t=>{
  const f=await wolfHuntFixture(t);let e=await stalk(f,5);
  f.world.navigation={segmentClear:(from,to,radius,sight)=>sight||to.x<=from.x+.00001,constrain(){},steer:(from,to)=>to};
  stepWolfHunt(f,e,1/60);assert.equal(e.brain.stalkBlocked,true);assert.equal(e.brain.time,0,'rejected root travel cannot advance support feet');assert.ok(e.actor.position.equalsWithEpsilon(Vector3.Zero(),1e-7));
@@ -21,22 +21,35 @@ test('an obstructed player-centered stride tries the genuinely opposite gait onc
  const radius=Vector3.Distance(e.actor.position,f.player.position);for(let i=0;i<20;i++)stepWolfHunt(f,e,1/60);assert.ok(Math.abs(Vector3.Distance(e.actor.position,f.player.position)-radius)<1e-6);
  f.world.navigation=null;e=await stalk(f);const before=e.actor.position.clone();
  f.world.navigation={segmentClear:(from,to,radius,sight)=>!!sight,constrain(){},steer:(from,to)=>to};
- for(let i=0;i<8&&e.brain.mode!=='attack';i++)stepWolfHunt(f,e,1/60);
- assert.equal(e.brain.mode,'attack','two blocked orbit directions return to a reachable bite');assert.equal(e.brain.flankReversed,true);assert.ok(e.actor.position.equalsWithEpsilon(before,1e-7));
+ const target=e.brain.circleTarget;let frames=0;
+ for(;frames<8;frames++)stepWolfHunt(f,e,1/60);
+ assert.equal(e.brain.behavior,'flank');assert.equal(e.brain.attackCount,0,'blocked steps cannot skip the requested observation');assert.equal(e.brain.flankReversed,true);
+ for(;frames<Math.ceil((target+.1)*60)&&e.brain.mode!=='attack';frames++){
+  stepWolfHunt(f,e,1/60);assert.equal(e.brain.circleTarget,target,'retries preserve the original observation budget');
+  if(e.brain.circleElapsed<target-1e-8)assert.equal(e.brain.attackCount,0);
+ }
+ assert.equal(e.brain.mode,'attack','after the full budget, two blocked orbit directions still permit a visible reachable bite');assert.ok(e.brain.circleElapsed>=target-1e-8);assert.ok(e.actor.position.equalsWithEpsilon(before,1e-7));
+ f.world.navigation=null;e=await stalk(f);const wallOrigin=e.actor.position.clone();
+ f.world.navigation={segmentClear:()=>false,constrain:(position,previous)=>position.copyFrom(previous),steer:from=>from};
+ for(let i=0;i<210;i++)stepWolfHunt(f,e,1/60);
+ assert.equal(e.brain.attackCount,0,'a blocked line of sight must use navigation instead of attacking through the wall');assert.equal(e.playerHp,500);assert.ok(e.actor.position.equalsWithEpsilon(wallOrigin,1e-7));
  f.world.navigation=null;
 });
 
 test('a player leaving the orbit is pursued by the actual run rather than dragging a planted circle or retreating',async t=>{
- const f=await wolfHuntFixture(t),e=await stalk(f,3.1);e.brain.flankRemaining=20;
+ const f=await wolfHuntFixture(t),e=await stalk(f,3.1),target=e.brain.circleTarget;
  let pursued=false,maximumStep=0,previous=e.actor.position.clone();
- for(let i=0;i<180;i++){
-  f.player.position.x+=3.6/60;stepWolfHunt(f,e,1/60);maximumStep=Math.max(maximumStep,Vector3.Distance(e.actor.position,previous));previous.copyFrom(e.actor.position);
+ for(let i=0;i<Math.ceil((target+1)*60);i++){
+  f.player.position.x+=3.6/60;stepWolfHunt(f,e,1/60);const step=Vector3.Distance(e.actor.position,previous);maximumStep=Math.max(maximumStep,step);previous.copyFrom(e.actor.position);
+  const allowedSpeed=e.brain.mode==='move'?e.brain.approachSpeed:WOLF_V02_GAIT.runSpeed;
+  assert.ok(step<=allowedSpeed/60+1e-6,'each tick stays within its current configured movement speed');
+  assert.equal(e.brain.circleTarget,target,'a moving player cannot reset the observation into a new delay');
   if(e.brain.mode==='move'){
-   assert.equal(e.brain.state,WOLF_CLIPS.run);pursued=true;break;
+   assert.equal(e.brain.state,WOLF_CLIPS.run);assert.ok(e.brain.circleElapsed>=target-1e-8,'pursuit follows the completed observation');pursued=true;break;
   }
  }
  assert.ok(pursued,'large centre displacement exits the small-step gait and runs after the player');
- assert.ok(maximumStep<=WOLF_V02_GAIT.runSpeed/60+1e-6,'re-centering never teleports the actor to the moving player');
+ assert.ok(maximumStep<=WOLF_V02_GAIT.farRunSpeed/60+1e-6,'re-centering never exceeds the configured fast run distance per tick');
  for(const node of Object.values(e.nodes))if(node.scaling)assert.ok(Math.max(...node.scaling.asArray().map(v=>Math.abs(v-1)))<1e-5,'support adaptation cannot stretch the rig');
 });
 

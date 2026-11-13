@@ -1,0 +1,321 @@
+{
+  "scope": "Actual CPU-skinned pose/root/gaze/plant. Original colour atlas, offline Blender lighting; not game GPU UI.",
+  "blenderVersion": "4.5.14 LTS",
+  "rows": [
+    {
+      "case": "quick-bite-runtime-impact",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\quick-bite-runtime-impact-front.png",
+      "sourceTime": 0.3333333333333333,
+      "clip": "Wolf_Predator_Diagonal_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-impact",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\quick-bite-runtime-impact-side.png",
+      "sourceTime": 0.3333333333333333,
+      "clip": "Wolf_Predator_Diagonal_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-impact",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\quick-bite-runtime-impact-quarter.png",
+      "sourceTime": 0.3333333333333333,
+      "clip": "Wolf_Predator_Diagonal_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-followthrough",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\quick-bite-runtime-followthrough-front.png",
+      "sourceTime": 0.5156862745098044,
+      "clip": "Wolf_Predator_Diagonal_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-followthrough",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\quick-bite-runtime-followthrough-side.png",
+      "sourceTime": 0.5156862745098044,
+      "clip": "Wolf_Predator_Diagonal_Bite_V02"
+    },
+    {
+      "case": "quick-bite-runtime-followthrough",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\quick-bite-runtime-followthrough-quarter.png",
+      "sourceTime": 0.5156862745098044,
+      "clip": "Wolf_Predator_Diagonal_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-impact",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\paw-swipe-runtime-impact-front.png",
+      "sourceTime": 0.36666666666666664,
+      "clip": "Wolf_Predator_Reverse_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-impact",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\paw-swipe-runtime-impact-side.png",
+      "sourceTime": 0.36666666666666664,
+      "clip": "Wolf_Predator_Reverse_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-impact",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\paw-swipe-runtime-impact-quarter.png",
+      "sourceTime": 0.36666666666666664,
+      "clip": "Wolf_Predator_Reverse_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-followthrough",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\paw-swipe-runtime-followthrough-front.png",
+      "sourceTime": 0.5473684210526321,
+      "clip": "Wolf_Predator_Reverse_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-followthrough",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\paw-swipe-runtime-followthrough-side.png",
+      "sourceTime": 0.5473684210526321,
+      "clip": "Wolf_Predator_Reverse_Bite_V02"
+    },
+    {
+      "case": "paw-swipe-runtime-followthrough",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\paw-swipe-runtime-followthrough-quarter.png",
+      "sourceTime": 0.5473684210526321,
+      "clip": "Wolf_Predator_Reverse_Bite_V02"
+    },
+    {
+      "case": "orbit-3m-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\orbit-3m-runtime-front.png",
+      "sourceTime": 0.23582895071746598,
+      "clip": "Wolf_Orbit_Step_V02"
+    },
+    {
+      "case": "orbit-3m-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\orbit-3m-runtime-side.png",
+      "sourceTime": 0.23582895071746598,
+      "clip": "Wolf_Orbit_Step_V02"
+    },
+    {
+      "case": "orbit-3m-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\orbit-3m-runtime-quarter.png",
+      "sourceTime": 0.23582895071746598,
+      "clip": "Wolf_Orbit_Step_V02"
+    },
+    {
+      "case": "orbit-5m-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\orbit-5m-runtime-front.png",
+      "sourceTime": 0.3497935268471207,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-5m-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\orbit-5m-runtime-side.png",
+      "sourceTime": 0.3497935268471207,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "orbit-5m-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\orbit-5m-runtime-quarter.png",
+      "sourceTime": 0.3497935268471207,
+      "clip": "Wolf_Orbit_Step_Left_V02"
+    },
+    {
+      "case": "running-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\running-runtime-front.png",
+      "sourceTime": 0.5208465608465612,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "running-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\running-runtime-side.png",
+      "sourceTime": 0.5208465608465612,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "running-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\running-runtime-quarter.png",
+      "sourceTime": 0.5208465608465612,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-00",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-00-front.png",
+      "sourceTime": 0.04402116402116402,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-00",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-00-side.png",
+      "sourceTime": 0.04402116402116402,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-00",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-00-quarter.png",
+      "sourceTime": 0.04402116402116402,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-02",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-02-front.png",
+      "sourceTime": 0.06603174603174604,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-02",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-02-side.png",
+      "sourceTime": 0.06603174603174604,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-02",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-02-quarter.png",
+      "sourceTime": 0.06603174603174604,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-04",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-04-front.png",
+      "sourceTime": 0.0888888888888889,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-04",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-04-side.png",
+      "sourceTime": 0.0888888888888889,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-04",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-04-quarter.png",
+      "sourceTime": 0.0888888888888889,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-08",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-08-front.png",
+      "sourceTime": 0.1371428571428572,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-08",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-08-side.png",
+      "sourceTime": 0.1371428571428572,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-08",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-08-quarter.png",
+      "sourceTime": 0.1371428571428572,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-16",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-16-front.png",
+      "sourceTime": 0.2438095238095239,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-16",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-16-side.png",
+      "sourceTime": 0.2438095238095239,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-16",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-16-quarter.png",
+      "sourceTime": 0.2438095238095239,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-24",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-24-front.png",
+      "sourceTime": 0.3602116402116404,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-24",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-24-side.png",
+      "sourceTime": 0.3602116402116404,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "far-orbit-run-24",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\far-orbit-run-24-quarter.png",
+      "sourceTime": 0.3602116402116404,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "case": "brace-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\brace-runtime-front.png",
+      "sourceTime": 0.35000000000000026,
+      "clip": "Wolf_Backward_Brace_V02"
+    },
+    {
+      "case": "brace-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\brace-runtime-side.png",
+      "sourceTime": 0.35000000000000026,
+      "clip": "Wolf_Backward_Brace_V02"
+    },
+    {
+      "case": "brace-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\brace-runtime-quarter.png",
+      "sourceTime": 0.35000000000000026,
+      "clip": "Wolf_Backward_Brace_V02"
+    },
+    {
+      "case": "death-runtime",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\death-runtime-front.png",
+      "sourceTime": 1.65,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    },
+    {
+      "case": "death-runtime",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\death-runtime-side.png",
+      "sourceTime": 1.65,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    },
+    {
+      "case": "death-runtime",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-predator-r11\\runtime-poses\\death-runtime-quarter.png",
+      "sourceTime": 1.65,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    }
+  ]
+}

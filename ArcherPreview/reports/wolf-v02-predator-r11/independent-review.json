@@ -1,0 +1,487 @@
+{
+  "scope": "Independent actual-rig CPU/NullEngine acceptance evidence for R11. The model uses original approved geometry/bind/weights/UV/4K source texture data; the CPU fixture substitutes material. This report establishes the measured state, skeletal pose, physical contact and lifetime checks below. It does not establish natural-looking motion, evaluated-skin visual approval, visible warrior animation, device FPS, GPU cost, heat or touch feel.",
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "e54f7a934a74e5205f1c57c9a85771445ab44ee56d63c855c3a5e47d373693c6",
+    "src/wolf-v02-encounter.js": "4a0b68af380c67d37246fd7c2bfb388cb9b1e7615bea47b074115eb8315bc9c2",
+    "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "src/wolf-v02-authored-clips.js": "258381685307280343cd67f7a2a151f619440dd3de0b2ae069e5944ee1a64ea2",
+    "src/wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+    "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93"
+  },
+  "testSha256": "6321788425eda3115b17abfd7f996581e0b3e8ed133c8930b0afb7f2f090b616",
+  "acceptanceGates": {
+    "count": 11,
+    "passed": 11,
+    "source": "tests/wolf-v02-predator-integration.test.js",
+    "names": [
+      "near and far autonomous attacks wait for a genuine random 2–3 second player-centered observation budget",
+      "seeded observation choices vary and remain actor-owned through independent concurrent wolves",
+      "blocked steps, source wraps and player movement cannot reset the ongoing observation budget into a rapid attack",
+      "nonlethal heavy contact shoves the standing wolf backward and block contact plays a real hit motion without collapse",
+      "the live upper-body diagonal remains large after runtime attention and retains the authored strike direction",
+      "every autonomous attack engagement band contacts once with dodge, escape and capture ownership intact",
+      "a disadvantaged live wolf steps backward while facing the player then waits another 2–3 seconds before reattacking",
+      "lethal collapse is separate from live reactions and resource reuse retains independent rigs and cleanup ownership",
+      "runtime circling, bite, shove and retreat preserve approved bind attachment lengths and scales",
+      "far autonomous pursuit uses a fast matched gallop and the accelerated dodge-leap retains sideways travel and body flight",
+      "escaping a real pin before the bite prevents damage and takedown while dodge or block prevents capture"
+    ]
+  },
+  "combinedRegression": {
+    "tests": 141,
+    "passed": 141,
+    "failed": 0,
+    "exitCode": 0,
+    "unchangedDuringRun": true,
+    "status": "passed",
+    "source": "combined-regression.json"
+  },
+  "baseline": {
+    "source": "baseline-r10.json",
+    "sourceHashes": {
+      "src/wolf-v02-spec.js": "088f490f153369b665fb72b7bdb7c977aa13a7ec3fe03215c6a4d2840fdfd860",
+      "src/wolf-v02-encounter.js": "baf6e32309630e6900b90464735e4c07a7942be072f9ec50efe4a14e254a298e",
+      "src/wolf-v02-locomotion.js": "bda980b4885904f07fda6db44dd2b29b2be08d5defda1501cb1d5b6dc9d78abc",
+      "src/wolf-v02-authored-clips.js": "bc9537da98f251b13c4eb60f0ea30e6a10b511747a9a16410bcd8ec33e3a2b3d"
+    },
+    "observationWallSeconds": [
+      {
+        "hp": 900,
+        "initialRange": 3,
+        "firstCircleSeconds": 0.75
+      },
+      {
+        "hp": 900,
+        "initialRange": 15,
+        "firstCircleSeconds": 0.75
+      },
+      {
+        "hp": 900,
+        "initialRange": 35,
+        "firstCircleSeconds": 0.75
+      },
+      {
+        "hp": 400,
+        "initialRange": 3,
+        "firstCircleSeconds": 0.5333333333333333
+      },
+      {
+        "hp": 400,
+        "initialRange": 15,
+        "firstCircleSeconds": 0.5333333333333333
+      },
+      {
+        "hp": 400,
+        "initialRange": 35,
+        "firstCircleSeconds": 0.5333333333333333
+      }
+    ],
+    "liveHeadAndChestYaw": [
+      {
+        "case": "diagonal-r10",
+        "id": "quick-bite",
+        "headLiveYawSpan": 16.05128136532102,
+        "headAuthoredYawSpan": 57.29579010235587,
+        "chestLiveYawSpan": 9.740287125927994,
+        "chestAuthoredYawSpan": 9.740287125927994
+      },
+      {
+        "case": "diagonal-r10",
+        "id": "paw-swipe",
+        "headLiveYawSpan": 19.024804092503025,
+        "headAuthoredYawSpan": 57.295790102355866,
+        "chestLiveYawSpan": 9.740287125927992,
+        "chestAuthoredYawSpan": 9.740287125927992
+      }
+    ],
+    "nonlethalHeavy": {
+      "case": "nonlethal-heavy-r10",
+      "hp": 880,
+      "clip": "Knockdown_Fall_R5",
+      "mode": "down",
+      "behavior": "down",
+      "impulse": [
+        0,
+        0,
+        -6.4
+      ]
+    },
+    "block": {
+      "case": "block-r10",
+      "blocked": {
+        "time": 0.2833333333333333,
+        "clip": "Wolf_Driving_Bite_V02",
+        "sourceTime": 0.29999999999999993,
+        "mode": "attack",
+        "stagger": 1,
+        "flash": 0.45
+      },
+      "halfSecondLater": {
+        "clip": "Wolf_Driving_Bite_V02",
+        "sourceTime": 0.29999999999999993,
+        "sourceTimeAdvance": 0,
+        "mode": "attack",
+        "chestQuaternionDistance": 1.5764958782860106e-8,
+        "actor": [
+          0,
+          0,
+          0.7328304648399351
+        ],
+        "hp": 900
+      }
+    }
+  },
+  "checks": {
+    "autonomousObservation": {
+      "cases": 12,
+      "ranges": [
+        3,
+        15,
+        35
+      ],
+      "fps": [
+        30,
+        60
+      ],
+      "hp": [
+        900,
+        400
+      ],
+      "setup": "Untouched rest/detect/rise summon flow; no forced attack. Observation is before each new bout; authorized finite hit-confirmed low-HP continuation strikes remain inside a bout.",
+      "sampledTargetsSeconds": [
+        2.178093185182661,
+        2.384271076414734
+      ],
+      "actualWallSeconds": [
+        2.2,
+        2.433333333333333
+      ],
+      "completedSourceLoops": [
+        2,
+        4
+      ],
+      "maximumRadiusErrorMeters": 7.105427357601002e-15,
+      "maximumActual3DHeadAimErrorDegrees": 0.000026231839250191058
+    },
+    "independentRandomness": {
+      "case": "seeded-independent-randomness",
+      "targets": [
+        {
+          "seed": 13,
+          "target": 2.24110615439713,
+          "draws": 1
+        },
+        {
+          "seed": 97,
+          "target": 2.2736605582758784,
+          "draws": 1
+        },
+        {
+          "seed": 991,
+          "target": 2.6201324281282723,
+          "draws": 1
+        }
+      ]
+    },
+    "replanBudget": {
+      "cases": [
+        {
+          "blocked": false,
+          "target": 2.549985438818112,
+          "frames": 153,
+          "firstAttack": null
+        },
+        {
+          "blocked": true,
+          "target": 2.549985438818112,
+          "frames": 153,
+          "firstAttack": null
+        }
+      ],
+      "scope": "Source wraps, a modest moving player and blocked both-direction observation retain a nondecreasing wall-clock elapsed budget and stay bounded."
+    },
+    "liveHeavyAndBlock": [
+      {
+        "id": "judgment",
+        "beforeHp": 900,
+        "immediate": {
+          "clip": "Wolf_Backward_Brace_V02",
+          "mode": "hit",
+          "hp": 880,
+          "flash": 0.22,
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        },
+        "backwardDistance": 1.1999999731779114,
+        "minimumChestHeight": 2.118715286254883
+      },
+      {
+        "id": "shield-push",
+        "beforeHp": 900,
+        "immediate": {
+          "clip": "Wolf_Backward_Brace_V02",
+          "mode": "hit",
+          "hp": 880,
+          "flash": 0.22,
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        },
+        "backwardDistance": 1.1999999731779114,
+        "minimumChestHeight": 2.118715286254883
+      },
+      {
+        "id": "player-blocks-wolf",
+        "block": {
+          "clip": "Hit_Cower_R5",
+          "mode": "hit",
+          "time": 0,
+          "flash": 0.45,
+          "stagger": 0,
+          "position": [
+            -2.3749315222808436,
+            0,
+            2.4714086664000825
+          ]
+        },
+        "chestMovement": 0.0005959255947791675,
+        "playerHp": 500
+      }
+    ],
+    "actualUpperBodyDiagonal": {
+      "cases": 12,
+      "conditions": "Both R11 bites ×30/60Hz ×.5/1/2 attack speed, including actual transition blending.",
+      "headYawSpanDegrees": [
+        83.64416072157121,
+        92.24084159325332
+      ],
+      "chestYawSpanDegrees": [
+        58.46832977150132,
+        64.7464348973638
+      ],
+      "minimumRetainedSampledHeadSpanRatio": 1,
+      "maximumCommittedBodyTurnRadians": 0,
+      "note": "Reference is the sampled pre-attention TRS pose at the same actual source time; runtime aiming must not cancel it. Original-color runtime skin review is separate."
+    },
+    "autonomousContact": {
+      "cases": 120,
+      "oneDamageEvents": 120,
+      "realCaptureEvents": 24,
+      "sharedKnockdownEvents": 48,
+      "setup": "Requested engagement band is established after the actual rest/rise motion, before a fresh complete2–3s observation and autonomous selection/approach. The player is never moved and startAction is never called. Separate near/far observation cases retain the untouched complete summon path.",
+      "conditions": "Five actions ×min/preferred/max/outside-approach ×30/60Hz ×.5/1/2 speed. Lunge and pin use real jaw/head contact; no spare-paw substitute.",
+      "playerTeleports": 0
+    },
+    "physicalMisses": {
+      "case": "contact-negatives",
+      "rows": [
+        {
+          "mode": "dodge",
+          "hp": 500,
+          "captured": false
+        },
+        {
+          "mode": "height",
+          "hp": 500,
+          "captured": false
+        },
+        {
+          "mode": "distant",
+          "hp": 500,
+          "captured": false
+        },
+        {
+          "mode": "behind",
+          "hp": 500,
+          "captured": false
+        },
+        {
+          "mode": "wall",
+          "hp": 500,
+          "captured": false
+        }
+      ]
+    },
+    "pinEscapeAndDefenses": {
+      "case": "pin-defense-escape-before-bite",
+      "rows": [
+        {
+          "defense": "escape",
+          "captured": true,
+          "escaped": true,
+          "knockdowns": 0,
+          "hp": 500,
+          "grabActive": false,
+          "ownerReleased": true,
+          "playerUnchanged": true
+        },
+        {
+          "defense": "dodge",
+          "captured": false,
+          "escaped": false,
+          "knockdowns": 0,
+          "hp": 500,
+          "grabActive": false,
+          "ownerReleased": true,
+          "playerUnchanged": true
+        },
+        {
+          "defense": "shieldPush",
+          "captured": false,
+          "escaped": false,
+          "knockdowns": 0,
+          "hp": 500,
+          "grabActive": false,
+          "ownerReleased": true,
+          "playerUnchanged": true
+        }
+      ]
+    },
+    "facingRetreat": {
+      "start": {
+        "start": 0.8166666666666667,
+        "first": [
+          -2.3749315222808423,
+          0,
+          2.471408666400076
+        ],
+        "startRadius": 2.4330451153811645
+      },
+      "minimumBodyFacingCosine": 0.9999999999999998,
+      "backwardDistanceMeters": 1.1999999731779112,
+      "subsequentObservationSeconds": 2.5833333333333335,
+      "subsequentObservationTarget": 2.564950577216223,
+      "nextAttack": {
+        "time": 4.4,
+        "id": "quick-bite"
+      },
+      "scope": "Actual blocked strike, standing hit response and full authored backward step against the standing player, followed by a newly drawn complete observation."
+    },
+    "fastApproachAndLeap": [
+      {
+        "distance": 6,
+        "attack": {
+          "id": "quick-bite",
+          "clip": "Wolf_Predator_Diagonal_Bite_V02"
+        },
+        "moveFrames": 26,
+        "peakWorldSpeed": 6.600000000000014,
+        "walkFrames": 0
+      },
+      {
+        "distance": 15,
+        "attack": {
+          "id": "pin",
+          "clip": "Pin_Throat_Bite_R5"
+        },
+        "moveFrames": 41,
+        "peakWorldSpeed": 9.199999999999996,
+        "walkFrames": 0
+      },
+      {
+        "distance": 35,
+        "attack": {
+          "id": "lunge",
+          "clip": "Run_Dodge_Lunge_R5"
+        },
+        "moveFrames": 63,
+        "peakWorldSpeed": 9.200000000000047,
+        "walkFrames": 0,
+        "lunge": {
+          "wallSeconds": 1.3000000000000003,
+          "lateralMeters": 2.1289676779729803,
+          "pelvisFlightSpan": 1.9477020502090454
+        }
+      }
+    ],
+    "naturalCollapseLifetime": {
+      "case": "separate-natural-collapse-lifetime",
+      "lethalClip": "Wolf_Staggered_Collapse_V02",
+      "rewards": 1,
+      "corpseGone": true,
+      "minimumChestHeight": 1.0563633441925049,
+      "modes": [
+        "down"
+      ],
+      "relaxedHoldSamples": 215,
+      "relaxedHoldMotionMeters": 0,
+      "scope": "Endpoint stability and lifetime only; cheek/fur/body ground contact and the reference-image silhouette require actual evaluated skin renders."
+    },
+    "anatomy": {
+      "case": "runtime-fixed-bind-anatomy",
+      "checks": 32436,
+      "visited": [
+        "Alert_Lie_R5",
+        "Rise_From_Lie_R5",
+        "Circle_Watch_R5",
+        "Wolf_Orbit_Step_Left_V02",
+        "Wolf_Predator_Diagonal_Bite_V02",
+        "Hit_Cower_R5",
+        "Wolf_Backward_Brace_V02",
+        "Wolf_Orbit_Step_V02",
+        "Wolf_Run_R5",
+        "Wolf_Predator_Reverse_Bite_V02"
+      ],
+      "maximumAttachmentLengthErrorMeters": 4.1723228111356647e-7,
+      "maximumScaleError": 5.924354169462021e-7,
+      "worstAttachment": {
+        "name": "hind.R.lower",
+        "clip": "Wolf_Backward_Brace_V02",
+        "time": 0.8000000000000008,
+        "error": 4.1723228111356647e-7,
+        "local": [
+          -5.150261200451019e-9,
+          0.38026267290138605,
+          9.762937638203396e-9
+        ],
+        "bind": [
+          9.778887033462524e-9,
+          0.380263090133667,
+          1.30385160446167e-8
+        ]
+      },
+      "preservedLegacyNonlimbVariation": {
+        "name": "tail_1",
+        "clip": "Circle_Watch_R5",
+        "time": 0,
+        "error": 0.041477338110366996,
+        "local": [
+          -0.010060722939670086,
+          -0.025815825909376144,
+          -0.21462492644786835
+        ],
+        "bind": [
+          0,
+          -0.04000173509120941,
+          -0.17029350996017456
+        ]
+      },
+      "scope": "All limb offsets throughout the actual fight including transitions, plus every non-root/pelvis attachment in fully blended new R11 poses, are compared with approved bind lengths. Original unmodified nonlimb translations and their transition blends are recorded separately. Evaluated skin cores, joint collars, fur pattern and relaxed collapse silhouette require the separate actual-color runtime render review."
+    },
+    "cleanup": {
+      "case": "warm-five-wolf-cleanup",
+      "repeats": 3,
+      "resources": {
+        "meshes": 80,
+        "geometry": 12,
+        "materials": 8,
+        "skeletons": 5,
+        "groups": 90,
+        "morph": 5,
+        "textures": 0,
+        "nodes": 191,
+        "nativeAnimatables": 0
+      },
+      "independentSkeletons": 5,
+      "sharedTemplateClips": 12
+    }
+  },
+  "preservedChecks": "Strict original0.1 code/config/model/texture/dependency hashes and twelve original raw sampler poses; explicit R9 source moving keys and isolated historical standing-shape review; R10 source bind/scaling checks; active-only eighteen live clips with twelve unchanged shared-template clips; actual four-map 1/5/10/20 populations, independent rigs/targets and bounded warm/cancel ownership.",
+  "obsoleteExpectations": "obsolete-expectations.json records the root-approved semantic changes. No physical contact envelope, original0.1 check or new bind-length threshold was enlarged to turn a miss into a pass.",
+  "visualEvidence": "Root-owned visual-review.json records separate inspection of45 actual post-runtime original-color views and source support/joint sheets, including the far orbit-to-run transition. Existing narrow angular joint-collar folds and reach-limit anchor releases are not described as zero deformation or universally stationary feet."
+}

@@ -1,0 +1,55 @@
+{
+  "scope": "Root-approved changes to genuinely superseded 0.2 expectations after R11 freezes. Original 0.1 source/model/texture/timing, strict historical source data, physical negatives, fixed anatomy and lifetime checks remain required.",
+  "items": [
+    {
+      "old": "One .9-second source orbit played once in .72/.50 wall seconds",
+      "new": "A seeded actor-owned random2–3 second wall budget spans several complete support-step source loops before each new bout; hit-confirmed low-HP continuation strikes remain finite."
+    },
+    {
+      "old": "Every nonlethal heavy/bash enters the R8 knockdown fall and later get-up",
+      "new": "Nonlethal heavy/bash uses a standing authored backward brace/shove; only lethal damage selects the separately authored collapse."
+    },
+    {
+      "old": "Player block freezes the attacking clip with one second of stagger",
+      "new": "A contacting block consumes the strike, flashes the wolf and immediately advances an actual hit reaction without a forced fall or recoil impulse."
+    },
+    {
+      "old": "Current short bite IDs use R10 Driving_Bite and Driving_Cross_Bite",
+      "new": "Current IDs use the separately authored R11 Predator diagonal/reverse bites; R9/R10 source-data and historical sampler checks remain explicit."
+    },
+    {
+      "old": "All R9/R10 extra wrappers are installed on every live actor",
+      "new": "Only active R10 orbit clips and R11 motions are installed in production. Historical pose checks install their wrappers into an isolated test-only fixture; active clip count does not prove quality."
+    },
+    {
+      "old": "Runtime head counter-aim may reduce the diagonal under a bounded yaw/pitch envelope",
+      "new": "R11 authored attack attention preserves the large upper-body and muzzle trajectory; legacy long attacks still keep their own bounded aim and body commitment rules."
+    },
+    {
+      "old": "Every0.2 approach frame has a constant6.6m/s speed",
+      "new": "Close pursuit remains6.6m/s; farther pursuit can accelerate to9.2m/s with matched actual source cadence and original run-loop offset."
+    },
+    {
+      "old": "Original R8 knockdown clip is the final lethal identity",
+      "new": "Natural collapse has a separate R11 identity and relaxed endpoint, with the same defeat reward/control release and corpse cleanup ownership."
+    },
+    {
+      "old": "Blocked orbit directions required an attack within8frames; moving-player pursuit forced only legacy flankRemaining=20 and constant6.6m/s cap.",
+      "new": "Blocked directions preserve the full seeded2.5s observation budget, then choose a genuinely reachable attack. Blocked sight must prevent attack/damage and hold safe position. Moving-player pursuit follows completed observation and uses the current acceleration-limited speed, with all original positional/radius/bone-scale tolerances retained."
+    }
+  ],
+  "preserve": [
+    "0.1 strict source/config/model/dependency hashes and original sampler poses",
+    "R9 exact moving keys and historical standing-shape checks",
+    "R10 exact source channels and bind lengths",
+    "Player capsule radius once, bounded sweep, genuine dodge/height/behind/wall misses",
+    "Capture escape before bite, no player teleport, one terminal resolution per strike",
+    "Independent skeleton/targets/random state and bounded warm resource reuse",
+    "Actual post-runtime whole-torso diagonal and2–3s wall time, not property-only assertions"
+  ],
+  "visualLimits": [
+    "Dummy player node knockdown events establish reaction ownership, not visible warrior animation quality",
+    "Fixed bones and numeric skin checks do not certify natural collapse or relaxed lying silhouette",
+    "CPU NullEngine does not certify device FPS, GPU cost, heat or touch feel"
+  ]
+}

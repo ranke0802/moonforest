@@ -41,7 +41,9 @@
     "wolf-attack-r8": "Sources/actors/tripo-monsters/wolf-attack-r8",
     "wolf-v02-attacks-r9": "Sources/actors/tripo-monsters/wolf-v02-attacks-r9",
     "wolf-v02-feral-r10": "Sources/actors/tripo-monsters/wolf-v02-feral-r10",
-    "wolf-feral-r10-review-reference": "Sources/references/wolf-feral-r10"
+    "wolf-feral-r10-review-reference": "Sources/references/wolf-feral-r10",
+    "wolf-v02-predator-r11": "Sources/actors/tripo-monsters/wolf-v02-predator-r11",
+    "wolf-predator-r11-review-reference": "Sources/references/wolf-predator-r11"
   },
   "inputs": [
     {
@@ -35350,6 +35352,3074 @@
       ],
       "requiredBy": [
         "wolf-feral-r10-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/actions.json",
+      "bytes": 570175,
+      "sha256": "db84de8b8ac555e48e8aad3edfc2cba9f0ff59bea1ae0b58134dd34c6056ba66",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/audit.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/audit.log",
+      "bytes": 38433,
+      "sha256": "41832cf55b2e49bbab1ccc40112c4584e60ff5bece29731d28e3df791ce187b7",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/AUTHORING_NOTES.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/AUTHORING_NOTES.txt",
+      "bytes": 3173,
+      "sha256": "3606b20965846b6142f2202ec0607b93945d6e6af692ed116a855c577d2815f3",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/blend/wolf-v02-predator-r11.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/blend/wolf-v02-predator-r11.blend",
+      "bytes": 56622446,
+      "sha256": "b38bc2248d47000d6e771b6865705ca4ebc3b510ed7af01e3849277858889e0c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/build.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/build.log",
+      "bytes": 6479,
+      "sha256": "c9e3be6454fd0377e0aa4f60c51a789abb75784500930648b50ebe8ce2254e8d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/clips.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/clips.json",
+      "bytes": 1594650,
+      "sha256": "ae59d5b9a914550ce42319dfcccd40ef2ce4766d057a1f7e7d05f403a9a2c3ec",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/collapse-review.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/collapse-review.log",
+      "bytes": 8690,
+      "sha256": "1f8293d668dc6a193ae0e537717f6b2118257dce4b55e017a580df09278f756a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/deformation-validation.json",
+      "bytes": 53462,
+      "sha256": "b48d7141b91b1df0ac902b59421cd0fc2fd919c412120c6494f69373e166692d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/encode.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/encode.log",
+      "bytes": 25413,
+      "sha256": "db6eb6a39aef4fcc4d1335678e5cf88e61ddec9adb6ba9c1e9d46daa645b9071",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/floor-probe.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/floor-probe.json",
+      "bytes": 23974,
+      "sha256": "53c43ff78abcf1bb7090fd2bc647bb8b5f6aa4b7ffb2886029a75f954040096f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/floor-probe.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/floor-probe.log",
+      "bytes": 14507,
+      "sha256": "0883bd685aa31ac79a4c992d9fa18992d414a6f1ea46c824ef7c40ae030cb2be",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/head-support-probe.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/head-support-probe.json",
+      "bytes": 4222,
+      "sha256": "e845a26aeb7a9b9f379a385a6cc1688b5ccf432ef2e3330185cd024e1f364f34",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/head-support-probe.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/head-support-probe.log",
+      "bytes": 3802,
+      "sha256": "51d17d8d99dd5100a86882ddd5992484d4e280e5832f1c0368dd6b8d05f7831e",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/manifest.json",
+      "bytes": 10761,
+      "sha256": "90629f5678220bd987b57bee514f1433efaf15a8200ae0f28278f37e7d98d75c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/models/wolf-v02-predator-r11.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/models/wolf-v02-predator-r11.glb",
+      "bytes": 361472,
+      "sha256": "fbadf8da3ce73b56d70c2f3cd1f668d27b670909776ec13d0e0aa7fb9994eeb6",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/playblast.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/playblast.log",
+      "bytes": 28839,
+      "sha256": "94825df5c02d8a11f609e90bd363ae548110c4e1dce64093e1aae7a80ff1c94d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/000.png",
+      "bytes": 241953,
+      "sha256": "3f6d85e1e7cf1cebb44e61ea568bf30beb88f3ed4ba3b1c235a73414bb1c75ed",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/003.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/003.png",
+      "bytes": 241118,
+      "sha256": "608e22a7f43a8205ef15ff6b4e9ad2c2d468eb4c3699f2ce8d864177be597636",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/006.png",
+      "bytes": 240312,
+      "sha256": "ee8fa4220c2a2291bb92f9272453648dbc0835ff8ba948dc5d5b5bafa56d6d16",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/009.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/009.png",
+      "bytes": 240014,
+      "sha256": "a61342bed74cb7ba2a20e2ba13990b1ee11e7f33d698883fee897a4c94469c75",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/012.png",
+      "bytes": 239834,
+      "sha256": "f64709809cd5a2ec5a2b186b8762f8afe75195411e8039ec4d0b5963c89219f5",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/015.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/015.png",
+      "bytes": 239269,
+      "sha256": "b583bc41a84154cebb23c2b9a328e2982d6b8e179c125ce4c97670d2bc4e453c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/018.png",
+      "bytes": 238978,
+      "sha256": "4734c4d8da85f9b8e598290ab3fae0914efabced5b264c959ef5e897a0358f22",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/021.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/021.png",
+      "bytes": 239394,
+      "sha256": "5da0bb58fe741bb893ccbe8c82f5accd9562f230895cebdf32ade503d97bf663",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/024.png",
+      "bytes": 239994,
+      "sha256": "3983851622ac2a84fb8a29281a014451edda87151533977ec334f7cb055043c4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/027.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/027.png",
+      "bytes": 240103,
+      "sha256": "8f65bfc39cc03f0782944990f803ed294f9d8f2fde12fb8bc401eff4f53ca131",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/030.png",
+      "bytes": 240109,
+      "sha256": "cbdb979b399ba4e7134f48c69f367e77d6487c8e8d322cad3d963fd36b0c596f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/033.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/033.png",
+      "bytes": 239848,
+      "sha256": "b3b645bfd519c82d6a54b3f3518e5708999355cede74a3df270a28e4fe2fba7e",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/036.png",
+      "bytes": 239658,
+      "sha256": "33cb9b764b0e1e335cb1f9acec0b447d76596585554838f3b348e828f73d4281",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/039.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/039.png",
+      "bytes": 239778,
+      "sha256": "97fc36d8a6855d3e24de4d32f74aaca6e281b55d31036e8fb0ad3a0f26d6ad8c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/042.png",
+      "bytes": 239801,
+      "sha256": "47d9ae461ef3e44d204b93c8e2a1d5bc1fbffb0bddc641181f940fd4d3a8bd20",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/045.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/045.png",
+      "bytes": 240184,
+      "sha256": "232177b0bcd864ab0936730f9940c9979404360691a3ebca3eece44c038c5aeb",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/048.png",
+      "bytes": 240816,
+      "sha256": "18805e4a91efa2502307ada21ab5f0e97a8c7691f94eb8a1766e33f18b149d82",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/051.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/051.png",
+      "bytes": 241218,
+      "sha256": "20e8b24188ce29bdb71c35ec2b72ce34d630ec45921817924843430e4fbf496c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/054.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/054.png",
+      "bytes": 241407,
+      "sha256": "6e065cf45e4c0d3335bbd637b3cb5392312f5e55c58eb241344f1f0575b0650d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Backward_Brace_V02/sequence.ffconcat",
+      "bytes": 611,
+      "sha256": "fdcb3da92fc4c6e42bdd9ad2e27329ca5740a444a996566fa977e8b77c4528f3",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/000.png",
+      "bytes": 241953,
+      "sha256": "f61c7c661df48b5863d17c34cc17bcb6063a2966010ff869f64b6e9e08c4a12f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/003.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/003.png",
+      "bytes": 242060,
+      "sha256": "c926149aa41f4d87824100c4ee8fef582ed8b7b02c1b8499babbeed5643a9dd8",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/006.png",
+      "bytes": 243391,
+      "sha256": "fe4d83532ef2488f4dcd4d05ccd1afa0c08939d04f0127e813df042108bbd900",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/009.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/009.png",
+      "bytes": 243890,
+      "sha256": "c050679f2f3ef67c0e0e421dc8cdfd05916bceece46d0ae3b9654578e31878f3",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/012.png",
+      "bytes": 242432,
+      "sha256": "d7dba136cd73185716a98ba8957109942af0ff4a5b6755783a0153643af5fd1f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/015.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/015.png",
+      "bytes": 239184,
+      "sha256": "d2196c67fc4390e37b62ed151a0e25ac94ce7d84c938dcbda3765fea6b853121",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/018.png",
+      "bytes": 233783,
+      "sha256": "4c721c8827fe309065dc07a804bece5c3e951e986e7bf6e8db48b372c6b35564",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/021.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/021.png",
+      "bytes": 232079,
+      "sha256": "e459c3c2da3154f1a8090bbe6482e8d597f911de24b8c5684adf4d78aec854ad",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/024.png",
+      "bytes": 231300,
+      "sha256": "aa390c0618b17dfa201250cba9271b6a589f9ce904a8cac4088d01b83ea4b063",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/027.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/027.png",
+      "bytes": 230981,
+      "sha256": "53fe658727cb4f7dd7cc14ab554c0335c0e6d192f557ee9330454609eb7a6f0d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/030.png",
+      "bytes": 232335,
+      "sha256": "a8f26462db19c683efe7fdeb0c14f068c61658f2dbd79a480603e125487e22b8",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/033.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/033.png",
+      "bytes": 234915,
+      "sha256": "314d0940fb726a182594aee7b91e2c444e3df7d27fe99364a0e6851da7cdb1ca",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/036.png",
+      "bytes": 236994,
+      "sha256": "1e7bfd76678c1ee6087a2c83007bd173e46650ac24b5f39ff0d4c9ce67aae10a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/039.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/039.png",
+      "bytes": 239224,
+      "sha256": "e7cca29c964e59efa5607d78bfabbcc183244bb9d41891719e348b1fce162333",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/042.png",
+      "bytes": 240457,
+      "sha256": "2b7fd4c17bc3b85a355423ea21b0ed207121d3f69380f22d44713f1bdc20dd64",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/045.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/045.png",
+      "bytes": 240883,
+      "sha256": "c63f7ff06e29c7c9dfb0c8fbf4cd9b23e208ed25f75e18c78d1fc7e9c6b24106",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/048.png",
+      "bytes": 240682,
+      "sha256": "e5416ebc920b50a9a19f33eef8f0d134f6fd6f9105d6af017cf7233350d829c0",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Diagonal_Bite_V02/sequence.ffconcat",
+      "bytes": 549,
+      "sha256": "4c4ad12f41dd7d61d07b4c619fbb1e131ce38d252518740923821d76becd7ba4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/000.png",
+      "bytes": 241953,
+      "sha256": "c608d70265d2c6ea447769675eac374b48ab17ebef5c41d54b0b9ad88cba9fdd",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/003.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/003.png",
+      "bytes": 241728,
+      "sha256": "047ea8474ce6c407c3fa146eeeb8439b5966501a67c579838c687545279295ee",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/006.png",
+      "bytes": 241112,
+      "sha256": "03b883e84e9900a3c4d2b8a09072966125ed2194fe36ac77c9dba9290888fdea",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/009.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/009.png",
+      "bytes": 240361,
+      "sha256": "b2148e24039ac2b14043bdefb404ba7fbbe73fdb5d7cfeb653ea7870226e491a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/012.png",
+      "bytes": 239264,
+      "sha256": "cd490ce8cb4e433bec67a214f1530be156997fa705d9bf102c0d04f7416a82f4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/015.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/015.png",
+      "bytes": 238467,
+      "sha256": "cd7f504a59e7b06d0f9440e2d50e6628f8b53e51daf6c688fb60c5f1af4c7ea8",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/018.png",
+      "bytes": 235493,
+      "sha256": "85d079cd21938c948d7c819aaa4862ab542b101c5d39236836b7ff86c1e51305",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/021.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/021.png",
+      "bytes": 234466,
+      "sha256": "cc8633cc8fbb4deb9d3ffd813162a701ba0bee3f787a86b48efecf9e0e906b28",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/024.png",
+      "bytes": 234359,
+      "sha256": "69c5b78d42534ad802fb94ca05199364631dd876f2ca116e54e9866146cda437",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/027.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/027.png",
+      "bytes": 235313,
+      "sha256": "a9de1069814e7647bc0271b66b0978c15a599c294cd1e1c23e9b459118c0e566",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/030.png",
+      "bytes": 235778,
+      "sha256": "13d215cb1c864673bb090893c55434ae94d425a5bb2cee1827b1ab795ad42691",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/033.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/033.png",
+      "bytes": 236248,
+      "sha256": "d1da9f1267d02be0e8196a4484095f527428d9d726578b6351fb84033cc9bed0",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/036.png",
+      "bytes": 237461,
+      "sha256": "7940aed42bdeadb3d9e9c0c6ab7cf88c6d10db36ad8a11f9a2fa4232b2444a59",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/039.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/039.png",
+      "bytes": 238811,
+      "sha256": "210f5773d0ae1c21544509475c156492b90b0fa2b01aebff7e15bc2c15718743",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/042.png",
+      "bytes": 240356,
+      "sha256": "46d0147a6f9a0cf1620e17d586e12a4198aaba971400f8f8d6bbca634c486183",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/045.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/045.png",
+      "bytes": 241350,
+      "sha256": "7d426b41218a8135aa84986b70f0081d0b1fd9827d503056d07babcf746d73a0",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/048.png",
+      "bytes": 241183,
+      "sha256": "c1252a78ce4c0f04c8f7ff028a58bdd5b87ea4036e04a17c4e098da8fafe3438",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/051.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/051.png",
+      "bytes": 241059,
+      "sha256": "21b118d2999a51cb49635b58e85aa113d86af78a1e53f357bf61b35d92b06479",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/052.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/052.png",
+      "bytes": 240955,
+      "sha256": "579d7b0440bede5d0a42ec28f96775fc3dc567bdb01a589b4e8031e0e3b81893",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Predator_Reverse_Bite_V02/sequence.ffconcat",
+      "bytes": 611,
+      "sha256": "d042ab699d1eb2303c20b61ddcf979e8fcdc67b2e87ed63793950a8196df8113",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/000.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/000.png",
+      "bytes": 228813,
+      "sha256": "df7a5930d004a8cb929653c8206587cf7379439aa424c6b4930a7950eecf0d7b",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/003.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/003.png",
+      "bytes": 229100,
+      "sha256": "12c06f4842f6eba4ebaf5d59cafcddb17bb773fe91e50a7ba5a857556f3096fb",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/006.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/006.png",
+      "bytes": 228905,
+      "sha256": "f5a724baab1e9f8b71f39dd415af501c4015a8716135bd13b520d310f3e46ca6",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/009.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/009.png",
+      "bytes": 229018,
+      "sha256": "98fcc6ef0705e011b15e82a17799c00668257f1c384dfa613284bd275d1877c2",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/012.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/012.png",
+      "bytes": 228701,
+      "sha256": "d5a5d1d053af3a2a9040dca60eac450c64dd97a8d60c37d1ffcfe440b46cbfde",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/015.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/015.png",
+      "bytes": 228578,
+      "sha256": "9ed019718d2996d2a858d5a7a833a091fc029f9bc40b07d02bb62152a265c16b",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/018.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/018.png",
+      "bytes": 227982,
+      "sha256": "f7f644f2fd134139bb74221359918951949b5d5464430cc65a53cb0231696bb5",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/021.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/021.png",
+      "bytes": 227135,
+      "sha256": "796e228aad3fbb5f5a12aef1e6783fbebf39aefa5daefe06dd6c012486bcda53",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/024.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/024.png",
+      "bytes": 226038,
+      "sha256": "7c0d1e88aad96d7c5b06b84e603682abb976d9f6d210ff2a95f862c337a43523",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/027.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/027.png",
+      "bytes": 225410,
+      "sha256": "6057ca355a631d98f3c26396979d9dbbfdca04b52289415a41d0dca94b5bf844",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/030.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/030.png",
+      "bytes": 223969,
+      "sha256": "0fbf96e1143e41f71055201de241ebd53fbd6c95260cd54256a8d36acd516efb",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/033.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/033.png",
+      "bytes": 223362,
+      "sha256": "7a39cc89ed4eded5ee1660097fc81ed16c94e4324cb26a45445d367c555bb2a7",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/036.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/036.png",
+      "bytes": 222159,
+      "sha256": "3c78fbb2529ae58af32f5ed0e24c8bc899ed6c7dbd6383e7012b79c6e3abcf63",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/039.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/039.png",
+      "bytes": 221698,
+      "sha256": "c1b32431e158812a3ba91c99153d5d5da97d90ce9ce3066382ad1a35262581b9",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/042.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/042.png",
+      "bytes": 220511,
+      "sha256": "c23c3b619a3b10c338855bdd49a46c23e54042030d4998d63ab4e207d063bfeb",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/045.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/045.png",
+      "bytes": 219049,
+      "sha256": "befffe53ff20ddeddeed5002fd19dfab308c8ec93cf89f274e10669b664c9761",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/048.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/048.png",
+      "bytes": 217288,
+      "sha256": "778ef0d0529ab9674aa29cc33c1a4f17e00c8d80eddd143b83cd7b11a522ba3c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/051.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/051.png",
+      "bytes": 215903,
+      "sha256": "31772d18a1844c2e0015f533c5f916188884d51b63240fb6b93cba2e209e9558",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/054.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/054.png",
+      "bytes": 215191,
+      "sha256": "9703333194d7478249d43300230f225b510626f19b97136e786e0784e137e398",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/057.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/057.png",
+      "bytes": 213554,
+      "sha256": "2f9298468b566e242debbed77f67b0a52afbc0d8fa40b3d782e100daa20f4f7d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/060.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/060.png",
+      "bytes": 212816,
+      "sha256": "4e196cf024a5fca1738df33cbca137b7686c15c72073c737b1a4f3c198df77cb",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/063.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/063.png",
+      "bytes": 212515,
+      "sha256": "b2468d57b62c40887d6e24124a4e5b8cb2d7ea272a2284e6251b616033ad7760",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/066.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/066.png",
+      "bytes": 212331,
+      "sha256": "16f316cd29b1d4b642bbf850795dd3c7da85ecd2aa2db2319a662fabecff42ec",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/069.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/069.png",
+      "bytes": 212355,
+      "sha256": "70f57f72984e8f1c8bc894aa17fcead343b2706b1051390f169a708d03c39d45",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/072.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/072.png",
+      "bytes": 212425,
+      "sha256": "57ceed047dee1e1fa4a93364e5f81ae7bbcd785ff91bbd8c7037a2e83e451671",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/075.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/075.png",
+      "bytes": 212446,
+      "sha256": "80aa696b3a9729dde94d08a2829554d4285a92efaca5b28f77a190c270490fa3",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/078.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/078.png",
+      "bytes": 212591,
+      "sha256": "97ea78146056ebba082a51ba92ba328b25251264791e26c4aa06da5f91dccf4c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/081.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/081.png",
+      "bytes": 212569,
+      "sha256": "a360f7d1345f595081ea43f3bbc6b15f8cb78e6eea67f0924e8ed254159fab00",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/084.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/084.png",
+      "bytes": 212617,
+      "sha256": "7a9183f8751e9f17c9915bcd761d0b3ca50fc4ab9e5039859108fe63afc685c9",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/087.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/087.png",
+      "bytes": 212617,
+      "sha256": "7b8d97f1f3411b94c06516ce1d8f37221e86aa801e603dc62eed495fa0914506",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/090.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/090.png",
+      "bytes": 212617,
+      "sha256": "e29803fce82f8e775dec3b0adbfcd6661e114e70f03698a2667cabd93710a526",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/093.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/093.png",
+      "bytes": 212617,
+      "sha256": "0901d260aec9cbc6d2cd795bc9aa178fcfc56d9eea1e263cb2ff21281ed3f961",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/096.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/096.png",
+      "bytes": 212617,
+      "sha256": "c09237a3e360f3e9b4ebdd5b49774f9b1e3a33195dd0c73944f8f5a8e5438c55",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/099.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/099.png",
+      "bytes": 212618,
+      "sha256": "a85e1a7b29d21c8ceebdbb76fed7faaa800ddd46e35c6c3851b42f1360b673da",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/sequence.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/frames/Wolf_Staggered_Collapse_V02/sequence.ffconcat",
+      "bytes": 1076,
+      "sha256": "5e3de9876a7f7c7774c2d855f82cd4d697e2703e76084662353e5e41e1e18354",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/R10-R11-truecolor-comparison.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/R10-R11-truecolor-comparison.jpg",
+      "bytes": 505683,
+      "sha256": "5a248fb36a0157342f0294bb0d9d24eb7c2fa956690073d8c0ca72ed9a2855ca",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/R11-motion-preview.ffconcat",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/R11-motion-preview.ffconcat",
+      "bytes": 6483,
+      "sha256": "ddb21ac052c39131ed3da08ec78d287973f006296a10cfed3fa48796d5a8dd28",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/R11-motion-preview.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/R11-motion-preview.mp4",
+      "bytes": 696134,
+      "sha256": "f185afe73c9445dd468d655d2f7919ee04628db042afb1e071a898fe45a0d296",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/render-cases.json",
+      "bytes": 13370,
+      "sha256": "26f6b4c05459f8116e91a7ba9c8fb70a70dbb26f564b071bac2e20874254872f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-forelimbs-matcap.png",
+      "bytes": 469461,
+      "sha256": "a81b28ebbea2510e91e4bad21311d3529b5cf28e3f0e729c2fbad3210ae724a3",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-forelimbs-quarter.png",
+      "bytes": 549396,
+      "sha256": "b7f838e78fbbd44ab1370a9cb3a2271d5bc0177314fc362f941d1d834f762dd8",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-hindlimbs-matcap.png",
+      "bytes": 517650,
+      "sha256": "f2abbdffabb0104137e57335ae35fed6e7b58a71ca43a3ffe212970130055673",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-hindlimbs-quarter.png",
+      "bytes": 596190,
+      "sha256": "9c5e009889911b1870acd91180dd0ac242675876a8b09df00082524fbf8fed49",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-impact-front.png",
+      "bytes": 471417,
+      "sha256": "b78e7df198d75ba4413e4f9d99f5fa9827f10d197edfec1c97019a29afb02a2f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-impact-quarter.png",
+      "bytes": 512468,
+      "sha256": "18fbbe7cd17a2c4aa72a47969fee6a6c52c184967bb097ab134c8b123300afaa",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-impact-side.png",
+      "bytes": 490733,
+      "sha256": "3fcd8d31fe88a6d1f85a6e9e762873c188c61dbe383b2da8ebaff8b89fe3a7fb",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-joint-sheet.jpg",
+      "bytes": 240998,
+      "sha256": "76043ee371809eea5bb155570caf16909eb41ecba6bad8eed7f9f2d7513f89c7",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-motion-filmstrip.jpg",
+      "bytes": 222116,
+      "sha256": "6f77edb825ca031f8ceb71eb0b4029438efd5ff0e6cf6f7ee597b86c1976cc6e",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-muzzle-matcap.png",
+      "bytes": 430959,
+      "sha256": "88265f40a09acae3bb74774418c09187c69847b635de2ada23f9f42dec89ec10",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-muzzle-quarter.png",
+      "bytes": 492117,
+      "sha256": "63454f707c601600e0dcb9f9f408677ce41f80d9c3a797b476c030427e95217a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-prepare-front.png",
+      "bytes": 470869,
+      "sha256": "5446a3774938e2c7063f0944523476a1b4724671a456a5239f7558612f371c7d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-prepare-quarter.png",
+      "bytes": 513149,
+      "sha256": "7353606d9d3e82d60b68726cf2675f5ef1176bf0a39519c07caa35ff3fbbbdd2",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-prepare-side.png",
+      "bytes": 491529,
+      "sha256": "56aa88166e8ca0ffb91475d4bd5ad6d573c0e9e22dfc28248f86f3dad0ba2233",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-preview-label.png",
+      "bytes": 180096,
+      "sha256": "5bab6e18a15362c6911a72a72a8e8a5ab2fffd2ba32042b4f6c0dd374365a938",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-recover-front.png",
+      "bytes": 477294,
+      "sha256": "fe9de64d1f8e393e005a59fc627b17b93238d6de2b75e26f2a9269e3bc8d9fe1",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-recover-quarter.png",
+      "bytes": 516391,
+      "sha256": "85e23733a0f1920dc90af0a77b068cdc09a2773cd949f46127f4b072d0768897",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-recover-side.png",
+      "bytes": 479522,
+      "sha256": "49c39149f21f718fadc59a55686211456eb0b2d7565e4cf9294d1dbbe6f7c3ad",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-slow.gif",
+      "bytes": 1714734,
+      "sha256": "d871a2066b0dba2601d414cdd6568c3a566c9f23b5d8d2c352bc0c0ea578f41a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-truecolor-sheet.jpg",
+      "bytes": 290337,
+      "sha256": "dabf95fb18c9c27f9d4e8c9ada513b44ac4b9d3f66f3e578868628be53d20f81",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02.gif",
+      "bytes": 1714734,
+      "sha256": "8c2d32d30f3a4a1af3dc20d316090349c27183845c97098b6c98d1804f7dcd7d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02.mp4",
+      "bytes": 87569,
+      "sha256": "4119e45b397ae2f39c968b29ea9b37114b413511663522d07f5db43072991af4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-follow-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-follow-front.png",
+      "bytes": 464786,
+      "sha256": "c59b53a43a85bbe83c4d232163cdc0e6d7b86aae09520e495b0b842f0284db38",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-follow-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-follow-quarter.png",
+      "bytes": 495683,
+      "sha256": "7e5af27a009e8ad0ef49590f25e41fe81bfd99f15c43e82ecb3895c801936a02",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-follow-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-follow-side.png",
+      "bytes": 482396,
+      "sha256": "94843d36dbc9cad2d56fd2de620cee2bbb1d5ef5384884823d837912adbbb8a8",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-forelimbs-matcap.png",
+      "bytes": 523204,
+      "sha256": "84191dc2f121d88d2f44bdde6863cce5824f30bc3d1742d773fbcb5625b04440",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-forelimbs-quarter.png",
+      "bytes": 597115,
+      "sha256": "95d1847c9da7d65e0e15c6d3360e477cde307e111efade4a89c6be30784a9089",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-hindlimbs-matcap.png",
+      "bytes": 487410,
+      "sha256": "07e10defb06e280ce3d7c981d8155d466cb47ad0f18905661d269eba9e940087",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-hindlimbs-quarter.png",
+      "bytes": 566119,
+      "sha256": "dac0b560f70da83633a89a07bc2c4f1efd7a75b9d355f472e771a59903978d1f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-impact-front.png",
+      "bytes": 453502,
+      "sha256": "72c1299da69fc6c030027f658b90174d8df843a234c9e2626f7e88b79af0f514",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-impact-quarter.png",
+      "bytes": 498361,
+      "sha256": "1395ff74d4fd79da5a7b837ecf4f03be1de67d70a85c6d1a80f14a77f0aa7943",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-impact-side.png",
+      "bytes": 487935,
+      "sha256": "65db9bafdc4d1187cf67d894fc7db4dc9207bf87e1d92ee4dbe5fa3dff8e7618",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-joint-sheet.jpg",
+      "bytes": 283485,
+      "sha256": "7db3996d66e952649a5e48120805fcf3f781c3c894237d8d4d4881969e0c85bf",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-motion-filmstrip.jpg",
+      "bytes": 221330,
+      "sha256": "114814540c7ee4abded0123310559f1a21f598633c450821c4d290c350276d3a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-muzzle-matcap.png",
+      "bytes": 470082,
+      "sha256": "025aee42cba091a9eeb299af9aa9d9f9475d248d48f26cfaf03e0ca8291cbaea",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-muzzle-quarter.png",
+      "bytes": 520653,
+      "sha256": "d86d78fd5134e4407b3330dae478a57ed543d60cc7bae9e0e90042f0101ec0e9",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-prepare-front.png",
+      "bytes": 477254,
+      "sha256": "6bf6b3b82d59f82eb9e0db89e72e2cfb5cda0683225533e4778e9789ef21fd48",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-prepare-quarter.png",
+      "bytes": 520057,
+      "sha256": "e4d1f6a68c40d79ca5ba8233715daca2bb6a793a0b4d5952f10612a2e7f10989",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-prepare-side.png",
+      "bytes": 497617,
+      "sha256": "5dd3a3cd2764ee5511aef0d4955b5d186d82f985389ecc3f48192bed33b70a83",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-preview-label.png",
+      "bytes": 180279,
+      "sha256": "79a3ac81a298cfc5039db589772833c0d7a17b8a9b7e6d8450062435385a2640",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-recover-front.png",
+      "bytes": 475777,
+      "sha256": "f025627e00f6c3c647ecac51d277eb1141120371a20fc76c839bbef582f1f6a5",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-recover-quarter.png",
+      "bytes": 515231,
+      "sha256": "177f291de3046f27fd715aa4ee47ab7104ab2ca3c12fd3482408a9e80b180387",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-recover-side.png",
+      "bytes": 492868,
+      "sha256": "e765c8dabc6c5fc132feb7016dadb303e27747f44625da3b6074f47dd8de8958",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-slow.gif",
+      "bytes": 1527786,
+      "sha256": "237aeb2b08e4b90323e70ed3e49dfda2cb5bf468c81d9dd07c533d73d3f58568",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-truecolor-sheet.jpg",
+      "bytes": 387822,
+      "sha256": "550a9d7e954efa2d0920cfb4762ca384a5cc80f7e7912c826acf9fc260d242af",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02.gif",
+      "bytes": 1527786,
+      "sha256": "a192e65f7b8dc310c6adfc1c09c351efe4a8fe0cda75cf4c054f5c684bae6b2f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02.mp4",
+      "bytes": 103957,
+      "sha256": "25ea452716955e883f279febc0316e39299aa0661b4025a3627584c355a75627",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-follow-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-follow-front.png",
+      "bytes": 457436,
+      "sha256": "20b262f98643a6b709d2da3698850d8673eb2526e15acbcc73ac6c1c80f58350",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-follow-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-follow-quarter.png",
+      "bytes": 503825,
+      "sha256": "fad5262722b29731cebc6768d33107f3f30adae1e70be14fe49bc142f661cd02",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-follow-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-follow-side.png",
+      "bytes": 485473,
+      "sha256": "2abd9ce544dc6a39edf730a371f7eee6f1e4e1ca24a486a0e78b1796b412b574",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-forelimbs-matcap.png",
+      "bytes": 517468,
+      "sha256": "fa44e915082fc3575ef6fcafeef667f4fd141f28349bbf74fdcf7a4fa2c19db0",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-forelimbs-quarter.png",
+      "bytes": 607223,
+      "sha256": "9f28d0361062278c39bd694d485ceb3f6b22787e71f909f552499e6302ee2d81",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-hindlimbs-matcap.png",
+      "bytes": 503423,
+      "sha256": "3976cee15be9eb597dc68ade17e816256ed998a173226b728ff9814fd5dbb33b",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-hindlimbs-quarter.png",
+      "bytes": 590370,
+      "sha256": "828d125e86b391cba1048e588534857940eff5458d1f9c78c7346518b1559f27",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-impact-front.png",
+      "bytes": 456946,
+      "sha256": "fb792b766a6225086c1809a4bf5aeaf432112c1c1e28f57a27abf2866fecf438",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-impact-quarter.png",
+      "bytes": 502172,
+      "sha256": "843c265f4405b910a0eea8ca8dc7f5409730c981aeba1500a3009868fcd1192a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-impact-side.png",
+      "bytes": 489708,
+      "sha256": "a96d0bd32ce4bf5f41e390e822b008820338e8a1b2d83cf1229b4d73e0a0cfde",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-joint-sheet.jpg",
+      "bytes": 265200,
+      "sha256": "68a88dc9e4d795e863ac51d67851286eb3f5122804e3a11fad2698f565a185ce",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-motion-filmstrip.jpg",
+      "bytes": 221970,
+      "sha256": "497a94075ff7507c57fe7e908dcbe8eea267f6aadfc53e8e585149917e5f6cd3",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-muzzle-matcap.png",
+      "bytes": 431393,
+      "sha256": "27880bab4799fdecf09dd0b73ef577c2c2dca975309ab7c8a68ed5bf716b0908",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-muzzle-quarter.png",
+      "bytes": 492210,
+      "sha256": "94b1d65a693fa0629d7997476af4f7eb798c2bed658a355c6a6971ca1c48e5a2",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-prepare-front.png",
+      "bytes": 479822,
+      "sha256": "f31df28775ea989c7218759109083cb619b6f1cb7f390a214c2e80d0085e797c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-prepare-quarter.png",
+      "bytes": 513255,
+      "sha256": "b63ae97748f95195425657910153334c61b1f0feb3700cff7168772af271ea4d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-prepare-side.png",
+      "bytes": 492342,
+      "sha256": "c2045aed9999ef3707181e2bc89bbc21c459468bd35ae38cfd9c08e4828cd9c4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-preview-label.png",
+      "bytes": 180188,
+      "sha256": "900e4787696a601d236ec614d22318eaed00535fa9b3675eadd2cf7770467879",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-recover-front.png",
+      "bytes": 475558,
+      "sha256": "6fe3d2e5787203a143f9cd40826452be7e37f8c368e24a1e6d0aa42f17511076",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-recover-quarter.png",
+      "bytes": 515296,
+      "sha256": "d60899ac85a9cd86f0b69b160970e51613f9fe3c3046d5d95a6760b4d35d4990",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-recover-side.png",
+      "bytes": 493452,
+      "sha256": "eeb7edc7617437d0ade4575746110f24ed13b8257bad7cd3e6fcb82cd87db892",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-slow.gif",
+      "bytes": 1716234,
+      "sha256": "2213e41d2d8eabd68b4fed4e67971f5801422c5f95e7e1937864ae62ed9fd5a4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-truecolor-sheet.jpg",
+      "bytes": 387903,
+      "sha256": "29cc7b0089596bd5b9500ac8fea560696388fd4379fe868093781251c9dcde11",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02.gif",
+      "bytes": 1716234,
+      "sha256": "979637e74c6e86d7dafe40b499b3189ce4e588a8cae948a84a19446b1d9704a9",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02.mp4",
+      "bytes": 115877,
+      "sha256": "1481c406eae29022b6f91f3d8a4afc1931ed52c18a4eb15e9fbe9aa9b45f45b2",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-forelimbs-matcap.png",
+      "bytes": 529683,
+      "sha256": "a220d0cadbc7fd30ba3f8d45b043e3279188dec214be9c7efb3c58e960512dc4",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-forelimbs-quarter.png",
+      "bytes": 599377,
+      "sha256": "d2efeca3d5e3e9f4990b6ac10cb954ff6fccb138aed83682e5d471ec246c00ed",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-ground-support-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-ground-support-sheet.jpg",
+      "bytes": 127439,
+      "sha256": "8f07ebc900bcb2d13b459d09ab30d5b4d1c85f68126121170894f170f2dea110",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-hindlimbs-matcap.png",
+      "bytes": 452790,
+      "sha256": "bda8eb8519e14a01d8e8d901f259a742779e4cccf3ac8e9e09311259b486713c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-hindlimbs-quarter.png",
+      "bytes": 512304,
+      "sha256": "1e20c324ff19847928b1509eeac2c301cf09330f314235ad1d0e79ff17f25fab",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-front.png",
+      "bytes": 452556,
+      "sha256": "387093546ad1885fe32b252ffb8e6df49a943f8688a11b8e5ce916dc5ae86e3d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-limb-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-limb-quarter.png",
+      "bytes": 462290,
+      "sha256": "8a946524bad8067a320911587d894e4be9b148c31e3aeaf94b635d06087e4dfd",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-limb-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-limb-side.png",
+      "bytes": 452471,
+      "sha256": "91ab604cf4a65eeff9309d474bee9d40d3a79732be3acd15c2fa5a4e40ab791f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-low-limb-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-low-limb-quarter.png",
+      "bytes": 453413,
+      "sha256": "bd9a3677f3c387a8b30491a6ca62d6a70e844463106b47dcf06810f55b8e679f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-quarter.png",
+      "bytes": 477380,
+      "sha256": "7a7444edfa187a27473927ac6929ad3a2e3c1b44d4bd5c08cd03d95c8887ca16",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-side.png",
+      "bytes": 454374,
+      "sha256": "3c15bde4d2bb97ddff8f961446b6f04803f635b9b4eeef0d277945fdb5ee7622",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-top.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-impact-top.png",
+      "bytes": 501150,
+      "sha256": "84466d36aadf2582b3a7169391c27321e04e723e829be5938dab478d9f1b7fee",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-joint-sheet.jpg",
+      "bytes": 294315,
+      "sha256": "fcba7bd9a6dd3e4c3ce16f0b7201d17c2916dd8f298c57249cac5c72b48e0a08",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-motion-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-motion-filmstrip.jpg",
+      "bytes": 187827,
+      "sha256": "81b4567a13be9e2268650b754c56084a3e167087d01ef4d31fe32b5abd9fe5a9",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-muzzle-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-muzzle-matcap.png",
+      "bytes": 484094,
+      "sha256": "a83b65147cec811a4ca06fce14b3844ec5a83da46ff59707745f3a1731155e9f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-muzzle-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-muzzle-quarter.png",
+      "bytes": 548147,
+      "sha256": "bd1892b66b8fd9fc60d7b22f05190040df0c1ee2dcd18280dadead979441e564",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-front.png",
+      "bytes": 474760,
+      "sha256": "329aea059cf46c465f4cb85979deecb626f9401faaed78ec826439eb9e2efe96",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-limb-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-limb-quarter.png",
+      "bytes": 478859,
+      "sha256": "ecbedffe3791c590aaa46ac4925fbfa007194cea97def5ba4b1192ca33d67a8a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-limb-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-limb-side.png",
+      "bytes": 465891,
+      "sha256": "b188194087f7f399e0b658dfa0866d1682fb951bf2879d641674e91d371efdf1",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-low-limb-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-low-limb-quarter.png",
+      "bytes": 469200,
+      "sha256": "25aaf113dfcf0f56227bcd72eec25df7a15e0b5c6503a2075ce43ccce419b12c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-quarter.png",
+      "bytes": 514626,
+      "sha256": "85a445985fe9b32173b046c57f79355096340bad19e20172c3542101addf711c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-side.png",
+      "bytes": 490309,
+      "sha256": "424fb818c53e04c4946a99c30a5c227e2c612e2c1da40600a7f7d2ca4a3cf040",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-top.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-prepare-top.png",
+      "bytes": 498204,
+      "sha256": "164bf217837295a1141c5c8ad1d03cfe6e1831df5d2e8eef87a8df323f7c402d",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-preview-label.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-preview-label.png",
+      "bytes": 168608,
+      "sha256": "6c57ef1288df3310c07f54a098e3030fe12d4829ddfd1563452a223e3d86e587",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-front.png",
+      "bytes": 437779,
+      "sha256": "b9278c755ea5c1a4866f4e8ff28a5bef2b121791c57f1d59058638473548198f",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-limb-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-limb-quarter.png",
+      "bytes": 450791,
+      "sha256": "ea07b70e0af64f2908de4f2553e066c144da34d4cc2788759698b25a59a0cbe6",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-limb-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-limb-side.png",
+      "bytes": 450519,
+      "sha256": "d0ae6bd7d77a5cbfcedb0e1cbe38f011d823bb793bee3863b37d7dfb67930326",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-low-limb-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-low-limb-quarter.png",
+      "bytes": 448108,
+      "sha256": "62fc2ed52cc94d0a314643b9d9f200c790284d9bda9cad731a64ec1a50620804",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-quarter.png",
+      "bytes": 475077,
+      "sha256": "b9c7e6251ba048309447ed8e3aacdb7ec48379256df4a88c1eb01ab580eb68a2",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-side.png",
+      "bytes": 448581,
+      "sha256": "48e4370039c94b7a5e5be39eb8bf7fe2fd47416a2bbdfdd2f1982fd9818bf5e5",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-top.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-recover-top.png",
+      "bytes": 490706,
+      "sha256": "e780e4ed41ecc27519c6d1a939e1fd195f4e78fb19072f12755464fd17108417",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-slow.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-slow.gif",
+      "bytes": 2379488,
+      "sha256": "4ac11e375b61260f5f52f017374e01d5ca3ebd292fb9d2ac88e0af57d8ce6e47",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-truecolor-sheet.jpg",
+      "bytes": 270976,
+      "sha256": "b0dfe682f5659e9a7bbd9e7e61c3d5634fc4d3610f8eeaa9405c29588bf3aa66",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02.gif",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02.gif",
+      "bytes": 2379488,
+      "sha256": "57ca83671a37ab13e93e3d615a52082ef1b8a39d2bfa0ca309c42a64d58576ee",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02.mp4",
+      "bytes": 117486,
+      "sha256": "baa01f74118e44c98f47e95e2b754734791352ccf5c31cbf0948afd9dbb1b351",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/review.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review.log",
+      "bytes": 24055,
+      "sha256": "6b7fa3521f02d0cc20c975dd549a196b0ac6b9432b674ff34024caa95c49fba7",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/audit_deformation.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/audit_deformation.py",
+      "bytes": 10891,
+      "sha256": "72e6ddcad35cd1c051b7e517709038597aff49ce9c95d81313cc7d09e5d37253",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/build_predator.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/build_predator.py",
+      "bytes": 20361,
+      "sha256": "f79c747558fb19f7f2018bd4a740b08ce632fde63f23e59801a17d8c55db894e",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/extract_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/extract_clips.py",
+      "bytes": 6980,
+      "sha256": "c701f72d0b23a57f86beae4521eb8abbbdda36c9c2acef25ce58728667f16346",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/finalize_manifest.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/finalize_manifest.py",
+      "bytes": 3898,
+      "sha256": "bf7dddf21c3159984ab1250509518360edd80ea55c7bc07fa304a0bc138bd3cf",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/inventory_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/inventory_review.py",
+      "bytes": 1071,
+      "sha256": "f7f31b3dd869d08c96dfff9f9b7bf7088d29d953c9fb18ae405d4bdb27d57d6a",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/package_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/package_review.py",
+      "bytes": 4710,
+      "sha256": "2c88c7500570eb8ef2d5c5966ca7d4c24c26554aa0ee8afc86e6bf1090adce4b",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/probe_floor.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/probe_floor.py",
+      "bytes": 1317,
+      "sha256": "52c51ed5a6b49282467cef232ea46c10c4baf35f41fb10d0d7196daf99009db0",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/probe_head_support.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/probe_head_support.py",
+      "bytes": 1405,
+      "sha256": "9631c9b002ea44b645b40877b4c79f417db71c0348519a20db0f6d5bb1f9db4c",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-predator-r11/scripts/render_review.py",
+      "bytes": 6908,
+      "sha256": "dba747be7ff9ba34b7942f53dfbb64c3889eecf0b889dad879e9653b551f2862",
+      "origins": [
+        "New R11 animation-only derivative; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-predator-r11"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-predator-r11/concept-provenance.json",
+      "path": "Sources/references/wolf-predator-r11/concept-provenance.json",
+      "bytes": 3125,
+      "sha256": "78acaee5b3ede3e9c2c47354d28b52b9b306874c4e47a68cfaeb3602212007d7",
+      "origins": [
+        "R11 animation reference study and provenance, see research-notes.json and concept-provenance.json"
+      ],
+      "requiredBy": [
+        "wolf-predator-r11-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-predator-r11/mission-wolf-rest-reference.jpg",
+      "path": "Sources/references/wolf-predator-r11/mission-wolf-rest-reference.jpg",
+      "bytes": 442243,
+      "sha256": "53d1077ba47044fbdeaf0718a8b8b27c29eb179a41a29739d5b9bc005f26186e",
+      "origins": [
+        "Mission:Wolf Skinwalker photo, research-only pose reference; no game texture or public report reuse"
+      ],
+      "requiredBy": [
+        "wolf-predator-r11-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-predator-r11/relaxed-collapse-concept.png",
+      "path": "Sources/references/wolf-predator-r11/relaxed-collapse-concept.png",
+      "bytes": 1660083,
+      "sha256": "497a4e19d61d959539e29de90351060f0388b2b44aaf67db5bc2583311a1c806",
+      "origins": [
+        "Built-in image_gen pose concept created before R11 collapse authoring; canonical copy, see concept-provenance.json"
+      ],
+      "requiredBy": [
+        "wolf-predator-r11-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-predator-r11/research-notes.json",
+      "path": "Sources/references/wolf-predator-r11/research-notes.json",
+      "bytes": 1976,
+      "sha256": "ef28f1c8749190fcb909f773e23262e6ec5178a9db673b4ef9b0722f83d44833",
+      "origins": [
+        "R11 animation reference study and provenance, see research-notes.json and concept-provenance.json"
+      ],
+      "requiredBy": [
+        "wolf-predator-r11-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-predator-r11/review-input.mp4",
+      "path": "Sources/references/wolf-predator-r11/review-input.mp4",
+      "bytes": 33563385,
+      "sha256": "8f8a7b0eb80a84d7fb46d44c6e0d993072ce05073265bdfadd8799c22e8b06fb",
+      "origins": [
+        "User-provided 2026-11-13 gameplay review, copied into canonical workspace"
+      ],
+      "requiredBy": [
+        "wolf-predator-r11-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-predator-r11/video-review.json",
+      "path": "Sources/references/wolf-predator-r11/video-review.json",
+      "bytes": 1424,
+      "sha256": "ba895ba841dc8a4cf3e315df5ad2cf3167696631f03b2c991f64836cd268c610",
+      "origins": [
+        "R11 animation reference study and provenance, see research-notes.json and concept-provenance.json"
+      ],
+      "requiredBy": [
+        "wolf-predator-r11-review"
       ],
       "status": "bundled"
     }

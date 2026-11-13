@@ -27,7 +27,7 @@ test('real head keeps its muzzle toward stationary and moving players through bo
  for(const side of [-1,1])for(const radius of [3,5])for(const moving of [false,true]){
   const e=await resetFeral(f,{distance:radius,behavior:'observe'});e.brain.observation=5;
   for(let warm=0;warm<24;warm++)stepWolfHunt(f,e,1/60);
-  e.brain.flankSide=-side;e.brain.beginStalk();e.brain.flankRemaining=15;
+  e.brain.flankSide=-side;e.brain.beginStalk();e.brain.flankRemaining=e.brain.circleTarget=15;e.brain.circleElapsed=0;e.brain.flankPlaybackRate=WOLF_V02_GAIT.orbitPlaybackRate;
   const angles=[],angles3D=[],radii=[],support=[],trace=[];let angleSum=0,lastAngle=null,episode=null,loop=0,previousTime=0,exit=null;
   for(let frame=0;frame<14*60;frame++){
    const wall=frame/60;if(moving){f.player.position.x=wall*.12;f.player.position.z=radius+Math.sin(wall*.15)*.2;}
@@ -64,15 +64,16 @@ test('autonomous pursuit uses the approved gallop at the requested faster speed 
  // Authored R8 gallop contact windows, from the canonical R8 actions.json.
  const runStances={'fore.L.paw':[.58-17/30,.72-17/30],'fore.R.paw':[.1216666667,.2616666667],'hind.L.paw':[.2916666667,.3916666667],'hind.R.paw':[.3583333333,.4583333333]};
  for(const initialRange of [6,15,35]){
-  const e=await resetFeral(f,{distance:initialRange,sequence:['quick-bite']}),moves=[],stanceDrift=[],wrappedPeriods=[],wrapWalls=[];let previous=e.actor.position.clone(),lastTime=0,lastClip=null,cycle=0;const anchors={};
+  const e=await resetFeral(f,{distance:initialRange,sequence:['quick-bite']}),moves=[],stanceDrift=[],wrappedPeriods=[],wrapWalls=[];let previous=e.actor.position.clone(),lastTime=0,lastClip=null,cycle=0,runStart=0;const anchors={};
   for(let i=0;i<60*20&&e.brain.mode!=='attack';i++){
    stepWolfHunt(f,e,1/60);if(e.brain.mode==='move'){
-    const distance=Vector3.Distance(previous,e.actor.position);moves.push({clip:e.brain.state,speed:distance*60,sourceDelta:lastClip===e.brain.state&&e.brain.time>=lastTime?e.brain.time-lastTime:null});
-    if(lastClip===e.brain.state&&e.brain.time<lastTime){cycle++;wrappedPeriods.push(lastTime+WOLF_V02_GAIT.runPlaybackRate/60-e.brain.time);wrapWalls.push(i/60);}
+    if(lastClip!==e.brain.state)runStart=i/60;
+    const distance=Vector3.Distance(previous,e.actor.position);moves.push({clip:e.brain.state,speed:distance*60,requestedSpeed:e.brain.approachSpeed,playback:e.brain.approachPlaybackRate,sourceDelta:lastClip===e.brain.state&&e.brain.time>=lastTime?e.brain.time-lastTime:null});
+    if(lastClip===e.brain.state&&e.brain.time<lastTime){cycle++;wrappedPeriods.push(lastTime+e.brain.approachPlaybackRate/60-e.brain.time);wrapWalls.push(i/60);}
     for(const [name,[start,end]]of Object.entries(runStances)){
      // Ignore only the explicit .16s transition and 1/60 source-time edge
      // interpolation into/out of a contact window. Flight is not support.
-     const phase=e.brain.time-1/30,supported=i/60>.3&&phase>start+1/60&&phase<end-1/60&&distance*60>WOLF_V02_GAIT.runSpeed-.05;
+     const phase=e.brain.time-1/30,supported=i/60-runStart>.3&&phase>start+1/60&&phase<end-1/60&&distance*60>WOLF_V02_GAIT.runSpeed-.05;
      if(!supported){delete anchors[name];continue;}
      const point=e.nodes[name].getAbsolutePosition();anchors[name]??=point.clone();stanceDrift.push({name,wall:i/60,sourceTime:e.brain.time,drift:Vector3.Distance(point,anchors[name])});
     }
@@ -80,8 +81,8 @@ test('autonomous pursuit uses the approved gallop at the requested faster speed 
   }
   assert.equal(e.brain.mode,'attack');assert.equal(e.brain.actionId,'quick-bite');assert.ok(moves.length>10);
   assert.ok(moves.every(r=>r.clip===WOLF_CLIPS.run),'requested aggressive pursuit cannot spend its final two metres in the slow walking clip');
-  const normal=moves.filter(r=>r.speed>WOLF_V02_GAIT.runSpeed-.05&&r.sourceDelta!==null),medianSpeed=quantile(moves.map(r=>r.speed),.5),medianCadence=quantile(normal.map(r=>r.sourceDelta*60),.5);
-  assert.ok(Math.abs(medianSpeed-WOLF_V02_GAIT.runSpeed)<1e-6);assert.ok(Math.abs(medianCadence-WOLF_V02_GAIT.runPlaybackRate)<1e-6);
+  const normal=moves.filter(r=>r.speed>WOLF_V02_GAIT.runSpeed-.05&&r.sourceDelta!==null&&Math.abs(r.speed-r.requestedSpeed)<1e-6),medianSpeed=quantile(normal.map(r=>r.speed),.5),medianCadence=quantile(normal.map(r=>r.sourceDelta*60),.5);
+  assert.ok(medianSpeed>=WOLF_V02_GAIT.runSpeed-1e-6&&medianSpeed<=WOLF_V02_GAIT.farRunSpeed+1e-6);assert.ok(normal.every(r=>Math.abs(r.sourceDelta*60-r.playback)<1e-6));
   assert.ok(Math.abs(medianCadence*WOLF_V02_GAIT.runSourceSpeed*e.config.scale-medianSpeed)<1e-6,'gait travel per source second must match game travel per wall second');
   const maxStanceDrift=Math.max(0,...stanceDrift.map(r=>r.drift)),observedSourcePeriod=quantile(wrappedPeriods,.5),sampledWallPeriods=wrapWalls.slice(1).map((v,i)=>v-wrapWalls[i]);
   if(initialRange===35)assert.ok(Math.abs(observedSourcePeriod-17/30)<1e-7,'actual loop wraps the original 17/30 second gallop and skips only the export hold');
@@ -180,7 +181,7 @@ test('actual default bouts switch at half health without cutting the current str
   assert.ok(bouts.length>=3);assert.ok(hits>=3);assert.ok(bouts.every(b=>b.length>=1&&b.length<=3));
   if(hp>450)assert.ok(bouts.every(b=>b.length===1),'above half HP one completed strike must precede every stalk');
   else assert.ok(bouts.some(b=>b.length===3),'successful close contacts should permit the aggressive three-strike phase');
-  assert.ok([...clips].every(clip=>['Wolf_Driving_Bite_V02','Wolf_Driving_Cross_Bite_V02',WOLF_CLIPS.pin,WOLF_CLIPS.lunge].includes(clip)));
+  assert.ok([...clips].every(clip=>['Wolf_Predator_Diagonal_Bite_V02','Wolf_Predator_Reverse_Bite_V02',WOLF_CLIPS.pin,WOLF_CLIPS.lunge].includes(clip)));
  }
  const e=await resetFeral(f,{distance:3.1,hp:451,sequence:['quick-bite']});
  while(e.brain.mode!=='attack'||e.brain.time<.10)stepWolfHunt(f,e,1/240);

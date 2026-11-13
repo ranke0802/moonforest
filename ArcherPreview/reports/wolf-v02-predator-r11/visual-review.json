@@ -1,0 +1,33 @@
+{
+  "reviewedAt": "2026-11-13T02:18:43.231Z",
+  "scope": "Direct model visual inspection of original-colour offline renders, generated from actual post-runtime Babylon CPU skins and original 4K atlas; not browser GPU screenshots.",
+  "runtimeViews": 45,
+  "inspectedImageHashes": {
+    "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Staggered_Collapse_V02-ground-support-sheet.jpg": "8f07ebc900bcb2d13b459d09ab30d5b4d1c85f68126121170894f170f2dea110",
+    "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Diagonal_Bite_V02-joint-sheet.jpg": "7db3996d66e952649a5e48120805fcf3f781c3c894237d8d4d4881969e0c85bf",
+    "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Predator_Reverse_Bite_V02-truecolor-sheet.jpg": "29cc7b0089596bd5b9500ac8fea560696388fd4379fe868093781251c9dcde11",
+    "Sources/actors/tripo-monsters/wolf-v02-predator-r11/review/Wolf_Backward_Brace_V02-joint-sheet.jpg": "76043ee371809eea5bb155570caf16909eb41ecba6bad8eed7f9f2d7513f89c7",
+    "Docs/Reviews/2026-11-13/wolf-predator-r11/runtime-poses/runtime-contact-sheet.jpg": "7d9f4f93b23d73ddce61660b025ed3f289090f2ffaaf32fc0009680695318dba",
+    "Docs/Reviews/2026-11-13/wolf-predator-r11/runtime-poses/far-run-transition.jpg": "270c3ae5d55c5b1cf395489327db686bd6fca63f5f5bc8e64e5ed2d728369438",
+    "Docs/Reviews/2026-11-13/wolf-predator-r11/runtime-poses/runtime-remaining-views.jpg": "a6d7079eb7783db1cac587139fd735b8250fe756a41ae59d3e5ba7f102268f2d"
+  },
+  "findings": [
+    "No gross elongated shafts or changing muscle core thickness in inspected frontal/lateral/oblique attack, brace, gait, death and distant orbit-to-run views.",
+    "Final collapse has asymmetrically relaxed paws, cheek and torso support, full tail in top/support views; no hidden floor penetration in final evaluated source proof.",
+    "Distant observation-to-run transition uses reachable fixed-length legs and releases unreachable earlier foot anchors. This does not certify every transient foot is stationary.",
+    "Existing hard/angular collar folds remain around bending joints. Rigid muscle cores and narrow transition bands are separate checks.",
+    "Source image concepts were generated before collapse authoring. Original R8 bone lengths and source weights remain authoritative."
+  ],
+  "limits": [
+    "No browser automation.",
+    "Real-device FPS, heat, GPU timings, touch feel and visible player knockdown animation were not measured."
+  ],
+  "runtimePoseSourceHashes": {
+    "wolf-v02-spec.js": "e54f7a934a74e5205f1c57c9a85771445ab44ee56d63c855c3a5e47d373693c6",
+    "wolf-v02-encounter.js": "4a0b68af380c67d37246fd7c2bfb388cb9b1e7615bea47b074115eb8315bc9c2",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "wolf-v02-authored-clips.js": "258381685307280343cd67f7a2a151f619440dd3de0b2ae069e5944ee1a64ea2",
+    "wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+    "wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97"
+  }
+}

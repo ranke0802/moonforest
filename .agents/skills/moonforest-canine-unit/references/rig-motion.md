@@ -22,9 +22,19 @@ Use a short clear preparation, rapid contact, deceleration and recovery. Runtime
 
 For a visible head nip, restrain jaw opening to what the weighted muzzle supports. R9's 0.20 radian opening is a wolf-specific measured limit; larger gaps deformed the muzzle and were rejected. Retargeting to a different jaw requires a new deformation check, not an unconditional 0.20 limit.
 
-Do not author a wide, high forepaw sweep merely to make a wolf look aggressive. R9's `Wolf_Forepaw_Swipe_V02` is preserved as a historical low supporting step. The user rejected its friendly appearance for current combat; R10's compatibility action ID `paw-swipe` now uses a driving cross-bite. Use rear-leg propulsion, forward torso weight, a planted lead support and a visible diagonal neck/head trajectory. Restrained jaw opening alone is not an aggressive whole-body attack.
+Do not author a wide, high forepaw sweep merely to make a wolf look aggressive. R9's `Wolf_Forepaw_Swipe_V02` is a historical low supporting step, and the R10 bites are preserved historical sources. Current R11's compatibility action ID `paw-swipe` uses `Wolf_Predator_Reverse_Bite_V02`. Use rear-leg propulsion, forward torso weight, a planted support and a clear diagonal upper-body trajectory. Restrained jaw opening or an isolated head nod does not make a forceful whole-body attack.
 
 The R10 right/left orbit clips follow a real circular path, with planted foot targets on the original fixed-length rig. Left reuses the motion idea, not opposite-side bind offsets: the model is slightly asymmetric. Reflecting opposite local translations changed joint lengths and was rejected. Solve each side against its own bind lengths and mirror all relevant step phases/rotations rather than root alone.
+
+## R11 authored attack and reaction contracts
+
+The two R11 bites drive the pelvis, spine, chest and nape through a large counterwindup, centred bite and opposite diagonal follow-through. The head inherits the chain and adds a small local snap. Preserve those authored rotations through the entire runtime attack: a global head aim or attention pass must not cancel the torso-led gesture. Compare source and post-sampler upper-body excursions, not actor yaw or jaw opening alone. Apply jaw/ear hinge axes relative to the rotating head; R11 retains the measured 0.20 radian muzzle limit.
+
+`Wolf_Backward_Brace_V02` is a separate 0.90 second standing support step, travelling -0.48 model metres in glTF forward Z while facing the opponent. At the current 2.5 scale that is about 1.20 game metres. Named support windows and a matching translated standing endpoint permit retreat/re-entry without falling. A heavy nonlethal hit must not reuse the death collapse.
+
+`Wolf_Staggered_Collapse_V02` is a 1.65 second articulated lethal fall with a settled source hold from 1.42–1.65. Shoulder, pelvis, flexed knees/hocks, head and loose tail release/settle sequentially rather than rotating four rigid standing legs as a unit. R11's generated relaxed-pose concept was inspected before collapse authoring; it supplied composition, not authoritative anatomy. Keep the actual stocky mesh, asymmetric bind lengths and firm muscle cores. The researched wildlife impact was nonfatal; the final death is an authored artistic extrapolation. Runtime then adds a 0.65 second endpoint hold and 5 second fade.
+
+Check cheek/muzzle, shoulder/chest, hip/thigh, paws and tail on the evaluated skin. A fur-covered flank can conceal deeply buried joints even when the visible face appears grounded. Use the opposite limb side, low quarter and full-tail top views plus per-region floor minima and settled-vertex motion. Report residual joint-collar folds separately from unchanged rigid cores; do not expose a hidden limb by stretching or reweighting the original. See [the R11 review report](../../../../Docs/Reports/2026-11-13/MOONFOREST_0.2_늑대_R11_검토보고서.html).
 
 ## Validation and export
 

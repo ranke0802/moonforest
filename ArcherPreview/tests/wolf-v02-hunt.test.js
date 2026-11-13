@@ -2,12 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WOLF_CLIPS,WOLF_BALANCE} from '../src/wolf-spec.js';
-import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_ORBIT,WOLF_V02_GAIT,actionDuration,sampleWhipTime,whipElapsedAt} from '../src/wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_ORBIT,WOLF_V02_GAIT,WOLF_V02_BRACE,WOLF_V02_DEATH,actionDuration,sampleWhipTime,whipElapsedAt} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const config=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
 const durations=Object.fromEntries([...config.catalog,...WOLF_V02_AUTHORED_CLIPS].map(c=>[c.name,c.duration]));
-const brain=hp=>{const b=new WolfV02Brain(durations);b.hp=hp;b.start(WOLF_CLIPS.watch,'idle');b.behavior='observe';b.observation=0;return b;};
+const brain=hp=>{const b=new WolfV02Brain(durations,WOLF_BALANCE,()=>.5);b.hp=hp;b.start(WOLF_CLIPS.watch,'idle');b.behavior='observe';b.observation=0;return b;};
 
 function trace(hp,{seconds=90,outcome='hit',fps=60}={}){
  const b=brain(hp),bouts=[],attacks=[],flanks=[];let distance=2.25,current=[],wasFlank=false;
@@ -36,7 +36,7 @@ test('above half health every default bout has one attack followed by authored s
  for(const fps of [30,60]){
   const t=trace(451,{fps});assert.ok(t.bouts.length>8);assert.ok(t.bouts.every(b=>b.length===1));assert.ok(!t.attacks.includes('chain-bite'));
   assert.ok(t.attacks.includes('quick-bite')&&t.attacks.includes('paw-swipe'));
-  assert.ok(t.flanks.every(f=>Object.values(WOLF_V02_ORBIT).includes(f.clip)&&f.mode==='idle'&&Math.abs(f.remaining-.9/WOLF_V02_GAIT.orbitPlaybackRate)<1e-8));
+  assert.ok(t.flanks.every(f=>Object.values(WOLF_V02_ORBIT).includes(f.clip)&&f.mode==='idle'&&f.remaining>=2&&f.remaining<=3));
   assert.equal(t.b.balance,WOLF_BALANCE);
  }
 });
@@ -45,7 +45,7 @@ test('half health and below adds bounded successful attack bouts without elimina
  const cautious=trace(451),fierce=trace(450);assert.equal(cautious.b.phase,1);assert.equal(fierce.b.phase,2);
  assert.ok(fierce.bouts.some(b=>b.length===3));assert.ok(fierce.bouts.every(b=>b.length>=1&&b.length<=3));assert.ok(fierce.attacks.includes('chain-bite'));
  assert.ok(fierce.attacks.length>cautious.attacks.length*1.3,'phase 2 pressure comes from fewer decision pauses and conditional followups');
- assert.ok(fierce.flanks.every(f=>f.remaining<=.55));
+ assert.ok(fierce.flanks.every(f=>f.remaining>=2&&f.remaining<=3),'low HP retains the new2–3s observation before each bout');
  const b=brain(450);b.startAction('quick-bite');let entered=false;
  for(let frame=0;frame<120;frame++){const r=b.update(1/60,2.25);if(r.events.length)b.noteAttackResult({blocked:true});if(b.behavior==='recovery'){entered=true;assert.ok(b.recoveryRemaining>=WOLF_V02_BY_ID['quick-bite'].recovery-1/60);break;}}
  assert.ok(entered,'blocked attack exposes a real recovery instead of restarting the attack');
@@ -73,13 +73,13 @@ test('long attacks never make space by fleeing and custom orders substitute only
    if(b.action?.id==='pin')assert.ok(distance>=WOLF_V02_BY_ID.pin.minDistance);
   }
  }
- const custom=brain(900);custom.configureAttacks({custom:true,sequence:['lunge','pin'],speed:1});assert.equal(custom.chooseAction(25),'lunge');assert.notEqual(custom.chooseAction(2.2),'lunge');custom.customAttackIndex=1;assert.equal(custom.chooseAction(9.1),'pin');
+ const custom=brain(900);custom.configureAttacks({custom:true,sequence:['lunge','pin'],speed:1});assert.equal(custom.chooseAction(WOLF_V02_BY_ID.lunge.preferredDistance),'lunge');assert.notEqual(custom.chooseAction(2.2),'lunge');custom.customAttackIndex=1;assert.equal(custom.chooseAction(9.1),'pin');
 });
 
 test('stalking freezes its authored gait when corridor or facing is blocked',()=>{
  const b=brain(900);b.beginStalk();const first=b.update(.1,2.25);assert.equal(first.speed,0);assert.equal(first.flank.authored,true);assert.equal(first.flank.facePlayer,true);assert.ok(Object.values(WOLF_V02_ORBIT).includes(b.state));
- const poseTime=b.time;b.suppressStalkStep=true;const next=b.update(.1,2.25);assert.equal(b.time,poseTime);assert.equal(next.speed,0);assert.equal(b.behavior,'position');
- assert.equal(b.update(.01,2.25).events.length,0);assert.equal(b.mode,'attack');
+ const elapsed=b.circleElapsed;b.suppressStalkStep=true;const next=b.update(.1,2.25);assert.equal(b.time,0);assert.equal(next.speed,0);assert.equal(b.behavior,'flank');assert.ok(b.circleElapsed>elapsed,'blocked watch still consumes real observation time');
+ assert.equal(b.update(.01,2.25).events.length,0);assert.notEqual(b.mode,'attack','blocked foot motion cannot bypass the remaining2–3s budget');
 });
 
 test('stationary observation and recovery hold the circling pose while only their timers advance',()=>{
@@ -94,12 +94,13 @@ test('stationary observation and recovery hold the circling pose while only thei
  recovering.beginStalk();recovering.update(.1,2.25);assert.ok(recovering.time>0,'only an actual stalking step advances the circling gait');
 });
 
-test('phase threshold does not cut off current attack or bypass hit/down/recovery motions',()=>{
+test('phase threshold does not cut off the current attack, nonlethal reactions stay standing and lethal collapse stays separate',()=>{
  const b=brain(900);b.startAction('quick-bite');b.update(.1,2.25);const serial=b.serial,time=b.time;b.hp=450;b.update(.01,2.25);assert.equal(b.serial,serial);assert.ok(b.time>time);assert.equal(b.phase,2);
- b.hit({heavy:true,damage:1});assert.equal(b.state,WOLF_CLIPS.down);assert.equal(b.update(.1,2).events.length,0);
- for(let frame=0;frame<120;frame++)b.update(1/60,2);assert.ok(b.visited.has(WOLF_CLIPS.recover));
+ b.hit({heavy:true,damage:1});assert.equal(b.state,WOLF_V02_BRACE);assert.equal(b.update(.1,2).events.length,0);
+ for(let frame=0;frame<120;frame++)b.update(1/60,2);assert.ok(!b.visited.has(WOLF_CLIPS.down)&&!b.visited.has(WOLF_CLIPS.recover));
  const hit=brain(450);hit.hit({interruptsBoss:true,damage:1});assert.equal(hit.state,WOLF_CLIPS.hit);
- const brace=brain(450);brace.hit({stun:.1,damage:1});brace.update(.2,2);assert.equal(brace.state,WOLF_CLIPS.brace);
+ const brace=brain(450);brace.hit({stun:.1,damage:1});brace.update(.2,2);assert.equal(brace.state,WOLF_CLIPS.hit);assert.equal(brace.stagger,0);
+ const lethal=brain(450);lethal.hit({damage:900,heavy:true});assert.equal(lethal.state,WOLF_V02_DEATH);
  const discovery=new WolfV02Brain(durations);for(let frame=0;frame<400;frame++)discovery.update(1/60,14);for(const clip of [WOLF_CLIPS.rest,WOLF_CLIPS.alert,WOLF_CLIPS.rise,WOLF_CLIPS.watch])assert.ok(discovery.visited.has(clip));
 });
 
@@ -111,7 +112,7 @@ test('impact window accepts a late contact upgrade once and rejects stale, dupli
 
 test('strong whipping accelerates contact while preserving exact authored poses, time monotonicity and speed snapshot',()=>{
  for(const action of WOLF_V02_ACTIONS){
-  const {source,seconds}=action.whip,rates=source.slice(1).map((s,i)=>(s-source[i])/(seconds[i+1]-seconds[i]));assert.ok(Math.max(...rates)>=2.2);assert.ok(Math.max(...rates)>rates[0]*2);
+  const {source,seconds}=action.whip,rates=source.slice(1).map((s,i)=>(s-source[i])/(seconds[i+1]-seconds[i]));assert.ok(Math.max(...rates)>=2.2);assert.ok(Math.max(...rates)>rates[0]*(['lunge','pin'].includes(action.id)?1.15:2));
   assert.ok(Math.abs(sampleWhipTime(action,whipElapsedAt(action,action.impact))-action.impact)<1e-9);
   let previous=0;for(let i=0;i<=240;i++){const time=sampleWhipTime(action,actionDuration(action)*i/240);assert.ok(time>=previous);previous=time;}assert.equal(previous,action.clipEnd);
   for(const fps of [30,60])for(const speed of [.5,1,2]){

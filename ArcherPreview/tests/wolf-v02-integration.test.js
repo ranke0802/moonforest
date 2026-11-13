@@ -10,7 +10,7 @@ import {BossModelLibrary} from '../src/boss-models.js';
 import {BossBattle} from '../src/boss-battle.js';
 import {WolfEncounter} from '../src/wolf-encounter.js';
 import {WolfV02Encounter} from '../src/wolf-v02-encounter.js';
-import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH} from '../src/wolf-v02-spec.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {CaveNavigation} from '../src/witch-cave-navigation.js';
@@ -109,7 +109,7 @@ test('actual bite contact respects dodge and shield, and a missed bite still lea
  const f=await fixture(t);plainWorld(f);
  for(const state of ['dodge','shieldPush']){
   const e=await begin(f,'quick-bite');let defended=false;
-  for(let i=0;i<600&&e.brain.mode==='attack';i++){frame(f,e,1/60,{state,actionId:10});defended||=e.brain.stagger>0;}
+  for(let i=0;i<600&&e.brain.mode==='attack';i++){frame(f,e,1/60,{state,actionId:10});defended||=e.brain.mode==='hit'&&e.brain.state===WOLF_CLIPS.hit;}
   assert.equal(e.playerHp,500);if(state==='shieldPush'){assert.equal(defended,true);assert.equal(e.knockVelocity.lengthSquared(),0);}
   assert.equal(f.battle.combat.grabOwner,null);
  }
@@ -135,9 +135,10 @@ test('heavy/bash interrupt before impact, capture escape and death release input
   const e=await begin(f,'quick-bite');e.player=f.player;e.dt=1/60;
   e.gate.collect=()=>({hits:[{id,damage:20,heavy:id==='judgment'}],hitStop:.03});
   try{e.poseAndContacts(f.player,{state:'idle'},{actionId:7},null);}finally{delete e.gate.collect;}
-  assert.equal(e.brain.mode,'down');assert.ok(e.knockVelocity.length()>0);assert.equal(e.pendingEvents.length,0);
-  assert.ok(e.knockVelocity.dot(e.actor.position.subtract(f.player.position))>0);
+  assert.equal(e.brain.mode,'hit');assert.equal(e.brain.state,WOLF_V02_BRACE);assert.equal(e.knockVelocity.length(),0);assert.equal(e.pendingEvents.length,0);
+  const before=e.actor.position.clone();
   for(let i=0;i<45;i++)frame(f,e,1/60);assert.equal(e.playerHp,500);assert.notEqual(e.brain.mode,'attack');
+  assert.ok(e.actor.position.subtract(before).dot(before.subtract(f.player.position))>0,'standing brace root moves away from the hit');
  }
  let e=await begin(f,'pin');const initial=f.player.position.clone();
  for(let i=0;i<300&&!e.grab.active;i++)frame(f,e,1/60);
@@ -145,7 +146,7 @@ test('heavy/bash interrupt before impact, capture escape and death release input
  for(let i=0;i<180&&(e.brain.mode==='attack'||e.brain.behavior==='recovery');i++)frame(f,e,1/60);assert.equal(e.playerHp,500);
  e=await begin(f,'pin');for(let i=0;i<300&&!e.grab.active;i++)frame(f,e,1/60);e.playerHp=0;frame(f,e,1/60);assert.equal(e.grab.active,false);assert.equal(f.battle.combat.grabOwner,null);
  e=await begin(f,'pin');for(let i=0;i<300&&!e.grab.active;i++)frame(f,e,1/60);let rewards=0;e.onDefeat=()=>rewards++;e.brain.hit({damage:900,heavy:true,ignoreDefense:true});
- for(let i=0;i<400;i++)frame(f,e,1/60);assert.equal(e.grab.active,false);assert.equal(f.battle.combat.grabOwner,null);assert.equal(rewards,1);assert.equal(e.corpseGone,true);assert.equal(e.brain.state,WOLF_CLIPS.down);
+ for(let i=0;i<500&&!e.corpseGone;i++)frame(f,e,1/60);assert.equal(e.grab.active,false);assert.equal(f.battle.combat.grabOwner,null);assert.equal(rewards,1);assert.equal(e.corpseGone,true);assert.equal(e.brain.state,WOLF_V02_DEATH);
  rows.push({case:'interrupt-escape-death',heavy:true,bash:true,escape:true,playerDeathRelease:true,wolfDeathRelease:true,rewardCount:rewards});
 });
 

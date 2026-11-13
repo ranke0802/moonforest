@@ -1,11 +1,12 @@
 import {Vector3} from '@babylonjs/core';
 import {WolfEncounter} from './wolf-encounter.js';
-import {WolfV02Brain,WOLF_V02_KNOCKBACK_SCALE,WOLF_V02_ORBIT,WOLF_V02_GAIT} from './wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_KNOCKBACK_SCALE,WOLF_V02_ORBIT,WOLF_V02_GAIT,WOLF_V02_BRACE,WOLF_V02_DEATH} from './wolf-v02-spec.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 import {playerDimensions} from './player-dimensions.js';
 import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
 import {segmentDistanceSquared} from './melee-collision.js';
 import {WolfV02LocomotionPose} from './wolf-v02-locomotion.js';
+import {WolfGrab} from './wolf-grab.js';
 
 // These are the physical part envelopes; player capsule radius is added once.
 // Their centres always come from the post-navigation, authored skeletal pose.
@@ -36,6 +37,23 @@ function sampleYaw(clip,time){
   return frames[i]+angleDelta(frames[j],frames[i])*(f-i);
 }
 
+// Capture follows the accelerated source action, not repeated pose-pass dt.
+// The player keeps its real position and can escape until the authored bite.
+class WolfV02Grab extends WolfGrab{
+  constructor(encounter,original){super(original.onControl,original.onImpact);this.encounter=encounter;}
+  get canEscape(){return this.active&&!this.impacted;}
+  start(...args){const started=super.start(...args);if(started)this.captureClock=this.encounter.brain.actionElapsed;return started;}
+  escape(){const escaped=super.escape();if(escaped){this.encounter.brain.lastOutcome='miss';this.encounter.brain.requestRetreat('escape');}return escaped;}
+  update(dt,{interrupted,state,serial,clipTime}){
+    if(!this.active)return;
+    const brain=this.encounter.brain;
+    if(interrupted||serial!==this.serial||state!==WOLF_CLIPS.pin){this.reset();return;}
+    this.time=Math.max(this.time,(brain.actionElapsed-this.captureClock)/Math.max(.5,brain.castSpeed??1));
+    if(!this.impacted&&clipTime>=1.85){this.impacted=true;this.onImpact();}
+    if(this.active&&clipTime>=3.35)this.reset();
+  }
+}
+
 // The 0.2 variant owns decisions, movement and bounded post-sampler attention /
 // fixed-length foot support. R8's sampler, model library, shared paint/ink,
 // preparation, pool and death lifecycle remain the implementation used by 0.1.
@@ -48,14 +66,27 @@ export class WolfV02Encounter extends WolfEncounter{
     this.v02ContactPoints=[];
     this.v02LastContact=null;
     this.v02LastOutcome=null;
+    this.v02PinBiteContact=null;
     this.v02PreviousPlayer=new Vector3();
     for(const part of this.v02ContactParts)part.previous=new Vector3();
     this.v02ContactSerial=null;
     this.v02ResolvedSerial=null;
+    this.grab=new WolfV02Grab(this,this.grab);
+    this.grab.onImpact=()=>{
+      if(this.pinBiteContact())this.hitPlayer(this.balance.pinDamage,this.actor.position,{grabImpact:true,knockdown:true});
+      else{this.brain.lastOutcome='miss';this.brain.requestRetreat('miss');this.grab.reset();}
+      if(!this.playerAlive)this.grab.reset();
+    };
   }
 
   createBrain(durations){return new WolfV02Brain(durations);}
   prepareAsset(){this.config=installWolfV02AttackClips(this.asset,this.config);}
+
+  async summon(...args){
+    const result=await super.summon(...args),duration=this.animator?.durations[WOLF_V02_DEATH];
+    if(duration){this.death.reset({holdPose:true,clipSeconds:duration,holdSeconds:.65});this.death.duration=5;}
+    return result;
+  }
 
   update(dt,player){
     this.v02Pose?.capturePreviousFeet();
@@ -65,6 +96,12 @@ export class WolfV02Encounter extends WolfEncounter{
     // interruptible observation, use a real step before the neck reaches its
     // turn limit. A punishable recovery always retains its full timer.
     const b=this.brain,p=this.actor?.position;
+    const navigation=this.world.navigation;
+    this.v02SightRemaining=Math.max(0,(this.v02SightRemaining??0)-Math.max(0,dt));
+    if(b&&p&&player&&(navigation!==this.v02SightNavigation||!this.v02SightRemaining)){
+      this.v02SightNavigation=navigation;this.v02SightRemaining=.15;
+      b.sightBlocked=!!navigation&&!navigation.segmentClear(p,player.position,0,true);
+    }
     if(b?.behavior==='observe'&&b.state===WOLF_CLIPS.watch&&p&&player){
       const target=Math.atan2(player.position.x-p.x,player.position.z-p.z);
       if(Math.abs(angleDelta(target,this.v02HeldYaw))>.24)b.observation=0;
@@ -78,6 +115,7 @@ export class WolfV02Encounter extends WolfEncounter{
     super.alignPose();
     const orbit=this.brain.behavior==='flank'&&ORBIT_CLIPS.has(this.brain.state);
     if(orbit)this.v02Pose.plantOrbit(this.brain.state===WOLF_V02_ORBIT.left);
+    else if(this.brain.state===WOLF_V02_BRACE)this.v02Pose.plantBrace();
     else if(this.brain.mode==='move'&&this.brain.state===WOLF_CLIPS.run)this.v02Pose.plantRun();
     else this.v02Pose.resetPlants();
     this.v02Pose.aim();
@@ -92,6 +130,19 @@ export class WolfV02Encounter extends WolfEncounter{
 
   attackDamage(event){
     return Number.isFinite(event?.damage)?event.damage:super.attackDamage(event);
+  }
+
+  isHeavyAttack(event){return (event?.actionId??this.brain?.action?.id)==='lunge';}
+
+  pinBiteContact(){
+    const player=this.player.position,d=playerDimensions(this.player),low=player.y+d.moveRadius,high=player.y+d.height-d.moveRadius,radius=.60+d.moveRadius;
+    let separation=Infinity,part=null;
+    for(const name of ['jaw','head']){
+      const point=this.nodes[name].getAbsolutePosition(),distance=Math.hypot(point.x-player.x,point.z-player.z,Math.max(low-point.y,point.y-high,0));
+      if(distance<separation){separation=distance;part=name;}
+    }
+    this.v02PinBiteContact={serial:this.brain.serial,sourceTime:this.brain.time,separation,radius,part,contact:separation<=radius};
+    return separation<=radius;
   }
 
   movementPlan(player,result){
@@ -119,19 +170,32 @@ export class WolfV02Encounter extends WolfEncounter{
     if(this.lastSerial!==brain.serial||this.wolfClip!==clip.name){
       this.wolfClip=clip.name;
       this.motionYaw=this.knockTurn?this.knockTurn.start+this.knockTurn.delta:this.actor.rotation.y;
-      // Quick bites begin inside the Pin clip. The skipped authored approach
-      // is an origin, never a first-frame world displacement.
+      // Every action has its own local root origin. A nonzero source start is
+      // an origin, never a first-frame world displacement.
       const start=action?.clipStart??0;
       this.previousWolfTime=start;
       this.lastRoot=sampleRoot(clip,start);
       this.v02RootYaw=sampleYaw(clip,start);
+      this.v02CommitRoot=action?sampleRoot(clip,action.commitTime):null;
+    }
+    if((brain.mode==='retreat'||brain.state===WOLF_V02_BRACE)&&!this.knockTurn&&this.player){
+      const target=Math.atan2(this.player.position.x-this.actor.position.x,this.player.position.z-this.actor.position.z),limit=1.6*Math.max(0,this.dt??0);
+      this.motionYaw+=Math.max(-limit,Math.min(limit,angleDelta(target,this.motionYaw)));
     }
     if(action&&!this.knockTurn&&!brain.stagger){
       const commit=action.commitTime??(action.clipStart>0?1.45:FALLBACK_COMMIT[clip.name]??0);
       if(time<commit&&this.player){
         const dx=this.player.position.x-this.actor.position.x,dz=this.player.position.z-this.actor.position.z;
         if(dx*dx+dz*dz>1e-8){
-          const turn=angleDelta(Math.atan2(dx,dz),this.motionYaw),limit=1.6*Math.max(0,this.dt??0);
+          let target=Math.atan2(dx,dz);
+          // The authored dodge returns from its lateral offset before launch.
+          // Aim for that remaining path instead of chasing each intermediate
+          // side step, which otherwise leaves a frame-rate-dependent yaw snap.
+          if(action.id==='lunge'&&this.v02CommitRoot&&this.lastRoot){
+            const sideways=(this.v02CommitRoot[0]-this.lastRoot[0])*this.config.scale;
+            target-=Math.asin(Math.max(-.95,Math.min(.95,sideways/Math.hypot(dx,dz))));
+          }
+          const turn=angleDelta(target,this.motionYaw),limit=1.6*Math.max(0,this.dt??0);
           this.motionYaw+=Math.max(-limit,Math.min(limit,turn));
         }
       }
@@ -143,7 +207,16 @@ export class WolfV02Encounter extends WolfEncounter{
     if((time>=this.previousWolfTime||stalking)&&this.lastRoot&&!brain.stagger&&brain.mode!=='move'&&(!watching||stalking)){
       // The large 2.5x body amplified both authored fall travel and impulse.
       // Keep the pose curve intact and shorten only the world displacement.
-      const fallScale=['down','recover'].includes(brain.mode)?WOLF_V02_KNOCKBACK_SCALE:1;
+      const fallScale=brain.state===WOLF_V02_DEATH?1:['down','recover'].includes(brain.mode)?WOLF_V02_KNOCKBACK_SCALE:1;
+      if(action&&!this.knockTurn&&this.previousWolfTime<action.commitTime&&time>=action.commitTime){
+        // Fast source playback can cross the final dodge and take-off in one
+        // simulation tick. Finish that authored dodge before snapshotting the
+        // leap heading, rather than aiming from the previous tick's position.
+        const commitRoot=this.v02CommitRoot??sampleRoot(clip,action.commitTime),x=(commitRoot[0]-this.lastRoot[0])*this.config.scale,z=(commitRoot[2]-this.lastRoot[2])*this.config.scale,yaw=this.motionYaw;
+        this.actor.position.x+=x*Math.cos(yaw)+z*Math.sin(yaw);this.actor.position.z+=z*Math.cos(yaw)-x*Math.sin(yaw);
+        const target=Math.atan2(this.player.position.x-this.actor.position.x,this.player.position.z-this.actor.position.z);
+        this.motionYaw+=Math.max(-.40,Math.min(.40,angleDelta(target,this.motionYaw)));this.lastRoot=commitRoot;
+      }
       const x=(root[0]-this.lastRoot[0])*this.config.scale*fallScale,z=(root[2]-this.lastRoot[2])*this.config.scale*fallScale;
       const yaw=this.motionYaw;
       const dx=x*Math.cos(yaw)+z*Math.sin(yaw),dz=z*Math.cos(yaw)-x*Math.sin(yaw);
@@ -262,7 +335,10 @@ export class WolfV02Encounter extends WolfEncounter{
     this.v02EvaluatingContacts=true;
     let hitStop;
     try{hitStop=super.poseAndContacts(player,result,sample,shield);}finally{this.v02EvaluatingContacts=false;}
-    if(this.heavyCount>heavyBefore)this.knockVelocity.scaleInPlace(WOLF_V02_KNOCKBACK_SCALE);
+    if(this.heavyCount>heavyBefore){
+      if(this.brain.hp>0||this.brain.state===WOLF_V02_DEATH){this.knockVelocity.setAll(0);this.knockTurn=null;}
+      else this.knockVelocity.scaleInPlace(WOLF_V02_KNOCKBACK_SCALE);
+    }
     if(hasImpact){
       const outcome=this.v02ImpactOutcome??{serial,hit:false,blocked:false,captured:false};
       this.v02LastOutcome={...outcome,action};
@@ -282,12 +358,15 @@ export class WolfV02Encounter extends WolfEncounter{
     this.v02ImpactOutcome=null;
     this.v02LastContact=null;
     this.v02LastOutcome=null;
+    this.v02PinBiteContact=null;
     this.v02ContactSerial=null;this.v02ResolvedSerial=null;this.v02StalkRadius=null;this.v02OrbitDistance=0;
+    this.v02SightRemaining=0;this.v02SightNavigation=null;
   }
 
   inspect(){
     return {...super.inspect(),combatVersion:this.combatVersion,action:this.brain?.action?.id??null,
-      phase:this.brain?.phase??null,behavior:this.brain?.behavior??null,contact:this.v02LastContact,outcome:this.v02LastOutcome,
+      phase:this.brain?.phase??null,behavior:this.brain?.behavior??null,contact:this.v02LastContact,bite:this.v02PinBiteContact,outcome:this.v02LastOutcome,
+      observation:{target:this.brain?.circleTarget??0,elapsed:this.brain?.circleElapsed??0,remaining:this.brain?.flankRemaining??0},retreat:{reason:this.brain?.retreatReason??null,cooldown:this.brain?.retreatCooldown??0},
       locomotion:{orbitSourceDistance:this.v02OrbitDistance??0,plantReachError:this.v02Pose?.maxReachError??0,releasedPlants:this.v02Pose?.releasedPlants??0}};
   }
 }

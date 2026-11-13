@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {wolfHuntFixture,beginWolfHunt,stepWolfHunt,huntResourceCounts} from './helpers/wolf-hunt-fixture.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
-import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const evidence=[];
@@ -48,8 +48,11 @@ test('all eighteen motion roles remain available independently through discovery
  for(const [clip,mode] of [[WOLF_CLIPS.walk,'move'],[WOLF_CLIPS.run,'move']]){e.brain.start(clip,mode);e.animator.transition(clip,{clipTime:.2,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(e.brain.state);}
  for(const id of ['quick-bite','paw-swipe','lunge','pin']){e.brain.startAction(id);const action=WOLF_V02_BY_ID[id];e.animator.transition(action.sourceClip,{clipTime:action.impact,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(e.brain.state);}
  e.brain.hit({damage:1,interruptsBoss:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_CLIPS.hit);
- e.brain.hit({damage:1,stun:.1});tickUntil(()=>e.brain.state===WOLF_CLIPS.brace);visited.add(e.brain.state);
- e.brain.hit({damage:1,heavy:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_CLIPS.down);tickUntil(()=>e.brain.state===WOLF_CLIPS.recover);visited.add(e.brain.state);tickUntil(()=>e.brain.state===WOLF_CLIPS.watch);
+ e.brain.hit({damage:1,stun:.1});assert.equal(e.brain.state,WOLF_CLIPS.hit);assert.equal(e.brain.stagger,0);visited.add(e.brain.state);
+ e.brain.hit({damage:1,heavy:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_V02_BRACE);tickUntil(()=>e.brain.behavior==='flank');
+ // Legacy fall/get-up remain reviewable source roles, while live nonlethal
+ // R11 reactions deliberately keep the wolf on its feet.
+ for(const clip of [WOLF_CLIPS.brace,WOLF_CLIPS.down,WOLF_CLIPS.recover]){e.brain.start(clip,'idle');e.animator.transition(clip,{clipTime:.2,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(clip);}
  const manuallySampled=[];for(const clip of WOLF_V02_AUTHORED_CLIPS){e.brain.start(clip.name,'idle');e.animator.transition(clip.name,{clipTime:clip.duration*.37,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(clip.name);manuallySampled.push(clip.name);}
  const expected=[...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)];assert.deepEqual([...visited].sort(),expected.sort());assert.equal(e.animator.clips.size,18);assert.equal(f.container.animationGroups.length,12);assert.equal(f.scene._activeAnimatables.length,0);
  const resources=huntResourceCounts(f.scene);for(let i=0;i<3;i++){f.battle.hide();await f.battle.summon(f.player,1,'wolf');assert.deepEqual(huntResourceCounts(f.scene),resources);}
@@ -117,8 +120,8 @@ test('watching and recovery hold their ground, and a blocked authored stalk stop
  const origin=e.actor.position.clone();for(let i=0;i<100;i++)stepWolfHunt(f,e,1/60);assert.ok(e.actor.position.equalsWithEpsilon(origin,1e-7),'idle watch root cannot drift during observation');
  e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='recovery';e.brain.recoveryRemaining=e.brain.recoveryFull=3;e.brain.recoveryElapsed=0;e.brain.followupId=null;
  for(let i=0;i<100;i++)stepWolfHunt(f,e,1/60);assert.equal(e.brain.behavior,'recovery');assert.ok(e.actor.position.equalsWithEpsilon(origin,1e-7),'watch root cannot drift during punishable recovery');
- e.brain.beginStalk();f.world.navigation={segmentClear:()=>false,constrain(){},steer:(from,to)=>to};
- try{for(let i=0;i<30&&e.brain.behavior==='flank';i++)stepWolfHunt(f,e,1/60);assert.ok(e.actor.position.equalsWithEpsilon(origin,1e-7),'blocked stalk cannot move through an obstruction');assert.notEqual(e.brain.behavior,'flank','blocked stalk exits rather than looping forever');}
+ e.brain.beginStalk();f.world.navigation={segmentClear:()=>false,constrain(){},steer:(from,to)=>from};
+ try{for(let i=0;i<200&&e.brain.behavior==='flank';i++)stepWolfHunt(f,e,1/60);assert.ok(e.actor.position.equalsWithEpsilon(origin,1e-7),'blocked stalk cannot move through an obstruction');assert.notEqual(e.brain.behavior,'flank','blocked stalk retains its2–3s observation but remains bounded');}
  finally{f.world.navigation=null;}
  evidence.push({case:'stationary-watch-and-blocked-stalk',idleFrames:100,recoveryFrames:100,rootDrift:0,blockedStalkMoved:false});
 });

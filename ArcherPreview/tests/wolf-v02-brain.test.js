@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE,WOLF_SCALE} from '../src/wolf-spec.js';
-import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,sampleWhipTime,actionDuration} from '../src/wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,sampleWhipTime,actionDuration} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const config=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
@@ -34,7 +34,7 @@ test('0.1 keeps its R8 source, texture, size, two authored attacks and legacy im
  const b=new WolfBrain(durations);assert.equal(b.plannedAttack(WOLF_BALANCE.pinDistance),WOLF_CLIPS.pin);assert.equal(b.plannedAttack(WOLF_BALANCE.lungeDistance),WOLF_CLIPS.lunge);
 });
 
-test('0.2 uses separately authored driving bites while preserving the full R8 lunge and pin',()=>{
+test('0.2 uses separately authored torso-led predator bites while preserving the full R8 lunge and pin',()=>{
  assert.deepEqual(WOLF_V02_ACTIONS.map(a=>a.id),['quick-bite','chain-bite','paw-swipe','lunge','pin']);
  for(const action of WOLF_V02_ACTIONS){
   assert.strictEqual(WOLF_V02_BY_ID[action.id],action);assert.ok([...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)].includes(action.sourceClip));
@@ -42,9 +42,9 @@ test('0.2 uses separately authored driving bites while preserving the full R8 lu
   assert.ok(action.clipEnd<=durations[action.sourceClip]+1e-5);
   assert.ok(action.range>0&&action.damage>0);assert.ok(action.label);
  }
- assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Driving_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
- assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Driving_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
- assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Driving_Cross_Bite_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['jaw','head']);
+ assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
+ assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Predator_Reverse_Bite_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['jaw','head']);
  assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_CLIPS.lunge);
  assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,durations[WOLF_CLIPS.lunge]);
 });
@@ -77,7 +77,7 @@ test('long frames cross the authored impact once and cannot emit damage during r
   for(let i=0;i<10&&b.mode==='attack';i++){const r=b.update(100,10);assert.equal(r.events.length,0);recoverySeen||=b.behavior==='recovery';}
   assert.notEqual(b.mode,'attack');assert.ok(recoverySeen||b.behavior==='recovery','action must expose a punishable recovery');
   const interrupted=start(new WolfV02Brain(durations),action.id);assert.equal(interrupted.hit({damage:1,heavy:true}),true);
-  for(let i=0;i<20;i++)assert.equal(interrupted.update(.1,10).events.length,0);assert.ok(['down','recover'].includes(interrupted.mode));
+  for(let i=0;i<20;i++)assert.equal(interrupted.update(.1,10).events.length,0);assert.ok(interrupted.visited.has(WOLF_V02_BRACE));assert.ok(!interrupted.visited.has(WOLF_CLIPS.down)&&!interrupted.visited.has(WOLF_CLIPS.recover),'nonlethal interruption remains standing');
  }
 });
 
@@ -86,22 +86,23 @@ test('whipping remaps only source time with slow anticipation, rapid contact and
   assert.equal(sampleWhipTime(action,0),action.clipStart);assert.equal(sampleWhipTime(action,actionDuration(action)),action.clipEnd);
   const source=action.whip.source,seconds=action.whip.seconds;assert.equal(source.length,seconds.length);assert.ok(source.length>=4);
   const rates=source.slice(1).map((value,i)=>(value-source[i])/(seconds[i+1]-seconds[i]));
-  assert.ok(rates.every(r=>r>0));assert.ok(Math.max(...rates)>rates[0]*1.3,'contact must accelerate beyond anticipation');
-  assert.ok(Math.max(...rates)>rates.at(-1)*1.3,'followthrough must slow after contact');
+  const long=['lunge','pin'].includes(action.id);assert.ok(rates.every(r=>r>0));assert.ok(Math.max(...rates)>rates[0]*(long?1.15:1.3),'the attack has a faster physical contact phase');
+  assert.ok(Math.max(...rates)>rates.at(-1)*(long?1.1:1.3),'followthrough slows after the fast contact phase');
+  if(long)assert.ok(actionDuration(action)<1.6,'R11 speeds the full preserved dodge/takedown, including anticipation');
   let last=action.clipStart;for(let i=0;i<=100;i++){const time=sampleWhipTime(action,actionDuration(action)*i/100);assert.ok(time>=last-1e-9&&time<=action.clipEnd+1e-9);last=time;}
  }
 });
 
 test('phase pressure, flanks and outcome tracking stay deterministic and do not mutate legacy balance',()=>{
- const a=new WolfV02Brain(durations),b=new WolfV02Brain(durations);
+ const a=new WolfV02Brain(durations,WOLF_BALANCE,()=>.5),b=new WolfV02Brain(durations,WOLF_BALANCE,()=>.5);
  assert.deepEqual(a.balance,b.balance);assert.equal(WOLF_BALANCE.hp,900);
  const trace=brain=>{const attacks=[],flanks=[];let distance=10;brain.start(WOLF_CLIPS.watch,'idle');brain.wait=0;for(let i=0;i<3000;i++){const r=brain.update(.05,distance);if(r.flank&&flanks.at(-1)!==r.flank.side)flanks.push(r.flank.side);if(r.speed&&!r.flank){const desired=r.retreatDistance??r.stopDistance??distance,step=r.speed*.05;distance+=r.retreat?Math.min(step,Math.max(0,desired-distance)):-Math.min(step,Math.max(0,distance-desired));}for(const e of r.events){attacks.push(e.actionId);brain.noteAttackResult({serial:brain.serial,hit:true});}}return {attacks,flanks};};
  const traced=trace(a);assert.deepEqual(traced,trace(b));assert.ok(traced.attacks.length>=6);assert.ok(traced.flanks.length>=4);for(let i=1;i<traced.flanks.length;i++)assert.equal(traced.flanks[i],-traced.flanks[i-1]);
  for(let i=2;i<traced.attacks.length;i++)assert.ok(traced.attacks[i]!==traced.attacks[i-1]||traced.attacks[i]!==traced.attacks[i-2],'default deck cannot repeat one action three times');
- const pressures=[900,450].map(hp=>{const brain=new WolfV02Brain(durations);brain.hp=hp;brain.start(WOLF_CLIPS.watch,'idle');brain.behavior='observe';brain.observation=0;brain.update(.01,3);return {phase:brain.phase,flank:brain.flankRemaining};});
- assert.deepEqual(pressures.map(p=>p.phase),[1,2]);assert.ok(pressures[1].flank<pressures[0].flank);
+ const pressures=[900,450].map(hp=>{const brain=new WolfV02Brain(durations,WOLF_BALANCE,()=>.5);brain.hp=hp;brain.start(WOLF_CLIPS.watch,'idle');brain.behavior='observe';brain.observation=0;brain.update(.01,3);return {phase:brain.phase,flank:brain.flankRemaining,rate:brain.flankPlaybackRate};});
+ assert.deepEqual(pressures.map(p=>p.phase),[1,2]);assert.deepEqual(pressures.map(p=>p.flank),[2.5,2.5]);assert.ok(pressures[1].rate>pressures[0].rate);
  const outcome=start(new WolfV02Brain(durations),'chain-bite');assert.equal(outcome.noteAttackResult({serial:outcome.serial-1,hit:true}),false);assert.equal(outcome.noteAttackResult({serial:outcome.serial,blocked:true}),true);assert.equal(outcome.lastOutcome,'blocked');assert.equal(outcome.chainRemaining,0);assert.equal(outcome.noteAttackResult({serial:outcome.serial,hit:true}),false);assert.equal(outcome.lastOutcome,'blocked');
  rows.push({case:'deterministic-default-deck',attacks:traced.attacks,flanks:traced.flanks,pressures});
  const down=start(new WolfV02Brain(durations),'pin');down.hit({damage:900,heavy:true,ignoreDefense:true});
- for(let i=0;i<1000;i++)assert.equal(down.update(.1,10).events.length,0);assert.equal(down.hp,0);assert.equal(down.state,WOLF_CLIPS.down);assert.equal(down.time,durations[WOLF_CLIPS.down]);
+ for(let i=0;i<1000;i++)assert.equal(down.update(.1,10).events.length,0);assert.equal(down.hp,0);assert.equal(down.state,WOLF_V02_DEATH);assert.equal(down.time,durations[WOLF_V02_DEATH]);
 });

@@ -1,12 +1,18 @@
 import {Animation,AnimationGroup,Quaternion,Vector3} from '@babylonjs/core';
 import data from './wolf-v02-attack-clips.json' with {type:'json'};
 import feral from './wolf-v02-feral-clips.json' with {type:'json'};
+import predator from './wolf-v02-predator-clips.json' with {type:'json'};
 
 export const WOLF_V02_R9_CLIPS=data.clips;
 export const WOLF_V02_FERAL_CLIPS=feral.clips;
-export const WOLF_V02_AUTHORED_CLIPS=[...data.clips,...feral.clips];
-export const WOLF_V02_AUTHORED_SOURCE=data.sourceSha256;
-if(feral.sourceSha256!==data.sourceSha256)throw Error('R10 motions require the same approved R8 rig');
+export const WOLF_V02_PREDATOR_CLIPS=predator.clips;
+export const WOLF_V02_ALL_AUTHORED_CLIPS=[...data.clips,...feral.clips,...predator.clips];
+// Historical R9/R10 attacks stay in their source data and review exports. Live
+// actors only prepare the current bites, support reactions and lateral gaits.
+export const WOLF_V02_ACTIVE_CLIPS=[...feral.clips.filter(c=>c.name==='Wolf_Orbit_Step_V02'||c.name==='Wolf_Orbit_Step_Left_V02'),...predator.clips];
+export const WOLF_V02_AUTHORED_CLIPS=WOLF_V02_ACTIVE_CLIPS;
+export const WOLF_V02_AUTHORED_SOURCE=feral.sourceSha256;
+if(predator.sourceSha256!==feral.sourceSha256)throw Error('R11 motions require the same approved R8 rig');
 const properties={translation:'position',rotation:'rotationQuaternion',scale:'scaling'};
 const installed=new WeakMap();
 // One immutable key-value table for the module. Actors own their animation
@@ -25,7 +31,7 @@ const templates=WOLF_V02_AUTHORED_CLIPS.map(clip=>({clip,channels:clip.channels.
 
 export function installWolfV02AttackClips(asset,config){
  if(installed.has(asset))return installed.get(asset);
- if(config.sourceSha256!==data.sourceSha256)throw Error('Authored wolf attacks require the approved R8 model');
+ if(config.sourceSha256!==WOLF_V02_AUTHORED_SOURCE)throw Error('Authored wolf attacks require the approved R8 model');
  const nodes=new Map([...asset.transformNodes,...asset.meshes].map(node=>[node.name,node]));
  // Validate the whole mapping before adding any groups to a live container.
  for(const {clip,channels}of templates){
