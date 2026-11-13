@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {WolfBrain,WOLF_CLIPS,WOLF_BALANCE,WOLF_SCALE} from '../src/wolf-spec.js';
-import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_RAM,sampleWhipTime,whipElapsedAt,actionDuration} from '../src/wolf-v02-spec.js';
+import {WolfV02Brain,WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_CLOSE_RAM,sampleWhipTime,whipElapsedAt,actionDuration} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const config=JSON.parse(fs.readFileSync(new URL('../public/assets/alpha-wolf.json',import.meta.url)));
@@ -34,7 +34,7 @@ test('0.1 keeps its R8 source, texture, size, two authored attacks and legacy im
  const b=new WolfBrain(durations);assert.equal(b.plannedAttack(WOLF_BALANCE.pinDistance),WOLF_CLIPS.pin);assert.equal(b.plannedAttack(WOLF_BALANCE.lungeDistance),WOLF_CLIPS.lunge);
 });
 
-test('0.2 retains predator bites and R8 pin while its separate R12 ram carries a bounded two-bite damage budget',()=>{
+test('0.2 retains predator bites and R8 pin while its separate R13 compact ram carries a bounded two-bite damage budget',()=>{
  assert.deepEqual(WOLF_V02_ACTIONS.map(a=>a.id),['quick-bite','chain-bite','paw-swipe','lunge','pin']);
  for(const action of WOLF_V02_ACTIONS){
   assert.strictEqual(WOLF_V02_BY_ID[action.id],action);assert.ok([...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)].includes(action.sourceClip));
@@ -45,8 +45,8 @@ test('0.2 retains predator bites and R8 pin while its separate R12 ram carries a
  assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['quick-bite'].capture,false);
  assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].capture,false);
  assert.equal(WOLF_V02_BY_ID['paw-swipe'].sourceClip,'Wolf_Predator_Reverse_Bite_V02');assert.deepEqual(WOLF_V02_BY_ID['paw-swipe'].contactParts,['jaw','head']);
- assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_V02_RAM);
- assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,5.2);assert.equal(durations[WOLF_CLIPS.lunge],3.1);
+ assert.equal(WOLF_V02_BY_ID.pin.capture,true);assert.equal(WOLF_V02_BY_ID.lunge.sourceClip,WOLF_V02_CLOSE_RAM);
+ assert.equal(WOLF_V02_BY_ID.lunge.clipStart,0);assert.equal(WOLF_V02_BY_ID.lunge.clipEnd,200/60);assert.equal(durations[WOLF_CLIPS.lunge],3.1);
  assert.deepEqual(WOLF_V02_BY_ID.lunge.ramPhases.map(phase=>[phase.id,phase.damage,phase.contactParts]),[['ram',40,['head']],['maul-1',30,['jaw']],['maul-2',30,['jaw']]]);
 });
 
@@ -79,7 +79,7 @@ test('long frames cross the authored impact once and cannot emit damage during r
   for(let i=0;i<10&&b.mode==='attack';i++){const r=b.update(100,10);assert.equal(r.events.length,0);recoverySeen||=b.behavior==='recovery';}
   assert.notEqual(b.mode,'attack');assert.ok(recoverySeen||b.behavior==='recovery','action must expose a punishable recovery');
   const interrupted=start(new WolfV02Brain(durations),action.id);assert.equal(interrupted.hit({damage:1,heavy:true}),true);
-  for(let i=0;i<20;i++)assert.equal(interrupted.update(.1,10).events.length,0);assert.ok(interrupted.visited.has(WOLF_V02_BRACE));assert.ok(!interrupted.visited.has(WOLF_CLIPS.down)&&!interrupted.visited.has(WOLF_CLIPS.recover),'nonlethal interruption remains standing');
+  for(let i=0;i<20;i++)assert.equal(interrupted.update(.1,10).events.length,0);assert.ok(interrupted.visited.has(WOLF_V02_DEATH));assert.ok(!interrupted.visited.has(WOLF_CLIPS.down)&&!interrupted.visited.has(WOLF_CLIPS.recover),'nonlethal interruption uses the approved improved collapse');
  }
 });
 

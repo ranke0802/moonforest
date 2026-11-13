@@ -1,0 +1,61 @@
+{
+  "scope": "Losslessly compressed numerical/contact evidence. These are CPU/offline proofs, not device/GPU performance results.",
+  "files": [
+    {
+      "file": "ram-proof.json",
+      "bytes": 52059754,
+      "sha256": "f3c8188e30a5c559c79af56d35d32ad6753fd777f5773d3bcc5922a623f2879e",
+      "archive": "ram-proof.json.gz",
+      "gzipBytes": 2948279,
+      "gzipSha256": "7bbf6386bd17989555a2bced1c815e533695db7fcd828a262b4c6f3f70504dc9"
+    },
+    {
+      "file": "incoming-proof.json",
+      "bytes": 3846590,
+      "sha256": "6e887592124614fefe6a8f4c6050d6ad4b64cb5a6fda8f5bb6b3e4c35bf419ea",
+      "archive": "incoming-proof.json.gz",
+      "gzipBytes": 250100,
+      "gzipSha256": "f1c779f7e30579cc65890c03dde9e23ffddd87c57a53b73dfbe7d7fb51c40819"
+    },
+    {
+      "file": "tactics-proof.json",
+      "bytes": 106689,
+      "sha256": "b92d4cd9d4e9dc58348b372dbffa12705ec179f731f78e75e28ebac782e535aa",
+      "archive": "tactics-proof.json.gz",
+      "gzipBytes": 7689,
+      "gzipSha256": "30b523dc6a544d447093e8fce87c17dc8b9e6bb2ed3e7dab4180a401d7c99a7f"
+    },
+    {
+      "file": "legacy-ram-independent-gameplay.json",
+      "bytes": 60822964,
+      "sha256": "fae58e323eadaeb23ffa7fbfd4ed4f36186fe42bfc246f2313f0b43a14fa5003",
+      "archive": "legacy-ram-independent-gameplay.json.gz",
+      "gzipBytes": 4383678,
+      "gzipSha256": "95c2289b0ae995be526e6b87e72c4db93c8104d284ba58218201682cb1f64c20"
+    },
+    {
+      "file": "baseline-autonomy.json",
+      "bytes": 274136,
+      "sha256": "03f4149eddc67950caffbb8a7ac0c507c5544660b162c8fa0f3551725e485ed5",
+      "archive": "baseline-autonomy.json.gz",
+      "gzipBytes": 14609,
+      "gzipSha256": "1b88d521cd0eeebc57762b1090556d60b600affcccafbcaa0bc2880c47262995"
+    },
+    {
+      "file": "baseline-incoming-low-head-relative.json",
+      "bytes": 370167,
+      "sha256": "f76b192063def5f862eaf974da08799578cf3d246e74c41fffdb8f2e42b48ee7",
+      "archive": "baseline-incoming-low-head-relative.json.gz",
+      "gzipBytes": 17926,
+      "gzipSha256": "c980849f219e3fbb4f8ef852d937fa66b3da9766d05a9bdcab0379dc7d0e7a2c"
+    },
+    {
+      "file": "baseline-incoming-compact-relative.json",
+      "bytes": 405713,
+      "sha256": "eb12a83d46ac993ea83e4b1a83dd13ae728966893f97ee27a6419a533ca93de2",
+      "archive": "baseline-incoming-compact-relative.json.gz",
+      "gzipBytes": 17725,
+      "gzipSha256": "552ac890746efd85378233cc72bbeca4dc63ac56d78e35ac52185f629b4ce023"
+    }
+  ]
+}

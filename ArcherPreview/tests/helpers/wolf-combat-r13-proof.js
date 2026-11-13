@@ -1,0 +1,7 @@
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+export const r13ProofInputs=[
+ 'src/wolf-v02-spec.js','src/wolf-v02-encounter.js','src/wolf-v02-ram.js','src/wolf-v02-locomotion.js','src/wolf-v02-hurt.js','src/wolf-v02-shield.js','src/wolf-v02-support.js','src/wolf-v02-telegraph.js','src/wolf-v02-contact-shapes.js','src/wolf-v02-authored-clips.js','src/wolf-v02-authored-history.js','src/wolf-v02-combat-r13-clips.json','src/wolf-v02-predator-clips.json','src/wolf-v02-feral-clips.json','src/wolf-v02-ram-clips.json','src/wolf-spec.js','src/wolf-animation.js','src/wolf-encounter.js','src/warrior-v2.js','src/player-strikes.js','src/player-strike-timings.js','src/player-dimensions.js','src/boss-battle.js','src/boss-encounter.js','src/animation.js','src/melee-collision.js','src/tree-view-surface.js','src/pose-matrices.js',
+ 'tests/helpers/wolf-ram-fixture.js','tests/helpers/wolf-hunt-fixture.js','tests/helpers/wolf-combat-r13-fixture.js','tests/helpers/wolf-combat-r13-run.js','tests/helpers/wolf-combat-r13-surface.js','tests/helpers/wolf-combat-r13-proof.js','tests/wolf-v02-combat-r13-ram.test.js','tests/wolf-v02-combat-r13-incoming.test.js','tests/wolf-v02-combat-r13-tactics.test.js','reports/wolf-v02-ram-r12/skin-contact.mjs',
+];
+export const r13ProofHashes=()=>Object.fromEntries(r13ProofInputs.map(path=>[path,createHash('sha256').update(fs.readFileSync(path)).digest('hex')]));

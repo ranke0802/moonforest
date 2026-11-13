@@ -1,0 +1,770 @@
+[
+  {
+    "pose": "quick-bite",
+    "x": 2,
+    "z": 0,
+    "damage": 13,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.0016053643480494664,
+      "oldLine": [
+        {
+          "minimumDistance": 0,
+          "minimumProvedDistance": 0,
+          "initialContainment": [
+            "surface",
+            "surface"
+          ],
+          "insideWitness": false,
+          "outsideProved": false,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 389,
+          "temporalSamples": 778,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": 0.10801847312699796,
+          "inside": false,
+          "lower": 0.10801847312699663
+        },
+        {
+          "distance": 0.044987205689129915,
+          "inside": false,
+          "lower": 0.04498720568912858
+        },
+        {
+          "distance": 0.0032682385583435608,
+          "inside": false,
+          "lower": 0.0032682385583422263
+        },
+        {
+          "distance": 0,
+          "inside": false,
+          "lower": 0
+        },
+        {
+          "distance": 0,
+          "inside": false,
+          "lower": 0
+        },
+        {
+          "distance": 0,
+          "inside": false,
+          "lower": 0
+        },
+        {
+          "distance": 0,
+          "inside": false,
+          "lower": 0
+        },
+        {
+          "distance": 0,
+          "inside": false,
+          "lower": 0
+        },
+        {
+          "distance": 0,
+          "inside": false,
+          "lower": 0
+        },
+        {
+          "distance": 0.010884374333460985,
+          "inside": false,
+          "lower": 0.010884374333459703
+        },
+        {
+          "distance": 0.06205148831573691,
+          "inside": false,
+          "lower": 0.06205148831573563
+        },
+        {
+          "distance": 0.14422323987701022,
+          "inside": false,
+          "lower": 0.14422323987700894
+        },
+        {
+          "distance": 0.23312100205534203,
+          "inside": false,
+          "lower": 0.23312100205534075
+        }
+      ]
+    }
+  },
+  {
+    "pose": "quick-bite",
+    "x": 2.3,
+    "z": 0,
+    "damage": 13,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.016945036417828976,
+      "oldLine": [
+        {
+          "minimumDistance": 0,
+          "minimumProvedDistance": 0,
+          "initialContainment": [
+            "surface",
+            "surface"
+          ],
+          "insideWitness": false,
+          "outsideProved": false,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 319,
+          "temporalSamples": 638,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": 0.15948007699941796,
+          "inside": false,
+          "lower": 0.15948007699941663
+        },
+        {
+          "distance": 0.10339065964570704,
+          "inside": false,
+          "lower": 0.10339065964570571
+        },
+        {
+          "distance": 0.07091743604047268,
+          "inside": false,
+          "lower": 0.07091743604047135
+        },
+        {
+          "distance": 0.057523571624952016,
+          "inside": false,
+          "lower": 0.057523571624950684
+        },
+        {
+          "distance": 0.05447495346462853,
+          "inside": false,
+          "lower": 0.0544749534646272
+        },
+        {
+          "distance": 0.030982431108472385,
+          "inside": false,
+          "lower": 0.03098243110847105
+        },
+        {
+          "distance": 0.005809239877711133,
+          "inside": false,
+          "lower": 0.005809239877709852
+        },
+        {
+          "distance": 0.02107784597882387,
+          "inside": false,
+          "lower": 0.02107784597882259
+        },
+        {
+          "distance": 0.03964507954590732,
+          "inside": false,
+          "lower": 0.039645079545906035
+        },
+        {
+          "distance": 0.06948983960115387,
+          "inside": false,
+          "lower": 0.0694898396011526
+        },
+        {
+          "distance": 0.119816250565505,
+          "inside": false,
+          "lower": 0.11981625056550373
+        },
+        {
+          "distance": 0.18804763975347336,
+          "inside": false,
+          "lower": 0.18804763975347208
+        },
+        {
+          "distance": 0.27444972245165283,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  },
+  {
+    "pose": "quick-bite",
+    "x": 0,
+    "z": 2.3,
+    "damage": 0,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.5424414633846791,
+      "oldLine": [
+        {
+          "minimumDistance": null,
+          "minimumProvedDistance": 0.25,
+          "initialContainment": [
+            "outside",
+            "outside"
+          ],
+          "insideWitness": false,
+          "outsideProved": true,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 0,
+          "temporalSamples": 0,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  },
+  {
+    "pose": "quick-bite",
+    "x": 0,
+    "z": -2.3,
+    "damage": 0,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.40720186456840585,
+      "oldLine": [
+        {
+          "minimumDistance": null,
+          "minimumProvedDistance": 0.25,
+          "initialContainment": [
+            "outside",
+            "outside"
+          ],
+          "insideWitness": false,
+          "outsideProved": true,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 0,
+          "temporalSamples": 0,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.5137607865121694,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.48096154569956473,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.43774597520945197,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.46298386912918965,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  },
+  {
+    "pose": "lunge",
+    "x": 2,
+    "z": 0,
+    "damage": 13,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.1521169371278202,
+      "oldLine": [
+        {
+          "minimumDistance": 0.10565999255556532,
+          "minimumProvedDistance": 0.10565999255556405,
+          "initialContainment": [
+            "outside",
+            "outside"
+          ],
+          "insideWitness": false,
+          "outsideProved": true,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 127,
+          "temporalSamples": 254,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": 0.3379640254552238,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.27530929100121454,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.22429259417168856,
+          "inside": false,
+          "lower": 0.22429259417168723
+        },
+        {
+          "distance": 0.18267802452632328,
+          "inside": false,
+          "lower": 0.18267802452632195
+        },
+        {
+          "distance": 0.15947623250614523,
+          "inside": false,
+          "lower": 0.1594762325061439
+        },
+        {
+          "distance": 0.14990610209195393,
+          "inside": false,
+          "lower": 0.1499061020919526
+        },
+        {
+          "distance": 0.13005902303413455,
+          "inside": false,
+          "lower": 0.13005902303413328
+        },
+        {
+          "distance": 0.12403219644530378,
+          "inside": false,
+          "lower": 0.1240321964453025
+        },
+        {
+          "distance": 0.13467210118120254,
+          "inside": false,
+          "lower": 0.13467210118120126
+        },
+        {
+          "distance": 0.1477829200500535,
+          "inside": false,
+          "lower": 0.14778292005005222
+        },
+        {
+          "distance": 0.18170042265680897,
+          "inside": false,
+          "lower": 0.1817004226568077
+        },
+        {
+          "distance": 0.25033205480775034,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.32823078269098216,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  },
+  {
+    "pose": "lunge",
+    "x": 2.3,
+    "z": 0,
+    "damage": 13,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.20368102692116294,
+      "oldLine": [
+        {
+          "minimumDistance": 0.16267653543085567,
+          "minimumProvedDistance": 0.1626765354308544,
+          "initialContainment": [
+            "outside",
+            "outside"
+          ],
+          "insideWitness": false,
+          "outsideProved": true,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 137,
+          "temporalSamples": 274,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": 0.3916130459663515,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.32880885376234026,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.281028920369723,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.24616189386556261,
+          "inside": false,
+          "lower": 0.24616189386556128
+        },
+        {
+          "distance": 0.22303743638196266,
+          "inside": false,
+          "lower": 0.22303743638196133
+        },
+        {
+          "distance": 0.19860545480422612,
+          "inside": false,
+          "lower": 0.19860545480422478
+        },
+        {
+          "distance": 0.18674780671794067,
+          "inside": false,
+          "lower": 0.1867478067179394
+        },
+        {
+          "distance": 0.1858151999021721,
+          "inside": false,
+          "lower": 0.18581519990217082
+        },
+        {
+          "distance": 0.19845205984313063,
+          "inside": false,
+          "lower": 0.19845205984312936
+        },
+        {
+          "distance": 0.20825133781083718,
+          "inside": false,
+          "lower": 0.2082513378108359
+        },
+        {
+          "distance": 0.24231388818072208,
+          "inside": false,
+          "lower": 0.2423138881807208
+        },
+        {
+          "distance": 0.30989593236845725,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.4108124456044984,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  },
+  {
+    "pose": "lunge",
+    "x": 0,
+    "z": 2.3,
+    "damage": 0,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.48930923715937596,
+      "oldLine": [
+        {
+          "minimumDistance": null,
+          "minimumProvedDistance": 0.25,
+          "initialContainment": [
+            "outside",
+            "outside"
+          ],
+          "insideWitness": false,
+          "outsideProved": true,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 0,
+          "temporalSamples": 0,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  },
+  {
+    "pose": "lunge",
+    "x": 0,
+    "z": -2.3,
+    "damage": 13,
+    "first": {
+      "time": 1.4999999999999996,
+      "source": 1.100000000000001,
+      "vertexUpperBound": 0.1812922962788353,
+      "oldLine": [
+        {
+          "minimumDistance": 0.27786936167927195,
+          "minimumProvedDistance": 0.25,
+          "initialContainment": [
+            "outside",
+            "outside"
+          ],
+          "insideWitness": false,
+          "outsideProved": true,
+          "temporalErrorBound": 1.2816495814253883e-15,
+          "steps": 1,
+          "testedTriangles": 48,
+          "temporalSamples": 96,
+          "relativeTravel": 2.5632991628507767e-15,
+          "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+        }
+      ],
+      "faceRows": [
+        {
+          "distance": 0.204818954215276,
+          "inside": false,
+          "lower": 0.20481895421527466
+        },
+        {
+          "distance": 0.1890676329085603,
+          "inside": false,
+          "lower": 0.18906763290855896
+        },
+        {
+          "distance": 0.1757829890491422,
+          "inside": false,
+          "lower": 0.17578298904914086
+        },
+        {
+          "distance": 0.18329263125653486,
+          "inside": false,
+          "lower": 0.18329263125653353
+        },
+        {
+          "distance": 0.20719272347879544,
+          "inside": false,
+          "lower": 0.2071927234787941
+        },
+        {
+          "distance": 0.24270205606169104,
+          "inside": false,
+          "lower": 0.2427020560616897
+        },
+        {
+          "distance": 0.2850183710883561,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.3309498120139911,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": 0.41545463621261003,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        },
+        {
+          "distance": null,
+          "inside": false,
+          "lower": 0.25
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,283 @@
+BJS - [13:58:58]: Babylon.js v9.31.0 - Null engine
+[
+  {
+    "distance": 3,
+    "custom": false,
+    "moving": false,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 331
+  },
+  {
+    "distance": 3,
+    "custom": false,
+    "moving": true,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 314
+  },
+  {
+    "distance": 3,
+    "custom": true,
+    "moving": false,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 331
+  },
+  {
+    "distance": 3,
+    "custom": true,
+    "moving": true,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 314
+  },
+  {
+    "distance": 6,
+    "custom": false,
+    "moving": false,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 331
+  },
+  {
+    "distance": 6,
+    "custom": false,
+    "moving": true,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 331
+  },
+  {
+    "distance": 6,
+    "custom": true,
+    "moving": false,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 331
+  },
+  {
+    "distance": 6,
+    "custom": true,
+    "moving": true,
+    "actions": [
+      "quick-bite",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 331
+  },
+  {
+    "distance": 10,
+    "custom": false,
+    "moving": false,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 266
+  },
+  {
+    "distance": 10,
+    "custom": false,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 266
+  },
+  {
+    "distance": 10,
+    "custom": true,
+    "moving": false,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 266
+  },
+  {
+    "distance": 10,
+    "custom": true,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 266
+  },
+  {
+    "distance": 15,
+    "custom": false,
+    "moving": false,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 266
+  },
+  {
+    "distance": 15,
+    "custom": false,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 246
+  },
+  {
+    "distance": 15,
+    "custom": true,
+    "moving": false,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 266
+  },
+  {
+    "distance": 15,
+    "custom": true,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe",
+      "quick-bite"
+    ],
+    "ramSelected": false,
+    "playerHp": 246
+  },
+  {
+    "distance": 25,
+    "custom": false,
+    "moving": false,
+    "actions": [
+      "pin",
+      "paw-swipe"
+    ],
+    "ramSelected": false,
+    "playerHp": 319
+  },
+  {
+    "distance": 25,
+    "custom": false,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe"
+    ],
+    "ramSelected": false,
+    "playerHp": 263
+  },
+  {
+    "distance": 25,
+    "custom": true,
+    "moving": false,
+    "actions": [
+      "pin",
+      "paw-swipe"
+    ],
+    "ramSelected": false,
+    "playerHp": 319
+  },
+  {
+    "distance": 25,
+    "custom": true,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe"
+    ],
+    "ramSelected": false,
+    "playerHp": 263
+  },
+  {
+    "distance": 35,
+    "custom": false,
+    "moving": false,
+    "actions": [
+      "lunge",
+      "paw-swipe"
+    ],
+    "ramSelected": true,
+    "playerHp": 343
+  },
+  {
+    "distance": 35,
+    "custom": false,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe"
+    ],
+    "ramSelected": false,
+    "playerHp": 319
+  },
+  {
+    "distance": 35,
+    "custom": true,
+    "moving": false,
+    "actions": [
+      "lunge",
+      "paw-swipe"
+    ],
+    "ramSelected": true,
+    "playerHp": 343
+  },
+  {
+    "distance": 35,
+    "custom": true,
+    "moving": true,
+    "actions": [
+      "pin",
+      "paw-swipe"
+    ],
+    "ramSelected": false,
+    "playerHp": 319
+  }
+]

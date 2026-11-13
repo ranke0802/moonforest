@@ -1,0 +1,36 @@
+{
+  "scope": "Qualified UX review opinions from the canonical97-second user video and one-second contact sheets. These are not frame-accurate collision proofs, performance measurements or authorization for unrelated changes.",
+  "video": "Sources/references/wolf-combat-r13/observed-gameplay.mp4",
+  "opinions": [
+    {
+      "timestampsSeconds": [7,27,31,39,71,79,89],
+      "observation": "The red warning is a generic wolf actor-origin disc; it does not explain the visible mouth path, charge lane or separate pending bite phase.",
+      "opinion": "Show a committed charge lane or local mouth-phase footprint that agrees with the actual contact geometry, then clear each resolved phase immediately. The indicator should help the player predict where a dodge is safe.",
+      "qualification": "The origin was verified by root from the full27-second frame and code. Earlier low-resolution appearance as a player-origin ring was corrected."
+    },
+    {
+      "timestampsSeconds": [20,21,22,23,51,52,53,54,55],
+      "observation": "Repeated stamina warnings cover the central combat area while the player repeatedly tries actions.",
+      "opinion": "A persistent disabled/cost state on the action button and a less repetitive warning could clarify that an input was rejected before any attack. This would separate resource failure from a genuine collision miss.",
+      "qualification": "Stamina rejection may explain some apparent failed inputs. It does not explain all visible misses, and no stamina balance/input change is proposed here."
+    },
+    {
+      "timestampsSeconds": [8,9,10,11,12,13,14,15,16,17,18,19,50,56,61,64,69,73,74],
+      "observation": "During close front-facing combat, the small warrior is often partly hidden beneath the much larger wolf's muzzle and forequarters.",
+      "opinion": "Review camera elevation/near-fight framing or a subtle player visibility cue. The approved model scale should stay fixed; better visibility would help distinguish a real fall, guard, shove and prone maul.",
+      "qualification": "This is a readability opinion from the supplied camera view, not evidence that model scaling or animation is incorrect."
+    },
+    {
+      "timestampsSeconds": [16,18,20,21,52,62,67,74],
+      "observation": "Healing ticks and several damage numbers appear close to the same character overlap.",
+      "opinion": "Clearer ownership/placement of hit, block and healing feedback could reduce uncertainty about which action connected. Keep healing/combat balance separate from any cosmetic presentation decision.",
+      "qualification": "The sheets establish visual clutter but do not identify every individual damage/heal event."
+    },
+    {
+      "timestampsSeconds": [60,66,72],
+      "observation": "BLOCK text/white flash can occur around the same shield action that later performs its outgoing push.",
+      "opinion": "A clearer distinction between held guard, successful defensive block and released push would make the narrow outgoing hit moment easier to understand.",
+      "qualification": "The existing shield cast blocks before its released push window. A defensive block is not automatically proof that the later push damaged the wolf; real animation/surface tests handle that distinction."
+    }
+  ]
+}

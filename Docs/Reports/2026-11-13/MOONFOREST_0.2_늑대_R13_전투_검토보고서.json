@@ -1,0 +1,886 @@
+{
+  "generatedAt": "2026-11-13T06:11:22.300Z",
+  "scope": "R13 CPU/native-controller integration, source preservation and offline original-colour visual review. No browser automation, device/GPU/FPS/heat certification.",
+  "regression": {
+    "scope": "Node/NullEngine actual-rig 3D attention, complete orbit entry/foot plant, autonomous contact, R13 compact ram/actual prone chase, native player fall, two prone jaw phases, defense/abort/ownership/damage budget, and approved original art and updated R13 collapse/tactical/physical incoming, four-map summon/resource lifecycle, preserved0.1 and shared combat regressions. No browser automation. DeviceFPS/heat/GPU and visual approval are not measured.",
+    "startedAt": "2026-11-13T06:07:06.720Z",
+    "finishedAt": "2026-11-13T06:08:53.765Z",
+    "command": [
+      "node",
+      "--test",
+      "tests/wolf-integration.test.js",
+      "tests/wolf-pattern-size.test.js",
+      "tests/wolf-v02-brain.test.js",
+      "tests/wolf-v02-patterns.test.js",
+      "tests/wolf-v02-authored-attacks.test.js",
+      "tests/wolf-v02-integration.test.js",
+      "tests/wolf-v02-hunt.test.js",
+      "tests/wolf-v02-hunt-integration.test.js",
+      "tests/wolf-v02-feral-integration.test.js",
+      "tests/wolf-v02-orbit-navigation.test.js",
+      "tests/wolf-v02-predator-runtime.test.js",
+      "tests/wolf-v02-predator-integration.test.js",
+      "tests/wolf-v02-ram-runtime.test.js",
+      "tests/wolf-v02-ram-integration.test.js",
+      "tests/wolf-v02-combat-r13-ram.test.js",
+      "tests/wolf-v02-combat-r13-incoming.test.js",
+      "tests/wolf-v02-combat-r13-tactics.test.js",
+      "tests/boss-battle.test.js",
+      "tests/boss-combat.test.js",
+      "tests/combat-reconcile.test.js",
+      "tests/grab-escape.test.js",
+      "tests/release-v2.test.js"
+    ],
+    "exitCode": 0,
+    "tests": 181,
+    "pass": 181,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "sourceAndTestFilesUnchangedDuringRun": true,
+    "inputHashes": {
+      "src/wolf-v02-spec.js": "52495b30da2a28ee9e03581e7aae25dec6b1d15e77ab46f1555eb7628c43a766",
+      "src/wolf-v02-encounter.js": "f6d92d83780fd8d0d9fa35bb599234696513c84a89d6c75f99d091ee9d85f60e",
+      "src/wolf-spec.js": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+      "src/wolf-encounter.js": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+      "src/wolf-animation.js": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+      "src/wolf-v02-authored-clips.js": "415b2b5f080cacd47a057c2aa46b44495034162d8a7cc14deb64441892a01199",
+      "src/wolf-v02-attack-clips.json": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9",
+      "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "src/wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+      "src/wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+      "src/wolf-v02-ram.js": "3af9977951a2d77e9400a2cd15b1dd5cfee89356dde351433050bbb84e0d42a4",
+      "src/wolf-v02-combat-r13-clips.json": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94",
+      "src/wolf-v02-hurt.js": "5c759063a1f9b6705cfdd142320b8ee3e2cab392f650117953a25c4e8d1ac181",
+      "src/wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065",
+      "src/wolf-v02-support.js": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783",
+      "src/wolf-v02-telegraph.js": "e8ad89b8d2a70b9a5519f4e260dd516201bd6150afb90ac76c02e00fc443fbf3",
+      "src/wolf-v02-contact-shapes.js": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1",
+      "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+      "src/animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+      "tests/helpers/wolf-ram-fixture.js": "40297abc9779b83cc383dc2e21d09b0a0eeed26ac16ec2bbabb9336be9b0c7e1",
+      "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+      "public/assets/alpha-wolf.json": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+      "tests/wolf-integration.test.js": "a68c876905cd288d23c261bd2800d7e1bb610b88ca3f2f0bff7084fb6eb23895",
+      "tests/wolf-pattern-size.test.js": "97a8b52fc20ee7a7021362e44558816a21c1c138618ee646df97cefb3436abee",
+      "tests/wolf-v02-brain.test.js": "3bc8e5ab2cadc8da4e7915f7e49b947cd68f46ef4ef2904f07934853714c5844",
+      "tests/wolf-v02-patterns.test.js": "9f05cc72d04d8e019da3cccc03eb9809e0b21f5a9a986b0f45e279a0bdfcc11f",
+      "tests/wolf-v02-authored-attacks.test.js": "c1a817a01b94a92cc94d7af3e57af3d49a8f4be896cf21213f7bdfd1e6ce407c",
+      "tests/wolf-v02-integration.test.js": "05943347f83be24e0ffe273a588005414d50b7befd0861399b18e562d4179167",
+      "tests/wolf-v02-hunt.test.js": "df1a308b5ff869a0825c67f6203f8d10c68538a0b4b51a69529c5497f0c2c08c",
+      "tests/wolf-v02-hunt-integration.test.js": "8af4758433b9921cc10e81823410bbb1af0ae48401714ff09b19c9c8aee24802",
+      "tests/wolf-v02-feral-integration.test.js": "2aa67bc6ccaa4e5460ae519303b94998cd299a616e761dc060b3be8f1971f2bd",
+      "tests/wolf-v02-orbit-navigation.test.js": "4057ad5f2cb54ef469bc25e132f09fc982a4124680fe17a51b0440f6d9c4a038",
+      "tests/wolf-v02-predator-runtime.test.js": "8de78fa98fb28131f91ddf18ed17354a179e2361dff6a36014bc70043ca98879",
+      "tests/wolf-v02-predator-integration.test.js": "1ed39d6c5ad03b2d314853ce95f19006ecefe6c499e8be4d0a89c8d0ed2d4e8e",
+      "tests/wolf-v02-ram-runtime.test.js": "b9c15859a76144fc35cff6dee3192ba41c863d1ddc4f4af588256edc8930e958",
+      "tests/wolf-v02-ram-integration.test.js": "76d63c235b9628261f47830c73f13802a2c57a84136da6552a32e26fe70bd6fe",
+      "tests/wolf-v02-combat-r13-ram.test.js": "fdb863c306ad1ae8129516fd6798ae5dad0d60e65fc9d0696c8e9e58d139e0ba",
+      "tests/wolf-v02-combat-r13-incoming.test.js": "4cd4fb6077f7165314b6f07a7ef28d3397b74025cfa9a698a29106586eba9a42",
+      "tests/wolf-v02-combat-r13-tactics.test.js": "162aeb0c79095ddd20a014ee5059665df0dd5cf5396bba54cce1bdec39c7df9e",
+      "tests/boss-battle.test.js": "ba1bacd5dd2fafb91086f1cf1a9993ac3eb36ea2101478d4508202af7c15edac",
+      "tests/boss-combat.test.js": "394e6f43f5e876590aaa2a523aeaac6937a711fb7bd5e06dea9a24a0738c7d85",
+      "tests/combat-reconcile.test.js": "68814ff8b408d0f588709f2e8bb30ed1b3bcc89fcf69a6919177ba778eafaa5f",
+      "tests/grab-escape.test.js": "e209d0831344731eba16e09e9803faee6d8756d91b9767ee467074a013978366",
+      "tests/release-v2.test.js": "7892554bcefabc8a21b3f59ecff8c5d2bcbc1d36d00659c6c2b3c7ed650b2324",
+      "tests/helpers/wolf-combat-r13-fixture.js": "8c7351173fec70dc1963be36c494379660a0eeae726da8a3611079c35a3397d6",
+      "tests/helpers/wolf-combat-r13-surface.js": "cc0bffb39c68b81ebaf236d65ac92a053209c9be6732073f5d2688371fb98803",
+      "tests/helpers/wolf-hunt-fixture.js": "b2c9a972232667bf4cd8d169269d12d61e54ed41ba0002ee83510b81adeeccc1",
+      "tests/helpers/wolf-feral-fixture.js": "1888d353aef2bbb32e98cb3572b9fe48d7475a4eb9e6ff11606ae6672863e4a6",
+      "src/wolf-v02-authored-history.js": "929e6b8be8b82159334eb3c1aeadd2ae4a053876f49c6c509589cea8e364d5f6",
+      "tests/helpers/wolf-combat-r13-run.js": "9511e28d617984a949ac48554bc39081724cbeaba4d035d31e7e816e0bdf8a39"
+    },
+    "output": "combined-regression.txt"
+  },
+  "preservation": {
+    "scope": "Frozen0.1, shared player/combat/render inputs, R11/R12 source art and shared4K/LOD graph. Only0.2wolf-specific requested behavior/hit representation and newR13art may change.",
+    "baseline": "1bf3892c546496b839ed0278275415efc5d4e020",
+    "checkedAt": "2026-11-13T06:11:15.045Z",
+    "allPreserved": true,
+    "rows": [
+      {
+        "path": "ArcherPreview/src/wolf-spec.js",
+        "basis": "committed R12 bytes",
+        "expected": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+        "actual": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/wolf-encounter.js",
+        "basis": "committed R12 bytes",
+        "expected": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+        "actual": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/wolf-animation.js",
+        "basis": "committed R12 bytes",
+        "expected": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+        "actual": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-predator-clips.json",
+        "basis": "committed R12 bytes",
+        "expected": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+        "actual": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-feral-clips.json",
+        "basis": "committed R12 bytes",
+        "expected": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+        "actual": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-ram-clips.json",
+        "basis": "committed R12 bytes",
+        "expected": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+        "actual": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/warrior-v2.js",
+        "basis": "committed R12 bytes",
+        "expected": "057145e42dd1cbdb7c7a56a8595d9bfd73d5d8704be525261ba1118e9cefb2ea",
+        "actual": "057145e42dd1cbdb7c7a56a8595d9bfd73d5d8704be525261ba1118e9cefb2ea",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/main.js",
+        "basis": "committed R12 bytes",
+        "expected": "203db090ed6a80cb4fbaf2f3f9c234df94ba9904d087e065d8d84e5057f3847c",
+        "actual": "203db090ed6a80cb4fbaf2f3f9c234df94ba9904d087e065d8d84e5057f3847c",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/player-strikes.js",
+        "basis": "committed R12 bytes",
+        "expected": "8767ddb797a826f673ce219c7c236b364d35271269573ce796848d81ab2d400d",
+        "actual": "8767ddb797a826f673ce219c7c236b364d35271269573ce796848d81ab2d400d",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/animation.js",
+        "basis": "committed R12 bytes",
+        "expected": "ae59b1507000c8542ebc3822c61617b7f3902c8bc5969ea887ed08a9bfe15cd1",
+        "actual": "ae59b1507000c8542ebc3822c61617b7f3902c8bc5969ea887ed08a9bfe15cd1",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/hit-feedback.js",
+        "basis": "committed R12 bytes",
+        "expected": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c",
+        "actual": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/melee-collision.js",
+        "basis": "committed R12 bytes",
+        "expected": "120b720be73815c11e12abb704c34dca9e037b450080cd3141fc698f7a04b250",
+        "actual": "120b720be73815c11e12abb704c34dca9e037b450080cd3141fc698f7a04b250",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/src/terrain-mesh.js",
+        "basis": "committed R12 bytes",
+        "expected": "b315d4a704f5d8af1ca435fe7cd4cc5843ecc8f430ea71a1748f0aa15f0524f4",
+        "actual": "b315d4a704f5d8af1ca435fe7cd4cc5843ecc8f430ea71a1748f0aa15f0524f4",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/public/assets/alpha-wolf.json",
+        "basis": "committed R12 bytes",
+        "expected": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+        "actual": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/public/assets/warrior-v2.json",
+        "basis": "committed R12 bytes",
+        "expected": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+        "actual": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreview/public/assets/resource-index.json",
+        "basis": "physical canonical prepared input before R13 edits",
+        "expected": "52bd74fecf648b3821a253810e28a9d40e2a1300491025b7e230c35b20ecb043",
+        "actual": "52bd74fecf648b3821a253810e28a9d40e2a1300491025b7e230c35b20ecb043",
+        "preserved": true
+      },
+      {
+        "path": "ArcherPreviewSite/deployment-files.json",
+        "basis": "committed R12 bytes",
+        "expected": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+        "actual": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+        "preserved": true
+      }
+    ]
+  },
+  "source": {
+    "id": "wolf-v02-knockdown-r13",
+    "clipsSha256": "2f0fe94738248cfdd2c3d7499c4954059df517166f78405de6bb25edc588b27f",
+    "boneCount": 28,
+    "activeClips": 21,
+    "originalTriangles": 25080
+  },
+  "runtime": {
+    "lunge": {
+      "id": "lunge",
+      "label": "머리 들이받기·넘어진 적 물어뜯기",
+      "sourceClip": "Wolf_Close_Ram_Ground_Maul_V02",
+      "variant": "grounded-ram",
+      "clipStart": 0,
+      "clipEnd": 3.3333333333333335,
+      "impact": 0.7533333333333334,
+      "contactStart": 0.6733333333333333,
+      "contactEnd": 0.8633333333333333,
+      "commitTime": 0.36,
+      "capture": false,
+      "damage": 100,
+      "range": 4,
+      "minDistance": 3.8,
+      "maxDistance": 4.2,
+      "preferredDistance": 4,
+      "recovery": 1.1,
+      "contactParts": [
+        "head"
+      ],
+      "authoredAttention": true,
+      "ramPhases": [
+        {
+          "id": "ram",
+          "kind": "ram",
+          "contactStart": 0.6733333333333333,
+          "contactEnd": 0.8633333333333333,
+          "impact": 0.7533333333333334,
+          "damage": 40,
+          "contactParts": [
+            "head"
+          ]
+        },
+        {
+          "id": "maul-1",
+          "kind": "maul",
+          "contactStart": 1.7733333333333334,
+          "contactEnd": 1.8333333333333335,
+          "impact": 1.7833333333333332,
+          "damage": 30,
+          "contactParts": [
+            "jaw"
+          ]
+        },
+        {
+          "id": "maul-2",
+          "kind": "maul",
+          "contactStart": 2.3233333333333337,
+          "contactEnd": 2.3833333333333333,
+          "impact": 2.3333333333333335,
+          "damage": 30,
+          "contactParts": [
+            "jaw"
+          ]
+        }
+      ],
+      "postRamClock": 0.7533333333333334,
+      "abortRecoveryStart": 2.4533333333333336,
+      "missSourceClip": "Run_Dodge_Lunge_R5",
+      "missClipStart": 2.73,
+      "missClipEnd": 3.1,
+      "whip": {
+        "source": [
+          0,
+          0.28,
+          0.5,
+          0.6833333333333331,
+          0.7533333333333334,
+          3.3333333333333335
+        ],
+        "seconds": [
+          0,
+          0.32,
+          0.5,
+          0.64,
+          0.6947272727272727,
+          3.2747272727272727
+        ]
+      }
+    },
+    "chase": {
+      "source": [
+        0.8333333333333335,
+        1.1833333333333331,
+        1.7733333333333334,
+        1.7833333333333332,
+        1.8333333333333335,
+        2.3233333333333337,
+        2.3333333333333335,
+        2.3833333333333333,
+        3.3333333333333335
+      ],
+      "seconds": [
+        0,
+        0.24,
+        0.46,
+        0.48,
+        0.53,
+        1.01,
+        1.03,
+        1.08,
+        2.03
+      ],
+      "earliestProne": 0.82,
+      "latestProne": 1.1
+    },
+    "tactics": {
+      "recentDamageFraction": 0.15,
+      "recentDamageSeconds": 3,
+      "healthyHpFraction": 0.5,
+      "retreatCooldown": 6,
+      "retreatDistance": 4.8,
+      "maximumRetreatRange": 8,
+      "evadeCooldown": 2,
+      "evadePlaybackRate": 2.5
+    }
+  },
+  "independent": {
+    "positiveCases": 36,
+    "phaseHits": 108,
+    "actualSurfaceIntersectionHits": 78,
+    "maximumNonintersectionVertexGapUpperBoundMeters": 0.05719249941650864,
+    "qualification": "Literal triangle intersections prove overlap; nearest-vertex gaps are upper bounds, not exact surface separations. Small bounded tactile edge cases are reported separately.",
+    "support": {
+      "gate": "named-compact-support",
+      "maxWorldDrift": 0.000007945603202445022,
+      "samples": 617,
+      "limbError": 0.0000027298891467908426,
+      "scaleError": 5.25608710555403e-7
+    },
+    "sourceHashes": {
+      "src/wolf-v02-spec.js": "52495b30da2a28ee9e03581e7aae25dec6b1d15e77ab46f1555eb7628c43a766",
+      "src/wolf-v02-encounter.js": "f6d92d83780fd8d0d9fa35bb599234696513c84a89d6c75f99d091ee9d85f60e",
+      "src/wolf-v02-ram.js": "3af9977951a2d77e9400a2cd15b1dd5cfee89356dde351433050bbb84e0d42a4",
+      "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "src/wolf-v02-hurt.js": "5c759063a1f9b6705cfdd142320b8ee3e2cab392f650117953a25c4e8d1ac181",
+      "src/wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065",
+      "src/wolf-v02-support.js": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783",
+      "src/wolf-v02-telegraph.js": "e8ad89b8d2a70b9a5519f4e260dd516201bd6150afb90ac76c02e00fc443fbf3",
+      "src/wolf-v02-contact-shapes.js": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1",
+      "src/wolf-v02-authored-clips.js": "415b2b5f080cacd47a057c2aa46b44495034162d8a7cc14deb64441892a01199",
+      "src/wolf-v02-authored-history.js": "929e6b8be8b82159334eb3c1aeadd2ae4a053876f49c6c509589cea8e364d5f6",
+      "src/wolf-v02-combat-r13-clips.json": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94",
+      "src/wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+      "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+      "src/wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+      "src/wolf-spec.js": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+      "src/wolf-animation.js": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+      "src/wolf-encounter.js": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+      "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+      "src/player-strikes.js": "cdaa2c56c3d34b720bce592f4e4745c7d87f7fb1a89010a01f510dd3a4cb3ce5",
+      "src/player-strike-timings.js": "34b67f719fc4218b8340c94e3739024463c670f2c209bdbc18a6edbff94d8e9b",
+      "src/player-dimensions.js": "f4a8545e46490575c15600a6de04532e34cd9d1782faef1e976d10df493cc37f",
+      "src/boss-battle.js": "b774dd48bfc2cde1459e7e598018af1e8f6b52680c69170514459fe1fb060559",
+      "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+      "src/animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+      "src/melee-collision.js": "b97acb0e5ff4c820423e6bca8631d49685a77902074e3f1fdb3b8339a43075f5",
+      "src/tree-view-surface.js": "8c30b7e5b3cf8b7df2a9fac91119ac6e04dc92236739cab7d320761b7471f588",
+      "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+      "tests/helpers/wolf-ram-fixture.js": "40297abc9779b83cc383dc2e21d09b0a0eeed26ac16ec2bbabb9336be9b0c7e1",
+      "tests/helpers/wolf-hunt-fixture.js": "b2c9a972232667bf4cd8d169269d12d61e54ed41ba0002ee83510b81adeeccc1",
+      "tests/helpers/wolf-combat-r13-fixture.js": "8c7351173fec70dc1963be36c494379660a0eeae726da8a3611079c35a3397d6",
+      "tests/helpers/wolf-combat-r13-run.js": "9511e28d617984a949ac48554bc39081724cbeaba4d035d31e7e816e0bdf8a39",
+      "tests/helpers/wolf-combat-r13-surface.js": "cc0bffb39c68b81ebaf236d65ac92a053209c9be6732073f5d2688371fb98803",
+      "tests/helpers/wolf-combat-r13-proof.js": "fbc450bdf2871d00efe23ea30b075b3da4284c9f2802e3452c45012e45a00f5d",
+      "tests/wolf-v02-combat-r13-ram.test.js": "fdb863c306ad1ae8129516fd6798ae5dad0d60e65fc9d0696c8e9e58d139e0ba",
+      "tests/wolf-v02-combat-r13-incoming.test.js": "4cd4fb6077f7165314b6f07a7ef28d3397b74025cfa9a698a29106586eba9a42",
+      "tests/wolf-v02-combat-r13-tactics.test.js": "162aeb0c79095ddd20a014ee5059665df0dd5cf5396bba54cce1bdec39c7df9e",
+      "reports/wolf-v02-ram-r12/skin-contact.mjs": "26ab11f5a3783add4a22992eb869f2cbc88bfcb085f57755ddc719d1d753ddee"
+    }
+  },
+  "bundle": {
+    "file": "mourning-elena-encounter-CKjnIN7G.js",
+    "bytes": 5146473,
+    "sha256": "65531b48818bbf4ebadf69f615f22010de4e4846b0ef06af54d22a58f4579793",
+    "historicalR9Present": false,
+    "historicalR12Present": false,
+    "activeCompactPresent": true,
+    "beforeCleanupBytes": 7494025,
+    "removedUnminifiedFileBytes": 2347552,
+    "scope": "Same active21clip actor and source quality. Historical R9/R12 source keys remain in Node/offline review only. File bytes are not gzip transfer or GPU residency."
+  },
+  "visual": {
+    "reviewedAt": "2026-11-13T06:02:52.864Z",
+    "scope": "Primary agent directly inspected four chronological sheets covering all56 actual CPU-skinned views, selected full-size chase/maul/recovery views, three original-colour authored filmstrips, and front/hind joint colour+matcap sheets. Offline original-colour rendering, not browser/device visual certification.",
+    "actualRuntimeViews": 56,
+    "originalColour": true,
+    "playerMaterial": "Neutral review material; actual native1.6m geometry/pose preserved",
+    "sourceHashes": {
+      "wolf-v02-spec.js": "52495b30da2a28ee9e03581e7aae25dec6b1d15e77ab46f1555eb7628c43a766",
+      "wolf-v02-encounter.js": "f6d92d83780fd8d0d9fa35bb599234696513c84a89d6c75f99d091ee9d85f60e",
+      "wolf-v02-authored-clips.js": "415b2b5f080cacd47a057c2aa46b44495034162d8a7cc14deb64441892a01199",
+      "wolf-v02-combat-r13-clips.json": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94",
+      "wolf-v02-ram.js": "3af9977951a2d77e9400a2cd15b1dd5cfee89356dde351433050bbb84e0d42a4",
+      "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+      "wolf-v02-support.js": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783",
+      "wolf-v02-contact-shapes.js": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1",
+      "wolf-v02-hurt.js": "5c759063a1f9b6705cfdd142320b8ee3e2cab392f650117953a25c4e8d1ac181",
+      "wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065",
+      "wolf-v02-telegraph.js": "e8ad89b8d2a70b9a5519f4e260dd516201bd6150afb90ac76c02e00fc443fbf3",
+      "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+      "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+    },
+    "observations": [
+      "Actual native player falls before supported pursuit. Pursuit advances toward the prone torso and two low jaw poses meet the fallen body.",
+      "Fore/hind rigid muscle cores do not visibly elongate in the reviewed steps; original angular inner-elbow collar and fur overlaps remain.",
+      "Nonlethal collapse and supported rise preserve articulated joints; final gait/watch is the unchanged asymmetric source stance.",
+      "No original mesh, UV, weights, bind or4K colour texture replacement was used.",
+      "After native get-up the completed maul retains its original attack serial, finishes the authored backstep and reaches watch without replaying recovery."
+    ],
+    "limits": [
+      "Static phase views and numerical tests do not establish real-device motion feel, GPU FPS or heat.",
+      "Full-surface muscle bands/fur may deform locally; rigid-core preservation does not mean every skin triangle is rigid."
+    ],
+    "files": [
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-front.png",
+        "bytes": 394448,
+        "sha256": "9b1554634880f6d8bd1dacd447fd76b11611465e3842b5c56dd657dc186a4482"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-side.png",
+        "bytes": 378595,
+        "sha256": "f112d4aa3927dff5eabcbcad0b4f235bc3027a7356a038ee2f75f8bf2d12c4a1"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-quarter.png",
+        "bytes": 390413,
+        "sha256": "1556b1e15d858fa772faed21a164c7dc36005544862d2ffa0dcb954b2dd14ee5"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-opposite.png",
+        "bytes": 386420,
+        "sha256": "541d5da0909c43d3bcd2801a525ce8cd00e9d6030846380f1a4656ad90817865"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-front.png",
+        "bytes": 335668,
+        "sha256": "74bb3fec0f05f9eb7e1a50e40396d77c6778806d44ebe00cde70fcd426c78ceb"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-side.png",
+        "bytes": 369491,
+        "sha256": "820a7474833f29bc62e853b8cd38355fa6a29fb4d37fb721750b555174f29c16"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-quarter.png",
+        "bytes": 385115,
+        "sha256": "62353970f5981ecf490274b7e135e76042a6b6a5b8dd130d16811186512053f8"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-opposite.png",
+        "bytes": 382791,
+        "sha256": "9dc60adf04f28ec4b3eee19e25dc66d14fcd55d1de77e8e93bdff2069f9530c9"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-front.png",
+        "bytes": 337005,
+        "sha256": "74429c17bd4d2f177e269124bd643dabfd8f97bdadff22c5add7cc500d3728df"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-side.png",
+        "bytes": 374409,
+        "sha256": "8f67d5fb4f24299d72520c1469976455a3efba727b0ad8b6dbfcaf5279a0d181"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-quarter.png",
+        "bytes": 388904,
+        "sha256": "fbc24b57e4c5ddb133cbabd5cc6106e192f4e0ea7e667b2fda8c4336354a0967"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-opposite.png",
+        "bytes": 386871,
+        "sha256": "0f7e8ca7291484025b89d85998649e77dbb590ee9eaf3d7ba62498df595fd526"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-front.png",
+        "bytes": 340917,
+        "sha256": "cc8be4a2f2be65ed3ee23260ec85fa1b58d47c8f25df0bd5a3b23483317f5b5f"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-side.png",
+        "bytes": 378453,
+        "sha256": "c5c2637fea0fee55da55d7f1026f699cacef7cc9b4acbf2361bfa6a563a2277e"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-quarter.png",
+        "bytes": 390669,
+        "sha256": "c31ec75037aa6c7b9ddc119adee70da8ed23c258015504626d1ee47860abbab3"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-opposite.png",
+        "bytes": 389272,
+        "sha256": "e39165dd30434064e16ec645513390a7ca757c218be195e10590754acef3137f"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-front.png",
+        "bytes": 340892,
+        "sha256": "b69fe3dbd8a89df4ba72d5922b0af7c5009d7eb5baaf87b787ca741245f755fa"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-side.png",
+        "bytes": 377220,
+        "sha256": "b7e1c40389b2ac4f5f531e1f54b7305ab6cac7b726e89939be717a1a95f50fd9"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-quarter.png",
+        "bytes": 388468,
+        "sha256": "7cdeeda2b10b7270970b4c90b7705011808865d720d8ab3cb96a24725c628c6d"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-opposite.png",
+        "bytes": 388450,
+        "sha256": "31eb78e7229820862f8767c1de34f4e22564bc27e41710181ee93b20fadcd51c"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-front.png",
+        "bytes": 340588,
+        "sha256": "df223a8cfc703a91fb90019b82b697c29f6ee5238e9c89b9ead7ed60a79c1521"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-side.png",
+        "bytes": 374370,
+        "sha256": "9d4c1b87b23a3156613748f813572c9492c6aa447fce9e56fff6758c987c5545"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-quarter.png",
+        "bytes": 386965,
+        "sha256": "209054e457147ae9c8f4f08f6073cb9967f7e3270d66c8c6477b56cf7fe0d5db"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-opposite.png",
+        "bytes": 388639,
+        "sha256": "1c206f73d3a02ac4ee3bf531da8ddba5ad39c1d80eacd228b10c1f21a74ecd61"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-front.png",
+        "bytes": 339127,
+        "sha256": "d3063f1e24412b8d90cf543586a87b70885208c9cf0d70d52fd53609a504b129"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-side.png",
+        "bytes": 373090,
+        "sha256": "19c79e8d257cadf4d575f87619ed4aa9b1aef1b5ab556bb60673d7bcb0a0cd71"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-quarter.png",
+        "bytes": 385804,
+        "sha256": "fa080d6c5e874807844c6d13d17972db74f271e0d0185a1903931cd08ce9343c"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-opposite.png",
+        "bytes": 387152,
+        "sha256": "c3d007648fb74fc08aff19c82ec5aadde2da76aac29f0a373690707b5fb7b389"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-front.png",
+        "bytes": 339071,
+        "sha256": "745eaf6805e0986ba3d22db90de677d9b572270ce052d1a6fd08564853ea2ad0"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-side.png",
+        "bytes": 372630,
+        "sha256": "d6007e17c5570a57491e1c8b91bb5bad9974fa153223685527e778f38b5fe11b"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-quarter.png",
+        "bytes": 385110,
+        "sha256": "2b23e1831fb389c4aa2893318d6625a50e8ff77736ab682d016f172df1e36a8f"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-opposite.png",
+        "bytes": 387352,
+        "sha256": "a2e2fcd12d27135fe40f5972a9d727b24d7163dc1f55bb8f3e806fcbf4697545"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-front.png",
+        "bytes": 340043,
+        "sha256": "db42e2a179b21cebf3ba79984c5a4807e7030147d3969a5dde3d267be22f1907"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-side.png",
+        "bytes": 375067,
+        "sha256": "4b19d6e2317088584f9925727b8bcc45275bed744fca5304358b08620b771f28"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-quarter.png",
+        "bytes": 385980,
+        "sha256": "b54e885ccdcb8edd0814adcb8b08f26a5320b7943a6e811dd0d8a0a455fd33a0"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-opposite.png",
+        "bytes": 388050,
+        "sha256": "6413f0a9a81ce259b0650cb12c7f58569e3e582a78d0ffd69198ca775772374e"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-front.png",
+        "bytes": 359811,
+        "sha256": "aebda64d0287ba22607fc8f2d3c4ff9a071671b66787e685418e5131d02a13f4"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-side.png",
+        "bytes": 386678,
+        "sha256": "ffba4595c6a3f858f0bf8d85be540e5c1ff2cbf486b991f7b2ec6b8c8593540f"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-quarter.png",
+        "bytes": 399308,
+        "sha256": "c64ed2d8d6d154c0bd522894272f6c85e500c712094259ef5b5754cc4390c2fe"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-opposite.png",
+        "bytes": 396492,
+        "sha256": "342b8ac0a370ca6dda41548ba96b00310a8ca80d63879087d6578930908c809c"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-front.png",
+        "bytes": 354924,
+        "sha256": "dd3906915910891bd5400ee9fb3000985ffb7a0aeeb5345c53bb2e809686efac"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-side.png",
+        "bytes": 382700,
+        "sha256": "f25f58321b1a74a2d636291c8b864186324bd7462d4b7c4f3e31f525a9d5d225"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-quarter.png",
+        "bytes": 394655,
+        "sha256": "8e1b2a75eeac4921729de3c77b5f46d849b123d9d9c7935ab44b0fd3b72332f3"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-opposite.png",
+        "bytes": 394948,
+        "sha256": "1357e2a6ee6229c4dc8a60c378fcac521c978e63dab6695b180a46db63557ef9"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-front.png",
+        "bytes": 333879,
+        "sha256": "f89ca64a50dc42c7e92224048ce8ca03b64b7c68dd425beb36ea3111e804f162"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-side.png",
+        "bytes": 364080,
+        "sha256": "e3e9c17383fb802acb1ea3cca11d5664a8a1de4d230316eb6a36266918eafcba"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-quarter.png",
+        "bytes": 371173,
+        "sha256": "f184da049c830fec7537f3c90b29819a18bc4f5712a991c286aa3d16bb61496a"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-opposite.png",
+        "bytes": 383178,
+        "sha256": "c169509074fb19e591587e26607bc4369480c923bc882165a84145882b6d8f1c"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-front.png",
+        "bytes": 331917,
+        "sha256": "dd47919de34a9bda3fb54a868df15cc8845033695902b09da2ccae170cce6c5a"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-side.png",
+        "bytes": 364255,
+        "sha256": "029f9bed2749655f426313ee9f365696b06bb27122446a75f92029e2cf93dc53"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-quarter.png",
+        "bytes": 381664,
+        "sha256": "681fab088298b3cd23ac8a7375c0e7f0a5d555cfffb40ab76083930fdc5cce91"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-opposite.png",
+        "bytes": 383909,
+        "sha256": "f7b176646d31d50f5e87a1b000da7e68c0a4e0749c990ef93b71149a3617680f"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-front.png",
+        "bytes": 347207,
+        "sha256": "73f32e5f1c6accca2ea548f29b279417a6ccab14d44a53c4e257c9bb6c7e2f57"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-side.png",
+        "bytes": 384858,
+        "sha256": "3712952a52fac3311deded27a96a4e85e81c2c6a6efc5c61557a04dc9a6f305e"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-quarter.png",
+        "bytes": 399206,
+        "sha256": "518695a7aa5eb426d09deb8ad0bd51cf03fc1fc57406ef4cbc80ea3462bd26dc"
+      },
+      {
+        "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-opposite.png",
+        "bytes": 393161,
+        "sha256": "0061d35300e5b8a423a76a007a3fba3a5df0144cd143c8b17117f23d09a597fc"
+      }
+    ],
+    "poseInputs": [
+      {
+        "name": "ram-prepare",
+        "sha256": "82cb4d9d13e34f6128f1a20d4ba83bc4c0474b158e4cdb000bf926e584b17d3d"
+      },
+      {
+        "name": "head-ram",
+        "sha256": "97d1614e387bbc35e53125267a5c48f4f91abb143d748c7b908568bf69e151b3"
+      },
+      {
+        "name": "native-fall",
+        "sha256": "55386e19aef2414165bef48e291754af5056c7d58153bdc86489d9a8c6b141a9"
+      },
+      {
+        "name": "chase-start",
+        "sha256": "21f06bbba541fec758ad9d07c16d1d0c0592cd70aa31e167fc0df7c74c484297"
+      },
+      {
+        "name": "chase-step",
+        "sha256": "1ec05fefd6f7d6382a8e7b59d39d4b9b93b87460f5902e93a264bb47199f33be"
+      },
+      {
+        "name": "chase-settle",
+        "sha256": "2488a6be073b0038bfbc1f3a77963a47479be050a35715e750daf0874de97b05"
+      },
+      {
+        "name": "ground-bite-1",
+        "sha256": "e8348d7d95e3f2ccfba2c92c1647b38d3b0e4b0d7035d346a7c140540ffe5ede"
+      },
+      {
+        "name": "ground-bite-2",
+        "sha256": "4554bd402a975abc3cf5c7c6083e2278e71154e940050919ba58e0912fb970f4"
+      },
+      {
+        "name": "ram-recovery",
+        "sha256": "9eeb72776cedca08890b9831df21b4d74b25dfdf032155695480b9e5454401d0"
+      },
+      {
+        "name": "ram-recovery-end",
+        "sha256": "9d8f66f23c836a86e140fd108c49bf179a5d94a33ffcef40bb8f822d73d25a79"
+      },
+      {
+        "name": "ram-watch",
+        "sha256": "317271bde37e6254c3f16e06eba8166954f01fef48b6d8942e07a28a914f1326"
+      },
+      {
+        "name": "wolf-collapse",
+        "sha256": "c9533910eef49a22ea854a0b0ad898ddec915d560da14cb87bf6f8ad2c488cdf"
+      },
+      {
+        "name": "wolf-supported-rise",
+        "sha256": "8b5f78e73deed2033ddad2125b88cfc88958c75715458ccafecac940d24749f0"
+      },
+      {
+        "name": "wolf-getup",
+        "sha256": "dbfc99bd09078d27cdc87e7271adc401dd9ce0e6e001291f8e18922587253917"
+      }
+    ]
+  },
+  "poseInputs": {
+    "wolf-v02-spec.js": "52495b30da2a28ee9e03581e7aae25dec6b1d15e77ab46f1555eb7628c43a766",
+    "wolf-v02-encounter.js": "f6d92d83780fd8d0d9fa35bb599234696513c84a89d6c75f99d091ee9d85f60e",
+    "wolf-v02-authored-clips.js": "415b2b5f080cacd47a057c2aa46b44495034162d8a7cc14deb64441892a01199",
+    "wolf-v02-combat-r13-clips.json": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94",
+    "wolf-v02-ram.js": "3af9977951a2d77e9400a2cd15b1dd5cfee89356dde351433050bbb84e0d42a4",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "wolf-v02-support.js": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783",
+    "wolf-v02-contact-shapes.js": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1",
+    "wolf-v02-hurt.js": "5c759063a1f9b6705cfdd142320b8ee3e2cab392f650117953a25c4e8d1ac181",
+    "wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065",
+    "wolf-v02-telegraph.js": "e8ad89b8d2a70b9a5519f4e260dd516201bd6150afb90ac76c02e00fc443fbf3",
+    "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+  },
+  "reviewOpinions": [
+    {
+      "timestampsSeconds": [
+        7,
+        27,
+        31,
+        39,
+        71,
+        79,
+        89
+      ],
+      "observation": "The red warning is a generic wolf actor-origin disc; it does not explain the visible mouth path, charge lane or separate pending bite phase.",
+      "opinion": "Show a committed charge lane or local mouth-phase footprint that agrees with the actual contact geometry, then clear each resolved phase immediately. The indicator should help the player predict where a dodge is safe.",
+      "qualification": "The origin was verified by root from the full27-second frame and code. Earlier low-resolution appearance as a player-origin ring was corrected."
+    },
+    {
+      "timestampsSeconds": [
+        20,
+        21,
+        22,
+        23,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "observation": "Repeated stamina warnings cover the central combat area while the player repeatedly tries actions.",
+      "opinion": "A persistent disabled/cost state on the action button and a less repetitive warning could clarify that an input was rejected before any attack. This would separate resource failure from a genuine collision miss.",
+      "qualification": "Stamina rejection may explain some apparent failed inputs. It does not explain all visible misses, and no stamina balance/input change is proposed here."
+    },
+    {
+      "timestampsSeconds": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        50,
+        56,
+        61,
+        64,
+        69,
+        73,
+        74
+      ],
+      "observation": "During close front-facing combat, the small warrior is often partly hidden beneath the much larger wolf's muzzle and forequarters.",
+      "opinion": "Review camera elevation/near-fight framing or a subtle player visibility cue. The approved model scale should stay fixed; better visibility would help distinguish a real fall, guard, shove and prone maul.",
+      "qualification": "This is a readability opinion from the supplied camera view, not evidence that model scaling or animation is incorrect."
+    },
+    {
+      "timestampsSeconds": [
+        16,
+        18,
+        20,
+        21,
+        52,
+        62,
+        67,
+        74
+      ],
+      "observation": "Healing ticks and several damage numbers appear close to the same character overlap.",
+      "opinion": "Clearer ownership/placement of hit, block and healing feedback could reduce uncertainty about which action connected. Keep healing/combat balance separate from any cosmetic presentation decision.",
+      "qualification": "The sheets establish visual clutter but do not identify every individual damage/heal event."
+    },
+    {
+      "timestampsSeconds": [
+        60,
+        66,
+        72
+      ],
+      "observation": "BLOCK text/white flash can occur around the same shield action that later performs its outgoing push.",
+      "opinion": "A clearer distinction between held guard, successful defensive block and released push would make the narrow outgoing hit moment easier to understand.",
+      "qualification": "The existing shield cast blocks before its released push window. A defensive block is not automatically proof that the later push damaged the wolf; real animation/surface tests handle that distinction."
+    }
+  ],
+  "deployment": null
+}

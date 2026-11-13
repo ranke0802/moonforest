@@ -136,10 +136,10 @@ test('heavy/bash interrupt before impact, capture escape and death release input
   const e=await begin(f,'quick-bite');e.player=f.player;e.dt=1/60;
   e.gate.collect=()=>({hits:[{id,damage:20,heavy:id==='judgment'}],hitStop:.03});
   try{e.poseAndContacts(f.player,{state:'idle'},{actionId:7},null);}finally{delete e.gate.collect;}
-  assert.equal(e.brain.mode,'hit');assert.equal(e.brain.state,WOLF_V02_BRACE);assert.equal(e.knockVelocity.length(),0);assert.equal(e.pendingEvents.length,0);
+  assert.equal(e.brain.mode,'down');assert.equal(e.brain.state,WOLF_V02_DEATH);assert.ok(e.knockVelocity.length()>0);assert.equal(e.pendingEvents.length,0);
   const before=e.actor.position.clone();
   for(let i=0;i<45;i++)frame(f,e,1/60);assert.equal(e.playerHp,500);assert.notEqual(e.brain.mode,'attack');
-  assert.ok(e.actor.position.subtract(before).dot(before.subtract(f.player.position))>0,'standing brace root moves away from the hit');
+  assert.ok(e.actor.position.subtract(before).dot(before.subtract(f.player.position))>0,'approved collapse and bounded recoil move away from the hit');
  }
  let e=await begin(f,'pin');const initial=f.player.position.clone();
  for(let i=0;i<300&&!e.grab.active;i++)frame(f,e,1/60);

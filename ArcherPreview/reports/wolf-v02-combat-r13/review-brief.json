@@ -1,0 +1,47 @@
+{
+  "baselineRevision": "1bf3892",
+  "publishedRuntime": "f757c20929faf29a8d9e12ed2544b4e68a170165",
+  "scope": "Wolf combat in separate MoonForest0.2 only; frozen0.1 and other actor/player inputs/quality/LOD remain preserved.",
+  "requested": [
+    "Ram visible in ordinary actual fighting distance, with straight or lateral-evade fast approach.",
+    "Player shield push/heavy attack hit volumes follow visible wolf anatomy and heavy contacts use articulated collapse and supported get-up.",
+    "Outgoing warning footprint and actual damage volume/timing agree; real dodge/miss/guard remain.",
+    "After actual ram knockdown, wolf quickly takes physical steps toward actual prone target before mauls.",
+    "At HP>=50%, sufficient recent damage triggers fast backward retreat and 2–3s player-centred observation; close incoming attacks prompt physical evade-counter."
+  ],
+  "extraReviewOnly": [
+    {
+      "time": [
+        20,
+        31
+      ],
+      "finding": "Repeated large stamina alerts cover the hero and muzzle; zero stamina also explains some rejected attacks.",
+      "proposal": "Keep requested centre placement but limit repeated alert density and use a clear low-stamina bar cue; do not silently rebalance stamina."
+    },
+    {
+      "time": [
+        27,
+        31
+      ],
+      "finding": "The generic wolf-origin warning ring covers a broad disc while contact uses mouth/head path.",
+      "proposal": "Use a directional footprint and distinguish preparation, active contact and recovery."
+    },
+    {
+      "time": [
+        11,
+        35
+      ],
+      "finding": "Small hero overlaps the large wolf head/forelegs, reducing read of weapon/shield/body contact.",
+      "proposal": "Consider an optional combat framing/occlusion aid separately after corrected contacts are assessed."
+    },
+    {
+      "time": [
+        11,
+        44
+      ],
+      "finding": "Damage labels appear high above the wolf and away from the actual strike point.",
+      "proposal": "Consider a small contact-point visual cue while keeping the existing readable damage label."
+    }
+  ],
+  "verification": "Video observations are visual evidence. Code/actual native-model contact tests establish causes. CPU/offline renders are not device performance measurements."
+}

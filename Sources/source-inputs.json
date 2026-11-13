@@ -44,7 +44,9 @@
     "wolf-feral-r10-review-reference": "Sources/references/wolf-feral-r10",
     "wolf-v02-predator-r11": "Sources/actors/tripo-monsters/wolf-v02-predator-r11",
     "wolf-predator-r11-review-reference": "Sources/references/wolf-predator-r11",
-    "wolf-v02-ram-r12": "Sources/actors/tripo-monsters/wolf-v02-ram-r12"
+    "wolf-v02-ram-r12": "Sources/actors/tripo-monsters/wolf-v02-ram-r12",
+    "wolf-v02-knockdown-r13": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13",
+    "wolf-combat-r13-review-reference": "Sources/references/wolf-combat-r13"
   },
   "inputs": [
     {
@@ -40930,6 +40932,1709 @@
       ],
       "requiredBy": [
         "moonforest-0.2-wolf-ram-r12"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/actions.json",
+      "bytes": 416129,
+      "sha256": "c2ffee9f2163c67b572b01558f9928aec3a2404f4ae59c975d4f09526c4743c3",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/audit.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/audit.log",
+      "bytes": 2961,
+      "sha256": "7aa344c768351b4615e2c95a10f4dd52531e2d2a45e44ff3cc168e21e573d0a4",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/AUTHORING_NOTES.txt",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/AUTHORING_NOTES.txt",
+      "bytes": 6065,
+      "sha256": "5ec871a7cf8753fbab3ec84a266b5808fd055946708ddf63ea3c6a5b6cec8400",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/backward-run-actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/backward-run-actions.json",
+      "bytes": 41448,
+      "sha256": "4318291c0e3878cc2dd80a137494d028aff3b07db97f3a3de0e1539a42e22936",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/blend/wolf-v02-knockdown-r13.blend",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/blend/wolf-v02-knockdown-r13.blend",
+      "bytes": 64317632,
+      "sha256": "4433d2eb8d3bf754956e41969bd256e7f614ec96c585c855b00a636e3922a618",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/clips.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/clips.json",
+      "bytes": 2283059,
+      "sha256": "2f0fe94738248cfdd2c3d7499c4954059df517166f78405de6bb25edc588b27f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/close-ram-actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/close-ram-actions.json",
+      "bytes": 229965,
+      "sha256": "cacfbfb8133ebfe9e1f63d3f8a8464078d3e67e190bff4a771e5ccc49d3240bc",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/combat-build.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/combat-build.log",
+      "bytes": 3470,
+      "sha256": "9d1afc1cffcc13e1adb1f2ca8c57fb83e6418b5c02b5656cc1b75c94ca387cd6",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/combat-motion.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/combat-motion.log",
+      "bytes": 28968,
+      "sha256": "e2d202c5ed016399c9308a9f2e80b2c9fd38679ef294ed7f57b82ee8d29417ea",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/combat-render.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/combat-render.log",
+      "bytes": 16248,
+      "sha256": "c77e4bd3ae9b01af9de3053ca75dbbaee9d73c181eb1fe35fa08fdbe5bdb17a1",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/deformation-validation.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/deformation-validation.json",
+      "bytes": 33179,
+      "sha256": "d1dc16829227d36cdfd71d40063f058fb69a78730c2297dbd996e07e633b8669",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/export.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/export.log",
+      "bytes": 802,
+      "sha256": "d1e3a3695743df284f4f8ad2ec20fd375157de009038ebd9f8d0915acd166bc3",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-actions.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-actions.json",
+      "bytes": 144947,
+      "sha256": "c20c6cbb9cf542ff62100b2ef86e49f0ca8a776b50d2e480d0481c6f9c9f9c27",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-build.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-build.log",
+      "bytes": 1132,
+      "sha256": "247e4553f4ea2aba74f5776557f545d27579eb9e4bf361cc78b10a14264d5996",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-motion.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-motion.log",
+      "bytes": 23029,
+      "sha256": "dcca3d0d097713db9a9a0db2903b7573bfa3eb49203e615cae72d491d84364e7",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-render.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/getup-render.log",
+      "bytes": 10221,
+      "sha256": "bfd9d021e2d56a95dd3bcfbf92afefe654c62d2b66b098697b76ef655845b9da",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/manifest.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/manifest.json",
+      "bytes": 12548,
+      "sha256": "dc6926cbb9642ca8b810252fed617c5e357268850bc568b8c0be38349ecdadc2",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/models/wolf-v02-knockdown-r13.glb",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/models/wolf-v02-knockdown-r13.glb",
+      "bytes": 475648,
+      "sha256": "b9a23d5e5c85b976f0a74ede69e65744cb2c1667979090a093401b15466421c9",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/package-review.log",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/package-review.log",
+      "bytes": 15554,
+      "sha256": "1ed682025bb37999aa9233da51aa8db1b89c9b4de8f033545d336db2f7bea5a2",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/r12-suffix-comparison.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/r12-suffix-comparison.json",
+      "bytes": 439,
+      "sha256": "a694b3f43d2d4fe4e7992143cae89251c51b5c6fc99782576fbad035e7e146b5",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/combat-render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/combat-render-cases.json",
+      "bytes": 6972,
+      "sha256": "a43989a891c151ea14bbb6cbc6424b54586f9471a5d50564a057c27e526c8482",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/getup-render-cases.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/getup-render-cases.json",
+      "bytes": 3902,
+      "sha256": "d8d4cf42fbbbb3fe084ba4bb1016621b27dd4b6e9d70905d5632c522ae72e9d0",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/preview-timing.json",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/preview-timing.json",
+      "bytes": 1000,
+      "sha256": "a5db036ccd79e9e1fdce40d596e4ff5b4ab5b152f3c6628f810cfc795fe272d5",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run-filmstrip.jpg",
+      "bytes": 195509,
+      "sha256": "d38cb9b35839af3591be4cb4c1d06c7d323187fbee4c90978c8b61275b3057c3",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run-joint-sheet.jpg",
+      "bytes": 168248,
+      "sha256": "1158f483717f8c8f8c0ea45c75ed5c245dda5ede04227facd4d8abc107d0d409",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run-truecolor-sheet.jpg",
+      "bytes": 326165,
+      "sha256": "2be13bc699a2197273e5a4c344a286a3464a587ac32395f928f924ef68e71981",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-backward-run.mp4",
+      "bytes": 385883,
+      "sha256": "f63e0916f148a503f260b1b90d796f34c4d06fd5e31443c5c0f61e5c095b55fd",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram-filmstrip.jpg",
+      "bytes": 192693,
+      "sha256": "b7185c8c646c947fa78f070b38bea8788f35c400e1c2a6686e5b60cf4473ed24",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram-joint-sheet.jpg",
+      "bytes": 509872,
+      "sha256": "4ee167dba8710850d0cbdd2727b34f19c4c75ca2447ee9973e9c499ecf241bca",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram-truecolor-sheet.jpg",
+      "bytes": 435758,
+      "sha256": "8d368fe21789201b372a3c5028e0ed1a0995a6ea5f373c5bd33d518183d24e0d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-compact-ram.mp4",
+      "bytes": 509583,
+      "sha256": "641de23d5e0265b990f723335141d47de64b79440590b49b1f4121cf6a02d3cf",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup-filmstrip.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup-filmstrip.jpg",
+      "bytes": 181687,
+      "sha256": "7322fed7586794479dc1d5ee146e00c08314726b48b5358f5e071cb3186c1a29",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup-joint-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup-joint-sheet.jpg",
+      "bytes": 516272,
+      "sha256": "34e23aa1c8d4442c1fee7cfa75ee92c4f1e7913143c4af2aedace859a6d448b4",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup-truecolor-sheet.jpg",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup-truecolor-sheet.jpg",
+      "bytes": 435200,
+      "sha256": "ba9c1f1cc1a87d8ad8646bae0b23561ce21b2568255ad0cf80648bb25426701f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup.mp4",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/R13-getup.mp4",
+      "bytes": 391941,
+      "sha256": "a76093614b3c1169b614a2260b92a6fd92a42bac556955bead42a5e6e73fd1ed",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-left-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-left-front.png",
+      "bytes": 453213,
+      "sha256": "465080d07ea404a71102e99192fde955739540b4fa172c5d4eb5f4d2c88d05bf",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-left-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-left-quarter.png",
+      "bytes": 502880,
+      "sha256": "afe1f298f069577db55f090d6b15af781fb57f964f825ffeb21042696b89ec7d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-left-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-left-side.png",
+      "bytes": 472160,
+      "sha256": "6943233746da6d43695acf55f5068968624dcae62863cc29ce9488e848d0deb3",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-forelimbs-matcap.png",
+      "bytes": 509350,
+      "sha256": "e17e7d0a5a0edc852daa25c3d7066f13ac58e9e9b34d9b3fe3ad362c93e3a63a",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-forelimbs-quarter.png",
+      "bytes": 567188,
+      "sha256": "8ef2de67e971d4200065778ad9e94fa168509891f7b563431a87a4dc2ad5f0d5",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-front.png",
+      "bytes": 452479,
+      "sha256": "bcddcb5aa86a0a32bb633acd66a90bcc62f84dc259734ba30a767449a0b11366",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-hindlimbs-matcap.png",
+      "bytes": 524344,
+      "sha256": "c4893f5196af13d311f5c8afa76bc3ebe3319d4280c51ae89088cb7dc0b889c5",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-hindlimbs-quarter.png",
+      "bytes": 587082,
+      "sha256": "6fe41bf673a8c368693d0664dde2db5fb70330754f438b7b3aa1d833a6b8cb3d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-quarter.png",
+      "bytes": 503437,
+      "sha256": "c282295bad431d05771811b71953da89f9e3d5420068ba591e89b4450197336d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-flight-right-side.png",
+      "bytes": 474215,
+      "sha256": "1c5781def71572247b521dc97cdd3b995348605a6c5381d3187f2c80c8abc6d4",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-seam-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-seam-front.png",
+      "bytes": 450162,
+      "sha256": "826e7920f058d6934da142e4922bae63dfcd022e3fdb0637a34d6ff33886c5bc",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-seam-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-seam-quarter.png",
+      "bytes": 498583,
+      "sha256": "4f1a799e1271304fbfe2822966f42ed9d293eadfbb36df52f6f30d79ea4764bc",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-seam-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-seam-side.png",
+      "bytes": 476425,
+      "sha256": "ecdf16103384a7b9c500b6868457ec52c9b3ad27a3fdaee91a0d3e012bf7314d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-left-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-left-front.png",
+      "bytes": 452738,
+      "sha256": "4d7abf6b4e43e0cb7ac089320a9881b6ff0b5339d03534d0db6f5f5c1883364a",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-left-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-left-quarter.png",
+      "bytes": 502243,
+      "sha256": "3097a3ff2b62034714b48985340c9f4a20b66480c298d9535d610c8374a5ff7f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-left-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-left-side.png",
+      "bytes": 475888,
+      "sha256": "38194e6d14000f6ab8e206b98e7509fdf288e9507aac0333afe0fe8160c99f40",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-right-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-right-front.png",
+      "bytes": 450745,
+      "sha256": "3397693eb68658850ae5b2cf170b9f0c54c99df22cfb770367bfdff2faf74773",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-right-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-right-quarter.png",
+      "bytes": 500111,
+      "sha256": "530d0a3c96287ad6f5acdb85468ce2aacb4708f63547b476f55d03e20bab4dc0",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-right-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Backward_Run_V02-support-right-side.png",
+      "bytes": 474800,
+      "sha256": "fb026909f53eb90d3a395668c9666e11fa053d5a100607949d7abcd7c9855c77",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite1-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite1-front.png",
+      "bytes": 436318,
+      "sha256": "85c181495c5c2d4cfd8f030a27356be089a43ef73ad75baeca3c3a76c3e7975f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite1-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite1-quarter.png",
+      "bytes": 492529,
+      "sha256": "cbfc8e4451bb65ebd7701681bf994bd40d8f0bbf2bf27192f6a00b6b04ac7a9f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite1-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite1-side.png",
+      "bytes": 456642,
+      "sha256": "b1c48e64607a14d189a41803aa698c4380b81df34a4bb7a4c1bb044c681e614c",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite2-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite2-front.png",
+      "bytes": 436228,
+      "sha256": "1b20120470d3778e346c2fc023077ea657cbbe2e82d946198ace985f1decac11",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite2-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite2-quarter.png",
+      "bytes": 492732,
+      "sha256": "d6892ab6b31832faaacda01799afe514daa1eb56801ff022faa0a0e1515e51e9",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite2-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-bite2-side.png",
+      "bytes": 456466,
+      "sha256": "35545f82e159a30e82e75ad87e7479d5bb84809449ab5ddb99f9fb6ee99ddd25",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-forelimbs-matcap.png",
+      "bytes": 520963,
+      "sha256": "58c2de89e907aa614b6b72c45ecc5011205aa8df2d8db8e74f633cec0b2dc2a2",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-forelimbs-quarter.png",
+      "bytes": 575514,
+      "sha256": "db660386452d5f9b79773062cffccb97ac4ea9d93787af6e1050e69c42b9b388",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-front.png",
+      "bytes": 437392,
+      "sha256": "2fe7c46dd60ec6cf81a314540137485356170e9cc7c371101d7bf41764f0ef68",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-hindlimbs-matcap.png",
+      "bytes": 506220,
+      "sha256": "370515a62af033c92e3145b2dedbad4d5a6e1b25ba3dae03e3209b0ca97791c8",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-hindlimbs-quarter.png",
+      "bytes": 564825,
+      "sha256": "b535296b916f52e2405e8ef47f6abf0b6bb78b70142fa819cbb693e30001e6c9",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-quarter.png",
+      "bytes": 489413,
+      "sha256": "76c64856b233af7d247e091ac6e279e898eef283d88eccac312dacf19b0f8c98",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-drive-side.png",
+      "bytes": 457860,
+      "sha256": "e1a9ab4e14f1415ab82e60af21439196ece588fa241658e17254408214976b6e",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-forelimbs-matcap.png",
+      "bytes": 525904,
+      "sha256": "cb4bbd897384e37b8489ae9186a8e6162ee2f0ed139e6c193f6264dd89b39fba",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-forelimbs-quarter.png",
+      "bytes": 587569,
+      "sha256": "93fceaa4df9a344493399ed5610c25edd920daa4ecc71c462a74fd421c9c6206",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-front.png",
+      "bytes": 433995,
+      "sha256": "b27b5a47223355185f5ac1854b68b8001b5ce362b376bfff36a4979ed5e3fbca",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-hindlimbs-matcap.png",
+      "bytes": 517653,
+      "sha256": "56cc6afa46766e0e4198a7b6eeada837deddb3784deac88c3a168829f6b331f8",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-hindlimbs-quarter.png",
+      "bytes": 577965,
+      "sha256": "b0035bcd9fb39e8b49967013c8baaa6847d4d8adf4a65361cb844a92ccafb59d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-quarter.png",
+      "bytes": 488167,
+      "sha256": "0836a6b3d8f000fd4275fc32d72aa25fc96a92d4a8665d38e79c4bbebbea1b94",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-headram-side.png",
+      "bytes": 452994,
+      "sha256": "a06a0c9f32995f9210bed0ab5545baa7fe418e8f411173c3f5e509e3100056f0",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-forelimbs-matcap.png",
+      "bytes": 523113,
+      "sha256": "567387fdb9fb34b8d68209a4e50d75281872a77ab948e1315b9f7c2b58fc1e22",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-forelimbs-quarter.png",
+      "bytes": 580860,
+      "sha256": "63592805bb2341f6970189ca6e1239760aab835c9e95996909955a9ad6d516f8",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-front.png",
+      "bytes": 443213,
+      "sha256": "f3c178fd31cff40fa7da7318057d6fa168553f67b423e7b5cd20ebc09dca8c19",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-hindlimbs-matcap.png",
+      "bytes": 527440,
+      "sha256": "d958267cbaa662210a430db5d922fe4e1c643b4441825ad93820ea4dcfb33b70",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-hindlimbs-quarter.png",
+      "bytes": 588035,
+      "sha256": "e8a264ec0dd925b02d4155ccfa476fd39ed576e8de66cb8ee7af8567e3704560",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-quarter.png",
+      "bytes": 497202,
+      "sha256": "73fdaa00b9a23e321151d0b94e7510e40fbf4c6ee04abe7b9775788763b4eefc",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-pursuit-side.png",
+      "bytes": 460292,
+      "sha256": "1f3407d16b760f2e9ed6f48d90b7c95424448523387755898120a6dc68d7ca32",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-recover-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-recover-front.png",
+      "bytes": 457013,
+      "sha256": "7afa2b9843356ebaa763c111b052d995e1aa5f9ba387bb02042892943eae38ff",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-recover-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-recover-quarter.png",
+      "bytes": 504173,
+      "sha256": "8238124c345250a0e361adc92888ad0ed1a7baa86e2008d42991099c825aa2f4",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-recover-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-recover-side.png",
+      "bytes": 469463,
+      "sha256": "464dc77e3862a552abd1f4fc50828ae68ef47baee1a62557dfabe35ef2789301",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-watch-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-watch-front.png",
+      "bytes": 455446,
+      "sha256": "2aa52e103e0a435de3a0f61a921d635fc5be988114bf9692ec0cd54ab7b9bc5a",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-watch-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-watch-quarter.png",
+      "bytes": 503692,
+      "sha256": "e48868247c5121a4f689ff68ea03c53d2d1fc6e302700f1b86a1ff4d54cea1c3",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-watch-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Close_Ram_Ground_Maul_V02-watch-side.png",
+      "bytes": 471771,
+      "sha256": "cb786518dfaa5eabcb1b639379d9daf3f1999a05184fd79986c4a67166ff5dce",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-forelimbs-matcap.png",
+      "bytes": 509020,
+      "sha256": "d2b3b4d9a9690eeedf33f24052f690654b0d06f600a9a2b0048aaa0d6bc1b58d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-forelimbs-quarter.png",
+      "bytes": 592978,
+      "sha256": "6a4742ead74229a467525b5ff28be115fe17c3943ea4fffb45e73dedb54c6e10",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-front.png",
+      "bytes": 440416,
+      "sha256": "49052ec26c1005a6e1c65e7296e109c7391c932629bd5e77e70120eeaf517ee9",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-hindlimbs-matcap.png",
+      "bytes": 479490,
+      "sha256": "7efe2b5eedf60081a0e802b659b7d272cb41b76555f6365cef0693309506e68a",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-hindlimbs-quarter.png",
+      "bytes": 559230,
+      "sha256": "9f3ace601bd5c1272e42c4a1c288d61599145fbbdc3bd20092d6bd1d30877ea3",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-quarter.png",
+      "bytes": 485668,
+      "sha256": "ec6f2548f296f0c01155bbc7eda258045f33ec6cee6a43990509c754dab10bbd",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-fore-support-side.png",
+      "bytes": 458056,
+      "sha256": "20420ff6ffa70de880e45a8e4023d31632314026bc637b036d9b908b99d61edf",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-head-lift-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-head-lift-front.png",
+      "bytes": 431282,
+      "sha256": "91a9cb9e20a910b617e82e5010aef8ab9f05a86ed515b6b020bfb8df7c98ae43",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-head-lift-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-head-lift-quarter.png",
+      "bytes": 476924,
+      "sha256": "411334f5f179991b92b6e094ba3d49c385c456b00a35e3a6af2c92da023dc27a",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-head-lift-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-head-lift-side.png",
+      "bytes": 449751,
+      "sha256": "f36cf80e02e762a274529c45aa81f45219a1606801542e4178199bd5fd7a0044",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-lying-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-lying-front.png",
+      "bytes": 428486,
+      "sha256": "51a7f76d9c35e6fca6b1fefabc92cf7a606f7802a4a7247d6e1906e61702d55b",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-lying-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-lying-quarter.png",
+      "bytes": 475912,
+      "sha256": "836b19db57c351bd848fdb4f95dd0850ab2095e2918e548ea2e5f89127bafddc",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-lying-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-lying-side.png",
+      "bytes": 446336,
+      "sha256": "be4873e918241a6d4f03583bbe2d8b6371a88db63772574835992987447771ed",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-forelimbs-matcap.png",
+      "bytes": 493087,
+      "sha256": "058031ed528790c9248ecd6c1e50e0ddec7170ecc063b4ca738670fc519c5f5f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-forelimbs-quarter.png",
+      "bytes": 576146,
+      "sha256": "b15f9dccf1c1317cd1ed55a38e03d000b1fb85d2978eb2fc374e6df9717d7a5e",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-front.png",
+      "bytes": 446616,
+      "sha256": "8c44df764d2370bbdec28a6dd9c50973b0976025b36c8237b2ad3bf209cbc519",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-hindlimbs-matcap.png",
+      "bytes": 492289,
+      "sha256": "22a0a545e889e42d4abb8bb6ad53698803c67afc2510fa03c2121e969788fd5f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-hindlimbs-quarter.png",
+      "bytes": 570198,
+      "sha256": "5b6e9da600348cc048dbb688d6a6b03b556e30f0995eb9e2c2fad128ced4982e",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-quarter.png",
+      "bytes": 495035,
+      "sha256": "c5549a27cadde2440bd5643c8a88967bbf747c7b3550317c98338ee8f932d6b0",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-rise-side.png",
+      "bytes": 464847,
+      "sha256": "b6c4f8d842a0a4a27ced3d633b01158b2baf602c053baa199e9e1c07f3922bc1",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-forelimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-forelimbs-matcap.png",
+      "bytes": 497088,
+      "sha256": "dbf8b43ded7e26c27fc70a5dea0b7b4f37bd1e9a08c353eba5347d79b9d775f5",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-forelimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-forelimbs-quarter.png",
+      "bytes": 579106,
+      "sha256": "e3e6e2f7d3ccc609bc77ae5c739f15e6a871cafcb2f760c625387ca94680357d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-front.png",
+      "bytes": 445119,
+      "sha256": "cac52dffc671900831c8f56b8e075c92be9d96527baea90730c17f5acda13ba7",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-hindlimbs-matcap.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-hindlimbs-matcap.png",
+      "bytes": 491884,
+      "sha256": "87baec339d113631aceb43388929a4276ef8f1db063143ca2c6f2113f86305d1",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-hindlimbs-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-hindlimbs-quarter.png",
+      "bytes": 569923,
+      "sha256": "bd5f67abdaf4df5129a5969d092d76f172465197db5e0ce426ce358d79b79d94",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-quarter.png",
+      "bytes": 493998,
+      "sha256": "11c5b0d88abe291dbaa7bac353a1a60d5e343c83b672a5b35547113a24d5f67d",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-sternal-side.png",
+      "bytes": 464058,
+      "sha256": "955a04490b1faef6b0a4e8696017d75a0c21b3ddf591104cbe53e1306ee5ac83",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-front.png",
+      "bytes": 454307,
+      "sha256": "702c67a917ab249999834eeb49562fcf60e46b4f5781c1a9d2addcd60520b274",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-quarter.png",
+      "bytes": 501729,
+      "sha256": "ffb5ab97c80e24e3b2982ecc60d08992c07310d11864eb2e76f36a637bdc22ec",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-side.png",
+      "bytes": 469127,
+      "sha256": "607e31a5bc7620f95bfcaa898ffd87c0de133d3e8a3c3626ba4631541295c5c7",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-step-front.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-step-front.png",
+      "bytes": 449495,
+      "sha256": "eccb04564e836eb1003292986a338d86dc9b3bbf0ec0e37d124fd8c47f6f2b4b",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-step-quarter.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-step-quarter.png",
+      "bytes": 501648,
+      "sha256": "944b5e6c84d4a71f67c7bcde1e6c8a76296952c33d7f13a25301e5cee98ef99f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-step-side.png",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/review/Wolf_Supported_Get_Up_V02-watch-step-side.png",
+      "bytes": 468710,
+      "sha256": "1e4bd4a14f941bef71f90c6e2c87e3402569ff5050b35cb5c1d81fa3e7cafb02",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/audit_deformation.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/audit_deformation.py",
+      "bytes": 7979,
+      "sha256": "1b4558925421c9bf5335930de373ad809ac033227acbe4e1c82b6c539c9a4a69",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/build_combat.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/build_combat.py",
+      "bytes": 14773,
+      "sha256": "0e3757b1a3831f21e4738d20272e3e38b85660be1466b92999970604902e4cd7",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/build_getup.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/build_getup.py",
+      "bytes": 11323,
+      "sha256": "4da9fd074c236f6235a0f5f3310273c66348508cc0031adc637f0c3028863c40",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/export_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/export_clips.py",
+      "bytes": 1761,
+      "sha256": "2bf4d6aa0a99a4e1d185bc1f5d83e0fa97838de3f95deafe8850b874a2db7f30",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/extract_clips.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/extract_clips.py",
+      "bytes": 6190,
+      "sha256": "f4fba3355f8722802578cb72f0d2eb5c22309f838688698404f2b3cdb5ee079f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/finalize_manifest.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/finalize_manifest.py",
+      "bytes": 6281,
+      "sha256": "09a09174ca7659d37ca15a70e48bb0a87d00e0339db3815282601d5ad33dfb47",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/package_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/package_review.py",
+      "bytes": 4127,
+      "sha256": "9323bd92a2f0f908ad049bfc1326994ad2db0f05444812c8a7ff89ca8c41b19f",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/refresh_metadata.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/refresh_metadata.py",
+      "bytes": 1772,
+      "sha256": "ff611901d942f2c6699ee4ee5ccae4bac724eebe1e96ee365690e17ab9647cf1",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/render_review.py",
+      "path": "Sources/actors/tripo-monsters/wolf-v02-knockdown-r13/scripts/render_review.py",
+      "bytes": 8494,
+      "sha256": "053585f19236fb44f137a3380f5a467bbfb17409ee494120ac24c7e4c303dd54",
+      "origins": [
+        "R13 supported get-up, compact head ram/prone pursuit and backward gait, animation-only derivatives; unchanged R8 mesh, UVs, normals, weights, binds and 4K texture"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-combat-r13/observed-gameplay.mp4",
+      "path": "Sources/references/wolf-combat-r13/observed-gameplay.mp4",
+      "bytes": 31834740,
+      "sha256": "d3f56b145d14d09c5d28b265161e10614a9fa6566b1e8a840385f7648b559669",
+      "origins": [
+        "User-supplied MoonForest R12 gameplay recording; visual review reference only, never runtime content or an instruction source"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13-review"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/references/wolf-combat-r13/provenance.json",
+      "path": "Sources/references/wolf-combat-r13/provenance.json",
+      "bytes": 472,
+      "sha256": "bc92f44cf14a873d6e3302f4d92a20322861b7dc4674481cb47788457998ef37",
+      "origins": [
+        "User-supplied MoonForest R12 gameplay recording; visual review reference only, never runtime content or an instruction source"
+      ],
+      "requiredBy": [
+        "moonforest-0.2-wolf-combat-r13-review"
       ],
       "status": "bundled"
     }

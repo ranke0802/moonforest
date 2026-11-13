@@ -1,0 +1,11 @@
+{
+  "file": "mourning-elena-encounter-CKjnIN7G.js",
+  "bytes": 5146473,
+  "sha256": "65531b48818bbf4ebadf69f615f22010de4e4846b0ef06af54d22a58f4579793",
+  "historicalR9Present": false,
+  "historicalR12Present": false,
+  "activeCompactPresent": true,
+  "beforeCleanupBytes": 7494025,
+  "removedUnminifiedFileBytes": 2347552,
+  "scope": "Same active21clip actor and source quality. Historical R9/R12 source keys remain in Node/offline review only. File bytes are not gzip transfer or GPU residency."
+}

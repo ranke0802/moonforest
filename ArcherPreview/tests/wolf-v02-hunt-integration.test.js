@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {wolfHuntFixture,beginWolfHunt,stepWolfHunt,huntResourceCounts} from './helpers/wolf-hunt-fixture.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
-import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_GET_UP} from '../src/wolf-v02-spec.js';
 import {WOLF_V02_AUTHORED_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const evidence=[];
@@ -41,7 +41,7 @@ test('actual default hunt attacks, stalks and faces the player instead of runnin
  }
 });
 
-test('all nineteen motion roles remain available independently through discovery, direct sampling and combat reactions',async t=>{
+test('all twenty-one motion roles remain available independently through discovery, direct sampling and combat reactions',async t=>{
  const f=await wolfHuntFixture(t);await f.battle.summon(f.player,1,'wolf');const e=f.battle.encounters[0],visited=new Set([e.brain.state]);
  const tickUntil=(accept,limit=1000)=>{for(let i=0;i<limit&&!accept();i++){e.playerHp=500;stepWolfHunt(f,e,1/60);visited.add(e.brain.state);}assert.ok(accept(),JSON.stringify({state:e.brain.state,mode:e.brain.mode}));};
  e.actor.position.setAll(0);f.player.position.set(0,0,5);tickUntil(()=>e.brain.mode==='alert');tickUntil(()=>e.brain.mode==='rise');tickUntil(()=>e.brain.state===WOLF_CLIPS.watch);
@@ -49,14 +49,14 @@ test('all nineteen motion roles remain available independently through discovery
  for(const id of ['quick-bite','paw-swipe','lunge','pin']){e.brain.startAction(id);const action=WOLF_V02_BY_ID[id];e.animator.transition(action.sourceClip,{clipTime:action.impact,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(e.brain.state);}
  e.brain.hit({damage:1,interruptsBoss:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_CLIPS.hit);
  e.brain.hit({damage:1,stun:.1});assert.equal(e.brain.state,WOLF_CLIPS.hit);assert.equal(e.brain.stagger,0);visited.add(e.brain.state);
- e.brain.hit({damage:1,heavy:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_V02_BRACE);tickUntil(()=>e.brain.behavior==='flank');
+ e.brain.hit({damage:1,heavy:true});visited.add(e.brain.state);assert.equal(e.brain.state,WOLF_V02_DEATH);tickUntil(()=>e.brain.behavior==='flank');
  // Legacy fall/get-up remain reviewable source roles, while live nonlethal
- // R11 reactions deliberately keep the wolf on its feet.
+ // R13 reactions use the improved collapse and supported getup.
  for(const clip of [WOLF_CLIPS.lunge,WOLF_CLIPS.brace,WOLF_CLIPS.down,WOLF_CLIPS.recover]){e.brain.start(clip,'idle');e.animator.transition(clip,{clipTime:.2,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(clip);}
  const manuallySampled=[];for(const clip of WOLF_V02_AUTHORED_CLIPS){e.brain.start(clip.name,'idle');e.animator.transition(clip.name,{clipTime:clip.duration*.37,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();visited.add(clip.name);manuallySampled.push(clip.name);}
- const expected=[...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)];assert.deepEqual([...visited].sort(),expected.sort());assert.equal(e.animator.clips.size,19);assert.equal(f.container.animationGroups.length,12);assert.equal(f.scene._activeAnimatables.length,0);
+ const expected=[...Object.values(WOLF_CLIPS),...WOLF_V02_AUTHORED_CLIPS.map(c=>c.name)];assert.deepEqual([...visited].sort(),expected.sort());assert.equal(e.animator.clips.size,21);assert.equal(f.container.animationGroups.length,12);assert.equal(f.scene._activeAnimatables.length,0);
  const resources=huntResourceCounts(f.scene);for(let i=0;i<3;i++){f.battle.hide();await f.battle.summon(f.player,1,'wolf');assert.deepEqual(huntResourceCounts(f.scene),resources);}
- evidence.push({case:'nineteen-role-availability',sampledRoles:[...visited],manuallySampledAddedClips:manuallySampled,allRolesAutonomouslyVisited:false,sharedTemplateClips:f.container.animationGroups.length,actorClips:e.animator.clips.size,warmRepeats:3,resources});
+ evidence.push({case:'twenty-one-role-availability',sampledRoles:[...visited],manuallySampledAddedClips:manuallySampled,allRolesAutonomouslyVisited:false,sharedTemplateClips:f.container.animationGroups.length,actorClips:e.animator.clips.size,warmRepeats:3,resources});
 });
 
 test('bounded physical contact windows deduplicate hits, consume a dodged strike and do not hit through walls or behind the wolf',async t=>{

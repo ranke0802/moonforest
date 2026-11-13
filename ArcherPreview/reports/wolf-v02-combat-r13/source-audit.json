@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-11-13T06:03:55.310Z",
+  "sourceDirectories": [
+    "wolf-v02-knockdown-r13",
+    "wolf-combat-r13-review-reference"
+  ],
+  "files": 131,
+  "bytes": 146097105,
+  "allHashesValid": true,
+  "scope": "Task-specific physical source registry audit. Historic origin paths are provenance only. This is not a full unrelated workspace archive audit."
+}

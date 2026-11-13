@@ -13,8 +13,9 @@ import {WolfEncounter} from '../src/wolf-encounter.js';
 import {WolfAnimator} from '../src/wolf-animation.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
-import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE} from '../src/wolf-v02-spec.js';
-import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_R9_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_PREDATOR_CLIPS,WOLF_V02_RAM_CLIPS,WOLF_V02_ALL_AUTHORED_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_GET_UP} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_PREDATOR_CLIPS,WOLF_V02_COMBAT_R13_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_R9_CLIPS,WOLF_V02_RAM_CLIPS,WOLF_V02_ALL_AUTHORED_CLIPS} from '../src/wolf-v02-authored-history.js';
 import {createActorEncounterFactory} from '../src/actor-encounter-adapter.js';
 import {sourcePath} from '../../Sources/resolve-source.mjs';
 
@@ -81,7 +82,7 @@ test('new standing attacks have separate clip identities and finite fixed-scale 
  const names=WOLF_V02_AUTHORED_CLIPS.map(c=>c.name);assert.ok(names.includes('Wolf_Predator_Diagonal_Bite_V02'));assert.ok(!names.includes('Wolf_Snap_Bite_V02'));assert.ok(WOLF_V02_R9_CLIPS.some(c=>c.name==='Wolf_Snap_Bite_V02'));assert.ok(names.every(n=>!Object.values(WOLF_CLIPS).includes(n)));assert.equal(new Set(names).size,names.length);
  const base=JSON.parse(fs.readFileSync(new URL('alpha-wolf.json',assetBase)));assert.equal(WOLF_V02_AUTHORED_SOURCE,base.sourceSha256);
  assert.equal(WOLF_V02_BY_ID['quick-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');assert.equal(WOLF_V02_BY_ID['chain-bite'].sourceClip,'Wolf_Predator_Diagonal_Bite_V02');
- assert.equal(WOLF_V02_R9_CLIPS.length,2);assert.equal(WOLF_V02_FERAL_CLIPS.length,4);assert.equal(WOLF_V02_PREDATOR_CLIPS.length,4);assert.equal(WOLF_V02_RAM_CLIPS.length,1);assert.equal(WOLF_V02_ALL_AUTHORED_CLIPS.length,11);assert.equal(WOLF_V02_AUTHORED_CLIPS.length,7);
+ assert.equal(WOLF_V02_R9_CLIPS.length,2);assert.equal(WOLF_V02_FERAL_CLIPS.length,4);assert.equal(WOLF_V02_PREDATOR_CLIPS.length,4);assert.equal(WOLF_V02_RAM_CLIPS.length,1);assert.equal(WOLF_V02_COMBAT_R13_CLIPS.length,3);assert.equal(WOLF_V02_ALL_AUTHORED_CLIPS.length,14);assert.equal(WOLF_V02_AUTHORED_CLIPS.length,9);
  for(const clip of WOLF_V02_R9_CLIPS){
   assert.ok(clip.duration>0&&clip.duration<=2);assert.equal(clip.fps,60);assert.ok(clip.channels.length>0);assert.ok(clip.rootTrack.length>1&&clip.yawTrack.length>1);
   const ids=new Set();
@@ -151,7 +152,7 @@ test('authored clips install once per cloned rig without changing the shared twe
  rows.push({case:'actor-local-install-and-reuse',sourceClips:12,totalClips:expected,repeats:5,resources:baseline,unchangedSharedTemplate:true,independentTargetsAndCursors:true});
 });
 
-test('0.2 nonlethal heavy/bash uses a standing authored shove while 0.1 retains its original knockdown',async t=>{
+test('0.2 nonlethal heavy/bash uses the improved collapse and supported getup while 0.1 retains original knockdown',async t=>{
  const f=await fixture(t),oracle=new WolfEncounter(f.world,()=>{},()=>{},()=>{},{loadAsset:()=>f.models.instantiate()});
  for(const fps of [30,60])for(const id of ['judgment','shield-push']){
   assert.equal(await f.battle.summon(f.player,1,'wolf'),true);const variant=f.battle.encounters[0];await oracle.summon(f.player,{position:Vector3.Zero(),rotationY:0});f.player.position.set(0,0,2.4);
@@ -160,13 +161,13 @@ test('0.2 nonlethal heavy/bash uses a standing authored shove while 0.1 retains 
    e.gate.collect=()=>({hits:[{id,damage:20,heavy:id==='judgment'}],hitStop:.03});try{e.poseAndContacts(f.player,{state:'idle'},{actionId:22},null);}finally{delete e.gate.collect;}
    assert.equal(e.brain.hp,880);assert.equal(e.hitCount,1);assert.equal(e.heavyCount,1);
   }
-  assert.equal(variant.brain.mode,'hit');assert.equal(variant.brain.state,WOLF_V02_BRACE);assert.equal(variant.knockVelocity.length(),0,'authored backward root has one movement owner');assert.equal(oracle.brain.mode,'down');assert.equal(oracle.brain.state,WOLF_CLIPS.down);assert.ok(oracle.knockVelocity.length()>0);
-  const samples=[];for(let frame=0;frame<fps;frame++){
+  assert.equal(variant.brain.mode,'down');assert.equal(variant.brain.state,WOLF_V02_DEATH);assert.ok(variant.knockVelocity.length()>0);assert.equal(oracle.brain.mode,'down');assert.equal(oracle.brain.state,WOLF_CLIPS.down);assert.ok(oracle.knockVelocity.length()>0);
+  const samples=[];for(let frame=0;frame<fps*4.3;frame++){
    variant.update(1/fps,f.player);oracle.update(1/fps,f.player);variant.alignPose();oracle.alignPose();
-   assert.equal(variant.playerHp,500);assert.ok(!['down','recover'].includes(variant.brain.mode));if(variant.brain.state===WOLF_V02_BRACE)samples.push({distance:Math.hypot(variant.actor.position.x,variant.actor.position.z),chest:variant.nodes.chest.getAbsolutePosition().y});
+   assert.equal(variant.playerHp,500);samples.push({mode:variant.brain.mode,clip:variant.brain.state,distance:Math.hypot(variant.actor.position.x,variant.actor.position.z),chest:variant.nodes.chest.getAbsolutePosition().y});
   }
-  assert.ok(samples.length>10);assert.ok(Math.abs(samples.at(-1).distance-1.2)<.04);assert.ok(samples.every(s=>s.chest>1.2));assert.equal(variant.brain.hp,oracle.brain.hp);
-  rows.push({case:'v02-standing-shove-vs-legacy-down',fps,id,sourceClip:WOLF_V02_BRACE,backwardDistance:samples.at(-1).distance,legacyState:oracle.brain.state,legacyDownPreserved:true});
+  assert.ok(samples.some(s=>s.clip===WOLF_V02_GET_UP&&s.mode==='recover'));assert.ok(Math.min(...samples.map(s=>s.chest))<samples[0].chest*.6);assert.equal(variant.brain.hp,oracle.brain.hp);assert.ok(variant.brain.hp>0);
+  rows.push({case:'v02-improved-collapse-getup-vs-legacy-down',fps,id,sourceClip:WOLF_V02_DEATH,getup:WOLF_V02_GET_UP,legacyState:oracle.brain.state,legacyDownPreserved:true});
  }
  oracle.hide();
 });
@@ -211,8 +212,8 @@ test('new snap, chain and swipe hit actual warrior body once per strike using on
  }
 });
 
-test('disposing authored actor adapters removes all six added animation groups and leaves the shared template intact',async t=>{
+test('disposing authored actor adapters removes all nine active added animation groups and leaves the shared template intact',async t=>{
  const f=await fixture(t),baseline={groups:f.scene.animationGroups.length,native:f.scene._activeAnimatables.length,dispose:f.scene.onDisposeObservable.observers.length},factory=createActorEncounterFactory({world:f.world,battle:f.battle,getPlayer:()=>f.player,libraryFactory:()=>({library:f.models,owned:false})});f.player.position.setAll(0);
- try{for(let cycle=0;cycle<3;cycle++){const adapter=factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(0,0,4)});assert.equal(adapter.encounter.asset.animationGroups.length,19);await adapter.dispose();assert.equal(f.scene.animationGroups.length,baseline.groups);assert.equal(f.scene._activeAnimatables.length,baseline.native);assert.equal(f.scene.onDisposeObservable.observers.length,baseline.dispose);assert.equal(f.container.animationGroups.length,12);}}finally{await factory.dispose();}
+ try{for(let cycle=0;cycle<3;cycle++){const adapter=factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(0,0,4)});assert.equal(adapter.encounter.asset.animationGroups.length,21);await adapter.dispose();assert.equal(f.scene.animationGroups.length,baseline.groups);assert.equal(f.scene._activeAnimatables.length,baseline.native);assert.equal(f.scene.onDisposeObservable.observers.length,baseline.dispose);assert.equal(f.container.animationGroups.length,12);}}finally{await factory.dispose();}
  rows.push({case:'authored-group-disposal',cycles:3,addedGroupsPerActor:6,groupsReturnedToBaseline:true,nativeAndDisposalObserversStable:true});
 });

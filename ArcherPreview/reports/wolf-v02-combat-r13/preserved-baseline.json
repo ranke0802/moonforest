@@ -1,0 +1,91 @@
+{
+  "commit": "1bf3892c546496b839ed0278275415efc5d4e020",
+  "scope": "Frozen0.1, shared player/combat/render inputs, R11/R12 source art and shared4K/LOD graph. Only0.2wolf-specific requested behavior/hit representation and newR13art may change.",
+  "files": {
+    "ArcherPreview/src/wolf-spec.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 7216,
+      "sha256": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4"
+    },
+    "ArcherPreview/src/wolf-encounter.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 7477,
+      "sha256": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d"
+    },
+    "ArcherPreview/src/wolf-animation.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 3543,
+      "sha256": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141"
+    },
+    "ArcherPreview/src/wolf-v02-predator-clips.json": {
+      "basis": "committed R12 bytes",
+      "bytes": 1546290,
+      "sha256": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97"
+    },
+    "ArcherPreview/src/wolf-v02-feral-clips.json": {
+      "basis": "committed R12 bytes",
+      "bytes": 1232044,
+      "sha256": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93"
+    },
+    "ArcherPreview/src/wolf-v02-ram-clips.json": {
+      "basis": "committed R12 bytes",
+      "bytes": 1901323,
+      "sha256": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1"
+    },
+    "ArcherPreview/src/warrior-v2.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 19818,
+      "sha256": "057145e42dd1cbdb7c7a56a8595d9bfd73d5d8704be525261ba1118e9cefb2ea"
+    },
+    "ArcherPreview/src/main.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 124685,
+      "sha256": "203db090ed6a80cb4fbaf2f3f9c234df94ba9904d087e065d8d84e5057f3847c"
+    },
+    "ArcherPreview/src/player-strikes.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 4085,
+      "sha256": "8767ddb797a826f673ce219c7c236b364d35271269573ce796848d81ab2d400d"
+    },
+    "ArcherPreview/src/animation.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 10363,
+      "sha256": "ae59b1507000c8542ebc3822c61617b7f3902c8bc5969ea887ed08a9bfe15cd1"
+    },
+    "ArcherPreview/src/hit-feedback.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 2369,
+      "sha256": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c"
+    },
+    "ArcherPreview/src/melee-collision.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 4663,
+      "sha256": "120b720be73815c11e12abb704c34dca9e037b450080cd3141fc698f7a04b250"
+    },
+    "ArcherPreview/src/terrain-mesh.js": {
+      "basis": "committed R12 bytes",
+      "bytes": 3125,
+      "sha256": "b315d4a704f5d8af1ca435fe7cd4cc5843ecc8f430ea71a1748f0aa15f0524f4"
+    },
+    "ArcherPreview/public/assets/alpha-wolf.json": {
+      "basis": "committed R12 bytes",
+      "bytes": 318364,
+      "sha256": "077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9"
+    },
+    "ArcherPreview/public/assets/warrior-v2.json": {
+      "basis": "committed R12 bytes",
+      "bytes": 7047,
+      "sha256": "1b99199c6e43b2d3e00ac208984a623cbcdb11a8548efe2af5732b786609b948"
+    },
+    "ArcherPreview/public/assets/resource-index.json": {
+      "basis": "physical canonical prepared input before R13 edits",
+      "bytes": 194447,
+      "sha256": "52bd74fecf648b3821a253810e28a9d40e2a1300491025b7e230c35b20ecb043"
+    },
+    "ArcherPreviewSite/deployment-files.json": {
+      "basis": "committed R12 bytes",
+      "bytes": 431790,
+      "sha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b"
+    }
+  }
+}

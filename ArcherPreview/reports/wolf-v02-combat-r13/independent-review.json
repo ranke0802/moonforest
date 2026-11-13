@@ -1,0 +1,659 @@
+{
+  "scope": "Independent actual packed wolf+native warrior CPU combat review. Frozen runtime/source/test hashes are bound to all3 proof files. Root owns visual review, broader combined suite, preservation/build/publish evidence.",
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "52495b30da2a28ee9e03581e7aae25dec6b1d15e77ab46f1555eb7628c43a766",
+    "src/wolf-v02-encounter.js": "f6d92d83780fd8d0d9fa35bb599234696513c84a89d6c75f99d091ee9d85f60e",
+    "src/wolf-v02-ram.js": "3af9977951a2d77e9400a2cd15b1dd5cfee89356dde351433050bbb84e0d42a4",
+    "src/wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "src/wolf-v02-hurt.js": "5c759063a1f9b6705cfdd142320b8ee3e2cab392f650117953a25c4e8d1ac181",
+    "src/wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065",
+    "src/wolf-v02-support.js": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783",
+    "src/wolf-v02-telegraph.js": "e8ad89b8d2a70b9a5519f4e260dd516201bd6150afb90ac76c02e00fc443fbf3",
+    "src/wolf-v02-contact-shapes.js": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1",
+    "src/wolf-v02-authored-clips.js": "415b2b5f080cacd47a057c2aa46b44495034162d8a7cc14deb64441892a01199",
+    "src/wolf-v02-authored-history.js": "929e6b8be8b82159334eb3c1aeadd2ae4a053876f49c6c509589cea8e364d5f6",
+    "src/wolf-v02-combat-r13-clips.json": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94",
+    "src/wolf-v02-predator-clips.json": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97",
+    "src/wolf-v02-feral-clips.json": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93",
+    "src/wolf-v02-ram-clips.json": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1",
+    "src/wolf-spec.js": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4",
+    "src/wolf-animation.js": "536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141",
+    "src/wolf-encounter.js": "405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d",
+    "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "src/player-strikes.js": "cdaa2c56c3d34b720bce592f4e4745c7d87f7fb1a89010a01f510dd3a4cb3ce5",
+    "src/player-strike-timings.js": "34b67f719fc4218b8340c94e3739024463c670f2c209bdbc18a6edbff94d8e9b",
+    "src/player-dimensions.js": "f4a8545e46490575c15600a6de04532e34cd9d1782faef1e976d10df493cc37f",
+    "src/boss-battle.js": "b774dd48bfc2cde1459e7e598018af1e8f6b52680c69170514459fe1fb060559",
+    "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+    "src/animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9",
+    "src/melee-collision.js": "b97acb0e5ff4c820423e6bca8631d49685a77902074e3f1fdb3b8339a43075f5",
+    "src/tree-view-surface.js": "8c30b7e5b3cf8b7df2a9fac91119ac6e04dc92236739cab7d320761b7471f588",
+    "src/pose-matrices.js": "75d44c66a41e710ae6f9da8e423a44c241bac9f3f75fcb35662e460118edf334",
+    "tests/helpers/wolf-ram-fixture.js": "40297abc9779b83cc383dc2e21d09b0a0eeed26ac16ec2bbabb9336be9b0c7e1",
+    "tests/helpers/wolf-hunt-fixture.js": "b2c9a972232667bf4cd8d169269d12d61e54ed41ba0002ee83510b81adeeccc1",
+    "tests/helpers/wolf-combat-r13-fixture.js": "8c7351173fec70dc1963be36c494379660a0eeae726da8a3611079c35a3397d6",
+    "tests/helpers/wolf-combat-r13-run.js": "9511e28d617984a949ac48554bc39081724cbeaba4d035d31e7e816e0bdf8a39",
+    "tests/helpers/wolf-combat-r13-surface.js": "cc0bffb39c68b81ebaf236d65ac92a053209c9be6732073f5d2688371fb98803",
+    "tests/helpers/wolf-combat-r13-proof.js": "fbc450bdf2871d00efe23ea30b075b3da4284c9f2802e3452c45012e45a00f5d",
+    "tests/wolf-v02-combat-r13-ram.test.js": "fdb863c306ad1ae8129516fd6798ae5dad0d60e65fc9d0696c8e9e58d139e0ba",
+    "tests/wolf-v02-combat-r13-incoming.test.js": "4cd4fb6077f7165314b6f07a7ef28d3397b74025cfa9a698a29106586eba9a42",
+    "tests/wolf-v02-combat-r13-tactics.test.js": "162aeb0c79095ddd20a014ee5059665df0dd5cf5396bba54cce1bdec39c7df9e",
+    "reports/wolf-v02-ram-r12/skin-contact.mjs": "26ab11f5a3783add4a22992eb869f2cbc88bfcb085f57755ddc719d1d753ddee"
+  },
+  "namedGates": [
+    {
+      "name": "default-and-saved-autonomous-range12",
+      "conditionCount": 12
+    },
+    {
+      "name": "coupled24-clock-movement-cases",
+      "conditionCount": 24
+    },
+    {
+      "name": "six-real-defenses",
+      "conditionCount": 6
+    },
+    {
+      "name": "four-postram-invalidations",
+      "conditionCount": 4
+    },
+    {
+      "name": "seven-hitches-repeated-pose",
+      "conditionCount": 7
+    },
+    {
+      "name": "named-compact-support",
+      "conditionCount": 1
+    },
+    {
+      "name": "four-native-heavy-shield-collapse-getup",
+      "conditionCount": 4
+    },
+    {
+      "name": "16-native-region-and-outside-cases",
+      "conditionCount": 16
+    },
+    {
+      "name": "two-actual-shield-face-versus-old-line",
+      "conditionCount": 2
+    },
+    {
+      "name": "same-pass-actual-heavy-before-ram",
+      "conditionCount": 1
+    },
+    {
+      "name": "grounded-outside-no-radial-bypass",
+      "conditionCount": 1
+    },
+    {
+      "name": "input-stamina-rejections-separated",
+      "conditionCount": 1
+    },
+    {
+      "name": "unit-damage-window-hp-cooldown",
+      "conditionCount": 4
+    },
+    {
+      "name": "physical-backrun-supported-retreat",
+      "conditionCount": 110
+    },
+    {
+      "name": "native-equipment20-pulse-retreat",
+      "conditionCount": 286
+    },
+    {
+      "name": "native-threat-real-side-step",
+      "conditionCount": 23
+    },
+    {
+      "name": "native-held-guard-is-not-released-threat",
+      "conditionCount": 45
+    },
+    {
+      "name": "shared-part-footprints-and-resolved-hide",
+      "conditionCount": 1
+    },
+    {
+      "name": "two-actor-four-warm-cycles",
+      "conditionCount": 1
+    }
+  ],
+  "namedGateCount": 19,
+  "autonomy": {
+    "baseline": {
+      "cases": 24,
+      "selectedR12": 2,
+      "reason": "Only static35m cases reached the former25.50–25.55m band; ordinary3–25m did not select R12 and moving35m fell back to pin."
+    },
+    "current": {
+      "cases": 36,
+      "successes": 36,
+      "untouchedDefaultAndSavedDistances": [
+        3,
+        6,
+        10,
+        15,
+        25,
+        35
+      ],
+      "nativeClockMatrix": "30/60Hz x.5/1/2 speed xstationary/nativewalking x3/15m",
+      "actualSkinSamples": 108,
+      "literalSurfaceOverlaps": 78,
+      "tactileMarginSamples": 30,
+      "maximumNonintersectionVertexUpperBound": 0.05719249941650864,
+      "outgoingTactileAllowance": 0.075,
+      "phaseDamage": "40+30+30 raw; default armor2 ->38+28+28. One rear-critical snapshot ->50+37+37 after armor.",
+      "chaseSeconds": [
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666666965,
+          "firstJaw": 1.3166666666667188,
+          "secondJaw": 1.8666666666667462
+        },
+        {
+          "distance": 6,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 10,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 25,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 35,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666666965,
+          "firstJaw": 1.3166666666667188,
+          "secondJaw": 1.8666666666667462
+        },
+        {
+          "distance": 6,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 10,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 25,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 35,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 30,
+          "speed": 0.5,
+          "moving": false,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 15,
+          "fps": 30,
+          "speed": 0.5,
+          "moving": false,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 3,
+          "fps": 30,
+          "speed": 0.5,
+          "moving": true,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 15,
+          "fps": 30,
+          "speed": 0.5,
+          "moving": true,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 3,
+          "fps": 30,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8999999999999977,
+          "firstJaw": 1.3333333333333295,
+          "secondJaw": 1.8999999999999941
+        },
+        {
+          "distance": 15,
+          "fps": 30,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 3,
+          "fps": 30,
+          "speed": 1,
+          "moving": true,
+          "startsAfterRam": 0.8999999999999977,
+          "firstJaw": 1.3333333333333295,
+          "secondJaw": 1.8999999999999941
+        },
+        {
+          "distance": 15,
+          "fps": 30,
+          "speed": 1,
+          "moving": true,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 3,
+          "fps": 30,
+          "speed": 2,
+          "moving": false,
+          "startsAfterRam": 0.8999999999999977,
+          "firstJaw": 1.3333333333333295,
+          "secondJaw": 1.8999999999999941
+        },
+        {
+          "distance": 15,
+          "fps": 30,
+          "speed": 2,
+          "moving": false,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 3,
+          "fps": 30,
+          "speed": 2,
+          "moving": true,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333295,
+          "secondJaw": 1.8999999999999941
+        },
+        {
+          "distance": 15,
+          "fps": 30,
+          "speed": 2,
+          "moving": true,
+          "startsAfterRam": 0.8999999999999968,
+          "firstJaw": 1.3333333333333286,
+          "secondJaw": 1.8999999999999932
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 0.5,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 0.5,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 0.5,
+          "moving": true,
+          "startsAfterRam": 0.866666666666708,
+          "firstJaw": 1.3166666666667304,
+          "secondJaw": 1.8666666666667577
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 0.5,
+          "moving": true,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666666965,
+          "firstJaw": 1.3166666666667188,
+          "secondJaw": 1.8666666666667462
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 1,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 1,
+          "moving": true,
+          "startsAfterRam": 0.8666666666666742,
+          "firstJaw": 1.3166666666666966,
+          "secondJaw": 1.866666666666724
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 1,
+          "moving": true,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 2,
+          "moving": false,
+          "startsAfterRam": 0.8666666666666796,
+          "firstJaw": 1.316666666666702,
+          "secondJaw": 1.8666666666667293
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 2,
+          "moving": false,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        },
+        {
+          "distance": 3,
+          "fps": 60,
+          "speed": 2,
+          "moving": true,
+          "startsAfterRam": 0.8666666666666636,
+          "firstJaw": 1.3166666666666798,
+          "secondJaw": 1.866666666666707
+        },
+        {
+          "distance": 15,
+          "fps": 60,
+          "speed": 2,
+          "moving": true,
+          "startsAfterRam": 0.8666666666667098,
+          "firstJaw": 1.3166666666667322,
+          "secondJaw": 1.8666666666667595
+        }
+      ]
+    }
+  },
+  "incoming": {
+    "nativeReactions": 4,
+    "collapse": 1.65,
+    "floorHold": 0.3,
+    "getup": 2.2,
+    "maximumGetupSupportDrift": 0.0000016499293489058507,
+    "maximumFixedLimbLengthError": 3.731875045931421e-7,
+    "maximumScaleError": 4.7683644299745254e-7,
+    "shieldFace": {
+      "gate": "two-actual-shield-face-versus-old-line",
+      "cases": [
+        {
+          "fps": 30,
+          "damage": 13,
+          "measured": {
+            "fullFace": {
+              "distance": 0.14581204002986528,
+              "trianglePairs": 153048
+            },
+            "oldMidline": [
+              {
+                "minimumDistance": 0.26386875341063093,
+                "minimumProvedDistance": 0.25,
+                "initialContainment": [
+                  "outside",
+                  "outside"
+                ],
+                "insideWitness": false,
+                "outsideProved": true,
+                "temporalErrorBound": 0,
+                "steps": 1,
+                "testedTriangles": 72,
+                "temporalSamples": 144,
+                "relativeTravel": 0,
+                "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+              }
+            ],
+            "radius": 0.06482224635394668,
+            "rows": 13,
+            "source": 1.1
+          }
+        },
+        {
+          "fps": 60,
+          "damage": 13,
+          "measured": {
+            "fullFace": {
+              "distance": 0.14581204002986528,
+              "trianglePairs": 153048
+            },
+            "oldMidline": [
+              {
+                "minimumDistance": 0.26386875341062843,
+                "minimumProvedDistance": 0.25,
+                "initialContainment": [
+                  "outside",
+                  "outside"
+                ],
+                "insideWitness": false,
+                "outsideProved": true,
+                "temporalErrorBound": 1.2816495814253883e-15,
+                "steps": 1,
+                "testedTriangles": 72,
+                "temporalSamples": 144,
+                "relativeTravel": 2.5632991628507767e-15,
+                "scope": "Actual clipped line blade versus interpolated moving wolf skin; conservative temporal distance error plus three-direction signed-ray containment distinguishes embedded weapons from genuine outside misses."
+              }
+            ],
+            "radius": 0.06482224635394668,
+            "rows": 13,
+            "source": 1.100000000000001
+          }
+        }
+      ],
+      "toleranceWorldMeters": 0.1,
+      "interpretation": "Exact actual-mesh proximity; these cases use the bounded tactile/anatomy envelope, not literal mesh intersection."
+    },
+    "heavyPriority": {
+      "gate": "same-pass-actual-heavy-before-ram",
+      "armed": true,
+      "first": {
+        "mode": "down",
+        "clip": "Wolf_Staggered_Collapse_V02",
+        "playerHp": 500,
+        "result": "judgment",
+        "phase": null,
+        "event": {
+          "time": 0.9333333333333346,
+          "value": 25,
+          "heavy": true,
+          "kind": "enemy",
+          "burstIndex": 1,
+          "critical": false,
+          "enemyId": "wolf-1"
+        }
+      }
+    },
+    "guardNegative": "Actual pending/held guard does not trigger evade; released strike windup remains a threat."
+  },
+  "support": {
+    "compact": {
+      "gate": "named-compact-support",
+      "maxWorldDrift": 0.000007945603202445022,
+      "samples": 617,
+      "limbError": 0.0000027298891467908426,
+      "scaleError": 5.25608710555403e-7
+    },
+    "backRun": {
+      "maxDrift": 0.0000010241770909690607,
+      "minFacing": 1
+    }
+  },
+  "tactics": {
+    "thresholdUnit": {
+      "gate": "unit-damage-window-hp-cooldown",
+      "cases": [
+        {
+          "hp": 900,
+          "damage": 134,
+          "finalHp": 766,
+          "pending": false
+        },
+        {
+          "hp": 900,
+          "damage": 135,
+          "finalHp": 765,
+          "pending": true
+        },
+        {
+          "hp": 585,
+          "damage": 135,
+          "finalHp": 450,
+          "pending": true
+        },
+        {
+          "hp": 584,
+          "damage": 135,
+          "finalHp": 449,
+          "pending": false
+        }
+      ],
+      "expired": 35,
+      "cooldown": 6
+    },
+    "nativeEquippedPulse": {
+      "attackBonus": 20,
+      "damage": 161,
+      "retreat": {
+        "time": 5.166666666666654,
+        "source": 0,
+        "cooldown": 6
+      }
+    },
+    "physicalEvade": "Native released attack provokes actual R10 side steps, with no defense/invulnerability state.",
+    "resources": {
+      "gate": "two-actor-four-warm-cycles",
+      "resources": {
+        "meshes": 66,
+        "geometry": 42,
+        "materials": 6,
+        "skeletons": 4,
+        "groups": 51,
+        "morph": 2,
+        "textures": 0,
+        "nodes": 228,
+        "nativeAnimatables": 408
+      },
+      "observers": 1
+    }
+  },
+  "fixesExposedByReview": [
+    "Pending/held shield incorrectly consumed an evade action; released-threat filter fixed.",
+    "Natural player getup after both jaws restarted authored wolf recovery; now original attack serial completes its endpoint."
+  ],
+  "harnessNotes": [
+    "Each case resets native controller, animator, HP/recoil, global warrior-plains profile, sampler and wolf lifetime.",
+    "Range matrix uses untouched summon/rise/orbit/approach; source-held receiving poses are explicitly isolated geometry fixtures.",
+    "Exact authored source channels and old raw sources stay separate from runtime attention/support. No fake collision gate authorizes a positive native incoming contact."
+  ],
+  "limitations": [
+    "CPU/NullEngine and native asset tests establish state, contact, clock, geometry and lifecycle evidence; they do not establish device FPS/GPU/heat/touch feel.",
+    "Bounded anatomy/tactile receiving envelopes approximate skin; actual full-shield distance is reported rather than called triangle intersection.",
+    "Frame-based UX opinions are qualified and timestamped in review-opinions.json; stamina rejections are separated from valid-swing misses.",
+    "Root separately inspects actual original-colour coupled poses and authors visual approval; no browser automation used."
+  ]
+}

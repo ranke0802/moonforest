@@ -1,0 +1,373 @@
+{
+  "reviewedAt": "2026-11-13T06:02:52.864Z",
+  "scope": "Primary agent directly inspected four chronological sheets covering all56 actual CPU-skinned views, selected full-size chase/maul/recovery views, three original-colour authored filmstrips, and front/hind joint colour+matcap sheets. Offline original-colour rendering, not browser/device visual certification.",
+  "actualRuntimeViews": 56,
+  "originalColour": true,
+  "playerMaterial": "Neutral review material; actual native1.6m geometry/pose preserved",
+  "sourceHashes": {
+    "wolf-v02-spec.js": "52495b30da2a28ee9e03581e7aae25dec6b1d15e77ab46f1555eb7628c43a766",
+    "wolf-v02-encounter.js": "f6d92d83780fd8d0d9fa35bb599234696513c84a89d6c75f99d091ee9d85f60e",
+    "wolf-v02-authored-clips.js": "415b2b5f080cacd47a057c2aa46b44495034162d8a7cc14deb64441892a01199",
+    "wolf-v02-combat-r13-clips.json": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94",
+    "wolf-v02-ram.js": "3af9977951a2d77e9400a2cd15b1dd5cfee89356dde351433050bbb84e0d42a4",
+    "wolf-v02-locomotion.js": "e7cd0b356459548d9598671de926b1a3ae66fc89b412f9ef657967628848dbb4",
+    "wolf-v02-support.js": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783",
+    "wolf-v02-contact-shapes.js": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1",
+    "wolf-v02-hurt.js": "5c759063a1f9b6705cfdd142320b8ee3e2cab392f650117953a25c4e8d1ac181",
+    "wolf-v02-shield.js": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065",
+    "wolf-v02-telegraph.js": "e8ad89b8d2a70b9a5519f4e260dd516201bd6150afb90ac76c02e00fc443fbf3",
+    "warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0",
+    "animation.js": "4068da864f3e4c768d5708a6d437b0b2e8cbf66cbe96468cdae9303d20f756f9"
+  },
+  "observations": [
+    "Actual native player falls before supported pursuit. Pursuit advances toward the prone torso and two low jaw poses meet the fallen body.",
+    "Fore/hind rigid muscle cores do not visibly elongate in the reviewed steps; original angular inner-elbow collar and fur overlaps remain.",
+    "Nonlethal collapse and supported rise preserve articulated joints; final gait/watch is the unchanged asymmetric source stance.",
+    "No original mesh, UV, weights, bind or4K colour texture replacement was used.",
+    "After native get-up the completed maul retains its original attack serial, finishes the authored backstep and reaches watch without replaying recovery."
+  ],
+  "limits": [
+    "Static phase views and numerical tests do not establish real-device motion feel, GPU FPS or heat.",
+    "Full-surface muscle bands/fur may deform locally; rigid-core preservation does not mean every skin triangle is rigid."
+  ],
+  "files": [
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-front.png",
+      "bytes": 394448,
+      "sha256": "9b1554634880f6d8bd1dacd447fd76b11611465e3842b5c56dd657dc186a4482"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-side.png",
+      "bytes": 378595,
+      "sha256": "f112d4aa3927dff5eabcbcad0b4f235bc3027a7356a038ee2f75f8bf2d12c4a1"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-quarter.png",
+      "bytes": 390413,
+      "sha256": "1556b1e15d858fa772faed21a164c7dc36005544862d2ffa0dcb954b2dd14ee5"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-prepare-opposite.png",
+      "bytes": 386420,
+      "sha256": "541d5da0909c43d3bcd2801a525ce8cd00e9d6030846380f1a4656ad90817865"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-front.png",
+      "bytes": 335668,
+      "sha256": "74bb3fec0f05f9eb7e1a50e40396d77c6778806d44ebe00cde70fcd426c78ceb"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-side.png",
+      "bytes": 369491,
+      "sha256": "820a7474833f29bc62e853b8cd38355fa6a29fb4d37fb721750b555174f29c16"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-quarter.png",
+      "bytes": 385115,
+      "sha256": "62353970f5981ecf490274b7e135e76042a6b6a5b8dd130d16811186512053f8"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/head-ram-opposite.png",
+      "bytes": 382791,
+      "sha256": "9dc60adf04f28ec4b3eee19e25dc66d14fcd55d1de77e8e93bdff2069f9530c9"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-front.png",
+      "bytes": 337005,
+      "sha256": "74429c17bd4d2f177e269124bd643dabfd8f97bdadff22c5add7cc500d3728df"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-side.png",
+      "bytes": 374409,
+      "sha256": "8f67d5fb4f24299d72520c1469976455a3efba727b0ad8b6dbfcaf5279a0d181"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-quarter.png",
+      "bytes": 388904,
+      "sha256": "fbc24b57e4c5ddb133cbabd5cc6106e192f4e0ea7e667b2fda8c4336354a0967"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/native-fall-opposite.png",
+      "bytes": 386871,
+      "sha256": "0f7e8ca7291484025b89d85998649e77dbb590ee9eaf3d7ba62498df595fd526"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-front.png",
+      "bytes": 340917,
+      "sha256": "cc8be4a2f2be65ed3ee23260ec85fa1b58d47c8f25df0bd5a3b23483317f5b5f"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-side.png",
+      "bytes": 378453,
+      "sha256": "c5c2637fea0fee55da55d7f1026f699cacef7cc9b4acbf2361bfa6a563a2277e"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-quarter.png",
+      "bytes": 390669,
+      "sha256": "c31ec75037aa6c7b9ddc119adee70da8ed23c258015504626d1ee47860abbab3"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-start-opposite.png",
+      "bytes": 389272,
+      "sha256": "e39165dd30434064e16ec645513390a7ca757c218be195e10590754acef3137f"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-front.png",
+      "bytes": 340892,
+      "sha256": "b69fe3dbd8a89df4ba72d5922b0af7c5009d7eb5baaf87b787ca741245f755fa"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-side.png",
+      "bytes": 377220,
+      "sha256": "b7e1c40389b2ac4f5f531e1f54b7305ab6cac7b726e89939be717a1a95f50fd9"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-quarter.png",
+      "bytes": 388468,
+      "sha256": "7cdeeda2b10b7270970b4c90b7705011808865d720d8ab3cb96a24725c628c6d"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-step-opposite.png",
+      "bytes": 388450,
+      "sha256": "31eb78e7229820862f8767c1de34f4e22564bc27e41710181ee93b20fadcd51c"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-front.png",
+      "bytes": 340588,
+      "sha256": "df223a8cfc703a91fb90019b82b697c29f6ee5238e9c89b9ead7ed60a79c1521"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-side.png",
+      "bytes": 374370,
+      "sha256": "9d4c1b87b23a3156613748f813572c9492c6aa447fce9e56fff6758c987c5545"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-quarter.png",
+      "bytes": 386965,
+      "sha256": "209054e457147ae9c8f4f08f6073cb9967f7e3270d66c8c6477b56cf7fe0d5db"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/chase-settle-opposite.png",
+      "bytes": 388639,
+      "sha256": "1c206f73d3a02ac4ee3bf531da8ddba5ad39c1d80eacd228b10c1f21a74ecd61"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-front.png",
+      "bytes": 339127,
+      "sha256": "d3063f1e24412b8d90cf543586a87b70885208c9cf0d70d52fd53609a504b129"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-side.png",
+      "bytes": 373090,
+      "sha256": "19c79e8d257cadf4d575f87619ed4aa9b1aef1b5ab556bb60673d7bcb0a0cd71"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-quarter.png",
+      "bytes": 385804,
+      "sha256": "fa080d6c5e874807844c6d13d17972db74f271e0d0185a1903931cd08ce9343c"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-1-opposite.png",
+      "bytes": 387152,
+      "sha256": "c3d007648fb74fc08aff19c82ec5aadde2da76aac29f0a373690707b5fb7b389"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-front.png",
+      "bytes": 339071,
+      "sha256": "745eaf6805e0986ba3d22db90de677d9b572270ce052d1a6fd08564853ea2ad0"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-side.png",
+      "bytes": 372630,
+      "sha256": "d6007e17c5570a57491e1c8b91bb5bad9974fa153223685527e778f38b5fe11b"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-quarter.png",
+      "bytes": 385110,
+      "sha256": "2b23e1831fb389c4aa2893318d6625a50e8ff77736ab682d016f172df1e36a8f"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ground-bite-2-opposite.png",
+      "bytes": 387352,
+      "sha256": "a2e2fcd12d27135fe40f5972a9d727b24d7163dc1f55bb8f3e806fcbf4697545"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-front.png",
+      "bytes": 340043,
+      "sha256": "db42e2a179b21cebf3ba79984c5a4807e7030147d3969a5dde3d267be22f1907"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-side.png",
+      "bytes": 375067,
+      "sha256": "4b19d6e2317088584f9925727b8bcc45275bed744fca5304358b08620b771f28"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-quarter.png",
+      "bytes": 385980,
+      "sha256": "b54e885ccdcb8edd0814adcb8b08f26a5320b7943a6e811dd0d8a0a455fd33a0"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-opposite.png",
+      "bytes": 388050,
+      "sha256": "6413f0a9a81ce259b0650cb12c7f58569e3e582a78d0ffd69198ca775772374e"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-front.png",
+      "bytes": 359811,
+      "sha256": "aebda64d0287ba22607fc8f2d3c4ff9a071671b66787e685418e5131d02a13f4"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-side.png",
+      "bytes": 386678,
+      "sha256": "ffba4595c6a3f858f0bf8d85be540e5c1ff2cbf486b991f7b2ec6b8c8593540f"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-quarter.png",
+      "bytes": 399308,
+      "sha256": "c64ed2d8d6d154c0bd522894272f6c85e500c712094259ef5b5754cc4390c2fe"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-recovery-end-opposite.png",
+      "bytes": 396492,
+      "sha256": "342b8ac0a370ca6dda41548ba96b00310a8ca80d63879087d6578930908c809c"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-front.png",
+      "bytes": 354924,
+      "sha256": "dd3906915910891bd5400ee9fb3000985ffb7a0aeeb5345c53bb2e809686efac"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-side.png",
+      "bytes": 382700,
+      "sha256": "f25f58321b1a74a2d636291c8b864186324bd7462d4b7c4f3e31f525a9d5d225"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-quarter.png",
+      "bytes": 394655,
+      "sha256": "8e1b2a75eeac4921729de3c77b5f46d849b123d9d9c7935ab44b0fd3b72332f3"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/ram-watch-opposite.png",
+      "bytes": 394948,
+      "sha256": "1357e2a6ee6229c4dc8a60c378fcac521c978e63dab6695b180a46db63557ef9"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-front.png",
+      "bytes": 333879,
+      "sha256": "f89ca64a50dc42c7e92224048ce8ca03b64b7c68dd425beb36ea3111e804f162"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-side.png",
+      "bytes": 364080,
+      "sha256": "e3e9c17383fb802acb1ea3cca11d5664a8a1de4d230316eb6a36266918eafcba"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-quarter.png",
+      "bytes": 371173,
+      "sha256": "f184da049c830fec7537f3c90b29819a18bc4f5712a991c286aa3d16bb61496a"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-collapse-opposite.png",
+      "bytes": 383178,
+      "sha256": "c169509074fb19e591587e26607bc4369480c923bc882165a84145882b6d8f1c"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-front.png",
+      "bytes": 331917,
+      "sha256": "dd47919de34a9bda3fb54a868df15cc8845033695902b09da2ccae170cce6c5a"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-side.png",
+      "bytes": 364255,
+      "sha256": "029f9bed2749655f426313ee9f365696b06bb27122446a75f92029e2cf93dc53"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-quarter.png",
+      "bytes": 381664,
+      "sha256": "681fab088298b3cd23ac8a7375c0e7f0a5d555cfffb40ab76083930fdc5cce91"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-supported-rise-opposite.png",
+      "bytes": 383909,
+      "sha256": "f7b176646d31d50f5e87a1b000da7e68c0a4e0749c990ef93b71149a3617680f"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-front.png",
+      "bytes": 347207,
+      "sha256": "73f32e5f1c6accca2ea548f29b279417a6ccab14d44a53c4e257c9bb6c7e2f57"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-side.png",
+      "bytes": 384858,
+      "sha256": "3712952a52fac3311deded27a96a4e85e81c2c6a6efc5c61557a04dc9a6f305e"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-quarter.png",
+      "bytes": 399206,
+      "sha256": "518695a7aa5eb426d09deb8ad0bd51cf03fc1fc57406ef4cbc80ea3462bd26dc"
+    },
+    {
+      "path": "Docs/Reviews/2026-11-13/wolf-combat-r13/runtime-poses/wolf-getup-opposite.png",
+      "bytes": 393161,
+      "sha256": "0061d35300e5b8a423a76a007a3fba3a5df0144cd143c8b17117f23d09a597fc"
+    }
+  ],
+  "poseInputs": [
+    {
+      "name": "ram-prepare",
+      "sha256": "82cb4d9d13e34f6128f1a20d4ba83bc4c0474b158e4cdb000bf926e584b17d3d"
+    },
+    {
+      "name": "head-ram",
+      "sha256": "97d1614e387bbc35e53125267a5c48f4f91abb143d748c7b908568bf69e151b3"
+    },
+    {
+      "name": "native-fall",
+      "sha256": "55386e19aef2414165bef48e291754af5056c7d58153bdc86489d9a8c6b141a9"
+    },
+    {
+      "name": "chase-start",
+      "sha256": "21f06bbba541fec758ad9d07c16d1d0c0592cd70aa31e167fc0df7c74c484297"
+    },
+    {
+      "name": "chase-step",
+      "sha256": "1ec05fefd6f7d6382a8e7b59d39d4b9b93b87460f5902e93a264bb47199f33be"
+    },
+    {
+      "name": "chase-settle",
+      "sha256": "2488a6be073b0038bfbc1f3a77963a47479be050a35715e750daf0874de97b05"
+    },
+    {
+      "name": "ground-bite-1",
+      "sha256": "e8348d7d95e3f2ccfba2c92c1647b38d3b0e4b0d7035d346a7c140540ffe5ede"
+    },
+    {
+      "name": "ground-bite-2",
+      "sha256": "4554bd402a975abc3cf5c7c6083e2278e71154e940050919ba58e0912fb970f4"
+    },
+    {
+      "name": "ram-recovery",
+      "sha256": "9eeb72776cedca08890b9831df21b4d74b25dfdf032155695480b9e5454401d0"
+    },
+    {
+      "name": "ram-recovery-end",
+      "sha256": "9d8f66f23c836a86e140fd108c49bf179a5d94a33ffcef40bb8f822d73d25a79"
+    },
+    {
+      "name": "ram-watch",
+      "sha256": "317271bde37e6254c3f16e06eba8166954f01fef48b6d8942e07a28a914f1326"
+    },
+    {
+      "name": "wolf-collapse",
+      "sha256": "c9533910eef49a22ea854a0b0ad898ddec915d560da14cb87bf6f8ad2c488cdf"
+    },
+    {
+      "name": "wolf-supported-rise",
+      "sha256": "8b5f78e73deed2033ddad2125b88cfc88958c75715458ccafecac940d24749f0"
+    },
+    {
+      "name": "wolf-getup",
+      "sha256": "dbfc99bd09078d27cdc87e7271adc401dd9ce0e6e001291f8e18922587253917"
+    }
+  ]
+}

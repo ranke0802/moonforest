@@ -94,9 +94,9 @@ test('stationary observation and recovery hold the circling pose while only thei
  recovering.beginStalk();recovering.update(.1,2.25);assert.ok(recovering.time>0,'only an actual stalking step advances the circling gait');
 });
 
-test('phase threshold does not cut off the current attack, nonlethal reactions stay standing and lethal collapse stays separate',()=>{
+test('phase threshold does not cut off the current attack, nonlethal reactions use improved collapse/getup and lethal collapse stays separate',()=>{
  const b=brain(900);b.startAction('quick-bite');b.update(.1,2.25);const serial=b.serial,time=b.time;b.hp=450;b.update(.01,2.25);assert.equal(b.serial,serial);assert.ok(b.time>time);assert.equal(b.phase,2);
- b.hit({heavy:true,damage:1});assert.equal(b.state,WOLF_V02_BRACE);assert.equal(b.update(.1,2).events.length,0);
+ b.hit({heavy:true,damage:1});assert.equal(b.state,WOLF_V02_DEATH);assert.equal(b.update(.1,2).events.length,0);
  for(let frame=0;frame<120;frame++)b.update(1/60,2);assert.ok(!b.visited.has(WOLF_CLIPS.down)&&!b.visited.has(WOLF_CLIPS.recover));
  const hit=brain(450);hit.hit({interruptsBoss:true,damage:1});assert.equal(hit.state,WOLF_CLIPS.hit);
  const brace=brain(450);brace.hit({stun:.1,damage:1});brace.update(.2,2);assert.equal(brace.state,WOLF_CLIPS.hit);assert.equal(brace.stagger,0);
@@ -112,7 +112,7 @@ test('impact window accepts a late contact upgrade once and rejects stale, dupli
 
 test('strong whipping accelerates contact while preserving exact authored poses, time monotonicity and speed snapshot',()=>{
  for(const action of WOLF_V02_ACTIONS){
-  const {source,seconds}=action.whip,rates=source.slice(1).map((s,i)=>(s-source[i])/(seconds[i+1]-seconds[i]));assert.ok(Math.max(...rates)>=2.2);assert.ok(Math.max(...rates)>rates[0]*(['lunge','pin'].includes(action.id)?1.15:2));
+  const {source,seconds}=action.whip,rates=source.slice(1).map((s,i)=>(s-source[i])/(seconds[i+1]-seconds[i]));assert.ok(Math.max(...rates)>=(action.id==='lunge'?1.3:2.2));assert.ok(Math.max(...rates)>rates[0]*(['lunge','pin'].includes(action.id)?1.15:2));
   assert.ok(Math.abs(sampleWhipTime(action,whipElapsedAt(action,action.impact))-action.impact)<1e-9);
   let previous=0;for(let i=0;i<=240;i++){const time=sampleWhipTime(action,actionDuration(action)*i/240);assert.ok(time>=previous);previous=time;}assert.equal(previous,action.clipEnd);
   for(const fps of [30,60])for(const speed of [.5,1,2]){

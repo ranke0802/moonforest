@@ -8,6 +8,7 @@ import {headAttention,angleDelta} from './helpers/wolf-feral-fixture.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {WolfEncounter} from '../src/wolf-encounter.js';
 import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID} from '../src/wolf-v02-spec.js';
+import {WOLF_V02_COMBAT_R13_CLIPS} from '../src/wolf-v02-authored-clips.js';
 
 const evidence=[];
 const watchedSources=['src/wolf-v02-spec.js','src/wolf-v02-encounter.js','src/wolf-v02-locomotion.js','src/wolf-v02-authored-clips.js','src/wolf-v02-predator-clips.json','src/wolf-v02-feral-clips.json'];
@@ -45,7 +46,7 @@ function setStandingEngagement(f,e){
  until(f,e,()=>e.brain.behavior==='flank');e.v02Pose?.restore();
  e.actor.position.setAll(0);e.actor.rotation.y=0;e.brain.start(WOLF_CLIPS.watch,'idle');e.brain.behavior='observe';e.brain.observation=5;
  e.animator.transition(WOLF_CLIPS.watch,{clipTime:0,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);WolfEncounter.prototype.alignPose.call(e);
- e.v02Pose?.resetPlants();e.v02Pose?.capturePreviousFeet();e.v02StalkRadius=null;e.brain.beginStalk();
+ e.v02Pose?.resetPlants();e.v02Pose?.capturePreviousFeet();e.v02StalkRadius=null;e.brain.lastDistance=Vector3.Distance(e.actor.position,f.player.position);e.brain.beginStalk();
 }
 
 test('near and far autonomous attacks wait for a genuine random 2–3 second player-centered observation budget',async t=>{
@@ -55,9 +56,9 @@ test('near and far autonomous attacks wait for a genuine random 2–3 second pla
   for(let frame=0;frame<fps*22;frame++){
    e.playerHp=500;stepWolfHunt(f,e,1/fps);const time=frame/fps;
    if(e.brain.behavior==='flank'){
-    current??={start:time,frames:0,loops:0,lastSource:e.brain.time,target:e.brain.circleTarget,startRadius:Vector3.Distance(e.actor.position,f.player.position),maxRadiusError:0,gazeMax:0};current.frames++;
+    current??={start:time,frames:0,loops:0,lastSource:e.brain.time,target:e.brain.circleTarget,startRadius:Vector3.Distance(e.actor.position,f.player.position),maxRadiusError:0,radialTarget:e.brain.orbitTargetRadius??Vector3.Distance(e.actor.position,f.player.position),gazeMax:0};current.frames++;
     if(e.brain.time<current.lastSource)current.loops++;current.lastSource=e.brain.time;
-    current.maxRadiusError=Math.max(current.maxRadiusError,Math.abs(Vector3.Distance(e.actor.position,f.player.position)-current.startRadius));current.gazeMax=Math.max(current.gazeMax,headAttention(e,f.player).degrees3D);
+    current.maxRadiusError=Math.max(current.maxRadiusError,Math.max(0,Math.min(current.startRadius,current.radialTarget)-Vector3.Distance(e.actor.position,f.player.position),Vector3.Distance(e.actor.position,f.player.position)-Math.max(current.startRadius,current.radialTarget)));current.gazeMax=Math.max(current.gazeMax,headAttention(e,f.player).degrees3D);
    }else if(current){circles.push({...current,seconds:current.frames/fps,elapsed:e.brain.circleElapsed});current=null;}
    if(e.brain.mode==='move')moves++;
    if(e.brain.mode==='attack'){attack={id:e.brain.actionId,time,sourceTime:e.brain.time};break;}
@@ -101,14 +102,14 @@ test('blocked steps, source wraps and player movement cannot reset the ongoing o
  for(const row of rows){assert.ok(row.target>=2&&row.target<=3);const elapsed=row.records.map(r=>r.circleElapsed).filter(Number.isFinite);assert.ok(elapsed.length>0);assert.ok(elapsed.every((v,i)=>i===0||v>=elapsed[i-1]-1e-8),'source wrap/reverse cannot reset wall-clock observation elapsed');if(row.firstAttack!==null)assert.ok(row.firstAttack>=row.target-2/60,'obstructed circle cannot bypass observation time');assert.ok(row.frames<720,'a blocked circle remains bounded');}
 });
 
-test('nonlethal heavy contact shoves the standing wolf backward and block contact plays a real hit motion without collapse',async t=>{
+test('nonlethal heavy contact uses improved collapse/getup and block contact plays a real hit motion without collapse',async t=>{
  const f=await wolfHuntFixture(t),rows=[];
  for(const id of ['judgment','shield-push']){
   const e=await begin(f,{distance:3});until(f,e,()=>e.brain.mode==='attack');const beforeHp=e.brain.hp,origin=e.actor.position.clone(),away=origin.subtract(f.player.position).normalize();
   e.gate.collect=()=>({hits:[{id,damage:20,heavy:id==='judgment'}],hitStop:.03});
   try{e.poseAndContacts(f.player,{state:'idle'},{actionId:921},null);}finally{delete e.gate.collect;}
   const immediate={clip:e.brain.state,mode:e.brain.mode,hp:e.brain.hp,flash:e.brain.flash,velocity:e.knockVelocity.asArray()},samples=[];
-  for(let i=0;i<120;i++){stepWolfHunt(f,e,1/60);if(e.brain.mode!=='hit')break;samples.push({clip:e.brain.state,mode:e.brain.mode,sourceTime:e.brain.time,chestHeight:e.nodes.chest.getAbsolutePosition().y,position:e.actor.position.asArray()});}
+  for(let i=0;i<300;i++){stepWolfHunt(f,e,1/60);if(!['down','recover'].includes(e.brain.mode))break;samples.push({clip:e.brain.state,mode:e.brain.mode,sourceTime:e.brain.time,chestHeight:e.nodes.chest.getAbsolutePosition().y,position:e.actor.position.asArray()});}
   const travel=Vector3.FromArray(samples.at(-1).position).subtract(origin);rows.push({id,beforeHp,immediate,backwardDistance:Vector3.Dot(travel,away),minimumChestHeight:Math.min(...samples.map(s=>s.chestHeight)),samples});
  }
  const e=await begin(f,{distance:3,sequence:['quick-bite']});until(f,e,()=>e.brain.mode==='attack');let block=null;
@@ -117,7 +118,7 @@ test('nonlethal heavy contact shoves the standing wolf backward and block contac
  for(let i=0;i<15;i++){stepWolfHunt(f,e,1/60);blockSamples.push({clip:e.brain.state,mode:e.brain.mode,time:e.brain.time,rotation:e.nodes.chest.rotationQuaternion.asArray(),position:e.actor.position.asArray()});}
  const chestMovement=1-Math.abs(start.dot(e.nodes.chest.rotationQuaternion));rows.push({id:'player-blocks-wolf',block:block?{...block,position:block.position.asArray()}:null,chestMovement,playerHp:e.playerHp,samples:blockSamples});
  evidence.push({case:'live-heavy-shove-and-block-motion',rows});
- for(const row of rows.filter(r=>r.id!=='player-blocks-wolf')){assert.ok(row.immediate.hp>0&&row.immediate.hp<row.beforeHp);assert.ok(row.immediate.flash>0);assert.ok(![WOLF_CLIPS.down,WOLF_CLIPS.recover].includes(row.immediate.clip),'nonlethal strong hit must not select the Lego-like knockdown');assert.ok(row.samples.every(s=>!['down','recover'].includes(s.mode)));assert.ok(Math.abs(row.backwardDistance-1.2)<.03,'the whole authored backward brace finishes before leaving the reaction');assert.ok(row.minimumChestHeight>1.2);}
+ for(const row of rows.filter(r=>r.id!=='player-blocks-wolf')){assert.ok(row.immediate.hp>0&&row.immediate.hp<row.beforeHp);assert.ok(row.immediate.flash>0);assert.ok(![WOLF_CLIPS.down,WOLF_CLIPS.recover].includes(row.immediate.clip),'nonlethal strong hit must not select the Lego-like knockdown');assert.ok(row.samples.some(s=>s.mode==='down')&&row.samples.some(s=>s.mode==='recover'));assert.ok(row.minimumChestHeight<row.samples[0].chestHeight*.6);assert.ok(row.backwardDistance>0,'collapse retains bounded outward recoil');}
  assert.ok(block&&block.flash>0);assert.equal(e.playerHp,500);assert.ok(block.stagger<=0,'block response plays motion rather than holding the attack pose for one second');assert.ok(![WOLF_V02_BY_ID['quick-bite'].sourceClip,WOLF_CLIPS.down,WOLF_CLIPS.recover].includes(block.clip));assert.ok(blockSamples.some(r=>r.time>block.time+.05));assert.ok(chestMovement>1e-5,'actual hit pose must visibly change more than a flash');
 });
 
@@ -213,7 +214,7 @@ test('runtime circling, bite, shove and retreat preserve approved bind attachmen
  assert.ok(checks>1000);assert.ok(maxLengthError<1e-5);assert.ok(maxScaleError<2e-6);
 });
 
-test('far autonomous pursuit uses a fast matched gallop and the accelerated dodge-leap retains sideways travel and body flight',async t=>{
+test('far autonomous pursuit uses a fast matched gallop into compact grounded ram',async t=>{
  const f=await wolfHuntFixture(t),rows=[];
  for(const distance of [6,15,35]){
   const e=await begin(f,{distance,seed:1234}),moves=[];let previous=e.actor.position.clone(),attack=null;
@@ -226,10 +227,12 @@ test('far autonomous pursuit uses a fast matched gallop and the accelerated dodg
    const origin=e.actor.position.clone(),heading=e.actor.rotation.y,serial=e.brain.serial,samples=[];let wall=0;
    for(let frame=0;frame<60*5&&e.brain.serial===serial&&e.brain.mode==='attack'&&e.brain.time<WOLF_V02_BY_ID.lunge.impact;frame++){
     stepWolfHunt(f,e,1/60);wall+=1/60;if(e.brain.serial!==serial||e.brain.mode!=='attack')break;
-    const p=e.actor.position,dx=p.x-origin.x,dz=p.z-origin.z;samples.push({wall,source:e.brain.time,lateral:dx*Math.cos(heading)-dz*Math.sin(heading),pelvisAboveActor:e.nodes.pelvis.getAbsolutePosition().y-p.y});
+   const p=e.actor.position,dx=p.x-origin.x,dz=p.z-origin.z;samples.push({wall,source:e.brain.time,lateral:dx*Math.cos(heading)-dz*Math.sin(heading),pelvisAboveActor:e.nodes.pelvis.getAbsolutePosition().y-p.y,feet:Object.fromEntries(stanceNames.map(n=>[n,e.nodes[n].getAbsolutePosition().asArray()]))});
    }
    const lateral=Math.max(...samples.map(s=>s.lateral))-Math.min(...samples.map(s=>s.lateral)),flight=Math.max(...samples.map(s=>s.pelvisAboveActor))-Math.min(...samples.map(s=>s.pelvisAboveActor));
-   rows.at(-1).lunge={ramPrefixWallSeconds:wall,lateralMeters:lateral,pelvisFlightSpan:flight,samples};assert.equal(attack.id,'lunge');assert.ok(wall<1.1,'the head-ram run-up stays fast while later mauls use the real fall clock');assert.ok(lateral>.5);assert.ok(flight>.5,'time remap must retain the visible jump body trajectory');
+   const clip=WOLF_V02_COMBAT_R13_CLIPS.find(c=>c.name===attack.clip),drifts=[];
+   for(const phase of clip.supportPhases){const support=samples.filter(s=>s.source>=phase.start+1/60&&s.source<=phase.end-1/60);if(!support.length)continue;for(const name of phase.feet)drifts.push(Math.max(...support.map(s=>Vector3.Distance(Vector3.FromArray(s.feet[name]),Vector3.FromArray(support[0].feet[name])))));}
+   rows.at(-1).lunge={ramPrefixWallSeconds:wall,lateralMeters:lateral,pelvisHeightSpan:flight,namedSupportDrifts:drifts,samples};assert.equal(attack.id,'lunge');assert.ok(wall<1.1,'the head-ram run-up stays fast while later mauls use the real fall clock');assert.ok(lateral<.25,'compact ram has no obsolete airborne dodge');assert.ok(drifts.length>=2&&drifts.every(d=>d<.025),'grounded ram preserves named supported feet despite torso pitch/height changes');
   }
  }
  evidence.push({case:'actual-fast-approach-dodge-leap',rows});assert.ok(rows.every(r=>r.walkFrames===0&&r.peakWorldSpeed>=6.5));assert.ok(rows.at(-1).peakWorldSpeed>8.5);

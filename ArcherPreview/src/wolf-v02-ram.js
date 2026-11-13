@@ -1,7 +1,7 @@
 import {Vector3} from '@babylonjs/core';
 import {segmentDistanceSquared} from './melee-collision.js';
 import {playerDimensions} from './player-dimensions.js';
-import {WOLF_V02_RAM,WOLF_V02_RAM_PHASES} from './wolf-v02-spec.js';
+import {WOLF_V02_RAM_PHASES,WOLF_V02_RAM_CHASE} from './wolf-v02-spec.js';
 
 // Per-actor attack authorization and a bounded actual-pose capsule history.
 // The normal standing capsule is never a substitute for a prone victim.
@@ -15,14 +15,16 @@ export class WolfRamSequence{
  reset(){
   this.brain=null;this.serial=null;this.active=false;this.current=null;this.authorized=false;this.critical=null;this.cancelReason=null;this.historyValid=false;this.historyKey=null;this.targetPlayer=null;this.patternScene=null;this.patternMap=null;this.sourceHistory=false;this.lastSource=0;
   this.leaseBrain=null;this.leasePlayer=null;this.leaseScene=null;this.leaseMap=null;this.proneValid=false;this.geometryValid=false;
+  this.chaseCorrectionX=this.chaseCorrectionZ=this.chaseProgress=0;this.chaseCorrectionReady=false;
   for(const phase of this.phases){phase.key=null;phase.resolved=phase.hit=phase.blocked=phase.acceptedKnockdown=false;phase.damage=0;phase.sourceTime=null;}
  }
- matches(){const b=this.e.brain;return this.e.active&&!this.e.world.scene?.isDisposed&&this.active&&b===this.brain&&b.serial===this.serial&&b.mode==='attack'&&b.action?.sourceClip===WOLF_V02_RAM&&this.targetPlayer===this.e.player&&this.patternScene===this.e.world.scene&&this.patternMap===this.e.world.mapId;}
+ matches(){const b=this.e.brain;return this.e.active&&!this.e.world.scene?.isDisposed&&this.active&&b===this.brain&&b.serial===this.serial&&b.mode==='attack'&&!!b.action?.ramPhases&&this.targetPlayer===this.e.player&&this.patternScene===this.e.world.scene&&this.patternMap===this.e.world.mapId;}
  begin(brain,player){
   this.brain=brain;this.serial=brain.serial;this.active=true;this.authorized=false;this.critical=null;this.cancelReason=null;this.historyValid=false;this.historyKey=null;
   this.targetPlayer=player;this.patternScene=this.e.world.scene;this.patternMap=this.e.world.mapId;
   this.sourceHistory=false;this.lastSource=0;
-  for(const phase of this.phases){phase.key=`${brain.serial}:${phase.config.id}`;phase.resolved=phase.hit=phase.blocked=phase.acceptedKnockdown=false;phase.damage=0;phase.sourceTime=null;}
+  this.chaseCorrectionX=this.chaseCorrectionZ=this.chaseProgress=0;this.chaseCorrectionReady=false;
+  for(let i=0;i<this.phases.length;i++){const phase=this.phases[i];phase.config=brain.action.ramPhases[i];phase.key=`${brain.serial}:${phase.config.id}`;phase.resolved=phase.hit=phase.blocked=phase.acceptedKnockdown=false;phase.damage=0;phase.sourceTime=null;}
  }
  readTarget(player,result){
   this.result=result;this.proneValid=false;this.geometryValid=false;this.targetStanding=!!result&&typeof result.state==='string'&&!result.knockedDown&&!result.captured&&!['knockdown','getUp'].includes(result.state)&&!this.e.combat.grabOwner&&this.e.playerAlive;
@@ -34,8 +36,9 @@ export class WolfRamSequence{
   this.proneValid=this.geometryValid&&result?.state==='knockdown'&&result.knockedDown===true&&!result.captured&&!this.e.combat.grabOwner&&this.e.playerAlive;
  }
  prepare(player,result){
-  const b=this.e.brain,pattern=b.mode==='attack'&&b.action?.sourceClip===WOLF_V02_RAM;
+  const b=this.e.brain,pattern=b.mode==='attack'&&!!b.action?.ramPhases;
   this.readTarget(player,result);
+  b.ramVictimProne=this.proneValid;
   if(this.leaseBrain&&(this.leaseBrain!==b||this.leasePlayer!==player||this.leaseScene!==this.e.world.scene||this.leaseMap!==this.e.world.mapId||b.hp<=0))this.clearLease();
   if(!pattern){this.active=false;this.current=null;this.authorized=false;this.historyValid=false;return null;}
   if(this.brain!==b||this.serial!==b.serial)this.begin(b,player);
@@ -46,7 +49,12 @@ export class WolfRamSequence{
    for(const phase of this.phases)if(!phase.resolved&&this.lastSource<=phase.config.contactEnd&&b.time>=phase.config.contactStart){this.current=phase;break;}
   }
   if(b.time>this.phases[0].config.contactEnd&&!this.authorized&&this.current!==this.phases[0])this.cancel('ram-not-confirmed');
-  if(this.authorized&&this.current?.config.kind==='maul'&&(result?.state==='getUp'||result?.captured||!this.e.playerAlive||this.e.combat.grabOwner))this.cancel('victim-unavailable');
+  if(this.authorized&&(result?.state==='getUp'||result?.captured||!this.e.playerAlive||this.e.combat.grabOwner)){
+   // Natural get-up after the final bite must not seek back into recovery.
+   // Only an unresolved, still-valid future bite needs victim cancellation.
+   let pending=false;for(const phase of this.phases)if(phase.config.kind==='maul'&&!phase.resolved&&b.time<=phase.config.contactEnd){pending=true;break;}
+   if(pending)this.cancel('victim-unavailable');
+  }
   return this.current;
  }
  canAttempt(){
@@ -58,7 +66,8 @@ export class WolfRamSequence{
  hasClearanceLease(){
   const e=this.e;
   if(this.leaseBrain!==e.brain||this.leasePlayer!==e.player||this.leaseScene!==e.world.scene||this.leaseMap!==e.world.mapId||e.brain.hp<=0){this.clearLease();return false;}
-  if(e.brain.mode==='attack'&&e.brain.action?.sourceClip!==WOLF_V02_RAM){this.clearLease();return false;}
+  if(e.brain.mode==='attack'&&!e.brain.action?.ramPhases){this.clearLease();return false;}
+  if(e.brain.action?.ramPhases&&['attack','ramRecover'].includes(e.brain.mode))return true;
   const distance=Math.hypot(e.actor.position.x-e.player.position.x,e.actor.position.z-e.player.position.z),normal=e.radius+playerDimensions(e.player).standingClearance;
   if(distance>=normal+1e-5){this.clearLease();return false;}
   return true;
@@ -68,7 +77,7 @@ export class WolfRamSequence{
   phase.resolved=true;phase.hit=after<before;phase.damage=Math.max(0,before-after);phase.blocked=blocked;phase.sourceTime=sourceTime;phase.acceptedKnockdown=acceptedKnockdown===true;
   if(phase.config.kind==='ram'){
    this.authorized=this.matches()&&this.targetStanding&&phase.hit&&!blocked&&phase.acceptedKnockdown&&this.e.playerAlive&&!this.e.combat.grabOwner;
-   if(this.authorized){this.e.brain.ramAccepted=true;this.leaseBrain=this.e.brain;this.leasePlayer=this.e.player;this.leaseScene=this.e.world.scene;this.leaseMap=this.e.world.mapId;}
+   if(this.authorized){this.e.brain.ramAccepted=true;this.e.brain.impacted=true;this.e.brain.ramAcceptedClock=this.e.brain.combatClock;this.e.brain.ramAcceptedSource=sourceTime;this.leaseBrain=this.e.brain;this.leasePlayer=this.e.player;this.leaseScene=this.e.world.scene;this.leaseMap=this.e.world.mapId;}
    else this.cancel(blocked?'ram-blocked':'ram-not-confirmed');
   }
  }
@@ -78,13 +87,28 @@ export class WolfRamSequence{
   if(this.matches()&&phase?.config.kind==='maul'&&this.proneValid){this.previousA.copyFrom(this.a);this.previousB.copyFrom(this.b);this.historyKey=phase.key;this.historyValid=true;}
   else this.historyValid=false;
  }
+ chaseStep(root,clip){
+  const e=this.e,b=e.brain,clock=WOLF_V02_RAM_CHASE,first=clock.source[0],last=clock.source[1];
+  if(!this.matches()||!this.authorized||b.ramChaseClock===null||b.time<first||this.chaseProgress>=1)return;
+  const yaw=e.motionYaw,c=Math.cos(yaw),s=Math.sin(yaw),scale=e.config.scale;
+  if(!this.chaseCorrectionReady){
+   const sample=e.v02Telegraph?.profiles.get('lunge')?.phases.find(phase=>phase.id==='maul-1')?.samples[1];if(!sample)return;
+   const index=Math.min(clip.rootTrack.length-1,Math.round(last*clip.fps)),end=clip.rootTrack[index],x=(end[0]-root[0])*scale,z=(end[2]-root[2])*scale;
+   const futureX=e.actor.position.x+x*c+z*s,futureZ=e.actor.position.z+z*c-x*s,mouthX=(sample.point[0]*c+sample.point[2]*s)*scale,mouthZ=(sample.point[2]*c-sample.point[0]*s)*scale;
+   const targetX=(this.a.x+this.b.x)*.5-mouthX-s*.16,targetZ=(this.a.z+this.b.z)*.5-mouthZ-c*.16;
+   let dx=targetX-futureX,dz=targetZ-futureZ,length=Math.hypot(dx,dz);if(length>.25){dx*=.25/length;dz*=.25/length;}
+   this.chaseCorrectionX=dx;this.chaseCorrectionZ=dz;this.chaseCorrectionReady=true;
+  }
+  const progress=Math.max(0,Math.min(1,(b.time-first)/(last-first))),advance=progress-this.chaseProgress;
+  e.actor.position.x+=this.chaseCorrectionX*advance;e.actor.position.z+=this.chaseCorrectionZ*advance;this.chaseProgress=progress;
+ }
  maulContact(points,previousTime,time){
   if(!this.canAttempt())return false;
   const e=this.e,phase=this.current,config=phase.config,fromTime=Math.max(config.contactStart,previousTime),toTime=Math.min(config.contactEnd,time);
   const sweep=this.historyValid&&this.historyKey===phase.key&&e.v02ContactSerial===phase.key&&time>=previousTime&&time-previousTime<.25;
   if(!sweep&&time>config.contactEnd)return false;
   const from=sweep?Math.max(0,Math.min(1,(fromTime-previousTime)/Math.max(1e-9,time-previousTime))):1,to=sweep?Math.max(0,Math.min(1,(toTime-previousTime)/Math.max(1e-9,time-previousTime))):1;
-  let best=Infinity,bestPart=null,bestTime=time,contact=false;
+  let best=Infinity,bestPart=null,bestTime=time,bestRadius=0,contact=false;
   for(const point of points){
    const part=e.v02ContactParts.find(item=>item.point===point),radius=(part?.radius??.60)+this.bodyRadius,old=sweep?part.previous:point,a=sweep?this.previousA:this.a,b=sweep?this.previousB:this.b;
    // Nine samples of the actual moving point AND both moving torso endpoints.
@@ -96,12 +120,12 @@ export class WolfRamSequence{
     this.capsuleA[0]=a.x+(this.a.x-a.x)*alpha;this.capsuleA[1]=a.y+(this.a.y-a.y)*alpha;this.capsuleA[2]=a.z+(this.a.z-a.z)*alpha;
     this.capsuleB[0]=b.x+(this.b.x-b.x)*alpha;this.capsuleB[1]=b.y+(this.b.y-b.y)*alpha;this.capsuleB[2]=b.z+(this.b.z-b.z)*alpha;
     const distance=Math.sqrt(segmentDistanceSquared(this.point,this.point,this.capsuleA,this.capsuleB));
-    if(distance<best){best=distance;bestPart=part?.name??'jaw';bestTime=sweep?previousTime+(time-previousTime)*alpha:time;}
+    if(distance<best){best=distance;bestPart=part?.name??'jaw';bestTime=sweep?previousTime+(time-previousTime)*alpha:time;bestRadius=radius;}
     if(distance<=radius)contact=true;
    }
   }
-  e.v02LastContact={serial:this.serial,phaseSerial:phase.key,phase:config.id,action:'lunge',sourceTime:bestTime,part:bestPart,distance:best,radius:.60+this.bodyRadius,bodyRadius:this.bodyRadius,prone:true,body:[this.a.asArray(),this.b.asArray()],swept:sweep,contact};
+  e.v02LastContact={serial:this.serial,phaseSerial:phase.key,phase:config.id,action:'lunge',sourceTime:bestTime,part:bestPart,distance:best,radius:bestRadius,bodyRadius:this.bodyRadius,prone:true,body:[this.a.asArray(),this.b.asArray()],swept:sweep,contact};
   return contact;
  }
- inspect(){return {serial:this.serial,active:this.matches(),phase:this.current?.config.id??null,ramHit:this.phases[0].hit,authorized:this.authorized,critical:this.critical,cancelReason:this.cancelReason,clearanceLease:!!this.leaseBrain,phases:this.phases.map(phase=>({id:phase.config.id,serial:phase.key,resolved:phase.resolved,hit:phase.hit,damage:phase.damage,sourceTime:phase.sourceTime,blocked:phase.blocked,acceptedKnockdown:phase.acceptedKnockdown}))};}
+ inspect(){return {serial:this.serial,active:this.matches(),phase:this.current?.config.id??null,ramHit:this.phases[0].hit,authorized:this.authorized,critical:this.critical,cancelReason:this.cancelReason,clearanceLease:!!this.leaseBrain,chase:{acceptedClock:this.e.brain.ramAcceptedClock??null,startClock:this.e.brain.ramChaseClock??null,progress:this.chaseProgress,correction:[this.chaseCorrectionX,this.chaseCorrectionZ],prone:this.proneValid},phases:this.phases.map(phase=>({id:phase.config.id,serial:phase.key,resolved:phase.resolved,hit:phase.hit,damage:phase.damage,sourceTime:phase.sourceTime,blocked:phase.blocked,acceptedKnockdown:phase.acceptedKnockdown}))};}
 }

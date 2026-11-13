@@ -1,0 +1,12 @@
+{
+  "file": "Docs/Reports/2026-11-13/MOONFOREST_0.2_늑대_R13_전투_검토보고서.html",
+  "bytes": 3938153,
+  "inlineScripts": 1,
+  "embeddedJson": 2,
+  "embeddedContactImages": 56,
+  "embeddedMedia": 2,
+  "uniqueIds": 7,
+  "syntax": true,
+  "externalRequiredMedia": false,
+  "checks": "Static DOM/inline script/JSON and data-URL validation only; no browser automation."
+}

@@ -1,0 +1,10 @@
+import fs from 'node:fs';
+import {wolfCombatR13Fixture} from '../../tests/helpers/wolf-combat-r13-fixture.js';
+import {worldSurface,nearestSurfaceVertexBound,movingBladeSkinGap,exactSurfaceDistance} from '../../tests/helpers/wolf-combat-r13-surface.js';
+const api=await wolfCombatR13Fixture(),cases=[];
+for(const pose of process.env.R13_SHIELD_PROBE==='rearclose'?['lunge']:['quick-bite','lunge'])for(const [x,z]of process.env.R13_SHIELD_PROBE==='rearclose'?[[0,-2],[0,-2.1],[0,-2.2]]:[[2,0],[2.3,0],[0,2.3],[0,-2.3]]){
+ const e=await api.summon({distance:3});api.f.player.position.set(x,0,z);api.f.player.rotation.y=Math.atan2(-x,-z);api.watch(e);for(let i=0;i<24;i++)api.step(1/60);api.poseTarget(e,pose);const original=e.hurtCapsules.bind(e),rows=[];
+ e.hurtCapsules=()=>{if(api.lastStrike?.contacts?.length){const mesh=e.asset.meshes.find(m=>m.skeleton&&m.morphTargetManager&&!m.metadata?.moonforestOutline),body=worldSurface(mesh),shield=worldSurface(api.shieldNode);rows.push({time:api.elapsed,source:api.result.clipTime,vertexUpperBound:nearestSurfaceVertexBound(body,shield),exact:exactSurfaceDistance(shield,body),oldLine:api.lastStrike.contacts.map(c=>movingBladeSkinGap(body,body,c,0,1)),faceRows:e.v02Shield.contacts.map(c=>movingBladeSkinGap(body,body,c,0,1)).map(r=>({distance:r.minimumDistance,inside:r.insideWitness,lower:r.minimumProvedDistance}))});}return original();};
+ api.controller.shieldPush();const hp=e.brain.hp;for(let i=0;i<90;i++){api.step(1/60);if(e.brain.hp<hp||!api.controller.action)break;}delete e.hurtCapsules;cases.push({pose,x,z,damage:hp-e.brain.hp,first:rows[0]??null});
+}
+await api.dispose();fs.writeFileSync('reports/wolf-v02-combat-r13/shield-surface-probe'+(process.env.R13_SHIELD_PROBE==='rearclose'?'-rearclose':'')+'.json',JSON.stringify(cases,null,2)+'\n');console.log(JSON.stringify(cases.map(c=>({...c,first:c.first&&{upper:c.first.vertexUpperBound,old:c.first.oldLine.map(r=>r.minimumDistance),faceMin:Math.min(...c.first.faceRows.map(r=>r.distance??Infinity)),inside:c.first.faceRows.some(r=>r.inside)}})),null,2));

@@ -1,0 +1,37 @@
+{
+  "stagedFiles": 159,
+  "siteFiles": 14,
+  "frozenFiles": 2069,
+  "frozenStaged": 0,
+  "sourceDirectories": [
+    "wolf-v02-knockdown-r13",
+    "wolf-combat-r13-review-reference"
+  ],
+  "largestFiles": [
+    {
+      "path": "ArcherPreviewSite/assets/mourning-elena-encounter-CKjnIN7G.js",
+      "bytes": 5146473
+    },
+    {
+      "path": "ArcherPreview/reports/wolf-v02-combat-r13/legacy-ram-independent-gameplay.json.gz",
+      "bytes": 4383678
+    },
+    {
+      "path": "Docs/Reports/2026-11-13/MOONFOREST_0.2_늑대_R13_전투_검토보고서.html",
+      "bytes": 3938153
+    },
+    {
+      "path": "ArcherPreview/reports/wolf-v02-combat-r13/ram-proof.json.gz",
+      "bytes": 2948279
+    },
+    {
+      "path": "Sources/source-inputs.json",
+      "bytes": 2536866
+    },
+    {
+      "path": "ArcherPreviewSite/assets/moonforestV2-B9Y1jkwR.js",
+      "bytes": 2309036
+    }
+  ],
+  "intermediateLogsExcluded": 29
+}

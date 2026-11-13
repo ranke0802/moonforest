@@ -25,7 +25,7 @@ function authoredRotation(e,name){
 test('real head keeps its muzzle toward stationary and moving players through both centered orbit directions',async t=>{
  const f=await wolfHuntFixture(t),rows=[];
  for(const side of [-1,1])for(const radius of [3,5])for(const moving of [false,true]){
-  const e=await resetFeral(f,{distance:radius,behavior:'observe'});e.brain.observation=5;
+  const e=await resetFeral(f,{distance:radius,sequence:['quick-bite'],behavior:'observe'});e.brain.observation=5;
   for(let warm=0;warm<24;warm++)stepWolfHunt(f,e,1/60);
   e.brain.flankSide=-side;e.brain.beginStalk();e.brain.flankRemaining=e.brain.circleTarget=15;e.brain.circleElapsed=0;e.brain.flankPlaybackRate=WOLF_V02_GAIT.orbitPlaybackRate;
   const angles=[],angles3D=[],radii=[],support=[],trace=[];let angleSum=0,lastAngle=null,episode=null,loop=0,previousTime=0,exit=null;

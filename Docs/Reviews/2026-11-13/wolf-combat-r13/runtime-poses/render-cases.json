@@ -1,0 +1,398 @@
+{
+  "scope": "Actual CPU-skinned R13 wolf and native warrior knockdown. Wolf original 4K colour atlas; warrior neutral review material. Identical offline framing, not game GPU UI.",
+  "blenderVersion": "4.5.14 LTS",
+  "rows": [
+    {
+      "case": "ram-prepare",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-prepare-front.png",
+      "sourceTime": 0.4592592592592592,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-prepare",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-prepare-side.png",
+      "sourceTime": 0.4592592592592592,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-prepare",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-prepare-quarter.png",
+      "sourceTime": 0.4592592592592592,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-prepare",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-prepare-opposite.png",
+      "sourceTime": 0.4592592592592592,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\head-ram-front.png",
+      "sourceTime": 0.6746031746031748,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\head-ram-side.png",
+      "sourceTime": 0.6746031746031748,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\head-ram-quarter.png",
+      "sourceTime": 0.6746031746031748,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "head-ram",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\head-ram-opposite.png",
+      "sourceTime": 0.6746031746031748,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "native-fall",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\native-fall-front.png",
+      "sourceTime": 0.8174603174603248,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "native-fall",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\native-fall-side.png",
+      "sourceTime": 0.8174603174603248,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "native-fall",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\native-fall-quarter.png",
+      "sourceTime": 0.8174603174603248,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "native-fall",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\native-fall-opposite.png",
+      "sourceTime": 0.8174603174603248,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-start",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-start-front.png",
+      "sourceTime": 0.9062500000000037,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-start",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-start-side.png",
+      "sourceTime": 0.9062500000000037,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-start",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-start-quarter.png",
+      "sourceTime": 0.9062500000000037,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-start",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-start-opposite.png",
+      "sourceTime": 0.9062500000000037,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-step",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-step-front.png",
+      "sourceTime": 1.1250000000000144,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-step",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-step-side.png",
+      "sourceTime": 1.1250000000000144,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-step",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-step-quarter.png",
+      "sourceTime": 1.1250000000000144,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-step",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-step-opposite.png",
+      "sourceTime": 1.1250000000000144,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-settle",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-settle-front.png",
+      "sourceTime": 1.433636363636408,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-settle",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-settle-side.png",
+      "sourceTime": 1.433636363636408,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-settle",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-settle-quarter.png",
+      "sourceTime": 1.433636363636408,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "chase-settle",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\chase-settle-opposite.png",
+      "sourceTime": 1.433636363636408,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-1-front.png",
+      "sourceTime": 1.7766666666666784,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-1-side.png",
+      "sourceTime": 1.7766666666666784,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-1-quarter.png",
+      "sourceTime": 1.7766666666666784,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-1",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-1-opposite.png",
+      "sourceTime": 1.7766666666666784,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-2-front.png",
+      "sourceTime": 2.3266666666666924,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-2-side.png",
+      "sourceTime": 2.3266666666666924,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-2-quarter.png",
+      "sourceTime": 2.3266666666666924,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ground-bite-2",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ground-bite-2-opposite.png",
+      "sourceTime": 2.3266666666666924,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-front.png",
+      "sourceTime": 2.703333333333403,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-side.png",
+      "sourceTime": 2.703333333333403,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-quarter.png",
+      "sourceTime": 2.703333333333403,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-opposite.png",
+      "sourceTime": 2.703333333333403,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery-end",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-end-front.png",
+      "sourceTime": 3.203333333333428,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery-end",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-end-side.png",
+      "sourceTime": 3.203333333333428,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery-end",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-end-quarter.png",
+      "sourceTime": 3.203333333333428,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-recovery-end",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-recovery-end-opposite.png",
+      "sourceTime": 3.203333333333428,
+      "clip": "Wolf_Close_Ram_Ground_Maul_V02"
+    },
+    {
+      "case": "ram-watch",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-watch-front.png",
+      "sourceTime": 0,
+      "clip": "Circle_Watch_R5"
+    },
+    {
+      "case": "ram-watch",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-watch-side.png",
+      "sourceTime": 0,
+      "clip": "Circle_Watch_R5"
+    },
+    {
+      "case": "ram-watch",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-watch-quarter.png",
+      "sourceTime": 0,
+      "clip": "Circle_Watch_R5"
+    },
+    {
+      "case": "ram-watch",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\ram-watch-opposite.png",
+      "sourceTime": 0,
+      "clip": "Circle_Watch_R5"
+    },
+    {
+      "case": "wolf-collapse",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-collapse-front.png",
+      "sourceTime": 0.850000000000001,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    },
+    {
+      "case": "wolf-collapse",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-collapse-side.png",
+      "sourceTime": 0.850000000000001,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    },
+    {
+      "case": "wolf-collapse",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-collapse-quarter.png",
+      "sourceTime": 0.850000000000001,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    },
+    {
+      "case": "wolf-collapse",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-collapse-opposite.png",
+      "sourceTime": 0.850000000000001,
+      "clip": "Wolf_Staggered_Collapse_V02"
+    },
+    {
+      "case": "wolf-supported-rise",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-supported-rise-front.png",
+      "sourceTime": 0.4666666666666666,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-supported-rise",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-supported-rise-side.png",
+      "sourceTime": 0.4666666666666666,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-supported-rise",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-supported-rise-quarter.png",
+      "sourceTime": 0.4666666666666666,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-supported-rise",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-supported-rise-opposite.png",
+      "sourceTime": 0.4666666666666666,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-getup",
+      "view": "front",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-getup-front.png",
+      "sourceTime": 1.35,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-getup",
+      "view": "side",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-getup-side.png",
+      "sourceTime": 1.35,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-getup",
+      "view": "quarter",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-getup-quarter.png",
+      "sourceTime": 1.35,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    },
+    {
+      "case": "wolf-getup",
+      "view": "opposite",
+      "output": "Docs\\Reviews\\2026-11-13\\wolf-combat-r13\\runtime-poses\\wolf-getup-opposite.png",
+      "sourceTime": 1.35,
+      "clip": "Wolf_Supported_Get_Up_V02"
+    }
+  ]
+}

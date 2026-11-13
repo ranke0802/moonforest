@@ -1,0 +1,21 @@
+{
+  "outDir": "C:\\dev\\MoonForest\\ArcherPreview\\dist\\moonforest-0.2",
+  "release": "moonforest-0.2",
+  "manifestCount": 32,
+  "runtimeGraph": {
+    "chunks": 535,
+    "entriesChecked": 1
+  },
+  "bundleAudit": {
+    "revision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+    "files": 1226,
+    "bundles": 236,
+    "packedBytes": 70793433,
+    "bundledFiles": 934
+  },
+  "files": 2056,
+  "bytes": 723737995,
+  "reusedFiles": 1506,
+  "reusedBytes": 703447446,
+  "stagedBytes": 20290549
+}

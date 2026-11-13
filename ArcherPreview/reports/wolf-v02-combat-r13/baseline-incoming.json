@@ -1,0 +1,2900 @@
+{
+  "scope": "Real packed native warrior controller/animator and PlayerStrikeSampler at current live-source hashes. Historical R12 seven-capsule geometry is evaluated READ-ONLY against the same actual bones, alongside actual CPU-skinned triangle/blade sweeps. No collision gates/damage are injected. Source may contain concurrent R13 work; per-hash current damage and historical shape misses are distinguished.",
+  "sourceHashes": {
+    "src/wolf-v02-spec.js": "d9af885493d9d5c751049d2e75856aa81759917e4c999b6315d97142b4614a9f",
+    "src/wolf-v02-encounter.js": "8cf4279be3777fb479740b9d2f58f8736a9d75e0008daa0b9c58badd183b2a13",
+    "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+    "src/player-strikes.js": "cdaa2c56c3d34b720bce592f4e4745c7d87f7fb1a89010a01f510dd3a4cb3ce5",
+    "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0"
+  },
+  "sourceHashesAfter": {
+    "src/wolf-v02-spec.js": "d9af885493d9d5c751049d2e75856aa81759917e4c999b6315d97142b4614a9f",
+    "src/wolf-v02-encounter.js": "8cf4279be3777fb479740b9d2f58f8736a9d75e0008daa0b9c58badd183b2a13",
+    "src/boss-encounter.js": "a750e525799025f9e79bb543e475bcced4dbc0030c0c765adab749cf0269827b",
+    "src/player-strikes.js": "cdaa2c56c3d34b720bce592f4e4745c7d87f7fb1a89010a01f510dd3a4cb3ce5",
+    "src/warrior-v2.js": "7537aea9ddcb68cac73cbc6ff2f8b382179758105087a0637a1e3f216502d5c0"
+  },
+  "cases": [
+    {
+      "attack": "shieldPush",
+      "region": "front",
+      "x": 0,
+      "z": 3,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 1.4999999999999996,
+          "playerClipTime": 1.100000000000001,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.3537736464738852,
+                  1.0878038636743999,
+                  2.2356052886694666
+                ],
+                [
+                  -0.054821557879447286,
+                  1.004056913644073,
+                  2.2787672508507963
+                ]
+              ],
+              "blade": [
+                [
+                  0.3537736464738846,
+                  1.0878038636744023,
+                  2.235605288669467
+                ],
+                [
+                  -0.054821557879447924,
+                  1.0040569136440753,
+                  2.278767250850797
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5166666666666662,
+          "playerClipTime": 1.1166666666666676,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.3537736464738846,
+                  1.0878038636744023,
+                  2.235605288669467
+                ],
+                [
+                  -0.054821557879447924,
+                  1.0040569136440753,
+                  2.278767250850797
+                ]
+              ],
+              "blade": [
+                [
+                  0.34028416383266447,
+                  1.1104589183330535,
+                  2.240116627857089
+                ],
+                [
+                  -0.06831104052066803,
+                  1.0267119191288947,
+                  2.2832785900384187
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5333333333333328,
+          "playerClipTime": 1.1333333333333342,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.34028416383266447,
+                  1.1104589183330535,
+                  2.240116627857089
+                ],
+                [
+                  -0.06831104052066803,
+                  1.0267119191288947,
+                  2.2832785900384187
+                ]
+              ],
+              "blade": [
+                [
+                  0.3287977603673935,
+                  1.1268704139590264,
+                  2.246911527067423
+                ],
+                [
+                  -0.07954146468639373,
+                  1.0431060170531272,
+                  2.2924009309709072
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5499999999999994,
+          "playerClipTime": 1.1500000000000008,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.3287977603673935,
+                  1.1268704139590264,
+                  2.246911527067423
+                ],
+                [
+                  -0.07954146468639373,
+                  1.0431060170531272,
+                  2.2924009309709072
+                ]
+              ],
+              "blade": [
+                [
+                  0.30339124512672555,
+                  1.114662109583617,
+                  2.248608145609498
+                ],
+                [
+                  -0.10413562822341788,
+                  1.0308616092503078,
+                  2.3008182993978257
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "shieldPush",
+      "region": "front-edge",
+      "x": 0,
+      "z": 3.8,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 1.4999999999999996,
+          "playerClipTime": 1.100000000000001,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.3537736464738852,
+                  1.0878038636743999,
+                  3.035605240985751
+                ],
+                [
+                  -0.054821557879447286,
+                  1.004056913644073,
+                  3.0787672031670805
+                ]
+              ],
+              "blade": [
+                [
+                  0.3537736464738846,
+                  1.0878038636744023,
+                  3.0356052409857512
+                ],
+                [
+                  -0.054821557879447924,
+                  1.0040569136440753,
+                  3.078767203167081
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5166666666666662,
+          "playerClipTime": 1.1166666666666676,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.3537736464738846,
+                  1.0878038636744023,
+                  3.0356052409857512
+                ],
+                [
+                  -0.054821557879447924,
+                  1.0040569136440753,
+                  3.078767203167081
+                ]
+              ],
+              "blade": [
+                [
+                  0.34028416383266447,
+                  1.1104589183330535,
+                  3.040116580173373
+                ],
+                [
+                  -0.06831104052066803,
+                  1.0267119191288947,
+                  3.083278542354703
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5333333333333328,
+          "playerClipTime": 1.1333333333333342,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.34028416383266447,
+                  1.1104589183330535,
+                  3.040116580173373
+                ],
+                [
+                  -0.06831104052066803,
+                  1.0267119191288947,
+                  3.083278542354703
+                ]
+              ],
+              "blade": [
+                [
+                  0.3287977603673935,
+                  1.1268704139590264,
+                  3.046911479383707
+                ],
+                [
+                  -0.07954146468639373,
+                  1.0431060170531272,
+                  3.0924008832871914
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5499999999999994,
+          "playerClipTime": 1.1500000000000008,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  0.3287977603673935,
+                  1.1268704139590264,
+                  3.046911479383707
+                ],
+                [
+                  -0.07954146468639373,
+                  1.0431060170531272,
+                  3.0924008832871914
+                ]
+              ],
+              "blade": [
+                [
+                  0.30339124512672555,
+                  1.114662109583617,
+                  3.0486080979257824
+                ],
+                [
+                  -0.10413562822341788,
+                  1.0308616092503078,
+                  3.10081825171411
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "shieldPush",
+      "region": "flank",
+      "x": 2.5,
+      "z": 0,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 1.4999999999999996,
+          "playerClipTime": 1.100000000000001,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            2.5,
+            0,
+            0
+          ],
+          "wolf": [
+            1.1053686363105255,
+            0,
+            -2.0748502016805057
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  1.8484920892268417,
+                  1.0878038636743999,
+                  -0.5338468788862236
+                ],
+                [
+                  1.7880046911686656,
+                  1.004056913644073,
+                  -0.12745509493351054
+                ]
+              ],
+              "blade": [
+                [
+                  1.848492089226842,
+                  1.0878038636744023,
+                  -0.5338468788862228
+                ],
+                [
+                  1.7880046911686658,
+                  1.0040569136440753,
+                  -0.12745509493350982
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5166666666666662,
+          "playerClipTime": 1.1166666666666676,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": 0.1947609156568786,
+            "minimumProvedDistance": 0.19030256334999962,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8878,
+              "alpha": 1,
+              "pointTimeError": 0.004458352306878979
+            },
+            "testedTriangles": 33,
+            "temporalSamples": 132,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            2.5,
+            0,
+            0
+          ],
+          "wolf": [
+            1.1282752793723196,
+            0,
+            -2.0900649011020955
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  1.848492089226842,
+                  1.0878038636744023,
+                  -0.5338468788862228
+                ],
+                [
+                  1.7880046911686658,
+                  1.0040569136440753,
+                  -0.12745509493350982
+                ]
+              ],
+              "blade": [
+                [
+                  1.8494829166978597,
+                  1.1104589183330535,
+                  -0.5196576100587845
+                ],
+                [
+                  1.7889955874830483,
+                  1.0267119191288947,
+                  -0.11326582610607147
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5333333333333328,
+          "playerClipTime": 1.1333333333333342,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": 0.18591643065627092,
+            "minimumProvedDistance": 0.18227214816872467,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8880,
+              "alpha": 1,
+              "pointTimeError": 0.0036442824875462586
+            },
+            "testedTriangles": 41,
+            "temporalSamples": 164,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            2.5,
+            0,
+            0
+          ],
+          "wolf": [
+            1.1513486802277104,
+            0,
+            -2.105027224925241
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  1.8494829166978597,
+                  1.1104589183330535,
+                  -0.5196576100587845
+                ],
+                [
+                  1.7889955874830483,
+                  1.0267119191288947,
+                  -0.11326582610607147
+                ]
+              ],
+              "blade": [
+                [
+                  1.853186563283205,
+                  1.1268704139590264,
+                  -0.5068360456228256
+                ],
+                [
+                  1.7950166246592998,
+                  1.0431060170531272,
+                  -0.10010948622226712
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5499999999999994,
+          "playerClipTime": 1.1500000000000008,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": 0.19125208833862067,
+            "minimumProvedDistance": 0.18646306110606178,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8880,
+              "alpha": 0,
+              "pointTimeError": 0.004789027232558886
+            },
+            "testedTriangles": 41,
+            "temporalSamples": 164,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            2.5,
+            0,
+            0
+          ],
+          "wolf": [
+            1.1745851430782586,
+            0,
+            -2.1197347610140094
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  1.853186563283205,
+                  1.1268704139590264,
+                  -0.5068360456228256
+                ],
+                [
+                  1.7950166246592998,
+                  1.0431060170531272,
+                  -0.10010948622226712
+                ]
+              ],
+              "blade": [
+                [
+                  1.8484696675539019,
+                  1.114662109583617,
+                  -0.48181358730793133
+                ],
+                [
+                  1.7970098818540574,
+                  1.0308616092503078,
+                  -0.07419127738475939
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "shieldPush",
+      "region": "flank-edge",
+      "x": 3.3,
+      "z": 0,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 1.4999999999999996,
+          "playerClipTime": 1.100000000000001,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            0.2616217436331807,
+            0,
+            -2.364478287326261
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  2.6119078344106668,
+                  1.0878038636743999,
+                  -0.48578242814540934
+                ],
+                [
+                  2.5807009798288343,
+                  1.004056913644073,
+                  -0.07610067880153727
+                ]
+              ],
+              "blade": [
+                [
+                  2.611907834410667,
+                  1.0878038636744023,
+                  -0.4857824281454086
+                ],
+                [
+                  2.5807009798288347,
+                  1.0040569136440753,
+                  -0.07610067880153656
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5166666666666662,
+          "playerClipTime": 1.1166666666666676,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            0.27858777793888434,
+            0,
+            -2.386119901509501
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  2.611907834410667,
+                  1.0878038636744023,
+                  -0.4857824281454086
+                ],
+                [
+                  2.5807009798288347,
+                  1.0040569136440753,
+                  -0.07610067880153656
+                ]
+              ],
+              "blade": [
+                [
+                  2.613913397595286,
+                  1.1104589183330535,
+                  -0.4717007380723953
+                ],
+                [
+                  2.5827065479308366,
+                  1.0267119191288947,
+                  -0.062018949389457706
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5333333333333328,
+          "playerClipTime": 1.1333333333333342,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            0.29570854348169107,
+            0,
+            -2.4076405139245973
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  2.613913397595286,
+                  1.1104589183330535,
+                  -0.4717007380723953
+                ],
+                [
+                  2.5827065479308366,
+                  1.0267119191288947,
+                  -0.062018949389457706
+                ]
+              ],
+              "blade": [
+                [
+                  2.618526058599353,
+                  1.1268704139590264,
+                  -0.4591774722337723
+                ],
+                [
+                  2.589654651239514,
+                  1.0431060170531272,
+                  -0.0493279024362564
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5499999999999994,
+          "playerClipTime": 1.1500000000000008,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            0.3129824973448039,
+            0,
+            -2.4290381715468197
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  2.618526058599353,
+                  1.1268704139590264,
+                  -0.4591774722337723
+                ],
+                [
+                  2.589654651239514,
+                  1.0431060170531272,
+                  -0.0493279024362564
+                ]
+              ],
+              "blade": [
+                [
+                  2.6156147357150914,
+                  1.114662109583617,
+                  -0.43388136672973765
+                ],
+                [
+                  2.593500429995358,
+                  1.0308616092503078,
+                  -0.023619248151780525
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "shieldPush",
+      "region": "rear",
+      "x": 0,
+      "z": -2.5,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 1.4999999999999996,
+          "playerClipTime": 1.100000000000001,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -2.5
+          ],
+          "wolf": [
+            -2.074850201680497,
+            0,
+            -1.105368636310512
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.5338468788862236,
+                  1.0878038636743999,
+                  -1.8484920892268417
+                ],
+                [
+                  -0.12745509493351054,
+                  1.004056913644073,
+                  -1.7880046911686656
+                ]
+              ],
+              "blade": [
+                [
+                  -0.5338468788862228,
+                  1.0878038636744023,
+                  -1.848492089226842
+                ],
+                [
+                  -0.12745509493350982,
+                  1.0040569136440753,
+                  -1.7880046911686658
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5166666666666662,
+          "playerClipTime": 1.1166666666666676,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": 0.19476087907834494,
+            "minimumProvedDistance": 0.19030252677146597,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8878,
+              "alpha": 1,
+              "pointTimeError": 0.004458352306878979
+            },
+            "testedTriangles": 33,
+            "temporalSamples": 132,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -2.5
+          ],
+          "wolf": [
+            -2.090064901102087,
+            0,
+            -1.1282752793723063
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.5338468788862228,
+                  1.0878038636744023,
+                  -1.848492089226842
+                ],
+                [
+                  -0.12745509493350982,
+                  1.0040569136440753,
+                  -1.7880046911686658
+                ]
+              ],
+              "blade": [
+                [
+                  -0.5196576100587845,
+                  1.1104589183330535,
+                  -1.8494829166978597
+                ],
+                [
+                  -0.11326582610607147,
+                  1.0267119191288947,
+                  -1.7889955874830483
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5333333333333328,
+          "playerClipTime": 1.1333333333333342,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": 0.18591649491022355,
+            "minimumProvedDistance": 0.1822722124226773,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8880,
+              "alpha": 1,
+              "pointTimeError": 0.0036442824875462586
+            },
+            "testedTriangles": 41,
+            "temporalSamples": 164,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -2.5
+          ],
+          "wolf": [
+            -2.105027224925232,
+            0,
+            -1.1513486802276964
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.5196576100587845,
+                  1.1104589183330535,
+                  -1.8494829166978597
+                ],
+                [
+                  -0.11326582610607147,
+                  1.0267119191288947,
+                  -1.7889955874830483
+                ]
+              ],
+              "blade": [
+                [
+                  -0.5068360456228256,
+                  1.1268704139590264,
+                  -1.853186563283205
+                ],
+                [
+                  -0.10010948622226712,
+                  1.0431060170531272,
+                  -1.7950166246592998
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5499999999999994,
+          "playerClipTime": 1.1500000000000008,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": 0.19125204931719367,
+            "minimumProvedDistance": 0.18646302208463478,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8880,
+              "alpha": 0,
+              "pointTimeError": 0.004789027232558886
+            },
+            "testedTriangles": 41,
+            "temporalSamples": 164,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -2.5
+          ],
+          "wolf": [
+            -2.119734761014001,
+            0,
+            -1.174585143078245
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.5068360456228256,
+                  1.1268704139590264,
+                  -1.853186563283205
+                ],
+                [
+                  -0.10010948622226712,
+                  1.0431060170531272,
+                  -1.7950166246592998
+                ]
+              ],
+              "blade": [
+                [
+                  -0.48181358730793133,
+                  1.114662109583617,
+                  -1.8484696675539019
+                ],
+                [
+                  -0.07419127738475939,
+                  1.0308616092503078,
+                  -1.7970098818540574
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "shieldPush",
+      "region": "rear-edge",
+      "x": 0,
+      "z": -3.3,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 1.4999999999999996,
+          "playerClipTime": 1.100000000000001,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -2.3644782873262433,
+            0,
+            -0.2616217436331669
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.48578242814540934,
+                  1.0878038636743999,
+                  -2.6119078344106668
+                ],
+                [
+                  -0.07610067880153727,
+                  1.004056913644073,
+                  -2.5807009798288343
+                ]
+              ],
+              "blade": [
+                [
+                  -0.4857824281454086,
+                  1.0878038636744023,
+                  -2.611907834410667
+                ],
+                [
+                  -0.07610067880153656,
+                  1.0040569136440753,
+                  -2.5807009798288347
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5166666666666662,
+          "playerClipTime": 1.1166666666666676,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -2.3861199015094834,
+            0,
+            -0.27858777793887013
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.4857824281454086,
+                  1.0878038636744023,
+                  -2.611907834410667
+                ],
+                [
+                  -0.07610067880153656,
+                  1.0040569136440753,
+                  -2.5807009798288347
+                ]
+              ],
+              "blade": [
+                [
+                  -0.4717007380723953,
+                  1.1104589183330535,
+                  -2.613913397595286
+                ],
+                [
+                  -0.062018949389457706,
+                  1.0267119191288947,
+                  -2.5827065479308366
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5333333333333328,
+          "playerClipTime": 1.1333333333333342,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -2.40764051392458,
+            0,
+            -0.29570854348167686
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.4717007380723953,
+                  1.1104589183330535,
+                  -2.613913397595286
+                ],
+                [
+                  -0.062018949389457706,
+                  1.0267119191288947,
+                  -2.5827065479308366
+                ]
+              ],
+              "blade": [
+                [
+                  -0.4591774722337723,
+                  1.1268704139590264,
+                  -2.618526058599353
+                ],
+                [
+                  -0.0493279024362564,
+                  1.0431060170531272,
+                  -2.589654651239514
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.5499999999999994,
+          "playerClipTime": 1.1500000000000008,
+          "sourceState": "shieldPush",
+          "bladeRadius": 0.06482224635394668,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.06482224635394668,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -2.429038171546803,
+            0,
+            -0.3129824973447901
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "shield-push",
+                "from": 1.1,
+                "to": 1.15,
+                "damage": 10,
+                "stun": 1.5
+              },
+              "previous": [
+                [
+                  -0.4591774722337723,
+                  1.1268704139590264,
+                  -2.618526058599353
+                ],
+                [
+                  -0.0493279024362564,
+                  1.0431060170531272,
+                  -2.589654651239514
+                ]
+              ],
+              "blade": [
+                [
+                  -0.43388136672973765,
+                  1.114662109583617,
+                  -2.6156147357150914
+                ],
+                [
+                  -0.023619248151780525,
+                  1.0308616092503078,
+                  -2.593500429995358
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "judgment",
+      "region": "front",
+      "x": 0,
+      "z": 3,
+      "entry": true,
+      "damage": 79,
+      "firstHit": {
+        "time": 0.9333333333333346,
+        "mode": "idle",
+        "clip": "Circle_Watch_R5",
+        "hp": 875
+      },
+      "samples": [
+        {
+          "time": 0.9333333333333346,
+          "playerClipTime": 0.9600000000000006,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": 0.38036750212455345,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 3080,
+              "alpha": 1,
+              "pointTimeError": 0.004999903932852666
+            },
+            "testedTriangles": 9,
+            "temporalSamples": 234,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 875,
+          "player": [
+            0,
+            0,
+            3
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  -0.31725995850252686,
+                  1.7826301675265093,
+                  2.4513695954146546
+                ],
+                [
+                  -0.1784662919087909,
+                  2.395906820816303,
+                  2.334989767304315
+                ]
+              ],
+              "blade": [
+                [
+                  -0.2945698740091175,
+                  1.6101653023436666,
+                  2.2718184085972606
+                ],
+                [
+                  -0.32048977742902934,
+                  2.260140827961266,
+                  2.2235217193998396
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "judgment",
+      "region": "front-edge",
+      "x": 0,
+      "z": 3.8,
+      "entry": true,
+      "damage": 0,
+      "firstHit": null,
+      "samples": [
+        {
+          "time": 0.9333333333333346,
+          "playerClipTime": 0.9600000000000006,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  -0.31725995850252686,
+                  1.7826301675265093,
+                  3.251369547730939
+                ],
+                [
+                  -0.1784662919087909,
+                  2.395906820816303,
+                  3.134989719620599
+                ]
+              ],
+              "blade": [
+                [
+                  -0.2945698740091175,
+                  1.6101653023436666,
+                  3.0718183609135448
+                ],
+                [
+                  -0.32048977742902934,
+                  2.260140827961266,
+                  3.0235216717161237
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.9500000000000013,
+          "playerClipTime": 0.9900000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  -0.2945698740091175,
+                  1.6101653023436666,
+                  3.0718183609135448
+                ],
+                [
+                  -0.32048977742902934,
+                  2.260140827961266,
+                  3.0235216717161237
+                ]
+              ],
+              "blade": [
+                [
+                  0.11146261628717186,
+                  1.304969097673893,
+                  2.7959282755404713
+                ],
+                [
+                  -0.2462914781942963,
+                  1.7860579958558083,
+                  2.5389493980556725
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.966666666666668,
+          "playerClipTime": 1.0200000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.11146261628717184,
+                  1.304969097673893,
+                  2.7959282755404713
+                ],
+                [
+                  -0.2462914781942963,
+                  1.7860579958558083,
+                  2.5389493980556725
+                ]
+              ],
+              "blade": [
+                [
+                  0.5149519635587931,
+                  1.2010058190077544,
+                  2.854895016819239
+                ],
+                [
+                  0.2836331381350755,
+                  1.5318042341321707,
+                  2.3425114689171314
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.9833333333333347,
+          "playerClipTime": 1.0500000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.5149519635587931,
+                  1.2010058190077544,
+                  2.854895016819239
+                ],
+                [
+                  0.28363313813507557,
+                  1.5318042341321707,
+                  2.3425114689171314
+                ]
+              ],
+              "blade": [
+                [
+                  0.7397081311913207,
+                  1.1736587613783778,
+                  3.037649489760399
+                ],
+                [
+                  0.7511183528462425,
+                  1.5129103257618843,
+                  2.480647714972496
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.0000000000000013,
+          "playerClipTime": 1.0800000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.7397081311913207,
+                  1.1736587613783778,
+                  3.037649489760399
+                ],
+                [
+                  0.7511183528462425,
+                  1.5129103257618843,
+                  2.480647714972496
+                ]
+              ],
+              "blade": [
+                [
+                  0.8352257892340421,
+                  1.1670937275439501,
+                  3.2738969259262083
+                ],
+                [
+                  1.035370998725295,
+                  1.5894320573359728,
+                  2.8188748260736465
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.016666666666668,
+          "playerClipTime": 1.1100000000000008,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.8352257892340421,
+                  1.1670937275439501,
+                  3.2738969259262083
+                ],
+                [
+                  1.035370998725295,
+                  1.5894320573359728,
+                  2.8188748260736465
+                ]
+              ],
+              "blade": [
+                [
+                  0.8122211554050446,
+                  1.1536264813095332,
+                  3.4808428363502024
+                ],
+                [
+                  1.0656706755161285,
+                  1.6786367831379176,
+                  3.188267477363348
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 1.0333333333333345,
+          "playerClipTime": 1.1400000000000008,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            3.8
+          ],
+          "wolf": [
+            0,
+            0,
+            0
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.8122211554050446,
+                  1.1536264813095332,
+                  3.4808428363502024
+                ],
+                [
+                  1.0656706755161285,
+                  1.6786367831379176,
+                  3.188267477363348
+                ]
+              ],
+              "blade": [
+                [
+                  0.7895226740340408,
+                  1.1478871530915304,
+                  3.526602768309411
+                ],
+                [
+                  1.0283312952021781,
+                  1.6980445446396855,
+                  3.2832144798412854
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "judgment",
+      "region": "flank",
+      "x": 2.5,
+      "z": 0,
+      "entry": true,
+      "damage": 79,
+      "firstHit": {
+        "time": 0.9333333333333346,
+        "mode": "idle",
+        "clip": "Wolf_Orbit_Step_V02",
+        "hp": 875
+      },
+      "samples": [
+        {
+          "time": 0.9333333333333346,
+          "playerClipTime": 0.9600000000000006,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": 0,
+            "minimumProvedDistance": -0.004999907816593904,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": false,
+            "closest": {
+              "triangle": 3931,
+              "alpha": 0.24,
+              "pointTimeError": 0.004999907816593904
+            },
+            "testedTriangles": 398,
+            "temporalSamples": 10348,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": true,
+          "hpBefore": 900,
+          "hpAfter": 875,
+          "player": [
+            2.5,
+            0,
+            0
+          ],
+          "wolf": [
+            0.44374489932114614,
+            0,
+            -1.4219053980248464
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  1.8894215794603086,
+                  1.7826301675265093,
+                  0.16983282936147326
+                ],
+                [
+                  1.8114879976312368,
+                  2.395906820816303,
+                  0.006326589481591018
+                ]
+              ],
+              "blade": [
+                [
+                  1.7212654947638513,
+                  1.6101653023436666,
+                  0.10292171748075635
+                ],
+                [
+                  1.6680183064341545,
+                  2.260140827961266,
+                  0.11592739783693104
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 1,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "judgment",
+      "region": "flank-edge",
+      "x": 3.3,
+      "z": 0,
+      "entry": true,
+      "damage": 79,
+      "firstHit": {
+        "time": 0.966666666666668,
+        "mode": "idle",
+        "clip": "Wolf_Orbit_Step_V02",
+        "hp": 875
+      },
+      "samples": [
+        {
+          "time": 0.9333333333333346,
+          "playerClipTime": 0.9600000000000006,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            -0.05823983088885454,
+            0,
+            -1.5002763803845518
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  2.7031628579385636,
+                  1.7826301675265093,
+                  0.2131545677284418
+                ],
+                [
+                  2.613711609605704,
+                  2.395906820816303,
+                  0.05565402043858766
+                ]
+              ],
+              "blade": [
+                [
+                  2.5306443377994,
+                  1.6101653023436666,
+                  0.15846672144532203
+                ],
+                [
+                  2.4784661516062916,
+                  2.260140827961266,
+                  0.17525501707196237
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.9500000000000013,
+          "playerClipTime": 0.9900000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            -0.05355800075657724,
+            0,
+            -1.52737507407913
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  2.5306443377994,
+                  1.6101653023436666,
+                  0.15846672144532203
+                ],
+                [
+                  2.4784661516062916,
+                  2.260140827961266,
+                  0.17525501707196237
+                ]
+              ],
+              "blade": [
+                [
+                  2.3324741775989533,
+                  1.304969097673893,
+                  -0.2906505209058523
+                ],
+                [
+                  2.0152098252773287,
+                  1.7860579958558083,
+                  0.01491370327770708
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.966666666666668,
+          "playerClipTime": 1.0200000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": 0.11176202224388644,
+            "minimumProvedDistance": 0.10676427817971777,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8883,
+              "alpha": 1,
+              "pointTimeError": 0.004997744064168666
+            },
+            "testedTriangles": 106,
+            "temporalSamples": 6678,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 875,
+          "player": [
+            3.3,
+            0,
+            0
+          ],
+          "wolf": [
+            -0.048680581441016724,
+            0,
+            -1.554438708889275
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  2.3324741775989533,
+                  1.304969097673893,
+                  -0.2906505209058523
+                ],
+                [
+                  2.0152098252773287,
+                  1.7860579958558083,
+                  0.01491370327770708
+                ]
+              ],
+              "blade": [
+                [
+                  2.463215799301863,
+                  1.2010058190077544,
+                  -0.6768984438329935
+                ],
+                [
+                  1.9175253290832042,
+                  1.5318042341321707,
+                  -0.5417423569709061
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "judgment",
+      "region": "rear",
+      "x": 0,
+      "z": -2.5,
+      "entry": true,
+      "damage": 79,
+      "firstHit": {
+        "time": 0.9333333333333346,
+        "mode": "idle",
+        "clip": "Wolf_Orbit_Step_V02",
+        "hp": 875
+      },
+      "samples": [
+        {
+          "time": 0.9333333333333346,
+          "playerClipTime": 0.9600000000000006,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": 0,
+            "minimumProvedDistance": -0.004999907816593904,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": false,
+            "closest": {
+              "triangle": 3931,
+              "alpha": 0.24,
+              "pointTimeError": 0.004999907816593904
+            },
+            "testedTriangles": 398,
+            "temporalSamples": 10348,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": true,
+          "hpBefore": 900,
+          "hpAfter": 875,
+          "player": [
+            0,
+            0,
+            -2.5
+          ],
+          "wolf": [
+            -1.4219053980248324,
+            0,
+            -0.44374489932113637
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.16983282936147326,
+                  1.7826301675265093,
+                  -1.8894215794603086
+                ],
+                [
+                  0.006326589481591018,
+                  2.395906820816303,
+                  -1.8114879976312368
+                ]
+              ],
+              "blade": [
+                [
+                  0.10292171748075635,
+                  1.6101653023436666,
+                  -1.7212654947638513
+                ],
+                [
+                  0.11592739783693104,
+                  2.260140827961266,
+                  -1.6680183064341545
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 1,
+      "visibleOldCapsuleMisses": 0
+    },
+    {
+      "attack": "judgment",
+      "region": "rear-edge",
+      "x": 0,
+      "z": -3.3,
+      "entry": true,
+      "damage": 79,
+      "firstHit": {
+        "time": 0.966666666666668,
+        "mode": "idle",
+        "clip": "Wolf_Orbit_Step_V02",
+        "hp": 875
+      },
+      "samples": [
+        {
+          "time": 0.9333333333333346,
+          "playerClipTime": 0.9600000000000006,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -1.5002763803845411,
+            0,
+            0.05823983088885676
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.2131545677284418,
+                  1.7826301675265093,
+                  -2.7031628579385636
+                ],
+                [
+                  0.05565402043858766,
+                  2.395906820816303,
+                  -2.613711609605704
+                ]
+              ],
+              "blade": [
+                [
+                  0.15846672144532203,
+                  1.6101653023436666,
+                  -2.5306443377994
+                ],
+                [
+                  0.17525501707196237,
+                  2.260140827961266,
+                  -2.4784661516062916
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.9500000000000013,
+          "playerClipTime": 0.9900000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": null,
+            "minimumProvedDistance": 0.2,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": null,
+            "testedTriangles": 0,
+            "temporalSamples": 0,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 900,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -1.5273750740791194,
+            0,
+            0.053558000756579904
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  0.15846672144532203,
+                  1.6101653023436666,
+                  -2.5306443377994
+                ],
+                [
+                  0.17525501707196237,
+                  2.260140827961266,
+                  -2.4784661516062916
+                ]
+              ],
+              "blade": [
+                [
+                  -0.2906505209058523,
+                  1.304969097673893,
+                  -2.3324741775989533
+                ],
+                [
+                  0.01491370327770708,
+                  1.7860579958558083,
+                  -2.0152098252773287
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "time": 0.966666666666668,
+          "playerClipTime": 1.0200000000000007,
+          "sourceState": "judgment",
+          "bladeRadius": 0.049516993742598166,
+          "surface": {
+            "minimumDistance": 0.11176216697625882,
+            "minimumProvedDistance": 0.10676442291209015,
+            "bladeRadius": 0.049516993742598166,
+            "actualSurfaceClear": true,
+            "closest": {
+              "triangle": 8883,
+              "alpha": 1,
+              "pointTimeError": 0.004997744064168666
+            },
+            "testedTriangles": 106,
+            "temporalSamples": 6678,
+            "scope": "Actual CPU-skinned mesh TRIANGLES versus the real line blade sweep; no lateral assist. Time sampling has a conservative travel/(2N) distance bound. Boss pose uses the current frame, matching the live solver."
+          },
+          "oldSevenCapsuleContact": false,
+          "hpBefore": 900,
+          "hpAfter": 875,
+          "player": [
+            0,
+            0,
+            -3.3
+          ],
+          "wolf": [
+            -1.554438708889264,
+            0,
+            0.04868058144101983
+          ],
+          "blade": [
+            {
+              "window": {
+                "id": "jump-cut",
+                "from": 0.94,
+                "to": 1.12,
+                "damage": 79,
+                "heavy": true,
+                "burst": [
+                  25,
+                  25,
+                  29
+                ],
+                "interval": 0.055
+              },
+              "previous": [
+                [
+                  -0.2906505209058523,
+                  1.304969097673893,
+                  -2.3324741775989533
+                ],
+                [
+                  0.01491370327770708,
+                  1.7860579958558083,
+                  -2.0152098252773287
+                ]
+              ],
+              "blade": [
+                [
+                  -0.6768984438329935,
+                  1.2010058190077544,
+                  -2.463215799301863
+                ],
+                [
+                  -0.5417423569709061,
+                  1.5318042341321707,
+                  -1.9175253290832042
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "visibleSurfaceContacts": 0,
+      "visibleOldCapsuleMisses": 0
+    }
+  ]
+}

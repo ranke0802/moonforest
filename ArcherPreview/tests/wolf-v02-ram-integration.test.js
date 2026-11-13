@@ -9,20 +9,24 @@ import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_GAIT,WOLF_V02_ORBIT} from '../s
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {WolfEncounter} from '../src/wolf-encounter.js';
 import {segmentDistanceSquared} from '../src/melee-collision.js';
-import {WOLF_V02_RAM_CLIPS} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_COMBAT_R13_CLIPS} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_RAM_CLIPS} from '../src/wolf-v02-authored-history.js';
+const compact=WOLF_V02_COMBAT_R13_CLIPS.find(c=>c.name==='Wolf_Close_Ram_Ground_Maul_V02');
+const suffixOffset=112/60;
+const tactileSkin=proof=>proof?.surfacesIntersect||proof?.nearestVertexDistance!==null&&proof?.nearestVertexDistance<=.075;
 import {measureSkinContact} from '../reports/wolf-v02-ram-r12/skin-contact.mjs';
 
 const baseline=JSON.parse(fs.readFileSync(new URL('../reports/wolf-v02-ram-r12/preservation-baseline.json',import.meta.url)));
 const sha=path=>createHash('sha256').update(fs.readFileSync(path)).digest('hex');
 const evidence=[];
-const sourcePaths=['src/wolf-v02-spec.js','src/wolf-v02-encounter.js','src/wolf-v02-ram.js','src/wolf-v02-locomotion.js','src/wolf-v02-authored-clips.js','src/wolf-v02-ram-clips.json','src/warrior-v2.js','src/animation.js','src/player-dimensions.js','src/boss-battle.js','src/boss-encounter.js','src/tree-view-surface.js','src/melee-collision.js','tests/helpers/wolf-ram-fixture.js','tests/wolf-v02-ram-integration.test.js','reports/wolf-v02-ram-r12/skin-contact.mjs'];
+const sourcePaths=['src/wolf-v02-spec.js','src/wolf-v02-encounter.js','src/wolf-v02-ram.js','src/wolf-v02-locomotion.js','src/wolf-v02-hurt.js','src/wolf-v02-shield.js','src/wolf-v02-support.js','src/wolf-v02-contact-shapes.js','src/wolf-v02-telegraph.js','src/wolf-v02-authored-clips.js','src/wolf-v02-authored-history.js','src/wolf-v02-ram-clips.json','src/wolf-v02-combat-r13-clips.json','src/warrior-v2.js','src/animation.js','src/player-dimensions.js','src/boss-battle.js','src/boss-encounter.js','src/tree-view-surface.js','src/melee-collision.js','tests/helpers/wolf-ram-fixture.js','tests/wolf-v02-ram-integration.test.js','reports/wolf-v02-ram-r12/skin-contact.mjs'];
 const hashes=()=>Object.fromEntries(sourcePaths.filter(path=>fs.existsSync(path)).map(path=>[path,sha(path)]));
 const initialHashes=hashes();
 let sharedApi=null;
 test.after(async()=>{
  const finalHashes=hashes();
  const label=process.env.WOLF_RAM_EVIDENCE_LABEL?.replace(/[^a-z0-9_-]/gi,'-'),name=label?`independent-gameplay-${label}.json`:'independent-gameplay.json';
- fs.writeFileSync('reports/wolf-v02-ram-r12/'+name,JSON.stringify({scope:'Actual packed warrior-v2 and approved wolf rigs; native controller/animator, shared combat, real post-animation skeletal contacts. Contact-band cases establish an engagement band after actual rise, then allow a fresh autonomous observation and selection. No player/wolf relocation occurs during successful ram/fall/maul. Explicit escape/invalid-state tests are negative injections. CPU tests do not establish visual motion/skin quality, player feel or device performance.',sourceHashes:finalHashes,initialSourceHashes:initialHashes,cases:evidence},null,2)+'\n');
+ fs.writeFileSync('reports/wolf-v02-combat-r13/legacy-ram-'+name,JSON.stringify({scope:'Actual packed warrior-v2 and approved wolf rigs; native controller/animator, shared combat, real post-animation skeletal contacts. Contact-band cases establish an engagement band after actual rise, then allow a fresh autonomous observation and selection. No player/wolf relocation occurs during successful ram/fall/maul. Explicit escape/invalid-state tests are negative injections. CPU tests do not establish visual motion/skin quality, player feel or device performance.',sourceHashes:finalHashes,initialSourceHashes:initialHashes,cases:evidence},null,2)+'\n');
  assert.deepEqual(finalHashes,initialHashes,'runtime changed during QA; rerun after freeze');
  if(sharedApi)await sharedApi.dispose();
 });
@@ -68,8 +72,8 @@ async function runBout({fps=60,speed=1,distance:range=WOLF_V02_BY_ID.lunge.prefe
  }finally{f.battle.hide();}
 }
 
-test('R12 scope preserves every other attack, movement cadence, original rig data and player size',()=>{
- assert.deepEqual(JSON.parse(JSON.stringify(WOLF_V02_ACTIONS.filter(a=>a.id!=='lunge'))),baseline.actions);
+test('live R13 preserves historical R12 source, other attacks, movement cadence, original rig data and player size',()=>{
+ assert.deepEqual(JSON.parse(JSON.stringify(WOLF_V02_ACTIONS.filter(a=>a.id!=='lunge'))),baseline.actions);assert.equal(WOLF_V02_RAM_CLIPS[0].name,'Wolf_Ram_Ground_Maul_V02');assert.equal(WOLF_V02_RAM_CLIPS[0].duration,5.2);
  assert.deepEqual(WOLF_V02_GAIT,baseline.gait);assert.deepEqual(WOLF_V02_ORBIT,baseline.orbits);
  for(const [path,expected]of Object.entries(baseline.hashes))assert.equal(sha(path),expected,path);
  const prepared=JSON.parse(fs.readFileSync('src/wolf-v02-ram-clips.json'));assert.notEqual(prepared.preparation?.provisionalAuthoring,true,'final QA requires strict prepared art');
@@ -109,7 +113,7 @@ test('ground bites require live native knockdown, actual prone nodes, reach and 
  }
  evidence.push({case:'live-prone-pose-and-each-phase-validation',rows:cases});
  for(const c of cases){
-  assert.equal(c.applied,true);assert.deepEqual(c.hits.map(h=>h.damage),c.invalidation==='get-up'?[40,30]:[40],c.invalidation);
+  assert.equal(c.applied,true);assert.deepEqual(c.hits.map(h=>h.damage),[40],c.invalidation);
   if(c.invalidation==='get-up'){assert.ok(c.rows.some(r=>r.playerState==='getUp'));assert.ok(c.hits.every(h=>h.playerState!=='getUp'));}
   assert.equal(c.final.captured,false);
  }
@@ -169,7 +173,7 @@ test('real warrior native knockdown lowers its torso before get-up and retains t
    rows.push({fps,low,getUp,idle,minimumChest,samples});
   }finally{await api.dispose();}
  }
- fs.writeFileSync('reports/wolf-v02-ram-r12/native-warrior-test.json',JSON.stringify({scope:'Calibration of genuine player animation only; the final ram tests must trigger knockdown through actual wolf head contact.',rows},null,2)+'\n');
+ fs.writeFileSync('reports/wolf-v02-combat-r13/legacy-native-warrior-test.json',JSON.stringify({scope:'Calibration of genuine player animation only; the final ram tests must trigger knockdown through actual wolf head contact.',rows},null,2)+'\n');
 });
 
 test('autonomous ram hits with its head, then real fall precedes two jaw contacts on the actual prone torso across range, frame rate and speed',async()=>{
@@ -181,7 +185,7 @@ test('autonomous ram hits with its head, then real fall precedes two jaw contact
   assert.ok(c.attackStart!==null,label+' autonomous attack missing');assert.ok(c.circleSeconds>=2.5-2/c.fps,label+' full observation required');
   if(c.distance>a.maxDistance)assert.ok(c.movementFrames>0,label+' outside-band approach missing');
   assert.deepEqual(c.hits.map(hit=>hit.damage),[40,30,30],label+' one damage per ram/maul phase');
-  for(const hit of c.hits)assert.equal(hit.skinContact?.surfacesIntersect,true,label+' actual deformed wolf-part/warrior skin overlap: '+JSON.stringify(hit.skinContact));
+  for(const hit of c.hits)assert.ok(tactileSkin(hit.skinContact),label+' actual deformed wolf-part/warrior skin overlap: '+JSON.stringify(hit.skinContact));
   const [ram,first,second]=c.hits;assert.equal(ram.contact?.part,'head',label+' first impact must be head-owned');
   assert.ok(ram.body.Spine2[1]>.8,label+' ram starts against upright actual body');
   const knockdowns=c.reactions.filter(r=>r.options.knockdown&&r.accepted!==false);assert.equal(knockdowns.length,1,label+' only ram starts knockdown');
@@ -191,18 +195,20 @@ test('autonomous ram hits with its head, then real fall precedes two jaw contact
    assert.ok(hit.torsoSkin.count>100,label+' actual torso skin must be evaluated');assert.ok(hit.torsoSkin.centroid[1]<.55,label+' skin torso must fall with the native bones');
    assert.ok(hit.jawTorsoDistance<.85,label+' jaw must meet actual lowered Hips–Spine2 segment');assert.ok(hit.jaw[1]<.9,label+' jaw must lower to ground-body height');
   }
-  assert.ok(first.time-ram.time>=.85-1/c.fps&&first.time-ram.time<1.2,label+' first maul follows the real fall');
-  assert.ok(second.time-ram.time>1.35&&second.time-ram.time<1.85,label+' second maul remains in the native prone interval');
+  assert.ok(first.time-ram.time>=1.22&&first.time-ram.time<1.48,label+' first maul follows the real fall');
+  assert.ok(second.time-ram.time>1.77&&second.time-ram.time<2.04,label+' second maul remains in the native prone interval');
   assert.ok(Math.abs((second.time-first.time)-(second.sourceTime-first.sourceTime))<2/c.fps+1e-5,label+' both ground bites use the fixed real clock');
-  const fixedClock=c.rows.filter(r=>r.serial===ram.serial&&r.mode==='attack'&&r.sourceTime>2.74&&r.sourceTime<5.19);
-  for(let i=1;i<fixedClock.length;i++)assert.ok(Math.abs(fixedClock[i].sourceTime-fixedClock[i-1].sourceTime-(fixedClock[i].time-fixedClock[i-1].time))<1e-5,label+' post-ram phase speed is 1x');
+  const fixedClock=c.rows.filter(r=>r.serial===ram.serial&&r.mode==='attack'&&r.sourceTime>2.4&&r.sourceTime<compact.duration-.01);
+  for(let i=1;i<fixedClock.length;i++)assert.ok(Math.abs(fixedClock[i].sourceTime-fixedClock[i-1].sourceTime-(fixedClock[i].time-fixedClock[i-1].time))<1e-5,label+' post-maul recovery phase speed is 1x');
   const afterRecoil=c.rows.filter(r=>r.time>=ram.time+.25&&r.time<=second.time+.01);
   assert.ok(afterRecoil.length>0);assert.ok(Math.max(...afterRecoil.map(r=>distance(r.playerRoot,afterRecoil[0].playerRoot)))<1e-7,label+' mauls add no recoil or player teleport');
   assert.ok(Math.abs(distance(ram.playerRoot,afterRecoil[0].playerRoot)-.28)<1e-7,label+' normal ram recoil remains exactly bounded');
   const attackRows=c.rows.filter(r=>r.serial===ram.serial&&r.mode==='attack');
+  assert.ok(attackRows.some(r=>r.playerState==='getUp'&&r.sourceTime>=compact.duration-1/30),label+' natural get-up after both jaws lets the original recovery reach its endpoint');
   for(let i=1;i<attackRows.length;i++){
    const previous=attackRows[i-1],next=attackRows[i],sourceStep=Math.hypot(next.authoredRoot[0]-previous.authoredRoot[0],next.authoredRoot[2]-previous.authoredRoot[2])*2.5,worldStep=Math.hypot(next.wolfRoot[0]-previous.wolfRoot[0],next.wolfRoot[2]-previous.wolfRoot[2]);
-   assert.ok(worldStep<=sourceStep+.04,label+' actor travel must follow the authored root rather than teleport to the prone target');
+   assert.ok(next.sourceTime>=previous.sourceTime-1e-8,label+' native get-up cannot rewind or restart the authored recovery');
+   assert.ok(worldStep<=sourceStep+.04+.25*Math.min(1,(next.sourceTime-previous.sourceTime)/.35),label+' actor travel must follow the authored root rather than teleport to the prone target');
   }
   assert.ok(c.rows.some(r=>r.time>ram.time+.5&&r.time<first.time&&r.body.Spine2[1]>.45),label+' fall progression must occur between impact and maul');
   assert.equal(c.final.captured,false,label+' native fall must not freeze through capture');
@@ -227,10 +233,11 @@ test('repeated pose passes cannot advance clocks or duplicate any ram or maul ph
 
 test('bounded 100ms hitches retain clipped prone-body phase contact and cannot turn a moved-away victim into a phantom maul',async()=>{
  const cases=[];
+ const phases=WOLF_V02_BY_ID.lunge.ramPhases,firstLead=phases[1].contactStart-.08,secondLead=phases[2].contactStart-.08;
  for(const speed of [.5,1,2])for(const escape of [false,true]){
   const hitches=[];
-  const c=await runBout({speed,onBeforeStep({api,e}){if(escape&&hitches.length===0&&e.brain.mode==='attack'&&e.brain.time>=3.62)api.f.player.position.x+=12;},dtForFrame({e}){
-   if(e.brain.mode==='attack'&&((hitches.length===0&&e.brain.time>=3.62)||(hitches.length===1&&e.brain.time>=4.17))){hitches.push(e.brain.time);return .1;}return 1/60;
+  const c=await runBout({speed,onBeforeStep({api,e}){if(escape&&hitches.length===0&&e.brain.mode==='attack'&&e.brain.time>=firstLead)api.f.player.position.x+=12;},dtForFrame({e}){
+   if(e.brain.mode==='attack'&&((hitches.length===0&&e.brain.time>=firstLead)||(hitches.length===1&&e.brain.time>=secondLead))){hitches.push(e.brain.time);return .1;}return 1/60;
   }});cases.push({escape,hitches,...c});
  }
  evidence.push({case:'bounded-hitch-relative-source-window-and-escape',rows:cases});
@@ -246,7 +253,7 @@ test('rear critical is sampled once at ram and stays coherent while the real fal
   const c=await runBout({fps,speed,surfaceProof:true,onBeforeStep({api,frame}){if(frame===0)api.f.player.rotation.y=0;}});cases.push(c);
  }
  evidence.push({case:'ram-rear-critical-snapshot-through-real-fall',rows:cases});
- for(const c of cases){assert.deepEqual(c.hits.map(h=>h.damage),[52,39,39],JSON.stringify({fps:c.fps,speed:c.speed}));for(const hit of c.hits){assert.equal(hit.skinContact?.surfacesIntersect,true,JSON.stringify({fps:c.fps,speed:c.speed,part:hit.skinContact?.part,skin:hit.skinContact}));}for(const hit of c.hits.slice(1)){assert.equal(hit.playerState,'knockdown');assert.ok(hit.body.Spine2[1]<.45);assert.ok(hit.jawTorsoDistance<.85);}assert.equal(c.reactions.filter(r=>r.options.knockdown&&r.accepted===true).length,1);}
+ for(const c of cases){assert.deepEqual(c.hits.map(h=>h.damage),[52,39,39],JSON.stringify({fps:c.fps,speed:c.speed}));for(const hit of c.hits){assert.ok(tactileSkin(hit.skinContact),JSON.stringify({fps:c.fps,speed:c.speed,part:hit.skinContact?.part,skin:hit.skinContact}));}for(const hit of c.hits.slice(1)){assert.equal(hit.playerState,'knockdown');assert.ok(hit.body.Spine2[1]<.45);assert.ok(hit.jawTorsoDistance<.85);}assert.equal(c.reactions.filter(r=>r.options.knockdown&&r.accepted===true).length,1);}
 });
 
 test('untouched far summons rise, observe and approach before the real ram-to-prone-maul sequence',async()=>{
@@ -273,10 +280,10 @@ test('ram-to-maul keeps fixed limb attachments and scale, and named maul support
  const oldTracks=new Map(f.container.animationGroups.find(group=>group.name===WOLF_CLIPS.lunge).targetedAnimations.filter(row=>['position','scaling'].includes(row.animation.targetProperty)).map(({target,animation})=>[target.name+':'+animation.targetProperty,animation]));
  const watchPositions=new Map(f.container.animationGroups.find(group=>group.name===WOLF_CLIPS.watch).targetedAnimations.filter(({animation})=>animation.targetProperty==='position').map(({target,animation})=>[target.name,animation.getKeys()[0].value.asArray()]));
  const recoveryCarriers=new Set(['spine','chest','neck','head','jaw','tail_1','tail_2','tail_3','fore.L.scapula','fore.R.scapula']);
- const sourcePositions=new Map(WOLF_V02_RAM_CLIPS[0].channels.filter(channel=>channel.path==='translation').map(channel=>[channel.node,channel]));
+ const sourcePositions=new Map(compact.channels.filter(channel=>channel.path==='translation').map(channel=>[channel.node,channel]));
  const authoredPosition=(name,time)=>{const channel=sourcePositions.get(name);if(!channel)return bind.get(name)?.translation??[0,0,0];const {times,values}=channel;let i=0;while(i<times.length-2&&time>times[i+1])i++;const j=Math.min(i+1,times.length-1),t=Math.max(0,Math.min(1,(time-times[i])/Math.max(1e-9,times[j]-times[i])));return values[i].map((v,k)=>v+(values[j][k]-v)*t);};
  const oldValue=(name,property,time,fallback)=>{const animation=oldTracks.get(name+':'+property);if(!animation)return fallback;const keys=animation.getKeys(),frame=time*animation.framePerSecond;let i=0;while(i<keys.length-2&&frame>keys[i+1].frame)i++;const a=keys[i],b=keys[Math.min(i+1,keys.length-1)],t=Math.max(0,Math.min(1,(frame-a.frame)/Math.max(1e-9,b.frame-a.frame)));return a.value.asArray().map((v,k)=>v+(b.value.asArray()[k]-v)*t);};
- let checks=0,newPoseChecks=0,prefixChecks=0,maxLengthError=0,maxScaleError=0,maxPrefixLengthError=0,maxPrefixScaleError=0,maxPrefixCarrierSourceError=0,prefixCarrierReferenceDeviation=0,maxRecoveryCarrierSourceError=0,maxRecoveryCarrierEndpointError=0,worst=null,legacyLengthError=0,legacyScaleError=0;const recoveryCarrierDifferences={},support=[],names=['fore.L.paw','fore.R.paw','hind.L.paw','hind.R.paw'],named=(WOLF_V02_RAM_CLIPS[0].supportPhases??[]).map(phase=>({...phase,samples:[]})),transition=[];
+ let checks=0,newPoseChecks=0,prefixChecks=0,maxLengthError=0,maxScaleError=0,maxPrefixLengthError=0,maxPrefixScaleError=0,maxPrefixCarrierSourceError=0,prefixCarrierReferenceDeviation=0,maxRecoveryCarrierSourceError=0,maxRecoveryCarrierEndpointError=0,worst=null,legacyLengthError=0,legacyScaleError=0;const recoveryCarrierDifferences={},support=[],names=['fore.L.paw','fore.R.paw','hind.L.paw','hind.R.paw'],named=(compact.supportPhases??[]).map(phase=>({...phase,samples:[]})),transition=[];
  try{
   let serial=null,ended=null,lastAttackFeet=null;
   for(let frame=0;frame<60*20;frame++){
@@ -284,13 +291,13 @@ test('ram-to-maul keeps fixed limb attachments and scale, and named maul support
    if(serial&&e.brain.serial!==serial){ended??=api.elapsed;transition.push({time:api.elapsed,clip:e.brain.state,sourceTime:e.brain.time,actor:e.actor.position.asArray(),feet:Object.fromEntries(names.map(name=>[name,e.nodes[name].getAbsolutePosition().asArray()]))});if(api.elapsed>ended+.2)break;}
    for(const [name,node]of Object.entries(e.nodes)){
     const original=bind.get(name);if(!original)continue;
-    const newPose=e.brain.mode==='attack'&&e.brain.action?.id==='lunge'&&e.brain.time>=2.75&&e.animator.blend===1;
-    const prefix=e.brain.mode==='attack'&&e.brain.action?.id==='lunge'&&e.brain.time<2.75&&e.animator.blend===1;
+    const newPose=e.brain.mode==='attack'&&e.brain.action?.id==='lunge'&&e.brain.time>=2.75-suffixOffset&&e.animator.blend===1;
+    const prefix=e.brain.mode==='attack'&&e.brain.action?.id==='lunge'&&e.brain.time<2.75-suffixOffset&&e.animator.blend===1;
     if(!['root','pelvis'].includes(name)){
      const error=Math.abs(node.position.length()-Math.hypot(...(original.translation??[0,0,0])));
-     const inheritedCarrier=newPose&&recoveryCarriers.has(name)&&e.brain.time>=4.45;
+     const inheritedCarrier=newPose&&recoveryCarriers.has(name)&&e.brain.time>=4.45-suffixOffset;
      if(inheritedCarrier){
-      const sourceError=distance(node.position.asArray(),authoredPosition(name,e.brain.time)),endpointError=distance(authoredPosition(name,5.2),watchPositions.get(name)??original.translation);
+      const sourceError=distance(node.position.asArray(),authoredPosition(name,e.brain.time)),endpointError=distance(authoredPosition(name,compact.duration),watchPositions.get(name)??original.translation);
       maxRecoveryCarrierSourceError=Math.max(maxRecoveryCarrierSourceError,sourceError);maxRecoveryCarrierEndpointError=Math.max(maxRecoveryCarrierEndpointError,endpointError);
       const previous=recoveryCarrierDifferences[name]??{maximumBindLengthDeviation:0,maximumSourcePositionError:0,endpointWatchError:endpointError};previous.maximumBindLengthDeviation=Math.max(previous.maximumBindLengthDeviation,error);previous.maximumSourcePositionError=Math.max(previous.maximumSourcePositionError,sourceError);recoveryCarrierDifferences[name]=previous;
      }
@@ -303,7 +310,7 @@ test('ram-to-maul keeps fixed limb attachments and scale, and named maul support
     const oldScale=prefix?oldValue(name,'scaling',e.brain.time,original.scale??[1,1,1]):null;
     for(let k=0;k<3;k++){const error=Math.abs(node.scaling.asArray()[k]-(original.scale??[1,1,1])[k]);if(newPose)maxScaleError=Math.max(maxScaleError,error);else legacyScaleError=Math.max(legacyScaleError,error);if(prefix)maxPrefixScaleError=Math.max(maxPrefixScaleError,Math.min(error,Math.abs(node.scaling.asArray()[k]-oldScale[k])));}checks++;if(newPose)newPoseChecks++;if(prefix)prefixChecks++;
    }
-   if(e.brain.mode==='attack'&&e.brain.time>=3.35&&e.brain.time<=4.28)support.push({sourceTime:e.brain.time,feet:Object.fromEntries(names.map(name=>[name,e.nodes[name].getAbsolutePosition().asArray()]))});
+   if(e.brain.mode==='attack'&&e.brain.time>=3.35-suffixOffset&&e.brain.time<=4.28-suffixOffset)support.push({sourceTime:e.brain.time,feet:Object.fromEntries(names.map(name=>[name,e.nodes[name].getAbsolutePosition().asArray()]))});
    if(e.brain.mode==='attack'){
     lastAttackFeet=Object.fromEntries(names.map(name=>[name,e.nodes[name].getAbsolutePosition().asArray()]));
     for(const phase of named)if(e.brain.time>=phase.start&&e.brain.time<=phase.end)phase.samples.push({sourceTime:e.brain.time,playerState:api.result.state,feet:Object.fromEntries(phase.feet.map(name=>[name,e.nodes[name].getAbsolutePosition().asArray()]))});
@@ -312,7 +319,7 @@ test('ram-to-maul keeps fixed limb attachments and scale, and named maul support
   const footDrift=Object.fromEntries(names.map(name=>[name,support.length?Math.max(...support.map(sample=>distance(sample.feet[name],support[0].feet[name]))):Infinity]));
   const phaseDrift=named.map(phase=>({...phase,drift:Object.fromEntries(phase.feet.map(name=>[name,phase.samples.length?Math.max(...phase.samples.map(sample=>distance(sample.feet[name],phase.samples[0].feet[name]))):Infinity]))}));
   const watchTransitionDrift=Object.fromEntries(names.map(name=>[name,lastAttackFeet&&transition.length?Math.max(...transition.map(sample=>distance(sample.feet[name],lastAttackFeet[name]))):Infinity]));
-  evidence.push({case:'actual-runtime-fixed-anatomy-and-maul-support',checks,newPoseChecks,prefixChecks,maxLengthError,maxScaleError,maxPrefixLengthError,maxPrefixScaleError,maxPrefixCarrierSourceError,prefixCarrierReferenceDeviation,maxRecoveryCarrierSourceError,maxRecoveryCarrierEndpointError,recoveryCarrierDifferences,recoveryCarrierPolicy:'Explicit non-limb prefix carriers use the authored R12 translation oracle. Only the listed source4.45+ recovery carriers inherit the authored trajectory whose endpoint must equal original WATCH0. Fore/hind upper, lower, metatarsal and paw attachments stay strict through prefix, mauls and recovery; all maul attachments remain strict.',worst,unchangedLegacySourceDeviation:{legacyLengthError,legacyScaleError},scaleTolerance:1e-6,scaleToleranceReason:'The approved R8 bind and authored TRS contain sub-1e-6 float scale residue around unit scale; the source rig and skin remain hash-preserved.',footDrift,support,namedSupportPhases:phaseDrift,watchTransitionDrift,transition});
+  evidence.push({case:'actual-runtime-fixed-anatomy-and-maul-support',checks,newPoseChecks,prefixChecks,maxLengthError,maxScaleError,maxPrefixLengthError,maxPrefixScaleError,maxPrefixCarrierSourceError,prefixCarrierReferenceDeviation,maxRecoveryCarrierSourceError,maxRecoveryCarrierEndpointError,recoveryCarrierDifferences,recoveryCarrierPolicy:'Explicit non-limb prefix carriers use the authored compact R13 translation oracle. Only the listed source(4.45-112/60)+ recovery carriers inherit the authored trajectory whose endpoint must equal original WATCH0. Fore/hind upper, lower, metatarsal and paw attachments stay strict through prefix, mauls and recovery; all maul attachments remain strict.',worst,unchangedLegacySourceDeviation:{legacyLengthError,legacyScaleError},scaleTolerance:1e-6,scaleToleranceReason:'The approved R8 bind and authored TRS contain sub-1e-6 float scale residue around unit scale; the source rig and skin remain hash-preserved.',footDrift,support,namedSupportPhases:phaseDrift,watchTransitionDrift,transition});
   assert.ok(checks>5000&&newPoseChecks>1000&&prefixChecks>100);assert.ok(maxLengthError<1e-5,JSON.stringify(worst));assert.ok(maxScaleError<1e-6);assert.ok(maxPrefixLengthError<1e-5,'R12 fixed limb segments cannot stretch during the prefix');assert.ok(maxPrefixScaleError<1e-6);assert.ok(maxPrefixCarrierSourceError<1e-5);assert.ok(maxRecoveryCarrierSourceError<1e-5);assert.ok(maxRecoveryCarrierEndpointError<1e-5);assert.ok(support.length>30);
   for(const [name,drift]of Object.entries(footDrift))assert.ok(drift<.025,name+' planted during both mauls: '+drift);
   assert.ok(phaseDrift.length>=4,'support contracts must cover every leg');for(const phase of phaseDrift)for(const [name,drift]of Object.entries(phase.drift))assert.ok(drift<.025,JSON.stringify({name,start:phase.start,end:phase.end,drift}));

@@ -1,0 +1,432 @@
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+✔ monsters summon near an outer-arena player and continue past the former wall (324.465ms)
+✔ group preparation keeps all requested actors hidden while the other kind continues (135.677ms)
+✔ model CPU timings are copied into the owning hidden job without retaining library records (30.0752ms)
+✔ far enemy draw suppression is reversible and leaves combat/model state intact (31.4552ms)
+✔ spawn count is bounded and five bosses have separate positions inside the arena (14.455ms)
+✔ bear and goblin ground anchors follow terrain on spawn, movement, separation and contact correction (68.1853ms)
+✔ dead bear and goblin fade independently, award once, stop rendering and reset on resummon (62.3407ms)
+✔ equipped armor reduces incoming normal, critical and throw damage once and persists across resets (62.2984ms)
+✔ summon 3/1/5/2 reuses one model template, shares geometry, clones skeletons and animations, hides unused actors (80.6053ms)
+✔ five bosses share player health, immunity and a single potion clock (50.8079ms)
+✔ one swing hits each grounded boss once; recovery stays damageable independently (54.2173ms)
+✔ a single boss owns the grab; another boss cannot capture or damage that held player (68.9826ms)
+✔ separation moves overlapping living bosses without dragging a captured player owner (0.9324ms)
+✔ roll contact never displaces an overlapping bear or goblin (77.739ms)
+✔ ending a roll beside an enemy does not push it out of the newly usable gap (27.3795ms)
+✔ walking through prone, getting-up or dead enemies does not separate their bodies (27.3237ms)
+✔ hiding during a pending load cannot reactivate an old summon (1.4848ms)
+✔ multi-boss audio tracks separate attack clocks and plays victory only after the last death (1.8464ms)
+✔ five goblins coexist with bears, share player health and reuse one goblin asset (97.4409ms)
+✔ a shared sword swing damages both bear and goblin, with independent hit deduplication (52.4585ms)
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+✔ boss: 20 original clips are retained; 18 active motions exclude both ball projectiles (26.5768ms)
+✔ boss: normal hits flash white without stopping or cancelling an attack (0.4154ms)
+✔ boss: heavy hit cancels attack, plays down then stand-up before resuming (0.2625ms)
+✔ boss: defeat stays down and attacks do not fire during knockdown or stagger (0.2724ms)
+✔ boss: contact damages stand-up once without pausing recovery (33.3556ms)
+✔ boss: melee/projectile contact damages warrior, with a short repeat-hit cooldown (1.2437ms)
+✔ boss: shield push blocks throughout wind-up, impact and recovery, but never at a distance (0.8186ms)
+✔ melee: actual blade contact required, miss at distance and sweep catches fast crossing (0.734ms)
+✔ melee: fast sweep cannot skip a narrow limb between the old eight samples (0.889ms)
+✔ actual GLB: visible cutting passes register once; idle cannot deal damage (2872.8701ms)
+✔ boss HP bar: projects to feet, follows camera orbit, hides behind camera, respects render scale (20.3953ms)
+✔ melee: no idle hits or repeated per-frame damage; a new attack can hit again (0.7646ms)
+✔ shield: push cancels after 1.5 seconds; block cancels after one second without HP loss (0.7621ms)
+✔ shield: real transformed front face blocks, a rear contact and nearby miss do not (2.7154ms)
+✔ strike sampling: 2x low-FPS shield contact is retained only inside its authored window (1.4494ms)
+✔ downed boss: real low blade contact deals normal and three heavy hits without restarting fall (7.4834ms)
+✔ boss defense: roll says 회피, guard says BLOCK; prevented bursts cannot damage later (10.4571ms)
+✔ boss aggression: expanded range, quicker pursuit and shorter gaps retain an impact windup (1.3422ms)
+✔ source GLBs: normal sword passes damage the actual lying boss skeleton (3590.2789ms)
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:17]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:23]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:23]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:24]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:24]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:26]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:26]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:26]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:28]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:29]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:31]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:31]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:32]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:33]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:33]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:34]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:35]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:35]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:36]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:37]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:37]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:38]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:39]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:39]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:40]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:40]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:41]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:42]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:43]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:44]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:45]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:46]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:47]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:48]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:48]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:49]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:50]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:51]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:51]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:52]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:53]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:53]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:54]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:55]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:55]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:56]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:59]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:59]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:59]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:59]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:59]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:59]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:00]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:00]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:00]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:00]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:00]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:00]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:01]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:01]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:01]: Babylon.js v9.31.0 - Null engine
+✔ four actual map navigators preserve prior combat outcomes while reducing duplicate work (44551.0688ms)
+✔ paired NullEngine update timing records guard overhead without making a device FPS claim (881.6944ms)
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:16]: Babylon.js v9.31.0 - Null engine
+✔ throwing in the outer forest does not pull the player back into the old arena (81.5758ms)
+✔ escape succeeds up to and including 1s, restores grounded rotation and starts the selected roll (37.3367ms)
+✔ late escape and escape during throw/recovery fail without unlocking or changing pose (29.0986ms)
+✔ 0.2 entry, alias and query retain independent identity through four-map travel (10.3155ms)
+✔ selecting 0.1 loads the preserved entry and legacy selections leave the 0.2 entry (25.6009ms)
+✔ 0.2 inherits preferences read-only, isolates boss patterns and keeps removals private (0.8211ms)
+✔ motion controls use injected version storage without touching the global store (51.7302ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+✔ R8 asset definition and style isolate the wolf without changing other boss defaults (5.7105ms)
+✔ authored attack events survive long frames exactly once, deaths never recover, blocked stun has no movement (1.7997ms)
+✔ grab leaves player coordinates untouched and releases input on escape/interruption/reset (1.9225ms)
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:24]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:29]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:31]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:32]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:33]: Babylon.js v9.31.0 - Null engine
+▶ actual R8 1/5/10/20 manual summons on all four maps have independent poses and bounded warm pools
+  ✔ village (3136.3715ms)
+  ✔ great-plains (2765.0015ms)
+  ✔ monster-forest (3022.1807ms)
+  ✔ witch-cave (2176.2373ms)
+✔ actual R8 1/5/10/20 manual summons on all four maps have independent poses and bounded warm pools (11102.9331ms)
+✔ runtime sampler matches native R8 channels at identical authored times and planar extraction cannot erase body jump (855.0832ms)
+✔ late cancelled preparation never activates and can be retried on the new map without extra models (1086.5813ms)
+✔ real jaw/paw contacts respect dodge and shield, heavy/bash knock down, capture/death release and reward deduplicates (801.6515ms)
+✔ authored long lunge lands on a 10.4 m target once; carrier cancels only planar root, not body pitch/flight (864.588ms)
+✔ warm wolf pool survives repeated four-map round trips and warning height follows the current terrain (5361.006ms)
+✔ single HTML embeds R8 and runtime assets, paired controls and no external model/image dependencies (1392.396ms)
+✔ wolf pattern catalog exposes both attacks and saved wolf edits preserve every other boss profile (6.8072ms)
+✔ custom wolf order repeats duplicates; speed-only or unrelated edits retain the next pattern (2.2826ms)
+✔ wolf speed .5/1/2 changes bite wall time, locks during attack and never duplicates skipped events (2.6417ms)
+✔ selected pin approaches and selected lunge backs away to its authored range without consuming the pattern (0.7164ms)
+✔ 2.5x world size keeps source files/texture and movement speed, with gait cadence matched to the larger stride (0.4935ms)
+✔ actual pattern controls select wolf, add/reorder/remove, persist speed and reset only wolf (32.7286ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+✔ new 0.2 authoring preserves the exact shared 0.1 wolf code, model config and packed model bytes (78.8086ms)
+✔ new standing attacks have separate clip identities and finite fixed-scale authored channels (18.8255ms)
+✔ runtime preparation removes only exact constant-channel duplicates and preserves all moving keys and metadata (98.8057ms)
+✔ preserved R10 and new R11 channels retain approved bind offsets and scales while allowing authored pelvis movement (77.2581ms)
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:23]: Babylon.js v9.31.0 - Null engine
+✔ authored clips install once per cloned rig without changing the shared twelve-clip template (2458.6266ms)
+✔ 0.2 nonlethal heavy/bash uses the improved collapse and supported getup while 0.1 retains original knockdown (823.7421ms)
+✔ preserved R9 standing snap keeps four feet planted while body pressure uses a short supported forepaw step (309.3031ms)
+✔ new snap, chain and swipe hit actual warrior body once per strike using only their authored contact parts (722.9398ms)
+✔ disposing authored actor adapters removes all nine active added animation groups and leaves the shared template intact (405.6992ms)
+✔ 0.1 keeps its R8 source, texture, size, two authored attacks and legacy impact contracts (3.6383ms)
+✔ 0.2 retains predator bites and R8 pin while its separate R13 compact ram carries a bounded two-bite damage budget (4.6062ms)
+✔ 30/60 Hz and 0.5/1/2 speed play every action once, retain source impact pose and snapshot speed (22.9173ms)
+✔ long frames cross the authored impact once and cannot emit damage during recovery or after interruption (2.674ms)
+✔ whipping remaps only source time with slow anticipation, rapid contact and slower followthrough (1.4735ms)
+✔ phase pressure, flanks and outcome tracking stay deterministic and do not mutate legacy balance (31.6833ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:19]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ real released shield and first descending heavy contact select collapse, then floor hold and supported getup (7889.476ms)
+✔ actual native head/flank/front/rear swings preserve outside misses at30/60Hz (82834.8322ms)
+✔ actual full shield face reaches low anatomy where the old horizontal centreline remains clear (4110.3132ms)
+✔ a real contacting heavy wins the same pose pass over pending head ram (48.7692ms)
+✔ incoming during collapse remains physical and nonreentrant; no close-range radial damage bypass (156.1246ms)
+✔ low stamina and unreleased guard yield no damage or collapse before a valid native strike (17.9977ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ default and saved ordinary starts3–35m select the compact ram with real fall/chase/mauls (29094.6544ms)
+✔ native walking and stationary ram timelines retain real prone chase at30/60Hz and speed .5/1/2 (17182.7819ms)
+✔ real dodge/shield cast and escaped target prevent accepted ram and both ground bites (3123.631ms)
+✔ standing/getup/escape/missing real nodes/invulnerability invalidate remaining ground bites (2549.3381ms)
+✔ bounded100ms hitches cross each narrow jaw envelope without lost phases or repeated-pose duplicate damage (6500.1169ms)
+✔ compact support phases remain planted after navigation and chase correction; fixed limbs retain length (954.958ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+✔ recent damage threshold respects15percent/3seconds, HP50percent inclusive and6second cooldown (5.6908ms)
+BJS - [15:07:19]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:19]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:22]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:22]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:28]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:28]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ actual backward-run gait faces player, steps back to capped range and then observes2–3seconds (3148.0549ms)
+✔ a real native equipped heavy damage pulse schedules a supported retreat after collapse/getup (2681.5776ms)
+✔ native incoming threat provokes physical side steps with no evade invulnerability (266.0736ms)
+✔ native pending or held shield guard alone does not consume an evade-counter action (305.908ms)
+✔ contact footprints use the same bounded head/jaw shapes, hide resolved ram while waiting and reuse unchanged buffers (2790.1766ms)
+✔ actor-local marker/support/gates remain independent and warm pooled cycles release every external target (960.4047ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:28]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:29]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:30]: Babylon.js v9.31.0 - Null engine
+✔ real head keeps its muzzle toward stationary and moving players through both centered orbit directions (3414.2238ms)
+✔ autonomous pursuit uses the approved gallop at the requested faster speed with matching enlarged cadence (550.2493ms)
+✔ real autonomous positioning reaches every attack at minimum/preferred/maximum and farther starts at 30/60Hz and 0.5/1/2x (4917.4571ms)
+✔ committed attacks lock body and neck while bounded head attention preserves authored roll as the player escapes (1222.507ms)
+✔ independent actual contacts retain dodge/block/interrupt/height/behind/wall negatives and one resolution per serial (1045.2573ms)
+✔ actual default bouts switch at half health without cutting the current strike or creating an unlimited chain (1073.8693ms)
+✔ the first actual support step holds its entry anchors through the transition and completes a full cycle in both phases (539.0905ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:26]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+✔ actual default hunt attacks, stalks and faces the player instead of running away at close/mid/long range (6541.9813ms)
+✔ all twenty-one motion roles remain available independently through discovery, direct sampling and combat reactions (381.5193ms)
+✔ bounded physical contact windows deduplicate hits, consume a dodged strike and do not hit through walls or behind the wolf (597.1078ms)
+✔ a modest lateral moving target is contacted without altering its position or extending a missed strike indefinitely (303.8347ms)
+✔ both ends of every automatic engagement band contact the standing player at 30/60Hz and 0.5/1/2x speed (1054.4936ms)
+✔ watching and recovery hold their ground, and a blocked authored stalk stops instead of sliding or teleporting (271.0212ms)
+✔ above half health every default bout has one attack followed by authored stalking (29.5355ms)
+✔ half health and below adds bounded successful attack bouts without eliminating final recovery (27.2984ms)
+✔ miss, block, escape and interrupts cancel aggressive followups; explicit chain stays compatible (6.9501ms)
+✔ long attacks never make space by fleeing and custom orders substitute only when too close (2.6264ms)
+✔ stalking freezes its authored gait when corridor or facing is blocked (1.1404ms)
+✔ stationary observation and recovery hold the circling pose while only their timers advance (1.1253ms)
+✔ phase threshold does not cut off the current attack, nonlethal reactions use improved collapse/getup and lethal collapse stays separate (1.8015ms)
+✔ impact window accepts a late contact upgrade once and rejects stale, duplicate and terminal changes (0.5422ms)
+✔ strong whipping accelerates contact while preserving exact authored poses, time monotonicity and speed snapshot (16.8434ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:23]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:24]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:26]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:28]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:29]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:32]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:35]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:37]: Babylon.js v9.31.0 - Null engine
+✔ only the explicit 0.2 world selects the new wolf encounter and 0.1/default retain the original class (4689.1627ms)
+✔ 0.2 preserves all twelve approved R8 local poses, root pitch and lunge body height (1127.5356ms)
+✔ actual 0.2 attacks land at their authored contact poses once at 30/60 Hz and 0.5/1/2 speed (1641.4694ms)
+✔ actual bite contact respects dodge and shield, and a missed bite still leaves recovery (1045.5329ms)
+✔ lunge anticipation tracks with a turn limit and commits its aim before the authored leap (1011.429ms)
+✔ heavy/bash interrupt before impact, capture escape and death release input, and defeat rewards deduplicate (1190.6478ms)
+▶ 0.2 1/5/10/20 manual summons on all maps retain independent rigs, sampler tables and stable warm resources
+  ✔ village (1644.5171ms)
+  ✔ great-plains (1905.5469ms)
+  ✔ monster-forest (2552.8773ms)
+  ✔ witch-cave (1962.361ms)
+✔ 0.2 1/5/10/20 manual summons on all maps retain independent rigs, sampler tables and stable warm resources (8067.3206ms)
+✔ cancelled 0.2 preparation stays hidden, releases waiting work and retries on a changed map without new models (1132.1337ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:19]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+✔ an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack (930.727ms)
+✔ a player leaving the orbit is pursued by the actual run rather than dragging a planted circle or retreating (781.0307ms)
+✔ a walking player does not spin standing recovery feet and observation starts a real step before attention runs out (637.7887ms)
+✔ support and attention refresh only cached affected branches with bounded matrix work and identical poses (346.639ms)
+✔ versioned wolf catalog and saved patterns cannot replace 0.1 settings (5.9055ms)
+✔ 0.2 pattern panel exposes all five actions and saves actual add/reorder/speed/reset controls (33.9394ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:22]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:24]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:35]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:35]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:36]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:36]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:37]: Babylon.js v9.31.0 - Null engine
+✔ near and far autonomous attacks wait for a genuine random 2–3 second player-centered observation budget (1995.224ms)
+✔ seeded observation choices vary and remain actor-owned through independent concurrent wolves (942.7816ms)
+✔ blocked steps, source wraps and player movement cannot reset the ongoing observation budget into a rapid attack (552.9997ms)
+✔ nonlethal heavy contact uses improved collapse/getup and block contact plays a real hit motion without collapse (819.6982ms)
+✔ the live upper-body diagonal remains large after runtime attention and retains the authored strike direction (1339.595ms)
+✔ every autonomous attack engagement band contacts once with dodge, escape and capture ownership intact (11250.524ms)
+✔ a disadvantaged live wolf steps backward while facing the player then waits another 2–3 seconds before reattacking (322.3994ms)
+✔ lethal collapse is separate from live reactions and resource reuse retains independent rigs and cleanup ownership (544.5203ms)
+✔ runtime circling, bite, shove and retreat preserve approved bind attachment lengths and scales (495.9376ms)
+✔ far autonomous pursuit uses a fast matched gallop into compact grounded ram (537.3391ms)
+✔ escaping a real pin before the bite prevents damage and takedown while dodge or block prevents capture (559.8803ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+✔ seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling (31.2296ms)
+✔ every new bout samples independently while the three-strike low-health bout remains finite (21.7675ms)
+✔ live heavy hits collapse/getup, blocked attacks play a hit motion, and lethal collapse remains terminal (4.6683ms)
+✔ the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing (31.0063ms)
+BJS - [15:07:20]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:21]: Babylon.js v9.31.0 - Null engine
+✔ standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites (1718.5889ms)
+✔ compact grounded prelaunch aiming stays bounded without a commit snap or post-launch retarget (1204.3335ms)
+✔ blocked near-range replanning keeps the completed observation and follows a detour instead of stopping its run at the player range (308.5219ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+✔ live R13 preserves historical R12 source, other attacks, movement cadence, original rig data and player size (43.6806ms)
+BJS - [15:07:20]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:21]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:57]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:57]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:57]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:58]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:58]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:08:38]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:38]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:08:38]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:08:38]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:08:39]: Babylon.js v9.31.0 - Null engine
+BJS - [15:08:39]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:08:39]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:08:39]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ a real player dodge, block, invulnerability or post-commit miss prevents both the ram knockdown and all maul phases (29068.6666ms)
+✔ ground bites require live native knockdown, actual prone nodes, reach and ordinary invulnerability at each phase (4205.8165ms)
+✔ a ram cannot acquire maul ownership from a pre-existing fall or an unaccepted knockdown callback (1755.4046ms)
+✔ wolf interruption, death, player death, map exit and hide cancel pending mauls without stale damage (3306.8136ms)
+✔ real warrior native knockdown lowers its torso before get-up and retains the normal bounded recoil (1345.2596ms)
+✔ autonomous ram hits with its head, then real fall precedes two jaw contacts on the actual prone torso across range, frame rate and speed (19410.2889ms)
+✔ repeated pose passes cannot advance clocks or duplicate any ram or maul phase (4374.0706ms)
+✔ bounded 100ms hitches retain clipped prone-body phase contact and cannot turn a moved-away victim into a phantom maul (3466.8935ms)
+✔ rear critical is sampled once at ram and stays coherent while the real fallen torso turns (4411.921ms)
+✔ untouched far summons rise, observe and approach before the real ram-to-prone-maul sequence (1778.9294ms)
+✔ real prone contact is invariant under a shared flat +3m or -2m ground elevation (6465.058ms)
+✔ ram-to-maul keeps fixed limb attachments and scale, and named maul support feet stay planted (983.4605ms)
+✔ a pooled wolf life resets all ram phase ownership and reuses its rig without resource growth (2394.8275ms)
+BJS - [15:07:18]: Babylon.js v9.31.0 - Null engine
+✔ R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts (52.1479ms)
+✔ compact ram prefix speed is configurable and the authored whole-pose chase mapping stays monotonic (2.5395ms)
+✔ an accepted late-window ram cannot rewind the whole rig when the victim becomes prone (9.3983ms)
+BJS - [15:07:20]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:20]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:25]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:26]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:26]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:26]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:27]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:28]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:28]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:28]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:30]: Babylon.js v9.31.0 - Null engine
+BJS - [15:07:31]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:31]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [15:07:31]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture (7072.9734ms)
+✔ a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once (2151.5485ms)
+✔ a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token (2384.1061ms)
+✔ a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek (1499.7319ms)
+ℹ tests 181
+ℹ suites 0
+ℹ pass 181
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 106963.292
