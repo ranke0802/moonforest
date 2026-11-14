@@ -78,3 +78,13 @@ test('slow sampled renders are retained in a bounded history, separately from th
  f.setTime(11000);f.begin();f.end();result=f.sampler.sample();assert.equal(result.latest.sampleId,11);assert.equal(result.slowSamples.at(-1).sampleId,10);
  f.sampler.reset();assert.equal(f.sampler.sample().slowSamples.length,0);f.sampler.dispose();
 });
+
+test('only retained slow effect calls inspect bounded define fingerprints, never shader source or fast calls',()=>{
+ const f=fixture();let reads=0;const options={get defines(){reads++;return '#define UNLIT\n#define ALPHABLEND\n#define NUM_BONE_INFLUENCERS 4\n#define NUM_MORPH_INFLUENCERS 1\n'+('x'.repeat(20000))+'\n#define FOG\n';}};
+ f.engine.createEffect=function(){f.setTime(0);};f.sampler.setActive(true);f.begin();f.engine.createEffect('pbr',options);f.end();assert.equal(reads,0,'fast cached effects never inspect define text');
+ f.sampler.dispose();const g=fixture();g.sampler.setActive(true);g.begin();
+ for(let i=0;i<20;i++)g.engine.createEffect('pbr',options);
+ g.end();const calls=g.sampler.sample().latest.slowCalls;assert.equal(calls.length,8);assert.equal(reads,8,'discarded slow calls also avoid inspection');
+ for(const call of calls){assert.equal(call.variant.ALPHABLEND,true);assert.equal(call.variant.UNLIT,true);assert.equal(call.variant.FOG,false,'text after limit is not inspected');assert.equal(call.variant.NUM_BONE_INFLUENCERS,4);assert.equal(call.variant.NUM_MORPH_INFLUENCERS,1);assert.ok(JSON.stringify(call).length<500);}
+ g.sampler.dispose();
+});

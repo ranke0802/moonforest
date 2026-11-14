@@ -45,7 +45,8 @@ export class PlayerMeleeAim{
   // Reuse the identical cached visible-face hull used by the real contact
   // sweep. A centreline cannot select the low edge of a held shield.
   this.shieldSweep=new WolfV02ShieldSweep();this.shieldLines=[];
-  this.representativeShieldProfile=[];this.bodyCapsules=[];this.neckCapsules=[];
+  this.representativeShieldProfile=[];this.bodyCapsules=[];this.neckCapsules=[];this.neckFlags=[];
+  this.fitExtended=[];this.fitYawed=[];
   this.representativeShieldLines=[];this.elbowPivot=new Vector3();this.elbowAxis=new Vector3();this.upperDirection=new Vector3();this.lowerDirection=new Vector3();this.extended=[[0,0,0],[0,0,0]];
   this.axis=new Vector3();this.up=new Vector3(0,1,0);this.localAxis=new Vector3();this.localUp=new Vector3();this.pivot=new Vector3();this.point=new Vector3();this.inverseParent=Matrix.Identity();this.localDelta=Quaternion.Identity();this.yawDelta=Quaternion.Identity();this.combinedDelta=Quaternion.Identity();
   this.endpoints=[[0,0,0],[0,0,0]];this.yawed=[[0,0,0],[0,0,0]];this.rotated=[[0,0,0],[0,0,0]];this.reset();
@@ -73,7 +74,7 @@ export class PlayerMeleeAim{
   else (target.nodes?.head??target.nodes?.neck)?.computeWorldMatrix(true);
   const capsules=target.hurtCapsules?.();if(!capsules?.length)return;
   this.bodyCapsules.length=this.neckCapsules.length=0;
-  for(const capsule of capsules)if(body.test(capsule.name??'')){this.bodyCapsules.push(capsule);if(neck.test(capsule.name??''))this.neckCapsules.push(capsule);}
+  for(const capsule of capsules)if(body.test(capsule.name??'')){this.neckFlags[this.bodyCapsules.length]=neck.test(capsule.name??'');this.bodyCapsules.push(capsule);if(neck.test(capsule.name??''))this.neckCapsules.push(capsule);}
   if(!this.bodyCapsules.length)return;
   this.fitClock+=Math.max(0,dt);
   const local=side==='Left'?shieldLocal:swordLocal;
@@ -98,21 +99,28 @@ export class PlayerMeleeAim{
   const extensions=extensionLimit>.01?[0,extensionLimit*.5,extensionLimit]:[0];
   const margin=side==='Left'?playerDimensions(player).shieldStrikeRadius:playerDimensions(player).bladeRadius;
   let best=0,bestYaw=0,bestExtension=0,bestScore=Infinity,bestError=Infinity,bestNeckError=Infinity;
-  const search=(pitches,yaws,elbows)=>{for(const extension of elbows)for(const yaw of yaws)for(const angle of pitches){
+  while(this.fitExtended.length<lines.length){this.fitExtended.push([[0,0,0],[0,0,0]]);this.fitYawed.push([[0,0,0],[0,0,0]]);}
+  // The same elbow/yaw span is evaluated at many shoulder pitches. Prepare it
+  // once per candidate pair, preserving the original candidate/tie-break order.
+  const search=(pitches,yaws,elbows)=>{for(const extension of elbows){
+   for(let row=0;row<lines.length;row++)for(let end=0;end<2;end++){
+    if(extension)rotate(lines[row][end],this.elbowPivot,this.elbowAxis,extension,this.fitExtended[row][end]);
+    else for(let axis=0;axis<3;axis++)this.fitExtended[row][end][axis]=lines[row][end][axis];
+   }
+   for(const yaw of yaws){
+    for(let row=0;row<lines.length;row++)for(let end=0;end<2;end++)rotate(this.fitExtended[row][end],this.pivot,this.up,yaw,this.fitYawed[row][end]);
+    for(const angle of pitches){
    let error=Infinity,neckError=Infinity;
-   for(const line of lines){
-    if(extension){rotate(line[0],this.elbowPivot,this.elbowAxis,extension,this.extended[0]);rotate(line[1],this.elbowPivot,this.elbowAxis,extension,this.extended[1]);}
-    const span=extension?this.extended:line;
-    rotate(span[0],this.pivot,this.up,yaw,this.yawed[0]);rotate(span[1],this.pivot,this.up,yaw,this.yawed[1]);
-    rotate(this.yawed[0],this.pivot,this.axis,angle,this.rotated[0]);rotate(this.yawed[1],this.pivot,this.axis,angle,this.rotated[1]);
-    for(const capsule of this.bodyCapsules){const gap=Math.max(0,Math.sqrt(segmentDistanceSquared(...this.rotated,...capsule.points))-capsule.radius-margin);error=Math.min(error,gap);if(neck.test(capsule.name??''))neckError=Math.min(neckError,gap);}
+   for(let row=0;row<lines.length;row++){
+    const span=this.fitYawed[row];rotate(span[0],this.pivot,this.axis,angle,this.rotated[0]);rotate(span[1],this.pivot,this.axis,angle,this.rotated[1]);
+    for(let part=0;part<this.bodyCapsules.length;part++){const capsule=this.bodyCapsules[part],gap=Math.max(0,Math.sqrt(segmentDistanceSquared(this.rotated[0],this.rotated[1],capsule.points[0],capsule.points[1]))-capsule.radius-margin);error=Math.min(error,gap);if(this.neckFlags[part])neckError=Math.min(neckError,gap);}
     if(neckError===0)break;
    }
    // Real contact takes priority. Among reachable poses prefer the neck; if it
    // is physically out of reach retain a genuine torso hit, never stretch.
    const score=(error>.003?1+error*error*40:0)+Math.min(.5,neckError*neckError)*.25+(angle*angle+yaw*yaw+extension*extension)*.00025;
    if(score<bestScore){bestScore=score;best=angle;bestYaw=yaw;bestExtension=extension;bestError=error;bestNeckError=neckError;}
-  }};
+  }}}};
   if(this.fitReady){
    // Follow the prior fit with at most 3x3x3 nearby candidates. The complete
    // bounded grid is a warm-up/recovery operation, not per-frame work.

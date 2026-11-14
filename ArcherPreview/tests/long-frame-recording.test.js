@@ -18,6 +18,18 @@ test('stale draw samples are not attributed to another frame and a pause breaks 
  assert.equal(r.snapshot().critical[0].previousFrame,null);assert.equal(r.snapshot().critical[0].render.drawCpu,null);
 });
 
+test('ordinary frame scratch reuse cannot overwrite retained event, preceding work or detailed sections',()=>{
+ let now=0;const r=new LongFrameRecording({now:()=>now});r.start();const sections={contactsMs:1};
+ const frame=(at,interval,work,detailed=false)=>{now=at;r.record({startMs:at,intervalMs:interval,workMs:work,targetFps:60,metrics:{sceneMs:work,drawCpu:{latest:detailed?{reason:'continuous',startedAtMs:at,completedAtMs:at+work}:null}},sections,context:()=>({})});};
+ frame(10,10,7);const scratch=r.previous;
+ sections.contactsMs=2;frame(26,16,8);assert.equal(r.previous,scratch,'normal frames reuse storage');
+ sections.contactsMs=9;frame(100,74,70,true);
+ const event=r.events[0],detail=r.detailFrames[0];assert.equal(event.previousFrame.sections.contactsMs,2);assert.equal(event.previousFrame.startMs,26);
+ for(let i=0;i<100;i++){sections.contactsMs=i;frame(200+i*16,16,4);}
+ assert.equal(event.startMs,100);assert.equal(event.render.sceneMs,70);assert.equal(event.sections.contactsMs,9);assert.equal(detail.sections.contactsMs,9);assert.equal(event.previousFrame.render.sceneMs,8);
+ r.break();sections.contactsMs=3;frame(2000,220,4);assert.equal(r.critical[0].previousFrame,null);
+});
+
 test('continuous sampling covers every render and returns to throttled sampling when stopped',()=>{
  let now=0;const engine={onEndFrameObservable:new Observable(),onContextLostObservable:new Observable(),onContextRestoredObservable:new Observable(),drawElementsType(){now++;}};
  const scene={getEngine:()=>engine,getFrameId:()=>1,onBeforeRenderObservable:new Observable(),onAfterRenderObservable:new Observable()};

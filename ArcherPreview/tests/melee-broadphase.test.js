@@ -20,3 +20,11 @@ test('swept capsule rejection preserves detailed contacts including lateral cuts
     assert.equal(bladeTouchesCapsule(previous,current,capsule,radius,lateral),reference(previous,current,capsule,radius,lateral),'sample '+i);
   }
 });
+
+test('allocation-free sweeps preserve tangent, degenerate, stationary and fast lateral contacts',()=>{
+ const blades=[[[0,0,0],[0,1,0]],[[0,0,0],[0,0,0]],[[4,-2,3],[-3,4,-1]]];
+ for(const current of blades)for(const previous of [null,current,[[3,1,-2],[-2,0,3]]])for(const radius of [.005,.05,.25])for(const shift of [-1e-9,0,1e-9])for(const lateral of [null,{halfWidth:.35,axis:[1,0,0]},{halfWidth:.35,axis:[.6,0,.8]}]){
+  const capsule=[[radius+shift,0,0],[radius+shift,1,0]];
+  assert.equal(bladeTouchesCapsule(previous,current,capsule,radius,lateral),reference(previous,current,capsule,radius,lateral));
+ }
+});

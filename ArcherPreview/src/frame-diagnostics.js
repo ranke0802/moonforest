@@ -90,7 +90,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;if(!value){recording.break();finishBurst(now());}onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
-  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0};
+  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,playerMeleeAimMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0};
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
   // last play snapshot and refresh only asynchronous GPU state/retained age.
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};if(sample&&Object.hasOwn(sample,'drawCpu'))metrics={...metrics,drawCpu:sample.drawCpu};};
@@ -171,6 +171,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     report.measurement+=' submittedTriangles is Babylon active indices divided by three for the rendered frame, including instances and repeated render passes; it is not the count of unique map polygons and may include actors.';
     report.measurement+=' framePreludeMs measures gameplay preparation before the boss update, including controller/animation selection and action audio. sceneCallMs measures the complete synchronous scene.render call, including all its after-render observers; sceneMs remains the SDK counter with its own observer boundary. contactsMs is nested inside rendering; do not sum these fields as independent costs. Viewport resize callbacks run outside these gameplay-frame sections and are reported separately in viewportResize.';
     report.measurement+=' playerControllerMs, playerAnimationMs and actionAudioMs are diagnostic-only sections nested within framePreludeMs. playerAnimationMs includes manual CharacterAnimator transitions and pose sampling before rendering; the SDK animationMs counter has a separate render boundary. These sections are not GPU time and must not be added to their enclosing counters.';
+    report.measurement+=' playerMeleeAimMs measures weapon-pose fitting separately before contactsMs inside scene.render. It preserves the same contact geometry and adds no timing calls while diagnostics are OFF.';
     report.measurement+=' sceneryGeometryMs, sceneryTextureMs and sceneryOcclusionMs measure synchronous after-render callbacks only while diagnostics collect play frames. They are nested within sceneCallMs and may sit outside the SDK sceneMs observer boundary. They do not measure asynchronous decode/download duration or GPU query execution; an occlusion callback can still include CPU driver wait.';
     report.measurement+=' sceneryDemandMs and sceneryLoadStartMs are synchronous subintervals of sceneryGeometryMs; do not sum them with their parent. Sampled drawCpu textureUpload/shaderPrepare capture engine calls only within sampled renders; preparation outside the sampled render, asynchronous completion, GPU execution and driver scheduling may be missed.';
     report.measurement+=' sceneResources counts are instantaneous scene-level counts; observer counts cover only the three named scene observables and include observers pending removal. SDK active animatables include paused bindings; these counts are not leak proof or total memory.';
@@ -205,7 +206,7 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     },
     endFrame(){if(!collecting)return;const time=now();if(recording.state==='recording'&&time-recording.startMs>=recording.durationMs)stopRecording('duration-limit');try{metrics={...renderMetrics()};
       if(recording.state==='recording'&&monitor.interval>0){
-        const workMs=Math.max(0,time-monitor.frameStart);recording.record({startMs:monitor.frameStart,intervalMs:monitor.interval,workMs,targetFps:monitor.targetFps,metrics,sections:{...sections},context});
+        const workMs=Math.max(0,time-monitor.frameStart);recording.record({startMs:monitor.frameStart,intervalMs:monitor.interval,workMs,targetFps:monitor.targetFps,metrics,sections,context});
         if(burstUntil&&time>=burstUntil)finishBurst(time);
         const critical=monitor.interval>=200||workMs>=200||metrics.drawSubmissionMs>=200;
         const slow=monitor.interval>50||workMs>50||metrics.drawSubmissionMs>50;

@@ -124,6 +124,22 @@ for(const manifest of ['elena','mourning-elena'])test(`${manifest} actual packed
  records.push({case:'actual-packed-model-effects',manifest,allBossMaterialsUnfrozen:true,bodies:bodies.map(mesh=>({name:mesh.name,vertices:mesh.getTotalVertices(),boneInfluencers:mesh.numBoneInfluencers,morphTargets:mesh.morphTargetManager?.numTargets??0,textureMorphs:mesh.morphTargetManager?.isUsingTextureForTargets??false})),transitions,newEffectsOnFirstDisplayOrDeath:0,rawTexturesDuringWarm:afterWarmRaw-beforeRaw,rawTexturesAfterFirstDisplay:rawAfterFirstDraw-afterWarmRaw,resourcesBeforeDisplay:counts,resourcesAfterDisplay:inventory(f),sourceImagesLoaded:false});
 });
 
+for(const manifest of ['alpha-wolf','gray-wolf-r2','stylized-wolf-r2','wolf-3-r2'])test(`${manifest} actual wolf skin and Breath slots reuse prepared effects on first fade`,async t=>{
+ const f=fixture(t),{asset}=await packedAsset(f,t,manifest);
+ for(const node of [...asset.meshes,...asset.transformNodes])if(!node.parent)node.parent=f.actor;
+ for(const mesh of asset.meshes)if(mesh.getTotalVertices()){mesh.alwaysSelectAsActiveMesh=true;if(mesh.skeleton)mesh.skeleton.useTextureToStoreBoneMatrices=true;}
+ // Match the shipped loader's stable slot contract, not an all-zero synthetic rig.
+ for(const manager of new Set(asset.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))){manager.optimizeInfluencers=false;manager.numMaxInfluencers=manager.numTargets;}
+ applyMonsterToon(asset);attachCharacterOutlines(asset,'wolf');enableEnemyFade(asset);
+ await prepareBossShaders(asset,{shadows:f.shadows,frame:async()=>{}});const prepared=f.effects.length;
+ f.actor.setEnabled(true);
+ for(const visibility of [1,.999,.8,.1,1]){
+  for(const mesh of asset.meshes)mesh.visibility=visibility;
+  for(const manager of new Set(asset.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean)))for(let i=0;i<manager.numTargets;i++)manager.getTarget(i).influence=visibility===1?0:.7;
+  applyHitFlash(asset.meshes,.1);f.scene.render();assert.equal(f.effects.length,prepared,'wolf fade unexpectedly requested an unprepared Effect');
+ }
+});
+
 test('actual goblin geometry reuses prepared body, outline, overlay and shadow effects through first fatal hit and fade',async t=>{
  const f=fixture(t),{asset}=await packedAsset(f,t,'hooded-goblin');
  for(const node of [...asset.meshes,...asset.transformNodes])if(!node.parent)node.parent=f.actor;

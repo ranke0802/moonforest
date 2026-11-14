@@ -8,6 +8,19 @@ const methods={
  shaderPrepare:['createEffect','createShaderProgram','_preparePipelineContext'],
 };
 function shaderLabel(source){try{const label=typeof source==='string'?source:source?.vertex;return typeof label==='string'&&label.length<=128&&!/[\r\n]/.test(label)?label:null;}catch{return null;}}
+// A slow PBR request otherwise has no clue whether it came from a fading
+// skinned enemy or scenery. Read only the already-supplied, bounded defines;
+// no material scan, extra hook/timer, GPU query or full shader text is added.
+const variantFlags=['ALPHABLEND','ALPHATEST','UNLIT','FOG','INSTANCES','THIN_INSTANCES','MOONFOREST_CHARACTER_STYLE'];
+function shaderVariant(args){
+ try{
+  const value=typeof args[1]==='object'?args[1]?.defines:args[4];if(typeof value!=='string')return null;
+  const text=value.slice(0,16384),variant={};
+  for(const flag of variantFlags)variant[flag]=new RegExp('(?:^|\\n)#define '+flag+'(?:\\s|$)').test(text);
+  for(const name of ['NUM_BONE_INFLUENCERS','NUM_MORPH_INFLUENCERS']){const match=text.match(new RegExp('(?:^|\\n)#define '+name+' ([0-9]{1,4})(?:\\s|$)'));variant[name]=match?Math.min(4096,Number(match[1])):0;}
+  return variant;
+ }catch{return null;}
+}
 
 // Periodic and bounded event-requested renders, only while diagnostics collect. These
 // are inclusive engine-method CPU times (including cached/no-op calls), not GL
@@ -68,7 +81,8 @@ export class RenderCpuSampler {
        const elapsed=Math.max(0,sampler.now()-start);counter.ms+=elapsed;
        if(elapsed>=2&&current.slowCalls.length<8){
         const label=group==='shaderPrepare'?shaderLabel(args[0]):null;
-        current.slowCalls.push({group,method:name,ms:elapsed,shader:label});
+        const variant=name==='createEffect'?shaderVariant(args):null;
+        current.slowCalls.push({group,method:name,ms:elapsed,shader:label,...(variant?{variant}:{})});
        }
        if(name==='enableEffect'&&this._currentEffect!==effect)current.effectChanges++;
       }

@@ -1,0 +1,358 @@
+{
+  "inputs": [
+    {
+      "file": "moonforest-performance-2026-11-14T02-01-48-927Z.json",
+      "sha256": "aca57ab5213024a1ffe8e2bbf175d1bdc43f0a0e2e47e6f37d0b900cff65d5e7",
+      "bundle": "./assets/moonforestV2-C6BwIZ43.js",
+      "frames": 3930,
+      "activeSeconds": 75.95619999998807,
+      "fps": 51.740345093627866,
+      "meanFrameMs": 19.327277353686533,
+      "meanWorkMs": 16.46241730262002,
+      "maxIntervalMs": 80.09999996423721,
+      "maxWorkMs": 73.89999997615814,
+      "events": 5,
+      "critical": 0,
+      "dropped": {
+        "events": 0,
+        "critical": 0,
+        "detailFrames": 0,
+        "ktxUploads": 0
+      },
+      "renderSize": [
+        1414,
+        652
+      ],
+      "criticalCases": []
+    },
+    {
+      "file": "moonforest-performance-2026-11-14T02-03-54-654Z.json",
+      "sha256": "7d73e4d653c04ddcb16fdf7fd65979371e3e23741b13a7e4fcd90f570b22955d",
+      "bundle": "./assets/moonforestV2-C6BwIZ43.js",
+      "frames": 5670,
+      "activeSeconds": 104.7435,
+      "fps": 54.13223732260236,
+      "meanFrameMs": 18.473280423280425,
+      "meanWorkMs": 15.569029981875545,
+      "maxIntervalMs": 237,
+      "maxWorkMs": 231.5,
+      "events": 18,
+      "critical": 4,
+      "dropped": {
+        "events": 0,
+        "critical": 0,
+        "detailFrames": 0,
+        "ktxUploads": 0
+      },
+      "renderSize": [
+        1414,
+        652
+      ],
+      "criticalCases": [
+        {
+          "seconds": 45.20319999998808,
+          "intervalMs": 221.10000002384186,
+          "workMs": 36.19999998807907,
+          "sceneMs": 27.400000035762787,
+          "drawSubmissionMs": 13.699999988079071,
+          "sections": {
+            "bossUpdateMs": 2,
+            "contactsMs": 1.199999988079071,
+            "worldUpdateMs": 0.19999998807907104,
+            "hudUpdateMs": 0.3999999761581421,
+            "framePreludeMs": 1.2000000476837158,
+            "playerControllerMs": 0,
+            "playerAnimationMs": 0.8999999761581421,
+            "actionAudioMs": 0.10000002384185791,
+            "sceneryGeometryMs": 0.5999999642372131,
+            "sceneryDemandMs": 0.5999999642372131,
+            "sceneryLoadStartMs": 0,
+            "sceneryTextureMs": 0,
+            "sceneryOcclusionMs": 0.20000004768371582,
+            "sceneCallMs": 31.900000035762787
+          },
+          "textureWork": {
+            "asset": null,
+            "stage": "viewport-wait:admission",
+            "lastPromoteMs": 0.699999988079071
+          },
+          "viewportResize": {
+            "settling": true,
+            "disposed": false,
+            "mobile": true,
+            "committed": {
+              "width": 832,
+              "height": 384,
+              "pixelRatio": 2.8125
+            },
+            "pending": null,
+            "elapsedMs": 0,
+            "stableMs": 0,
+            "quietMs": 125,
+            "maxWaitMs": 500,
+            "watching": true
+          },
+          "drawCpu": null
+        },
+        {
+          "seconds": 48.412899999976155,
+          "intervalMs": 200.89999997615814,
+          "workMs": 18.5,
+          "sceneMs": 14.199999988079071,
+          "drawSubmissionMs": 4.800000011920929,
+          "sections": {
+            "bossUpdateMs": 1.800000011920929,
+            "contactsMs": 1.300000011920929,
+            "worldUpdateMs": 0.5,
+            "hudUpdateMs": 0.2999999523162842,
+            "framePreludeMs": 1.2999999523162842,
+            "playerControllerMs": 0,
+            "playerAnimationMs": 1.100000023841858,
+            "actionAudioMs": 0,
+            "sceneryGeometryMs": 0,
+            "sceneryDemandMs": 0,
+            "sceneryLoadStartMs": 0,
+            "sceneryTextureMs": 0.10000002384185791,
+            "sceneryOcclusionMs": 0,
+            "sceneCallMs": 14.400000035762787
+          },
+          "textureWork": {
+            "asset": null,
+            "stage": "viewport-wait:admission",
+            "lastPromoteMs": 0.699999988079071
+          },
+          "viewportResize": {
+            "settling": true,
+            "disposed": false,
+            "mobile": true,
+            "committed": {
+              "width": 384,
+              "height": 693,
+              "pixelRatio": 2.8125
+            },
+            "pending": null,
+            "elapsedMs": 0,
+            "stableMs": 0,
+            "quietMs": 125,
+            "maxWaitMs": 500,
+            "watching": true
+          },
+          "drawCpu": null
+        },
+        {
+          "seconds": 85.12929999995232,
+          "intervalMs": 105.69999998807907,
+          "workMs": 231.5,
+          "sceneMs": 121.80000001192093,
+          "drawSubmissionMs": 7.200000047683716,
+          "sections": {
+            "bossUpdateMs": 15.299999952316284,
+            "contactsMs": 103.70000004768372,
+            "worldUpdateMs": 0.40000003576278687,
+            "hudUpdateMs": 8.699999988079071,
+            "framePreludeMs": 83.60000002384186,
+            "playerControllerMs": 0,
+            "playerAnimationMs": 83.19999998807907,
+            "actionAudioMs": 0,
+            "sceneryGeometryMs": 0.7999999523162842,
+            "sceneryDemandMs": 0.7999999523162842,
+            "sceneryLoadStartMs": 0,
+            "sceneryTextureMs": 0.40000003576278687,
+            "sceneryOcclusionMs": 0,
+            "sceneCallMs": 123.09999996423721
+          },
+          "textureWork": {
+            "asset": null,
+            "stage": "idle",
+            "lastPromoteMs": 0.800000011920929
+          },
+          "viewportResize": {
+            "settling": false,
+            "disposed": false,
+            "mobile": true,
+            "committed": {
+              "width": 832,
+              "height": 384,
+              "pixelRatio": 2.8125
+            },
+            "pending": null,
+            "elapsedMs": 0,
+            "stableMs": 0,
+            "quietMs": 125,
+            "maxWaitMs": 500,
+            "watching": false
+          },
+          "drawCpu": {
+            "sampleId": 424,
+            "sceneFrameId": 14701,
+            "startedAtMs": 974565.6000000238,
+            "reason": "periodic",
+            "effectChanges": 51,
+            "groups": {
+              "drawCommands": {
+                "calls": 127,
+                "ms": 0.30000001192092896
+              },
+              "effectEnable": {
+                "calls": 127,
+                "ms": 0.10000002384185791
+              },
+              "bufferBinding": {
+                "calls": 127,
+                "ms": 0.19999998807907104
+              },
+              "textureSet": {
+                "calls": 169,
+                "ms": 0.5999999642372131
+              },
+              "bufferUpdate": {
+                "calls": 139,
+                "ms": 0.5000001192092896
+              },
+              "textureUpload": {
+                "calls": 0,
+                "ms": 0
+              },
+              "shaderPrepare": {
+                "calls": 0,
+                "ms": 0
+              },
+              "candidateSelection": {
+                "calls": 1,
+                "ms": 0.8999999761581421
+              }
+            },
+            "slowCalls": [],
+            "completedAtMs": 974582.9000000358,
+            "sceneElapsedMs": 17.30000001192093
+          }
+        },
+        {
+          "seconds": 85.36629999995232,
+          "intervalMs": 237,
+          "workMs": 19.900000035762787,
+          "sceneMs": 14.800000011920929,
+          "drawSubmissionMs": 5,
+          "sections": {
+            "bossUpdateMs": 1,
+            "contactsMs": 0.6000000238418579,
+            "worldUpdateMs": 1,
+            "hudUpdateMs": 0.3999999761581421,
+            "framePreludeMs": 2.5,
+            "playerControllerMs": 0.09999996423721313,
+            "playerAnimationMs": 2.100000023841858,
+            "actionAudioMs": 0.09999996423721313,
+            "sceneryGeometryMs": 0,
+            "sceneryDemandMs": 0,
+            "sceneryLoadStartMs": 0,
+            "sceneryTextureMs": 0,
+            "sceneryOcclusionMs": 0,
+            "sceneCallMs": 14.800000011920929
+          },
+          "textureWork": {
+            "asset": null,
+            "stage": "idle",
+            "lastPromoteMs": 0.800000011920929
+          },
+          "viewportResize": {
+            "settling": false,
+            "disposed": false,
+            "mobile": true,
+            "committed": {
+              "width": 832,
+              "height": 384,
+              "pixelRatio": 2.8125
+            },
+            "pending": null,
+            "elapsedMs": 0,
+            "stableMs": 0,
+            "quietMs": 125,
+            "maxWaitMs": 500,
+            "watching": false
+          },
+          "drawCpu": null
+        }
+      ]
+    }
+  ],
+  "syntheticMelee": {
+    "before": {
+      "runsMs": [
+        22.022400000000005,
+        22.11139999999999,
+        21.560899999999975,
+        20.67409999999998,
+        22.31990000000002
+      ],
+      "medianMs": 22.022400000000005,
+      "cases": 3600,
+      "hits": 1812,
+      "kind": "Node CPU synthetic; not mobile FPS"
+    },
+    "after": {
+      "runsMs": [
+        7.4251000000000005,
+        6.645099999999999,
+        6.780999999999999,
+        6.727700000000006,
+        6.725200000000001
+      ],
+      "medianMs": 6.727700000000006,
+      "cases": 3600,
+      "hits": 1812,
+      "kind": "Node CPU synthetic; not mobile FPS"
+    },
+    "reductionPercent": 69.4506502470212
+  },
+  "syntheticAim": {
+    "cases": 720,
+    "maxDelta": 0,
+    "beforeMs": [
+      11.433700000000044,
+      8.335599999999886,
+      10.666899999999941,
+      8.592200000000048,
+      9.616400000000112
+    ],
+    "afterMs": [
+      7.051799999999957,
+      6.29989999999998,
+      6.254500000000007,
+      5.931100000000015,
+      6.1771000000001095
+    ],
+    "beforeMedian": 9.616400000000112,
+    "afterMedian": 6.254500000000007,
+    "scope": "Node NullEngine synthetic rotating arm/neck geometry; exact fit and rotations, not real-device FPS"
+  },
+  "changes": [
+    "Reuse scalar coordinates for lateral contact sweeps; identical radius/windows/sampling",
+    "Hoist elbow/yaw spans and neck flags in aim fitting; identical candidate/tie order",
+    "Reuse ordinary recording scratch; retain independent slow/detail snapshots",
+    "Add opt-in diagnostic playerMeleeAimMs section",
+    "Only retained slow createEffect calls receive bounded variant feature tags"
+  ],
+  "notConfirmed": [
+    "GPU/driver cause: unsupported GPU timer",
+    "Thermal throttling: no device-temperature telemetry",
+    "No proof of native animation leak;1224 bindings stable",
+    "Input recordings are older bundle moonforestV2-C6BwIZ43, not post-fix device recordings"
+  ],
+  "preserved": [
+    "quality",
+    "textures",
+    "LOD",
+    "combat windows/damage/collision geometry",
+    "0.1 release"
+  ],
+  "shaderCase": {
+    "seconds": 77.4,
+    "createEffectInclusiveMs": 91.5,
+    "createShaderProgramNestedMs": 56.1,
+    "textureUploads": 0,
+    "objectIdentity": "unresolved",
+    "actualWolfSkinFadeCacheCases": 4,
+    "newEffectsAfterPreparedFade": 0,
+    "scope": "NullEngine geometry, omitted image textures; not GPU compilation"
+  }
+}

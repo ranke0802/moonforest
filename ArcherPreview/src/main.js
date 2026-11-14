@@ -981,7 +981,9 @@ try {
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame)return;
     if(!ready||!isWarrior()||!combatResult){swordTrail?.clear();return;}
+    const meleeAimStart=frameDiagnostics.mark();
     meleeAim?.apply(combatResult,actor,meleeAimDt);
+    frameDiagnostics.measure('playerMeleeAimMs',meleeAimStart);
     const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
     try{swordTrail?.update(sample,combatResult.state,elapsed,equipmentChoices.sword);}catch(error){swordTrail?.setEnabled(false);console.warn('[검격 잔상]',error);}
     const contactsStart=frameDiagnostics.mark();
