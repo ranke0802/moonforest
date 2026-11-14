@@ -1,0 +1,40 @@
+✔ primary save-and-JSON command is outside folds and exports the same full-precision 5x draft it persists (14.601ms)
+✔ download link stays inside the active editor and retains its URL until replacement or disposal (3.3131ms)
+✔ blocked file click leaves persisted data, raw JSON and an explicit in-dialog fallback link (3.6383ms)
+✔ object URL failure still exposes current JSON and leaves editor controls usable (2.8486ms)
+✔ ordinary cancel, invalid JSON and file chooser cancellation never commit a draft (4.6739ms)
+✔ a previous editor session cannot import an asynchronously resolved file into a reopened draft (3.1401ms)
+✔ a no-op release storage wrapper reports session-only save while preserving the applied layout (3.0104ms)
+✔ clipboard-unavailable copy exposes selected current JSON without saving or discarding the draft (6.6881ms)
+✔ unrelated pointer release or cancellation never interrupts the active HUD drag (14.9605ms)
+✔ stored hidden diagnostics apply on reveal and recalculate once on resize (1.4764ms)
+✔ closing the HUD editor restores focus outside the now-closed editor and settings dialog (1.4956ms)
+✔ layout documents strictly validate numbers, schema and movable combat controls (1.8895ms)
+✔ viewport resolver preserves neutral authored placement and clips moved groups inside screen (0.2506ms)
+✔ every HUD group and inner component accepts and restores up to 500 percent (15.379ms)
+✔ popup position and size are saved with HUD layout (7.4561ms)
+✔ a closed popup has an inert draggable preview and saves its placement (4.5295ms)
+✔ a popup component is editable in the preview and never applied to a different screen or item (4.8615ms)
+✔ neutral layout scales with the viewport without scheduling continuous frame work (2.4134ms)
+✔ edited scale remains proportional across fullscreen viewport changes and reset restores the default (3.4964ms)
+✔ save, reload and cancel use independent game storage and reset held input at editor boundaries (5.3206ms)
+✔ combat buttons can move and reset independently (6.5846ms)
+✔ drag events in editing top layer move HUD without invoking the underlying combat button (2.8148ms)
+✔ directly pointing at another visible UI selects and moves that item (2.6224ms)
+✔ mouse corner drag and touch pinch resize the selected HUD group (3.802ms)
+✔ invalid import is non-destructive; valid import restores all groups and exports editable data (2.7207ms)
+✔ layout download emits a JSON file with the current edited positions (2.9895ms)
+✔ unavailable storage keeps usable session settings and reports lack of persistence (3.1114ms)
+✔ native close and Escape cancellation discard drafts and release pause (7.2235ms)
+✔ eight sprite bindings reuse original live controls and never overwrite HUD data or saved transforms (6.6934ms)
+✔ press/held/release timing joins existing frames and respects multiple guard sources (1.5333ms)
+✔ cancel, focus loss, modal opening and blocked state clear cosmetic holds without dispatching actions (3.6545ms)
+✔ runtime CSS references exactly two atlases and retains live circular map plus distinct PC/touch layouts (26.1529ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 284.7216

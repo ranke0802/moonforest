@@ -14,6 +14,12 @@
 #hud-layout-dialog::backdrop{background:transparent;backdrop-filter:none}
 .hud-layout-panel,#hud-layout-dialog[data-preview] .hud-layout-panel{top:auto;bottom:max(8px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:min(500px,calc(100vw - 16px));max-height:min(75dvh,560px);padding:8px 12px;z-index:2}
 .hud-layout-panel header{justify-content:flex-start;gap:8px}.hud-layout-panel header strong{white-space:nowrap}.hud-layout-panel header #hud-layout-current{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e5ce8f}.hud-layout-panel header button{min-height:38px;padding:5px 10px}.hud-layout-panel header button:last-child{background:#59673f}.hud-layout-panel>p{margin:4px 0;font-size:12px}.hud-layout-panel #hud-layout-status:empty{display:none}.hud-layout-options>summary{min-height:30px}.hud-layout-options{max-height:58dvh;overflow:auto;overscroll-behavior:contain}.hud-layout-options>label{margin-top:6px}
+.hud-layout-panel .hud-layout-files{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;justify-content:flex-start}
+.hud-layout-files [data-hud-command=download]{flex:1;min-width:175px;background:#59673f}
+.hud-layout-panel .hud-layout-download{display:block;margin:8px 0;color:#ffe4a1;text-decoration:underline;min-height:32px;line-height:32px;touch-action:manipulation}
+.hud-layout-panel .hud-layout-download[hidden]{display:none}
+.hud-layout-panel .hud-layout-download:focus-visible{outline:2px solid #f4d184;outline-offset:2px}
+.hud-layout-panel header{flex-wrap:wrap}.hud-layout-panel header [data-hud-command=save]{white-space:nowrap}
 @media(orientation:landscape) and (max-height:540px){.hud-layout-panel{width:min(500px,calc(100vw - 16px));padding:6px 10px}.hud-layout-panel header+p{display:block;font-size:11px}.hud-layout-panel header button{min-height:32px}.hud-layout-options{max-height:48dvh}}
 
 /* Center notices use outlined text on the game scene. Keep the stamina warning

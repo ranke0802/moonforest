@@ -3,7 +3,7 @@
   "release": "moonforest-0.2",
   "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
   "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "bytes": 800322481,
+  "bytes": 800324885,
   "files": [
     {
       "path": "app.webmanifest",
@@ -10136,14 +10136,14 @@
       "sha256": "6e354a50d216ad9e88acfe7421e24db6a64ee51c0c87c0eed3d3a89c2ee33725"
     },
     {
-      "path": "assets/moonforestV2-C6BwIZ43.js",
-      "bytes": 2325700,
-      "sha256": "f550eeb9a30450a37266a1f8a9719bd87ef3af727076844c605354a580cfd8ca"
+      "path": "assets/moonforestV2-B3nz0pNS.css",
+      "bytes": 122109,
+      "sha256": "83a601b89bde21a9fb680114f7617a8d963ed81d2dce81b2ef685aaa36a6660b"
     },
     {
-      "path": "assets/moonforestV2-DQFzXusB.css",
-      "bytes": 121478,
-      "sha256": "68c004ba4510b1baebdc559911ab618dd975c46f6a9b83769e34073e0affaff0"
+      "path": "assets/moonforestV2-B9BWekVv.js",
+      "bytes": 2327473,
+      "sha256": "034d77e2dda1fb3e3a2531760ab7fb2c05294fcdfc6412bd894fc5c4bcbef99a"
     },
     {
       "path": "assets/morphTargetsVertex-6kE48R8N.js",
@@ -10998,7 +10998,7 @@
     {
       "path": "moonforest-0.2.html",
       "bytes": 39379,
-      "sha256": "7e9bf49429348fe54f4d9f0144cfa6194b877ac3371978ccc8ad499a084e29fb"
+      "sha256": "93b6d0cedd84899e05fd0373d96e621a4ac5ec7aab2f86723364d5865e8a74b3"
     },
     {
       "path": "moonforest-0.2.webmanifest",

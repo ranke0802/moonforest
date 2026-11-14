@@ -96,7 +96,12 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   const preview=doc.createElement('div');preview.id='hud-layout-preview';preview.setAttribute('aria-hidden','true');dialog.prepend(preview);
   const find=s=>dialog.querySelector(s),select=find('#hud-layout-selection'),status=find('#hud-layout-status');
   const componentChoice=doc.createElement('label');componentChoice.innerHTML='<input type="checkbox" data-hud-components> 창 미리보기에서 내부 요소 선택';find('#hud-layout-note').after(componentChoice);
-  const fileActions=doc.createElement('div'),fileInput=doc.createElement('input');fileActions.className='hud-layout-actions';fileActions.innerHTML='<button type="button" data-hud-command="download">JSON 다운로드</button><button type="button" data-hud-command="open-file">JSON 파일 열기</button>';fileInput.type='file';fileInput.accept='.json,application/json';fileInput.hidden=true;find('#hud-layout-json').after(fileActions,fileInput);
+  const fileActions=doc.createElement('div'),fileInput=doc.createElement('input');fileActions.className='hud-layout-actions hud-layout-files';fileActions.innerHTML='<button type="button" data-hud-command="download">저장 · JSON 내보내기</button><button type="button" data-hud-command="open-file">JSON 파일 열기</button><button type="button" data-hud-command="copy">JSON 복사</button>';fileInput.type='file';fileInput.accept='.json,application/json';fileInput.hidden=true;find('.hud-layout-options').before(fileActions,fileInput);
+  find('[data-hud-command="save"]').textContent='저장하고 닫기';
+  find('[data-hud-command="export"]').textContent='JSON 내용 표시';
+  const downloadLink=doc.createElement('a');downloadLink.className='hud-layout-download';downloadLink.download='moonforest-hud-layout.json';downloadLink.textContent='내보낸 JSON 파일 다시 받기';downloadLink.hidden=true;status.before(downloadLink);
+  const urls=win.URL?.createObjectURL?win.URL:globalThis.URL;
+  let downloadUrl=null,editSession=0,fileRequest=0;
   let committed=defaultHudLayout(),draft=null,editing=false,selected=groups[0]?.id,selectedComponent=null,drag=null,scheduled=null,disposed=false,boxes={},view={width:0,height:0,left:0,top:0},storageError=false,previewNode=null;
   const componentOriginal=new Map();
   const pointers=new Map();
@@ -138,27 +143,80 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     const g=group();if(!g)return;
     select.value=selected;find('#hud-layout-current').textContent=g.label;find('#hud-layout-note').textContent=selectedComponent?'선택한 창 내부 요소를 조절합니다.':'위치는 화면 비율로 저장됩니다. 겹치지 않게 배치해 주세요.';
     for(const input of dialog.querySelectorAll('[data-hud-field]')){const key=input.dataset.hudField,v=draft[selectedComponent??g.id];input.disabled=g.locked&&key!=='scale';input.min=String(key==='scale'?(selectedComponent ? .6 : g.min)*100:-90);input.max=String(key==='scale'?(selectedComponent?5:g.max)*100:90);input.value=String(Math.round(v[key]*100));find(`[data-hud-output="${key}"]`).textContent=Math.round(v[key]*100)+'%';}
-    const chosen=boxes[g.id];if(!chosen?.width||!chosen?.height)status.textContent='현재 숨겨진 항목입니다. 표시될 때 저장한 배치가 적용됩니다.';
+    const chosen=boxes[g.id];if((!chosen?.width||!chosen?.height)&&!status.textContent)status.textContent='현재 숨겨진 항목입니다. 표시될 때 저장한 배치가 적용됩니다.';
+  }
+  function snapshot(){return {version:1,items:parseHudLayout({version:1,items:draft??committed})};}
+  function jsonText(){return JSON.stringify(snapshot(),null,2)+'\n';}
+  function persist(){
+    committed=snapshot().items;
+    try{if(!storage?.setItem||!storage?.getItem)throw Error();const text=JSON.stringify({version:1,items:committed});storage.setItem(HUD_LAYOUT_KEY,text);if(storage.getItem(HUD_LAYOUT_KEY)!==text)throw Error();storageError=false;}catch{storageError=true;}
+  }
+  function showJson(text){
+    const area=find('#hud-layout-json');area.value=text;
+    for(let parent=area.parentElement;parent&&parent!==dialog;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+    area.focus();area.select?.();
+  }
+  function releaseDownload(){if(downloadUrl){urls?.revokeObjectURL?.(downloadUrl);downloadUrl=null;}downloadLink.removeAttribute('href');downloadLink.hidden=true;}
+  function downloadJson(){
+    clearDrag();persist();releaseDownload();const text=jsonText();find('#hud-layout-json').value=text;
+    try{
+      const blob=new (win.Blob??globalThis.Blob)([text],{type:'application/json;charset=utf-8'}),url=urls.createObjectURL(blob);
+      downloadUrl=url;downloadLink.href=url;downloadLink.hidden=false;
+      // The active modal makes its outside body inert. Keep the real link in
+      // this dialog and retain its URL for mobile/download-manager retries.
+      downloadLink.click();
+      status.textContent=(storageError?'배치를 적용했습니다. 브라우저 저장은 사용할 수 없습니다. ':'배치를 저장했습니다. ')+'JSON 다운로드를 요청했습니다. 시작되지 않으면 파일 링크를 눌러 주세요.';
+    }catch{
+      showJson(text);status.textContent='파일 다운로드를 시작하지 못했습니다. JSON 복사 버튼 또는 아래 선택된 내용을 복사해 보관하세요.';
+    }
+    draw();
+  }
+  async function copyJson(){
+    clearDrag();const text=jsonText(),session=editSession;find('#hud-layout-json').value=text;
+    try{if(!win.navigator?.clipboard?.writeText)throw Error();await win.navigator.clipboard.writeText(text);if(editing&&!disposed&&session===editSession)status.textContent='현재 UI 배치 JSON을 복사했습니다.';}
+    catch{if(editing&&!disposed&&session===editSession){showJson(text);status.textContent='자동 복사가 지원되지 않습니다. 아래 선택된 JSON을 복사하세요.';}}
   }
   function clearDrag(){drag=null;const ids=[...pointers.keys()];pointers.clear();for(const id of ids){try{dialog.releasePointerCapture(id);}catch{}}}
   function finish(save){
     if(!editing)return;
-    clearDrag();if(save){committed=parseHudLayout({version:1,items:draft});try{if(!storage)throw Error();storage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:1,items:committed}));storageError=false;}catch{storageError=true;}}
+    clearDrag();if(save)persist();editSession++;fileRequest++;
     editing=false;draft=null;selectedComponent=null;preview.replaceChildren();previewNode=null;dialog.removeAttribute('data-preview');root.removeAttribute('data-hud-editing');dialog.close();resetInput();draw();onPauseChange();
     (root.querySelector('#motion-speed-toggle')??root.querySelector('#viewport'))?.focus({preventScroll:true});
     onClose(save&&storageError?'배치를 적용했습니다. 저장 공간을 사용할 수 없어 이번 접속에서만 유지됩니다.':save?'HUD 배치를 저장했습니다.':'HUD 편집을 취소했습니다.');
   }
   function open(){
     if(editing||disposed||!getReady())return false;
-    resetInput();editing=true;draft=JSON.parse(JSON.stringify(committed));root.setAttribute('data-hud-editing','');
+    resetInput();editing=true;editSession++;fileRequest++;draft=JSON.parse(JSON.stringify(committed));root.setAttribute('data-hud-editing','');
     root.querySelector('#motion-speed-dialog')?.close();dialog.showModal();status.textContent=storageError?'저장 배치를 읽지 못했거나 저장 공간을 사용할 수 없습니다.':'';updatePreview();draw();onPauseChange();dialog.querySelector('[data-hud-command="save"]').focus();return true;
   }
   listen(select,'change',()=>{selected=select.value;selectedComponent=null;status.textContent='';updatePreview();draw();});
   listen(dialog,'input',event=>{const key=event.target.dataset.hudField,g=group();if(!key||!g||g.locked&&key!=='scale')return;draft[selectedComponent??g.id][key]=clamp(Number(event.target.value)/100,key==='scale'?(selectedComponent ? .6 : g.min):-.9,key==='scale'?(selectedComponent?5:g.max):.9);status.textContent='저장 전 미리보기';draw();});
   listen(componentChoice.querySelector('input'),'change',()=>{selectedComponent=null;updatePreview();draw();});
   listen(dialog,'click',event=>{const command=event.target.closest('[data-hud-command]')?.dataset.hudCommand;if(command==='reset'&&selectedComponent){draft[selectedComponent]={x:0,y:0,scale:1};event.stopImmediatePropagation();draw();}else if(command==='reset-all'||command==='import')selectedComponent=null;});
-  listen(dialog,'click',event=>{const command=event.target.closest('[data-hud-command]')?.dataset.hudCommand;if(!command)return;if(command==='cancel'||command==='save'){finish(command==='save');return;}if(command==='reset')draft[selected]=defaultHudLayout()[selected];if(command==='reset-all'){draft=defaultHudLayout();status.textContent='기본 배치로 초기화했습니다. 저장하면 적용됩니다.';}if(command==='export'){find('#hud-layout-json').value=JSON.stringify({version:1,items:draft},null,2);find('#hud-layout-json').focus();find('#hud-layout-json').select();status.textContent='배치 데이터를 복사해 보관하세요.';}if(command==='download'){const url=URL.createObjectURL(new Blob([JSON.stringify({version:1,items:draft},null,2)+'\n'],{type:'application/json'})),link=doc.createElement('a');link.href=url;link.download='moonforest-hud-layout.json';link.hidden=true;doc.body.append(link);try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}status.textContent='배치 파일 다운로드를 요청했습니다.';}if(command==='open-file')fileInput.click();if(command==='import'){try{draft=parseHudLayout(find('#hud-layout-json').value);status.textContent='배치를 불러왔습니다. 저장하면 적용됩니다.';}catch(error){status.textContent=error.message;}}draw();});
-  listen(fileInput,'change',async()=>{const file=fileInput.files?.[0];if(!file)return;try{if(file.size>65536)throw Error('배치 파일이 너무 큽니다.');const value=parseHudLayout(await file.text());if(!editing||disposed)return;selectedComponent=null;draft=value;status.textContent='배치를 불러왔습니다. 저장하면 적용됩니다.';draw();}catch(error){if(editing&&!disposed)status.textContent=error.message;}finally{fileInput.value='';}});
+  listen(dialog,'click',event=>{
+    const command=event.target.closest('[data-hud-command]')?.dataset.hudCommand;if(!command||!editing)return;
+    try{
+      if(command==='cancel'||command==='save'){finish(command==='save');return;}
+      if(command==='reset')draft[selected]=defaultHudLayout()[selected];
+      if(command==='reset-all'){draft=defaultHudLayout();status.textContent='기본 배치로 초기화했습니다. 저장하면 적용됩니다.';}
+      if(command==='export'){showJson(jsonText());status.textContent='현재 배치 JSON입니다. 파일로 받으려면 저장 · JSON 내보내기를 누르세요.';}
+      if(command==='download'){downloadJson();return;}
+      if(command==='copy'){void copyJson();return;}
+      if(command==='open-file')fileInput.click();
+      if(command==='import'){draft=parseHudLayout(find('#hud-layout-json').value);status.textContent='배치를 불러왔습니다. 저장하면 적용됩니다.';}
+      draw();
+    }catch(error){status.textContent=error.message||'UI 배치를 처리하지 못했습니다. JSON 내용을 확인해 주세요.';}
+  });
+  listen(fileInput,'change',async()=>{
+    const file=fileInput.files?.[0];if(!file||!editing||disposed)return;
+    const session=editSession,request=++fileRequest;
+    const current=()=>editing&&!disposed&&session===editSession&&request===fileRequest;
+    try{
+      if(file.size>65536)throw Error('배치 파일이 너무 큽니다.');
+      const value=parseHudLayout(await file.text());if(!current())return;
+      clearDrag();selectedComponent=null;draft=value;status.textContent='배치를 불러왔습니다. 저장하면 적용됩니다.';draw();
+    }catch(error){if(current())status.textContent=error.message;}finally{fileInput.value='';}
+  });
   listen(dialog,'cancel',event=>{event.preventDefault();finish(false);});
   listen(dialog,'close',()=>{if(editing)finish(false);});
   listen(dialog,'pointerdown',event=>{
@@ -191,5 +249,5 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   const entry=doc.createElement('button');entry.type='button';entry.id='open-hud-layout';entry.textContent='HUD 위치 · 크기';entry.setAttribute('aria-haspopup','dialog');entry.setAttribute('aria-controls',dialog.id);entry.className='motion-speed-toggle';
   const host=root.querySelector('#camera-follow-options')?.parentElement??root.querySelector('.settings-sections');host?.append(entry);listen(entry,'click',open);
   const observer=win.ResizeObserver?new win.ResizeObserver(schedule):null;observer?.observe(root);for(const g of groups)observer?.observe(g.node);const mutations=win.MutationObserver?new win.MutationObserver(schedule):null;for(const g of groups)if(g.node.tagName==='DIALOG')mutations?.observe(g.node,{childList:true,subtree:true});listen(win,'resize',schedule);draw();
-  return {open,isOpen:()=>editing,close:()=>finish(false),refresh:schedule,inspect:()=>({version:1,items:JSON.parse(JSON.stringify(committed)),editing,storageAvailable:!storageError}),dispose(){if(disposed)return;finish(false);disposed=true;if(scheduled!==null)win.cancelAnimationFrame(scheduled);observer?.disconnect();mutations?.disconnect();for(const stop of cleanups)stop();restoreComponents();for(const g of groups){restore(g);g.node.removeAttribute('data-hud-selected');}dialog.remove();entry.remove();}};
+  return {open,isOpen:()=>editing,close:()=>finish(false),refresh:schedule,inspect:()=>({version:1,items:JSON.parse(JSON.stringify(committed)),editing,storageAvailable:!storageError}),dispose(){if(disposed)return;finish(false);releaseDownload();disposed=true;if(scheduled!==null)win.cancelAnimationFrame(scheduled);observer?.disconnect();mutations?.disconnect();for(const stop of cleanups)stop();restoreComponents();for(const g of groups){restore(g);g.node.removeAttribute('data-hud-selected');}dialog.remove();entry.remove();}};
 }
