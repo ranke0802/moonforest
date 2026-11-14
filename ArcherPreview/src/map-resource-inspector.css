@@ -1,0 +1,17 @@
+#diagnostic-map-resources{margin:12px 0;padding:12px;border:1px solid #596957;border-radius:6px}
+#diagnostic-map-resources>summary{font-size:1.1em;color:#edce8d;cursor:pointer}
+.map-resource-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.map-resource-actions button,.map-resource-actions a{padding:10px 13px;min-height:42px;font:inherit}
+#map-resource-status{display:block;overflow-wrap:anywhere;color:#ded9bf}
+#map-resource-report{font-size:14px;line-height:1.55;overflow-wrap:anywhere}
+#map-resource-report h3{font-size:1.2em;margin:15px 0 8px}
+#map-resource-report details{padding:10px 0;border-top:1px solid #506054}
+#map-resource-report summary{cursor:pointer;color:#e7d099;padding:6px 0}
+.map-resource-table{max-height:360px;overflow:auto;overscroll-behavior:contain;margin:12px 0}
+.map-resource-table table{border-collapse:collapse;width:100%;font-size:13px}
+.map-resource-table th,.map-resource-table td{padding:8px;text-align:left;border-bottom:1px solid #45574c;min-width:90px;max-width:380px;overflow-wrap:anywhere}
+.map-resource-table th{position:sticky;top:0;background:#1e3429;color:#e7d099;z-index:1}
+.map-resource-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px}
+.map-resource-metrics>div{padding:12px;background:#1d3228;border:1px solid #475f4e;border-radius:4px}
+.map-resource-metrics dd{font-size:1.2em;color:#f0d597;margin:6px 0}
+.map-resource-metrics small{display:block;color:#c0cabc;font-size:12px}

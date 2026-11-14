@@ -63,6 +63,8 @@ import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import {createLoadingView} from './loading-view.js';
 import {prepareStartupResources,prepareMapResources} from './startup-resources.js';
+import {createMapResourceInspector} from './map-resource-inspector.js';
+import './map-resource-inspector.css';
 import { BossBattle } from './boss-battle.js';
 import { BossSelection, bossSelectionHelp, summonSelectedBoss } from './boss-selection.js';
 import {MonsterSelection,MONSTER_NAMES,monsterSelectionHelp,summonSelectedMonster} from './monster-selection.js';
@@ -248,6 +250,8 @@ if(import.meta.hot)import.meta.hot.dispose(()=>renderScaleControl.dispose());
 const renderResolution=()=>renderResolutionSnapshot({engine,canvas,deviceRatio:window.devicePixelRatio,quality:qualityMode,touchDevice,percent:renderScaleControl.value});
 const loadDiagnostics=new LoadDiagnostics();
 const sceneDiagnostics=new SceneDiagnostics();
+const mapResourceInspector=createMapResourceInspector({getWorld:()=>world,getLoad:()=>loadDiagnostics.snapshot()});
+if(import.meta.hot)import.meta.hot.dispose(()=>mapResourceInspector.dispose());
 let playerTextureSelection=null;
 // Copy only scalar work state so old delay events cannot change as streaming
 // and candidate selection advance. No extra scene traversal is needed.
@@ -516,6 +520,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  mapResourceInspector.begin();
   world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
   world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
@@ -670,8 +675,9 @@ async function loadCharacter() {
     assertFrameHealthy();world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     assertFrameHealthy();
-    loadingView.reveal(loadingGeneration);showMinimap();if(world.villageStreaming)world.villageStreaming.active=true;
     loadDiagnostics.finish();
+    mapResourceInspector.captureReady();
+    loadingView.reveal(loadingGeneration);showMinimap();if(world.villageStreaming)world.villageStreaming.active=true;
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
   } catch (error) {
@@ -939,7 +945,7 @@ try {
   const cameraSettingChanged=()=>{syncCameraFocus(0,{snap:true});frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();};
   $('#map-polygon-estimate')?.addEventListener('click',async event=>{
     const button=event.currentTarget,status=$('#map-polygon-status'),map=world.mapId;button.disabled=true;status.textContent='맵 배치를 집계하는 중…';
-    try{const [{ASSET_CATALOG},{estimateMapPolygons}]=await Promise.all([import('./asset-catalog.js'),import('./map-polygon-estimate.js')]);if(world.mapId!==map){status.textContent='맵이 바뀌었습니다. 다시 집계해 주세요.';return;}const value=estimateMapPolygons(world,ASSET_CATALOG);status.textContent=`확인 가능한 배치·지형 합계 ${value.estimatedTotal?.toLocaleString()??'—'} 삼각형 · 배치 ${value.placements}개 · 집계 불가 ${value.unknown}개. 미집계 대상이 있으면 전체보다 적을 수 있으며 배우·효과와 실제 LOD는 제외됩니다.`;}
+    try{const [{ASSET_CATALOG},{estimateMapPolygons}]=await Promise.all([import('./asset-catalog.js'),import('./map-polygon-estimate.js')]);if(world.mapId!==map){status.textContent='맵이 바뀌었습니다. 다시 집계해 주세요.';return;}const value=estimateMapPolygons(world,ASSET_CATALOG);status.textContent=`맵 전체 배치 예상치 ${value.estimatedTotal?.toLocaleString()??'—'} 삼각형 · 모든 배치를 근거리 LOD로 가정합니다. 화면 밖·미로딩 포함, 배우·효과·외곽선·그림자 제외. 배치 ${value.placements}개 · 집계 불가 ${value.unknown}개. 실제 상주 자원은 ‘이번 로딩 리소스 보기’에서 확인하세요.`;}
     catch(error){status.textContent='맵 집계 실패: '+error.message;}finally{button.disabled=false;}
   });
   setupCameraZoomControls(cameraZoom,{onChange:cameraSettingChanged});cameraPitchControls=setupCameraPitchControls(cameraPitch,{onChange:cameraSettingChanged});
@@ -1021,7 +1027,7 @@ try {
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
       saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
-      frameDiagnostics.mapChanged();loadDiagnostics.begin('지역 이동');
+      frameDiagnostics.mapChanged();mapResourceInspector.begin();loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
@@ -1068,8 +1074,7 @@ try {
       world.storyboardEvents?.emit('map-enter',{mapId:world.mapId});
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       assertFrameHealthy();
-      applyRenderQuality();loadingView.reveal(mapLoadingGeneration);showMinimap();world.villageStreaming.active=true;
-      loadDiagnostics.finish();
+      applyRenderQuality();loadDiagnostics.finish();mapResourceInspector.captureReady();loadingView.reveal(mapLoadingGeneration);showMinimap();world.villageStreaming.active=true;
       const modalOpen=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen());
       audio.setSuspended(document.hidden||modalOpen);

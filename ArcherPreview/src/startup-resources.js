@@ -11,8 +11,9 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
   const downloads=new ResourceDownloads(sizes.files,base,{index:sizes});let released=false;const preparedUrls=new Set();
   const cancel=()=>{downloads.cancel();lifetime.abort(mapLoadAbortError());};
   const abort=()=>downloads.cancel();lifetime.signal.addEventListener('abort',abort,{once:true});
-  const release=()=>{if(released)return;released=true;preparedUrls.clear();cancel();lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);if(world.releaseResourceDownloads===release)Object.assign(world,{prefetchResources:null,releaseResourceDownloads:null,cancelResourceDownloads:null});};
+  const release=()=>{if(released)return;released=true;preparedUrls.clear();cancel();lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);if(world.releaseResourceDownloads===release)Object.assign(world,{prefetchResources:null,releaseResourceDownloads:null,cancelResourceDownloads:null,resourceLoadLedger:null});};
   world.resourceDownloadStats=downloads.stats;
+  world.resourceLoadLedger=downloads;
   // Protect this document's complete graph (including the other map) before
   // asking the worker to collect obsolete versions from earlier deployments.
   registerResourceGraph(sizes);
@@ -31,6 +32,7 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
     // Actual model/texture reads always go through the normal cache/network path.
     if(!initial)preparedUrls.clear();
     const missing=initial?paths.filter(path=>!preparedUrls.has(resourceUrl(path,base))):paths;
+    if(initial)downloads.noteReuse(paths.filter(path=>preparedUrls.has(resourceUrl(path,base))),{initial:true});
     downloads.stats.initialPrefetchReusedFiles+=paths.length-missing.length;
     if(!missing.length)return {complete:true,loaded:0,total:0,ratio:1};
     return downloads.prepare(missing,progress(onStream));

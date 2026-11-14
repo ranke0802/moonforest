@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-14",
+  "feature": "Per-map initial-ready and manual resident resource inspector",
+  "checks": {
+    "focusedBatchPassed": 43,
+    "additionalGroundClassificationPassed": 1,
+    "build": "passed",
+    "sync": "passed",
+    "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+    "protectedInventorySha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b"
+  },
+  "behavior": {
+    "captures": "once per foreground load plus explicit manual refresh",
+    "retention": "one initial and one manual snapshot, bounded 1024 inventory rows/type and 4096 preparation rows",
+    "exports": [
+      "JSON",
+      "standalone HTML"
+    ],
+    "extraFrameObservers": 0,
+    "extraGpuQueries": 0,
+    "extraAssetDownloads": 0
+  },
+  "limitations": [
+    "No browser automation or real-device validation",
+    "Near-tier placement totals include unloaded/offscreen placements; not current rendered triangles",
+    "Resident snapshot includes prepared alternate LODs, templates and hidden pools",
+    "Known buffers and texture estimates are not total GPU/device RAM",
+    "Preparation ledger is not every actual Babylon loader read; network transfer remains unknown without evidence",
+    "No texture, LOD, combat or art resource changes"
+  ]
+}

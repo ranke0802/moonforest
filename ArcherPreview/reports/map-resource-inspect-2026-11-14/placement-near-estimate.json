@@ -1,0 +1,1093 @@
+{
+  "scope": "Shipped default placements plus project-authored overlay; catalogue near-tier per-placement metadata. Excludes ground, generated cave structure, skyline, river, actors, effects, ink and shadow passes. Not current resident nor drawn polygons; browser-applied private edits unavailable.",
+  "maps": [
+    {
+      "map": "village",
+      "basePlacements": 753,
+      "effectivePlacements": 753,
+      "overlayInstances": 0,
+      "removed": 0,
+      "modified": 0,
+      "unknown": 0,
+      "nearPlacementTriangles": 2180315,
+      "catalogUniqueNearTriangles": 87947,
+      "categories": {
+        "tree": {
+          "placements": 231,
+          "triangles": 1071708
+        },
+        "plant": {
+          "placements": 210,
+          "triangles": 553280
+        },
+        "wall": {
+          "placements": 64,
+          "triangles": 160000
+        },
+        "fence": {
+          "placements": 52,
+          "triangles": 77948
+        },
+        "rock": {
+          "placements": 110,
+          "triangles": 77000
+        },
+        "prop": {
+          "placements": 49,
+          "triangles": 109176
+        },
+        "building": {
+          "placements": 21,
+          "triangles": 93351
+        },
+        "defense": {
+          "placements": 15,
+          "triangles": 28418
+        },
+        "background": {
+          "placements": 1,
+          "triangles": 9434
+        }
+      },
+      "top": [
+        {
+          "assetId": "tree-01-round-oak",
+          "name": "참나무",
+          "category": "tree",
+          "trianglesPerPlacement": 4494,
+          "placements": 165,
+          "totalTriangles": 741510
+        },
+        {
+          "assetId": "bush",
+          "name": "올리브색 관목",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 175,
+          "totalTriangles": 437500
+        },
+        {
+          "assetId": "tree-02-slender-pine",
+          "name": "침엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5003,
+          "placements": 66,
+          "totalTriangles": 330198
+        },
+        {
+          "assetId": "wall-01-straight",
+          "name": "직선 돌담",
+          "category": "wall",
+          "trianglesPerPlacement": 2500,
+          "placements": 54,
+          "totalTriangles": 135000
+        },
+        {
+          "assetId": "garden-bed",
+          "name": "채소와 꽃 텃밭",
+          "category": "plant",
+          "trianglesPerPlacement": 3308,
+          "placements": 35,
+          "totalTriangles": 115780
+        },
+        {
+          "assetId": "rail-fence",
+          "name": "낮은 가로 목책",
+          "category": "fence",
+          "trianglesPerPlacement": 1499,
+          "placements": 52,
+          "totalTriangles": 77948
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 93,
+          "totalTriangles": 65100
+        },
+        {
+          "assetId": "crate-barrel-cluster",
+          "name": "상자와 통 묶음",
+          "category": "prop",
+          "trianglesPerPlacement": 1964,
+          "placements": 23,
+          "totalTriangles": 45172
+        }
+      ],
+      "all": [
+        {
+          "assetId": "tree-01-round-oak",
+          "name": "참나무",
+          "category": "tree",
+          "trianglesPerPlacement": 4494,
+          "placements": 165,
+          "totalTriangles": 741510
+        },
+        {
+          "assetId": "bush",
+          "name": "올리브색 관목",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 175,
+          "totalTriangles": 437500
+        },
+        {
+          "assetId": "tree-02-slender-pine",
+          "name": "침엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5003,
+          "placements": 66,
+          "totalTriangles": 330198
+        },
+        {
+          "assetId": "wall-01-straight",
+          "name": "직선 돌담",
+          "category": "wall",
+          "trianglesPerPlacement": 2500,
+          "placements": 54,
+          "totalTriangles": 135000
+        },
+        {
+          "assetId": "garden-bed",
+          "name": "채소와 꽃 텃밭",
+          "category": "plant",
+          "trianglesPerPlacement": 3308,
+          "placements": 35,
+          "totalTriangles": 115780
+        },
+        {
+          "assetId": "rail-fence",
+          "name": "낮은 가로 목책",
+          "category": "fence",
+          "trianglesPerPlacement": 1499,
+          "placements": 52,
+          "totalTriangles": 77948
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 93,
+          "totalTriangles": 65100
+        },
+        {
+          "assetId": "crate-barrel-cluster",
+          "name": "상자와 통 묶음",
+          "category": "prop",
+          "trianglesPerPlacement": 1964,
+          "placements": 23,
+          "totalTriangles": 45172
+        },
+        {
+          "assetId": "house-01-cottage",
+          "name": "작은 민가",
+          "category": "building",
+          "trianglesPerPlacement": 4106,
+          "placements": 10,
+          "totalTriangles": 41060
+        },
+        {
+          "assetId": "firewood",
+          "name": "장작 거치대",
+          "category": "prop",
+          "trianglesPerPlacement": 1941,
+          "placements": 14,
+          "totalTriangles": 27174
+        },
+        {
+          "assetId": "house-03-workshop",
+          "name": "작업장",
+          "category": "building",
+          "trianglesPerPlacement": 4915,
+          "placements": 4,
+          "totalTriangles": 19660
+        },
+        {
+          "assetId": "house-04-forest-hut",
+          "name": "작은 오래된 집",
+          "category": "building",
+          "trianglesPerPlacement": 4652,
+          "placements": 4,
+          "totalTriangles": 18608
+        },
+        {
+          "assetId": "handcart",
+          "name": "두 바퀴 손수레",
+          "category": "prop",
+          "trianglesPerPlacement": 2500,
+          "placements": 7,
+          "totalTriangles": 17500
+        },
+        {
+          "assetId": "wall-03-breached",
+          "name": "파손 돌담",
+          "category": "wall",
+          "trianglesPerPlacement": 2500,
+          "placements": 6,
+          "totalTriangles": 15000
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 17,
+          "totalTriangles": 11900
+        },
+        {
+          "assetId": "wood-01-palisade",
+          "name": "통나무 목책",
+          "category": "defense",
+          "trianglesPerPlacement": 1479,
+          "placements": 8,
+          "totalTriangles": 11832
+        },
+        {
+          "assetId": "wall-02-corner",
+          "name": "모서리 돌담",
+          "category": "wall",
+          "trianglesPerPlacement": 2500,
+          "placements": 4,
+          "totalTriangles": 10000
+        },
+        {
+          "assetId": "market-stall",
+          "name": "보라 천막 노점",
+          "category": "prop",
+          "trianglesPerPlacement": 4895,
+          "placements": 2,
+          "totalTriangles": 9790
+        },
+        {
+          "assetId": "house-02-tall-home",
+          "name": "높은 주택",
+          "category": "building",
+          "trianglesPerPlacement": 4738,
+          "placements": 2,
+          "totalTriangles": 9476
+        },
+        {
+          "assetId": "village-plains-outskirts-ground",
+          "name": "대평원 입구 지면 · 기존 지형 조각",
+          "category": "background",
+          "trianglesPerPlacement": 9434,
+          "placements": 1,
+          "totalTriangles": 9434
+        },
+        {
+          "assetId": "watchtower",
+          "name": "목조 감시탑",
+          "category": "defense",
+          "trianglesPerPlacement": 4590,
+          "placements": 2,
+          "totalTriangles": 9180
+        },
+        {
+          "assetId": "wood-02-cross-barricade",
+          "name": "교차 바리케이드",
+          "category": "defense",
+          "trianglesPerPlacement": 1488,
+          "placements": 4,
+          "totalTriangles": 5952
+        },
+        {
+          "assetId": "covered-wagon",
+          "name": "천 덮개 짐마차",
+          "category": "prop",
+          "trianglesPerPlacement": 4611,
+          "placements": 1,
+          "totalTriangles": 4611
+        },
+        {
+          "assetId": "chapel",
+          "name": "작은 예배당",
+          "category": "building",
+          "trianglesPerPlacement": 4547,
+          "placements": 1,
+          "totalTriangles": 4547
+        },
+        {
+          "assetId": "well",
+          "name": "지붕 있는 우물",
+          "category": "prop",
+          "trianglesPerPlacement": 3011,
+          "placements": 1,
+          "totalTriangles": 3011
+        },
+        {
+          "assetId": "waypost",
+          "name": "waypost",
+          "category": "prop",
+          "trianglesPerPlacement": 1918,
+          "placements": 1,
+          "totalTriangles": 1918
+        },
+        {
+          "assetId": "wood-03-plank-gate",
+          "name": "북쪽 닫힌 문",
+          "category": "defense",
+          "trianglesPerPlacement": 1454,
+          "placements": 1,
+          "totalTriangles": 1454
+        }
+      ]
+    },
+    {
+      "map": "great-plains",
+      "basePlacements": 1424,
+      "effectivePlacements": 1425,
+      "overlayInstances": 16,
+      "removed": 1,
+      "modified": 14,
+      "unknown": 0,
+      "nearPlacementTriangles": 2709209,
+      "catalogUniqueNearTriangles": 89680,
+      "categories": {
+        "plant": {
+          "placements": 780,
+          "triangles": 1230836
+        },
+        "tree": {
+          "placements": 241,
+          "triangles": 1117164
+        },
+        "rock": {
+          "placements": 366,
+          "triangles": 256200
+        },
+        "background": {
+          "placements": 1,
+          "triangles": 44828
+        },
+        "fence": {
+          "placements": 25,
+          "triangles": 37475
+        },
+        "prop": {
+          "placements": 12,
+          "triangles": 22706
+        }
+      },
+      "top": [
+        {
+          "assetId": "grass-tuft",
+          "name": "풀 군락",
+          "category": "plant",
+          "trianglesPerPlacement": 1455,
+          "placements": 694,
+          "totalTriangles": 1009770
+        },
+        {
+          "assetId": "tree-01-round-oak",
+          "name": "참나무",
+          "category": "tree",
+          "trianglesPerPlacement": 4494,
+          "placements": 97,
+          "totalTriangles": 435918
+        },
+        {
+          "assetId": "tree-02-slender-pine",
+          "name": "침엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5003,
+          "placements": 82,
+          "totalTriangles": 410246
+        },
+        {
+          "assetId": "forest-01-sickly-oak",
+          "name": "병든 활엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5000,
+          "placements": 49,
+          "totalTriangles": 245000
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 240,
+          "totalTriangles": 168000
+        },
+        {
+          "assetId": "bush",
+          "name": "올리브색 관목",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 49,
+          "totalTriangles": 122500
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 126,
+          "totalTriangles": 88200
+        },
+        {
+          "assetId": "forest-05-thorn-bramble",
+          "name": "가시덤불",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 28,
+          "totalTriangles": 70000
+        }
+      ],
+      "all": [
+        {
+          "assetId": "grass-tuft",
+          "name": "풀 군락",
+          "category": "plant",
+          "trianglesPerPlacement": 1455,
+          "placements": 694,
+          "totalTriangles": 1009770
+        },
+        {
+          "assetId": "tree-01-round-oak",
+          "name": "참나무",
+          "category": "tree",
+          "trianglesPerPlacement": 4494,
+          "placements": 97,
+          "totalTriangles": 435918
+        },
+        {
+          "assetId": "tree-02-slender-pine",
+          "name": "침엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5003,
+          "placements": 82,
+          "totalTriangles": 410246
+        },
+        {
+          "assetId": "forest-01-sickly-oak",
+          "name": "병든 활엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5000,
+          "placements": 49,
+          "totalTriangles": 245000
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 240,
+          "totalTriangles": 168000
+        },
+        {
+          "assetId": "bush",
+          "name": "올리브색 관목",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 49,
+          "totalTriangles": 122500
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 126,
+          "totalTriangles": 88200
+        },
+        {
+          "assetId": "forest-05-thorn-bramble",
+          "name": "가시덤불",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 28,
+          "totalTriangles": 70000
+        },
+        {
+          "assetId": "village-approach",
+          "name": "마을 외경 · 기존 건물과 성벽",
+          "category": "background",
+          "trianglesPerPlacement": 44828,
+          "placements": 1,
+          "totalTriangles": 44828
+        },
+        {
+          "assetId": "rail-fence",
+          "name": "낮은 가로 목책",
+          "category": "fence",
+          "trianglesPerPlacement": 1499,
+          "placements": 25,
+          "totalTriangles": 37475
+        },
+        {
+          "assetId": "forest-04-poison-fungi",
+          "name": "독버섯 군락",
+          "category": "plant",
+          "trianglesPerPlacement": 3174,
+          "placements": 9,
+          "totalTriangles": 28566
+        },
+        {
+          "assetId": "forest-02-dead-tree",
+          "name": "고사목",
+          "category": "tree",
+          "trianglesPerPlacement": 2000,
+          "placements": 13,
+          "totalTriangles": 26000
+        },
+        {
+          "assetId": "covered-wagon",
+          "name": "천 덮개 짐마차",
+          "category": "prop",
+          "trianglesPerPlacement": 4611,
+          "placements": 1,
+          "totalTriangles": 4611
+        },
+        {
+          "assetId": "forest-03-fallen-log",
+          "name": "속이 빈 쓰러진 통나무",
+          "category": "prop",
+          "trianglesPerPlacement": 999,
+          "placements": 4,
+          "totalTriangles": 3996
+        },
+        {
+          "assetId": "crate-barrel-cluster",
+          "name": "상자와 통 묶음",
+          "category": "prop",
+          "trianglesPerPlacement": 1964,
+          "placements": 2,
+          "totalTriangles": 3928
+        },
+        {
+          "assetId": "waypost",
+          "name": "waypost",
+          "category": "prop",
+          "trianglesPerPlacement": 1918,
+          "placements": 2,
+          "totalTriangles": 3836
+        },
+        {
+          "assetId": "handcart",
+          "name": "두 바퀴 손수레",
+          "category": "prop",
+          "trianglesPerPlacement": 2500,
+          "placements": 1,
+          "totalTriangles": 2500
+        },
+        {
+          "assetId": "firewood",
+          "name": "장작 거치대",
+          "category": "prop",
+          "trianglesPerPlacement": 1941,
+          "placements": 1,
+          "totalTriangles": 1941
+        },
+        {
+          "assetId": "clue-bandage",
+          "name": "clue-bandage",
+          "category": "prop",
+          "trianglesPerPlacement": 1894,
+          "placements": 1,
+          "totalTriangles": 1894
+        }
+      ]
+    },
+    {
+      "map": "monster-forest",
+      "basePlacements": 891,
+      "effectivePlacements": 891,
+      "overlayInstances": 0,
+      "removed": 0,
+      "modified": 0,
+      "unknown": 0,
+      "nearPlacementTriangles": 2795950,
+      "catalogUniqueNearTriangles": 24576,
+      "categories": {
+        "tree": {
+          "placements": 368,
+          "triangles": 1744624
+        },
+        "plant": {
+          "placements": 356,
+          "triangles": 927744
+        },
+        "rock": {
+          "placements": 149,
+          "triangles": 105600
+        },
+        "prop": {
+          "placements": 18,
+          "triangles": 17982
+        }
+      },
+      "top": [
+        {
+          "assetId": "tree-02-slender-pine",
+          "name": "침엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5003,
+          "placements": 208,
+          "totalTriangles": 1040624
+        },
+        {
+          "assetId": "forest-01-sickly-oak",
+          "name": "병든 활엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5000,
+          "placements": 128,
+          "totalTriangles": 640000
+        },
+        {
+          "assetId": "bush",
+          "name": "올리브색 관목",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 160,
+          "totalTriangles": 400000
+        },
+        {
+          "assetId": "forest-05-thorn-bramble",
+          "name": "가시덤불",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 140,
+          "totalTriangles": 350000
+        },
+        {
+          "assetId": "forest-04-poison-fungi",
+          "name": "독버섯 군락",
+          "category": "plant",
+          "trianglesPerPlacement": 3174,
+          "placements": 56,
+          "totalTriangles": 177744
+        },
+        {
+          "assetId": "forest-02-dead-tree",
+          "name": "고사목",
+          "category": "tree",
+          "trianglesPerPlacement": 2000,
+          "placements": 32,
+          "totalTriangles": 64000
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 84,
+          "totalTriangles": 58800
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 64,
+          "totalTriangles": 44800
+        }
+      ],
+      "all": [
+        {
+          "assetId": "tree-02-slender-pine",
+          "name": "침엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5003,
+          "placements": 208,
+          "totalTriangles": 1040624
+        },
+        {
+          "assetId": "forest-01-sickly-oak",
+          "name": "병든 활엽수",
+          "category": "tree",
+          "trianglesPerPlacement": 5000,
+          "placements": 128,
+          "totalTriangles": 640000
+        },
+        {
+          "assetId": "bush",
+          "name": "올리브색 관목",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 160,
+          "totalTriangles": 400000
+        },
+        {
+          "assetId": "forest-05-thorn-bramble",
+          "name": "가시덤불",
+          "category": "plant",
+          "trianglesPerPlacement": 2500,
+          "placements": 140,
+          "totalTriangles": 350000
+        },
+        {
+          "assetId": "forest-04-poison-fungi",
+          "name": "독버섯 군락",
+          "category": "plant",
+          "trianglesPerPlacement": 3174,
+          "placements": 56,
+          "totalTriangles": 177744
+        },
+        {
+          "assetId": "forest-02-dead-tree",
+          "name": "고사목",
+          "category": "tree",
+          "trianglesPerPlacement": 2000,
+          "placements": 32,
+          "totalTriangles": 64000
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 84,
+          "totalTriangles": 58800
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 64,
+          "totalTriangles": 44800
+        },
+        {
+          "assetId": "forest-03-fallen-log",
+          "name": "속이 빈 쓰러진 통나무",
+          "category": "prop",
+          "trianglesPerPlacement": 999,
+          "placements": 18,
+          "totalTriangles": 17982
+        },
+        {
+          "assetId": "forest-06-witch-cave-mouth",
+          "name": "마녀의 동굴 입구",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 1,
+          "totalTriangles": 2000
+        }
+      ]
+    },
+    {
+      "map": "witch-cave",
+      "basePlacements": 212,
+      "effectivePlacements": 212,
+      "overlayInstances": 0,
+      "removed": 0,
+      "modified": 0,
+      "unknown": 0,
+      "nearPlacementTriangles": 376212,
+      "catalogUniqueNearTriangles": 62030,
+      "categories": {
+        "rock": {
+          "placements": 161,
+          "triangles": 274361
+        },
+        "prop": {
+          "placements": 51,
+          "triangles": 101851
+        }
+      },
+      "top": [
+        {
+          "assetId": "cave-01-eroded-wall",
+          "name": "침식된 동굴 암벽",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 55,
+          "totalTriangles": 110000
+        },
+        {
+          "assetId": "cave-s01-solid-cliff-base",
+          "name": "두꺼운 절벽 기단",
+          "category": "rock",
+          "trianglesPerPlacement": 1999,
+          "placements": 25,
+          "totalTriangles": 49975
+        },
+        {
+          "assetId": "cave-13-votive-lantern",
+          "name": "성녀의 봉헌 등불",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 20,
+          "totalTriangles": 30000
+        },
+        {
+          "assetId": "cave-05-stalagmites",
+          "name": "석순 군락",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 14,
+          "totalTriangles": 28000
+        },
+        {
+          "assetId": "cave-02-rock-ledge",
+          "name": "자연 암반 발판·절벽턱",
+          "category": "rock",
+          "trianglesPerPlacement": 1999,
+          "placements": 9,
+          "totalTriangles": 17991
+        },
+        {
+          "assetId": "cave-06-stalactite-canopy",
+          "name": "종유석 천장 모듈",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 8,
+          "totalTriangles": 16000
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 20,
+          "totalTriangles": 14000
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 17,
+          "totalTriangles": 11900
+        }
+      ],
+      "all": [
+        {
+          "assetId": "cave-01-eroded-wall",
+          "name": "침식된 동굴 암벽",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 55,
+          "totalTriangles": 110000
+        },
+        {
+          "assetId": "cave-s01-solid-cliff-base",
+          "name": "두꺼운 절벽 기단",
+          "category": "rock",
+          "trianglesPerPlacement": 1999,
+          "placements": 25,
+          "totalTriangles": 49975
+        },
+        {
+          "assetId": "cave-13-votive-lantern",
+          "name": "성녀의 봉헌 등불",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 20,
+          "totalTriangles": 30000
+        },
+        {
+          "assetId": "cave-05-stalagmites",
+          "name": "석순 군락",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 14,
+          "totalTriangles": 28000
+        },
+        {
+          "assetId": "cave-02-rock-ledge",
+          "name": "자연 암반 발판·절벽턱",
+          "category": "rock",
+          "trianglesPerPlacement": 1999,
+          "placements": 9,
+          "totalTriangles": 17991
+        },
+        {
+          "assetId": "cave-06-stalactite-canopy",
+          "name": "종유석 천장 모듈",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 8,
+          "totalTriangles": 16000
+        },
+        {
+          "assetId": "rock-02-jagged-outcrop",
+          "name": "솟은 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 20,
+          "totalTriangles": 14000
+        },
+        {
+          "assetId": "rock-01-mossy-boulder",
+          "name": "이끼 둥근 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 700,
+          "placements": 17,
+          "totalTriangles": 11900
+        },
+        {
+          "assetId": "cave-10-hand-winch",
+          "name": "수동 권양기·핸들",
+          "category": "prop",
+          "trianglesPerPlacement": 4822,
+          "placements": 2,
+          "totalTriangles": 9644
+        },
+        {
+          "assetId": "cave-18-alchemy-workbench",
+          "name": "연금술 작업대",
+          "category": "prop",
+          "trianglesPerPlacement": 4736,
+          "placements": 2,
+          "totalTriangles": 9472
+        },
+        {
+          "assetId": "cave-03-great-column",
+          "name": "대형 자연 석주",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 4,
+          "totalTriangles": 8000
+        },
+        {
+          "assetId": "crate-barrel-cluster",
+          "name": "상자와 통 묶음",
+          "category": "prop",
+          "trianglesPerPlacement": 1964,
+          "placements": 4,
+          "totalTriangles": 7856
+        },
+        {
+          "assetId": "cave-08-timber-brace",
+          "name": "덧댄 목재 버팀대",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 5,
+          "totalTriangles": 7500
+        },
+        {
+          "assetId": "cave-04-natural-arch",
+          "name": "자연 암교·굴 입구",
+          "category": "rock",
+          "trianglesPerPlacement": 1999,
+          "placements": 3,
+          "totalTriangles": 5997
+        },
+        {
+          "assetId": "firewood",
+          "name": "장작 거치대",
+          "category": "prop",
+          "trianglesPerPlacement": 1941,
+          "placements": 3,
+          "totalTriangles": 5823
+        },
+        {
+          "assetId": "cave-16-soul-collector-arm",
+          "name": "영혼 수집 관절 장치",
+          "category": "prop",
+          "trianglesPerPlacement": 2885,
+          "placements": 2,
+          "totalTriangles": 5770
+        },
+        {
+          "assetId": "handcart",
+          "name": "두 바퀴 손수레",
+          "category": "prop",
+          "trianglesPerPlacement": 2500,
+          "placements": 2,
+          "totalTriangles": 5000
+        },
+        {
+          "assetId": "cave-20-modest-cot",
+          "name": "소박한 침상",
+          "category": "prop",
+          "trianglesPerPlacement": 4999,
+          "placements": 1,
+          "totalTriangles": 4999
+        },
+        {
+          "assetId": "cave-07-scree-ramp",
+          "name": "붕락 암반 경사로",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 2,
+          "totalTriangles": 4000
+        },
+        {
+          "assetId": "cave-s03-dry-spillway-rock",
+          "name": "폭포 수로 바위",
+          "category": "rock",
+          "trianglesPerPlacement": 1999,
+          "placements": 2,
+          "totalTriangles": 3998
+        },
+        {
+          "assetId": "cave-09-iron-gate-leaf",
+          "name": "철제 격자 문짝",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 2,
+          "totalTriangles": 3000
+        },
+        {
+          "assetId": "cave-14-hidden-pressure-stone",
+          "name": "숨겨진 압력 석판",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 2,
+          "totalTriangles": 3000
+        },
+        {
+          "assetId": "cave-17-faded-sacred-emblem",
+          "name": "타락한 성녀의 성표·천",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 2,
+          "totalTriangles": 3000
+        },
+        {
+          "assetId": "cave-derived-laboratory-rock",
+          "name": "실험실 큰 암반·절리",
+          "category": "rock",
+          "trianglesPerPlacement": 2500,
+          "placements": 1,
+          "totalTriangles": 2500
+        },
+        {
+          "assetId": "cave-15-resurrection-altar",
+          "name": "부활 제단·석관",
+          "category": "prop",
+          "trianglesPerPlacement": 2097,
+          "placements": 1,
+          "totalTriangles": 2097
+        },
+        {
+          "assetId": "forest-06-witch-cave-mouth",
+          "name": "마녀의 동굴 입구",
+          "category": "rock",
+          "trianglesPerPlacement": 2000,
+          "placements": 1,
+          "totalTriangles": 2000
+        },
+        {
+          "assetId": "cave-11-sluice-shutter",
+          "name": "목재 수문 판",
+          "category": "prop",
+          "trianglesPerPlacement": 1691,
+          "placements": 1,
+          "totalTriangles": 1691
+        },
+        {
+          "assetId": "cave-19-apothecary-shelf",
+          "name": "서적·약병 선반",
+          "category": "prop",
+          "trianglesPerPlacement": 1500,
+          "placements": 1,
+          "totalTriangles": 1500
+        },
+        {
+          "assetId": "cave-12-lift-platform",
+          "name": "밧줄 승강 발판",
+          "category": "prop",
+          "trianglesPerPlacement": 1499,
+          "placements": 1,
+          "totalTriangles": 1499
+        }
+      ]
+    }
+  ]
+}
