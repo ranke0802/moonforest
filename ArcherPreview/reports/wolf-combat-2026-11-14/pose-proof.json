@@ -1,0 +1,8 @@
+{
+  "frames": 1200,
+  "beforeRefreshes": 2400,
+  "afterRefreshes": 1216,
+  "maxWorldMatrixError": 0,
+  "stageDamageAndPlayerStateEqual": true,
+  "scope": "Actual alpha-wolf and native player coupled CPU fixture, legacy second refresh A/B; not mobile GPU/FPS"
+}

@@ -10,11 +10,11 @@ import {caveFogFallback} from '../src/cave-fog-binding.js';
 import {regularWolfManifest} from '../src/regular-wolf-spec.js';
 import {WOLF_MAUL_NO_CONTACT_SECONDS,WOLF_MAUL_ESCAPE_RECOVERY_SECONDS} from '../src/wolf-v02-grab.js';
 
-test('native mixed wolf/fox owns one maul, honors early taps, bounds lost contact, and releases on hide/death',async()=>{
- const a=await wolfMomentumR14Fixture(),containers=[],loaders=[],proof={scope:'Actual R2 wolf/fox, native warrior/controller and collision/contact pipeline. The overlap case places the second actor at the settling attacker; player position and damage gates are never fabricated.',cases:[]};
+test('native mixed alpha/boar owns one maul, honors early taps, bounds lost contact, and releases on hide/death',async()=>{
+ const a=await wolfMomentumR14Fixture(),containers=[],loaders=[],proof={scope:'Actual alpha wolf and R3 boar, native warrior/controller and collision/contact pipeline. Ordinary wolves/fox no longer capture from a ram. The overlap case places the second actor at the settling attacker; player position and damage gates are never fabricated.',cases:[]};
  caveFogFallback(a.f.scene).getInternalTexture().isReady=true;a.f.battle.preparationOptions={...a.f.battle.preparationOptions,frame:async()=>a.f.scene.render()};
  try{
-  for(const id of ['gray-wolf','fox']){
+  for(const id of ['boar']){
    const base=new URL('../public/assets/',import.meta.url),config=JSON.parse(fs.readFileSync(new URL(regularWolfManifest(id)+'.json',base))),decoded=await readRuntimeGltf(new URL(config.model,base)),gltf=structuredClone(decoded.gltf);
    for(const key of ['extensionsUsed','extensionsRequired'])gltf[key]=(gltf[key]??[]).filter(name=>name!=='EXT_meshopt_compression'&&name!=='KHR_texture_basisu');
    for(const buffer of gltf.buffers)if(buffer.uri)buffer.uri='data:application/octet-stream;base64,'+decoded.files.get(buffer.uri).data.toString('base64');
@@ -24,8 +24,8 @@ test('native mixed wolf/fox owns one maul, honors early taps, bounds lost contac
   }
   const battle=a.f.battle,combat=battle.combat,player=a.f.player;
   async function start(){
-   a.resetCombat();player.position.set(0,0,6);player.rotation.y=Math.PI;await battle.summon(player,1,'gray-wolf');await battle.summon(player,1,'fox');
-   const enemies=battle.encounters;for(let i=0;i<enemies.length;i++){const e=enemies[i];e.actor.position.set(i?.12:-.12,0,0);e.actor.rotation.y=0;e.brain.random=()=>.5;e.brain.configureAttacks({custom:true,sequence:['lunge'],speed:1});}return enemies;
+   a.resetCombat();player.position.set(0,0,6);player.rotation.y=Math.PI;await battle.summon(player,1,'boar');await battle.summon(player,1,'wolf');
+   const enemies=battle.encounters;for(let i=0;i<enemies.length;i++){const e=enemies[i];assert.notEqual(e.combatProfile.ramStaggerOnly,true);e.actor.position.set(i?.12:-.12,0,0);e.actor.rotation.y=0;e.brain.random=()=>.5;e.brain.configureAttacks({custom:true,sequence:['lunge'],speed:1});}return enemies;
   }
   async function held(enemies,{overlap=false}={}){
    let inserted=false;

@@ -151,6 +151,7 @@ export class WolfV02Encounter extends WolfEncounter{
     if(!(this.brain.mode==='ramRecover'&&this.brain.ramAccepted&&this.brain.action?.authoredAttention))this.v02Pose.aim();
     this.v14RunLayer.apply();
     this.v14PawBrace.apply();
+    return true;
   }
 
   motionSpec(name){
@@ -170,9 +171,11 @@ export class WolfV02Encounter extends WolfEncounter{
     const phase=this.v02RamPhase;
     if(!phase)return super.hitPlayer(damage,source,options);
     if(!this.v02Ram.matches())return;
-    const maul=phase.config.kind==='maul';
+    const maul=phase.config.kind==='maul',staggerOnly=!maul&&this.combatProfile.ramStaggerOnly===true;
     if(this.v02Ram.critical===null)this.v02Ram.critical=rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y??0)).critical;
-    const scoped={...options,critical:this.v02Ram.critical,grabImpact:maul&&this.grab.maulHolding,knockdown:!maul,superArmor:maul||options.superArmor};
+    // The existing superArmor flag suppresses only physical recoil here;
+    // BossEncounter still calls the native controller's ordinary hit-stun.
+    const scoped={...options,critical:this.v02Ram.critical,grabImpact:maul&&this.grab.maulHolding,knockdown:!maul&&!staggerOnly,superArmor:maul||staggerOnly||options.superArmor};
     if(maul)return super.hitPlayer(damage,source,scoped);
     const original=this.onPlayerHit;this.v02RamOriginalReaction=original;this.v02RamAcceptedKnockdown=false;this.onPlayerHit=this.v02RamReaction;
     try{return super.hitPlayer(damage,source,scoped);}finally{this.onPlayerHit=original;this.v02RamOriginalReaction=null;}

@@ -57,17 +57,20 @@ function installHistoricalReviewClips(e){
 }
 test.after(()=>{fs.mkdirSync('reports/wolf-v02-authored-attacks',{recursive:true});fs.writeFileSync('reports/wolf-v02-authored-attacks/validation.json',JSON.stringify({scope:'CPU-only packed R8 rig and authored 0.2 animation sidecar validation in Babylon NullEngine. Materials replaced; visual quality, GPU and device/touch play remain unmeasured.',sourceMotionSha256:createHash('sha256').update(fs.readFileSync(sourcePath('wolf-v02-attacks-r9','clips.json'))).digest('hex'),runtimeMotionSha256:createHash('sha256').update(fs.readFileSync(new URL('../src/wolf-v02-attack-clips.json',import.meta.url))).digest('hex'),cases:rows},null,2)+'\n');});
 
-// Captured immediately before the separately authored 0.2 attack work. The
-// requested new motions belong only to the 0.2 sidecar and actor-local rig.
+// The preserved 0.1 release is the frozen published graph. Shared source can
+// receive pose-equivalent runtime optimizations (covered by sampler/pose tests)
+// without rewriting that release or the original R8 model and motion bytes.
 const legacyHashes={
  'src/wolf-spec.js':'3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4',
- 'src/wolf-encounter.js':'405c8d2d4882bbe7ef78a56bb4f9acc141d5d64ffc013c70bb3260ca8492f85d',
- 'src/wolf-animation.js':'536b68fa6554c2328e5a1c0ec0b0ba777de76fcc3d78d9c69bb0c3ee43bc5141',
  'public/assets/alpha-wolf.json':'077edc52665ea2270c376dfcbd4e1d86520faf77b299c1b999ba0d6715d7fdb9',
  'public/assets/content/e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63.gltf':'e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63',
 };
 
-test('new 0.2 authoring preserves the exact shared 0.1 wolf code, model config and packed model bytes',()=>{
+test('0.2 runtime optimization preserves frozen 0.1 deployment, R8 model config and packed model bytes',()=>{
+ const inventory=fs.readFileSync('../ArcherPreviewSite/deployment-files.json');
+ assert.equal(createHash('sha256').update(inventory).digest('hex'),'0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b');
+ const entry=JSON.parse(inventory).files.find(file=>file.path==='index.html');
+ assert.equal(createHash('sha256').update(fs.readFileSync('../ArcherPreviewSite/index.html')).digest('hex'),entry.sha256);
  for(const [path,expected]of Object.entries(legacyHashes))assert.equal(createHash('sha256').update(fs.readFileSync(path)).digest('hex'),expected,path);
  const gltf=JSON.parse(fs.readFileSync('public/assets/content/e3e18718e561fb963b7c18d54a515f69e22da58bf271e0ebfe3c5c97decc6a63.gltf'));
  assert.equal(gltf.animations.length,12);

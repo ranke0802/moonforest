@@ -68,7 +68,7 @@ export class WolfRamSequence{
  }
  canAttempt(){
   if(!this.matches()||!this.current||this.current.resolved||this.cancelReason)return false;
-  return this.current.config.kind==='ram'?this.targetStanding&&(!this.e.brain.action.momentumRam||this.e.combat.v02Impact.canBegin(this.e.player,this.e)):this.authorized&&this.proneValid&&(!this.e.brain.action.momentumRam||this.e.brain.ramPawBraced===true);
+  return this.current.config.kind==='ram'?this.targetStanding&&(this.e.combatProfile.ramStaggerOnly===true||!this.e.brain.action.momentumRam||this.e.combat.v02Impact.canBegin(this.e.player,this.e)):this.authorized&&this.proneValid&&(!this.e.brain.action.momentumRam||this.e.brain.ramPawBraced===true);
  }
  cancel(reason){this.cancelReason??=reason;this.authorized=false;this.historyValid=false;this.e.combat.releaseWolfRam?.(this.e);if(this.e.grab.maulHolding)this.e.grab.reset();this.e.brain.abortRam(reason);}
  clearLease(){this.leaseBrain=null;this.leasePlayer=null;this.leaseScene=null;this.leaseMap=null;}
@@ -85,6 +85,11 @@ export class WolfRamSequence{
   if(!phase||phase.resolved||!this.active||!phase.key)return;
   phase.resolved=true;phase.hit=after<before;phase.damage=Math.max(0,before-after);phase.blocked=blocked;phase.sourceTime=sourceTime;phase.acceptedKnockdown=acceptedKnockdown===true;
   if(phase.config.kind==='ram'){
+   if(this.e.combatProfile.ramStaggerOnly===true){
+    // A standing stagger never owns a throw, pair-clearance lease or prone
+    // maul. Brake using the existing running recovery after this one impact.
+    this.clearLease();this.cancel(blocked?'ram-blocked':phase.hit?'ram-stagger-only':'ram-not-confirmed');return;
+   }
    this.authorized=this.matches()&&this.targetStanding&&phase.hit&&!blocked&&phase.acceptedKnockdown&&this.e.playerAlive&&!this.e.combat.grabOwner;
    if(this.authorized&&this.e.brain.action.momentumRam){this.authorized=this.e.combat.claimWolfRam?.(this.e,this.e.player)??true;if(this.authorized){this.launchDirection.copyFrom(this.e.player.position).subtractInPlace(this.e.actor.position);this.authorized=this.e.combat.v02Impact.begin({owner:this.e,serial:this.serial,player:this.e.player,direction:this.launchDirection});}}
    if(this.authorized){this.e.brain.ramAccepted=true;this.e.brain.impacted=true;this.e.brain.ramAcceptedClock=this.e.brain.combatClock;this.e.brain.ramAcceptedSource=sourceTime;this.leaseBrain=this.e.brain;this.leasePlayer=this.e.player;this.leaseScene=this.e.world.scene;this.leaseMap=this.e.world.mapId;}

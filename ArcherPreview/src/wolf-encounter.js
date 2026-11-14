@@ -68,6 +68,7 @@ export class WolfEncounter extends BossEncounter{
   // Babylon's imported __root__ is a Mesh, not a TransformNode. Refresh it
   // before bone nodes when correcting twice within one engine render frame.
   this.animator.ensurePoseCurrent();
+  return true;
  }
  hurtCapsules(){const pairs=[['pelvis','chest',.34],['chest','neck',.32],['neck','head',.28],['fore.L.upper','fore.L.lower',.14],['fore.R.upper','fore.R.lower',.14],['hind.L.upper','hind.L.lower',.18],['hind.R.upper','hind.R.lower',.18]];return pairs.map(([a,b,r])=>({points:[this.nodes[a].getAbsolutePosition().asArray(),this.nodes[b].getAbsolutePosition().asArray()],radius:r*this.config.scale}));}
  damageNumberPosition(){this.damageAnchor.copyFrom(this.nodes.chest.getAbsolutePosition());this.damageAnchor.y+=.45*this.config.scale;return this.damageAnchor;}

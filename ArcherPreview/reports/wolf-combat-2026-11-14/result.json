@@ -1,0 +1,65 @@
+{
+  "beforeCommit": "19c5ecb",
+  "scope": "Native warrior and actual alpha-wolf Node/NullEngine, flat terrain and replacement paint; no browser/device GPU/FPS proof",
+  "changes": [
+    "Bounded key search across backwards and repeated maul seeks",
+    "Reuse SDK cached world rotation decomposition",
+    "Skip certified second full-rig refresh when no root separation occurs",
+    "Only normal wolves and fox incoming ram use existing stationary hit-stun; alpha and boar unchanged"
+  ],
+  "sampler": {
+    "actualChannels": 84,
+    "channelPoseComparisons": 1008,
+    "frameKeyReadsBefore": 57204,
+    "frameKeyReadsAfter": 16716,
+    "maxPoseError": 1e-12
+  },
+  "pose": {
+    "frames": 1200,
+    "beforeRefreshes": 2400,
+    "afterRefreshes": 1216,
+    "maxWorldMatrixError": 0,
+    "stageDamageAndPlayerStateEqual": true,
+    "scope": "Actual alpha-wolf and native player coupled CPU fixture, legacy second refresh A/B; not mobile GPU/FPS"
+  },
+  "syntheticCpu": {
+    "activeFrames": 1800,
+    "beforeMeanSteadyMs": 0.6038356547618876,
+    "afterMeanSteadyMs": 0.5795394047619062,
+    "beforeP95Ms": 0.8936999999987165,
+    "afterP95Ms": 0.8173000000001593,
+    "stagesIdentical": true
+  },
+  "checks": {
+    "focusedTests": 42,
+    "passed": 42,
+    "frozenReleaseAssetTest": 1,
+    "canineCases": [
+      "gray-wolf",
+      "stylized-wolf",
+      "wolf-3",
+      "fox"
+    ],
+    "nativeHitStun": true,
+    "noVictimDisplacement": true,
+    "noFallThrowCaptureOrMaul": true,
+    "followupAttackWorks": true,
+    "dodgeBlockPreserved": true,
+    "alphaBoarOwnershipAndEscapePreserved": true
+  },
+  "unchanged": [
+    "mesh",
+    "textures",
+    "bone lengths",
+    "authored motion",
+    "LOD",
+    "damage/contact/dodge/block except requested regular ram reaction",
+    "frozen 0.1"
+  ],
+  "notMeasured": [
+    "mobile FPS",
+    "GPU driver stutter",
+    "heat",
+    "visual/play-feel approval"
+  ]
+}

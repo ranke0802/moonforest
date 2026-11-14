@@ -49,9 +49,13 @@ export class WolfV02LocomotionPose{
   node.markAsDirty();for(const affected of this.slots.get(node).branch)affected.computeWorldMatrix();
  }
  setWorldRotation(node,rotation){
-  this.remember(node);node.parent.getWorldMatrix().decompose(undefined,this.parent);this.parent.conjugateInPlace();this.parent.multiplyToRef(rotation,this.local);node.rotationQuaternion.copyFrom(this.local).normalize();this.refresh(node);
+  // TransformNode caches the same matrix decomposition until its world matrix
+  // changes. Feet sharing a pelvis and repeated head/neck corrections can read
+  // that parent rotation without decomposing it again. Refresh the matrix first:
+  // absoluteRotationQuaternion by itself does not compute a dirty parent.
+  this.remember(node);node.parent.getWorldMatrix();this.parent.copyFrom(node.parent.absoluteRotationQuaternion);this.parent.conjugateInPlace();this.parent.multiplyToRef(rotation,this.local);node.rotationQuaternion.copyFrom(this.local).normalize();this.refresh(node);
  }
- rotateWorld(node,rotation){node.getWorldMatrix().decompose(undefined,this.world);rotation.multiplyToRef(this.world,this.desired);this.setWorldRotation(node,this.desired);}
+ rotateWorld(node,rotation){node.getWorldMatrix();this.world.copyFrom(node.absoluteRotationQuaternion);rotation.multiplyToRef(this.world,this.desired);this.setWorldRotation(node,this.desired);}
  turnToward(node,radians){if(Math.abs(radians)<1e-7)return;Quaternion.RotationAxisToRef(up,radians,this.delta);this.rotateWorld(node,this.delta);}
  alertCrouch(){
   const e=this.e,b=e.brain;

@@ -21,7 +21,7 @@ export const WOLF_V02_ORBIT=Object.freeze({right:'Wolf_Orbit_Step_V02',left:'Wol
 // R8's supported run feet travel 4.2 source metres per source second (17/30 s
 // per cycle). At 2.5x the cadence, rather than the stride, matches world speed.
 export const WOLF_V02_GAIT=Object.freeze({runSpeed:6.6,farRunSpeed:9.2,runAcceleration:8,runSourceSpeed:4.2,runPlaybackRate:6.6/(4.2*WOLF_SCALE),runSourceStart:1/30,runSourceDuration:17/30,orbitPlaybackRate:1.25,orbitFastPlaybackRate:1.8,orbitRadius:1.2});
-export const WOLF_V02_COMBAT_PROFILES=Object.freeze({alphaWolf:Object.freeze({ramIgnoresGuard:true}),regularWolf:Object.freeze({ramIgnoresGuard:false})});
+export const WOLF_V02_COMBAT_PROFILES=Object.freeze({alphaWolf:Object.freeze({ramIgnoresGuard:true}),regularWolf:Object.freeze({ramIgnoresGuard:false}),regularCanine:Object.freeze({ramIgnoresGuard:false,ramStaggerOnly:true})});
 const ramSpeedSources=Object.freeze([0,.20,.28,.42,.60]),ramSpeedMultipliers=Object.freeze([1.5,1.5,2,2,1.5]);
 export function ramChargeMultiplier(sourceTime){
  const t=Math.max(0,Math.min(.60,sourceTime));let i=0;while(i<ramSpeedSources.length-2&&t>ramSpeedSources[i+1])i++;

@@ -348,7 +348,7 @@ export class BossEncounter {
   }
   prepareContactPose(player,result){
     this.player=player;
-    this.alignPose();
+    const poseCurrent=this.alignPose()===true;
     // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
     // Retain the narrower clearance until this pair has separated naturally.
@@ -357,9 +357,15 @@ export class BossEncounter {
     if(result.state==='dodge'||result.rollFrom!=null)this.dodgeContactClearance=true;
     else if(distance>=this.radius+playerDimensions(player).standingClearance)this.dodgeContactClearance=false;
     const separation=this.contactSeparation();
-    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();}
-    this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
-    if(this.animator?.ensurePoseCurrent)this.animator.ensurePoseCurrent();else refreshPoseMatrices(this.poseNodes);
+    let separated=false;
+    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();separated=true;}
+    // Wolf alignment already refreshes its imported root and every edited
+    // support/attention branch. Repeat only when separation moved that pose.
+    // Other aligners retain the existing full refresh unless they certify it.
+    if(!poseCurrent||separated){
+      this.poseNodes??=orderPoseNodes(Object.values(this.nodes));
+      if(this.animator?.ensurePoseCurrent)this.animator.ensurePoseCurrent();else refreshPoseMatrices(this.poseNodes);
+    }
     this.contactPoseDirection=d;return distance;
   }
   poseAndContacts(player,result,sample,shield){

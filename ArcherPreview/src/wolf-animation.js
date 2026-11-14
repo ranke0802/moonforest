@@ -3,7 +3,28 @@ import {orderPoseNodes,refreshPoseMatrices} from './pose-matrices.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 // All R8 exported channels are LINEAR TRS or scalar Breath weights. Keep one
 // bounded sampler table for the actor life; no native bindings on transitions.
-function track(animation){const keys=animation.getKeys(),scalar=typeof keys[0].value==='number',quaternion=animation.targetProperty==='rotationQuaternion';let index=0;const out=scalar?null:keys[0].value.clone();return {sample(time){const f=time*animation.framePerSecond;if(f<keys[index].frame)index=0;while(index<keys.length-2&&f>keys[index+1].frame)index++;const a=keys[index],b=keys[Math.min(keys.length-1,index+1)],t=Math.max(0,Math.min(1,(f-a.frame)/Math.max(1e-9,b.frame-a.frame)));if(scalar)return a.value+(b.value-a.value)*t;if(quaternion)Quaternion.SlerpToRef(a.value,b.value,t,out);else Vector3.LerpToRef(a.value,b.value,t,out);return out;}};}
+function track(animation){
+ const keys=animation.getKeys(),last=Math.max(0,keys.length-2),scalar=typeof keys[0].value==='number',quaternion=animation.targetProperty==='rotationQuaternion';let index=0;
+ const out=scalar?null:keys[0].value.clone();
+ return {sample(time){
+  const f=time*animation.framePerSecond;
+  // Normal playback needs only neighbouring keys. A maul repeat, interrupted
+  // action or seek can jump across hundreds: never restart a linear scan at0.
+  if(f<keys[index].frame||index<last&&f>keys[index+1].frame){
+   let steps=0;
+   if(f<keys[index].frame){while(index>0&&f<keys[index].frame&&steps++<2)index--;}
+   else{while(index<last&&f>keys[index+1].frame&&steps++<2)index++;}
+   if(f<keys[index].frame||index<last&&f>keys[index+1].frame){
+    let low=0,high=keys.length-1;
+    while(low<high){const middle=(low+high)>>>1;if(keys[middle].frame<f)low=middle+1;else high=middle;}
+    index=Math.max(0,Math.min(last,low-1));
+   }
+  }
+  const a=keys[index],b=keys[Math.min(keys.length-1,index+1)],t=Math.max(0,Math.min(1,(f-a.frame)/Math.max(1e-9,b.frame-a.frame)));
+  if(scalar)return a.value+(b.value-a.value)*t;
+  if(quaternion)Quaternion.SlerpToRef(a.value,b.value,t,out);else Vector3.LerpToRef(a.value,b.value,t,out);return out;
+ }};
+}
 export class WolfAnimator{
  constructor(asset,config){this.asset=asset;this.clips=new Map();this.durations={};this.nodes=orderPoseNodes([...asset.transformNodes,...asset.meshes.filter(mesh=>mesh.getTotalVertices()===0)]);this.current=null;this.actionId=null;this.blend=1;this.samples=0;this.channels=0;
   for(const group of asset.animationGroups){group.stop();const fps=group.targetedAnimations[0]?.animation.framePerSecond??60;this.durations[group.name]=(group.to-group.from)/fps;const rows=group.targetedAnimations.map(({target,animation})=>{const property=animation.targetProperty,value=target[property];this.channels++;return {target,property,track:track(animation),from:typeof value==='number'?value:value.clone()};});this.clips.set(group.name,rows);}

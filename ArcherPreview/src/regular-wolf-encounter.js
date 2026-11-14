@@ -15,7 +15,9 @@ export class RegularWolfEncounter extends WolfV02Encounter{
   this.summonKind=this.regularWolfId=id;this.displayName=REGULAR_WOLF_VARIANTS[id].label;
   const onDefeat=this.onDefeat;this.onDefeat=event=>onDefeat({...event,kind:id,actorVariant:id});
   this.balance=regularWolfBalance(id);for(const key of ['radius','separationRadius','stopDistance','renderRangePadding'])this[key]=this.balance[key];
-  this.combatProfile=WOLF_V02_COMBAT_PROFILES.regularWolf;
+  // Wolves and foxes stop the victim in place. Boar retains its existing
+  // ram/throw/maul contract independently of the ordinary canine policy.
+  this.combatProfile=id==='boar'?WOLF_V02_COMBAT_PROFILES.regularWolf:WOLF_V02_COMBAT_PROFILES.regularCanine;
  }
  prepareAsset(){
   this.runtimeProfile=regularWolfRuntimeProfile(this.regularWolfId,this.config);
@@ -53,5 +55,5 @@ export class RegularWolfEncounter extends WolfV02Encounter{
   return this.radius+playerDimensions(this.player).moveRadius;
  }
  hurtCapsules(){this.v02Hurt??=new WolfV02HurtVolumes(this.nodes,this.config.scale,this.runtimeProfile.hurtVolumes);return this.v02Hurt.sample();}
- inspect(){return {...super.inspect(),source:this.config?.sourceAssetId,variant:this.regularWolfId,combatProfile:'regularWolf',fittedHeight:this.config?.height};}
+ inspect(){return {...super.inspect(),source:this.config?.sourceAssetId,variant:this.regularWolfId,combatProfile:this.combatProfile.ramStaggerOnly?'regularCanine':'regularWolf',fittedHeight:this.config?.height};}
 }

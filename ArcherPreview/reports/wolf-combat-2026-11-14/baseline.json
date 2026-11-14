@@ -1,0 +1,181 @@
+{
+  "label": "baseline",
+  "frames": 1800,
+  "totalMs": 1147.095099999964,
+  "meanSteadyMs": 0.6038356547618876,
+  "p95Ms": 0.8936999999987165,
+  "matrixCalls": 705315,
+  "forced": 7374,
+  "counts": {
+    "playerSample": {
+      "calls": 1800,
+      "ms": 207.00510000002578
+    },
+    "wolfSample": {
+      "calls": 1818,
+      "ms": 36.58220000000438
+    },
+    "wolfMatrices": {
+      "calls": 3600,
+      "ms": 58.46339999992233
+    },
+    "alignPose": {
+      "calls": 1800,
+      "ms": 90.0210999999581
+    },
+    "prepareContactPose": {
+      "calls": 1800,
+      "ms": 119.85210000002735
+    }
+  },
+  "stages": [
+    {
+      "frame": 0,
+      "stage": "alert"
+    },
+    {
+      "frame": 112,
+      "stage": "rise"
+    },
+    {
+      "frame": 246,
+      "stage": "observe"
+    },
+    {
+      "frame": 274,
+      "stage": "flank"
+    },
+    {
+      "frame": 426,
+      "stage": "position"
+    },
+    {
+      "frame": 432,
+      "stage": "charge"
+    },
+    {
+      "frame": 450,
+      "stage": "chase"
+    },
+    {
+      "frame": 474,
+      "stage": "settle"
+    },
+    {
+      "frame": 500,
+      "stage": "maul"
+    },
+    {
+      "frame": 550,
+      "stage": "miss-brake"
+    },
+    {
+      "frame": 848,
+      "stage": "charge"
+    },
+    {
+      "frame": 858,
+      "stage": "chase"
+    },
+    {
+      "frame": 882,
+      "stage": "settle"
+    },
+    {
+      "frame": 908,
+      "stage": "maul"
+    },
+    {
+      "frame": 958,
+      "stage": "miss-brake"
+    }
+  ],
+  "taps": 11,
+  "top": [
+    {
+      "frame": 0,
+      "ms": 21.71860000000015,
+      "stage": "alert",
+      "source": 0,
+      "clip": "Alert_Lie_R5"
+    },
+    {
+      "frame": 17,
+      "ms": 11.308100000000195,
+      "stage": "alert",
+      "source": 0.2833333333333333,
+      "clip": "Alert_Lie_R5"
+    },
+    {
+      "frame": 450,
+      "ms": 4.992400000000998,
+      "stage": "chase",
+      "source": 0.418924931795635,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "frame": 209,
+      "ms": 3.9619000000002416,
+      "stage": "rise",
+      "source": 1.6333333333333324,
+      "clip": "Rise_From_Lie_R5"
+    },
+    {
+      "frame": 1,
+      "ms": 3.1995999999999185,
+      "stage": "alert",
+      "source": 0.016666666666666666,
+      "clip": "Alert_Lie_R5"
+    },
+    {
+      "frame": 432,
+      "ms": 2.4268000000010943,
+      "stage": "charge",
+      "source": 0.1119047619047619,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "frame": 18,
+      "ms": 2.0931999999993423,
+      "stage": "alert",
+      "source": 0.3,
+      "clip": "Alert_Lie_R5"
+    },
+    {
+      "frame": 2,
+      "ms": 1.991600000001199,
+      "stage": "alert",
+      "source": 0.03333333333333333,
+      "clip": "Alert_Lie_R5"
+    },
+    {
+      "frame": 3,
+      "ms": 1.898299999998926,
+      "stage": "alert",
+      "source": 0.05,
+      "clip": "Alert_Lie_R5"
+    },
+    {
+      "frame": 449,
+      "ms": 1.8145999999997002,
+      "stage": "charge",
+      "source": 0.39860747147817466,
+      "clip": "Wolf_Run_R5"
+    },
+    {
+      "frame": 695,
+      "ms": 1.694099999998798,
+      "stage": "miss-brake",
+      "source": 0.41400000000000026,
+      "clip": "Wolf_Orbit_Step_V02"
+    },
+    {
+      "frame": 4,
+      "ms": 1.6797000000005937,
+      "stage": "alert",
+      "source": 0.06666666666666667,
+      "clip": "Alert_Lie_R5"
+    }
+  ],
+  "scope": "Actual alpha model/native player/controller and contacts on flat CPU fixture; Node/NullEngine replacement paint; not device FPS or GPU latency"
+}
