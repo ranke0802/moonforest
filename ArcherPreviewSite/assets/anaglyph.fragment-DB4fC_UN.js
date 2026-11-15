@@ -1,0 +1,1 @@
+export{Yt as anaglyphPixelShader}from"./babylon-game-DZXlSAq8.js";

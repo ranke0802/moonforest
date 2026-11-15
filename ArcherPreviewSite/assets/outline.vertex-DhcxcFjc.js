@@ -1,0 +1,1 @@
+export{Y as outlineVertexShader}from"./babylon-game-DZXlSAq8.js";

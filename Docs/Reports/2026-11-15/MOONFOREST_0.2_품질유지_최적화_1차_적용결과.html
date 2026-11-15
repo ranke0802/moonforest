@@ -1,0 +1,74 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MoonForest 0.2 · 품질 유지 최적화 1차</title><style>
+:root{color-scheme:dark;font-family:system-ui,'Malgun Gothic',sans-serif;background:#111a19;color:#e6e9df}*{box-sizing:border-box}body{margin:0}main{max-width:1080px;margin:auto;padding:48px 24px 80px}h1{font-size:clamp(26px,5vw,44px);letter-spacing:-.04em;margin:14px 0}h2{font-size:23px;margin-top:42px}p,li{line-height:1.8;color:#c8d2c9}small,.kicker{color:#cdb57e}a{color:#ead193}nav{display:flex;gap:20px;flex-wrap:wrap;margin:24px 0}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.card,aside{background:#1b2a25;padding:22px;border:1px solid #3d4e40;border-radius:14px}.metric{font-size:34px;font-weight:700;color:#e5c588}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:15px 12px;border-bottom:1px solid #3a493e;text-align:left;vertical-align:top;line-height:1.65}th{color:#e7cc90}.scroll{overflow:auto}td:first-child{min-width:130px}.bar{height:18px;border-radius:4px;background:#a38a55;margin:8px 0 18px}.new{background:#7fae98;width:25%}.ok{color:#9ed7b4}.later{color:#e1b277}details{margin-top:24px}pre{white-space:pre-wrap;font-size:12px;overflow-wrap:anywhere}footer{margin-top:36px;color:#a8b7ac;font-size:13px}.link{display:inline-block;padding:10px 18px;border:1px solid #b39d6a;border-radius:8px;text-decoration:none}button{font:inherit}</style><main>
+<div class="kicker">MOONFOREST · 0.2 · 2026.11.15</div><h1>화질을 유지하며<br>반복 비용과 준비 집중을 줄였습니다.</h1><p>설계서의 첫 적용본입니다. 자산 선택·풍경 계산·준비 작업을 개선하고, 새 효과를 직접 볼 수 있는 검수 기능을 추가했습니다. 전체 아트 개편이나 저사양 기기의 안정적인 60FPS 달성을 완료했다는 뜻은 아닙니다.</p>
+<nav><a href="#review">직접 확인</a><a href="#applied">적용 내용</a><a href="#memory">메모리 추정</a><a href="#remaining">남은 작업</a></nav>
+<div class="cards"><div class="card"><small>PC 전사 · 같은 해상도</small><div class="metric">832 → 208 MiB</div><p>전체 mip을 포함한 텍스처 추정. 실제 GPU 전체 메모리 측정치가 아닙니다.</p></div><div class="card"><small>기본 풍경 준비 완료 검사</small><div class="metric">600 → 12회</div><p>512배치·4자산·완료 검사 50회의 자료구조 조회. FPS 개선율이 아닙니다.</p></div><div class="card"><small>직접 관련된 집중 검사</small><div class="metric">61개 통과</div><p>네 맵 회귀·수명·취소·프로필 검사 및 빌드/배포 동기화.</p></div></div>
+<h2 id="review">게임에서 확인하는 위치</h2><p><a class="link" href="https://ranke0802.github.io/moonforest/ArcherPreviewSite/moonforest-0.2.html">MoonForest 0.2 열기</a></p><ol><li><b>설정 → 화면 설정 → 플레이어 텍스처 · PC</b>에서 8K GPU 압축 / 8K 원본 이미지를 선택한 뒤 <b>적용하고 다시 불러오기</b>를 누릅니다. 위치와 카메라를 복원해 비교합니다. 압축 지원이 없는 PC는 원본을 사용합니다.</li><li>압축 모드에서 시작에 실패하면 오류 화면의 <b>8K 원본으로 다시 불러오기</b>로 수동 복구할 수 있습니다. 실패 후 두 그래프를 자동으로 중복 다운로드하지 않습니다.</li><li><b>설정 → 화면 설정 → 마법 효과 검수</b>에서 밀도를 고르고 <b>화염 충격파 재생</b>을 누릅니다. 게임 화면의 전사 앞에서 한 번 재생됩니다. 신규 전투 기술이나 피해는 추가하지 않았습니다.</li><li>기존 성능 진단의 JSON에는 <b>preparationBudget</b>과 <b>reviewEffects</b> 상태가 추가됩니다. 평소 상세 CPU 추적·GPU 동기 대기를 추가로 켜지 않습니다.</li></ol>
+<h2 id="applied">실제로 적용한 내용</h2><div class="scroll"><table><thead><tr><th>구간</th><th>변경</th><th>보존·한계</th></tr></thead><tbody>
+<tr><td class="ok">PC 텍스처</td><td>기존 8K UASTC KTX2 그래프를 0.2 PC 기본 선택으로 연결. 사용자 원본 선택과 오류 화면 복구 제공.</td><td>8K/4K/2K 원래 해상도, 모델·UV·골격·모션 데이터 유지. GPU 블록 압축의 미세한 색상 차이는 가능. 모바일의 기존 4K 압축 / 2K RGBA 선택 유지.</td></tr>
+<tr><td class="ok">풍경 계산</td><td>자산별 배치 인덱스, 기본 맵의 준비 완료 상태, 동일 카메라·경계구의 정확한 투영값을 재사용.</td><td>거리·LOD 단계·대평원 배율·선택 공식 유지. LOD 해제·실패/재시도·자산 교체·명시적 편집 변경을 감지. 일반 편집 스트림의 직접 검사 유지.</td></tr>
+<tr><td class="ok">공통 준비 예산</td><td>증분 배치와 배우/셰이더 준비 경계가 장면별 2ms 목표를 공유. 같은 대기 기회가 예산을 중복 초기화하지 않음.</td><td>단일 SDK 호출을 중간에 끊는 상한이 아님. 기존 취소·세대·시간초과·순서·준비 장벽 보존. 모든 텍스처 업로드가 이미 통합된 것은 아님.</td></tr>
+<tr><td class="ok">효과 검수 기반</td><td>화염 형상·섬광·확산 링·불씨를 한 메시로 재생. 유한 슬롯·밀도/면적 압력 제어, 이벤트 때만 버퍼 갱신. 맵/플레이어 재로딩 시 비움.</td><td>별도 광원 0, 반사/내부선 RTT 0, 추가 RAF 0. 기존 동굴 안개 가림 재사용. 처음 누를 때만 모듈·버퍼 준비. 실제 전투의 예고/명중/피해는 변경하지 않음.</td></tr></tbody></table></div>
+<h2 id="memory">KTX2를 고려한 메모리와 다운로드 구분</h2><p>전사 6개 이미지의 원래 크기를 유지한 채 8bpp 압축으로 추정하면 <b>832 → 약 208MiB</b>, 약 624MiB 감소 여지가 있습니다. 위쪽 두 8K만 비교하면 682.67 → 170.67MiB입니다. 기기·디코더의 실제 선택 형식과 작업 메모리는 별도입니다.</p><div>기존 RGBA 추정 · 832MiB<div class="bar"></div>압축 추정 · 208MiB<div class="bar new"></div></div><aside><b>다운로드 파일은 오히려 커집니다.</b><p>같은 6장 원본 약 26.97MiB, 기존 KTX2 약 45.04MiB입니다. 이 변경의 목적은 GPU 상주량·이미지 준비 부담 감소이며 네트워크 파일 크기 감소가 아닙니다. 원본 파일을 삭제하지 않았습니다.</p></aside>
+<h2>137삼각형이 쓰는 큰 아틀라스 조사</h2><p>사용 영역은 작은 UV 조각들이 8K 전체에 흩어져 있습니다. 단순 사각형으로 자르면 면적의 <b>92.61%</b>가 남고, 2의 거듭제곱 크기는 계속 8192입니다. 따라서 단순 crop의 이 방식 GPU 절감은 <b>0</b>입니다. 이 결과를 무시하고 UV를 자동으로 바꾸지 않았습니다. 조각별 재배치·패딩·mip 이음새 비교를 거친 별도 후보가 필요합니다.</p>
+<h2>확인한 범위</h2><p>PC 선택/설정 12개, 실제 두 리소스 그래프의 모델·UV·애니메이션·sampler 동등성과 KTX2 해상도 1개, 공유 준비 16개, 풍경/마을·대평원·숲·동굴 관련 회귀 25개, 효과 예산·수명·지연 완료·설정 연결 7개를 확인했습니다. 0.2 빌드와 동기화가 통과했고 공유 리소스 그래프 및 동결한 0.1 목록을 유지했습니다.</p><p><b>브라우저 자동조작은 사용하지 않았습니다.</b> Node/NullEngine 검사는 실제 GPU의 GLSL 실행·화질·실기기 FPS/발열 검수를 대신하지 않습니다. 과거 200ms 드라이버 지연이 완전히 사라졌다고 판정하지 않았습니다.</p>
+<h2 id="remaining">다음 단계 · 아직 적용했다고 볼 수 없는 항목</h2><div class="scroll"><table><thead><tr><th>우선</th><th>작업</th><th>이유</th></tr></thead><tbody><tr><td>1</td><td>실제 준비/업로드 정체의 단일 호출 분리와 자원 소유권 연결</td><td>공유 경계 예산만으로 긴 WebGL 호출을 선점할 수 없음. 기존 200ms 문제의 실기기 개선 여부는 별도 근거 필요.</td></tr><tr><td>2</td><td>작은 UV 조각을 재배치한 전용 아틀라스 후보</td><td>원래 화소 밀도와 무늬·이음새를 보존해 상주 낭비를 추가 제거.</td></tr><tr><td>3</td><td>전투 이벤트에 연결하는 본격 마법 효과와 공통 지면 준비</td><td>이번 화염 시안은 표현/예산 기반. 실제 주문의 예고·발사·명중·취소 계약은 별도 연결.</td></tr><tr><td>4</td><td>한 장면의 아트 개선 및 몬스터·NPC·컷씬 동시 자원 계약 확장</td><td>승인된 화면과 비교 가능한 후보로 단계별 제공. 현재 콘텐츠를 한꺼번에 새로 쓰지 않음.</td></tr></tbody></table></div>
+<details><summary>검증 기록 · 내장 JSON</summary><pre>{
+  "date": "2026-11-15",
+  "scope": "First implementation and manual graphics review candidate, not the entire future roadmap",
+  "tests": {
+    "pcProfileAndSettings": 12,
+    "realGeometryAndTextureGraph": 1,
+    "sharedPreparation": 16,
+    "sceneryAndFourMapRegressions": 25,
+    "optionalEffectLifecycleAndIntegration": 7,
+    "total": 61
+  },
+  "build": "passed",
+  "sync": "passed",
+  "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+  "protectedInventorySha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+  "preserved": [
+    "original source images",
+    "mobile existing 4K compressed / 2K RGBA profiles",
+    "geometry and UV accessor/buffer graph",
+    "rig and animation data",
+    "LOD and distance policies",
+    "combat damage/contact/input/timing",
+    "frozen 0.1 entry"
+  ],
+  "estimates": {
+    "pcOriginalPlayerMiB": 832,
+    "pcCompressedPlayerMiB": 208,
+    "estimatedSavingMiB": 624,
+    "sourcePixelEquality": false,
+    "originalTextureFilesMiB": 26.97,
+    "compressedTextureFilesMiB": 45.04
+  },
+  "uvFinding": {
+    "referencingTriangles": 137,
+    "rectangleFraction": 0.9261493682861328,
+    "powerOfTwoCropSavingBytes": 0,
+    "chartPacking": "deferred; requires visual review"
+  },
+  "workBudget": {
+    "sharedTargetMs": 2,
+    "preemptive": false,
+    "appliesTo": "incremental map placement and actor/shader preparation boundaries; not all texture uploads"
+  },
+  "effect": {
+    "scope": "manual settings-only fire impact preview",
+    "meshes": 1,
+    "quadCapacity": 768,
+    "extraLights": 0,
+    "extraRenderTargets": 0,
+    "extraRAF": 0,
+    "perFrameVertexUploads": 0
+  },
+  "limitations": [
+    "No browser automation",
+    "No real-device FPS, temperature, GPU memory or actual GLSL execution verified",
+    "No claim that historical 200ms driver stalls are eliminated",
+    "UV chart packing, upload scheduling, full residency ownership, gameplay VFX integration and art direction remain later steps"
+  ]
+}</pre></details><footer>단일 HTML · 외부 이미지/폰트/스크립트 없이 공유 가능. 적용된 구현과 향후 기준을 구분해 AGENTS.md에도 기록했습니다.</footer></main></html>

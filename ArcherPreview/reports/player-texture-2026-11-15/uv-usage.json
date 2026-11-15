@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "manifest": "warrior-v3",
+  "model": "./content/f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083.gltf",
+  "modelSha256": "f033fb07a554e6ff205c2b919c741d9ccaeb46b2b6854b5729c2d4a55096a083",
+  "image": {
+    "mimeType": "image/png",
+    "name": "warrior_head_clean_v2_8k",
+    "uri": "79f107187ed61f15718804c4b58519d627a58167c96260065d83bddbdef22367.png"
+  },
+  "sourceSize": [
+    8192,
+    8192
+  ],
+  "referencingPrimitives": 4,
+  "triangles": 137,
+  "uniqueUvAccessorVertexReferences": 194,
+  "uvBounds": {
+    "min": [
+      0.026611328125,
+      0.004638671875
+    ],
+    "max": [
+      0.9970703125,
+      0.95849609375
+    ]
+  },
+  "uvOutsideUnitSquare": false,
+  "sumTriangleAreaExcludingDuplicateMaterialSlots": 0.0020926594734191895,
+  "triangleAreaIsUnion": false,
+  "pixelBounds": {
+    "min": [
+      218,
+      38
+    ],
+    "max": [
+      8168,
+      7852
+    ]
+  },
+  "candidates": [
+    {
+      "paddingPerSide": 0,
+      "origin": [
+        216,
+        36
+      ],
+      "extent": [
+        8168,
+        7852
+      ],
+      "width": 7952,
+      "height": 7816,
+      "basePixels": 62152832,
+      "rectangleFraction": 0.9261493682861328,
+      "potWidth": 8192,
+      "potHeight": 8192,
+      "estimatedPotRgbaMipBytes": 357913940,
+      "estimatedPotSavingBytes": 0,
+      "validBounds": true,
+      "boundarySamplingRisk": false
+    },
+    {
+      "paddingPerSide": 32,
+      "origin": [
+        184,
+        4
+      ],
+      "extent": [
+        8192,
+        7884
+      ],
+      "width": 8008,
+      "height": 7880,
+      "basePixels": 63103040,
+      "rectangleFraction": 0.9403085708618164,
+      "potWidth": 8192,
+      "potHeight": 8192,
+      "estimatedPotRgbaMipBytes": 357913940,
+      "estimatedPotSavingBytes": 0,
+      "validBounds": true,
+      "boundarySamplingRisk": true
+    },
+    {
+      "paddingPerSide": 64,
+      "origin": [
+        152,
+        0
+      ],
+      "extent": [
+        8192,
+        7916
+      ],
+      "width": 8040,
+      "height": 7916,
+      "basePixels": 63644640,
+      "rectangleFraction": 0.9483790397644043,
+      "potWidth": 8192,
+      "potHeight": 8192,
+      "estimatedPotRgbaMipBytes": 357913940,
+      "estimatedPotSavingBytes": 0,
+      "validBounds": true,
+      "boundarySamplingRisk": true
+    },
+    {
+      "paddingPerSide": 128,
+      "origin": [
+        88,
+        0
+      ],
+      "extent": [
+        8192,
+        7980
+      ],
+      "width": 8104,
+      "height": 7980,
+      "basePixels": 64669920,
+      "rectangleFraction": 0.9636569023132324,
+      "potWidth": 8192,
+      "potHeight": 8192,
+      "estimatedPotRgbaMipBytes": 357913940,
+      "estimatedPotSavingBytes": 0,
+      "validBounds": true,
+      "boundarySamplingRisk": true
+    }
+  ],
+  "primitives": [
+    {
+      "mesh": "Warrior_Body_Mesh",
+      "meshIndex": 0,
+      "primitiveIndex": 1,
+      "material": "Hair_Clean_v2",
+      "triangles": 40,
+      "slots": [
+        {
+          "slot": "pbrMetallicRoughness.baseColorTexture",
+          "uvAccessor": 9,
+          "texCoord": 0,
+          "textureTransform": {},
+          "uniqueReferencedVertices": 60,
+          "uvBounds": {
+            "min": [
+              0.030517578125,
+              0.14404296875
+            ],
+            "max": [
+              0.771240234375,
+              0.935546875
+            ]
+          },
+          "sumTriangleArea": 0.0006900131702423096,
+          "sampler": {
+            "wrapS": 10497,
+            "wrapT": 10497,
+            "magFilter": 9729,
+            "minFilter": 9987
+          }
+        }
+      ]
+    },
+    {
+      "mesh": "Warrior_Body_Mesh",
+      "meshIndex": 0,
+      "primitiveIndex": 2,
+      "material": "Face_Skin_Clean_v2",
+      "triangles": 60,
+      "slots": [
+        {
+          "slot": "pbrMetallicRoughness.baseColorTexture",
+          "uvAccessor": 15,
+          "texCoord": 0,
+          "textureTransform": {},
+          "uniqueReferencedVertices": 82,
+          "uvBounds": {
+            "min": [
+              0.026611328125,
+              0.004638671875
+            ],
+            "max": [
+              0.9970703125,
+              0.9501953125
+            ]
+          },
+          "sumTriangleArea": 0.0007615387439727783,
+          "sampler": {
+            "wrapS": 10497,
+            "wrapT": 10497,
+            "magFilter": 9729,
+            "minFilter": 9987
+          }
+        }
+      ]
+    },
+    {
+      "mesh": "Warrior_Cape_Mesh",
+      "meshIndex": 18,
+      "primitiveIndex": 1,
+      "material": "Hair_Clean_v2",
+      "triangles": 9,
+      "slots": [
+        {
+          "slot": "pbrMetallicRoughness.baseColorTexture",
+          "uvAccessor": 90,
+          "texCoord": 0,
+          "textureTransform": {},
+          "uniqueReferencedVertices": 23,
+          "uvBounds": {
+            "min": [
+              0.24072265625,
+              0.075927734375
+            ],
+            "max": [
+              0.955078125,
+              0.93701171875
+            ]
+          },
+          "sumTriangleArea": 0.00018703937530517578,
+          "sampler": {
+            "wrapS": 10497,
+            "wrapT": 10497,
+            "magFilter": 9729,
+            "minFilter": 9987
+          }
+        }
+      ]
+    },
+    {
+      "mesh": "Warrior_Cape_Mesh",
+      "meshIndex": 18,
+      "primitiveIndex": 2,
+      "material": "Face_Skin_Clean_v2",
+      "triangles": 28,
+      "slots": [
+        {
+          "slot": "pbrMetallicRoughness.baseColorTexture",
+          "uvAccessor": 96,
+          "texCoord": 0,
+          "textureTransform": {},
+          "uniqueReferencedVertices": 29,
+          "uvBounds": {
+            "min": [
+              0.276123046875,
+              0.49169921875
+            ],
+            "max": [
+              0.717529296875,
+              0.95849609375
+            ]
+          },
+          "sumTriangleArea": 0.0004540681838989258,
+          "sampler": {
+            "wrapS": 10497,
+            "wrapT": 10497,
+            "magFilter": 9729,
+            "minFilter": 9987
+          }
+        }
+      ]
+    }
+  ],
+  "measurement": "Read-only actual indexed TEXCOORD/indices decode, including material texture transforms. UV triangle area is a sum, not chart-union area or proof of visible texels. Rectangles are conservative bounding crops with explicit padding; wrapping/filtering/mips and all motion visibility require separate approval. No geometry, UV, texture, runtime file or registry was changed. Hidden/unused status and deletion safety are not established."
+}

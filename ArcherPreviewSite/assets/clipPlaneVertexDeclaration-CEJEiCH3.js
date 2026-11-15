@@ -1,0 +1,1 @@
+export{$a as clipPlaneVertexDeclarationWGSL}from"./babylon-game-DZXlSAq8.js";

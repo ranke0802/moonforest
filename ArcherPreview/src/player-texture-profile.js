@@ -5,6 +5,8 @@ function mipBytes(size,compressed){
   for(;;){bytes+=compressed?Math.ceil(size/4)**2*16:size**2*4;if(size===1)return bytes;size=Math.max(1,Math.floor(size/2));}
 }
 const estimates={
+  compressed8k:{estimatedGpuBytes:2*mipBytes(8192,true)+3*mipBytes(2048,true)+mipBytes(4096,true),
+    maxImageRgbaBytes:8192**2*4,maxImageUploadBytes:mipBytes(8192,true)},
   compressed4k:{estimatedGpuBytes:3*mipBytes(4096,true)+3*mipBytes(2048,true),
     maxImageRgbaBytes:4096**2*4,maxImageUploadBytes:mipBytes(4096,true)},
   rgba2k:{estimatedGpuBytes:6*mipBytes(2048,false),
@@ -23,13 +25,28 @@ export function playerTextureCapabilities(caps){
     formats:Object.fromEntries(compressedFormats.map(name=>[name,!!caps?.[name]]))};
 }
 
-export function selectPlayerTextureProfile(character,caps,navigator=globalThis.navigator){
-  const capabilities=playerTextureCapabilities(caps);
-  if(!playerAliases.has(character))return {manifest:character==='archer'?'character':character,mobile:false,capabilities};
+export function isMobilePlayerTextureDevice(navigator=globalThis.navigator){
   const ios=/iPad|iPhone|iPod/.test(navigator?.userAgent??'')||
     (navigator?.platform==='MacIntel'&&navigator?.maxTouchPoints>1);
-  const mobile=ios||/Android/i.test(navigator?.userAgent??'');
-  if(!mobile)return {manifest:'warrior-v3',mobile:false,maxSize:8192,encoding:'original',gpuCompressed:false,...estimates.original,estimateScope,capabilities};
+  return ios||/Android/i.test(navigator?.userAgent??'');
+}
+
+export function selectPlayerTextureProfile(character,caps,navigator=globalThis.navigator,{release,desktopPreference='compressed'}={}){
+  const capabilities=playerTextureCapabilities(caps);
+  if(!playerAliases.has(character))return {manifest:character==='archer'?'character':character,mobile:false,capabilities};
+  const mobile=isMobilePlayerTextureDevice(navigator);
+  if(!mobile){
+    // Keep the frozen 0.1 / three-argument integration unchanged. 0.2 chooses
+    // its complete graph before prefetch; no decode-time fallback/retry starts
+    // a second original-image download behind the user's back.
+    const enabled=release==='moonforest-0.2',requested=desktopPreference==='original'?'original':'compressed';
+    const available=capabilities.maxTextureSize>=8192&&Object.values(capabilities.formats).some(Boolean);
+    const compressed=enabled&&requested==='compressed'&&available;
+    return {manifest:compressed?'warrior-v3-ios':'warrior-v3',mobile:false,maxSize:8192,preserveSourceResolution:true,
+      encoding:compressed?'ktx2-uastc':'original',gpuCompressed:compressed,
+      ...(compressed?estimates.compressed8k:estimates.original),estimateScope,capabilities,
+      desktopPreference:enabled?requested:'original',selectionReason:!enabled?'legacy-original':requested==='original'?'user-original':available?'supported-8k-compression':'compression-unavailable-original'};
+  }
   const max=capabilities.maxTextureSize;
   if(max===null||max<2048){
     const formats=Object.entries(capabilities.formats).map(([name,supported])=>name.toUpperCase()+'='+(supported?'yes':'no')).join(', ');
@@ -48,6 +65,6 @@ export function selectPlayerTextureProfile(character,caps,navigator=globalThis.n
 }
 
 // Keep the existing integration API: main.js selects before its download plan.
-export function playerTextureManifest(character,caps,navigator=globalThis.navigator){
-  return selectPlayerTextureProfile(character,caps,navigator).manifest;
+export function playerTextureManifest(character,caps,navigator=globalThis.navigator,options){
+  return selectPlayerTextureProfile(character,caps,navigator,options).manifest;
 }

@@ -1,0 +1,1 @@
+export{va as lightProxyPixelShaderWGSL}from"./babylon-game-DZXlSAq8.js";

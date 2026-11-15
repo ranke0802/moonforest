@@ -1,0 +1,1 @@
+export{Er as postprocessVertexShaderWGSL}from"./babylon-game-DZXlSAq8.js";

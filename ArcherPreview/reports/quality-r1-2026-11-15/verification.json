@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-15",
+  "scope": "First implementation and manual graphics review candidate, not the entire future roadmap",
+  "tests": {
+    "pcProfileAndSettings": 12,
+    "realGeometryAndTextureGraph": 1,
+    "sharedPreparation": 16,
+    "sceneryAndFourMapRegressions": 25,
+    "optionalEffectLifecycleAndIntegration": 7,
+    "total": 61
+  },
+  "build": "passed",
+  "sync": "passed",
+  "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+  "protectedInventorySha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+  "preserved": [
+    "original source images",
+    "mobile existing 4K compressed / 2K RGBA profiles",
+    "geometry and UV accessor/buffer graph",
+    "rig and animation data",
+    "LOD and distance policies",
+    "combat damage/contact/input/timing",
+    "frozen 0.1 entry"
+  ],
+  "estimates": {
+    "pcOriginalPlayerMiB": 832,
+    "pcCompressedPlayerMiB": 208,
+    "estimatedSavingMiB": 624,
+    "sourcePixelEquality": false,
+    "originalTextureFilesMiB": 26.97,
+    "compressedTextureFilesMiB": 45.04
+  },
+  "uvFinding": {
+    "referencingTriangles": 137,
+    "rectangleFraction": 0.9261493682861328,
+    "powerOfTwoCropSavingBytes": 0,
+    "chartPacking": "deferred; requires visual review"
+  },
+  "workBudget": {
+    "sharedTargetMs": 2,
+    "preemptive": false,
+    "appliesTo": "incremental map placement and actor/shader preparation boundaries; not all texture uploads"
+  },
+  "effect": {
+    "scope": "manual settings-only fire impact preview",
+    "meshes": 1,
+    "quadCapacity": 768,
+    "extraLights": 0,
+    "extraRenderTargets": 0,
+    "extraRAF": 0,
+    "perFrameVertexUploads": 0
+  },
+  "limitations": [
+    "No browser automation",
+    "No real-device FPS, temperature, GPU memory or actual GLSL execution verified",
+    "No claim that historical 200ms driver stalls are eliminated",
+    "UV chart packing, upload scheduling, full residency ownership, gameplay VFX integration and art direction remain later steps"
+  ]
+}

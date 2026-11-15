@@ -1,0 +1,8 @@
+.player-texture-settings,.effect-review-settings{flex-basis:100%;min-width:0;padding-top:12px;border-top:1px solid rgba(200,190,140,.2)}
+.player-texture-settings{display:grid;gap:10px}
+.settings-display-options .player-texture-settings label,.settings-display-options .effect-review-settings label{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.player-texture-settings small,.effect-review-settings small{display:block;line-height:1.65;opacity:.85}
+.player-texture-settings select,.effect-review-settings select{min-height:40px;max-width:100%;font:inherit}
+.player-texture-settings button,.effect-review-settings button{min-height:40px;width:fit-content;max-width:100%;white-space:normal}
+.effect-review-settings summary{cursor:pointer;padding-bottom:8px}
+.effect-review-settings[open]>:not(summary){margin-block:10px}

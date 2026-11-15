@@ -1,0 +1,1 @@
+export{ja as shadowMapFragmentSoftTransparentShadowWGSL}from"./babylon-game-DZXlSAq8.js";

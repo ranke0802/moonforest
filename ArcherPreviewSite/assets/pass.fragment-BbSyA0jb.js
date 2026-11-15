@@ -1,0 +1,1 @@
+export{yn as passPixelShaderWGSL}from"./babylon-game-DZXlSAq8.js";

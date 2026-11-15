@@ -34,6 +34,10 @@ import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@baby
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {selectPlayerTextureProfile,playerTextureCapabilities} from './player-texture-profile.js';
+import {setupPlayerTextureSettings} from './player-texture-settings.js';
+import {setFrameWorkContext,frameWorkSnapshot} from './frame-work-coordinator.js';
+import {setupEffectReviewSettings} from './effect-review-settings.js';
+import './preparation-review-settings.css';
 import {createMapDeparture} from './map-departure.js';
 import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
@@ -253,11 +257,34 @@ const sceneDiagnostics=new SceneDiagnostics();
 const mapResourceInspector=createMapResourceInspector({getWorld:()=>world,getLoad:()=>loadDiagnostics.snapshot()});
 if(import.meta.hot)import.meta.hot.dispose(()=>mapResourceInspector.dispose());
 let playerTextureSelection=null;
+const playerTextureSettings=setupPlayerTextureSettings({host:$('.settings-display-options'),storage:equipmentStorage,release:versionRoute.release,onApply:async()=>{
+  const selectedWorld=world,selectedCharacter=character,position=actor?.position.clone(),rotation=actor?.rotation.clone(),camera=world?.camera;
+  const view=camera?{alpha:camera.alpha,beta:camera.beta,radius:camera.radius,target:camera.target.clone()}:null;
+  $('#motion-speed-dialog').close();await retryLoading();
+  if(ready&&world===selectedWorld&&character===selectedCharacter&&position&&rotation){actor.position.copyFrom(position);actor.rotation.copyFrom(rotation);if(view){camera.setTarget(view.target);camera.alpha=view.alpha;camera.beta=view.beta;camera.radius=view.radius;camera.getViewMatrix(true);}frameLoop?.invalidate();}
+}});
+const originalTextureRetry=document.createElement('button');originalTextureRetry.type='button';originalTextureRetry.textContent='8K 원본으로 다시 불러오기';originalTextureRetry.hidden=true;
+$('#retry-load').after(originalTextureRetry);
+originalTextureRetry.addEventListener('click',()=>{originalTextureRetry.hidden=true;playerTextureSettings.restoreOriginal();void retryLoading();});
+let effectReviewGeneration=0;
+const effectReviewSettings=setupEffectReviewSettings({host:$('.settings-display-options'),release:versionRoute.release,onMode:value=>world?.effectWorld?.setMode(value),onPreview:async value=>{
+  if(!world||!ready||loadingAsset||mapTransition?.busy)throw new Error('지역 로딩이 끝난 뒤 사용해 주세요.');
+  const selectedWorld=world,generation=world.toolGeneration,ticket=effectReviewGeneration;
+  const {createEffectWorld}=await import('./effect-world.js');
+  if(selectedWorld!==world||generation!==world.toolGeneration||ticket!==effectReviewGeneration||loadingAsset||!ready)return;
+  if(!world.effectWorld){world.effectWorld=createEffectWorld(world.scene);const effectWorld=world.effectWorld;world.scene.onDisposeObservable.addOnce(()=>effectWorld.dispose());}
+  await world.effectWorld.warm();if(selectedWorld!==world||generation!==world.toolGeneration||ticket!==effectReviewGeneration||loadingAsset||!ready)return;
+  world.effectWorld.setMode(value);const yaw=actor.rotation.y-(config?.forwardYaw??0),point=new Vector3(actor.position.x+Math.sin(yaw)*3,actor.position.y,actor.position.z+Math.cos(yaw)*3);world.terrain.place(point);
+  world.effectWorld.burst(point);$('#motion-speed-dialog').close();renderActivity.wake();frameLoop?.invalidate();
+}});
+if(import.meta.hot)import.meta.hot.dispose(()=>{effectReviewGeneration++;playerTextureSettings.dispose();effectReviewSettings.dispose();});
 // Copy only scalar work state so old delay events cannot change as streaming
 // and candidate selection advance. No extra scene traversal is needed.
 const mapWorkDiagnostics=()=>({
   renderResolution:renderResolution(),
   playerTextures:playerTextureSelection,
+  preparationBudget:world?.scene?frameWorkSnapshot(world.scene):null,
+  reviewEffects:world?.effectWorld?.inspect()??null,
   activeMeshCandidates:world?.environment?.activeMeshCandidates?{...world.environment.activeMeshCandidates}:null,
   geometryWork:world?.environment?{
     completeSkips:world.environment.geometryCompleteSkips??null,
@@ -520,6 +547,8 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  effectReviewGeneration++;world?.effectWorld?.clear();setFrameWorkContext(world?.scene,{active:false,frameId:engine?.frameId,generation:world?.toolGeneration});
+  originalTextureRetry.hidden=true;
   mapResourceInspector.begin();
   world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
   world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
@@ -546,8 +575,9 @@ async function loadCharacter() {
     const caps=engine.getCaps();
     // Retain the exact gate inputs even if selection fails before downloads.
     playerTextureSelection={status:'selecting',capabilities:playerTextureCapabilities(caps)};
-    const selectedProfile=selectPlayerTextureProfile(character,caps);
+    const selectedProfile=selectPlayerTextureProfile(character,caps,undefined,{release:versionRoute.release,desktopPreference:playerTextureSettings.value});
     playerTextureSelection={status:'selected',...selectedProfile};
+    playerTextureSettings.sync(selectedProfile);
     const manifestName=selectedProfile.manifest;
     const manifestUrl = new URL(`${import.meta.env.BASE_URL}assets/${manifestName}.json`, location.href);
     resetCamera();
@@ -681,6 +711,7 @@ async function loadCharacter() {
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
   } catch (error) {
+    originalTextureRetry.hidden=!playerTextureSettings.noteFailure(playerTextureSelection,error);
     loadDiagnostics.finish(error.message);
     ready=false;loadingAsset=false;if(frameLoop){frameLoop.loadingFailed=true;frameLoop.setPaused(true);}audio.setSuspended(true);
     console.error('[Archer asset load]', error);
@@ -736,6 +767,7 @@ function syncCameraFocus(dt,{snap=false}={}){
 
 function render(dt) {
   if(mapDeparture?.departing)return;
+  setFrameWorkContext(world.scene,{active:ready&&!loadingAsset&&!mapTransition?.busy,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.storyboardOpening?.update();
   world.storyboardEvents?.update();
   if(world.storyboardDeathPlayback){const events=world.storyboardEvents?.inspect();if(!events||!events.active&&!events.queued){world.storyboardDeathPlayback=false;deathScreen.show();return;}}
@@ -762,6 +794,7 @@ function render(dt) {
   const framePreludeStart=frameDiagnostics.mark();
   elapsed += dt;
   world.tick(elapsed);
+  world.effectWorld?.update(dt);
   training.update(dt);
   projectiles.update(dt);
   if (ready) {
@@ -920,6 +953,7 @@ try {
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
   world.release=versionRoute.release;
+  setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.weather=weatherSettings;weatherSettings.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
   if(releaseEnabled){
@@ -1027,7 +1061,7 @@ try {
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
       saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
-      frameDiagnostics.mapChanged();mapResourceInspector.begin();loadDiagnostics.begin('지역 이동');
+      frameDiagnostics.mapChanged();mapResourceInspector.begin();effectReviewGeneration++;world.effectWorld?.clear();setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();

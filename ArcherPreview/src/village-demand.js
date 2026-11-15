@@ -1,5 +1,6 @@
-import {Frustum,Vector3,Matrix,Quaternion} from '@babylonjs/core';
-import {projectedCoverage,villageLodTier,VILLAGE_LOD_COVERAGE} from './village-lod.js';
+import {Vector3,Matrix,Quaternion} from '@babylonjs/core';
+import {villageLodTier,VILLAGE_LOD_COVERAGE} from './village-lod.js';
+import {groupVillageRecords,sceneryProjection,projectedSceneryCoverage} from './village-scenery-cache.js';
 import {plainsRenderRange} from './plains-view-distance.js';
 import {sceneryDistanceRange as cinematicSceneryRange,sceneryDistanceScale as cinematicSceneryScale} from './scenery-distance-state.js';
 
@@ -90,7 +91,7 @@ export function villageDemand(world,records,index=null,stats=null){
     return villageDemandDirect(world,records);
   }
   const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
-  const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),wanted=new Map();
+  const projection=sceneryProjection(camera),planes=projection.planes,wanted=new Map();
   const range=cinematicSceneryRange(world)?.cellCull??(world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull);
   const target=camera.target??camera.getTarget();
   const candidates=villageDemandCandidates(index,camera.globalPosition,target,planes,range);
@@ -103,7 +104,7 @@ export function villageDemand(world,records,index=null,stats=null){
     const {center,radius}=record.bounds,distance=Vector3.Distance(camera.globalPosition,center)-radius;
     const close=Vector3.Distance(target,center)-radius<18;
     if(distance>range+12||(!close&&!planes.every(p=>p.dotCoordinate(center)>=-radius-10)))continue;
-    const coverage=projectedCoverage(camera,{centerWorld:center,radiusWorld:radius},world),level=villageLodTier(coverage);
+    const coverage=projectedSceneryCoverage(projection,record.bounds,world),level=villageLodTier(coverage);
     const request=tier=>{
       const key=record.placement.asset+':'+tier,priority=(close?1000:0)+coverage*100-distance;
       if(!wanted.has(key)||wanted.get(key).priority<priority)wanted.set(key,{id:record.placement.asset,level:tier,priority});
@@ -120,7 +121,7 @@ export function villageDemand(world,records,index=null,stats=null){
 // overview cameras. Oracle tests keep it and the indexed loop in lockstep.
 function villageDemandDirect(world,records){
   const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
-  const planes=Frustum.GetPlanes(camera.getTransformationMatrix()),wanted=new Map();
+  const projection=sceneryProjection(camera),planes=projection.planes,wanted=new Map();
   const range=cinematicSceneryRange(world)?.cellCull??(world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull);
   const target=camera.target??camera.getTarget();
   for(const record of records){
@@ -128,7 +129,7 @@ function villageDemandDirect(world,records){
     const {center,radius}=record.bounds,distance=Vector3.Distance(camera.globalPosition,center)-radius;
     const close=Vector3.Distance(target,center)-radius<18;
     if(distance>range+12||(!close&&!planes.every(p=>p.dotCoordinate(center)>=-radius-10)))continue;
-    const coverage=projectedCoverage(camera,{centerWorld:center,radiusWorld:radius},world),level=villageLodTier(coverage);
+    const coverage=projectedSceneryCoverage(projection,record.bounds,world),level=villageLodTier(coverage);
     const request=tier=>{
       const key=record.placement.asset+':'+tier,priority=(close?1000:0)+coverage*100-distance;
       if(!wanted.has(key)||wanted.get(key).priority<priority)wanted.set(key,{id:record.placement.asset,level:tier,priority});
@@ -167,9 +168,11 @@ export class VillageDemandCache {
 }
 
 export class VillageGeometryStreaming {
-  constructor(world,records,load,has,stats){
+  constructor(world,records,load,has,stats,{recordsByAsset=null,assets=null}={}){
     Object.assign(this,{world,records,load,has,stats});this.failed=new Set();this.active=false;this.pending=null;this.next=0;this.disposed=false;
+    this.recordsByAsset=recordsByAsset;this.assets=assets;this.indexedRecords=records;this.indexedLength=records.length;this.settledAssets=new Map();this.settledHas=has;
     stats.geometryCompleteSkips=0;
+    stats.geometrySettledEvaluations=0;stats.geometrySettledCacheHits=0;
     this.demand=new VillageDemandCache(world,records,stats);
     this.observer=world.scene.onAfterRenderObservable.add(()=>{
       const start=world.frameDiagnostics?.mark();
@@ -177,7 +180,34 @@ export class VillageGeometryStreaming {
     });
   }
   async initial(plan){for(const request of plan)if(!this.has(request))await this.load(request);}
+  invalidateRecords(){
+    if(this.recordsByAsset){const grouped=groupVillageRecords(this.records);this.recordsByAsset.clear();for(const [id,records]of grouped)this.recordsByAsset.set(id,records);}
+    this.indexedRecords=this.records;this.indexedLength=this.records.length;this.settledAssets.clear();this.demand.invalidate();this.demand.index=null;this.demand.indexLength=-1;
+  }
   allGeometrySettled(){
+    // Opt in only for the immutable base-placement index. Generic/editor
+    // streams retain the original direct checks, including unannounced edits.
+    if(this.recordsByAsset&&this.assets){
+      if(this.indexedRecords!==this.records||this.indexedLength!==this.records.length)this.invalidateRecords();
+      if(this.settledHas!==this.has){this.settledAssets.clear();this.settledHas=this.has;}
+      if(!this.records.length)return false;
+      for(const id of this.recordsByAsset.keys()){
+        if(typeof id!=='string'||!id)return false;
+        const asset=this.assets.get(id);if(!asset?.tiers||!asset.levels)return false;
+        let model0,model1,model2;
+        for(const row of asset.levels){if(row.level===0)model0=row.model;else if(row.level===1)model1=row.model;else if(row.level===2)model2=row.model;}
+        const tier0=asset.tiers.get(0),tier1=asset.tiers.get(1),tier2=asset.tiers.get(2),failed=(this.failed.has(id+':0')?1:0)|(this.failed.has(id+':1')?2:0)|(this.failed.has(id+':2')?4:0);
+        let cached=this.settledAssets.get(id);
+        if(cached&&cached.asset===asset&&cached.tier0===tier0&&cached.tier1===tier1&&cached.tier2===tier2&&cached.model0===model0&&cached.model1===model1&&cached.model2===model2&&cached.failed===failed)this.stats.geometrySettledCacheHits++;
+        else{
+          let settled=true;
+          for(let level=0;level<3;level++){if(failed&(1<<level))continue;try{if(!this.has({id,level})){settled=false;break;}}catch{settled=false;break;}}
+          cached={asset,tier0,tier1,tier2,model0,model1,model2,failed,settled};this.settledAssets.set(id,cached);this.stats.geometrySettledEvaluations++;
+        }
+        if(!cached.settled)return false;
+      }
+      return this.recordsByAsset.size>0;
+    }
     // Every demand request uses one of these three tiers. Only skip the camera
     // scan when *all* assets are already resident or explicitly failed. Check
     // again each time so editor changes, retries and resource release are seen.
@@ -211,5 +241,5 @@ export class VillageGeometryStreaming {
       console.warn('Village model stopped; no automatic retry.',request.id,request.level,error);
     }).finally(()=>{this.pending=null;this.stats.geometryPending=0;});
   }
-  dispose(){this.disposed=true;this.world.scene.onAfterRenderObservable.remove(this.observer);}
+  dispose(){this.disposed=true;this.settledAssets.clear();this.recordsByAsset=null;this.assets=null;this.world.scene.onAfterRenderObservable.remove(this.observer);}
 }

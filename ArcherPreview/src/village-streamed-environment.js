@@ -23,6 +23,7 @@ import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
+import {groupVillageRecords} from './village-scenery-cache.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -76,7 +77,7 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
     plan.unshift({id,level:2,priority:Infinity});
   }
   const resources=[...new Set(plan.flatMap(r=>assets.get(r.id).levels.find(l=>l.level===r.level).resources))];
-  return world.villagePrepared={url,manifest,assets,records,plan,resources};
+  return world.villagePrepared={url,manifest,assets,records,recordsByAsset:groupVillageRecords(records),plan,resources};
   }finally{snapshot.scene.onDisposeObservable.remove(observer);if(ownLifetime)lifetime.close();}
 }
 
@@ -169,7 +170,7 @@ export function loadStreamedVillage(world,{
       setup.stage='decoder-init';await setup.run(()=>initialize({timeoutMs:setupTimeoutMs,timers:setupTimers}));checkMapLoadSnapshot(world,snapshot,setup);
       setup.stage='ground';await setup.run(()=>ground(world,{lifetime:setup}));checkMapLoadSnapshot(world,snapshot,setup);
     }catch(error){setup.abort(error);error.stage??=setup.stage;throw error;}finally{setup.close();snapshot.scene.onDisposeObservable.remove(setupObserver);}
-    const {url,manifest,assets,records,plan}=prepared,containers=[];
+    const {url,manifest,assets,records,plan}=prepared,recordsByAsset=prepared.recordsByAsset??groupVillageRecords(records),containers=[];
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats),candidates=new VillageActiveCandidates(world.scene);stats.activeMeshCandidates=candidates.stats;
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
@@ -192,7 +193,7 @@ export function loadStreamedVillage(world,{
       world.lighting.registerMeshes(meshes);
       await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled}));lifetime.check();
       installVillageGeometry(asset,container,level,world);
-      const instances=records.filter(r=>r.placement.asset===id);
+      const instances=recordsByAsset.get(id)??[];
       for(const record of instances)if(!record.meshes.length){
         if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
@@ -229,7 +230,7 @@ export function loadStreamedVillage(world,{
         throw error;
       }finally{pendingLoads.delete(operation);lifetime.close();}
     };
-    const streaming=new VillageGeometryStreaming(world,records,load,has,stats);world.villageStreaming=streaming;
+    const streaming=new VillageGeometryStreaming(world,records,load,has,stats,{recordsByAsset,assets});world.villageStreaming=streaming;
     let cleaned=false;
     const stop=()=>{if(disposed)return;disposed=true;controller.abort(mapLoadAbortError());streaming.dispose();textures?.dispose();};
     const cleanup=()=>{

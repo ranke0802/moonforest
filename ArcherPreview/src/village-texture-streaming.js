@@ -1,6 +1,7 @@
-import {Frustum,Texture} from '@babylonjs/core';
+import {Texture} from '@babylonjs/core';
 import {releaseMapTexture} from './map-texture-lifetime.js';
-import {projectedCoverage,VILLAGE_LOD_COVERAGE} from './village-lod.js';
+import {VILLAGE_LOD_COVERAGE} from './village-lod.js';
+import {sceneryProjection,projectedSceneryCoverage} from './village-scenery-cache.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
 import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS,mapLoadAbortError,mapLoadTimeoutError} from './map-load-lifetime.js';
 import {sceneryHighTextureProfile} from './mobile-texture-policy.js';
@@ -94,7 +95,7 @@ export class VillageTextureStreaming {
     if(!this.pending&&this.stats.highTextureStage==='viewport-wait:admission'){this.stats.highTextureStage='idle';this.stats.highTextureViewportWaiting=false;}
     const policy=VILLAGE_TEXTURE_PACING;
     this.nextCheck=now+policy.checkMs;const candidates=new Map();
-    const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
+    const camera=this.world.camera,projection=sceneryProjection(camera),planes=projection.planes;
     const view=camera.getViewMatrix().m;
     // Include translation and zoom, not just camera rotation. Keep observing
     // during geometry work so the first subsequent upload uses the moving rate.
@@ -108,7 +109,7 @@ export class VillageTextureStreaming {
       if(!config?.highTextures||(asset.baseLevel!==undefined&&asset.baseLevel!==0))continue;
       for(const mesh of record.meshes){
         if(!mesh.isInFrustum(planes))continue;
-        const coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere,this.world);
+        const coverage=projectedSceneryCoverage(projection,mesh.getBoundingInfo().boundingSphere,this.world);
         if(coverage>VILLAGE_LOD_COVERAGE.mid){
           const id=record.placement.asset;
           if(!this.failed.has(id))candidates.set(id,Math.max(coverage,candidates.get(id)??0));

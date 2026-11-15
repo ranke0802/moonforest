@@ -1,0 +1,1 @@
+export{Mn as volumetricLightScatteringPixelShader}from"./babylon-game-DZXlSAq8.js";

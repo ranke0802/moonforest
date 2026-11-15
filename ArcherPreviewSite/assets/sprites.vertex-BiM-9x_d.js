@@ -1,0 +1,1 @@
+export{m as spritesVertexShader}from"./babylon-game-DZXlSAq8.js";

@@ -1,0 +1,1 @@
+export{ra as lightUboDeclarationWGSL}from"./babylon-game-DZXlSAq8.js";

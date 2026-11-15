@@ -1,0 +1,1 @@
+export{t as volumetricLightingRenderVolumePixelShaderWGSL}from"./babylon-lazy~moonforestV2~volumetricLightingRenderVolume.fragment~volumetricLightingRenderV~i2rte4ot-Dr5k_9Pd.js";

@@ -1,7 +1,7 @@
-import {Color3,Constants,Frustum,ShaderMaterial,Vector2,Vector4,VertexBuffer} from '@babylonjs/core';
+import {Color3,Constants,ShaderMaterial,Vector2,Vector4,VertexBuffer} from '@babylonjs/core';
 import '@babylonjs/core/Shaders/ShadersInclude/instancesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/instancesVertex.js';
-import {projectedCoverage} from './village-lod.js';
+import {sceneryProjection,projectedSceneryCoverage} from './village-scenery-cache.js';
 import {VILLAGE_INK_MIN_COVERAGE,selectVillageOutlines,villageInkWidth} from './village-outline-policy.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
 import {CAVE_VIEW_GLSL,CAVE_VIEW_UNIFORMS} from './witch-cave-visibility.js';
@@ -197,12 +197,12 @@ export class VillageOutlines {
     if(this.vertexColorMaterial)this.updateMaterial(this.vertexColorMaterial,fogChanged);
     if(this.tintedVertexColorMaterial)this.updateMaterial(this.tintedVertexColorMaterial,fogChanged);
     if(now>=this.next){
-      this.next=now+150;const camera=this.world.camera,planes=Frustum.GetPlanes(camera.getTransformationMatrix());
+      this.next=now+150;const camera=this.world.camera,projection=sceneryProjection(camera),planes=projection.planes;
       const ranked=[];
       for(const entry of this.entries){
         const {record,mesh}=entry;
         if(record.fogVisible===false||!record.root.isEnabled()||!mesh.isInFrustum(planes))continue;
-        entry.coverage=projectedCoverage(camera,mesh.getBoundingInfo().boundingSphere);
+        entry.coverage=projectedSceneryCoverage(projection,mesh.getBoundingInfo().boundingSphere);
         if(entry.coverage>this.minimumCoverage)ranked.push(entry);
       }
       const {chosen:selected,triangles}=selectVillageOutlines(ranked,this.world.touchDevice,this.selected,this.minimumCoverage);
