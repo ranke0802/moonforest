@@ -1,0 +1,11 @@
+✔ whole-body scenery space protects the rendered rock boundary without changing combat or player collision (1.2198ms)
+✔ a bounded initial home correction stays inside its territory and cannot teleport across a real barrier (0.9822ms)
+✔ all nineteen R5 authored homes and peaceful wander footprints clear current production rock bounds and navigation (350.7388ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2009.1793

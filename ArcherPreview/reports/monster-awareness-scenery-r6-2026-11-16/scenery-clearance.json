@@ -1,0 +1,278 @@
+{
+  "passed": true,
+  "scope": "Production transforms and conservative rendered-rock bounds; no browser/device raster claim",
+  "rows": [
+    {
+      "id": "plains-fox-west-1",
+      "radius": 1.23,
+      "requested": {
+        "x": -77,
+        "y": 0.11999999731779099,
+        "z": -52
+      },
+      "actualHome": {
+        "x": -77,
+        "y": 0.11999999731779099,
+        "z": -52
+      },
+      "shift": 0,
+      "safeWanderDirections": 6
+    },
+    {
+      "id": "plains-fox-east-1",
+      "radius": 1.23,
+      "requested": {
+        "x": -72,
+        "y": 0.6468173563480377,
+        "z": -10
+      },
+      "actualHome": {
+        "x": -72,
+        "y": 0.6468173563480377,
+        "z": -10
+      },
+      "shift": 0,
+      "safeWanderDirections": 24
+    },
+    {
+      "id": "plains-boar-north-bank-1",
+      "radius": 0.83,
+      "requested": {
+        "x": 66,
+        "y": 0.4011885076761246,
+        "z": 32
+      },
+      "actualHome": {
+        "x": 66,
+        "y": 0.4011885076761246,
+        "z": 32
+      },
+      "shift": 0,
+      "safeWanderDirections": 24
+    },
+    {
+      "id": "plains-boar-south-bank-1",
+      "radius": 0.83,
+      "requested": {
+        "x": 66,
+        "y": 0.24721749871969217,
+        "z": -13
+      },
+      "actualHome": {
+        "x": 66,
+        "y": 0.24721749871969217,
+        "z": -13
+      },
+      "shift": 0,
+      "safeWanderDirections": 24
+    },
+    {
+      "id": "plains-wolf-meadow-1",
+      "radius": 1.62,
+      "requested": {
+        "x": -28,
+        "y": 1.0405574142932892,
+        "z": 59
+      },
+      "actualHome": {
+        "x": -28,
+        "y": 1.0405574142932892,
+        "z": 59
+      },
+      "shift": 0,
+      "safeWanderDirections": 20
+    },
+    {
+      "id": "plains-wolf-meadow-2",
+      "radius": 1.66,
+      "requested": {
+        "x": -23,
+        "y": 1.3438690602779388,
+        "z": 58
+      },
+      "actualHome": {
+        "x": -23,
+        "y": 1.3438690602779388,
+        "z": 58
+      },
+      "shift": 0,
+      "safeWanderDirections": 14
+    },
+    {
+      "id": "plains-wolf-meadow-3",
+      "radius": 1.51,
+      "requested": {
+        "x": -23,
+        "y": 0.8845127522945404,
+        "z": 62
+      },
+      "actualHome": {
+        "x": -23.923879532511286,
+        "z": 61.61731656763491,
+        "y": 0.9090608308224514
+      },
+      "shift": 0.9999999999999999,
+      "safeWanderDirections": 8
+    },
+    {
+      "id": "plains-alpha-pack-1",
+      "radius": 3.61,
+      "requested": {
+        "x": 29.25,
+        "y": 1.858901560306549,
+        "z": 37
+      },
+      "actualHome": {
+        "x": 27.145241121992004,
+        "z": 31.918662571187923,
+        "y": 1.5119991259193593
+      },
+      "shift": 5.5,
+      "safeWanderDirections": 9
+    },
+    {
+      "id": "plains-alpha-pack-2",
+      "radius": 1.62,
+      "requested": {
+        "x": 24,
+        "y": 1.1823619902133964,
+        "z": 33
+      },
+      "actualHome": {
+        "x": 24,
+        "y": 1.1823619902133964,
+        "z": 33
+      },
+      "shift": 0,
+      "safeWanderDirections": 16
+    },
+    {
+      "id": "plains-alpha-pack-3",
+      "radius": 1.66,
+      "requested": {
+        "x": 32,
+        "y": 1.9618545770645142,
+        "z": 32
+      },
+      "actualHome": {
+        "x": 31.425974851452363,
+        "z": 30.61418070123307,
+        "y": 1.8309656221293817
+      },
+      "shift": 1.5,
+      "safeWanderDirections": 14
+    },
+    {
+      "id": "plains-alpha-pack-4",
+      "radius": 1.51,
+      "requested": {
+        "x": 36,
+        "y": 2.343322515487671,
+        "z": 38
+      },
+      "actualHome": {
+        "x": 40.242640687119284,
+        "z": 33.757359312880716,
+        "y": 2.251039459130923
+      },
+      "shift": 5.999999999999998,
+      "safeWanderDirections": 11
+    },
+    {
+      "id": "plains-stylized-wolf-pack-1",
+      "radius": 1.66,
+      "requested": {
+        "x": -73,
+        "y": 1.056545451283455,
+        "z": 49
+      },
+      "actualHome": {
+        "x": -73,
+        "y": 1.056545451283455,
+        "z": 49
+      },
+      "shift": 0,
+      "safeWanderDirections": 16
+    },
+    {
+      "id": "plains-stylized-wolf-pack-2",
+      "radius": 1.66,
+      "requested": {
+        "x": -67,
+        "y": 1.386963665485382,
+        "z": 49
+      },
+      "actualHome": {
+        "x": -67,
+        "y": 1.386963665485382,
+        "z": 49
+      },
+      "shift": 0,
+      "safeWanderDirections": 17
+    },
+    {
+      "id": "plains-stylized-wolf-pack-3",
+      "radius": 1.66,
+      "requested": {
+        "x": -73,
+        "y": 1.891736775636673,
+        "z": 55
+      },
+      "actualHome": {
+        "x": -71.08658283817455,
+        "z": 50.38060233744357,
+        "y": 1.4093861322713612
+      },
+      "shift": 4.999999999999997,
+      "safeWanderDirections": 10
+    },
+    {
+      "id": "plains-stylized-wolf-pack-4",
+      "radius": 1.66,
+      "requested": {
+        "x": -67,
+        "y": 2.410731613636017,
+        "z": 55
+      },
+      "actualHome": {
+        "x": -64.17157287525382,
+        "z": 52.17157287525381,
+        "y": 2.004013296777062
+      },
+      "shift": 3.999999999999997,
+      "safeWanderDirections": 11
+    },
+    {
+      "id": "plains-village-wolf-south-1",
+      "radius": 1.62,
+      "requested": {
+        "x": -57,
+        "y": 3.61909681558609,
+        "z": -50
+      },
+      "actualHome": {
+        "x": -58.06066017177982,
+        "z": -51.06066017177982,
+        "y": 3.842534152726199
+      },
+      "shift": 1.5000000000000022,
+      "safeWanderDirections": 10
+    },
+    {
+      "id": "plains-village-wolf-north-1",
+      "radius": 1.62,
+      "requested": {
+        "x": -82,
+        "y": 1.7152364253997803,
+        "z": 8
+      },
+      "actualHome": {
+        "x": -84.30969883127821,
+        "z": 7.043291419087276,
+        "y": 1.4766492911141302
+      },
+      "shift": 2.499999999999995,
+      "safeWanderDirections": 7
+    }
+  ]
+}

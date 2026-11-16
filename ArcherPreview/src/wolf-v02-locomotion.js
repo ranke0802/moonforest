@@ -96,9 +96,9 @@ export class WolfV02LocomotionPose{
   Vector3.TransformNormalToRef(up,head.getWorldMatrix(),this.forward);this.forward.normalize();const baseDot=Vector3.Dot(this.forward,this.to),yaw=Math.atan2(this.forward.x,this.forward.z),pitch=Math.atan2(this.forward.y,Math.hypot(this.forward.x,this.forward.z));
   Vector3.TransformCoordinatesToRef(this.watchMuzzleOffset,jaw.getWorldMatrix(),this.watchMuzzle);const muzzleDistance=Vector3.Distance(this.watchMuzzle,this.watchChest),muzzleHeight=this.watchMuzzle.y;
   const targetYaw=angleDelta(Math.atan2(player.x-origin.x,player.z-origin.z),yaw),targetPitch=Math.atan2(player.y+playerDimensions(e.player).bodyAimHeight-origin.y,Math.hypot(player.x-origin.x,player.z-origin.z))-pitch;
-  // A fixed resting body cannot follow a target behind its shoulders. Fade
-  // attention toward the original pose rather than folding the face inward.
-  const attention=clamp((1.8-Math.abs(targetYaw))/.6,0,1),desiredYaw=clamp(targetYaw,-.90,.90)*attention,desiredPitch=clamp(targetPitch,-.28,.28)*attention;
+  // Behind the shoulders, keep a visible bounded side glance. The anatomical
+  // clearance guard below still prevents curling the face into the chest.
+  const desiredYaw=clamp(targetYaw,-.90,.90),desiredPitch=clamp(targetPitch,-.28,.28);
   if(!this.watchActive)this.watchYaw=this.watchPitch=0;
   const dt=this.watchSample===e.animator.samples?0:Math.max(0,e.dt??0);this.watchSample=e.animator.samples;this.watchActive=true;
   this.watchYaw+=clamp(desiredYaw-this.watchYaw,-.9*dt,.9*dt);this.watchPitch+=clamp(desiredPitch-this.watchPitch,-.65*dt,.65*dt);

@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-16",
+  "base": "df1fc40",
+  "tests": {
+    "runner": "Node24/Babylon NullEngine",
+    "pass": 55,
+    "fail": 0
+  },
+  "causes": [
+    "Territory watch retained the sleeping clip and erased rear attention",
+    "Center-only inner range missed close approaches to wandering animals",
+    "Small center circles and understated scenery colliders omitted heads/tails and visible rock bounds"
+  ],
+  "changes": [
+    "Reuse existing lying alert clip, hold endpoint, bounded rear head glance",
+    "Actor-or-center inner confirmation with original outer leash and sight gate",
+    "Separate measured noncombat whole-body scenery envelope",
+    "Shared spatial index of current rendered and edited rocks, weak map identities",
+    "Safe home correction before reveal only; bounded wandering and homeward detours"
+  ],
+  "preserved": [
+    "approved mesh/UV/weights/bone lengths/scales/textures/LOD",
+    "combat hit volumes, damage and original attack windows",
+    "no live actor teleport",
+    "0.1 deployment",
+    "19 default actors/11 territories and runtime limits"
+  ],
+  "limits": [
+    "No browser automation",
+    "No real-device raster/FPS/heat verification",
+    "Conservative bounds and sampled envelope, not full triangle collision for every animation"
+  ]
+}

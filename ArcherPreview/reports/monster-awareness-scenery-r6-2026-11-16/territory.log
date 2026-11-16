@@ -1,0 +1,37 @@
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+BJS - [19:06:29]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (780.143ms)
+BJS - [19:06:29]: Babylon.js v9.31.0 - Null engine
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (391.8647ms)
+BJS - [19:06:30]: Babylon.js v9.31.0 - Null engine
+✔ ambient walking uses native rise; resting watch confirms inner presence with game dt and keeps outer combat hysteresis (189.1861ms)
+BJS - [19:06:30]: Babylon.js v9.31.0 - Null engine
+✔ a wall or cliff between an inner-ring player and the monster keeps the encounter in watch until the approach is clear (232.5026ms)
+BJS - [19:06:30]: Babylon.js v9.31.0 - Null engine
+✔ a walking canine can settle back into lying rest using its real rise keys in reverse without changing rig scale (195.6758ms)
+BJS - [19:06:31]: Babylon.js v9.31.0 - Null engine
+✔ all territorial species hold their body heading while watching and wait in game time before turning home (810.761ms)
+BJS - [19:06:31]: Babylon.js v9.31.0 - Null engine
+✔ noticing the player during an ambient rise returns to lying watch instead of finishing the stand-up (574.0683ms)
+BJS - [19:06:32]: Babylon.js v9.31.0 - Null engine
+✔ ambient walk advances in world space and follows accepted travel; a blocked route stops its gait (135.2705ms)
+✔ actual quadruped watch faces stay clear of the chest in lying, standing and settling poses (1021.1229ms)
+ℹ 108 real model/pose/target conditions; no skin/texture/LOD edits or GPU claim
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+BJS - [19:06:28]: Babylon.js v9.31.0 - Null engine
+✔ cached SDK absolute rotations preserve full joint poses and skip repeated parent decompositions (23.5753ms)
+ℹ scale=2.5,2.5,2.5 decompositions 960 -> 645, maximum matrix/quaternion difference 0
+ℹ scale=1.2,0.8,1.6 decompositions 960 -> 645, maximum matrix/quaternion difference 0
+ℹ scale=-1.2,0.8,1.6 decompositions 960 -> 645, maximum matrix/quaternion difference 0
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6337.4916

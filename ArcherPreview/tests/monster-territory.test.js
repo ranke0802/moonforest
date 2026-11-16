@@ -37,7 +37,7 @@ test('fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk hom
   f.player.position.set(0,0,6);f.world.terrain.place(f.player.position);const zone={x:0,z:0,radius:12,combatRadius:4,wanderRadius:0,returnRadius:.4,reengageRadius:10};
   const adapter=f.factory(id);await adapter.activate({position:new Vector3(),row:{territory:zone}},{preparation:prepare()});const e=adapter.encounter;
   const publicState=e.territoryState;e.update(.2,f.player);assert.equal(publicState.phase,'watch',id+': outside combat circle only watches');assert.equal(publicState.engaged,false);assert.equal(adapter.snapshot().combat,false);
-  if(id!=='boar.r1'&&id!=='guardian-bear.standard')assert.equal(e.brain.state,'Rest_Lie_R5',id+': lying watch retains the actual rest clip');
+  if(id!=='boar.r1'&&id!=='guardian-bear.standard')assert.equal(e.brain.state,'Alert_Lie_R5',id+': lying watch retains the actual rest clip');
   assert.equal(e.grab.start(f.player,f.playerNodes,e.brain.serial),false,id+': watch cannot capture');assert.equal(e.ring.isVisible,false);
   e.brain.hit({damage:1});assert.equal(publicState.engaged,true,id+': a real incoming hit engages inside the activity region');
   e.actor.position.set(0,0,8);f.world.terrain.place(e.actor.position);e.brain.hp=e.brain.maxHp-17;const hp=e.brain.hp;e.combat.hp=400;
@@ -85,7 +85,7 @@ test('ambient walking uses native rise; resting watch confirms inner presence wi
  for(let frame=0;frame<160&&!sawWalk;frame++){e.update(.1,f.player);const status=adapter.snapshot().territory;sawRise||=e.brain.state==='Rise_From_Lie_R5';sawWalk||=e.brain.state==='Wolf_Walk_R5';assert.equal(publicState.phase,'ambient');assert.equal(publicState.engaged,false);assert.notEqual(e.brain.mode,'attack');assert.equal(e.ring.isVisible,false);if(status.ambientMoving)assert.ok(Math.hypot(status.target.x-status.home.x,status.target.z-status.home.z)<=2+1e-6);}
  assert.equal(sawRise,true,'a lying wolf plays the existing complete rise before ambient walking');assert.equal(sawWalk,true);
  adapter.hide();f.player.position.set(8,0,0);await adapter.activate({position:new Vector3(),row:{territory:zone}},{preparation:prepare()});e.actor.rotation.y=-Math.PI/2;
- const yaw=e.actor.rotation.y;e.update(.1,f.player);assert.strictEqual(e.territoryState,publicState);assert.equal(publicState.phase,'watch');assert.equal(e.brain.state,'Rest_Lie_R5');assert.equal(e.actor.rotation.y,yaw,'rest watch keeps the body heading and leaves gaze to the head pose');
+ const yaw=e.actor.rotation.y;e.update(.1,f.player);assert.strictEqual(e.territoryState,publicState);assert.equal(publicState.phase,'watch');assert.equal(e.brain.state,'Alert_Lie_R5');assert.equal(e.actor.rotation.y,yaw,'rest watch keeps the body heading and leaves gaze to the head pose');
  for(let frame=0;frame<15;frame++)e.update(.1,f.player);assert.equal(publicState.engaged,false,'outer presence never attacks');assert.equal(adapter.snapshot().combat,false);
  f.player.position.set(0,0,3);for(let frame=0;frame<8;frame++)e.update(.1,f.player);assert.equal(publicState.engaged,false);
  const clock=adapter.snapshot().territory.innerTime;for(let frame=0;frame<12;frame++)e.update(0,f.player);assert.equal(adapter.snapshot().territory.innerTime,clock,'pause advances no awareness clock');
@@ -152,7 +152,7 @@ test('noticing the player during an ambient rise returns to lying watch instead 
   assert.equal(adapter.snapshot().territory.rising,true,id);for(let frame=0;frame<7;frame++)e.update(.1,f.player);e.alignPose();const raised=e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y;
   f.player.position.set(8,0,0);const body=e.actor.rotation.y,location=e.actor.position.clone();let highest=-Infinity;
   for(let frame=0;frame<80;frame++){e.update(.1,f.player);e.alignPose();const status=adapter.snapshot().territory;assert.equal(status.phase,'watch');assert.equal(status.rising,false);assert.equal(status.engaged,false);assert.ok(Math.abs(e.actor.rotation.y-body)<1e-6);assert.ok(Vector3.Distance(e.actor.position,location)<1e-5,JSON.stringify({id,frame,from:location.asArray(),to:e.actor.position.asArray(),state:e.brain.state,time:e.brain.time}));highest=Math.max(highest,e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y);}
-  assert.equal(e.brain.state,'Rest_Lie_R5',id+': lies while watching');assert.ok(highest<=raised+.025,id+': notice does not finish standing');assert.ok(Math.abs(e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y-resting)<.025,id+': actual pelvis returns to its lying height');await adapter.dispose();
+  assert.equal(e.brain.state,'Alert_Lie_R5',id+': lies while watching');assert.ok(highest<=raised+.025,id+': notice does not finish standing');assert.ok(Math.abs(e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y-resting)<.025,id+': actual pelvis returns to its lying height');await adapter.dispose();
  }
 });
 
