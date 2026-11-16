@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-16",
+  "base": "acc5e22",
+  "changes": [
+    "cancel ambient stand-up into lying head-only watch",
+    "stationary watch preserves body heading and XZ",
+    "idle on rejected ambient travel; return retry after .5 game seconds",
+    "canine walk phase follows accepted displacement",
+    "bear Walking/Running phase follows measured stance stride",
+    "single-owner backward Backflip displacement"
+  ],
+  "tests": {
+    "runner": "Node24/Babylon NullEngine",
+    "count": 48,
+    "passed": 48,
+    "failed": 0
+  },
+  "bear": {
+    "worldWalkMetresPerSourceSecond": 2.227331892673378,
+    "worldRunMetresPerSourceSecond": 8.213286354233082,
+    "backflipWorldMetres": 2.1959606753385197
+  },
+  "preserved": [
+    "source art/keys/textures/LOD",
+    "bear attack contact and damage",
+    "0.1",
+    "native incoming reactions",
+    "world collision"
+  ],
+  "limits": [
+    "No browser automation",
+    "Device visuals/FPS/heat not verified"
+  ]
+}

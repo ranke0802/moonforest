@@ -14,7 +14,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
   const center={x:0,z:0},home=new Vector3(),target=new Vector3(),motion={target,stopDistance:.25},brains=new WeakSet();
   const walkResult={events:[],speed:walkSpeed},stopResult={events:[],speed:0};
   let radius=0,combatRadius=0,wanderRadius=0,returnRadius=0,reengageRadius=0,ready=false,arrived=false,reason=null;
-  let walkState,idleState,restState,riseState,watchState,innerTime=0,ambientTime=3,disengageRemaining=0,ambientMoving=false,lastPlayer=null,rising=false,settling=false,stood=false;
+  let walkState,idleState,restState,riseState,watchState,innerTime=0,ambientTime=3,disengageRemaining=0,travelWait=0,ambientMoving=false,lastPlayer=null,rising=false,settling=false,stood=false;
   const originalUpdate=encounter.update,originalMotion=encounter.movementPlan,originalContacts=encounter.poseAndContacts,originalReceive=encounter.receiveBossHit,originalAlign=encounter.alignPose;
   let watchLook;
   const protectedReaction=b=>b.hp<=0||b.stagger>0||reactions.has(b.mode);
@@ -43,7 +43,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
   }
   function noncombatPose(){
     const b=encounter.brain;if(!b||protectedReaction(b)||rising||settling)return;
-    const moving=(state.phase==='return'&&!arrived)||(state.phase==='ambient'&&ambientMoving);
+    const moving=travelWait<=0&&!encounter.combat?.grabOwner&&((state.phase==='return'&&!arrived)||(state.phase==='ambient'&&ambientMoving));
     if(moving&&startRise())return;
     const clip=moving?walkState:['watch','disengage'].includes(state.phase)?watchState:stood?idleState:restState;
     if(b.state!==clip||b.mode!==(moving?'move':'idle'))b.start(clip,moving?'move':'idle');
@@ -54,7 +54,12 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
     // Watch may finish lying down. A committed fight or homeward walk instead
     // reverses smoothly from the current source pose into the same rise clip.
     if(settling&&(next==='combat'||next==='return')){settling=false;if(!protectedReaction(encounter.brain)){rising=true;encounter.brain.mode='rise';}}
-    state.phase=next;state.engaged=next==='combat';innerTime=0;
+    state.phase=next;state.engaged=next==='combat';innerTime=0;travelWait=0;
+    if((next==='watch'||next==='disengage')&&riseState&&(rising||settling)&&!protectedReaction(encounter.brain)){
+      // Noticing someone is not a command to finish an ambient stand-up.
+      // Return along the same keys from the current pose, keeping the head free.
+      rising=false;settling=true;stood=false;watchState=restState;encounter.brain.mode='settle';encounter.brain.behavior=behavior();
+    }
     if(next!=='combat'){clearAttack();noncombatPose();}
   }
   function nativeCombat(){
@@ -135,7 +140,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
   const controller={
     get returning(){return state.enabled&&state.phase==='return';},
     configure(value){
-      state.enabled=state.engaged=ready=arrived=false;state.phase='ambient';reason=null;innerTime=disengageRemaining=0;ambientMoving=rising=settling=stood=false;lastPlayer=null;if(!value)return;
+      state.enabled=state.engaged=ready=arrived=false;state.phase='ambient';reason=null;innerTime=disengageRemaining=travelWait=0;ambientMoving=rising=settling=stood=false;lastPlayer=null;if(!value)return;
       const {x,z}=value;radius=value.radius;combatRadius=value.combatRadius??radius*.55;wanderRadius=value.wanderRadius??Math.min(2,radius*.2);
       if(![x,z,radius,combatRadius,wanderRadius].every(Number.isFinite)||radius<=0||combatRadius<=0||combatRadius>radius||wanderRadius<0||wanderRadius>radius)throw new Error('Invalid monster territory');
       returnRadius=value.returnRadius??Math.min(2,radius*.25);reengageRadius=value.reengageRadius??Math.max(0,radius-1.5);
@@ -145,7 +150,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
     reset(position){
       if(!state.enabled)return;
       if(!position||![position.x,position.z].every(Number.isFinite)||distance(position,center)>radius+1e-6)throw new Error('Monster home must be inside its territory');
-      home.copyFrom(position);target.copyFrom(position);ready=true;arrived=false;reason=null;innerTime=disengageRemaining=0;ambientTime=3+random()*2;ambientMoving=rising=settling=false;
+      home.copyFrom(position);target.copyFrom(position);ready=true;arrived=false;reason=null;innerTime=disengageRemaining=travelWait=0;ambientTime=3+random()*2;ambientMoving=rising=settling=false;
       stood=encounter.brain.state!==restState;watchState=stood?idleState:restState;state.phase='ambient';state.engaged=false;noncombatPose();
     },
     bindBrain(brain){
@@ -160,6 +165,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
       brain.update=function(dt,range,alive){
         if(!state.enabled||!ready)return update.call(this,dt,range,alive);
         dt=Number.isFinite(dt)?Math.max(0,dt):0;
+        travelWait=Math.max(0,travelWait-dt);
         if(protectedReaction(this)){
           rising=settling=false;const result=update.call(this,dt,range,true);
           if(state.phase!=='combat'){result.events.length=0;result.speed=0;noncombatPose();}
@@ -195,17 +201,34 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
         return moving?walkResult:stopResult;
       };
     },
-    inspect:()=>({enabled:state.enabled,phase:state.phase,engaged:state.engaged,returning:controller.returning,arrived,reason,innerTime,disengageRemaining,ambientMoving,rising,settling,home:{x:home.x,y:home.y,z:home.z},target:{x:target.x,y:target.y,z:target.z},x:center.x,z:center.z,radius,combatRadius,wanderRadius,returnRadius,reengageRadius}),
+    inspect:()=>({enabled:state.enabled,phase:state.phase,engaged:state.engaged,returning:controller.returning,arrived,reason,innerTime,disengageRemaining,travelWait,ambientMoving,rising,settling,home:{x:home.x,y:home.y,z:home.z},target:{x:target.x,y:target.y,z:target.z},x:center.x,z:center.z,radius,combatRadius,wanderRadius,returnRadius,reengageRadius}),
   };
   encounter.update=function(dt,player){
     watchLook?.restore();
-    const step=Number.isFinite(dt)?Math.max(0,dt):0,beforeYaw=this.actor?.rotation.y;check(player,step);
+    const step=Number.isFinite(dt)?Math.max(0,dt):0,beforeYaw=this.actor?.rotation.y,beforeX=this.actor?.position.x,beforeZ=this.actor?.position.z,beforeTime=this.brain?.time,beforeState=this.brain?.state,beforeSerial=this.brain?.serial,beforeMode=this.brain?.mode;check(player,step);
     const result=originalUpdate.call(this,dt,player);check(player);
     if(state.enabled&&ready&&state.phase!=='combat'){
       silence();
+      if(step>0&&!protectedReaction(this.brain)&&this.brain.mode==='move'){
+        const moved=Math.hypot(this.actor.position.x-beforeX,this.actor.position.z-beforeZ),b=this.brain;
+        if(moved<1e-5&&beforeMode==='move'&&beforeState===walkState){
+          if(state.phase==='ambient'){ambientMoving=false;ambientTime=2+random()*2;}else travelWait=.5;
+          noncombatPose();this.animator.transition(b.state,{clipTime:b.time,actionId:b.serial,blendDuration:.12});this.animator.update(0);
+        }else if(moved>=1e-5&&this.kind==='wolf'){
+          // The imported walk is in-place. Its source phase follows accepted
+          // world travel, so obstruction cannot keep advancing the feet.
+          const source=beforeState===b.state&&beforeSerial===b.serial?beforeTime:0,duration=b.durations[b.state],rate=this.balance?.locomotionPlaybackRate??1,time=(source+moved/walkSpeed*rate)%Math.max(.001,duration??1);
+          if(Math.abs(time-b.time)>1e-6){b.time=time;this.animator.transition(b.state,{clipTime:time,actionId:b.serial});this.animator.update(0);}
+        }
+      }
       // The native encounter faces an idle actor toward the player. Restore
       // the resting body heading; the existing neck/head pose owns its gaze.
-      if(!protectedReaction(this.brain)&&this.brain.mode!=='move'&&Number.isFinite(beforeYaw))this.actor.rotation.y=beforeYaw;
+      if(!protectedReaction(this.brain)&&this.brain.mode!=='move'&&Number.isFinite(beforeYaw)){
+        this.actor.rotation.y=beforeYaw;
+        if((state.phase==='watch'||state.phase==='disengage')&&(this.actor.position.x!==beforeX||this.actor.position.z!==beforeZ)){
+          this.actor.position.x=beforeX;this.actor.position.z=beforeZ;this.world.terrain?.place(this.actor.position);
+        }
+      }
     }
     return result;
   };

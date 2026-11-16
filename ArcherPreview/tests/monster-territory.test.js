@@ -142,3 +142,27 @@ test('all territorial species hold their body heading while watching and wait in
   e.update(.1,f.player);assert.equal(e.territoryState.phase,'return',id+': returns only after the cautious pause');await adapter.dispose();
  }
 });
+
+test('noticing the player during an ambient rise returns to lying watch instead of finishing the stand-up',async t=>{
+ const f=await fixture(t);f.world.mapId='village';
+ for(const id of ['gray-wolf.r1','stylized-wolf.r1','wolf-3.r1','alpha-wolf.r8','fox.r1']){
+  f.player.position.set(0,0,40);const adapter=f.factory(id);await adapter.activate({position:new Vector3(),row:{territory:{x:0,z:0,radius:12,combatRadius:4,wanderRadius:2}}},{preparation:prepare()});const e=adapter.encounter;e.brain.random=()=>.5;
+  e.alignPose();const resting=e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y;
+  for(let frame=0;frame<80&&!adapter.snapshot().territory.rising;frame++)e.update(.1,f.player);
+  assert.equal(adapter.snapshot().territory.rising,true,id);for(let frame=0;frame<7;frame++)e.update(.1,f.player);e.alignPose();const raised=e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y;
+  f.player.position.set(8,0,0);const body=e.actor.rotation.y,location=e.actor.position.clone();let highest=-Infinity;
+  for(let frame=0;frame<80;frame++){e.update(.1,f.player);e.alignPose();const status=adapter.snapshot().territory;assert.equal(status.phase,'watch');assert.equal(status.rising,false);assert.equal(status.engaged,false);assert.ok(Math.abs(e.actor.rotation.y-body)<1e-6);assert.ok(Vector3.Distance(e.actor.position,location)<1e-5,JSON.stringify({id,frame,from:location.asArray(),to:e.actor.position.asArray(),state:e.brain.state,time:e.brain.time}));highest=Math.max(highest,e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y);}
+  assert.equal(e.brain.state,'Rest_Lie_R5',id+': lies while watching');assert.ok(highest<=raised+.025,id+': notice does not finish standing');assert.ok(Math.abs(e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y-resting)<.025,id+': actual pelvis returns to its lying height');await adapter.dispose();
+ }
+});
+
+test('ambient walk advances in world space and follows accepted travel; a blocked route stops its gait',async t=>{
+ const f=await fixture(t);f.world.mapId='village';f.player.position.set(0,0,40);const adapter=f.factory('gray-wolf.r1');await adapter.activate({position:new Vector3(),row:{territory:{x:0,z:0,radius:12,combatRadius:4,wanderRadius:2}}},{preparation:prepare()});const e=adapter.encounter;e.brain.random=()=>.5;
+ for(let frame=0;frame<100&&e.brain.mode!=='move';frame++)e.update(.1,f.player);
+ assert.equal(e.brain.mode,'move');const start=e.actor.position.clone();for(let frame=0;frame<5;frame++)e.update(.1,f.player);assert.ok(Vector3.Distance(e.actor.position,start)>.4,'walking must move the actor, not only its feet');
+ const original=f.world.navigation.constrain,beforePhase=e.brain.time,duration=e.brain.durations.Wolf_Walk_R5;
+ f.world.navigation.constrain=(position,previous)=>{position.x=previous.x+(position.x-previous.x)*.5;position.z=previous.z+(position.z-previous.z)*.5;return position;};e.update(.1,f.player);assert.ok(Math.abs((e.brain.time-beforePhase+duration)%duration-.05*(e.balance.locomotionPlaybackRate??1))<1e-5,'half the accepted travel advances only half the foot phase');
+ f.world.navigation.constrain=(position,previous)=>position.copyFrom(previous);const blocked=e.actor.position.clone();e.update(.1,f.player);assert.ok(Vector3.Distance(e.actor.position,blocked)<1e-6);assert.notEqual(e.brain.mode,'move');assert.notEqual(e.brain.state,'Wolf_Walk_R5');
+ for(let frame=0;frame<15;frame++){e.update(.1,f.player);assert.notEqual(e.brain.state,'Wolf_Walk_R5','a blocked actor waits instead of walking in place');}
+ f.world.navigation.constrain=original;await adapter.dispose();
+});

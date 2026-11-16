@@ -26,6 +26,7 @@ import { createBossPreparation,bossPreparationCancelled } from './boss-preparati
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
 import { bearEncounterSize } from './bear-size.js';
 import {BearCombatContact} from './bear-combat-contact.js';
+import {BearLocomotion} from './bear-locomotion.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -134,6 +135,7 @@ export class BossEncounter {
       this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       if(this.kind!=='elena')this.ring.metadata={...this.ring.metadata,moonforestWarmMaterial:true};
       if(this.kind==='bear'&&this.bearSize)this.bearCombatContact??=new BearCombatContact(this);
+      if(this.kind==='bear'&&this.bearSize)this.bearLocomotion??=new BearLocomotion(this);
     });this.assetPreparationStep=4;}
     // The stable morph-slot contract is configured above. Initialize the real
     // idle pose before compiling; do not warm an artificial all-zero morph rig.
@@ -152,6 +154,7 @@ export class BossEncounter {
   }
   prepareAnimator(){const animator=this.createAnimator();if(this.kind==='elena'&&this.phase===2)installMourningHairGuides(animator);return animator;}
   async summon(player,{position,rotationY,preparation,reuseAnimator=false,activate=true}={}){
+    this.bearLocomotion?.reset();
     this.bearCombatContact?.reset();
     if(this.loading)return;this.loading=true;this.onChange(this);
     this.grab.reset();
@@ -182,7 +185,7 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.bearCombatContact?.reset();this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.knockTurn=null;if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
+  hide(){this.bearLocomotion?.reset();this.bearCombatContact?.reset();this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.knockTurn=null;if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
   setShadowCasting(enabled){
     enabled=enabled&&this.renderVisible!==false&&!(this.death.started&&this.death.opacity<1);
     // Retain pooled geometry for a warm return, but do not keep retired phases
@@ -252,6 +255,7 @@ export class BossEncounter {
   attackContactPoints(aim){return ['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));}
   attackBodyContact(event){return this.kind==='bear'&&this.bearSize?this.bearCombatContact?.contact(event,this.player)===true:true;}
   applyMotionRoot(root){
+    if(this.kind==='bear'&&this.bearSize&&this.brain.mode==='evade'&&this.brain.state==='Backflip'){if(this.motionRootTravel!==false)this.bearLocomotion?.backflip();return;}
     if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
       const x=(root[0]-this.lastRoot[0])*this.config.scale,z=(root[2]-this.lastRoot[2])*this.config.scale,yaw=this.actor.rotation.y;
       this.actor.position.x+=x*Math.cos(yaw)+z*Math.sin(yaw);this.actor.position.z+=z*Math.cos(yaw)-x*Math.sin(yaw);
@@ -328,6 +332,7 @@ export class BossEncounter {
     this.knockVelocity.scaleInPlace(Math.exp(-6*dt));
     if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,ENEMY_ARENA_RADIUS);else capPosition(this.actor.position);
     this.world.terrain?.place(this.actor.position);
+    if(this.kind==='bear'&&this.bearSize)this.bearLocomotion?.synchronize(beforeMove);
     // Only the battle-owned update may certify this exact post-collision pose.
     // Subclasses can still move after super.update; the battle checks the
     // complete snapshot again after every encounter and separation have run.

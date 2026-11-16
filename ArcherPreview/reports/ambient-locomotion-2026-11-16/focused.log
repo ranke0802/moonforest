@@ -1,0 +1,92 @@
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+✔ definitions name only canonical versioned assets and preserve live encounter stats/animation mappings (23.389ms)
+✔ spawn safety rejects map, navigation, actor overlap and player distance without relocation (14.1543ms)
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+✔ a registered variant consumes health, collider and actor-local clip mapping; unsupported movement/remaps reject explicitly (165.316ms)
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+✔ independent pooled encounters reuse shared geometry/materials and retain animator/native clip bindings over warm lives (73.8292ms)
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ ten goblin actors repeatedly created, killed and removed release owned scene resources (235.5944ms)
+✔ retained crossfade sets old native weights to zero; defaults stop/delete and both produce the same sampled pose (3.1704ms)
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ death callback is once per life and opt-in corpse completion retains the same animator through respawn (62.0619ms)
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ NPC stays outside battle, keeps its interaction under decision tiering and follows live quest relevance (59.9572ms)
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ last-actor eviction releases only its owned library; borrowed libraries and another live clone survive (101.1353ms)
+✔ map generation cancellation before a late library load prevents independent actor creation or publication (3.962ms)
+✔ ordinary summon/hide retains its existing recreate/dispose behavior unless explicit actor pooling opts in (0.5551ms)
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ staged group actors stay hidden and outside battle until committed (58.5089ms)
+✔ actual pooled encounters enter together, wait for all corpses, and respawn as a group (78.1478ms)
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ all enabled bear attacks have physical limb roles; corrected real skin contacts hit and distant/side air swings miss (664.917ms)
+BJS - [17:04:47]: Babylon.js v9.31.0 - Null engine
+✔ every enabled bear attack can approach and physically reach a stationary player through the native encounter (868.6574ms)
+✔ native jab approach resolves once at30/60Hz and2x; dodge and out-of-reach motions cannot damage (488.0931ms)
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ actual approved low-foot stance travel matches the calibrated gait clocks; hip loops have zero net travel (594.1123ms)
+ℹ {"measurements":[{"name":"Walking","worldMetresPerSourceSecond":2.224706461032231,"calibrated":2.227331892673378},{"name":"Running","worldMetresPerSourceSecond":8.218966014683247,"calibrated":8.213286354233082}],"backflipDistance":2.1959606753385197}
+BJS - [17:04:46]: Babylon.js v9.31.0 - Null engine
+✔ walking/running source time follows accepted world distance at native and territory speeds, and freezes at a wall (396.2598ms)
+✔ Backflip has one backward displacement owner and the ordinary wall/cliff collider path stops it (344.9188ms)
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:45]: Skeleton "target_character": 58 bones stored as vertex uniforms use 236 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [17:04:46]: Skeleton "target_character": 58 bones stored as vertex uniforms use 236 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+{"referencePose":"Block6 frame 0","actualHeight":4.50000006417676,"preservedV01Height":2.3436112906352804,"scale":2.7841648658417224,"sizeRatio":1.9201137005804982,"clips":20,"checks":"native skin height; independent config; proportionate navigation/hurt/range; preserved movement speed/timing and rig/clip layout"}
+✔ 0.2 shipped skinned bear has a 4.5m default guard pose and proportional geometry without changing 0.1 or source clips (712.2967ms)
+BJS - [17:04:45]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:47]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (1440.2085ms)
+BJS - [17:04:47]: Babylon.js v9.31.0 - Null engine
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (603.8213ms)
+BJS - [17:04:47]: Babylon.js v9.31.0 - Null engine
+✔ ambient walking uses native rise; resting watch confirms inner presence with game dt and keeps outer combat hysteresis (157.3578ms)
+BJS - [17:04:48]: Babylon.js v9.31.0 - Null engine
+✔ a wall or cliff between an inner-ring player and the monster keeps the encounter in watch until the approach is clear (162.1748ms)
+BJS - [17:04:48]: Babylon.js v9.31.0 - Null engine
+✔ a walking canine can settle back into lying rest using its real rise keys in reverse without changing rig scale (224.1021ms)
+BJS - [17:04:49]: Babylon.js v9.31.0 - Null engine
+✔ all territorial species hold their body heading while watching and wait in game time before turning home (744.2372ms)
+BJS - [17:04:49]: Babylon.js v9.31.0 - Null engine
+✔ noticing the player during an ambient rise returns to lying watch instead of finishing the stand-up (577.1572ms)
+✔ ambient walk advances in world space and follows accepted travel; a blocked route stops its gait (180.3345ms)
+BJS - [17:04:44]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:44]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:44]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:44]: Babylon.js v9.31.0 - Null engine
+BJS - [17:04:44]: Babylon.js v9.31.0 - Null engine
+✔ actual bear headfront rig aims neck/head while actor, torso, every position and scale remain exact (20.8995ms)
+✔ repeated align/apply never compounds and restore respects new animator samples (15.2024ms)
+✔ sample-counter-free bear restores before native sample/align and phase exit, including disengage and pause (4.2927ms)
+✔ manual/legacy/non-bear, movement and hurt/death cases keep their source pose (2.7113ms)
+✔ a target behind and far above cannot exceed the small neck/head correction bounds (2.7ms)
+✔ static cliff solids cover the full steep band with no rendered geometry and keep the west ramp open (6.6326ms)
+✔ north and east cliffs stop ascent/descent including a large swept dash before any part of the steep band (4.0338ms)
+✔ world navigation and placement rebuild preserve cliff barriers, while the approved bear summit stays usable (696.9227ms)
+✔ boar preparation lasts .9 game seconds at 30Hz and 0.5x, with unchanged charge contact profile (2.7028ms)
+✔ boar preparation lasts .9 game seconds at 30Hz and 1x, with unchanged charge contact profile (0.3047ms)
+✔ boar preparation lasts .9 game seconds at 30Hz and 2x, with unchanged charge contact profile (0.2546ms)
+✔ boar preparation lasts .9 game seconds at 60Hz and 0.5x, with unchanged charge contact profile (0.2441ms)
+✔ boar preparation lasts .9 game seconds at 60Hz and 1x, with unchanged charge contact profile (0.2646ms)
+✔ boar preparation lasts .9 game seconds at 60Hz and 2x, with unchanged charge contact profile (0.241ms)
+✔ normal autonomous and manually summoned boar brain path both show watch preparation after forward approach (0.707ms)
+✔ boar hit charge leaves at least 2.5 seconds of non-attacking counter time and no low-HP chain (0.5166ms)
+✔ boar blocked charge leaves at least 2.5 seconds of non-attacking counter time and no low-HP chain (0.3665ms)
+✔ boar miss charge leaves at least 2.5 seconds of non-attacking counter time and no low-HP chain (1.4245ms)
+✔ autonomous repeated missed charges cannot bypass their counter window through player threats (1.6055ms)
+✔ hit, death, territory return/start and cancellation discard a pending charge; later combat needs a fresh preparation (0.8279ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 48
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7421.374
