@@ -1,0 +1,32 @@
+{
+  "baselineRevision": "09410d8",
+  "method": "Node24 registerHooks substitutes only the six task-modified src modules using git show; same tests/assets and all other tracked sources. No live source/test edits, revert, worktree or asset copies.",
+  "files": [
+    "wolf-v02-ram-runtime.test.js",
+    "wolf-v02-predator-runtime.test.js",
+    "wolf-v02-orbit-navigation.test.js"
+  ],
+  "baseline": {
+    "tests": 18,
+    "passed": 6,
+    "failed": 12
+  },
+  "currentFailureCount": 12,
+  "sameFailureNames": true,
+  "onlyCurrent": [],
+  "onlyBaseline": [],
+  "failureNames": [
+    "R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts",
+    "a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once",
+    "a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token",
+    "a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek",
+    "an accepted late-window ram cannot rewind the whole rig when the victim becomes prone",
+    "an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack",
+    "every new bout samples independently while the three-strike low-health bout remains finite",
+    "real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture",
+    "seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling",
+    "standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites",
+    "support and attention refresh only cached affected branches with bounded matrix work and identical poses",
+    "the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing"
+  ]
+}

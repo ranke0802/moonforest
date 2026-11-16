@@ -1,6 +1,20 @@
 import test from 'node:test';import assert from 'node:assert/strict';import {parseHTML} from 'linkedom';
 import {setupMonsterSpawnEditor} from '../src/monster-spawn-editor.js';import {emptyMonsterSpawns,validateMonsterSpawns} from '../src/monster-spawn-document.js';
 const tick=()=>new Promise(r=>setImmediate(r));
+
+test('authored plains animal types remain selected and keep their territory when saved',async()=>{
+ for(const definitionId of ['fox.r1','boar.r1','gray-wolf.r1','stylized-wolf.r1','wolf-3.r1','alpha-wolf.r8','guardian-bear.standard']){
+  const {document,window}=parseHTML('<html><body><main></main></body></html>'),host=document.querySelector('main');
+  const row={id:'animal',definitionId,groupId:'pack',spawnMode:'start',respawn:true,rewardEnabled:true,x:20,z:10,yaw:0,delaySeconds:45,randomRadius:0,drop:{assetId:'',effectEnabled:false},territory:{x:20,z:10,radius:10}};
+  let saved={...emptyMonsterSpawns(),maps:{'great-plains':[row]}};
+  const runtime={getDocument:()=>structuredClone(saved),replace:value=>{saved=structuredClone(value);}};
+  const editor=setupMonsterSpawnEditor({host,world:{mapId:'great-plains',navigation:{free:()=>true}},getPlayer:()=>({position:{x:0,z:0}}),getRuntime:async()=>runtime});
+  const click=async selector=>{host.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));await tick();};
+  await click('[data-monster=load]');await click('[data-monster-select=animal]');
+  assert.equal(host.querySelector('[data-monster-field=definitionId] option[selected]').getAttribute('value'),definitionId);
+  await click('[data-monster=save]');assert.deepEqual(saved.maps['great-plains'][0],row);editor.dispose();
+ }
+});
 test('authoring can add, group, save and retain an independent data-only placement',async()=>{const {document,window}=parseHTML('<html><body><main></main></body></html>'),host=document.querySelector('main'),world={mapId:'great-plains'},player={position:{x:3,z:4}};let saved=emptyMonsterSpawns();const runtime={getDocument:()=>structuredClone(saved),replace:v=>{assert.equal(validateMonsterSpawns(v).valid,true);saved=structuredClone(v);},resetPermanent:()=>{}};const editor=setupMonsterSpawnEditor({host,world,getPlayer:()=>player,getRuntime:async()=>runtime});const click=async s=>{host.querySelector(s).dispatchEvent(new window.Event('click',{bubbles:true}));await tick();};await click('[data-monster=add]');assert.equal(host.querySelector('[data-monster-field=x]').value,'8');await click('[data-monster=save]');assert.equal(saved.maps['great-plains'].length,1);assert.equal(saved.maps['great-plains'][0].rewardEnabled,true);editor.dispose();});
 
 test('a map click selects a safe monster position without forwarding the click to the game',async()=>{const {document,window}=parseHTML('<html><body><main><canvas></canvas></main></body></html>'),host=document.querySelector('main'),canvas=host.querySelector('canvas');canvas.getBoundingClientRect=()=>({left:10,top:20,width:500,height:500});const world={mapId:'great-plains',scene:{getEngine:()=>({getRenderingCanvas:()=>canvas})},navigation:{free:()=>true}},player={position:{x:0,z:0}};let saved=emptyMonsterSpawns(),observed=0;const runtime={getDocument:()=>structuredClone(saved),replace:v=>saved=structuredClone(v),resetPermanent(){}};const editor=setupMonsterSpawnEditor({host,world,getPlayer:()=>player,getRuntime:async()=>runtime,groundAtScreen:(_world,x,y)=>({x:x/10,y:0,z:y/10})});const click=async selector=>{host.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));await tick();};await click('[data-monster=add]');await click('[data-monster=pick]');canvas.addEventListener('pointerdown',()=>observed++);const e=new window.Event('pointerdown',{bubbles:true,cancelable:true});Object.defineProperties(e,{button:{value:0},clientX:{value:110},clientY:{value:120}});canvas.dispatchEvent(e);assert.equal(observed,0);await click('[data-monster=save]');assert.equal(saved.maps['great-plains'][0].x,10);assert.equal(saved.maps['great-plains'][0].z,10);editor.dispose();});

@@ -15,6 +15,7 @@ import {prepareNpcInteriorInk} from './character-interior-ink.js';
 import {applyHitFlash} from './hit-feedback.js';
 import {isRuntimeOutline} from './character-outlines.js';
 import {ACTOR_DEFINITIONS,getActorDefinition,validateActorSpawn} from './actor-definitions.js';
+import {installMonsterTerritory} from './monster-territory.js';
 
 const encounters={wolf:WolfEncounter,bear:BossEncounter,goblin:GoblinEncounter,elena:ElenaEncounter,mourning:MourningElenaEncounter,npc:GoblinEncounter};
 const positionOf=value=>value instanceof Vector3?value.clone():new Vector3(value.x,value.y??0,value.z);
@@ -105,8 +106,9 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         if(rewardsEnabled)onDefeat({...event,actorDefinitionId:definition.actorDefinitionId,actorId:id,life});
       },
     });
+    let territory=null;
     const createBrain=encounter.createBrain.bind(encounter);
-    encounter.createBrain=durations=>{const brain=createBrain(durations);if(definition.category!=='npc')brain.hp=brain.maxHp=profile.hp;return brain;};
+    encounter.createBrain=durations=>{const brain=createBrain(durations);if(definition.category!=='npc')brain.hp=brain.maxHp=profile.hp;territory?.bindBrain(brain);return brain;};
     function applyCollider(){for(const key of ['radius','stopDistance','separationRadius'])encounter[key]=profile.collider[key]*(definition.encounterType==='bear'?(encounter.bearSize?.sizeScale??1):1);}
     applyCollider();
     encounter.id=id;encounter.actorDefinitionId=definition.actorDefinitionId;encounter.retainAnimatorForPool=true;encounter.developmentActor=true;
@@ -183,9 +185,14 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         const bearSize=definition.encounterType==='bear'?bearEncounterSize(world):null,spawnDefinition=bearSize?{...definition,collider:{...profile.collider,radius:profile.collider.radius*bearSize.sizeScale},spawn:{...definition.spawn,safeDistance:definition.spawn.safeDistance*bearSize.sizeScale}}:definition;
         const spawn=validateActorSpawn(spawnDefinition,world,{position,player,occupied:value.occupied??[]});
         if(!spawn.valid)throw new Error('Unsafe actor spawn: '+spawn.reason);
+        const zone=world.release==='moonforest-0.2'&&definition.category!=='npc'?value.row?.territory:null;
+        if(zone){if(territory)territory.configure(zone);else territory=installMonsterTerritory(encounter,zone,{walkSpeed:definition.movement.walkSpeed});}
+        else territory?.configure(null);
         applyCollider();resetTransient();rewardGranted=false;spawnContext=value;
         await encounter.summon(player,{position,rotationY:value.rotationY,preparation,reuseAnimator:true});
         if(!valid()||(isCurrent&&!isCurrent())){encounter.hide();detach();throw bossPreparationCancelled();}
+        territory?.reset(encounter.actor.position);
+        if(territory&&zone)territory.bindBrain(encounter.brain);
         life++;active=true;
         if(definition.category==='npc'){
           // Reuse the prepared visual/idle, never the hostile encounter update.
@@ -220,7 +227,8 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         const activity=getActivity(definition,encounter);
         const clipDuration=encounter.animator?.deathDuration??encounter.animator?.durations?.[encounter.brain?.state]??0;
         const deathPoseFinished=encounter.animator?.deathFinished??((encounter.brain?.time??0)>=clipDuration);
-        return {active:active&&(definition.category==='npc'||encounter.active),dead,dying:dead&&!encounter.corpseGone&&(!encounter.death.started||!deathPoseFinished),corpseGone:!!encounter.corpseGone,combat:active&&definition.category!=='npc'&&encounter.active&&!dead,incoming:!!encounter.pendingEvents.length||activity?.incoming===true,projectile:!!encounter.spell?.plan||activity?.projectile===true,questRelevant:spawnContext?.questRelevant===true||activity?.questRelevant===true,rewardGranted,position:encounter.actor?.position,life,decisionCount};
+        const snapshot={active:active&&(definition.category==='npc'||encounter.active),dead,dying:dead&&!encounter.corpseGone&&(!encounter.death.started||!deathPoseFinished),corpseGone:!!encounter.corpseGone,combat:active&&definition.category!=='npc'&&encounter.active&&!dead,incoming:!!encounter.pendingEvents.length||activity?.incoming===true,projectile:!!encounter.spell?.plan||activity?.projectile===true,questRelevant:spawnContext?.questRelevant===true||activity?.questRelevant===true,rewardGranted,position:encounter.actor?.position,life,decisionCount};
+        if(territory)snapshot.territory=territory.inspect();return snapshot;
       },
       estimate(){return estimate??{estimatedBytes:definition.population.estimatedBytes};},
       dispose(){

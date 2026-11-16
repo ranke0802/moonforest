@@ -1,0 +1,7 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+const current=readFileSync(new URL('integration-tests.txt',import.meta.url),'utf8').replaceAll('\r','');
+const baseline=readFileSync(new URL('baseline-integration-tests.txt',import.meta.url),'utf8').replaceAll('\r','');
+const currentNames=[...new Set([...current.matchAll(/^✖ (.+) \([\d.]+ms\)$/gm)].map(match=>match[1]))].sort();
+const baselineNames=[...new Set([...baseline.matchAll(/^not ok \d+ - (.+)$/gm)].map(match=>match[1]))].sort();
+const result={baselineRevision:'09410d8',method:'Node24 registerHooks substitutes only the six task-modified src modules using git show; same tests/assets and all other tracked sources. No live source/test edits, revert, worktree or asset copies.',files:['wolf-v02-ram-runtime.test.js','wolf-v02-predator-runtime.test.js','wolf-v02-orbit-navigation.test.js'],baseline:{tests:Number(baseline.match(/^# tests (\d+)$/m)?.[1]),passed:Number(baseline.match(/^# pass (\d+)$/m)?.[1]),failed:Number(baseline.match(/^# fail (\d+)$/m)?.[1])},currentFailureCount:currentNames.length,sameFailureNames:JSON.stringify(currentNames)===JSON.stringify(baselineNames),onlyCurrent:currentNames.filter(name=>!baselineNames.includes(name)),onlyBaseline:baselineNames.filter(name=>!currentNames.includes(name)),failureNames:baselineNames};
+writeFileSync(new URL('baseline-comparison.json',import.meta.url),JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result));

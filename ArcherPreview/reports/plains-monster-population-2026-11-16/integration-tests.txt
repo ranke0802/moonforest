@@ -1,0 +1,423 @@
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ definitions name only canonical versioned assets and preserve live encounter stats/animation mappings (15.9013ms)
+✔ spawn safety rejects map, navigation, actor overlap and player distance without relocation (7.5755ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ a registered variant consumes health, collider and actor-local clip mapping; unsupported movement/remaps reject explicitly (119.4422ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ independent pooled encounters reuse shared geometry/materials and retain animator/native clip bindings over warm lives (48.9821ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ ten goblin actors repeatedly created, killed and removed release owned scene resources (151.3556ms)
+✔ retained crossfade sets old native weights to zero; defaults stop/delete and both produce the same sampled pose (1.743ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ death callback is once per life and opt-in corpse completion retains the same animator through respawn (36.1724ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ NPC stays outside battle, keeps its interaction under decision tiering and follows live quest relevance (44.4007ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ last-actor eviction releases only its owned library; borrowed libraries and another live clone survive (94.8354ms)
+✔ map generation cancellation before a late library load prevents independent actor creation or publication (4.1414ms)
+✔ ordinary summon/hide retains its existing recreate/dispose behavior unless explicit actor pooling opts in (0.5688ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ staged group actors stay hidden and outside battle until committed (41.496ms)
+✔ actual pooled encounters enter together, wait for all corpses, and respawn as a group (49.1952ms)
+✔ warm reuse keeps one prepared resource set and resets independent per-life state (6.1081ms)
+✔ caps account for overlapping requests, categories, exact memory and hard maximum twenty (1.3293ms)
+✔ prewarm rejects oversized reservations atomically and actual estimates cannot overrun memory cap (1.2017ms)
+✔ death reward acknowledgment and respawn occur once per life; pause freezes countdown (3.8765ms)
+✔ map generation cancellation rejects promptly, retains bounded reservation and disposes late creation (0.7031ms)
+✔ late activation cancellation hides again and queued jobs never create after disposal (0.7476ms)
+✔ only far peaceful NPC decisions are staggered; update and meaningful threats stay full frequency (0.4297ms)
+✔ clear and external hide do not emit rewards or respawn; idle eviction releases only unleased resources (0.5227ms)
+✔ actual definition validator injection rejects safety, map, navigation and occupancy before resource creation (0.4195ms)
+✔ a temporarily blocked respawn retries the same ticket without duplicating death or reward (0.7818ms)
+✔ a preparation timeout frees the scheduling slot but charges and eventually reclaims its late work (18.2998ms)
+✔ asynchronous disposal retains its memory reservation until the owned resource actually releases (0.7977ms)
+✔ clear at the respawn completion boundary reclaims the cancelled life exactly once (0.455ms)
+✔ fresh0.2 plains defaults seed14 approved actors in7 complete groups, with bounded preparation and terrain height (12.7567ms)
+✔ legacy custom20 are preserved; requested defaults reserve whole groups first while excess customs wait visibly (3.5439ms)
+✔ editing or deleting defaults persists across runtime recreation, including a replacement imported without migration metadata (1.2702ms)
+✔ storage errors keep defaults active in memory without overwriting unreadable custom data (2.2602ms)
+✔ prepared groups wait through pause and a map departure cannot attach a late acquisition (1.3858ms)
+✔ game runtime stages a group, honors rewards, persists permanent kills, and releases old maps (4.3826ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ monsters summon near an outer-arena player and continue past the former wall (113.2896ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ group preparation keeps all requested actors hidden while the other kind continues (56.3469ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ model CPU timings are copied into the owning hidden job without retaining library records (29.0652ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ far enemy draw suppression is reversible and leaves combat/model state intact (27.9889ms)
+✔ spawn count is bounded and five bosses have separate positions inside the arena (0.3882ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ bear and goblin ground anchors follow terrain on spawn, movement, separation and contact correction (33.4945ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ dead bear and goblin fade independently, award once, stop rendering and reset on resummon (35.3977ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ equipped armor reduces incoming normal, critical and throw damage once and persists across resets (35.725ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ summon 3/1/5/2 reuses one model template, shares geometry, clones skeletons and animations, hides unused actors (37.0358ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ five bosses share player health, immunity and a single potion clock (33.7492ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ one swing hits each grounded boss once; recovery stays damageable independently (44.3645ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ a single boss owns the grab; another boss cannot capture or damage that held player (38.7369ms)
+✔ separation moves overlapping living bosses without dragging a captured player owner (0.2375ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ roll contact never displaces an overlapping bear or goblin (29.4428ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ ending a roll beside an enemy does not push it out of the newly usable gap (31.5895ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ walking through prone, getting-up or dead enemies does not separate their bodies (29.1964ms)
+✔ hiding during a pending load cannot reactivate an old summon (0.7363ms)
+✔ multi-boss audio tracks separate attack clocks and plays victory only after the last death (0.8775ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✔ five goblins coexist with bears, share player health and reuse one goblin asset (36.2031ms)
+✔ a shared sword swing damages both bear and goblin, with independent hit deduplication (39.1622ms)
+✔ group respawns together after all members die and game-time delay expires (3.4939ms)
+✔ permanent death persists and map cancellation removes late actors (1.1666ms)
+✔ whole-group admission reserves before asynchronous preparation and exposes capacity wait without partial spawns (0.9732ms)
+✔ monster placement records round trip and grouped lifetime configuration stays consistent (1.1277ms)
+✔ invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected (0.2161ms)
+✔ all approved plains quadruped definitions and finite contained territories round trip (0.7493ms)
+✔ default migration preserves custom values and aliases conflicting IDs/groups without mutating its input (2.156ms)
+✔ only the exact plains default revision and known14 ID history permit migration storage capacity up to34 (2.1893ms)
+✔ future default revisions add new IDs but do not restore deleted or overwrite edited previously installed defaults (0.2379ms)
+✔ authored plains animal types remain selected and keep their territory when saved (26.1598ms)
+✔ authoring can add, group, save and retain an independent data-only placement (6.0288ms)
+✔ a map click selects a safe monster position without forwarding the click to the game (2.4523ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:59]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (907.7512ms)
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (477.1723ms)
+✔ default plains document has exactly fourteen actors in seven independently editable stable groups (1.8212ms)
+✔ all fixed homes use actual terrain and clear physical navigation, water, roads, arrival and each other (2.7145ms)
+✔ territories remain distinct and contain group homes with current body and attack reach allowances (0.3971ms)
+✔ fox homes use existing forest canopies, boars use dry river banks and the bear stands on the real high summit (1.9404ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✖ an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack (278.9101ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ a player leaving the orbit is pursued by the actual run rather than dragging a planted circle or retreating (169.6863ms)
+BJS - [13:49:59]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:59]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ a walking player does not spin standing recovery feet and observation starts a real step before attention runs out (164.8521ms)
+✖ support and attention refresh only cached affected branches with bounded matrix work and identical poses (147.3608ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✖ seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling (4.2763ms)
+✖ every new bout samples independently while the three-strike low-health bout remains finite (6.231ms)
+✔ live heavy hits collapse/getup, blocked attacks play a hit motion, and lethal collapse remains terminal (1.1368ms)
+✖ the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing (6.7797ms)
+BJS - [13:49:58]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:58]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✖ standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites (249.5129ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:59]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✔ compact grounded prelaunch aiming stays bounded without a commit snap or post-launch retarget (237.0891ms)
+✔ blocked near-range replanning keeps the completed observation and follows a detour instead of stopping its run at the player range (167.8983ms)
+BJS - [13:49:58]: Babylon.js v9.31.0 - Null engine
+✖ R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts (13.5247ms)
+✔ compact ram prefix speed is configurable and the authored whole-pose chase mapping stays monotonic (0.4272ms)
+✖ an accepted late-window ram cannot rewind the whole rig when the victim becomes prone (1.1271ms)
+BJS - [13:49:59]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:59]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:59]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:59]: Babylon.js v9.31.0 - Null engine
+BJS - [13:49:59]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✖ real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture (817.2974ms)
+BJS - [13:49:59]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:59]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:49:59]: Babylon.js v9.31.0 - Null engine
+BJS - [13:50:00]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✖ a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once (472.2316ms)
+BJS - [13:50:00]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:50:00]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:50:00]: Babylon.js v9.31.0 - Null engine
+BJS - [13:50:00]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✖ a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token (447.0812ms)
+BJS - [13:50:00]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+BJS - [13:50:00]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+✖ a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek (447.0079ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 76
+ℹ fail 12
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5136.6312
+
+✖ failing tests:
+
+test at tests\wolf-v02-orbit-navigation.test.js:16:1
+✖ an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack (278.9101ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(e.actor.position.equalsWithEpsilon(before,1e-7))
+
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-orbit-navigation.test.js:31:183)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-orbit-navigation.test.js:73:1
+✖ support and attention refresh only cached affected branches with bounded matrix work and identical poses (147.3608ms)
+  AssertionError [ERR_ASSERTION]: full refresh reference must reproduce the actual corrected game pose
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-orbit-navigation.test.js:85:95)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-predator-runtime.test.js:13:1
+✖ seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling (4.2763ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+
+  + undefined
+  - false
+
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:22:23)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-predator-runtime.test.js:32:1
+✖ every new bout samples independently while the three-strike low-health bout remains finite (6.231ms)
+  AssertionError [ERR_ASSERTION]: {"hp":450,"bouts":[["lunge"],["paw-swipe","chain-bite","paw-swipe"],["quick-bite","paw-swipe","chain-bite"],["lunge"],["chain-bite","chain-bite","paw-swipe"]]}
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:43:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-predator-runtime.test.js:64:1
+✖ the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing (6.7797ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+
+    assert.ok(Math.abs(actionDuration(lunge)-ramPrefix-(lunge.clipEnd-lunge.impact))<1e-9)
+
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:65:109)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-predator-runtime.test.js:81:1
+✖ standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites (249.5129ms)
+  AssertionError [ERR_ASSERTION]: {"id":"lunge","fps":30,"speed":0.5,"band":"minDistance","contact":null,"bite":null}
+
+  0 !== 40
+
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:88:11)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 40,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-ram-runtime.test.js:55:1
+✖ R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts (13.5247ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+
+    [
+      {
+        authoredAttention: true,
+        capture: false,
+        clipEnd: 0.8,
+  ...
+            0,
+  +         0.26,
+  +         0.305,
+  +         0.68
+  -         0.24,
+  -         0.32,
+  -         0.66
+          ],
+          source: [
+            0,
+            0.2,
+            0.4,
+  ...
+            0,
+  +         0.26,
+  +         0.305,
+  +         0.68
+  -         0.24,
+  -         0.32,
+  -         0.66
+          ],
+          source: [
+            0,
+            0.2,
+            0.4,
+  ...
+            0,
+  +         0.28,
+  +         0.325,
+  +         0.74
+  -         0.26,
+  -         0.34,
+  -         0.72
+          ],
+          source: [
+            0,
+            0.22,
+            0.43333333333333335,
+  ...
+            0,
+  +         0.5,
+  +         0.57,
+  +         0.68,
+  +         1.58
+  -         0.43,
+  -         0.6,
+  -         0.85,
+  -         1.55
+          ],
+          source: [
+            0,
+            0.85,
+            1.2,
+
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:57:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { id: 'quick-bite', label: '짧은 입질', sourceClip: 'Wolf_Predator_Diagonal_Bite_V02', clipStart: 0, clipEnd: 0.8, impact: 0.3333333333333333, commitTime: 0.2, capture: false, damage: 55, range: 4, minDistance: 2.8, maxDistance: 3.15, preferredDistance: 3, recovery: 0.6, authoredAttention: true, contactParts: [Array], whip: [Object], contactStart: 0.29, contactEnd: 0.4 }, { id: 'chain-bite', label: '연속 입질', sourceClip: 'Wolf_Predator_Diagonal_Bite_V02', clipStart: 0, clipEnd: 0.8, impact: 0.3333333333333333, commitTime: 0.2, capture: false, damage: 45, range: 4, minDistance: 2.8, maxDistance: 3.15, preferredDistance: 3, recovery: 0.68, authoredAttention: true, contactParts: [Array], whip: [Object], chain: true, contactStart: 0.29, contactEnd: 0.4 }, { id: 'paw-swipe', label: '사선 돌진 물기', sourceClip: 'Wolf_Predator_Reverse_Bite_V02', clipStart: 0, clipEnd: 0.8666666666666667, impact: 0.36666666666666664, commitTime: 0.22, capture: false, damage: 65, range: 4, minDistance: 2.8, maxDistance: 3.25, preferredDistance: 3.1, recovery: 0.65, authoredAttention: true, contactParts: [Array], whip: [Object], contactStart: 0.32, contactEnd: 0.43333333333333335 }, { id: 'pin', label: '앞발 제압·물기', sourceClip: 'Pin_Throat_Bite_R5', clipStart: 0, clipEnd: 3.4, impact: 1.2, commitTime: 0.85, capture: true, damage: 120, range: 3.2, minDistance: 8.7, maxDistance: 9.5, preferredDistance: 9.1, recovery: 1.05, contactParts: [Array], whip: [Object], contactStart: 1.2, contactEnd: 1.3199999999999998 } ],
+    expected: [ { id: 'quick-bite', label: '짧은 입질', sourceClip: 'Wolf_Predator_Diagonal_Bite_V02', clipStart: 0, clipEnd: 0.8, impact: 0.3333333333333333, commitTime: 0.2, capture: false, damage: 55, range: 4, minDistance: 2.8, maxDistance: 3.15, preferredDistance: 3, recovery: 0.6, authoredAttention: true, contactParts: [Array], whip: [Object], contactStart: 0.29, contactEnd: 0.4 }, { id: 'chain-bite', label: '연속 입질', sourceClip: 'Wolf_Predator_Diagonal_Bite_V02', clipStart: 0, clipEnd: 0.8, impact: 0.3333333333333333, commitTime: 0.2, capture: false, damage: 45, range: 4, minDistance: 2.8, maxDistance: 3.15, preferredDistance: 3, recovery: 0.68, authoredAttention: true, contactParts: [Array], whip: [Object], chain: true, contactStart: 0.29, contactEnd: 0.4 }, { id: 'paw-swipe', label: '사선 돌진 물기', sourceClip: 'Wolf_Predator_Reverse_Bite_V02', clipStart: 0, clipEnd: 0.8666666666666667, impact: 0.36666666666666664, commitTime: 0.22, capture: false, damage: 65, range: 4, minDistance: 2.8, maxDistance: 3.25, preferredDistance: 3.1, recovery: 0.65, authoredAttention: true, contactParts: [Array], whip: [Object], contactStart: 0.32, contactEnd: 0.43333333333333335 }, { id: 'pin', label: '앞발 제압·물기', sourceClip: 'Pin_Throat_Bite_R5', clipStart: 0, clipEnd: 3.4, impact: 1.2, commitTime: 0.85, capture: true, damage: 120, range: 3.2, minDistance: 8.7, maxDistance: 9.5, preferredDistance: 9.1, recovery: 1.05, contactParts: [Array], whip: [Object], contactStart: 1.2, contactEnd: 1.3199999999999998 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-ram-runtime.test.js:80:1
+✖ an accepted late-window ram cannot rewind the whole rig when the victim becomes prone (1.1271ms)
+  AssertionError [ERR_ASSERTION]: late real contact must not seek back into an earlier support pose
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:86:36)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-ram-runtime.test.js:91:1
+✖ real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture (817.2974ms)
+  AssertionError [ERR_ASSERTION]: the live whole-pose source clock stays monotonic
+      at drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:95:156)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-ram-runtime.test.js:107:1
+✖ a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once (472.2316ms)
+  AssertionError [ERR_ASSERTION]: the live whole-pose source clock stays monotonic
+      at drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:108:110)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-ram-runtime.test.js:113:1
+✖ a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token (447.0812ms)
+  AssertionError [ERR_ASSERTION]: the live whole-pose source clock stays monotonic
+      at drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:116:117)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests\wolf-v02-ram-runtime.test.js:125:1
+✖ a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek (447.0079ms)
+  AssertionError [ERR_ASSERTION]: the live whole-pose source clock stays monotonic
+      at drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+      at TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:127:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

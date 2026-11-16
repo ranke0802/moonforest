@@ -1358,13 +1358,16 @@ try {
   let authoredMonsterTask=null;
   const getAuthoredMonsters=async()=>{
     if(world.authoredMonsters)return world.authoredMonsters;
-    authoredMonsterTask??=import('./authored-monster-runtime.js').then(({createAuthoredMonsterRuntime})=>{
+    authoredMonsterTask??=Promise.all([
+      import('./authored-monster-runtime.js'),
+      versionRoute.release==='moonforest-0.2'?import('./plains-monster-spawns.js'):null,
+    ]).then(([{createAuthoredMonsterRuntime},defaults])=>{
       if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
-      const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);},onError:error=>console.error('[몬스터 배치]',error)});
+      const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,defaultDocument:defaults?.PLAINS_MONSTER_SPAWNS,defaultRevision:defaults?.PLAINS_MONSTER_SPAWNS_REVISION,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);},onError:error=>console.error('[몬스터 배치]',error)});
       world.authoredMonsters=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
     }).catch(error=>{authoredMonsterTask=null;throw error;});return authoredMonsterTask;
   };
-  try{if(releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&journeyStorage?.getItem('moonforest-monster-spawns-v1'))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
+  try{if(releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&(versionRoute.release==='moonforest-0.2'||journeyStorage?.getItem('moonforest-monster-spawns-v1')))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
   const getActorEditor=async(canOpen=()=>true)=>{
     if(!canOpen())throw new Error('배우 편집 설정이 꺼졌습니다.');
     if(world.developmentActorEditor)return world.developmentActorEditor;

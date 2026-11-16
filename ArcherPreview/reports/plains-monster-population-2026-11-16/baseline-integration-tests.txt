@@ -1,0 +1,643 @@
+TAP version 13
+# BJS - [13:51:40]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:40]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack
+not ok 1 - an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack
+  ---
+  duration_ms: 264.8382
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-orbit-navigation.test.js:16:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+
+      assert.ok(e.actor.position.equalsWithEpsilon(before,1e-7))
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-orbit-navigation.test.js:31:183)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: a player leaving the orbit is pursued by the actual run rather than dragging a planted circle or retreating
+ok 2 - a player leaving the orbit is pursued by the actual run rather than dragging a planted circle or retreating
+  ---
+  duration_ms: 167.7883
+  type: 'test'
+  ...
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: a walking player does not spin standing recovery feet and observation starts a real step before attention runs out
+ok 3 - a walking player does not spin standing recovery feet and observation starts a real step before attention runs out
+  ---
+  duration_ms: 138.6082
+  type: 'test'
+  ...
+# Subtest: support and attention refresh only cached affected branches with bounded matrix work and identical poses
+not ok 4 - support and attention refresh only cached affected branches with bounded matrix work and identical poses
+  ---
+  duration_ms: 133.9184
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-orbit-navigation.test.js:73:1'
+  failureType: 'testCodeFailure'
+  error: 'full refresh reference must reproduce the actual corrected game pose'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-orbit-navigation.test.js:85:95)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:40]: Babylon.js v9.31.0 - Null engine
+# Subtest: seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling
+not ok 5 - seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling
+  ---
+  duration_ms: 3.361
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-predator-runtime.test.js:13:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + undefined
+    - false
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:22:23)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.start (node:internal/test_runner/test:1262:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: every new bout samples independently while the three-strike low-health bout remains finite
+not ok 6 - every new bout samples independently while the three-strike low-health bout remains finite
+  ---
+  duration_ms: 6.9026
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-predator-runtime.test.js:32:1'
+  failureType: 'testCodeFailure'
+  error: '{"hp":450,"bouts":[["lunge"],["paw-swipe","chain-bite","paw-swipe"],["quick-bite","paw-swipe","chain-bite"],["lunge"],["chain-bite","chain-bite","paw-swipe"]]}'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:43:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: live heavy hits collapse/getup, blocked attacks play a hit motion, and lethal collapse remains terminal
+ok 7 - live heavy hits collapse/getup, blocked attacks play a hit motion, and lethal collapse remains terminal
+  ---
+  duration_ms: 1.1577
+  type: 'test'
+  ...
+# Subtest: the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing
+not ok 8 - the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing
+  ---
+  duration_ms: 2.8505
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-predator-runtime.test.js:64:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+
+      assert.ok(Math.abs(actionDuration(lunge)-ramPrefix-(lunge.clipEnd-lunge.impact))<1e-9)
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:65:109)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:40]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites
+not ok 9 - standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites
+  ---
+  duration_ms: 237.9515
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-predator-runtime.test.js:81:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    {"id":"lunge","fps":30,"speed":0.5,"band":"minDistance","contact":null,"bite":null}
+
+    0 !== 40
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 40
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-predator-runtime.test.js:88:11)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: compact grounded prelaunch aiming stays bounded without a commit snap or post-launch retarget
+ok 10 - compact grounded prelaunch aiming stays bounded without a commit snap or post-launch retarget
+  ---
+  duration_ms: 236.0227
+  type: 'test'
+  ...
+# Subtest: blocked near-range replanning keeps the completed observation and follows a detour instead of stopping its run at the player range
+ok 11 - blocked near-range replanning keeps the completed observation and follows a detour instead of stopping its run at the player range
+  ---
+  duration_ms: 129.8827
+  type: 'test'
+  ...
+# BJS - [13:51:40]: Babylon.js v9.31.0 - Null engine
+# Subtest: R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts
+not ok 12 - R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts
+  ---
+  duration_ms: 2.8353
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-ram-runtime.test.js:55:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+
+      [
+        {
+          authoredAttention: true,
+          capture: false,
+          clipEnd: 0.8,
+    ...
+              0,
+    +         0.26,
+    +         0.305,
+    +         0.68
+    -         0.24,
+    -         0.32,
+    -         0.66
+            ],
+            source: [
+              0,
+              0.2,
+              0.4,
+    ...
+              0,
+    +         0.26,
+    +         0.305,
+    +         0.68
+    -         0.24,
+    -         0.32,
+    -         0.66
+            ],
+            source: [
+              0,
+              0.2,
+              0.4,
+    ...
+              0,
+    +         0.28,
+    +         0.325,
+    +         0.74
+    -         0.26,
+    -         0.34,
+    -         0.72
+            ],
+            source: [
+              0,
+              0.22,
+              0.43333333333333335,
+    ...
+              0,
+    +         0.5,
+    +         0.57,
+    +         0.68,
+    +         1.58
+    -         0.43,
+    -         0.6,
+    -         0.85,
+    -         1.55
+            ],
+            source: [
+              0,
+              0.85,
+              1.2,
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0:
+      id: 'quick-bite'
+      label: '짧은 입질'
+      sourceClip: 'Wolf_Predator_Diagonal_Bite_V02'
+      clipStart: 0
+      clipEnd: 0.8
+      impact: 0.3333333333333333
+      commitTime: 0.2
+      capture: false
+      damage: 55
+      range: 4
+      minDistance: 2.8
+      maxDistance: 3.15
+      preferredDistance: 3
+      recovery: 0.6
+      authoredAttention: true
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.2
+          2: 0.4
+          3: 0.8
+        seconds:
+          0: 0
+          1: 0.24
+          2: 0.32
+          3: 0.66
+      contactStart: 0.29
+      contactEnd: 0.4
+    1:
+      id: 'chain-bite'
+      label: '연속 입질'
+      sourceClip: 'Wolf_Predator_Diagonal_Bite_V02'
+      clipStart: 0
+      clipEnd: 0.8
+      impact: 0.3333333333333333
+      commitTime: 0.2
+      capture: false
+      damage: 45
+      range: 4
+      minDistance: 2.8
+      maxDistance: 3.15
+      preferredDistance: 3
+      recovery: 0.68
+      authoredAttention: true
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.2
+          2: 0.4
+          3: 0.8
+        seconds:
+          0: 0
+          1: 0.24
+          2: 0.32
+          3: 0.66
+      chain: true
+      contactStart: 0.29
+      contactEnd: 0.4
+    2:
+      id: 'paw-swipe'
+      label: '사선 돌진 물기'
+      sourceClip: 'Wolf_Predator_Reverse_Bite_V02'
+      clipStart: 0
+      clipEnd: 0.8666666666666667
+      impact: 0.36666666666666664
+      commitTime: 0.22
+      capture: false
+      damage: 65
+      range: 4
+      minDistance: 2.8
+      maxDistance: 3.25
+      preferredDistance: 3.1
+      recovery: 0.65
+      authoredAttention: true
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.22
+          2: 0.43333333333333335
+          3: 0.8666666666666667
+        seconds:
+          0: 0
+          1: 0.26
+          2: 0.34
+          3: 0.72
+      contactStart: 0.32
+      contactEnd: 0.43333333333333335
+    3:
+      id: 'pin'
+      label: '앞발 제압·물기'
+      sourceClip: 'Pin_Throat_Bite_R5'
+      clipStart: 0
+      clipEnd: 3.4
+      impact: 1.2
+      commitTime: 0.85
+      capture: true
+      damage: 120
+      range: 3.2
+      minDistance: 8.7
+      maxDistance: 9.5
+      preferredDistance: 9.1
+      recovery: 1.05
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.85
+          2: 1.2
+          3: 1.85
+          4: 3.4
+        seconds:
+          0: 0
+          1: 0.43
+          2: 0.6
+          3: 0.85
+          4: 1.55
+      contactStart: 1.2
+      contactEnd: 1.3199999999999998
+  actual:
+    0:
+      id: 'quick-bite'
+      label: '짧은 입질'
+      sourceClip: 'Wolf_Predator_Diagonal_Bite_V02'
+      clipStart: 0
+      clipEnd: 0.8
+      impact: 0.3333333333333333
+      commitTime: 0.2
+      capture: false
+      damage: 55
+      range: 4
+      minDistance: 2.8
+      maxDistance: 3.15
+      preferredDistance: 3
+      recovery: 0.6
+      authoredAttention: true
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.2
+          2: 0.4
+          3: 0.8
+        seconds:
+          0: 0
+          1: 0.26
+          2: 0.305
+          3: 0.68
+      contactStart: 0.29
+      contactEnd: 0.4
+    1:
+      id: 'chain-bite'
+      label: '연속 입질'
+      sourceClip: 'Wolf_Predator_Diagonal_Bite_V02'
+      clipStart: 0
+      clipEnd: 0.8
+      impact: 0.3333333333333333
+      commitTime: 0.2
+      capture: false
+      damage: 45
+      range: 4
+      minDistance: 2.8
+      maxDistance: 3.15
+      preferredDistance: 3
+      recovery: 0.68
+      authoredAttention: true
+      contactParts: <Circular>
+      whip:
+        source: <Circular>
+        seconds: <Circular>
+      chain: true
+      contactStart: 0.29
+      contactEnd: 0.4
+    2:
+      id: 'paw-swipe'
+      label: '사선 돌진 물기'
+      sourceClip: 'Wolf_Predator_Reverse_Bite_V02'
+      clipStart: 0
+      clipEnd: 0.8666666666666667
+      impact: 0.36666666666666664
+      commitTime: 0.22
+      capture: false
+      damage: 65
+      range: 4
+      minDistance: 2.8
+      maxDistance: 3.25
+      preferredDistance: 3.1
+      recovery: 0.65
+      authoredAttention: true
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.22
+          2: 0.43333333333333335
+          3: 0.8666666666666667
+        seconds:
+          0: 0
+          1: 0.28
+          2: 0.325
+          3: 0.74
+      contactStart: 0.32
+      contactEnd: 0.43333333333333335
+    3:
+      id: 'pin'
+      label: '앞발 제압·물기'
+      sourceClip: 'Pin_Throat_Bite_R5'
+      clipStart: 0
+      clipEnd: 3.4
+      impact: 1.2
+      commitTime: 0.85
+      capture: true
+      damage: 120
+      range: 3.2
+      minDistance: 8.7
+      maxDistance: 9.5
+      preferredDistance: 9.1
+      recovery: 1.05
+      contactParts:
+        0: 'jaw'
+        1: 'head'
+      whip:
+        source:
+          0: 0
+          1: 0.85
+          2: 1.2
+          3: 1.85
+          4: 3.4
+        seconds:
+          0: 0
+          1: 0.5
+          2: 0.57
+          3: 0.68
+          4: 1.58
+      contactStart: 1.2
+      contactEnd: 1.3199999999999998
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:57:9)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.start (node:internal/test_runner/test:1262:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: compact ram prefix speed is configurable and the authored whole-pose chase mapping stays monotonic
+ok 13 - compact ram prefix speed is configurable and the authored whole-pose chase mapping stays monotonic
+  ---
+  duration_ms: 0.4801
+  type: 'test'
+  ...
+# Subtest: an accepted late-window ram cannot rewind the whole rig when the victim becomes prone
+not ok 14 - an accepted late-window ram cannot rewind the whole rig when the victim becomes prone
+  ---
+  duration_ms: 1.2481
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-ram-runtime.test.js:80:1'
+  failureType: 'testCodeFailure'
+  error: 'late real contact must not seek back into an earlier support pose'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:86:36)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:41]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture
+not ok 15 - real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture
+  ---
+  duration_ms: 544.9661
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-ram-runtime.test.js:91:1'
+  failureType: 'testCodeFailure'
+  error: 'the live whole-pose source clock stays monotonic'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:95:156)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:41]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:41]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:42]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once
+not ok 16 - a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once
+  ---
+  duration_ms: 443.6925
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-ram-runtime.test.js:107:1'
+  failureType: 'testCodeFailure'
+  error: 'the live whole-pose source clock stays monotonic'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:108:110)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:42]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:42]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:42]: Babylon.js v9.31.0 - Null engine
+# BJS - [13:51:42]: Skeleton "AlphaWolf_Rig": 28 bones stored as vertex uniforms use 116 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token
+not ok 17 - a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token
+  ---
+  duration_ms: 474.9861
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-ram-runtime.test.js:113:1'
+  failureType: 'testCodeFailure'
+  error: 'the live whole-pose source clock stays monotonic'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:116:117)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# BJS - [13:51:42]: Skeleton "Armature": 90 bones stored as vertex uniforms use 364 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# BJS - [13:51:42]: Skeleton "Armature": 135 bones stored as vertex uniforms use 544 of ~0 usable uniform vectors on a device reporting 16. This can exceed the GPU vertex-uniform limit and make the mesh silently fail to render. Set skeleton.useTextureToStoreBoneMatrices = true to store bone matrices in a texture.
+# Subtest: a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek
+not ok 18 - a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek
+  ---
+  duration_ms: 517.0618
+  type: 'test'
+  location: 'C:\\dev\\MoonForest\\ArcherPreview\\tests\\wolf-v02-ram-runtime.test.js:125:1'
+  failureType: 'testCodeFailure'
+  error: 'the live whole-pose source clock stays monotonic'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    drive (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:46:38)
+    TestContext.<anonymous> (file:///C:/dev/MoonForest/ArcherPreview/tests/wolf-v02-ram-runtime.test.js:127:12)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 6
+# fail 12
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4121.8526

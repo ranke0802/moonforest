@@ -1,0 +1,1 @@
+export{t as PLAINS_MONSTER_GROUPS,n as PLAINS_MONSTER_SPAWNS,r as PLAINS_MONSTER_SPAWNS_REVISION,i as createPlainsMonsterSpawns}from"./plains-monster-spawns-CQu3h3aG.js";

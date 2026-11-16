@@ -1,0 +1,468 @@
+{
+  "task": "대평원 14마리·7그룹 배치와 독립 활동영역",
+  "date": "2026-11-16",
+  "release": "moonforest-0.2",
+  "placement": {
+    "revision": "great-plains-monsters-2026-11-16-r1",
+    "actors": 14,
+    "groups": 7,
+    "passed": true,
+    "groupSummary": [
+      {
+        "id": "plains-fox-west",
+        "label": "서쪽 숲 아래 여우",
+        "count": 2,
+        "territory": {
+          "x": 8,
+          "z": -69,
+          "radius": 8,
+          "returnRadius": 0.8,
+          "reengageRadius": 6.5
+        }
+      },
+      {
+        "id": "plains-fox-east",
+        "label": "동쪽 숲 아래 여우",
+        "count": 2,
+        "territory": {
+          "x": 37,
+          "z": -74,
+          "radius": 7,
+          "returnRadius": 0.8,
+          "reengageRadius": 5.5
+        }
+      },
+      {
+        "id": "plains-boar-north-bank",
+        "label": "강 북쪽 둔치 멧돼지",
+        "count": 1,
+        "territory": {
+          "x": 66,
+          "z": 32,
+          "radius": 6,
+          "returnRadius": 0.8,
+          "reengageRadius": 4.5
+        }
+      },
+      {
+        "id": "plains-boar-south-bank",
+        "label": "강 남쪽 둔치 멧돼지",
+        "count": 1,
+        "territory": {
+          "x": 66,
+          "z": -13,
+          "radius": 6,
+          "returnRadius": 0.8,
+          "reengageRadius": 4.5
+        }
+      },
+      {
+        "id": "plains-wolf-meadow",
+        "label": "초원 일반 늑대 무리",
+        "count": 3,
+        "territory": {
+          "x": 29,
+          "z": 37,
+          "radius": 12,
+          "returnRadius": 1,
+          "reengageRadius": 10.5
+        }
+      },
+      {
+        "id": "plains-alpha-pack",
+        "label": "우두머리와 일반 늑대 무리",
+        "count": 4,
+        "territory": {
+          "x": -25,
+          "z": 60,
+          "radius": 18,
+          "returnRadius": 1.5,
+          "reengageRadius": 16.5
+        }
+      },
+      {
+        "id": "plains-lookout-bear",
+        "label": "높은 언덕 정상 곰 보스",
+        "count": 1,
+        "territory": {
+          "x": -25,
+          "z": -16,
+          "radius": 10.5,
+          "returnRadius": 1,
+          "reengageRadius": 9
+        }
+      }
+    ],
+    "homes": [
+      {
+        "id": "plains-fox-west-1",
+        "groupId": "plains-fox-west",
+        "definitionId": "fox.r1",
+        "home": {
+          "x": 6.6,
+          "y": 3.393041,
+          "z": -69
+        },
+        "bodyRadius": 0.430168,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 36.144604,
+        "streamCenterDistance": 74.299573,
+        "villageArrivalDistance": 100.647702,
+        "territory": {
+          "x": 8,
+          "z": -69,
+          "radius": 8,
+          "returnRadius": 0.8,
+          "reengageRadius": 6.5
+        }
+      },
+      {
+        "id": "plains-fox-west-2",
+        "groupId": "plains-fox-west",
+        "definitionId": "fox.r1",
+        "home": {
+          "x": 9.4,
+          "y": 3.315836,
+          "z": -69
+        },
+        "bodyRadius": 0.430168,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 37.678588,
+        "streamCenterDistance": 71.562883,
+        "villageArrivalDistance": 103.256767,
+        "territory": {
+          "x": 8,
+          "z": -69,
+          "radius": 8,
+          "returnRadius": 0.8,
+          "reengageRadius": 6.5
+        }
+      },
+      {
+        "id": "plains-fox-east-1",
+        "groupId": "plains-fox-east",
+        "definitionId": "fox.r1",
+        "home": {
+          "x": 36,
+          "y": 0.123727,
+          "z": -75.2
+        },
+        "bodyRadius": 0.430168,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 23.935397,
+        "streamCenterDistance": 47.971438,
+        "villageArrivalDistance": 130.365793,
+        "territory": {
+          "x": 37,
+          "z": -74,
+          "radius": 7,
+          "returnRadius": 0.8,
+          "reengageRadius": 5.5
+        }
+      },
+      {
+        "id": "plains-fox-east-2",
+        "groupId": "plains-fox-east",
+        "definitionId": "fox.r1",
+        "home": {
+          "x": 38,
+          "y": 0.130221,
+          "z": -74.5
+        },
+        "bodyRadius": 0.430168,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 21.818597,
+        "streamCenterDistance": 45.854691,
+        "villageArrivalDistance": 132.027459,
+        "territory": {
+          "x": 37,
+          "z": -74,
+          "radius": 7,
+          "returnRadius": 0.8,
+          "reengageRadius": 5.5
+        }
+      },
+      {
+        "id": "plains-boar-north-bank-1",
+        "groupId": "plains-boar-north-bank",
+        "definitionId": "boar.r1",
+        "home": {
+          "x": 66,
+          "y": 0.401189,
+          "z": 32
+        },
+        "bodyRadius": 0.485679,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 49.945009,
+        "streamCenterDistance": 11.867488,
+        "villageArrivalDistance": 165.846314,
+        "territory": {
+          "x": 66,
+          "z": 32,
+          "radius": 6,
+          "returnRadius": 0.8,
+          "reengageRadius": 4.5
+        }
+      },
+      {
+        "id": "plains-boar-south-bank-1",
+        "groupId": "plains-boar-south-bank",
+        "definitionId": "boar.r1",
+        "home": {
+          "x": 66,
+          "y": 0.247217,
+          "z": -13
+        },
+        "bodyRadius": 0.485679,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 21.623859,
+        "streamCenterDistance": 12.039752,
+        "villageArrivalDistance": 154.175225,
+        "territory": {
+          "x": 66,
+          "z": -13,
+          "radius": 6,
+          "returnRadius": 0.8,
+          "reengageRadius": 4.5
+        }
+      },
+      {
+        "id": "plains-wolf-meadow-1",
+        "groupId": "plains-wolf-meadow",
+        "definitionId": "gray-wolf.r1",
+        "home": {
+          "x": 26,
+          "y": 1.491227,
+          "z": 36
+        },
+        "bodyRadius": 0.535872,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 22.744896,
+        "streamCenterDistance": 50.777939,
+        "villageArrivalDistance": 131.882523,
+        "territory": {
+          "x": 29,
+          "z": 37,
+          "radius": 12,
+          "returnRadius": 1,
+          "reengageRadius": 10.5
+        }
+      },
+      {
+        "id": "plains-wolf-meadow-2",
+        "groupId": "plains-wolf-meadow",
+        "definitionId": "stylized-wolf.r1",
+        "home": {
+          "x": 31,
+          "y": 2.001917,
+          "z": 35
+        },
+        "bodyRadius": 0.56016,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 27.843729,
+        "streamCenterDistance": 45.687784,
+        "villageArrivalDistance": 135.69451,
+        "territory": {
+          "x": 29,
+          "z": 37,
+          "radius": 12,
+          "returnRadius": 1,
+          "reengageRadius": 10.5
+        }
+      },
+      {
+        "id": "plains-wolf-meadow-3",
+        "groupId": "plains-wolf-meadow",
+        "definitionId": "wolf-3.r1",
+        "home": {
+          "x": 31,
+          "y": 2.001065,
+          "z": 39
+        },
+        "bodyRadius": 0.401232,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 27.197412,
+        "streamCenterDistance": 46.826991,
+        "villageArrivalDistance": 137.713471,
+        "territory": {
+          "x": 29,
+          "z": 37,
+          "radius": 12,
+          "returnRadius": 1,
+          "reengageRadius": 10.5
+        }
+      },
+      {
+        "id": "plains-alpha-pack-1",
+        "groupId": "plains-alpha-pack",
+        "definitionId": "alpha-wolf.r8",
+        "home": {
+          "x": -25,
+          "y": 1.037641,
+          "z": 60
+        },
+        "bodyRadius": 1.625,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 18.211544,
+        "streamCenterDistance": 92.850419,
+        "villageArrivalDistance": 110.941426,
+        "territory": {
+          "x": -25,
+          "z": 60,
+          "radius": 18,
+          "returnRadius": 1.5,
+          "reengageRadius": 16.5
+        }
+      },
+      {
+        "id": "plains-alpha-pack-2",
+        "groupId": "plains-alpha-pack",
+        "definitionId": "gray-wolf.r1",
+        "home": {
+          "x": -30,
+          "y": 1.233889,
+          "z": 56
+        },
+        "bodyRadius": 0.535872,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 13.134454,
+        "streamCenterDistance": 98.668597,
+        "villageArrivalDistance": 104.847508,
+        "territory": {
+          "x": -25,
+          "z": 60,
+          "radius": 18,
+          "returnRadius": 1.5,
+          "reengageRadius": 16.5
+        }
+      },
+      {
+        "id": "plains-alpha-pack-3",
+        "groupId": "plains-alpha-pack",
+        "definitionId": "stylized-wolf.r1",
+        "home": {
+          "x": -22,
+          "y": 1.740606,
+          "z": 55
+        },
+        "bodyRadius": 0.56016,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 14.483535,
+        "streamCenterDistance": 91.20764,
+        "villageArrivalDistance": 108.600184,
+        "territory": {
+          "x": -25,
+          "z": 60,
+          "radius": 18,
+          "returnRadius": 1.5,
+          "reengageRadius": 16.5
+        }
+      },
+      {
+        "id": "plains-alpha-pack-4",
+        "groupId": "plains-alpha-pack",
+        "definitionId": "wolf-3.r1",
+        "home": {
+          "x": -18,
+          "y": 1.005119,
+          "z": 61
+        },
+        "bodyRadius": 0.401232,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 17.418288,
+        "streamCenterDistance": 85.812489,
+        "villageArrivalDistance": 115.801554,
+        "territory": {
+          "x": -25,
+          "z": 60,
+          "radius": 18,
+          "returnRadius": 1.5,
+          "reengageRadius": 16.5
+        }
+      },
+      {
+        "id": "plains-lookout-bear-1",
+        "groupId": "plains-lookout-bear",
+        "definitionId": "guardian-bear.standard",
+        "home": {
+          "x": -25,
+          "y": 8.1,
+          "z": -16
+        },
+        "bodyRadius": 1.34408,
+        "navigationClearanceMargin": 0.25,
+        "roadShoulderDistance": 1.762278,
+        "streamCenterDistance": 103.004854,
+        "villageArrivalDistance": 64.031242,
+        "territory": {
+          "x": -25,
+          "z": -16,
+          "radius": 10.5,
+          "returnRadius": 1,
+          "reengageRadius": 9
+        }
+      }
+    ],
+    "notes": [
+      "Static production terrain/navigation checks only; no browser, GPU, FPS, heat or play-feel measurement.",
+      "Homes avoid the roads; territories retain existing terrain/obstacles and actors still use ordinary navigation. The lookout territory includes summit approaches/slopes.",
+      "The current group scheduler has game-time respawn and staged group publication. Distance-based actor activation is not supplied by this preset.",
+      "Source geometry, textures, LOD, animation and combat contact rules are unchanged."
+    ]
+  },
+  "checks": {
+    "relatedNodeNullEngine": {
+      "tests": 70,
+      "passed": 70,
+      "failed": 0
+    },
+    "historicalWolfChecks": {
+      "baselineRevision": "09410d8",
+      "method": "Node24 registerHooks substitutes only the six task-modified src modules using git show; same tests/assets and all other tracked sources. No live source/test edits, revert, worktree or asset copies.",
+      "files": [
+        "wolf-v02-ram-runtime.test.js",
+        "wolf-v02-predator-runtime.test.js",
+        "wolf-v02-orbit-navigation.test.js"
+      ],
+      "baseline": {
+        "tests": 18,
+        "passed": 6,
+        "failed": 12
+      },
+      "currentFailureCount": 12,
+      "sameFailureNames": true,
+      "onlyCurrent": [],
+      "onlyBaseline": [],
+      "failureNames": [
+        "R13 preserves historical R12 data and all unrelated R11 action, gait and locomotion contracts",
+        "a bounded .1-second hitch crossing each maul window still resolves each actual-prone phase once",
+        "a refused ram knockdown, missing actual prone bones, or an old life cannot manufacture a maul token",
+        "a victim rising after the first maul cancels damage and takes the compact authored recovery without a root seek",
+        "an accepted late-window ram cannot rewind the whole rig when the victim becomes prone",
+        "an obstructed player-centered stride tries the opposite gait while preserving the full observation before a reachable attack",
+        "every new bout samples independently while the three-strike low-health bout remains finite",
+        "real warrior receives one accepted head ram and two real prone jaw phases, with one recoil and no capture",
+        "seeded 2–3 second observation is wall time at near/far ranges and survives blocked replans without resetting or stalling",
+        "standing fixtures receive head ram40 or the unchanged mouth pin, and escaped captures cannot receive phantom bites",
+        "support and attention refresh only cached affected branches with bounded matrix work and identical poses",
+        "the ram prefix stays fast while its maul tail uses real time, and pin preserves its accelerated full timing"
+      ]
+    },
+    "browserAutomationUsed": false,
+    "physicalDeviceChecked": false,
+    "deviceFpsOrHeatClaim": false
+  },
+  "resources": {
+    "modelsTexturesLodChanged": false,
+    "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+    "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1"
+  },
+  "behavior": {
+    "outside": "cancel only owned attack/capture; existing navigation and walk to own home",
+    "reengage": "home reached and player inside inner boundary",
+    "respawnSeconds": 45,
+    "healthResetOnLeash": false,
+    "defaultMigration": "once per revision; preserve custom rows, edits and deletions",
+    "preparation": "existing shared libraries and sequential preparation; actual authored population20, estimate512MiB unchanged"
+  }
+}

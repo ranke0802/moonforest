@@ -1,0 +1,108 @@
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ definitions name only canonical versioned assets and preserve live encounter stats/animation mappings (12.9149ms)
+✔ spawn safety rejects map, navigation, actor overlap and player distance without relocation (7.2392ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ a registered variant consumes health, collider and actor-local clip mapping; unsupported movement/remaps reject explicitly (118.7852ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ independent pooled encounters reuse shared geometry/materials and retain animator/native clip bindings over warm lives (48.3452ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ ten goblin actors repeatedly created, killed and removed release owned scene resources (125.2507ms)
+✔ retained crossfade sets old native weights to zero; defaults stop/delete and both produce the same sampled pose (1.636ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ death callback is once per life and opt-in corpse completion retains the same animator through respawn (35.6952ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ NPC stays outside battle, keeps its interaction under decision tiering and follows live quest relevance (47.204ms)
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ last-actor eviction releases only its owned library; borrowed libraries and another live clone survive (90.529ms)
+✔ map generation cancellation before a late library load prevents independent actor creation or publication (2.1741ms)
+✔ ordinary summon/hide retains its existing recreate/dispose behavior unless explicit actor pooling opts in (0.3243ms)
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ staged group actors stay hidden and outside battle until committed (49.4282ms)
+✔ actual pooled encounters enter together, wait for all corpses, and respawn as a group (65.2407ms)
+✔ warm reuse keeps one prepared resource set and resets independent per-life state (7.4735ms)
+✔ caps account for overlapping requests, categories, exact memory and hard maximum twenty (2.0748ms)
+✔ prewarm rejects oversized reservations atomically and actual estimates cannot overrun memory cap (1.2974ms)
+✔ death reward acknowledgment and respawn occur once per life; pause freezes countdown (4.424ms)
+✔ map generation cancellation rejects promptly, retains bounded reservation and disposes late creation (1.258ms)
+✔ late activation cancellation hides again and queued jobs never create after disposal (1.0885ms)
+✔ only far peaceful NPC decisions are staggered; update and meaningful threats stay full frequency (0.6654ms)
+✔ clear and external hide do not emit rewards or respawn; idle eviction releases only unleased resources (0.7405ms)
+✔ actual definition validator injection rejects safety, map, navigation and occupancy before resource creation (0.4566ms)
+✔ a temporarily blocked respawn retries the same ticket without duplicating death or reward (0.8375ms)
+✔ a preparation timeout frees the scheduling slot but charges and eventually reclaims its late work (11.509ms)
+✔ asynchronous disposal retains its memory reservation until the owned resource actually releases (0.7552ms)
+✔ clear at the respawn completion boundary reclaims the cancelled life exactly once (0.5335ms)
+✔ fresh0.2 plains defaults seed14 approved actors in7 complete groups, with bounded preparation and terrain height (5.8844ms)
+✔ legacy custom20 are preserved; requested defaults reserve whole groups first while excess customs wait visibly (3.8999ms)
+✔ editing or deleting defaults persists across runtime recreation, including a replacement imported without migration metadata (1.2846ms)
+✔ storage errors keep defaults active in memory without overwriting unreadable custom data (3.3371ms)
+✔ prepared groups wait through pause and a map departure cannot attach a late acquisition (1.3706ms)
+✔ game runtime stages a group, honors rewards, persists permanent kills, and releases old maps (4.1128ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ monsters summon near an outer-arena player and continue past the former wall (110.7421ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ group preparation keeps all requested actors hidden while the other kind continues (38.4556ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ model CPU timings are copied into the owning hidden job without retaining library records (35.0965ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ far enemy draw suppression is reversible and leaves combat/model state intact (30.3245ms)
+✔ spawn count is bounded and five bosses have separate positions inside the arena (0.2509ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ bear and goblin ground anchors follow terrain on spawn, movement, separation and contact correction (35.1261ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ dead bear and goblin fade independently, award once, stop rendering and reset on resummon (32.4543ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ equipped armor reduces incoming normal, critical and throw damage once and persists across resets (23.2758ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ summon 3/1/5/2 reuses one model template, shares geometry, clones skeletons and animations, hides unused actors (37.1422ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ five bosses share player health, immunity and a single potion clock (31.0206ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ one swing hits each grounded boss once; recovery stays damageable independently (27.5545ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+✔ a single boss owns the grab; another boss cannot capture or damage that held player (27.9507ms)
+✔ separation moves overlapping living bosses without dragging a captured player owner (0.175ms)
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ roll contact never displaces an overlapping bear or goblin (30.3182ms)
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ ending a roll beside an enemy does not push it out of the newly usable gap (32.6538ms)
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ walking through prone, getting-up or dead enemies does not separate their bodies (28.8544ms)
+✔ hiding during a pending load cannot reactivate an old summon (0.4216ms)
+✔ multi-boss audio tracks separate attack clocks and plays victory only after the last death (0.4721ms)
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ five goblins coexist with bears, share player health and reuse one goblin asset (37.4315ms)
+✔ a shared sword swing damages both bear and goblin, with independent hit deduplication (23.7216ms)
+✔ group respawns together after all members die and game-time delay expires (3.3889ms)
+✔ permanent death persists and map cancellation removes late actors (0.7296ms)
+✔ whole-group admission reserves before asynchronous preparation and exposes capacity wait without partial spawns (0.6442ms)
+✔ monster placement records round trip and grouped lifetime configuration stays consistent (1.0828ms)
+✔ invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected (0.1966ms)
+✔ all approved plains quadruped definitions and finite contained territories round trip (0.7319ms)
+✔ default migration preserves custom values and aliases conflicting IDs/groups without mutating its input (1.8138ms)
+✔ only the exact plains default revision and known14 ID history permit migration storage capacity up to34 (1.3454ms)
+✔ future default revisions add new IDs but do not restore deleted or overwrite edited previously installed defaults (0.4604ms)
+✔ authored plains animal types remain selected and keep their territory when saved (21.3958ms)
+✔ authoring can add, group, save and retain an independent data-only placement (5.2661ms)
+✔ a map click selects a safe monster position without forwarding the click to the game (2.2063ms)
+BJS - [13:51:03]: Babylon.js v9.31.0 - Null engine
+BJS - [13:51:04]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (809.6972ms)
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (533.5984ms)
+✔ default plains document has exactly fourteen actors in seven independently editable stable groups (1.8299ms)
+✔ all fixed homes use actual terrain and clear physical navigation, water, roads, arrival and each other (2.7203ms)
+✔ territories remain distinct and contain group homes with current body and attack reach allowances (0.3806ms)
+✔ fox homes use existing forest canopies, boars use dry river banks and the bear stands on the real high summit (1.3394ms)
+ℹ tests 70
+ℹ suites 0
+ℹ pass 70
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3894.3831
