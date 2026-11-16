@@ -1,0 +1,176 @@
+{
+  "date": "2026-11-16",
+  "release": "moonforest-0.2",
+  "baseCommit": "5af659e894546a2eabd37c8114ddf08c0e408366",
+  "scope": "R2 첫 적용 묶음. 조건부 대규모 구조 변경은 미적용.",
+  "tests": [
+    {
+      "file": "integration-test.log",
+      "tests": 139,
+      "pass": 139,
+      "fail": 0,
+      "sha256": "0920966e1f86fe876f927c8d3faf7cae507abd05d915156098b3bbd03fb9a116"
+    },
+    {
+      "file": "four-map-test.log",
+      "tests": 8,
+      "pass": 8,
+      "fail": 0,
+      "sha256": "f975569e1a9f79a031c360d9bd5234a98a3fffd2470eae8f975fe5bd6616c93f"
+    }
+  ],
+  "totalTests": 147,
+  "quality": {
+    "preserved01InventorySha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+    "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+    "modelTextureLodAndCombatAuthoredFilesChanged": false
+  },
+  "animationCache": {
+    "scope": "CPU-only Babylon NullEngine with shipped warrior TRS/hierarchy; counts and phase-sampled pose/strike equivalence, not GPU/FPS/thermal evidence",
+    "frames": 1944,
+    "transitions": 162,
+    "strikeSweepSamples": 258,
+    "contactStates": [
+      "slash",
+      "attack",
+      "shieldPush",
+      "judgment"
+    ],
+    "states": [
+      "run",
+      "idle",
+      "slash",
+      "attack",
+      "dodge",
+      "shieldPush",
+      "judgment"
+    ],
+    "rows": [
+      {
+        "limit": 0,
+        "peakCached": 0,
+        "peakBindings": 816,
+        "peakActiveClips": 2,
+        "maxWorldMatrixError": 0,
+        "enabled": false,
+        "eligible": false,
+        "cached": 0,
+        "created": 66096,
+        "reused": 0,
+        "evicted": 0,
+        "currentBindings": 408,
+        "retainedBindings": 408,
+        "medianTransitionSampleMs": 0.7132999999994354
+      },
+      {
+        "limit": 2,
+        "peakCached": 2,
+        "peakBindings": 1632,
+        "peakActiveClips": 2,
+        "maxWorldMatrixError": 0,
+        "enabled": true,
+        "eligible": true,
+        "cached": 2,
+        "created": 35088,
+        "reused": 31008,
+        "evicted": 83,
+        "currentBindings": 1224,
+        "retainedBindings": 1224,
+        "medianTransitionSampleMs": 0.6552000000001499
+      },
+      {
+        "limit": 4,
+        "peakCached": 4,
+        "peakBindings": 2448,
+        "peakActiveClips": 2,
+        "maxWorldMatrixError": 0,
+        "enabled": true,
+        "eligible": true,
+        "cached": 4,
+        "created": 26112,
+        "reused": 39984,
+        "evicted": 59,
+        "currentBindings": 2040,
+        "retainedBindings": 2040,
+        "medianTransitionSampleMs": 0.7584999999999127
+      },
+      {
+        "limit": 6,
+        "peakCached": 6,
+        "peakBindings": 2856,
+        "peakActiveClips": 2,
+        "maxWorldMatrixError": 0,
+        "enabled": true,
+        "eligible": true,
+        "cached": 6,
+        "created": 2856,
+        "reused": 63240,
+        "evicted": 0,
+        "currentBindings": 2856,
+        "retainedBindings": 2856,
+        "medianTransitionSampleMs": 0.8200000000006185
+      }
+    ]
+  },
+  "spatial": {
+    "mode": "spatial",
+    "actors": 80,
+    "allPairs": 6320,
+    "testedPairs": 0,
+    "queries": 160,
+    "pushes": 0
+  },
+  "published": {
+    "release": "moonforest-0.2",
+    "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+    "verifiedFiles": 2209,
+    "bytes": 800403142,
+    "reusedBytes": 791996321,
+    "changedPaths": [
+      "ArcherPreviewSite/assets/actor-editor-h3uKKfrf.js",
+      "ArcherPreviewSite/assets/actor-encounter-adapter-BABkuGpi.js",
+      "ArcherPreviewSite/assets/actor-population-qZL7s2Qx.js",
+      "ArcherPreviewSite/assets/authored-monster-runtime-D4Buwzf8.js",
+      "ArcherPreviewSite/assets/cinematic-game-DVUhEQNl.js",
+      "ArcherPreviewSite/assets/cinematic-interaction-D-IRW3nf.js",
+      "ArcherPreviewSite/assets/cinematic-scene-host-Bnl20SX-.js",
+      "ArcherPreviewSite/assets/developer-actors-CC61oPXy.js",
+      "ArcherPreviewSite/assets/moonforestV2-CFNpDlIN.js",
+      "ArcherPreviewSite/assets/mourning-elena-encounter-Dvtqs9iG.js",
+      "ArcherPreviewSite/assets/npc-world-CJWhGs0i.js",
+      "ArcherPreviewSite/assets/npc-world-yHP87v5m.js",
+      "ArcherPreviewSite/moonforest-0.2.html",
+      "ArcherPreviewSite/deployment-files-moonforest-0.2.json"
+    ]
+  },
+  "sourceHashes": {
+    "animation.js": "22a045e7dfcc79de6dda69a02f967b863943ff97206a142e32cd3e026ab83cb9",
+    "boss-battle.js": "f4bd7a885a57188a77d53626069b69291beadee78d2d07d82a7933c2aa3f4712",
+    "boss-encounter.js": "945993b3fa25d20deda993da374f72e75fac0e67392a53f7f433468d64a49387",
+    "boss-models.js": "7980e98349abb6d92f4863dac1155ee6565176fdea68110b9d97ba83a6944b48",
+    "chapter-quest-state.js": "8b98cc95191b392d4ac3448539dabbcb045695a1d5494ff3bec54737f3d48a39",
+    "character-interior-ink.js": "d74aa35f9d6fc1d5926169eefe60c139c79a3b311a9d21c5c42f8f69757a0cbb",
+    "frame-diagnostics.js": "4df6faa1497f37c77872c0bfac8d8df4dd73fdb640fde31aa154a518fae38bbd",
+    "game-audio.js": "981a14fa687a32643f12338191481a024c5a4444f30d143e03c8da081459cff1",
+    "main.js": "361f945868ddbfa38f0938fb9376b4ca30970969fc142587db4a69e610bae98e",
+    "map-resource-inspector.js": "4a916013d1517baec120b109b8f1c60c8084dac435a343de9ee271cbdacc044e",
+    "mourning-camera-culling.js": "1b3dd4b12152107290c849a9f2e75f70544352861e62d069f77ca761bcb792bf",
+    "content-runtime-budget.js": "7c0ddfe2325a3e60c148bd224f4365fa70d21916fdfafc1385f61492a2b1708b",
+    "dormant-encounter-pool.js": "647aa228b9a4e07cf1dcf8b776ffd3a51cc1316d25903fa558160e005cb97a76",
+    "enemy-separation.js": "62c441ee7a76c9fe40b98ad84abd17c65490be76af5a6d83b5b7927807d72b05"
+  },
+  "realDevice": {
+    "tested": false,
+    "fps": null,
+    "gpuMs": null,
+    "thermal": null,
+    "browserAutomation": false
+  },
+  "remaining": [
+    "지형 분할과 추가 thin instance의 조건부 시범",
+    "교차 로더 입장 제어 및 GPU 업로드 충돌 확인",
+    "디코더 보존·고해상도 캐시 수명 실험",
+    "NPC 시간원 통합",
+    "모든 소유자를 강제하는 전역 자원 입장 상한"
+  ]
+}

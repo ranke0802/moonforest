@@ -5,7 +5,8 @@ export class CharacterAnimator {
     this.active = new Map();
     this.current = null;
     this.actionId = null;
-    this.bindingCacheSize=Math.min(2,Math.max(0,Math.floor(bindingCacheSize)||0));
+    // Opt-in inactive bindings only; active fades keep their original lifetime.
+    this.bindingCacheSize=Math.min(6,Math.max(0,Math.floor(bindingCacheSize)||0));
     this.bindingCache=new Map();
     this.bindingCounts={created:0,reused:0,evicted:0};
     for (const [state, name] of Object.entries(names)) {

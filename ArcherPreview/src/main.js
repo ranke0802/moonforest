@@ -71,8 +71,10 @@ import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import {createLoadingView} from './loading-view.js';
 import {prepareStartupResources,prepareMapResources} from './startup-resources.js';
 import {createMapResourceInspector} from './map-resource-inspector.js';
+import {inspectContentRuntimeBudget} from './content-runtime-budget.js';
 import './map-resource-inspector.css';
 import { BossBattle } from './boss-battle.js';
+import {releaseNpcInteriorInkResources} from './character-interior-ink.js';
 import { BossSelection, bossSelectionHelp, summonSelectedBoss } from './boss-selection.js';
 import {MonsterSelection,MONSTER_NAMES,monsterSelectionHelp,summonSelectedMonster} from './monster-selection.js';
 import { loadTrainingGround } from './environment.js';
@@ -304,6 +306,7 @@ const mapWorkDiagnostics=()=>({
   }:null,
 });
 const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
+  contentRuntime:()=>inspectContentRuntimeBudget({world,battle:boss,audio,playerTextureProfile:playerTextureSelection,decodeCache:inspectMapDecodeCache(engine)}),
   onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
   onDrawCpuEnabled:enabled=>sceneDiagnostics.setDrawCpuEnabled(enabled),
   onContinuousDraw:enabled=>sceneDiagnostics.setContinuous(enabled),
@@ -646,7 +649,7 @@ async function loadCharacter() {
     applyCharacterSurfaceStyle(container,'player');
     if (isWarrior()) attachCharacterOutlines(container, 'warrior');
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
-    animator = new CharacterAnimator(container.animationGroups, config.animations,{bindingCacheSize:isV2()?2:0});
+    animator = new CharacterAnimator(container.animationGroups, config.animations,{bindingCacheSize:isV2()?4:0});
     const speeds=isV2()?Object.fromEntries(Object.entries(config.speeds??{}).map(([key,value])=>[key,value*dimensions.ratio])):config.speeds;
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds, ...(isV2()?{holdNow:()=>performance.now()}:{}) });
     movementSpeedSettings.apply(controller);
@@ -1071,12 +1074,12 @@ try {
       ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
-      boss.hide();applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
+      boss.hide();releaseNpcInteriorInkResources(world.scene);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;meleeAim?.reset();strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();
     },
-    release:async()=>{await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
+    release:async()=>{await boss.trimDormantModels();await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
     load:async (href,context)=>{
       const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url),loadingGeneration=mapLoadingGeneration;
       url.searchParams.delete('elenaReview');

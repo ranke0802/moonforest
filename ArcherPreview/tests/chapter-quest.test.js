@@ -13,6 +13,19 @@ test('early evidence survives reload and turn-in is exactly once, including cons
  const storage=memory(),j=new ChapterJourney(storage);j.record('inspect:bandage',1,'point:bandage');j.collect('apple',4,'apples');assert.equal(j.collect('apple',4,'apples'),false);finish(j,'M00');assert.equal(j.accept('Q01'),true);j.record('apple:strike',3);
  const next=new ChapterJourney(storage);assert.equal(next.value.facts['inspect:bandage'],1);assert.equal(next.status('Q01'),'ready');assert.ok(next.claim('Q01'));assert.equal(next.value.bag.apple,0);assert.equal(next.value.bag.pie,2);assert.equal(next.claim('Q01'),null);assert.equal(new ChapterJourney(storage).value.bag.pie,2);
 });
+test('collect persists its fact, bag and token atomically with one immediate write',()=>{
+ const writes=[],data=new Map(),storage={getItem:key=>data.get(key),setItem:(key,value)=>{writes.push(JSON.parse(value));data.set(key,value);}},j=new ChapterJourney(storage);
+ assert.equal(j.collect('apple',4,'one-harvest'),true);assert.equal(writes.length,1);
+ assert.equal(writes[0].facts['item:apple'],4);assert.equal(writes[0].bag.apple,4);assert.deepEqual(writes[0].seen,['one-harvest']);
+ const reloaded=new ChapterJourney(storage);assert.equal(reloaded.collect('apple',4,'one-harvest'),false);assert.equal(writes.length,1);
+ for(const count of [0,-1,Infinity,1.5])assert.equal(j.collect('apple',count,'invalid'),false);
+ assert.equal(writes.length,1);assert.equal(j.seen.has('invalid'),false);assert.equal(j.collect('apple',2),true);assert.equal(writes.length,2);assert.equal(writes[1].bag.apple,6);
+});
+test('a failed atomic collect save retains the complete volatile reward and exactly-once token',()=>{
+ let writes=0;const j=new ChapterJourney({getItem:()=>null,setItem:()=>{writes++;throw Error('quota');}});
+ assert.equal(j.collect('apple',2,'volatile-harvest'),true);assert.equal(writes,1);assert.equal(j.volatile,true);
+ assert.equal(j.value.facts['item:apple'],2);assert.equal(j.value.bag.apple,2);assert.deepEqual(j.value.seen,['volatile-harvest']);assert.equal(j.collect('apple',2,'volatile-harvest'),false);assert.equal(writes,1);
+});
 test('incomplete and locked quests grant nothing; optional future model events remain pending',()=>{
  const j=new ChapterJourney(memory());assert.equal(j.claim('M07'),null);assert.equal(j.accept('M07'),false);assert.equal(j.value.xp,0);finish(j,'M00');finish(j,'M01');finish(j,'M02');assert.ok(j.accept('Q08'));for(const id of ['archer','warrior','shaman'])j.record('read:'+id);assert.equal(j.status('Q08'),'active');assert.equal(j.claim('Q08'),null);
 });

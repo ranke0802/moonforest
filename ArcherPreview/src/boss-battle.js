@@ -21,6 +21,8 @@ import { CaveNavigation } from './witch-cave-navigation.js';
 import { MourningCaveNavigation } from './mourning-cave-navigation.js';
 import { TerrainHeightField } from './terrain.js';
 import {MAX_SUMMON_PER_KIND,normalizeSummonCount} from './summon-limits.js';
+import {EnemySeparationWorkspace,separateEnemies} from './enemy-separation.js';
+import {trimDormantEncounterPools} from './dormant-encounter-pool.js';
 
 function stableMapCollision(navigation,terrain){
   const type=navigation?.constructor;
@@ -64,23 +66,7 @@ export function bossSpawnPositions(player, value, {radius=.7,separationRadius=.8
   });
 }
 
-export function separateBosses(encounters, grabOwner) {
-  const movable = boss => boss !== grabOwner && !['down', 'recover'].includes(boss.brain.mode);
-  for (let pass = 0; pass < 2; pass++) for (let i = 0; i < encounters.length; i++) for (let j = i + 1; j < encounters.length; j++) {
-    const a = encounters[i], b = encounters[j];
-    if (!isEnemySolid(a) || !isEnemySolid(b)) continue;
-    const aMoves = movable(a), bMoves = movable(b), weight = Number(aMoves) + Number(bMoves);
-    if (!weight) continue;
-    const dx = b.actor.position.x - a.actor.position.x, dz = b.actor.position.z - a.actor.position.z;
-    const distance = Math.hypot(dx, dz);
-    const spacing=(a.separationRadius??.8)+(b.separationRadius??.8);
-    if (distance >= spacing) continue;
-    const x = distance > .0001 ? dx / distance : 1, z = distance > .0001 ? dz / distance : 0;
-    const push = (spacing - distance) / weight;
-    if (aMoves) { a.actor.position.x -= x * push; a.actor.position.z -= z * push; }
-    if (bMoves) { b.actor.position.x += x * push; b.actor.position.z += z * push; }
-  }
-}
+export function separateBosses(encounters,grabOwner,workspace){return separateEnemies(encounters,grabOwner,workspace);}
 
 export class BossBattle {
   constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, wolfModels, regularWolfModels={}, elenaModels, mourningModels, onDefeat=()=>{},onDiagnosticEvent=()=>{} } = {}) {
@@ -92,7 +78,7 @@ export class BossBattle {
     this.goblinModels=goblinModels??new BossModelLibrary(world.scene,'hooded-goblin');this.goblinPool=[];
     this.elenaModels=elenaModels??new BossModelLibrary(world.scene,'elena');this.elenaPool=[];this.residentRevision=0;
     this.mourningModels=mourningModels??new BossModelLibrary(world.scene,'mourning-elena');this.mourningPool=[];this.residentPhase=1;this.residentHome=ELENA_HOME;
-    this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];this.frameEncounters=[];
+    this.combat = new PlayerCombat(); this.pool = []; this.encounters = [];this.frameEncounters=[];this.separationWorkspace=new EnemySeparationWorkspace();
     this.active = false; this.loading = false; this.revision = 0; this.actionVersion = 0;this.motionToken={generation:0};
     this.noGrab = { active: false, label: '' };
   }
@@ -401,6 +387,15 @@ export class BossBattle {
     this.updating = false; this.lastHit = null; this.onChange(this);
   }
   resetBattle() { this.hide(); this.combat.reset(); this.onChange(this); }
+  async trimDormantModels(){
+    if(this.world.release!=='moonforest-0.2'||this.loading||this.residentPending||this.manualTransformPending||this.mourningWarmJob)return;
+    const revision=this.revision,scene=this.world.scene,map=this.world.mapId;
+    const current=()=>revision===this.revision&&scene===this.world.scene&&map===this.world.mapId&&!scene.isDisposed&&!this.loading&&!this.residentPending&&!this.manualTransformPending&&!this.mourningWarmJob;
+    const groups=[{pool:this.pool,models:this.models},{pool:this.wolfPool,models:this.wolfModels},...Object.values(this.regularWolves),{pool:this.goblinPool,models:this.goblinModels},{pool:this.elenaPool,models:this.elenaModels},{pool:this.mourningPool,models:this.mourningModels}];
+    const preparation=createBossPreparation({incremental:true,isCurrent:current});
+    try{this.poolTrim=await trimDormantEncounterPools(groups,{current,pause:()=>preparation.pause()});}
+    catch(error){if(error.name!=='AbortError')throw error;}
+  }
   nearestTarget(position) {
     let target = null, nearest = Infinity;
     for (const boss of this.encounters) {
@@ -421,7 +416,7 @@ export class BossBattle {
     if(this.world.prefetchResources&&this.encounters.some(b=>b.kind==='elena'&&b.phase===1&&b.engaged))this.preloadMourning({modelsOnly:this.encounters.some(b=>b.kind==='elena'&&b.manualSummon)});
     const running=this.frameEncounters;running.length=0;
     for(const boss of this.encounters)if(boss.active&&!boss.corpseGone){(boss.separationFrom??=new Vector3()).copyFrom(boss.actor.position);running.push(boss);}
-    if(running.length>1)separateBosses(running, this.combat.grabOwner);
+    if(running.length>1)separateBosses(running,this.combat.grabOwner,this.world.release==='moonforest-0.2'?this.separationWorkspace:undefined);
     for(const boss of running){
       const position=boss.actor.position,navigation=boss.movementNavigation??this.world.navigation,terrain=this.world.terrain,proof=boss._reconciledMotion;
       // The normal map navigator and height field are deterministic for an
@@ -450,6 +445,8 @@ export class BossBattle {
   }
   inspect() {
     return { active: this.active, loading: this.loading, count: this.encounters.length, living: this.livingCount,
+      separation:this.separationWorkspace.inspect(),
+      dormantPoolTrim:this.poolTrim??null,
       playerHp: this.playerHp, potions: this.potions.remaining, capturedBy: this.combat.grabOwner?.id ?? null,
       pooledModels: this.allPooled.length, modelLoads: this.models.loads,wolfModelLoads:this.wolfModels.loads,wolfCount:this.encounters.filter(b=>b.kind==='wolf'&&!b.summonKind).length,regularWolves:Object.fromEntries(Object.entries(this.regularWolves).map(([id,entry])=>[id,{count:this.encounters.filter(b=>b.summonKind===id).length,pooled:entry.pool.length,modelLoads:entry.models.loads}])), goblinModelLoads:this.goblinModels.loads,elenaModelLoads:this.elenaModels.loads,mourningModelLoads:this.mourningModels.loads,residentPhase:this.residentPhase,residentError:this.residentError??null,
       summonLimitPerKind:MAX_BOSSES,lastSummon:this.lastSummon??null,elenaCount:this.encounters.filter(b=>b.kind==='elena'&&b.phase===1).length,mourningCount:this.encounters.filter(b=>b.kind==='elena'&&b.phase===2).length,

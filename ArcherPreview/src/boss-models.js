@@ -28,46 +28,36 @@ export function instantiateBossModel(container, timings) {
 }
 
 export class BossModelLibrary {
-  constructor(scene,manifest='guardian-bear',options={}) { this.scene = scene; this.loads = 0; this.manifest=manifest;this.options=options; }
+  constructor(scene,manifest='guardian-bear',options={}) { this.scene = scene; this.loads = 0; this.manifest=manifest;this.options=options;this.generation=0; }
   async load() {
-    if(this.options.scoped)return this.loadScoped();
-    if (!this.pending) {
-      this.pending = (async () => {
-        const url = new URL(`${import.meta.env.BASE_URL}assets/${this.manifest}.json`, location.href);
-        const response = await fetch(url, { cache: 'no-cache' });
-        if (!response.ok) throw new Error('보스 설정을 불러오지 못했습니다.');
-        this.config = await response.json();
-        const model = new URL(this.config.model, url);
-        this.container = await loadBossModelContainer(this.scene,model);
-        for (const group of this.container.animationGroups) group.stop();
-        this.loads++;
-      })().catch(error => { this.pending = null; throw error; });
-    }
-    await this.pending;
-  }
-  async loadScoped(){
-    if(this.disposed)throw mapLoadAbortError();
+    if(this.disposed||this.scene.isDisposed)throw mapLoadAbortError();
     if(!this.pending){
       const {timeoutMs,timers}=this.options,lifetime=new MapLoadLifetime({timeoutMs,timers,stage:'actor-asset'});
-      this.lifetime=lifetime;
+      const generation=++this.generation;this.lifetime=lifetime;
+      // The library, rather than one waiting actor, owns the shared request.
+      // A caller cancelling its preparation cannot cancel another consumer.
+      const check=()=>{if(this.disposed||this.scene.isDisposed||generation!==this.generation)lifetime.abort(mapLoadAbortError());lifetime.check();};
       const observer=this.scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError()));
       const pending=(async()=>{
-        lifetime.check();
-        if(this.scene.isDisposed)throw mapLoadAbortError();
+        check();
         const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${this.manifest}.json`,location.href);
-        this.config=await lifetime.wait(readMapManifest(url,{timeoutMs,timers}));
-        const container=await loadBossModelContainer(this.scene,new URL(this.config.model,url),{lifetime});
-        lifetime.check();this.container=container;
-        for(const group of container.animationGroups)group.stop();this.loads++;
-      })().catch(error=>{if(this.pending===pending)this.pending=null;throw error;}).finally(()=>{
+        const config=await lifetime.wait(readMapManifest(url,{timeoutMs,timers}));check();
+        // This loader owns partial/late containers through the same lifetime.
+        const container=await loadBossModelContainer(this.scene,new URL(config.model,url),{lifetime});
+        try{check();for(const group of container.animationGroups)group.stop();check();}
+        catch(error){container.dispose();throw error;}
+        this.config=config;this.container=container;this.loads++;
+      })().catch(error=>{lifetime.abort(error);if(this.pending===pending)this.pending=null;throw error;}).finally(()=>{
         lifetime.close();this.scene.onDisposeObservable.remove(observer);if(this.lifetime===lifetime)this.lifetime=null;
       });
       this.pending=pending;
     }
     await this.pending;
   }
+  // Kept for existing explicit scoped consumers; all source loads now use it.
+  loadScoped(){return this.load();}
   dispose(){
-    if(this.disposed)return;this.disposed=true;this.lifetime?.abort(mapLoadAbortError());
+    if(this.disposed)return;this.disposed=true;this.generation++;this.lifetime?.abort(mapLoadAbortError());
     this.container?.dispose();this.container=null;
   }
   async instantiate() {

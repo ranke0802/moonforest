@@ -3,6 +3,7 @@ import {BindBonesParameters} from '@babylonjs/core/Materials/materialHelper.func
 import {buildNpcInkFragment} from './character-ink-shaders.js';
 import {bindCaveFogMaterial,readyShaderEffect} from './cave-fog-binding.js';
 import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
+import {actorIntersectsCamera} from './mourning-camera-culling.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
@@ -47,11 +48,23 @@ void main(void){
 
 function makeManager(scene){
  const engine=scene.getEngine(),entries=new Map(),profiles=new Float32Array(128),profileIds=new Map(),rootScales=new Map();
- let normalMaterial=null,target=null,post=null,camera=null,normalDepthView=null,mainDepthView=null,disposed=false,rendering=false,active=[],normalFrames=0,resourceCycles=0;
+ let normalMaterial=null,target=null,post=null,camera=null,cameraDispose=null,attached=false,normalDepthView=null,mainDepthView=null,disposed=false,rendering=false,normalFrames=0,resourceCycles=0;
+ const active=[],keys=new Map();
  const maximumProfiles=Math.min(64,Math.max(2,(engine.getCaps().maxFragmentUniformVectors??128)-12));
  const size=()=>({width:Math.max(1,engine.getRenderWidth(true)),height:Math.max(1,engine.getRenderHeight(true))});
+ const samplesFor=nextCamera=>Math.min(engine.getCaps().maxMSAASamples??1,Math.max(1,nextCamera?._postProcesses?.find(value=>value&&value!==post)?.samples??(engine.getCreationOptions?.().antialias?4:1)));
+ function detach(){
+  if(!attached)return;attached=false;camera?.detachPostProcess(post);
+ }
+ function attach(){
+  if(attached)return;
+  // Keep the owned input/depth while idle. Babylon invalidates the first pass
+  // on attach and reuses that same correctly sized input on activation.
+  camera.attachPostProcess(post,0);attached=true;
+ }
  function releaseResources(disposeMaterial=false){
-  if(post){camera?.detachPostProcess(post);post.dispose(camera);camera?._postProcesses?.find(Boolean)?.markTextureDirty();post=null;}
+  detach();camera?.onDisposeObservable.remove(cameraDispose);cameraDispose=null;
+  const previousPost=post;post=null;previousPost?.dispose(camera);
   target?.dispose();target=null;if(disposeMaterial){normalMaterial?.dispose();normalMaterial=null;}camera=null;normalDepthView=null;mainDepthView=null;profileIds.clear();rootScales.clear();
  }
  function ensureNormalMaterial(){
@@ -63,7 +76,7 @@ function makeManager(scene){
   return normalMaterial;
  }
  function createResources(nextCamera){
-  releaseResources();camera=nextCamera;resourceCycles++;ensureNormalMaterial();
+  releaseResources();camera=nextCamera;cameraDispose=camera.onDisposeObservable.addOnce(()=>releaseResources());resourceCycles++;ensureNormalMaterial();
   target=new RenderTargetTexture('npc-interior-normal-depth',size(),scene,{generateMipMaps:false,samplingMode:Constants.TEXTURE_NEAREST_SAMPLINGMODE,generateDepthBuffer:true,generateStencilBuffer:false,type:Constants.TEXTURETYPE_UNSIGNED_BYTE,format:Constants.TEXTUREFORMAT_RGBA,samples:1});
   target.clearColor=new Color4(0,0,0,0);target.wrapU=target.wrapV=Constants.TEXTURE_CLAMP_ADDRESSMODE;target.renderParticles=false;target.renderSprites=false;target.useCameraPostProcesses=false;target.activeCamera=camera;
   target.createDepthStencilTexture(0,false,false,1,Constants.TEXTUREFORMAT_DEPTH32_FLOAT,'npc-interior-own-depth');
@@ -72,9 +85,10 @@ function makeManager(scene){
   post=new PostProcess('npc-interior-ink',shaderName,['texel','nearFar','pixelWorldFactor','ink','npcProfiles','reverseDepth'],['tNormal','tDepth','tSceneDepth'],1,null,Constants.TEXTURE_NEAREST_SAMPLINGMODE,engine);
   // Become the first pass, so its own input stores the main world's existing
   // depth. No second world render, shared-depth mutation, or hidden wall ink.
-  const previousFirst=camera._postProcesses?.find(Boolean);
-  post.samples=Math.max(1,previousFirst?.samples??(engine.getCreationOptions?.().antialias?4:1));
-  camera.attachPostProcess(post,0);
+  post.samples=samplesFor(camera);
+  const ownedPost=post;
+  post.onDisposeObservable.addOnce(()=>{if(post===ownedPost){post=null;attached=false;releaseResources();}});
+  attach();
   post.onActivateObservable.add(()=>{
    const input=post.inputTexture;
    if(!input.depthStencilTexture){const stencil=!!engine.isStencilEnable;input.createDepthStencilTexture(0,false,stencil,input.samples,stencil?Constants.TEXTUREFORMAT_DEPTH24_STENCIL8:Constants.TEXTUREFORMAT_DEPTH32_FLOAT,'npc-main-render-depth');input.resolveMSAADepth=true;engine.bindFramebuffer(input);}
@@ -96,12 +110,16 @@ function makeManager(scene){
   });
  }
  function collect(){
-  if(disposed)return;active=[];
-  for(const [mesh,value]of entries)if(!mesh.isDisposed()&&mesh.isEnabled()&&mesh.isVisible&&mesh.visibility>0&&value.look.interior&&value.look.interiorStrength>0&&(!scene.activeCamera||mesh.layerMask&scene.activeCamera.layerMask))active.push(mesh);
-  if(!active.length||!scene.activeCamera||!scene.postProcessesEnabled||!engine.getCaps().depthTextureExtension){releaseResources();return;}
-  if(!post||camera!==scene.activeCamera)createResources(scene.activeCamera);
-  const s=size(),old=target.getSize();if(s.width!==old.width||s.height!==old.height){target.resize(s);target.createDepthStencilTexture(0,false,false,1,Constants.TEXTUREFORMAT_DEPTH32_FLOAT,'npc-interior-own-depth');}
-  profiles.fill(0);profileIds.clear();rootScales.clear();const keys=new Map();
+  if(disposed)return;active.length=0;
+  for(const [mesh,value]of entries)if(!mesh.isDisposed()&&mesh.isEnabled()&&mesh.isVisible&&mesh.visibility>0&&value.look.interior&&value.look.interiorStrength>0&&(!scene.activeCamera||mesh.layerMask&scene.activeCamera.layerMask)&&actorIntersectsCamera(mesh,scene))active.push(mesh);
+  const s=size(),old=target?.getSize();
+  // Retain only one camera/size/sample set. Replacing a size also releases the
+  // postprocess SDK texture cache, rather than retaining old-size inputs.
+  if(post&&(camera!==scene.activeCamera||s.width!==old.width||s.height!==old.height||post.samples!==samplesFor(scene.activeCamera)))releaseResources();
+  if(!scene.activeCamera||!engine.getCaps().depthTextureExtension){releaseResources();return;}
+  if(!active.length||!scene.postProcessesEnabled){detach();return;}
+  if(!post)createResources(scene.activeCamera);else attach();
+  profiles.fill(0);profileIds.clear();rootScales.clear();keys.clear();
   for(const mesh of active){const value=entries.get(mesh),root=value.root;
    // Several body/halo meshes share one actor. Reuse its ordinary dirty-aware
    // transform once, rather than force-refreshing the root for each part.
@@ -111,7 +129,7 @@ function makeManager(scene){
  }
  const before=scene.onBeforeRenderObservable.add(collect);
  const render=scene.postProcessManager.onBeforeRenderObservable.add(()=>{
-  if(rendering||!post||!active.length||scene.activeCamera!==camera)return;
+  if(rendering||!attached||!post||!active.length||scene.activeCamera!==camera)return;
   const view=scene.getViewMatrix().clone(),projection=scene.getProjectionMatrix().clone();
   rendering=true;try{target.render(false,false);normalFrames++;}finally{rendering=false;scene.setTransformMatrix(view,projection);}
  });
@@ -124,11 +142,12 @@ function makeManager(scene){
   // Warm the real skin/morph variants under the existing summon deadline, with
   // no normal render, framebuffer allocation, per-actor pass or private timer.
   for(const mesh of selected){await preparation.pause();for(;;){preparation.check();if(material.isReady(mesh,false))break;const effect=material.getEffect();if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('내부선 셰이더를 준비하지 못했습니다.');await preparation.sleep(16);}}
- },inspect:()=>({registered:entries.size,visible:active.length,renderTargets:target?1:0,postProcesses:post?1:0,normalFrames,resourceCycles,worldDepthRenders:0,rafOwned:false,maximumProfiles,depthSupported:!!engine.getCaps().depthTextureExtension}),dispose};
+ },releaseResources(){active.length=0;releaseResources();},inspect:()=>({registered:entries.size,visible:active.length,renderTargets:target?1:0,postProcesses:post?1:0,attachedPostProcesses:attached?1:0,idleRetained:!!post&&!attached,normalFrames,resourceCycles,worldDepthRenders:0,rafOwned:false,maximumProfiles,depthSupported:!!engine.getCaps().depthTextureExtension}),dispose};
 }
 
 export function registerNpcInteriorInk(mesh,{root,look,height=1.85,baseScale=1}={}){
  const scene=mesh.getScene();let manager=scenes.get(scene);if(!manager){manager=makeManager(scene);scenes.set(scene,manager);}manager.register(mesh,{root,look,height,baseScale});
 }
-export function inspectNpcInteriorInk(scene){return scenes.get(scene)?.inspect()??{registered:0,visible:0,renderTargets:0,postProcesses:0,normalFrames:0,resourceCycles:0,worldDepthRenders:0,rafOwned:false};}
+export function inspectNpcInteriorInk(scene){return scenes.get(scene)?.inspect()??{registered:0,visible:0,renderTargets:0,postProcesses:0,attachedPostProcesses:0,idleRetained:false,normalFrames:0,resourceCycles:0,worldDepthRenders:0,rafOwned:false};}
+export function releaseNpcInteriorInkResources(scene){scenes.get(scene)?.releaseResources();}
 export async function prepareNpcInteriorInk(asset,preparation){const scene=asset.meshes[0]?.getScene();await scenes.get(scene)?.prepare(asset.meshes,preparation);}

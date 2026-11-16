@@ -1,0 +1,233 @@
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+✔ ordinary actor and its shell share one decision without changing visibility; alternate shadow planes use the original method (14.6251ms)
+✔ generic bounds include simultaneous morphs and current bone transforms, including changes within one render ID (3.3315ms)
+✔ world-space hull displacement retains a body just beyond the camera edge (2.1598ms)
+✔ unsupported sources fail open atomically, async preparation installs ordinary actors and disposal unregisters the group (2.1209ms)
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+✔ normal GoblinEncounter preparation installs camera culling through the common actor preparation path (94.5565ms)
+✔ distance-rejected actors leave shadow membership and return without reviving fading or finished corpses (2.0401ms)
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+✔ scoped actor source cancellation settles immediately while shared JSON cache owns one bounded fetch (7.3007ms)
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+✔ scoped model deadline rejects hung transport and ignores its late result before constructing meshes (1.6198ms)
+✔ scoped source loads once, reuses a prepared container and releases all owned scene resources (19.8533ms)
+✔ scoped map import invokes the existing mesh preparation hook and detaches its lifetime on disposal (2.2529ms)
+BJS - [12:16:06]: Babylon.js v9.31.0 - Null engine
+✔ default manual library times out its shared model task, retries freshly and ignores old transport completion (3.0565ms)
+✔ one manual consumer cancelling its wait does not abort another consumer or replace the shared source (2.004ms)
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:07]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:14]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:14]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:14]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:14]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+✔ real warrior 2/4/6 cache comparison preserves recurring movement/roll/bash/light/heavy poses and strike sweeps (6951.6604ms)
+ℹ {"scope":"CPU-only Babylon NullEngine with shipped warrior TRS/hierarchy; counts and phase-sampled pose/strike equivalence, not GPU/FPS/thermal evidence","frames":1944,"transitions":162,"strikeSweepSamples":258,"contactStates":["slash","attack","shieldPush","judgment"],"states":["run","idle","slash","attack","dodge","shieldPush","judgment"],"rows":[{"limit":0,"peakCached":0,"peakBindings":816,"peakActiveClips":2,"maxWorldMatrixError":0,"enabled":false,"eligible":false,"cached":0,"created":66096,"reused":0,"evicted":0,"currentBindings":408,"retainedBindings":408,"medianTransitionSampleMs":0.7132999999994354},{"limit":2,"peakCached":2,"peakBindings":1632,"peakActiveClips":2,"maxWorldMatrixError":0,"enabled":true,"eligible":true,"cached":2,"created":35088,"reused":31008,"evicted":83,"currentBindings":1224,"retainedBindings":1224,"medianTransitionSampleMs":0.6552000000001499},{"limit":4,"peakCached":4,"peakBindings":2448,"peakActiveClips":2,"maxWorldMatrixError":0,"enabled":true,"eligible":true,"cached":4,"created":26112,"reused":39984,"evicted":59,"currentBindings":2040,"retainedBindings":2040,"medianTransitionSampleMs":0.7584999999999127},{"limit":6,"peakCached":6,"peakBindings":2856,"peakActiveClips":2,"maxWorldMatrixError":0,"enabled":true,"eligible":true,"cached":6,"created":2856,"reused":63240,"evicted":0,"currentBindings":2856,"retainedBindings":2856,"medianTransitionSampleMs":0.8200000000006185}]}
+✔ real warrior rapid superseded fades remain normalized and bounded at cache sizes 2/4/6 (1175.7645ms)
+ℹ {"scope":"140 rapid fades; active blends are preserved independently of inactive cache budget","rows":[{"limit":0,"maxActive":3,"maxCached":0,"maxBindings":1224,"maxWorldMatrixError":0},{"limit":2,"maxActive":3,"maxCached":2,"maxBindings":2040,"maxWorldMatrixError":0},{"limit":4,"maxActive":3,"maxCached":4,"maxBindings":2856,"maxWorldMatrixError":0},{"limit":6,"maxActive":3,"maxCached":5,"maxBindings":2856,"maxWorldMatrixError":0}]}
+✔ cache budget is explicitly bounded at six and event/sparse/additive/blending safeguards still reject reuse (455.5402ms)
+✔ a late observer at cache size six gets a fresh binding without a stale completion (21.5276ms)
+BJS - [12:16:08]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:08]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:08]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:08]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:08]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:08]: Babylon.js v9.31.0 - Null engine
+✔ Babylon 9.31 NullEngine: non-loop death retains final pose, then revive starts idle (14.6183ms)
+✔ Babylon rendered attack time equals controller time before/after release and at 3x recovery (4.9548ms)
+✔ rendered attack stays synchronized when speed changes while alternating standing and moving (3.4067ms)
+✔ standing/moving swaps preserve sampled phase, blend weights and single release (3.0324ms)
+✔ buffered same-state attack rewinds to new action time, not the previous final pose (4.7014ms)
+✔ cancelling the shot removes its animation and keeps the replacement on its own clock (1.3056ms)
+✔ a hung effect cannot delay selected music; timeout, gesture retry and late result remain separately owned (5.2217ms)
+✔ timed-out native decode never publishes over a successful retry (1.1028ms)
+✔ bed readiness does not start destination music while map loading explicitly suspends audio (0.9791ms)
+✔ never-settling native decodes stay capped after logical timeout and later retries (1.0912ms)
+✔ dispose aborts effect fetches and native decode waits immediately without late buffer resurrection (0.8969ms)
+✔ manifest timeout is retryable and a stale manifest cannot configure a disposed audio owner (0.5741ms)
+✔ sound assets load/decode once with bounded concurrency; no repeated fetch per sound (33.4443ms)
+✔ boss score loads only on encounter, reuses one decode/source, pauses with context and cancels stale loads (1.4336ms)
+✔ audio bounds voices, prioritizes contacts, drops distant/missing/duplicate sounds, suspends cleanly (0.3803ms)
+✔ motion cues follow clip crossings at different rates, never repeat during hit-stop or invent impact on a miss (0.8628ms)
+✔ archer moving/standing transitions do not retrigger bow draw; canceled actions produce no later swing (0.1367ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ monsters summon near an outer-arena player and continue past the former wall (96.4602ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ group preparation keeps all requested actors hidden while the other kind continues (49.645ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ model CPU timings are copied into the owning hidden job without retaining library records (34.4303ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ far enemy draw suppression is reversible and leaves combat/model state intact (29.881ms)
+✔ spawn count is bounded and five bosses have separate positions inside the arena (0.2656ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ bear and goblin ground anchors follow terrain on spawn, movement, separation and contact correction (33.3766ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ dead bear and goblin fade independently, award once, stop rendering and reset on resummon (33.0303ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ equipped armor reduces incoming normal, critical and throw damage once and persists across resets (23.4814ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ summon 3/1/5/2 reuses one model template, shares geometry, clones skeletons and animations, hides unused actors (37.3807ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ five bosses share player health, immunity and a single potion clock (29.3386ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ one swing hits each grounded boss once; recovery stays damageable independently (29.3889ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ a single boss owns the grab; another boss cannot capture or damage that held player (26.4814ms)
+✔ separation moves overlapping living bosses without dragging a captured player owner (0.1989ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ roll contact never displaces an overlapping bear or goblin (30.0785ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ ending a roll beside an enemy does not push it out of the newly usable gap (29.8247ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ walking through prone, getting-up or dead enemies does not separate their bodies (30.3987ms)
+✔ hiding during a pending load cannot reactivate an old summon (0.4487ms)
+✔ multi-boss audio tracks separate attack clocks and plays victory only after the last death (0.4733ms)
+BJS - [12:16:09]: Babylon.js v9.31.0 - Null engine
+✔ five goblins coexist with bears, share player health and reuse one goblin asset (36.0085ms)
+✔ a shared sword swing damages both bear and goblin, with independent hit deduplication (23.6889ms)
+BJS - [12:16:10]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:10]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:10]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:10]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:11]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:11]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:11]: Babylon.js v9.31.0 - Null engine
+✔ actual witch loader creates each byte-identical morph texture once while preserving all geometry, target and influence state (524.8596ms)
+✔ attribute/layer-limit fallback keeps the exact loader contract: {"texture":false,"layers":256} (493.0904ms)
+✔ attribute/layer-limit fallback keeps the exact loader contract: {"texture":true,"layers":4} (546.4754ms)
+BJS - [12:16:12]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:12]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:12]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:12]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:13]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:13]: Babylon.js v9.31.0 - Null engine
+✔ the scoped modern loader wrapper passes its real URL root, glTF plugin options and preparation through the actual SDK (623.7574ms)
+✔ unrelated loaders and already-ready/disposed meshes retain their original behavior; failed scoped loads release pending data (620.9326ms)
+✔ overlapping public boss and non-pinning generic loads remain isolated, including container disposal and reload (836.9785ms)
+✔ truncated public model data rejects cleanly and a fresh model request retains the same optimized upload path (251.1207ms)
+✔ actual BossModelLibrary load preserves config no-cache, URL resolution, error retry and one cached successful model request (593.1595ms)
+✔ nineteen authored quests form an acyclic prerequisite graph; optional quests never block the main path (1.3819ms)
+✔ early evidence survives reload and turn-in is exactly once, including consumed apples and rewards (0.3131ms)
+✔ collect persists its fact, bag and token atomically with one immediate write (0.5985ms)
+✔ a failed atomic collect save retains the complete volatile reward and exactly-once token (0.1211ms)
+✔ incomplete and locked quests grant nothing; optional future model events remain pending (0.1485ms)
+✔ a full health bar does not consume food, and successful use persists independently from map saves (0.1461ms)
+✔ corrupt saves and unavailable storage preserve an operational session without invented progress (0.7146ms)
+✔ quest gold reconciles into the real wallet once after reload and retains combat loot (0.325ms)
+✔ re-armed chest reward cycles retain earlier drops and quest facts and cannot duplicate on reload (0.5726ms)
+✔ combines owner activity without double counting battle development aliases or borrowed cutscene actors (1.1028ms)
+✔ keeps actual named CPU payload counters, GPU estimates, reservations and transfer bytes in separate scopes (0.237ms)
+✔ missing and failing owner counters remain explicit unknowns and do not trigger a scene scan (0.1776ms)
+✔ repeated snapshots retain no ownership state and a map release immediately reflects smaller dormant pools (0.1259ms)
+BJS - [12:16:11]: Babylon.js v9.31.0 - Null engine
+✔ diagnostics OFF, basic, recording and detailed recording preserve the same real scene submission and state (63.4734ms)
+BJS - [12:16:12]: Babylon.js v9.31.0 - Null engine
+✔ trimming preserves stable slot0 and caps total dormant clones with no active actor deletion (0.8285ms)
+✔ a map/summon revision change during yield prevents disposal and pool publication (0.1239ms)
+✔ disposing a hidden cloned rig preserves library geometry, material, morph and live sibling (11.9785ms)
+✔ spatial separation is exactly ordered like both original passes for mixed moving, dead, down and captured actors (33.8684ms)
+✔ coincident clusters and chain pushes crossing buckets find newly reachable later pairs (2.6881ms)
+✔ 80 spread actors avoid most distance tests and workspace reuse retains no actors (5.464ms)
+✔ small and nonfinite input preserve the original fallback behavior (0.4775ms)
+✔ normal mobile pacing is 30 FPS / 33ms and is never counted as a delayed frame (1.0892ms)
+✔ sustained 40 FPS at a 60 FPS target is visible without fabricating 50 ms stalls (0.38ms)
+✔ raw stalls are not capped at simulation delta; reports retain location and bounded event history (0.5815ms)
+✔ only recent ten seconds affect peaks and slow counts and storage remains bounded (1.4863ms)
+✔ paused/hidden time and FPS cap changes are not reported as gameplay stalls (0.2017ms)
+✔ disabled diagnostics perform no timing, context collection or HUD updates; choice persists (2.1306ms)
+✔ combined content owner counters run only for explicit snapshot/export, never frames or periodic paint (1.8287ms)
+✔ CPU stage counters accumulate only during play and reset on the next frame (0.4882ms)
+✔ manual player animation sections stay inside prelude and do not replace SDK animation time (0.6073ms)
+✔ GPU collecting hooks transition once and reset/map/pause stop pending measurement without enabling disabled work (0.6665ms)
+✔ settings pause preserves completed GPU timing as historical JSON with fresh age, map/reset/context loss erase it (1.4142ms)
+✔ GPU HUD separates unsupported/pending/disjoint/stale states and displays true zero only when valid (0.1142ms)
+✔ paused preview CPU counter mutations cannot overwrite last play snapshot while GPU retained age refreshes (0.4508ms)
+✔ existing HUD opens spawn comparison, records memory and draws, and exports independent completed comparisons (3.7367ms)
+✔ load timings survive late HUD enable, memory samples are bounded and exported with clear labels (0.7148ms)
+✔ HUD throttles updates, explains mobile pacing, and exports measured delays without sending them (0.5698ms)
+✔ zoom readout follows the camera, exports limits, and refreshes while settings pause the game (0.818ms)
+✔ clipboard refusal offers a selectable local report instead of losing the diagnostic (0.4632ms)
+✔ real FrameLoop keeps 100ms simulation cap while diagnostics see a 400ms stall, excluding suspension (0.6746ms)
+BJS - [12:16:14]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:14]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:15]: Babylon.js v9.31.0 - Null engine
+✔ real goblin clips reuse bounded bindings on state changes, without changing poses, combat events or death cleanup (182.8555ms)
+ℹ {"frames":900,"baseline":{"enabled":false,"eligible":false,"limit":0,"cached":0,"created":1776,"reused":0,"evicted":0,"currentBindings":111},"cached":{"enabled":true,"eligible":true,"limit":2,"cached":2,"created":1110,"reused":666,"evicted":7,"currentBindings":333},"scope":"Babylon NullEngine with shipped goblin animation tracks; not mobile FPS or GPU"}
+✔ goblin production encounter selects a bounded cache (9.8517ms)
+✔ Babylon loader and independently cloned shipped goblins are eligible and keep matching skin pose (86.0988ms)
+✔ touch release retries a hung first resume, while sound loading never waits for it (4.328ms)
+✔ interrupted Safari contexts resume on tap and visibility return without re-decoding or duplicating loops (1.6238ms)
+✔ a late resume cannot turn audio back on while the app explicitly remains paused (0.8846ms)
+✔ a loop ended by interruption restarts from its cached buffer when the context runs again (0.5674ms)
+✔ a failed music download retries only after a later gesture and cooldown, not on every frame (1.3056ms)
+✔ unsupported or read-only Audio Session APIs do not prevent normal audio playback (0.464ms)
+✔ closing a modal on a touch-generated click resumes within that same gesture and keeps its cached loops (1.237ms)
+✔ one load-ready snapshot is fixed while a manual refresh sees later streamed resources; no continuous scan (31.2784ms)
+✔ map replacement while lazy catalog resolves cannot replace the new map display or export an old snapshot (10.5569ms)
+✔ JSON and standalone HTML exports keep usable links and release old Blob URLs on replacement/disposal (7.3614ms)
+✔ inventory failure remains visible without breaking map completion (3.4336ms)
+✔ report escapes resource labels, explains near-tier and shared counts, and never calls unknown network bytes zero (4.3214ms)
+✔ polygon snapshots preserve all four maps and effective overlay assets without retaining world objects (0.303ms)
+✔ the inert supplied InteriorInk source fixes the8-neighbor numerical contract (2.3532ms)
+✔ generated GLSL uses native postprocess inputs, fixed WebGL1 profile loop and no color conversion (0.5189ms)
+✔ hardware perspective depth and reverse depth reconstruct near, far and intermediate distances (0.1553ms)
+✔ edge numerical goldens match the supplied math for all8 offsets, slopes, scales and signed breaks (2.9929ms)
+✔ center and neighbor occlusion controls suppress hidden NPC ink while preserving equal/front depth (0.6067ms)
+✔ per-NPC height and strength, weak-edge cutoff and alpha cap preserve linear scene compositing (0.2318ms)
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+BJS - [12:16:16]: Babylon.js v9.31.0 - Null engine
+✔ one shared NPC-only pass owns its depth and bypasses composition while retaining one idle target set (21.4873ms)
+✔ NPC pass retains independent existing post processes through camera replacement, resize and repeated warm hide/show (3.6588ms)
+✔ reentry reuses its own input/depth without growing camera slots or allocating per hidden frame (8.537ms)
+✔ the SDK sample cap does not cause a new target set every frame (2.0506ms)
+✔ idle resize/camera disposal release the retained set, and reentry binds fresh full-size depth (1.9719ms)
+✔ camera-proven off-screen actors are absent from ink lists while unsupported meshes fail open (3.0828ms)
+✔ a multi-mesh actor uses one dirty-aware root update per collection and never forces a pose refresh (1.5273ms)
+✔ NPC toon port keeps supplied world light/bands/brightness and disables the older albedo-derivative crease shader only for NPC bodies (1.771ms)
+✔ native NPC postprocess binding matches supplied exact sRGB output encoding and preserves a deferred linear pipeline (1.7606ms)
+✔ only selected map downloads; combat/boss priority, region return, pause and no per-frame restart (4.0537ms)
+✔ repeated village/forest/cave trips keep bounded buffers and fade voices; scores decode one at a time (3.4532ms)
+✔ rapid map changes ignore obsolete decode and never download an already superseded middle map (0.4149ms)
+✔ failed score is not retried each frame and cannot mute successfully loaded effects (0.6035ms)
+✔ dispose during pending decode prevents resurrection or additional ambience downloads (0.3416ms)
+✔ combat router uses actual enemy/health transitions and gives victory music time before map return (0.3969ms)
+✔ packed audio references are hashed, licensed and finite; original sound references remain unchanged (26.1057ms)
+ℹ tests 139
+ℹ suites 0
+ℹ pass 139
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11155.6193

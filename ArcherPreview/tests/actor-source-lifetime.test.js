@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {NullEngine,Scene} from '@babylonjs/core';
 import {BossModelLibrary} from '../src/boss-models.js';
 import {readMapContainer} from '../src/map-container.js';
+import {MapLoadLifetime} from '../src/map-load-lifetime.js';
 
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function until(check){for(let i=0;i<50;i++){if(check())return;await tick();}assert.fail('Expected source loading boundary');}
@@ -40,4 +41,30 @@ test('scoped source loads once, reuses a prepared container and releases all own
 test('scoped map import invokes the existing mesh preparation hook and detaches its lifetime on disposal',async t=>{
  const {scene}=fixture(t);let callbacks=0;const container=await readMapContainer(scene,triangle(),'https://actor-source.test/',{onMeshLoaded:()=>callbacks++});
  assert.ok(callbacks>0);container.dispose();assert.equal(scene.meshes.length,0);assert.equal(scene.geometries.length,0);
+});
+
+test('default manual library times out its shared model task, retries freshly and ignores old transport completion',async t=>{
+ const {scene}=fixture(t),timers=fakeClock();let finishOld,modelRequests=0,oldJsonReads=0,oldSignal;
+ globalThis.fetch=(url,options)=>{
+  if(!String(url).endsWith('.gltf'))return Promise.resolve({ok:true,json:async()=>({model:'./manual-retry.gltf',version:'test'})});
+  modelRequests++;if(modelRequests===1){oldSignal=options.signal;return new Promise(resolve=>finishOld=resolve);}
+  return Promise.resolve({ok:true,json:async()=>triangle()});
+ };
+ const library=new BossModelLibrary(scene,'default-manual-retry',{timers,timeoutMs:100});
+ const a=library.load(),b=library.load(),rejected=Promise.all([assert.rejects(a,{name:'TimeoutError'}),assert.rejects(b,{name:'TimeoutError'})]);
+ await until(()=>!!finishOld);assert.equal(modelRequests,1);timers.advance(100);await rejected;
+ assert.equal(oldSignal.aborted,true);assert.equal(library.pending,null);assert.equal(library.config,undefined);
+ await library.load();const current=library.container;assert.equal(modelRequests,2);assert.equal(library.loads,1);
+ finishOld({ok:true,json:async()=>{oldJsonReads++;return triangle();}});await tick();
+  assert.equal(oldJsonReads,0);assert.strictEqual(library.container,current);assert.equal(library.loads,1);assert.equal(current.meshes.filter(mesh=>mesh.getTotalVertices()>0).length,1);assert.equal(timers.size,0);
+ library.dispose();assert.equal(scene.meshes.length,0);
+});
+
+test('one manual consumer cancelling its wait does not abort another consumer or replace the shared source',async t=>{
+ const {scene}=fixture(t),timers=fakeClock();let finish,modelSignal,requests=0;
+ globalThis.fetch=(url,options)=>String(url).endsWith('.gltf')?(requests++,modelSignal=options.signal,new Promise(resolve=>finish=resolve)):Promise.resolve({ok:true,json:async()=>({model:'./manual-shared.gltf'})});
+ const library=new BossModelLibrary(scene,'default-manual-shared',{timers,timeoutMs:100}),consumer=new MapLoadLifetime({timers,timeoutMs:50});
+ const cancelled=consumer.wait(library.load()),rejected=assert.rejects(cancelled,{name:'AbortError'}),other=library.load();
+ await until(()=>!!finish);consumer.abort();consumer.close();await rejected;assert.equal(modelSignal.aborted,false);assert.equal(requests,1);
+ finish({ok:true,json:async()=>triangle()});await other;assert.equal(library.loads,1);assert.equal(timers.size,0);library.dispose();
 });

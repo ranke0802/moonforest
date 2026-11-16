@@ -54,8 +54,10 @@ export function createMapResourceInspector({doc=document,getWorld,getLoad=()=>nu
  function begin(){generation++;initial=null;current=null;selected=null;releaseUrls();if(host)host.textContent='이 맵의 로딩이 완료되면 기록됩니다.';statusText('로딩 준비 중');buttons();}
  function capture(kind){
   const world=getWorld();if(!world?.scene)return null;
+  const captureStarted=performance.now();
   const report={version:1,format:'moonforest-map-load-resources',mapId:world.mapId,kind,createdAt:new Date().toISOString(),frameCounter:{source:'last-engine-frame-at-capture',frameId:world.scene.getEngine?.()?.frameId??null},pending:{geometry:world.environment?.geometryPending??0,textures:world.environment?.highTexturePending??0},loading:structuredClone(getLoad()),preparation:world.resourceLoadLedger?.snapshot?.()??null};
   try{report.inventory=collect(world.scene,{world,mapId:world.mapId,renderMetrics:{submittedTriangles:world.scene.getActiveIndices?.()/3},limit:1024});report.placementInputs=captureMapPolygonInputs(world);if(catalog)report.placementEstimate=estimateMapPolygonInputs(report.placementInputs,catalog);}catch(error){report.error=String(error.message).slice(0,300);}
+  report.captureCpuMs=Math.max(0,performance.now()-captureStarted);
   return report;
  }
  function captureReady(){try{getWorld()?.resourceLoadLedger?.markReady?.();initial=capture('load-ready');current=null;selected=null;buttons();statusText(initial?'이번 로딩 완료 기록이 준비되었습니다.':'맵 기록 없음');}catch(error){statusText('리소스 집계 실패: '+error.message);}}

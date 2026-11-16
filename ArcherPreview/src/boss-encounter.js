@@ -6,6 +6,7 @@ import { applyElenaStyle } from './elena-style.js';
 import {applyMourningElenaLook} from './mourning-elena-look.js';
 import {installMourningHairGuides} from './mourning-hair-guides.js';
 import {prepareNpcInteriorInk} from './character-interior-ink.js';
+import {prepareActorCameraCullingAsync} from './mourning-camera-culling.js';
 import { BossBrain, BOSS_BY_NAME, BOSS_DAMAGE, BOSS_GROUNDED_HIT_RANGE, BOSS_HEAVY_ATTACKS, bossAttackRange } from './boss-spec.js';
 import { MeleeContactGate } from './melee-collision.js';
 import { applyHitFlash, PlayerHitReaction, PLAYER_STAGGER, PLAYER_BLOCK_GROGGY } from './hit-feedback.js';
@@ -122,6 +123,7 @@ export class BossEncounter {
     if(this.assetPreparationStep<3){
       if(preparation.incremental)await attachCharacterOutlinesAsync(this.asset,this.kind,preparation);
       else attachCharacterOutlines(this.asset,this.kind);
+      await prepareActorCameraCullingAsync(this.asset,preparation);
       this.assetPreparationStep=3;
     }
     if(this.assetPreparationStep<4){await preparation.step('pose-and-warning-resources',()=>{
@@ -163,7 +165,8 @@ export class BossEncounter {
       this.brain=this.createBrain(this.animator.durations);this.hitCount=0;this.heavyCount=0;this.gate.reset();
       this.death.reset({holdPose:this.hasAuthoredLamentDeath,clipSeconds:this.animator.deathDuration??this.animator.durations.dead});
       this.deathShadowsRemoved=false;
-        for(const [mesh,visibility] of this.deathVisibility){mesh.visibility=visibility;if(activate&&mesh.getTotalVertices()&&!isRuntimeOutline(mesh))this.world.shadows.addShadowCaster(mesh,false);}
+        for(const [mesh,visibility] of this.deathVisibility)mesh.visibility=visibility;
+        if(activate)this.setShadowCasting(true);
       if(this.ownsCombat)this.combat.reset();
       this.bossReaction.reset();applyHitFlash(this.asset.meshes,0);
         this.actor.setEnabled(activate);this.actor.position.copyFrom(position??player.position.add(new Vector3(Math.sin(player.rotation.y)*2.8,0,Math.cos(player.rotation.y)*2.8)));
@@ -178,7 +181,7 @@ export class BossEncounter {
   }
   hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.knockTurn=null;if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
   setShadowCasting(enabled){
-    enabled=enabled&&!(this.death.started&&this.death.opacity<1);
+    enabled=enabled&&this.renderVisible!==false&&!(this.death.started&&this.death.opacity<1);
     // Retain pooled geometry for a warm return, but do not keep retired phases
     // in the shadow renderer's readiness/caster traversal.
     for(const mesh of this.asset?.meshes??[]){
@@ -203,6 +206,9 @@ export class BossEncounter {
     if(visible===this.renderVisible)return;
     this.renderVisible=visible;
     for(const mesh of this.asset.meshes)if(mesh.getTotalVertices())mesh.isVisible=visible;
+    // Distance rejection already hides this actor in every pass. Retire that
+    // membership too, without tying visible offscreen shadows to camera culling.
+    this.setShadowCasting(visible);
   }
   updateDeath(dt){
     if(this.corpseGone)return;

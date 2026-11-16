@@ -1,5 +1,6 @@
 import { AudioBeds } from './audio-beds.js';
 import {bossMusicContext,availableBossMusic} from './boss-music.js';
+import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
 const DEFAULTS={volume:.55,priority:2,cooldown:.055};
 const SETTINGS={
  foot_0:{volume:.19,priority:0,cooldown:.12},foot_1:{volume:.19,priority:0,cooldown:.12},foot_2:{volume:.19,priority:0,cooldown:.12},
@@ -13,13 +14,14 @@ const SETTINGS={
 };
 
 export class GameAudio {
-  constructor({contextFactory=()=>new (globalThis.AudioContext||globalThis.webkitAudioContext)({latencyHint:'interactive',sampleRate:32000}),fetcher=(...args)=>fetch(...args),maxVoices=12,manifestUrl,audioSession=globalThis.navigator?.audioSession,now=()=>Date.now()}={}){
+  constructor({contextFactory=()=>new (globalThis.AudioContext||globalThis.webkitAudioContext)({latencyHint:'interactive',sampleRate:32000}),fetcher=(...args)=>fetch(...args),maxVoices=12,manifestUrl,audioSession=globalThis.navigator?.audioSession,now=()=>Date.now(),loadTimeoutMs=20000,retryDelayMs=5000,timers}={}){
     this.contextFactory=contextFactory;this.fetcher=fetcher;this.maxVoices=maxVoices;
     this.buffers=new Map();this.variants=new Map();this.variantIndex=new Map();this.voices=new Set();this.lastPlayed=new Map();this.listener={x:0,z:0};this.seed=27183;
     this.musicWanted=false;this.beds=new AudioBeds(this);this.environment=null;this.combatMode=null;this.bossTheme=null;
     this.manifestUrl=manifestUrl;
     this.audioSession=audioSession;this.now=now;this.resumeAttempts=0;this.resumePending=null;this.gestureCleanup=null;
     this.suspended=false;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
+    this.loadTimeoutMs=loadTimeoutMs;this.retryDelayMs=retryDelayMs;this.timers=timers;this.audioGeneration=0;this.audioLifetimes=new Set();this.sfxSources=new Map();this.sfxDecodeJobs=new Set();this.sfxLoading=null;
   }
   bindUnlock(target){
     this.gestureCleanup?.();
@@ -60,29 +62,60 @@ export class GameAudio {
       if(!this.context)this.makeContext();
       const resumed=this.resumeContext({gesture:true});
       // Fetch/decode must not be held hostage by a pending iOS resume promise.
-      this.loading??=this.preload();
+      if(!this.loading)this.loading=this.preload();else this.loadSoundEffects();
       this.beds.retryFailed();this.selectBed();this.syncMusic();return resumed;
     }catch{this.failed++;}
   }
   async preload(){
+    const generation=++this.audioGeneration,context=this.context,lifetime=this.loadLifetime('audio-manifest');
     try{
       const manifestUrl=this.manifestUrl||new URL(`${import.meta.env?.BASE_URL??'/'}assets/audio.json`,globalThis.location.href);
-      const response=await this.fetcher(manifestUrl,{cache:'no-cache'});if(!response.ok)throw new Error('audio manifest');
-      const manifest=await response.json(),{sounds}=manifest;this.cueSettings=manifest.cueSettings;this.beds.configure(manifest,manifestUrl);this.resolvedManifestUrl=manifestUrl;this.selectBed();
-      const queue=[],byPath=new Map();
+      // Start I/O in the trusted gesture, even when WebKit resume never settles.
+      const response=await lifetime.wait(this.fetcher(manifestUrl,{cache:'no-cache',signal:lifetime.signal}));if(!response.ok)throw new Error('audio manifest');
+      const manifest=await lifetime.wait(response.json());this.checkAudioLoad(generation,context,lifetime);this.closeLoadLifetime(lifetime);
+      const {sounds}=manifest;this.cueSettings=manifest.cueSettings;this.beds.configure(manifest,manifestUrl);this.resolvedManifestUrl=manifestUrl;this.selectBed();
+      this.sfxSources.clear();
       for(const [name,paths] of Object.entries(sounds)){
         const variants=(Array.isArray(paths)?paths:[paths]).map((path,i)=>({key:i?`${name}_${i}`:name,path}));
-        this.variants.set(name,variants.map(v=>v.key));for(const v of variants){if(!byPath.has(v.path)){byPath.set(v.path,[]);queue.push([v.key,v.path]);}byPath.get(v.path).push(v.key);}
+        this.variants.set(name,variants.map(v=>v.key));for(const v of variants){const url=new URL(v.path,manifestUrl).href;let source=this.sfxSources.get(url);if(!source){source={url,keys:[],status:'new',retryAt:0};this.sfxSources.set(url,source);}source.keys.push(v.key);}
       }
-      // Three in-flight decodes/downloads, rather than a burst of dozens on mobile.
-      await Promise.all(Array.from({length:3},async()=>{while(queue.length&&!this.disposed){
-        const [name,path]=queue.shift();
-        try{const response=await this.fetcher(new URL(path,manifestUrl),{cache:'force-cache'});if(!response.ok)throw new Error(name);
-          const buffer=await this.context.decodeAudioData(await response.arrayBuffer());if(!this.disposed)for(const key of byPath.get(path))this.buffers.set(key,buffer);
-        }catch{this.failed++;}
-      }}));
+      const soundsLoading=this.loadSoundEffects();
+      // A stalled effect must not hold the selected map's music/ambience hostage.
+      // AudioBeds still owns suspension, map selection and stale-load checks.
       this.beds.ready=true;this.syncMusic();
-    }catch{this.failed++;this.loading=null;}
+      await soundsLoading;
+    }catch(error){lifetime.abort(error);if(!this.disposed&&this.audioGeneration===generation){this.failed++;this.loading=null;}}
+    finally{this.closeLoadLifetime(lifetime);}
+  }
+  loadLifetime(stage){const lifetime=new MapLoadLifetime({timeoutMs:this.loadTimeoutMs,timers:this.timers,stage});this.audioLifetimes.add(lifetime);return lifetime;}
+  closeLoadLifetime(lifetime){lifetime.close();this.audioLifetimes.delete(lifetime);}
+  checkAudioLoad(generation,context,lifetime){
+    if(this.disposed||generation!==this.audioGeneration||this.context!==context||context?.state==='closed')lifetime.abort(mapLoadAbortError());lifetime.check();
+  }
+  loadSoundEffects(){
+    if(this.disposed||!this.context||this.context.state==='closed'||this.sfxLoading)return this.sfxLoading;
+    const queue=[...this.sfxSources.values()].filter(source=>source.status==='new'||source.status==='failed'&&this.now()>=source.retryAt);
+    if(!queue.length)return;
+    const generation=this.audioGeneration,context=this.context;
+    const pending=Promise.all(Array.from({length:3},async()=>{while(queue.length&&!this.disposed&&this.audioGeneration===generation){
+      const source=queue.shift(),lifetime=this.loadLifetime('audio-effect');source.status='loading';
+      try{
+        this.checkAudioLoad(generation,context,lifetime);
+        const response=await lifetime.wait(this.fetcher(source.url,{cache:'force-cache',signal:lifetime.signal}),{onLate:response=>response.body?.cancel().catch(()=>{})});if(!response.ok)throw new Error('audio effect');
+        const bytes=await lifetime.wait(response.arrayBuffer());this.checkAudioLoad(generation,context,lifetime);
+        // Native decode cannot be interrupted. Do not accumulate new native
+        // decodes after timed-out calls; late results have no publication path.
+        if(this.sfxDecodeJobs.size>=3)throw new Error('Audio decoder is still busy');
+        const decode=Promise.resolve(context.decodeAudioData(bytes));this.sfxDecodeJobs.add(decode);
+        decode.then(()=>this.sfxDecodeJobs.delete(decode),()=>this.sfxDecodeJobs.delete(decode));
+        const buffer=await lifetime.wait(decode);this.checkAudioLoad(generation,context,lifetime);
+        for(const key of source.keys)this.buffers.set(key,buffer);source.status='loaded';
+      }catch(error){
+        lifetime.abort(error);
+        if(!this.disposed&&this.audioGeneration===generation){source.status='failed';source.retryAt=this.now()+this.retryDelayMs;this.failed++;}
+      }finally{this.closeLoadLifetime(lifetime);}
+    }})).finally(()=>{if(this.sfxLoading===pending)this.sfxLoading=null;});
+    this.sfxLoading=pending;return pending;
   }
   setSuspended(value){
     this.suspended=value;
@@ -147,6 +180,6 @@ export class GameAudio {
     if(['boss_hit','player_hit','land','block','parry'].includes(name))this.duckMusic(now);
     this.peakVoices=Math.max(this.peakVoices,this.voices.size);return true;
   }
-  inspect(){return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,bossThemeRequested:this.bossTheme,bossThemeAvailable:!!this.beds.definitions.music[this.bossTheme]?.url,...this.beds.inspect()};}
-  dispose(){this.disposed=true;this.gestureCleanup?.();this.stopAll();this.buffers.clear();this.beds.dispose();this.context?.removeEventListener?.('statechange',this.contextStateChanged);if(this.primer){this.primer.onended=null;try{this.primer.stop();}catch{}this.primer.disconnect();this.primer.buffer=null;this.primer=null;}this.context?.close().catch(()=>{});try{if(this.audioSession?.type==='playback'&&this.previousSessionType!=null)this.audioSession.type=this.previousSessionType;}catch{}}
+  inspect(){const unique=new Set(this.buffers.values());let decodedSfxBytes=0;for(const buffer of unique){const bytes=(buffer.length??Math.round((buffer.duration??0)*(buffer.sampleRate??32000)))*(buffer.numberOfChannels??2)*4;if(Number.isFinite(bytes))decodedSfxBytes+=bytes;}return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,decodedSfxBuffers:unique.size,decodedSfxBytes,pendingSfxDecodes:this.sfxDecodeJobs.size,failedSfxSources:[...this.sfxSources.values()].filter(source=>source.status==='failed').length,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,bossThemeRequested:this.bossTheme,bossThemeAvailable:!!this.beds.definitions.music[this.bossTheme]?.url,...this.beds.inspect()};}
+  dispose(){this.disposed=true;this.audioGeneration++;for(const lifetime of this.audioLifetimes)lifetime.abort(mapLoadAbortError());this.gestureCleanup?.();this.stopAll();this.buffers.clear();this.sfxSources.clear();this.beds.dispose();this.context?.removeEventListener?.('statechange',this.contextStateChanged);if(this.primer){this.primer.onended=null;try{this.primer.stop();}catch{}this.primer.disconnect();this.primer.buffer=null;this.primer=null;}this.context?.close().catch(()=>{});try{if(this.audioSession?.type==='playback'&&this.previousSessionType!=null)this.audioSession.type=this.previousSessionType;}catch{}}
 }
