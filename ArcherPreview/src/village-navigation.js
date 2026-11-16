@@ -129,8 +129,11 @@ export class VillageNavigation extends ArenaNavigation {
   }
   free(p,radius,limit=ARENA_RADIUS){
     if(Math.hypot(p.x,p.z)>limit+1e-6)return false;
-    const near=radius<=1.5?(this.cells.get(key(p.x,p.z))??[]):this.obstacles;
-    return near.every(o=>obstacleClearance(p,o)>=radius+EPS);
+    // Wider actors used to test every solid at every grid node. Query the
+    // same conservative spatial index; malformed legacy bounds retain fallback.
+    const near=radius<=1.5?(this.cells.get(key(p.x,p.z))??[]):Number.isFinite(radius)&&this.segmentCellPruningSafe?this.nearby(p,p,radius):this.obstacles;
+    for(const obstacle of near)if(!(obstacleClearance(p,obstacle)>=radius+EPS))return false;
+    return true;
   }
   nearby(a,b,radius=0){
     const near=new Set();

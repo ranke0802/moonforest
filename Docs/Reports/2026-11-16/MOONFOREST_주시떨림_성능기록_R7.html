@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoonForest · 성능 기록 분석과 주시 떨림 수정 R7</title>
+<style>body{margin:0;background:#101b19;color:#e9e8df;font:16px/1.7 system-ui,sans-serif}main{max-width:960px;margin:auto;padding:38px 22px 70px}h1{font-size:30px;line-height:1.4}h2{margin-top:32px;color:#e0cb8d;font-size:21px}p{max-width:880px}small,.muted{color:#b3c1b9}table{width:100%;border-collapse:collapse;font-size:15px}th,td{padding:11px;border-bottom:1px solid #34443f;text-align:left}th{background:#1b2d27}.scroll{overflow-x:auto}.card{background:#1b2d27;border-left:3px solid #b5c984;padding:12px 18px}strong{color:#fff0be}code{font-size:.88em;overflow-wrap:anywhere}li{margin:7px 0}@media print{body{background:white;color:#202824}h2,strong{color:#284634}.card,th{background:#eef2ed}.muted,small{color:#526057}}</style>
+<main>
+<small>MOONFOREST 0.2 · 2026-11-16 · R7</small>
+<h1>성능 기록 분석과 늑대·여우 주시 떨림 수정</h1>
+<p class="card">반복 떨림은 안전 검사에서 <strong>저장된 머리 각도를 반감한 뒤 다음 프레임에 다시 늘리는 진동</strong>이 원인이었습니다. 임시 목표각에서 안전 범위를 정하고 그 목표로 부드럽게 이동하도록 수정했습니다. 성능 기록의 큰 세 지연은 몬스터 갱신에 집중됐으며, 별도로 확인한 큰 개체의 첫 길찾기 낭비도 줄였습니다.</p>
+<h2>1. 첨부 기록에서 확인한 성능</h2>
+<p><code>moonforest-performance-2026-11-16T10-34-26-201Z.json</code><br>19:28:21–19:34:24 KST, 약 6분 3초, 18,231프레임. 높은 품질·목표 60FPS·3D 해상도 85%, 실제 렌더 크기 1414×652. Android Chrome 기록이나 정확한 기종과 GPU는 기록돼 있지 않습니다.</p>
+<div class="scroll"><table><tr><th>항목</th><th>전체 기록</th></tr><tr><td>활성 구간 평균</td><td>50.55FPS · 프레임 간격 19.782ms</td></tr><tr><td>평균 CPU 작업</td><td>17.034ms</td></tr><tr><td>50ms 초과 프레임 간격</td><td>62개 / 18,231개 (0.340%)</td></tr><tr><td>가장 긴 간격 / CPU 작업</td><td>698.5ms / 694.9ms</td></tr></table></div>
+<p>끝부분의 짧은 요약 창을 전체 기록의 성능으로 사용하지 않았습니다. 큰 CPU 작업과 그 다음 프레임의 긴 간격은 같은 멈춤을 두 번 기록할 수 있으므로 각각 독립된 멈춤으로 세지 않았습니다.</p>
+<div class="scroll"><table><tr><th>기록 시작 후</th><th>전체 CPU 작업</th><th>몬스터 갱신</th><th>장면 렌더 호출</th></tr><tr><td>30.4초</td><td>422.3ms</td><td>405.3ms</td><td>15.4ms</td></tr><tr><td>156.1초</td><td>500.8ms</td><td>488.9ms</td><td>10.6ms</td></tr><tr><td>294.2초</td><td>694.9ms</td><td>675.4ms</td><td>17.8ms</td></tr></table></div>
+<p>이 세 구간에는 텍스처 작업이나 KTX 업로드가 겹치지 않았습니다. 이번 기록의 가장 큰 멈춤을 텍스처 업로드만으로 설명할 수 없습니다. 별도로 렌더링과 몬스터 갱신이 함께 느려지는 구간도 있습니다. GPU 시간은 지원되지 않아 GPU 대기·브라우저 스케줄링·GC의 기여도는 확정할 수 없습니다.</p>
+<h2>2. 얼굴 떨림과 턱이 비틀려 보이는 원인·수정</h2>
+<ul><li>뒤쪽 주시에서 여우 머리는 한 프레임에 약 16.64°, 회색 늑대는 약 14.62° 튀는 현상을 실제 출하 골격으로 재현했습니다.</li><li>턱은 머리의 자식이며 원본과 실행 중 머리 기준 턱 회전이 유지됩니다. 턱의 별도 옆회전 키가 원인은 아니었습니다. 큰 목·머리 보정과 반복 반감이 얼굴·턱의 모양이 흔들리는 인상을 만들었습니다.</li><li>안전 검사 중에는 임시 목표각만 줄이고, 저장된 주시각은 안전 목표로 속도를 제한해 보간합니다. 같은 애니메이터 샘플을 다시 조회해도 주시 시간을 추가 진행하지 않습니다.</li><li>몸통 방향, 턱 원래 회전, 관절 위치·스케일, 기존 모션과 공격 전용 조준 경로를 유지했습니다.</li></ul>
+<p><strong>수치 확인:</strong> 6종 × 4개 원형 자세 × 4개 고정 목표의 96조건을 각 300프레임 검사했습니다. 안정 후 프레임 간 반복 진동은 0, 최대 머리 회전 속도는 약 1.07rad/s였습니다. 실제 1.8초 누운 경계 동작의 전환과 끝자세 유지, 같은 샘플 12회 재정렬도 통과했습니다.</p>
+<h2>3. 함께 줄인 첫 길찾기 비용</h2>
+<p>큰 개체의 반경이 1.5m를 넘으면 길찾기 격자 약 79,524개 지점마다 모든 장애물을 검사하고 있었습니다. 같은 보수적 공간 인덱스로 가까운 장애물만 고른 뒤 <strong>기존 충돌식과 여유값</strong>으로 검사하도록 수정했습니다. 잘못된 옛 경계값이나 유한하지 않은 반경은 기존 전체 검사로 돌아갑니다.</p>
+<p>반경 1.625m의 PC Node 단일 비교에서 최초 격자 생성이 <strong>1053.1 → 183.0ms (약 82.6% 감소)</strong>였고, 통행 가능 격자 마스크는 동일했습니다. 마을·대평원·숲·동굴의 통행 비교와 관련 검사까지 총 38개가 통과했습니다. 이 수치는 모바일 실측 FPS가 아닙니다.</p>
+<h2>4. 남은 한계</h2>
+<ul><li>로그에 반경별 격자 생성 이벤트가 없어 위 세 멈춤이 모두 첫 길찾기 때문이었다고 확정할 수는 없습니다.</li><li>최초 격자 생성은 여전히 동기 작업입니다. 이번 변경으로 모든 순간 멈춤을 제거했다고 주장하지 않습니다.</li><li>기존 모델·텍스처·LOD·전투 피해·접촉 창은 변경하지 않았습니다. 브라우저 자동조작 없이 코드·실제 골격 수치·빌드와 배포 파일을 확인했으며, 수정본의 모바일 외형·FPS·발열 검수는 별도입니다.</li></ul>
+<small>근거: performance-log-analysis.json · navigation-before/after.json · focused-tests.log (ArcherPreview/reports/watch-stability-r7-2026-11-16)</small>
+</main></html>

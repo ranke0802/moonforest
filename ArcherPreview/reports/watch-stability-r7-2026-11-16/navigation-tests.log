@@ -1,0 +1,35 @@
+✔ indexed large actor clearance matches every-obstacle decisions on all four production maps (65.4509ms)
+✔ legacy understated boxes and nonfinite radii retain their complete-scan results (0.2339ms)
+BJS - [19:42:14]: Babylon.js v9.31.0 - Null engine
+✔ three authored map grids restore exact nodes, edges, components and paths in a fixed CPU budget (1654.1492ms)
+ℹ {"bytes":305096,"limit":524288,"entries":3,"hits":6,"misses":3,"evictions":0,"last":{"map":"village","hit":true,"milliseconds":11.020499999999629}}
+✔ changed obstacle data or collision implementation invalidates a snapshot; grids are caller-owned (7.28ms)
+✔ repeated signatures do not grow the pool and oversized maps retain no snapshot (37.6079ms)
+✔ noncanonical edge layouts bypass the compact cache without changing the navigator result (2.66ms)
+✔ whole-body scenery space protects the rendered rock boundary without changing combat or player collision (1.4616ms)
+✔ a bounded initial home correction stays inside its territory and cannot teleport across a real barrier (1.7285ms)
+✔ all nineteen R5 authored homes and peaceful wander footprints clear current production rock bounds and navigation (365.7997ms)
+✔ outer forest paths reach the expanded boundary with a bounded waypoint grid (39.5684ms)
+✔ swept character and boss collision prevents tunneling even for long dodge/throw steps (0.3729ms)
+✔ boss route detours around a tree without crossing its expanded collision hull (7.4691ms)
+✔ training layout has one target and open routes for bears between major arena positions (44.2166ms)
+✔ trees interrupt combat sight lines while low obstacles do not (0.1822ms)
+✔ warrior, goblin and bear can cross the rendered grass beds; trunks stay solid (0.2754ms)
+BJS - [19:42:15]: Babylon.js v9.31.0 - Null engine
+✔ OBBs use their faces and round player-radius corners, not enclosing circles or enlarged square corners (1.3362ms)
+✔ continuous OBB sweeps stop long player, goblin and bear steps without corner tunneling (0.8802ms)
+✔ OBB contacts reject sampled intersections and preserve clear paths under arbitrary rotations (9.2801ms)
+✔ v3 circle-only scenes retain v2 analytic collision and movement results (0.7313ms)
+✔ v3 rolls pass beside long thin walls, stop at their faces, and escape existing overlaps (1.2076ms)
+✔ v3 enemy-assisted dodges cannot cross OBB walls or move enemies at any frame rate (1.8888ms)
+✔ actual village rolls keep navigation clearance so the following walk never snaps away from a wall (29.3781ms)
+✔ goblin and bear heap paths navigate rotated buildings and L-shaped walls (107.7383ms)
+✔ BossGrab landing callback stops a thrown player at an actual OBB face (8.5065ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3654.9526

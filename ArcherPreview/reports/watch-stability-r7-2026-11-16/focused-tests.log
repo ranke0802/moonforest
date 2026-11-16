@@ -1,0 +1,74 @@
+✔ indexed large actor clearance matches every-obstacle decisions on all four production maps (83.8605ms)
+✔ legacy understated boxes and nonfinite radii retain their complete-scan results (0.3081ms)
+BJS - [19:46:36]: Babylon.js v9.31.0 - Null engine
+✔ three authored map grids restore exact nodes, edges, components and paths in a fixed CPU budget (2120.7032ms)
+ℹ {"bytes":305096,"limit":524288,"entries":3,"hits":6,"misses":3,"evictions":0,"last":{"map":"village","hit":true,"milliseconds":10.921299999999974}}
+✔ changed obstacle data or collision implementation invalidates a snapshot; grids are caller-owned (6.8707ms)
+✔ repeated signatures do not grow the pool and oversized maps retain no snapshot (47.5213ms)
+✔ noncanonical edge layouts bypass the compact cache without changing the navigator result (2.9469ms)
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+✔ all four actual R5 singles visibly notice front and rear outer approaches while keeping their lying body and Alert endpoint (1148.8502ms)
+ℹ {"scope":"Native R5 factory models and production plains navigation/terrain; final posed bones, no raster/device claim","proof":[{"id":"plains-fox-west-1","approach":"front","actualHome":[-77,0.12,-52],"headLift":0.14219,"alertEndpoint":1.8,"target":[-74.68175,-46.19585]},{"id":"plains-fox-west-1","approach":"rear","actualHome":[-77,0.12,-52],"headLift":0.13969,"alertEndpoint":1.8,"target":[-79.99641,-57.48489]},{"id":"plains-fox-east-1","approach":"front","actualHome":[-72,0.64682,-10],"headLift":0.14471,"alertEndpoint":1.8,"target":[-69.56614,-4.24337]},{"id":"plains-fox-east-1","approach":"rear","actualHome":[-72,0.64682,-10],"headLift":0.13929,"alertEndpoint":1.8,"target":[-74.43386,-15.75663]},{"id":"plains-village-wolf-south-1","approach":"front","actualHome":[-58.06066,3.84253,-51.06066],"headLift":0.22104,"alertEndpoint":1.8,"target":[-53.33242,-56.22242]},{"id":"plains-village-wolf-south-1","approach":"rear","actualHome":[-58.06066,3.84253,-51.06066],"headLift":0.21523,"alertEndpoint":1.8,"target":[-62.7889,-45.8989]},{"id":"plains-village-wolf-north-1","approach":"front","actualHome":[-84.3097,1.47665,7.04329],"headLift":0.2194,"alertEndpoint":1.8,"target":[-81.31804,0.71479]},{"id":"plains-village-wolf-north-1","approach":"rear","actualHome":[-84.3097,1.47665,7.04329],"headLift":0.2156,"alertEndpoint":1.8,"target":[-87.30136,13.3718]}]}
+✔ all four actual R5 singles enter combat after one clear inner second, retain it in the outer circle and disengage outside the leash (765.3666ms)
+ℹ {"scope":"Clear approaches chosen around post-protection actual actor positions; no forced hit/contact or direct brain state changes","proof":[{"id":"plains-fox-west-1","actualHome":[-77,0.12,-52],"clearInner":[-75.13024,-48.57743],"entryActorRange":3.9,"centerRange":3.9},{"id":"plains-fox-east-1","actualHome":[-72,0.64682,-10],"clearInner":[-70.48127,-6.40786],"entryActorRange":3.9,"centerRange":3.9},{"id":"plains-village-wolf-south-1","actualHome":[-58.06066,3.84253,-51.06066],"clearInner":[-55.08862,-54.30519],"entryActorRange":4.4,"centerRange":4.71042},{"id":"plains-village-wolf-north-1","actualHome":[-84.3097,1.47665,7.04329],"clearInner":[-82.42923,3.06537],"entryActorRange":4.4,"centerRange":4.95326}]}
+✔ whole-body scenery space protects the rendered rock boundary without changing combat or player collision (2.4204ms)
+✔ a bounded initial home correction stays inside its territory and cannot teleport across a real barrier (1.4534ms)
+✔ all nineteen R5 authored homes and peaceful wander footprints clear current production rock bounds and navigation (522.6097ms)
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (1094.6591ms)
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (512.9264ms)
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+✔ ambient walking uses native rise; resting watch confirms inner presence with game dt and keeps outer combat hysteresis (120.727ms)
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+✔ a wall or cliff between an inner-ring player and the monster keeps the encounter in watch until the approach is clear (156.4546ms)
+BJS - [19:46:39]: Babylon.js v9.31.0 - Null engine
+✔ a walking canine can settle back into lying rest using its real rise keys in reverse without changing rig scale (144.0017ms)
+BJS - [19:46:39]: Babylon.js v9.31.0 - Null engine
+✔ all territorial species hold their body heading while watching and wait in game time before turning home (577.6716ms)
+BJS - [19:46:40]: Babylon.js v9.31.0 - Null engine
+✔ noticing the player during an ambient rise returns to lying watch instead of finishing the stand-up (518.7537ms)
+BJS - [19:46:40]: Babylon.js v9.31.0 - Null engine
+✔ ambient walk advances in world space and follows accepted travel; a blocked route stops its gait (146.7421ms)
+✔ actual quadruped watch faces stay clear of the chest in lying, standing and settling poses (766.8755ms)
+ℹ 108 real model/pose/target conditions; no skin/texture/LOD edits or GPU claim
+✔ outer forest paths reach the expanded boundary with a bounded waypoint grid (45.3796ms)
+✔ swept character and boss collision prevents tunneling even for long dodge/throw steps (0.6365ms)
+✔ boss route detours around a tree without crossing its expanded collision hull (8.6434ms)
+✔ training layout has one target and open routes for bears between major arena positions (52.6135ms)
+✔ trees interrupt combat sight lines while low obstacles do not (0.2361ms)
+✔ warrior, goblin and bear can cross the rendered grass beds; trunks stay solid (0.2445ms)
+BJS - [19:46:36]: Babylon.js v9.31.0 - Null engine
+✔ OBBs use their faces and round player-radius corners, not enclosing circles or enlarged square corners (2.4043ms)
+✔ continuous OBB sweeps stop long player, goblin and bear steps without corner tunneling (1.4986ms)
+✔ OBB contacts reject sampled intersections and preserve clear paths under arbitrary rotations (16.0049ms)
+✔ v3 circle-only scenes retain v2 analytic collision and movement results (0.9102ms)
+✔ v3 rolls pass beside long thin walls, stop at their faces, and escape existing overlaps (1.5285ms)
+✔ v3 enemy-assisted dodges cannot cross OBB walls or move enemies at any frame rate (2.9247ms)
+✔ actual village rolls keep navigation clearance so the following walk never snaps away from a wall (38.7706ms)
+✔ goblin and bear heap paths navigate rotated buildings and L-shaped walls (159.5689ms)
+✔ BossGrab landing callback stops a thrown player at an actual OBB face (13.3308ms)
+BJS - [19:46:36]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:37]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+BJS - [19:46:38]: Babylon.js v9.31.0 - Null engine
+✔ real watch poses converge for stationary opponents without guard feedback jitter or changing jaw/bone shape (1213.6794ms)
+ℹ {"scope":"Actual shipped nodes/keys; 300 frames per stationary source/target and repeated same-sample alignment; no GPU/visual claim","conditions":96,"maxTailJitter":0,"maxVelocity":1.0693637495516293,"minHeadRatio":0.9648172316320052,"minMuzzleRatio":0.940904809651726}
+✔ authored attack attention remains on its existing path (87.2421ms)
+✔ actual lying Alert plays through to its held endpoint without losing chest clearance or final stability (317.3138ms)
+ℹ {"scope":"Native 1.8-second Alert interpolation then held endpoint; correction measured against each frame original authored orientation","maxCorrectionVelocity":0.9539766346888011,"maxTailJitter":0}
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6653.8155

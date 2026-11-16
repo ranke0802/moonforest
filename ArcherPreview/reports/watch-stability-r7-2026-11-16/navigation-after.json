@@ -1,0 +1,32 @@
+{
+  "scope": "Single Node CPU cold-grid runs, not mobile speed or steady-state FPS",
+  "rows": [
+    {
+      "radius": 0.535872,
+      "nodes": 79524,
+      "free": 55576,
+      "gridMs": 204.76070000000004,
+      "beforeGridMs": 213.24710000000005,
+      "freeMaskSha256": "8afb1b95b27d84982e2ecfa6a3e17356a2f143a770bc8734e5d5184ca9affb37",
+      "decisionsMatch": true
+    },
+    {
+      "radius": 0.896053,
+      "nodes": 79524,
+      "free": 53282,
+      "gridMs": 156.22699999999986,
+      "beforeGridMs": 158.00440000000003,
+      "freeMaskSha256": "382b0ee16fd253a9e25028352ed11c396dbd273c8cf36b9aff95766f513de156",
+      "decisionsMatch": true
+    },
+    {
+      "radius": 1.625,
+      "nodes": 79524,
+      "free": 48255,
+      "gridMs": 183.04470000000015,
+      "beforeGridMs": 1053.1082999999999,
+      "freeMaskSha256": "9753538219a7c2af4867e9f3e4dae788a8b4523dd866b4bde67ec6a8ef917c02",
+      "decisionsMatch": true
+    }
+  ]
+}
