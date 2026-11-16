@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-16",
+  "base": "e62560e",
+  "tests": {
+    "runner": "Node24/Babylon NullEngine",
+    "count": 67,
+    "pass": 67,
+    "fail": 0,
+    "actualWatchModelPoseTargetConditions": 108
+  },
+  "watch": {
+    "maxCombinedYaw": 0.9,
+    "maxCombinedPitch": 0.28,
+    "clearanceRatio": 0.94,
+    "bodyAndLocalBoneLengthsPreserved": true,
+    "attackAimUnchanged": true
+  },
+  "bear": {
+    "referenceHeightMetres": 3,
+    "oldReferenceHeightMetres": 4.5,
+    "scaleRatio": 0.6666666666666666,
+    "backflipMetres": 1.4639737835590132,
+    "physicalAttacksChecked": 12
+  },
+  "population": {
+    "revision": "r4",
+    "count": 19,
+    "groups": 9,
+    "bears": 2,
+    "additionalWolf2Group": 4,
+    "allDefaultOuterTerritoriesDisjoint": true,
+    "editedOrDeletedSavedRowsPreserved": true
+  },
+  "preserved": [
+    "meshes/UV/weights/keys/textures/LOD",
+    "0.1 release",
+    "damage and impact windows",
+    "terrain/navigation",
+    "runtime20/512MiB caps"
+  ],
+  "limits": [
+    "No browser automation",
+    "Device visuals/FPS/heat not measured",
+    "Default territory disjointness does not relocate user-edited zones"
+  ]
+}

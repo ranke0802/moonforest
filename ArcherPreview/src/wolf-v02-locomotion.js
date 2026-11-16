@@ -32,6 +32,8 @@ export class WolfV02LocomotionPose{
   this.legs=['fore.L','fore.R','hind.L','hind.R'].map(name=>({name,upper:encounter.nodes[name+'.upper'],lower:encounter.nodes[name+'.lower'],end:encounter.nodes[name+(name.startsWith('hind')?'.metatarsal':'.paw')],foot:encounter.nodes[name+'.paw'],anchor:new Vector3(),previous:new Vector3(),offset:new Vector3(),endWorld:Quaternion.Identity(),footWorld:Quaternion.Identity(),planted:false,braceSupport:braceSupport(brace,name)}));
   this.maxReachError=0;this.releasedPlants=0;this.serial=null;
   this.alertPosition=Vector3.Zero();this.emphasis=Quaternion.Identity();
+  this.watchHeadBase=Quaternion.Identity();this.watchNeckBase=Quaternion.Identity();this.watchChest=new Vector3();this.watchMuzzle=new Vector3();this.watchMuzzleOffset=encounter.contactShape?.('jaw','maul')?.offset??new Vector3(0,.11,.01);
+  this.watchYaw=this.watchPitch=0;this.watchSample=-1;this.watchActive=false;
   this.motionProfile={alertDropRatio:.065,diagonalYaw:.09,diagonalRoll:.045,...encounter.config.motionProfile};
   this.alertDrop=Math.min(.04,Vector3.Distance(this.legs[0].upper.getAbsolutePosition(),this.legs[0].lower.getAbsolutePosition())/encounter.config.scale*this.motionProfile.alertDropRatio);
  }
@@ -87,19 +89,44 @@ export class WolfV02LocomotionPose{
   const pitch=Math.atan2(this.forward.y,Math.hypot(this.forward.x,this.forward.z)),targetPitch=Math.atan2(player.y+height-p.y,Math.hypot(player.x-p.x,player.z-p.z));
   Quaternion.RotationAxisToRef(this.right,-clamp((targetPitch-pitch)*fraction,-pitchLimit,pitchLimit),this.delta);this.rotateWorld(node,this.delta);
  }
+ aimWatch(){
+  const e=this.e,head=e.nodes.head,neck=e.nodes.neck,jaw=e.nodes.jaw??head,player=e.player.position;
+  this.watchHeadBase.copyFrom(head.rotationQuaternion);this.watchNeckBase.copyFrom(neck.rotationQuaternion);this.watchChest.copyFrom(e.nodes.chest.getAbsolutePosition());
+  const origin=head.getAbsolutePosition();this.watchChest.subtractToRef(origin,this.to);const headDistance=this.to.length();this.to.scaleInPlace(1/Math.max(1e-8,headDistance));
+  Vector3.TransformNormalToRef(up,head.getWorldMatrix(),this.forward);this.forward.normalize();const baseDot=Vector3.Dot(this.forward,this.to),yaw=Math.atan2(this.forward.x,this.forward.z),pitch=Math.atan2(this.forward.y,Math.hypot(this.forward.x,this.forward.z));
+  Vector3.TransformCoordinatesToRef(this.watchMuzzleOffset,jaw.getWorldMatrix(),this.watchMuzzle);const muzzleDistance=Vector3.Distance(this.watchMuzzle,this.watchChest),muzzleHeight=this.watchMuzzle.y;
+  const targetYaw=angleDelta(Math.atan2(player.x-origin.x,player.z-origin.z),yaw),targetPitch=Math.atan2(player.y+playerDimensions(e.player).bodyAimHeight-origin.y,Math.hypot(player.x-origin.x,player.z-origin.z))-pitch;
+  // A fixed resting body cannot follow a target behind its shoulders. Fade
+  // attention toward the original pose rather than folding the face inward.
+  const attention=clamp((1.8-Math.abs(targetYaw))/.6,0,1),desiredYaw=clamp(targetYaw,-.90,.90)*attention,desiredPitch=clamp(targetPitch,-.28,.28)*attention;
+  if(!this.watchActive)this.watchYaw=this.watchPitch=0;
+  const dt=this.watchSample===e.animator.samples?0:Math.max(0,e.dt??0);this.watchSample=e.animator.samples;this.watchActive=true;
+  this.watchYaw+=clamp(desiredYaw-this.watchYaw,-.9*dt,.9*dt);this.watchPitch+=clamp(desiredPitch-this.watchPitch,-.65*dt,.65*dt);
+  for(let attempt=0;attempt<3;attempt++){
+   neck.rotationQuaternion.copyFrom(this.watchNeckBase);head.rotationQuaternion.copyFrom(this.watchHeadBase);this.refresh(neck);
+   this.turnToward(neck,this.watchYaw*.32);this.right.set(Math.cos(yaw+this.watchYaw),0,-Math.sin(yaw+this.watchYaw));Quaternion.RotationAxisToRef(this.right,-this.watchPitch*.32,this.delta);this.rotateWorld(neck,this.delta);
+   this.turnToward(head,this.watchYaw*.68);Quaternion.RotationAxisToRef(this.right,-this.watchPitch*.68,this.delta);this.rotateWorld(head,this.delta);
+   this.watchChest.subtractToRef(head.getAbsolutePosition(),this.to);const distance=this.to.length();this.to.scaleInPlace(1/Math.max(1e-8,distance));Vector3.TransformNormalToRef(up,head.getWorldMatrix(),this.forward);this.forward.normalize();
+   Vector3.TransformCoordinatesToRef(this.watchMuzzleOffset,jaw.getWorldMatrix(),this.watchMuzzle);
+   if(Vector3.Dot(this.forward,this.to)<=Math.min(-.08,baseDot+.3)&&distance>=headDistance*.94&&Vector3.Distance(this.watchMuzzle,this.watchChest)>=muzzleDistance*.94&&this.watchMuzzle.y>=muzzleHeight-.04*e.config.scale)return;
+   this.watchYaw*=.5;this.watchPitch*=.5;
+  }
+  neck.rotationQuaternion.copyFrom(this.watchNeckBase);head.rotationQuaternion.copyFrom(this.watchHeadBase);this.refresh(neck);this.watchYaw=this.watchPitch=0;
+ }
  aim(){
   const e=this.e,b=e.brain;
-  if(!e.player||b.hp<=0||b.stagger||['down','recover'].includes(b.mode)||b.behavior==='rest')return;
-  if(b.mode==='attack'&&b.action?.authoredAttention)return;
+  if(!e.player||b.hp<=0||b.stagger||['down','recover'].includes(b.mode)||b.behavior==='rest'){this.watchActive=false;return;}
+  if(b.mode==='attack'&&b.action?.authoredAttention){this.watchActive=false;return;}
   const head=e.nodes.head,neck=e.nodes.neck,player=e.player.position;
   const height=playerDimensions(e.player).bodyAimHeight;
   if(b.mode==='attack'){
+   this.watchActive=false;
    // Counter-aim only the head while the authored neck/chest carry the diagonal
    // strike. Applying bounded yaw/pitch to the sampled quaternion keeps its
    // authored roll; no look-at basis, root turn or changed charge path is used.
    this.aimJoint(head,head,player,height,.70,.35);return;
   }
-  this.aimJoint(neck,head,player,height,.72,.55,.6);this.aimJoint(head,head,player,height,.72,.60);
+  this.aimWatch();
  }
  resetPlants(){for(const leg of this.legs)leg.planted=false;this.serial=null;}
  capturePreviousFeet(){for(const leg of this.legs)leg.previous.copyFrom(leg.foot.getAbsolutePosition());this.hasPreviousFeet=true;}

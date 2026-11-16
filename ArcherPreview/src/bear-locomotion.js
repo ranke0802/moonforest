@@ -1,4 +1,4 @@
-// The approved 4.5 m bear's in-place locomotion has zero net hip travel.
+// The original bear's in-place locomotion has zero net hip travel.
 // Actual low-foot stance samples give ~2.225 / 8.22 world m per source second
 // at scale 2.78416486584, hence these source-space gait speeds. Hip sway must
 // never be mistaken for a stride or added as a second locomotion owner.

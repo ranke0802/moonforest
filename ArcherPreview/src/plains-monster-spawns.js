@@ -3,7 +3,8 @@
 // and checked by plains-monster-spawns.test.js. Runtime re-reads terrain height.
 export const PLAINS_MONSTER_SPAWNS_R1_REVISION='great-plains-monsters-2026-11-16-r1';
 export const PLAINS_MONSTER_SPAWNS_R2_REVISION='great-plains-monsters-2026-11-16-r2';
-export const PLAINS_MONSTER_SPAWNS_REVISION='great-plains-monsters-2026-11-16-r3';
+export const PLAINS_MONSTER_SPAWNS_R3_REVISION='great-plains-monsters-2026-11-16-r3';
+export const PLAINS_MONSTER_SPAWNS_REVISION='great-plains-monsters-2026-11-16-r4';
 const freeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};
 
 const r2Groups=freeze([
@@ -33,11 +34,18 @@ const r2Groups=freeze([
 
 // R3 swaps the two wolf territories. The larger leader uses a checked nearby
 // gap at29.25,37; source models, group IDs, composition and all other homes stay.
-export const PLAINS_MONSTER_GROUPS=freeze(r2Groups.map(group=>group.id==='plains-wolf-meadow'?{...group,territory:{...r2Groups.find(row=>row.id==='plains-alpha-pack').territory},members:[
+const r3Groups=freeze(r2Groups.map(group=>group.id==='plains-wolf-meadow'?{...group,territory:{...r2Groups.find(row=>row.id==='plains-alpha-pack').territory},members:[
  ['gray-wolf.r1',-28,59,1.0405574142932892,2.4],['stylized-wolf.r1',-23,58,1.3438690602779388,2.9],['wolf-3.r1',-23,62,.8845127522945404,2.7],
 ]}:group.id==='plains-alpha-pack'?{...group,territory:{...r2Groups.find(row=>row.id==='plains-wolf-meadow').territory},members:[
  ['alpha-wolf.r8',29.25,37,1.858901560306549,Math.PI],['gray-wolf.r1',24,33,1.1823619902133964,2.6],['stylized-wolf.r1',32,32,1.9618545770645142,-2.8],['wolf-3.r1',36,38,2.343322515487671,-2.4],
 ]}:group));
+export const PLAINS_MONSTER_GROUPS=freeze([...r3Groups.map(group=>group.id==='plains-fox-west'?{...group,label:'서남쪽 숲 아래 여우',territory:{...group.territory,x:-53,z:-64},members:[
+ ['fox.r1',-54.4,-64,3.8136508464813232,.5],['fox.r1',-51.6,-64,3.67986500263214,-.5],
+]}:group),{id:'plains-riverbank-bear',label:'강 남쪽 서안 곰',territory:{x:72,z:-49,radius:14,combatRadius:8,wanderRadius:2,returnRadius:1,reengageRadius:12.5},members:[
+ ['guardian-bear.standard',72,-49,.2932288721203804,-Math.PI/2],
+ ]},{id:'plains-stylized-wolf-pack',label:'서쪽 초원 늑대2 무리',territory:{x:-49,z:14,radius:18,combatRadius:9,wanderRadius:2.5,returnRadius:1,reengageRadius:16.5},members:[
+ ['stylized-wolf.r1',-52,11,.34020696580410004,2.4],['stylized-wolf.r1',-46,11,.18587123230099678,2.9],['stylized-wolf.r1',-52,17,.2715796157717705,2.6],['stylized-wolf.r1',-46,17,.18941158801317215,-2.8],
+]}]);
 
 const spawnDocument=groups=>({format:'moonforest-monster-spawns',version:1,maps:{'great-plains':groups.flatMap(group=>group.members.map(([definitionId,x,z,y,yaw],index)=>({
  id:group.id+'-'+(index+1),groupId:group.id,definitionId,x,y,z,yaw,
@@ -45,6 +53,7 @@ const spawnDocument=groups=>({format:'moonforest-monster-spawns',version:1,maps:
  drop:{assetId:'',effectEnabled:false},territory:{...group.territory},
 })))}});
 export const PLAINS_MONSTER_SPAWNS=freeze(spawnDocument(PLAINS_MONSTER_GROUPS));
+export const PLAINS_MONSTER_SPAWNS_R3=freeze(spawnDocument(r3Groups));
 export const PLAINS_MONSTER_SPAWNS_R2=freeze(spawnDocument(r2Groups));
 
 // R1 is retained as immutable migration evidence. Only an unchanged original

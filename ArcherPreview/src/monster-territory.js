@@ -197,7 +197,11 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
         noncombatPose();this.flash=Math.max(0,(this.flash??0)-dt);
         if(rising||settling)return stopResult;
         const moving=this.mode==='move'&&!encounter.combat?.grabOwner;
-        this.time=(this.time+dt*(moving?(encounter.balance?.locomotionPlaybackRate??1):1))%Math.max(.001,this.durations[this.state]??1);
+        // Circle_Watch contains authored circular steps beyond its opening
+        // pose. A stationary lookout keeps that opening body pose, not a walk
+        // in place; the separate neck/head owner supplies its attention.
+        if(encounter.kind==='wolf'&&this.state===idleState&&!moving)this.time=0;
+        else this.time=(this.time+dt*(moving?(encounter.balance?.locomotionPlaybackRate??1):1))%Math.max(.001,this.durations[this.state]??1);
         return moving?walkResult:stopResult;
       };
     },

@@ -166,3 +166,27 @@ test('ambient walk advances in world space and follows accepted travel; a blocke
  for(let frame=0;frame<15;frame++){e.update(.1,f.player);assert.notEqual(e.brain.state,'Wolf_Walk_R5','a blocked actor waits instead of walking in place');}
  f.world.navigation.constrain=original;await adapter.dispose();
 });
+
+test('actual quadruped watch faces stay clear of the chest in lying, standing and settling poses',async t=>{
+ const f=await fixture(t);let poses=0;
+ for(const id of ['alpha-wolf.r8','gray-wolf.r1','stylized-wolf.r1','wolf-3.r1','fox.r1','boar.r1']){
+  f.player.position.set(0,0,8);const adapter=f.factory(id);await adapter.activate({position:new Vector3(),row:{territory:{x:0,z:0,radius:12,combatRadius:3,wanderRadius:0}}},{preparation:prepare()});const e=adapter.encounter;
+  for(const [clip,time]of [['Rest_Lie_R5',0],['Circle_Watch_R5',0],['Rise_From_Lie_R5',1.1]]){
+   e.v02Pose?.restore();e.brain.start(clip,'idle');e.brain.time=time;e.brain.behavior='rest';e.player=f.player;e.dt=1/60;e.animator.transition(clip,{clipTime:time,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.alignPose();
+   const source=new Map(e.asset.transformNodes.map(n=>[n,{position:n.position.clone(),scale:n.scaling.clone(),rotation:n.rotationQuaternion?.clone()}])),head=e.nodes.head,neck=e.nodes.neck,chest=e.nodes.chest,jaw=e.nodes.jaw,offset=e.contactShape('jaw','maul').offset;
+   const headDistance=Vector3.Distance(head.getAbsolutePosition(),chest.getAbsolutePosition()),muzzle=Vector3.TransformCoordinates(offset,jaw.getWorldMatrix()),muzzleDistance=Vector3.Distance(muzzle,chest.getAbsolutePosition());
+   for(const [x,y,z]of [[0,0,2],[0,0,-2],[4,0,0],[-4,0,0],[0,-2,.2],[0,8,-1]]){
+    e.v02Pose.restore();e.v02Pose.watchActive=false;f.player.position.set(x,y,z);
+    for(let frame=0;frame<40;frame++){
+     e.v02Pose.restore();e.animator.transition(clip,{clipTime:time,actionId:e.brain.serial,blendDuration:0});e.animator.update(0);e.brain.behavior='territory-watch';e.alignPose();
+     const origin=head.getAbsolutePosition(),towards=chest.getAbsolutePosition().subtract(origin).normalize(),forward=Vector3.TransformNormal(Vector3.Up(),head.getWorldMatrix()).normalize(),teeth=Vector3.TransformCoordinates(offset,jaw.getWorldMatrix());
+     assert.ok(Vector3.Dot(forward,towards)<0,JSON.stringify({id,clip,target:[x,y,z],frame,reason:'face must not look into the chest'}));assert.ok(Vector3.Distance(origin,chest.getAbsolutePosition())>=headDistance*.94-1e-5);assert.ok(Vector3.Distance(teeth,chest.getAbsolutePosition())>=muzzleDistance*.94-1e-5);
+     for(const [node,before]of source){assert.ok(node.position.equalsWithEpsilon(before.position,1e-6));assert.ok(node.scaling.equalsWithEpsilon(before.scale,1e-6));if(node!==head&&node!==neck&&before.rotation)assert.ok(node.rotationQuaternion.equalsWithEpsilon(before.rotation,1e-5),node.name+': head attention must not change the body');}
+    }
+    const once=head.rotationQuaternion.clone();e.alignPose();assert.ok(head.rotationQuaternion.equalsWithEpsilon(once,1e-5),'repeated pose queries cannot accelerate attention');poses++;
+   }
+  }
+  await adapter.dispose();
+ }
+ t.diagnostic(poses+' real model/pose/target conditions; no skin/texture/LOD edits or GPU claim');
+});

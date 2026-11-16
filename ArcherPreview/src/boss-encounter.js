@@ -24,7 +24,7 @@ import { createTerrainRing } from './terrain-mesh.js';
 import { prepareBossShaders } from './boss-shader-warmup.js';
 import { createBossPreparation,bossPreparationCancelled } from './boss-preparation.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
-import { bearEncounterSize } from './bear-size.js';
+import { bearEncounterSize,bearApproachDistances } from './bear-size.js';
 import {BearCombatContact} from './bear-combat-contact.js';
 import {BearLocomotion} from './bear-locomotion.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
@@ -246,7 +246,7 @@ export class BossEncounter {
   // Actor movement may need a larger environment envelope than its combat body.
   // Player sight, weapon contact and dodge collisions still use world navigation.
   get movementNavigation(){return this.world.navigation;}
-  movementPlan(player){return {target:player.position,stopDistance:this.kind==='bear'&&this.bearSize?(this.brain.mode==='approach'?this.radius+playerDimensions(player).moveRadius+.015:1.75):this.stopDistance};}
+  movementPlan(player){const reach=this.kind==='bear'&&this.bearSize?bearApproachDistances(this.bearSize,playerDimensions(player).moveRadius):null;return {target:player.position,stopDistance:reach?(this.brain.mode==='approach'?reach.grab:reach.normal):this.stopDistance};}
   contactSeparation(){const dimensions=playerDimensions(this.player);return this.dodgeContactClearance?dodgeSeparation(this,dimensions):this.radius+(this.kind==='bear'&&this.bearSize?dimensions.moveRadius:dimensions.standingClearance);}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec)*(this.bearSize?.attackRangeScale??1);}
@@ -303,7 +303,10 @@ export class BossEncounter {
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const blocked=this.world.navigation&&(this.motionRootTravel!==false||this.brain.mode!=='attack')&&!this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
     const available=!this.combat.grabOwner||this.combat.grabOwner===this;
-    const brainDistance=this.kind==='bear'&&this.bearSize?this.brain.mode==='approach'?distance+.25:distance+.85:distance;
+    const bearReach=this.kind==='bear'&&this.bearSize?bearApproachDistances(this.bearSize,playerDimensions(player).moveRadius):null;
+    // Adapt the unchanged native AI gates to the current bear + real player
+    // capsules; the previous 4.5m metre offsets cannot survive a size change.
+    const brainDistance=bearReach?distance+(this.brain.mode==='approach'?1.9-bearReach.grabTrigger:2.65-bearReach.normalTrigger):distance;
     const result=this.brain.update(dt,blocked?Math.max(3.8,distance):brainDistance,this.playerAlive&&available&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
     const motion=this.movementPlan(player,result,distance),target=motion.target;
     const canTravel=result.speed>0&&this.brain.hp>0&&!['down','recover','dead'].includes(this.brain.mode)&&!this.combat.grabOwner;
