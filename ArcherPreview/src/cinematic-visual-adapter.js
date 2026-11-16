@@ -11,10 +11,12 @@ import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {getNpcSource,getNpcCatalog} from './npc-library.js';
 import {applyNpcLook} from './npc-look.js';
+import {prepareNpcInteriorInk} from './character-interior-ink.js';
+import {createBossPreparation} from './boss-preparation.js';
 
 // A visual-only, scoped container cache. Independent rigs/animation targets,
 // shared original geometry/textures, no brain, collision, rewards or battle list.
-export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,readNpcContainer=readMapContainer,resolveNpcSource=getNpcSource,resolveCatalog=getNpcCatalog,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},prepareShaders=prepareBossShaders}={}){
+export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,readNpcContainer=readMapContainer,resolveNpcSource=getNpcSource,resolveCatalog=getNpcCatalog,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},prepareShaders=prepareBossShaders,prepareInterior=prepareNpcInteriorInk}={}){
  const scene=world.scene,entries=new Map(),adapters=new Set();let disposed=false,initialized;
  const rootUrl=new URL(baseUrl??import.meta.env?.BASE_URL??'/',globalThis.location?.href??'http://localhost/');
  function release(entry){if(--entry.refs>0)return;entries.delete(entry.key);entry.controller.abort(mapLoadAbortError());const finish=()=>{entry.container?.dispose();for(const material of entry.derived)material.dispose(false,false);entry.derived.clear();};finish();entry.pending.finally(finish).catch(()=>{});}
@@ -34,13 +36,20 @@ export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest
   }finally{container?.dispose();npcSource?.release();lifetime.close();}})();entry.pending.catch(()=>{});return entry;
  }
  function create(definition,context={}){
-  if(disposed)throw mapLoadAbortError();const entry=sourceFor(definition);let retired=false,warming,asset,root;
+  if(disposed)throw mapLoadAbortError();const entry=sourceFor(definition);let retired=false,warming,visiblePreparation,asset,root;
   const encounter={config:{animations:{}},animator:null};
   const valid=()=>!retired&&!disposed&&!scene.isDisposed&&world.scene===scene&&context.isCurrent?.()!==false;
   const check=()=>{if(!valid())throw mapLoadAbortError();};
+  async function prepareVisible({preparation,isCurrent=()=>true}={}){
+   check();if(!isCurrent())throw mapLoadAbortError();
+   const job=preparation??createBossPreparation({scene,isCurrent:()=>valid()&&isCurrent()});
+   await prepareShaders(asset,{preparation:job,shadows:world.shadows});job.check();check();if(!isCurrent())throw mapLoadAbortError();
+   if(encounter.config.npc){await prepareInterior(asset,job);job.check();check();if(!isCurrent())throw mapLoadAbortError();}
+   return asset;
+  }
   const adapter={definition,encounter,
-   async warm({preparation,isCurrent=()=>true}={}){
-    check();if(asset)return asset;if(warming)return warming;
+   async warm({preparation,isCurrent=()=>true,deferShaders=false}={}){
+    check();if(warming)return warming;if(asset)return asset;
     warming=(async()=>{await (preparation?preparation.wait(entry.pending):entry.pending);check();if(!isCurrent())throw mapLoadAbortError();
      asset=instantiateBossModel(entry.container);root=new TransformNode('cinematic-visual-'+definition.actorDefinitionId,scene);root.setEnabled(false);const facing=new TransformNode(root.name+'-facing',scene);facing.parent=root;facing.rotation.y=entry.asset.forwardYaw??0;
      for(const node of new Set([...asset.meshes,...asset.transformNodes]))if(!node.parent)node.parent=facing;
@@ -50,12 +59,15 @@ export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest
      for(const mesh of asset.meshes){mesh.isPickable=true;mesh.checkCollisions=false;mesh.alwaysSelectAsActiveMesh=true;mesh.metadata={...mesh.metadata,moonforestWarmMaterial:true,cinematicVisual:true};if(mesh.skeleton){mesh.skeleton.useTextureToStoreBoneMatrices=true;if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;}}
      if(encounter.config.npc){encounter.npcCarrier=facing;encounter.npcCarrierOrigin=facing.position.clone();const targets=[...new Set(asset.animationGroups.flatMap(group=>group.targetedAnimations.filter(row=>row.animation.targetProperty==='position').map(row=>row.target)))];encounter.npcMotionRoot=targets.find(node=>{for(let parent=node.parent;parent&&parent!==root;parent=parent.parent)if(targets.includes(parent))return false;return true;})??asset.skeletons.flatMap(skeleton=>skeleton.bones.filter(bone=>!bone.getParent()).map(bone=>bone.getTransformNode())).find(Boolean);root.computeWorldMatrix(true);facing.computeWorldMatrix(true);encounter.npcMotionRoot?.computeWorldMatrix(true);encounter.npcMotionAnchor=encounter.npcMotionRoot?Vector3.TransformCoordinates(encounter.npcMotionRoot.getAbsolutePosition(),root.getWorldMatrix().clone().invert()):null;}
      world.lighting?.registerMeshes(asset.meshes);if(preparation?.incremental)await attachCharacterOutlinesAsync(asset,'scarecrow',preparation);else attachCharacterOutlines(asset,'scarecrow');if(encounter.config.npc)applyNpcLook(asset,encounter.config.npc.look,{root,referenceHeight:entry.asset.referenceHeight??entry.config.height??1.85,baseScale:root.scaling.y});
-     await prepareShaders(asset,{preparation,shadows:world.shadows});check();if(!isCurrent())throw mapLoadAbortError();return asset;
+     // Callers that own an initial clip sample finalize its actual morph/skin
+     // state before readiness; standalone warm keeps its original contract.
+     if(!deferShaders)await prepareVisible({preparation,isCurrent});check();if(!isCurrent())throw mapLoadAbortError();return asset;
     })();return warming;
    },
+   async prepareVisible(options={}){if(warming)await warming;check();if(!asset)throw new Error('Cinematic visual is not prepared');visiblePreparation=prepareVisible(options);return visiblePreparation;},
    hide(){if(root&&!root.isDisposed()){root.setEnabled(false);encounter.setShadowCasting(false);}},
    estimate(){return {estimatedBytes:definition.population?.estimatedBytes??16*1024*1024};},
-   dispose(){if(retired)return;retired=true;adapter.hide();adapters.delete(adapter);const cleanup=()=>{const managers=new Set(asset?.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean));for(const group of asset?.animationGroups??[])group.dispose();root?.dispose(false,false);for(const skeleton of asset?.skeletons??[])skeleton.dispose();const sources=new Set(entry.container?.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean));for(const manager of managers)if(!sources.has(manager))manager.dispose();};cleanup();release(entry);return warming?.then(cleanup,cleanup);},
+   dispose(){if(retired)return;retired=true;adapter.hide();adapters.delete(adapter);const cleanup=()=>{const managers=new Set(asset?.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean));for(const group of asset?.animationGroups??[])group.dispose();root?.dispose(false,false);for(const skeleton of asset?.skeletons??[])skeleton.dispose();const sources=new Set(entry.container?.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean));for(const manager of managers)if(!sources.has(manager))manager.dispose();};cleanup();release(entry);return Promise.allSettled([warming,visiblePreparation]).then(cleanup);},
   };
   encounter.setShadowCasting=enabled=>{for(const mesh of asset?.meshes??[])if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh)){if(enabled)world.shadows?.addShadowCaster(mesh,false);else world.shadows?.removeShadowCaster(mesh,false);}};
   adapters.add(adapter);return adapter;

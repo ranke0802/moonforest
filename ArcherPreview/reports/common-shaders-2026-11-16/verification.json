@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-16",
+  "scope": "Common model shader readiness and prepared effect lifetime; diagnostic parity audit",
+  "tests": {
+    "integration": {
+      "passed": 125,
+      "failed": 0
+    },
+    "mapAndInkAndReadiness": {
+      "passed": 43,
+      "failed": 0,
+      "overlapsIntegration": true
+    }
+  },
+  "build": "passed",
+  "sync": "passed",
+  "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+  "protectedInventorySha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+  "coverage": [
+    "player before first scene draw",
+    "boss and regular encounters",
+    "authored monsters and pooled gameplay/cinematic adapters",
+    "NPC final initial pose and shared interior ink",
+    "visual cutscene and pooled initial frame",
+    "static and edited placements with planned instancing",
+    "standalone quest marker without instancing"
+  ],
+  "contracts": [
+    "per-submesh material",
+    "actual camera/output-render-target pass",
+    "opaque and fading enemy states",
+    "native/custom buffer instancing; supported actor variants",
+    "all configured shadow render pass IDs",
+    "actual overlay pass",
+    "frozen/readiness flags restored",
+    "bounded owner pin; cancel rollback and disposal"
+  ],
+  "effects": {
+    "ownerLimit": 16,
+    "engineUniqueLimit": 128,
+    "newProgramsAfterPreparedRepresentativeRequests": 0,
+    "representatives": [
+      {
+        "asset": "alpha-wolf",
+        "meshes": 7,
+        "bones": 28,
+        "morphTargets": 1,
+        "preparedPrograms": 12
+      },
+      {
+        "asset": "guardian-bear",
+        "meshes": 1,
+        "bones": 58,
+        "morphTargets": 0,
+        "preparedPrograms": 6
+      }
+    ],
+    "geometryAndSkinDataPreserved": true
+  },
+  "diagnosticParity": {
+    "modes": [
+      "off",
+      "basic",
+      "recording",
+      "detailed-recording"
+    ],
+    "same": [
+      "original draw calls and return values",
+      "world transforms, visibility, enabled state",
+      "material and instance population",
+      "render size and FPS settings",
+      "shared preparation budget"
+    ],
+    "extraGameFastModeFound": false,
+    "originalMethodsAndObserversRestored": true,
+    "realDeviceEffectUnknown": true
+  },
+  "preserved": [
+    "original model/UV/weights/rig/motion",
+    "approved textures",
+    "LOD/distance/quality settings",
+    "combat input/contact/damage/timing",
+    "0.1 deployment"
+  ],
+  "limitations": [
+    "No browser automation or real-device/GPU timing validation",
+    "Recording may affect device/JIT/driver timing; parity does not identify the subjective cause",
+    "An essential first SDK compilation is atomic and not preempted by 2ms cooperative scheduling",
+    "No claim all historical 200ms stalls or late-play sustained FPS loss are eliminated",
+    "Previous cache loading timeout is not proven resolved by this shader change"
+  ]
+}

@@ -97,7 +97,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
     const value=await lifetime.run(()=>readManifest(base));lifetime.check();if(!current(revision))return false;manifest=value;
     markerMaterial=new StandardMaterial('quest-point-marker',scene);markerMaterial.diffuseColor=new Color3(.76,.65,.28);markerMaterial.emissiveColor=world.cave?Color3.Black():new Color3(.05,.04,.01);markerMaterial.specularColor=Color3.Black();
     world.caveFog?.attach(markerMaterial);marker=markerSource(scene,markerMaterial);
-    await lifetime.run(()=>prepareMapMaterials([marker],{cancelled:()=>!current(revision)||lifetime.signal.aborted}));lifetime.check();
+    await lifetime.run(()=>prepareMapMaterials([marker],{instances:false,cancelled:()=>!current(revision)||lifetime.signal.aborted}));lifetime.check();
     for(const point of points){const ring=marker.createInstance('quest-marker-'+point.id);ring.position.set(point.x,world.terrain.heightAt(point.x,point.z)+.05,point.z);ring.isPickable=false;ring.setEnabled(false);ring.freezeWorldMatrix();owned.push(ring);point.marker=ring;}
     stats.markerInstances=points.length;sync();pump();return true;
    }catch(error){if(!current(revision))return false;release();throw error;}finally{lifetime.close();}

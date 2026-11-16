@@ -8,6 +8,7 @@ import {BossBattle} from '../src/boss-battle.js';
 import {createBossPreparation} from '../src/boss-preparation.js';
 import {ACTOR_DEFINITIONS,getActorDefinition,validateActorSpawn} from '../src/actor-definitions.js';
 import {createActorEncounterFactory} from '../src/actor-encounter-adapter.js';
+import {regularWolfManifest} from '../src/regular-wolf-spec.js';
 
 const prepare=()=>createBossPreparation({frame:async()=>{},incremental:true});
 function fixture(t,{borrowed=false}={}){
@@ -44,8 +45,11 @@ function fixture(t,{borrowed=false}={}){
 test('definitions name only canonical versioned assets and preserve live encounter stats/animation mappings',()=>{
   for(const [id,definition]of Object.entries(ACTOR_DEFINITIONS)){
     assert.equal(id,definition.actorDefinitionId);assert.ok(Object.isFrozen(definition));
-    const manifest=JSON.parse(readFileSync(new URL('../public/assets/'+definition.assetId+'.json',import.meta.url)));
-    assert.equal(definition.assetVersion,manifest.version);assert.deepEqual(definition.animation,manifest.animations);
+    const manifestId=definition.encounterType==='regular-wolf'?regularWolfManifest(definition.assetId):definition.assetId;
+    const manifest=JSON.parse(readFileSync(new URL('../public/assets/'+manifestId+'.json',import.meta.url)));
+    assert.equal(definition.assetVersion,manifest.version);
+    if(['regular-wolf','wolf'].includes(definition.encounterType))for(const [clip,mapping]of Object.entries(definition.animation))assert.equal(manifest.animations[clip],mapping,'each requested source clip retains its mapping; fitted manifest clips are additive');
+    else assert.deepEqual(definition.animation,manifest.animations);
     assert.equal(/data:|base64|\.gltf|\.glb|https?:/.test(JSON.stringify(definition)),false);
     assert.equal(definition.lod.reduceExisting,false);
   }
@@ -212,6 +216,6 @@ test('actual pooled encounters enter together, wait for all corpses, and respawn
  class ImmediatePopulation extends ActorPopulation{constructor(opts){super({...opts,preparationFactory:()=>prepare()});}}
  const runtime=createAuthoredMonsterRuntime({world:f.world,battle:f.battle,getPlayer:()=>f.player,getState:()=>state,storage,Factory:()=>f.factory,Population:ImmediatePopulation});t.after(()=>runtime.dispose());const doc=emptyMonsterSpawns(),row=(id,x)=>({id,definitionId:'hooded-goblin.standard',groupId:'pack',spawnMode:'start',respawn:true,rewardEnabled:true,x,z:4,yaw:0,delaySeconds:2,randomRadius:2,drop:{assetId:'',effectEnabled:false}});doc.maps.village=[row('a',-3),row('b',3)];runtime.replace(doc);runtime.beforeBattle(0,f.player);
  for(let i=0;i<80&&runtime.inspect().groups[0]?.state!=='active';i++)await new Promise(r=>setTimeout(r,2));assert.equal(runtime.inspect().groups[0].state,'active');assert.equal(f.battle.encounters.length,2);
- const [a,b]=f.battle.encounters;a.brain.hp=0;a.death.advance(5);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'active');b.brain.hp=0;b.death.advance(5);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'waiting');assert.equal(f.battle.encounters.length,0);
+ const [a,b]=f.battle.encounters;a.brain.hp=0;a.death.advance(10);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'active');b.brain.hp=0;b.death.advance(10);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'waiting');assert.equal(f.battle.encounters.length,0);
  runtime.beforeBattle(2,f.player);for(let i=0;i<80&&runtime.inspect().groups[0]?.state!=='active';i++)await new Promise(r=>setTimeout(r,2));assert.equal(runtime.inspect().groups[0].state,'active');assert.equal(f.battle.encounters.length,2);runtime.leaveMap();assert.equal(f.battle.encounters.length,0);
 });

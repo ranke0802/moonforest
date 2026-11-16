@@ -131,7 +131,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
  function retire(slot){
   if(slot.retiring)return slot.retirement;slot.retiring=true;slot.busy=false;slot.preparation?.cancel();
   let disposal;try{if(slot.adapter&&!slot.adapter.then){slot.adapter.hide?.();disposal=slot.adapter.dispose?.();}}catch{}
-  const pending=[slot.pendingCreate,slot.warmPromise,disposal].filter(Boolean);
+  const pending=[slot.pendingCreate,slot.warmPromise,slot.visiblePromise,disposal].filter(Boolean);
   const retirement=Promise.allSettled(pending).then(async()=>{try{await slot.adapter?.dispose?.();}finally{if(pool.get(slot.key)===slot)pool.delete(slot.key);stats.actorsRetired++;}});slot.retirement=retirement;retirements.add(retirement);retirement.then(()=>retirements.delete(retirement),()=>retirements.delete(retirement));return retirement;
  }
  function evict(protectedKeys=new Set()){
@@ -226,7 +226,11 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
      if(!definition||definition.cinematicStatic){placementCatalogAsset(catalog,actor.assetId,actor.assetVersion);staticActors.push({actor,initial});continue;}
      const slot=await slotFor(definition,key,protectedKeys,session);check(session);slot.preparation=preparation;
      const adapter=await lifetime.wait(slot.pendingCreate);check(session);
-     if(!slot.warmed){slot.warmPromise=adapter.warm({preparation,isCurrent:()=>current(session)});await lifetime.wait(slot.warmPromise);preparation.check();slot.warmed=true;slot.baseScale=adapter.encounter.actor.scaling.clone();slot.sampler=createCinematicPoseSampler(adapter.encounter);slot.estimatedBytes=adapter.estimate?.().estimatedBytes??slot.estimatedBytes;if(bytes()>caps.estimatedBytes)throw new Error('Prepared cinematic actors exceed the estimated-memory cap');}
+     if(!slot.warmed){slot.warmPromise=adapter.warm({preparation,isCurrent:()=>current(session),deferShaders:true});await lifetime.wait(slot.warmPromise);preparation.check();slot.warmed=true;slot.baseScale=adapter.encounter.actor.scaling.clone();slot.sampler=createCinematicPoseSampler(adapter.encounter);slot.estimatedBytes=adapter.estimate?.().estimatedBytes??slot.estimatedBytes;if(bytes()>caps.estimatedBytes)throw new Error('Prepared cinematic actors exceed the estimated-memory cap');}
+     // The loader/outline stage runs hidden. Warm the selected initial clip's
+     // real morph/skin state before the first reveal, including pooled replays.
+     slot.visibleReady=false;const initialRoot=adapter.encounter.actor;initialRoot.position.copyFromFloats(...initial.position);initialRoot.rotationQuaternion??=Quaternion.Identity();initialRoot.rotationQuaternion.copyFromFloats(...initial.rotation);initialRoot.scaling.copyFrom(slot.baseScale).scaleInPlace(initial.scale);slot.sampler.sample(initial.animations,frame.time);
+     if(adapter.prepareVisible){slot.visiblePromise=adapter.prepareVisible({preparation,isCurrent:()=>current(session)});await lifetime.wait(slot.visiblePromise);}check(session);slot.visibleReady=true;
      prepared.actors.set(actor.actorId,{kind:'animated',slot});
     }
     if(staticActors.length){
@@ -236,7 +240,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
      staticActors.forEach(({actor,initial},index)=>{const target={kind:'static',instanceId:instances[index].instanceId,visible:initial.visible!==false},root=runtime.records.get(target.instanceId).root,setEnabled=root.setEnabled;root.setEnabled=function(){return setEnabled.call(this,target.visible);};root.setEnabled(target.visible);prepared.actors.set(actor.actorId,target);});
     }
     check(session);stats.prepared++;return prepared;
-   }catch(error){for(const slot of session.slots)if(!slot.warmed)retire(slot);throw error;}
+   }catch(error){for(const slot of session.slots)if(!slot.warmed||!slot.visibleReady)retire(slot);throw error;}
    finally{lifetime.close();session.controller.signal.removeEventListener('abort',cancel);}
   },
   sample(frame,{token,lease,prepared,seeking=false}={}){
@@ -251,8 +255,8 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
     if(target.kind==='static'){const record=prepared.staticRuntime.records.get(target.instanceId);record.root.setEnabled(target.visible);if(target.visible)statics.push({instanceId:target.instanceId,position:actor.position,rotation:actor.rotation,scale:actor.scale});continue;}
     const {slot}=target,encounter=slot.adapter.encounter,root=encounter.actor;
     root.position.copyFromFloats(...actor.position);root.rotationQuaternion??=Quaternion.Identity();root.rotationQuaternion.copyFromFloats(...actor.rotation);root.scaling.copyFrom(slot.baseScale).scaleInPlace(actor.scale);
-    if(slot.shown!==target.visible){root.setEnabled(target.visible);encounter.setShadowCasting(target.visible);slot.shown=target.visible;}if(!target.visible)continue;
-    slot.sampler.sample(actor.animations,frame.time);
+    if(target.visible)slot.sampler.sample(actor.animations,frame.time);
+    if(slot.shown!==target.visible){root.setEnabled(target.visible);encounter.setShadowCasting(target.visible);slot.shown=target.visible;}
    }
    if(statics.length)prepared.staticRuntime.sampleFreeTransforms(statics);onSubtitles(frame.subtitles);stats.samples++;
   },
@@ -269,7 +273,7 @@ export function createCinematicSceneHost({world,getPlayer=()=>null,battle,catalo
    session.released=true;session.releasedPrepared=prepared;session.controller.abort(bossPreparationCancelled());session.preparation?.cancel();session.lifetime?.abort();session.lifetime?.close();session.signal?.removeEventListener('abort',session.abort);
    attempt(()=>session.scenery?.release());attempt(()=>lease?.stopAudio?.());for(const target of session.prepared?.actors.values()??[])if(target.kind==='bound')attempt(()=>target.restore());attempt(()=>session.staticRuntime?.dispose());
    const keep=restore&&sameWorld(world,session.world)&&!['death','context-loss','scene-dispose','map-change','error','dispose'].includes(reason);
-   for(const slot of session.slots){slot.busy=false;slot.shown=false;slot.lastUsed=now();if(keep&&slot.warmed&&!slot.retiring)attempt(()=>slot.adapter.hide());else retire(slot);}
+   for(const slot of session.slots){slot.busy=false;slot.shown=false;slot.lastUsed=now();if(keep&&slot.warmed&&slot.visibleReady&&!slot.retiring)attempt(()=>slot.adapter.hide());else retire(slot);}
    attempt(()=>restoreLimits(session));attempt(()=>lease?.release?.(reason,{restore:restore&&sameWorld(world,session.world)}));
    if(active===session){active=null;attempt(()=>onSubtitles([]));}stats.released++;
    // Keep only a bounded latest session for the player's late-prepare cleanup.

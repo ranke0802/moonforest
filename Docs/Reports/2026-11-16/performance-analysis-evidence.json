@@ -1,0 +1,407 @@
+{
+  "source": {
+    "file": "moonforest-performance-2026-11-16T00-25-48-493Z.json",
+    "sha256": "71af9babf8312db728aaf772937be9f2b70a58a773fc76a97577eed0ad98e5e7"
+  },
+  "build": "./assets/moonforestV2-oVUhVnLh.js",
+  "conditions": {
+    "quality": "high",
+    "targetFps": 60,
+    "render": {
+      "selectedPercent": 85,
+      "basePixelRatio": 2,
+      "requestedPixelRatio": 1.7,
+      "cssSize": [
+        832,
+        384
+      ],
+      "renderSize": [
+        1414,
+        652
+      ],
+      "effectivePixelRatio": [
+        1.6995192307692308,
+        1.6979166666666667
+      ],
+      "pixels": 921928
+    },
+    "mobile": true,
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Mobile Safari/537.36",
+    "maps": [
+      "warrior-plains"
+    ]
+  },
+  "recording": {
+    "wallSeconds": 369.8,
+    "activeIntervalSeconds": 346.73,
+    "frames": 15214,
+    "meanFps": 43.88,
+    "meanIntervalMs": 22.79,
+    "meanWorkMs": 15.67,
+    "maxIntervalMs": 185.1,
+    "maxWorkMs": 173.6,
+    "intervalOver50": 629,
+    "criticalFrames": 0,
+    "dropped": {
+      "events": 0,
+      "critical": 0,
+      "detailFrames": 0,
+      "ktxUploads": 0
+    }
+  },
+  "minutes": [
+    {
+      "minute": 1,
+      "frames": 3070,
+      "fps": 58.82,
+      "meanIntervalMs": 17,
+      "meanWorkMs": 12.02
+    },
+    {
+      "minute": 2,
+      "frames": 3547,
+      "fps": 59.86,
+      "meanIntervalMs": 16.7,
+      "meanWorkMs": 12.19
+    },
+    {
+      "minute": 3,
+      "frames": 3030,
+      "fps": 50.5,
+      "meanIntervalMs": 19.8,
+      "meanWorkMs": 15.24
+    },
+    {
+      "minute": 4,
+      "frames": 1920,
+      "fps": 36.84,
+      "meanIntervalMs": 27.15,
+      "meanWorkMs": 18.7
+    },
+    {
+      "minute": 5,
+      "frames": 1780,
+      "fps": 29.66,
+      "meanIntervalMs": 33.72,
+      "meanWorkMs": 21.23
+    },
+    {
+      "minute": 6,
+      "frames": 1760,
+      "fps": 29.33,
+      "meanIntervalMs": 34.09,
+      "meanWorkMs": 20.57
+    }
+  ],
+  "cases": [
+    {
+      "atSeconds": 125.68,
+      "context": "늑대 1마리 사망 후 소멸 · 다른 늑대 공격 중",
+      "workMs": 137.3,
+      "drawSubmissionMs": 127.5,
+      "confirmed": "ALPHABLEND=true, INSTANCES=true의 PBR createEffect 85ms + 별도 변형 33ms. 내부 createShaderProgram은 각각 69.7/17.8ms로 중첩됨.",
+      "certainty": "같은 프레임의 상세 호출로 확인"
+    },
+    {
+      "atSeconds": 200.79,
+      "context": "곰 등장 전후 · 불투명 변형",
+      "workMs": null,
+      "drawSubmissionMs": null,
+      "confirmed": "INSTANCES=true, bone influencers=5, ALPHABLEND=false의 createEffect 51.4ms, 내부 createShaderProgram 31ms. 기록된 해당 렌더 소요 87.7ms.",
+      "certainty": "상세 샘플은 보존됨. 가장 가까운 이벤트는 95.7ms 뒤이므로 그 이벤트와 동일 프레임으로 간주하지 않음"
+    },
+    {
+      "atSeconds": 207.72,
+      "context": "곰 + 비탄의 마녀 · 참나무 텍스처 준비 표시",
+      "workMs": 173.6,
+      "drawSubmissionMs": 133.9,
+      "confirmed": "가장 큰 현재 프레임 CPU 작업. 해당 프레임 상세 호출 없음. 다음 프레임 간격 185.1ms.",
+      "certainty": "지연 위치는 확인. 셰이더/업로드/드라이버 원인은 미확정"
+    },
+    {
+      "atSeconds": 275.46,
+      "context": "곰 HP=0, 사망 모션 · 엘레나 생존",
+      "workMs": 123.1,
+      "drawSubmissionMs": 98.5,
+      "confirmed": "ALPHABLEND=true, INSTANCES=true, bone influencers=5의 createEffect 89.7ms, 내부 createShaderProgram 69.4ms.",
+      "certainty": "같은 프레임 상세 호출로 확인"
+    },
+    {
+      "atSeconds": 306.07,
+      "context": "엘레나 전투 · 여러 CPU 구간 동반 상승",
+      "workMs": 136.7,
+      "drawSubmissionMs": 14.2,
+      "confirmed": "playerAnimation 62.4ms, activeMeshes 26.9ms. 인접 프레임 activeMeshes 최대 30.2ms, sceneryDemand 14.8ms.",
+      "certainty": "발생 구간은 확인. 바인딩 생성/GC/스케줄링/기기 상태의 구분은 불가"
+    },
+    {
+      "atSeconds": 359.75,
+      "context": "엘레나 사망",
+      "workMs": 101.3,
+      "drawSubmissionMs": 86.5,
+      "confirmed": "지오메트리 대기 0, 텍스처 idle. 해당 프레임 상세 호출 없음.",
+      "certainty": "렌더링 정체는 확인. 정확한 엔진 호출 원인은 미확정"
+    }
+  ],
+  "playerTextures": {
+    "status": "selected",
+    "manifest": "warrior-v3-mobile4k",
+    "mobile": true,
+    "maxSize": 4096,
+    "encoding": "ktx2-uastc",
+    "gpuCompressed": true,
+    "estimatedGpuBytes": 83886240,
+    "maxImageRgbaBytes": 67108864,
+    "maxImageUploadBytes": 22369648,
+    "estimateScope": "Unique images with full mip chains; compressed uses ASTC/BC7/ETC2 alpha worst case. Excludes driver/decoder workspace and other scene resources.",
+    "capabilities": {
+      "maxTextureSize": 8192,
+      "formats": {
+        "astc": true,
+        "bptc": true,
+        "s3tc": true,
+        "etc2": true
+      }
+    }
+  },
+  "preparationBudget": {
+    "active": true,
+    "budgetMs": 2,
+    "usedMs": 0,
+    "generation": 2,
+    "frameId": 15531,
+    "totalPreparationMs": 1369.8000000715256,
+    "sharedYields": 154,
+    "atomicOverruns": 44,
+    "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+  },
+  "reviewEffects": null,
+  "loadHistory": [
+    {
+      "label": "대평원",
+      "phase": "error",
+      "setupMs": 227.20000004768372,
+      "downloadMs": 2686.5,
+      "modelMs": 46283.69999998808,
+      "screenMs": 0,
+      "bytes": 0,
+      "cachedBytes": 45738781,
+      "totalMs": 49197.40000003576,
+      "failedPhase": "model",
+      "error": "리소스 준비 시간이 초과되었습니다 (45초). 다시 시도해 주세요."
+    },
+    {
+      "label": "대평원",
+      "phase": "complete",
+      "setupMs": 15,
+      "downloadMs": 1927.1000000238419,
+      "modelMs": 5105.300000011921,
+      "screenMs": 1121,
+      "bytes": 0,
+      "cachedBytes": 58357469,
+      "totalMs": 8168.400000035763,
+      "error": null
+    }
+  ],
+  "memory": {
+    "jsUsedBytes": 139000000,
+    "jsAllocatedBytes": 139000000,
+    "jsLimitBytes": 1940000000,
+    "backgroundHighTextureEstimateBytes": 11184864,
+    "backgroundHighTextureBudgetBytes": 100663296,
+    "textures": 41,
+    "meshes": 3090,
+    "geometries": 116,
+    "sampleAtMs": 539717.8999999762
+  },
+  "sceneResources": {
+    "start": {
+      "meshes": 3029,
+      "skeletons": 2,
+      "animationGroups": 9,
+      "sdkActiveAnimatablesIncludingPaused": 408,
+      "sceneObservers": {
+        "beforeRender": 6,
+        "afterRender": 8,
+        "dispose": 78
+      }
+    },
+    "end": {
+      "meshes": 3090,
+      "skeletons": 7,
+      "animationGroups": 83,
+      "sdkActiveAnimatablesIncludingPaused": 1224,
+      "sceneObservers": {
+        "beforeRender": 7,
+        "afterRender": 8,
+        "dispose": 93
+      }
+    }
+  },
+  "animationBindings": {
+    "start": {
+      "player": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 0,
+        "created": 408,
+        "reused": 0,
+        "evicted": 0,
+        "currentBindings": 408
+      },
+      "enemies": []
+    },
+    "end": {
+      "player": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 75888,
+        "reused": 49368,
+        "evicted": 183,
+        "currentBindings": 1224
+      },
+      "enemies": [
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Wolf_Staggered_Collapse_V02",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 9938,
+            "currentBindings": 0,
+            "channels": 1860,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Wolf_Staggered_Collapse_V02",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 4212,
+            "currentBindings": 0,
+            "channels": 1860,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "bear",
+          "active": true,
+          "state": "Knock_Down_1",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "limit": 2,
+            "cached": 0,
+            "created": 6786,
+            "reused": 3480,
+            "evicted": 36,
+            "currentBindings": 0
+          }
+        },
+        {
+          "kind": "elena",
+          "active": true,
+          "state": "dead",
+          "bindings": null
+        }
+      ]
+    }
+  },
+  "uploads": {
+    "count": 16,
+    "maxSynchronousCpuMs": 1
+  },
+  "workers": {
+    "ktx": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "idleReleaseMs": 8000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 9,
+        "terminated": 9,
+        "completed": 46,
+        "failed": 0,
+        "cancelled": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 46,
+        "stage": "decode",
+        "bytes": 213403,
+        "queuedMs": 0,
+        "initMs": 65.69999998807907,
+        "activeDecodeMs": 182.39999997615814,
+        "totalMs": 248.0999999642372
+      }
+    },
+    "meshopt": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "queueTimeoutMs": 45000,
+      "initTimeoutMs": 45000,
+      "decodeTimeoutMs": 45000,
+      "idleReleaseMs": 1000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 7,
+        "terminated": 7,
+        "completed": 4689,
+        "failed": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 4689,
+        "stage": "decode",
+        "bytes": 2687,
+        "queueMs": 966.1999999880791,
+        "initMs": 0,
+        "decodeMs": 20.30000001192093,
+        "totalMs": 986.5
+      }
+    }
+  },
+  "diagnosticCpu": {
+    "scope": "synchronous-endFrame-collection-only",
+    "window": "since-diagnostic-reset",
+    "samples": 15509,
+    "meanMs": 0.07653620475741618,
+    "maxMs": 6.899999976158142,
+    "latestMs": 0,
+    "latestCompletedAtMs": 523443.6999999881
+  },
+  "gpuStatus": "unsupported",
+  "codeFinding": {
+    "file": "ArcherPreview/src/boss-shader-warmup.js",
+    "line": 30,
+    "actual": "material.isReadyForSubMesh(mesh,subMesh,false) / material.isReady(mesh,false)",
+    "observed": "INSTANCES=true in captured slow shader variants",
+    "conclusion": "Prewarming and actual rendering do not cover the same instancing mode. A confirmed coverage gap; not proof that every stall has this cause."
+  },
+  "limitations": [
+    "One Android log; hardware model, temperature and GPU time unavailable",
+    "Events retain slow frames, not a representative distribution of all render subcounters",
+    "End summary is a shorter sliding window; its fps and meanFrameMs use different windows",
+    "Nested CPU shader timings overlap and must not be added",
+    "No game source changes or deployment performed in this analysis"
+  ]
+}

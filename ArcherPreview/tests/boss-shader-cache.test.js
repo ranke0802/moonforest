@@ -58,7 +58,7 @@ for(const precompiledOpaque of [false,true])test(`same-renderId preparation chec
  const renderId=f.scene.getRenderId(),renderPass=f.engine.currentRenderPassId;
  await prepareBossShaders(asset,{shadows:f.shadows,frame:async()=>{frames++;assert.equal(material.checkReadyOnEveryCall,false,'the borrowed flag is never held during a yield');assert.equal(f.actor.isEnabled(),false);assert.equal(f.shadows.getShadowMap().renderList.length,0);}});
  assert.equal(f.scene.getRenderId(),renderId);assert.equal(f.engine.currentRenderPassId,renderPass);assert.equal(material.checkReadyOnEveryCall,false);assert.equal(material.allowShaderHotSwapping,true);assert.equal(body.visibility,1);
- assert.equal(checks.some(x=>x.visibility===.5&&x.alpha),true);assert.equal(checks.some(x=>x.visibility===1&&!x.alpha),true);assert.doesNotMatch(body.subMeshes[0].effect.defines,/#define ALPHABLEND\b/);
+ assert.equal(checks.some(x=>x.visibility===.5&&x.alpha),true);assert.equal(checks.some(x=>x.visibility===1&&!x.alpha),true);assert.doesNotMatch(body.subMeshes[0]._getDrawWrapper(f.scene.activeCamera.renderPassId).effect.defines,/#define ALPHABLEND\b/);
  const warmedEffects=f.effects.length,requestsBefore=f.requests.length,counts=inventory(f);material.isReadyForSubMesh=ready;f.actor.setEnabled(true);f.shadows.addShadowCaster(body,false);
  const transitions=[];
  for(const visibility of [1,.999,.5,.1,1]){
@@ -111,7 +111,7 @@ for(const manifest of ['elena','mourning-elena'])test(`${manifest} actual packed
  for(const material of new Set(asset.meshes.map(mesh=>mesh.material).filter(Boolean)))assert.equal(material.isFrozen,false,'the actual boss material contract stays unfrozen; frozen readiness uses a separate SDK fast path');
  const bodies=asset.meshes.filter(mesh=>mesh.getTotalVertices()&&!isRuntimeOutline(mesh)),beforeRaw=f.rawTextures.length;
  await prepareBossShaders(asset,{shadows:f.shadows,frame:async()=>{assert.equal(f.actor.isEnabled(),false);}});
- for(const mesh of bodies){assert.equal(mesh.instances.length,0);assert.equal(mesh.hasThinInstances,false);assert.doesNotMatch(mesh.subMeshes[0].effect.defines,/#define ALPHABLEND\b/);assert.ok(shadowReady(f,mesh));}
+ for(const mesh of bodies){assert.equal(mesh.instances.length,0);assert.equal(mesh.hasThinInstances,false);assert.doesNotMatch(mesh.subMeshes[0]._getDrawWrapper(f.scene.activeCamera.renderPassId).effect.defines,/#define ALPHABLEND\b/);assert.ok(shadowReady(f,mesh));}
  const prepared=f.effects.length,afterWarmRaw=f.rawTextures.length,counts=inventory(f),transitions=[];f.actor.scaling.setAll(config.scale);f.actor.setEnabled(true);
  for(const visibility of [1,.999,.7,.1,1]){
   for(const mesh of asset.meshes)mesh.visibility=visibility;for(const mesh of bodies)visibility<1?f.shadows.removeShadowCaster(mesh,false):f.shadows.addShadowCaster(mesh,false);

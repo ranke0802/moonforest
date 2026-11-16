@@ -1,5 +1,6 @@
 import {Frustum} from '@babylonjs/core/Maths/math.frustum.js';
 import {overlaySubMeshReadiness} from './overlay-readiness.js';
+import {hardwareInstancesForSubMesh,readMaterialVariant,cameraRenderPass} from './render-variant-state.js';
 
 const label=value=>String(value?.name??value?.id??'unknown').slice(0,72);
 const enabled=mesh=>{
@@ -7,7 +8,7 @@ const enabled=mesh=>{
   return !mesh.isDisposed?.()&&mesh.isEnabled?.()!==false&&mesh.isVisible!==false&&mesh.visibility!==0&&!(fog&&!fog.disposed&&mesh.metadata?.caveFogVisible===false);
 };
 const instances=(mesh,engine)=>!!(engine.getCaps?.().instancedArrays&&(mesh.isAnInstance||mesh.hasThinInstances||mesh.instances?.length));
-const hardwareFor=(mesh,source,engine)=>!mesh._internalAbstractMeshDataInfo?._actAsRegularMesh&&(instances(mesh,engine)||instances(source,engine));
+const hardwareFor=(mesh,source,engine,sub)=>!mesh._internalAbstractMeshDataInfo?._actAsRegularMesh&&(hardwareInstancesForSubMesh(source,sub)||instances(mesh,engine)||instances(source,engine));
 function failedEffect(effect){const error=effect?.getCompilationError?.();return error&&effect.allFallbacksProcessed?.()?String(error).slice(0,160):null;}
 
 // Scene.isReady checks disabled retained bosses, archived LODs and every engine
@@ -27,10 +28,10 @@ export function currentFrameReadiness(scene){
   const useMaterial=(mesh,subMesh,useInstances,kind,override)=>{
     const material=override??subMesh.getMaterial?.()??mesh.material??scene.defaultMaterial;if(!material)return;
     if(!states.has(material)){states.set(material,material.allowShaderHotSwapping);material.allowShaderHotSwapping=false;}
-    const ready=material._storeEffectOnSubMeshes?material.isReadyForSubMesh(mesh,subMesh,useInstances):material.isReady(mesh,useInstances),effect=material._storeEffectOnSubMeshes?subMesh.effect:material.getEffect?.();
+    const {ready,effect}=readMaterialVariant(mesh,subMesh,{material,instances:useInstances,pass:engine.currentRenderPassId});
     if(!ready)block(kind,mesh,material,'material',effect);
   };
-  const originalPass=engine.currentRenderPassId;engine.currentRenderPassId=camera.renderPassId??originalPass;
+  const originalPass=engine.currentRenderPassId;engine.currentRenderPassId=cameraRenderPass(scene)??originalPass;
   try{
     for(const mesh of scene.meshes){
       if(mesh.isBlocked||!mesh.subMeshes?.length||!enabled(mesh)||mesh.scaling?.hasAZeroComponent)continue;
@@ -39,8 +40,7 @@ export function currentFrameReadiness(scene){
       const source=selected(mesh);if(!source)continue;meshes.push(label(mesh));
       const blockedBefore=blockers.length;
       if(!source.isReady(false)){block('view',mesh,null,'geometry');checked(false);continue;}
-      const hardware=hardwareFor(mesh,source,engine);
-      for(const sub of source.subMeshes??[]){if(!hardware&&source.subMeshes.length>1&&sub.isInFrustum&&!sub.isInFrustum(planes))continue;useMaterial(source,sub,hardware,'view');
+      for(const sub of source.subMeshes??[]){const hardware=hardwareFor(mesh,source,engine,sub);if(!hardware&&source.subMeshes.length>1&&sub.isInFrustum&&!sub.isInFrustum(planes))continue;useMaterial(source,sub,hardware,'view');
         if(hardware&&mesh.instancedBuffers?.villageInk?.x>0&&!mesh._internalAbstractMeshDataInfo?._actAsRegularMesh)for(const material of scene.materials)if(material.metadata?.villageOutline&&(!material.metadata.villageOutlineUsesSource||material.metadata.villageOutlineUsesSource(source))){outlines.push(label(mesh));useMaterial(source,sub,true,'outline',material);}
       }
       checked(blockers.length===blockedBefore);
@@ -68,9 +68,8 @@ export function currentFrameReadiness(scene){
           if(!enabled(mesh))continue;const source=selected(mesh);if(!source)continue;shadows.push(label(mesh));
           const blockedBefore=blockers.length;
           if(!source.isReady(false)){block('shadow',mesh,null,'geometry');checked(false);continue;}
-          const hardware=hardwareFor(mesh,source,engine);
           for(const id of map.renderPassIds??[map.renderPassId??pass]){engine.currentRenderPassId=id;
-            for(const sub of source.subMeshes??[]){const material=sub.getMaterial?.()??source.material,transparent=material?.needAlphaBlendingForMesh(source)??false;
+            for(const sub of source.subMeshes??[]){const hardware=hardwareFor(mesh,source,engine,sub),material=sub.getMaterial?.()??source.material,transparent=material?.needAlphaBlendingForMesh(source)??false;
               if(!generator.isReady(sub,hardware,transparent))block('shadow',mesh,material,'shadow',sub._getDrawWrapper?.()?.effect);
             }
           }

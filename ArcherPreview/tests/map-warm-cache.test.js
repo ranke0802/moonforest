@@ -61,9 +61,9 @@ test('real shipped meshopt model revisits bypass decoding with identical indices
 test('actual instanced shader stays reusable after map disposal and cached program count is bounded',async t=>{
  const e=new NullEngine(),scene=new Scene(e);t.after(()=>e.dispose());new ArcRotateCamera('view',0,1,10,Vector3.Zero(),scene);e.getCaps().instancedArrays=true;
  const make=()=>{const mesh=MeshBuilder.CreateBox('map',{},scene);mesh.material=new PBRMaterial('paint',scene);return mesh;};
- const first=make();await prepareMapMaterials([first]);const effect=first.subMeshes[0].effect;assert.ok(effect.isReady());assert.match(effect.defines,/#define INSTANCES/);assert.equal(mapShaderCacheSize(e),1);
+ const first=make();await prepareMapMaterials([first]);const pass=scene.activeCamera.renderPassId,effect=first.subMeshes[0]._getDrawWrapper(pass).effect;assert.ok(effect.isReady());assert.match(effect.defines,/#define INSTANCES/);assert.equal(mapShaderCacheSize(e),1);
  first.dispose(false,true);await new Promise(r=>setImmediate(r));e.onEndFrameObservable.notifyObservers(e);
- const next=make();await prepareMapMaterials([next]);assert.equal(next.subMeshes[0].effect,effect);assert.equal(mapShaderCacheSize(e),1);assert.equal(next.getTotalVertices(),24);next.dispose(false,true);
+ const next=make();await prepareMapMaterials([next]);assert.equal(next.subMeshes[0]._getDrawWrapper(pass).effect,effect);assert.equal(mapShaderCacheSize(e),1);assert.equal(next.getTotalVertices(),24);next.dispose(false,true);
  const fakeEngine={onDisposeObservable:new Observable()};let disposed=0;
  for(let i=0;i<100;i++)retainMapEffect({_refCount:1,isReady:()=>true,getEngine:()=>fakeEngine,dispose(){this._refCount--;disposed++;}});
  assert.equal(mapShaderCacheSize(fakeEngine),12);assert.equal(disposed,88);fakeEngine.onDisposeObservable.notifyObservers(fakeEngine);assert.equal(disposed,100);

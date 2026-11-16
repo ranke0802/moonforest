@@ -25,12 +25,12 @@ function rig(scene){
  root.setEnabled(false);
  return {actor:root,carrier,nodes:{'mixamorig:Hips':hip},asset:{meshes:[mesh],transformNodes:[hip],skeletons:[skeleton],animationGroups:groups},config:{animations:{idle:'Idle',walk:'Walk',turn:'Turn'},catalog:groups.map(group=>({name:group.name,groundTrack:[0,0],fps:1}))},animator:{},setShadowCasting(){},hip};
 }
-function fixture(t,{warm,acquire:acquireOverride,onSubtitles=()=>{},projectCatalog=catalog,definitions={[definition.actorDefinitionId]:definition},hostLimits={},instanceIds=[]}={}){
+function fixture(t,{warm,visible,acquire:acquireOverride,onSubtitles=()=>{},projectCatalog=catalog,definitions={[definition.actorDefinitionId]:definition},hostLimits={},instanceIds=[]}={}){
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;const camera=new ArcRotateCamera('existing-camera',.2,1.1,5,Vector3.Zero(),scene);camera.lowerRadiusLimit=2;camera.upperRadiusLimit=10;camera.lowerBetaLimit=.3;camera.upperBetaLimit=1.3;
  const ground=new TransformNode('ground',scene),world={scene,camera,mapId:'village',ground,terrain:{heightAt:()=>0},toolGeneration:0},counts={created:0,warm:0,dispose:0,leased:0,released:0,audio:0,stopped:0,resources:0,shadowSets:0},adapters=[];let leaseOptions;
  const factory=(def,owner)=>{
   counts.created++;counts.resources++;const encounter=rig(scene);encounter.setShadowCasting=()=>counts.shadowSets++;
-  const adapter={encounter,async warm(options){counts.warm++;if(warm)await warm(options,encounter);assert.equal(owner.isCurrent(),true);return encounter.asset;},hide(){encounter.actor.setEnabled(false);},estimate(){return {estimatedBytes:100};},dispose(){if(adapter.disposed)return;adapter.disposed=true;counts.dispose++;counts.resources--;for(const group of encounter.asset.animationGroups)group.dispose();encounter.actor.dispose(false,true);for(const skeleton of encounter.asset.skeletons)skeleton.dispose();}};adapters.push(adapter);return adapter;
+  const adapter={encounter,async warm(options){counts.warm++;if(warm)await warm(options,encounter);assert.equal(owner.isCurrent(),true);return encounter.asset;},async prepareVisible(options){if(visible)await visible(options,encounter);assert.equal(owner.isCurrent(),true);return encounter.asset;},hide(){encounter.actor.setEnabled(false);},estimate(){return {estimatedBytes:100};},dispose(){if(adapter.disposed)return;adapter.disposed=true;counts.dispose++;counts.resources--;for(const group of encounter.asset.animationGroups)group.dispose();encounter.actor.dispose(false,true);for(const skeleton of encounter.asset.skeletons)skeleton.dispose();}};adapters.push(adapter);return adapter;
  };
  const acquire=async options=>{
   leaseOptions=options;const original={position:camera.position.clone(),target:camera.getTarget().clone(),fov:camera.fov},map=world.mapId,generation=world.toolGeneration;
@@ -82,6 +82,16 @@ test('dragged actor world transforms round-trip a rotated anchor and persist thr
  const next=structuredClone(doc);Object.assign(next.actors[0],cinematicLocalTransform(doc,transform));f.player.document=next;f.player.seek(.8);
  near(f.host.getActorHandles()[0].position,transform.position);near(f.host.getActorHandles()[0].rotation,transform.rotation);assert.equal(f.host.getActorHandles()[0].scale,transform.scale);
  const before=f.host.getActorHandles()[0].position;assert.throws(()=>f.host.previewActorTransform(handle.actorId,{...transform,position:[NaN,0,0]}),/유효한/);near(f.host.getActorHandles()[0].position,before);
+});
+
+test('first and pooled cinematic reveals prepare the exact initial clip pose while hidden',async t=>{
+ let expected=.25,checks=0;const f=fixture(t,{visible:async(_options,encounter)=>{checks++;assert.equal(encounter.actor.isEnabled(),false);near(encounter.hip.position.asArray(),[2*expected,1+2*expected,0]);}}),doc=document();
+ await f.player.load(doc,{time:.25});assert.equal(checks,1);assert.equal(f.adapters[0].encounter.actor.isEnabled(),true);await f.player.stop('skip');expected=.75;await f.player.load(doc,{time:.75});assert.equal(checks,2);assert.equal(f.counts.warm,1);assert.equal(f.counts.created,1);near(f.adapters[0].encounter.hip.position.asArray(),[1.5,2.5,0]);
+});
+
+test('cancelling final visible preparation retires the hidden slot instead of caching a half-ready actor',async t=>{
+ const gate=deferred();let entered=false;const f=fixture(t,{visible:async()=>{entered=true;await gate.promise;}}),loading=f.player.load(document());
+ for(let i=0;i<30&&!entered;i++)await flush();assert.equal(entered,true);await f.player.stop('skip');assert.equal(await loading,false);assert.equal(f.adapters[0].encounter.actor.isEnabled(),false);assert.equal(f.counts.resources,0);gate.resolve();await flush();await flush();assert.equal(f.host.inspect().actors,0);
 });
 
 test('sixteen warm replays plateau model/pose resources and release the lease exactly once each time',async t=>{

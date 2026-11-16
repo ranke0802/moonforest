@@ -36,6 +36,9 @@ import './serial-player-textures.js';
 import {selectPlayerTextureProfile,playerTextureCapabilities} from './player-texture-profile.js';
 import {setupPlayerTextureSettings} from './player-texture-settings.js';
 import {setFrameWorkContext,frameWorkSnapshot} from './frame-work-coordinator.js';
+import {prepareModelShaders} from './boss-shader-warmup.js';
+import {createBossPreparation} from './boss-preparation.js';
+import {inspectPreparedEffects} from './prepared-effect-lifetime.js';
 import {setupEffectReviewSettings} from './effect-review-settings.js';
 import './preparation-review-settings.css';
 import {createMapDeparture} from './map-departure.js';
@@ -284,6 +287,7 @@ const mapWorkDiagnostics=()=>({
   renderResolution:renderResolution(),
   playerTextures:playerTextureSelection,
   preparationBudget:world?.scene?frameWorkSnapshot(world.scene):null,
+  preparedShaders:engine?inspectPreparedEffects(engine):null,
   reviewEffects:world?.effectWorld?.inspect()??null,
   activeMeshCandidates:world?.environment?.activeMeshCandidates?{...world.environment.activeMeshCandidates}:null,
   geometryWork:world?.environment?{
@@ -699,6 +703,8 @@ async function loadCharacter() {
     if(isCave())await boss.activateResident(actor);
     await prepareElenaReview();world.authoredPlacements?.update(0,actor);
     loadDiagnostics.phase('screen');
+    const preparedPlayer=container,preparedGeneration=world.toolGeneration;
+    await prepareModelShaders(preparedPlayer,{preparation:createBossPreparation({scene:world.scene,isCurrent:()=>container===preparedPlayer&&world.toolGeneration===preparedGeneration&&!world.scene.isDisposed}),shadows:world.shadows});
     // Keep the loading artwork through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
     assertFrameHealthy();updatePlainsBoundaryAtmosphere(world,actor.position,true);syncCaveFog(true);world.scene.render();await chapterQuests?.prepareEffects();await world.goldLootView?.prepare();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});

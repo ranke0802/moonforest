@@ -11,6 +11,7 @@ import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {loadStreamedVillage} from './village-streamed-environment.js';
 import {prepareVillageInstancing} from './village-instancing.js';
+import {prepareMapMaterials} from './map-shader-cache.js';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 export {prepareVillageStart} from './village-streamed-environment.js';
 
@@ -130,9 +131,7 @@ async function loadVillageEager(world,{onProgress=()=>{}}={}){
     outlines=new VillageOutlines(world,records,world.environment);
     // Warm each base LOD before camera movement. Ink now runs inside its
     // successful draw lifecycle and cannot render as an independent object.
-    for(const container of containers)for(const mesh of geometry(container)){
-      await mesh.material?.forceCompilationAsync(mesh,{useInstances:true});
-    }
+    for(const container of containers)await prepareMapMaterials(geometry(container));
     await outlines.prepare();
     // Read by the development review panel only, never a per-frame production scan.
     world.villageRenderRecords=records;

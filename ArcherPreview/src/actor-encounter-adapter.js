@@ -10,6 +10,8 @@ import {ElenaEncounter} from './elena-encounter.js';
 import {MourningElenaEncounter} from './mourning-elena-encounter.js';
 import {BossModelLibrary,instantiateBossModel} from './boss-models.js';
 import {createBossPreparation,bossPreparationCancelled} from './boss-preparation.js';
+import {prepareModelShaders} from './boss-shader-warmup.js';
+import {prepareNpcInteriorInk} from './character-interior-ink.js';
 import {applyHitFlash} from './hit-feedback.js';
 import {isRuntimeOutline} from './character-outlines.js';
 import {ACTOR_DEFINITIONS,getActorDefinition,validateActorSpawn} from './actor-definitions.js';
@@ -156,6 +158,13 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
           estimate=assetEstimate(asset,definition.population.estimatedBytes);return asset;
         }).finally(()=>{warming=null;encounter.actorPreparation=null;});
         return warming;
+      },
+      async prepareVisible({preparation,isCurrent}={}){
+        check();if(isCurrent&&!isCurrent())throw bossPreparationCancelled();
+        await adapter.warm({preparation,isCurrent});
+        const job=preparation??createBossPreparation({scene:world.scene,isCurrent:()=>valid()&&isCurrent?.()!==false});
+        await prepareModelShaders(encounter.asset,{preparation:job,shadows:world.shadows});
+        await prepareNpcInteriorInk(encounter.asset,job);job.check();check();if(isCurrent&&!isCurrent())throw bossPreparationCancelled();
       },
       reset(value={}){
         check();active=false;detach();encounter.hide();resetTransient();rewardGranted=false;spawnContext=value;

@@ -1,0 +1,97 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MoonForest · 공통 셰이더 준비 개선</title><style>:root{color-scheme:dark;font-family:system-ui,'Malgun Gothic',sans-serif;background:#111b19;color:#e8ece3}*{box-sizing:border-box}body{margin:0}main{max-width:1030px;margin:auto;padding:45px 24px 75px}h1{font-size:clamp(29px,5vw,42px);letter-spacing:-.04em}h2{font-size:23px;margin-top:36px}p,li{line-height:1.85;color:#c5d1c8}small{color:#d2b982}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card,aside{padding:21px;border-radius:12px;background:#1c2b25;border:1px solid #3c5244}.metric{font-size:30px;font-weight:700;color:#e2c38c}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;padding:14px 10px;vertical-align:top;border-bottom:1px solid #35483b;line-height:1.7}th{color:#e6c891}td:first-child{min-width:110px}a{color:#e3cb91}code{color:#e2cfae}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}details{margin-top:26px}.note{font-size:13px;color:#acbfb0}</style><main><small>MOONFOREST 0.2 · 2026.11.16</small><h1>모델별 예외 대신<br>공통 준비 조건과 프로그램 수명을 고쳤습니다.</h1><p>공통 모델 준비를 실제 렌더링의 재질·인스턴싱·스킨/모프·투명 상태·패스에 맞췄습니다. 플레이어·일반 몬스터·보스·NPC·컷씬이 같은 기준을 사용하며, 배경도 같은 조건 판별을 공유합니다. 원본 모델·텍스처·기존 LOD·전투 판정은 변경하지 않았습니다.</p><div class="cards"><div class="card"><small>집중 통합 검사</small><div class="metric">125 / 125</div><p>실제 모델·준비 수명·취소·NPC/컷씬·기록 상태 동등성</p></div><div class="card"><small>준비 후 대표 변형 재요청</small><div class="metric">새 Effect 0</div><p>실제 늑대/곰·MultiMaterial·frozen·인스턴싱·사망·카메라/그림자</p></div><div class="card"><small>진단/10분 기록 OFF</small><div class="metric">동일 적용</div><p>게임에 별도의 기록 전용 고속 모드를 두지 않았습니다.</p></div></div>
+<h2>이번에 고친 공통 원인</h2><div class="scroll"><table><thead><tr><th>문제</th><th>공통 수정</th></tr></thead><tbody><tr><td>준비와 실제 배치 방식 불일치</td><td>실제 Babylon 배치·추가 인스턴스 버퍼 조건과 예정된 배치를 구분합니다. 배우는 지원되는 불투명/사망 및 인스턴싱 변형을 준비하고 현재 사용할 조건을 마지막에 둡니다.</td></tr><tr><td>재질·패스 누락</td><td>메시 대표 재질만 보던 코드를 하위 재질별 확인으로 변경. 카메라/출력 RTT·여러 그림자 패스·피격 오버레이를 정확히 확인합니다. 종별 메타데이터가 없는 일반 모델도 제외하지 않습니다.</td></tr><tr><td>frozen 재질의 잘못된 준비 완료</td><td>frozen의 조기 성공을 피하고 같은 renderId에서도 실제 조건을 검사합니다. 빌린 준비 플래그·pass·투명도·frozen 상태를 복원합니다.</td></tr><tr><td>준비한 다른 변형의 수명</td><td>준비 프로그램을 메시가 살아 있는 동안 추가 참조로 보존합니다. 메시당16개/엔진 고유128개로 제한하며 취소한 신규 준비분과 메시·장면·엔진 해제를 정리합니다. 한도 초과 시 강제 퇴출하지 않습니다.</td></tr><tr><td>실제 최초 자세보다 이른 준비</td><td>플레이어는 최초 장면 렌더 전에 준비합니다. NPC·컷씬은 숨긴 상태에서 초기 자세와 모프를 적용한 뒤 본체·그림자·내부선을 준비하고 표시합니다. pooled 재생도 같은 순서를 따릅니다.</td></tr></tbody></table></div>
+<h2>일반 플레이에서도 적용되는가?</h2><aside><b>적용됩니다. 기록을 켜야 동작하는 최적화 조건은 발견되지 않았습니다.</b><p>동일 NullEngine 장면을 진단 OFF / 기본 진단 / 기록 / 상세 기록 네 상태로 실행했습니다. 실제 드로 인수와 원본 반환값, 변환·가시성·재질·인스턴스 수, 렌더 크기·FPS 설정·공유 준비 예산이 동일했습니다. 계측 해제 시 원본 메서드와 관찰자가 복구되는 것도 확인했습니다.</p></aside><p>기록을 켰을 때 더 부드럽다는 체감의 원인은 아직 확정하지 않았습니다. 설정 창에서 잠시 정지한 사이 준비가 끝나는 효과, 이미 준비된 캐시, 기기 온도/스케줄링, 측정 래퍼의 JIT·드라이버 타이밍 영향은 구분해야 합니다. 이를 이유로 평소에도 상세 계측을 강제로 켜는 우회는 하지 않았습니다.</p>
+<h2>적용 경로</h2><ul><li>플레이어 최초 로딩 및 기존 일반·보스 소환 공통 경로</li><li>배치 몬스터·편집 소환·게임플레이 배우를 이용하는 컷씬</li><li>일반 NPC·시각 전용 컷씬의 초기 자세와 공유 내부선</li><li>기존/스트리밍/편집 배경의 하위 재질 준비, 독립 퀘스트 표식의 실제 비인스턴싱 조건</li></ul><p>향후 이 프로젝트의 공통 로더/adapter를 통해 넣는 모델도 같은 기준을 사용합니다. 공통 경로를 거치지 않는 새로운 별도 렌더러에는 자동 적용됐다고 간주하지 않도록 AGENTS.md에도 연결했습니다.</p>
+<h2>검증과 보존</h2><p>통합 검사125개와 별도 네 맵·외곽선·안개·내부선·준비 관련43개 검사가 통과했습니다(일부 중복). 마을·대평원·숲·동굴 왕복의 수명/취소 관련 검사와 실제 전사·성녀·마녀·늑대·곰 준비 검사도 포함합니다. 원본 지오메트리·골격·인덱스·스킨 가중치를 유지한 것을 확인했습니다. 0.2 빌드/동기화와 리소스 그래프 보존을 확인했습니다.</p><p class="note">배우 검사 중 발견한 오래된 테스트 기준은 현재 일반 4족 모델의 버전/추가 클립과 승인된 시체10초에 맞췄습니다. 게임의 버전·모션·소멸 시간을 바꾼 것이 아닙니다.</p>
+<h2>남은 한계</h2><p>Node/NullEngine은 실기기 GPU 성능 검증이 아닙니다. 최초로 필요한 SDK 컴파일 호출은 중간에 끊을 수 없으므로 공유2ms 예산이 실제2ms 상한이라는 뜻도 아닙니다. 이번 수정은 준비 누락과 불필요한 재생성 경로를 줄인 것이며, 과거 모든200ms 멈춤·후반 지속 FPS 저하·캐시 로딩45초 시간초과가 해결됐다고 판정하지 않았습니다.</p><p>성능 진단 JSON의 <code>preparedShaders</code>에서 보존 중 프로그램/소유자/한도 거부 수를 확인할 수 있습니다. 참조 개수이며 GPU 메모리량이 아닙니다. 이 통계 수집 여부와 준비 최적화 실행 여부는 분리되어 있습니다.</p><p><a href="https://ranke0802.github.io/moonforest/ArcherPreviewSite/moonforest-0.2.html">MoonForest 0.2 열기</a></p><details><summary>내장 검증 기록</summary><pre>{
+  "date": "2026-11-16",
+  "scope": "Common model shader readiness and prepared effect lifetime; diagnostic parity audit",
+  "tests": {
+    "integration": {
+      "passed": 125,
+      "failed": 0
+    },
+    "mapAndInkAndReadiness": {
+      "passed": 43,
+      "failed": 0,
+      "overlapsIntegration": true
+    }
+  },
+  "build": "passed",
+  "sync": "passed",
+  "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+  "protectedInventorySha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+  "coverage": [
+    "player before first scene draw",
+    "boss and regular encounters",
+    "authored monsters and pooled gameplay/cinematic adapters",
+    "NPC final initial pose and shared interior ink",
+    "visual cutscene and pooled initial frame",
+    "static and edited placements with planned instancing",
+    "standalone quest marker without instancing"
+  ],
+  "contracts": [
+    "per-submesh material",
+    "actual camera/output-render-target pass",
+    "opaque and fading enemy states",
+    "native/custom buffer instancing; supported actor variants",
+    "all configured shadow render pass IDs",
+    "actual overlay pass",
+    "frozen/readiness flags restored",
+    "bounded owner pin; cancel rollback and disposal"
+  ],
+  "effects": {
+    "ownerLimit": 16,
+    "engineUniqueLimit": 128,
+    "newProgramsAfterPreparedRepresentativeRequests": 0,
+    "representatives": [
+      {
+        "asset": "alpha-wolf",
+        "meshes": 7,
+        "bones": 28,
+        "morphTargets": 1,
+        "preparedPrograms": 12
+      },
+      {
+        "asset": "guardian-bear",
+        "meshes": 1,
+        "bones": 58,
+        "morphTargets": 0,
+        "preparedPrograms": 6
+      }
+    ],
+    "geometryAndSkinDataPreserved": true
+  },
+  "diagnosticParity": {
+    "modes": [
+      "off",
+      "basic",
+      "recording",
+      "detailed-recording"
+    ],
+    "same": [
+      "original draw calls and return values",
+      "world transforms, visibility, enabled state",
+      "material and instance population",
+      "render size and FPS settings",
+      "shared preparation budget"
+    ],
+    "extraGameFastModeFound": false,
+    "originalMethodsAndObserversRestored": true,
+    "realDeviceEffectUnknown": true
+  },
+  "preserved": [
+    "original model/UV/weights/rig/motion",
+    "approved textures",
+    "LOD/distance/quality settings",
+    "combat input/contact/damage/timing",
+    "0.1 deployment"
+  ],
+  "limitations": [
+    "No browser automation or real-device/GPU timing validation",
+    "Recording may affect device/JIT/driver timing; parity does not identify the subjective cause",
+    "An essential first SDK compilation is atomic and not preempted by 2ms cooperative scheduling",
+    "No claim all historical 200ms stalls or late-play sustained FPS loss are eliminated",
+    "Previous cache loading timeout is not proven resolved by this shader change"
+  ]
+}</pre></details><p class="note">단일 HTML · 외부 이미지/폰트/스크립트 없음 · 브라우저 자동조작 사용 안 함</p></main></html>

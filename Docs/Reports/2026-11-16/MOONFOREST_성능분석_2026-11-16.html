@@ -1,0 +1,417 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MoonForest · 2026-11-16 성능 분석</title><style>
+:root{color-scheme:dark;font-family:system-ui,'Malgun Gothic',sans-serif;background:#101a19;color:#e8ede6}*{box-sizing:border-box}body{margin:0}main{max-width:1080px;margin:auto;padding:44px 24px 70px}h1{font-size:clamp(28px,5vw,43px);letter-spacing:-.04em;line-height:1.2}h2{margin-top:38px;font-size:23px}p,li{line-height:1.8;color:#c6d3ca}small{color:#cdb781}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.card,aside{padding:20px;background:#1c2a25;border:1px solid #3a5142;border-radius:12px}.metric{font-size:32px;font-weight:700;color:#edc48a}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:14px}th,td{text-align:left;vertical-align:top;padding:13px 10px;border-bottom:1px solid #35493d;line-height:1.65}th{color:#e6c891}td:first-child{min-width:92px}.bars{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;align-items:end;height:230px;padding-top:15px}.column{display:flex;flex-direction:column;justify-content:flex-end;height:100%;text-align:center;font-size:13px}.bar{height:calc(var(--fps)*2.5px);background:var(--color);border-radius:7px 7px 0 0;margin:10px 0}.note{font-size:13px;color:#a4b8a9}code{overflow-wrap:anywhere;color:#e2cfaa}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}details{margin-top:30px}.bad{color:#efb995}.good{color:#a6d6b6}</style><main>
+<small>MOONFOREST 0.2 · 2026.11.16 · 배포본 ./assets/moonforestV2-oVUhVnLh.js</small><h1>남은 문제는<br>사망 셰이더 준비와 후반 지속 저하입니다.</h1><p>이번 로그에서는 200ms 이상 프레임 지연이 기록되지 않았습니다. 그러나 최대 185.1ms 간격과 173.6ms CPU 작업이 남아 있고, 초반 약 60FPS에서 5~6분째 약 30FPS로 내려갑니다. 전체적으로 해결된 상태는 아닙니다.</p>
+<div class="cards"><div class="card"><small>기록 시간 / 활성 프레임</small><div class="metric">6분 10초</div><p>활성 간격 합계 약 5분 47초 · 15,214프레임</p></div><div class="card"><small>전체 활성 구간 가중 평균</small><div class="metric">43.88 FPS</div><p>평균 간격 22.79ms · CPU 15.67ms</p></div><div class="card"><small>50ms 초과 프레임 간격</small><div class="metric">629회 · 4.13%</div><p>200ms 이상 0회 · 기록 누락 카운터 모두 0</p></div></div>
+<h2>조건과 적용 확인</h2><p>Android 모바일 Chrome 157, 고화질, 목표 60FPS, 3D 해상도 85%, 가로 렌더 1414×652입니다. 대평원에서 늑대·곰·엘레나가 기록됐습니다. 실제 기기 모델은 UA에서 확인할 수 없습니다.</p><ul><li>배포된 <code>moonforestV2-oVUhVnLh.js</code>와 일치합니다.</li><li>모바일 <b>4K KTX2 압축</b>이 선택됐고 전사 텍스처 추정은 <b>약 80MiB</b>입니다. PC의 832→208MiB 변경 효과를 이 모바일 로그의 개선 수치로 해석할 수 없습니다.</li><li>공유 준비 예산 2ms가 켜져 있으며 양보 154회·단일 작업 초과 44회입니다. 긴 셰이더 생성 호출을 중간에 끊을 수 있다는 뜻은 아닙니다.</li><li>추가 화염 검수 효과는 <code>reviewEffects=null</code>로 생성되지 않았습니다.</li></ul>
+<h2>1분 구간별 흐름</h2><div class="bars"><div class="column"><b>58.82</b><div class="bar" style="--fps:58.82;--color:#7fae98"></div><span>0~1분</span></div><div class="column"><b>59.86</b><div class="bar" style="--fps:59.86;--color:#7fae98"></div><span>1~2분</span></div><div class="column"><b>50.5</b><div class="bar" style="--fps:50.5;--color:#7fae98"></div><span>2~3분</span></div><div class="column"><b>36.84</b><div class="bar" style="--fps:36.84;--color:#b4a56e"></div><span>3~4분</span></div><div class="column"><b>29.66</b><div class="bar" style="--fps:29.66;--color:#c98c69"></div><span>4~5분</span></div><div class="column"><b>29.33</b><div class="bar" style="--fps:29.33;--color:#c98c69"></div><span>5~6분</span></div></div><div class="scroll"><table><thead><tr><th>구간</th><th>FPS</th><th>평균 CPU 작업</th></tr></thead><tbody><tr><td>0~1분</td><td>58.82</td><td>12.02ms</td></tr><tr><td>1~2분</td><td>59.86</td><td>12.19ms</td></tr><tr><td>2~3분</td><td>50.5</td><td>15.24ms</td></tr><tr><td>3~4분</td><td>36.84</td><td>18.7ms</td></tr><tr><td>4~5분</td><td>29.66</td><td>21.23ms</td></tr><tr><td>5~6분</td><td>29.33</td><td>20.57ms</td></tr></tbody></table></div><p class="note">일시정지/로딩/숨김 간격을 제외한 초 단위 합계로 계산했습니다. 전체 P95는 이 요약 자료만으로 복원하지 않았습니다. 카메라·적 구성·기기 온도가 고정된 A/B가 아니므로 패치 회귀나 발열 저하로 단정하지 않습니다.</p>
+<h2>상세 호출로 확인된 원인</h2><aside><b>사전 준비와 실제 렌더링의 INSTANCES 모드가 다릅니다.</b><p>현행 <code>boss-shader-warmup.js:30</code>은 준비 시 <code>isReadyForSubMesh(...,false)</code>를 사용합니다. 반면 느려진 늑대/곰 셰이더의 실제 로그는 <code>INSTANCES=true</code>입니다. 준비 범위에 빈틈이 있는 것은 코드와 로그 양쪽에서 확인했습니다. 모든 멈춤의 원인이 이것 하나라고 확정한 것은 아닙니다.</p></aside><div class="scroll"><table><thead><tr><th>기록 시작 후</th><th>상황</th><th>관측 / 판단</th></tr></thead><tbody><tr><td>125.68초</td><td>늑대 1마리 사망 후 소멸 · 다른 늑대 공격 중<br>CPU 137.3ms / 제출 127.5ms</td><td>ALPHABLEND=true, INSTANCES=true의 PBR createEffect 85ms + 별도 변형 33ms. 내부 createShaderProgram은 각각 69.7/17.8ms로 중첩됨.<br><span class="note">같은 프레임의 상세 호출로 확인</span></td></tr><tr><td>200.79초</td><td>곰 등장 전후 · 불투명 변형</td><td>INSTANCES=true, bone influencers=5, ALPHABLEND=false의 createEffect 51.4ms, 내부 createShaderProgram 31ms. 기록된 해당 렌더 소요 87.7ms.<br><span class="note">상세 샘플은 보존됨. 가장 가까운 이벤트는 95.7ms 뒤이므로 그 이벤트와 동일 프레임으로 간주하지 않음</span></td></tr><tr><td>207.72초</td><td>곰 + 비탄의 마녀 · 참나무 텍스처 준비 표시<br>CPU 173.6ms / 제출 133.9ms</td><td>가장 큰 현재 프레임 CPU 작업. 해당 프레임 상세 호출 없음. 다음 프레임 간격 185.1ms.<br><span class="note">지연 위치는 확인. 셰이더/업로드/드라이버 원인은 미확정</span></td></tr><tr><td>275.46초</td><td>곰 HP=0, 사망 모션 · 엘레나 생존<br>CPU 123.1ms / 제출 98.5ms</td><td>ALPHABLEND=true, INSTANCES=true, bone influencers=5의 createEffect 89.7ms, 내부 createShaderProgram 69.4ms.<br><span class="note">같은 프레임 상세 호출로 확인</span></td></tr><tr><td>306.07초</td><td>엘레나 전투 · 여러 CPU 구간 동반 상승<br>CPU 136.7ms / 제출 14.2ms</td><td>playerAnimation 62.4ms, activeMeshes 26.9ms. 인접 프레임 activeMeshes 최대 30.2ms, sceneryDemand 14.8ms.<br><span class="note">발생 구간은 확인. 바인딩 생성/GC/스케줄링/기기 상태의 구분은 불가</span></td></tr><tr><td>359.75초</td><td>엘레나 사망<br>CPU 101.3ms / 제출 86.5ms</td><td>지오메트리 대기 0, 텍스처 idle. 해당 프레임 상세 호출 없음.<br><span class="note">렌더링 정체는 확인. 정확한 엔진 호출 원인은 미확정</span></td></tr></tbody></table></div><p><b>셰이더 그룹의 205.6ms는 독립적인 205.6ms 멈춤이 아닙니다.</b> createEffect 안의 createShaderProgram 시간이 중첩 합산됩니다. 해당 프레임 전체 CPU는 137.3ms입니다. 불투명 → 사망 투명화와 실제 인스턴스/스킨/morph 조합을 정확하게 미리 준비하는 것이 우선입니다.</p>
+<h2>텍스처·후보 선별·메모리의 해석</h2><ul><li>수집한 KTX 업로드 16회는 동기 CPU 호출 최대 <b>1.0ms</b>입니다. 느린 이벤트 643개 중 텍스처 상태 idle은 639개입니다. 업로드만으로 모든 지연을 설명하기 어렵습니다. 이후 GPU 작업은 이 CPU 시계로 배제할 수 없습니다.</li><li>125.68초 늑대 소멸 프레임은 activeMeshes 4.6ms, 실제 후보 함수 약 0.6ms에 비해 drawSubmission이 127.5ms입니다. 이 사건은 후보 수보다 셰이더 준비가 더 직접적인 원인입니다.</li><li>306초 주변에서는 activeMeshes 26.9~30.2ms, 플레이어 애니메이션 62.4ms, 풍경 수요 검사 14.8ms가 인접 프레임에서 함께 상승합니다. 단일 병목보다 GC·스케줄링·기기 속도·반복 할당도 검토할 구간입니다. GPU 시간은 unsupported여서 확정할 수 없습니다.</li><li>플레이어 바인딩은 408→75,888개 생성 누적, 재사용 49,368개, 교체 183회이며 현재 보유는 1,224개입니다. <b>약 7.5만 개가 계속 메모리에 남아 있다는 뜻이 아닙니다.</b> 재생성/폐기의 반복 비용은 남아 있습니다. 늑대 두 개체는 새 바인딩 생성 0으로 기록됐습니다.</li><li>마지막 JS heap 약 139MB, Mesh 3,029→3,090, Skeleton 2→7입니다. 적 추가와 캐시가 포함되므로 이 두 시점만으로 누수를 확정할 수 없습니다. 현재 데이터에는 온도·주파수 측정이 없습니다.</li></ul>
+<h2>로딩에도 별도 문제가 남아 있습니다</h2><p>캐시가 있는 대평원 첫 준비가 <b>49.20초 뒤 model 단계 시간초과</b>로 실패했고, 재시도는 <b>8.17초</b>에 완료됐습니다. 재시도 내역은 준비 15ms + 다운로드/캐시 확인 1.93초 + 모델 5.11초 + 화면 1.12초입니다. 네트워크 다운로드는 0바이트입니다.</p><p>마지막 Meshopt 요청은 대기 966.2ms / 실제 decode 20.3ms, KTX 요청은 초기화 65.7ms / decode 182.4ms입니다. 이것만으로 앞선 45초 시간초과의 대상을 특정할 수는 없지만, 재다운로드보다 큐·캐시 조회·모델 준비 경로를 봐야 할 근거입니다.</p>
+<h2>수정 우선순위</h2><ol><li><b>사전 셰이더 준비 보완:</b> 실제 본체·투명 사망·인스턴스·스킨·morph·렌더 패스 조합과 맞추고, 준비된 프로그램의 유지/교체를 확인합니다. 살아 있는 모델을 모두 투명 재질로 바꿔 우회하지 않습니다.</li><li><b>캐시 로딩 시간초과와 큐:</b> 어떤 파일/디코더/준비 장벽이 45초를 점유했는지 기존 수명 정보와 연결하고, 반복 캐시 조회와 큐 대기를 줄입니다.</li><li><b>후반의 지속 CPU 부담:</b> 약 19~21ms까지 올라간 분 단위 CPU 작업과 전사 동작 전환 할당을 줄입니다. 시야 품질·해상도·LOD를 추가 감량하는 것을 우선 답으로 삼지 않습니다.</li><li><b>미확정 렌더 정체:</b> 207.72초와 엘레나 사망 프레임은 호출 상세가 없으므로 다른 사건의 셰이더 원인을 그대로 복사하지 않습니다.</li></ol>
+<p>분석 중 게임 소스·배포본을 변경하지 않았으며 브라우저 자동조작도 사용하지 않았습니다. 추가 실기기 테스트를 요청하지 않고 현재 로그와 코드에서 확인한 범위로 구분했습니다.</p><details><summary>분석 근거 JSON · 원본 해시 포함</summary><pre>{
+  "source": {
+    "file": "moonforest-performance-2026-11-16T00-25-48-493Z.json",
+    "sha256": "71af9babf8312db728aaf772937be9f2b70a58a773fc76a97577eed0ad98e5e7"
+  },
+  "build": "./assets/moonforestV2-oVUhVnLh.js",
+  "conditions": {
+    "quality": "high",
+    "targetFps": 60,
+    "render": {
+      "selectedPercent": 85,
+      "basePixelRatio": 2,
+      "requestedPixelRatio": 1.7,
+      "cssSize": [
+        832,
+        384
+      ],
+      "renderSize": [
+        1414,
+        652
+      ],
+      "effectivePixelRatio": [
+        1.6995192307692308,
+        1.6979166666666667
+      ],
+      "pixels": 921928
+    },
+    "mobile": true,
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Mobile Safari/537.36",
+    "maps": [
+      "warrior-plains"
+    ]
+  },
+  "recording": {
+    "wallSeconds": 369.8,
+    "activeIntervalSeconds": 346.73,
+    "frames": 15214,
+    "meanFps": 43.88,
+    "meanIntervalMs": 22.79,
+    "meanWorkMs": 15.67,
+    "maxIntervalMs": 185.1,
+    "maxWorkMs": 173.6,
+    "intervalOver50": 629,
+    "criticalFrames": 0,
+    "dropped": {
+      "events": 0,
+      "critical": 0,
+      "detailFrames": 0,
+      "ktxUploads": 0
+    }
+  },
+  "minutes": [
+    {
+      "minute": 1,
+      "frames": 3070,
+      "fps": 58.82,
+      "meanIntervalMs": 17,
+      "meanWorkMs": 12.02
+    },
+    {
+      "minute": 2,
+      "frames": 3547,
+      "fps": 59.86,
+      "meanIntervalMs": 16.7,
+      "meanWorkMs": 12.19
+    },
+    {
+      "minute": 3,
+      "frames": 3030,
+      "fps": 50.5,
+      "meanIntervalMs": 19.8,
+      "meanWorkMs": 15.24
+    },
+    {
+      "minute": 4,
+      "frames": 1920,
+      "fps": 36.84,
+      "meanIntervalMs": 27.15,
+      "meanWorkMs": 18.7
+    },
+    {
+      "minute": 5,
+      "frames": 1780,
+      "fps": 29.66,
+      "meanIntervalMs": 33.72,
+      "meanWorkMs": 21.23
+    },
+    {
+      "minute": 6,
+      "frames": 1760,
+      "fps": 29.33,
+      "meanIntervalMs": 34.09,
+      "meanWorkMs": 20.57
+    }
+  ],
+  "cases": [
+    {
+      "atSeconds": 125.68,
+      "context": "늑대 1마리 사망 후 소멸 · 다른 늑대 공격 중",
+      "workMs": 137.3,
+      "drawSubmissionMs": 127.5,
+      "confirmed": "ALPHABLEND=true, INSTANCES=true의 PBR createEffect 85ms + 별도 변형 33ms. 내부 createShaderProgram은 각각 69.7/17.8ms로 중첩됨.",
+      "certainty": "같은 프레임의 상세 호출로 확인"
+    },
+    {
+      "atSeconds": 200.79,
+      "context": "곰 등장 전후 · 불투명 변형",
+      "workMs": null,
+      "drawSubmissionMs": null,
+      "confirmed": "INSTANCES=true, bone influencers=5, ALPHABLEND=false의 createEffect 51.4ms, 내부 createShaderProgram 31ms. 기록된 해당 렌더 소요 87.7ms.",
+      "certainty": "상세 샘플은 보존됨. 가장 가까운 이벤트는 95.7ms 뒤이므로 그 이벤트와 동일 프레임으로 간주하지 않음"
+    },
+    {
+      "atSeconds": 207.72,
+      "context": "곰 + 비탄의 마녀 · 참나무 텍스처 준비 표시",
+      "workMs": 173.6,
+      "drawSubmissionMs": 133.9,
+      "confirmed": "가장 큰 현재 프레임 CPU 작업. 해당 프레임 상세 호출 없음. 다음 프레임 간격 185.1ms.",
+      "certainty": "지연 위치는 확인. 셰이더/업로드/드라이버 원인은 미확정"
+    },
+    {
+      "atSeconds": 275.46,
+      "context": "곰 HP=0, 사망 모션 · 엘레나 생존",
+      "workMs": 123.1,
+      "drawSubmissionMs": 98.5,
+      "confirmed": "ALPHABLEND=true, INSTANCES=true, bone influencers=5의 createEffect 89.7ms, 내부 createShaderProgram 69.4ms.",
+      "certainty": "같은 프레임 상세 호출로 확인"
+    },
+    {
+      "atSeconds": 306.07,
+      "context": "엘레나 전투 · 여러 CPU 구간 동반 상승",
+      "workMs": 136.7,
+      "drawSubmissionMs": 14.2,
+      "confirmed": "playerAnimation 62.4ms, activeMeshes 26.9ms. 인접 프레임 activeMeshes 최대 30.2ms, sceneryDemand 14.8ms.",
+      "certainty": "발생 구간은 확인. 바인딩 생성/GC/스케줄링/기기 상태의 구분은 불가"
+    },
+    {
+      "atSeconds": 359.75,
+      "context": "엘레나 사망",
+      "workMs": 101.3,
+      "drawSubmissionMs": 86.5,
+      "confirmed": "지오메트리 대기 0, 텍스처 idle. 해당 프레임 상세 호출 없음.",
+      "certainty": "렌더링 정체는 확인. 정확한 엔진 호출 원인은 미확정"
+    }
+  ],
+  "playerTextures": {
+    "status": "selected",
+    "manifest": "warrior-v3-mobile4k",
+    "mobile": true,
+    "maxSize": 4096,
+    "encoding": "ktx2-uastc",
+    "gpuCompressed": true,
+    "estimatedGpuBytes": 83886240,
+    "maxImageRgbaBytes": 67108864,
+    "maxImageUploadBytes": 22369648,
+    "estimateScope": "Unique images with full mip chains; compressed uses ASTC/BC7/ETC2 alpha worst case. Excludes driver/decoder workspace and other scene resources.",
+    "capabilities": {
+      "maxTextureSize": 8192,
+      "formats": {
+        "astc": true,
+        "bptc": true,
+        "s3tc": true,
+        "etc2": true
+      }
+    }
+  },
+  "preparationBudget": {
+    "active": true,
+    "budgetMs": 2,
+    "usedMs": 0,
+    "generation": 2,
+    "frameId": 15531,
+    "totalPreparationMs": 1369.8000000715256,
+    "sharedYields": 154,
+    "atomicOverruns": 44,
+    "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+  },
+  "reviewEffects": null,
+  "loadHistory": [
+    {
+      "label": "대평원",
+      "phase": "error",
+      "setupMs": 227.20000004768372,
+      "downloadMs": 2686.5,
+      "modelMs": 46283.69999998808,
+      "screenMs": 0,
+      "bytes": 0,
+      "cachedBytes": 45738781,
+      "totalMs": 49197.40000003576,
+      "failedPhase": "model",
+      "error": "리소스 준비 시간이 초과되었습니다 (45초). 다시 시도해 주세요."
+    },
+    {
+      "label": "대평원",
+      "phase": "complete",
+      "setupMs": 15,
+      "downloadMs": 1927.1000000238419,
+      "modelMs": 5105.300000011921,
+      "screenMs": 1121,
+      "bytes": 0,
+      "cachedBytes": 58357469,
+      "totalMs": 8168.400000035763,
+      "error": null
+    }
+  ],
+  "memory": {
+    "jsUsedBytes": 139000000,
+    "jsAllocatedBytes": 139000000,
+    "jsLimitBytes": 1940000000,
+    "backgroundHighTextureEstimateBytes": 11184864,
+    "backgroundHighTextureBudgetBytes": 100663296,
+    "textures": 41,
+    "meshes": 3090,
+    "geometries": 116,
+    "sampleAtMs": 539717.8999999762
+  },
+  "sceneResources": {
+    "start": {
+      "meshes": 3029,
+      "skeletons": 2,
+      "animationGroups": 9,
+      "sdkActiveAnimatablesIncludingPaused": 408,
+      "sceneObservers": {
+        "beforeRender": 6,
+        "afterRender": 8,
+        "dispose": 78
+      }
+    },
+    "end": {
+      "meshes": 3090,
+      "skeletons": 7,
+      "animationGroups": 83,
+      "sdkActiveAnimatablesIncludingPaused": 1224,
+      "sceneObservers": {
+        "beforeRender": 7,
+        "afterRender": 8,
+        "dispose": 93
+      }
+    }
+  },
+  "animationBindings": {
+    "start": {
+      "player": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 0,
+        "created": 408,
+        "reused": 0,
+        "evicted": 0,
+        "currentBindings": 408
+      },
+      "enemies": []
+    },
+    "end": {
+      "player": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 2,
+        "cached": 2,
+        "created": 75888,
+        "reused": 49368,
+        "evicted": 183,
+        "currentBindings": 1224
+      },
+      "enemies": [
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Wolf_Staggered_Collapse_V02",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 9938,
+            "currentBindings": 0,
+            "channels": 1860,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Wolf_Staggered_Collapse_V02",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 4212,
+            "currentBindings": 0,
+            "channels": 1860,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "bear",
+          "active": true,
+          "state": "Knock_Down_1",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "limit": 2,
+            "cached": 0,
+            "created": 6786,
+            "reused": 3480,
+            "evicted": 36,
+            "currentBindings": 0
+          }
+        },
+        {
+          "kind": "elena",
+          "active": true,
+          "state": "dead",
+          "bindings": null
+        }
+      ]
+    }
+  },
+  "uploads": {
+    "count": 16,
+    "maxSynchronousCpuMs": 1
+  },
+  "workers": {
+    "ktx": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "idleReleaseMs": 8000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 9,
+        "terminated": 9,
+        "completed": 46,
+        "failed": 0,
+        "cancelled": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 46,
+        "stage": "decode",
+        "bytes": 213403,
+        "queuedMs": 0,
+        "initMs": 65.69999998807907,
+        "activeDecodeMs": 182.39999997615814,
+        "totalMs": 248.0999999642372
+      }
+    },
+    "meshopt": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "queueTimeoutMs": 45000,
+      "initTimeoutMs": 45000,
+      "decodeTimeoutMs": 45000,
+      "idleReleaseMs": 1000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 7,
+        "terminated": 7,
+        "completed": 4689,
+        "failed": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 4689,
+        "stage": "decode",
+        "bytes": 2687,
+        "queueMs": 966.1999999880791,
+        "initMs": 0,
+        "decodeMs": 20.30000001192093,
+        "totalMs": 986.5
+      }
+    }
+  },
+  "diagnosticCpu": {
+    "scope": "synchronous-endFrame-collection-only",
+    "window": "since-diagnostic-reset",
+    "samples": 15509,
+    "meanMs": 0.07653620475741618,
+    "maxMs": 6.899999976158142,
+    "latestMs": 0,
+    "latestCompletedAtMs": 523443.6999999881
+  },
+  "gpuStatus": "unsupported",
+  "codeFinding": {
+    "file": "ArcherPreview/src/boss-shader-warmup.js",
+    "line": 30,
+    "actual": "material.isReadyForSubMesh(mesh,subMesh,false) / material.isReady(mesh,false)",
+    "observed": "INSTANCES=true in captured slow shader variants",
+    "conclusion": "Prewarming and actual rendering do not cover the same instancing mode. A confirmed coverage gap; not proof that every stall has this cause."
+  },
+  "limitations": [
+    "One Android log; hardware model, temperature and GPU time unavailable",
+    "Events retain slow frames, not a representative distribution of all render subcounters",
+    "End summary is a shorter sliding window; its fps and meanFrameMs use different windows",
+    "Nested CPU shader timings overlap and must not be added",
+    "No game source changes or deployment performed in this analysis"
+  ]
+}</pre></details><p class="note">단일 HTML · 외부 이미지·스크립트·폰트 없이 공유 가능합니다.</p></main></html>
