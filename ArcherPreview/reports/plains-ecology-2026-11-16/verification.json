@@ -1,0 +1,158 @@
+{
+  "task": "대평원 휴식·배회·주시·전투, 멧돼지 예고, HP 표시와 절벽 통행",
+  "release": "moonforest-0.2",
+  "seedRevision": "great-plains-monsters-2026-11-16-r2",
+  "groups": [
+    {
+      "id": "plains-fox-west",
+      "label": "서쪽 숲 아래 여우",
+      "count": 2,
+      "territory": {
+        "x": 8,
+        "z": -69,
+        "radius": 12,
+        "combatRadius": 6.8,
+        "wanderRadius": 2.4,
+        "returnRadius": 0.8,
+        "reengageRadius": 10.5
+      }
+    },
+    {
+      "id": "plains-fox-east",
+      "label": "동쪽 숲 아래 여우",
+      "count": 2,
+      "territory": {
+        "x": 37,
+        "z": -74,
+        "radius": 11,
+        "combatRadius": 6.2,
+        "wanderRadius": 2.2,
+        "returnRadius": 0.8,
+        "reengageRadius": 9.5
+      }
+    },
+    {
+      "id": "plains-boar-north-bank",
+      "label": "강 북쪽 둔치 멧돼지",
+      "count": 1,
+      "territory": {
+        "x": 66,
+        "z": 32,
+        "radius": 10,
+        "combatRadius": 5.8,
+        "wanderRadius": 2.4,
+        "returnRadius": 0.8,
+        "reengageRadius": 8.5
+      }
+    },
+    {
+      "id": "plains-boar-south-bank",
+      "label": "강 남쪽 둔치 멧돼지",
+      "count": 1,
+      "territory": {
+        "x": 66,
+        "z": -13,
+        "radius": 10,
+        "combatRadius": 5.8,
+        "wanderRadius": 2.4,
+        "returnRadius": 0.8,
+        "reengageRadius": 8.5
+      }
+    },
+    {
+      "id": "plains-wolf-meadow",
+      "label": "초원 일반 늑대 무리",
+      "count": 3,
+      "territory": {
+        "x": 29,
+        "z": 37,
+        "radius": 18,
+        "combatRadius": 10.8,
+        "wanderRadius": 3,
+        "returnRadius": 1,
+        "reengageRadius": 16.5
+      }
+    },
+    {
+      "id": "plains-alpha-pack",
+      "label": "우두머리와 일반 늑대 무리",
+      "count": 4,
+      "territory": {
+        "x": -25,
+        "z": 60,
+        "radius": 26,
+        "combatRadius": 15.6,
+        "wanderRadius": 4,
+        "returnRadius": 1.5,
+        "reengageRadius": 24.5
+      }
+    },
+    {
+      "id": "plains-lookout-bear",
+      "label": "높은 언덕 정상 곰 보스",
+      "count": 1,
+      "territory": {
+        "x": -25,
+        "z": -16,
+        "radius": 17,
+        "combatRadius": 10.2,
+        "wanderRadius": 2.5,
+        "returnRadius": 1,
+        "reengageRadius": 15.5
+      }
+    }
+  ],
+  "states": [
+    "ambient",
+    "watch",
+    "combat",
+    "return"
+  ],
+  "combatConfirmationSeconds": 1,
+  "boar": {
+    "preparationSeconds": 0.9,
+    "counterSeconds": 2.5
+  },
+  "cliff": {
+    "staticSolids": 46,
+    "rampClearWidthMetres": 6,
+    "addedRenderedGeometry": 0,
+    "perFrameHeightSampling": false
+  },
+  "tests": {
+    "combatUiSpawning": {
+      "passed": 125,
+      "failed": 0
+    },
+    "navigationTerritoryFourMapVegetation": {
+      "passed": 57,
+      "failed": 0
+    },
+    "note": "Two focused suites overlap; counts must not be added as unique tests.",
+    "finalAffected": {
+      "passed": 28,
+      "failed": 0
+    }
+  },
+  "preserved": {
+    "modelRigTexturesLodAndAttackContactWindows": true,
+    "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
+    "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1"
+  },
+  "browserAutomation": false,
+  "realDeviceVerified": false,
+  "restCycle": {
+    "canines": "existing Rise_From_Lie_R5 sampled backward to rest, forward to rise; actor-owned phase, unchanged keys/rig",
+    "boarBear": "standing rest; excluded from lying cycle",
+    "evidence": "actual fitted gray-wolf GLB in NullEngine, reverse clock and recurring rest, rig scale unchanged; not a device visual approval"
+  },
+  "hud": {
+    "show": "combat phase only for territorial bosses and normal monsters",
+    "hide": [
+      "ambient",
+      "watch",
+      "return"
+    ],
+    "internalActorIdHidden": true
+  }
+}

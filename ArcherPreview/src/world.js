@@ -17,6 +17,7 @@ import { villageRenderRange } from './village-policy.js';
 import {FOREST_PLACEMENTS,forestObstacles} from './monster-forest-layout.js';
 import {createMonsterForestTerrain} from './monster-forest-terrain.js';
 import {PLAINS_PLACEMENTS,plainsObstacles} from './great-plains-layout.js';
+import {plainsCliffObstacles} from './plains-cliff-collision.js';
 import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js';
 import {villageOutskirtsSkirtHeight} from './village-outskirts-skirt.js';
 import {createGreatPlainsTerrain} from './great-plains-terrain.js';
@@ -43,9 +44,9 @@ function outdoorFogColor({village,forest,plains,cave}){
   // without replacing the sky's independently bound horizon colour.
   return village&&!plains&&!cave?VILLAGE_FOG_COLOR.clone():SKY_HORIZON.clone();
 }
-function mapNavigation({cave,forest,plains,village}){
+export function mapNavigation({cave,forest,plains,village}){
   const boundaryTrees=village&&!plains&&!forest&&!cave?VILLAGE_PLACEMENTS.filter(p=>isVillageBoundaryTree(p)&&Math.hypot(p.x,p.z)>=50&&p.z>=43&&Math.abs(p.x)<26).flatMap(p=>villageObstacles([{...p,x:0,z:0}]).map(o=>({...o,x:o.x+p.x,z:o.z+p.z}))):[];
-  const obstacles=plains?plainsObstacles():cave?caveObstacles():forest?forestObstacles():village?[...villageObstacles(),...boundaryTrees]:FOREST_OBSTACLES;
+  const obstacles=plains?[...plainsObstacles(),...plainsCliffObstacles()]:cave?caveObstacles():forest?forestObstacles():village?[...villageObstacles(),...boundaryTrees]:FOREST_OBSTACLES;
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
   const Navigation=cave?CaveNavigation:village?VillageNavigation:ArenaNavigation;
   return new Navigation([...obstacles,...training]);

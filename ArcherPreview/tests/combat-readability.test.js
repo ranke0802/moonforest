@@ -8,6 +8,7 @@ import {PlayerHealthBar} from '../src/player-health-bar.js';
 import {primaryHealthBoss} from '../src/combat-readability.js';
 import {ScreenProjection} from '../src/screen-projection.js';
 import {createDamageNumbers} from '../src/damage-numbers.js';
+import {BossBattle} from '../src/boss-battle.js';
 
 function fixture(t){
  const {document:doc}=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),old=globalThis.document;globalThis.document=doc;
@@ -25,6 +26,29 @@ test('primary boss stays stable, ignores hidden/goblins, and all health data rem
  assert.equal(primaryHealthBoss([boss(3,0,{kind:'goblin'}),boss(4,0,{renderVisible:false}),boss(5,0,{corpseGone:true})],{x:0,z:0}),null);
  const regular=boss('boar-1',0,{kind:'wolf',regularWolfId:'boar'}),alpha=boss('wolf-1',5,{kind:'wolf'});
  assert.equal(primaryHealthBoss([regular,alpha],{x:0,z:0}),alpha,'regular quadrupeds use ordinary world health bars');
+});
+
+test('territorial bosses and ordinary monsters reveal HP only during combat, retiring it on return',t=>{
+ const f=fixture(t),bars=new BossHealthBars(f.doc.getElementById('boss-hud'));
+ const alpha=f.enemy('alpha',0,0,'wolf'),fox=f.enemy('fox',1,0,'wolf');fox.regularWolfId='fox';
+ for(const enemy of [alpha,fox]){enemy.territoryState={enabled:true,phase:'ambient',engaged:false};enemy.healthBarPosition=()=>enemy.actor.position.add(new Vector3(0,1,0));}
+ const enemies=[alpha,fox];
+ for(const phase of ['ambient','watch']){for(const enemy of enemies)enemy.territoryState.phase=phase;bars.update(f.scene,enemies,f.projection);assert.equal(bars.items.size,0);assert.equal(bars.template.hidden,true);assert.equal(primaryHealthBoss(enemies,f.actor.position),null);}
+ for(let i=0;i<8;i++){
+  for(const enemy of enemies)Object.assign(enemy.territoryState,{phase:'combat',engaged:true});
+  bars.update(f.scene,enemies,f.projection,{playerPosition:f.actor.position});assert.equal(bars.items.size,2);assert.equal(bars.items.get('alpha').element.hidden,false);assert.equal(bars.items.get('alpha').element.dataset.hud,'fixed');assert.equal(bars.items.get('fox').element.hidden,false);assert.equal(bars.items.get('fox').element.dataset.hud,'world');
+  for(const enemy of enemies)Object.assign(enemy.territoryState,{phase:'return',engaged:false});bars.update(f.scene,enemies,f.projection);assert.ok([...bars.items.values()].every(item=>item.element.hidden));assert.equal(primaryHealthBoss(enemies,f.actor.position,'alpha'),null);
+ }
+ assert.ok(f.doc.querySelectorAll('.boss-hud').length<=3);
+ fox.territoryState.enabled=false;bars.update(f.scene,enemies,f.projection);assert.equal(bars.items.get('fox').element.hidden,false,'unrestricted manual encounters retain their existing HP behavior');
+});
+
+test('watching monsters do not mark the whole map in combat, but remain valid targets for a player first strike',()=>{
+ const battle=Object.create(BossBattle.prototype),enemy={id:'fox',active:true,kind:'wolf',regularWolfId:'fox',actor:{position:new Vector3(2,0,0)},brain:{hp:300},territoryState:{enabled:true,phase:'watch',engaged:false}};
+ battle.encounters=[enemy];assert.equal(battle.combatCount,0);assert.equal(battle.nearestTarget(Vector3.Zero()),enemy);
+ Object.assign(enemy.territoryState,{phase:'combat',engaged:true});assert.equal(battle.combatCount,1);
+ Object.assign(enemy.territoryState,{phase:'return',engaged:false});assert.equal(battle.combatCount,0);
+ enemy.territoryState.enabled=false;assert.equal(battle.combatCount,1);
 });
 
 test('real camera changes cannot move fixed battle/player HP into head anchors; hidden enemies remain hidden',t=>{

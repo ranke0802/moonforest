@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
-import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_GROUPS,createPlainsMonsterSpawns} from '../src/plains-monster-spawns.js';
+import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_GROUPS,PLAINS_MONSTER_SPAWNS_R1,createPlainsMonsterSpawns} from '../src/plains-monster-spawns.js';
 import {validateMonsterSpawns} from '../src/monster-spawn-document.js';
 import {ACTOR_DEFINITIONS,validateActorSpawn} from '../src/actor-definitions.js';
 import {VillageNavigation} from '../src/village-navigation.js';
@@ -24,7 +24,7 @@ test('default plains document has exactly fourteen actors in seven independently
  const checked=validateMonsterSpawns(PLAINS_MONSTER_SPAWNS);assert.equal(checked.valid,true,checked.errors.join('\n'));assert.equal(rows.length,14);assert.equal(PLAINS_MONSTER_GROUPS.length,7);
  assert.deepEqual(Object.fromEntries([...new Set(rows.map(row=>row.definitionId))].map(id=>[id,rows.filter(row=>row.definitionId===id).length])),{'fox.r1':4,'boar.r1':2,'gray-wolf.r1':2,'stylized-wolf.r1':2,'wolf-3.r1':2,'alpha-wolf.r8':1,'guardian-bear.standard':1});
  assert.deepEqual(PLAINS_MONSTER_GROUPS.map(group=>group.members.length),[2,2,1,1,3,4,1]);assert.equal(new Set(rows.map(row=>row.id)).size,14);
- const copy=createPlainsMonsterSpawns();copy.maps['great-plains'][0].x=999;copy.maps['great-plains'][0].territory.radius=1;assert.equal(rows[0].x,6.6);assert.equal(rows[0].territory.radius,8);
+ const copy=createPlainsMonsterSpawns();copy.maps['great-plains'][0].x=999;copy.maps['great-plains'][0].territory.radius=1;assert.equal(rows[0].x,6.6);assert.equal(rows[0].territory.radius,12);
  for(const row of rows){assert.equal(row.spawnMode,'start');assert.equal(row.randomRadius,0);assert.equal(row.respawn,true);assert.equal(row.delaySeconds,45);assert.deepEqual(row.territory,PLAINS_MONSTER_GROUPS.find(group=>group.id===row.groupId).territory);}
 });
 
@@ -40,16 +40,28 @@ test('all fixed homes use actual terrain and clear physical navigation, water, r
  }
 });
 
-test('territories remain distinct and contain group homes with current body and attack reach allowances',()=>{
+test('R2 outer watch and inner combat ranges expand around the same homes with bounded home wandering',()=>{
  const alphaReach=Math.max(...WOLF_V02_ACTIONS.map(action=>action.maxDistance)),bearReach=Math.max(...BOSS_MOTIONS.filter(motion=>motion.role==='attack'&&!motion.disabled).map(motion=>bossAttackRange(motion)*BEAR_V02_SIZE.attackRangeScale));
+ assert.deepEqual(rows.map(({territory,...row})=>row),PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].map(({territory,...row})=>row));
  for(let i=0;i<PLAINS_MONSTER_GROUPS.length;i++){
   const group=PLAINS_MONSTER_GROUPS[i],circle=group.territory;assert.ok(Math.hypot(circle.x,circle.z)+circle.radius<PLAINS_RADIUS);
+  const old=PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].find(row=>row.groupId===group.id).territory;assert.ok(circle.radius>=old.radius*1.4);assert.ok(circle.radius<=old.radius*1.8);
+  assert.ok(circle.combatRadius>=circle.radius*.55&&circle.combatRadius<=circle.radius*.65);assert.ok(circle.wanderRadius>=2&&circle.wanderRadius<=5);
   assert.ok(circle.returnRadius>0&&circle.returnRadius<circle.radius);assert.ok(circle.reengageRadius<circle.radius);
-  for(let j=i+1;j<PLAINS_MONSTER_GROUPS.length;j++){const other=PLAINS_MONSTER_GROUPS[j].territory;assert.ok(distance(circle,other)>circle.radius+other.radius+1,group.id+' separate territory');}
   for(const row of rows.filter(row=>row.groupId===group.id)){
    const radius=radiusFor(row),reach=row.definitionId==='guardian-bear.standard'?bearReach:row.definitionId==='alpha-wolf.r8'?alphaReach:alphaReach*regularWolfSize(row.definitionId.replace(/\.r1$/,'')).spatialScale;
    assert.ok(distance(row,circle)+radius+reach<circle.radius,row.id+' home/body/attack allowance');
+   assert.ok(distance(row,circle)+radius+circle.wanderRadius<circle.radius,row.id+' bounded home wandering');
   }
+ }
+});
+
+test('every home has reachable ambient wander choices away from roads, water and village arrival',()=>{
+ for(const row of rows){const radius=radiusFor(row),home={x:row.x,z:row.z};let usable=0;
+  for(let i=0;i<24;i++){const angle=i*Math.PI/12,r=row.territory.wanderRadius,point={x:row.x+Math.cos(angle)*r,z:row.z+Math.sin(angle)*r};
+   if(navigation.free(point,radius+.25,PLAINS_RADIUS-.5)&&navigation.segmentClear(home,point,radius)&&roadDistance(point)>radius+.25&&plainsStreamDistance(point.x,point.z)>radius+4.4&&distance(point,PLAINS_SPAWN)>45+radius)usable++;
+  }
+  assert.ok(usable>=3,row.id+' usable bounded wander choices: '+usable);
  }
 });
 

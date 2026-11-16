@@ -1,0 +1,194 @@
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+✔ definitions name only canonical versioned assets and preserve live encounter stats/animation mappings (29.2132ms)
+✔ spawn safety rejects map, navigation, actor overlap and player distance without relocation (14.0622ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ a registered variant consumes health, collider and actor-local clip mapping; unsupported movement/remaps reject explicitly (190.6102ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ independent pooled encounters reuse shared geometry/materials and retain animator/native clip bindings over warm lives (78.126ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ ten goblin actors repeatedly created, killed and removed release owned scene resources (273.1293ms)
+✔ retained crossfade sets old native weights to zero; defaults stop/delete and both produce the same sampled pose (3.2639ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ death callback is once per life and opt-in corpse completion retains the same animator through respawn (53.338ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ NPC stays outside battle, keeps its interaction under decision tiering and follows live quest relevance (47.2855ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ last-actor eviction releases only its owned library; borrowed libraries and another live clone survive (104.9965ms)
+✔ map generation cancellation before a late library load prevents independent actor creation or publication (3.1896ms)
+✔ ordinary summon/hide retains its existing recreate/dispose behavior unless explicit actor pooling opts in (0.42ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ staged group actors stay hidden and outside battle until committed (43.9928ms)
+✔ actual pooled encounters enter together, wait for all corpses, and respawn as a group (61.3872ms)
+✔ warm reuse keeps one prepared resource set and resets independent per-life state (8.344ms)
+✔ caps account for overlapping requests, categories, exact memory and hard maximum twenty (3.054ms)
+✔ prewarm rejects oversized reservations atomically and actual estimates cannot overrun memory cap (2.5548ms)
+✔ death reward acknowledgment and respawn occur once per life; pause freezes countdown (4.0044ms)
+✔ map generation cancellation rejects promptly, retains bounded reservation and disposes late creation (0.7936ms)
+✔ late activation cancellation hides again and queued jobs never create after disposal (0.6515ms)
+✔ only far peaceful NPC decisions are staggered; update and meaningful threats stay full frequency (0.476ms)
+✔ clear and external hide do not emit rewards or respawn; idle eviction releases only unleased resources (0.7492ms)
+✔ actual definition validator injection rejects safety, map, navigation and occupancy before resource creation (0.6802ms)
+✔ a temporarily blocked respawn retries the same ticket without duplicating death or reward (1.3627ms)
+✔ a preparation timeout frees the scheduling slot but charges and eventually reclaims its late work (25.0531ms)
+✔ asynchronous disposal retains its memory reservation until the owned resource actually releases (1.1712ms)
+✔ clear at the respawn completion boundary reclaims the cancelled life exactly once (0.6479ms)
+✔ fresh0.2 plains defaults seed14 approved actors in7 complete groups, with bounded preparation and terrain height (15.786ms)
+✔ legacy custom20 are preserved; requested defaults reserve whole groups first while excess customs wait visibly (5.0756ms)
+✔ editing or deleting defaults persists across runtime recreation, including a replacement imported without migration metadata (2.0243ms)
+✔ a saved R1 runtime applies and persists R2 only to untouched territories without restoring deleted actors (2.6598ms)
+✔ storage errors keep defaults active in memory without overwriting unreadable custom data (11.9659ms)
+✔ prepared groups wait through pause and a map departure cannot attach a late acquisition (3.3247ms)
+✔ game runtime stages a group, honors rewards, persists permanent kills, and releases old maps (6.246ms)
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ monsters summon near an outer-arena player and continue past the former wall (168.4741ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ group preparation keeps all requested actors hidden while the other kind continues (78.9954ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ model CPU timings are copied into the owning hidden job without retaining library records (42.4157ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ far enemy draw suppression is reversible and leaves combat/model state intact (28.873ms)
+✔ spawn count is bounded and five bosses have separate positions inside the arena (0.3836ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ bear and goblin ground anchors follow terrain on spawn, movement, separation and contact correction (41.5603ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ dead bear and goblin fade independently, award once, stop rendering and reset on resummon (47.657ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ equipped armor reduces incoming normal, critical and throw damage once and persists across resets (32.0405ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ summon 3/1/5/2 reuses one model template, shares geometry, clones skeletons and animations, hides unused actors (40.384ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ five bosses share player health, immunity and a single potion clock (49.0054ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ one swing hits each grounded boss once; recovery stays damageable independently (36.3181ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ a single boss owns the grab; another boss cannot capture or damage that held player (42.954ms)
+✔ separation moves overlapping living bosses without dragging a captured player owner (0.3277ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ roll contact never displaces an overlapping bear or goblin (42.7575ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ ending a roll beside an enemy does not push it out of the newly usable gap (30.4351ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ walking through prone, getting-up or dead enemies does not separate their bodies (29.258ms)
+✔ hiding during a pending load cannot reactivate an old summon (0.5845ms)
+✔ multi-boss audio tracks separate attack clocks and plays victory only after the last death (0.6287ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ five goblins coexist with bears, share player health and reuse one goblin asset (45.8703ms)
+✔ a shared sword swing damages both bear and goblin, with independent hit deduplication (30.2239ms)
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:07]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:07]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:07]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:07]: Babylon.js v9.31.0 - Null engine
+✔ boss: 20 original clips are retained; 18 active motions exclude both ball projectiles (10.4626ms)
+✔ boss: normal hits flash white without stopping or cancelling an attack (0.4837ms)
+✔ boss: heavy hit cancels attack, plays down then stand-up before resuming (0.4474ms)
+✔ boss: defeat stays down and attacks do not fire during knockdown or stagger (0.4119ms)
+✔ boss: contact damages stand-up once without pausing recovery (17.4582ms)
+✔ boss: melee/projectile contact damages warrior, with a short repeat-hit cooldown (0.7206ms)
+✔ boss: shield push blocks throughout wind-up, impact and recovery, but never at a distance (0.4641ms)
+✔ melee: actual blade contact required, miss at distance and sweep catches fast crossing (0.5097ms)
+✔ melee: fast sweep cannot skip a narrow limb between the old eight samples (0.3748ms)
+✔ actual GLB: visible cutting passes register once; idle cannot deal damage (861.814ms)
+✔ boss HP bar: projects to feet, follows camera orbit, hides behind camera, respects render scale (8.3396ms)
+✔ melee: no idle hits or repeated per-frame damage; a new attack can hit again (0.2179ms)
+✔ shield: push cancels after 1.5 seconds; block cancels after one second without HP loss (0.1288ms)
+✔ shield: real transformed front face blocks, a rear contact and nearby miss do not (0.9331ms)
+✔ strike sampling: 2x low-FPS shield contact is retained only inside its authored window (0.5388ms)
+✔ downed boss: real low blade contact deals normal and three heavy hits without restarting fall (2.9722ms)
+✔ boss defense: roll says 회피, guard says BLOCK; prevented bursts cannot damage later (2.3853ms)
+✔ boss aggression: expanded range, quicker pursuit and shorter gaps retain an impact windup (0.3064ms)
+✔ source GLBs: normal sword passes damage the actual lying boss skeleton (1045.9773ms)
+BJS - [14:26:04]: Babylon.js v9.31.0 - Null engine
+✔ unseen damage text is not created; existing text and boss HP disappear with line of sight (9.1198ms)
+✔ unseen loot hides both geometry and label and reappears without allocating replacement meshes (24.6091ms)
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:05]: Babylon.js v9.31.0 - Null engine
+✔ actual render excludes hidden base, LOD, ink and shadow candidates; late arrivals cannot reveal roots (146.94ms)
+✔ unseen enemy body, contact, spells, ink and UI point gate agree while gameplay visibility is restored (24.9347ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:08]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:08]: Babylon.js v9.31.0 - Null engine
+✔ hidden terrain uses a sparse rock shell and never submits both ground versions (489.8249ms)
+ℹ {"updates":1,"raySteps":18675,"visibleCells":448,"exploredCells":448,"opaqueSamples":25600,"arrayBytes":282884,"uploads":1,"hiddenRecords":186,"hiddenMeshes":0,"hiddenShadowCasters":0,"detailPatches":2,"coverPatches":34,"coverDraws":12,"coverTriangles":3360,"distanceHiddenCoverPatches":0,"revision":1,"maskBytes":102400,"sharedTerrainGeometry":false,"originalGroundTriangles":73728,"shellTriangles":10080,"coverPatchLimit":36,"overlappingGroundPatches":0,"coverDistanceCulling":true,"coverDistanceEligible":false,"coverHideDistance":54,"coverShowDistance":50,"reusedRockTexture":"cave-fog-inactive-sampler","actualPlacementCount":212}
+✔ material fog runs after Elena hit flash and village tint; partial legacy overlays cannot leak (26.1615ms)
+✔ cave memory survives map roundtrips, material plugins rebind without observer or geometry leaks (2061.5467ms)
+✔ steady frames reuse inventory and only recheck dynamic objects; new material is attached on first frame (72.0333ms)
+ℹ {"scope":"NullEngine CPU gate only; no device FPS claim","records":212,"frames":1000,"meanMs":0.001562500000012733,"p95Ms":0.001900000000205182}
+ℹ {"scope":"CPU gate only: 300 static records, 32 dynamic meshes; forced mask refresh includes record/patch upload work","steady":{"meanMs":0.007631099999978687,"p95Ms":0.011499999999614374},"refresh":{"meanMs":0.38178833333332324,"p95Ms":0.47890000000006694}}
+✔ pooled frozen material and outline bind a complete shared fallback after fog disposal (3.7626ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+✔ primary boss stays stable, ignores hidden/goblins, and all health data remains owned by encounter (2.7618ms)
+✔ territorial bosses and ordinary monsters reveal HP only during combat, retiring it on return (51.6666ms)
+✔ watching monsters do not mark the whole map in combat, but remain valid targets for a player first strike (0.4823ms)
+✔ real camera changes cannot move fixed battle/player HP into head anchors; hidden enemies remain hidden (15.2687ms)
+✔ repeated pooled summon/replacement has one fixed primary and does not accumulate cloned HP DOM (52.7242ms)
+✔ foot/direction marker is fail-closed without structure clearance, follows actual root yaw, and allocates no scene resources (11.8574ms)
+✔ damage retains its original hit anchor, Critical wording and sequential rise with a bounded reusable pool (11.2528ms)
+✔ original burst offsets remain local to the hit instead of reserving HUD columns or reading DOM layout (7.2918ms)
+✔ downed moving enemy labels follow its torso and retire on reuse or map removal (20.0358ms)
+✔ actual camera projection preserves overlapping hit anchors without an automatic screen grid (7.8806ms)
+✔ group respawns together after all members die and game-time delay expires (3.4253ms)
+✔ permanent death persists and map cancellation removes late actors (0.7992ms)
+✔ whole-group admission reserves before asynchronous preparation and exposes capacity wait without partial spawns (0.6373ms)
+✔ monster placement records round trip and grouped lifetime configuration stays consistent (1.2387ms)
+✔ invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected (0.2217ms)
+✔ all approved plains quadruped definitions and finite contained territories round trip (1.8586ms)
+✔ default migration preserves custom values and aliases conflicting IDs/groups without mutating its input (1.566ms)
+✔ only the exact plains default revision and known14 ID history permit migration storage capacity up to34 (1.4393ms)
+✔ future default revisions add new IDs but do not restore deleted or overwrite edited previously installed defaults (0.2449ms)
+✔ R1 to R2 upgrades only unchanged default territories/homes and preserves edits, deletions and custom rows (1.302ms)
+✔ R1 custom20 migration documents remain valid at34 and collision aliases upgrade without changing custom originals (2.2357ms)
+✔ authored plains animal types remain selected and keep their territory when saved (46.8491ms)
+✔ authoring can add, group, save and retain an independent data-only placement (13.1451ms)
+✔ a map click selects a safe monster position without forwarding the click to the game (5.2328ms)
+BJS - [14:26:06]: Babylon.js v9.31.0 - Null engine
+BJS - [14:26:07]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (1295.5801ms)
+BJS - [14:26:07]: Babylon.js v9.31.0 - Null engine
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (543.1817ms)
+✔ ambient walking uses native rise; resting watch confirms inner presence with game dt and keeps outer combat hysteresis (149.3806ms)
+✔ default plains document has exactly fourteen actors in seven independently editable stable groups (2.7049ms)
+✔ all fixed homes use actual terrain and clear physical navigation, water, roads, arrival and each other (4.4588ms)
+✔ R2 outer watch and inner combat ranges expand around the same homes with bounded home wandering (1.167ms)
+✔ every home has reachable ambient wander choices away from roads, water and village arrival (35.7301ms)
+✔ fox homes use existing forest canopies, boars use dry river banks and the bear stands on the real high summit (1.8155ms)
+✔ boar preparation lasts .9 game seconds at 30Hz and 0.5x, with unchanged charge contact profile (2.8256ms)
+✔ boar preparation lasts .9 game seconds at 30Hz and 1x, with unchanged charge contact profile (0.3368ms)
+✔ boar preparation lasts .9 game seconds at 30Hz and 2x, with unchanged charge contact profile (0.2598ms)
+✔ boar preparation lasts .9 game seconds at 60Hz and 0.5x, with unchanged charge contact profile (0.2436ms)
+✔ boar preparation lasts .9 game seconds at 60Hz and 1x, with unchanged charge contact profile (0.3492ms)
+✔ boar preparation lasts .9 game seconds at 60Hz and 2x, with unchanged charge contact profile (0.3977ms)
+✔ normal autonomous and manually summoned boar brain path both show watch preparation after forward approach (0.75ms)
+✔ boar hit charge leaves at least 2.5 seconds of non-attacking counter time and no low-HP chain (0.6013ms)
+✔ boar blocked charge leaves at least 2.5 seconds of non-attacking counter time and no low-HP chain (0.392ms)
+✔ boar miss charge leaves at least 2.5 seconds of non-attacking counter time and no low-HP chain (0.9736ms)
+✔ autonomous repeated missed charges cannot bypass their counter window through player threats (1.7428ms)
+✔ hit, death, territory return/start and cancellation discard a pending charge; later combat needs a fresh preparation (1.0004ms)
+ℹ tests 125
+ℹ suites 0
+ℹ pass 125
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7050.8017

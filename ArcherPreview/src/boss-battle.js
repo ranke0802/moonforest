@@ -23,6 +23,7 @@ import { TerrainHeightField } from './terrain.js';
 import {MAX_SUMMON_PER_KIND,normalizeSummonCount} from './summon-limits.js';
 import {EnemySeparationWorkspace,separateEnemies} from './enemy-separation.js';
 import {trimDormantEncounterPools} from './dormant-encounter-pool.js';
+import {encounterInCombat} from './combat-readability.js';
 
 function stableMapCollision(navigation,terrain){
   const type=navigation?.constructor;
@@ -100,7 +101,7 @@ export class BossBattle {
   get playerNodes() { return this.combat.nodes; }
   set playerNodes(nodes) { this.combat.nodes = nodes; }
   get livingCount() { return this.encounters.filter(boss => boss.brain.hp > 0).length; }
-  get combatCount(){return this.encounters.filter(b=>b.brain.hp>0&&(b.kind!=='elena'||b.engaged)).length;}
+  get combatCount(){let count=0;for(const enemy of this.encounters)if(enemy.active&&enemy.brain.hp>0&&encounterInCombat(enemy))count++;return count;}
   get allPooled(){return [...this.pool,...this.wolfPool,...Object.values(this.regularWolves).flatMap(entry=>entry.pool),...this.goblinPool,...this.elenaPool,...this.mourningPool,...(this.developmentPool??[])];}
   setAttackSettings(value){this.attackSettings=value;for(const enemy of this.allPooled)this.applyAttackSettings(enemy);}
   applyAttackSettings(enemy){const kind=enemy.kind==='elena'?(enemy.phase===2?'mourning-elena':'elena'):enemy.kind;enemy.brain?.configureAttacks?.(this.attackSettings?.[kind]??{});}

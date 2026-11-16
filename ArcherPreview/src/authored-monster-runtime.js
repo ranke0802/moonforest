@@ -11,7 +11,7 @@ export function createAuthoredMonsterRuntime({world,battle,getPlayer,getState,st
  let disposed=false,mapId=null,document=emptyMonsterSpawns(),dead={},scheduler,savedUnreadable=false,defaultMigration=null;
  try{const raw=storage?.getItem(MONSTER_SPAWN_STORAGE);if(raw){const checked=validateMonsterSpawns(raw);if(checked.valid)document=checked.document;else{savedUnreadable=true;onError(Error('저장된 몬스터 배치를 읽지 못했습니다.'));}}}catch(error){savedUnreadable=true;onError(error);}
  if(defaultDocument){
-  try{const merged=mergeMonsterSpawnDefaults(document,defaultDocument,defaultRevision);document=merged.document;defaultMigration={revision:merged.revision,changed:merged.changed,addedRows:merged.addedRows,aliasedRows:merged.aliasedRows,persisted:!merged.changed,storageError:null};
+  try{const merged=mergeMonsterSpawnDefaults(document,defaultDocument,defaultRevision);document=merged.document;defaultMigration={revision:merged.revision,changed:merged.changed,addedRows:merged.addedRows,aliasedRows:merged.aliasedRows,upgradedRows:merged.upgradedRows,persisted:!merged.changed,storageError:null};
    if(merged.changed){if(savedUnreadable)defaultMigration.storageError='Existing unreadable placement data was preserved';else if(!storage?.setItem)defaultMigration.storageError='Storage unavailable; defaults active in memory';else try{storage.setItem(MONSTER_SPAWN_STORAGE,JSON.stringify(document));defaultMigration.persisted=true;}catch(error){defaultMigration.storageError=String(error?.message??error);onError(error);}}
   }catch(error){defaultMigration={revision:defaultRevision??null,changed:false,persisted:false,error:String(error?.message??error)};onError(error);}
  }

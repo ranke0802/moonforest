@@ -1,0 +1,22 @@
+{
+  "paths": [
+    "ArcherPreviewSite/assets/actor-editor-D3zsfftk.js",
+    "ArcherPreviewSite/assets/actor-encounter-adapter-Bc7BXjvm.js",
+    "ArcherPreviewSite/assets/actor-population-2M8yaa8R.js",
+    "ArcherPreviewSite/assets/authored-monster-runtime-Dwhh6fZn.js",
+    "ArcherPreviewSite/assets/cinematic-game-FRNl7MM9.js",
+    "ArcherPreviewSite/assets/cinematic-interaction-DcMvIdJg.js",
+    "ArcherPreviewSite/assets/cinematic-scene-host-Bf5bm939.js",
+    "ArcherPreviewSite/assets/developer-actors-BJ-4veWv.js",
+    "ArcherPreviewSite/assets/monster-spawn-document-WsR1kTpU.js",
+    "ArcherPreviewSite/assets/moonforestV2-CJYyys46.js",
+    "ArcherPreviewSite/assets/mourning-elena-encounter-BspJ1h0B.js",
+    "ArcherPreviewSite/assets/npc-world--pBCmx4S.js",
+    "ArcherPreviewSite/assets/npc-world-BXoF2KEu.js",
+    "ArcherPreviewSite/assets/plains-monster-spawns-BP9yB97a.js",
+    "ArcherPreviewSite/assets/plains-monster-spawns-ezAuNM8-.js",
+    "ArcherPreviewSite/deployment-files-moonforest-0.2.json",
+    "ArcherPreviewSite/moonforest-0.2.html"
+  ],
+  "note": "Includes referenced output reused from the first local sync but not yet tracked; no stale unreferenced chunks."
+}

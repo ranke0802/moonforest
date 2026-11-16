@@ -111,7 +111,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
     encounter.createBrain=durations=>{const brain=createBrain(durations);if(definition.category!=='npc')brain.hp=brain.maxHp=profile.hp;territory?.bindBrain(brain);return brain;};
     function applyCollider(){for(const key of ['radius','stopDistance','separationRadius'])encounter[key]=profile.collider[key]*(definition.encounterType==='bear'?(encounter.bearSize?.sizeScale??1):1);}
     applyCollider();
-    encounter.id=id;encounter.actorDefinitionId=definition.actorDefinitionId;encounter.retainAnimatorForPool=true;encounter.developmentActor=true;
+    encounter.id=id;encounter.actorDefinitionId=definition.actorDefinitionId;encounter.displayName??=definition.label;encounter.retainAnimatorForPool=true;encounter.developmentActor=true;
     if(definition.category!=='npc'){
       const pool=battle.developmentPool??= [];if(!pool.includes(encounter))pool.push(encounter);
     }
@@ -186,7 +186,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         const spawn=validateActorSpawn(spawnDefinition,world,{position,player,occupied:value.occupied??[]});
         if(!spawn.valid)throw new Error('Unsafe actor spawn: '+spawn.reason);
         const zone=world.release==='moonforest-0.2'&&definition.category!=='npc'?value.row?.territory:null;
-        if(zone){if(territory)territory.configure(zone);else territory=installMonsterTerritory(encounter,zone,{walkSpeed:definition.movement.walkSpeed});}
+        if(zone){if(territory)territory.configure(zone);else territory=installMonsterTerritory(encounter,zone,{walkSpeed:definition.movement.walkSpeed,getPlayer});}
         else territory?.configure(null);
         applyCollider();resetTransient();rewardGranted=false;spawnContext=value;
         await encounter.summon(player,{position,rotationY:value.rotationY,preparation,reuseAnimator:true});
@@ -228,7 +228,7 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
         const clipDuration=encounter.animator?.deathDuration??encounter.animator?.durations?.[encounter.brain?.state]??0;
         const deathPoseFinished=encounter.animator?.deathFinished??((encounter.brain?.time??0)>=clipDuration);
         const snapshot={active:active&&(definition.category==='npc'||encounter.active),dead,dying:dead&&!encounter.corpseGone&&(!encounter.death.started||!deathPoseFinished),corpseGone:!!encounter.corpseGone,combat:active&&definition.category!=='npc'&&encounter.active&&!dead,incoming:!!encounter.pendingEvents.length||activity?.incoming===true,projectile:!!encounter.spell?.plan||activity?.projectile===true,questRelevant:spawnContext?.questRelevant===true||activity?.questRelevant===true,rewardGranted,position:encounter.actor?.position,life,decisionCount};
-        if(territory)snapshot.territory=territory.inspect();return snapshot;
+        if(territory){snapshot.territory=territory.inspect();if(encounter.territoryState.enabled)snapshot.combat=snapshot.combat&&encounter.territoryState.engaged;}return snapshot;
       },
       estimate(){return estimate??{estimatedBytes:definition.population.estimatedBytes};},
       dispose(){

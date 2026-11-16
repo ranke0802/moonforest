@@ -1,0 +1,94 @@
+BJS - [14:28:39]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:40]: Babylon.js v9.31.0 - Null engine
+✔ terrain patch commits, reloads and restores its original field and visible ground (954.6148ms)
+BJS - [14:28:41]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:41]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:42]: Babylon.js v9.31.0 - Null engine
+✔ a saved patch and grounded solid object load together against the edited field; failed preparation leaves the previous ground (580.0493ms)
+✔ preview changes one instance without navigation/revision work; commits move exact solid bounds and restore base navigation (473.1575ms)
+✔ real mesh wall and ceiling anchors preserve normal offset and add no ground collision (673.8965ms)
+BJS - [14:28:43]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:43]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:44]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:44]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:45]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:45]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:46]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:47]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:47]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:48]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:48]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:49]: Babylon.js v9.31.0 - Null engine
+✔ map departure cancels a selected source and disposes its exact late container without an actor or obstacle (601.1131ms)
+✔ cancelling a pending placement preview cannot publish a late asset or obstacle (561.2456ms)
+✔ failed staged outline preparation preserves the committed document transform navigation revision and owner (589.1022ms)
+✔ the last source owner releases admitted high textures before disposing its material container (575.7405ms)
+✔ committed target preview crosses cells without ghosts or navigation edits and cancels to the exact saved transform (497.4299ms)
+✔ nonpublishing cinematic visuals sample multiple free transforms without overwriting world placement state (504.776ms)
+✔ same-ID base edits preserve native visual/collision on adoption, move every collider part, suppress visibility and restore on undo/reopen/dispose (494.7941ms)
+✔ failed base adoption leaves original visibility, all collider parts and native source resources untouched (601.6581ms)
+✔ new trees collide by certified trunk rather than crown and tilted trunks conservatively cover their changed body (596.0891ms)
+✔ a nonuniform original fence preserves its native aspect, analytic collider thickness and actual delete/undo ownership (601.9942ms)
+✔ a static single-model catalog asset remains addable without requesting nonexistent reduced tiers (533.4069ms)
+✔ nonuniform new tree trunks cover both enlarged horizontal axes (456.6652ms)
+✔ legacy native records without a facing property retain their actual child facing on adoption (458.8671ms)
+BJS - [14:28:40]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:42]: Babylon.js v9.31.0 - Null engine
+✔ treasure anchors preserve quest identities without duplicate static chests (5.252ms)
+✔ each authored supply chest sits under an existing tree and remains reachable (8.5534ms)
+✔ arrival and crossroads keep their framing within the bounded landscape budget (1.6658ms)
+✔ crossroads groves keep both road shoulders, summit and village-facing ramp open (5.8624ms)
+✔ groves add bounded scenery outside full road widths, clearings and the lookout ramp (25.9751ms)
+✔ native forest entry preserves source species while retained village and fringe groves stay distinct (1.5236ms)
+✔ plains reuses complete existing forest and village LOD graphs (325.2817ms)
+✔ authored route network stays walkable through clustered scenery (14.1838ms)
+✔ village to plains to forest and reciprocal arrivals are outside triggers (0.7323ms)
+✔ plains entry, exit and terrain stay finite with gentle road gradients (40.8436ms)
+✔ plains 240% floor border covers the normal camera range without adding playable geometry (2238.2812ms)
+✔ plains signs and river release across repeated four-map replacement without scene ownership growth (9449.8304ms)
+✔ flat-based dome rocks vary in scale across the map and leave paths and reward approaches open (5.9426ms)
+✔ grass forms small passable irregular patches at tree and rock bases, with bounded extra instances (55.8442ms)
+✔ town-facing hill climb reaches the unchanged summit, while the former east entrance is a cliff (326.5698ms)
+BJS - [14:28:39]: Babylon.js v9.31.0 - Null engine
+✔ three authored map grids restore exact nodes, edges, components and paths in a fixed CPU budget (4681.207ms)
+ℹ {"bytes":305096,"limit":524288,"entries":3,"hits":6,"misses":3,"evictions":0,"last":{"map":"village","hit":true,"milliseconds":13.197399999999107}}
+✔ changed obstacle data or collision implementation invalidates a snapshot; grids are caller-owned (19.5872ms)
+✔ repeated signatures do not grow the pool and oversized maps retain no snapshot (114.9214ms)
+✔ noncanonical edge layouts bypass the compact cache without changing the navigator result (7.1703ms)
+BJS - [14:28:40]: Babylon.js v9.31.0 - Null engine
+BJS - [14:28:42]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (1985.8697ms)
+BJS - [14:28:43]: Babylon.js v9.31.0 - Null engine
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (1119.3392ms)
+BJS - [14:28:43]: Babylon.js v9.31.0 - Null engine
+✔ ambient walking uses native rise; resting watch confirms inner presence with game dt and keeps outer combat hysteresis (264.0051ms)
+✔ a wall or cliff between an inner-ring player and the monster keeps the encounter in watch until the approach is clear (342.9525ms)
+✔ column traversal conservatively covers the thick segment at negative, corner, axial and large-radius boundaries (360.8899ms)
+✔ village analytic LOS and candidate order match the pre-change rectangle oracle (210.5773ms)
+✔ great-plains analytic LOS and candidate order match the pre-change rectangle oracle (348.1245ms)
+✔ monster-forest analytic LOS and candidate order match the pre-change rectangle oracle (235.769ms)
+✔ witch-cave analytic LOS and candidate order match the pre-change rectangle oracle (370.143ms)
+✔ actual cave corridors, portal and boss room preserve clear short segments and exact .4m sampling boundaries (154.6098ms)
+✔ undersized legacy box index bounds retain the old rectangle and all exact OBB results (26.8502ms)
+✔ long movement contacts, equal-time ties, dash sweeps and subsequent slides remain byte-for-byte identical (54.3561ms)
+✔ actual long diagonal queries request fewer index cells; CPU timing is informational only (616.3034ms)
+✔ static cliff solids cover the full steep band with no rendered geometry and keep the west ramp open (10.2848ms)
+✔ north and east cliffs stop ascent/descent including a large swept dash before any part of the steep band (6.5121ms)
+✔ world navigation and placement rebuild preserve cliff barriers, while the approved bear summit stays usable (996.4779ms)
+✔ village: soft vegetation has no movement collider; real solids still block (15.3722ms)
+ℹ {"map":"village","vegetation":175,"crossed":104,"retainedSolidObstacles":280}
+✔ forest: soft vegetation has no movement collider; real solids still block (22.6572ms)
+ℹ {"map":"forest","vegetation":356,"crossed":277,"retainedSolidObstacles":537}
+✔ plains: soft vegetation has no movement collider; real solids still block (36.3129ms)
+ℹ {"map":"plains","vegetation":780,"crossed":526,"retainedSolidObstacles":775}
+✔ cave: soft vegetation has no movement collider; real solids still block (0.6562ms)
+ℹ {"map":"cave","vegetation":0,"crossed":0,"retainedSolidObstacles":35}
+✔ explicit collision radii and footprints cannot make decorative grass or shrubs solid (2.0277ms)
+ℹ tests 57
+ℹ suites 0
+ℹ pass 57
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18679.3427

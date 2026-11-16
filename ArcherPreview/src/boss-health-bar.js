@@ -1,5 +1,5 @@
 import { Matrix, Vector3 } from '@babylonjs/core';
-import {primaryHealthBoss} from './combat-readability.js';
+import {primaryHealthBoss,encounterInCombat} from './combat-readability.js';
 
 // CSS coordinates, independent of render resolution / device pixel ratio.
 export function projectBossHealth(scene,position,width,height){
@@ -9,7 +9,7 @@ export function projectBossHealth(scene,position,width,height){
 }
 
 export function updateBossHealthPosition(scene,encounter,element,projection,{fixed=false}={}){
-  if(!encounter?.active||encounter.corpseGone||encounter.renderVisible===false||encounter.fogVisible===false){element.hidden=true;return;}
+  if(!encounter?.active||encounter.corpseGone||!encounterInCombat(encounter)||encounter.renderVisible===false||encounter.fogVisible===false){element.hidden=true;return;}
   if(element.dataset)element.dataset.hud=fixed?'fixed':'world';
   if(fixed){element.hidden=false;element.style.left='';element.style.top='';element.style.transform='translateX(-50%)';return;}
   element.style.left='0';element.style.top='0';
@@ -27,7 +27,7 @@ export class BossHealthBars {
     const primary=primaryHealthBoss(encounters,playerPosition??scene.activeCamera?.target,this.primaryId);this.primaryId=primary?.id;
     const visible = new Set();
     for (const boss of encounters) {
-      if (!boss.active||boss.corpseGone) continue;
+      if (!boss.active||boss.corpseGone||!encounterInCombat(boss)) continue;
       visible.add(boss.id);
       let item = this.items.get(boss.id);
       if (!item) {

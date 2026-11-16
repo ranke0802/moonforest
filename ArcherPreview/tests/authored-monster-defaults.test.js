@@ -2,8 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Vector3} from '@babylonjs/core';
 import {createAuthoredMonsterRuntime,MONSTER_SPAWN_STORAGE} from '../src/authored-monster-runtime.js';
-import {emptyMonsterSpawns} from '../src/monster-spawn-document.js';
-import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION} from '../src/plains-monster-spawns.js';
+import {emptyMonsterSpawns,mergeMonsterSpawnDefaults} from '../src/monster-spawn-document.js';
+import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION} from '../src/plains-monster-spawns.js';
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function settle(){for(let i=0;i<20;i++)await tick();}
 const custom=(id,extra={})=>({id,definitionId:'hooded-goblin.standard',groupId:id,spawnMode:'start',respawn:false,rewardEnabled:true,x:120+Number(id.split('-').at(-1))*3,z:100,yaw:0,delaySeconds:30,randomRadius:0,drop:{assetId:'',effectEnabled:false},...extra});
@@ -33,6 +33,12 @@ test('legacy custom20 are preserved; requested defaults reserve whole groups fir
 test('editing or deleting defaults persists across runtime recreation, including a replacement imported without migration metadata',()=>{
  const f=fixture(),edited=f.runtime.getDocument();edited.maps['great-plains'].shift();edited.maps['great-plains'][0].yaw=1.234;delete edited.defaultRevisions;delete edited.defaultRowIds;f.runtime.replace(edited);f.runtime.dispose();const again=fixture({memory:f.memory});
  assert.equal(again.runtime.getDocument().maps['great-plains'].length,13);assert.equal(again.runtime.getDocument().maps['great-plains'][0].yaw,1.234);assert.equal(again.runtime.inspect().defaultMigration.addedRows,0);again.runtime.dispose();
+});
+test('a saved R1 runtime applies and persists R2 only to untouched territories without restoring deleted actors',async()=>{
+ const installed=mergeMonsterSpawnDefaults(emptyMonsterSpawns(),PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION).document,rows=installed.maps['great-plains'];rows[0].territory.radius+=.25;rows[1].x+=.1;rows.splice(2,1);
+ const memory=new Map([[MONSTER_SPAWN_STORAGE,JSON.stringify(installed)]]),f=fixture({memory});assert.equal(f.runtime.inspect().defaultMigration.upgradedRows,11);assert.equal(f.runtime.inspect().defaultMigration.persisted,true);
+ const saved=JSON.parse(memory.get(MONSTER_SPAWN_STORAGE));assert.deepEqual(saved.defaultRevisions,[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_REVISION]);assert.equal(saved.maps['great-plains'].length,13);assert.equal(saved.maps['great-plains'][0].territory.radius,8.25);assert.equal(saved.maps['great-plains'][1].x,9.5);
+ f.runtime.beforeBattle(0,f.player);await settle();assert.equal(f.battle.encounters.length,13);assert.equal(f.errors.length,0);f.runtime.dispose();
 });
 test('storage errors keep defaults active in memory without overwriting unreadable custom data',async()=>{
  let writes=0;const f=fixture({storage:{getItem(){throw Error('denied');},setItem(){writes++;throw Error('denied');}}});f.runtime.beforeBattle(0,f.player);await settle();assert.equal(f.battle.encounters.length,14);assert.equal(f.runtime.inspect().defaultMigration.persisted,false);assert.equal(writes,0);assert.equal(f.errors.length,1);f.runtime.dispose();

@@ -1,0 +1,61 @@
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+✔ definitions name only canonical versioned assets and preserve live encounter stats/animation mappings (134.3359ms)
+✔ spawn safety rejects map, navigation, actor overlap and player distance without relocation (8.3958ms)
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+✔ a registered variant consumes health, collider and actor-local clip mapping; unsupported movement/remaps reject explicitly (156.4426ms)
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+✔ independent pooled encounters reuse shared geometry/materials and retain animator/native clip bindings over warm lives (55.579ms)
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+✔ ten goblin actors repeatedly created, killed and removed release owned scene resources (181.4288ms)
+✔ retained crossfade sets old native weights to zero; defaults stop/delete and both produce the same sampled pose (3.786ms)
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+✔ death callback is once per life and opt-in corpse completion retains the same animator through respawn (48.2443ms)
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+✔ NPC stays outside battle, keeps its interaction under decision tiering and follows live quest relevance (59.105ms)
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+✔ last-actor eviction releases only its owned library; borrowed libraries and another live clone survive (92.829ms)
+✔ map generation cancellation before a late library load prevents independent actor creation or publication (6.5804ms)
+✔ ordinary summon/hide retains its existing recreate/dispose behavior unless explicit actor pooling opts in (0.6671ms)
+BJS - [14:52:00]: Babylon.js v9.31.0 - Null engine
+✔ staged group actors stay hidden and outside battle until committed (57.4575ms)
+✔ actual pooled encounters enter together, wait for all corpses, and respawn as a group (75.8766ms)
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+✔ primary boss stays stable, ignores hidden/goblins, and all health data remains owned by encounter (2.2138ms)
+✔ territorial bosses and ordinary monsters reveal HP only during combat, retiring it on return (63.9843ms)
+✔ watching monsters do not mark the whole map in combat, but remain valid targets for a player first strike (0.3635ms)
+✔ real camera changes cannot move fixed battle/player HP into head anchors; hidden enemies remain hidden (14.71ms)
+✔ repeated pooled summon/replacement has one fixed primary and does not accumulate cloned HP DOM (48.1664ms)
+✔ foot/direction marker is fail-closed without structure clearance, follows actual root yaw, and allocates no scene resources (11.6268ms)
+✔ damage retains its original hit anchor, Critical wording and sequential rise with a bounded reusable pool (10.672ms)
+✔ original burst offsets remain local to the hit instead of reserving HUD columns or reading DOM layout (18.8129ms)
+✔ downed moving enemy labels follow its torso and retire on reuse or map removal (6.6954ms)
+✔ actual camera projection preserves overlapping hit anchors without an automatic screen grid (5.4339ms)
+BJS - [14:51:59]: Babylon.js v9.31.0 - Null engine
+BJS - [14:52:01]: Babylon.js v9.31.0 - Null engine
+✔ fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk home through their real encounter path (1877.0053ms)
+BJS - [14:52:02]: Babylon.js v9.31.0 - Null engine
+✔ territory capture release is actor-owned; wall routing, reactions and dormant reuse keep native state (649.0702ms)
+BJS - [14:52:02]: Babylon.js v9.31.0 - Null engine
+✔ ambient walking uses native rise; resting watch confirms inner presence with game dt and keeps outer combat hysteresis (147.4487ms)
+BJS - [14:52:02]: Babylon.js v9.31.0 - Null engine
+✔ a wall or cliff between an inner-ring player and the monster keeps the encounter in watch until the approach is clear (199.0627ms)
+✔ a walking canine can settle back into lying rest using its real rise keys in reverse without changing rig scale (213.0068ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8610.3807

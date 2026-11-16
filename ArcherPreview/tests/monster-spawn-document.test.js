@@ -1,12 +1,12 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {emptyMonsterSpawns,validateMonsterSpawns,mergeMonsterSpawnDefaults} from '../src/monster-spawn-document.js';
-import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION} from '../src/plains-monster-spawns.js';
+import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION} from '../src/plains-monster-spawns.js';
 const row=(id,extra={})=>({id,definitionId:'hooded-goblin.standard',groupId:'pack',spawnMode:'start',respawn:true,rewardEnabled:true,x:1,z:2,yaw:0,delaySeconds:30,randomRadius:3,drop:{assetId:'',effectEnabled:false},...extra});
 test('monster placement records round trip and grouped lifetime configuration stays consistent',()=>{const doc=emptyMonsterSpawns();doc.maps['great-plains']=[row('one'),row('two',{x:4})];assert.equal(validateMonsterSpawns(JSON.stringify(doc)).valid,true);doc.maps['great-plains'][1].respawn=false;assert.match(validateMonsterSpawns(doc).errors.join(),/같은 그룹/);});
 test('invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected',()=>{const doc=emptyMonsterSpawns();doc.maps.village=[row('one'),row('one',{definitionId:'evil',x:Infinity})];assert.equal(validateMonsterSpawns(doc).valid,false);doc.maps={other:[]};assert.equal(validateMonsterSpawns(doc).valid,false);});
 test('all approved plains quadruped definitions and finite contained territories round trip',()=>{
  const doc=createPlainsMonsterSpawns();assert.equal(validateMonsterSpawns(doc).valid,true);assert.equal(new Set(doc.maps['great-plains'].map(row=>row.groupId)).size,7);assert.equal(doc.maps['great-plains'].length,14);
- for(const area of [{x:0,z:0,radius:1},{x:6.6,z:-69,radius:8,returnRadius:9},{x:6.6,z:-69,radius:Infinity}]){const bad=structuredClone(doc);bad.maps['great-plains'][0].territory=area;assert.equal(validateMonsterSpawns(bad).valid,false);}
+ for(const area of [{x:0,z:0,radius:1},{x:6.6,z:-69,radius:8,returnRadius:9},{x:6.6,z:-69,radius:Infinity},{x:6.6,z:-69,radius:8,combatRadius:0},{x:6.6,z:-69,radius:8,combatRadius:9},{x:6.6,z:-69,radius:8,wanderRadius:-1}]){const bad=structuredClone(doc);bad.maps['great-plains'][0].territory=area;assert.equal(validateMonsterSpawns(bad).valid,false);}
 });
 test('default migration preserves custom values and aliases conflicting IDs/groups without mutating its input',()=>{
  const doc=emptyMonsterSpawns(),defaults=createPlainsMonsterSpawns(),first=defaults.maps['great-plains'][0];doc.maps['great-plains']=[row(first.id,{groupId:first.groupId,x:88,respawn:false})];const original=structuredClone(doc);
@@ -23,4 +23,18 @@ test('only the exact plains default revision and known14 ID history permit migra
 test('future default revisions add new IDs but do not restore deleted or overwrite edited previously installed defaults',()=>{
  const a=emptyMonsterSpawns(),seed=emptyMonsterSpawns();seed.maps.village=[row('first')];const one=mergeMonsterSpawnDefaults(a,seed,'small-r1').document;one.maps.village=[];
  seed.maps.village.push(row('second',{groupId:'second'}));const two=mergeMonsterSpawnDefaults(one,seed,'small-r2');assert.deepEqual(two.document.maps.village.map(row=>row.id),['second']);assert.deepEqual(two.document.defaultRowIds.village,['first','second']);
+});
+test('R1 to R2 upgrades only unchanged default territories/homes and preserves edits, deletions and custom rows',()=>{
+ const installed=mergeMonsterSpawnDefaults(emptyMonsterSpawns(),PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION).document,rows=installed.maps['great-plains'];
+ rows[0].territory.radius+=.5;rows[1].x+=.1;rows[2].yaw=1.1;rows.splice(3,1);rows.push(row('custom',{groupId:'custom'}));const before=structuredClone(installed);
+ const upgraded=mergeMonsterSpawnDefaults(installed,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION),next=upgraded.document.maps['great-plains'];
+ assert.equal(upgraded.upgradedRows,11);assert.equal(upgraded.addedRows,0);assert.equal(next.length,14);assert.deepEqual(installed,before);
+ assert.deepEqual(next[0],before.maps['great-plains'][0]);assert.deepEqual(next[1],before.maps['great-plains'][1]);assert.equal(next[2].yaw,1.1);assert.equal(next[2].territory.radius,11);assert.deepEqual(next.at(-1),before.maps['great-plains'].at(-1));assert.ok(!next.some(row=>row.id==='plains-fox-east-2'));
+ assert.deepEqual(upgraded.document.defaultRevisions,[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_REVISION]);assert.equal(mergeMonsterSpawnDefaults(upgraded.document,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION).changed,false);
+});
+test('R1 custom20 migration documents remain valid at34 and collision aliases upgrade without changing custom originals',()=>{
+ const saved=emptyMonsterSpawns(),first=PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'][0];saved.maps['great-plains']=Array.from({length:20},(_,i)=>row('c-'+i,{groupId:'c-'+i}));saved.maps['great-plains'][0]={...structuredClone(first),respawn:false};
+ const r1=mergeMonsterSpawnDefaults(saved,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION).document;assert.equal(validateMonsterSpawns(r1).valid,true);assert.equal(r1.maps['great-plains'].length,34);
+ const r2=mergeMonsterSpawnDefaults(r1,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION);assert.equal(r2.upgradedRows,14);assert.equal(r2.document.maps['great-plains'].length,34);assert.equal(validateMonsterSpawns(r2.document).valid,true);assert.deepEqual(r2.document.maps['great-plains'].slice(14),saved.maps['great-plains']);
+ const moved=structuredClone(r1);moved.maps['great-plains'][0].x+=.1;const kept=mergeMonsterSpawnDefaults(moved,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION);assert.equal(kept.upgradedRows,13);assert.deepEqual(kept.document.maps['great-plains'][0],moved.maps['great-plains'][0]);assert.deepEqual(kept.document.maps['great-plains'].slice(14),saved.maps['great-plains']);
 });
