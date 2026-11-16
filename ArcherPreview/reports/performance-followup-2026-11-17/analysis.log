@@ -1,0 +1,690 @@
+{
+  "summary": {
+    "inputBytes": 1005555,
+    "startedAt": "2026-11-16T15:46:33.521Z",
+    "endedAt": "2026-11-16T15:49:53.853Z",
+    "wallSeconds": 200.333,
+    "frames": 6335,
+    "buckets": 175,
+    "activeIntervalSeconds": 172.598,
+    "meanActiveFps": 36.704,
+    "meanIntervalMs": 27.245,
+    "meanWorkMs": 24.498,
+    "dropped": {
+      "events": 0,
+      "critical": 0,
+      "detailFrames": 0,
+      "ktxUploads": 0
+    },
+    "slowRecorded": 81,
+    "slowSharePercent": 1.279,
+    "ordinary": 80,
+    "critical": 1,
+    "intervalBins": {
+      "50..100": 54,
+      "100..200": 14,
+      "200..500": 1,
+      "500..1000": 0,
+      "1000..Infinity": 0
+    },
+    "workBins": {
+      "50..100": 28,
+      "100..200": 9,
+      "200..500": 0,
+      "500..1000": 0,
+      "1000..Infinity": 0
+    },
+    "intervalOver50": 69,
+    "workOver50": 37,
+    "maxIntervalMs": 212.4,
+    "maxWorkMs": 190.6,
+    "perSecondMeanWorkMs": {
+      "n": 175,
+      "min": 18.64,
+      "mean": 25.455,
+      "p50": 24.236,
+      "p95": 31.795,
+      "max": 81.854
+    },
+    "perSecondMeanIntervalMs": {
+      "n": 175,
+      "min": 20.11,
+      "mean": 28.409,
+      "p50": 26.9,
+      "p95": 36.837,
+      "max": 78.831
+    },
+    "lastTenSeconds": {
+      "fps": 33.52395977164232,
+      "frameMs": 31.30000001192093,
+      "maxMs": 59.39999997615814,
+      "p95Ms": 33.40000003576279,
+      "slowFrames": 1,
+      "thresholdMs": 50,
+      "targetFps": 60,
+      "samples": 348,
+      "maxWorkMs": 36.90000003576279,
+      "meanFrameMs": 28.7816091954023,
+      "meanWorkMs": 26.038793104304663,
+      "p95WorkMs": 29.899999976158142,
+      "missedTargetFrames": 348,
+      "missedTargetThresholdMs": 20.833333333333332
+    }
+  },
+  "windows": [
+    {
+      "seconds": [
+        0,
+        60
+      ],
+      "frames": 2163,
+      "meanIntervalMs": 27.307,
+      "meanWorkMs": 24.309,
+      "maxIntervalMs": 136.1,
+      "maxWorkMs": 90.9
+    },
+    {
+      "seconds": [
+        60,
+        120
+      ],
+      "frames": 2315,
+      "meanIntervalMs": 25.794,
+      "meanWorkMs": 23.34,
+      "maxIntervalMs": 123.6,
+      "maxWorkMs": 121.2
+    },
+    {
+      "seconds": [
+        120,
+        180
+      ],
+      "frames": 1324,
+      "meanIntervalMs": 29.161,
+      "meanWorkMs": 26.229,
+      "maxIntervalMs": 212.4,
+      "maxWorkMs": 190.6
+    },
+    {
+      "seconds": [
+        180,
+        201
+      ],
+      "frames": 533,
+      "meanIntervalMs": 28.542,
+      "meanWorkMs": 25.989,
+      "maxIntervalMs": 60.4,
+      "maxWorkMs": 58.4
+    }
+  ],
+  "retainedFrames": 185,
+  "eventSections": {
+    "bossUpdateMs": {
+      "n": 81,
+      "min": 1.8,
+      "mean": 10.407,
+      "p50": 6,
+      "p95": 32.5,
+      "max": 54.5
+    },
+    "contactsMs": {
+      "n": 81,
+      "min": 0.7,
+      "mean": 4.001,
+      "p50": 2.7,
+      "p95": 10.2,
+      "max": 16
+    },
+    "worldUpdateMs": {
+      "n": 81,
+      "min": 0.2,
+      "mean": 0.69,
+      "p50": 0.5,
+      "p95": 1.3,
+      "max": 7.6
+    },
+    "hudUpdateMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.628,
+      "p50": 0.5,
+      "p95": 1.4,
+      "max": 4.5
+    },
+    "framePreludeMs": {
+      "n": 81,
+      "min": 0.8,
+      "mean": 3.737,
+      "p50": 1.8,
+      "p95": 12.1,
+      "max": 56.8
+    },
+    "playerControllerMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.031,
+      "p50": 0,
+      "p95": 0.1,
+      "max": 0.5
+    },
+    "playerAnimationMs": {
+      "n": 81,
+      "min": 0.6,
+      "mean": 3.077,
+      "p50": 1.2,
+      "p95": 11.7,
+      "max": 55
+    },
+    "playerMeleeAimMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.151,
+      "p50": 0,
+      "p95": 0.6,
+      "max": 5.3
+    },
+    "actionAudioMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.143,
+      "p50": 0,
+      "p95": 0.7,
+      "max": 1.2
+    },
+    "sceneryGeometryMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 1.275,
+      "p50": 0.1,
+      "p95": 9.2,
+      "max": 17.2
+    },
+    "sceneryDemandMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 1.265,
+      "p50": 0.1,
+      "p95": 9.2,
+      "max": 17.2
+    },
+    "sceneryLoadStartMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "sceneryTextureMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.296,
+      "p50": 0,
+      "p95": 1.1,
+      "max": 9.5
+    },
+    "sceneryOcclusionMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.007,
+      "p50": 0,
+      "p95": 0.1,
+      "max": 0.2
+    },
+    "sceneCallMs": {
+      "n": 81,
+      "min": 17.1,
+      "mean": 42.954,
+      "p50": 35.1,
+      "p95": 92.9,
+      "max": 117.2
+    }
+  },
+  "uploads": {
+    "count": 14,
+    "cpuMs": {
+      "n": 14,
+      "min": 0.1,
+      "mean": 5.907,
+      "p50": 0.3,
+      "p95": 56.3,
+      "max": 56.3
+    },
+    "totalCpuMs": 82.7,
+    "bySize": {
+      "512x512": {
+        "count": 5,
+        "cpuMs": {
+          "n": 5,
+          "min": 0.1,
+          "mean": 0.12,
+          "p50": 0.1,
+          "p95": 0.2,
+          "max": 0.2
+        }
+      },
+      "4096x4096": {
+        "count": 1,
+        "cpuMs": {
+          "n": 1,
+          "min": 56.3,
+          "mean": 56.3,
+          "p50": 56.3,
+          "p95": 56.3,
+          "max": 56.3
+        }
+      },
+      "2048x2048": {
+        "count": 6,
+        "cpuMs": {
+          "n": 6,
+          "min": 0.3,
+          "mean": 3.3,
+          "p50": 0.3,
+          "p95": 11.9,
+          "max": 11.9
+        }
+      },
+      "1024x1024": {
+        "count": 2,
+        "cpuMs": {
+          "n": 2,
+          "min": 0.1,
+          "mean": 3,
+          "p50": 0.1,
+          "p95": 5.9,
+          "max": 5.9
+        }
+      }
+    },
+    "slow": [
+      {
+        "atSeconds": 7.884,
+        "cpuMs": 56.3,
+        "width": 4096
+      },
+      {
+        "atSeconds": 186.599,
+        "cpuMs": 11.9,
+        "width": 2048
+      }
+    ]
+  },
+  "detailGroups": {
+    "drawCommands": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.471,
+      "p50": 0.5,
+      "p95": 0.8,
+      "max": 1.4
+    },
+    "effectEnable": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.24,
+      "p50": 0.2,
+      "p95": 0.5,
+      "max": 0.6
+    },
+    "bufferBinding": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.352,
+      "p50": 0.3,
+      "p95": 0.7,
+      "max": 1.1
+    },
+    "textureSet": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.397,
+      "p50": 0.4,
+      "p95": 0.7,
+      "max": 0.9
+    },
+    "bufferUpdate": {
+      "n": 93,
+      "min": 0.6,
+      "mean": 1.21,
+      "p50": 1.1,
+      "p95": 1.7,
+      "max": 2.4
+    },
+    "textureUpload": {
+      "n": 93,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "shaderPrepare": {
+      "n": 93,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "candidateSelection": {
+      "n": 93,
+      "min": 0.2,
+      "mean": 0.767,
+      "p50": 0.4,
+      "p95": 1.6,
+      "max": 9.5
+    }
+  },
+  "top": [
+    {
+      "atSeconds": 165.179,
+      "intervalMs": 212.4,
+      "workMs": 87.5,
+      "previousWorkMs": 190.6,
+      "sceneMs": 24,
+      "bossUpdateMs": 5,
+      "contactsMs": 2.2,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 0,
+      "activity": "이동",
+      "actors": 18,
+      "position": [
+        22.6,
+        13.5
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.667,
+      "intervalMs": 196.4,
+      "workMs": 129.2,
+      "previousWorkMs": 152.4,
+      "sceneMs": 82.4,
+      "bossUpdateMs": 31.7,
+      "contactsMs": 3.6,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 9.5,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        22.5,
+        14.7
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 178.935,
+      "intervalMs": 176.3,
+      "workMs": 44.7,
+      "previousWorkMs": 92.5,
+      "sceneMs": 34.9,
+      "bossUpdateMs": 7.1,
+      "contactsMs": 2.8,
+      "sceneryGeometryMs": 1.2,
+      "sceneryTextureMs": 0.5,
+      "activity": "이동",
+      "actors": 18,
+      "position": [
+        27.9,
+        7.5
+      ],
+      "precedingUploads": [
+        {
+          "cpuMs": 0.1,
+          "width": 512,
+          "height": 512,
+          "atSeconds": 178.917
+        }
+      ]
+    },
+    {
+      "atSeconds": 178.078,
+      "intervalMs": 168,
+      "workMs": 40.9,
+      "previousWorkMs": 144.6,
+      "sceneMs": 29.2,
+      "bossUpdateMs": 8.8,
+      "contactsMs": 1.6,
+      "sceneryGeometryMs": 0.8,
+      "sceneryTextureMs": 0,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        26.4,
+        3.8
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.966,
+      "intervalMs": 165.7,
+      "workMs": 190.6,
+      "previousWorkMs": 147.7,
+      "sceneMs": 117,
+      "bossUpdateMs": 54.5,
+      "contactsMs": 10.2,
+      "sceneryGeometryMs": 15.1,
+      "sceneryTextureMs": 1.7,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        22.5,
+        13.9
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.471,
+      "intervalMs": 164.8,
+      "workMs": 152.4,
+      "previousWorkMs": 162.3,
+      "sceneMs": 97.2,
+      "bossUpdateMs": 41.1,
+      "contactsMs": 7.9,
+      "sceneryGeometryMs": 17.2,
+      "sceneryTextureMs": 0,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        22.4,
+        15.1
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 4.189,
+      "intervalMs": 136.1,
+      "workMs": 31.3,
+      "previousWorkMs": 35,
+      "sceneMs": 25.5,
+      "bossUpdateMs": 2.9,
+      "contactsMs": 1.1,
+      "sceneryGeometryMs": 0.2,
+      "sceneryTextureMs": 0.6,
+      "activity": "이동 · 모델 준비",
+      "actors": 10,
+      "position": [
+        -49.1,
+        -10
+      ],
+      "precedingUploads": [
+        {
+          "cpuMs": 0.2,
+          "width": 512,
+          "height": 512,
+          "atSeconds": 4.092
+        }
+      ]
+    },
+    {
+      "atSeconds": 164.801,
+      "intervalMs": 133.6,
+      "workMs": 147.7,
+      "previousWorkMs": 129.2,
+      "sceneMs": 92.8,
+      "bossUpdateMs": 32.5,
+      "contactsMs": 8.4,
+      "sceneryGeometryMs": 11.5,
+      "sceneryTextureMs": 0,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        22.5,
+        14.3
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 81.384,
+      "intervalMs": 123.6,
+      "workMs": 44.7,
+      "previousWorkMs": 121.2,
+      "sceneMs": 33.3,
+      "bossUpdateMs": 7.7,
+      "contactsMs": 4.1,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 0,
+      "activity": "플레이",
+      "actors": 17,
+      "position": [
+        -85.5,
+        6.6
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.306,
+      "intervalMs": 114.9,
+      "workMs": 162.3,
+      "previousWorkMs": 106.8,
+      "sceneMs": 97.4,
+      "bossUpdateMs": 40.7,
+      "contactsMs": 11.3,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 0.6,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        22.5,
+        15.5
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 178.288,
+      "intervalMs": 114,
+      "workMs": 91.7,
+      "previousWorkMs": 103.2,
+      "sceneMs": 64.4,
+      "bossUpdateMs": 18.6,
+      "contactsMs": 5.6,
+      "sceneryGeometryMs": 0.1,
+      "sceneryTextureMs": 1,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        27,
+        4.7
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 81.78,
+      "intervalMs": 107.7,
+      "workMs": 47.2,
+      "previousWorkMs": 93.2,
+      "sceneMs": 31.5,
+      "bossUpdateMs": 9.3,
+      "contactsMs": 3.5,
+      "sceneryGeometryMs": 0.7,
+      "sceneryTextureMs": 0.4,
+      "activity": "플레이",
+      "actors": 17,
+      "position": [
+        -85.5,
+        6.6
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 179.719,
+      "intervalMs": 104,
+      "workMs": 59.2,
+      "previousWorkMs": 83,
+      "sceneMs": 37.9,
+      "bossUpdateMs": 10.3,
+      "contactsMs": 2.3,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 0.6,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        28.4,
+        11.5
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 7.941,
+      "intervalMs": 103.5,
+      "workMs": 42.3,
+      "previousWorkMs": 44.1,
+      "sceneMs": 35.7,
+      "bossUpdateMs": 3.5,
+      "contactsMs": 1.5,
+      "sceneryGeometryMs": 9.2,
+      "sceneryTextureMs": 0,
+      "activity": "이동",
+      "actors": 11,
+      "position": [
+        -37.2,
+        -18.2
+      ],
+      "precedingUploads": [
+        {
+          "cpuMs": 56.3,
+          "width": 4096,
+          "height": 4096,
+          "atSeconds": 7.884
+        }
+      ]
+    },
+    {
+      "atSeconds": 178.391,
+      "intervalMs": 102.6,
+      "workMs": 69.8,
+      "previousWorkMs": 91.7,
+      "sceneMs": 49,
+      "bossUpdateMs": 14.6,
+      "contactsMs": 7.1,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 0,
+      "activity": "이동 · 회전/시점 조작",
+      "actors": 18,
+      "position": [
+        27.2,
+        5.1
+      ],
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 165.279,
+      "intervalMs": 100,
+      "workMs": 38.4,
+      "previousWorkMs": 87.5,
+      "sceneMs": 30.2,
+      "bossUpdateMs": 5.3,
+      "contactsMs": 3.1,
+      "sceneryGeometryMs": 0,
+      "sceneryTextureMs": 0,
+      "activity": "이동",
+      "actors": 18,
+      "position": [
+        22.7,
+        13.1
+      ],
+      "precedingUploads": []
+    }
+  ]
+}

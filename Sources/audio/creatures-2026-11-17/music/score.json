@@ -1,0 +1,6550 @@
+{
+  "format": "moonforest-original-offline-score",
+  "version": 1,
+  "title": "The Alpha Gives Chase",
+  "bpm": 136,
+  "meter": [
+    4,
+    4
+  ],
+  "bars": 40,
+  "beats": 160,
+  "key": "D minor, dominant A major",
+  "requestedDurationSeconds": 70.58823529411765,
+  "renderFrames": 2258824,
+  "sampleRate": 32000,
+  "seed": 261117136,
+  "sections": [
+    {
+      "bars": [
+        1,
+        8
+      ],
+      "name": "Tracks in the dark",
+      "dynamic": 0.52
+    },
+    {
+      "bars": [
+        9,
+        16
+      ],
+      "name": "The pack gives chase",
+      "dynamic": 0.88
+    },
+    {
+      "bars": [
+        17,
+        24
+      ],
+      "name": "Call and answering shadows",
+      "dynamic": 0.65
+    },
+    {
+      "bars": [
+        25,
+        32
+      ],
+      "name": "The alpha closes in",
+      "dynamic": 1.0
+    },
+    {
+      "bars": [
+        33,
+        40
+      ],
+      "name": "Circling back into the hunt",
+      "dynamic": 0.7
+    }
+  ],
+  "instruments": {
+    "celli": {
+      "program": 42,
+      "channel": 0,
+      "pan": -0.28
+    },
+    "bass": {
+      "program": 43,
+      "channel": 1,
+      "pan": 0.05
+    },
+    "strings": {
+      "program": 48,
+      "channel": 2,
+      "pan": 0.22
+    },
+    "horn": {
+      "program": 60,
+      "channel": 3,
+      "pan": -0.15
+    },
+    "reed": {
+      "program": 70,
+      "channel": 4,
+      "pan": 0.3
+    },
+    "answer": {
+      "program": 48,
+      "channel": 5,
+      "pan": 0.4
+    },
+    "taiko": {
+      "program": 0,
+      "channel": 9,
+      "pan": -0.1,
+      "drum": 41
+    },
+    "tom": {
+      "program": 0,
+      "channel": 9,
+      "pan": 0.26,
+      "drum": 45
+    },
+    "war_drum": {
+      "program": 0,
+      "channel": 9,
+      "pan": -0.22,
+      "drum": 38
+    },
+    "cymbal": {
+      "program": 0,
+      "channel": 9,
+      "pan": 0.3,
+      "drum": 49
+    }
+  },
+  "notes": [
+    {
+      "instrument": "bass",
+      "beat": 0,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 0.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "strings",
+      "beat": 0.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 0.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 0.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 1.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 2.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 2.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 3.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 4,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 4.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "strings",
+      "beat": 4.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 4.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 4.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 5.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 6.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 6.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 7.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 8,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 8.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 8,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4992,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 8.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 8.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 8.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 8.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3328,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 9.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 9.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.3224,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 10.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 10.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 10.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.364,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 10.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.338,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 11.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 11.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3172,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 12,
+      "pitch": 31,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 12.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 12,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4992,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 12.03,
+      "pitch": 43,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 12.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 12.03,
+      "pitch": 58,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 12.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.3328,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 13.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 13.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.3224,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 14.0,
+      "pitch": 31,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 14.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 14.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.364,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 14.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.338,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 15.0,
+      "pitch": 53,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 15.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.2912,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 15.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.3172,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 15.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.338,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 15.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.286,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 16,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 16.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 16,
+      "pitch": 62,
+      "duration": 1.6,
+      "velocity": 0.403,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 16,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4992,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 16.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 16.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 16.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 16.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3328,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 17.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 17.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3224,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 18.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 18.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 18.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.364,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 18.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.338,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 18.5,
+      "pitch": 65,
+      "duration": 0.75,
+      "velocity": 0.364,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 19.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 19.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3172,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 20,
+      "pitch": 36,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 20.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 20,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4992,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 20.03,
+      "pitch": 48,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 20.03,
+      "pitch": 55,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 20.03,
+      "pitch": 64,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 20.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.3328,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 21.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 21.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.3224,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 22.0,
+      "pitch": 36,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 22.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 22.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.364,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 22.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.338,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 23.0,
+      "pitch": 58,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 23.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.3172,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 24,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 24.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 24,
+      "pitch": 58,
+      "duration": 1.1,
+      "velocity": 0.377,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 24,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4992,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 24.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 24.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 24.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 24.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3328,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 25.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 25.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.3224,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 25.5,
+      "pitch": 62,
+      "duration": 1.2,
+      "velocity": 0.403,
+      "pan": -0.15
+    },
+    {
+      "instrument": "bass",
+      "beat": 26.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 26.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 26.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.364,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 26.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.338,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 27.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 27.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3172,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 28,
+      "pitch": 33,
+      "duration": 1.28,
+      "velocity": 0.4576,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 28.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.4992,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 28,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4992,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 28.03,
+      "pitch": 45,
+      "duration": 3.72,
+      "velocity": 0.2496,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 28.03,
+      "pitch": 52,
+      "duration": 3.72,
+      "velocity": 0.2184,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 28.03,
+      "pitch": 61,
+      "duration": 3.72,
+      "velocity": 0.182,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 28.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.3328,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 29.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 29.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.3224,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 30.0,
+      "pitch": 33,
+      "duration": 1.05,
+      "velocity": 0.3276,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 30.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.468,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 30.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.364,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 30.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.338,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 31.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.4056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 31.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.2912,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 31.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.3172,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 31.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.338,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 31.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.286,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 32,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 32.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "cymbal",
+      "beat": 32,
+      "pitch": 49,
+      "duration": 1.0,
+      "velocity": 0.3,
+      "pan": 0.3
+    },
+    {
+      "instrument": "horn",
+      "beat": 32,
+      "pitch": 62,
+      "duration": 1.35,
+      "velocity": 0.8184,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 32,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 32.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 32.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 32.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 32.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 33.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 33.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 33.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 33.5,
+      "pitch": 69,
+      "duration": 0.42,
+      "velocity": 0.704,
+      "pan": -0.15
+    },
+    {
+      "instrument": "bass",
+      "beat": 34.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 34.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 34,
+      "pitch": 67,
+      "duration": 0.82,
+      "velocity": 0.7568,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 34.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 34.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 35.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 35,
+      "pitch": 65,
+      "duration": 0.9,
+      "velocity": 0.7304,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 35.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 35.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 36,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 36.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 36,
+      "pitch": 64,
+      "duration": 0.65,
+      "velocity": 0.6688,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 36,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 36.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 36.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 36.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 36.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 36.75,
+      "pitch": 65,
+      "duration": 0.2,
+      "velocity": 0.6336,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 37.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 37,
+      "pitch": 64,
+      "duration": 0.88,
+      "velocity": 0.7216,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 37.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 37.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 38.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 38.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 38,
+      "pitch": 62,
+      "duration": 1.78,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 38.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 38.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 38.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.3784,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 39.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 39.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 39.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 40,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 40.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 40,
+      "pitch": 65,
+      "duration": 0.88,
+      "velocity": 0.7832,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 40,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 40.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 40.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 40.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 40.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 41.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 41,
+      "pitch": 69,
+      "duration": 0.88,
+      "velocity": 0.8272,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 41.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 41.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 42.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 42.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 42,
+      "pitch": 70,
+      "duration": 1.3,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 42.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 42.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 43.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 43.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 43.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 43.5,
+      "pitch": 69,
+      "duration": 0.4,
+      "velocity": 0.6688,
+      "pan": -0.15
+    },
+    {
+      "instrument": "bass",
+      "beat": 44,
+      "pitch": 31,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 44.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 44,
+      "pitch": 67,
+      "duration": 0.85,
+      "velocity": 0.7568,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 44,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 44.03,
+      "pitch": 43,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 44.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 44.03,
+      "pitch": 58,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 44.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 45.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 45,
+      "pitch": 65,
+      "duration": 0.4,
+      "velocity": 0.6688,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 45.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 45.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 45.5,
+      "pitch": 64,
+      "duration": 0.4,
+      "velocity": 0.66,
+      "pan": -0.15
+    },
+    {
+      "instrument": "bass",
+      "beat": 46.0,
+      "pitch": 31,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 46.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 46,
+      "pitch": 62,
+      "duration": 1.65,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 46.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 46.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 46.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.3784,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 47.0,
+      "pitch": 53,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 47.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.4928,
+      "pan": 0.26
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 47.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 47.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 47.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.572,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 47.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.484,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 48,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 48.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 48,
+      "pitch": 62,
+      "duration": 0.4,
+      "velocity": 0.7216,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 48,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 48.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 48.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 48.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 48.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 48.5,
+      "pitch": 65,
+      "duration": 0.4,
+      "velocity": 0.7392,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 49.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 49,
+      "pitch": 69,
+      "duration": 0.82,
+      "velocity": 0.8448,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 49.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 49.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 50.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 50.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 50,
+      "pitch": 72,
+      "duration": 0.4,
+      "velocity": 0.8008,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 50.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 50.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 50.5,
+      "pitch": 70,
+      "duration": 0.4,
+      "velocity": 0.7304,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 51.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 51,
+      "pitch": 69,
+      "duration": 0.84,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 51.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 51.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 52,
+      "pitch": 36,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 52.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 52,
+      "pitch": 67,
+      "duration": 0.84,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 52,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 52.03,
+      "pitch": 48,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 52.03,
+      "pitch": 55,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 52.03,
+      "pitch": 64,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 52.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 53.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 53,
+      "pitch": 64,
+      "duration": 0.84,
+      "velocity": 0.6952,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 53.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 53.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 54.0,
+      "pitch": 36,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 54.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 54,
+      "pitch": 65,
+      "duration": 0.84,
+      "velocity": 0.7568,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 54.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 54.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 54.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.3784,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 55.0,
+      "pitch": 58,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 55,
+      "pitch": 62,
+      "duration": 0.84,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 55.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 55.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 56,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 56.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 56,
+      "pitch": 58,
+      "duration": 0.86,
+      "velocity": 0.6864,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 56,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 56.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 56.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 56.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 56.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 57.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 57,
+      "pitch": 62,
+      "duration": 0.86,
+      "velocity": 0.7216,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 57.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 57.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 58.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 58.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 58,
+      "pitch": 65,
+      "duration": 0.86,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 58.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 58.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 59.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 59,
+      "pitch": 67,
+      "duration": 0.84,
+      "velocity": 0.8008,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 59.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 59.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 60,
+      "pitch": 33,
+      "duration": 1.28,
+      "velocity": 0.7744,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 60.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.8448,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 60,
+      "pitch": 64,
+      "duration": 0.88,
+      "velocity": 0.7744,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 60,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.8448,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 60.03,
+      "pitch": 45,
+      "duration": 3.72,
+      "velocity": 0.4224,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 60.03,
+      "pitch": 52,
+      "duration": 3.72,
+      "velocity": 0.3696,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 60.03,
+      "pitch": 61,
+      "duration": 3.72,
+      "velocity": 0.308,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 60.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.5632,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 61.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 61,
+      "pitch": 61,
+      "duration": 0.88,
+      "velocity": 0.7568,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 61.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5456,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 61.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.5456,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 62.0,
+      "pitch": 33,
+      "duration": 1.05,
+      "velocity": 0.5544,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 62.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.792,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 62,
+      "pitch": 57,
+      "duration": 1.72,
+      "velocity": 0.792,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 62.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.616,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 62.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.572,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 62.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.3784,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 63.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.6864,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 63.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.4928,
+      "pan": 0.26
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 63.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.5984,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 63.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.5368,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 63.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.572,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 63.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.484,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 64,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 64.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "cymbal",
+      "beat": 64,
+      "pitch": 49,
+      "duration": 1.0,
+      "velocity": 0.3,
+      "pan": 0.3
+    },
+    {
+      "instrument": "reed",
+      "beat": 64,
+      "pitch": 74,
+      "duration": 0.78,
+      "velocity": 0.5412,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 64,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 64.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 64.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 64.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 64.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 65.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 65,
+      "pitch": 72,
+      "duration": 0.42,
+      "velocity": 0.4752,
+      "pan": 0.3
+    },
+    {
+      "instrument": "reed",
+      "beat": 65.5,
+      "pitch": 69,
+      "duration": 0.42,
+      "velocity": 0.5148,
+      "pan": 0.3
+    },
+    {
+      "instrument": "bass",
+      "beat": 66.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 66.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 66.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 66.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 66.5,
+      "pitch": 65,
+      "duration": 1.1,
+      "velocity": 0.5214,
+      "pan": 0.3
+    },
+    {
+      "instrument": "celli",
+      "beat": 67.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 68,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 68.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 68,
+      "pitch": 62,
+      "duration": 1.5,
+      "velocity": 0.3808,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 68,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 68.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 68.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 68.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 68.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 69,
+      "pitch": 67,
+      "duration": 0.75,
+      "velocity": 0.4884,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 69.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 70,
+      "pitch": 69,
+      "duration": 0.75,
+      "velocity": 0.5412,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 70.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 70.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 70.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 70.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 70.5,
+      "pitch": 57,
+      "duration": 0.86,
+      "velocity": 0.336,
+      "pan": -0.15
+    },
+    {
+      "instrument": "answer",
+      "beat": 71,
+      "pitch": 65,
+      "duration": 0.72,
+      "velocity": 0.5082,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 71.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 72,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 72.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 72,
+      "pitch": 74,
+      "duration": 0.7,
+      "velocity": 0.5808,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 72,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 72.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 72.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 72.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 72.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 73.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 73,
+      "pitch": 77,
+      "duration": 0.7,
+      "velocity": 0.5676,
+      "pan": 0.3
+    },
+    {
+      "instrument": "bass",
+      "beat": 74.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 74.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 74,
+      "pitch": 76,
+      "duration": 0.72,
+      "velocity": 0.528,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 74.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 74.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 75.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 75,
+      "pitch": 74,
+      "duration": 0.72,
+      "velocity": 0.5148,
+      "pan": 0.3
+    },
+    {
+      "instrument": "answer",
+      "beat": 76,
+      "pitch": 70,
+      "duration": 0.78,
+      "velocity": 0.5412,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 76,
+      "pitch": 31,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 76.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 76,
+      "pitch": 55,
+      "duration": 1.5,
+      "velocity": 0.3808,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 76,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 76.03,
+      "pitch": 43,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 76.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 76.03,
+      "pitch": 58,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 76.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 77,
+      "pitch": 69,
+      "duration": 0.4,
+      "velocity": 0.4884,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 77.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 77.5,
+      "pitch": 67,
+      "duration": 0.4,
+      "velocity": 0.5016,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 78.0,
+      "pitch": 31,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 78.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 78.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "answer",
+      "beat": 78.5,
+      "pitch": 65,
+      "duration": 0.96,
+      "velocity": 0.528,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 78.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 78.5,
+      "pitch": 50,
+      "duration": 0.86,
+      "velocity": 0.336,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 79.0,
+      "pitch": 53,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 79.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.364,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 79.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.4225,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 79.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.3575,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 80,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 80.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 80,
+      "pitch": 74,
+      "duration": 0.78,
+      "velocity": 0.5412,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 80,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 80.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 80.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 80.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 80.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 81.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 81,
+      "pitch": 72,
+      "duration": 0.42,
+      "velocity": 0.4752,
+      "pan": 0.3
+    },
+    {
+      "instrument": "reed",
+      "beat": 81.5,
+      "pitch": 69,
+      "duration": 0.42,
+      "velocity": 0.5148,
+      "pan": 0.3
+    },
+    {
+      "instrument": "bass",
+      "beat": 82.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 82.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 82.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 82.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 82.5,
+      "pitch": 65,
+      "duration": 1.1,
+      "velocity": 0.5214,
+      "pan": 0.3
+    },
+    {
+      "instrument": "celli",
+      "beat": 83.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 84,
+      "pitch": 36,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 84.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 84,
+      "pitch": 60,
+      "duration": 1.5,
+      "velocity": 0.3808,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 84,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 84.03,
+      "pitch": 48,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 84.03,
+      "pitch": 55,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 84.03,
+      "pitch": 64,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 84.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 85,
+      "pitch": 67,
+      "duration": 0.75,
+      "velocity": 0.4884,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 85.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 86,
+      "pitch": 69,
+      "duration": 0.75,
+      "velocity": 0.5412,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 86.0,
+      "pitch": 36,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 86.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 86.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 86.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 86.5,
+      "pitch": 55,
+      "duration": 0.86,
+      "velocity": 0.336,
+      "pan": -0.15
+    },
+    {
+      "instrument": "answer",
+      "beat": 87,
+      "pitch": 65,
+      "duration": 0.72,
+      "velocity": 0.5082,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 87.0,
+      "pitch": 58,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 88,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 88.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 88,
+      "pitch": 74,
+      "duration": 0.7,
+      "velocity": 0.5808,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 88,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 88.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 88.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 88.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 88.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 89.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 89,
+      "pitch": 77,
+      "duration": 0.7,
+      "velocity": 0.5676,
+      "pan": 0.3
+    },
+    {
+      "instrument": "bass",
+      "beat": 90.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 90.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 90,
+      "pitch": 76,
+      "duration": 0.72,
+      "velocity": 0.528,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 90.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 90.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 91.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 91,
+      "pitch": 74,
+      "duration": 0.72,
+      "velocity": 0.5148,
+      "pan": 0.3
+    },
+    {
+      "instrument": "answer",
+      "beat": 92,
+      "pitch": 70,
+      "duration": 0.78,
+      "velocity": 0.5412,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 92,
+      "pitch": 33,
+      "duration": 1.28,
+      "velocity": 0.572,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 92.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.624,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 92,
+      "pitch": 57,
+      "duration": 1.5,
+      "velocity": 0.3808,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 92,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.624,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 92.03,
+      "pitch": 45,
+      "duration": 3.72,
+      "velocity": 0.312,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 92.03,
+      "pitch": 52,
+      "duration": 3.72,
+      "velocity": 0.273,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 92.03,
+      "pitch": 61,
+      "duration": 3.72,
+      "velocity": 0.2275,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 92.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.416,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 93,
+      "pitch": 69,
+      "duration": 0.4,
+      "velocity": 0.4884,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 93.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.52,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 93.5,
+      "pitch": 67,
+      "duration": 0.4,
+      "velocity": 0.5016,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 94.0,
+      "pitch": 33,
+      "duration": 1.05,
+      "velocity": 0.4095,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 94.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.585,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 94.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.455,
+      "pan": -0.1
+    },
+    {
+      "instrument": "answer",
+      "beat": 94.5,
+      "pitch": 65,
+      "duration": 0.96,
+      "velocity": 0.528,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 94.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.4225,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 94.5,
+      "pitch": 52,
+      "duration": 0.86,
+      "velocity": 0.336,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 95.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.507,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 95.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.364,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 95.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.4225,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 95.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.3575,
+      "pan": 0.26
+    },
+    {
+      "instrument": "answer",
+      "beat": 96,
+      "pitch": 74,
+      "duration": 1.35,
+      "velocity": 0.2604,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 96,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 96.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "cymbal",
+      "beat": 96,
+      "pitch": 49,
+      "duration": 1.0,
+      "velocity": 0.5,
+      "pan": 0.3
+    },
+    {
+      "instrument": "horn",
+      "beat": 96,
+      "pitch": 62,
+      "duration": 1.35,
+      "velocity": 0.9114,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 96,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 96.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 96.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 96.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 96.04,
+      "pitch": 62,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 96.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 97.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 97.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "answer",
+      "beat": 97.5,
+      "pitch": 81,
+      "duration": 0.42,
+      "velocity": 0.224,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 97.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 97.5,
+      "pitch": 69,
+      "duration": 0.42,
+      "velocity": 0.784,
+      "pan": -0.15
+    },
+    {
+      "instrument": "answer",
+      "beat": 98,
+      "pitch": 79,
+      "duration": 0.82,
+      "velocity": 0.2408,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 98.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 98.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 98,
+      "pitch": 67,
+      "duration": 0.82,
+      "velocity": 0.8428,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 98.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 98.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 99,
+      "pitch": 77,
+      "duration": 0.9,
+      "velocity": 0.2324,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 99.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 99,
+      "pitch": 65,
+      "duration": 0.9,
+      "velocity": 0.8134,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 99.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 99.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 100,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 100.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 100,
+      "pitch": 64,
+      "duration": 0.65,
+      "velocity": 0.7448,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 100,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 100.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 100.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 100.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 100.04,
+      "pitch": 62,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 100.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 100.75,
+      "pitch": 65,
+      "duration": 0.2,
+      "velocity": 0.7056,
+      "pan": -0.15
+    },
+    {
+      "instrument": "celli",
+      "beat": 101.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 101,
+      "pitch": 64,
+      "duration": 0.88,
+      "velocity": 0.8036,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 101.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 101.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 102.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 102.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 102,
+      "pitch": 62,
+      "duration": 1.78,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 102.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 102.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 102.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.43,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 103.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 103.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 103.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 104,
+      "pitch": 77,
+      "duration": 0.88,
+      "velocity": 0.2492,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 104,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 104.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 104,
+      "pitch": 65,
+      "duration": 0.88,
+      "velocity": 0.8722,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 104,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 104.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 104.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 104.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 104.04,
+      "pitch": 58,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 104.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 105,
+      "pitch": 81,
+      "duration": 0.88,
+      "velocity": 0.2632,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 105.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 105,
+      "pitch": 69,
+      "duration": 0.88,
+      "velocity": 0.9212,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 105.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 105.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 106,
+      "pitch": 82,
+      "duration": 1.3,
+      "velocity": 0.2744,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 106.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 106.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 106,
+      "pitch": 70,
+      "duration": 1.3,
+      "velocity": 0.9604,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 106.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 106.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 107.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 107.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "answer",
+      "beat": 107.5,
+      "pitch": 81,
+      "duration": 0.4,
+      "velocity": 0.2128,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 107.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 107.5,
+      "pitch": 69,
+      "duration": 0.4,
+      "velocity": 0.7448,
+      "pan": -0.15
+    },
+    {
+      "instrument": "bass",
+      "beat": 108,
+      "pitch": 31,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 108.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 108,
+      "pitch": 67,
+      "duration": 0.85,
+      "velocity": 0.8428,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 108,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 108.03,
+      "pitch": 43,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 108.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 108.03,
+      "pitch": 58,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 108.04,
+      "pitch": 55,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 108.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 109.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 109,
+      "pitch": 65,
+      "duration": 0.4,
+      "velocity": 0.7448,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 109.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 109.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 109.5,
+      "pitch": 64,
+      "duration": 0.4,
+      "velocity": 0.735,
+      "pan": -0.15
+    },
+    {
+      "instrument": "bass",
+      "beat": 110.0,
+      "pitch": 31,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 110.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 110,
+      "pitch": 62,
+      "duration": 1.65,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 110.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 110.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 110.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.43,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 111.0,
+      "pitch": 53,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 111.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.56,
+      "pan": 0.26
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 111.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 111.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 111.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.65,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 111.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.55,
+      "pan": 0.26
+    },
+    {
+      "instrument": "answer",
+      "beat": 112,
+      "pitch": 74,
+      "duration": 0.4,
+      "velocity": 0.2296,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 112,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 112.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 112,
+      "pitch": 62,
+      "duration": 0.4,
+      "velocity": 0.8036,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 112,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 112.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 112.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 112.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 112.04,
+      "pitch": 62,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "answer",
+      "beat": 112.5,
+      "pitch": 77,
+      "duration": 0.4,
+      "velocity": 0.2352,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 112.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 112.5,
+      "pitch": 65,
+      "duration": 0.4,
+      "velocity": 0.8232,
+      "pan": -0.15
+    },
+    {
+      "instrument": "answer",
+      "beat": 113,
+      "pitch": 81,
+      "duration": 0.82,
+      "velocity": 0.2688,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 113.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 113,
+      "pitch": 69,
+      "duration": 0.82,
+      "velocity": 0.9408,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 113.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 113.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 114,
+      "pitch": 84,
+      "duration": 0.4,
+      "velocity": 0.2548,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 114.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 114.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 114,
+      "pitch": 72,
+      "duration": 0.4,
+      "velocity": 0.8918,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 114.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "answer",
+      "beat": 114.5,
+      "pitch": 82,
+      "duration": 0.4,
+      "velocity": 0.2324,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 114.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 114.5,
+      "pitch": 70,
+      "duration": 0.4,
+      "velocity": 0.8134,
+      "pan": -0.15
+    },
+    {
+      "instrument": "answer",
+      "beat": 115,
+      "pitch": 81,
+      "duration": 0.84,
+      "velocity": 0.2464,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 115.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 115,
+      "pitch": 69,
+      "duration": 0.84,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 115.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 115.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 116,
+      "pitch": 36,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 116.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 116,
+      "pitch": 67,
+      "duration": 0.84,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 116,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 116.03,
+      "pitch": 48,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 116.03,
+      "pitch": 55,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 116.03,
+      "pitch": 64,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 116.04,
+      "pitch": 60,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 116.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 117.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 117,
+      "pitch": 64,
+      "duration": 0.84,
+      "velocity": 0.7742,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 117.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 117.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 118.0,
+      "pitch": 36,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 118.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 118,
+      "pitch": 65,
+      "duration": 0.84,
+      "velocity": 0.8428,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 118.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 118.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 118.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.43,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 119.0,
+      "pitch": 58,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 119,
+      "pitch": 62,
+      "duration": 0.84,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 119.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 119.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 120,
+      "pitch": 70,
+      "duration": 0.86,
+      "velocity": 0.2184,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 120,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 120.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 120,
+      "pitch": 58,
+      "duration": 0.86,
+      "velocity": 0.7644,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 120,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 120.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 120.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 120.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 120.04,
+      "pitch": 58,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 120.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 121,
+      "pitch": 74,
+      "duration": 0.86,
+      "velocity": 0.2296,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 121.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 121,
+      "pitch": 62,
+      "duration": 0.86,
+      "velocity": 0.8036,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 121.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 121.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 122,
+      "pitch": 77,
+      "duration": 0.86,
+      "velocity": 0.2464,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 122.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 122.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 122,
+      "pitch": 65,
+      "duration": 0.86,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 122.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 122.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 123,
+      "pitch": 79,
+      "duration": 0.84,
+      "velocity": 0.2548,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 123.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 123,
+      "pitch": 67,
+      "duration": 0.84,
+      "velocity": 0.8918,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 123.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 123.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 124,
+      "pitch": 33,
+      "duration": 1.28,
+      "velocity": 0.88,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 124.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.96,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 124,
+      "pitch": 64,
+      "duration": 0.88,
+      "velocity": 0.8624,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 124,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.96,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 124.03,
+      "pitch": 45,
+      "duration": 3.72,
+      "velocity": 0.48,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 124.03,
+      "pitch": 52,
+      "duration": 3.72,
+      "velocity": 0.42,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 124.03,
+      "pitch": 61,
+      "duration": 3.72,
+      "velocity": 0.35,
+      "pan": 0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 124.04,
+      "pitch": 57,
+      "duration": 3.64,
+      "velocity": 0.35,
+      "pan": -0.35
+    },
+    {
+      "instrument": "celli",
+      "beat": 124.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.64,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 125.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.8,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 125,
+      "pitch": 61,
+      "duration": 0.88,
+      "velocity": 0.8428,
+      "pan": -0.15
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 125.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.62,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 125.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.62,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 126.0,
+      "pitch": 33,
+      "duration": 1.05,
+      "velocity": 0.63,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 126.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.9,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 126,
+      "pitch": 57,
+      "duration": 1.72,
+      "velocity": 0.882,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 126.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 126.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.65,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 126.75,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.43,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 127.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.78,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 127.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.56,
+      "pan": 0.26
+    },
+    {
+      "instrument": "war_drum",
+      "beat": 127.0,
+      "pitch": 38,
+      "duration": 0.1,
+      "velocity": 0.68,
+      "pan": -0.22
+    },
+    {
+      "instrument": "celli",
+      "beat": 127.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.61,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 127.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.65,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 127.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.55,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 128,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.5236,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 128.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.5712,
+      "pan": -0.28
+    },
+    {
+      "instrument": "cymbal",
+      "beat": 128,
+      "pitch": 49,
+      "duration": 1.0,
+      "velocity": 0.3,
+      "pan": 0.3
+    },
+    {
+      "instrument": "taiko",
+      "beat": 128,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5712,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 128.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2856,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 128.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.2499,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 128.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.2082,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 128.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3808,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 129,
+      "pitch": 69,
+      "duration": 0.74,
+      "velocity": 0.3835,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 129.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.476,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 129.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3689,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 130,
+      "pitch": 65,
+      "duration": 0.74,
+      "velocity": 0.3776,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 130.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.3748,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 130.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.5355,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 130.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4165,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 130.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3867,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 131,
+      "pitch": 62,
+      "duration": 0.76,
+      "velocity": 0.3894,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 131.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.4641,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 131.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3629,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 132,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.5236,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 132.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.5712,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 132,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5712,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 132.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2856,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 132.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.2499,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 132.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.2082,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 132.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3808,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 133,
+      "pitch": 69,
+      "duration": 0.74,
+      "velocity": 0.3835,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 133.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.476,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 133.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3689,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 134,
+      "pitch": 65,
+      "duration": 0.74,
+      "velocity": 0.3776,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 134.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.3748,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 134.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.5355,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 134.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4165,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 134.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3867,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 135,
+      "pitch": 62,
+      "duration": 0.76,
+      "velocity": 0.3894,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 135.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.4641,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 135.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.3629,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 136,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.5236,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 136.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.5712,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 136,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5712,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 136.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.2856,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 136.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.2499,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 136.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.2082,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 136.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3808,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 137,
+      "pitch": 65,
+      "duration": 0.74,
+      "velocity": 0.3835,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 137.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.476,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 137.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.3689,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 138,
+      "pitch": 61,
+      "duration": 0.74,
+      "velocity": 0.3776,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 138.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.3748,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 138.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.5355,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 138.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4165,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 138.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3867,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 139,
+      "pitch": 58,
+      "duration": 0.76,
+      "velocity": 0.3894,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 139.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.4641,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 139.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.3629,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 140,
+      "pitch": 31,
+      "duration": 1.28,
+      "velocity": 0.5236,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 140.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.5712,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 140,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5712,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 140.03,
+      "pitch": 43,
+      "duration": 3.72,
+      "velocity": 0.2856,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 140.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.2499,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 140.03,
+      "pitch": 58,
+      "duration": 3.72,
+      "velocity": 0.2082,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 140.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.3808,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 141,
+      "pitch": 62,
+      "duration": 0.74,
+      "velocity": 0.3835,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 141.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.476,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 141.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.3689,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 142,
+      "pitch": 58,
+      "duration": 0.74,
+      "velocity": 0.3776,
+      "pan": 0.4
+    },
+    {
+      "instrument": "bass",
+      "beat": 142.0,
+      "pitch": 31,
+      "duration": 1.05,
+      "velocity": 0.3748,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 142.0,
+      "pitch": 43,
+      "duration": 0.4,
+      "velocity": 0.5355,
+      "pan": -0.28
+    },
+    {
+      "instrument": "taiko",
+      "beat": 142.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.4165,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 142.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.3867,
+      "pan": -0.28
+    },
+    {
+      "instrument": "answer",
+      "beat": 143,
+      "pitch": 55,
+      "duration": 0.76,
+      "velocity": 0.3894,
+      "pan": 0.4
+    },
+    {
+      "instrument": "celli",
+      "beat": 143.0,
+      "pitch": 53,
+      "duration": 0.4,
+      "velocity": 0.4641,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 143.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.3332,
+      "pan": 0.26
+    },
+    {
+      "instrument": "celli",
+      "beat": 143.5,
+      "pitch": 46,
+      "duration": 0.34,
+      "velocity": 0.3629,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 143.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.3867,
+      "pan": 0.26
+    },
+    {
+      "instrument": "tom",
+      "beat": 143.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.3272,
+      "pan": 0.26
+    },
+    {
+      "instrument": "bass",
+      "beat": 144,
+      "pitch": 38,
+      "duration": 1.28,
+      "velocity": 0.6468,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 144.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.7056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 144,
+      "pitch": 62,
+      "duration": 1.25,
+      "velocity": 0.54,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 144,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7056,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 144.03,
+      "pitch": 50,
+      "duration": 3.72,
+      "velocity": 0.3528,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 144.03,
+      "pitch": 57,
+      "duration": 3.72,
+      "velocity": 0.3087,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 144.03,
+      "pitch": 65,
+      "duration": 3.72,
+      "velocity": 0.2572,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 144.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.4704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 145.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.588,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 145.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.4557,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 146.0,
+      "pitch": 38,
+      "duration": 1.05,
+      "velocity": 0.4631,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 146.0,
+      "pitch": 50,
+      "duration": 0.4,
+      "velocity": 0.6615,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 146,
+      "pitch": 57,
+      "duration": 0.75,
+      "velocity": 0.4896,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 146.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5145,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 146.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.4778,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 147.0,
+      "pitch": 60,
+      "duration": 0.4,
+      "velocity": 0.5733,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 147.5,
+      "pitch": 57,
+      "duration": 0.34,
+      "velocity": 0.4483,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 148,
+      "pitch": 36,
+      "duration": 1.28,
+      "velocity": 0.6468,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 148.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.7056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 148,
+      "pitch": 60,
+      "duration": 1.25,
+      "velocity": 0.54,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 148,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7056,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 148.03,
+      "pitch": 48,
+      "duration": 3.72,
+      "velocity": 0.3528,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 148.03,
+      "pitch": 55,
+      "duration": 3.72,
+      "velocity": 0.3087,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 148.03,
+      "pitch": 64,
+      "duration": 3.72,
+      "velocity": 0.2572,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 148.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.4704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 149.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.588,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 149.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.4557,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 150.0,
+      "pitch": 36,
+      "duration": 1.05,
+      "velocity": 0.4631,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 150.0,
+      "pitch": 48,
+      "duration": 0.4,
+      "velocity": 0.6615,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 150,
+      "pitch": 55,
+      "duration": 0.75,
+      "velocity": 0.4896,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 150.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5145,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 150.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.4778,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 151.0,
+      "pitch": 58,
+      "duration": 0.4,
+      "velocity": 0.5733,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 151.5,
+      "pitch": 55,
+      "duration": 0.34,
+      "velocity": 0.4483,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 152,
+      "pitch": 34,
+      "duration": 1.28,
+      "velocity": 0.6468,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 152.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.7056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 152,
+      "pitch": 58,
+      "duration": 1.25,
+      "velocity": 0.54,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 152,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7056,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 152.03,
+      "pitch": 46,
+      "duration": 3.72,
+      "velocity": 0.3528,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 152.03,
+      "pitch": 53,
+      "duration": 3.72,
+      "velocity": 0.3087,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 152.03,
+      "pitch": 62,
+      "duration": 3.72,
+      "velocity": 0.2572,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 152.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.4704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 153.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.588,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 153.5,
+      "pitch": 50,
+      "duration": 0.34,
+      "velocity": 0.4557,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 154.0,
+      "pitch": 34,
+      "duration": 1.05,
+      "velocity": 0.4631,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 154.0,
+      "pitch": 46,
+      "duration": 0.4,
+      "velocity": 0.6615,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 154,
+      "pitch": 53,
+      "duration": 0.75,
+      "velocity": 0.4896,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 154.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5145,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 154.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.4778,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 155.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.5733,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 155.5,
+      "pitch": 53,
+      "duration": 0.34,
+      "velocity": 0.4483,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 156,
+      "pitch": 33,
+      "duration": 1.28,
+      "velocity": 0.6468,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 156.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.7056,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 156,
+      "pitch": 57,
+      "duration": 1.25,
+      "velocity": 0.54,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 156,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.7056,
+      "pan": -0.1
+    },
+    {
+      "instrument": "strings",
+      "beat": 156.03,
+      "pitch": 45,
+      "duration": 3.72,
+      "velocity": 0.3528,
+      "pan": -0.48
+    },
+    {
+      "instrument": "strings",
+      "beat": 156.03,
+      "pitch": 52,
+      "duration": 3.72,
+      "velocity": 0.3087,
+      "pan": 0.35
+    },
+    {
+      "instrument": "strings",
+      "beat": 156.03,
+      "pitch": 61,
+      "duration": 3.72,
+      "velocity": 0.2572,
+      "pan": 0.48
+    },
+    {
+      "instrument": "celli",
+      "beat": 156.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.4704,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 157.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.588,
+      "pan": -0.28
+    },
+    {
+      "instrument": "celli",
+      "beat": 157.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.4557,
+      "pan": -0.28
+    },
+    {
+      "instrument": "bass",
+      "beat": 158.0,
+      "pitch": 33,
+      "duration": 1.05,
+      "velocity": 0.4631,
+      "pan": 0.05
+    },
+    {
+      "instrument": "celli",
+      "beat": 158.0,
+      "pitch": 45,
+      "duration": 0.4,
+      "velocity": 0.6615,
+      "pan": -0.28
+    },
+    {
+      "instrument": "horn",
+      "beat": 158,
+      "pitch": 52,
+      "duration": 0.75,
+      "velocity": 0.4896,
+      "pan": -0.15
+    },
+    {
+      "instrument": "taiko",
+      "beat": 158.0,
+      "pitch": 41,
+      "duration": 0.12,
+      "velocity": 0.5145,
+      "pan": -0.1
+    },
+    {
+      "instrument": "celli",
+      "beat": 158.5,
+      "pitch": 52,
+      "duration": 0.34,
+      "velocity": 0.4778,
+      "pan": -0.28
+    },
+    {
+      "instrument": "reed",
+      "beat": 158.75,
+      "pitch": 61,
+      "duration": 0.4,
+      "velocity": 0.3348,
+      "pan": 0.3
+    },
+    {
+      "instrument": "celli",
+      "beat": 159.0,
+      "pitch": 56,
+      "duration": 0.4,
+      "velocity": 0.5733,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 159.0,
+      "pitch": 45,
+      "duration": 0.1,
+      "velocity": 0.4116,
+      "pan": 0.26
+    },
+    {
+      "instrument": "reed",
+      "beat": 159.25,
+      "pitch": 64,
+      "duration": 0.4,
+      "velocity": 0.3672,
+      "pan": 0.3
+    },
+    {
+      "instrument": "celli",
+      "beat": 159.5,
+      "pitch": 49,
+      "duration": 0.34,
+      "velocity": 0.4483,
+      "pan": -0.28
+    },
+    {
+      "instrument": "tom",
+      "beat": 159.5,
+      "pitch": 43,
+      "duration": 0.1,
+      "velocity": 0.4778,
+      "pan": 0.26
+    },
+    {
+      "instrument": "reed",
+      "beat": 159.75,
+      "pitch": 61,
+      "duration": 0.22,
+      "velocity": 0.2916,
+      "pan": 0.3
+    },
+    {
+      "instrument": "tom",
+      "beat": 159.75,
+      "pitch": 41,
+      "duration": 0.1,
+      "velocity": 0.4042,
+      "pan": 0.26
+    }
+  ],
+  "provenance": {
+    "composition": "New original note-level composition in compose_alpha.py",
+    "instrumentSource": "Analytic additive oscillators, procedural filtered noise, modal drums and generated room impulse",
+    "externalSongs": [],
+    "externalSamples": [],
+    "soundfonts": [],
+    "cloudGeneration": false
+  },
+  "loopMethod": "Render three musical cycles with instrument/reverb tails, retain the middle cycle. No ending fade."
+}

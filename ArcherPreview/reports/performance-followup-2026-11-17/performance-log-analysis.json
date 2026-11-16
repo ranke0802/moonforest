@@ -1,0 +1,3034 @@
+{
+  "summary": {
+    "inputBytes": 1005555,
+    "startedAt": "2026-11-16T15:46:33.521Z",
+    "endedAt": "2026-11-16T15:49:53.853Z",
+    "wallSeconds": 200.333,
+    "frames": 6335,
+    "buckets": 175,
+    "activeIntervalSeconds": 172.598,
+    "meanActiveFps": 36.704,
+    "meanIntervalMs": 27.245,
+    "meanWorkMs": 24.498,
+    "dropped": {
+      "events": 0,
+      "critical": 0,
+      "detailFrames": 0,
+      "ktxUploads": 0
+    },
+    "slowRecorded": 81,
+    "slowSharePercent": 1.279,
+    "ordinary": 80,
+    "critical": 1,
+    "intervalBins": {
+      "50..100": 54,
+      "100..200": 14,
+      "200..500": 1,
+      "500..1000": 0,
+      "1000..Infinity": 0
+    },
+    "workBins": {
+      "50..100": 28,
+      "100..200": 9,
+      "200..500": 0,
+      "500..1000": 0,
+      "1000..Infinity": 0
+    },
+    "intervalOver50": 69,
+    "workOver50": 37,
+    "maxIntervalMs": 212.4,
+    "maxWorkMs": 190.6,
+    "perSecondMeanWorkMs": {
+      "n": 175,
+      "min": 18.64,
+      "mean": 25.455,
+      "p50": 24.236,
+      "p95": 31.795,
+      "max": 81.854
+    },
+    "perSecondMeanIntervalMs": {
+      "n": 175,
+      "min": 20.11,
+      "mean": 28.409,
+      "p50": 26.9,
+      "p95": 36.837,
+      "max": 78.831
+    },
+    "lastTenSeconds": {
+      "fps": 33.52395977164232,
+      "frameMs": 31.30000001192093,
+      "maxMs": 59.39999997615814,
+      "p95Ms": 33.40000003576279,
+      "slowFrames": 1,
+      "thresholdMs": 50,
+      "targetFps": 60,
+      "samples": 348,
+      "maxWorkMs": 36.90000003576279,
+      "meanFrameMs": 28.7816091954023,
+      "meanWorkMs": 26.038793104304663,
+      "p95WorkMs": 29.899999976158142,
+      "missedTargetFrames": 348,
+      "missedTargetThresholdMs": 20.833333333333332
+    }
+  },
+  "windows": [
+    {
+      "seconds": [
+        0,
+        60
+      ],
+      "frames": 2163,
+      "meanIntervalMs": 27.307,
+      "meanWorkMs": 24.309,
+      "maxIntervalMs": 136.1,
+      "maxWorkMs": 90.9
+    },
+    {
+      "seconds": [
+        60,
+        120
+      ],
+      "frames": 2315,
+      "meanIntervalMs": 25.794,
+      "meanWorkMs": 23.34,
+      "maxIntervalMs": 123.6,
+      "maxWorkMs": 121.2
+    },
+    {
+      "seconds": [
+        120,
+        180
+      ],
+      "frames": 1324,
+      "meanIntervalMs": 29.161,
+      "meanWorkMs": 26.229,
+      "maxIntervalMs": 212.4,
+      "maxWorkMs": 190.6
+    },
+    {
+      "seconds": [
+        180,
+        201
+      ],
+      "frames": 533,
+      "meanIntervalMs": 28.542,
+      "meanWorkMs": 25.989,
+      "maxIntervalMs": 60.4,
+      "maxWorkMs": 58.4
+    }
+  ],
+  "retainedFrames": 185,
+  "retainedSections": {
+    "bossUpdateMs": {
+      "n": 185,
+      "min": 1.7,
+      "mean": 6.505,
+      "p50": 3.8,
+      "p95": 24.3,
+      "max": 54.5
+    },
+    "contactsMs": {
+      "n": 185,
+      "min": 0.7,
+      "mean": 2.729,
+      "p50": 2,
+      "p95": 8.1,
+      "max": 16
+    },
+    "worldUpdateMs": {
+      "n": 185,
+      "min": 0.1,
+      "mean": 0.463,
+      "p50": 0.3,
+      "p95": 1,
+      "max": 7.6
+    },
+    "hudUpdateMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.45,
+      "p50": 0.3,
+      "p95": 1,
+      "max": 4.5
+    },
+    "framePreludeMs": {
+      "n": 185,
+      "min": 0.6,
+      "mean": 2.349,
+      "p50": 1.2,
+      "p95": 7.6,
+      "max": 56.8
+    },
+    "playerControllerMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.023,
+      "p50": 0,
+      "p95": 0.1,
+      "max": 0.5
+    },
+    "playerAnimationMs": {
+      "n": 185,
+      "min": 0.4,
+      "mean": 1.881,
+      "p50": 0.8,
+      "p95": 6.5,
+      "max": 55
+    },
+    "playerMeleeAimMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.072,
+      "p50": 0,
+      "p95": 0.4,
+      "max": 5.3
+    },
+    "actionAudioMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.079,
+      "p50": 0,
+      "p95": 0.3,
+      "max": 1.2
+    },
+    "sceneryGeometryMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.649,
+      "p50": 0,
+      "p95": 2,
+      "max": 17.2
+    },
+    "sceneryDemandMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.64,
+      "p50": 0,
+      "p95": 2,
+      "max": 17.2
+    },
+    "sceneryLoadStartMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "sceneryTextureMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.168,
+      "p50": 0,
+      "p95": 0.8,
+      "max": 9.5
+    },
+    "sceneryOcclusionMs": {
+      "n": 185,
+      "min": 0,
+      "mean": 0.011,
+      "p50": 0,
+      "p95": 0.1,
+      "max": 0.3
+    },
+    "sceneCallMs": {
+      "n": 185,
+      "min": 14.9,
+      "mean": 31.95,
+      "p50": 24.8,
+      "p95": 75.8,
+      "max": 117.2
+    }
+  },
+  "eventSections": {
+    "bossUpdateMs": {
+      "n": 81,
+      "min": 1.8,
+      "mean": 10.407,
+      "p50": 6,
+      "p95": 32.5,
+      "max": 54.5
+    },
+    "contactsMs": {
+      "n": 81,
+      "min": 0.7,
+      "mean": 4.001,
+      "p50": 2.7,
+      "p95": 10.2,
+      "max": 16
+    },
+    "worldUpdateMs": {
+      "n": 81,
+      "min": 0.2,
+      "mean": 0.69,
+      "p50": 0.5,
+      "p95": 1.3,
+      "max": 7.6
+    },
+    "hudUpdateMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.628,
+      "p50": 0.5,
+      "p95": 1.4,
+      "max": 4.5
+    },
+    "framePreludeMs": {
+      "n": 81,
+      "min": 0.8,
+      "mean": 3.737,
+      "p50": 1.8,
+      "p95": 12.1,
+      "max": 56.8
+    },
+    "playerControllerMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.031,
+      "p50": 0,
+      "p95": 0.1,
+      "max": 0.5
+    },
+    "playerAnimationMs": {
+      "n": 81,
+      "min": 0.6,
+      "mean": 3.077,
+      "p50": 1.2,
+      "p95": 11.7,
+      "max": 55
+    },
+    "playerMeleeAimMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.151,
+      "p50": 0,
+      "p95": 0.6,
+      "max": 5.3
+    },
+    "actionAudioMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.143,
+      "p50": 0,
+      "p95": 0.7,
+      "max": 1.2
+    },
+    "sceneryGeometryMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 1.275,
+      "p50": 0.1,
+      "p95": 9.2,
+      "max": 17.2
+    },
+    "sceneryDemandMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 1.265,
+      "p50": 0.1,
+      "p95": 9.2,
+      "max": 17.2
+    },
+    "sceneryLoadStartMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "sceneryTextureMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.296,
+      "p50": 0,
+      "p95": 1.1,
+      "max": 9.5
+    },
+    "sceneryOcclusionMs": {
+      "n": 81,
+      "min": 0,
+      "mean": 0.007,
+      "p50": 0,
+      "p95": 0.1,
+      "max": 0.2
+    },
+    "sceneCallMs": {
+      "n": 81,
+      "min": 17.1,
+      "mean": 42.954,
+      "p50": 35.1,
+      "p95": 92.9,
+      "max": 117.2
+    }
+  },
+  "top": [
+    {
+      "atSeconds": 165.179,
+      "intervalMs": 212.4,
+      "workMs": 87.5,
+      "previousWorkMs": 190.6,
+      "sections": {
+        "bossUpdateMs": 5,
+        "contactsMs": 2.2,
+        "worldUpdateMs": 0.3,
+        "hudUpdateMs": 1,
+        "framePreludeMs": 56.8,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 55,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 1.2,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 24.1
+      },
+      "render": {
+        "drawCalls": 140,
+        "triangles": 1082266,
+        "sceneMs": 24,
+        "activeMeshesMs": 10.4,
+        "drawSubmissionMs": 7.1,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          22.6,
+          13.5
+        ],
+        "camera": [
+          42.14,
+          1.38,
+          9.44
+        ],
+        "activity": "이동",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 678,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 400
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6736,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.667,
+      "intervalMs": 196.4,
+      "workMs": 129.2,
+      "previousWorkMs": 152.4,
+      "sections": {
+        "bossUpdateMs": 31.7,
+        "contactsMs": 3.6,
+        "worldUpdateMs": 0.4,
+        "hudUpdateMs": 0.7,
+        "framePreludeMs": 7.8,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 6.6,
+        "playerMeleeAimMs": 0.1,
+        "actionAudioMs": 0.7,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 9.5,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 82.7
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1098123,
+        "sceneMs": 82.4,
+        "activeMeshesMs": 39.8,
+        "drawSubmissionMs": 17.3,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          22.5,
+          14.7
+        ],
+        "camera": [
+          42.14,
+          1.39,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 676,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 387
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6733,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 178.935,
+      "intervalMs": 176.3,
+      "workMs": 44.7,
+      "previousWorkMs": 92.5,
+      "sections": {
+        "bossUpdateMs": 7.1,
+        "contactsMs": 2.8,
+        "worldUpdateMs": 0.5,
+        "hudUpdateMs": 0.4,
+        "framePreludeMs": 1.2,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 0.9,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0,
+        "sceneryGeometryMs": 1.2,
+        "sceneryDemandMs": 1.2,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0.5,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 35.1
+      },
+      "render": {
+        "drawCalls": 142,
+        "triangles": 1125318,
+        "sceneMs": 34.9,
+        "activeMeshesMs": 13.8,
+        "drawSubmissionMs": 11.6,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          27.9,
+          7.5
+        ],
+        "camera": [
+          42.36,
+          1.34,
+          9.44
+        ],
+        "activity": "이동",
+        "actors": 18,
+        "states": [
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 742,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 448
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 7195,
+          "totalPreparationMs": 2512.5000007152557,
+          "sharedYields": 545,
+          "atomicOverruns": 138,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": [
+        {
+          "cpuMs": 0.1,
+          "width": 512,
+          "height": 512,
+          "atSeconds": 178.917
+        }
+      ]
+    },
+    {
+      "atSeconds": 178.078,
+      "intervalMs": 168,
+      "workMs": 40.9,
+      "previousWorkMs": 144.6,
+      "sections": {
+        "bossUpdateMs": 8.8,
+        "contactsMs": 1.6,
+        "worldUpdateMs": 0.3,
+        "hudUpdateMs": 0.3,
+        "framePreludeMs": 1.7,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 1.3,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0,
+        "sceneryGeometryMs": 0.8,
+        "sceneryDemandMs": 0.8,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 29.4
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1121711,
+        "sceneMs": 29.2,
+        "activeMeshesMs": 14.4,
+        "drawSubmissionMs": 7.4,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          26.4,
+          3.8
+        ],
+        "camera": [
+          42.27,
+          1.32,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Block6",
+          "Rest_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 738,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 434
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 7183,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.966,
+      "intervalMs": 165.7,
+      "workMs": 190.6,
+      "previousWorkMs": 147.7,
+      "sections": {
+        "bossUpdateMs": 54.5,
+        "contactsMs": 10.2,
+        "worldUpdateMs": 0.4,
+        "hudUpdateMs": 0.5,
+        "framePreludeMs": 17.3,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 16.9,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0.1,
+        "sceneryGeometryMs": 15.1,
+        "sceneryDemandMs": 15.1,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 1.7,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 117.2
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1103280,
+        "sceneMs": 117,
+        "activeMeshesMs": 49.2,
+        "drawSubmissionMs": 44.9,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          22.5,
+          13.9
+        ],
+        "camera": [
+          42.14,
+          1.38,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 678,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 400
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6735,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.471,
+      "intervalMs": 164.8,
+      "workMs": 152.4,
+      "previousWorkMs": 162.3,
+      "sections": {
+        "bossUpdateMs": 41.1,
+        "contactsMs": 7.9,
+        "worldUpdateMs": 0.4,
+        "hudUpdateMs": 0.8,
+        "framePreludeMs": 12.1,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 11.7,
+        "playerMeleeAimMs": 0.1,
+        "actionAudioMs": 0,
+        "sceneryGeometryMs": 17.2,
+        "sceneryDemandMs": 17.2,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 97.3
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1096794,
+        "sceneMs": 97.2,
+        "activeMeshesMs": 40.8,
+        "drawSubmissionMs": 36.7,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          22.4,
+          15.1
+        ],
+        "camera": [
+          42.12,
+          1.39,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 676,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 387
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6732,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 4.189,
+      "intervalMs": 136.1,
+      "workMs": 31.3,
+      "previousWorkMs": 35,
+      "sections": {
+        "bossUpdateMs": 2.9,
+        "contactsMs": 1.1,
+        "worldUpdateMs": 0.7,
+        "hudUpdateMs": 0.3,
+        "framePreludeMs": 1.5,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 1,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0.2,
+        "sceneryGeometryMs": 0.2,
+        "sceneryDemandMs": 0.2,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0.6,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 25.5
+      },
+      "render": {
+        "drawCalls": 123,
+        "triangles": 1413425,
+        "sceneMs": 25.5,
+        "activeMeshesMs": 10.9,
+        "drawSubmissionMs": 9.2,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          -49.1,
+          -10
+        ],
+        "camera": [
+          40.09,
+          1.42,
+          9.44
+        ],
+        "activity": "이동 · 모델 준비",
+        "actors": 10,
+        "states": [
+          "Rest_Lie_R5",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Block6",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rest_Lie_R5",
+          "Rest_Lie_R5"
+        ],
+        "geometryPending": 1,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 47,
+          "demandCacheHits": 10,
+          "recordsTotal": 1424,
+          "recordsChecked": 968
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.199999988079071
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 1492,
+          "totalPreparationMs": 1878.2000004053116,
+          "sharedYields": 337,
+          "atomicOverruns": 93,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": [
+        {
+          "cpuMs": 0.2,
+          "width": 512,
+          "height": 512,
+          "atSeconds": 4.092
+        }
+      ]
+    },
+    {
+      "atSeconds": 164.801,
+      "intervalMs": 133.6,
+      "workMs": 147.7,
+      "previousWorkMs": 129.2,
+      "sections": {
+        "bossUpdateMs": 32.5,
+        "contactsMs": 8.4,
+        "worldUpdateMs": 0.9,
+        "hudUpdateMs": 0.6,
+        "framePreludeMs": 14.5,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 13.7,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0.3,
+        "sceneryGeometryMs": 11.5,
+        "sceneryDemandMs": 11.5,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 92.9
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1101951,
+        "sceneMs": 92.8,
+        "activeMeshesMs": 41.7,
+        "drawSubmissionMs": 34.6,
+        "sameFrameDrawCpu": {
+          "reason": "periodic",
+          "sceneMs": 83,
+          "groups": {
+            "drawCommands": {
+              "calls": 141,
+              "ms": 1
+            },
+            "effectEnable": {
+              "calls": 141,
+              "ms": 0.19999998807907104
+            },
+            "bufferBinding": {
+              "calls": 141,
+              "ms": 0.30000007152557373
+            },
+            "textureSet": {
+              "calls": 187,
+              "ms": 0.9000000953674316
+            },
+            "bufferUpdate": {
+              "calls": 155,
+              "ms": 1.7000000476837158
+            },
+            "textureUpload": {
+              "calls": 0,
+              "ms": 0
+            },
+            "shaderPrepare": {
+              "calls": 0,
+              "ms": 0
+            },
+            "candidateSelection": {
+              "calls": 1,
+              "ms": 1.300000011920929
+            }
+          },
+          "slowCalls": []
+        }
+      },
+      "context": {
+        "position": [
+          22.5,
+          14.3
+        ],
+        "camera": [
+          42.14,
+          1.38,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 677,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 400
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6734,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 81.384,
+      "intervalMs": 123.6,
+      "workMs": 44.7,
+      "previousWorkMs": 121.2,
+      "sections": {
+        "bossUpdateMs": 7.7,
+        "contactsMs": 4.1,
+        "worldUpdateMs": 0.2,
+        "hudUpdateMs": 0.6,
+        "framePreludeMs": 1.9,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 1.5,
+        "playerMeleeAimMs": 0.7,
+        "actionAudioMs": 0,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 33.3
+      },
+      "render": {
+        "drawCalls": 152,
+        "triangles": 944122,
+        "sceneMs": 33.3,
+        "activeMeshesMs": 10,
+        "drawSubmissionMs": 13,
+        "sameFrameDrawCpu": {
+          "reason": "continuous",
+          "sceneMs": 26.5,
+          "groups": {
+            "drawCommands": {
+              "calls": 152,
+              "ms": 0.30000007152557373
+            },
+            "effectEnable": {
+              "calls": 152,
+              "ms": 0.20000004768371582
+            },
+            "bufferBinding": {
+              "calls": 152,
+              "ms": 0.5000000596046448
+            },
+            "textureSet": {
+              "calls": 170,
+              "ms": 0.3999999761581421
+            },
+            "bufferUpdate": {
+              "calls": 146,
+              "ms": 1.4999998807907104
+            },
+            "textureUpload": {
+              "calls": 0,
+              "ms": 0
+            },
+            "shaderPrepare": {
+              "calls": 0,
+              "ms": 0
+            },
+            "candidateSelection": {
+              "calls": 1,
+              "ms": 1
+            }
+          },
+          "slowCalls": []
+        }
+      },
+      "context": {
+        "position": [
+          -85.5,
+          6.6
+        ],
+        "camera": [
+          43.03,
+          1.12,
+          9.44
+        ],
+        "activity": "플레이",
+        "actors": 17,
+        "states": [
+          "Rest_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5",
+          "Wolf_Predator_Diagonal_Bite_V02",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Rest_Lie_R5",
+          "Rest_Lie_R5",
+          "Wolf_Walk_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 398,
+          "demandCacheHits": 14,
+          "recordsTotal": 1424,
+          "recordsChecked": 251
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.4000000357627869
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 4396,
+          "totalPreparationMs": 2187.500000655651,
+          "sharedYields": 478,
+          "atomicOverruns": 126,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 164.306,
+      "intervalMs": 114.9,
+      "workMs": 162.3,
+      "previousWorkMs": 106.8,
+      "sections": {
+        "bossUpdateMs": 40.7,
+        "contactsMs": 11.3,
+        "worldUpdateMs": 0.9,
+        "hudUpdateMs": 0.5,
+        "framePreludeMs": 12.7,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 11.9,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0.2,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0.6,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 97.4
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1096794,
+        "sceneMs": 97.4,
+        "activeMeshesMs": 49.5,
+        "drawSubmissionMs": 20.6,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          22.5,
+          15.5
+        ],
+        "camera": [
+          42.12,
+          1.39,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 675,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 387
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6731,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 178.288,
+      "intervalMs": 114,
+      "workMs": 91.7,
+      "previousWorkMs": 103.2,
+      "sections": {
+        "bossUpdateMs": 18.6,
+        "contactsMs": 5.6,
+        "worldUpdateMs": 1.6,
+        "hudUpdateMs": 1.1,
+        "framePreludeMs": 5.2,
+        "playerControllerMs": 0.5,
+        "playerAnimationMs": 3.1,
+        "playerMeleeAimMs": 0.1,
+        "actionAudioMs": 0.9,
+        "sceneryGeometryMs": 0.1,
+        "sceneryDemandMs": 0.1,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 1,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 64.5
+      },
+      "render": {
+        "drawCalls": 141,
+        "triangles": 1121719,
+        "sceneMs": 64.4,
+        "activeMeshesMs": 37.7,
+        "drawSubmissionMs": 11.2,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          27,
+          4.7
+        ],
+        "camera": [
+          42.28,
+          1.32,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Rise_From_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Block6",
+          "Rest_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 739,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 434
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 7186,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 81.78,
+      "intervalMs": 107.7,
+      "workMs": 47.2,
+      "previousWorkMs": 93.2,
+      "sections": {
+        "bossUpdateMs": 9.3,
+        "contactsMs": 3.5,
+        "worldUpdateMs": 0.5,
+        "hudUpdateMs": 0.5,
+        "framePreludeMs": 4.6,
+        "playerControllerMs": 0.1,
+        "playerAnimationMs": 1.7,
+        "playerMeleeAimMs": 0.5,
+        "actionAudioMs": 0.1,
+        "sceneryGeometryMs": 0.7,
+        "sceneryDemandMs": 0.6,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0.4,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 31.7
+      },
+      "render": {
+        "drawCalls": 121,
+        "triangles": 852782,
+        "sceneMs": 31.5,
+        "activeMeshesMs": 12,
+        "drawSubmissionMs": 9.6,
+        "sameFrameDrawCpu": {
+          "reason": "continuous",
+          "sceneMs": 25.2,
+          "groups": {
+            "drawCommands": {
+              "calls": 121,
+              "ms": 0.2999998927116394
+            },
+            "effectEnable": {
+              "calls": 121,
+              "ms": 0.30000007152557373
+            },
+            "bufferBinding": {
+              "calls": 121,
+              "ms": 0.5000000596046448
+            },
+            "textureSet": {
+              "calls": 132,
+              "ms": 0.6000000834465027
+            },
+            "bufferUpdate": {
+              "calls": 146,
+              "ms": 1.699999988079071
+            },
+            "textureUpload": {
+              "calls": 0,
+              "ms": 0
+            },
+            "shaderPrepare": {
+              "calls": 0,
+              "ms": 0
+            },
+            "candidateSelection": {
+              "calls": 1,
+              "ms": 1.800000011920929
+            }
+          },
+          "slowCalls": []
+        }
+      },
+      "context": {
+        "position": [
+          -85.5,
+          6.6
+        ],
+        "camera": [
+          43.03,
+          1.12,
+          9.44
+        ],
+        "activity": "플레이",
+        "actors": 17,
+        "states": [
+          "Rest_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5",
+          "Wolf_Airborne_Knockback_Land_V02",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Rest_Lie_R5",
+          "Rest_Lie_R5",
+          "Wolf_Walk_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 400,
+          "demandCacheHits": 14,
+          "recordsTotal": 1424,
+          "recordsChecked": 251
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.4000000357627869
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 4402,
+          "totalPreparationMs": 2187.500000655651,
+          "sharedYields": 478,
+          "atomicOverruns": 126,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 179.719,
+      "intervalMs": 104,
+      "workMs": 59.2,
+      "previousWorkMs": 83,
+      "sections": {
+        "bossUpdateMs": 10.3,
+        "contactsMs": 2.3,
+        "worldUpdateMs": 7.6,
+        "hudUpdateMs": 0.7,
+        "framePreludeMs": 2.2,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 1.1,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0.2,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0.6,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 38
+      },
+      "render": {
+        "drawCalls": 145,
+        "triangles": 1124012,
+        "sceneMs": 37.9,
+        "activeMeshesMs": 16.1,
+        "drawSubmissionMs": 12.5,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          28.4,
+          11.5
+        ],
+        "camera": [
+          42.45,
+          1.34,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Rest_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Block6",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 745,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 446
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 7205,
+          "totalPreparationMs": 2541.3000006079674,
+          "sharedYields": 555,
+          "atomicOverruns": 141,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 7.941,
+      "intervalMs": 103.5,
+      "workMs": 42.3,
+      "previousWorkMs": 44.1,
+      "sections": {
+        "bossUpdateMs": 3.5,
+        "contactsMs": 1.5,
+        "worldUpdateMs": 0.7,
+        "hudUpdateMs": 0.3,
+        "framePreludeMs": 1.4,
+        "playerControllerMs": 0,
+        "playerAnimationMs": 0.8,
+        "playerMeleeAimMs": 0,
+        "actionAudioMs": 0.3,
+        "sceneryGeometryMs": 9.2,
+        "sceneryDemandMs": 9.2,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0.1,
+        "sceneCallMs": 35.9
+      },
+      "render": {
+        "drawCalls": 125,
+        "triangles": 1516038,
+        "sceneMs": 35.7,
+        "activeMeshesMs": 12.3,
+        "drawSubmissionMs": 17.2,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          -37.2,
+          -18.2
+        ],
+        "camera": [
+          40.78,
+          1.28,
+          9.44
+        ],
+        "activity": "이동",
+        "actors": 11,
+        "states": [
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Block6"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 65,
+          "demandCacheHits": 10,
+          "recordsTotal": 1424,
+          "recordsChecked": 871
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.199999988079071
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 1599,
+          "totalPreparationMs": 1916.3000003099442,
+          "sharedYields": 353,
+          "atomicOverruns": 94,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": [
+        {
+          "cpuMs": 56.3,
+          "width": 4096,
+          "height": 4096,
+          "atSeconds": 7.884
+        }
+      ]
+    },
+    {
+      "atSeconds": 178.391,
+      "intervalMs": 102.6,
+      "workMs": 69.8,
+      "previousWorkMs": 91.7,
+      "sections": {
+        "bossUpdateMs": 14.6,
+        "contactsMs": 7.1,
+        "worldUpdateMs": 0.8,
+        "hudUpdateMs": 0.4,
+        "framePreludeMs": 4,
+        "playerControllerMs": 0.1,
+        "playerAnimationMs": 3.3,
+        "playerMeleeAimMs": 0.1,
+        "actionAudioMs": 0,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 49.1
+      },
+      "render": {
+        "drawCalls": 142,
+        "triangles": 1127893,
+        "sceneMs": 49,
+        "activeMeshesMs": 20.5,
+        "drawSubmissionMs": 9.9,
+        "sameFrameDrawCpu": null
+      },
+      "context": {
+        "position": [
+          27.2,
+          5.1
+        ],
+        "camera": [
+          42.28,
+          1.32,
+          9.44
+        ],
+        "activity": "이동 · 회전/시점 조작",
+        "actors": 18,
+        "states": [
+          "Rise_From_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Rise_From_Lie_R5",
+          "Walking",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rise_From_Lie_R5",
+          "Wolf_Walk_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Block6",
+          "Rise_From_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 739,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 434
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 7187,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    },
+    {
+      "atSeconds": 165.279,
+      "intervalMs": 100,
+      "workMs": 38.4,
+      "previousWorkMs": 87.5,
+      "sections": {
+        "bossUpdateMs": 5.3,
+        "contactsMs": 3.1,
+        "worldUpdateMs": 0.6,
+        "hudUpdateMs": 0.3,
+        "framePreludeMs": 1.4,
+        "playerControllerMs": 0.1,
+        "playerAnimationMs": 0.9,
+        "playerMeleeAimMs": 0.1,
+        "actionAudioMs": 0,
+        "sceneryGeometryMs": 0,
+        "sceneryDemandMs": 0,
+        "sceneryLoadStartMs": 0,
+        "sceneryTextureMs": 0,
+        "sceneryOcclusionMs": 0,
+        "sceneCallMs": 30.2
+      },
+      "render": {
+        "drawCalls": 139,
+        "triangles": 1083595,
+        "sceneMs": 30.2,
+        "activeMeshesMs": 13.8,
+        "drawSubmissionMs": 9,
+        "sameFrameDrawCpu": {
+          "reason": "continuous",
+          "sceneMs": 25.9,
+          "groups": {
+            "drawCommands": {
+              "calls": 139,
+              "ms": 0.5000000596046448
+            },
+            "effectEnable": {
+              "calls": 139,
+              "ms": 0.10000002384185791
+            },
+            "bufferBinding": {
+              "calls": 139,
+              "ms": 0.5999999046325684
+            },
+            "textureSet": {
+              "calls": 186,
+              "ms": 0.6000000834465027
+            },
+            "bufferUpdate": {
+              "calls": 153,
+              "ms": 1.5000000596046448
+            },
+            "textureUpload": {
+              "calls": 0,
+              "ms": 0
+            },
+            "shaderPrepare": {
+              "calls": 0,
+              "ms": 0
+            },
+            "candidateSelection": {
+              "calls": 1,
+              "ms": 1.100000023841858
+            }
+          },
+          "slowCalls": []
+        }
+      },
+      "context": {
+        "position": [
+          22.7,
+          13.1
+        ],
+        "camera": [
+          42.14,
+          1.38,
+          9.44
+        ],
+        "activity": "이동",
+        "actors": 18,
+        "states": [
+          "Wolf_Walk_R5",
+          "Alert_Lie_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Circle_Watch_R5",
+          "Wolf_Walk_R5",
+          "Wolf_Walk_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Rise_From_Lie_R5",
+          "Circle_Watch_R5",
+          "Rest_Lie_R5",
+          "Block6",
+          "Rest_Lie_R5"
+        ],
+        "geometryPending": 0,
+        "texturePending": 0,
+        "geometryWork": {
+          "completeSkips": 0,
+          "demandEvaluations": 678,
+          "demandCacheHits": 31,
+          "recordsTotal": 1424,
+          "recordsChecked": 400
+        },
+        "textureWork": {
+          "asset": null,
+          "stage": "idle",
+          "lastPromoteMs": 1.0999999642372131
+        },
+        "preparationBudget": {
+          "active": true,
+          "budgetMs": 2,
+          "usedMs": 0,
+          "generation": 1,
+          "frameId": 6737,
+          "totalPreparationMs": 2381.9000006318092,
+          "sharedYields": 543,
+          "atomicOverruns": 136,
+          "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+        }
+      },
+      "precedingUploads": []
+    }
+  ],
+  "uploads": {
+    "count": 14,
+    "cpuMs": {
+      "n": 14,
+      "min": 0.1,
+      "mean": 5.907,
+      "p50": 0.3,
+      "p95": 56.3,
+      "max": 56.3
+    },
+    "totalCpuMs": 82.7,
+    "bySize": {
+      "512x512": {
+        "count": 5,
+        "cpuMs": {
+          "n": 5,
+          "min": 0.1,
+          "mean": 0.12,
+          "p50": 0.1,
+          "p95": 0.2,
+          "max": 0.2
+        }
+      },
+      "4096x4096": {
+        "count": 1,
+        "cpuMs": {
+          "n": 1,
+          "min": 56.3,
+          "mean": 56.3,
+          "p50": 56.3,
+          "p95": 56.3,
+          "max": 56.3
+        }
+      },
+      "2048x2048": {
+        "count": 6,
+        "cpuMs": {
+          "n": 6,
+          "min": 0.3,
+          "mean": 3.3,
+          "p50": 0.3,
+          "p95": 11.9,
+          "max": 11.9
+        }
+      },
+      "1024x1024": {
+        "count": 2,
+        "cpuMs": {
+          "n": 2,
+          "min": 0.1,
+          "mean": 3,
+          "p50": 0.1,
+          "p95": 5.9,
+          "max": 5.9
+        }
+      }
+    },
+    "slow": [
+      {
+        "atSeconds": 7.884,
+        "cpuMs": 56.3,
+        "width": 4096
+      },
+      {
+        "atSeconds": 186.599,
+        "cpuMs": 11.9,
+        "width": 2048
+      }
+    ]
+  },
+  "detailSampleFrames": 93,
+  "detailGroups": {
+    "drawCommands": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.471,
+      "p50": 0.5,
+      "p95": 0.8,
+      "max": 1.4
+    },
+    "effectEnable": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.24,
+      "p50": 0.2,
+      "p95": 0.5,
+      "max": 0.6
+    },
+    "bufferBinding": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.352,
+      "p50": 0.3,
+      "p95": 0.7,
+      "max": 1.1
+    },
+    "textureSet": {
+      "n": 93,
+      "min": 0,
+      "mean": 0.397,
+      "p50": 0.4,
+      "p95": 0.7,
+      "max": 0.9
+    },
+    "bufferUpdate": {
+      "n": 93,
+      "min": 0.6,
+      "mean": 1.21,
+      "p50": 1.1,
+      "p95": 1.7,
+      "max": 2.4
+    },
+    "textureUpload": {
+      "n": 93,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "shaderPrepare": {
+      "n": 93,
+      "min": 0,
+      "mean": 0,
+      "p50": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "candidateSelection": {
+      "n": 93,
+      "min": 0.2,
+      "mean": 0.767,
+      "p50": 0.4,
+      "p95": 1.6,
+      "max": 9.5
+    }
+  },
+  "metadata": {
+    "renderResolution": {
+      "selectedPercent": 85,
+      "basePixelRatio": 2,
+      "requestedPixelRatio": 1.7,
+      "cssSize": [
+        832,
+        384
+      ],
+      "renderSize": [
+        1414,
+        652
+      ],
+      "effectivePixelRatio": [
+        1.6995192307692308,
+        1.6979166666666667
+      ],
+      "pixels": 921928
+    },
+    "playerTextures": {
+      "status": "selected",
+      "manifest": "warrior-v3-mobile4k",
+      "mobile": true,
+      "maxSize": 4096,
+      "encoding": "ktx2-uastc",
+      "gpuCompressed": true,
+      "estimatedGpuBytes": 83886240,
+      "maxImageRgbaBytes": 67108864,
+      "maxImageUploadBytes": 22369648,
+      "estimateScope": "Unique images with full mip chains; compressed uses ASTC/BC7/ETC2 alpha worst case. Excludes driver/decoder workspace and other scene resources.",
+      "capabilities": {
+        "maxTextureSize": 8192,
+        "formats": {
+          "astc": true,
+          "bptc": true,
+          "s3tc": true,
+          "etc2": true
+        }
+      }
+    },
+    "preparationBudget": {
+      "active": true,
+      "budgetMs": 2,
+      "usedMs": 0,
+      "generation": 1,
+      "frameId": 1393,
+      "totalPreparationMs": 1628.400000333786,
+      "sharedYields": 240,
+      "atomicOverruns": 73,
+      "scope": "cooperative preparation accounting; callback CPU and conservative elapsed checkpoints, not frame/GPU time or a preemptive limit"
+    },
+    "preparedShaders": {
+      "liveOwners": 65,
+      "liveEffects": 70,
+      "refs": 346,
+      "rejected": 0,
+      "rejectedOwnerLimit": 0,
+      "rejectedEngineLimit": 0,
+      "rejectedInvalid": 0,
+      "ownerLimit": 16,
+      "engineEffectLimit": 128,
+      "scope": "additional prepared-program references; not GPU bytes"
+    },
+    "reviewEffects": null,
+    "activeMeshCandidates": {
+      "scanned": 3094,
+      "submitted": 1586,
+      "skipped": 1508,
+      "owned": 2840,
+      "registryChecks": 1508,
+      "sceneScans": 0,
+      "cacheHits": 914
+    },
+    "geometryWork": {
+      "completeSkips": 0,
+      "demandEvaluations": 36,
+      "demandCacheHits": 8,
+      "recordsTotal": 1424,
+      "recordsChecked": 817
+    },
+    "textureWork": {
+      "asset": null,
+      "stage": "idle",
+      "lastPromoteMs": 1.199999988079071
+    },
+    "sceneResources": {
+      "meshes": 3094,
+      "skeletons": 8,
+      "animationGroups": 139,
+      "sdkActiveAnimatablesIncludingPaused": 990,
+      "sceneObservers": {
+        "beforeRender": 7,
+        "afterRender": 8,
+        "dispose": 161
+      }
+    },
+    "summonPreparation": null,
+    "animationBindings": {
+      "player": {
+        "enabled": true,
+        "eligible": true,
+        "limit": 4,
+        "cached": 1,
+        "created": 816,
+        "reused": 1224,
+        "evicted": 0,
+        "currentBindings": 816
+      },
+      "enemies": [
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Rise_From_Lie_R5",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 329,
+            "currentBindings": 0,
+            "channels": 1860,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Rise_From_Lie_R5",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 329,
+            "currentBindings": 0,
+            "channels": 1848,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Wolf_Walk_R5",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 328,
+            "currentBindings": 0,
+            "channels": 1848,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "wolf",
+          "active": true,
+          "state": "Circle_Watch_R5",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "mode": "bounded-authored-sampler",
+            "created": 0,
+            "reused": 329,
+            "currentBindings": 0,
+            "channels": 1848,
+            "clips": 22
+          }
+        },
+        {
+          "kind": "bear",
+          "active": true,
+          "state": "Block6",
+          "bindings": {
+            "enabled": true,
+            "eligible": true,
+            "limit": 2,
+            "cached": 0,
+            "created": 174,
+            "reused": 0,
+            "evicted": 0,
+            "currentBindings": 174
+          }
+        }
+      ]
+    },
+    "playerResources": {
+      "hp": 500,
+      "maxHp": 500,
+      "stamina": 100,
+      "maxStamina": 100
+    },
+    "plainsViewDistance": {
+      "selected": 2.4,
+      "applied": true,
+      "range": {
+        "fogStart": 156,
+        "fogEnd": 192,
+        "cellCull": 196.79999999999998,
+        "meshCull": 216,
+        "maxCameraRadius": 56
+      }
+    },
+    "questProps": {
+      "modelLoads": 1,
+      "modelFailures": 0,
+      "instances": 9,
+      "markerTriangles": 48,
+      "markerInstances": 12,
+      "outlineDraws": 383,
+      "lastError": null,
+      "outlineInstances": 0,
+      "outlineTriangles": 0,
+      "chestGeometry": {
+        "bodyTriangles": 1808,
+        "lidTriangles": 2679,
+        "totalTriangles": 4487,
+        "originalTriangles": 4479,
+        "recessedFloorTriangles": 20,
+        "addedTriangles": 8,
+        "vertices": 5125,
+        "hinge": [
+          0,
+          0.09512657284736631,
+          -0.3012495893239975
+        ]
+      },
+      "loading": false,
+      "models": {
+        "chest-common": "ready"
+      },
+      "visible": 4,
+      "openingChests": 0,
+      "openedChests": 8
+    },
+    "playerSize": {
+      "height": 1.6,
+      "ratio": 0.9003089771381485,
+      "moveRadius": 0.28809887268420753,
+      "spellRadius": 0.2700926931414445,
+      "rollRadius": 0.22507724428453713,
+      "standingClearance": 0.5852008351397966,
+      "guardHeight": 0.8552935282812411,
+      "bodyAimHeight": 0.9903398748519634,
+      "feedbackHeight": 1.6205561588486674,
+      "goldHeight": 1.4404943634210376,
+      "stableFocusHeight": 1.3504634657072228,
+      "sightFocusHeight": 0.945324425995056,
+      "headHeight": 1.3504634657072228,
+      "chestHeight": 0.7652626305674262,
+      "chinHeight": 1.3144511066216968,
+      "eyeBelowChin": 0.31510814199835196,
+      "markerLength": 0.6302162839967039,
+      "bladeRadius": 0.049516993742598166,
+      "shieldStrikeRadius": 0.054018538628288905
+    },
+    "mapTransition": {
+      "phase": "idle",
+      "busy": false,
+      "failed": false,
+      "lastError": null,
+      "retryAvailable": false,
+      "retryCount": 0,
+      "stageElapsedMs": null,
+      "totalElapsedMs": null,
+      "lastFailure": null
+    },
+    "viewportResize": {
+      "settling": false,
+      "disposed": false,
+      "mobile": true,
+      "committed": {
+        "width": 832,
+        "height": 384,
+        "pixelRatio": 2.8125
+      },
+      "pending": null,
+      "elapsedMs": 0,
+      "stableMs": 0,
+      "quietMs": 125,
+      "maxWaitMs": 500,
+      "watching": false
+    },
+    "goldLootPreparation": {
+      "status": "ready",
+      "runs": 1,
+      "checks": 1,
+      "geometryBindings": 1,
+      "lastDurationMs": 94.19999998807907,
+      "error": null
+    },
+    "lastFrameError": null,
+    "playback": {
+      "ready": true,
+      "loading": false,
+      "running": false,
+      "failed": false,
+      "frames": 1394
+    },
+    "character": "warrior-plains",
+    "quality": "high",
+    "touchDevice": true,
+    "userAgent": "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Mobile Safari/537.36",
+    "bundle": "./assets/moonforestV2-ZmTCMIYY.js",
+    "renderSize": [
+      1414,
+      652
+    ],
+    "mapDecodeCache": {
+      "geometry": {
+        "bytes": 2203928,
+        "limit": 8388608,
+        "entries": 256,
+        "hits": 50,
+        "misses": 5335,
+        "evictions": 3313
+      },
+      "textures": {
+        "bytes": 19923304,
+        "limit": 25165824,
+        "entries": 26,
+        "hits": 0,
+        "misses": 39,
+        "evictions": 13
+      }
+    },
+    "ktxWorker": {
+      "status": "idle",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "idleReleaseMs": 8000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 1,
+        "terminated": 0,
+        "completed": 48,
+        "failed": 0,
+        "cancelled": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 48,
+        "stage": "decode",
+        "bytes": 9657296,
+        "queuedMs": 0,
+        "initMs": 0,
+        "activeDecodeMs": 406.30000001192093,
+        "totalMs": 406.30000001192093
+      }
+    },
+    "meshoptWorker": {
+      "status": "ready",
+      "maxWorkers": 1,
+      "totalAwaitTimeoutMs": 45000,
+      "queueTimeoutMs": 45000,
+      "initTimeoutMs": 45000,
+      "decodeTimeoutMs": 45000,
+      "idleReleaseMs": 1000,
+      "queued": 0,
+      "active": null,
+      "counts": {
+        "created": 4,
+        "terminated": 4,
+        "completed": 8983,
+        "failed": 0,
+        "recoveries": 0,
+        "workerFaults": 0
+      },
+      "lastFailure": null,
+      "lastCompleted": {
+        "id": 8983,
+        "stage": "decode",
+        "bytes": 13572,
+        "queueMs": 3532.199999988079,
+        "initMs": 0,
+        "decodeMs": 0.30000001192092896,
+        "totalMs": 3532.5
+      }
+    },
+    "skyLoad": {
+      "status": "ready",
+      "timeoutMs": 8000
+    },
+    "screenReady": {
+      "meshes": 113,
+      "shadowMeshes": 35,
+      "blockers": [],
+      "progress": {
+        "completed": 182,
+        "total": 182
+      }
+    },
+    "mapTerrainCache": {
+      "bytes": 188356,
+      "limit": 524288,
+      "entries": 1,
+      "hits": 0,
+      "misses": 1,
+      "evictions": 0
+    },
+    "mapNavigationCache": {
+      "bytes": 271440,
+      "limit": 524288,
+      "entries": 1,
+      "hits": 0,
+      "misses": 1,
+      "evictions": 0,
+      "last": {
+        "map": "great-plains",
+        "hit": false,
+        "milliseconds": 680
+      }
+    },
+    "caveMaterials": null,
+    "cameraGuard": {
+      "requestedRadius": 9.444,
+      "effectiveRadius": null,
+      "requestedBeta": 1.2134999999999978,
+      "effectiveBeta": 1.2134999999999978,
+      "pitchCorrection": 0,
+      "reason": "inactive",
+      "baselineRadius": null,
+      "applied": false,
+      "fieldBytes": 1333088
+    },
+    "resourceDownloads": {
+      "revision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
+      "bundleRequests": 0,
+      "fileRequests": 0,
+      "extractedFiles": 0,
+      "cacheHits": 307,
+      "downloadBytes": 0,
+      "waitStage": null,
+      "initialPrefetchReusedFiles": 39
+    },
+    "textureStreaming": {
+      "highTextureProfile": "mobile-bounded-color/houses-original",
+      "highTextureAssets": 2,
+      "highTexturePending": 0,
+      "highTexturePendingAsset": null,
+      "highTextureStage": "idle",
+      "highTextureViewportWaiting": false,
+      "highTextureLastPromoteMs": 1.199999988079071,
+      "highTextureMax": 2048,
+      "highTextureLoads": 4,
+      "highTextureReleases": 2,
+      "highTextureError": null,
+      "highTextureBudget": 100663296,
+      "highTextureBytes": 11184864,
+      "highTextureReserved": 0,
+      "highTexturePeak": 16777296,
+      "highTextureQueued": 0,
+      "highTextureMoving": false,
+      "highTextureMovingLoads": 3,
+      "highTextureCooldownMs": 0,
+      "highTextureLastPrepareMs": 129.80000001192093,
+      "highTextureFormat": 37492
+    }
+  },
+  "end": {
+    "contentRuntime": {
+      "version": 1,
+      "mapId": "great-plains",
+      "collection": "on-demand-owned-records-and-existing-counters",
+      "owners": {
+        "manual": {
+          "entries": 0,
+          "live": 0,
+          "preparing": 0,
+          "dormant": 0,
+          "disposing": 0,
+          "pendingOperations": 0,
+          "unprepared": 0,
+          "sourceLoadsPending": 0,
+          "trim": null
+        },
+        "development": {
+          "entries": 0,
+          "live": 0,
+          "preparing": 0,
+          "dormant": 0,
+          "disposing": 0,
+          "pendingOperations": 0,
+          "limits": null,
+          "definitionReservationBytes": 0,
+          "adapterEstimateBytes": 0,
+          "unclassifiedEstimateBytes": 0
+        },
+        "authored": {
+          "entries": 19,
+          "live": 19,
+          "preparing": 0,
+          "dormant": 0,
+          "disposing": 0,
+          "pendingOperations": 0,
+          "queued": 0,
+          "limits": {
+            "total": 20,
+            "active": 20,
+            "perDefinition": 20,
+            "perType": {
+              "monster": 20,
+              "boss": 20,
+              "npc": 20
+            },
+            "estimatedMemoryBytes": 536870912,
+            "concurrentPreparations": 1,
+            "idleSeconds": 120
+          },
+          "definitionReservationBytes": 0,
+          "adapterEstimateBytes": 327155712,
+          "unclassifiedEstimateBytes": 0
+        },
+        "npc": {
+          "entries": 0,
+          "live": 0,
+          "preparing": 0,
+          "dormant": 0,
+          "disposing": 0,
+          "pendingOperations": 0,
+          "sources": 0
+        },
+        "cinematic": {
+          "entries": 0,
+          "live": 0,
+          "preparing": 0,
+          "dormant": 0,
+          "disposing": 0,
+          "pendingOperations": 0,
+          "leased": 0,
+          "reservationAndEstimateBytes": 0
+        }
+      },
+      "counts": {
+        "knownOwnedActorEntries": 19,
+        "liveKnown": 19,
+        "liveComplete": true,
+        "preparingKnown": 0,
+        "preparingComplete": true,
+        "dormantKnown": 0,
+        "dormantComplete": true,
+        "vfxActiveBursts": 0,
+        "vfxActiveSlots": 0,
+        "vfxCapacity": 0
+      },
+      "memory": {
+        "knownCpuPayloads": {
+          "sfxDecodedBytes": 6326492,
+          "bedsDecodedBytes": 43776000,
+          "geometryDecodeCacheBytes": 2602748,
+          "textureDecodeCacheBytes": 24991528
+        },
+        "knownCpuPayloadSubtotalBytes": 77696768,
+        "knownCpuPayloadCoverageComplete": true,
+        "gpuEstimates": {
+          "playerTextureResidentBytes": 83886240,
+          "sceneryExtraResidentBytes": 11184864,
+          "scope": "Profile estimates, not measured GPU allocations. Base scenery, actors and other textures are outside these fields."
+        },
+        "reservations": {
+          "sceneryExtraPendingBytes": 0,
+          "sceneryExtraBudgetBytes": 100663296,
+          "actorDefinitionBytes": 0,
+          "actorAdapterEstimateBytes": 327155712,
+          "actorUnclassifiedEstimateBytes": 0,
+          "cinematicMixedReservationAndEstimateBytes": 0,
+          "scope": "Existing owner admission accounting. Adapter estimates may include shared geometry; do not sum these fields into resident GPU/process memory."
+        },
+        "unknown": [
+          "Manual clone/source GPU and CPU payload bytes",
+          "NPC source/clone payload bytes",
+          "Cinematic static placements, borrowed visibility and media buffers",
+          "Actor skin/morph/instance allocations beyond supplied estimates",
+          "Base scenery/terrain/sky/quest/item textures and geometry",
+          "Render targets/depth/MSAA, driver and decoder workspace",
+          "Total browser/process/GPU/device residency"
+        ]
+      },
+      "admission": {
+        "combinedHardLimitEnforced": false,
+        "policy": "Observation only. Existing owner limits remain independent; no live actors, quality settings or LOD are changed."
+      },
+      "transfers": {
+        "cumulativeDownloadedBytes": 0,
+        "cacheHits": 307,
+        "scope": "Transfer counters, not current persistent-cache size or RAM/GPU residency."
+      },
+      "measurement": "Owner activity counts include dying/corpse states until their owner recycles them; they are not rendered mesh counts. Cinematic preparation counts only busy unwarmed slots, so additional shader/visibility preparation may be unreported. Known owned entries exclude unreported static actors. Byte counters cover named CPU payloads only; estimates, reservations, downloads and unknowns are kept separate. No total-memory or supported-population claim."
+    },
+    "memory": {
+      "jsUsedBytes": 624000000,
+      "jsAllocatedBytes": 624000000,
+      "jsLimitBytes": 1940000000,
+      "backgroundHighTextureEstimateBytes": 11184864,
+      "backgroundHighTextureBudgetBytes": 100663296,
+      "textures": 53,
+      "meshes": 3159,
+      "geometries": 126,
+      "sampleAtMs": 248093.19999998808
+    },
+    "diagnosticCpuMs": {
+      "scope": "synchronous-endFrame-collection-only",
+      "window": "since-diagnostic-reset",
+      "samples": 6337,
+      "meanMs": 0.10012624232536124,
+      "maxMs": 10.299999952316284,
+      "latestMs": 0,
+      "latestCompletedAtMs": 241992.69999998808
+    },
+    "renderMetrics": {
+      "drawCalls": 145,
+      "sceneMs": 22.30000001192093,
+      "animationMs": 2.300000011920929,
+      "submittedTriangles": 1264468,
+      "activeMeshesMs": 8.300000011920929,
+      "renderTargetsMs": 2.300000011920929,
+      "drawSubmissionMs": 9.099999964237213,
+      "gpu": {
+        "status": "unsupported",
+        "asynchronous": true,
+        "scope": "engine-frame",
+        "intervalMs": 250,
+        "pending": false,
+        "ageMs": null,
+        "samples": 0,
+        "meanMs": null,
+        "p95Ms": null,
+        "latest": null,
+        "retained": null,
+        "disjointEvents": 0,
+        "invalidSamples": 0,
+        "timeouts": 0
+      },
+      "drawCpu": {
+        "status": "paused",
+        "scope": "sampled-scene-engine-method-cpu",
+        "intervalMs": 1000,
+        "ageMs": 6776.600000023842,
+        "pending": false,
+        "latest": null,
+        "retained": {
+          "sampleId": 264,
+          "sceneFrameId": 7724,
+          "startedAtMs": 241287,
+          "reason": "texture-promote",
+          "effectChanges": 70,
+          "groups": {
+            "drawCommands": {
+              "calls": 146,
+              "ms": 0.6999999284744263
+            },
+            "effectEnable": {
+              "calls": 146,
+              "ms": 0.19999998807907104
+            },
+            "bufferBinding": {
+              "calls": 146,
+              "ms": 0.40000003576278687
+            },
+            "textureSet": {
+              "calls": 197,
+              "ms": 0.5
+            },
+            "bufferUpdate": {
+              "calls": 161,
+              "ms": 1.3999999165534973
+            },
+            "textureUpload": {
+              "calls": 0,
+              "ms": 0
+            },
+            "shaderPrepare": {
+              "calls": 0,
+              "ms": 0
+            },
+            "candidateSelection": {
+              "calls": 1,
+              "ms": 0.5
+            }
+          },
+          "slowCalls": [],
+          "completedAtMs": 241308.69999998808,
+          "sceneElapsedMs": 21.69999998807907
+        },
+        "slowSamples": [
+          {
+            "sampleId": 120,
+            "sceneFrameId": 4405,
+            "startedAtMs": 128471.5,
+            "reason": "continuous",
+            "effectChanges": 51,
+            "groups": {
+              "drawCommands": {
+                "calls": 121,
+                "ms": 0.20000004768371582
+              },
+              "effectEnable": {
+                "calls": 121,
+                "ms": 0
+              },
+              "bufferBinding": {
+                "calls": 121,
+                "ms": 0.7999999523162842
+              },
+              "textureSet": {
+                "calls": 132,
+                "ms": 0.3999999761581421
+              },
+              "bufferUpdate": {
+                "calls": 146,
+                "ms": 1.399999976158142
+              },
+              "textureUpload": {
+                "calls": 0,
+                "ms": 0
+              },
+              "shaderPrepare": {
+                "calls": 0,
+                "ms": 0
+              },
+              "candidateSelection": {
+                "calls": 1,
+                "ms": 0.9000000357627869
+              }
+            },
+            "slowCalls": [],
+            "completedAtMs": 128531.60000002384,
+            "sceneElapsedMs": 60.10000002384186
+          },
+          {
+            "sampleId": 212,
+            "sceneFrameId": 6738,
+            "startedAtMs": 211632.30000001192,
+            "reason": "periodic",
+            "effectChanges": 61,
+            "groups": {
+              "drawCommands": {
+                "calls": 141,
+                "ms": 1
+              },
+              "effectEnable": {
+                "calls": 141,
+                "ms": 0.19999998807907104
+              },
+              "bufferBinding": {
+                "calls": 141,
+                "ms": 0.30000007152557373
+              },
+              "textureSet": {
+                "calls": 187,
+                "ms": 0.9000000953674316
+              },
+              "bufferUpdate": {
+                "calls": 155,
+                "ms": 1.7000000476837158
+              },
+              "textureUpload": {
+                "calls": 0,
+                "ms": 0
+              },
+              "shaderPrepare": {
+                "calls": 0,
+                "ms": 0
+              },
+              "candidateSelection": {
+                "calls": 1,
+                "ms": 1.300000011920929
+              }
+            },
+            "slowCalls": [],
+            "completedAtMs": 211715.30000001192,
+            "sceneElapsedMs": 83
+          },
+          {
+            "sampleId": 231,
+            "sceneFrameId": 7198,
+            "startedAtMs": 225551.30000001192,
+            "reason": "periodic",
+            "effectChanges": 64,
+            "groups": {
+              "drawCommands": {
+                "calls": 142,
+                "ms": 0.8999999165534973
+              },
+              "effectEnable": {
+                "calls": 142,
+                "ms": 0.5000001192092896
+              },
+              "bufferBinding": {
+                "calls": 142,
+                "ms": 1.5999999642372131
+              },
+              "textureSet": {
+                "calls": 187,
+                "ms": 1.4999998211860657
+              },
+              "bufferUpdate": {
+                "calls": 157,
+                "ms": 2.7000001668930054
+              },
+              "textureUpload": {
+                "calls": 0,
+                "ms": 0
+              },
+              "shaderPrepare": {
+                "calls": 0,
+                "ms": 0
+              },
+              "candidateSelection": {
+                "calls": 1,
+                "ms": 4.099999964237213
+              }
+            },
+            "slowCalls": [
+              {
+                "group": "candidateSelection",
+                "method": "getActiveMeshCandidates",
+                "ms": 4.099999964237213,
+                "shader": null
+              }
+            ],
+            "completedAtMs": 225617.80000001192,
+            "sceneElapsedMs": 66.5
+          }
+        ],
+        "ktxUploads": [
+          {
+            "startedAtMs": 103246.69999998808,
+            "completedAtMs": 103246.80000001192,
+            "cpuMs": 0.10000002384185791,
+            "width": 1024,
+            "height": 1024,
+            "mipCount": 11,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 124472.80000001192,
+            "completedAtMs": 124473.10000002384,
+            "cpuMs": 0.30000001192092896,
+            "width": 2048,
+            "height": 2048,
+            "mipCount": 12,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 126213.30000001192,
+            "completedAtMs": 126213.69999998808,
+            "cpuMs": 0.3999999761581421,
+            "width": 2048,
+            "height": 2048,
+            "mipCount": 12,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 193836.40000003576,
+            "completedAtMs": 193842.30000001192,
+            "cpuMs": 5.899999976158142,
+            "width": 1024,
+            "height": 1024,
+            "mipCount": 11,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 195366.69999998808,
+            "completedAtMs": 195366.80000001192,
+            "cpuMs": 0.10000002384185791,
+            "width": 512,
+            "height": 512,
+            "mipCount": 10,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 202344.5,
+            "completedAtMs": 202351.10000002384,
+            "cpuMs": 6.600000023841858,
+            "width": 2048,
+            "height": 2048,
+            "mipCount": 12,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 225683.90000003576,
+            "completedAtMs": 225684,
+            "cpuMs": 0.09999996423721313,
+            "width": 512,
+            "height": 512,
+            "mipCount": 10,
+            "format": 37492,
+            "success": true
+          },
+          {
+            "startedAtMs": 233366.5,
+            "completedAtMs": 233378.40000003576,
+            "cpuMs": 11.900000035762787,
+            "width": 2048,
+            "height": 2048,
+            "mipCount": 12,
+            "format": 37492,
+            "success": true
+          }
+        ]
+      }
+    },
+    "bossComparison": null,
+    "loadHistory": [
+      {
+        "label": "대평원",
+        "phase": "complete",
+        "setupMs": 95,
+        "downloadMs": 3006.900000035763,
+        "modelMs": 6160.5,
+        "screenMs": 3122.7999999523163,
+        "bytes": 0,
+        "cachedBytes": 46308363,
+        "totalMs": 12385.199999988079,
+        "error": null
+      }
+    ]
+  },
+  "limits": [
+    "Only one-second totals cover all active frames; global per-frame p95 and >20.83ms counts cannot be recovered.",
+    "events/critical are complete only under the recorder trigger (>50ms interval/work/draw submission); sampled/retained-frame distributions are biased.",
+    "Previous interval and current work describe different time spans. CPU counters overlap. GPU is unsupported.",
+    "No named per-frame scenery-space/territory/watch timer or function-call count is in this log."
+  ]
+}

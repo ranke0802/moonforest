@@ -1,0 +1,532 @@
+{
+  "version": 3,
+  "sounds": {
+    "slash": [
+      "./content/b2f0b06586dec62370400d051f7f0aceb19ca3a9053d81fcad43f0b919b5bf3f.wav",
+      "./content/be361925afdaba8af3679e7de4ec88c306ae19b89d0cc7a7298313b0414ab127.wav",
+      "./content/76ead70834769f2d53b17c3bb706492e634ff21699098c9af80d71905a09a8df.wav"
+    ],
+    "slash_heavy": "./content/ef11e7428143980be7e670e822eb629573a412a9b5a7db67ef60e31bb9110d8e.wav",
+    "shield_up": "./content/7371fa252508bc35a4853174835418de104822156658de36bee08fe057c7b600.wav",
+    "block": [
+      "./content/f6b24f1aa8ff5c2521712a10b7ca5336a21b5000b278bf1b11ea1df1a8496789.wav",
+      "./content/fc8be575d3813e8cc738d8945400c8716cf3e82cef6cffc36e89305e71404a37.wav",
+      "./content/3cc62419b8c84b2e9d322695f3994ae4fbc6f9bb59d06c837f9a04b47fe0f6bc.wav"
+    ],
+    "parry": "./content/356f60f11d9169958b92b8d0bf782a6149c45f645e2dc5dc1282914be12800de.wav",
+    "roll": "./content/b7580577962a01e5aaf89b006f7c479a302d689a8c5ba38e003dde137af1a62e.wav",
+    "land": "./content/28a88099f81376ebe4624610c6365b64f0d75692d2d4cea231060920c5d99cd0.wav",
+    "jump": "./content/8849ee361c69f06c798439535e623e7efd216fb5666f2446865928265611b3db.wav",
+    "player_hit": "./content/db0736992c537f4a375d68fd0a3456e2dc31aa51e2a2c7dd731f2ff50f98e143.wav",
+    "boss_hit": [
+      "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav",
+      "./content/caa55f105c1e098682cf3f3e137d15e237c8bcaacb9eecd63be41e3b3efa3d46.wav",
+      "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav"
+    ],
+    "critical": "./content/d2ae3d53c9667e194bd0b8064f4f0e5e40cc85e5bd52d505d7e24121a2506cd5.wav",
+    "heal_start": "./content/6af1a673ecdbb03a4a0cec9aa6827fdac9602fa0cf24126b575b0530ef9a8a8d.wav",
+    "heal_tick": "./content/dd1bd99664f18e528f941a2b5916bc945801a0a3e82a0c595bc157defc37da00.wav",
+    "death": "./content/b20047b8c052e5751eddc026a21b861eda3eafdf8f737cb49efffa681f6dd482.wav",
+    "revive": "./content/50c64fec9dd71b15ea2a89436a888558022eefc43fecc24a2c4325f7463bb1ae.wav",
+    "charge_ready": "./content/01451d8fd7bb1458e27248c18c6fb57eeab14d107543fa3fab26fba561351195.wav",
+    "bow_draw": "./content/5e060a8298a95a414d9ab5a7026846436f4d191db52ffe0500bebf3012dade1b.wav",
+    "bow_release": "./content/a6d821f1ffdfe7edc318ec0441f57a917f3824e59e74fc37d2f1127673603da0.wav",
+    "arrow_hit": "./content/51c4afd74ce2381c02cd8698880e59e4e36b296dc158645478e5411077091eb6.wav",
+    "foot_0": "./content/258420c409d34e6bd118262f49028140f2e6513f9f5e4ef48131efc451db6a96.wav",
+    "foot_1": "./content/3221290aa3def64fcb247999be41d19a6b8b8b1df4ab84c9cd011c2611e9f5a9.wav",
+    "foot_2": "./content/73dccd69c03c7c1ffe2547d278a729f0c65cf55fd6d8378d2a7407679930a768.wav",
+    "equip": "./content/52215c65b25000c95182747226e7eddc331c48943fec4e7791c8e2e79af02993.wav",
+    "ui_click": "./content/5bb4a130d0744b76615eac8ece14bde446fd3448c6e82cfc960446eab760fe2c.wav",
+    "ui_open": "./content/a9299de25669dabcf2255dcc2a72af4c62eec714030b1309978db04fecabd22a.wav",
+    "ui_back": "./content/a48cb46531049656054a8d9c4cd03ecef12aa99f0e07c370e487e84c849cbc73.wav",
+    "ui_error": "./content/406618e7eec878ee98ebf337fb63b0599db5311638ba344dcb9cb66327000ab6.wav",
+    "boss_appear": "./content/2259593e5cf96ae69e49b84ea36b7421d2e03b4fbe087592997a3883a63c4332.wav",
+    "boss_warning": "./content/49a6e41eae068dc7a41a174386083070e76b21ebb01ac6c86b2ece550d230155.wav",
+    "victory": "./content/b7ee2ff9f711b6664cbd3a37b82bfe302e6b2ed22b30b1cdbc18e15f19b0286b.wav",
+    "low_health": "./content/cefed5988bdc094983747b06a0da8d25750bf26d17826f5d1575b4d5ad8fce90.wav",
+    "portal_depart": "./content/bcfd465189ffac3ceff822fc14d0a238b44d635d4e989c6b5f80cb4d2823219b.wav",
+    "portal_arrive": "./content/505255dd9d9888459ac1083d70990a970df16f8f5c00da843fffb199d243bb70.wav",
+    "gold_pickup": "./content/dfca9dfbe0fb2c6e403bd47069ce6a631a4a2e3d212f465efcad75a14e5635ab.wav",
+    "potion_drink": "./content/569d4f3671157e7a414dadd0ed7a659ad6d80658fd1c533c62b9b36037356503.wav",
+    "grab_caught": "./content/9b2af0e6b3925ea965a806cf822d83878045004963d23688dbc7554accc14561.wav",
+    "grab_escape": "./content/b2f6fb129b1c9af322ad8e026a80785c7f942f331e3f0dc7bab95484f00d79bf.wav",
+    "evade_success": "./content/70def7b2115c793cb9615242ce8bf768cf4c9d7391bca99e1712d487258e2dc1.wav",
+    "bear_attack": [
+      "./content/d6186050f0e427a8f91534c87a9976be1f4b8d87b9885a78550e6848ff78ff39.wav",
+      "./content/c0947343fc6d58cd17ae02be334bff488b7d2c9c5369f47f9c362511b0cef954.wav"
+    ],
+    "bear_hurt": [
+      "./content/1c1493f406eec0f9ca1a4741b56c4e7293fa504253bb9646405127f470c2e9c8.wav",
+      "./content/443f5228e2f904a42e07fc34d3c32ecb3d0b31bb1a836ee53dca4ba043efdb0e.wav"
+    ],
+    "bear_death": "./content/5c2dd7ac6b09cbd6d38bb7e229a5df7332c2cb20eda127d9a6eb18bc506ba959.wav",
+    "goblin_attack": "./content/b946601a07434fa900d63a9ac590b2d71d49caaae5afdda74c2e3b9271451065.wav",
+    "goblin_hurt": "./content/a153bba085db1410ce1f0355c90f90bef1a88ad3d5e6c9f6fd944141b0a9e578.wav",
+    "goblin_death": "./content/65530b52eb1817ab89dbf7a656450aaeaf4c6ff833cc0c48ad40e4e4c074ba90.wav",
+    "goblin_appear": "./content/5e73ebd194c71b85007a7e6949ba59f04171273c6dcbb23855d45501074aeb6b.wav",
+    "foot_cave_0": "./content/002a4a7b5c10852fc5c3185495f91190dee2d0f11f46ac8f5ec27f56c1fc3f1d.wav",
+    "foot_forest_0": "./content/45f1e0475c1aa5aac40497ae325870c95550702370bea7922772319b264840be.wav",
+    "foot_cave_1": "./content/6f2d639807e1feaf2c191cb742370f3aee8bd6ddfe277f47ee7a294ef54b2d42.wav",
+    "foot_forest_1": "./content/de46db9c04edd040a4dae25cc11675323c719656af11e5edd3ae16d66fe3d431.wav",
+    "foot_cave_2": "./content/46fb53a94a3cd4db370b8c87e9d06bdb6eb442cdc91b11a447730fc365ea61e4.wav",
+    "foot_forest_2": "./content/6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138.wav",
+    "wolf_attack": [
+      "./content/5d36fa87c0b5da51af931f651f490ce62e925f7ed6455b3b8a4ab7a5e6d432cc.wav",
+      "./content/b7de327b6ffd3072737ce46ce9d20361010152cfa8b31485d05b96a17f9d0ee4.wav"
+    ],
+    "wolf_hurt": [
+      "./content/0dd1cb7cfbab95adc9b87d5b831a969fb152d442d5664a3859160cf009c795ab.wav",
+      "./content/50ef049388be73de45ae8b0c0a4ca046a1e3b3423045f6eb407c3298c466bfb0.wav"
+    ],
+    "wolf_death": "./content/055be07c4568d12faafc054a571dcf4aaf1db22112f85da374833ea4412e1df3.wav",
+    "wolf_step": [
+      "./content/41d295b090f4aa2ef94357fca868087693e6a327120300675c71f3498aaee461.wav",
+      "./content/8871886fb50bad9cffc80c93e42ad7169e9a5223112ee874cdfad7091d09c962.wav",
+      "./content/542ef3c8a4a087ab20d1fff729b47ce2672e61f26c9734b7af849e083f32bd15.wav"
+    ],
+    "wolf_impact": [
+      "./content/cfc657bee75a5641d936538ad8291df48cc95927c583c1d563029940b3056b9c.wav",
+      "./content/6ce72e8f05cf5cd01466a7add0701ea2938ca27bcee239589135ed48b46d770e.wav"
+    ],
+    "wolf_alert": "./content/bcd8595bcf5bfd8fe0c579e533ac916ad01e16c91d939bad61360dc960d203f6.wav",
+    "fox_attack": [
+      "./content/7f8892196db6745037bfa15375710dbf91701beaee09c0eb8e3db793a2361e1b.wav",
+      "./content/974c882c51dbe6b03faf11930c3a2bca4d220e4e6b1c56bc985cd8433ad6b7ad.wav"
+    ],
+    "fox_hurt": [
+      "./content/304fee6d241c7bac9ad771c3b303b5a7a42616d68350688ec74ae8f0ba67448f.wav",
+      "./content/25526a081fa2d0923f19c3a91ca28eacf4f0c52b0130a5a627c9d98c843086a9.wav"
+    ],
+    "fox_death": "./content/35fe601de5c63d8ff2327d1ffb5d50ffab684e0f73a36274bbde05312def1633.wav",
+    "fox_step": [
+      "./content/6537141d2d4d75231dc96bf343bf02f4fef90b35ac15e49adb7828e84d0e7d4f.wav",
+      "./content/60e79eb7298fd9e3995edcd5ff99a523bbae1851a72e99ed64dd5d12be765435.wav",
+      "./content/559af796524e4dc4f973cdfb2c919905e2dff01b1ce83198a2261b6b8c9fe0a6.wav"
+    ],
+    "fox_impact": [
+      "./content/7eea6db29616489f8bfab18e5a5c100f13858233b4e4eede2f06d530b64fda53.wav",
+      "./content/f8bf568dadbfbc0b24a34f7a4aa3608ffd25abbf01be53559ed3ed0612bc0694.wav"
+    ],
+    "fox_alert": "./content/faedcdf49ba5ca3a2a6c5bd37333c6938f204d6b881d846f9062930e5b081484.wav",
+    "boar_attack": [
+      "./content/924dcd729fbfeb7d60f1ecb0e8de90a348e1ba3dc6ab8d9e577f94dee37afcfb.wav",
+      "./content/bdee7c52486af07c57ab44f6e36624d0ad6e940cf874f90782bfa1d10f3d696e.wav"
+    ],
+    "boar_hurt": [
+      "./content/4dc9f67f3d916a2b87bf6456bb05c5fb027b8003723bc22f9987f1254d076911.wav",
+      "./content/ffdf5ba3645f436016b04eaf6d918dfcb4504744946af1c45afeecd5fd7dc2a0.wav"
+    ],
+    "boar_death": "./content/5d9b3e0569f234bf9964248712b69c406062906e5bfcf55f77c6a675d0acaa96.wav",
+    "boar_step": [
+      "./content/4a3664f23d6a75179e0f8da94a591919be76fc892f65ca0024e6ce65e8203655.wav",
+      "./content/305bbf1cd67db10444c17bb3f5535ebc05324e1e5cef47bb2a994f270036f667.wav",
+      "./content/da06e869f616a6c3939d26735cfb26da35b3f3268b09e78cf4f697d64bb3e6ce.wav"
+    ],
+    "boar_impact": [
+      "./content/ea15c83de91f667d96355cc2cf6e332b1018ed68a071b373c379b83b1c323895.wav",
+      "./content/1d4fb47caa856b951e2163b7ee6cc8ded70765e574b5d5acc8819de67dee174a.wav"
+    ],
+    "boar_alert": "./content/035f5ef81a5b49f8cd52abc68258a74cfc2adbb9ff6e3cbcfa351982f9b5100a.wav",
+    "bear_step": [
+      "./content/a3fb2ca6c9e6106fbd1ba92791855f7b50c57326a9cf9335e4a4a505549e8f33.wav",
+      "./content/0ed7820ede3a0759d94c0f46fc69442bd76de37fd17dcab4168644325be4cb3d.wav",
+      "./content/82cafb0f34ffb5e4f3001c7db83cbd73fefcb56bf77baf169d9ec63e37bf8d06.wav"
+    ],
+    "bear_impact": [
+      "./content/abd1699ba63154be242cde1e3d582498410658029ff767f09d25c245efcd9e70.wav",
+      "./content/7cfd74cc4ef748c3bbc5f212cae2946426c2db42840f693b1d242088941b7fe2.wav"
+    ],
+    "bear_alert": "./content/e2de402e61a83d426757798f98a730659e901c65c58d65566d156e2775c22fea.wav"
+  },
+  "music": {
+    "boss": {
+      "url": "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3",
+      "volume": 0.32
+    },
+    "village": {
+      "url": "./content/270306426ba0d78907b2834e262bc38df9e89d96b872e38f5646c5753dae058f.mp3",
+      "volume": 0.27,
+      "seconds": 72
+    },
+    "forest": {
+      "url": "./content/1b583c8a9c4091032752fc5a72c1d38ce84d294806db7a2e562e9a60494a9f85.mp3",
+      "volume": 0.25,
+      "seconds": 72
+    },
+    "cave": {
+      "url": "./content/1c9395b0a19eba656c5c474d033c702fea33385f85aa0b4e230b9ee7ef5f7163.mp3",
+      "volume": 0.24,
+      "seconds": 72
+    },
+    "combat": {
+      "url": "./content/9b86f62edaf49d37fe85733095e25cd42dd4743551e982b35863d9415272d3f5.mp3",
+      "volume": 0.29,
+      "seconds": 72
+    },
+    "elena_saint": {
+      "url": "./content/caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1.mp3",
+      "volume": 0.3,
+      "seconds": 60,
+      "decodedBytes": 15360000,
+      "sampleRate": 32000,
+      "channels": 2
+    },
+    "elena_mourning": {
+      "url": "./content/69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0.mp3",
+      "volume": 0.3,
+      "seconds": 60,
+      "decodedBytes": 15360000,
+      "sampleRate": 32000,
+      "channels": 2
+    },
+    "alpha_wolf": {
+      "url": "./content/e2068daf237148ba5ee6a7c155765b566e571e07c0a4a59a8766caa416499a46.mp3",
+      "volume": 0.32,
+      "seconds": 70.58823529411765,
+      "sampleRate": 32000,
+      "channels": 2,
+      "decodedBytes": 18070592
+    }
+  },
+  "ambience": {
+    "ambience_village": {
+      "url": "./content/8d63af2a58cc56f324b492e7f601b1117e97da3074e719bff7c5fa934f949b8d.mp3",
+      "volume": 0.12,
+      "seconds": 18
+    },
+    "ambience_forest": {
+      "url": "./content/8289d26753a0bade4c75bcf2f9a6d3e19e43c3fa4a11b04708c3c432f0f818cb.mp3",
+      "volume": 0.11,
+      "seconds": 18
+    },
+    "ambience_cave": {
+      "url": "./content/d7a6c3c82a038fe8da4570dd87df783a9e23f386cd7595fd1d5a697669826400.mp3",
+      "volume": 0.14,
+      "seconds": 18
+    }
+  },
+  "cueSettings": {
+    "portal_depart": {
+      "volume": 0.38,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "portal_arrive": {
+      "volume": 0.32,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "gold_pickup": {
+      "volume": 0.32,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "potion_drink": {
+      "volume": 0.35,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "grab_caught": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "grab_escape": {
+      "volume": 0.44,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "evade_success": {
+      "volume": 0.2,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "bear_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "bear_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "bear_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "goblin_attack": {
+      "volume": 0.28,
+      "priority": 2,
+      "cooldown": 1.2
+    },
+    "goblin_hurt": {
+      "volume": 0.27,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "goblin_death": {
+      "volume": 0.4,
+      "priority": 2,
+      "cooldown": 1
+    },
+    "goblin_appear": {
+      "volume": 0.32,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "foot_cave_0": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_forest_0": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_cave_1": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_forest_1": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_cave_2": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "foot_forest_2": {
+      "volume": 0.18,
+      "priority": 0,
+      "cooldown": 0.12
+    },
+    "wolf_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "wolf_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "wolf_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "wolf_step": {
+      "volume": 0.28,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "wolf_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "wolf_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    },
+    "fox_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "fox_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "fox_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "fox_step": {
+      "volume": 0.28,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "fox_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "fox_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    },
+    "boar_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "boar_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "boar_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "boar_step": {
+      "volume": 0.28,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "boar_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "boar_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    },
+    "bear_step": {
+      "volume": 0.38,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "bear_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "bear_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    }
+  },
+  "resources": [
+    "./content/b2f0b06586dec62370400d051f7f0aceb19ca3a9053d81fcad43f0b919b5bf3f.wav",
+    "./content/be361925afdaba8af3679e7de4ec88c306ae19b89d0cc7a7298313b0414ab127.wav",
+    "./content/76ead70834769f2d53b17c3bb706492e634ff21699098c9af80d71905a09a8df.wav",
+    "./content/ef11e7428143980be7e670e822eb629573a412a9b5a7db67ef60e31bb9110d8e.wav",
+    "./content/7371fa252508bc35a4853174835418de104822156658de36bee08fe057c7b600.wav",
+    "./content/f6b24f1aa8ff5c2521712a10b7ca5336a21b5000b278bf1b11ea1df1a8496789.wav",
+    "./content/fc8be575d3813e8cc738d8945400c8716cf3e82cef6cffc36e89305e71404a37.wav",
+    "./content/3cc62419b8c84b2e9d322695f3994ae4fbc6f9bb59d06c837f9a04b47fe0f6bc.wav",
+    "./content/356f60f11d9169958b92b8d0bf782a6149c45f645e2dc5dc1282914be12800de.wav",
+    "./content/b7580577962a01e5aaf89b006f7c479a302d689a8c5ba38e003dde137af1a62e.wav",
+    "./content/28a88099f81376ebe4624610c6365b64f0d75692d2d4cea231060920c5d99cd0.wav",
+    "./content/8849ee361c69f06c798439535e623e7efd216fb5666f2446865928265611b3db.wav",
+    "./content/db0736992c537f4a375d68fd0a3456e2dc31aa51e2a2c7dd731f2ff50f98e143.wav",
+    "./content/580c83bdc60bd905dd8d9873f7eb31aa9d828777a36eed1e213de115b01ce786.wav",
+    "./content/caa55f105c1e098682cf3f3e137d15e237c8bcaacb9eecd63be41e3b3efa3d46.wav",
+    "./content/d2ae3d53c9667e194bd0b8064f4f0e5e40cc85e5bd52d505d7e24121a2506cd5.wav",
+    "./content/6af1a673ecdbb03a4a0cec9aa6827fdac9602fa0cf24126b575b0530ef9a8a8d.wav",
+    "./content/dd1bd99664f18e528f941a2b5916bc945801a0a3e82a0c595bc157defc37da00.wav",
+    "./content/b20047b8c052e5751eddc026a21b861eda3eafdf8f737cb49efffa681f6dd482.wav",
+    "./content/50c64fec9dd71b15ea2a89436a888558022eefc43fecc24a2c4325f7463bb1ae.wav",
+    "./content/01451d8fd7bb1458e27248c18c6fb57eeab14d107543fa3fab26fba561351195.wav",
+    "./content/5e060a8298a95a414d9ab5a7026846436f4d191db52ffe0500bebf3012dade1b.wav",
+    "./content/a6d821f1ffdfe7edc318ec0441f57a917f3824e59e74fc37d2f1127673603da0.wav",
+    "./content/51c4afd74ce2381c02cd8698880e59e4e36b296dc158645478e5411077091eb6.wav",
+    "./content/258420c409d34e6bd118262f49028140f2e6513f9f5e4ef48131efc451db6a96.wav",
+    "./content/3221290aa3def64fcb247999be41d19a6b8b8b1df4ab84c9cd011c2611e9f5a9.wav",
+    "./content/73dccd69c03c7c1ffe2547d278a729f0c65cf55fd6d8378d2a7407679930a768.wav",
+    "./content/52215c65b25000c95182747226e7eddc331c48943fec4e7791c8e2e79af02993.wav",
+    "./content/5bb4a130d0744b76615eac8ece14bde446fd3448c6e82cfc960446eab760fe2c.wav",
+    "./content/a9299de25669dabcf2255dcc2a72af4c62eec714030b1309978db04fecabd22a.wav",
+    "./content/a48cb46531049656054a8d9c4cd03ecef12aa99f0e07c370e487e84c849cbc73.wav",
+    "./content/406618e7eec878ee98ebf337fb63b0599db5311638ba344dcb9cb66327000ab6.wav",
+    "./content/2259593e5cf96ae69e49b84ea36b7421d2e03b4fbe087592997a3883a63c4332.wav",
+    "./content/49a6e41eae068dc7a41a174386083070e76b21ebb01ac6c86b2ece550d230155.wav",
+    "./content/b7ee2ff9f711b6664cbd3a37b82bfe302e6b2ed22b30b1cdbc18e15f19b0286b.wav",
+    "./content/cefed5988bdc094983747b06a0da8d25750bf26d17826f5d1575b4d5ad8fce90.wav",
+    "./content/494672f80901bdb45f796dd438603f2f296c57cfc7113e315433ab7244d0c207.mp3",
+    "./content/270306426ba0d78907b2834e262bc38df9e89d96b872e38f5646c5753dae058f.mp3",
+    "./content/1b583c8a9c4091032752fc5a72c1d38ce84d294806db7a2e562e9a60494a9f85.mp3",
+    "./content/1c9395b0a19eba656c5c474d033c702fea33385f85aa0b4e230b9ee7ef5f7163.mp3",
+    "./content/9b86f62edaf49d37fe85733095e25cd42dd4743551e982b35863d9415272d3f5.mp3",
+    "./content/8d63af2a58cc56f324b492e7f601b1117e97da3074e719bff7c5fa934f949b8d.mp3",
+    "./content/8289d26753a0bade4c75bcf2f9a6d3e19e43c3fa4a11b04708c3c432f0f818cb.mp3",
+    "./content/d7a6c3c82a038fe8da4570dd87df783a9e23f386cd7595fd1d5a697669826400.mp3",
+    "./content/bcfd465189ffac3ceff822fc14d0a238b44d635d4e989c6b5f80cb4d2823219b.wav",
+    "./content/505255dd9d9888459ac1083d70990a970df16f8f5c00da843fffb199d243bb70.wav",
+    "./content/dfca9dfbe0fb2c6e403bd47069ce6a631a4a2e3d212f465efcad75a14e5635ab.wav",
+    "./content/569d4f3671157e7a414dadd0ed7a659ad6d80658fd1c533c62b9b36037356503.wav",
+    "./content/9b2af0e6b3925ea965a806cf822d83878045004963d23688dbc7554accc14561.wav",
+    "./content/b2f6fb129b1c9af322ad8e026a80785c7f942f331e3f0dc7bab95484f00d79bf.wav",
+    "./content/70def7b2115c793cb9615242ce8bf768cf4c9d7391bca99e1712d487258e2dc1.wav",
+    "./content/22389d97bd162aec3db01eb33044d7986e6e1788c2c5838dd15f59752d84829a.wav",
+    "./content/cf37286ab5194510c0fe869996f6f4828d47d5d05c2e6b6fa465ece0ae86f24e.wav",
+    "./content/aaf0e176201053bea35aec6676d6fd7edf4d9061ffb8fd82f1266d56b8f731e0.wav",
+    "./content/b946601a07434fa900d63a9ac590b2d71d49caaae5afdda74c2e3b9271451065.wav",
+    "./content/a153bba085db1410ce1f0355c90f90bef1a88ad3d5e6c9f6fd944141b0a9e578.wav",
+    "./content/65530b52eb1817ab89dbf7a656450aaeaf4c6ff833cc0c48ad40e4e4c074ba90.wav",
+    "./content/5e73ebd194c71b85007a7e6949ba59f04171273c6dcbb23855d45501074aeb6b.wav",
+    "./content/002a4a7b5c10852fc5c3185495f91190dee2d0f11f46ac8f5ec27f56c1fc3f1d.wav",
+    "./content/45f1e0475c1aa5aac40497ae325870c95550702370bea7922772319b264840be.wav",
+    "./content/6f2d639807e1feaf2c191cb742370f3aee8bd6ddfe277f47ee7a294ef54b2d42.wav",
+    "./content/de46db9c04edd040a4dae25cc11675323c719656af11e5edd3ae16d66fe3d431.wav",
+    "./content/46fb53a94a3cd4db370b8c87e9d06bdb6eb442cdc91b11a447730fc365ea61e4.wav",
+    "./content/6b203664d0eb67a10ee657c7bb73f3d27e60df18b8c3545b106d7a00533eb138.wav",
+    "./content/caaee88744c088884a8c0014a6631d6b910a24bed6ea47ffa52bbce32af403b1.mp3",
+    "./content/69b3d54ccf4682e26a8995443e5e01d63d469bd0678758cef70746c403683fa0.mp3",
+    "./content/5d36fa87c0b5da51af931f651f490ce62e925f7ed6455b3b8a4ab7a5e6d432cc.wav",
+    "./content/b7de327b6ffd3072737ce46ce9d20361010152cfa8b31485d05b96a17f9d0ee4.wav",
+    "./content/0dd1cb7cfbab95adc9b87d5b831a969fb152d442d5664a3859160cf009c795ab.wav",
+    "./content/50ef049388be73de45ae8b0c0a4ca046a1e3b3423045f6eb407c3298c466bfb0.wav",
+    "./content/055be07c4568d12faafc054a571dcf4aaf1db22112f85da374833ea4412e1df3.wav",
+    "./content/41d295b090f4aa2ef94357fca868087693e6a327120300675c71f3498aaee461.wav",
+    "./content/8871886fb50bad9cffc80c93e42ad7169e9a5223112ee874cdfad7091d09c962.wav",
+    "./content/542ef3c8a4a087ab20d1fff729b47ce2672e61f26c9734b7af849e083f32bd15.wav",
+    "./content/cfc657bee75a5641d936538ad8291df48cc95927c583c1d563029940b3056b9c.wav",
+    "./content/6ce72e8f05cf5cd01466a7add0701ea2938ca27bcee239589135ed48b46d770e.wav",
+    "./content/bcd8595bcf5bfd8fe0c579e533ac916ad01e16c91d939bad61360dc960d203f6.wav",
+    "./content/7f8892196db6745037bfa15375710dbf91701beaee09c0eb8e3db793a2361e1b.wav",
+    "./content/974c882c51dbe6b03faf11930c3a2bca4d220e4e6b1c56bc985cd8433ad6b7ad.wav",
+    "./content/304fee6d241c7bac9ad771c3b303b5a7a42616d68350688ec74ae8f0ba67448f.wav",
+    "./content/25526a081fa2d0923f19c3a91ca28eacf4f0c52b0130a5a627c9d98c843086a9.wav",
+    "./content/35fe601de5c63d8ff2327d1ffb5d50ffab684e0f73a36274bbde05312def1633.wav",
+    "./content/6537141d2d4d75231dc96bf343bf02f4fef90b35ac15e49adb7828e84d0e7d4f.wav",
+    "./content/60e79eb7298fd9e3995edcd5ff99a523bbae1851a72e99ed64dd5d12be765435.wav",
+    "./content/559af796524e4dc4f973cdfb2c919905e2dff01b1ce83198a2261b6b8c9fe0a6.wav",
+    "./content/7eea6db29616489f8bfab18e5a5c100f13858233b4e4eede2f06d530b64fda53.wav",
+    "./content/f8bf568dadbfbc0b24a34f7a4aa3608ffd25abbf01be53559ed3ed0612bc0694.wav",
+    "./content/faedcdf49ba5ca3a2a6c5bd37333c6938f204d6b881d846f9062930e5b081484.wav",
+    "./content/924dcd729fbfeb7d60f1ecb0e8de90a348e1ba3dc6ab8d9e577f94dee37afcfb.wav",
+    "./content/bdee7c52486af07c57ab44f6e36624d0ad6e940cf874f90782bfa1d10f3d696e.wav",
+    "./content/4dc9f67f3d916a2b87bf6456bb05c5fb027b8003723bc22f9987f1254d076911.wav",
+    "./content/ffdf5ba3645f436016b04eaf6d918dfcb4504744946af1c45afeecd5fd7dc2a0.wav",
+    "./content/5d9b3e0569f234bf9964248712b69c406062906e5bfcf55f77c6a675d0acaa96.wav",
+    "./content/4a3664f23d6a75179e0f8da94a591919be76fc892f65ca0024e6ce65e8203655.wav",
+    "./content/305bbf1cd67db10444c17bb3f5535ebc05324e1e5cef47bb2a994f270036f667.wav",
+    "./content/da06e869f616a6c3939d26735cfb26da35b3f3268b09e78cf4f697d64bb3e6ce.wav",
+    "./content/ea15c83de91f667d96355cc2cf6e332b1018ed68a071b373c379b83b1c323895.wav",
+    "./content/1d4fb47caa856b951e2163b7ee6cc8ded70765e574b5d5acc8819de67dee174a.wav",
+    "./content/035f5ef81a5b49f8cd52abc68258a74cfc2adbb9ff6e3cbcfa351982f9b5100a.wav",
+    "./content/d6186050f0e427a8f91534c87a9976be1f4b8d87b9885a78550e6848ff78ff39.wav",
+    "./content/c0947343fc6d58cd17ae02be334bff488b7d2c9c5369f47f9c362511b0cef954.wav",
+    "./content/1c1493f406eec0f9ca1a4741b56c4e7293fa504253bb9646405127f470c2e9c8.wav",
+    "./content/443f5228e2f904a42e07fc34d3c32ecb3d0b31bb1a836ee53dca4ba043efdb0e.wav",
+    "./content/5c2dd7ac6b09cbd6d38bb7e229a5df7332c2cb20eda127d9a6eb18bc506ba959.wav",
+    "./content/a3fb2ca6c9e6106fbd1ba92791855f7b50c57326a9cf9335e4a4a505549e8f33.wav",
+    "./content/0ed7820ede3a0759d94c0f46fc69442bd76de37fd17dcab4168644325be4cb3d.wav",
+    "./content/82cafb0f34ffb5e4f3001c7db83cbd73fefcb56bf77baf169d9ec63e37bf8d06.wav",
+    "./content/abd1699ba63154be242cde1e3d582498410658029ff767f09d25c245efcd9e70.wav",
+    "./content/7cfd74cc4ef748c3bbc5f212cae2946426c2db42840f693b1d242088941b7fe2.wav",
+    "./content/e2de402e61a83d426757798f98a730659e901c65c58d65566d156e2775c22fea.wav",
+    "./content/e2068daf237148ba5ee6a7c155765b566e571e07c0a4a59a8766caa416499a46.mp3"
+  ],
+  "creatureAudio": {
+    "version": 1,
+    "credits": "../AUDIO_CREATURES_R1_CREDITS.txt"
+  }
+}

@@ -135,7 +135,7 @@ const elements=new Map();
 const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
 const text=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
 const canvas = $('#viewport');
-const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
+const audio=new GameAudio({manifestUrl:releaseRoute(location.href).release==='moonforest-0.2'?new URL(`${import.meta.env.BASE_URL}assets/audio-creatures-r1.json`,location.href):undefined}),actionAudio=new ActionAudio(audio);
 audio.bindUnlock(document);
 const loading = $('#loading');
 const loadingView=createLoadingView();

@@ -1,15 +1,19 @@
+import {encounterInCombat} from './combat-readability.js';
 // Track names are optional manifest entries, never aliases for an existing song.
 export const ELENA_MUSIC_KEYS=Object.freeze({saint:'elena_saint',mourning:'elena_mourning'});
+export const ALPHA_WOLF_MUSIC_KEY='alpha_wolf';
 
 export function bossMusicContext(encounters=[]){
   let selected=null;
   for(const enemy of encounters??[]){
-    if(!enemy?.active||!(enemy.brain?.hp>0)||enemy.reviewMode)continue;
+    if(!enemy?.active||!(enemy.brain?.hp>0)||enemy.reviewMode||!encounterInCombat(enemy))continue;
     if(enemy.kind==='elena'){
       if(!enemy.engaged)continue;
       if(enemy.phase===2)return ELENA_MUSIC_KEYS.mourning;
       if(enemy.phase===1)selected=ELENA_MUSIC_KEYS.saint;
       else selected??='boss';
+    }else if(enemy.kind==='wolf'&&!enemy.regularWolfId){
+      if(selected===null||selected==='boss')selected=ALPHA_WOLF_MUSIC_KEY;
     }else if(enemy.kind!=='goblin'&&!enemy.regularWolfId)selected??='boss';
   }
   return selected;

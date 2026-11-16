@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "createdAt": "2026-11-17",
+  "method": "Original offline source/filter creature synthesis and original scored music; no reused recording or external samples in the new assets",
+  "sounds": {
+    "wolf_attack": [
+      "sfx/wolf_attack_1.wav",
+      "sfx/wolf_attack_2.wav"
+    ],
+    "wolf_hurt": [
+      "sfx/wolf_hurt_1.wav",
+      "sfx/wolf_hurt_2.wav"
+    ],
+    "wolf_death": "sfx/wolf_death_1.wav",
+    "wolf_step": [
+      "sfx/wolf_step_1.wav",
+      "sfx/wolf_step_2.wav",
+      "sfx/wolf_step_3.wav"
+    ],
+    "wolf_impact": [
+      "sfx/wolf_impact_1.wav",
+      "sfx/wolf_impact_2.wav"
+    ],
+    "wolf_alert": "sfx/wolf_alert_1.wav",
+    "fox_attack": [
+      "sfx/fox_attack_1.wav",
+      "sfx/fox_attack_2.wav"
+    ],
+    "fox_hurt": [
+      "sfx/fox_hurt_1.wav",
+      "sfx/fox_hurt_2.wav"
+    ],
+    "fox_death": "sfx/fox_death_1.wav",
+    "fox_step": [
+      "sfx/fox_step_1.wav",
+      "sfx/fox_step_2.wav",
+      "sfx/fox_step_3.wav"
+    ],
+    "fox_impact": [
+      "sfx/fox_impact_1.wav",
+      "sfx/fox_impact_2.wav"
+    ],
+    "fox_alert": "sfx/fox_alert_1.wav",
+    "boar_attack": [
+      "sfx/boar_attack_1.wav",
+      "sfx/boar_attack_2.wav"
+    ],
+    "boar_hurt": [
+      "sfx/boar_hurt_1.wav",
+      "sfx/boar_hurt_2.wav"
+    ],
+    "boar_death": "sfx/boar_death_1.wav",
+    "boar_step": [
+      "sfx/boar_step_1.wav",
+      "sfx/boar_step_2.wav",
+      "sfx/boar_step_3.wav"
+    ],
+    "boar_impact": [
+      "sfx/boar_impact_1.wav",
+      "sfx/boar_impact_2.wav"
+    ],
+    "boar_alert": "sfx/boar_alert_1.wav",
+    "bear_attack": [
+      "sfx/bear_attack_1.wav",
+      "sfx/bear_attack_2.wav"
+    ],
+    "bear_hurt": [
+      "sfx/bear_hurt_1.wav",
+      "sfx/bear_hurt_2.wav"
+    ],
+    "bear_death": "sfx/bear_death_1.wav",
+    "bear_step": [
+      "sfx/bear_step_1.wav",
+      "sfx/bear_step_2.wav",
+      "sfx/bear_step_3.wav"
+    ],
+    "bear_impact": [
+      "sfx/bear_impact_1.wav",
+      "sfx/bear_impact_2.wav"
+    ],
+    "bear_alert": "sfx/bear_alert_1.wav"
+  },
+  "cueSettings": {
+    "wolf_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "wolf_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "wolf_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "wolf_step": {
+      "volume": 0.28,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "wolf_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "wolf_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    },
+    "fox_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "fox_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "fox_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "fox_step": {
+      "volume": 0.28,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "fox_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "fox_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    },
+    "boar_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "boar_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "boar_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "boar_step": {
+      "volume": 0.28,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "boar_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "boar_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    },
+    "bear_attack": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.22
+    },
+    "bear_hurt": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.12
+    },
+    "bear_death": {
+      "volume": 0.65,
+      "priority": 3,
+      "cooldown": 0.7
+    },
+    "bear_step": {
+      "volume": 0.38,
+      "priority": 0,
+      "cooldown": 0.1
+    },
+    "bear_impact": {
+      "volume": 0.65,
+      "priority": 2,
+      "cooldown": 0.075
+    },
+    "bear_alert": {
+      "volume": 0.48,
+      "priority": 2,
+      "cooldown": 1.5
+    }
+  },
+  "music": {
+    "alpha_wolf": {
+      "file": "music/alpha-wolf-r1.mp3",
+      "volume": 0.32,
+      "seconds": 70.58823529411765,
+      "sampleRate": 32000,
+      "channels": 2,
+      "decodedBytes": 18070592
+    }
+  },
+  "creditsFile": "CREDITS.txt"
+}

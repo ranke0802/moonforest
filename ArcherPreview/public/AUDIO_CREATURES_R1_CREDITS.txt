@@ -1,0 +1,19 @@
+MOONFOREST — ORIGINAL CREATURE AUDIO R1 — 2026-11-17
+
+New wolf, fox, boar and bear effects were synthesized specifically for
+MoonForest from oscillator excitation, seeded noise, resonant filters and
+original envelopes. No animal recording, commercial game sound, stock clip,
+prior MoonForest sound or third-party sample was used in these new cues.
+The alpha-wolf score is an original note arrangement rendered with original
+synthesized instrumental tones, not a borrowed song, sampled recording or
+an imitation of a named artist. No Runway or other hosted generation service
+was used. Editable generators, score and MIDI are preserved with the sources.
+
+Production: MoonForest project, created with Codex assistance.
+Methods are documented in make_creatures.py and compose_alpha.py.
+Tool software: Python, NumPy, SciPy, FFmpeg; no GeneralUser GS samples used.
+
+This attribution applies to the newly created creature cues and alpha-wolf
+score only. Existing bear/Elena/world tracks retain their separate original
+licenses and attribution. Original synthesis does not guarantee that an
+automated matching system will never issue a false match.

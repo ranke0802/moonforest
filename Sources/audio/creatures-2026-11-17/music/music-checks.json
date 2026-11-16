@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "scope": "Offline composition and numerical audio checks; not listener approval, in-game loudness or device playback certification",
+  "requested": {
+    "bpm": 136,
+    "bars": 40,
+    "seconds": 70.58823529411765,
+    "sampleRate": 32000,
+    "channels": 2,
+    "mp3Bitrate": 128000
+  },
+  "noteCount": 803,
+  "initialMasterGain": 1.911688798793108,
+  "wav": {
+    "frames": 2258824,
+    "sampleRate": 32000,
+    "channels": 2,
+    "durationSeconds": 70.58825,
+    "samplePeakDbfs": -3.5056056902863366,
+    "truePeak4xDbfs": -3.5000009817158673,
+    "rmsDbfs": -21.757094307914148,
+    "dcMaxAbs": 3.4753015825117473e-06,
+    "clippedSamples": 0,
+    "stereoCorrelation": 0.9683843883613658,
+    "monoToStereoRmsRatio": 0.9886096119880676,
+    "powerBelow100HzFraction": 0.34326093751570214,
+    "powerAbove6000HzFraction": 0.00010348335335676926,
+    "oneSecondRmsP90MinusP10Db": 9.921236533586466,
+    "loopBoundaryJumpAbsMax": 0.0013689100742340088,
+    "loopBoundaryVsLocalDerivativeRms": 0.7192901968955994
+  },
+  "mp3Decoded": {
+    "frames": 2258824,
+    "sampleRate": 32000,
+    "channels": 2,
+    "durationSeconds": 70.58825,
+    "samplePeakDbfs": -3.912846045923846,
+    "truePeak4xDbfs": -3.901808515802789,
+    "rmsDbfs": -22.202163117822824,
+    "dcMaxAbs": 5.2821560529991984e-06,
+    "clippedSamples": 0,
+    "stereoCorrelation": 0.9682442782940378,
+    "monoToStereoRmsRatio": 0.9885873198509216,
+    "powerBelow100HzFraction": 0.34319516713473663,
+    "powerAbove6000HzFraction": 0.00010754103887092187,
+    "oneSecondRmsP90MinusP10Db": 9.91675435619111,
+    "loopBoundaryJumpAbsMax": 0.004557931795716286,
+    "loopBoundaryVsLocalDerivativeRms": 2.4351632595062256
+  },
+  "mp3Container": {
+    "programs": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "sample_rate": "32000",
+        "channels": 2,
+        "start_time": "0.034531",
+        "duration": "70.632000",
+        "bit_rate": "128000"
+      }
+    ],
+    "format": {
+      "duration": "70.632000",
+      "size": "1130844"
+    }
+  },
+  "decodedFrameDifferenceFromWav": 0,
+  "ffmpegLoudnessSummary": "Summary:\n\n  Integrated loudness:\n    I:         -20.4 LUFS\n    Threshold: -30.5 LUFS\n\n  Loudness range:\n    LRA:         9.9 LU\n    Threshold: -40.4 LUFS\n    LRA low:   -26.8 LUFS\n    LRA high:  -17.0 LUFS\n\n  True peak:\n    Peak:       -3.9 dBFS",
+  "passed": true,
+  "assets": {
+    "alpha-wolf-r1.mid": {
+      "bytes": 7780,
+      "sha256": "a4733add96e8904041d5862767a263d35bd45a2bc84d3cba502be4e1a65b5088"
+    },
+    "alpha-wolf-r1.wav": {
+      "bytes": 18070650,
+      "sha256": "ca09cb06d19a78989a11972684a525da46e063e06b79d7ba26cb52663b316842"
+    },
+    "alpha-wolf-r1.mp3": {
+      "bytes": 1130844,
+      "sha256": "e2068daf237148ba5ee6a7c155765b566e571e07c0a4a59a8766caa416499a46"
+    },
+    "score.json": {
+      "bytes": 121737,
+      "sha256": "4ca12247a23207ab606a4d1cd0c94a8393902732fdf33091b2f4115e07ba2717"
+    }
+  }
+}
