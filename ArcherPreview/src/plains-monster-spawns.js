@@ -4,7 +4,8 @@
 export const PLAINS_MONSTER_SPAWNS_R1_REVISION='great-plains-monsters-2026-11-16-r1';
 export const PLAINS_MONSTER_SPAWNS_R2_REVISION='great-plains-monsters-2026-11-16-r2';
 export const PLAINS_MONSTER_SPAWNS_R3_REVISION='great-plains-monsters-2026-11-16-r3';
-export const PLAINS_MONSTER_SPAWNS_REVISION='great-plains-monsters-2026-11-16-r4';
+export const PLAINS_MONSTER_SPAWNS_R4_REVISION='great-plains-monsters-2026-11-16-r4';
+export const PLAINS_MONSTER_SPAWNS_REVISION='great-plains-monsters-2026-11-16-r5';
 const freeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};
 
 const r2Groups=freeze([
@@ -39,7 +40,7 @@ const r3Groups=freeze(r2Groups.map(group=>group.id==='plains-wolf-meadow'?{...gr
 ]}:group.id==='plains-alpha-pack'?{...group,territory:{...r2Groups.find(row=>row.id==='plains-wolf-meadow').territory},members:[
  ['alpha-wolf.r8',29.25,37,1.858901560306549,Math.PI],['gray-wolf.r1',24,33,1.1823619902133964,2.6],['stylized-wolf.r1',32,32,1.9618545770645142,-2.8],['wolf-3.r1',36,38,2.343322515487671,-2.4],
 ]}:group));
-export const PLAINS_MONSTER_GROUPS=freeze([...r3Groups.map(group=>group.id==='plains-fox-west'?{...group,label:'서남쪽 숲 아래 여우',territory:{...group.territory,x:-53,z:-64},members:[
+const r4Groups=freeze([...r3Groups.map(group=>group.id==='plains-fox-west'?{...group,label:'서남쪽 숲 아래 여우',territory:{...group.territory,x:-53,z:-64},members:[
  ['fox.r1',-54.4,-64,3.8136508464813232,.5],['fox.r1',-51.6,-64,3.67986500263214,-.5],
 ]}:group),{id:'plains-riverbank-bear',label:'강 남쪽 서안 곰',territory:{x:72,z:-49,radius:14,combatRadius:8,wanderRadius:2,returnRadius:1,reengageRadius:12.5},members:[
  ['guardian-bear.standard',72,-49,.2932288721203804,-Math.PI/2],
@@ -47,12 +48,26 @@ export const PLAINS_MONSTER_GROUPS=freeze([...r3Groups.map(group=>group.id==='pl
  ['stylized-wolf.r1',-52,11,.34020696580410004,2.4],['stylized-wolf.r1',-46,11,.18587123230099678,2.9],['stylized-wolf.r1',-52,17,.2715796157717705,2.6],['stylized-wolf.r1',-46,17,.18941158801317215,-2.8],
 ]}]);
 
+// R5 keeps the total population at19: two paired fox groups become single
+// foxes near the village, with two separate lone-wolf encounters nearby.
+export const PLAINS_MONSTER_GROUPS=freeze([...r4Groups.map(group=>group.id==='plains-fox-west'?{
+ ...group,label:'마을 남쪽 외곽 여우',territory:{x:-77,z:-52,radius:8,combatRadius:4.5,wanderRadius:2.2,returnRadius:.8,reengageRadius:7},members:[['fox.r1',-77,-52,.11999999731779099,.5]],
+}:group.id==='plains-fox-east'?{
+ ...group,label:'마을 북쪽 외곽 여우',territory:{x:-72,z:-10,radius:8,combatRadius:4.5,wanderRadius:2.2,returnRadius:.8,reengageRadius:7},members:[['fox.r1',-72,-10,.6468173563480377,.4]],
+}:group.id==='plains-stylized-wolf-pack'?{
+ ...group,label:'먼 북서쪽 초원 늑대2 무리',territory:{...group.territory,x:-70,z:52},members:[
+  ['stylized-wolf.r1',-73,49,1.056545451283455,2.4],['stylized-wolf.r1',-67,49,1.386963665485382,2.9],['stylized-wolf.r1',-73,55,1.891736775636673,2.6],['stylized-wolf.r1',-67,55,2.410731613636017,-2.8],
+ ],
+}:group),{id:'plains-village-wolf-south',label:'마을 남동쪽 외곽 외톨이 늑대',territory:{x:-57,z:-50,radius:9,combatRadius:5,wanderRadius:2.2,returnRadius:.8,reengageRadius:8},members:[['gray-wolf.r1',-57,-50,3.61909681558609,2.4]]},
+{id:'plains-village-wolf-north',label:'마을 북쪽 초원 외톨이 늑대',territory:{x:-82,z:8,radius:9,combatRadius:5,wanderRadius:2.2,returnRadius:.8,reengageRadius:8},members:[['gray-wolf.r1',-82,8,1.7152364253997803,2.7]]}]);
+
 const spawnDocument=groups=>({format:'moonforest-monster-spawns',version:1,maps:{'great-plains':groups.flatMap(group=>group.members.map(([definitionId,x,z,y,yaw],index)=>({
  id:group.id+'-'+(index+1),groupId:group.id,definitionId,x,y,z,yaw,
  spawnMode:'start',respawn:true,delaySeconds:45,randomRadius:0,rewardEnabled:true,
  drop:{assetId:'',effectEnabled:false},territory:{...group.territory},
 })))}});
 export const PLAINS_MONSTER_SPAWNS=freeze(spawnDocument(PLAINS_MONSTER_GROUPS));
+export const PLAINS_MONSTER_SPAWNS_R4=freeze(spawnDocument(r4Groups));
 export const PLAINS_MONSTER_SPAWNS_R3=freeze(spawnDocument(r3Groups));
 export const PLAINS_MONSTER_SPAWNS_R2=freeze(spawnDocument(r2Groups));
 

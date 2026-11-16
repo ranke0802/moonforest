@@ -1,0 +1,35 @@
+✔ fresh0.2 plains defaults seed19 approved actors in11 complete groups, with bounded preparation and terrain height (8.3653ms)
+✔ map-entry preparation prioritizes nearby complete default groups and leaves saved row order unchanged (0.9194ms)
+✔ legacy custom20 are preserved; requested defaults reserve whole groups first while excess customs wait visibly (1.7791ms)
+✔ editing or deleting defaults persists across runtime recreation, including a replacement imported without migration metadata (1.1628ms)
+✔ a saved R1 runtime applies and persists current defaults only to untouched rows without restoring deleted actors (1.645ms)
+✔ storage errors keep defaults active in memory without overwriting unreadable custom data (1.771ms)
+✔ prepared groups wait through pause and a map departure cannot attach a late acquisition (0.876ms)
+✔ monster placement records round trip and grouped lifetime configuration stays consistent (1.0476ms)
+✔ invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected (0.1988ms)
+✔ all approved plains quadruped definitions and finite contained territories round trip (1.169ms)
+✔ default migration preserves custom values and aliases conflicting IDs/groups without mutating its input (1.4796ms)
+✔ only recognized historical14 or current19 IDs permit bounded migration storage capacity34 or39 (1.5366ms)
+✔ future default revisions add new IDs but do not restore deleted or overwrite edited previously installed defaults (0.529ms)
+✔ R1 to R2 upgrades only unchanged default territories/homes and preserves edits, deletions and custom rows (1.0874ms)
+✔ R1 custom20 migration documents remain valid at34 and collision aliases upgrade without changing custom originals (1.8744ms)
+✔ R2 to R3 moves only pristine wolf defaults while preserving custom home/area/deletions and remains idempotent (1.6536ms)
+✔ R4 adds five new actors, moves pristine west foxes only and preserves R3 edits/deletions and historical capacity (2.0409ms)
+✔ R5 relocates the four-wolf pack, retires only pristine paired foxes and installs two lone wolves once (1.6274ms)
+✔ R5 preserves edited former foxes, moved wolves, rewards, deleted defaults and conflicting custom aliases (0.9276ms)
+✔ R1 through R4 pristine save documents all migrate directly to the same R5 homes and composition (2.75ms)
+✔ R5 default plains has nineteen actors in eleven independently editable stable groups and preserves prior evidence (1.9704ms)
+✔ all fixed homes use actual terrain and clear physical navigation, water, roads, arrival and each other (2.4946ms)
+✔ R2 outer watch and inner combat ranges expand around the same homes with bounded home wandering (0.4916ms)
+✔ R3 leader pack occupies the farther former wolf territory and the ordinary pack takes its former homes (0.1322ms)
+✔ every home has reachable ambient wander choices away from roads, water and village arrival (23.0195ms)
+✔ fox homes use existing forest canopies, boars use dry river banks and the bear stands on the real high summit (2.8026ms)
+✔ four single village encounters precede the relocated four-wolf pack without entering the arrival corridor (0.2196ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1728.3472

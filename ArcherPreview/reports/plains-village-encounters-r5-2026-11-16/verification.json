@@ -1,0 +1,66 @@
+{
+  "date": "2026-11-16",
+  "base": "10d39bb",
+  "revision": "r5",
+  "population": {
+    "actors": 19,
+    "groups": 11,
+    "nearVillage": {
+      "fox": [
+        {
+          "count": 1,
+          "x": -77,
+          "z": -52
+        },
+        {
+          "count": 1,
+          "x": -72,
+          "z": -10
+        }
+      ],
+      "regularWolf": [
+        {
+          "count": 1,
+          "x": -57,
+          "z": -50
+        },
+        {
+          "count": 1,
+          "x": -82,
+          "z": 8
+        }
+      ]
+    },
+    "farWolf2Pack": {
+      "count": 4,
+      "x": -70,
+      "z": 52
+    },
+    "allDefaultOuterTerritoriesDisjoint": true
+  },
+  "checks": {
+    "runner": "Node24/static production terrain and navigation/runtime fixtures",
+    "tests": 27,
+    "pass": 27,
+    "fail": 0,
+    "priorSaveMigrations": [
+      "r1",
+      "r2",
+      "r3",
+      "r4"
+    ],
+    "editedDeletedAndCustomRowsPreserved": true,
+    "retiredPristineFoxes": 2
+  },
+  "preserved": [
+    "approved models/textures/LOD",
+    "combat/animation/navigation",
+    "runtime20/512MiB limits",
+    "0.1 release"
+  ],
+  "limits": [
+    "No browser automation",
+    "Device visuals, FPS and heat not measured",
+    "User-edited territories are preserved rather than force-relocated"
+  ]
+}

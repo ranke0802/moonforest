@@ -3,7 +3,7 @@
   "release": "moonforest-0.2",
   "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
   "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "bytes": 800445606,
+  "bytes": 800447328,
   "files": [
     {
       "path": "app.webmanifest",
@@ -11,9 +11,9 @@
       "sha256": "89fef8403cc674c4f1e3aaf7038233f6b048d56fabdcabfe15f6bc1aa8cc9afd"
     },
     {
-      "path": "assets/actor-editor-Bnk84EZk.js",
+      "path": "assets/actor-editor-BCUbDUnJ.js",
       "bytes": 31975,
-      "sha256": "e8910153ff6ea445659b4741a113c00710f3639f9125ed911cb009f77307c479"
+      "sha256": "41564436c33dadd5e1f88bf10d2ce497f3fea74cec4ad19cd66fa93be533f294"
     },
     {
       "path": "assets/actor-encounter-adapter-BQs4BfFC.js",
@@ -71,9 +71,9 @@
       "sha256": "6d945302d3ce85cb3750e36ff880f9bd7fdef14c221296f3f9ebbc76f4429af6"
     },
     {
-      "path": "assets/authored-monster-runtime-CWv90Ecg.js",
+      "path": "assets/authored-monster-runtime-CcdoNSmb.js",
       "bytes": 9431,
-      "sha256": "37bd2d25b599aad6e0bf7ffc02016d4278442ea7cc70d672a37b456d85d65602"
+      "sha256": "8da6b4bb2f544d70dd97f34f5399dbbdc38471119cb804c1b297d667e16f7ce7"
     },
     {
       "path": "assets/authored-placement-runtime-Cd9LVXwi.js",
@@ -10156,19 +10156,19 @@
       "sha256": "eb9cd03794c5a433bba9b096ae385b64afd4ed840f3aa0f4dd42e317c918a6f4"
     },
     {
-      "path": "assets/monster-spawn-document-D9Mhbior.js",
-      "bytes": 6833,
-      "sha256": "b308515aa8644b8c6c9ac46b5eaab9f89c23f72242bc339dc8a2fd98b5f7ac60"
-    },
-    {
-      "path": "assets/moonforestV2-C47yU3Wb.js",
-      "bytes": 2379390,
-      "sha256": "edad54f8f9ef1e6f312d2e76996480c7457c8e339d958646dc6cd88f04887379"
+      "path": "assets/monster-spawn-document-JLuHnWAQ.js",
+      "bytes": 7161,
+      "sha256": "12ae76224925b1e963df3fed25b55559ad0343da6e73aeb641b72b96493d9d18"
     },
     {
       "path": "assets/moonforestV2-SRQLL6OX.css",
       "bytes": 124409,
       "sha256": "25689ed38514ee467c20cb6c83bf17e24ea4626c9e66cbf59771bc8a3c718c66"
+    },
+    {
+      "path": "assets/moonforestV2-UiSGE5DY.js",
+      "bytes": 2379390,
+      "sha256": "bbbae8100f7c4b3c4df710b3c8dc946bbe61b532bd1053a2d1e4a176390e6321"
     },
     {
       "path": "assets/morphTargetsVertex-2rpeEI8d.js",
@@ -10456,14 +10456,14 @@
       "sha256": "e630d0a12f082aa33ebdd73133fd73f604a7c698fa34045848a2f4f93e03a60c"
     },
     {
-      "path": "assets/plains-monster-spawns-DF4nCSG1.js",
-      "bytes": 377,
-      "sha256": "6763e5679a30387118928a885552f0b18a836e12fd76d0b76202193bc70f03ff"
+      "path": "assets/plains-monster-spawns-C3b_rIqQ.js",
+      "bytes": 5954,
+      "sha256": "aff26c3f0126856ec95f28b8badcc23b15fceedf7df2e60499973ad1ba5cb5f7"
     },
     {
-      "path": "assets/plains-monster-spawns-yzZZw-eW.js",
-      "bytes": 4629,
-      "sha256": "62c9697ac81df2b6cd8c21df6375df47197a9a0bd151207a9f862e40beaafe2e"
+      "path": "assets/plains-monster-spawns-CuFZqL99.js",
+      "bytes": 446,
+      "sha256": "dec31a62546259744e188d89d9d9f9ed0e2a2884a59d4ce9c0f17d16ca0ec066"
     },
     {
       "path": "assets/postprocess.vertex-D0swOvgr.js",
@@ -11033,7 +11033,7 @@
     {
       "path": "moonforest-0.2.html",
       "bytes": 40691,
-      "sha256": "fe32b36b2cf602775d65150a672fe8a2f3236e42893cf2fecbd71e4a981d074a"
+      "sha256": "45a15e9febbfba5d296b707aeab3def4bae65341352699ecd5e8d19fce4b545b"
     },
     {
       "path": "moonforest-0.2.webmanifest",

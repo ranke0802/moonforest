@@ -1,0 +1,42 @@
+[
+  {
+    "path": "ArcherPreviewSite/assets/actor-editor-BCUbDUnJ.js",
+    "bytes": 31975,
+    "sha256": "41564436c33dadd5e1f88bf10d2ce497f3fea74cec4ad19cd66fa93be533f294"
+  },
+  {
+    "path": "ArcherPreviewSite/assets/authored-monster-runtime-CcdoNSmb.js",
+    "bytes": 9431,
+    "sha256": "8da6b4bb2f544d70dd97f34f5399dbbdc38471119cb804c1b297d667e16f7ce7"
+  },
+  {
+    "path": "ArcherPreviewSite/assets/monster-spawn-document-JLuHnWAQ.js",
+    "bytes": 7161,
+    "sha256": "12ae76224925b1e963df3fed25b55559ad0343da6e73aeb641b72b96493d9d18"
+  },
+  {
+    "path": "ArcherPreviewSite/assets/moonforestV2-UiSGE5DY.js",
+    "bytes": 2379390,
+    "sha256": "bbbae8100f7c4b3c4df710b3c8dc946bbe61b532bd1053a2d1e4a176390e6321"
+  },
+  {
+    "path": "ArcherPreviewSite/assets/plains-monster-spawns-C3b_rIqQ.js",
+    "bytes": 5954,
+    "sha256": "aff26c3f0126856ec95f28b8badcc23b15fceedf7df2e60499973ad1ba5cb5f7"
+  },
+  {
+    "path": "ArcherPreviewSite/assets/plains-monster-spawns-CuFZqL99.js",
+    "bytes": 446,
+    "sha256": "dec31a62546259744e188d89d9d9f9ed0e2a2884a59d4ce9c0f17d16ca0ec066"
+  },
+  {
+    "path": "ArcherPreviewSite/moonforest-0.2.html",
+    "bytes": 40691,
+    "sha256": "45a15e9febbfba5d296b707aeab3def4bae65341352699ecd5e8d19fce4b545b"
+  },
+  {
+    "path": "ArcherPreviewSite/deployment-files-moonforest-0.2.json",
+    "bytes": 491981,
+    "sha256": "6874258e9607a90912500a37529fe56e2a525bda9b3bcef0404ed84e8f328740"
+  }
+]
