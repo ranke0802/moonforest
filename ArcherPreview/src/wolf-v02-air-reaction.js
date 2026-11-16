@@ -25,7 +25,8 @@ export class WolfV02AirReaction{
  applyMotion(){
   if(!this.valid())return false;const e=this.e,b=e.brain;if(b.state!==WOLF_V02_AIR_REACTION&&b.state!==WOLF_V02_GET_UP)return false;
   const time=b.state===WOLF_V02_AIR_REACTION?b.time:Infinity,t=clamp((time-WOLF_V02_AIR_IMPULSE.start)/WOLF_V02_AIR_IMPULSE.duration),curve=t*(2-t),delta=curve-this.previousCurve;
-  if(delta>0){e.actor.position.x+=this.direction.x*WOLF_V02_AIR_IMPULSE.distance*(e.runtimeProfile?.spatialScale??1)*delta;e.actor.position.z+=this.direction.z*WOLF_V02_AIR_IMPULSE.distance*(e.runtimeProfile?.spatialScale??1)*delta;}this.previousCurve=curve;
+  const configured=e.runtimeProfile?.airReactionDistance,distance=Number.isFinite(configured)&&configured>0?configured:WOLF_V02_AIR_IMPULSE.distance*(e.runtimeProfile?.spatialScale??1);
+  if(delta>0){e.actor.position.x+=this.direction.x*distance*delta;e.actor.position.z+=this.direction.z*distance*delta;}this.previousCurve=curve;
   const smooth=t*t*(3-2*t);this.yaw=this.startYaw+angle(this.targetYaw,this.startYaw)*smooth;e.actor.rotation.y=this.yaw;this.height=4*WOLF_V02_AIR_IMPULSE.arc*(e.runtimeProfile?.spatialScale??1)*t*(1-t);return true;
  }
  afterMotion(){if(!this.valid())return;const p=this.e.actor.position;if(this.e.brain.state===WOLF_V02_AIR_REACTION)this.travelled+=Math.hypot(p.x-this.previous.x,p.z-this.previous.z);this.previous.copyFrom(p);}

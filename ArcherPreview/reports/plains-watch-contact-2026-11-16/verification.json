@@ -1,0 +1,38 @@
+{
+  "date": "2026-11-16",
+  "scope": [
+    "stationary head-only territorial watch",
+    "2.5 game-second disengage hold",
+    "R3 farther alpha pack and saved-default migration",
+    "regular quadruped 1.4m accepted heavy/shield displacement",
+    "bear 0.2 actual 8-influence limb surface contact and joint aiming",
+    "nearby group-contiguous initial preparation"
+  ],
+  "checks": {
+    "runner": "Node24/Babylon NullEngine; no browser automation",
+    "tests": 86,
+    "pass": 86,
+    "fail": 0,
+    "bear": {
+      "enabledAttacks": 12,
+      "sourcePoseContacts": 12,
+      "nativeAutonomousContacts": 12,
+      "sourceLocalPositionsAndScalesPreserved": true,
+      "surfaceSkinComparisonErrorLessThan": 0.0001,
+      "surfacePointsPerPartMax": 48,
+      "onlyActivePartsSkinned": true,
+      "damageAndImpactEventsPreserved": true
+    },
+    "preserved": [
+      "model and texture files",
+      "LOD",
+      "0.1 release",
+      "edited/deleted saved spawns",
+      "navigation and cliff constraints"
+    ]
+  },
+  "limits": [
+    "Actual device initial appearance latency and GPU/FPS/heat not measured",
+    "In-game visual motion approval belongs to user"
+  ]
+}

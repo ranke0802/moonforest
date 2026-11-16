@@ -1,25 +1,33 @@
 // One scheduler per map, driven by the existing game tick. The host owns actors.
-export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>true,canLaunch=()=>true,releaseAdmission=()=>{},remove=()=>{},isAlive=()=>true,onPermanentDeath=()=>{},onError=()=>{},random=Math.random}){
- let generation=0,groups=new Map(),disposed=false;
+export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>true,canLaunch=()=>true,releaseAdmission=()=>{},remove=()=>{},isAlive=()=>true,onPermanentDeath=()=>{},onError=()=>{},random=Math.random,preparationGroups=Infinity,now=()=>performance.now()}){
+ let generation=0,groups=new Map(),disposed=false,paused=true,loadedAt=0;const preparationLimit=Number.isFinite(preparationGroups)?Math.max(1,Math.floor(preparationGroups)):Infinity;
  const safeRemove=handle=>{try{remove(handle);}catch(error){onError(error);}};
  const release=group=>{if(!group.admitted)return;group.admitted=false;try{releaseAdmission(group.members);}catch(error){onError(error);}};
- function leave(){generation++;for(const group of groups.values()){for(const handle of group.handles.values())safeRemove(handle);release(group);}groups=new Map();}
- function load(rows,{permanentlyDead=[]}={}){leave();const dead=new Set(permanentlyDead);for(const row of rows){if(dead.has(row.id))continue;let group=groups.get(row.groupId);if(!group){group={id:row.groupId,members:[],handles:new Map(),dead:new Set(),state:'waiting',remaining:row.spawnMode==='start'?0:row.delaySeconds*(.5+random()),pending:false};groups.set(row.groupId,group);}group.members.push(row);}}
+ function leave(){generation++;paused=true;for(const group of groups.values()){for(const handle of group.handles.values())safeRemove(handle);release(group);}groups=new Map();}
+ function load(rows,{permanentlyDead=[]}={}){leave();loadedAt=now();const dead=new Set(permanentlyDead);for(const row of rows){if(dead.has(row.id))continue;let group=groups.get(row.groupId);if(!group){const delay=row.spawnMode==='start'?0:row.delaySeconds*(.5+random());group={id:row.groupId,members:[],handles:new Map(),dead:new Set(),state:'waiting',remaining:delay,initialDelaySeconds:delay,pending:false,preparedCount:0,startedAt:null,readyAt:null};groups.set(row.groupId,group);}group.members.push(row);}}
  async function launch(group){
-  const epoch=generation;group.pending=true;group.state='preparing';const prepared=[];
-  try{for(const row of group.members){const handle=await spawn(row,{isCurrent:()=>!disposed&&generation===epoch});if(disposed||generation!==epoch){safeRemove(handle);for(const [,old] of prepared)safeRemove(old);return;}prepared.push([row.id,handle]);}
-   if(disposed||generation!==epoch)return;group.handles=new Map(prepared);group.dead.clear();group.state='prepared';if(canCommit()){commit([...group.handles.values()]);group.state='active';}
+  const epoch=generation;group.pending=true;group.state='preparing';group.startedAt=now();group.readyAt=null;group.preparedCount=0;const prepared=[];
+  try{for(const row of group.members){const handle=await spawn(row,{isCurrent:()=>!disposed&&generation===epoch});if(disposed||generation!==epoch){safeRemove(handle);for(const [,old] of prepared)safeRemove(old);return;}prepared.push([row.id,handle]);group.preparedCount=prepared.length;}
+   if(disposed||generation!==epoch)return;group.handles=new Map(prepared);group.dead.clear();group.state='prepared';group.readyAt=now();if(canCommit()){commit([...group.handles.values()]);group.state='active';}
   }catch(error){for(const [,handle] of prepared)safeRemove(handle);group.handles.clear();release(group);if(generation===epoch&&!disposed){group.state='waiting';group.remaining=2;onError(error);}}
-  finally{if(generation===epoch)group.pending=false;}
+  finally{if(generation===epoch){group.pending=false;startReady();}}
  }
- function update(dt,{paused=false}={}){if(disposed||paused)return;dt=Math.max(0,Number.isFinite(dt)?dt:0);for(const group of groups.values()){
+ function startReady(){
+  if(disposed||paused||!canCommit())return;let preparing=[...groups.values()].filter(group=>group.pending).length;
+  for(const group of groups.values())if(['waiting','capacity-wait','prepare-wait'].includes(group.state)&&group.remaining===0){
+   if(preparing>=preparationLimit){group.state='prepare-wait';continue;}
+   const admission=canLaunch(group.members);if(admission!==true){group.state='capacity-wait';group.capacityReason=typeof admission==='string'?admission:'capacity';continue;}
+   group.admitted=true;group.capacityReason=null;preparing++;void launch(group);
+  }
+ }
+ function update(dt,{paused:isPaused=false}={}){paused=isPaused;if(disposed||paused)return;dt=Math.max(0,Number.isFinite(dt)?dt:0);for(const group of groups.values()){
   if(group.pending)continue;
   if(group.state==='prepared'){if(!canCommit())continue;try{commit([...group.handles.values()]);group.state='active';}catch(error){for(const handle of group.handles.values())safeRemove(handle);group.handles.clear();release(group);group.state='waiting';group.remaining=2;onError(error);}}
   else if(group.state==='active'){
    for(const [id,handle] of group.handles)if(!group.dead.has(id)&&!isAlive(handle)){group.dead.add(id);if(!group.members[0].respawn)onPermanentDeath(id);}
    if(group.dead.size===group.members.length){for(const handle of group.handles.values())safeRemove(handle);group.handles.clear();release(group);if(group.members[0].respawn){group.state='waiting';group.remaining=group.members[0].delaySeconds;}else group.state='complete';}
   }
-  else if(group.state==='waiting'||group.state==='capacity-wait'){group.remaining=Math.max(0,group.remaining-dt);if(group.remaining===0){const admission=canLaunch(group.members);if(admission!==true){group.state='capacity-wait';group.capacityReason=typeof admission==='string'?admission:'capacity';continue;}group.admitted=true;group.capacityReason=null;void launch(group);}}
- }}
- return {load,leave,update,inspect:()=>[...groups.values()].map(g=>({id:g.id,state:g.state,remaining:g.remaining,count:g.members.length,dead:g.dead.size,capacityReason:g.capacityReason??null,admitted:!!g.admitted})),dispose(){if(disposed)return;leave();disposed=true;}};
+  else if(['waiting','capacity-wait','prepare-wait'].includes(group.state))group.remaining=Math.max(0,group.remaining-dt);
+ }startReady();}
+ return {load,leave,update,inspect:()=>[...groups.values()].map(g=>({id:g.id,state:g.state,remaining:g.remaining,initialDelaySeconds:g.initialDelaySeconds,count:g.members.length,preparedCount:g.preparedCount,dead:g.dead.size,capacityReason:g.capacityReason??null,admitted:!!g.admitted,prepareQueueMs:g.startedAt===null?null:Math.max(0,g.startedAt-loadedAt),preparationWallMs:g.readyAt===null||g.startedAt===null?null:Math.max(0,g.readyAt-g.startedAt),readyElapsedMs:g.readyAt===null?null:Math.max(0,g.readyAt-loadedAt)})),dispose(){if(disposed)return;leave();disposed=true;}};
 }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
-import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_GROUPS,PLAINS_MONSTER_SPAWNS_R1,createPlainsMonsterSpawns} from '../src/plains-monster-spawns.js';
+import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_GROUPS,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R2,createPlainsMonsterSpawns} from '../src/plains-monster-spawns.js';
 import {validateMonsterSpawns} from '../src/monster-spawn-document.js';
 import {ACTOR_DEFINITIONS,validateActorSpawn} from '../src/actor-definitions.js';
 import {VillageNavigation} from '../src/village-navigation.js';
@@ -12,9 +12,11 @@ import {WOLF_V02_ACTIONS} from '../src/wolf-v02-spec.js';
 import {regularWolfSize} from '../src/regular-wolf-spec.js';
 import {BOSS_MOTIONS,bossAttackRange} from '../src/boss-spec.js';
 import {setWorldCharacter} from '../src/world-limits.js';
+import {plainsCliffObstacles} from '../src/plains-cliff-collision.js';
+import {VILLAGE_PLAINS_BOUNDARY} from '../src/village-plains-boundary.js';
 
 setWorldCharacter('warrior-plains');
-const rows=PLAINS_MONSTER_SPAWNS.maps['great-plains'],navigation=new VillageNavigation(plainsObstacles()),terrain=createGreatPlainsTerrain();
+const rows=PLAINS_MONSTER_SPAWNS.maps['great-plains'],navigation=new VillageNavigation([...plainsObstacles(),...plainsCliffObstacles()]),terrain=createGreatPlainsTerrain();
 const world={mapId:'great-plains',navigation,terrain},radiusFor=row=>row.definitionId==='guardian-bear.standard'?BEAR_V02_SIZE.radius:ACTOR_DEFINITIONS[row.definitionId].collider.radius;
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z),round=value=>Math.round(value*1e6)/1e6;
 const roadDistance=point=>Math.min(...PLAINS_ROUTES.flatMap(road=>road.samples.map(([x,z])=>Math.hypot(point.x-x,point.z-z)-road.width/2)));
@@ -42,10 +44,10 @@ test('all fixed homes use actual terrain and clear physical navigation, water, r
 
 test('R2 outer watch and inner combat ranges expand around the same homes with bounded home wandering',()=>{
  const alphaReach=Math.max(...WOLF_V02_ACTIONS.map(action=>action.maxDistance)),bearReach=Math.max(...BOSS_MOTIONS.filter(motion=>motion.role==='attack'&&!motion.disabled).map(motion=>bossAttackRange(motion)*BEAR_V02_SIZE.attackRangeScale));
- assert.deepEqual(rows.map(({territory,...row})=>row),PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].map(({territory,...row})=>row));
+ const unchanged=row=>!['plains-alpha-pack','plains-wolf-meadow'].includes(row.groupId);assert.deepEqual(rows.filter(unchanged).map(({territory,...row})=>row),PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].filter(unchanged).map(({territory,...row})=>row));
  for(let i=0;i<PLAINS_MONSTER_GROUPS.length;i++){
   const group=PLAINS_MONSTER_GROUPS[i],circle=group.territory;assert.ok(Math.hypot(circle.x,circle.z)+circle.radius<PLAINS_RADIUS);
-  const old=PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].find(row=>row.groupId===group.id).territory;assert.ok(circle.radius>=old.radius*1.4);assert.ok(circle.radius<=old.radius*1.8);
+  const oldGroup=group.id==='plains-alpha-pack'?'plains-wolf-meadow':group.id==='plains-wolf-meadow'?'plains-alpha-pack':group.id,old=PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].find(row=>row.groupId===oldGroup).territory;assert.ok(circle.radius>=old.radius*1.4);assert.ok(circle.radius<=old.radius*1.8);
   assert.ok(circle.combatRadius>=circle.radius*.55&&circle.combatRadius<=circle.radius*.65);assert.ok(circle.wanderRadius>=2&&circle.wanderRadius<=5);
   assert.ok(circle.returnRadius>0&&circle.returnRadius<circle.radius);assert.ok(circle.reengageRadius<circle.radius);
   for(const row of rows.filter(row=>row.groupId===group.id)){
@@ -54,6 +56,13 @@ test('R2 outer watch and inner combat ranges expand around the same homes with b
    assert.ok(distance(row,circle)+radius+circle.wanderRadius<circle.radius,row.id+' bounded home wandering');
   }
  }
+});
+
+test('R3 leader pack occupies the farther former wolf territory and the ordinary pack takes its former homes',()=>{
+ const alpha=PLAINS_MONSTER_GROUPS.find(group=>group.id==='plains-alpha-pack'),regular=PLAINS_MONSTER_GROUPS.find(group=>group.id==='plains-wolf-meadow'),r2=PLAINS_MONSTER_SPAWNS_R2.maps['great-plains'];
+ assert.deepEqual(alpha.territory,r2.find(row=>row.groupId==='plains-wolf-meadow').territory);assert.deepEqual(regular.territory,r2.find(row=>row.groupId==='plains-alpha-pack').territory);
+ assert.ok(distance(alpha.territory,VILLAGE_PLAINS_BOUNDARY.plainsPortal)>distance(regular.territory,VILLAGE_PLAINS_BOUNDARY.plainsPortal)+20);assert.equal(alpha.members.length,4);assert.equal(regular.members.length,3);
+ assert.ok(distance(rows.find(row=>row.definitionId==='alpha-wolf.r8'),alpha.territory)<1);
 });
 
 test('every home has reachable ambient wander choices away from roads, water and village arrival',()=>{

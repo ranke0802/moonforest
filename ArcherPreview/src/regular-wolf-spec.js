@@ -22,6 +22,9 @@ export const REGULAR_WOLF_VARIANTS=Object.freeze(Object.fromEntries(Object.entri
 })));
 export const isRegularWolf=id=>Object.hasOwn(REGULAR_WOLF_VARIANTS,id);
 const runtimeProfiles=new WeakMap();
+// Match the existing bear's ~1.40 m open-floor impulse at 60 Hz. A small
+// animal's body-fit scale must not shorten this authored hit's world travel.
+export const REGULAR_QUADRUPED_HIT_DISTANCE=Object.freeze({'gray-wolf':1.4,'stylized-wolf':1.4,'wolf-3':1.4,fox:1.4,boar:1.4});
 export function regularWolfSize(id){
  const v=REGULAR_WOLF_VARIANTS[id];if(!v)throw new RangeError('Unknown regular wolf: '+id);
  const spatialScale=v.length/(1.9014592170715332*WOLF_SCALE);
@@ -42,6 +45,6 @@ export function regularWolfRuntimeProfile(id,config){
   return [action.id,Object.freeze({...action,range:reach?.range??action.range*s,minDistance:reach?.minDistance??action.minDistance*s,maxDistance:reach?.maxDistance??action.maxDistance*s,preferredDistance:reach?.preferredDistance??action.preferredDistance*s,damage:Math.round(action.damage*.45),ramPhases:action.ramPhases?.map(phase=>Object.freeze({...phase,damage:Math.round(phase.damage*.45)}))})];
  }));
  const actorScale=regularWolfActorScale(id);
- const result={...size,actions,gait:{...WOLF_V02_GAIT,runSpeed:4.2,farRunSpeed:6,runAcceleration:8,runSourceSpeed,runPlaybackRate:4.2/(runSourceSpeed*config.scale),orbitRadius:profile.orbitRadius??WOLF_V02_GAIT.orbitRadius*WOLF_SCALE*s/config.scale},tactics:{...WOLF_V02_TACTICS,retreatDistance:2.4*actorScale,maximumRetreatRange:5*actorScale},modelScale:config.scale,ramReach:profile.ramReach,catchDistance:profile.catchDistance??Math.max(.7*actorScale,1.90*s),ramPairClearance:profile.ramPairClearance,catchTolerance:.03*actorScale,forepawBrace:'floor',forepawPadHeight:profile.forepawPadHeight,hurtVolumes:profile.hurtVolumes,contactShapes:profile.contactShapes,runRamOverlay:profile.runRamOverlay};
+ const result={...size,actions,airReactionDistance:REGULAR_QUADRUPED_HIT_DISTANCE[id],gait:{...WOLF_V02_GAIT,runSpeed:4.2,farRunSpeed:6,runAcceleration:8,runSourceSpeed,runPlaybackRate:4.2/(runSourceSpeed*config.scale),orbitRadius:profile.orbitRadius??WOLF_V02_GAIT.orbitRadius*WOLF_SCALE*s/config.scale},tactics:{...WOLF_V02_TACTICS,retreatDistance:2.4*actorScale,maximumRetreatRange:5*actorScale},modelScale:config.scale,ramReach:profile.ramReach,catchDistance:profile.catchDistance??Math.max(.7*actorScale,1.90*s),ramPairClearance:profile.ramPairClearance,catchTolerance:.03*actorScale,forepawBrace:'floor',forepawPadHeight:profile.forepawPadHeight,hurtVolumes:profile.hurtVolumes,contactShapes:profile.contactShapes,runRamOverlay:profile.runRamOverlay};
  runtimeProfiles.set(profile,result);return result;
 }

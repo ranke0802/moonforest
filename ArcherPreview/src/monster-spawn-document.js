@@ -1,5 +1,5 @@
 import {ITEM_DROP_CHOICES} from './item-drop-data.js';
-import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION} from './plains-monster-spawns.js';
+import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION} from './plains-monster-spawns.js';
 // Data-only monster placement document. Never execute values from imported files.
 export const MONSTER_SPAWN_FORMAT='moonforest-monster-spawns';
 export const MONSTER_SPAWN_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
@@ -19,7 +19,7 @@ export function validateMonsterSpawns(input){
  for(const [mapId,rows] of Object.entries(document.maps)){
   // A migrated default layer may coexist with the previous custom20. This is
   // document capacity only: runtime admission stays20, editor creation stays20.
-  const installedIds=document.defaultRowIds?.[mapId],migratedPlains=mapId==='great-plains'&&[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_REVISION].some(revision=>document.defaultRevisions?.includes?.(revision))&&Array.isArray(installedIds)&&installedIds.length===plainsDefaultIds.size&&installedIds.every(id=>plainsDefaultIds.has(id));
+  const installedIds=document.defaultRowIds?.[mapId],migratedPlains=mapId==='great-plains'&&[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_REVISION].some(revision=>document.defaultRevisions?.includes?.(revision))&&Array.isArray(installedIds)&&installedIds.length===plainsDefaultIds.size&&installedIds.every(id=>plainsDefaultIds.has(id));
   const extra=migratedPlains?14:0;
   if(!MONSTER_SPAWN_MAPS.includes(mapId)||!Array.isArray(rows)||rows.length>20+extra){fail(mapId+': 지역 또는 몬스터 수를 확인하세요.');continue;}
   const ids=new Set(),groups=new Map();for(const row of rows){
@@ -44,19 +44,25 @@ export function preserveMonsterDefaultHistory(document,previous){
  if(revisions.length)document.defaultRevisions=revisions;if(Object.keys(maps).length)document.defaultRowIds=maps;return document;
 }
 function upgradePlainsTerritories(document,revision){
- if(revision!==PLAINS_MONSTER_SPAWNS_REVISION||!document.defaultRevisions?.includes(PLAINS_MONSTER_SPAWNS_R1_REVISION))return 0;
- const installed=new Set(document.defaultRowIds?.['great-plains']??[]),rows=document.maps['great-plains']??[],next=new Map(PLAINS_MONSTER_SPAWNS.maps['great-plains'].map(row=>[row.id,row]));let upgraded=0;
+ if(![PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_REVISION].includes(revision))return 0;
+ const history=document.defaultRevisions??[],hasR1=history.includes(PLAINS_MONSTER_SPAWNS_R1_REVISION),hasR2=history.includes(PLAINS_MONSTER_SPAWNS_R2_REVISION),installed=new Set(document.defaultRowIds?.['great-plains']??[]),rows=document.maps['great-plains']??[],upgraded=new Set();
  const sameArea=(a,b)=>a&&Object.keys(a).length===Object.keys(b).length&&Object.keys(b).every(key=>a[key]===b[key]);
- for(const original of PLAINS_MONSTER_SPAWNS_R1.maps['great-plains']){
+ const upgrade=(before,after,moveHome=false,eligible)=>{const next=new Map(after.maps['great-plains'].map(row=>[row.id,row]));for(const original of before.maps['great-plains']){
   if(!installed.has(original.id))continue;
   const sameHome=row=>row.definitionId===original.definitionId&&row.x===original.x&&row.z===original.z&&row.y===original.y;
   // R1 names colliding defaults with deterministic row/group aliases. Prefer
   // that generated pair so an existing custom row retaining the base ID is safe.
   const aliases=rows.filter(row=>row.id.startsWith(original.id.slice(0,60)+':default:'));
   const candidates=aliases.length?aliases.filter(row=>row.groupId.startsWith(original.groupId.slice(0,60)+':default:')):rows.filter(row=>row.id===original.id&&(row.groupId===original.groupId||row.groupId.startsWith(original.groupId.slice(0,60)+':default:')));
-  for(const row of candidates)if(sameHome(row)&&sameArea(row.territory,original.territory)){row.territory={...next.get(original.id).territory};upgraded++;}
- }
- return upgraded;
+  for(const row of candidates){
+   if(eligible&&!eligible.has(row)||!sameHome(row)||!sameArea(row.territory,original.territory))continue;const target=next.get(original.id);
+   if(moveHome){if(!['yaw','spawnMode','respawn','delaySeconds','randomRadius','rewardEnabled'].every(key=>row[key]===original[key])||!sameArea(row.drop,original.drop))continue;if(target.x===row.x&&target.y===row.y&&target.z===row.z&&sameArea(row.territory,target.territory))continue;row.x=target.x;row.y=target.y;row.z=target.z;}
+   row.territory={...target.territory};upgraded.add(row);
+  }
+ }};
+ if(hasR1&&!hasR2)upgrade(PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R2);
+ if(revision===PLAINS_MONSTER_SPAWNS_REVISION&&(hasR1||hasR2))upgrade(PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS,true,hasR2?undefined:new Set(upgraded));
+ return upgraded.size;
 }
 export function mergeMonsterSpawnDefaults(input,defaults,revision){
  const saved=validateMonsterSpawns(input),seed=validateMonsterSpawns(defaults);if(!saved.valid||!seed.valid||typeof revision!=='string'||!validId.test(revision))throw Error('기본 몬스터 배치 또는 revision이 올바르지 않습니다.');

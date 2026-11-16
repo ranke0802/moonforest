@@ -1,0 +1,36 @@
+✔ fresh0.2 plains defaults seed14 approved actors in7 complete groups, with bounded preparation and terrain height (8.2958ms)
+✔ legacy custom20 are preserved; requested defaults reserve whole groups first while excess customs wait visibly (2.2827ms)
+✔ editing or deleting defaults persists across runtime recreation, including a replacement imported without migration metadata (1.0047ms)
+✔ a saved R1 runtime applies and persists current defaults only to untouched rows without restoring deleted actors (1.545ms)
+✔ storage errors keep defaults active in memory without overwriting unreadable custom data (1.6313ms)
+✔ prepared groups wait through pause and a map departure cannot attach a late acquisition (0.9723ms)
+✔ monster placement records round trip and grouped lifetime configuration stays consistent (1.0436ms)
+✔ invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected (0.1747ms)
+✔ all approved plains quadruped definitions and finite contained territories round trip (1.8319ms)
+✔ default migration preserves custom values and aliases conflicting IDs/groups without mutating its input (1.3945ms)
+✔ only the exact plains default revision and known14 ID history permit migration storage capacity up to34 (1.2444ms)
+✔ future default revisions add new IDs but do not restore deleted or overwrite edited previously installed defaults (0.1863ms)
+✔ R1 to R2 upgrades only unchanged default territories/homes and preserves edits, deletions and custom rows (1.0555ms)
+✔ R1 custom20 migration documents remain valid at34 and collision aliases upgrade without changing custom originals (1.607ms)
+✔ R2 to R3 moves only pristine wolf defaults while preserving custom home/area/deletions and remains idempotent (2.3528ms)
+✔ default plains document has exactly fourteen actors in seven independently editable stable groups (1.6803ms)
+✔ all fixed homes use actual terrain and clear physical navigation, water, roads, arrival and each other (2.4158ms)
+✔ R2 outer watch and inner combat ranges expand around the same homes with bounded home wandering (0.4108ms)
+✔ R3 leader pack occupies the farther former wolf territory and the ordinary pack takes its former homes (0.1294ms)
+✔ every home has reachable ambient wander choices away from roads, water and village arrival (18.6632ms)
+✔ fox homes use existing forest canopies, boars use dry river banks and the bear stands on the real high summit (1.4101ms)
+✔ existing bear heavy/shield impulse measures about 1.4 metres, independently of skeletal fall keys (4.7388ms)
+ℹ {"scope":"Actual BossEncounter.update integration of existing accepted-hit impulse on open flat navigation; no render/GPU claim","bearWorldMetres":{"30":1.4709266017984974,"60":1.4009380151451274},"regularWorldMetres":1.4}
+✔ each regular wolf, fox and boar travels 1.4 world metres with unchanged curve/arc and locked attack direction (0.9935ms)
+ℹ {"scope":"Single airborne world-motion owner; original source pose/arc/duration retained","rows":[{"id":"gray-wolf","fps":30,"beforeMetres":0.689953425359554,"afterMetres":1.3999999999999997,"arcUnchanged":true},{"id":"gray-wolf","fps":60,"beforeMetres":0.689953425359554,"afterMetres":1.4000000000000004,"arcUnchanged":true},{"id":"stylized-wolf","fps":30,"beforeMetres":0.7184956099684802,"afterMetres":1.3999999999999997,"arcUnchanged":true},{"id":"stylized-wolf","fps":60,"beforeMetres":0.7184956099684802,"afterMetres":1.4000000000000004,"arcUnchanged":true},{"id":"wolf-3","fps":30,"beforeMetres":0.6637229390297893,"afterMetres":1.3999999999999997,"arcUnchanged":true},{"id":"wolf-3","fps":60,"beforeMetres":0.6637229390297893,"afterMetres":1.4000000000000004,"arcUnchanged":true},{"id":"fox","fps":30,"beforeMetres":0.5212347725429732,"afterMetres":1.3999999999999997,"arcUnchanged":true},{"id":"fox","fps":60,"beforeMetres":0.5212347725429732,"afterMetres":1.4000000000000004,"arcUnchanged":true},{"id":"boar","fps":30,"beforeMetres":0.43847983827485587,"afterMetres":1.3999999999999997,"arcUnchanged":true},{"id":"boar","fps":60,"beforeMetres":0.43847983827485587,"afterMetres":1.4000000000000004,"arcUnchanged":true}]}
+✔ expanded impulse still uses existing swept navigation at walls and plains cliffs (3.3768ms)
+✔ map/brain replacement cancels the expanded reaction without a late impulse (0.1784ms)
+✔ wolf impact follows the confirmed attack heading, including an overlapped long-body root (0.9195ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2045.5824

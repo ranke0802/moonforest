@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {Vector3} from '@babylonjs/core';
-import {createAuthoredMonsterRuntime,MONSTER_SPAWN_STORAGE} from '../src/authored-monster-runtime.js';
+import {createAuthoredMonsterRuntime,MONSTER_SPAWN_STORAGE,orderMonsterSpawnPreparation} from '../src/authored-monster-runtime.js';
 import {emptyMonsterSpawns,mergeMonsterSpawnDefaults} from '../src/monster-spawn-document.js';
 import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION} from '../src/plains-monster-spawns.js';
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
@@ -25,6 +25,12 @@ test('fresh0.2 plains defaults seed14 approved actors in7 complete groups, with 
  assert.equal(f.population.limits.total,20);assert.equal(f.population.limits.estimatedMemoryBytes,512*1024*1024);assert.ok(f.population.entries.every(record=>record.spawnContext.position.y===2&&record.spawnContext.staged&&record.spawnContext.row.territory));
  assert.equal(JSON.parse(f.memory.get(MONSTER_SPAWN_STORAGE)).defaultRevisions[0],PLAINS_MONSTER_SPAWNS_REVISION);assert.equal(f.errors.length,0);f.runtime.dispose();
 });
+test('map-entry preparation prioritizes nearby complete default groups and leaves saved row order unchanged',()=>{
+ const defaults=createPlainsMonsterSpawns().maps['great-plains'],rows=[...defaults,custom('custom-1',{x:-83,z:-35})],before=structuredClone(rows),ordered=orderMonsterSpawnPreparation(rows,{x:-85,z:-35.7},{defaults});
+ assert.deepEqual(rows,before);assert.equal(ordered[0].groupId,'plains-lookout-bear');assert.equal(ordered.at(-1).id,'custom-1');assert.equal(ordered.length,15);
+ const groups=[...new Set(ordered.map(row=>row.groupId))];assert.ok(groups.indexOf('plains-wolf-meadow')<groups.indexOf('plains-alpha-pack'),'R3 farther leader waits behind the nearer ordinary pack');
+ for(const groupId of groups){const indices=ordered.flatMap((row,index)=>row.groupId===groupId?[index]:[]);assert.equal(indices.at(-1)-indices[0]+1,indices.length,'group members stay consecutive');}
+});
 test('legacy custom20 are preserved; requested defaults reserve whole groups first while excess customs wait visibly',async()=>{
  const memory=new Map(),doc=emptyMonsterSpawns();doc.maps['great-plains']=Array.from({length:20},(_,i)=>custom('custom-'+i));memory.set(MONSTER_SPAWN_STORAGE,JSON.stringify(doc));const f=fixture({memory});
  assert.equal(f.runtime.getDocument().maps['great-plains'].length,34);assert.deepEqual(f.runtime.getDocument().maps['great-plains'].slice(14),doc.maps['great-plains']);f.runtime.beforeBattle(0,f.player);await settle();
@@ -34,10 +40,10 @@ test('editing or deleting defaults persists across runtime recreation, including
  const f=fixture(),edited=f.runtime.getDocument();edited.maps['great-plains'].shift();edited.maps['great-plains'][0].yaw=1.234;delete edited.defaultRevisions;delete edited.defaultRowIds;f.runtime.replace(edited);f.runtime.dispose();const again=fixture({memory:f.memory});
  assert.equal(again.runtime.getDocument().maps['great-plains'].length,13);assert.equal(again.runtime.getDocument().maps['great-plains'][0].yaw,1.234);assert.equal(again.runtime.inspect().defaultMigration.addedRows,0);again.runtime.dispose();
 });
-test('a saved R1 runtime applies and persists R2 only to untouched territories without restoring deleted actors',async()=>{
+test('a saved R1 runtime applies and persists current defaults only to untouched rows without restoring deleted actors',async()=>{
  const installed=mergeMonsterSpawnDefaults(emptyMonsterSpawns(),PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION).document,rows=installed.maps['great-plains'];rows[0].territory.radius+=.25;rows[1].x+=.1;rows.splice(2,1);
  const memory=new Map([[MONSTER_SPAWN_STORAGE,JSON.stringify(installed)]]),f=fixture({memory});assert.equal(f.runtime.inspect().defaultMigration.upgradedRows,11);assert.equal(f.runtime.inspect().defaultMigration.persisted,true);
- const saved=JSON.parse(memory.get(MONSTER_SPAWN_STORAGE));assert.deepEqual(saved.defaultRevisions,[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_REVISION]);assert.equal(saved.maps['great-plains'].length,13);assert.equal(saved.maps['great-plains'][0].territory.radius,8.25);assert.equal(saved.maps['great-plains'][1].x,9.5);
+ const saved=JSON.parse(memory.get(MONSTER_SPAWN_STORAGE));assert.deepEqual(saved.defaultRevisions,[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_REVISION]);assert.equal(saved.maps['great-plains'].length,13);assert.equal(saved.maps['great-plains'][0].territory.radius,8.25);assert.equal(saved.maps['great-plains'][1].x,9.5);assert.equal(saved.maps['great-plains'].find(row=>row.definitionId==='alpha-wolf.r8').x,29.25);
  f.runtime.beforeBattle(0,f.player);await settle();assert.equal(f.battle.encounters.length,13);assert.equal(f.errors.length,0);f.runtime.dispose();
 });
 test('storage errors keep defaults active in memory without overwriting unreadable custom data',async()=>{
@@ -46,6 +52,6 @@ test('storage errors keep defaults active in memory without overwriting unreadab
  const quota=fixture({storage:{getItem:()=>null,setItem(){throw Error('quota');}}});quota.runtime.beforeBattle(0,quota.player);await settle();assert.equal(quota.battle.encounters.length,14);assert.equal(quota.runtime.inspect().defaultMigration.persisted,false);assert.equal(quota.errors.length,1);quota.runtime.dispose();
 });
 test('prepared groups wait through pause and a map departure cannot attach a late acquisition',async()=>{
- let finish;const f=fixture({hold:record=>record.spawnContext.row.id==='plains-fox-west-1'?new Promise(resolve=>finish=resolve):undefined});f.runtime.beforeBattle(0,f.player);f.state.paused=true;await settle();assert.ok(f.runtime.inspect().groups.some(group=>group.state==='prepared'));assert.equal(f.battle.encounters.length,0);f.runtime.afterBattle(f.player);assert.equal(f.battle.encounters.length,0);
- f.runtime.leaveMap();f.world.mapId='village';finish();await settle();assert.equal(f.battle.encounters.length,0);assert.deepEqual(f.runtime.inspect().groups,[]);f.runtime.dispose();
+ let finish;const f=fixture({hold:()=>new Promise(resolve=>finish=resolve)});f.runtime.beforeBattle(0,f.player);f.state.paused=true;finish();await settle();assert.ok(f.runtime.inspect().groups.some(group=>group.state==='prepared'));assert.equal(f.battle.encounters.length,0);f.runtime.afterBattle(f.player);assert.equal(f.battle.encounters.length,0);
+ f.state.paused=false;f.runtime.beforeBattle(0,f.player);assert.equal(f.battle.encounters.length,1,'the ready nearest group publishes on resume');const finishLate=finish;f.runtime.leaveMap();f.world.mapId='village';finishLate();await settle();assert.equal(f.battle.encounters.length,0);assert.deepEqual(f.runtime.inspect().groups,[]);f.runtime.dispose();
 });

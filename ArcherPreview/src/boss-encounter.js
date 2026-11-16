@@ -25,6 +25,7 @@ import { prepareBossShaders } from './boss-shader-warmup.js';
 import { createBossPreparation,bossPreparationCancelled } from './boss-preparation.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
 import { bearEncounterSize } from './bear-size.js';
+import {BearCombatContact} from './bear-combat-contact.js';
 const capPosition=p=>{const d=Math.hypot(p.x,p.z);if(d>ENEMY_ARENA_RADIUS){p.x*=ENEMY_ARENA_RADIUS/d;p.z*=ENEMY_ARENA_RADIUS/d;}};
 function rootSample(config,name,time){
   const c=config.catalog.find(c=>c.name===name),f=Math.min(c.rootTrack.length-1,Math.max(0,time*c.fps));
@@ -132,6 +133,7 @@ export class BossEncounter {
       this.warningRing=createTerrainRing(this.world.scene,this.warningTerrain?.()??this.world.terrain);this.ring=this.warningRing.mesh;this.ring.isVisible=false;this.ring.setEnabled(false);
       this.ring.material=new StandardMaterial('boss-warning-gold',this.world.scene);this.ring.material.emissiveColor=new Color3(.9,.32,.05);this.ring.material.disableLighting=true;this.ring.isPickable=false;
       if(this.kind!=='elena')this.ring.metadata={...this.ring.metadata,moonforestWarmMaterial:true};
+      if(this.kind==='bear'&&this.bearSize)this.bearCombatContact??=new BearCombatContact(this);
     });this.assetPreparationStep=4;}
     // The stable morph-slot contract is configured above. Initialize the real
     // idle pose before compiling; do not warm an artificial all-zero morph rig.
@@ -150,6 +152,7 @@ export class BossEncounter {
   }
   prepareAnimator(){const animator=this.createAnimator();if(this.kind==='elena'&&this.phase===2)installMourningHairGuides(animator);return animator;}
   async summon(player,{position,rotationY,preparation,reuseAnimator=false,activate=true}={}){
+    this.bearCombatContact?.reset();
     if(this.loading)return;this.loading=true;this.onChange(this);
     this.grab.reset();
     try{
@@ -179,7 +182,7 @@ export class BossEncounter {
     }catch(error){this.active=false;this.actor?.setEnabled(false);throw error;}
     finally{this.loading=false;this.onChange(this);}
   }
-  hide(){this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.knockTurn=null;if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
+  hide(){this.bearCombatContact?.reset();this.grab.reset();if(this.ownsCombat){this.potions.cancel();this.playerReaction.reset();}this.active=false;this.bossReaction.reset();this.knockTurn=null;if(!this.retainAnimatorForPool)this.animator?.dispose();this.actor?.setEnabled(false);this.setShadowCasting(false);if(this.ring)this.ring.isVisible=false;this.pendingEvents=[];this.gate.reset();this.onChange(this);}
   setShadowCasting(enabled){
     enabled=enabled&&this.renderVisible!==false&&!(this.death.started&&this.death.opacity<1);
     // Retain pooled geometry for a warm return, but do not keep retired phases
@@ -233,21 +236,21 @@ export class BossEncounter {
       this.actor.setEnabled(false);this.ring.isVisible=false;this.pendingEvents=[];if(!this.retainAnimatorForPool)this.animator.dispose();this.onChange(this);
     }
   }
-  createBrain(durations){return new BossBrain(durations,Math.random,{distanceScale:this.bearSize?.sizeScale??1});}
+  createBrain(durations){return new BossBrain(durations,Math.random,{distanceScale:this.kind==='bear'&&this.bearSize?1:this.bearSize?.sizeScale??1});}
   createAnimator(){return new CharacterAnimator(this.asset.animationGroups,this.config.animations,{bindingCacheSize:['bear','goblin'].includes(this.kind)?2:0});}
   prepareAsset(){}
   async prepareAuxiliary(){}
   // Actor movement may need a larger environment envelope than its combat body.
   // Player sight, weapon contact and dodge collisions still use world navigation.
   get movementNavigation(){return this.world.navigation;}
-  movementPlan(player){return {target:player.position,stopDistance:this.stopDistance};}
-  contactSeparation(){const dimensions=playerDimensions(this.player);return this.dodgeContactClearance?dodgeSeparation(this,dimensions):this.radius+dimensions.standingClearance;}
+  movementPlan(player){return {target:player.position,stopDistance:this.kind==='bear'&&this.bearSize?(this.brain.mode==='approach'?this.radius+playerDimensions(player).moveRadius+.015:1.75):this.stopDistance};}
+  contactSeparation(){const dimensions=playerDimensions(this.player);return this.dodgeContactClearance?dodgeSeparation(this,dimensions):this.radius+(this.kind==='bear'&&this.bearSize?dimensions.moveRadius:dimensions.standingClearance);}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec)*(this.bearSize?.attackRangeScale??1);}
   attackDamage(event){return BOSS_DAMAGE[event.name];}
   isHeavyAttack(event){return BOSS_HEAVY_ATTACKS.has(event.name);}
   attackContactPoints(aim){return ['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));}
-  attackBodyContact(){return true;}
+  attackBodyContact(event){return this.kind==='bear'&&this.bearSize?this.bearCombatContact?.contact(event,this.player)===true:true;}
   applyMotionRoot(root){
     if(this.motionRootTravel!==false&&this.lastSerial===this.brain.serial&&this.lastRoot&&['attack','evade'].includes(this.brain.mode)&&!this.brain.stagger){
       const x=(root[0]-this.lastRoot[0])*this.config.scale,z=(root[2]-this.lastRoot[2])*this.config.scale,yaw=this.actor.rotation.y;
@@ -288,6 +291,7 @@ export class BossEncounter {
   }
   update(dt,player){
     if(!this.active||this.corpseGone)return;
+    this.bearCombatContact?.restore();
     if(this.brain.hp<=0){this.updateDeath(dt);if(this.corpseGone)return;}
     this.dt=dt;this.player=player;
     const beforeMove=this.actor.position.clone(),navigation=this.movementNavigation;
@@ -295,7 +299,8 @@ export class BossEncounter {
     const direction=player.position.subtract(this.actor.position);direction.y=0;const distance=direction.length();
     const blocked=this.world.navigation&&(this.motionRootTravel!==false||this.brain.mode!=='attack')&&!this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
     const available=!this.combat.grabOwner||this.combat.grabOwner===this;
-    const result=this.brain.update(dt,blocked?Math.max(3.8,distance):distance,this.playerAlive&&available&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
+    const brainDistance=this.kind==='bear'&&this.bearSize?this.brain.mode==='approach'?distance+.25:distance+.85:distance;
+    const result=this.brain.update(dt,blocked?Math.max(3.8,distance):brainDistance,this.playerAlive&&available&&(!this.grab.active||this.grab.holding));this.pendingEvents=result.events;
     const motion=this.movementPlan(player,result,distance),target=motion.target;
     const canTravel=result.speed>0&&this.brain.hp>0&&!['down','recover','dead'].includes(this.brain.mode)&&!this.combat.grabOwner;
     const waypoint=canTravel&&!motion.direct?navigation?.steer(this.actor.position,target,this.radius,this.routeState??={},dt):null;
@@ -354,6 +359,7 @@ export class BossEncounter {
   }
   prepareContactPose(player,result){
     this.player=player;
+    this.bearCombatContact?.restore();
     const poseCurrent=this.alignPose()===true;
     // Refresh once after both root corrections, before contacts consume the pose.
     const d=player.position.subtract(this.actor.position);d.y=0;const distance=d.length();
@@ -378,6 +384,7 @@ export class BossEncounter {
     if(!this.active||this.corpseGone)return;
     let hitStop=0;
     const distance=this.prepareContactPose(player,result);
+    if(this.kind==='bear'&&this.bearCombatContact){this.bearCombatContact.applyPose(player);this.bearCombatContact.sample();}
     const d=this.contactPoseDirection;
     const needsSight=(sample&&this.playerAlive&&this.brain.hp>0)||this.pendingEvents.length>0;
     const clearSight=!needsSight||!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
@@ -430,10 +437,11 @@ export class BossEncounter {
       if(event.disabled)continue;
       if(clearSight&&distance<=this.attackRange(event)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
-        if(event.kind==='spin'||event.kind==='grab'||facing>.2){
+        if(this.bearCombatContact||event.kind==='spin'||event.kind==='grab'||facing>.2){
           const aim=player.position.add(new Vector3(0,playerDimensions(player).bodyAimHeight,0));
           const limbs=this.attackContactPoints(aim);
-          this.receiveBossHit({event,damage:this.attackDamage(event),grab:event.kind==='grab',heavy:this.isHeavyAttack(event),bodyContact:this.attackBodyContact(event,aim,limbs),shieldContact:shieldIntercepts(limbs[0],aim,shield),action:result});
+          const bodyContact=this.attackBodyContact(event,aim,limbs),shieldContact=this.kind==='bear'&&this.bearSize?this.bearCombatContact.shieldContact(event,shield):shieldIntercepts(limbs[0],aim,shield);
+          this.receiveBossHit({event,damage:this.attackDamage(event),grab:event.kind==='grab',heavy:this.isHeavyAttack(event),bodyContact,shieldContact,action:result});
         }
       }
     }

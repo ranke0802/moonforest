@@ -12,6 +12,7 @@ import {createBossPreparation} from '../src/boss-preparation.js';
 import {regularWolfManifest,isRegularWolf} from '../src/regular-wolf-spec.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {setWorldCharacter} from '../src/world-limits.js';
+import {MONSTER_DISENGAGE_SECONDS} from '../src/monster-territory.js';
 
 const prepare=()=>createBossPreparation({incremental:false});
 async function fixture(t){
@@ -43,10 +44,10 @@ test('fox, regular wolf, boar, alpha and bear stop outgoing attacks and walk hom
   if(e.brain.startAction)e.brain.startAction('lunge');else e.brain.start('Skill_02','attack');
   assert.equal(e.grab.start(f.player,f.playerNodes,e.brain.serial),true,id+': owns a native capture before exit');
   e.pendingEvents.push({type:'attack',damage:999});f.player.position.z=20;f.world.terrain.place(f.player.position);const playerPosition=f.player.position.clone();
-  const before=e.actor.position.clone();e.update(1/30,f.player);assert.equal(adapter.snapshot().territory.returning,true,id);assert.notEqual(e.brain.mode,'attack',id);assert.equal(e.pendingEvents.length,0,id);assert.equal(e.receiveBossHit({damage:999,bodyContact:true}),false,id);
+  const before=e.actor.position.clone();e.update(1/30,f.player);assert.equal(adapter.snapshot().territory.phase,'disengage',id);assert.notEqual(e.brain.mode,'attack',id);assert.equal(e.pendingEvents.length,0,id);assert.equal(e.receiveBossHit({damage:999,bodyContact:true}),false,id);
   assert.equal(e.grab.active,false,id+': exit releases its native capture');assert.equal(e.combat.grabOwner,null,id);
   assert.ok(Vector3.Distance(before,e.actor.position)<.1,id+': return uses bounded walking displacement');assert.equal(e.actor.position.y,f.world.terrain.heightAt(e.actor.position.x,e.actor.position.z));
-  f.player.position.z=9;f.world.terrain.place(f.player.position);e.update(1/30,f.player);assert.equal(adapter.snapshot().territory.returning,true,id+': early player reentry does not skip returning home');
+  f.player.position.z=9;f.world.terrain.place(f.player.position);e.update(1/30,f.player);assert.equal(adapter.snapshot().territory.phase,'watch',id+': early player reentry resumes cautious watch, not an immediate attack');
   f.player.position.copyFrom(playerPosition);
   for(let frame=0;frame<420&&!adapter.snapshot().territory.arrived;frame++){e.update(1/30,f.player);assert.notEqual(e.brain.mode,'attack',id);}
   assert.equal(adapter.snapshot().territory.arrived,true,id+': reaches its own home');assert.equal(publicState.phase,'ambient',id+': outside player leaves it resting after returning');assert.equal(publicState.engaged,false);
@@ -69,7 +70,7 @@ test('territory capture release is actor-owned; wall routing, reactions and dorm
  const other={id:'another-grabber'};e.combat.grabOwner=other;adapter.hide();assert.strictEqual(e.combat.grabOwner,other,'retiring this actor never resets another capture owner');e.combat.grabOwner=null;
  f.world.navigation=new VillageNavigation([]);f.player.position.set(0,0,6);await adapter.activate({position:new Vector3(5,0,0),row:{territory:{x:5,z:0,radius:4,returnRadius:.3,reengageRadius:3}}},{preparation:prepare()});
  assert.equal(adapter.snapshot().territory.x,5);assert.equal(adapter.snapshot().territory.home.x,5,'a pooled life adopts the new group territory and home');
- e.actor.position.x=10;e.combat.grabOwner=other;e.update(1/30,f.player);assert.equal(adapter.snapshot().territory.returning,true);assert.strictEqual(e.combat.grabOwner,other,'territory exit never releases another actor grab');e.combat.grabOwner=null;
+ e.actor.position.x=10;e.combat.grabOwner=other;e.update(1/30,f.player);assert.equal(adapter.snapshot().territory.phase,'disengage');assert.strictEqual(e.combat.grabOwner,other,'territory exit never releases another actor grab');e.combat.grabOwner=null;
  adapter.hide();await adapter.activate({position:new Vector3()},{preparation:prepare()});assert.equal(adapter.snapshot().territory.enabled,false,'a row without territory disables the previous group leash');
  await adapter.dispose();const manual=f.factory('gray-wolf.r1');await manual.activate({position:new Vector3()},{preparation:prepare()});assert.equal(manual.snapshot().territory,undefined);assert.strictEqual(manual.encounter.update,Object.getPrototypeOf(manual.encounter).update,'manual summons keep their original encounter update');
  await manual.dispose();f.world.release='moonforest-0.1';const legacy=f.factory('guardian-bear.standard');await legacy.activate({position:new Vector3(),row:{territory:zone}},{preparation:prepare()});assert.equal(legacy.snapshot().territory,undefined,'0.1 never enables authored territory behavior');assert.strictEqual(legacy.encounter.update,Object.getPrototypeOf(legacy.encounter).update);
@@ -84,7 +85,7 @@ test('ambient walking uses native rise; resting watch confirms inner presence wi
  for(let frame=0;frame<160&&!sawWalk;frame++){e.update(.1,f.player);const status=adapter.snapshot().territory;sawRise||=e.brain.state==='Rise_From_Lie_R5';sawWalk||=e.brain.state==='Wolf_Walk_R5';assert.equal(publicState.phase,'ambient');assert.equal(publicState.engaged,false);assert.notEqual(e.brain.mode,'attack');assert.equal(e.ring.isVisible,false);if(status.ambientMoving)assert.ok(Math.hypot(status.target.x-status.home.x,status.target.z-status.home.z)<=2+1e-6);}
  assert.equal(sawRise,true,'a lying wolf plays the existing complete rise before ambient walking');assert.equal(sawWalk,true);
  adapter.hide();f.player.position.set(8,0,0);await adapter.activate({position:new Vector3(),row:{territory:zone}},{preparation:prepare()});e.actor.rotation.y=-Math.PI/2;
- const yaw=e.actor.rotation.y;e.update(.1,f.player);assert.strictEqual(e.territoryState,publicState);assert.equal(publicState.phase,'watch');assert.equal(e.brain.state,'Rest_Lie_R5');assert.ok(Math.abs(e.actor.rotation.y-yaw)<=.120001,'rest watch turns gradually');
+ const yaw=e.actor.rotation.y;e.update(.1,f.player);assert.strictEqual(e.territoryState,publicState);assert.equal(publicState.phase,'watch');assert.equal(e.brain.state,'Rest_Lie_R5');assert.equal(e.actor.rotation.y,yaw,'rest watch keeps the body heading and leaves gaze to the head pose');
  for(let frame=0;frame<15;frame++)e.update(.1,f.player);assert.equal(publicState.engaged,false,'outer presence never attacks');assert.equal(adapter.snapshot().combat,false);
  f.player.position.set(0,0,3);for(let frame=0;frame<8;frame++)e.update(.1,f.player);assert.equal(publicState.engaged,false);
  const clock=adapter.snapshot().territory.innerTime;for(let frame=0;frame<12;frame++)e.update(0,f.player);assert.equal(adapter.snapshot().territory.innerTime,clock,'pause advances no awareness clock');
@@ -119,4 +120,25 @@ test('a walking canine can settle back into lying rest using its real rise keys 
   assert.equal(status.phase,'ambient');assert.equal(status.engaged,false);assert.equal(e.ring.isVisible,false);
  }
  assert.equal(sawSettle,true);assert.equal(restored,true,'rest recurs after wandering instead of remaining standing forever');await adapter.dispose();
+});
+
+test('all territorial species hold their body heading while watching and wait in game time before turning home',async t=>{
+ const f=await fixture(t);
+ for(const id of ['fox.r1','gray-wolf.r1','boar.r1','alpha-wolf.r8','guardian-bear.standard']){
+  f.player.position.set(7,0,0);f.world.terrain.place(f.player.position);
+  const adapter=f.factory(id);await adapter.activate({position:new Vector3(),row:{territory:{x:0,z:0,radius:12,combatRadius:3,wanderRadius:0,returnRadius:.4}}},{preparation:prepare()});
+  const e=adapter.encounter;e.actor.rotation.y=.4;
+  const scales=e.asset.transformNodes.map(node=>[node,node.scaling.clone()]);
+  for(let frame=0;frame<8;frame++){
+   e.update(.1,f.player);e.alignPose();assert.ok(Math.abs(e.actor.rotation.y-.4)<1e-6,id+': stationary body never follows the watch target');
+   for(const [node,scale]of scales)assert.ok(node.scaling.equalsWithEpsilon(scale,1e-5),node.name+': watch never scales the rig');
+  }
+  e.actor.position.set(0,0,5);f.world.terrain.place(e.actor.position);f.player.position.set(0,0,20);f.world.terrain.place(f.player.position);
+  const before=e.actor.position.clone(),yaw=e.actor.rotation.y;e.update(.1,f.player);
+  assert.equal(e.territoryState.phase,'disengage');assert.equal(adapter.snapshot().territory.disengageRemaining,MONSTER_DISENGAGE_SECONDS);assert.equal(adapter.snapshot().combat,false);
+  for(let check=0;check<20;check++)e.update(0,f.player);
+  assert.equal(adapter.snapshot().territory.disengageRemaining,MONSTER_DISENGAGE_SECONDS,'paused checks cannot consume the delay');
+  for(let frame=0;frame<24;frame++){e.update(.1,f.player);e.alignPose();assert.equal(e.territoryState.phase,'disengage');assert.ok(Vector3.Distance(e.actor.position,before)<1e-5,id+': no premature homeward displacement');assert.ok(Math.abs(e.actor.rotation.y-yaw)<1e-6,id+': does not immediately turn its back');}
+  e.update(.1,f.player);assert.equal(e.territoryState.phase,'return',id+': returns only after the cautious pause');await adapter.dispose();
+ }
 });
