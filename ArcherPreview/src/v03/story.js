@@ -136,7 +136,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(target.key!==guide.key||guide.age>1.2&&(target.direct||moved>5)){
    const points=[{x:player.x,z:player.z}];
    if(!target.direct){try{for(const p of api.world.navigation?.path?.(player,guidePoint,.3)??[])points.push({x:p.x,z:p.z});}catch{/* fall back to a straight line */}}
-   if(points.length<2)points.push({x:guidePoint.x,z:guidePoint.z});
+   // The path search stays inside the map's enemy area; exits on a road
+   // beyond it (the village gate road) are reached by the last straight leg.
+   const last=points[points.length-1];
+   if(points.length<2||Math.hypot(last.x-guidePoint.x,last.z-guidePoint.z)>1)points.push({x:guidePoint.x,z:guidePoint.z});
    guide.track.setPath(points);guide.key=target.key;guide.originX=player.x;guide.originZ=player.z;guide.age=0;
   }
   const before=guide.track.distance,arrived=guide.track.update(dt,player,{stopShort:target.stopShort}),moving=guide.track.distance-before>dt*1.5;
