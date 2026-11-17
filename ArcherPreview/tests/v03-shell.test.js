@@ -229,7 +229,8 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // The ambush scene plays first: no control, the wolf is held, captions run.
  assert.equal(h.shell.story.sceneActive,true);assert.equal(h.shell.allows('move'),false);assert.equal(h.shell.allows('attack'),false);
  assert.equal(h.document.documentElement.dataset.v03Lock,'move camera attack dodge guard potion');
- for(let i=0;i<30;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/늑대다/);
+ h.shell.update(.016);assert.ok(h.shell.story.cameraFocus,'the first shot frames the wolf, not the player');
+ for(let i=0;i<160;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/늑대다/);
  for(let i=0;i<400;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
  // Coaching runs in order: move → camera → attack → dodge → shield, each
  // allowing only its own action.

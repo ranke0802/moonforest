@@ -220,49 +220,90 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   return true;
  }
  // ----- ambush scene -----
- // Played once as the prologue fades out: the wolf has come out of the grass
- // at the wagon, snarling at the driver; the camera starts behind the wolf
- // and swings round behind the player as control is handed over. It runs on
- // the live scene (no extra loop): the wolf is held, input is suspended.
- const SCENE_BEATS=Object.freeze([{at:.4,line:0,growl:true},{at:2.2,line:1,growl:true},{at:3.9,line:2}]);
- const SCENE_SWING=[3.6,5.4],SCENE_END=6.2;
- const scene={active:false,time:0,beat:0,from:null,to:null,driver:null,driverFrom:null,driverTo:null,radius:0,beta:0};
+ // Played once as the prologue fades out, as a few shots on the live scene
+ // (no extra loop; input suspended, the wolf held by the tutorial):
+ //  1. far off, the wolf snarls (close on the wolf)
+ //  2. the driver panics (close on the driver, he stumbles back)
+ //  3. the wolf charges the driver (wide)
+ //  4. the warrior rolls in between and stands guard (camera swings behind)
+ const SCENE=Object.freeze({wolfShot:0,driverShot:2.3,chargeShot:4.3,rollAt:4.75,heroShot:5.9,end:7.6});
+ const SCENE_LINES=Object.freeze([{at:2.4,line:0},{at:4.35,line:1},{at:6.0,line:2}]);
+ const scene={active:false,pending:false,time:0,beat:0,shot:-1,driver:null,wolf:null,points:null,rolled:false,rollWindow:false,radius:0,beta:0,focus:{x:0,y:0,z:0},cameraFocus:null};
  const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+ const heightAt=(x,z)=>api.world.terrain?.heightAt?.(x,z)??0;
+ const alphaFrom=(from,to)=>Math.atan2(from.z-to.z,from.x-to.x);// camera on `from`'s side looking at `to`
+ function freeNear(point){const nav=api.world.navigation;try{return nav?.free?.(point,.6)?point:nav?.findFree?.(point,.6)??point;}catch{return point;}}
  function beginAmbushScene(){
   const player=api.getPlayer()?.position,camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];
-  const foe=(api.battle.encounters??[]).find(row=>row.active&&row.brain?.hp>0);
-  if(!player||!camera||!foe||!lines)return false;
-  const wolf=foe.actor.position,dx=player.x-wolf.x,dz=player.z-wolf.z,length=Math.hypot(dx,dz)||1,ux=dx/length,uz=dz/length;
-  // The driver cowers behind the player, so the wolf facing the player also
-  // threatens him, and the player stands between them.
-  const member=cast.find(row=>row.npc.id==='driver');
-  if(member){
-   const want=findFreeSpot(api.world.navigation,{x:player.x+ux*2.3,z:player.z+uz*2.3});
-   scene.driver=member;scene.driverFrom={x:want.x-ux*.9,z:want.z-uz*.9};scene.driverTo=want;
-   const yaw=Math.atan2(wolf.x-want.x,wolf.z-want.z);member.yaw=yaw;
-  }
-  Object.assign(scene,{active:true,time:0,beat:0,from:Math.atan2(wolf.z-player.z,wolf.x-player.x),to:Math.atan2(player.z-wolf.z,player.x-wolf.x),radius:camera.radius,beta:camera.beta});
-  camera.alpha=scene.from;camera.beta=1.2;camera.radius=Math.max(camera.lowerRadiusLimit??1,Math.min(9,scene.radius));
+  const foe=(api.battle.encounters??[]).find(row=>row.active&&row.brain?.hp>0),member=cast.find(row=>row.npc.id==='driver');
+  if(!player||!camera||!foe||!lines||!member)return false;
+  const D={x:member.x,z:member.z},ux=player.x-D.x,uz=player.z-D.z,len=Math.hypot(ux,uz)||1,c=Math.cos(.7),s=Math.sin(.7);
+  // The wolf stands far off the road, 12 m from the driver, a little to the side of the warrior.
+  const dir={x:(ux*c-uz*s)/len,z:(ux*s+uz*c)/len};
+  const far=freeNear({x:D.x+dir.x*12,z:D.z+dir.z*12}),charge=freeNear({x:D.x+dir.x*5.2,z:D.z+dir.z*5.2}),guard=freeNear({x:D.x+dir.x*2.4,z:D.z+dir.z*2.4});
+  foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
+  if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(D.x-far.x,D.z-far.z);
+  scene.driver=member;scene.wolf=foe;scene.points={D,far,charge,guard,start:{x:player.x,z:player.z}};
+  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta});
   api.input.setSuspended(true);
   return true;
  }
+ function frame(target,height,alpha,radius,beta){
+  const camera=api.world.camera;
+  scene.focus.x=target.x;scene.focus.z=target.z;scene.focus.y=heightAt(target.x,target.z)+height;scene.cameraFocus=scene.focus;
+  camera.alpha=alpha;camera.beta=beta;camera.radius=Math.max(camera.lowerRadiusLimit??1,radius);
+ }
  function updateScene(dt){
-  const camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];scene.time+=dt;
-  while(scene.beat<SCENE_BEATS.length&&scene.time>=SCENE_BEATS[scene.beat].at){
-   const beat=SCENE_BEATS[scene.beat++],line=lines[beat.line];
-   hud.setCaption({who:speaker(line.who),text:line.text});
-   if(beat.growl){const foe=(api.battle.encounters??[]).find(row=>row.active);api.playSound?.('wolf_alert',foe?{position:foe.actor.position}:undefined);}
+  const camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'],P=scene.points,wolf=scene.wolf,player=api.getPlayer();scene.time+=dt;const now=scene.time;
+  while(scene.beat<SCENE_LINES.length&&now>=SCENE_LINES[scene.beat].at){const line=lines[SCENE_LINES[scene.beat++].line];hud.setCaption({who:speaker(line.who),text:line.text});}
+  const shot=now<SCENE.driverShot?0:now<SCENE.chargeShot?1:now<SCENE.heroShot?2:3;
+  if(shot!==scene.shot){
+   scene.shot=shot;
+   if(shot===0||shot===2)api.playSound?.('wolf_alert',{position:wolf.actor.position});
   }
-  // The driver stumbles back toward the wagon side during the first beats.
-  if(scene.driver){const k=ease(scene.time/1.6),p=scene.driverFrom,q=scene.driverTo,x=p.x+(q.x-p.x)*k,z=p.z+(q.z-p.z)*k;scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,api.world.terrain?.heightAt?.(x,z)??0,z,scene.driver.yaw??0);}
-  // Camera: hold behind the wolf, then swing the short way round.
-  const k=ease((scene.time-SCENE_SWING[0])/(SCENE_SWING[1]-SCENE_SWING[0]));
-  let turn=scene.to-scene.from;turn=Math.atan2(Math.sin(turn),Math.cos(turn));
-  camera.alpha=scene.from+turn*k;camera.beta=1.2+(scene.beta-1.2)*k;camera.radius=Math.min(9,scene.radius)+(scene.radius-Math.min(9,scene.radius))*k;
-  if(scene.time>=SCENE_END){
-   scene.active=false;hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));
-   coachState.alpha=camera.alpha;
+  // Shots. Close shots look across the subject from the other party's side.
+  if(shot===0)frame(P.far,.7,alphaFrom(P.D,P.far)+.35,4.6,1.32);
+  else if(shot===1){
+   frame(P.D,1.45,alphaFrom(P.far,P.D)-.25,3.6,1.3);
+   // The driver stumbles back, shaking.
+   const k=ease((now-SCENE.driverShot)/1.4),shake=Math.sin(now*38)*.035,x=P.D.x-(P.far.x-P.D.x)/12*.9*k+shake,z=P.D.z-(P.far.z-P.D.z)/12*.9*k;
+   scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,heightAt(x,z),z,Math.atan2(P.far.x-x,P.far.z-z));
+  }else if(shot===2){
+   const mid={x:(P.D.x+P.charge.x)/2,z:(P.D.z+P.charge.z)/2};
+   frame(mid,1,alphaFrom(P.start,mid)+.6,8.5,1.18);
+   // The wolf charges the driver.
+   const k=ease((now-SCENE.chargeShot)/.75),x=P.far.x+(P.charge.x-P.far.x)*k,z=P.far.z+(P.charge.z-P.far.z)*k;
+   wolf.actor.position.x=x;wolf.actor.position.z=z;wolf.actor.position.y=heightAt(x,z);if(wolf.actor.rotation)wolf.actor.rotation.y=Math.atan2(P.D.x-x,P.D.z-z);
+   // The warrior rolls in between: face the guard spot and dodge for real.
+   if(!scene.rolled&&now>=SCENE.rollAt&&player){
+    scene.rolled=true;const p=player.position;if(player.rotation)player.rotation.y=Math.atan2(P.guard.x-p.x,P.guard.z-p.z);
+    scene.rollWindow=true;try{api.actions?.dodge?.();}finally{scene.rollWindow=false;}
+   }
+  }else{
+   // Settle exactly on the guard spot facing the wolf, then swing behind.
+   if(player){const p=player.position,k=Math.min(1,dt*6);p.x+=(P.guard.x-p.x)*k;p.z+=(P.guard.z-p.z)*k;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(P.charge.x-p.x,P.charge.z-p.z);}
+   const k=ease((now-SCENE.heroShot)/1.3),behind=alphaFrom(P.D,P.charge);
+   scene.cameraFocus=null;
+   let turn=behind-camera.alpha;turn=Math.atan2(Math.sin(turn),Math.cos(turn));camera.alpha+=turn*Math.min(1,dt*4);
+   camera.beta+=(scene.beta-camera.beta)*Math.min(1,dt*3);camera.radius+=(scene.radius-camera.radius)*k*Math.min(1,dt*3);
   }
+  if(now>=SCENE.end){
+   scene.active=false;scene.cameraFocus=null;camera.radius=scene.radius;camera.beta=scene.beta;
+   hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera.alpha;
+  }
+ }
+ // ----- slow motion -----
+ // In the first fight, the start of every attack (the warrior's or the
+ // wolf's) plays 0.3 s of real time at 30 % speed: the moment reads clearly.
+ const SLOW_SCALE=.3,SLOW_SECONDS=.3,ATTACK_STATES=new Set(['attack','slash','judgment','moveAttack']);
+ const slow={left:0,player:null,foes:new WeakMap()};
+ function updateSlow(dt){
+  slow.left=Math.max(0,slow.left-dt);
+  const first=log.quest()?.id==='M00'&&log.step()?.id==='fight'&&!scene.active;
+  const state=api.getController()?.state??null,attacking=ATTACK_STATES.has(state);
+  let start=attacking&&!ATTACK_STATES.has(slow.player);slow.player=state;
+  for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')start=true;slow.foes.set(foe,mode);}
+  if(start&&first)slow.left=SLOW_SECONDS;
  }
  // ----- first-fight tutorial -----
  // Each lesson allows only its own action (main.js asks allows()), the wolf
@@ -272,7 +313,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const LOCKABLE=['move','camera','attack','dodge','guard','potion'];
  let lockKey='';
  function allows(kind){
-  if(scene.active)return false;
+  if(scene.active)return kind==='dodge'&&scene.rollWindow;
   if(!lessonActive())return true;
   const allow=content.COMBAT_HINTS[coachState.index]?.allow;
   return !allow||allow.includes(kind);
@@ -348,6 +389,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   allows,
   beginAmbushScene,
   get sceneActive(){return scene.active;},
+  get cameraFocus(){return scene.active?scene.cameraFocus:null;},
+  get timeScale(){return slow.left>0?SLOW_SCALE:1;},
   get started(){return started;},
   log,
   start({fresh=false}={}){
@@ -369,8 +412,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
-   if(scene.pending){scene.pending=false;beginAmbushScene();}
-   if(scene.active){updateScene(dt);coach(0);updateGuide(dt,null);return;}
+   if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;api.input.setSuspended(false);}}
+   if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);scene.active=false;scene.cameraFocus=null;hud.setCaption(null);api.input.setSuspended(false);}coach(0);updateGuide(dt,null);return;}
    const player=api.getPlayer()?.position;
    if(player&&!talking&&!dialogue.open){
     let best=null,bestSq=TALK_RANGE_SQ;
@@ -381,7 +424,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
      hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:markFor(near.npc.id),label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name})});
     }else hud.setPrompt(null);
    }
-   coach(dt);contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
+   coach(dt);updateSlow(dt);contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
   inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null}),
   dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},

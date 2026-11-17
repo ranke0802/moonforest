@@ -815,7 +815,9 @@ function syncCaveFog(force=false){if(actor&&!actor.isDisposed())world.caveFog?.u
 
 function syncCameraFocus(dt,{snap=false}={}){
   if(!actor||actor.isDisposed()||!cameraPitch)return;
-  const focus=elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.reviewFocusHeight??1.45,0)):cameraFollow.focus(actor,playerHead,boss?.nearestTarget(actor.position)?.actor.position,world.camera.radius),pan=input?.panOffset??{x:0,y:0,z:0};
+  // 0.3 cutscenes may frame another point (a snarling wolf, the driver).
+  const scripted=world.v03?.cameraFocus??null;
+  const focus=scripted?new Vector3(scripted.x,scripted.y,scripted.z):elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.reviewFocusHeight??1.45,0)):cameraFollow.focus(actor,playerHead,boss?.nearestTarget(actor.position)?.actor.position,world.camera.radius),pan=input?.panOffset??{x:0,y:0,z:0};
   const target=(isVillage()&&villageOverview?Vector3.Zero():focus).add(new Vector3(pan.x,pan.y,pan.z));
   cameraPitch.follow(target,dt,{snap});
   world.caveCamera?.follow(target,dt,{stable:!cameraFollow.settings.followMotion});
@@ -826,6 +828,8 @@ function render(dt) {
   if(mapDeparture?.departing)return;
   setFrameWorkContext(world.scene,{active:ready&&!loadingAsset&&!mapTransition?.busy,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.v03?.update(dt);
+  // 0.3 slow motion (short, story-driven): the rest of the frame runs scaled.
+  dt*=world.v03?.timeScale??1;
   world.storyboardOpening?.update();
   world.storyboardEvents?.update();
   if(world.storyboardDeathPlayback){const events=world.storyboardEvents?.inspect();if(!events||!events.active&&!events.queued){world.storyboardDeathPlayback=false;deathScreen.show();return;}}
