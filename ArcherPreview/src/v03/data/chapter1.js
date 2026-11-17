@@ -118,32 +118,32 @@ export const DIALOGUES=Object.freeze({
 
 // Step types: defeat {kind,count,map,at,summon,intro,arrival} (at: lead there; summon once the player is inside) · turnIn marks a report (! instead of ?) · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
 export const QUESTS=Object.freeze([
- {id:'M00',title:'늑대와 마차',steps:[
+ {id:'M00',reward:{gold:30},title:'늑대와 마차',steps:[
   {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],turnIn:true,dialogues:{driver:'driver-thanks'}},
   {id:'road',text:'길을 따라 마을로 가기',type:'reach',map:'village'},
  ]},
- {id:'M01',title:'달빛 여관',steps:[
+ {id:'M01',reward:{potions:1},title:'달빛 여관',steps:[
   {id:'inn',text:'여관 주인과 이야기하기',type:'talk',targets:['innkeeper'],dialogues:{innkeeper:'inn-arrive'}},
  ]},
- {id:'M02',title:'사람들이 기억하는 성녀',steps:[
+ {id:'M02',reward:{gold:20},title:'사람들이 기억하는 성녀',steps:[
   {id:'witness',text:'주민 세 사람의 이야기 듣기',type:'talk',targets:['elder','herbalist','youth'],dialogues:{elder:'elder-witness',herbalist:'herbalist-witness',youth:'youth-witness'}},
   {id:'report',text:'여관 주인에게 돌아가기',type:'talk',targets:['innkeeper'],turnIn:true,dialogues:{innkeeper:'inn-report'}},
  ]},
- {id:'M03',title:'마을의 부탁',steps:[
+ {id:'M03',reward:{gold:60,potions:1},title:'마을의 부탁',steps:[
   {id:'ask',text:'촌장 찾아가기',type:'talk',targets:['chief'],dialogues:{chief:'chief-request'}},
   {id:'hunt',text:'대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
- {id:'M04',title:'대평원의 곰',steps:[
-  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-28.5,z:-19.5,radius:8},summon:{kind:'bear',count:1},arrival:'대평원의 곰이 모습을 드러냈다'},
+ {id:'M04',reward:{gold:120,armor:'leather'},title:'대평원의 곰',steps:[
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-28.5,z:-19.5,radius:8},summon:{kind:'bear',count:1,tune:{hp:650,damage:.7}},arrival:'대평원의 곰이 모습을 드러냈다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-bear'}},
  ]},
- {id:'M05',title:'마을을 습격한 고블린',steps:[
+ {id:'M05',reward:{gold:150,potions:2},title:'마을을 습격한 고블린',steps:[
   {id:'raid',text:'목책에서 고블린 막아내기',type:'defeat',kind:'goblin',count:4,map:'village',at:{x:0,z:28,radius:11},summon:{kind:'goblin',count:4},intro:'raid-start',arrival:'고블린 습격!'},
   {id:'report',text:'청년과 이야기하기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'youth-goblin'}},
  ]},
- {id:'M06',title:'우두머리 늑대',steps:[
+ {id:'M06',reward:{gold:250},title:'우두머리 늑대',steps:[
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-alpha'}},
   {id:'alpha',text:'숲 어귀의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:50,z:-48,radius:9},summon:{kind:'wolf',count:1},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-alpha'}},

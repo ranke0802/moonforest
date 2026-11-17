@@ -250,7 +250,7 @@ export class BossEncounter {
   contactSeparation(){const dimensions=playerDimensions(this.player);return this.dodgeContactClearance?dodgeSeparation(this,dimensions):this.radius+(this.kind==='bear'&&this.bearSize?dimensions.moveRadius:dimensions.standingClearance);}
   motionSpec(name){return BOSS_BY_NAME[name];}
   attackRange(spec){return bossAttackRange(spec)*(this.bearSize?.attackRangeScale??1);}
-  attackDamage(event){return BOSS_DAMAGE[event.name];}
+  attackDamage(event){const base=BOSS_DAMAGE[event.name];return this.damageScale&&base?Math.round(base*this.damageScale):base;}
   isHeavyAttack(event){return BOSS_HEAVY_ATTACKS.has(event.name);}
   attackContactPoints(aim){return ['RightHand','LeftHand','RightFoot','LeftFoot'].map(n=>this.nodes[`mixamorig:${n}`].getAbsolutePosition()).sort((a,b)=>Vector3.DistanceSquared(a,aim)-Vector3.DistanceSquared(b,aim));}
   attackBodyContact(event){return this.kind==='bear'&&this.bearSize?this.bearCombatContact?.contact(event,this.player)===true:true;}

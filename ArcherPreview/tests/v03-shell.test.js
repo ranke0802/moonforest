@@ -101,7 +101,7 @@ function harness({local=memory(),session=memory(),ready=true}={}){
  battle.combatCount=0;
  const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait:instant,random:()=>.5,createVisual,createGuide:()=>guide,createMarkers:null,setMapMarkers:list=>marks.push(list),placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
   input:{setSuspended:v=>log.push('suspend:'+v)},actions:{attack:()=>log.push('attack'),dodge:()=>log.push('dodge'),guard:()=>log.push('guard'),move:()=>{}},
-  toast:m=>log.push('toast:'+m),getPlayer:()=>player,getController:()=>controller,getState:()=>state,
+  toast:m=>log.push('toast:'+m),creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},getPlayer:()=>player,getController:()=>controller,getState:()=>state,
   resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:async id=>log.push('travel:'+id),
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  const shell=setupV03(api);
@@ -280,6 +280,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'여관 주인과 이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'?');assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
  for(let i=0;i<5;i++)key('Space');await settle();
  assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'사람들이 기억하는 성녀');assert.equal(hud('.v03-quest-objective').textContent,'주민 세 사람의 이야기 듣기 (0/3)');
+ assert.ok(h.log.includes('gold:v03-quest-M00:30'),'M00 pays its gold reward once');assert.equal(h.log.filter(x=>x.startsWith('gold:v03-quest-M00')).length,1);
  // A later document resumes the same quest step.
  const again=harness({local:h.local,session:(()=>{const s=memory();createSaveSession({local:h.local,session:s,edition:E}).request(1,'load');return s;})()});
  again.state.mapId='village';again.shell.update(.016);await settle();again.shell.update(.016);

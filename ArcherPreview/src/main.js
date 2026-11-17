@@ -66,6 +66,7 @@ import { setupFullscreen } from './fullscreen.js';
 import { observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
+import { POTION } from './healing-potion.js';
 import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
@@ -234,6 +235,9 @@ let minimapTravel;
 const resumeStore=new MapResumeStore(journeyStorage);
 function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor||world.v03?.blocksProgress)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
 function restoreMapCamera(){if(!resumePose)return;actor.rotation.y=resumePose.yaw;const c=resumePose.camera;if(c){world.camera.alpha=c.alpha;world.camera.beta=Math.max(world.camera.lowerBetaLimit??.01,Math.min(world.camera.upperBetaLimit??3.13,c.beta));world.camera.radius=c.radius;cameraZoom.apply();}syncCameraFocus(0,{snap:true});resumePose=null;}
+// 0.3 quest armor (leather, from M04) adds flat defense on top of the shield.
+const V03_ARMOR_KEY='moonforest-v03-armor-v1',V03_ARMOR_DEFENSE={leather:2};
+function playerDefense(){let bonus=0;try{bonus=V03_ARMOR_DEFENSE[journeyStorage?.getItem(V03_ARMOR_KEY)]??0;}catch{/* storage optional */}return equipmentStats(equipmentChoices).defense+bonus;}
 function showMinimap(){minimap.setWorld(world).catch(error=>{console.warn('[Minimap]',error);minimap.hide();});}
 window.addEventListener('pagehide',()=>saveMapPosition(true));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveMapPosition(true);});
@@ -244,7 +248,7 @@ for (const slot of ['sword', 'shield']) {
   select.addEventListener('change', () => {
     if (!ready || !equipment) return;
     equipmentChoices[slot] = equipment.select(slot, select.value);
-    if(boss)boss.combat.defense=equipmentStats(equipmentChoices).defense;
+    if(boss)boss.combat.defense=playerDefense();
     audio.play('equip');
     saveEquipmentChoices(equipmentStorage, equipmentChoices);
     $('#equipment-status').textContent = `${equipmentLabel(slot,EQUIPMENT_STYLES.find(style => style.id === select.value))} 적용`;
@@ -1078,7 +1082,7 @@ try {
   },{onDefeat:event=>{try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
-  boss.combat.defense=equipmentStats(equipmentChoices).defense;
+  boss.combat.defense=playerDefense();
   try{swordTrail=createSwordTrail(world.scene,{enabled:swordTrailSettings.enabled,onError:error=>console.warn('[검격 잔상]',error)});}catch(error){console.warn('[검격 잔상]',error);}
   world.scene.onAfterAnimationsObservable.add(()=>{
     if(!simulateFrame)return;
@@ -1559,6 +1563,9 @@ try {
       },
       rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);return true;},
       setMapMarkers:list=>minimap.setMarkers(list),
+      creditGold:(source,amount)=>goldLoot.creditCumulative(source,amount),
+      addPotions:count=>{if(!boss)return 0;const before=boss.potions.remaining;boss.potions.remaining=Math.min(POTION.uses,before+count);updateButtons();return boss.potions.remaining-before;},
+      grantArmor:id=>{if(!V03_ARMOR_DEFENSE[id])return false;try{if(journeyStorage?.getItem(V03_ARMOR_KEY)===id)return false;journeyStorage?.setItem(V03_ARMOR_KEY,id);}catch{return false;}if(boss)boss.combat.defense=playerDefense();audio.play('equip');return true;},
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());

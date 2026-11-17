@@ -5,6 +5,7 @@ import {createQuestLog} from './quests.js';
 import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
 import {createGuideTrack} from './guide-track.js';
+import {PLAINS_MONSTER_GROUPS} from '../plains-monster-spawns.js';
 import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
 
@@ -43,6 +44,18 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(!tips.queue.length||dialogue.open)return;
   const tip=tips.queue.shift();tips.showing=tip;tips.left=TIP_SECONDS;hud.setTip({title:tip.title,lead:touch?tip.touch:tip.keys,text:tip.text});if(touch&&tip.target)hud.setRing(tip.target);
  }
+ // Quest rewards. Gold is credited per quest id (idempotent across reloads);
+ // potions refill toward the carry limit; armor is a persistent flag in main.
+ function grantReward(quest){
+  const reward=quest?.reward;if(!reward)return;
+  const parts=[];
+  try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
+  try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
+  try{if(reward.armor&&api.grantArmor?.(reward.armor))parts.push(t('reward.armor.'+reward.armor));}catch(error){console.warn('[MoonForest 0.3] armor reward',error);}
+  if(!parts.length)return;
+  api.playSound?.('gold_pickup',{volume:.9});
+  setTimeout(()=>{if(!disposed)api.toast?.(t('reward.got',{items:parts.join(' · ')}));},1400);
+ }
  function refresh(){
   const quest=log.quest();
   if(quest)hud.setQuest(quest.title,log.objective());else hud.setQuest(t('hud.chapterNext'),content.CHAPTER_END_NOTE);
@@ -53,6 +66,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(result.questDone){
    const done=content.QUESTS.find(quest=>quest.id===result.questDone),next=log.quest();
    hud.flash(next?t('hud.completeNext',{done:done.title,next:next.title}):t('hud.complete',{done:done.title}));
+   grantReward(done);
    save.touch({title:next?.title??done.title,titleKey:(next??done).id});
   }
   return result;
@@ -63,6 +77,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Straight hop from the player to a point, used only for the short orbit.
  const clearLine=(from,x,z)=>{for(let i=1;i<=3;i++){const k=i/3;if(!walkable(from.x+(x-from.x)*k,from.z+(z-from.z)*k))return false;}return true;};
  const guide={visual:null,track:createGuideTrack(),key:null,originX:0,originZ:0,age:0,time:0,failed:false,shown:false,x:0,y:0,z:0,sway:0,lift:1.25},guidePoint={x:0,z:0};
+ function nearestDen(player){
+  let den=null,bestSq=Infinity;
+  for(const group of PLAINS_MONSTER_GROUPS){const {x,z}=group.territory,sq=(x-player.x)**2+(z-player.z)**2;if(sq<64||sq>=bestSq)continue;bestSq=sq;den={id:group.id,x,z};}
+  return den;
+ }
  function guideTarget(player){
   const step=log.step();if(!step||api.battle.combatCount>0&&step.type!=='defeat')return null;
   if(step.type==='defeat'){
@@ -71,8 +90,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // Lead toward the nearest living foe, stopping short of it.
    let best=null,bestSq=Infinity;
    for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
-   if(!best||bestSq<16)return null;
-   guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};
+   if(best&&bestSq<16)return null;
+   if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};}
+   // No beast awake nearby: lead to the nearest plains den instead of vanishing.
+   const den=!step.kind&&mapId==='great-plains'?nearestDen(player):null;if(!den)return null;
+   guidePoint.x=den.x;guidePoint.z=den.z;return {key:'den:'+den.id,direct:false,stopShort:3};
   }
   if(step.type==='talk'){
    let best=null,bestSq=Infinity,away=null;
@@ -113,10 +135,21 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(disposed||log.step()!==step)return;
     const left=Math.max(1,step.summon.count-log.snapshot().count);
     const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind);
+    if(ok!==false&&step.summon.tune)tuneFoes(step.summon.kind,step.summon.tune);
     if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
    }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}
    finally{staged.busy=false;staged.key=key;staged.next=guide.time+4;}
   })();
+ }
+ // 0.3 balance for an early story fight: lower HP and hit damage of the
+ // summoned foes only (the 0.2 encounters keep their own numbers).
+ function tuneFoes(kind,tune){
+  for(const foe of api.battle.encounters??[]){
+   if(!foe.active||foe.v03Tuned||(foe.summonKind??foe.kind)!==kind||!foe.brain)continue;
+   if(tune.hp){foe.brain.maxHp=tune.hp;foe.brain.hp=Math.min(foe.brain.hp,tune.hp);}
+   if(tune.damage)foe.damageScale=tune.damage;
+   foe.v03Tuned=true;
+  }
  }
  function updateGuide(dt,player){
   guide.time+=dt;
