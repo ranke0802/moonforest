@@ -10,7 +10,7 @@ export default {
   'confirm.overwriteTitle':'Overwrite record','confirm.overwrite':'Slot {slot} will be erased and a new game started. This cannot be undone.','confirm.overwriteAccept':'Start over',
   'confirm.quitTitle':'Quit','confirm.quit':'Quit the game?','confirm.quitAccept':'Quit',
   'gallery.title':'Gallery','gallery.note':'Scenes you witness and beings you meet on your journey are recorded here.','gallery.scenes':'Scenes','gallery.bestiary':'Bestiary','gallery.titles':'Titles',
-  'settings.title':'Settings','settings.language':'Language','settings.game':'Game settings','settings.languageNote':'Changing the language reloads the screen.',
+  'slot.none':'No record here','settings.display':'Display','settings.performance':'Performance','settings.controls':'Controls','settings.version':'Version · Updates','settings.toTitle':'Return to title','settings.toTitleConfirm':'Tap again to save and return','settings.title':'Settings','settings.language':'Language','settings.game':'Game settings','settings.languageNote':'Changing the language reloads the screen.',
   'toast.failed':'Something went wrong. Please try again.','toast.noStorage':'Storage is unavailable, so records cannot be opened.','toast.wipeFailed':'Could not erase the record.','toast.preparing':'The world is still being prepared. Please wait a moment.',
   'meta.dream':'Dream',
   'place.warrior-v3':"Forest's Edge Village",'place.warrior-plains':'Great Plains','place.warrior-v4':'Forest of Fiends','place.warrior-v5':"Witch's Cave",

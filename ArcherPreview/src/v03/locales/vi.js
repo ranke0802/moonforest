@@ -10,7 +10,7 @@ export default {
   'confirm.overwriteTitle':'Ghi đè dữ liệu','confirm.overwrite':'Dữ liệu ô {slot} sẽ bị xóa để bắt đầu lại. Không thể hoàn tác.','confirm.overwriteAccept':'Bắt đầu lại',
   'confirm.quitTitle':'Thoát','confirm.quit':'Thoát trò chơi?','confirm.quitAccept':'Thoát',
   'gallery.title':'Thư viện','gallery.note':'Những cảnh bạn chứng kiến và những sinh vật bạn gặp trên hành trình sẽ được ghi lại tại đây.','gallery.scenes':'Cảnh','gallery.bestiary':'Bách khoa','gallery.titles':'Danh hiệu',
-  'settings.title':'Cài đặt','settings.language':'Ngôn ngữ','settings.game':'Cài đặt trò chơi','settings.languageNote':'Đổi ngôn ngữ sẽ tải lại màn hình.',
+  'slot.none':'Chưa có bản lưu','settings.display':'Hiển thị','settings.performance':'Chẩn đoán hiệu năng','settings.controls':'Hướng dẫn điều khiển','settings.version':'Phiên bản · Cập nhật','settings.toTitle':'Về màn hình tiêu đề','settings.toTitleConfirm':'Nhấn lần nữa để lưu và quay về','settings.title':'Cài đặt','settings.language':'Ngôn ngữ','settings.game':'Cài đặt trò chơi','settings.languageNote':'Đổi ngôn ngữ sẽ tải lại màn hình.',
   'toast.failed':'Không thể tiếp tục. Vui lòng thử lại.','toast.noStorage':'Không dùng được bộ nhớ trình duyệt nên không mở được dữ liệu.','toast.wipeFailed':'Không xóa được dữ liệu.','toast.preparing':'Thế giới đang được chuẩn bị. Vui lòng chờ một chút.',
   'meta.dream':'Giấc mơ',
   'place.warrior-v3':'Làng Bìa Rừng','place.warrior-plains':'Đại Bình Nguyên','place.warrior-v4':'Rừng Ma Vật','place.warrior-v5':'Hang Phù Thủy',

@@ -83,7 +83,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
     for(const meta of index){
      const summary=slotSummary(meta,describe),button=el(doc,'button','v03-slot');button.type='button';button.dataset.slot=String(meta.slot);
      button.disabled=mode==='load'&&!meta.used;
-     button.append(el(doc,'span','v03-slot-number',String(meta.slot)),el(doc,'strong','v03-slot-title',summary.title),el(doc,'small','v03-slot-detail',summary.detail));
+     button.append(el(doc,'span','v03-slot-number',String(meta.slot)),el(doc,'strong','v03-slot-title',summary.title),el(doc,'small','v03-slot-detail',mode==='load'&&!meta.used?t('slot.none'):summary.detail));
      if(meta.slot===bootSlot&&meta.used)button.classList.add('is-current');
      button.addEventListener('click',()=>close(meta.slot));list.append(button);
     }

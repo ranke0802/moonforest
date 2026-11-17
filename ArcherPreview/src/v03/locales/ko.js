@@ -12,7 +12,7 @@ export default {
   'confirm.overwriteTitle':'기록 덮어쓰기','confirm.overwrite':'{slot}번 기록을 지우고 새로 시작합니다. 되돌릴 수 없습니다.','confirm.overwriteAccept':'새로 시작',
   'confirm.quitTitle':'끝내기','confirm.quit':'게임을 종료할까요?','confirm.quitAccept':'끝내기',
   'gallery.title':'갤러리','gallery.note':'여정에서 본 장면과 만난 존재가 이곳에 기록됩니다.','gallery.scenes':'장면','gallery.bestiary':'도감','gallery.titles':'칭호',
-  'settings.title':'설정','settings.language':'언어','settings.game':'게임 설정','settings.languageNote':'언어를 바꾸면 화면을 다시 불러옵니다.',
+  'slot.none':'남은 기록이 없습니다','settings.display':'화면','settings.performance':'성능 진단','settings.controls':'조작 안내','settings.version':'버전 · 업데이트','settings.toTitle':'타이틀로 돌아가기','settings.toTitleConfirm':'한 번 더 누르면 저장하고 돌아갑니다','settings.title':'설정','settings.language':'언어','settings.game':'게임 설정','settings.languageNote':'언어를 바꾸면 화면을 다시 불러옵니다.',
   'toast.failed':'진행하지 못했습니다. 다시 시도해 주세요.','toast.noStorage':'저장소를 사용할 수 없어 기록을 열 수 없습니다.','toast.wipeFailed':'기록을 지우지 못했습니다.','toast.preparing':'세계를 준비하고 있습니다. 잠시만 기다려 주세요.',
   'meta.dream':'꿈',
   'place.warrior-v3':'숲의 경계 마을','place.warrior-plains':'대평원','place.warrior-v4':'마물의 숲','place.warrior-v5':'마녀의 동굴',

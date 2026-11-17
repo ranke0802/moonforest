@@ -202,6 +202,29 @@ export function setupV03(api){
   select.value=language();select.addEventListener('change',()=>{if(!changeLanguage(select.value))select.value=language();});
   const note=doc.createElement('small');note.textContent=t('settings.languageNote');
   row.append(name,select,note);dialog.querySelector('header')?.after(row);
+  tidySettings(dialog);
+ }
+ // Players see four sections (display, performance, controls, version); the
+ // review and tuning sections stay for development (?dev). CSS hides whatever
+ // is not tagged here, including sections added later.
+ const SETTINGS_KEEP=[['#quality-select','display'],['#frame-diagnostics-options','performance'],['#help-toggle','controls'],['#runtime-version','version']];
+ function tidySettings(dialog){
+  const host=dialog.querySelector('.settings-sections');if(!host)return;
+  for(const section of host.querySelectorAll(':scope>details'))for(const [selector,id] of SETTINGS_KEEP){
+   if(!section.querySelector(selector))continue;section.dataset.v03Keep=id;
+   if(!doc.documentElement.hasAttribute('data-dev')){const summary=section.querySelector(':scope>summary');if(summary)summary.textContent=t('settings.'+id);}
+  }
+  // Back to the title: saved first; a second tap within three seconds confirms.
+  const leave=doc.createElement('button');leave.type='button';leave.className='v03-settings-leave';leave.dataset.ui='';leave.textContent=t('settings.toTitle');
+  let armed=0;
+  leave.addEventListener('click',()=>{
+   if(state.screen!=='play')return;
+   if(!armed){leave.textContent=t('settings.toTitleConfirm');leave.classList.add('is-armed');armed=view.setTimeout(()=>{armed=0;leave.textContent=t('settings.toTitle');leave.classList.remove('is-armed');},3000);return;}
+   view.clearTimeout(armed);save.touch(metaPatch());
+   try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
+   view.location.reload();
+  });
+  host.append(leave);
  }
  // ----- boot -----
  function showTitle(){
