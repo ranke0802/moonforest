@@ -118,7 +118,7 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M03',title:'마을의 부탁',steps:[
   {id:'ask',text:'촌장 찾아가기',type:'talk',targets:['chief'],dialogues:{chief:'chief-request'}},
-  {id:'hunt',text:'대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3,at:{x:-60,z:-45,radius:12},summon:{kind:'gray-wolf',count:3},arrival:'늑대 무리가 길을 막아선다'},
+  {id:'hunt',text:'대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
  {id:'M04',title:'대평원의 곰',steps:[
