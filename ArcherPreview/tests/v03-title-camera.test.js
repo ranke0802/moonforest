@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {crownBoxes,insideCrown,clearRadius,clearView,CROWN} from '../src/v03/title-camera.js';
+import {crownBoxes,insideCrown,clearRadius,clearView,clearAlpha,CROWN} from '../src/v03/title-camera.js';
 
 const oak={placement:{asset:'tree-01-round-oak'},min:{x:5,y:0,z:-5},max:{x:15,y:10,z:5}};
 const rock={placement:{asset:'rock-01-mossy-boulder'},min:{x:-3,y:0,z:-3},max:{x:3,y:6,z:3}};
@@ -37,4 +37,18 @@ test('under a low, wide crown the camera drops to a level view below the leaves'
  // In the open nothing changes.
  assert.deepEqual(clearView([],target,0,beta,10.5,2.5),{radius:10.5,beta});
  assert.deepEqual(clearView(boxes,{x:200,y:1.6,z:0},0,beta,10.5,2.5),{radius:10.5,beta});
+});
+test('a scene never settles its camera behind a large prop',()=>{
+ // First fight (measured on the deployed build): warrior, wolf ahead, the
+ // wagon 5.5 m behind the warrior, exactly where "behind the hero" points.
+ const guard={x:-64.2,z:-20.3},wagon={x:-64.3,z:-25.8},behind=-1.768;
+ const alpha=clearAlpha(behind,guard,[wagon]);
+ const toward=Math.atan2(wagon.z-guard.z,wagon.x-guard.x);
+ let off=alpha-toward;off=Math.atan2(Math.sin(off),Math.cos(off));
+ assert.ok(Math.abs(off)>=1.04,'at least 60 degrees clear of the wagon');
+ assert.ok(Math.abs(alpha-behind)<1.3,'still on the hero\'s back side');
+ // Nothing in the way, or a prop far away: the angle is kept.
+ assert.equal(clearAlpha(behind,guard,[]),behind);
+ assert.equal(clearAlpha(behind,guard,[{x:40,z:40}]),behind);
+ assert.equal(clearAlpha(behind,guard,[{x:-64.2,z:-10}]),behind,'a prop in front of the hero is not in the way');
 });

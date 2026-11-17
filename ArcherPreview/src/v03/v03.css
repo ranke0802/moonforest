@@ -278,3 +278,12 @@ html[data-edition] #help-dialog .v03-guide-row dt{margin:0;font-size:13px;line-h
 .v03-guide .is-touch{display:none}
 @media (pointer:coarse){.v03-guide dd.is-touch{display:block}.v03-guide p.is-touch{display:inline-block}.v03-guide .is-keys{display:none}}
 @media (max-width:560px){.v03-guide-list{grid-template-columns:minmax(0,1fr)}}
+
+/* ----- Tip card on touch screens: at the top edge, so it never covers the
+   hero in the middle of the screen. It drops below the lesson line only while
+   a lesson line is showing. Korean text wraps between words, not inside. ----- */
+@media (pointer:coarse){
+ .v03-tip{top:max(10px,env(safe-area-inset-top))}
+ .v03-hud:has(.v03-hint:not([hidden])) .v03-tip{top:calc(max(58px,env(safe-area-inset-top)) + 46px)}
+}
+html[lang=ko] .v03-tip,html[lang=ko] .v03-dialogue-text,html[lang=ko] .v03-quest,html[lang=ko] .v03-hint,html[lang=ko] .v03-guide-row,html[lang=ko] .v03-caption-text{word-break:keep-all}

@@ -54,6 +54,9 @@ class TreeCoverage extends MaterialPluginBase {
   }
 }
 
+// Props tall and wide enough to hide the player: they fade like trees and
+// buildings when they stand between the camera and the player.
+export const TALL_PROPS=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
 export function prepareTreeOcclusion(meshes) {
   for (const mesh of meshes) {
     if (!mesh.getTotalVertices?.()) continue;

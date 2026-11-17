@@ -8,6 +8,7 @@ import {createGuideTrack} from './guide-track.js';
 import {PLAINS_MONSTER_GROUPS} from '../plains-monster-spawns.js';
 import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
+import {clearAlpha} from './title-camera.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -331,7 +332,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }else{
    // Settle exactly on the guard spot facing the wolf, then swing behind.
    if(player){const p=player.position,k=Math.min(1,dt*6);p.x+=(P.guard.x-p.x)*k;p.z+=(P.guard.z-p.z)*k;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(P.charge.x-p.x,P.charge.z-p.z);}
-   const k=ease((now-SCENE.heroShot)/1.3),behind=alphaFrom(P.D,P.charge);
+   // Behind the warrior, but never behind the wagon (it hid the wolf).
+   const k=ease((now-SCENE.heroShot)/1.3),behind=clearAlpha(alphaFrom(P.D,P.charge),P.guard,(content.PROPS??[]).filter(prop=>prop.map===mapId));
    scene.cameraFocus=null;
    let turn=behind-camera.alpha;turn=Math.atan2(Math.sin(turn),Math.cos(turn));camera.alpha+=turn*Math.min(1,dt*4);
    camera.beta+=(scene.beta-camera.beta)*Math.min(1,dt*3);camera.radius+=(scene.radius-camera.radius)*k*Math.min(1,dt*3);

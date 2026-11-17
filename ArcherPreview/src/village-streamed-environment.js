@@ -8,7 +8,7 @@ import {createVillageTransform} from './village-environment.js';
 import {placementBounds,villageDemand,VillageGeometryStreaming} from './village-demand.js';
 import {villageLodSources,hasVillageGeometry,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VillageVisibility} from './village-visibility.js';
-import {TreeOcclusion,prepareTreeOcclusion} from './tree-occlusion.js';
+import {TreeOcclusion,prepareTreeOcclusion,TALL_PROPS} from './tree-occlusion.js';
 import {VillageOutlines} from './village-outlines.js';
 import {VillageTextureStreaming} from './village-texture-streaming.js';
 import {applyVillageToon} from './village-toon.js';
@@ -30,7 +30,7 @@ import {plainsMeadow,plainsThicket} from './v04/meadow-plains.js';
 const SCATTER_VEGETATION=false;
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
-const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
+const tallProps=TALL_PROPS;
 // These authored two-sided surfaces have real open edges in every packed LOD.
 // Keep the source's coloured back faces instead of leaving only the ink hull.
 // Solid walls, foundations and the closed canopy retain the ordinary policy.

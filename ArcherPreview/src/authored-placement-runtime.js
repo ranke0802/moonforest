@@ -6,7 +6,7 @@ import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
 import {instantiateStaticMap} from './static-map-instances.js';
 import {prepareVillageInstancing} from './village-instancing.js';
 import {applyVillageToon} from './village-toon.js';
-import {prepareTreeOcclusion,TreeOcclusion} from './tree-occlusion.js';
+import {prepareTreeOcclusion,TreeOcclusion,TALL_PROPS} from './tree-occlusion.js';
 import {configureVillageSurfaceCulling,installVillageGeometry} from './village-streamed-environment.js';
 import {villageLodSources,hasVillageGeometry} from './village-lod.js';
 import {VillageGeometryStreaming} from './village-demand.js';
@@ -202,7 +202,7 @@ export class AuthoredPlacementRuntime {
    const meshes=root.getChildMeshes().filter(mesh=>mesh.getTotalVertices()>0);
    for(const mesh of meshes){mesh.isPickable=true;mesh.metadata={...mesh.metadata,placementInstanceId:instance.instanceId,authoredPlacement:true};}
    root.metadata={placementInstanceId:instance.instanceId,authoredPlacement:true};
-   const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale,...(instance.assetId==='chest-common'?{lootTier:instance.chest?.tier??1}:{})},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)};
+   const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale,...(instance.assetId==='chest-common'?{lootTier:instance.chest?.tier??1}:{})},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)||TALL_PROPS.has(instance.assetId)};
    this._setTransform(record,instance,terrain);if(instance.assetId==='chest-common')record.chestOpening=createChestOpening(root,{opened:this.world.isAuthoredChestOpened?.(instance.instanceId)===true});this.stats.instancesCreated++;return record;
   }catch(error){root.dispose();this._release(entry);throw error;}
  }

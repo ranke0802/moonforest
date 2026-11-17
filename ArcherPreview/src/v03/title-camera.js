@@ -57,3 +57,19 @@ export function clearView(boxes,target,alpha,beta,wanted,lower=1,options=CROWN){
  out.radius=Math.max(lower,wanted*options.steps[options.steps.length-1]);out.beta=Math.max(beta,options.flat);
  return out;
 }
+
+// A staged scene that ends "behind the hero" must not end behind a large prop:
+// the first fight stood the covered wagon between the camera and the wolf.
+// base: the wanted camera angle around `target` · props: [{x,z}] on this map.
+// A prop within `clear` radians of the camera's side moves the camera `swing`
+// radians off the prop, to whichever side needs the smaller turn.
+export function clearAlpha(base,target,props,{clear=.9,swing=1.05,reach=16}={}){
+ let alpha=base;
+ for(const prop of props??[]){
+  const dx=prop.x-target.x,dz=prop.z-target.z,distance=Math.hypot(dx,dz);
+  if(distance<.5||distance>reach)continue;
+  const toward=Math.atan2(dz,dx);let off=alpha-toward;off=Math.atan2(Math.sin(off),Math.cos(off));
+  if(Math.abs(off)<clear)alpha=toward+(off<0?-swing:swing);
+ }
+ return alpha;
+}
