@@ -4,6 +4,7 @@ import {FOREST_ROUTES,FOREST_CLEARINGS} from './monster-forest-layout.js';
 import {PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_RADIUS} from './great-plains-layout.js';
 import {CAVE_ROUTES,CAVE_ROOMS,caveSurface} from './witch-cave-layout.js';
 
+import {tr} from './v03/i18n.js';
 export const MINIMAP_SIZE=96;
 export const MINIMAP_MAPS=Object.freeze({
  village:{label:'마을',rect:[-52,-44,104,128],fill:'#314433',road:'#a49570'},
@@ -58,7 +59,7 @@ export class DotMinimap{
   const id=world.mapId,generation=++this.generation;this.mapId=id;if(!this.element)return;this.element.hidden=true;if(!this.ctx||!MINIMAP_MAPS[id])return;
   const revision=world.placementRevision??0;
   if(this.cacheRevisions.get(id)!==revision){this.cache.delete(id);this.cacheRevisions.set(id,revision);}
-  this.element.querySelector('strong').textContent=MINIMAP_MAPS[id].label;
+  this.element.querySelector('strong').textContent=tr(MINIMAP_MAPS[id].label);
   if(!this.cache.has(id)){
    // Yield to reveal the actual game first; a map switch invalidates stale work.
    await new Promise(resolve=>setTimeout(resolve,0));if(generation!==this.generation)return;

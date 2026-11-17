@@ -1,10 +1,11 @@
 // In-game 0.3 HUD pieces: quest tracker, coaching hint, interaction prompt and
+import {t} from './i18n.js';
 // a short banner. Text nodes are written only when their value changes.
 export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const make=(tag,className)=>{const node=doc.createElement(tag);node.className=className;return node;};
  const root=make('div','v03-hud');root.dataset.v03Hud='';
  const quest=make('section','v03-quest'),kicker=make('small','v03-quest-kicker'),title=make('strong','v03-quest-title'),objective=make('p','v03-quest-objective');
- kicker.textContent='메인';quest.append(kicker,title,objective);quest.hidden=true;
+ kicker.textContent=t('hud.main');quest.append(kicker,title,objective);quest.hidden=true;
  const hint=make('div','v03-hint');hint.hidden=true;
  const prompt=make('button','v03-prompt');prompt.type='button';prompt.hidden=true;
  const banner=make('div','v03-banner');banner.hidden=true;
@@ -20,7 +21,7 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
   setQuest(nextTitle,nextObjective){
    if(last.title===nextTitle&&last.objective===nextObjective)return;
    const changedStep=last.objective!==null&&last.objective!==nextObjective;
-   last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;title.textContent=nextTitle??'';objective.textContent=nextObjective??'';
+   last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;kicker.textContent=t('hud.main');title.textContent=nextTitle??'';objective.textContent=nextObjective??'';
    if(changedStep){quest.classList.remove('is-updated');void quest.offsetWidth;quest.classList.add('is-updated');}
   },
   setHint(text){if(last.hint===text)return;last.hint=text;hint.hidden=!text;hint.textContent=text??'';},

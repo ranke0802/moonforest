@@ -3,13 +3,14 @@
 // in-engine cutscene once the cast models are integrated; the interface
 // (play → Promise) stays the same.
 // Each caption fades in, holds, then fades out fully before the next one.
+import {t} from './i18n.js';
 export const FADE_SECONDS=1.1;
 export const DREAM_BEATS=Object.freeze([
- {seconds:2.7,tone:'warm',text:'상처 입은 손을 내미는 청년.\n내 손끝에서 번진 빛이 상처를 덮는다.'},
- {seconds:2.7,tone:'day',text:'나란히 걷던 마을 길.\n무슨 말을 했는지는 기억나지 않는다. 온기만 남았다.'},
- {seconds:2.6,tone:'alarm',text:'마물의 울음. 멀리서 그가 쓰러진다.\n손을 뻗지만, 닿지 않는다.'},
- {seconds:2.6,tone:'void',text:'어두운 곳에서 올리는 기도.\n응답은 없다.'},
- {seconds:3.0,tone:'voice',text:'“그 아이를 찾아라.”'},
+ {seconds:2.7,tone:'warm',key:'opening.0'},
+ {seconds:2.7,tone:'day',key:'opening.1'},
+ {seconds:2.6,tone:'alarm',key:'opening.2'},
+ {seconds:2.6,tone:'void',key:'opening.3'},
+ {seconds:3.0,tone:'voice',key:'opening.4'},
 ]);
 // Real running time: opening pause + every caption's hold and fade-out.
 export const dreamSeconds=()=>.5+DREAM_BEATS.reduce((sum,beat)=>sum+beat.seconds+FADE_SECONDS,0);
@@ -17,7 +18,7 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
  const layer=doc.createElement('section');layer.className='v03-opening';layer.hidden=true;layer.dataset.v03Layer='opening';layer.setAttribute('aria-live','polite');
  const glow=doc.createElement('div');glow.className='v03-opening-glow';
  const line=doc.createElement('p');line.className='v03-opening-line';
- const skip=doc.createElement('button');skip.type='button';skip.className='v03-opening-skip';skip.textContent='건너뛰기';
+ const skip=doc.createElement('button');skip.type='button';skip.className='v03-opening-skip';
  layer.append(glow,line,skip);mount.append(layer);
  let run=0;
  return {
@@ -27,12 +28,12 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
   async play(){
    const id=++run;let skipped=false;const onSkip=()=>{skipped=true;};
    skip.addEventListener('click',onSkip);
-   layer.hidden=false;layer.classList.remove('is-releasing');line.textContent='';
+   skip.textContent=t('opening.skip');layer.hidden=false;layer.classList.remove('is-releasing');line.textContent='';
    try{
     await wait(500);
     for(const beat of DREAM_BEATS){
      if(skipped||id!==run)break;
-     layer.dataset.tone=beat.tone;line.textContent=beat.text;line.classList.remove('is-in');void line.offsetWidth;line.classList.add('is-in');
+     layer.dataset.tone=beat.tone;line.textContent=t(beat.key);line.classList.remove('is-in');void line.offsetWidth;line.classList.add('is-in');
      // Poll in short steps so a skip never waits for a whole caption.
      for(let left=beat.seconds*1000;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));
      line.classList.remove('is-in');

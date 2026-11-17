@@ -20,7 +20,7 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-title.is-shown.scene-ready .v03-title-inner{opacity:1;transform:none}
 /* Until its scene is fully drawn the title stays black, with a quiet note. */
 .v03-title:not(.scene-ready) .v03-title-inner{pointer-events:none}
-.v03-title::after{content:'세계를 그리는 중';position:absolute;right:max(28px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));font-size:12px;letter-spacing:.3em;color:#ece0bc;opacity:0;transition:opacity .6s ease}
+.v03-title::after{content:attr(data-drawing);position:absolute;right:max(28px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));font-size:12px;letter-spacing:.3em;color:#ece0bc;opacity:0;transition:opacity .6s ease}
 .v03-title.is-shown:not(.scene-ready)::after{opacity:.55;animation:v03-breathe 1.6s ease-in-out infinite}
 @keyframes v03-breathe{50%{opacity:.2}}
 .v03-title.has-panel .v03-title-inner{opacity:.25;pointer-events:none}
@@ -125,3 +125,14 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-portrait.is-in{opacity:1;transform:none;transition:opacity .35s ease,transform .35s ease}
 .v03-dialogue-box{z-index:1}
 @media (pointer:coarse),(max-height:520px){.v03-dialogue-portrait{height:min(58vh,420px);max-width:38vw}}
+
+/* Languages: the pixel UI font covers Korean and Latin; other scripts fall
+   back per glyph to the platform's CJK/Vietnamese faces. */
+html[lang=ja]{--v03-font:MoonforestUI,'Yu Gothic UI','Meiryo','Hiragino Sans','Noto Sans JP',sans-serif}
+html[lang=zh-Hans]{--v03-font:MoonforestUI,'Microsoft YaHei','PingFang SC','Noto Sans SC',sans-serif}
+html[lang=vi]{--v03-font:'Segoe UI','Noto Sans',MoonforestUI,sans-serif}
+html[lang=en]{--v03-font:MoonforestUI,'Segoe UI',sans-serif}
+.v03-languages{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.v03-language,.v03-settings-game{display:flex!important;justify-content:center;align-items:center;min-height:48px!important;text-align:center;font-size:clamp(15px,2.4vmin,18px)}
+.v03-language.is-current{border-color:var(--v03-gold)}
+.v03-settings-game{width:100%;margin-top:6px}

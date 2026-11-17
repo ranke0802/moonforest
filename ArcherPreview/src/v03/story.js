@@ -6,6 +6,7 @@ import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
 import {createGuideTrack} from './guide-track.js';
 import {portraitFor} from './portraits.js';
+import {t,speaker} from './i18n.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -17,11 +18,7 @@ export function findFreeSpot(navigation,point,radius=.42){
  }
  return {x:point.x,z:point.z};
 }
-// Korean particle by final consonant: particle('여관 주인','과','와') → '여관 주인과'.
-export function particle(word,withFinal,withoutFinal){
- const code=word.charCodeAt(word.length-1)-0xac00;
- return word+(code>=0&&code<=11171&&code%28?withFinal:withoutFinal);
-}
+export {particle} from './korean.js';
 export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
  const log=createQuestLog({quests:content.QUESTS,storage:save.journey});
@@ -48,15 +45,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function refresh(){
   const quest=log.quest();
-  if(quest)hud.setQuest(quest.title,log.objective());else hud.setQuest('이야기의 다음 장',content.CHAPTER_END_NOTE);
+  if(quest)hud.setQuest(quest.title,log.objective());else hud.setQuest(t('hud.chapterNext'),content.CHAPTER_END_NOTE);
  }
  function emit(event){
   const result=log.notify(event);if(!result.changed)return result;
   refresh();
   if(result.questDone){
    const done=content.QUESTS.find(quest=>quest.id===result.questDone),next=log.quest();
-   hud.flash(next?`완료 · ${done.title}  →  ${next.title}`:`완료 · ${done.title}`);
-   save.touch({title:next?.title??done.title});
+   hud.flash(next?t('hud.completeNext',{done:done.title,next:next.title}):t('hud.complete',{done:done.title}));
+   save.touch({title:next?.title??done.title,titleKey:(next??done).id});
   }
   return result;
  }
@@ -208,7 +205,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function runEffects(lines){
   for(const line of lines)for(const effect of line.effects??[]){
-   if(effect==='rest'){api.rest?.();save.touch({});hud.flash('쉬었습니다 · 여정을 기록했습니다');trigger('effect:rest');}
+   if(effect==='rest'){api.rest?.();save.touch({});hud.flash(t('hud.rested'));trigger('effect:rest');}
   }
  }
  async function interact(){
@@ -270,7 +267,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    started=true;mapId=null;Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0});
    tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
-   const quest=log.quest();if(quest)save.touch({title:quest.title});
+   const quest=log.quest();if(quest)save.touch({title:quest.title,titleKey:quest.id});
   },
   defeat(event){if(started)emit({type:'defeat',kind:event?.kind,map:mapId});},
   // Called behind the prologue: scenery and the path grid are ready before
@@ -287,7 +284,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     let best=null,bestSq=TALK_RANGE_SQ;
     for(const member of cast){const dx=member.x-player.x,dz=member.z-player.z,sq=dx*dx+dz*dz;if(sq<bestSq){best=member;bestSq=sq;}}
     near=api.battle.combatCount>0?null:best;
-    hud.setPrompt(near?`${touch?'':'E · '}${log.isTarget(near.npc.id)?particle(near.npc.name,'과','와')+' 이야기하기':near.npc.name+'에게 말 걸기'}`:null);
+    hud.setPrompt(near?`${touch?'':'E · '}${t(log.isTarget(near.npc.id)?'prompt.talkQuest':'prompt.talkIdle',{name:speaker(near.npc.name)})}`:null);
    }
    coach(dt);contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },

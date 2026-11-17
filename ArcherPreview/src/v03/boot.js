@@ -10,12 +10,17 @@ import {createCursors} from './cursors.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
+import {LANGUAGES,readLanguage,writeLanguage,useLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
+// Map character → place. Saved records keep the Korean name as a fallback and
+// the key (placeKey) for display in any language.
 export const PLACE_NAMES=Object.freeze({'warrior-v3':'숲의 경계 마을','warrior-plains':'대평원','warrior-v4':'마물의 숲','warrior-v5':'마녀의 동굴'});
+// Session flag: a language change reloads the page straight to the title.
+export const SKIP_LOGO_KEY='moonforest-0.3:skip-logo';
 export const TITLE_FOE=Object.freeze({kind:'wolf',count:1,hpFloor:.45});
 // The first fight is one wolf: enough to learn every basic without pressure.
 export const AMBUSH=Object.freeze({kind:'gray-wolf',count:1});
-const GALLERY=Object.freeze([{id:'scenes',label:'장면',total:12},{id:'bestiary',label:'도감',total:14},{id:'titles',label:'칭호',total:10}]);
+const GALLERY=Object.freeze([{id:'scenes',total:12},{id:'bestiary',total:14},{id:'titles',total:10}]);
 export const OPENING_STAGE=chapter1.OPENING_STAGE;
 const TITLE_CAMERA=Object.freeze({radius:10.5,beta:1.24,orbit:.075});
 
@@ -25,15 +30,31 @@ export function setupV03(api){
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
  const cursors=createCursors(doc);
- const story=createStory({api,doc,save,content:api.content??chapter1,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers});
+ // Language: chosen on the first launch (inline splash) or in Settings, kept
+ // across editions in localStorage. Story text is laid over a copy of the
+ // chapter data once the language pack has loaded; nothing player-facing
+ // appears before that (title and play wait for langReady).
+ const languageStore=api.languageStorage??view?.localStorage??null,source=api.content??chapter1,content=cloneChapter(source);
+ const story=createStory({api,doc,save,content,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
- const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false};
+ const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false,langReady:false};
  const screen=value=>{state.screen=value;html.dataset.v03Screen=value;};
- const title=createTitleScreen({doc,wait,onAction:action=>{void handle(action).catch(report);}});
+ const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
+ // Records written before keys were saved carry Korean text only: map it back.
+ const describe=meta=>{
+  const titleKey=meta.titleKey??(meta.title==='꿈'?'dream':source.QUESTS?.find(quest=>quest.title===meta.title)?.id);
+  const placeKey=meta.placeKey||Object.keys(PLACE_NAMES).find(key=>PLACE_NAMES[key]===meta.place);
+  return {title:titleKey==='dream'?t('meta.dream'):titleKey?questTitle(titleKey):undefined,place:placeKey?t('place.'+placeKey):undefined};
+ };
+ const title=createTitleScreen({doc,wait,describe,onAction:action=>{void handle(action).catch(report);}});
+ // The first-launch picker lives in the splash, so the choice is read after it.
+ const langReady=Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})).then(()=>{
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
+ }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
- function report(error){console.error('[MoonForest 0.3]',error);api.toast?.('진행하지 못했습니다. 다시 시도해 주세요.');state.busy=false;}
+ function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
  const gameState=()=>api.getState();
 
  // ----- attract battle (title background) -----
@@ -72,7 +93,7 @@ export function setupV03(api){
  }
 
  // ----- starting a game -----
- function metaPatch(extra={}){const s=gameState();return {character:s.character,place:PLACE_NAMES[s.character]??'',playSeconds:state.playSeconds,level:1,...extra};}
+ function metaPatch(extra={}){const s=gameState();return {character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:'',playSeconds:state.playSeconds,level:1,...extra};}
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
  // Roaming monsters appear only after the opening quest: the first walk to
  // the village is safe.
@@ -85,7 +106,7 @@ export function setupV03(api){
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
   stopAttract();api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
-  screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',playSeconds:0}));state.playSeconds=0;
+  screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
   // Prepare the ambush behind the black stage; the simulation stays frozen
   // (blocksGame) until the dream ends, so nothing can attack early.
   state.ambush=true;
@@ -93,7 +114,7 @@ export function setupV03(api){
   await opening.play();
   const ready=await Promise.race([ambush,wait(6000).then(()=>null)]);
   if(ready===false)state.ambush=false;
-  save.touch(metaPatch({title:'늑대와 마차'}));
+  save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
   await enterPlay();state.busy=false;
   await opening.release();
  }
@@ -105,7 +126,7 @@ export function setupV03(api){
   state.busy=false;await opening.release();
  }
  function reloadInto(slot,mode,character){
-  if(!save.request(slot,mode)){api.toast?.('저장소를 사용할 수 없어 기록을 열 수 없습니다.');return false;}
+  if(!save.request(slot,mode)){api.toast?.(t('toast.noStorage'));return false;}
   const url=new URL(view.location.href);for(const key of ['arrival','from'])url.searchParams.delete(key);
   if(character&&PLACE_NAMES[character])url.searchParams.set('character',character);else url.searchParams.delete('character');
   view.location.replace(url.href);return true;
@@ -119,25 +140,31 @@ export function setupV03(api){
    if(anyUsed){slot=await title.chooseSlot({mode:'new',index,bootSlot:save.slot});if(slot===null)return;}
    const meta=index[slot-1];
    if(meta.used){
-    const ok=await title.confirm({title:'기록 덮어쓰기',message:`${slot}번 기록을 지우고 새로 시작합니다. 되돌릴 수 없습니다.`,accept:'새로 시작'});if(!ok)return;
-    if(!save.wipe(slot)){api.toast?.('기록을 지우지 못했습니다.');return;}
+    const ok=await title.confirm({title:t('confirm.overwriteTitle'),message:t('confirm.overwrite',{slot}),accept:t('confirm.overwriteAccept')});if(!ok)return;
+    if(!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}
     reloadInto(slot,'new',null);return;
    }
    if(slot!==save.slot){reloadInto(slot,'new',null);return;}
-   if(!ready){api.toast?.('세계를 준비하고 있습니다. 잠시만 기다려 주세요.');return;}
+   if(!ready){api.toast?.(t('toast.preparing'));return;}
    await beginNewGame();
   }else if(action==='load'){
    const slot=await title.chooseSlot({mode:'load',index,bootSlot:save.slot});if(slot===null)return;
    const meta=index[slot-1];if(!meta.used)return;
    if(slot!==save.slot){reloadInto(slot,'load',meta.character);return;}
-   if(!ready){api.toast?.('세계를 준비하고 있습니다. 잠시만 기다려 주세요.');return;}
+   if(!ready){api.toast?.(t('toast.preparing'));return;}
    await continueHere();
   }else if(action==='gallery'){
-   await title.showGallery({sections:GALLERY.map(section=>({...section,unlocked:0}))});
+   await title.showGallery({sections:GALLERY.map(section=>({...section,label:t('gallery.'+section.id),unlocked:0}))});
   }else if(action==='settings'){
-   api.openSettings();
+   const choice=await title.showSettings({languages:LANGUAGES,current:language()});
+   if(choice?.game)api.openSettings();
+   else if(choice?.language&&writeLanguage(languageStore,choice.language)){
+    // Reload into the new language; the logo is skipped for this one load.
+    try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
+    stopAttract();view.location.reload();
+   }
   }else if(action==='quit'){
-   const ok=await title.confirm({title:'끝내기',message:'게임을 종료할까요?',accept:'끝내기'});if(!ok)return;
+   const ok=await title.confirm({title:t('confirm.quitTitle'),message:t('confirm.quit'),accept:t('confirm.quitAccept')});if(!ok)return;
    stopAttract();title.hide();screen('exit');api.exit?.();
   }
  }
@@ -145,6 +172,7 @@ export function setupV03(api){
  // ----- boot -----
  function showTitle(){
   if(state.disposed||state.screen!=='boot')return;
+  if(!state.langReady){void langReady.then(showTitle);return;}
   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
  }
  // After the logo, the game's own download/loading card shows progress; the
@@ -196,15 +224,15 @@ export function setupV03(api){
      if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);}
     }
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
-   }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy){
+   }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy&&state.langReady){
     state.busy=true;api.resetStage(OPENING_STAGE);story.prepare(s.mapId);
     void (async()=>{
-     save.commit(metaPatch({chapter:1,title:'꿈',playSeconds:0}));state.ambush=true;
+     save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.ambush=true;
      const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(()=>false);
      await opening.play();const ok=await Promise.race([ambush,wait(6000).then(()=>null)]);if(ok===false)state.ambush=false;
-     save.touch(metaPatch({title:'늑대와 마차'}));await enterPlay();state.busy=false;await opening.release();
+     save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await opening.release();
     })().catch(report);
-   }else if(state.screen==='resume'&&s.ready){
+   }else if(state.screen==='resume'&&s.ready&&state.langReady){
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);

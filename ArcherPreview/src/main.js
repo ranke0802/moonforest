@@ -128,6 +128,8 @@ import { GoldLoot } from './gold-loot.js';
 import { createGoldLootView } from './gold-loot-view.js';
 import { attachCharacterOutlines } from './character-outlines.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
+// Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
+import {tr} from './v03/i18n.js';
 
 globalThis.__moonforestStartup?.entered();
 const gameSelection=setupGameSelection(document.getElementById('app'));
@@ -136,7 +138,7 @@ setupSettingsPanel();
 setupSummonPanel();
 const elements=new Map();
 const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
-const text=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
+const text=(selector,value)=>{const node=$(selector);value=tr(value);if(node.textContent!==value)node.textContent=value;};
 const canvas = $('#viewport');
 const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
 audio.bindUnlock(document);
@@ -389,7 +391,7 @@ function applyRenderQuality() {
 function toast(message, {stamina=false}={}) {
   staminaNoticeAnchor?.reset();
   $('#toast').classList.toggle('stamina-notice',stamina);
-  $('#toast').textContent = message; $('#toast').hidden = false;
+  $('#toast').textContent = tr(message); $('#toast').hidden = false;
   if(stamina)staminaNoticeAnchor?.show();
   clearTimeout(toastTimer); toastTimer = setTimeout(() => { staminaNoticeAnchor?.reset();$('#toast').hidden = true; }, 4000);
 }

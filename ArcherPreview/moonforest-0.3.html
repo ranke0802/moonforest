@@ -25,6 +25,12 @@
       #v03-splash span{font:700 clamp(26px,6vmin,56px)/1 MoonforestUI,'Malgun Gothic',sans-serif;letter-spacing:.18em;color:#ece0bc;opacity:0;transition:opacity 1.4s ease}
       #v03-splash span.is-in{opacity:1}
       #v03-splash.is-skip span{transition-duration:.3s}
+      #v03-splash .v03-lang-pick{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;font:600 14px/1.4 'Segoe UI','Malgun Gothic','Yu Gothic UI','Microsoft YaHei',sans-serif;color:#ece0bc}
+      #v03-splash .v03-lang-pick p{margin:0;letter-spacing:.12em;opacity:.8;text-align:center}
+      #v03-splash .v03-lang-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;width:min(720px,100%)}
+      #v03-splash .v03-lang-list button{min-height:52px;padding:10px 14px;font:inherit;font-size:17px;color:#ece0bc;background:#ffffff0d;border:1px solid #ae925966;border-radius:4px;cursor:pointer}
+      #v03-splash .v03-lang-list button:hover,#v03-splash .v03-lang-list button:focus-visible{border-color:#cfb77b;background:#cfb77b22;outline:none}
+      #v03-splash.is-picking span{display:none}
     </style>
   </head>
   <body>
@@ -221,14 +227,29 @@
         let finish,removed=false,skipped=false;const done=new Promise(resolve=>{finish=resolve;});
         const remove=()=>{if(removed)return;removed=true;finish();layer.classList.add('is-gone');setTimeout(()=>layer.remove(),700);};
         window.__moonforestSplash={done,remove};
-        // A record chosen on the previous document skips the logo.
-        let intent=null;try{intent=sessionStorage.getItem('moonforest-0.3:intent:v1');}catch{}
-        if(intent){removed=true;layer.remove();finish();return;}
+        // Language: chosen once on the very first launch, before the logo.
+        // The same key is read by src/v03/i18n.js.
+        const LANG_KEY='moonforest:lang:v1',LANGS=[['ko','한국어','ko'],['en','English','en'],['ja','日本語','ja'],['vi','Tiếng Việt','vi'],['zh','简体中文','zh-Hans']];
+        const applyLang=id=>{const row=LANGS.find(item=>item[0]===id);if(row){document.documentElement.lang=row[2];document.documentElement.dataset.lang=id;}return !!row;};
+        let lang=null;try{lang=localStorage.getItem(LANG_KEY);}catch{}
+        const known=applyLang(lang);
+        // A record chosen on the previous document (or a language change) skips the logo.
+        let intent=null,skipLogo=null;try{intent=sessionStorage.getItem('moonforest-0.3:intent:v1');skipLogo=sessionStorage.getItem('moonforest-0.3:skip-logo');if(skipLogo)sessionStorage.removeItem('moonforest-0.3:skip-logo');}catch{}
+        if((intent||skipLogo)&&known){removed=true;layer.remove();finish();return;}
         const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+        const pick=()=>new Promise(resolve=>{
+          const box=document.createElement('div');box.className='v03-lang-pick';box.setAttribute('role','dialog');box.setAttribute('aria-label','Language');
+          const head=document.createElement('p');head.textContent='Language · 언어 · 言語 · Ngôn ngữ · 语言';box.append(head);
+          const list=document.createElement('div');list.className='v03-lang-list';
+          for(const [id,label,html] of LANGS){const button=document.createElement('button');button.type='button';button.lang=html;button.textContent=label;
+            button.addEventListener('click',()=>{try{localStorage.setItem(LANG_KEY,id);}catch{}applyLang(id);box.remove();resolve(id);},{once:true});list.append(button);}
+          box.append(list);layer.append(box);layer.classList.add('is-picking');layer.removeAttribute('aria-hidden');list.firstElementChild?.focus();
+        });
         const skip=()=>{skipped=true;layer.classList.add('is-skip');};
-        addEventListener('keydown',skip,{once:true});layer.addEventListener('pointerdown',skip,{once:true});
         const hold=async ms=>{for(let t=0;t<ms&&!skipped&&!removed;t+=50)await sleep(50);};
         (async()=>{
+          if(!known){await pick();layer.classList.remove('is-picking');layer.setAttribute('aria-hidden','true');}
+          addEventListener('keydown',skip,{once:true});layer.addEventListener('pointerdown',skip,{once:true});
           try{await Promise.race([document.fonts.load("700 48px MoonforestUI"),sleep(1500)]);}catch{}
           await hold(300);text.classList.add('is-in');await hold(2600);
           text.classList.remove('is-in');await hold(1400);if(skipped)await sleep(320);

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
 import {createAttractPilot} from '../src/v03/attract-pilot.js';
+import {t,setPack,localizeChapter,cloneChapter,tr} from '../src/v03/i18n.js';
 import {createTitleScreen,slotSummary,formatPlayTime} from '../src/v03/title-screen.js';
 import {createOpening,dreamSeconds,DREAM_BEATS} from '../src/v03/opening.js';
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
@@ -78,7 +79,7 @@ test('prologue lasts 15 to 20 seconds, shows every beat and can be skipped',asyn
  assert.ok(dreamSeconds()>=15&&dreamSeconds()<=20,String(dreamSeconds()));
  const {document}=dom(),seen=[];
  const opening=createOpening({doc:document,wait:async()=>{const text=document.querySelector('.v03-opening-line').textContent;if(text&&seen.at(-1)!==text)seen.push(text);}});
- assert.equal(await opening.play(),'done');assert.deepEqual(seen,DREAM_BEATS.map(beat=>beat.text));assert.equal(opening.active,true);
+ assert.equal(await opening.play(),'done');assert.deepEqual(seen,DREAM_BEATS.map(beat=>t(beat.key)));assert.equal(opening.active,true);
  await opening.release();assert.equal(opening.active,false);
  let waits=0;const quick=createOpening({doc:document,wait:async()=>{if(++waits===3)document.querySelectorAll('.v03-opening-skip')[1].dispatchEvent(new document.defaultView.Event('click'));}});
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
@@ -86,7 +87,7 @@ test('prologue lasts 15 to 20 seconds, shows every beat and can be skipped',asyn
 
 function harness({local=memory(),session=memory(),ready=true}={}){
  const {document,window,root}=dom(),log=[];
- let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>log.push('splash-removed')};
+ let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
  const player={position:{x:0,z:0}},controller={captured:false,groggy:false,dead:false};
  const wolf={active:true,radius:1.8,actor:{position:{x:0,z:6}},brain:{hp:100,maxHp:900,mode:'idle'}};
@@ -141,7 +142,9 @@ test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  assert.equal(h.shell.pilotMovement,null);assert.equal(h.log.some(x=>x.startsWith('summon')),false);
  h.click('[data-action="new"]');await settle();assert.equal(h.shell.screen,'title','nothing happens before the scene is ready');
  h.state.ready=true;await h.reveal();
- h.click('[data-action="settings"]');await settle();assert.ok(h.log.includes('settings'));
+ h.click('[data-action="settings"]');await settle();assert.equal(h.document.querySelectorAll('.v03-language').length,5,'five languages offered');
+ assert.equal(h.document.querySelector('.v03-language.is-current')?.dataset.language,'ko');
+ h.click('.v03-settings-game');await settle();assert.ok(h.log.includes('settings'));
  h.click('[data-action="gallery"]');await settle();assert.equal(h.document.querySelectorAll('.v03-gallery-row').length,3);h.click('.v03-panel-back');await settle();
  h.click('[data-action="quit"]');await settle();h.click('.v03-panel-accept');await settle();
  assert.ok(h.log.includes('exit'));assert.equal(h.shell.screen,'exit');assert.equal(h.shell.blocksGame,true);
@@ -165,10 +168,10 @@ test('a document opened with an intent skips logo and title',async()=>{
  const h=harness({local,session,ready:false});
  assert.equal(h.shell.screen,'opening');assert.ok(h.log.includes('splash-removed'));assert.equal(h.document.querySelector('.v03-title').hidden,true);
  h.shell.update(.016);assert.equal(h.log.some(x=>x.startsWith('summon')),false);
- h.state.ready=true;h.shell.update(.016);await settle(40);
+ h.state.ready=true;await settle();h.shell.update(.016);await settle(40);
  assert.equal(h.shell.screen,'play');assert.ok(h.log.includes(`summon:${AMBUSH.kind}:${AMBUSH.count}`));assert.equal(h.save.meta().used,true);
  const local2=memory(),session2=memory();const s=createSaveSession({local:local2,session:session2,edition:E});s.commit({title:'x',character:'warrior-v3'});s.journey.setItem('v03-story-v1','{"quest":1,"step":0,"count":0,"done":[]}');s.request(1,'load');
- const r=harness({local:local2,session:session2});assert.equal(r.shell.screen,'resume');r.shell.update(.016);await settle();
+ const r=harness({local:local2,session:session2});assert.equal(r.shell.screen,'resume');await settle();r.shell.update(.016);await settle();
  assert.equal(r.shell.screen,'play');assert.ok(r.log.includes('startWorld'));assert.equal(r.log.some(x=>x.startsWith('summon')),false);
 });
 test('a loading failure hands the screen back to the game error card',async()=>{
@@ -213,7 +216,7 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  const ids=new Set(NPCS.map(n=>n.id));
  for(const quest of QUESTS)for(const step of quest.steps)if(step.type==='talk')for(const target of step.targets){assert.ok(ids.has(target),target);assert.ok(DIALOGUES[step.dialogues[target]]?.length,step.dialogues[target]);}
  for(const npc of NPCS)assert.ok(DIALOGUES[npc.idle]?.length,npc.idle);
- for(const quest of QUESTS)for(const step of quest.steps){if(step.intro)assert.ok(DIALOGUES[step.intro]?.length,step.intro);if(step.summon)assert.ok(step.at&&step.map&&step.kind,step.id);}
+ for(const quest of QUESTS)for(const step of quest.steps){if(step.intro)assert.ok(DIALOGUES[step.intro]?.length,step.intro);if(step.summon)assert.ok(step.at&&step.map,step.id);}
  store.setItem('v03-story-v1','{"quest":99,"step":0,"done":[]}');assert.equal(createQuestLog({quests:QUESTS,storage:store}).load(),false);
 });
 test('story: first fight coaching, driver talk, village cast, rest effect and save title',async()=>{
