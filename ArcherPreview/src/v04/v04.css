@@ -1,0 +1,21 @@
+/* 0.4 time of day and weather. .v04-sky must not create a stacking context:
+   its layers blend with the canvas behind them. */
+.v04-sky{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.v04-sky>i{position:absolute;display:block}
+.v04-grade{inset:0;mix-blend-mode:multiply;transition:background-color 1.2s linear}
+.v04-grade[hidden]{display:none}
+.v04-rain{left:-60%;top:-60%;width:220%;height:220%;opacity:0;transition:opacity 2.5s linear;background-repeat:repeat;will-change:transform;animation-play-state:paused}
+.v04-rain-far{background-size:384px 384px;animation:v04-rain-far .95s linear infinite}
+.v04-rain-near{background-size:256px 256px;animation:v04-rain-near .5s linear infinite}
+.v04-sky:not(.is-raining) .v04-rain{animation:none;visibility:hidden}
+.v04-sky.is-raining .v04-rain{animation-play-state:running}
+@keyframes v04-rain-far{from{transform:rotate(9deg) translate3d(0,-384px,0)}to{transform:rotate(9deg) translate3d(0,0,0)}}
+@keyframes v04-rain-near{from{transform:rotate(13deg) translate3d(0,-256px,0)}to{transform:rotate(13deg) translate3d(0,0,0)}}
+.v04-flash{inset:0;background:#dbe6ff;mix-blend-mode:screen;opacity:0}
+.v04-clock{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:5px;display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 7px;white-space:nowrap;font:11px/1.5 MoonforestUI,sans-serif;letter-spacing:.08em;color:#f1e6c6;background:linear-gradient(90deg,#101a1400,#101a14c4 22%,#101a14c4 78%,#101a1400);text-shadow:0 1px 2px #000;pointer-events:none}
+.v04-clock[hidden]{display:none}
+.v04-clock>i{width:13px;height:13px;color:#e6c97e;display:inline-flex}
+.v04-clock>i>svg{width:100%;height:100%;fill:currentColor}
+.v04-clock[data-phase=night]>i{color:#b9c8f0}
+.v04-clock>b{font-weight:400;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.v04-rain{animation-duration:2s!important}}

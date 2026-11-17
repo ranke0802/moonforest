@@ -870,6 +870,7 @@ function render(dt) {
   const framePreludeStart=frameDiagnostics.mark();
   elapsed += dt;
   world.tick(elapsed);
+  if(world.dayCycle&&world.v03?.playing!==false)world.dayCycle.update(dt);
   world.effectWorld?.update(dt);
   training.update(dt);
   projectiles.update(dt);
@@ -1046,7 +1047,7 @@ try {
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
   world.release=versionRoute.release;world.edition=versionRoute.edition??null;
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
-  world.weather=weatherSettings;weatherSettings.mapChanged();
+  world.weather=weatherSettings;weatherSettings.mapChanged();world.dayCycle?.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
   if(releaseEnabled){
     world.loadAuthoredMap=async()=>{
@@ -1588,7 +1589,7 @@ try {
         if(!extra.length)return true;
         await runtime.apply({...runtime.document,revision:runtime.document.revision+1,instances:[...runtime.document.instances,...extra]});return true;
       },
-      rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);return true;},
+      rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);world.dayCycle?.restUntilMorning();return true;},
       setMapMarkers:list=>minimap.setMarkers(list),
       creditGold:(source,amount)=>goldLoot.creditCumulative(source,amount),
       addPotions:count=>{if(!boss)return 0;const before=boss.potions.remaining;boss.potions.remaining=Math.min(POTION.uses,before+count);updateButtons();return boss.potions.remaining-before;},
@@ -1596,12 +1597,18 @@ try {
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
+    // 0.4 world: time of day and weather (shares the 0.3 story and saves).
+    if(versionRoute.worldRevision==='0.4'&&!world.dayCycle){
+      const [{createDayCycle}]=await Promise.all([import('./v04/day-cycle.js'),import('./v04/v04.css')]);
+      world.dayCycle=createDayCycle({doc:document,canvas,getWorld:()=>world,storage:journeyStorage,chipHost:()=>$('#dot-minimap')});
+      world.dayCycle.mapChanged();world.scene.onDisposeObservable.addOnce(()=>{world.dayCycle?.dispose();world.dayCycle=null;});
+    }
     hudLayout?.rebind?.();
     // 0.3 layered (recoverable) health on monster bars.
     bossHealthBars.decorate=(element,foe)=>world.v03?.decorateFoeBar?.(element,foe);
     // Development-only handle for QA from the console; never present in a build.
     // The same handle on a build when the address carries ?qa (inspection only).
-    if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;}};}
+    if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get dayCycle(){return world.dayCycle;},get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;}};}
     if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());
   }
   loadCharacter();
