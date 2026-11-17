@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_GROUPS,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R4,createPlainsMonsterSpawns} from '../src/plains-monster-spawns.js';
+import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_GROUPS,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R5,createPlainsMonsterSpawns} from '../src/plains-monster-spawns.js';
 import {validateMonsterSpawns} from '../src/monster-spawn-document.js';
 import {ACTOR_DEFINITIONS,validateActorSpawn} from '../src/actor-definitions.js';
 import {VillageNavigation} from '../src/village-navigation.js';
@@ -24,7 +24,7 @@ const roadDistance=point=>Math.min(...PLAINS_ROUTES.flatMap(road=>road.samples.m
 const evidence=[];
 const isVillageEncounter=row=>['plains-fox-west','plains-fox-east','plains-village-wolf-south','plains-village-wolf-north'].includes(row.groupId);
 
-test('R5 default plains has nineteen actors in eleven independently editable stable groups and preserves prior evidence',()=>{
+test('R6 default plains has nineteen actors in eleven independently editable stable groups and preserves prior evidence',()=>{
  const checked=validateMonsterSpawns(PLAINS_MONSTER_SPAWNS);assert.equal(checked.valid,true,checked.errors.join('\n'));assert.equal(rows.length,19);assert.equal(PLAINS_MONSTER_GROUPS.length,11);
  assert.deepEqual(Object.fromEntries([...new Set(rows.map(row=>row.definitionId))].map(id=>[id,rows.filter(row=>row.definitionId===id).length])),{'fox.r1':2,'boar.r1':2,'gray-wolf.r1':4,'stylized-wolf.r1':6,'wolf-3.r1':2,'alpha-wolf.r8':1,'guardian-bear.standard':2});
  assert.deepEqual(PLAINS_MONSTER_GROUPS.map(group=>group.members.length),[1,1,1,1,3,4,1,1,4,1,1]);assert.equal(new Set(rows.map(row=>row.id)).size,19);
@@ -45,14 +45,15 @@ test('all fixed homes use actual terrain and clear physical navigation, water, r
  }
 });
 
-test('R2 outer watch and inner combat ranges expand around the same homes with bounded home wandering',()=>{
+test('expanded wolf awareness preserves home, wandering, attack allowance and other species',()=>{
  const alphaReach=Math.max(...WOLF_V02_ACTIONS.map(action=>action.maxDistance)),bearReach=Math.max(...BOSS_MOTIONS.filter(motion=>motion.role==='attack'&&!motion.disabled).map(motion=>bossAttackRange(motion)*BEAR_V02_SIZE.attackRangeScale));
  const unchanged=row=>!['plains-alpha-pack','plains-wolf-meadow','plains-fox-west','plains-fox-east','plains-village-wolf-south','plains-village-wolf-north','plains-riverbank-bear','plains-stylized-wolf-pack'].includes(row.groupId);assert.deepEqual(rows.filter(unchanged).map(({territory,...row})=>row),PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].filter(unchanged).map(({territory,...row})=>row));
  for(let i=0;i<PLAINS_MONSTER_GROUPS.length;i++){
-  const group=PLAINS_MONSTER_GROUPS[i],circle=group.territory;assert.ok(Math.hypot(circle.x,circle.z)+circle.radius<PLAINS_RADIUS);
-  const oldGroup=group.id==='plains-alpha-pack'?'plains-wolf-meadow':group.id==='plains-wolf-meadow'?'plains-alpha-pack':group.id,old=PLAINS_MONSTER_SPAWNS_R1.maps['great-plains'].find(row=>row.groupId===oldGroup)?.territory;if(old&&!isVillageEncounter({groupId:group.id})){assert.ok(circle.radius>=old.radius*1.4);assert.ok(circle.radius<=old.radius*1.8);}
+  const group=PLAINS_MONSTER_GROUPS[i],circle=group.territory;assert.ok(Math.hypot(circle.x,circle.z)<PLAINS_RADIUS);
+  const prior=PLAINS_MONSTER_SPAWNS_R5.maps['great-plains'].find(row=>row.groupId===group.id).territory,wolf=group.members[0][0].includes('wolf');
+  assert.equal(circle.radius,prior.radius*(wolf?2:1));assert.equal(circle.combatRadius,prior.combatRadius*(wolf?2:1));assert.equal(circle.wanderRadius,prior.wanderRadius);
   assert.ok(circle.combatRadius>=circle.radius*.5&&circle.combatRadius<=circle.radius*.65);assert.ok(circle.wanderRadius>=2&&circle.wanderRadius<=5);
-  for(const other of PLAINS_MONSTER_GROUPS.slice(i+1))assert.ok(distance(circle,other.territory)>circle.radius+other.territory.radius,group.id+' nonoverlapping outer territory');
+  for(const other of PLAINS_MONSTER_GROUPS.slice(i+1)){const otherPrior=PLAINS_MONSTER_SPAWNS_R5.maps['great-plains'].find(row=>row.groupId===other.id).territory;assert.ok(distance(circle,other.territory)>prior.radius+otherPrior.radius,group.id+' original home separation');}
   assert.ok(circle.returnRadius>0&&circle.returnRadius<circle.radius);assert.ok(circle.reengageRadius<circle.radius);
   for(const row of rows.filter(row=>row.groupId===group.id)){
    const radius=radiusFor(row),reach=row.definitionId==='guardian-bear.standard'?bearReach:row.definitionId==='alpha-wolf.r8'?alphaReach:alphaReach*regularWolfSize(row.definitionId.replace(/\.r1$/,'')).spatialScale;
@@ -64,7 +65,7 @@ test('R2 outer watch and inner combat ranges expand around the same homes with b
 
 test('R3 leader pack occupies the farther former wolf territory and the ordinary pack takes its former homes',()=>{
  const alpha=PLAINS_MONSTER_GROUPS.find(group=>group.id==='plains-alpha-pack'),regular=PLAINS_MONSTER_GROUPS.find(group=>group.id==='plains-wolf-meadow'),r2=PLAINS_MONSTER_SPAWNS_R2.maps['great-plains'];
- assert.deepEqual(alpha.territory,r2.find(row=>row.groupId==='plains-wolf-meadow').territory);assert.deepEqual(regular.territory,r2.find(row=>row.groupId==='plains-alpha-pack').territory);
+ assert.deepEqual(PLAINS_MONSTER_SPAWNS_R5.maps['great-plains'].find(row=>row.groupId===alpha.id).territory,r2.find(row=>row.groupId==='plains-wolf-meadow').territory);assert.deepEqual(PLAINS_MONSTER_SPAWNS_R5.maps['great-plains'].find(row=>row.groupId===regular.id).territory,r2.find(row=>row.groupId==='plains-alpha-pack').territory);
  assert.ok(distance(alpha.territory,VILLAGE_PLAINS_BOUNDARY.plainsPortal)>distance(regular.territory,VILLAGE_PLAINS_BOUNDARY.plainsPortal)+20);assert.equal(alpha.members.length,4);assert.equal(regular.members.length,3);
  assert.ok(distance(rows.find(row=>row.definitionId==='alpha-wolf.r8'),alpha.territory)<1);
 });
@@ -84,7 +85,7 @@ test('fox homes use existing forest canopies, boars use dry river banks and the 
  for(const row of rows.filter(row=>row.definitionId==='boar.r1')){const water=plainsStreamDistance(row.x,row.z);assert.ok(water>10&&water<15,row.id+' bank proximity');assert.ok(row.x<75,'western dry bank');}
  const bear=rows.find(row=>row.definitionId==='guardian-bear.standard'),bodyRadius=radiusFor(bear);assert.ok(bear.y>8);assert.ok(Math.hypot((bear.x-PLAINS_LOOKOUT.x)/PLAINS_LOOKOUT.stretchX,bear.z-PLAINS_LOOKOUT.z)+bodyRadius<PLAINS_LOOKOUT.capRadius);
  for(let i=0;i<24;i++){const angle=i*Math.PI/12;assert.ok(terrain.heightAt(bear.x+bodyRadius*Math.cos(angle),bear.z+bodyRadius*Math.sin(angle))>8,'bear full body footprint remains on summit');}
- const directory=new URL('../reports/plains-village-encounters-r5-2026-11-16/',import.meta.url);mkdirSync(directory,{recursive:true});writeFileSync(new URL('placement-validation.json',directory),JSON.stringify({revision:PLAINS_MONSTER_SPAWNS_REVISION,actors:rows.length,groups:PLAINS_MONSTER_GROUPS.length,passed:true,groupSummary:PLAINS_MONSTER_GROUPS.map(group=>({id:group.id,label:group.label,count:group.members.length,territory:group.territory})),homes:evidence,notes:['Static production terrain/navigation checks only; no browser, GPU, FPS, heat or play-feel measurement.','Homes avoid the roads; territories retain existing terrain/obstacles and actors still use ordinary navigation. The lookout territory includes summit approaches/slopes.','The current group scheduler has game-time respawn and staged group publication. Distance-based actor activation is not supplied by this preset.','Source geometry, textures, LOD, animation and combat contact rules are unchanged.']},null,2)+'\n');
+ const directory=new URL('../reports/plains-wolf-awareness-r6-2026-11-17/',import.meta.url);mkdirSync(directory,{recursive:true});writeFileSync(new URL('placement-validation.json',directory),JSON.stringify({revision:PLAINS_MONSTER_SPAWNS_REVISION,actors:rows.length,groups:PLAINS_MONSTER_GROUPS.length,passed:true,groupSummary:PLAINS_MONSTER_GROUPS.map(group=>({id:group.id,label:group.label,count:group.members.length,territory:group.territory})),homes:evidence,notes:['Static production terrain/navigation checks only; no browser, GPU, FPS, heat or play-feel measurement.','Homes avoid roads and retain physical terrain/navigation. Wolf awareness radii are doubled; circles may overlap or extend beyond the playable boundary. The lookout territory includes summit approaches/slopes.','The current group scheduler has game-time respawn and staged group publication. Distance-based actor activation is not supplied by this preset.','Source geometry, textures, LOD, animation and combat contact rules are unchanged.']},null,2)+'\n');
 });
 
 test('four single village encounters precede the relocated four-wolf pack without entering the arrival corridor',()=>{

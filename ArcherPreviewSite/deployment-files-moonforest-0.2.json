@@ -6,7 +6,7 @@
   "sourceProvenance": {
     "version": 1,
     "algorithm": "sha256-lf",
-    "fingerprint": "1fd204857d7c6bad409b5edb1316d2bf499209f9a3b09b1d562ae070382d6089",
+    "fingerprint": "2f2a268934d403cee6b4f632e53c7ad483a3a252c3a4e607e2c26fa088daf766",
     "files": [
       {
         "path": "ArcherPreview/moonforest-0.2.html",
@@ -1095,8 +1095,8 @@
       },
       {
         "path": "ArcherPreview/src/monster-spawn-document.js",
-        "bytes": 11666,
-        "sha256": "db0423968c0815f085a70d664920a9e103eecf183117eeae0dc7c8109cdd95e2"
+        "bytes": 11843,
+        "sha256": "bdf28d031e03d1ab6d7050b0f8dd635bd6b469f48822155190fe2957cb9044e3"
       },
       {
         "path": "ArcherPreview/src/monster-spawn-editor.js",
@@ -1105,8 +1105,8 @@
       },
       {
         "path": "ArcherPreview/src/monster-territory.js",
-        "bytes": 19170,
-        "sha256": "5f53c3c12547c79df1dd562e08a71518b760ebbe48c5816a3f8d886acc46ef7e"
+        "bytes": 19680,
+        "sha256": "1579594c3a88e2a04b862b475e10923484e64e85a3fc172807b9f05abcec85cb"
       },
       {
         "path": "ArcherPreview/src/monster-toon.js",
@@ -1320,8 +1320,8 @@
       },
       {
         "path": "ArcherPreview/src/plains-monster-spawns.js",
-        "bytes": 7672,
-        "sha256": "0adb5c3e5251e13a99b9d5b2c9a57dcfc81f7ca83c173b37fed8c30ddd82e037"
+        "bytes": 8358,
+        "sha256": "883bde77bd62f67440e0dacd98e02d1eb65794352fb53b9ee6dd2ad4673ce6be"
       },
       {
         "path": "ArcherPreview/src/plains-overview.js",
@@ -2144,10 +2144,10 @@
         "sha256": "891448a4d5608d96e84cf902c02c168780657ba90f1260007718255eb862c537"
       }
     ],
-    "baseCommit": "a3491b60ffd4898680187f546bc1a21cf26ed4ce",
+    "baseCommit": "a49f2cdd44698998231dcd7fc250daca5cc702af",
     "dirty": true
   },
-  "bytes": 803193995,
+  "bytes": 803194477,
   "files": [
     {
       "path": "app.webmanifest",
@@ -2155,14 +2155,14 @@
       "sha256": "89fef8403cc674c4f1e3aaf7038233f6b048d56fabdcabfe15f6bc1aa8cc9afd"
     },
     {
-      "path": "assets/actor-editor-Czo9B8lb.js",
+      "path": "assets/actor-editor-CXgK12QA.js",
       "bytes": 31975,
-      "sha256": "8c5b1c5215f871d60e4bcfbb2f91b1fe1469f8bcdf11fb00b88831676d79448c"
+      "sha256": "8c87f9c3260d3a939e4b944874c8334be2dab959dfa9775167141854ed44212b"
     },
     {
-      "path": "assets/actor-encounter-adapter-B6_6mrqh.js",
-      "bytes": 33648,
-      "sha256": "e322393b0dbb65fa2e05e99ec221e71df17ac64ab254fb2e39ba8ffbb7edc792"
+      "path": "assets/actor-encounter-adapter-BqALI2KU.js",
+      "bytes": 33833,
+      "sha256": "0c8c7e37c7b6451713b91216f0e4a7ce6acaa3a9f120ceb59f9032e9814e2642"
     },
     {
       "path": "assets/actor-population-DiHVd2cL.js",
@@ -2220,9 +2220,9 @@
       "sha256": "786b733bae12849d6b0d620f6bea73d5adaffb639c872f8548633d5811ee865b"
     },
     {
-      "path": "assets/authored-monster-runtime-BowShdBS.js",
+      "path": "assets/authored-monster-runtime-DCpQPR_a.js",
       "bytes": 9407,
-      "sha256": "74ea942b1b2ef58109c465106ae0d681c4a86f94f6d15802dddf474cf91cfc2e"
+      "sha256": "30e389ed913e2235ed067b908ef423106897aff3d721cb3602a28e8523a6fc35"
     },
     {
       "path": "assets/authored-placement-runtime-mnbn5eRG.js",
@@ -3880,14 +3880,14 @@
       "sha256": "388de3b32238fa7c68df01c2ab79956dad33f9a8e43b5b89afd21b609bab381a"
     },
     {
-      "path": "assets/cinematic-game-Dy3qOyRP.js",
+      "path": "assets/cinematic-game-DQT38lQ4.js",
       "bytes": 64146,
-      "sha256": "031754ce2bd9d07bd6e7f3b577eb610bcd315147de016705940ffa99a9475330"
+      "sha256": "f31fc80a461f498f6d93bf3f0a6dab5bd21bf305bbaaf131e5a990ae659f7319"
     },
     {
-      "path": "assets/cinematic-interaction-Dta-cplY.js",
+      "path": "assets/cinematic-interaction-CzymIr__.js",
       "bytes": 7838,
-      "sha256": "b3cdf8ffc94b917343d25fa84ec3b299f67ebbd83e8a1d1965818a34320156aa"
+      "sha256": "dd60db754133826ff76e882d242ce19c945860c342b98b85d7a78d9fc3808f47"
     },
     {
       "path": "assets/cinematic-media-D3pcCO1R.js",
@@ -3900,9 +3900,9 @@
       "sha256": "9766dfc1ee740eaa480dc6cd30e6f960603b9adec5da531142590bfab4838cc3"
     },
     {
-      "path": "assets/cinematic-scene-host-MjA6Gboi.js",
+      "path": "assets/cinematic-scene-host-B55ZvBWJ.js",
       "bytes": 57249,
-      "sha256": "b235ce3710b6340a0e0e77ccc146dffc0d28a17b12e73e32b167b8fb7d3c1e84"
+      "sha256": "b608023df80b170118b8974d5ed0d3a0f0df4901ece1575ae4629c193c035a84"
     },
     {
       "path": "assets/circleOfConfusion.fragment-CmA-YxEc.js",
@@ -11140,9 +11140,9 @@
       "sha256": "7d5c47e579a7749f7457dad082b770c2864f647920c32ee204d549668a43c128"
     },
     {
-      "path": "assets/developer-actors-4hX6e9Kk.js",
+      "path": "assets/developer-actors-BuDvddKL.js",
       "bytes": 8699,
-      "sha256": "4a86dcd955290bd2a643ff76fee407aaf4b839968c0a02a34b79064265817397"
+      "sha256": "b3938f707177023d2c1ea399655fa8df259b836e2913c1637b531f60a2b981cc"
     },
     {
       "path": "assets/developer-editor-DqARkflx.js",
@@ -12530,9 +12530,9 @@
       "sha256": "eb9cd03794c5a433bba9b096ae385b64afd4ed840f3aa0f4dd42e317c918a6f4"
     },
     {
-      "path": "assets/monster-spawn-document-JLuHnWAQ.js",
-      "bytes": 7161,
-      "sha256": "12ae76224925b1e963df3fed25b55559ad0343da6e73aeb641b72b96493d9d18"
+      "path": "assets/monster-spawn-document-CBwqHOJg.js",
+      "bytes": 7022,
+      "sha256": "055a6dfe97cda772e521842e756131c80c93b7227d2dade1c5286745fdd18fdb"
     },
     {
       "path": "assets/moonforestV2-0Hr5Melq.css",
@@ -12540,9 +12540,9 @@
       "sha256": "d050c58dd3c6b789fb850f4b72e1234f758eade72e9343e6ebc052ecd75e82ef"
     },
     {
-      "path": "assets/moonforestV2-CGj_KSKx.js",
+      "path": "assets/moonforestV2-Ujx1BJHO.js",
       "bytes": 2393173,
-      "sha256": "a42af8c0a28aa30bd7a83692fe80b4fb5ca6e7264f58465da3814c1c06b5d969"
+      "sha256": "23edb96ed511d0ddc082569035d3163493c3cd734fcf564fe01d0bd36383ae9d"
     },
     {
       "path": "assets/morphTargetsVertex-2rpeEI8d.js",
@@ -12635,14 +12635,14 @@
       "sha256": "3a18cb02dedda693c7137cff0bf495ad11cf427ab80ff81ebc066e8559bcfa27"
     },
     {
-      "path": "assets/npc-world-B3gv5xPO.js",
+      "path": "assets/npc-world-DCG1MUX3.js",
       "bytes": 106,
-      "sha256": "170c81704831c80f6a656b31b0784980449a0e0b430c5fdf4f2ffb1ea6d72ff4"
+      "sha256": "49a95ab68170268c3e80f5fcc50835e588c2e0910a89374ebcddc2d6b460dddf"
     },
     {
-      "path": "assets/npc-world-dR4YSRm3.js",
+      "path": "assets/npc-world-GH7xrJQE.js",
       "bytes": 8868,
-      "sha256": "44cb6a997c109cd653b7b7dee1d3a878830fd76d4fce7c38ad2d8f7e77b5c1ac"
+      "sha256": "7ef8b21005de2c451f8f60f47cd43614a8ced5174280442efe1d2814c111eba0"
     },
     {
       "path": "assets/objectIdFunctions-B7luooam.js",
@@ -12830,14 +12830,14 @@
       "sha256": "e630d0a12f082aa33ebdd73133fd73f604a7c698fa34045848a2f4f93e03a60c"
     },
     {
-      "path": "assets/plains-monster-spawns-C3b_rIqQ.js",
-      "bytes": 5954,
-      "sha256": "aff26c3f0126856ec95f28b8badcc23b15fceedf7df2e60499973ad1ba5cb5f7"
+      "path": "assets/plains-monster-spawns-5LSrQo4i.js",
+      "bytes": 515,
+      "sha256": "fe6bfc43feac56962098380753dbfb3a87075348136d6ccc3756bf63b09ee8ee"
     },
     {
-      "path": "assets/plains-monster-spawns-CuFZqL99.js",
-      "bytes": 446,
-      "sha256": "dec31a62546259744e188d89d9d9f9ed0e2a2884a59d4ce9c0f17d16ca0ec066"
+      "path": "assets/plains-monster-spawns-CMP36oaM.js",
+      "bytes": 6321,
+      "sha256": "238584ceebb7650226f20ecb53f27e94919f384cc3d822f8d0120799375a96e1"
     },
     {
       "path": "assets/postprocess.vertex-D0swOvgr.js",
@@ -13412,7 +13412,7 @@
     {
       "path": "moonforest-0.2.html",
       "bytes": 42514,
-      "sha256": "5caa90e22c0662e291b075fef1be1e13a32cfe6a15503176aecf25057bd739f3"
+      "sha256": "4610795502b1ec994ee2bc5c552dd9f82a9ac5c8abda1c9ff13a7ad8477bb082"
     },
     {
       "path": "moonforest-0.2.webmanifest",

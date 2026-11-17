@@ -5,7 +5,8 @@ export const PLAINS_MONSTER_SPAWNS_R1_REVISION='great-plains-monsters-2026-11-16
 export const PLAINS_MONSTER_SPAWNS_R2_REVISION='great-plains-monsters-2026-11-16-r2';
 export const PLAINS_MONSTER_SPAWNS_R3_REVISION='great-plains-monsters-2026-11-16-r3';
 export const PLAINS_MONSTER_SPAWNS_R4_REVISION='great-plains-monsters-2026-11-16-r4';
-export const PLAINS_MONSTER_SPAWNS_REVISION='great-plains-monsters-2026-11-16-r5';
+export const PLAINS_MONSTER_SPAWNS_R5_REVISION='great-plains-monsters-2026-11-16-r5';
+export const PLAINS_MONSTER_SPAWNS_REVISION='great-plains-monsters-2026-11-17-r6';
 const freeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};
 
 const r2Groups=freeze([
@@ -50,7 +51,7 @@ const r4Groups=freeze([...r3Groups.map(group=>group.id==='plains-fox-west'?{...g
 
 // R5 keeps the total population at19: two paired fox groups become single
 // foxes near the village, with two separate lone-wolf encounters nearby.
-export const PLAINS_MONSTER_GROUPS=freeze([...r4Groups.map(group=>group.id==='plains-fox-west'?{
+const r5Groups=freeze([...r4Groups.map(group=>group.id==='plains-fox-west'?{
  ...group,label:'마을 남쪽 외곽 여우',territory:{x:-77,z:-52,radius:8,combatRadius:4.5,wanderRadius:2.2,returnRadius:.8,reengageRadius:7},members:[['fox.r1',-77,-52,.11999999731779099,.5]],
 }:group.id==='plains-fox-east'?{
  ...group,label:'마을 북쪽 외곽 여우',territory:{x:-72,z:-10,radius:8,combatRadius:4.5,wanderRadius:2.2,returnRadius:.8,reengageRadius:7},members:[['fox.r1',-72,-10,.6468173563480377,.4]],
@@ -66,7 +67,13 @@ const spawnDocument=groups=>({format:'moonforest-monster-spawns',version:1,maps:
  spawnMode:'start',respawn:true,delaySeconds:45,randomRadius:0,rewardEnabled:true,
  drop:{assetId:'',effectEnabled:false},territory:{...group.territory},
 })))}});
+// R6 expands only wolf awareness. Homes, wandering, physical obstacles and
+// attack reach stay unchanged; an outer circle may now overlap another pack.
+export const PLAINS_MONSTER_GROUPS=freeze(r5Groups.map(group=>group.members.every(([id])=>['alpha-wolf.r8','gray-wolf.r1','stylized-wolf.r1','wolf-3.r1'].includes(id))?{
+ ...group,territory:{...group.territory,radius:group.territory.radius*2,combatRadius:group.territory.combatRadius*2,reengageRadius:group.territory.radius*2-(group.territory.radius-group.territory.reengageRadius)},
+}:group));
 export const PLAINS_MONSTER_SPAWNS=freeze(spawnDocument(PLAINS_MONSTER_GROUPS));
+export const PLAINS_MONSTER_SPAWNS_R5=freeze(spawnDocument(r5Groups));
 export const PLAINS_MONSTER_SPAWNS_R4=freeze(spawnDocument(r4Groups));
 export const PLAINS_MONSTER_SPAWNS_R3=freeze(spawnDocument(r3Groups));
 export const PLAINS_MONSTER_SPAWNS_R2=freeze(spawnDocument(r2Groups));

@@ -19,6 +19,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
   let walkState,idleState,restState,alertState,riseState,watchState,innerTime=0,ambientTime=3,disengageRemaining=0,travelWait=0,ambientMoving=false,lastPlayer=null,rising=false,settling=false,stood=false;
   const originalUpdate=encounter.update,originalMotion=encounter.movementPlan,originalContacts=encounter.poseAndContacts,originalReceive=encounter.receiveBossHit,originalAlign=encounter.alignPose;
   let watchLook;
+  const restsAtHome=encounter.kind==='wolf'&&!encounter.regularWolfId;
   const protectedReaction=b=>b.hp<=0||b.stagger>0||reactions.has(b.mode);
   const lying=b=>b.state===restState||b.state===alertState;
   const sceneryRadius=()=>monsterSceneryRadius(encounter.regularWolfId??(encounter.kind==='wolf'?'alpha-wolf':null));
@@ -132,6 +133,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
     return true;
   }
   function chooseWander(){
+    if(restsAtHome)return false;
     const navigation=encounter.movementNavigation,body=Math.max(encounter.radius??0,sceneryRadius()),space=monsterScenerySpace(encounter.world);
     const available=Math.min(wanderRadius,Math.max(0,radius-distance(home,center)-body-.25));
     if(available<.25)return false;
@@ -157,7 +159,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
       if(!state.enabled)return;
       if(!position||![position.x,position.z].every(Number.isFinite)||distance(position,center)>radius+1e-6)throw new Error('Monster home must be inside its territory');
       home.copyFrom(position);target.copyFrom(position);sceneryRoute.point=sceneryRoute.space=null;sceneryRoute.wait=0;ready=true;arrived=false;reason=null;innerTime=disengageRemaining=travelWait=0;ambientTime=3+random()*2;ambientMoving=rising=settling=false;
-      stood=!lying(encounter.brain);watchState=stood?idleState:alertState;state.phase='ambient';state.engaged=false;noncombatPose();
+      stood=!restsAtHome&&!lying(encounter.brain);watchState=stood?idleState:alertState;state.phase='ambient';state.engaged=false;noncombatPose();
     },
     bindBrain(brain){
       if(brains.has(brain))return;brains.add(brain);
@@ -191,6 +193,11 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
         if(state.phase==='combat')return update.call(this,dt,range,alive);
         if(state.phase==='ambient'){
           ambientTime-=dt;
+          // The alpha rests between encounters. A completed homeward walk
+          // settles along the existing rise keys, never a new rig/pose layer.
+          if(restsAtHome&&!ambientMoving&&stood&&riseState){
+            settling=true;this.start(riseState,'settle');this.time=this.durations[riseState];this.behavior='rest';encounter.lastRoot=null;encounter.lastSerial=null;
+          }
           if(ambientMoving&&(distance(encounter.actor.position,target)<=.25+1e-6||ambientTime<=0)){
             ambientMoving=false;ambientTime=3+random()*3;
             if(riseState&&stood&&random()<.65){

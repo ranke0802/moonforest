@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {emptyMonsterSpawns,validateMonsterSpawns,mergeMonsterSpawnDefaults} from '../src/monster-spawn-document.js';
-import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION} from '../src/plains-monster-spawns.js';
+import {createPlainsMonsterSpawns,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION,PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION} from '../src/plains-monster-spawns.js';
 const row=(id,extra={})=>({id,definitionId:'hooded-goblin.standard',groupId:'pack',spawnMode:'start',respawn:true,rewardEnabled:true,x:1,z:2,yaw:0,delaySeconds:30,randomRadius:3,drop:{assetId:'',effectEnabled:false},...extra});
 test('monster placement records round trip and grouped lifetime configuration stays consistent',()=>{const doc=emptyMonsterSpawns();doc.maps['great-plains']=[row('one'),row('two',{x:4})];assert.equal(validateMonsterSpawns(JSON.stringify(doc)).valid,true);doc.maps['great-plains'][1].respawn=false;assert.match(validateMonsterSpawns(doc).errors.join(),/같은 그룹/);});
 test('invalid maps, duplicates, unsupported monsters and nonfinite placement values are rejected',()=>{const doc=emptyMonsterSpawns();doc.maps.village=[row('one'),row('one',{definitionId:'evil',x:Infinity})];assert.equal(validateMonsterSpawns(doc).valid,false);doc.maps={other:[]};assert.equal(validateMonsterSpawns(doc).valid,false);});
@@ -55,25 +55,38 @@ test('R4 adds five new actors, moves pristine west foxes only and preserves R3 e
 
 test('R5 relocates the four-wolf pack, retires only pristine paired foxes and installs two lone wolves once',()=>{
  const custom=emptyMonsterSpawns();custom.maps['great-plains']=Array.from({length:20},(_,i)=>row('r5-custom-'+i,{groupId:'r5-custom-'+i}));
- const r4=mergeMonsterSpawnDefaults(custom,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION).document,before=structuredClone(r4),result=mergeMonsterSpawnDefaults(r4,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION),next=result.document;
+ const r4=mergeMonsterSpawnDefaults(custom,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION).document,before=structuredClone(r4),result=mergeMonsterSpawnDefaults(r4,PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION),next=result.document;
  assert.deepEqual(r4,before);assert.equal(result.addedRows,2);assert.equal(result.removedRows,2);assert.equal(result.upgradedRows,6);assert.equal(next.maps['great-plains'].length,39);assert.equal(next.defaultRowIds['great-plains'].length,21);assert.equal(validateMonsterSpawns(next).valid,true);
  assert.deepEqual(next.maps['great-plains'].slice(19),custom.maps['great-plains']);
- for(const expected of createPlainsMonsterSpawns().maps['great-plains'])assert.deepEqual(next.maps['great-plains'].find(value=>value.id===expected.id),expected);
- assert.ok(!next.maps['great-plains'].some(value=>['plains-fox-west-2','plains-fox-east-2'].includes(value.id)));assert.equal(mergeMonsterSpawnDefaults(next,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION).changed,false);
+ for(const expected of PLAINS_MONSTER_SPAWNS_R5.maps['great-plains'])assert.deepEqual(next.maps['great-plains'].find(value=>value.id===expected.id),expected);
+ assert.ok(!next.maps['great-plains'].some(value=>['plains-fox-west-2','plains-fox-east-2'].includes(value.id)));assert.equal(mergeMonsterSpawnDefaults(next,PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION).changed,false);
 });
 
 test('R5 preserves edited former foxes, moved wolves, rewards, deleted defaults and conflicting custom aliases',()=>{
  const custom=emptyMonsterSpawns(),first=structuredClone(PLAINS_MONSTER_SPAWNS_R4.maps['great-plains'][0]);first.respawn=false;custom.maps['great-plains']=[first];
  const saved=mergeMonsterSpawnDefaults(custom,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION).document,rows=saved.maps['great-plains'];
  rows.find(value=>value.id==='plains-fox-west-2').x+=.1;rows.find(value=>value.id==='plains-stylized-wolf-pack-1').x+=.1;rows.find(value=>value.id==='plains-fox-east-1').drop.effectEnabled=true;rows.splice(rows.findIndex(value=>value.id==='plains-fox-east-2'),1);const before=structuredClone(saved);
- const result=mergeMonsterSpawnDefaults(saved,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION),next=result.document.maps['great-plains'];assert.equal(result.removedRows,0);
+ const result=mergeMonsterSpawnDefaults(saved,PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION),next=result.document.maps['great-plains'];assert.equal(result.removedRows,0);
  for(const id of ['plains-fox-west-1','plains-fox-west-2','plains-stylized-wolf-pack-1','plains-fox-east-1'])assert.deepEqual(next.find(value=>value.id===id),before.maps['great-plains'].find(value=>value.id===id));
  assert.ok(!next.some(value=>value.id==='plains-fox-east-2'));assert.equal(next.find(value=>value.id.startsWith('plains-fox-west-1:default:')).x,-77);assert.equal(validateMonsterSpawns(result.document).valid,true);
 });
 
-test('R1 through R4 pristine save documents all migrate directly to the same R5 homes and composition',()=>{
- for(const [defaults,revision]of [[PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION],[PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION],[PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R3_REVISION],[PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION]]){
+test('R1 through R5 pristine save documents all migrate directly to R6 wolf awareness without moving homes',()=>{
+ for(const [defaults,revision]of [[PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION],[PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION],[PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R3_REVISION],[PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION],[PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION]]){
   const saved=mergeMonsterSpawnDefaults(emptyMonsterSpawns(),defaults,revision).document,result=mergeMonsterSpawnDefaults(saved,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION);assert.equal(result.document.maps['great-plains'].length,19,revision);
   for(const expected of createPlainsMonsterSpawns().maps['great-plains'])assert.deepEqual(result.document.maps['great-plains'].find(value=>value.id===expected.id),expected,revision+' '+expected.id);
  }
+});
+
+test('R6 upgrades wolves once and preserves edited, deleted and custom encounters',()=>{
+ const custom=emptyMonsterSpawns();custom.maps['great-plains']=[row('custom-wolf',{definitionId:'gray-wolf.r1',territory:{x:1,z:2,radius:14,combatRadius:6}})];
+ const saved=mergeMonsterSpawnDefaults(custom,PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION).document,rows=saved.maps['great-plains'];
+ const edited=rows.find(r=>r.id==='plains-village-wolf-north-1');edited.territory.radius+=1;
+ rows.splice(rows.findIndex(r=>r.id==='plains-wolf-meadow-1'),1);const before=structuredClone(saved);
+ const result=mergeMonsterSpawnDefaults(saved,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION),next=result.document.maps['great-plains'];
+ assert.deepEqual(saved,before);assert.equal(result.addedRows,0);assert.equal(result.upgradedRows,11);
+ assert.deepEqual(next.find(r=>r.id===edited.id),edited);assert.ok(!next.some(r=>r.id==='plains-wolf-meadow-1'));assert.deepEqual(next.find(r=>r.id==='custom-wolf'),custom.maps['great-plains'][0]);
+ for(const original of before.maps['great-plains'].filter(r=>['fox.r1','boar.r1','guardian-bear.standard'].includes(r.definitionId)))assert.deepEqual(next.find(r=>r.id===original.id),original);
+ const south=next.find(r=>r.id==='plains-village-wolf-south-1');assert.equal(south.territory.radius,18);assert.equal(south.territory.combatRadius,10);
+ assert.equal(mergeMonsterSpawnDefaults(result.document,createPlainsMonsterSpawns(),PLAINS_MONSTER_SPAWNS_REVISION).changed,false);
 });

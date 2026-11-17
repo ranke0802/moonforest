@@ -13,6 +13,7 @@ import {regularWolfManifest,isRegularWolf} from '../src/regular-wolf-spec.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {setWorldCharacter} from '../src/world-limits.js';
 import {MONSTER_DISENGAGE_SECONDS} from '../src/monster-territory.js';
+import {PLAINS_MONSTER_SPAWNS} from '../src/plains-monster-spawns.js';
 
 const prepare=()=>createBossPreparation({incremental:false});
 async function fixture(t){
@@ -145,7 +146,7 @@ test('all territorial species hold their body heading while watching and wait in
 
 test('noticing the player during an ambient rise returns to lying watch instead of finishing the stand-up',async t=>{
  const f=await fixture(t);f.world.mapId='village';
- for(const id of ['gray-wolf.r1','stylized-wolf.r1','wolf-3.r1','alpha-wolf.r8','fox.r1']){
+ for(const id of ['gray-wolf.r1','stylized-wolf.r1','wolf-3.r1','fox.r1']){
   f.player.position.set(0,0,40);const adapter=f.factory(id);await adapter.activate({position:new Vector3(),row:{territory:{x:0,z:0,radius:12,combatRadius:4,wanderRadius:2}}},{preparation:prepare()});const e=adapter.encounter;e.brain.random=()=>.5;
   e.alignPose();const resting=e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y;
   for(let frame=0;frame<80&&!adapter.snapshot().territory.rising;frame++)e.update(.1,f.player);
@@ -154,6 +155,29 @@ test('noticing the player during an ambient rise returns to lying watch instead 
   for(let frame=0;frame<80;frame++){e.update(.1,f.player);e.alignPose();const status=adapter.snapshot().territory;assert.equal(status.phase,'watch');assert.equal(status.rising,false);assert.equal(status.engaged,false);assert.ok(Math.abs(e.actor.rotation.y-body)<1e-6);assert.ok(Vector3.Distance(e.actor.position,location)<1e-5,JSON.stringify({id,frame,from:location.asArray(),to:e.actor.position.asArray(),state:e.brain.state,time:e.brain.time}));highest=Math.max(highest,e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y);}
   assert.equal(e.brain.state,'Alert_Lie_R5',id+': lies while watching');assert.ok(highest<=raised+.025,id+': notice does not finish standing');assert.ok(Math.abs(e.nodes.pelvis.getAbsolutePosition().y-e.actor.position.y-resting)<.025,id+': actual pelvis returns to its lying height');await adapter.dispose();
  }
+});
+
+test('alpha rests without peaceful wandering, watches lying down, rises for combat and settles after disengaging',async t=>{
+ const f=await fixture(t);f.world.mapId='village';f.player.position.set(0,0,40);
+ const adapter=f.factory('alpha-wolf.r8');await adapter.activate({position:new Vector3(),row:{territory:{x:0,z:0,radius:12,combatRadius:4,wanderRadius:4}}},{preparation:prepare()});const e=adapter.encounter,home=e.actor.position.clone();e.brain.random=()=>.5;
+ for(let frame=0;frame<240;frame++){e.update(.1,f.player);assert.equal(e.brain.state,'Rest_Lie_R5');assert.equal(adapter.snapshot().territory.ambientMoving,false);assert.ok(Vector3.Distance(e.actor.position,home)<1e-6);}
+ f.player.position.set(0,0,8);e.update(.1,f.player);assert.equal(e.brain.state,'Alert_Lie_R5');assert.equal(e.territoryState.engaged,false);
+ f.player.position.set(0,0,3);for(let frame=0;frame<10;frame++)e.update(.1,f.player);
+ assert.equal(e.territoryState.engaged,true);assert.equal(e.brain.state,'Rise_From_Lie_R5');
+ for(let frame=0;frame<60&&adapter.snapshot().territory.rising;frame++)e.update(.1,f.player);
+ assert.equal(adapter.snapshot().territory.rising,false);assert.equal(e.brain.behavior,'flank','existing combat orbit observation resumes');
+ f.player.position.set(0,0,40);for(let frame=0;frame<120;frame++)e.update(.1,f.player);
+ assert.equal(e.territoryState.phase,'ambient');assert.equal(e.brain.state,'Rest_Lie_R5');assert.equal(adapter.snapshot().territory.ambientMoving,false);
+ await adapter.dispose();
+});
+
+test('production solo wolf notices at the expanded outer boundary and starts combat inside the doubled inner boundary',async t=>{
+ const f=await fixture(t);f.world.mapId='village';const row=PLAINS_MONSTER_SPAWNS.maps['great-plains'].find(r=>r.id==='plains-village-wolf-south-1'),territory={...row.territory,x:0,z:0};
+ f.player.position.set(0,0,19);const adapter=f.factory(row.definitionId);await adapter.activate({position:new Vector3(),row:{territory}},{preparation:prepare()});const e=adapter.encounter;
+ e.update(.1,f.player);assert.equal(e.territoryState.phase,'ambient');f.player.position.z=17;e.update(.1,f.player);assert.equal(e.territoryState.phase,'watch');
+ f.player.position.z=11;for(let i=0;i<15;i++)e.update(.1,f.player);assert.equal(e.territoryState.engaged,false);
+ f.player.position.z=9;for(let i=0;i<10;i++)e.update(.1,f.player);assert.equal(e.territoryState.engaged,true);
+ assert.equal(adapter.snapshot().territory.radius,18);assert.equal(adapter.snapshot().territory.combatRadius,10);await adapter.dispose();
 });
 
 test('ambient walk advances in world space and follows accepted travel; a blocked route stops its gait',async t=>{

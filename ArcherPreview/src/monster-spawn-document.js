@@ -1,5 +1,5 @@
 import {ITEM_DROP_CHOICES} from './item-drop-data.js';
-import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION} from './plains-monster-spawns.js';
+import {PLAINS_MONSTER_SPAWNS,PLAINS_MONSTER_SPAWNS_REVISION,PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R4_REVISION,PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS_R5_REVISION} from './plains-monster-spawns.js';
 // Data-only monster placement document. Never execute values from imported files.
 export const MONSTER_SPAWN_FORMAT='moonforest-monster-spawns';
 export const MONSTER_SPAWN_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
@@ -8,7 +8,7 @@ const validId=/^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,79}$/;
 const plainsDefaultSets=[PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS].map(document=>new Set(document.maps['great-plains'].map(row=>row.id)));
 // Retired default IDs remain tombstones; an edited former fox is preserved.
 plainsDefaultSets.push(new Set(plainsDefaultSets.flatMap(ids=>[...ids])));
-const plainsDefaultRevisions=[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4_REVISION,PLAINS_MONSTER_SPAWNS_REVISION];
+const plainsDefaultRevisions=[PLAINS_MONSTER_SPAWNS_R1_REVISION,PLAINS_MONSTER_SPAWNS_R2_REVISION,PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4_REVISION,PLAINS_MONSTER_SPAWNS_R5_REVISION,PLAINS_MONSTER_SPAWNS_REVISION];
 export const emptyMonsterSpawns=()=>({format:MONSTER_SPAWN_FORMAT,version:1,maps:{}});
 export function validateMonsterSpawns(input){
  let document;try{const text=typeof input==='string'?input:JSON.stringify(input);if(new TextEncoder().encode(text).length>262144)throw Error('파일이 256 KiB를 초과합니다.');document=JSON.parse(text);}catch(error){return {valid:false,errors:[error.message]};}
@@ -48,7 +48,7 @@ export function preserveMonsterDefaultHistory(document,previous){
 }
 function upgradePlainsTerritories(document,revision){
  if(!plainsDefaultRevisions.slice(1).includes(revision))return {upgradedRows:0,removedRows:0};
- const history=document.defaultRevisions??[],hasR1=history.includes(PLAINS_MONSTER_SPAWNS_R1_REVISION),hasR2=history.includes(PLAINS_MONSTER_SPAWNS_R2_REVISION),hasR3=history.includes(PLAINS_MONSTER_SPAWNS_R3_REVISION),hasR4=history.includes(PLAINS_MONSTER_SPAWNS_R4_REVISION),installed=new Set(document.defaultRowIds?.['great-plains']??[]),rows=document.maps['great-plains']??[],upgraded=new Set();let removedRows=0;
+ const history=document.defaultRevisions??[],hasR1=history.includes(PLAINS_MONSTER_SPAWNS_R1_REVISION),hasR2=history.includes(PLAINS_MONSTER_SPAWNS_R2_REVISION),hasR3=history.includes(PLAINS_MONSTER_SPAWNS_R3_REVISION),hasR4=history.includes(PLAINS_MONSTER_SPAWNS_R4_REVISION),hasR5=history.includes(PLAINS_MONSTER_SPAWNS_R5_REVISION),installed=new Set(document.defaultRowIds?.['great-plains']??[]),rows=document.maps['great-plains']??[],upgraded=new Set();let removedRows=0;
  const sameArea=(a,b)=>a&&Object.keys(a).length===Object.keys(b).length&&Object.keys(b).every(key=>a[key]===b[key]);
  const upgrade=(before,after,moveHome=false,eligible)=>{const next=new Map(after.maps['great-plains'].map(row=>[row.id,row]));for(const original of before.maps['great-plains']){
   if(!installed.has(original.id))continue;
@@ -63,10 +63,12 @@ function upgradePlainsTerritories(document,revision){
    row.territory={...target.territory};upgraded.add(row);
   }
  }};
- if(hasR1&&!hasR2&&!hasR3&&!hasR4)upgrade(PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R2);
- if([PLAINS_MONSTER_SPAWNS_R3_REVISION,PLAINS_MONSTER_SPAWNS_R4_REVISION,PLAINS_MONSTER_SPAWNS_REVISION].includes(revision)&&!hasR3&&!hasR4&&(hasR1||hasR2))upgrade(PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R3,true,hasR2?undefined:new Set(upgraded));
- if([PLAINS_MONSTER_SPAWNS_R4_REVISION,PLAINS_MONSTER_SPAWNS_REVISION].includes(revision)&&!hasR4&&(hasR1||hasR2||hasR3))upgrade(PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R4,true,hasR3||hasR2?undefined:new Set(upgraded));
- if(revision===PLAINS_MONSTER_SPAWNS_REVISION&&(hasR1||hasR2||hasR3||hasR4))upgrade(PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS,true,hasR4||hasR3||hasR2?undefined:new Set(upgraded));
+ const targetRevision=plainsDefaultRevisions.indexOf(revision);
+ if(hasR1&&!hasR2&&!hasR3&&!hasR4&&!hasR5)upgrade(PLAINS_MONSTER_SPAWNS_R1,PLAINS_MONSTER_SPAWNS_R2);
+ if(targetRevision>=2&&!hasR3&&!hasR4&&!hasR5&&(hasR1||hasR2))upgrade(PLAINS_MONSTER_SPAWNS_R2,PLAINS_MONSTER_SPAWNS_R3,true,hasR2?undefined:new Set(upgraded));
+ if(targetRevision>=3&&!hasR4&&!hasR5&&(hasR1||hasR2||hasR3))upgrade(PLAINS_MONSTER_SPAWNS_R3,PLAINS_MONSTER_SPAWNS_R4,true,hasR3||hasR2?undefined:new Set(upgraded));
+ if(targetRevision>=4&&!hasR5&&(hasR1||hasR2||hasR3||hasR4))upgrade(PLAINS_MONSTER_SPAWNS_R4,PLAINS_MONSTER_SPAWNS_R5,true,hasR4||hasR3||hasR2?undefined:new Set(upgraded));
+ if(targetRevision>=5&&(hasR1||hasR2||hasR3||hasR4||hasR5))upgrade(PLAINS_MONSTER_SPAWNS_R5,PLAINS_MONSTER_SPAWNS,true);
  return {upgradedRows:upgraded.size,removedRows};
 }
 export function mergeMonsterSpawnDefaults(input,defaults,revision){
