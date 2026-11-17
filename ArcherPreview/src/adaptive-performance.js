@@ -9,9 +9,9 @@ export const ADAPTIVE_LEVELS=Object.freeze([
  // draw submission, 1.0–1.5 M triangles on the plains), so the view distance
  // and the shadow pass go first; resolution follows for the GPU.
  Object.freeze({scale:1,viewCap:1.8,rangeScale:1,shadows:true}),
- Object.freeze({scale:.9,viewCap:1.4,rangeScale:1,shadows:true}),
- Object.freeze({scale:.85,viewCap:1.2,rangeScale:.9,shadows:false}),
- Object.freeze({scale:.75,viewCap:1,rangeScale:.8,shadows:false}),
+ Object.freeze({scale:.9,viewCap:1.4,rangeScale:1,detailRange:70,shadows:true}),
+ Object.freeze({scale:.85,viewCap:1.2,rangeScale:.9,detailRange:55,shadows:false}),
+ Object.freeze({scale:.75,viewCap:1,rangeScale:.8,detailRange:42,shadows:false}),
 ]);
 const WINDOW_MS=2000,CALM_MS=20000,PROBE_MS=8000;
 

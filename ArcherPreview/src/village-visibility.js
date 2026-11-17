@@ -64,7 +64,9 @@ export class VillageVisibility {
     const transform=this.world.camera.getTransformationMatrix();
     const turned=!this.view||transform.m.some((n,i)=>Math.abs(n-this.view[i])>.0001);
     const range=cinematicSceneryRange(this.world,this.touch)?.cellCull??(this.world.villageOverview?(this.world.plains?420:260):plainsRenderRange(this.world,this.touch).cellCull);
-    if(this.timer>0&&!moved&&!turned&&this.range===range)return;this.range=range;
+    // Frame guard (touch): small ground detail beyond this distance is not drawn.
+    const detailRange=this.world.detailCullRange>0?this.world.detailCullRange:Infinity;
+    if(this.timer>0&&!moved&&!turned&&this.range===range&&this.detailRange===detailRange)return;this.range=range;this.detailRange=detailRange;
     this.timer=.16;this.camera.copyFrom(camera);
     this.view??=new Float32Array(16);this.view.set(transform.m);Frustum.GetPlanesToRef(transform,this.planes);
     let activeCells=0,activeInstances=0;
@@ -74,7 +76,9 @@ export class VillageVisibility {
       const inFrustum=this.planes.every(p=>p.dotCoordinate(cell.center)>=-cell.radius-5);
       const active=distance<range&&inFrustum;
       if(active!==cell.active){for(const r of cell.records){r.cellActive=active;r.root.setEnabled(caveFogRootEnabled(r));}cell.active=active;}
-      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.fogVisible!==false&&r.authoredSuppressed!==true)activeInstances++;}
+      const detailFar=distance>detailRange;
+      if(detailFar!==(cell.detailFar===true)){cell.detailFar=detailFar;for(const r of cell.records)if(r.placement.kind==='ground-detail'){r.detailCulled=detailFar;r.root.setEnabled(caveFogRootEnabled(r));}}
+      if(active){activeCells++;for(const r of cell.records)if(r.meshes.length&&!r.occluded&&r.detailCulled!==true&&r.fogVisible!==false&&r.authoredSuppressed!==true)activeInstances++;}
     }
     Object.assign(this.stats,{activeCells,activeInstances});
   }
