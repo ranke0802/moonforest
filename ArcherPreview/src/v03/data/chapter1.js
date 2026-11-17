@@ -122,7 +122,7 @@ export const QUESTS=Object.freeze([
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
  {id:'M04',title:'대평원의 곰',steps:[
-  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-60,z:-60,radius:13},summon:{kind:'bear',count:1},arrival:'대평원의 곰이 모습을 드러냈다'},
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-28.5,z:-19.5,radius:8},summon:{kind:'bear',count:1},arrival:'대평원의 곰이 모습을 드러냈다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-bear'}},
  ]},
  {id:'M05',title:'마을을 습격한 고블린',steps:[
