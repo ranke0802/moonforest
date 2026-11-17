@@ -80,6 +80,20 @@ export const DIALOGUES=Object.freeze({
   {who:'청년',text:'형은 곰한테 죽은 게 아니에요. 숲에, 마물의 숲에 뭔가 있어요.'},
   {who:'나',text:'(보랏빛 쇠붙이, 홉고블린, 그리고 숲. 성녀가 사라진 길도 그쪽일 것이다.)'},
  ],
+ 'driver-alpha':[
+  {who:'마부',text:"오, 자네로군! 마을 쪽 소식은 들었네. 고블린까지 막아냈다며?"},
+  {who:'마부',text:"그런데 큰일일세. 숲 어귀 쉼터 쪽에 우두머리 늑대가 나타났어. 덩치가 곰만 하다네."},
+  {who:'마부',text:"그놈이 무리를 몰고 다니는 한 마차는 한 발짝도 못 움직여. 부탁하네."},
+  {who:'나',text:"(무리를 이끄는 놈. 짐승들이 사나워진 이유도 그쪽에 있을지 모른다.)"},
+ ],
+ 'alpha-start':[
+  {who:'나',text:"(저 눈빛… 곰의 목에 박혀 있던 것과 같은 보랏빛이다.)"},
+ ],
+ 'chief-alpha':[
+  {who:'촌장',text:"우두머리 늑대를…! 이제야 길이 열리겠군. 마을을 대표해 고맙네."},
+  {who:'나',text:"그놈의 목에도 보랏빛 쇠붙이가 있었습니다. 곰과 같은 것이었어요."},
+  {who:'촌장',text:"…누군가 짐승들을 몰아붙이고 있다는 거로군. 숲 안쪽, 마물의 숲으로 가 보게. 답은 거기 있을 걸세."},
+ ],
  'chief-idle':[{who:'촌장',text:'목책 고칠 일손이 모자라. 힘 좀 쓰는 사람이면 언제든 환영이네.'}],
  'elder-witness':[
   {who:'노년 여성',text:'엘레나? 아이고, 그 아이 덕에 이 다리로 다시 걷는다오. 밤새 내 곁을 지켰지.'},
@@ -128,6 +142,11 @@ export const QUESTS=Object.freeze([
  {id:'M05',title:'마을을 습격한 고블린',steps:[
   {id:'raid',text:'목책에서 고블린 막아내기',type:'defeat',kind:'goblin',count:4,map:'village',at:{x:0,z:28,radius:11},summon:{kind:'goblin',count:4},intro:'raid-start',arrival:'고블린 습격!'},
   {id:'report',text:'청년과 이야기하기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'youth-goblin'}},
+ ]},
+ {id:'M06',title:'우두머리 늑대',steps:[
+  {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-alpha'}},
+  {id:'alpha',text:'숲 어귀의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:50,z:-48,radius:9},summon:{kind:'wolf',count:1},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
+  {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-alpha'}},
  ]},
 ]);
 export const CHAPTER_END_NOTE='다음 이야기 · 마물의 숲';

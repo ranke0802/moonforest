@@ -41,6 +41,9 @@ export default {
    'chief-bear':['The bear…? You, alone?','There was a violet iron piece driven into its neck. As if someone put it there on purpose.','…Joachim said the same thing. That the beasts had a strange look in their eyes. Nobody believed him.','There are rumors of goblins coming down from the forest, too. Guard the palisade tonight.'],
    'raid-start':['Goblins! They’re swarming toward the palisade!','(They must not get into the village.)'],
    'youth-goblin':['We held them off… But those weren’t ordinary goblins. I saw a big one giving orders from behind.','A hobgoblin. On the last day Joachim went out, he was talking about that thing in the forest too.','He wasn’t killed by a bear. Something is out there, in the Forest of Fiends.','(Violet iron, a hobgoblin, and the forest. The saint’s trail must lead that way too.)'],
+   'driver-alpha':["Oh, it’s you! I heard what happened at the village. You held off the goblins too?", "But we’ve got trouble. An alpha wolf has shown up by the rest stop at the forest’s edge. It’s as big as a bear.", "As long as it leads that pack, my wagon can’t move an inch. Please.", "(The one leading the pack. Maybe that’s why the beasts turned vicious.)"],
+   'alpha-start':["(Those eyes… the same violet as the iron in the bear’s neck.)"],
+   'chief-alpha':["The alpha wolf…! The road will finally open. On behalf of the village, thank you.", "It had violet iron in its neck too. The same as the bear.", "…So someone is driving the beasts. Go deeper, into the Forest of Fiends. The answer is there."],
    'chief-idle':['We’re short of hands to mend the palisade. Anyone strong is always welcome.'],
    'elder-witness':['Elena? Oh, thanks to that child I can walk on these legs again. She stayed by my side all night.','I received so much… but if you ask what I ever did for her in the end, the words won’t come.','(They remember clearly what they received, but not what they gave.)'],
    'elder-idle':['When that child comes back… this time I’ll at least cook her a meal.'],
@@ -56,6 +59,7 @@ export default {
    M03:{title:'The Village’s Request',steps:{ask:'Visit the village chief',hunt:'Drive off the beasts of the Great Plains',report:'Report to the chief'},arrivals:{hunt:'A pack of wolves blocks the way'}},
    M04:{title:'The Bear of the Great Plains',steps:{bear:'Defeat the bear on the plains hill',report:'Report to the chief'},arrivals:{bear:'The bear of the Great Plains appears'}},
    M05:{title:'Goblins Raid the Village',steps:{raid:'Hold the palisade against the goblins',report:'Talk to the young man'},arrivals:{raid:'Goblin raid!'}},
+   M06:{title:"The Alpha Wolf",steps:{driver:"Talk to the driver",alpha:"Defeat the alpha wolf at the forest’s edge",report:"Report to the chief"},arrivals:{alpha:"The alpha wolf howls"}},
   },
   endNote:'Next · The Forest of Fiends',
   hints:{

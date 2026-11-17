@@ -41,6 +41,9 @@ export default {
    'chief-bear':['Con gấu…? Một mình cô sao?','Trên cổ nó có một mảnh sắt màu tím đóng vào. Như thể ai đó cố tình gắn lên.','…Joachim cũng từng nói vậy. Rằng ánh mắt lũ thú rất lạ. Chẳng ai tin cậu ấy.','Còn có tin đồn yêu tinh từ rừng kéo xuống. Đêm nay hãy giữ hàng rào giúp làng.'],
    'raid-start':['Yêu tinh! Chúng đang tràn về phía hàng rào!','(Không được để chúng vào làng.)'],
    'youth-goblin':['Chặn được rồi… Nhưng bọn đó không phải yêu tinh thường. Tôi thấy một tên to lớn chỉ huy phía sau.','Là yêu tinh lớn. Hôm cuối cùng anh Joachim ra ngoài, anh ấy cũng nhắc đến nó trong rừng.','Anh ấy không chết vì gấu. Có thứ gì đó trong rừng, trong Rừng Ma Vật.','(Mảnh sắt tím, yêu tinh lớn, và khu rừng. Con đường thánh nữ biến mất chắc cũng dẫn về đó.)'],
+   'driver-alpha':["Ồ, là cô à! Tôi nghe chuyện ở làng rồi. Cô còn chặn được cả yêu tinh à?", "Nhưng có chuyện lớn rồi. Một con sói đầu đàn xuất hiện gần trạm nghỉ ở bìa rừng. To như con gấu ấy.", "Chừng nào nó còn dẫn bầy, xe ngựa của tôi không nhúc nhích nổi. Nhờ cô đấy.", "(Con dẫn bầy. Có lẽ lý do lũ thú trở nên hung dữ nằm ở đó.)"],
+   'alpha-start':["(Ánh mắt đó… cùng màu tím với mảnh sắt trên cổ con gấu.)"],
+   'chief-alpha':["Con sói đầu đàn…! Cuối cùng con đường cũng thông. Thay mặt cả làng, cảm ơn cô.", "Trên cổ nó cũng có mảnh sắt tím. Giống hệt con gấu.", "…Vậy là có kẻ đang dồn ép lũ thú. Hãy vào sâu trong Rừng Ma Vật. Câu trả lời ở đó."],
    'chief-idle':['Thiếu người sửa hàng rào quá. Ai có sức thì lúc nào cũng được chào đón.'],
    'elder-witness':['Elena à? Ôi, nhờ con bé mà đôi chân này đi lại được. Nó thức bên tôi suốt đêm.','Nhận của nó nhiều lắm… vậy mà hỏi cuối cùng tôi đã làm gì cho nó, tôi chẳng nói nên lời.','(Họ nhớ rõ điều mình nhận được, nhưng không nhớ điều mình đã cho.)'],
    'elder-idle':['Khi con bé về… lần này tôi phải nấu cho nó một bữa cơm.'],
@@ -56,6 +59,7 @@ export default {
    M03:{title:'Lời nhờ của làng',steps:{ask:'Đến gặp trưởng làng',hunt:'Đuổi thú ở Đại Bình Nguyên',report:'Báo cho trưởng làng'},arrivals:{hunt:'Một bầy sói chặn đường'}},
    M04:{title:'Con gấu của Đại Bình Nguyên',steps:{bear:'Hạ con gấu trên đồi bình nguyên',report:'Báo cho trưởng làng'},arrivals:{bear:'Con gấu của Đại Bình Nguyên xuất hiện'}},
    M05:{title:'Yêu tinh tấn công làng',steps:{raid:'Chặn yêu tinh tại hàng rào',report:'Nói chuyện với chàng trai'},arrivals:{raid:'Yêu tinh tấn công!'}},
+   M06:{title:"Sói đầu đàn",steps:{driver:"Nói chuyện với người đánh xe",alpha:"Hạ sói đầu đàn ở bìa rừng",report:"Báo cho trưởng làng"},arrivals:{alpha:"Sói đầu đàn tru lên"}},
   },
   endNote:'Câu chuyện tiếp theo · Rừng Ma Vật',
   hints:{
