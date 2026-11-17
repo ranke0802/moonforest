@@ -241,6 +241,9 @@
         const applyLang=id=>{const row=LANGS.find(item=>item[0]===id);if(row){document.documentElement.lang=row[2];document.documentElement.dataset.lang=id;}return !!row;};
         let lang=null;try{lang=localStorage.getItem(LANG_KEY);}catch{}
         const known=applyLang(lang);
+        // The static loading card, before the game script runs.
+        const LOADING={en:'Loading',ja:'読み込み中',vi:'Đang tải',zh:'载入中'}[lang];
+        if(known&&LOADING)for(const id of ['loading-title','loading-text']){const node=document.getElementById(id);if(node)node.textContent=LOADING;}
         // A record chosen on the previous document (or a language change) skips the logo.
         let intent=null,skipLogo=null;try{intent=sessionStorage.getItem('moonforest-0.3:intent:v1');skipLogo=sessionStorage.getItem('moonforest-0.3:skip-logo');if(skipLogo)sessionStorage.removeItem('moonforest-0.3:skip-logo');}catch{}
         if((intent||skipLogo)&&known){removed=true;layer.remove();finish();return;}

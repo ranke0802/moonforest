@@ -48,9 +48,18 @@ export function t(key,params){
  if(value===undefined)return key;
  return typeof value==='function'?value(params??{}):fill(value,params);
 }
+// The first loading words, built in: they show before any language pack has
+// arrived (the splash script sets data-lang as soon as the page parses).
+const BOOT_WORDS=Object.freeze({
+ en:{'불러오는 중':'Loading','화면 준비하는 중':'Preparing the scene','용량 확인 중':'Checking size'},
+ ja:{'불러오는 중':'読み込み中','화면 준비하는 중':'画面を準備しています','용량 확인 중':'容量を確認中'},
+ vi:{'불러오는 중':'Đang tải','화면 준비하는 중':'Đang chuẩn bị màn hình','용량 확인 중':'Đang kiểm tra dung lượng'},
+ zh:{'불러오는 중':'载入中','화면 준비하는 중':'正在准备画面','용량 확인 중':'正在确认大小'},
+});
 // Shared-game text keyed by its Korean source.
 export function tr(text){
- if(current==='ko'||typeof text!=='string'||!text)return text;
+ if(typeof text!=='string'||!text)return text;
+ if(current==='ko'){const early=BOOT_WORDS[globalThis.document?.documentElement?.dataset?.lang]?.[text];return early??text;}
  const table=pack.legacy??{};
  if(table[text]!==undefined)return table[text];
  const trimmed=text.trim();
