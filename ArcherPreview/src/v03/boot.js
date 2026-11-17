@@ -4,7 +4,7 @@
 import {createTitleScreen} from './title-screen.js';
 import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
-import {crownBoxes,clearRadius} from './title-camera.js';
+import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
 import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
@@ -99,9 +99,12 @@ export function setupV03(api){
   const spot=player.position,crowns=state.crowns;
   if(!crowns||Math.hypot(spot.x-crowns.x,spot.z-crowns.z)>6)state.crowns={x:spot.x,z:spot.z,boxes:crownBoxes(api.world.villageRenderRecords,spot)};
   const lower=camera.lowerRadiusLimit??1,upper=camera.upperRadiusLimit??60,arm=Math.max(lower,Math.min(upper,TITLE_CAMERA.radius)),k=Math.min(1,dt*1.5);
-  // Looks a little ahead along the orbit so the arm is already short on arrival.
-  let wanted=arm;for(const ahead of [0,.15,.3])wanted=Math.min(wanted,clearRadius(state.crowns.boxes,camera.target??spot,camera.alpha+ahead,camera.beta,arm,Math.max(lower,2.5)));
-  camera.radius+=(wanted-camera.radius)*(wanted<camera.radius?Math.min(1,k*2.5):k);camera.beta+=(TITLE_CAMERA.beta-camera.beta)*k;
+  // Looks a little ahead along the orbit so the arm is already short on arrival;
+  // under a crown the view also drops level, below the leaves.
+  let wanted=arm,pitch=TITLE_CAMERA.beta;
+  for(const ahead of [0,.15,.3]){const view=clearView(state.crowns.boxes,camera.target??spot,camera.alpha+ahead,TITLE_CAMERA.beta,arm,Math.max(lower,2.5));wanted=Math.min(wanted,view.radius);pitch=Math.max(pitch,view.beta);}
+  const quick=Math.min(1,k*2.5);
+  camera.radius+=(wanted-camera.radius)*(wanted<camera.radius?quick:k);camera.beta+=(pitch-camera.beta)*(pitch>camera.beta?quick:k);
   pilot.update(dt,{player:player.position,target:target?.actor.position??null,targetRadius:target?.radius??1,targetAttacking:target?.brain.mode==='attack',
    cameraAlpha:camera.alpha,captured:controller.captured===true,busy:controller.groggy===true||controller.dead===true,actions});
  }
