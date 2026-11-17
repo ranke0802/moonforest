@@ -49,14 +49,14 @@ test('custom subset and retained external wrapper preserve provider behavior acr
  scene.dispose(); engine.dispose();
 });
 
-test('only disabled owned empty clone roots are omitted and later attachments or overrides restore them', () => {
+test('owned empty clone roots are omitted enabled or not, and later attachments or overrides restore them', () => {
  const {engine, scene, source} = setup(), root = new TransformNode('placement', scene);
  const empty = new Mesh('empty', scene); empty.parent = root;
  const unowned = new Mesh('unowned', scene); unowned.setEnabled(false);
  const candidates = new VillageActiveCandidates(scene);
  candidates.addEmptyRoot(empty); candidates.addEmptyRoot(empty); candidates.addEmptyRoot(source);
  assert.equal(candidates.stats.owned, 1);
- assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'empty', 'unowned']);
+ assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'unowned'], 'an enabled empty root draws nothing and is not a candidate');
  root.setEnabled(false);
  assert.deepEqual(names(scene.getActiveMeshCandidates()), ['source', 'unowned']);
  empty.material = new StandardMaterial('added-material', scene);
@@ -88,7 +88,7 @@ test('real SDK rendering preserves active instances and draw batches through rep
   const snapshots = [];
   for (const provider of [original, filtered]) {
    scene.getActiveMeshCandidates = provider; draws.length = 0; scene.render();
-   snapshots.push({active: names(scene.getActiveMeshes()), draws: structuredClone(draws)});
+   snapshots.push({active: names(scene.getActiveMeshes()).filter(name => !name.startsWith('empty-')), draws: structuredClone(draws)});
   }
   assert.ok(snapshots[0].draws.length > 0, `step ${i} must exercise real draws`);
   assert.deepEqual(snapshots[1], snapshots[0], `visibility step ${i}`);

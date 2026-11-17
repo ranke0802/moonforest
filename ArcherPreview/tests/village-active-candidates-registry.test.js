@@ -23,19 +23,19 @@ function fixture(t) {
 const names = list => list.data.slice(0, list.length).map(mesh => mesh.name);
 const selected = f => names(f.scene.getActiveMeshCandidates());
 
-test('stationary queries reuse scene order and guard only disabled registered nodes', t => {
+test('stationary queries reuse scene order, guard disabled instances and never submit empty roots', t => {
  const f = fixture(t), disabled = f.instance('disabled'), active = f.instance('active', true);
  const dynamic = MeshBuilder.CreateBox('dynamic', {}, f.scene);
- assert.deepEqual(selected(f), ['source', 'active', 'active-empty', 'dynamic']);
+ assert.deepEqual(selected(f), ['source', 'active', 'dynamic']);
  assert.equal(f.candidates.stats.sceneScans, 6);
  for (let i = 0; i < 20; i++) {
-  assert.deepEqual(selected(f), ['source', 'active', 'active-empty', 'dynamic']);
+  assert.deepEqual(selected(f), ['source', 'active', 'dynamic']);
   assert.equal(f.candidates.stats.sceneScans, 0);
-  assert.equal(f.candidates.stats.registryChecks, 2);
+  assert.equal(f.candidates.stats.registryChecks, 3);
  }
  assert.equal(f.candidates.stats.cacheHits, 20);
  disabled.root.setEnabled(true); active.root.setEnabled(false);
- assert.deepEqual(selected(f), ['source', 'disabled', 'disabled-empty', 'dynamic']);
+ assert.deepEqual(selected(f), ['source', 'disabled', 'dynamic']);
  assert.equal(f.candidates.stats.sceneScans, 6);
  selected(f); assert.equal(f.candidates.stats.sceneScans, 0);
  // Reparenting changes effective enabled state without setEnabled on the mesh.
@@ -43,16 +43,16 @@ test('stationary queries reuse scene order and guard only disabled registered no
  disabled.empty.parent = off;
  assert.deepEqual(selected(f), ['source', 'dynamic']);
  disabled.empty.parent = null;
- assert.deepEqual(selected(f), ['source', 'disabled', 'disabled-empty', 'dynamic']);
+ assert.deepEqual(selected(f), ['source', 'disabled', 'dynamic']);
 });
 
 test('Babylon add/remove swap order, late registration and disposal invalidate cached membership', t => {
  const f = fixture(t), a = f.instance('a', true), b = f.instance('b', true), off = f.instance('off');
  selected(f);
  f.scene.removeMesh(a.mesh);
- assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && mesh !== off.empty).map(mesh => mesh.name));
+ assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && !mesh.name.endsWith('-empty')).map(mesh => mesh.name));
  f.scene.addMesh(a.mesh);
- assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && mesh !== off.empty).map(mesh => mesh.name));
+ assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && !mesh.name.endsWith('-empty')).map(mesh => mesh.name));
  // Removed registered objects keep ownership if re-added without disposal.
  f.scene.removeMesh(off.mesh); f.scene.addMesh(off.mesh);
  assert.ok(!selected(f).includes('off'));
@@ -62,10 +62,10 @@ test('Babylon add/remove swap order, late registration and disposal invalidate c
  assert.equal(f.candidates.records.size, 7);
  b.root.dispose(); later.dispose();
  assert.equal(f.candidates.records.size, 4);
- assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && mesh !== off.empty).map(mesh => mesh.name));
+ assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && !mesh.name.endsWith('-empty')).map(mesh => mesh.name));
  // Foreign direct array edits have an explicit invalidation escape hatch.
  f.scene.meshes.reverse(); f.candidates.invalidate();
- assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && mesh !== off.empty).map(mesh => mesh.name));
+ assert.deepEqual(selected(f), f.scene.meshes.filter(mesh => mesh !== off.mesh && !mesh.name.endsWith('-empty')).map(mesh => mesh.name));
 });
 
 test('mutable empty roots fail open immediately, including in-place attachments', t => {
