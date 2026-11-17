@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="%BASE_URL%moonforest-0.3.webmanifest" />
+    <title>MoonForest</title>
+    <style>
+      /* The frame keeps to the safe area: inside an iframe the game's own
+         env(safe-area-inset-*) values are zero. */
+      html,body{margin:0;height:100%;background:#000;overflow:hidden;overscroll-behavior:none}
+      iframe{position:fixed;border:0;background:#000;top:env(safe-area-inset-top,0px);left:env(safe-area-inset-left,0px);width:calc(100% - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));height:calc(100% - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+    </style>
+  </head>
+  <body>
+    <script id="moonforest-shell">
+      // Phones: this outer page owns fullscreen and the landscape lock, and the
+      // game runs in the frame below. When the game reloads itself (new game,
+      // loading another record, language change) only the frame is replaced,
+      // so the browser no longer drops fullscreen and turns back to portrait.
+      (function(){
+        var query=new URLSearchParams(location.search),game=query.get('game')||'moonforest-0.3.html';
+        if(!/^moonforest-0\.[34]\.html$/.test(game))game='moonforest-0.3.html';   // fixed list: never an open redirect
+        query.delete('game');
+        var root=document.documentElement,installEvent=null;
+        function full(){return document.fullscreenElement||document.webkitFullscreenElement||null;}
+        window.addEventListener('beforeinstallprompt',function(event){event.preventDefault();installEvent=event;});
+        window.__moonforestShell={
+          isFullscreen:function(){return !!full();},
+          // Called from the game's own tap handler (same origin), so it runs
+          // inside the user gesture.
+          goLandscape:function(){
+            var request=root.requestFullscreen||root.webkitRequestFullscreen,done=Promise.resolve();
+            try{if(request&&!full())done=Promise.resolve(request===root.requestFullscreen?request.call(root,{navigationUI:'hide'}):request.call(root));}catch(error){}
+            return done.catch(function(){}).then(function(){try{if(screen.orientation&&screen.orientation.lock)return screen.orientation.lock('landscape');}catch(error){}}).catch(function(){});
+          },
+          installable:function(){return !!installEvent;},
+          install:function(){var event=installEvent;installEvent=null;try{return event?Promise.resolve(event.prompt()).catch(function(){}):Promise.resolve();}catch(error){return Promise.resolve();}}
+        };
+        var frame=document.createElement('iframe'),search=query.toString();
+        frame.title='MoonForest';frame.setAttribute('allow','fullscreen; autoplay; gamepad; screen-wake-lock');frame.setAttribute('allowfullscreen','');
+        frame.src=game+(search?'?'+search:'');
+        frame.addEventListener('load',function(){try{frame.contentWindow.focus();}catch(error){}});
+        document.body.appendChild(frame);
+      })();
+    </script>
+  </body>
+</html>

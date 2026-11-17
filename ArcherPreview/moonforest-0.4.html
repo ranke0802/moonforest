@@ -2,6 +2,20 @@
 <html lang="ko" data-loading="true">
   <head>
     <meta charset="UTF-8" />
+    <script id="moonforest-shell-redirect">
+      // Phones play inside moonforest-shell.html: that outer page keeps
+      // fullscreen and the landscape lock while this page reloads itself
+      // (new game, loading a record). Desktop and iPhone stay on this page.
+      (function(){try{
+        if(window.top!==window.self)return;
+        var query=new URLSearchParams(location.search);if(query.has('noshell'))return;
+        var root=document.documentElement;
+        if(!(root.requestFullscreen||root.webkitRequestFullscreen))return;
+        if(!(window.matchMedia&&matchMedia('(pointer: coarse)').matches))return;
+        query.set('game',location.pathname.split('/').pop()||'moonforest-0.3.html');
+        location.replace('moonforest-shell.html?'+query.toString());
+      }catch(error){}})();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

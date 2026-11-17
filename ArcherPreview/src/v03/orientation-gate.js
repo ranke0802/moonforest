@@ -12,8 +12,14 @@ export function isIos(view){
 }
 export function isStandalone(view){return view?.navigator?.standalone===true||view?.matchMedia?.('(display-mode: standalone)')?.matches===true||view?.matchMedia?.('(display-mode: fullscreen)')?.matches===true;}
 
+// On phones the game runs in a frame of moonforest-shell.html; that outer
+// page owns fullscreen and the landscape lock so a reload of the game (new
+// game, loading a record) cannot drop them.
+function shellOf(view){try{const shell=view&&view.parent!==view?view.parent.__moonforestShell:null;return shell&&typeof shell.goLandscape==='function'?shell:null;}catch{return null;}}
+const isFullscreen=doc=>{const shell=shellOf(doc.defaultView);return shell?shell.isFullscreen()===true:!!(doc.fullscreenElement||doc.webkitFullscreenElement);};
 async function goLandscape(doc){
- const target=doc.documentElement,view=doc.defaultView;
+ const target=doc.documentElement,view=doc.defaultView,shell=shellOf(view);
+ if(shell){try{await shell.goLandscape();}catch{/* the card stays */}return;}
  const request=target.requestFullscreen??target.webkitRequestFullscreen;
  try{if(request&&!doc.fullscreenElement&&!doc.webkitFullscreenElement)await Promise.resolve(request===target.requestFullscreen?request.call(target,{navigationUI:'hide'}):request.call(target));}catch{/* fullscreen refused: the card stays */}
  try{await view.screen?.orientation?.lock?.('landscape');}catch{/* lock unsupported: the player turns the device */}
@@ -36,12 +42,13 @@ export function createOrientationGate({doc,mount=doc.body}){
  // A reload leaves fullscreen and drops the orientation lock. On Android the
  // first touch afterwards (any touch, in landscape too) takes both back, so a
  // phone with auto-rotate off does not fall back to portrait mid-game.
- const relock=()=>{if(!enabled||!touch||ios||isStandalone(view)||doc.fullscreenElement||doc.webkitFullscreenElement)return;void goLandscape(doc);};
+ const relock=()=>{if(!enabled||!touch||ios||isStandalone(view)||isFullscreen(doc))return;void goLandscape(doc);};
  doc.addEventListener('pointerup',relock,true);
  function label(){
   title.textContent=t('rotate.title');
   lead.textContent=ios?t('rotate.ios'):t('rotate.tap');
-  add.textContent=ios?t('ios.add'):t('rotate.install');add.hidden=isStandalone(view)||!(ios||install);
+  const shell=shellOf(view);
+  add.textContent=ios?t('ios.add'):t('rotate.install');add.hidden=isStandalone(view)||!(ios||install||shell?.installable?.());
   steps.replaceChildren(...[t('ios.step1'),t('ios.step2'),t('ios.step3')].map(text=>{const item=doc.createElement('li');item.textContent=text;return item;}));
  }
  function sync(){
@@ -52,7 +59,7 @@ export function createOrientationGate({doc,mount=doc.body}){
  // The first tap anywhere on the card (except the iOS button) asks for
  // landscape fullscreen; it must run inside the user gesture.
  layer.addEventListener('click',event=>{
-  if(event.target.closest?.('.v03-rotate-add')){if(ios){steps.hidden=!steps.hidden;return;}const prompt=install;install=null;add.hidden=true;void Promise.resolve(prompt?.prompt?.()).catch(()=>{});return;}
+  if(event.target.closest?.('.v03-rotate-add')){if(ios){steps.hidden=!steps.hidden;return;}const prompt=install;install=null;add.hidden=true;void Promise.resolve(prompt?prompt.prompt?.():shellOf(view)?.install?.()).catch(()=>{});return;}
   if(!ios)void goLandscape(doc);
  });
  portraitQuery?.addEventListener?.('change',sync);view?.addEventListener?.('resize',sync);

@@ -12,7 +12,7 @@ export async function syncMoonforestV3({repository=resolve(import.meta.dirname,'
  // manifests, bundles and all referenced chunks remain immutable.
  await reviewedDeploymentUnion(site,{requireResourceIndex:true});
  const protectedPaths=new Set(primary.files.map(item=>item.path));protectedPaths.add('deployment-files.json');
- const ownedEntries=new Set(['moonforest-0.3.html','moonforest-0.4.html','moonforest-0.3.webmanifest']),unique=new Set(),copies=[];let total=0,reusedBytes=0;
+ const ownedEntries=new Set(['moonforest-0.3.html','moonforest-0.4.html','moonforest-shell.html','moonforest-0.3.webmanifest']),unique=new Set(),copies=[];let total=0,reusedBytes=0;
  for(const item of manifest.files){
   if(unique.has(item.path))throw new Error('Unsafe or duplicate deployment path');unique.add(item.path);
   const from=deploymentPath(dist,item.path),target=deploymentPath(site,item.path),staged=await optionalBytes(from),existing=await optionalBytes(target),bytes=staged??existing;
