@@ -7,7 +7,7 @@ const emptyRoot=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&mesh.isReady===
 // Only native frozen map instances are registered. Dynamic actors, quest
 // props, source meshes and any custom candidate provider retain their order.
 export class VillageActiveCandidates {
- constructor(scene){
+ constructor(scene,{holdLod=false}={}){
   this.scene=scene;this.previous=scene.getActiveMeshCandidates;this.tracked=new WeakMap();this.disposed=false;
   this.records=new Set();this.disabled=[];this.roots=[];this.dirty=true;this.meshes=null;this.meshCount=-1;
   this.result={data:[],length:0};this.stats={scanned:0,submitted:0,skipped:0,owned:0,registryChecks:0,sceneScans:0,cacheHits:0};
@@ -52,7 +52,7 @@ export class VillageActiveCandidates {
   // one temporary vector each). A static prop keeps its choice for a few
   // frames instead; the refresh is staggered by id so no frame pays for all.
   // Measured on the plains hill: selection −7 %. Any other selector wins.
-  if(!scene.customLODSelector){
+  if(holdLod&&!scene.customLODSelector){
    this.lodSelector=(mesh,camera)=>{
     if(mesh._villageLodOwned===true&&mesh.isWorldMatrixFrozen){
      const frame=scene.getFrameId(),lod=mesh._villageLod;
