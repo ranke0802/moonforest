@@ -7,7 +7,7 @@ const hash=value=>createHash('sha256').update(value).digest('hex');
 const roots=['ArcherPreview/src'];
 // Historical, optional asset-authoring scripts are not runtime build inputs.
 // Include the release entry points and their resource/graph guards explicitly.
-export const SOURCE_ENTRY_FILES=['ArcherPreview/moonforest-0.2.html','ArcherPreview/moonforest-0.3.html','ArcherPreview/package.json','ArcherPreview/package-lock.json','ArcherPreview/vite.config.js',
+export const SOURCE_ENTRY_FILES=['ArcherPreview/moonforest-0.2.html','ArcherPreview/moonforest-0.3.html','ArcherPreview/moonforest-0.4.html','ArcherPreview/package.json','ArcherPreview/package-lock.json','ArcherPreview/vite.config.js',
  ...['build-moonforest-0.2.mjs','sync-moonforest-0.2.mjs','build-moonforest-0.3.mjs','sync-moonforest-0.3.mjs','stage-pages.mjs','source-provenance.mjs','release-deployment.mjs','runtime-module-graph.mjs','resource-bundles.mjs','build-village-site.mjs'].map(name=>'ArcherPreview/scripts/'+name)];
 const entries=SOURCE_ENTRY_FILES;
 // Track executable inputs, not authoring originals or machine-local build output.

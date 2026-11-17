@@ -13,6 +13,8 @@ test('0.3 entry is an edition on the 0.2 combat release and opens the plains by 
  const route=releaseRoute('https://test.invalid/game/moonforest-0.3.html');
  assert.equal(route.edition,E);assert.equal(route.release,'moonforest-0.2');assert.equal(route.enabled,true);
  assert.equal(route.label,'MoonForest 0.3');assert.equal(route.url.searchParams.get('character'),'warrior-plains');
+ // 0.4 is the same edition (shared saves) with the reworked world switched on.
+ const next=releaseRoute('https://test.invalid/game/moonforest-0.4.html');assert.equal(next.edition,route.edition);assert.equal(next.worldRevision,'0.4');assert.equal(route.worldRevision,null);
  const kept=releaseRoute('https://test.invalid/moonforest-0.3.html?character=warrior-v3&release=moonforest-0.1&uiTest=1');
  assert.equal(kept.url.searchParams.get('character'),'warrior-v3');assert.equal(kept.release,'moonforest-0.2');assert.equal(kept.url.searchParams.has('uiTest'),false);
 });

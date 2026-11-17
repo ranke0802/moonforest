@@ -7,6 +7,11 @@ export const MOONFOREST_RELEASE_V2_LABEL='MoonForest 0.2 ver';
 export const MOONFOREST_EDITION_V3='moonforest-0.3';
 export const MOONFOREST_EDITION_V3_LABEL='MoonForest 0.3';
 export const MOONFOREST_EDITION_V3_ENTRY='/moonforest-0.3.html';
+// 0.4 is the same edition (story and saves are shared with 0.3) opened with
+// the reworked world: scenery, time of day and weather. 0.3 stays as it is,
+// so going back is opening the 0.3 address.
+export const MOONFOREST_WORLD_V4_ENTRY='/moonforest-0.4.html';
+export const MOONFOREST_WORLD_V4='0.4';
 const releaseLabels=new Map([[MOONFOREST_RELEASE,MOONFOREST_RELEASE_LABEL],[MOONFOREST_RELEASE_V2,MOONFOREST_RELEASE_V2_LABEL]]);
 export const isMoonforestRelease=value=>releaseLabels.has(value);
 
@@ -24,14 +29,15 @@ export function releaseRoute(href){
   url.searchParams.set('release',MOONFOREST_RELEASE_V2);
   if(!url.searchParams.has('character'))url.searchParams.set('character','warrior-v3');
  }
- const edition=url.pathname.endsWith(MOONFOREST_EDITION_V3_ENTRY)?MOONFOREST_EDITION_V3:null;
+ const worldRevision=url.pathname.endsWith(MOONFOREST_WORLD_V4_ENTRY)?MOONFOREST_WORLD_V4:null;
+ const edition=worldRevision||url.pathname.endsWith(MOONFOREST_EDITION_V3_ENTRY)?MOONFOREST_EDITION_V3:null;
  if(edition){
   url.searchParams.set('release',MOONFOREST_RELEASE_V2);
   if(!url.searchParams.has('character'))url.searchParams.set('character','warrior-plains');
   for(const key of ['uiTest','elenaReview'])url.searchParams.delete(key);
  }
  const release=url.searchParams.get('release');
- return {url,enabled:isMoonforestRelease(release),release:isMoonforestRelease(release)?release:null,edition,label:edition?MOONFOREST_EDITION_V3_LABEL:releaseLabels.get(release)??null};
+ return {url,enabled:isMoonforestRelease(release),release:isMoonforestRelease(release)?release:null,edition,worldRevision,label:edition?MOONFOREST_EDITION_V3_LABEL:releaseLabels.get(release)??null};
 }
 
 export function releaseSelectionUrl(href,value){

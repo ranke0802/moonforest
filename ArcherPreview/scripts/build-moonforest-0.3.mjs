@@ -43,7 +43,7 @@ export async function buildMoonforestV3(){
   pending.push({item,bytes});
  }
  let runtimeGraph;
- await build({root:project,publicDir:publicRoot,plugins:[{name:'verify-moonforest-0.3-runtime',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false,rolldownOptions:{input:{moonforestV3:resolve(project,'moonforest-0.3.html')}}}});
+ await build({root:project,publicDir:publicRoot,plugins:[{name:'verify-moonforest-0.3-runtime',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false,rolldownOptions:{input:{moonforestV3:resolve(project,'moonforest-0.3.html'),moonforestV4:resolve(project,'moonforest-0.4.html')}}}});
  for(const {item,bytes}of pending){const target=deploymentPath(outDir,item.path);await mkdir(dirname(target),{recursive:true});await writeFile(target,bytes);}
  const deploymentFiles=[...reused];let stagedBytes=0;
  async function inventory(directory){

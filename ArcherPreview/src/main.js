@@ -157,6 +157,7 @@ const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
 if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;
+if(versionRoute.worldRevision)document.documentElement.dataset.world=versionRoute.worldRevision;
 let character = uiRoute.character;
 let uiTest=null;
 let commercialUi, hudLayout, developerTools;
