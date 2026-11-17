@@ -213,7 +213,9 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  assert.equal(log.notify({type:'defeat',kind:'bear',map:'great-plains'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M04');
  for(let i=0;i<4;i++)log.notify({type:'defeat',kind:'goblin',map:'village'});assert.equal(log.notify({type:'talk',npc:'youth'}).questDone,'M05');
  assert.equal(log.notify({type:'talk',npc:'driver'}).stepDone,true);assert.equal(log.notify({type:'defeat',kind:'gray-wolf',map:'great-plains'}).changed,false,'only the alpha counts');
- assert.equal(log.notify({type:'defeat',kind:'wolf',map:'great-plains'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M06');assert.equal(log.finished,true);assert.equal(log.objective(),'');
+ assert.equal(log.notify({type:'defeat',kind:'wolf',map:'great-plains'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M06');
+ log.notify({type:'reach',map:'monster-forest'});for(let i=0;i<5;i++)log.notify({type:'defeat',kind:'goblin',map:'monster-forest'});assert.equal(log.notify({type:'reach',map:'witch-cave'}).questDone,'M07');
+ assert.equal(log.notify({type:'defeat',kind:'elena',map:'witch-cave'}).questDone,'M08');assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M09');assert.equal(log.finished,true);assert.equal(log.objective(),'');
  // Data integrity: every referenced dialogue and NPC exists.
  const ids=new Set(NPCS.map(n=>n.id));
  for(const quest of QUESTS)for(const step of quest.steps)if(step.type==='talk')for(const target of step.targets){assert.ok(ids.has(target),target);assert.ok(DIALOGUES[step.dialogues[target]]?.length,step.dialogues[target]);}

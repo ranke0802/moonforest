@@ -10,8 +10,11 @@ export const PROPS=Object.freeze([
 ]);
 // Where to walk to leave a map toward another one (used by the guide light).
 export const ROUTES=Object.freeze({
- 'great-plains':{village:{x:-92.6,z:-34.6}},
- village:{'great-plains':{x:.35,z:74.5}},
+ // Keyed by destination map: indirect destinations name the first exit to take.
+ 'great-plains':{village:{x:-92.6,z:-34.6},'monster-forest':{x:65,z:-72},'witch-cave':{x:65,z:-72}},
+ village:{'great-plains':{x:.35,z:74.5},'monster-forest':{x:.35,z:74.5},'witch-cave':{x:.35,z:74.5}},
+ 'monster-forest':{'great-plains':{x:0,z:51},village:{x:0,z:51},'witch-cave':{x:28,z:-41}},
+ 'witch-cave':{'monster-forest':{x:-46,z:47},'great-plains':{x:-46,z:47},village:{x:-46,z:47}},
 });
 export const NPCS=Object.freeze([
  {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-65.6,z:-23.6,yaw:.6,idle:'driver-idle'},
@@ -94,6 +97,17 @@ export const DIALOGUES=Object.freeze({
   {who:'나',text:"그놈의 목에도 보랏빛 쇠붙이가 있었습니다. 곰과 같은 것이었어요."},
   {who:'촌장',text:"…누군가 짐승들을 몰아붙이고 있다는 거로군. 숲 안쪽, 마물의 숲으로 가 보게. 답은 거기 있을 걸세."},
  ],
+ 'forest-camp':[
+  {who:'나',text:'(나무 사이로 연기가 오른다. 고블린 야영지다.)'},
+  {who:'나',text:'(목책을 넘던 놈들도 여기서 왔겠지.)'},
+ ],
+ 'inn-ending':[
+  {who:'여관 주인',text:'…돌아왔군. 그 얼굴을 보니, 찾던 걸 찾은 모양이야.'},
+  {who:'나',text:'성녀 엘레나는… 동굴 깊은 곳에 있었습니다. 더는 사람이 아니었어요.'},
+  {who:'여관 주인',text:'…그렇군. 그 아이가 이 여관에 묵던 마지막 밤, 요아힘이 문 앞을 지켰지.'},
+  {who:'여관 주인',text:'그 방은 그대로 두었네. 일지 한 권이 남아 있을 걸세. 읽을지 말지는 자네 몫이야.'},
+  {who:'나',text:'(받은 것은 기억하고, 준 것은 기억하지 못하는 마을. 그녀가 남긴 것을 읽어야 한다.)'},
+ ],
  'chief-idle':[{who:'촌장',text:'목책 고칠 일손이 모자라. 힘 좀 쓰는 사람이면 언제든 환영이네.'}],
  'elder-witness':[
   {who:'노년 여성',text:'엘레나? 아이고, 그 아이 덕에 이 다리로 다시 걷는다오. 밤새 내 곁을 지켰지.'},
@@ -148,8 +162,19 @@ export const QUESTS=Object.freeze([
   {id:'alpha',text:'숲 어귀의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:50,z:-48,radius:9},summon:{kind:'wolf',count:1},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-alpha'}},
  ]},
+ {id:'M07',reward:{gold:200,potions:1},title:'마물의 숲',steps:[
+  {id:'forest',text:'평원 동쪽 끝에서 마물의 숲으로 들어가기',type:'reach',map:'monster-forest'},
+  {id:'goblins',text:'숲의 고블린 야영지 쓸어내기',type:'defeat',kind:'goblin',count:5,map:'monster-forest',at:{x:14,z:2,radius:10},summon:{kind:'goblin',count:5},intro:'forest-camp',arrival:'고블린 야영지다!'},
+  {id:'cave',text:'숲 깊은 곳의 동굴로 들어가기',type:'reach',map:'witch-cave'},
+ ]},
+ {id:'M08',reward:{gold:300},title:'타락의 성소',steps:[
+  {id:'saint',text:'동굴 깊은 곳의 성녀와 마주하기',type:'defeat',kind:'elena',count:1,map:'witch-cave'},
+ ]},
+ {id:'M09',reward:{gold:100},title:'남겨진 방',steps:[
+  {id:'report',text:'여관 주인에게 돌아가기',type:'talk',targets:['innkeeper'],turnIn:true,dialogues:{innkeeper:'inn-ending'}},
+ ]},
 ]);
-export const CHAPTER_END_NOTE='다음 이야기 · 마물의 숲';
+export const CHAPTER_END_NOTE='1장 끝 · 다음 이야기 · 엘레나의 일지';
 
 // First-fight coaching, in order. Each line stays until the player has done it.
 // done: moved (metres) · camera (radians turned) · states (controller states)
