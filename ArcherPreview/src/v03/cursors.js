@@ -32,15 +32,17 @@ export function cursorCss(art=CURSOR_ART){
 export function createCursors(doc){
  const html=doc.documentElement,style=doc.createElement('style');
  style.dataset.v03Cursors='';style.textContent=cursorCss();doc.head.append(style);
- let mode=null,turning=false;
+ // Off until enable(): the first-launch language picker keeps the system cursor.
+ let mode=null,turning=false,enabled=false;
  const down=event=>{if(event.button===2&&event.target?.tagName==='CANVAS'){turning=true;apply();}};
  const up=event=>{if(turning&&(event.type!=='pointerup'||event.button===2)){turning=false;apply();}};
  doc.addEventListener('pointerdown',down,true);doc.addEventListener('pointerup',up,true);doc.defaultView?.addEventListener?.('blur',up);
  let wanted='ui';
- function apply(){const next=turning&&wanted!=='ui'?'camera':wanted;if(next!==mode){mode=next;html.dataset.v03Cursor=next;}}
+ function apply(){if(!enabled)return;const next=turning&&wanted!=='ui'?'camera':wanted;if(next!==mode){mode=next;html.dataset.v03Cursor=next;}}
  apply();
  return {
   set(next){wanted=next;apply();},
+  enable(){if(enabled)return;enabled=true;apply();},
   get mode(){return mode;},
   dispose(){doc.removeEventListener('pointerdown',down,true);doc.removeEventListener('pointerup',up,true);doc.defaultView?.removeEventListener?.('blur',up);style.remove();delete html.dataset.v03Cursor;},
  };

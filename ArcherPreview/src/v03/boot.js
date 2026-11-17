@@ -30,6 +30,8 @@ export function setupV03(api){
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
  const cursors=createCursors(doc);
+ // Game cursors start after the splash (and its language picker) is done.
+ void Promise.resolve(view?.__moonforestSplash?.done).then(()=>{if(!state.disposed)cursors.enable();});
  // Language: chosen on the first launch (inline splash) or in Settings, kept
  // across editions in localStorage. Story text is laid over a copy of the
  // chapter data once the language pack has loaded; nothing player-facing
