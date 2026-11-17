@@ -8,7 +8,10 @@
 import {scatterCell,meadowCells,MEADOW_CELL,TUFT_STRIDE} from './meadow-scatter.js';
 import {deriveDetailMesh} from './detail-lod.js';
 
-export const MEADOW=Object.freeze({nearTriangles:210,farTriangles:28,nearRange:34,thinRange:95,farShare:.8,thinShare:.4,switchSeconds:.2,hysteresis:3,slope:.38});
+// Measured on the plains (PC, 0.4): a 201-triangle near copy within 34 m put
+// 1.34 M triangles on screen by the stream; 84 triangles within 26 m reads the
+// same from the play camera.
+export const MEADOW=Object.freeze({nearTriangles:84,farTriangles:24,nearRange:26,thinRange:90,farShare:.7,thinShare:.35,switchSeconds:.2,hysteresis:3,slope:.38});
 
 export function createMeadow(world,{tuft,spec,amount=1,now=()=>performance.now()}){
  const scene=world.scene,near=deriveDetailMesh(tuft,MEADOW.nearTriangles,'meadow-near'),far=deriveDetailMesh(tuft,MEADOW.farTriangles,'meadow-far');
@@ -30,14 +33,17 @@ export function createMeadow(world,{tuft,spec,amount=1,now=()=>performance.now()
   return mesh;
  }
  function build(entry){
-  const started=now(),data=scatterCell(entry.cx,entry.cz,{density:spec.density,tall:spec.tall,amount}),total=data.length/TUFT_STRIDE;
+  const started=now(),reach=MEADOW_CELL*.71,data=scatterCell(entry.cx,entry.cz,{sample:spec.sampler(entry.x,entry.z,reach),amount}),total=data.length/TUFT_STRIDE;
+  // Solid scenery near this cell (rocks, trunks, walls): tufts keep out.
+  const solids=[];for(const o of world.navigation?.obstacles??[])if(Number.isFinite(o.radius)&&(o.x-entry.x)**2+(o.z-entry.z)**2<(reach+o.radius+.5)**2)solids.push(o.x,o.z,(o.radius+.1)**2);
   const matrices=new Float32Array(total*16);let count=0;
   for(let i=0;i<total;i++){
    const x=data[i*TUFT_STRIDE],z=data[i*TUFT_STRIDE+1],width=data[i*TUFT_STRIDE+2],yaw=data[i*TUFT_STRIDE+3],stretch=data[i*TUFT_STRIDE+4];
    const y=height(x,z);
-   // Keep off cliffs and out of rocks, trunks and walls.
+   // Keep off cliffs.
    if(Math.abs(height(x+.4,z)-y)>MEADOW.slope||Math.abs(height(x,z+.4)-y)>MEADOW.slope)continue;
-   if(world.navigation?.free&&!world.navigation.free({x,z},.12,Infinity))continue;
+   let blocked=false;for(let k=0;k<solids.length;k+=3)if((solids[k]-x)**2+(solids[k+1]-z)**2<solids[k+2]){blocked=true;break;}
+   if(blocked)continue;
    const c=Math.cos(yaw)*width,s=Math.sin(yaw)*width,o=count*16;
    matrices[o]=c;matrices[o+2]=-s;matrices[o+5]=width*stretch;matrices[o+8]=s;matrices[o+10]=c;matrices[o+12]=x;matrices[o+13]=y-.02;matrices[o+14]=z;matrices[o+15]=1;
    count++;
