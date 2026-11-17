@@ -338,6 +338,24 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')start=true;slow.foes.set(foe,mode);}
   if(start&&first)slow.left=SLOW_SECONDS;
  }
+ // ----- light combat (M3 prototype: Genshin-like) -----
+ // Taps chain three hits (slash → thrust → judgment finisher at half stamina);
+ // a shield raised within JUST_WINDOW before contact is a just guard: longer
+ // enemy stagger, stamina back, a short slow-motion beat.
+ const COMBAT_COMBO=Object.freeze(['slash','attack','judgment']),COMBO_COST=Object.freeze({judgment:15});
+ const JUST_WINDOW=.25,JUST_STAGGER=1.6,JUST_REFUND=20,JUST_SLOW=.4;
+ const combatState={controller:null,combat:null,justCount:0};
+ function configureCombat(){
+  const controller=api.getController?.();
+  if(controller&&controller!==combatState.controller&&'combo' in controller){controller.combo=COMBAT_COMBO;controller.comboCost=COMBO_COST;combatState.controller=controller;}
+  const combat=api.battle?.combat;
+  if(combat&&combat!==combatState.combat){combat.justGuard={window:JUST_WINDOW,stagger:JUST_STAGGER};combat.onJustGuard=justGuard;combatState.combat=combat;}
+ }
+ function justGuard(){
+  combatState.justCount++;slow.left=Math.max(slow.left,JUST_SLOW);
+  const controller=api.getController?.();if(controller&&Number.isFinite(controller.stamina))controller.stamina=Math.min(controller.maxStamina??100,controller.stamina+JUST_REFUND);
+  hud.flash(t('combat.justGuard'));api.playSound?.('charge_ready',{volume:.45,rate:1.25});
+ }
  // ----- first-fight tutorial -----
  // Each lesson allows only its own action (main.js asks allows()), the wolf
  // plays its part (holds still, charges for the dodge lesson, snaps for the
@@ -457,9 +475,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
      hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:markFor(near.npc.id),label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name})});
     }else hud.setPrompt(null);
    }
-   coach(dt);updateSlow(dt);contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
+   coach(dt);updateSlow(dt);configureCombat();contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
-  inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null}),
+  inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
   dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }

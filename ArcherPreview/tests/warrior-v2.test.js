@@ -159,3 +159,13 @@ test('defense still interrupts other actions and accepts a different defense',()
  assert.equal(c.shieldPush(),true);assert.equal(c.action.state,'shieldPush');
  assert.equal(c.dodge(),true);assert.equal(c.action.state,'dodge');
 });
+
+test('an edition can chain three taps and discount the finisher stamina',()=>{
+ const c=new WarriorV2Controller({durations,speeds:{run:4.4371}});c.setAttackSpeed(1/V2_ATTACK_BASE_RATE);
+ c.combo=['slash','attack','judgment'];c.comboCost={judgment:15};
+ const seen=[];
+ for(let i=0;i<4;i++){tap(c);seen.push(c.action?.state);while(c.action)c.update(.05);}
+ assert.deepEqual(seen,['slash','attack','judgment','slash']);
+ // 10 + 10 + 15 + 10 spent, with regeneration only in the short gaps.
+ assert.ok(c.stamina>100-45-1&&c.stamina<100,'finisher costs 15, not 30: '+c.stamina);
+});

@@ -23,7 +23,7 @@ export default {
   'opening.4':'“Find that child.”',
   'scene.protect':'Protect the driver',
   'rotate.title':'Please turn your device sideways','rotate.tap':'Tap to switch to fullscreen landscape.','rotate.ios':'The game plays in landscape. Add it to your Home Screen to play fullscreen without browser bars.','ios.add':'Add to Home Screen','ios.step1':'Tap the Share button (□↑) in Safari.','ios.step2':"Choose 'Add to Home Screen'.",'ios.step3':'Launch MoonForest from the Home Screen and turn your device sideways.',
-  'hud.main':'Main','hud.chapterNext':'The story continues','reward.got':'Reward · {items}','reward.gold':'{n} G','reward.potions':'{n} Healing Potion(s)','reward.armor.leather':'Leather Armor (Defense +2)','hud.complete':'Complete · {done}','hud.completeNext':'Complete · {done}  →  {next}','hud.rested':'Rested · Journey recorded',
+  'hud.main':'Main','hud.chapterNext':'The story continues','reward.got':'Reward · {items}','reward.gold':'{n} G','reward.potions':'{n} Healing Potion(s)','reward.armor.leather':'Leather Armor (Defense +2)','combat.justGuard':'Just Guard!','hud.complete':'Complete · {done}','hud.completeNext':'Complete · {done}  →  {next}','hud.rested':'Rested · Journey recorded',
   'prompt.actionQuest':'Talk','prompt.actionIdle':'Chat',
   'prompt.talkQuest':'Talk to {name}','prompt.talkIdle':'Speak to {name}',
  },

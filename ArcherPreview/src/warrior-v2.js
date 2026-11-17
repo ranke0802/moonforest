@@ -32,15 +32,16 @@ export class WarriorV2Controller {
     this.sprintRecord={sprintSeconds:0,idleSeconds:0,allowRestore:false};
     this.motionSpeeds={...V2_MOTION_DEFAULTS};
     this.walkSpeedFactor=1;this.sprintSpeedFactor=V2_SPRINT_MULTIPLIER;
+    // Tap chain and per-step stamina override (an edition may lengthen the chain).
+    this.combo=V2_COMBO;this.comboCost=null;
   }
   setMovementSpeed({walk=1,sprint=V2_SPRINT_MULTIPLIER}={}){this.walkSpeedFactor=Number.isFinite(walk)?Math.max(.5,Math.min(2,walk)):1;this.sprintSpeedFactor=Number.isFinite(sprint)?Math.max(.5,Math.min(3,sprint)):V2_SPRINT_MULTIPLIER;}
   setAttackSpeed(value){this.attackSpeed=normalizeAttackSpeed(value)*V2_ATTACK_BASE_RATE;}
   setMotionSpeed(state,value){if(state in this.motionSpeeds)this.motionSpeeds[state]=normalizeAttackSpeed(value);}
   playbackRate(state){return (this.motionSpeeds[state]??1)*(V2_ATTACKS.includes(state)?this.attackSpeed:1);}
-  canSpendStamina(kind){return !this.staminaEnabled||this.stamina+1e-8>=(V2_STAMINA_COST[kind]??0);}
-  spendStamina(kind){
-    if(!this.canSpendStamina(kind)){this.staminaRejectSerial++;return false;}
-    const cost=V2_STAMINA_COST[kind]??0;
+  canSpendStamina(kind,cost=V2_STAMINA_COST[kind]??0){return !this.staminaEnabled||this.stamina+1e-8>=cost;}
+  spendStamina(kind,cost=V2_STAMINA_COST[kind]??0){
+    if(!this.canSpendStamina(kind,cost)){this.staminaRejectSerial++;return false;}
     if(this.staminaEnabled&&cost){this.stamina=Math.max(0,this.stamina-cost);this.staminaSpent=true;}
     return true;
   }
@@ -63,8 +64,8 @@ export class WarriorV2Controller {
   }
   startAttack(kind) {
     if(this.captured||this.knockedDown||this.groggy||this.shieldPending||this.guarding)return false;
-    const normal=kind==null;kind??=V2_COMBO[this.attackIndex%V2_COMBO.length];
-    if(!this.spendStamina(kind))return false;
+    const normal=kind==null;kind??=this.combo[this.attackIndex%this.combo.length];
+    if(!this.spendStamina(kind,normal?this.comboCost?.[kind]:undefined))return false;
     if(normal)this.attackIndex++;
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
     return true;
@@ -245,7 +246,7 @@ export class WarriorV2Controller {
       if(alive&&this.action.state==='judgment')this.restoreJudgmentRecovery(this.action.time,Math.min(this.durations.judgment,this.action.time+dt*rate),rate);
       if(rolling)rollTo=Math.min(this.durations.dodge,this.action.time+dt*rate);
       if(dt<left){this.action.time+=dt*rate;idleDt=0;}
-      else {idleDt=dt-left;this.comboRemaining=V2_COMBO.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
+      else {idleDt=dt-left;this.comboRemaining=this.combo.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
     }
     if(!this.action&&this.queuedAttack&&!this.shieldHeld){
       const kind=this.queuedAttack;this.queuedAttack=null;

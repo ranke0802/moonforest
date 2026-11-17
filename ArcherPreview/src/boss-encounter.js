@@ -495,6 +495,13 @@ export class BossEncounter {
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     if(shieldContact||casting){
       this.brain.parry();this.lastHit='블록 · 보스 1초 경직';
+      // Optional just guard (an edition sets combat.justGuard): a shield raised
+      // just before contact staggers the attacker longer and is reported once.
+      const just=this.combat.justGuard,elapsed=action?.actionElapsed;
+      if(just&&casting&&Number.isFinite(elapsed)&&elapsed<=just.window){
+        if(Number.isFinite(this.brain.stagger))this.brain.stagger=Math.max(this.brain.stagger,just.stagger??0);
+        this.lastHit='저스트 가드';try{this.combat.onJustGuard?.(this);}catch(error){console.warn('[just guard]',error);}
+      }
       if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45,recoil:false});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
       this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'BLOCK',false,'block');this.onChange(this);
