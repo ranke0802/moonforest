@@ -67,9 +67,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const step=log.step();if(!step||api.battle.combatCount>0&&step.type!=='defeat')return null;
   if(step.type==='defeat'){
    if(step.map&&step.map!==mapId){const exit=content.ROUTES?.[mapId]?.[step.map];if(!exit)return null;guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};}
+   if(step.at&&!livingFoe(step.kind)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
    // Lead toward the nearest living foe, stopping short of it.
    let best=null,bestSq=Infinity;
-   for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0))continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
+   for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
    if(!best||bestSq<16)return null;
    guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',direct:true,stopShort:2.6};
   }
@@ -90,6 +91,32 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};
   }
   return null;
+ }
+ const livingFoe=kind=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain?.hp>0&&(!kind||(foe.summonKind??foe.kind)===kind));
+ // Story fights: a defeat step with {at,summon} calls its foes once the player
+ // is inside the spot, and again after a retreat or death left none alive.
+ const staged={key:null,busy:false,next:0,introduced:new Set()};
+ function stageFight(player){
+  const step=log.step(),quest=log.quest();
+  if(!step?.summon||step.type!=='defeat'||step.map!==mapId||!player||staged.busy||talking||dialogue.open)return;
+  const key=quest.id+'/'+step.id;
+  if(livingFoe(step.kind)){staged.key=key;return;}
+  if(api.battle.loading||api.battle.combatCount>0||guide.time<staged.next)return;
+  if((step.at.x-player.x)**2+(step.at.z-player.z)**2>step.at.radius**2)return;
+  staged.busy=true;
+  void (async()=>{
+   try{
+    if(step.intro&&!staged.introduced.has(key)&&content.DIALOGUES[step.intro]){
+     staged.introduced.add(key);talking=true;api.input.setSuspended(true);
+     try{await dialogue.play(content.DIALOGUES[step.intro]);}finally{talking=false;if(!disposed)api.input.setSuspended(false);}
+    }
+    if(disposed||log.step()!==step)return;
+    const left=Math.max(1,step.summon.count-log.snapshot().count);
+    const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind);
+    if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
+   }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}
+   finally{staged.busy=false;staged.key=key;staged.next=guide.time+4;}
+  })();
  }
  function updateGuide(dt,player){
   guide.time+=dt;
@@ -250,7 +277,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     near=api.battle.combatCount>0?null:best;
     hud.setPrompt(near?`${touch?'':'E · '}${log.isTarget(near.npc.id)?particle(near.npc.name,'과','와')+' 이야기하기':near.npc.name+'에게 말 걸기'}`:null);
    }
-   coach(dt);contextTips();runTips(dt);updateGuide(dt,player);updateMarkers();
+   coach(dt);contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
   inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null}),
   dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},

@@ -58,6 +58,22 @@ export const DIALOGUES=Object.freeze({
   {who:'촌장',text:'…하지만 곰은 사람을 그렇게 찢지 않아. 그 이상은 나도 모르네.'},
   {who:'나',text:'(곰. 모두가 같은 이름을 말한다. 그런데 본 사람은 아무도 없다.)'},
  ],
+ 'chief-bear':[
+  {who:'촌장',text:'곰을…? 자네 혼자서?'},
+  {who:'나',text:'목에 보랏빛 쇠붙이가 박혀 있었습니다. 누가 일부러 채운 것처럼.'},
+  {who:'촌장',text:'…요아힘도 같은 말을 했었지. 짐승들 눈빛이 이상하다고. 그 말을 아무도 믿지 않았네.'},
+  {who:'촌장',text:'숲 쪽에서 고블린들이 내려온다는 소문도 있네. 오늘 밤은 목책을 지켜 주게.'},
+ ],
+ 'raid-start':[
+  {who:'청년',text:'고블린이에요! 목책 쪽으로 몰려와요!'},
+  {who:'나',text:'(마을 안으로 들이면 안 된다.)'},
+ ],
+ 'youth-goblin':[
+  {who:'청년',text:'막아냈어요… 근데 저것들, 그냥 고블린이 아니에요. 덩치 큰 놈이 뒤에서 지휘하는 걸 봤어요.'},
+  {who:'청년',text:'홉고블린이요. 요아힘 형이 마지막으로 나갔던 날도, 숲에서 그놈 얘기를 했었어요.'},
+  {who:'청년',text:'형은 곰한테 죽은 게 아니에요. 숲에, 마물의 숲에 뭔가 있어요.'},
+  {who:'나',text:'(보랏빛 쇠붙이, 홉고블린, 그리고 숲. 성녀가 사라진 길도 그쪽일 것이다.)'},
+ ],
  'chief-idle':[{who:'촌장',text:'목책 고칠 일손이 모자라. 힘 좀 쓰는 사람이면 언제든 환영이네.'}],
  'elder-witness':[
   {who:'노년 여성',text:'엘레나? 아이고, 그 아이 덕에 이 다리로 다시 걷는다오. 밤새 내 곁을 지켰지.'},
@@ -80,7 +96,7 @@ export const DIALOGUES=Object.freeze({
  'youth-idle':[{who:'청년',text:'목책이 또 무너졌어요. 다음 습격 전에 고쳐야 하는데.'}],
 });
 
-// Step types: defeat {kind,count,map} · turnIn marks a report (! instead of ?) · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
+// Step types: defeat {kind,count,map,at,summon,intro,arrival} (at: lead there; summon once the player is inside) · turnIn marks a report (! instead of ?) · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
 export const QUESTS=Object.freeze([
  {id:'M00',title:'늑대와 마차',steps:[
   {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
@@ -99,8 +115,16 @@ export const QUESTS=Object.freeze([
   {id:'hunt',text:'대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
+ {id:'M04',title:'대평원의 곰',steps:[
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-60,z:-60,radius:13},summon:{kind:'bear',count:1},arrival:'대평원의 곰이 모습을 드러냈다'},
+  {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-bear'}},
+ ]},
+ {id:'M05',title:'마을을 습격한 고블린',steps:[
+  {id:'raid',text:'목책에서 고블린 막아내기',type:'defeat',kind:'goblin',count:4,map:'village',at:{x:0,z:28,radius:11},summon:{kind:'goblin',count:4},intro:'raid-start',arrival:'고블린 습격!'},
+  {id:'report',text:'청년과 이야기하기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'youth-goblin'}},
+ ]},
 ]);
-export const CHAPTER_END_NOTE='다음 이야기 · 대평원의 곰';
+export const CHAPTER_END_NOTE='다음 이야기 · 마물의 숲';
 
 // First-fight coaching, in order. Each line stays until the player has done it.
 // done: moved (metres) · camera (radians turned) · states (controller states)
@@ -117,6 +141,7 @@ export const COMBAT_HINTS=Object.freeze([
 export const TIPS=Object.freeze([
  {id:'guide',when:'step:M00/fight',title:'길잡이 빛',keys:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',touch:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',text:'어디로 갈지 모를 때는 빛을 따라가세요.'},
  {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 동안에도 움직일 수 있습니다.'},
+ {id:'boss',when:'step:M04/bear',title:'큰 짐승',keys:'몸을 크게 젖히면 강한 공격이 옵니다. Space로 피하거나 F를 길게 눌러 막으세요.',touch:'몸을 크게 젖히면 강한 공격이 옵니다. 장화 버튼으로 피하거나 방패 버튼을 길게 눌러 막으세요.',text:'공격이 끝난 직후가 반격할 때입니다.'},
  {id:'charge',when:'step:M00/driver',title:'강공격',keys:'공격(J · 좌클릭)을 길게 누르면 심판의 검을 내려칩니다.',touch:'검 버튼을 길게 누르면 심판의 검을 내려칩니다.',text:'느리지만 강합니다. 빈틈이 보일 때 쓰세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
  {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 왼쪽 목표와 오른쪽 위 지도를 따라가세요.'},
