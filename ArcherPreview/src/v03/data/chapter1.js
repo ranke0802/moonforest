@@ -85,7 +85,7 @@ export const DIALOGUES=Object.freeze({
  ],
  'driver-alpha':[
   {who:'마부',text:"오, 자네로군! 마을 쪽 소식은 들었네. 고블린까지 막아냈다며?"},
-  {who:'마부',text:"그런데 큰일일세. 숲 어귀 쉼터 쪽에 우두머리 늑대가 나타났어. 덩치가 곰만 하다네."},
+  {who:'마부',text:"그런데 큰일일세. 초원 한가운데에 우두머리 늑대가 무리를 끌고 나타났어. 덩치가 곰만 하다네."},
   {who:'마부',text:"그놈이 무리를 몰고 다니는 한 마차는 한 발짝도 못 움직여. 부탁하네."},
   {who:'나',text:"(무리를 이끄는 놈. 짐승들이 사나워진 이유도 그쪽에 있을지 모른다.)"},
  ],
@@ -150,7 +150,7 @@ export const QUESTS=Object.freeze([
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
  {id:'M04',reward:{gold:120,armor:'leather'},title:'대평원의 곰',steps:[
-  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-28.5,z:-19.5,radius:8},summon:{kind:'bear',count:1,tune:{hp:650,damage:.7}},arrival:'대평원의 곰이 모습을 드러냈다'},
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},summon:{kind:'bear',count:1,after:8,tune:{hp:650,damage:.7}},arrival:'대평원의 곰이 모습을 드러냈다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-bear'}},
  ]},
  {id:'M05',reward:{gold:150,potions:2},title:'마을을 습격한 고블린',steps:[
@@ -159,7 +159,7 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M06',reward:{gold:250},title:'우두머리 늑대',steps:[
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-alpha'}},
-  {id:'alpha',text:'숲 어귀의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:50,z:-48,radius:9},summon:{kind:'wolf',count:1},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
+  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28},summon:{kind:'wolf',count:1,after:8},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-alpha'}},
  ]},
  {id:'M07',reward:{gold:200,potions:1},title:'마물의 숲',steps:[

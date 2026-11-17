@@ -21,7 +21,9 @@ export function readPlainsViewDistance(storage){
 export function plainsRenderRange(world,touch=world.touchDevice){
   const cinematic=cinematicSceneryRange(world,touch);if(cinematic)return cinematic;
   const base=villageRenderRange(touch);
-  if(world.mapId!=='great-plains')return base;
+  // Frame guard (touch): the village may pull its range in a little.
+  const guard=world.mapId==='village'&&world.adaptiveRangeScale>0&&world.adaptiveRangeScale<1?world.adaptiveRangeScale:1;
+  if(world.mapId!=='great-plains')return guard===1?base:{...base,fogStart:base.fogStart*guard,fogEnd:base.fogEnd*guard,cellCull:base.cellCull*guard,meshCull:base.meshCull*guard};
   const scale=normalizePlainsViewDistance(world.plainsViewDistance);
   if(scale===1)return base;
   return {...base,fogStart:base.fogStart*scale,fogEnd:base.fogEnd*scale,cellCull:base.cellCull*scale,meshCull:base.meshCull*scale};
@@ -31,6 +33,16 @@ export function applyPlainsViewDistance(world,value){
   if(!world)return;
   world.plainsViewDistance=normalizePlainsViewDistance(value);
   if(world.mapId!=='great-plains'||world.villageOverview)return;
+  const range=plainsRenderRange(world);
+  world.scene.fogStart=range.fogStart;world.scene.fogEnd=range.fogEnd;
+  if(world.villageVisibility)world.villageVisibility.timer=0;
+  world.villageStreaming?.demand?.invalidate();
+}
+// Frame guard: scale the village render range (1 = authored range).
+export function applyAdaptiveRange(world,scale,force=false){
+  if(!world||(!force&&world.adaptiveRangeScale===scale)||(force&&scale===1&&!(world.adaptiveRangeScale<1)))return;
+  world.adaptiveRangeScale=scale;
+  if(world.mapId!=='village'||world.villageOverview)return;
   const range=plainsRenderRange(world);
   world.scene.fogStart=range.fogStart;world.scene.fogEnd=range.fogEnd;
   if(world.villageVisibility)world.villageVisibility.timer=0;

@@ -122,7 +122,7 @@ import {inspectMapNavigationCache} from './map-navigation-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import {setupFrameRateControl} from './frame-rate-settings.js';
 import {setupRenderScaleControl,renderResolutionSnapshot} from './render-scale-settings.js';
-import {setupPlainsViewDistanceControl,applyPlainsViewDistance,plainsRenderRange} from './plains-view-distance.js';
+import {setupPlainsViewDistanceControl,applyPlainsViewDistance,applyAdaptiveRange,plainsRenderRange} from './plains-view-distance.js';
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
@@ -206,10 +206,12 @@ function assertFrameHealthy(){
 const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
 // Touch devices: hold the frame cap by trading resolution, view distance and shadows.
-const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition});
+const ADAPTIVE_LEVEL_KEY='moonforest-adaptive-level-v1';
+let adaptiveStoredLevel=0;try{adaptiveStoredLevel=Number(globalThis.localStorage?.getItem(ADAPTIVE_LEVEL_KEY))||0;}catch{/* storage optional */}
+const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition,level:adaptiveStoredLevel});
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
 function applyAdaptiveShadows(){if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
-function applyAdaptivePerformance(){applyRenderQuality();if(world)applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveShadows();}
+function applyAdaptivePerformance(){try{globalThis.localStorage?.setItem(ADAPTIVE_LEVEL_KEY,String(adaptivePerformance.level));}catch{/* storage optional */}applyRenderQuality();if(world){applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale);}applyAdaptiveShadows();}
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
@@ -1058,7 +1060,7 @@ try {
         setReady:value=>{ready=value;updateButtons();},resetInput:()=>{input?.reset();cancelAttackInput();},reconcile:()=>reconcilePlayback()},options);
     };
   }
-  applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));
+  applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale,true);
   setupCaveStoryInspection({world,getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,combat:(boss?.combatCount??0)>0,busy:controller?.captured||controller?.groggy}),onOpen:()=>{input?.reset();cancelAttackInput();}});
   world.caveCamera=new CaveCameraGuard(world);
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
@@ -1164,7 +1166,7 @@ try {
       const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url),loadingGeneration=mapLoadingGeneration;
       url.searchParams.delete('elenaReview');
       url.searchParams.delete('waypoint');
-      replaceWorldMap(world,destination);applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveShadows();character=destination;history.replaceState(null,'',url);
+      replaceWorldMap(world,destination);applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale,true);applyAdaptiveShadows();character=destination;history.replaceState(null,'',url);
       const handoff=context?.boundary?.to===destination?context.boundary:null;
       const spawn=handoff?.position??waypoint?.position??mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
       syncCaveFog(true);

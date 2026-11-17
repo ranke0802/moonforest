@@ -1,20 +1,24 @@
 // Frame-rate guard for touch devices. Watches the real frame interval and,
 // when the device cannot hold its target, steps down (in order) the 3D render
-// resolution, the plains view distance and finally the shadow map. It steps
+// plains view distance, the shadow map and the 3D render resolution. It steps
 // back up after a long calm stretch; a level that drops again soon after a
 // step up becomes the floor for the session. Pure logic: main.js applies it.
 export const ADAPTIVE_LEVELS=Object.freeze([
- Object.freeze({scale:1,viewCap:null,shadows:true}),
- Object.freeze({scale:.88,viewCap:null,shadows:true}),
- Object.freeze({scale:.8,viewCap:1.8,shadows:true}),
- Object.freeze({scale:.72,viewCap:1.4,shadows:true}),
- Object.freeze({scale:.66,viewCap:1.2,shadows:false}),
+ Object.freeze({scale:1,viewCap:null,rangeScale:1,shadows:true}),
+ // The 2026-11-17 phone recording was CPU-bound (active-mesh selection and
+ // draw submission, 1.0–1.5 M triangles on the plains), so the view distance
+ // and the shadow pass go first; resolution follows for the GPU.
+ Object.freeze({scale:1,viewCap:1.8,rangeScale:1,shadows:true}),
+ Object.freeze({scale:.9,viewCap:1.4,rangeScale:1,shadows:true}),
+ Object.freeze({scale:.85,viewCap:1.2,rangeScale:.9,shadows:false}),
+ Object.freeze({scale:.75,viewCap:1,rangeScale:.8,shadows:false}),
 ]);
 const WINDOW_MS=2000,CALM_MS=20000,PROBE_MS=8000;
 
 export class AdaptivePerformance {
- constructor({enabled=true,now=()=>performance.now()}={}){
-  this.enabled=enabled;this.now=now;this.level=0;this.floor=0;this.calm=0;this.probeAt=null;this.changes=0;this.reset();
+ constructor({enabled=true,now=()=>performance.now(),level=0}={}){
+  // level: where the previous session settled (the caller persists it).
+  this.enabled=enabled;this.now=now;this.level=enabled&&Number.isInteger(level)?Math.min(ADAPTIVE_LEVELS.length-1,Math.max(0,level)):0;this.floor=0;this.calm=0;this.probeAt=null;this.changes=0;this.reset();
  }
  get settings(){return ADAPTIVE_LEVELS[this.level];}
  reset(){this.sum=0;this.count=0;this.slow=0;this.elapsed=0;}

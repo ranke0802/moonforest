@@ -69,6 +69,7 @@ export function bossSpawnPositions(player, value, {radius=.7,separationRadius=.8
 
 export function separateBosses(encounters,grabOwner,workspace){return separateEnemies(encounters,grabOwner,workspace);}
 
+const FAR_UPDATE_DISTANCE=45;
 export class BossBattle {
   constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, wolfModels, regularWolfModels={}, elenaModels, mourningModels, onDefeat=()=>{},onDiagnosticEvent=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
@@ -304,7 +305,9 @@ export class BossBattle {
     if(!['bear','goblin','wolf','elena','mourning-elena'].includes(kind)&&!(this.world.release==='moonforest-0.2'&&isRegularWolf(kind)))throw new RangeError('Unknown summon kind: '+kind);
     const regular=isRegularWolf(kind)?this.regularWolves[kind]:null;
     const phase=kind==='mourning-elena'?2:kind==='elena'?1:null;
-    const matches=b=>phase?b.kind==='elena'&&b.phase===phase:(b.summonKind??b.kind)===kind;
+    // Map residents placed by the population (developmentActor) are not part
+    // of a manual summon: replacing them would orphan a visible, frozen actor.
+    const matches=b=>!b.developmentActor&&(phase?b.kind==='elena'&&b.phase===phase:(b.summonKind??b.kind)===kind);
     const others=this.encounters.filter(b=>!matches(b));
     const request = ++this.revision, count = normalizeBossCount(value);
     const models=regular?regular.models:phase===2?this.mourningModels:phase===1?this.elenaModels:kind==='wolf'?this.wolfModels:kind==='goblin'?this.goblinModels:this.models,pool=regular?regular.pool:phase===2?this.mourningPool:phase===1?this.elenaPool:kind==='wolf'?this.wolfPool:kind==='goblin'?this.goblinPool:this.pool,radius=regular?regularWolfSize(kind).radius:phase===2?MOURNING_SIZE.radius:phase===1?ELENA_SIZE.radius:kind==='wolf'?WOLF_BALANCE.radius:kind==='goblin'?.34:bearEncounterSize(this.world)?.radius??.7;
@@ -413,12 +416,28 @@ export class BossBattle {
     this.combat.update(dt, player, this.onDamage);
     this.updating = true;
     const updateToken=this.motionToken,generation=++updateToken.generation;
-    for (const boss of this.encounters){boss._battleUpdateToken=updateToken;try{boss.update(dt, player);}finally{boss._battleUpdateToken=null;}}
+    // Optional far-actor update rate (an edition sets farUpdateInterval>1):
+    // a living foe that is neither drawn (outside the render range) nor near
+    // the player thinks and animates every Nth frame with the summed time.
+    // Nothing visible changes; the AI sees the same elapsed seconds.
+    const interval=this.farUpdateInterval>1?Math.floor(this.farUpdateInterval):1,frame=this.farUpdateFrame=(this.farUpdateFrame??0)+1;let slot=0;
+    for (const boss of this.encounters){
+      let step=dt;slot++;
+      const far=boss._far=interval>1&&boss.active&&boss.renderVisible===false&&boss.brain?.hp>0&&!boss.grab?.active&&boss.actor&&(boss.actor.position.x-player.position.x)**2+(boss.actor.position.z-player.position.z)**2>FAR_UPDATE_DISTANCE**2;
+      if(far){
+        boss._farDt=(boss._farDt??0)+dt;
+        if((frame+slot)%interval){boss._farSkipped=true;continue;}
+        step=Math.min(.1,boss._farDt);
+      }
+      boss._farDt=0;boss._farSkipped=false;
+      boss._battleUpdateToken=updateToken;try{boss.update(step, player);}finally{boss._battleUpdateToken=null;}
+    }
     if(this.world.prefetchResources&&this.encounters.some(b=>b.kind==='elena'&&b.phase===1&&b.engaged))this.preloadMourning({modelsOnly:this.encounters.some(b=>b.kind==='elena'&&b.manualSummon)});
     const running=this.frameEncounters;running.length=0;
     for(const boss of this.encounters)if(boss.active&&!boss.corpseGone){(boss.separationFrom??=new Vector3()).copyFrom(boss.actor.position);running.push(boss);}
     if(running.length>1)separateBosses(running,this.combat.grabOwner,this.world.release==='moonforest-0.2'?this.separationWorkspace:undefined);
     for(const boss of running){
+      if(boss._farSkipped)continue;
       const position=boss.actor.position,navigation=boss.movementNavigation??this.world.navigation,terrain=this.world.terrain,proof=boss._reconciledMotion;
       // The normal map navigator and height field are deterministic for an
       // unchanged pose. Unknown implementations, stale tokens, subclass
@@ -435,7 +454,8 @@ export class BossBattle {
     let hitStop = 0;
     const version = this.actionVersion;
     for (const boss of this.encounters) {
-      if(!boss.active||boss.corpseGone)continue;
+      // Far, undrawn foes (see update) have no contact with the player.
+      if(!boss.active||boss.corpseGone||boss._far)continue;
       const canceled = version !== this.actionVersion || this.grab.active;
       // A mauling owner needs the real frozen knockdown pose for its own bite
       // contact. Captured input never supplies a player weapon sample.

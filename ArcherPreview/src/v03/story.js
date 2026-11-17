@@ -114,7 +114,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }
   return null;
  }
- const livingFoe=kind=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain?.hp>0&&(!kind||(foe.summonKind??foe.kind)===kind));
+ // A foe counts until its defeat has been reported (the event fires one frame
+ // after the killing blow): otherwise the last kill of a wave summons one more.
+ const livingFoe=kind=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain&&(foe.brain.hp>0||foe.death&&!foe.death.started)&&(!kind||(foe.summonKind??foe.kind)===kind));
  // Story fights: a defeat step with {at,summon} calls its foes once the player
  // is inside the spot, and again after a retreat or death left none alive.
  const staged={key:null,busy:false,next:0,introduced:new Set()};
@@ -122,9 +124,20 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const step=log.step(),quest=log.quest();
   if(!step?.summon||step.type!=='defeat'||step.map!==mapId||!player||staged.busy||talking||dialogue.open)return;
   const key=quest.id+'/'+step.id;
-  if(livingFoe(step.kind)){staged.key=key;return;}
+  const inside=(step.at.x-player.x)**2+(step.at.z-player.z)**2<=step.at.radius**2;
+  // A step may be fought against the map's own resident (summon.after): the
+  // story only calls a stand-in when none has shown up for that many seconds.
+  if(livingFoe(step.kind)){
+   staged.key=key;staged.since=null;if(step.summon.tune)tuneFoes(step.summon.kind,step.summon.tune);
+   if(inside&&step.intro&&!staged.introduced.has(key)&&content.DIALOGUES[step.intro]&&api.battle.combatCount===0){
+    staged.introduced.add(key);staged.busy=true;talking=true;api.input.setSuspended(true);
+    void dialogue.play(content.DIALOGUES[step.intro]).catch(()=>{}).finally(()=>{talking=false;staged.busy=false;if(!disposed){api.input.setSuspended(false);if(step.arrival)hud.flash(step.arrival);}});
+   }
+   return;
+  }
   if(api.battle.loading||api.battle.combatCount>0||guide.time<staged.next)return;
-  if((step.at.x-player.x)**2+(step.at.z-player.z)**2>step.at.radius**2)return;
+  if(!inside){staged.since=null;return;}
+  if(step.summon.after){staged.since??=guide.time;if(guide.time-staged.since<step.summon.after)return;}
   staged.busy=true;
   void (async()=>{
    try{
@@ -353,7 +366,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const controller=api.getController?.();
   if(controller&&controller!==combatState.controller&&'combo' in controller){controller.combo=COMBAT_COMBO;controller.comboCost=COMBO_COST;combatState.controller=controller;}
   const combat=api.battle?.combat;
-  if(combat&&combat!==combatState.combat){combat.justGuard={window:JUST_WINDOW,stagger:JUST_STAGGER};combat.lightHit=LIGHT_HIT;combat.onJustGuard=justGuard;combatState.combat=combat;}
+  if(combat&&combat!==combatState.combat){combat.justGuard={window:JUST_WINDOW,stagger:JUST_STAGGER};combat.lightHit=LIGHT_HIT;
+   // Foes that are neither drawn nor near the player update every third frame.
+   api.battle.farUpdateInterval=3;combat.onJustGuard=justGuard;combatState.combat=combat;}
  }
  function justGuard(){
   combatState.justCount++;slow.left=Math.max(slow.left,JUST_SLOW);
