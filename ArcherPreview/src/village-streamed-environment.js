@@ -24,6 +24,7 @@ import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,c
 import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 import {groupVillageRecords} from './village-scenery-cache.js';
+import {installDetailLods,detailLodEnabled,DETAIL_LOD_KINDS} from './v04/detail-lod.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -194,6 +195,12 @@ export function loadStreamedVillage(world,{
       await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled}));lifetime.check();
       installVillageGeometry(asset,container,level,world);
       const instances=recordsByAsset.get(id)??[];
+      // 0.4: derived far-distance levels for small scenery (see v04/detail-lod.js).
+      if(detailLodEnabled()&&!asset.detailLods){
+        asset.detailLods=instances.length&&!outskirtsGround&&instances.every(record=>DETAIL_LOD_KINDS.has(record.placement.kind))
+          ?asset.baseMeshes.flatMap(base=>installDetailLods(base,{prepare:mesh=>{prepareVillageInstancing([mesh]);prepareTreeOcclusion([mesh]);}})):[];
+        if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
+      }
       for(const record of instances)if(!record.meshes.length){
         if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
@@ -205,7 +212,7 @@ export function loadStreamedVillage(world,{
         record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;
       }
       world.caveFog?.updateRecords(instances);
-      const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes)])];
+      const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes),...(asset.detailLods??[])])];
       world.lighting.registerMeshes(activeSources);
       if(!outskirtsGround){
         for(const mesh of activeSources)outlines.sourceFor(mesh);
@@ -244,6 +251,7 @@ export function loadStreamedVillage(world,{
       candidates.dispose();outlines.dispose();visibility.dispose();
       for(const r of records)r.root.dispose();
       for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
+      for(const asset of assets.values())for(const mesh of asset.detailLods??[])if(!mesh.isDisposed())mesh.dispose();
       for(const c of containers)c.dispose();
       world.scene.onDisposeObservable.remove(disposeObserver);
       signal?.removeEventListener('abort',forwardAbort);
