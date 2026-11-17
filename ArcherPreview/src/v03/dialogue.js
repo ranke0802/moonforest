@@ -21,7 +21,9 @@ export function createDialogue({doc,mount=doc.body}){
  layer.addEventListener('click',event=>{if(event.target===layer)step();});
  const onKey=event=>{
   if(!lines||event.repeat)return;
-  if(event.code==='Enter'||event.code==='Space'||event.code==='KeyE'){event.preventDefault();event.stopPropagation();step();}
+  // Stop every other listener too: the key that closes the last line must not
+  // reach the story's own E handler and reopen the conversation.
+  if(event.code==='Enter'||event.code==='Space'||event.code==='KeyE'){event.preventDefault();event.stopImmediatePropagation();step();}
  };
  doc.addEventListener('keydown',onKey,true);
  return {

@@ -169,7 +169,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null}
   if(combat&&combat.maxHp>0&&combat.hp>0&&combat.hp/combat.maxHp<.6)trigger('low-hp');
  }
  const onKey=event=>{
-  if(event.code!=='KeyE'||event.repeat||!started||dialogue.open)return;
+  if(event.code!=='KeyE'||event.repeat||event.defaultPrevented||!started||dialogue.open)return;
   if(doc.querySelector('dialog[open]'))return;
   if(near){event.preventDefault();event.stopPropagation();void interact();}
  };

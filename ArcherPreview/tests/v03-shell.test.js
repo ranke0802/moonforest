@@ -233,7 +233,9 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-tip-title').textContent,'강공격','the next tip waits its turn');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
  key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);
- for(let i=0;i<4;i++)key('Enter');await settle();
+ // E advances every line and closes the last one without reopening the talk.
+ for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();
+ assert.equal(hud('.v03-dialogue').hidden,true,'E closes the conversation');
  assert.equal(h.shell.blocksGame,false);assert.equal(hud('.v03-quest-objective').textContent,'길을 따라 마을로 가기');assert.equal(h.log.at(-1),'suspend:false');
  // Walking away: the light follows the navigation path toward the village gate, ahead of the player.
  h.player.position={x:-66,z:-24};for(let i=0;i<300;i++)h.shell.update(.016);
