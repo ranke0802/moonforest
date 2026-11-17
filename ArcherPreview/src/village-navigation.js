@@ -2,6 +2,7 @@ import { ArenaNavigation } from './navigation.js';
 import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
 import { obstacleClearance, sweepObstacle } from './village-collision.js';
 import {visitSegmentCells} from './navigation-segment-cells.js';
+import {NavigationSearchWorkspace} from './navigation-search-workspace.js';
 
 const CELL=4,EPS=.002;
 const key=(x,z)=>`${Math.floor(x/CELL)}:${Math.floor(z/CELL)}`;
@@ -111,21 +112,26 @@ export class VillageNavigation extends ArenaNavigation {
     if(s<0||g<0)return [];
     const {component}=this.gridMetadata.get(nodes);
     if(component[s]!==component[g])return [];
-    const scores=new Float64Array(nodes.length);scores.fill(Infinity);scores[s]=0;
-    const parents=new Int32Array(nodes.length);parents.fill(-1);
-    const closed=new Uint8Array(nodes.length),open=new RouteHeap();open.push(s,distance(start,target));
+    // Searches are synchronous; share scratch capacity across all grid radii.
+    // A custom reentrant navigation callback receives an independent lease.
+    const workspace=this.searchWorkspace?.busy?new NavigationSearchWorkspace():(this.searchWorkspace??=new NavigationSearchWorkspace());
+    const {scores,parents,scoreEpoch,closed,epoch}=workspace.begin(nodes.length);
+    try{
+    scores[s]=0;parents[s]=-1;scoreEpoch[s]=epoch;
+    const open=new RouteHeap();open.push(s,distance(start,target));
     while(open.items.length){
-      const {i}=open.pop();if(closed[i])continue;closed[i]=1;
+      const {i}=open.pop();if(closed[i]===epoch)continue;closed[i]=epoch;
       if(i===g){
         const route=[];for(let j=g;j>=0;j=parents[j])route.push(nodes[j]);
         route.reverse();route.push(target);return route;
       }
       for(const [j,cost]of nodes[i].edges){
-        const next=scores[i]+cost;if(next>=scores[j])continue;
-        scores[j]=next;parents[j]=i;open.push(j,next+distance(nodes[j],target));
+        const next=scores[i]+cost;if(scoreEpoch[j]===epoch&&next>=scores[j])continue;
+        scores[j]=next;parents[j]=i;scoreEpoch[j]=epoch;open.push(j,next+distance(nodes[j],target));
       }
     }
     return [];
+    }finally{workspace.end();}
   }
   free(p,radius,limit=ARENA_RADIUS){
     if(Math.hypot(p.x,p.z)>limit+1e-6)return false;

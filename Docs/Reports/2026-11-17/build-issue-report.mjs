@@ -7,6 +7,8 @@ import {applyImplementations} from './issue-report-implementation.mjs';
 
 const root=resolve(import.meta.dirname,'../../..');
 const head=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+const inventory=JSON.parse(readFileSync(resolve(root,'ArcherPreviewSite/deployment-files-moonforest-0.2.json'),'utf8'));
+const currentBundle=inventory.files.find(row=>/^assets\/moonforestV2-[^/]+\.js$/.test(row.path))?.path.split('/').pop()??'빌드 목록 확인 필요';
 const report=(name)=>`Docs/Reports/2026-11-16/${name}.html`;
 const latest='Docs/Reports/2026-11-17/MOONFOREST_성능기록_비교분석.html';
 const applied=report('MOONFOREST_종합최적화_R2_1차_적용결과');
@@ -131,7 +133,7 @@ const sourceMeta=allSources.map(path=>{
 });
 const data={date:'2026-11-17',timezone:'Asia/Seoul',head,statuses,issues,ownerAudit:{added:ownerIssues.length,conditionalCodePathTypes:4,noRealSaveTouched:true},
  latestMeasurement:{bundle:'moonforestV2-ZmTCMIYY.js',localBundle:'moonforestV2-ERbQVS8V.js',dateKst:'2026-11-17 00:46:33–00:49:53',frames:6335,meanFps:36.70,maxFrameMs:212.4,meanCpuMs:24.498,jsHeapReportedApprox:'약 624MB (기록 표기)'},
- sourceMeta,implementation:{applied:['MF-17','MF-18','MF-19','MF-20','MF-21','MF-24','MF-25'],focusedTests:63,build:'moonforestV2-grKA-yi9.js',realDeviceTested:false,browserAutomation:false},scope:'Code audit with post-audit save/reward/startup/deployment fixes and 63 focused Node tests. No real user save modification or fresh device tests. Partial recovery and missing actor/story bindings remain explicit.'};
+ sourceMeta,implementation:{applied:['MF-05','MF-07','MF-17','MF-18','MF-19','MF-20','MF-21','MF-24','MF-25'],previousSaveReleaseTests:63,focusedPerformanceTests:29,navigationCompatibilityTests:24,build:currentBundle,realDeviceTested:false,browserAutomation:false},scope:'Code audit with post-audit save/reward/startup/deployment fixes, then scenery/A*/culling/shader CPU hotpath fixes. Counts are per focused test batch, not summed unique tests or device performance. No real user save modification or fresh device tests.'};
 const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const list=items=>'<ul>'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
 const priority={1:'먼저',2:'다음',3:'후속'};
@@ -168,5 +170,7 @@ html=html.replace('기준: 로컬 HEAD','검토 기준 커밋');
 html=html.replace('이번 보고서 작성 중 실제 웹의 최신 파일·실행 결과를 새로 확인한 것은 아닙니다.','이전 보고서의 배포 기준입니다. 이번 수정의 준비 산출물은 <code>moonforestV2-grKA-yi9.js</code>이며, 웹 반영 여부와 실기기 검수는 별도 기록합니다.');
 html=html.replace('게임 수정 없음</footer>','저장·보상·복구 개선 적용 · 실기기 검수 전</footer>');
 html=html.replace('</style>','.status.implemented{color:#285640;background:#e3f2df}</style>');
+html=html.replaceAll('moonforestV2-grKA-yi9.js',currentBundle);
+html=html.replace('<main>','<main><div class="note"><b>성능 후속 반영:</b> 동일 정지 시야의 풍경 재검사, 모델 경계 중복 검증/행렬 조회, 길찾기의 반복 버퍼 생성·초기화, 맵 셰이더의 공유 예산 우회를 줄였습니다. 핵심 통합 검사29개·길찾기 호환 검사24개를 통과했습니다. 이들은 서로 겹칠 수 있는 검사 묶음이며 FPS 향상률이 아닙니다. <b>200ms급 긴 단일 GPU/드라이버 호출과 실제 모바일 성능은 아직 미확정입니다.</b> MF-05·07의 적용/남은 부분을 확인하세요.</div>');
 writeFileSync(out,html);
 console.log(JSON.stringify({file:relative(root,out),bytes:Buffer.byteLength(html),items:issues.length,first:issues.filter(x=>x.priority===1).length,evidenceFiles:sourceMeta.length,head:head.slice(0,7)}));

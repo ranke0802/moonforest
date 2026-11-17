@@ -21,6 +21,9 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
   const cancel=(error=bossPreparationCancelled())=>{if(reason)return;reason=error;controller.abort(error);for(const reject of [...waiters])reject(error);};
   const check=()=>{if(!reason&&!isCurrent())cancel();if(!reason&&now()-started>=timeoutMs)cancel(bossPreparationTimeout());if(reason)throw reason;};
   const preparation={incremental,stats,check,cancel,signal:controller.signal,get pendingWaits(){return waiters.size;},
+    // Account synchronous SDK work before a final ready check returns. Without
+    // this boundary its last slice was invisible to another preparation owner.
+    checkpoint(){check();checkpoint();},
     wait(value){
       try{check();}catch(error){Promise.resolve(value).catch(()=>{});return Promise.reject(error);}checkpoint();
       return new Promise((resolve,reject)=>{

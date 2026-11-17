@@ -39,6 +39,20 @@ test('generic bounds include simultaneous morphs and current bone transforms, in
  manager.getTarget(0).influence=-.1;assert.equal(actorIntersectsCamera(mesh),true,'unsupported morph range fails open');assert.equal(group.valid,false);
 });
 
+test('a changed actor union validates morphs and obtains world matrices once per source, without caching later edits',t=>{
+ const {scene,mesh,asset,frame}=fixture(t),manager=new MorphTargetManager(scene),positions=mesh.getVerticesData(VertexBuffer.PositionKind),target=new MorphTarget('breathing',.5,scene);
+ target.setPositions(Float32Array.from(positions,(value,i)=>value+(i%3===1?.25:0)));manager.addTarget(target);mesh.morphTargetManager=manager;
+ const group=prepareActorCameraCulling(asset);assert.ok(group);
+ let positionsReads=0,worldReads=0;const getPositions=target.getPositions,computeWorld=mesh.computeWorldMatrix;
+ target.getPositions=function(){positionsReads++;return getPositions.call(this);};mesh.computeWorldMatrix=function(...args){worldReads++;return computeWorld.apply(this,args);};
+ frame();assert.equal(group.update(),true);assert.equal(positionsReads,1,'one morph-contract validation, previously two');assert.equal(worldReads,1,'one source world-matrix retrieval, previously two');
+ assert.equal(group.updates,1);positionsReads=worldReads=0;mesh.position.x=100;
+ assert.equal(group.update(),true);assert.equal(positionsReads,1);assert.equal(worldReads,1);assert.equal(group.updates,2);assert.ok(group.bounds[0]>99,'a same-frame move invalidates the previous union');
+ target.influence=1.1;assert.equal(actorIntersectsCamera(mesh),true,'unsupported edits are still checked on the next query and fail open');
+ target.influence=.5;target.setPositions(Float32Array.from(positions));assert.equal(actorIntersectsCamera(mesh),true,'replacing morph geometry invalidates the proof even in the same render ID');
+ t.diagnostic(JSON.stringify({sourceValidationsPerChangedUnion:{before:2,after:1},worldMatrixRetrievalsPerChangedUnion:{before:2,after:1},deviceFpsMeasured:false}));
+});
+
 test('world-space hull displacement retains a body just beyond the camera edge',t=>{
  const {scene,camera,mesh,asset,frame}=fixture(t);camera.mode=1;camera.orthoLeft=-5;camera.orthoRight=5;camera.orthoTop=3;camera.orthoBottom=-3;
  const shell=mesh.clone('world-hull');shell.metadata={moonforestOutline:true,outlineWidth:.2,characterStyleGroup:'boss'};asset.meshes.push(shell);scene.metadata={characterStyleSettings:{boss:{outlineWidth:.5}}};

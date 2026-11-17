@@ -256,7 +256,7 @@ export function loadStreamedVillage(world,{
       await streaming.initial(plan);
       initializing=false;
       if(disposed)throw Object.assign(new Error('Map load was released'),{name:'AbortError'});
-      textures=new VillageTextureStreaming(world,assets,records,url,stats);
+      textures=new VillageTextureStreaming(world,assets,records,url,stats,{cacheCandidates:true});
       world.villageRenderRecords=records;stats.ready=true;return stats;
     }catch(error){dispose();throw error;}
   })().catch(error=>{signal?.removeEventListener('abort',forwardAbort);if(world.villageLoadOwner===owner){for(const r of ownedPrepared?.records??[])r.root.dispose();Object.assign(world,{villageLoadOwner:null,villagePrepared:null,villagePromise:null,villageVisibility:null,treeOcclusion:null,villageStreaming:null,releaseEnvironment:null});}throw error;});

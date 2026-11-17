@@ -12,6 +12,7 @@ import {prepareBossMorphUpload} from '../src/boss-gpu-preparation.js';
 import {createBossPreparation} from '../src/boss-preparation.js';
 import {ElenaEncounter} from '../src/elena-encounter.js';
 import {MourningElenaEncounter} from '../src/mourning-elena-encounter.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
 const base=new URL('../public/assets/',import.meta.url),records=[],digest=v=>createHash('sha256').update(Buffer.from(v.buffer,v.byteOffset,v.byteLength)).digest('hex'),cpuMs=s=>{const u=process.cpuUsage(s);return (u.user+u.system)/1000;};
 async function fixture(t,id){const loadStart=performance.now(),loadCpu=process.cpuUsage(),engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;Object.assign(engine.getCaps(),{textureFloat:true,canUseGLVertexID:true,maxVertexTextureImageUnits:16,texture2DArrayMaxLayerCount:256,maxTextureSize:4096});const uploads=[];engine.createRawTexture2DArray=(data,w,h,d,f,m,i,s,c,type)=>{uploads.push({bytes:data.byteLength,width:w,height:h,depth:d,hash:digest(data)});const texture=engine.createRawTexture(data,w,h,f,m,i,s,c,type);texture.depth=d;texture.is2DArray=true;return texture;};new FreeCamera('view',new Vector3(0,4,-10),scene);const config=JSON.parse(readFileSync(new URL(id+'.json',base))),decoded=await readRuntimeGltf(new URL(config.model,base)),gltf=structuredClone(decoded.gltf);for(const k of ['extensionsUsed','extensionsRequired'])gltf[k]=(gltf[k]??[]).filter(x=>x!=='EXT_meshopt_compression');for(const b of gltf.buffers)if(b.uri)b.uri='data:application/octet-stream;base64,'+decoded.files.get(b.uri).data.toString('base64');const loader=new GLTFFileLoader({onMeshLoaded:prepareBossMorphUpload});loader.skipMaterials=true;const container=await loader.loadAssetContainerAsync(scene,{json:gltf},'');for(const g of container.animationGroups)g.stop();const paint=new StandardMaterial('source-paint',scene);for(const m of container.meshes)if(m.getTotalVertices())m.material=paint;const library=new BossModelLibrary(scene,id);Object.assign(library,{container,config,load:async()=>{}});t.after(()=>{container.dispose();loader.dispose();scene.dispose();engine.dispose();});return {engine,scene,container,library,config,uploads,load:{wallMs:performance.now()-loadStart,processCpuMs:cpuMs(loadCpu)}};}
 
@@ -27,7 +28,30 @@ test('twenty actual mourning clones retain complete independent rigs with shared
 });
 
 test('actual hidden Elena preparation coalesces artificial scheduling waits without changing prepared geometry or visibility',async t=>{
- for(const id of ['elena','mourning-elena']){const runs=[];for(const legacyFrames of [true,false]){const f=await fixture(t,id),world={scene:f.scene,mapId:'village',terrain:{heightAt:()=>0,place:p=>p.y=0}},Encounter=id==='elena'?ElenaEncounter:MourningElenaEncounter,encounter=new Encounter(world,()=>{},()=>{},()=>true,{loadAsset:()=>f.library.instantiate()}),preparation=createBossPreparation({frame:async()=>{assert.notEqual(encounter.actor?.isEnabled(),true);await new Promise(r=>setTimeout(r,2));}});if(legacyFrames)preparation.pause=async()=>preparation.nextFrame();const start=performance.now(),cpu=process.cpuUsage();await encounter.prepareHidden({preparation});const cold={wallMs:performance.now()-start,processCpuMs:cpuMs(cpu),schedulerWaitMs:preparation.stats.frameWaitMs,yields:preparation.stats.yields,coalescedPauses:preparation.stats.coalescedPauses},warm=createBossPreparation({frame:async()=>{assert.fail('already prepared actor must not wait for a new frame');}}),warmStart=performance.now(),warmCpu=process.cpuUsage();await encounter.prepareHidden({preparation:warm});runs.push({legacyFrames,cold,warm:{wallMs:performance.now()-warmStart,processCpuMs:cpuMs(warmCpu),yields:warm.stats.yields},triangles:encounter.asset.meshes.filter(m=>!m.metadata?.moonforestOutline).reduce((s,m)=>s+m.getTotalIndices()/3,0),meshNames:encounter.asset.meshes.map(m=>m.name),stillHidden:encounter.actor.isEnabled()===false});}assert.equal(runs[0].triangles,runs[1].triangles);assert.deepEqual(runs[0].meshNames,runs[1].meshNames);assert.ok(runs.every(r=>r.stillHidden));assert.ok(runs[1].cold.coalescedPauses>0);assert.ok(runs[1].cold.yields<runs[0].cold.yields);records.push({case:id+'-hidden-preparation',runs,frameDelay:'Synthetic 2ms scheduling opportunities to separate wait time from process CPU; no browser/rAF or real GPU timing.'});}
+ for(const id of ['elena','mourning-elena']){
+  const runs=[];
+  for(const legacyFrames of [true,false]){
+   const f=await fixture(t,id),world={scene:f.scene,mapId:'village',terrain:{heightAt:()=>0,place:p=>p.y=0}},Encounter=id==='elena'?ElenaEncounter:MourningElenaEncounter;
+   // NullEngine does not complete raw GPU uploads. Match the existing shader
+   // fixture's inert fallback sampler; never force production readiness.
+   caveFogFallback(f.scene).getInternalTexture().isReady=true;
+   const encounter=new Encounter(world,()=>{},()=>{},()=>true,{loadAsset:()=>f.library.instantiate()});
+   // Windows may quantize setTimeout(2) to ~15.6ms. Model the requested 2ms
+   // while still yielding the real event loop and counting physical CPU/time.
+   // The production 45s deadline and all task/time ceilings stay unchanged.
+   let syntheticFrameWaitMs=0;
+   const preparation=createBossPreparation({now:()=>performance.now()+syntheticFrameWaitMs,frame:async()=>{
+    assert.notEqual(encounter.actor?.isEnabled(),true);await new Promise(r=>setImmediate(r));syntheticFrameWaitMs+=2;
+   }});
+   if(legacyFrames)preparation.pause=async()=>preparation.nextFrame();
+   const start=performance.now(),cpu=process.cpuUsage();await encounter.prepareHidden({preparation});
+   const cold={wallMs:performance.now()-start,processCpuMs:cpuMs(cpu),virtualSchedulerWaitMs:preparation.stats.frameWaitMs,syntheticFrameWaitMs,yields:preparation.stats.yields,coalescedPauses:preparation.stats.coalescedPauses};
+   const warm=createBossPreparation({frame:async()=>{assert.fail('already prepared actor must not wait for a new frame');}}),warmStart=performance.now(),warmCpu=process.cpuUsage();await encounter.prepareHidden({preparation:warm});
+   runs.push({legacyFrames,cold,warm:{wallMs:performance.now()-warmStart,processCpuMs:cpuMs(warmCpu),yields:warm.stats.yields},triangles:encounter.asset.meshes.filter(m=>!m.metadata?.moonforestOutline).reduce((s,m)=>s+m.getTotalIndices()/3,0),meshNames:encounter.asset.meshes.map(m=>m.name),stillHidden:encounter.actor.isEnabled()===false});
+  }
+  assert.equal(runs[0].triangles,runs[1].triangles);assert.deepEqual(runs[0].meshNames,runs[1].meshNames);assert.ok(runs.every(r=>r.stillHidden));assert.ok(runs[1].cold.coalescedPauses>0);assert.ok(runs[1].cold.yields<runs[0].cold.yields);
+  records.push({case:id+'-hidden-preparation',runs,frameDelay:'Real setImmediate event-loop opportunities with exactly2ms synthetic offset per yield; wallMs/processCpuMs are physical, virtualSchedulerWaitMs uses physical+synthetic clock. No browser/rAF or real GPU timing.'});
+ }
 });
 
 test('source clone hooks restore on failure and disposed library cannot create a late actor',async()=>{

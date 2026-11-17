@@ -6,6 +6,7 @@ import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.
 import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS,mapLoadAbortError,mapLoadTimeoutError} from './map-load-lifetime.js';
 import {sceneryHighTextureProfile} from './mobile-texture-policy.js';
 import {runtimeTimers} from './runtime-timers.js';
+import {VillageTextureDemandCache} from './village-texture-demand-cache.js';
 
 export const shouldReleaseHighTexture=(lastWanted,now,touch)=>now-lastWanted>(touch?12000:20000);
 export const VILLAGE_TEXTURE_PACING=Object.freeze({checkMs:250,motionHoldMs:600,visibleGapMs:750,fillDwellMs:250,replacementDwellMs:3000,minResidenceMs:6000,mobileMovingMs:2000,mobileIdleMs:750,desktopMovingMs:750,desktopIdleMs:350,visibleReplacementRatio:1.5});
@@ -17,7 +18,7 @@ export const highTextureOptions=(role,old)=>({noMipmap:false,invertY:old?.invert
 // One asset at a time. The persistent content cache retains downloaded files;
 // only temporary high-resolution GPU allocations are released on distance exit.
 export class VillageTextureStreaming {
-  constructor(world,assets,records,manifestUrl,stats,{textureTimeoutMs=MAP_MODEL_TIMEOUT_MS,textureTimers,viewportWaitTimeoutMs=MAP_MODEL_TIMEOUT_MS}={}){
+  constructor(world,assets,records,manifestUrl,stats,{textureTimeoutMs=MAP_MODEL_TIMEOUT_MS,textureTimers,viewportWaitTimeoutMs=MAP_MODEL_TIMEOUT_MS,cacheCandidates=false}={}){
     this.world=world;this.assets=assets;this.records=records;this.url=manifestUrl;this.stats=stats;
     this.textureTimeoutMs=textureTimeoutMs;this.textureTimers=textureTimers;this.viewportWaitTimeoutMs=viewportWaitTimeoutMs;this.viewportWait=null;this.viewportWaitDeadline=null;this.viewportClock=runtimeTimers(textureTimers).now;
     this.resident=new Map();this.failed=new Set();this.wanted=new Map();this.lastWanted=new Map();
@@ -32,6 +33,7 @@ export class VillageTextureStreaming {
     if(world.touchDevice&&this.compressedSupported&&profiles.every(p=>this.profileBytes(p)<highTextureBytes(p,false)))this.budget=VILLAGE_TEXTURE_BUDGET.mobileCompressed;
     this.lastView=new Float32Array(16);this.hasView=false;this.lastFov=null;this.motionUntil=0;this.lastFinished=-Infinity;
     this.seenSince=new Map();this.replacementSince=new Map();this.clock=()=>performance.now();
+    this.candidateCache=cacheCandidates?new VillageTextureDemandCache(this):null;
     Object.assign(stats,{highTextureProfile:world.touchDevice?'mobile-bounded-color/houses-original':'original',highTextureAssets:0,highTexturePending:0,highTexturePendingAsset:null,highTextureStage:'idle',highTextureViewportWaiting:false,highTextureLastPromoteMs:0,highTextureMax:0,highTextureLoads:0,highTextureReleases:0,highTextureError:null,highTextureBudget:this.budget,highTextureBytes:0,highTextureReserved:0,highTexturePeak:0,highTextureQueued:0,highTextureMoving:false,highTextureMovingLoads:0,highTextureCooldownMs:0,highTextureLastPrepareMs:0});
     this.contextLostObserver=engine.onContextLostObservable?.add(()=>{
       if(this.disposed)return;this.contextLost=true;this.viewportWait?.cancel(mapLoadAbortError());
@@ -94,7 +96,7 @@ export class VillageTextureStreaming {
     }
     if(!this.pending&&this.stats.highTextureStage==='viewport-wait:admission'){this.stats.highTextureStage='idle';this.stats.highTextureViewportWaiting=false;}
     const policy=VILLAGE_TEXTURE_PACING;
-    this.nextCheck=now+policy.checkMs;const candidates=new Map();
+    this.nextCheck=now+policy.checkMs;
     const camera=this.world.camera,projection=sceneryProjection(camera),planes=projection.planes;
     const view=camera.getViewMatrix().m;
     // Include translation and zoom, not just camera rotation. Keep observing
@@ -103,19 +105,7 @@ export class VillageTextureStreaming {
     this.lastView.set(view);this.hasView=true;this.lastFov=camera.fov;
     const moving=now<this.motionUntil;
     this.stats.highTextureMoving=moving;
-    for(const record of this.records){
-      if(!record.root.isEnabled())continue;
-      const asset=this.assets.get(record.placement.asset),config=asset?.config;
-      if(!config?.highTextures||(asset.baseLevel!==undefined&&asset.baseLevel!==0))continue;
-      for(const mesh of record.meshes){
-        if(!mesh.isInFrustum(planes))continue;
-        const coverage=projectedSceneryCoverage(projection,mesh.getBoundingInfo().boundingSphere,this.world);
-        if(coverage>VILLAGE_LOD_COVERAGE.mid){
-          const id=record.placement.asset;
-          if(!this.failed.has(id))candidates.set(id,Math.max(coverage,candidates.get(id)??0));
-        }
-      }
-    }
+    const screen=()=>this.screenCandidates(projection,planes),candidates=this.candidateCache?this.candidateCache.get(projection,screen):screen();
     for(const id of candidates.keys()){
       if(!this.seenSince.has(id)||now-(this.lastWanted.get(id)??-Infinity)>policy.visibleGapMs)this.seenSince.set(id,now);
       this.lastWanted.set(id,now);
@@ -142,6 +132,20 @@ export class VillageTextureStreaming {
       this.start(ready.id);
     }
     this.syncStats();
+  }
+  screenCandidates(projection,planes){
+    const candidates=new Map();this.stats.highTextureScreenEvaluations=(this.stats.highTextureScreenEvaluations??0)+1;this.stats.highTextureScreenRecordsChecked=this.records.length;
+    for(const record of this.records){
+      if(!record.root.isEnabled())continue;
+      const asset=this.assets.get(record.placement.asset),config=asset?.config;
+      if(!config?.highTextures||(asset.baseLevel!==undefined&&asset.baseLevel!==0))continue;
+      for(const mesh of record.meshes){
+        if(!mesh.isInFrustum(planes))continue;
+        const coverage=projectedSceneryCoverage(projection,mesh.getBoundingInfo().boundingSphere,this.world);
+        if(coverage>VILLAGE_LOD_COVERAGE.mid){const id=record.placement.asset;if(!this.failed.has(id))candidates.set(id,Math.max(coverage,candidates.get(id)??0));}
+      }
+    }
+    return candidates;
   }
   admission(candidates,now){
     const policy=VILLAGE_TEXTURE_PACING,used=[...this.resident.values()].reduce((sum,e)=>sum+e.bytes,0);
@@ -267,7 +271,7 @@ export class VillageTextureStreaming {
   dispose(){
     if(this.disposed)return;this.disposed=true;this.viewportWait?.cancel(mapLoadAbortError());for(const cancel of [...this.textureWaiters])cancel();
     this.stats.highTexturePendingAsset=null;this.stats.highTextureStage='disposed';this.stats.highTextureViewportWaiting=false;
-    this.world.scene.onAfterRenderObservable.remove(this.observer);
+    this.candidateCache?.dispose();this.world.scene.onAfterRenderObservable.remove(this.observer);
     this.world.scene.onDisposeObservable.remove(this.disposeObserver);
     const engine=this.world.scene.getEngine();engine.onContextLostObservable?.remove(this.contextLostObserver);engine.onContextRestoredObservable?.remove(this.contextRestoredObserver);
     for(const id of [...this.resident.keys()])this.release(id);

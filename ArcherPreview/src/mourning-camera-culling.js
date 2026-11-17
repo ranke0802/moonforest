@@ -53,7 +53,11 @@ function supportsCurrentPose(part){
   }
   return true;
 }
-function affine(m){return m.every(Number.isFinite)&&Math.abs(m[3])<1e-7&&Math.abs(m[7])<1e-7&&Math.abs(m[11])<1e-7&&Math.abs(m[15]-1)<1e-5;}
+function affine(m){
+  if(Math.abs(m[3])>=1e-7||Math.abs(m[7])>=1e-7||Math.abs(m[11])>=1e-7||Math.abs(m[15]-1)>=1e-5)return false;
+  for(let i=0;i<16;i++)if(!Number.isFinite(m[i]))return false;
+  return true;
+}
 function transformedUnion(out,box,m){
   const cx=(box[0]+box[3])*.5,cy=(box[1]+box[4])*.5,cz=(box[2]+box[5])*.5,ex=(box[3]-box[0])*.5,ey=(box[4]-box[1])*.5,ez=(box[5]-box[2])*.5;
   for(let a=0;a<3;a++){const center=cx*m[a]+cy*m[a+4]+cz*m[a+8]+m[a+12],extent=ex*Math.abs(m[a])+ey*Math.abs(m[a+4])+ez*Math.abs(m[a+8]),padding=1e-5*(1+Math.abs(center)+extent);out[a]=Math.min(out[a],center-extent-padding);out[a+3]=Math.max(out[a+3],center+extent+padding);}
@@ -66,17 +70,21 @@ export class MourningCameraBounds{
     if(this.disposed)return false;
     const frame=this.scene.getRenderId(),sceneFrame=this.scene.getFrameId();let changed=force||this.frame!==frame||this.sceneFrame!==sceneFrame;
     for(const part of this.parts){
-      if(!supportsCurrentPose(part)){this.valid=false;this.query=null;return false;}
+      if(part.mesh.isDisposed()){this.valid=false;this.query=null;return false;}
       // Babylon otherwise reuses a matrix within the same render ID before
       // checking dirty local/ancestor transforms (secondary passes can revisit).
       const world=part.mesh.computeWorldMatrix(!part.mesh.isWorldMatrixFrozen&&!part.mesh.isSynchronized());
+      // Matrix observers may edit the mesh. Validate after that callback boundary.
+      if(!supportsCurrentPose(part)){this.valid=false;this.query=null;return false;}
+      // Reuse this exact matrix only inside this synchronous update. The next
+      // query still probes dirty local/ancestor transforms and every morph.
+      part.currentWorld=world;
       if(part.worldRevision!==world.updateFlag||part.skeleton?._isDirty||part.skinRevision!==part.skeleton?.bones[0]?._childUpdateId)changed=true;
     }
     if(!changed)return this.valid;
     this.frame=frame;this.sceneFrame=sceneFrame;this.valid=false;this.updates++;this.bounds[0]=this.bounds[1]=this.bounds[2]=Infinity;this.bounds[3]=this.bounds[4]=this.bounds[5]=-Infinity;
     for(const part of this.parts){
-      if(!supportsCurrentPose(part))return false;
-      const world=part.mesh.computeWorldMatrix();if(!affine(world.m))return false;part.worldRevision=world.updateFlag;
+      const world=part.currentWorld;if(!affine(world.m))return false;part.worldRevision=world.updateFlag;
       if(part.skeleton)part.skeleton.prepare(part.skeleton._isDirty);const matrices=part.skeleton?.getTransformMatrices(part.mesh);
       part.skinRevision=part.skeleton?.bones[0]?._childUpdateId;
       for(const {joint,box}of part.boxes){
@@ -115,7 +123,7 @@ export class MourningCameraBounds{
     const engine=this.scene.getEngine(),canvas=engine.getRenderingCanvas(),width=canvas?.clientWidth||engine.getRenderWidth(),height=canvas?.clientHeight||engine.getRenderHeight();
     if(!(width>0&&height>0))return true;
     const m=transform.m,px=1+2*padding.pixels/width,py=1+2*padding.pixels/height;
-    for(const sign of [-1,1]){
+    for(let sign=-1;sign<=1;sign+=2){
       if(outside(box,sign*m[0]+px*m[3],sign*m[4]+px*m[7],sign*m[8]+px*m[11],sign*m[12]+px*m[15],padding.world))return false;
       if(outside(box,sign*m[1]+py*m[3],sign*m[5]+py*m[7],sign*m[9]+py*m[11],sign*m[13]+py*m[15],padding.world))return false;
     }
