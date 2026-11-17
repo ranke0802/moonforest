@@ -73,6 +73,9 @@ export function prepareTreeOcclusion(meshes) {
 
 // Inside a crown the leaves are at the lens: keep one pixel in eight.
 const CROWN_INSET=0,CROWN_TRUNK=.3,CROWN_COVERAGE=.125;
+// Scenery between the camera and the player keeps this share of its pixels.
+// It was .45: a crown in the way laid a dense dot screen over the whole view.
+const VIEW_COVERAGE=.15;
 export class TreeOcclusion {
   constructor(roots) {
     const surfaces=new WeakMap();
@@ -147,7 +150,7 @@ export class TreeOcclusion {
         const crown=tree.crown;
         if(crown&&camera.x>crown.minX&&camera.x<crown.maxX&&camera.y>crown.minY&&camera.y<crown.maxY&&camera.z>crown.minZ&&camera.z<crown.maxZ){tree.target=CROWN_COVERAGE;continue;}
         tree.target = this.obstructs(tree,camera,this.head) ||
-          this.obstructs(tree,camera,this.chest) ? .45 : 1;
+          this.obstructs(tree,camera,this.chest) ? VIEW_COVERAGE : 1;
       }
     }
     const step = Math.min(dt, .1) * 4;

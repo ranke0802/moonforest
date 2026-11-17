@@ -26,7 +26,7 @@ const results=[];
 function oldUpdate(o,camera,player,dt,dimensions){
  o.checkIn-=dt;
  if(o.checkIn<=0){o.checkIn=.1;o.head.copyFrom(player);o.head.y+=dimensions.headHeight;o.chest.copyFrom(player);o.chest.y+=dimensions.chestHeight;
-  for(const tree of o.trees)tree.target=(o.obstructs(tree,camera,o.head)||o.obstructs(tree,camera,o.chest)) ? .45 : 1;
+  for(const tree of o.trees)tree.target=(o.obstructs(tree,camera,o.head)||o.obstructs(tree,camera,o.chest)) ? .15 : 1;
  }
  const step=Math.min(dt,.1)*4;for(const tree of o.trees){if(tree.coverage===tree.target)continue;tree.coverage+=Math.sign(tree.target-tree.coverage)*Math.min(step,Math.abs(tree.target-tree.coverage));for(const mesh of tree.meshes)mesh.instancedBuffers.treeCoverage=tree.coverage;}
 }

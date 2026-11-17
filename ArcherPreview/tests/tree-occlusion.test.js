@@ -29,7 +29,7 @@ test('empty canopy bounds, standing nearby and a camera inside empty bounds neve
   for(let i=0;i<6;i++)occlusion.update(new Vector3(0,2,-5),player,.1);
   assert.equal(tree.coverage,1,'being inside an empty bounding box is insufficient');
   for(let i=0;i<6;i++)occlusion.update(new Vector3(3,2,-10),player,.1);
-  assert.equal(tree.coverage,.45,'actual trunk crosses camera-to-player segment');
+  assert.equal(tree.coverage,.15,'actual trunk crosses camera-to-player segment');
   for(let i=0;i<6;i++)occlusion.update(camera,player,.1);
   assert.equal(tree.coverage,1,'moving clear restores opacity');
  }finally{scene.dispose();engine.dispose();}
@@ -99,7 +99,7 @@ test('only an obstructing tree fades, restores, and retains the same LOD instanc
     const blocked=makeRoot(0),clear=makeRoot(6),occlusion=new TreeOcclusion([blocked,clear]);
     const camera=new Vector3(0,2,-10),player=Vector3.Zero();
     for(let i=0;i<6;i++)occlusion.update(camera,player,.05);
-    assert.equal(blocked.getChildMeshes()[0].instancedBuffers.treeCoverage,.45);
+    assert.equal(blocked.getChildMeshes()[0].instancedBuffers.treeCoverage,.15);
     assert.equal(clear.getChildMeshes()[0].instancedBuffers.treeCoverage,1);
     assert.equal(full.material,low.material);
     assert.equal(low.instancedBuffers.treeCoverage,1);
