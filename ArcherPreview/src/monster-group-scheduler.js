@@ -1,5 +1,5 @@
 // One scheduler per map, driven by the existing game tick. The host owns actors.
-export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>true,canLaunch=()=>true,releaseAdmission=()=>{},remove=()=>{},isAlive=()=>true,onPermanentDeath=()=>{},onError=()=>{},random=Math.random,preparationGroups=Infinity,now=()=>performance.now()}){
+export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>true,canLaunch=()=>true,releaseAdmission=()=>{},remove=()=>{},isAlive=()=>true,onPermanentDeath=()=>{},onError=()=>{},random=Math.random,preparationGroups=Infinity,now=()=>performance.now(),focus=null}){
  let generation=0,groups=new Map(),disposed=false,paused=true,loadedAt=0;const preparationLimit=Number.isFinite(preparationGroups)?Math.max(1,Math.floor(preparationGroups)):Infinity;
  const safeRemove=handle=>{try{remove(handle);}catch(error){onError(error);}};
  const release=group=>{if(!group.admitted)return;group.admitted=false;try{releaseAdmission(group.members);}catch(error){onError(error);}};
@@ -12,9 +12,18 @@ export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>t
   }catch(error){for(const [,handle] of prepared)safeRemove(handle);group.handles.clear();release(group);if(generation===epoch&&!disposed){group.state='waiting';group.remaining=2;onError(error);}}
   finally{if(generation===epoch){group.pending=false;startReady();}}
  }
+ // focus() → {x,z} | null: groups still waiting are prepared nearest that
+ // point first (the quest spot, else the player), so the pack the player is
+ // walking to is not queued behind the rest of the map.
+ function byFocus(){
+  const list=[...groups.values()],point=focus?.();
+  if(!point||!Number.isFinite(point.x)||!Number.isFinite(point.z))return list;
+  const gap=group=>{let best=Infinity;for(const row of group.members){const d=(row.x-point.x)**2+(row.z-point.z)**2;if(d<best)best=d;}return best;};
+  return list.map(group=>[gap(group),group]).sort((a,b)=>a[0]-b[0]).map(entry=>entry[1]);
+ }
  function startReady(){
   if(disposed||paused||!canCommit())return;let preparing=[...groups.values()].filter(group=>group.pending).length;
-  for(const group of groups.values())if(['waiting','capacity-wait','prepare-wait'].includes(group.state)&&group.remaining===0){
+  for(const group of byFocus())if(['waiting','capacity-wait','prepare-wait'].includes(group.state)&&group.remaining===0){
    if(preparing>=preparationLimit){group.state='prepare-wait';continue;}
    const admission=canLaunch(group.members);if(admission!==true){group.state='capacity-wait';group.capacityReason=typeof admission==='string'?admission:'capacity';continue;}
    group.admitted=true;group.capacityReason=null;preparing++;void launch(group);

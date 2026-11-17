@@ -14,3 +14,16 @@ test('one group finishes and publishes before an unrelated slow model can occupy
  const old=await scenario(Infinity);assert.deepEqual(old.order,['near1','far']);assert.deepEqual(old.commits,[],'round-robin group awaits put near2 behind an unrelated cold model');old.finishFar();await tick();old.scheduler.dispose();
  const fixed=await scenario(1);assert.deepEqual(fixed.order,['near1','near2','far']);assert.deepEqual(fixed.commits,[['near1','near2']]);assert.equal(fixed.scheduler.inspect()[0].initialDelaySeconds,0,'respawn45 never becomes first-spawn delay');assert.equal(fixed.scheduler.inspect()[0].preparedCount,2);assert.equal(fixed.scheduler.inspect()[0].state,'active');assert.equal(fixed.scheduler.inspect()[1].state,'preparing');fixed.scheduler.leave();fixed.finishFar();await tick();assert.deepEqual(fixed.scheduler.inspect(),[]);fixed.scheduler.dispose();
 });
+
+test('waiting groups are prepared nearest the focus point first, re-read every frame',async()=>{
+ const started=[];let point={x:100,z:0};
+ const scheduler=createMonsterGroupScheduler({preparationGroups:1,random:()=>.5,focus:()=>point,spawn:async row=>{started.push(row.groupId);return {row};}});
+ const row=(groupId,x)=>({id:groupId+'-1',groupId,definitionId:'wolf',x,z:0,spawnMode:'start',delaySeconds:0});
+ scheduler.load([row('west',-100),row('middle',0),row('east',100)]);
+ scheduler.update(0);
+ assert.equal(started[0],'east','nearest the focus, not the list order');
+ // The player turns toward the west pack while the east one is preparing.
+ point={x:-100,z:0};await tick();scheduler.update(0);await tick();
+ assert.equal(started[1],'west','the focus moved: the next group follows it');
+ scheduler.dispose();
+});
