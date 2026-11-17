@@ -25,6 +25,7 @@ export default {
   'opening.4':'“그 아이를 찾아라.”',
   'scene.protect':'마부를 지켜라',
   'hud.main':'메인','hud.chapterNext':'이야기의 다음 장','hud.complete':'완료 · {done}','hud.completeNext':'완료 · {done}  →  {next}','hud.rested':'쉬었습니다 · 여정을 기록했습니다',
+  'prompt.actionQuest':'이야기하기','prompt.actionIdle':'말 걸기',
   'prompt.talkQuest':({name})=>particle(name,'과','와')+' 이야기하기',
   'prompt.talkIdle':({name})=>name+'에게 말 걸기',
  },

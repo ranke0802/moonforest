@@ -50,7 +50,7 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
 }
 // Quest glyphs as 3×5 pixel bitmaps (row-major, top to bottom).
 const GLYPHS=Object.freeze({'?':['111','001','011','000','010'],'!':['010','010','010','000','010'],'>':['100','110','111','110','100']});
-const GLYPH_COLORS=Object.freeze({'?':'#ffd54a','!':'#7dffb2','>':'#ffd54a'});
+const GLYPH_COLORS=Object.freeze({'?':'#f2dc9c','!':'#bff0dc','>':'#f2dc9c'});
 export class DotMinimap{
  constructor(element,{document=globalThis.document}={}){this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;this.markers=[];this.markerRevision=0;}
  // Story markers [{x,z,glyph:'?'|'!'|'>'}] drawn over the map; off-map ones stick to the edge.
@@ -79,8 +79,8 @@ export class DotMinimap{
    const bits=GLYPHS[mark.glyph];if(!bits)continue;
    const m=minimapPoint(rect,mark.x,mark.z,MINIMAP_SIZE,halfTurn),gx=Math.max(1,Math.min(MINIMAP_SIZE-8,Math.round(m.x)-3)),gy=Math.max(1,Math.min(MINIMAP_SIZE-12,Math.round(m.y)-11));
    // 2× pixels with a dark outline so the glyph reads on any terrain colour.
-   ctx.fillStyle='#1d1406';ctx.fillRect(gx-1,gy-1,8,12);
-   ctx.fillStyle=blink||mark.glyph==='>'?GLYPH_COLORS[mark.glyph]:'#fff6c8';
+   ctx.fillStyle='#0b080c';ctx.fillRect(gx-1,gy-1,8,12);
+   ctx.fillStyle=blink||mark.glyph==='>'?GLYPH_COLORS[mark.glyph]:'#fff8e6';
    for(let r=0;r<5;r++)for(let c=0;c<3;c++)if(bits[r][c]==='1')ctx.fillRect(gx+c*2,gy+r*2,2,2);
   }
  }

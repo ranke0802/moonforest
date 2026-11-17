@@ -23,6 +23,7 @@ export default {
   'opening.4':'「あの子を探せ」',
   'scene.protect':'御者を守れ',
   'hud.main':'メイン','hud.chapterNext':'物語の続き','hud.complete':'完了 · {done}','hud.completeNext':'完了 · {done}  →  {next}','hud.rested':'休みました · 旅を記録しました',
+  'prompt.actionQuest':'話す','prompt.actionIdle':'話しかける',
   'prompt.talkQuest':'{name}と話す','prompt.talkIdle':'{name}に話しかける',
  },
  story:{

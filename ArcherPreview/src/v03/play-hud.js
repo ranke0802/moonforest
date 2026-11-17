@@ -7,7 +7,10 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const quest=make('section','v03-quest'),kicker=make('small','v03-quest-kicker'),title=make('strong','v03-quest-title'),objective=make('p','v03-quest-objective');
  kicker.textContent=t('hud.main');quest.append(kicker,title,objective);quest.hidden=true;
  const hint=make('div','v03-hint');hint.hidden=true;
+ // Interaction plate: key cap · name · action. The whole plate is the touch target.
  const prompt=make('button','v03-prompt');prompt.type='button';prompt.hidden=true;
+ const promptKey=make('span','v03-prompt-key'),promptMark=make('span','v03-prompt-mark'),promptName=make('strong','v03-prompt-name'),promptAction=make('span','v03-prompt-action');
+ const promptText=make('span','v03-prompt-text');promptText.append(promptName,promptAction);prompt.append(promptKey,promptText,promptMark);
  const banner=make('div','v03-banner');banner.hidden=true;
  // Cutscene subtitle: speaker + line, bottom centre.
  const caption=make('div','v03-caption'),captionWho=make('strong','v03-caption-who'),captionText=make('p','v03-caption-text');caption.append(captionWho,captionText);caption.hidden=true;
@@ -31,7 +34,15 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    captionWho.textContent=value.who??'';captionWho.hidden=!value.who;captionText.textContent=value.text;caption.hidden=false;caption.classList.remove('is-in');void caption.offsetWidth;caption.classList.add('is-in');
   },
   setHint(text){if(last.hint===text)return;last.hint=text;hint.hidden=!text;hint.textContent=text??'';},
-  setPrompt(text){if(last.prompt===text)return;last.prompt=text;prompt.hidden=!text;prompt.textContent=text??'';},
+  // value: null | {key,name,action,label,mark:'?'|'!'|null}
+  setPrompt(value){
+   const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}`:null;if(last.prompt===id)return;last.prompt=id;
+   if(!value){prompt.classList.remove('is-in');prompt.hidden=true;return;}
+   promptKey.textContent=value.key??'';promptKey.hidden=!value.key;promptName.textContent=value.name;promptAction.textContent=value.action;
+   promptMark.textContent=value.mark??'';promptMark.hidden=!value.mark;promptMark.dataset.mark=value.mark??'';
+   prompt.setAttribute('aria-label',value.label??`${value.name} ${value.action}`);
+   prompt.hidden=false;prompt.classList.remove('is-in');void prompt.offsetWidth;prompt.classList.add('is-in');
+  },
   // One-shot message (quest complete, saved). CSS runs the whole animation.
   flash(text){banner.textContent=text;banner.hidden=false;banner.classList.remove('is-shown');void banner.offsetWidth;banner.classList.add('is-shown');},
   // One-time tutorial card; pass null to hide it.

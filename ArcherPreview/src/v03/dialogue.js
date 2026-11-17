@@ -22,7 +22,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null}){
  function step(){
   if(!lines)return;
   if(++index<lines.length){show();return;}
-  const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;shownArt=null;done?.(played);
+  const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;shownArt=null;portrait.hidden=true;portrait.classList.remove('is-in');done?.(played);
  }
  next.addEventListener('click',step);
  layer.addEventListener('click',event=>{if(event.target===layer)step();});

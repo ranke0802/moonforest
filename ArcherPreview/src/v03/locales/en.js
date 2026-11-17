@@ -23,6 +23,7 @@ export default {
   'opening.4':'“Find that child.”',
   'scene.protect':'Protect the driver',
   'hud.main':'Main','hud.chapterNext':'The story continues','hud.complete':'Complete · {done}','hud.completeNext':'Complete · {done}  →  {next}','hud.rested':'Rested · Journey recorded',
+  'prompt.actionQuest':'Talk','prompt.actionIdle':'Chat',
   'prompt.talkQuest':'Talk to {name}','prompt.talkIdle':'Speak to {name}',
  },
  story:{

@@ -376,7 +376,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     let best=null,bestSq=TALK_RANGE_SQ;
     for(const member of cast){const dx=member.x-player.x,dz=member.z-player.z,sq=dx*dx+dz*dz;if(sq<bestSq){best=member;bestSq=sq;}}
     near=api.battle.combatCount>0?null:best;
-    hud.setPrompt(near?`${touch?'':'E · '}${t(log.isTarget(near.npc.id)?'prompt.talkQuest':'prompt.talkIdle',{name:speaker(near.npc.name)})}`:null);
+    if(near){
+     const quest=log.isTarget(near.npc.id),name=speaker(near.npc.name);
+     hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:markFor(near.npc.id),label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name})});
+    }else hud.setPrompt(null);
    }
    coach(dt);contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },

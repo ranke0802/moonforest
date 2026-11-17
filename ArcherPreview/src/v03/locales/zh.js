@@ -23,6 +23,7 @@ export default {
   'opening.4':'“去找那个孩子。”',
   'scene.protect':'保护车夫',
   'hud.main':'主线','hud.chapterNext':'故事未完待续','hud.complete':'完成 · {done}','hud.completeNext':'完成 · {done}  →  {next}','hud.rested':'已休息 · 旅程已记录',
+  'prompt.actionQuest':'交谈','prompt.actionIdle':'搭话',
   'prompt.talkQuest':'与{name}交谈','prompt.talkIdle':'向{name}搭话',
  },
  story:{

@@ -257,7 +257,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.ok(h.guide.shown&&h.guide.shown.z>4&&h.guide.shown.z<12.2,JSON.stringify(h.guide.shown));
  {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
- assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.match(hud('.v03-prompt').textContent,/E · 마부와 이야기하기/);
+ assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'!','the driver is a report: !');
  assert.equal(hud('.v03-tip-title').textContent,'강공격','the next tip waits its turn');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
  key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);
@@ -274,7 +274,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),['innkeeper','elder','herbalist','chief','youth']);
  assert.deepEqual(h.marks.at(-1),[{x:-3.4,z:10.6,glyph:'?'}],'the innkeeper carries a ? on the minimap');
  assert.equal(h.save.meta().title,'달빛 여관');assert.match(hud('.v03-banner').textContent,/완료 · 늑대와 마차/);
- h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').textContent,'E · 여관 주인과 이야기하기');assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
+ h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'여관 주인과 이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'?');assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
  for(let i=0;i<5;i++)key('Space');await settle();
  assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'사람들이 기억하는 성녀');assert.equal(hud('.v03-quest-objective').textContent,'주민 세 사람의 이야기 듣기 (0/3)');
  // A later document resumes the same quest step.

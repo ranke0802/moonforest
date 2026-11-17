@@ -23,6 +23,7 @@ export default {
   'opening.4':'“Hãy tìm đứa trẻ đó.”',
   'scene.protect':'Bảo vệ người đánh xe',
   'hud.main':'Chính','hud.chapterNext':'Câu chuyện còn tiếp','hud.complete':'Hoàn thành · {done}','hud.completeNext':'Hoàn thành · {done}  →  {next}','hud.rested':'Đã nghỉ ngơi · Đã ghi lại hành trình',
+  'prompt.actionQuest':'Nói chuyện','prompt.actionIdle':'Bắt chuyện',
   'prompt.talkQuest':'Nói chuyện với {name}','prompt.talkIdle':'Bắt chuyện với {name}',
  },
  story:{
