@@ -130,6 +130,7 @@ import { attachCharacterOutlines } from './character-outlines.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
 // Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
 import {tr,startLanguage} from './v03/i18n.js';
+import hudLandscapeV03 from './v03/data/hud-landscape.json' with {type:'json'};
 // 0.3 only (its splash defines __moonforestSplash): load the language before the loading card.
 if(globalThis.__moonforestSplash)void startLanguage();
 
@@ -567,7 +568,13 @@ function v03ResetStage(stage){
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;controller.resetStamina?.();controller.cancelAttack?.();
   staminaNoticeAnchor.reset();staminaFeedback.reset(controller);
   input.reset();attackSources.clear();attackPointerTypes.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
-  const spawn=mapSpawn(),staged=!!stage&&Number.isFinite(stage.x)&&Number.isFinite(stage.z)&&(!stage.map||stage.map===world.mapId)&&world.navigation?.free?.(stage,playerDimensions(actor).moveRadius,movementLimit(stage))===true;
+  // A story stage always wins over any remembered position. If the exact spot
+  // is blocked, the nearest free spot beside it is used (never the map spawn).
+  if(stage)resumePose=null;
+  const radius=playerDimensions(actor).moveRadius,onMap=!!stage&&Number.isFinite(stage.x)&&Number.isFinite(stage.z)&&(!stage.map||stage.map===world.mapId);
+  const near=onMap&&world.navigation?.free?.(stage,radius,movementLimit(stage))!==true?world.navigation?.findFree?.(stage,radius,movementLimit(stage)):null;
+  if(near){stage={...stage,x:near.x,z:near.z};}
+  const spawn=mapSpawn(),staged=onMap;
   const yaw=staged&&Number.isFinite(stage.yaw)?stage.yaw:null;
   actor.rotationQuaternion=null;actor.rotation.set(0,(config.forwardYaw||0)+(yaw??0),0);
   actor.position.set(staged?stage.x:spawn.x,0,staged?stage.z:spawn.z);world.terrain.place(actor.position);
@@ -1371,7 +1378,9 @@ try {
       world.scene.onDisposeObservable.addOnce(()=>world.hudRaster?.dispose());
       if(import.meta.hot)import.meta.hot.dispose(()=>world.hudRaster?.dispose());
     }
-    hudLayout=setupHudLayout({root:$('#app'),storage:equipmentStorage,getReady:()=>ready&&!loadingAsset&&!mapTransition?.busy&&!frameLoop?.failed&&!controller?.dead,resetInput:()=>{input?.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),onClose:message=>toast(message)});
+    hudLayout=setupHudLayout({root:$('#app'),storage:equipmentStorage,getReady:()=>ready&&!loadingAsset&&!mapTransition?.busy&&!frameLoop?.failed&&!controller?.dead,resetInput:()=>{input?.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),onClose:message=>toast(message),
+      // 0.3: its own quest panel, and a reviewed landscape layout (portrait keeps the authored default).
+      ...(versionRoute.edition?{selectors:{quest:'.v03-quest'},orientationDefaults:{landscape:hudLandscapeV03}}:{})});
     if(import.meta.hot)import.meta.hot.dispose(()=>{hudLayout?.dispose();commercialUi?.dispose();});
   }
   if(releaseEnabled&&new URLSearchParams(location.search).get('actorLab')==='1'){
@@ -1549,6 +1558,7 @@ try {
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
+    hudLayout?.rebind?.();
     // Development-only handle for QA from the console; never present in a build.
     if(import.meta.env.DEV)window.moonforestV03=world.v03;
     if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());

@@ -22,6 +22,7 @@ export default {
   'opening.3':'Lời cầu nguyện trong bóng tối.\nKhông có lời đáp.',
   'opening.4':'“Hãy tìm đứa trẻ đó.”',
   'scene.protect':'Bảo vệ người đánh xe',
+  'rotate.title':'Hãy xoay ngang thiết bị','rotate.tap':'Chạm để chuyển sang toàn màn hình ngang.','rotate.ios':'Trò chơi chơi ở chế độ ngang. Thêm vào Màn hình chính để chơi toàn màn hình không có thanh trình duyệt.','ios.add':'Thêm vào Màn hình chính','ios.step1':'Chạm nút Chia sẻ (□↑) trong Safari.','ios.step2':"Chọn 'Thêm vào Màn hình chính'.",'ios.step3':'Mở MoonForest từ Màn hình chính và xoay ngang thiết bị.',
   'hud.main':'Chính','hud.chapterNext':'Câu chuyện còn tiếp','hud.complete':'Hoàn thành · {done}','hud.completeNext':'Hoàn thành · {done}  →  {next}','hud.rested':'Đã nghỉ ngơi · Đã ghi lại hành trình',
   'prompt.actionQuest':'Nói chuyện','prompt.actionIdle':'Bắt chuyện',
   'prompt.talkQuest':'Nói chuyện với {name}','prompt.talkIdle':'Bắt chuyện với {name}',

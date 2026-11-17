@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "items": {
+    "health": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "gold": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "quest": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "tools": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "map": {
+      "x": -0.002197265625,
+      "y": -0.040283203125,
+      "scale": 1.2275450584366836
+    },
+    "diagnostics": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "shield": {
+      "x": -0.034423828125,
+      "y": -0.070068359375,
+      "scale": 1.7117035247796994
+    },
+    "potion": {
+      "x": -0.046142578125,
+      "y": -0.082275390625,
+      "scale": 1.298659913759922
+    },
+    "dodge": {
+      "x": -0.11,
+      "y": -0.100341796875,
+      "scale": 1.320767528759491
+    },
+    "attack": {
+      "x": -0.046630859375,
+      "y": -0.028076171875,
+      "scale": 1.5859609360075602
+    },
+    "boss": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "joystick": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "travel": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "story": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "interact": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "fps": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "bag": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "journal": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "summon": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "fullscreen": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "settings": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "chapterDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "summonDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "settingsDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "mapDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "helpDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "diagnosticsDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "bossSettingsDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "characterSettingsDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "brand": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "characterInfo": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "cameraTools": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "keyboardHint": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "cameraHint": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "joystickHint": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "run": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "hit": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "death": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "toast": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "chapterToast": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "deathDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "authoredInteraction": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "authoredDialog": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    },
+    "streamLoading": {
+      "x": 0,
+      "y": 0,
+      "scale": 1
+    }
+  }
+}

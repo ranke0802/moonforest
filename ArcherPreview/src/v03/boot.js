@@ -7,6 +7,7 @@ import {createAttractPilot} from './attract-pilot.js';
 import {createStory} from './story.js';
 import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
+import {createOrientationGate} from './orientation-gate.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
@@ -30,6 +31,8 @@ export function setupV03(api){
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
  const cursors=createCursors(doc);
+ // Phones play in landscape only, from the moment the language is chosen.
+ const gate=createOrientationGate({doc});
  // Game cursors start after the splash (and its language picker) is done.
  void Promise.resolve(view?.__moonforestSplash?.done).then(()=>{if(!state.disposed)cursors.enable();});
  // Language: chosen on the first launch (inline splash) or in Settings, kept
@@ -53,7 +56,7 @@ export function setupV03(api){
  const title=createTitleScreen({doc,wait,describe,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
-  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
  function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
@@ -107,7 +110,10 @@ export function setupV03(api){
  async function beginNewGame(){
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
-  stopAttract();api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
+  stopAttract();
+  // The title can be on another map (a record was resumed there): travel and let the opening run after the load.
+  if(OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map){save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));reloadInto(save.slot,'new',null);return;}
+  api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
   screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
   // Prepare the ambush behind the black stage; the simulation stays frozen
   // (blocksGame) until the dream ends, so nothing can attack early.
@@ -225,7 +231,7 @@ export function setupV03(api){
   // Title/prologue never write progress, quests or map position.
   get blocksProgress(){return state.screen!=='play';},
   // The simulation is frozen while the prologue covers the stage.
-  get blocksGame(){return state.screen==='opening'||state.screen==='exit'||story.dialogueOpen;},
+  get blocksGame(){return state.screen==='opening'||state.screen==='exit'||story.dialogueOpen||gate.active;},
   // Called by the game when an enemy is defeated.
   defeat(event){if(state.screen==='play')story.defeat(event);},
   story,
@@ -246,6 +252,9 @@ export function setupV03(api){
     }
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
    }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy&&state.langReady){
+    // The opening is on the plains road; a document opened on another map goes there first.
+    if(OPENING_STAGE.map&&s.mapId!==OPENING_STAGE.map&&!state.openingTravel){state.openingTravel=true;void Promise.resolve(api.travel?.('warrior-plains')).catch(report);return;}
+    if(s.mapId!==OPENING_STAGE.map)return;
     state.busy=true;api.resetStage(OPENING_STAGE);story.prepare(s.mapId);
     void (async()=>{
      save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.ambush=true;
@@ -272,6 +281,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

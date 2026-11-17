@@ -131,7 +131,7 @@ html[data-loading] .v03-hud{display:none}
  .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
 }
 
-.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:10vh;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 16%);mask-image:linear-gradient(to top,transparent 0,#000 16%);height:min(68vh,560px);width:auto;max-width:42vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
+.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:clamp(120px,21vh,200px);-webkit-mask-image:linear-gradient(to top,transparent 0,#000 18%);mask-image:linear-gradient(to top,transparent 0,#000 18%);height:min(68vh,560px);width:auto;max-width:42vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
 .v03-dialogue-portrait.is-in{opacity:1;transform:none;transition:opacity .35s ease,transform .35s ease}
 .v03-dialogue-box{z-index:1}
 @media (pointer:coarse),(max-height:520px){.v03-dialogue-portrait{height:min(58vh,420px);max-width:38vw}}
@@ -165,3 +165,14 @@ html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opa
 .v03-language:active{transform:scale(.96)}
 .v03-languages.is-done .v03-language:not(.is-chosen){opacity:.25}
 .v03-language.is-chosen{transform:scale(1.05);color:#1a1408;background:#e6cf8f!important;border-color:#fff2c8!important;box-shadow:0 0 0 2px #fff2c8aa,0 0 24px #e6cf8f99}
+
+/* Portrait gate (touch devices, after the language is chosen) */
+.v03-rotate{z-index:29000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:max(24px,env(safe-area-inset-top)) 28px max(24px,env(safe-area-inset-bottom));text-align:center;background:radial-gradient(ellipse at 50% 40%,#16241be8,#050806f5);user-select:none}
+.v03-rotate[hidden]{display:none}
+.v03-rotate-icon{width:46px;height:78px;border:3px solid var(--v03-gold);border-radius:9px;position:relative;animation:v03-rotate 2.4s ease-in-out infinite}
+.v03-rotate-icon::after{content:'';position:absolute;left:50%;bottom:6px;width:10px;height:3px;margin-left:-5px;border-radius:2px;background:var(--v03-gold)}
+@keyframes v03-rotate{0%,25%{transform:rotate(0)}55%,85%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+.v03-rotate-title{margin:6px 0 0;font-size:20px;letter-spacing:.08em;color:#f2dc9c}
+.v03-rotate-lead{margin:0;max-width:320px;font-size:14px;line-height:1.55;color:#e8dfc8}
+.v03-rotate-add{margin-top:6px;min-height:46px;padding:10px 22px;font-size:15px!important;color:#14100a!important;background:#e6cf8f!important;border:1px solid #fff2c8!important;border-radius:4px!important}
+.v03-rotate-steps{margin:4px 0 0;padding:12px 16px 12px 34px;max-width:320px;text-align:left;font-size:13px;line-height:1.6;color:#e8dfc8;background:#ffffff0d;border:1px solid #ae925966;border-radius:4px}

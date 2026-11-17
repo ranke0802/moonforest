@@ -22,6 +22,7 @@ export default {
   'opening.3':'在黑暗中献上的祈祷。\n没有回应。',
   'opening.4':'“去找那个孩子。”',
   'scene.protect':'保护车夫',
+  'rotate.title':'请将设备横过来','rotate.tap':'点击切换为横屏全屏。','rotate.ios':'本游戏需横屏游玩。添加到主屏幕后可无浏览器栏全屏游玩。','ios.add':'添加到主屏幕','ios.step1':'点击 Safari 底部的分享按钮（□↑）。','ios.step2':'选择“添加到主屏幕”。','ios.step3':'从主屏幕的 MoonForest 图标启动，并将设备横过来。',
   'hud.main':'主线','hud.chapterNext':'故事未完待续','hud.complete':'完成 · {done}','hud.completeNext':'完成 · {done}  →  {next}','hud.rested':'已休息 · 旅程已记录',
   'prompt.actionQuest':'交谈','prompt.actionIdle':'搭话',
   'prompt.talkQuest':'与{name}交谈','prompt.talkIdle':'向{name}搭话',

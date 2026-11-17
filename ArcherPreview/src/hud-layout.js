@@ -87,12 +87,25 @@ export function resolveHudBox(group,value,box,viewport,responsiveScale=1){
   return {x:group.locked?0:axis(value.x,cx,box.width*scale,halfW*2),y:group.locked?0:axis(value.y,cy,box.height*scale,halfH*2),scale};
 }
 
-export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{},onPauseChange=()=>{},onClose=()=>{}}){
-  const doc=root.ownerDocument,win=doc.defaultView,groups=HUD_GROUPS.map(g=>({...g,node:root.querySelector(g.selector)})).filter(g=>g.node);
+// selectors: per-group selector overrides (0.3 edits its own quest panel).
+// orientationDefaults: {landscape:rawLayout} keeps a separate layout per
+// orientation (stored under HUD_LAYOUT_KEY+':landscape' / ':portrait'), with
+// that default for landscape and the authored default for portrait.
+export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{},onPauseChange=()=>{},onClose=()=>{},selectors={},orientationDefaults=null}){
+  const doc=root.ownerDocument,win=doc.defaultView;
+  const resolveGroups=()=>HUD_GROUPS.map(g=>({...g,selector:selectors[g.id]??g.selector})).map(g=>({...g,node:root.querySelector(g.selector)})).filter(g=>g.node);
+  let groups=resolveGroups();
   const original=new Map(groups.map(g=>[g.id,{translate:g.node.style.translate||'',scale:g.node.style.scale||'',origin:g.node.style.transformOrigin||''}]));
+  const orientationOf=box=>box.width>=box.height?'landscape':'portrait';
+  let orientation=orientationDefaults?orientationOf(root.getBoundingClientRect()):null;
+  const storageKey=()=>orientation?`${HUD_LAYOUT_KEY}:${orientation}`:HUD_LAYOUT_KEY;
+  const orientedDefault=()=>orientation==='landscape'&&orientationDefaults?.landscape?parseHudLayout(orientationDefaults.landscape):defaultHudLayout();
+  function loadCommitted(){let value=orientedDefault();try{const raw=storage?.getItem(storageKey());if(raw)value=parseHudLayout(raw);}catch{storageError=true;}return value;}
   const dialog=doc.createElement('dialog');dialog.id='hud-layout-dialog';dialog.dataset.ui='';dialog.setAttribute('aria-label','HUD 위치와 크기 편집');
-  dialog.innerHTML=`<section class="hud-layout-panel"><header><strong>UI 편집</strong><span id="hud-layout-current"></span><button type="button" data-hud-command="reset-all">초기화</button><button type="button" data-hud-command="cancel">취소</button><button type="button" data-hud-command="save">저장</button></header><p>화면의 UI를 선택해 드래그하세요. PC는 가장자리, 모바일은 두 손가락으로 크기를 조절합니다.</p><details class="hud-layout-options"><summary>다른 항목 · 세부 설정</summary><label>편집할 항목<select id="hud-layout-selection">${groups.map(g=>`<option value="${g.id}">${g.label}</option>`).join('')}</select></label><p id="hud-layout-note"></p><div class="hud-layout-fields">${[['x','가로 위치'],['y','세로 위치'],['scale','크기']].map(([key,label])=>`<label>${label}<input type="range" data-hud-field="${key}" aria-label="${label}" step="1"><output data-hud-output="${key}"></output></label>`).join('')}</div><div class="hud-layout-actions"><button type="button" data-hud-command="reset">선택 초기화</button></div><details><summary>배치 내보내기 · 가져오기</summary><textarea id="hud-layout-json" aria-label="HUD 배치 데이터" spellcheck="false"></textarea><div class="hud-layout-actions"><button type="button" data-hud-command="export">내보내기</button><button type="button" data-hud-command="import">가져오기</button></div></details></details><p id="hud-layout-status" role="status" aria-live="polite"></p></section>`;
+  dialog.innerHTML=`<section class="hud-layout-panel"><header><strong>UI 편집</strong><span id="hud-layout-current"></span><button type="button" class="hud-layout-collapse" data-hud-collapse aria-expanded="true" title="편집 창 접기">▾</button><button type="button" data-hud-command="reset-all">초기화</button><button type="button" data-hud-command="cancel">취소</button><button type="button" data-hud-command="save">저장</button></header><p>화면의 UI를 선택해 드래그하세요. PC는 가장자리, 모바일은 두 손가락으로 크기를 조절합니다.</p><details class="hud-layout-options"><summary>다른 항목 · 세부 설정</summary><label>편집할 항목<select id="hud-layout-selection">${groups.map(g=>`<option value="${g.id}">${g.label}</option>`).join('')}</select></label><p id="hud-layout-note"></p><div class="hud-layout-fields">${[['x','가로 위치'],['y','세로 위치'],['scale','크기']].map(([key,label])=>`<label>${label}<input type="range" data-hud-field="${key}" aria-label="${label}" step="1"><output data-hud-output="${key}"></output></label>`).join('')}</div><div class="hud-layout-actions"><button type="button" data-hud-command="reset">선택 초기화</button></div><details><summary>배치 내보내기 · 가져오기</summary><textarea id="hud-layout-json" aria-label="HUD 배치 데이터" spellcheck="false"></textarea><div class="hud-layout-actions"><button type="button" data-hud-command="export">내보내기</button><button type="button" data-hud-command="import">가져오기</button></div></details></details><p id="hud-layout-status" role="status" aria-live="polite"></p></section>`;
   root.append(dialog);
+  // The editor panel folds down to its header so the HUD behind stays visible.
+  dialog.addEventListener('click',event=>{const button=event.target.closest?.('[data-hud-collapse]');if(!button)return;event.stopPropagation();const panel=dialog.querySelector('.hud-layout-panel'),folded=panel.classList.toggle('is-collapsed');button.textContent=folded?'▴':'▾';button.title=folded?'편집 창 펼치기':'편집 창 접기';button.setAttribute('aria-expanded',String(!folded));});
   const preview=doc.createElement('div');preview.id='hud-layout-preview';preview.setAttribute('aria-hidden','true');dialog.prepend(preview);
   const find=s=>dialog.querySelector(s),select=find('#hud-layout-selection'),status=find('#hud-layout-status');
   const componentChoice=doc.createElement('label');componentChoice.innerHTML='<input type="checkbox" data-hud-components> 창 미리보기에서 내부 요소 선택';find('#hud-layout-note').after(componentChoice);
@@ -102,10 +115,10 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   const downloadLink=doc.createElement('a');downloadLink.className='hud-layout-download';downloadLink.download='moonforest-hud-layout.json';downloadLink.textContent='내보낸 JSON 파일 다시 받기';downloadLink.hidden=true;status.before(downloadLink);
   const urls=win.URL?.createObjectURL?win.URL:globalThis.URL;
   let downloadUrl=null,editSession=0,fileRequest=0;
-  let committed=defaultHudLayout(),draft=null,editing=false,selected=groups[0]?.id,selectedComponent=null,drag=null,scheduled=null,disposed=false,boxes={},view={width:0,height:0,left:0,top:0},storageError=false,previewNode=null;
+  let committed=null,draft=null,editing=false,selected=groups[0]?.id,selectedComponent=null,drag=null,scheduled=null,disposed=false,boxes={},view={width:0,height:0,left:0,top:0},storageError=false,previewNode=null;
   const componentOriginal=new Map();
   const pointers=new Map();
-  try{const raw=storage?.getItem(HUD_LAYOUT_KEY);if(raw)committed=parseHudLayout(raw);}catch{storageError=true;}
+  committed=loadCommitted();
   const listen=(node,type,fn,options)=>{node.addEventListener(type,fn,options);cleanups.push(()=>node.removeEventListener(type,fn,options));};
   const cleanups=[];
   const group=()=>groups.find(g=>g.id===selected);
@@ -126,6 +139,8 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     if(disposed)return;
     const viewport=root.getBoundingClientRect();if(!viewport.width||!viewport.height)return;
     view={width:viewport.width,height:viewport.height,left:viewport.left,top:viewport.top};
+    // Turning the device swaps to that orientation's own layout.
+    if(orientationDefaults&&!editing){const next=orientationOf(viewport);if(next!==orientation){orientation=next;committed=loadCommitted();}}
     // Restore all authored transforms before measuring. No per-frame work.
     restoreComponents();for(const g of groups)restore(g);
     boxes={};
@@ -149,7 +164,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   function jsonText(){return JSON.stringify(snapshot(),null,2)+'\n';}
   function persist(){
     committed=snapshot().items;
-    try{if(!storage?.setItem||!storage?.getItem)throw Error();const text=JSON.stringify({version:1,items:committed});storage.setItem(HUD_LAYOUT_KEY,text);if(storage.getItem(HUD_LAYOUT_KEY)!==text)throw Error();storageError=false;}catch{storageError=true;}
+    try{if(!storage?.setItem||!storage?.getItem)throw Error();const text=JSON.stringify({version:1,items:committed});storage.setItem(storageKey(),text);if(storage.getItem(storageKey())!==text)throw Error();storageError=false;}catch{storageError=true;}
   }
   function showJson(text){
     const area=find('#hud-layout-json');area.value=text;
@@ -198,7 +213,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     try{
       if(command==='cancel'||command==='save'){finish(command==='save');return;}
       if(command==='reset')draft[selected]=defaultHudLayout()[selected];
-      if(command==='reset-all'){draft=defaultHudLayout();status.textContent='기본 배치로 초기화했습니다. 저장하면 적용됩니다.';}
+      if(command==='reset-all'){draft=orientedDefault();status.textContent='기본 배치로 초기화했습니다. 저장하면 적용됩니다.';}
       if(command==='export'){showJson(jsonText());status.textContent='현재 배치 JSON입니다. 파일로 받으려면 저장 · JSON 내보내기를 누르세요.';}
       if(command==='download'){downloadJson();return;}
       if(command==='copy'){void copyJson();return;}
@@ -249,5 +264,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   const entry=doc.createElement('button');entry.type='button';entry.id='open-hud-layout';entry.textContent='HUD 위치 · 크기';entry.setAttribute('aria-haspopup','dialog');entry.setAttribute('aria-controls',dialog.id);entry.className='motion-speed-toggle';
   const host=root.querySelector('#camera-follow-options')?.parentElement??root.querySelector('.settings-sections');host?.append(entry);listen(entry,'click',open);
   const observer=win.ResizeObserver?new win.ResizeObserver(schedule):null;observer?.observe(root);for(const g of groups)observer?.observe(g.node);const mutations=win.MutationObserver?new win.MutationObserver(schedule):null;for(const g of groups)if(g.node.tagName==='DIALOG')mutations?.observe(g.node,{childList:true,subtree:true});listen(win,'resize',schedule);draw();
-  return {open,isOpen:()=>editing,close:()=>finish(false),refresh:schedule,inspect:()=>({version:1,items:JSON.parse(JSON.stringify(committed)),editing,storageAvailable:!storageError}),dispose(){if(disposed)return;finish(false);releaseDownload();disposed=true;if(scheduled!==null)win.cancelAnimationFrame(scheduled);observer?.disconnect();mutations?.disconnect();for(const stop of cleanups)stop();restoreComponents();for(const g of groups){restore(g);g.node.removeAttribute('data-hud-selected');}dialog.remove();entry.remove();}};
+  // Picks up HUD pieces created after setup (the 0.3 story HUD).
+  function rebind(){const next=resolveGroups();for(const g of next)if(!original.has(g.id)||groups.find(row=>row.id===g.id)?.node!==g.node)original.set(g.id,{translate:g.node.style.translate||'',scale:g.node.style.scale||'',origin:g.node.style.transformOrigin||''});groups=next;if(!groups.some(g=>g.id===selected))selected=groups[0]?.id;select.replaceChildren(...groups.map(g=>{const option=doc.createElement('option');option.value=g.id;option.textContent=g.label;return option;}));select.value=selected;schedule();}
+  return {open,rebind,isOpen:()=>editing,close:()=>finish(false),refresh:schedule,inspect:()=>({version:1,items:JSON.parse(JSON.stringify(committed)),editing,storageAvailable:!storageError}),dispose(){if(disposed)return;finish(false);releaseDownload();disposed=true;if(scheduled!==null)win.cancelAnimationFrame(scheduled);observer?.disconnect();mutations?.disconnect();for(const stop of cleanups)stop();restoreComponents();for(const g of groups){restore(g);g.node.removeAttribute('data-hud-selected');}dialog.remove();entry.remove();}};
 }
