@@ -121,7 +121,7 @@ html[data-loading] .v03-hud{display:none}
  .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
 }
 
-.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:0;height:min(68vh,560px);width:auto;max-width:42vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
+.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:10vh;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 16%);mask-image:linear-gradient(to top,transparent 0,#000 16%);height:min(68vh,560px);width:auto;max-width:42vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
 .v03-dialogue-portrait.is-in{opacity:1;transform:none;transition:opacity .35s ease,transform .35s ease}
 .v03-dialogue-box{z-index:1}
 @media (pointer:coarse),(max-height:520px){.v03-dialogue-portrait{height:min(58vh,420px);max-width:38vw}}
