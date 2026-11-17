@@ -235,21 +235,7 @@ html[data-v03-vital] #app{--v03-quest-top:calc(clamp(20px,4vh,44px) + 52px)}
    with ?dev (or ?qa) in the address. */
 html[data-edition]:not([data-dev]) #open-summon{display:none!important}
 
-/* ----- Player settings: the story edition shows display, performance,
-   controls and version; review and tuning controls need ?dev (or ?qa). ----- */
-html[data-edition]:not([data-dev]) .game-settings .settings-sections>details:not([data-v03-keep]),
-html[data-edition]:not([data-dev]) .game-settings #motion-speed-description,
-html[data-edition]:not([data-dev]) .game-settings #open-character-style,
-html[data-edition]:not([data-dev]) .game-settings .camera-tools,
-html[data-edition]:not([data-dev]) .game-settings #camera-zoom-options,
-html[data-edition]:not([data-dev]) .game-settings .effect-review-settings,
-html[data-edition]:not([data-dev]) .game-settings .camera-hint,
-html[data-edition]:not([data-dev]) .game-settings .secondary-actions,
-html[data-edition]:not([data-dev]) .game-settings #build-tag,
-html[data-edition]:not([data-dev]) .game-settings .scene-footer,
-html[data-edition]:not([data-dev]) .game-settings #player-combat-status{display:none!important}
-/* 0.4 runs its own sky and weather; the 0.2 weather preset would fight it. */
-html[data-world="0.4"] .game-settings .settings-display-options label:has(select[aria-label="날씨"]){display:none!important}
+/* ----- Settings: touch-sized buttons at the foot (return to title, quit). ----- */
 html[data-edition] .game-settings .settings-sections>button{display:block;width:100%;min-height:44px;margin-top:10px;padding:8px 14px;border:1px solid #ae925980;border-radius:4px;background:#ffffff0a;color:#f4ead0;font-size:14px;letter-spacing:.08em;transition:background .15s ease,border-color .15s ease}
 html[data-edition] .game-settings .settings-sections>button:hover,html[data-edition] .game-settings .settings-sections>button:focus-visible{background:#cfb77b22;border-color:var(--v03-gold,#cfb77b)}
 html[data-edition] .game-settings .v03-settings-leave.is-armed{background:#cfb77b2e;border-color:var(--v03-gold,#cfb77b);color:#fff4d6}

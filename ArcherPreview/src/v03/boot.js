@@ -228,16 +228,8 @@ export function setupV03(api){
   const title=doc.getElementById('death-title'),hint=doc.getElementById('death-hint');
   if(title)title.textContent=t('death.title');if(hint)hint.textContent=t('death.hint');
  }
- // Players see four sections (display, performance, controls, version); the
- // review and tuning sections stay for development (?dev). CSS hides whatever
- // is not tagged here, including sections added later.
- const SETTINGS_KEEP=[['#quality-select','display'],['#frame-diagnostics-options','performance'],['#help-toggle','controls'],['#runtime-version','version']];
  function tidySettings(dialog){
   const host=dialog.querySelector('.settings-sections');if(!host)return;
-  for(const section of host.querySelectorAll(':scope>details'))for(const [selector,id] of SETTINGS_KEEP){
-   if(!section.querySelector(selector))continue;section.dataset.v03Keep=id;
-   if(!doc.documentElement.hasAttribute('data-dev')){const summary=section.querySelector(':scope>summary');if(summary)summary.textContent=t('settings.'+id);}
-  }
   // Back to the title: saved first; a second tap within three seconds confirms.
   const leave=doc.createElement('button');leave.type='button';leave.className='v03-settings-leave';leave.dataset.ui='';leave.textContent=t('settings.toTitle');
   let armed=0;
