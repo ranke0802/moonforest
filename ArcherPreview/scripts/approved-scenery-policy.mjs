@@ -50,7 +50,12 @@ export function validateR2SceneryAgainstLedger(assetId,config,info,ledger){
  if(a.sourceRgbId&&(!hex.test(a.sourceRgbSha256??'')||sha(readFileSync(sourcePath(a.sourceRgbId)))!==a.sourceRgbSha256))return fail();
  return b.catalogAssetVersion;
 }
+// CI release builds (MOONFOREST_RELEASE_CI=1) run without the gitignored source art.
+// There the published files are already proven byte-identical to the reviewed
+// 0.1 inventory by the release build, so only this source re-check is skipped.
+const releaseCiWithoutSources=()=>process.env.MOONFOREST_RELEASE_CI==='1';
 export function approvedR2SceneryVersion(assetId,config,info){
+ if(releaseCiWithoutSources()){try{sourcePath('approved-review-r2-2026-11-09','approval.json');}catch{return null;}}
  const bytes=readFileSync(sourcePath('approved-review-r2-2026-11-09','approval.json'));
  if(sha(bytes)!==SCENERY_REVIEW_R2_LEDGER_SHA256)throw new Error('Registered R2 approval ledger hash differs');
  return validateR2SceneryAgainstLedger(assetId,config,info,JSON.parse(bytes));
