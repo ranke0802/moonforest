@@ -229,30 +229,6 @@ export function setupV03(api){
   for(const [name,row] of rows){const item=make('div','v03-guide-row');item.append(make('dt','',name),make('dd','is-touch',row.touch),make('dd','is-keys',row.keys));list.append(item);}
   guide.append(list);dialog.append(guide);
  }
- // Controls guide for players, built from the lesson and tip text already
- // written per language. It replaces the review-era help text (v03.css).
- function mountControlsGuide(){
-  const dialog=doc.getElementById('help-dialog');if(!dialog||dialog.querySelector('.v03-guide'))return;
-  const hint=id=>content.COMBAT_HINTS?.find(row=>row.id===id),tip=id=>content.TIPS?.find(row=>row.id===id);
-  const both=key=>({touch:t(key),keys:t(key)});
-  const rows=[
-   [hint('move')?.text,hint('move')],[hint('camera')?.text,hint('camera')],[hint('attack')?.text,hint('attack')],
-   [t('guide.combo'),both('guide.comboText')],[tip('charge')?.title,tip('charge')],
-   [t('guide.dodge'),hint('dodge')],[tip('sprint')?.title,tip('sprint')],
-   [t('guide.guard'),hint('guard')],[t('guide.justGuard'),both('guide.justGuardText')],
-   [tip('potion')?.title,tip('potion')],[tip('talk')?.title,tip('talk')],
-  ].filter(([name,row])=>name&&row);
-  const make=(tag,className,text)=>{const node=doc.createElement(tag);node.className=className;if(text!==undefined)node.textContent=text;return node;};
-  const guide=make('section','v03-guide'),list=make('dl','v03-guide-list');
-  guide.append(make('h2','v03-guide-title',t('settings.controls')),make('p','v03-guide-mode is-touch',t('guide.touch')),make('p','v03-guide-mode is-keys',t('guide.keys')));
-  for(const [name,row] of rows){const item=make('div','v03-guide-row');item.append(make('dt','',name),make('dd','is-touch',row.touch),make('dd','is-keys',row.keys));list.append(item);}
-  guide.append(list);dialog.append(guide);
- }
- // The fall screen speaks the game's language and typeface (v03.css).
- function labelDeathScreen(){
-  const title=doc.getElementById('death-title'),hint=doc.getElementById('death-hint');
-  if(title)title.textContent=t('death.title');if(hint)hint.textContent=t('death.hint');
- }
  function tidySettings(dialog){
   const host=dialog.querySelector('.settings-sections');if(!host)return;
   // Back to the title: saved first; a second tap within three seconds confirms.
