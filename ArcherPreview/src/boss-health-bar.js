@@ -53,6 +53,7 @@ export class BossHealthBars {
         item.state.textContent = boss.brain.label;
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }
+      this.decorate?.(item.element,boss);
       updateBossHealthPosition(scene, boss, item.element, projection,{fixed:boss===primary});
     }
     for (const [id, item] of this.items) if (!visible.has(id)) {

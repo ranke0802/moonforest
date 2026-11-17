@@ -8,6 +8,7 @@ import {createStory} from './story.js';
 import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
 import {createOrientationGate} from './orientation-gate.js';
+import {createVitalityHud} from './vitality-hud.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
@@ -33,6 +34,8 @@ export function setupV03(api){
  const cursors=createCursors(doc);
  // Phones play in landscape only, from the moment the language is chosen.
  const gate=createOrientationGate({doc});
+ // Tekken-style health (recoverable part) for the player and monsters, in play only.
+ const vitality=createVitalityHud({doc,battle});
  // Game cursors start after the splash (and its language picker) is done.
  void Promise.resolve(view?.__moonforestSplash?.done).then(()=>{if(!state.disposed)cursors.enable();});
  // Language: chosen on the first launch (inline splash) or in Settings, kept
@@ -234,6 +237,7 @@ export function setupV03(api){
   get blocksGame(){return state.screen==='opening'||state.screen==='exit'||story.dialogueOpen||gate.active;},
   // Called by the game when an enemy is defeated.
   defeat(event){if(state.screen==='play')story.defeat(event);},
+  decorateFoeBar(element,foe){if(state.screen==='play')vitality.decorate(element,foe);},
   story,
   get pilotMovement(){return state.attract?pilot.movement:null;},
   // Tutorial gate for main.js actions; everything is allowed outside play.
@@ -266,6 +270,7 @@ export function setupV03(api){
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
+    if(!story.sceneActive)vitality.update(dt);
     cursors.set(story.dialogueOpen||story.sceneActive?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();
     if(state.sinceSave>=15){state.sinceSave=0;save.touch(metaPatch());}
@@ -281,6 +286,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

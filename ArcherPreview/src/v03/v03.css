@@ -176,3 +176,24 @@ html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opa
 .v03-rotate-lead{margin:0;max-width:320px;font-size:14px;line-height:1.55;color:#e8dfc8}
 .v03-rotate-add{margin-top:6px;min-height:46px;padding:10px 22px;font-size:15px!important;color:#14100a!important;background:#e6cf8f!important;border:1px solid #fff2c8!important;border-radius:4px!important}
 .v03-rotate-steps{margin:4px 0 0;padding:12px 16px 12px 34px;max-width:320px;text-align:left;font-size:13px;line-height:1.6;color:#e8dfc8;background:#ffffff0d;border:1px solid #ae925966;border-radius:4px}
+/* ---- Vitality (0.3): layered health, thin stamina line ----
+   green health · ember recoverable · pale trail of what was just lost.
+   Ink frame and gold hairline match the HUD; ticks every 10%. */
+html[data-v03-vital] #player-hud>progress:not(#player-stamina){display:none!important}
+.v03-vital{position:relative;overflow:hidden;background:#0c130f;border:1px solid #0b080c;box-shadow:0 0 0 1px #c9b98055,inset 0 1px 3px #000c}
+.v03-vital>i{position:absolute;inset:0;transform-origin:0 50%;will-change:transform}
+.v03-vital-trail{background:#efe4c4;opacity:.92}
+.v03-vital-recover{background:repeating-linear-gradient(-45deg,#c65a3f 0 3px,#9e3b2c 3px 6px)}
+.v03-vital-fill{background:linear-gradient(180deg,#d4f09e 0,#9fd36f 22%,#6fae4f 60%,#3f7a35 100%);box-shadow:inset 0 -1px #2b5a2688}
+.v03-vital-ticks{background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),#0b080c66 calc(10% - 1px) 10%)}
+#player-hud .v03-vital-player{grid-column:1;grid-row:1;align-self:center;height:12px}
+html[data-v03-vital] #player-hud #player-stamina{height:3px!important;margin-top:3px!important;background:#2c2717!important;box-shadow:0 0 0 1px #0b080c}
+html[data-v03-vital] #player-stamina::-webkit-progress-bar{background:#2c2717}
+html[data-v03-vital] #player-stamina::-webkit-progress-value{background:linear-gradient(90deg,#f6dc7a,#e9b843)!important;box-shadow:0 0 4px #f2c94c88}
+html[data-v03-vital] #player-stamina::-moz-progress-bar{background:#efc54f!important}
+html[data-v03-vital] #player-hud[data-low=true] .v03-vital{box-shadow:0 0 0 1px #d0604a,inset 0 1px 3px #000c;animation:v03-low 1.2s ease-in-out infinite}
+@keyframes v03-low{50%{box-shadow:0 0 0 1px #ff8a6a,0 0 10px #d0604a88,inset 0 1px 3px #000c}}
+/* Monster bars */
+.boss-hud[data-v03-vital] progress{display:none!important}
+.boss-hud .v03-vital-foe{height:5px;margin:2px auto 0}
+#app>.boss-hud[data-hud="fixed"] .v03-vital-foe{height:8px}

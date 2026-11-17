@@ -1559,6 +1559,8 @@ try {
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
     hudLayout?.rebind?.();
+    // 0.3 layered (recoverable) health on monster bars.
+    bossHealthBars.decorate=(element,foe)=>world.v03?.decorateFoeBar?.(element,foe);
     // Development-only handle for QA from the console; never present in a build.
     if(import.meta.env.DEV)window.moonforestV03=world.v03;
     if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());
