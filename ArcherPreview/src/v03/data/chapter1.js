@@ -18,6 +18,7 @@ export const NPCS=Object.freeze([
  {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle'},
  {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle'},
+ {id:'chief',name:'촌장',visual:'chief',map:'village',x:7.2,z:9.4,yaw:-2.2,idle:'chief-idle'},
  {id:'youth',name:'청년',visual:'youth',map:'village',x:-5.2,z:5.6,yaw:1.6,idle:'youth-idle'},
 ]);
 
@@ -42,8 +43,22 @@ export const DIALOGUES=Object.freeze({
   {who:'여관 주인',text:'세 사람 이야기를 다 들었군. 표정을 보니 말이 서로 안 맞았나 보네.'},
   {who:'나',text:'모두 그녀를 좋게 기억한다. 그런데 마지막 며칠을 물으면 말이 짧아진다.'},
   {who:'여관 주인',text:'…요아힘이 죽은 뒤로 마을이 그 얘기를 피하지. 그 친구는 평원 언덕의 곰한테 당했다고들 하네.'},
-  {who:'여관 주인',text:'사람들 입을 열고 싶으면 먼저 마을 일을 도와 보게. 게시판에 부탁이 붙어 있을 걸세. 오늘은 쉬어 두고.',effects:['rest']},
+  {who:'여관 주인',text:'사람들 입을 열고 싶으면 먼저 마을 일을 도와 보게. 촌장 댁에 가 보면 일거리가 있을 걸세. 우선 쉬어 두고.',effects:['rest']},
  ],
+ 'chief-request':[
+  {who:'촌장',text:'자네가 성녀님 일을 묻고 다닌다는 그 사람인가.'},
+  {who:'촌장',text:'묻는 건 자유지. 하지만 지금 이 마을엔 옛이야기를 할 여유가 없네.'},
+  {who:'촌장',text:'대평원 짐승들이 길까지 내려와. 마차가 습격당한 건 자네도 봤겠지.'},
+  {who:'촌장',text:'세 마리만 쫓아내 주게. 그러면 나도 아는 걸 하나 이야기해 주지.'},
+  {who:'나',text:'(성녀의 이야기를 들으려면, 먼저 이 마을의 신뢰부터.)'},
+ ],
+ 'chief-report':[
+  {who:'촌장',text:'길이 조용해졌군. 고맙네. 약속했으니 하나만 말하지.'},
+  {who:'촌장',text:'요아힘이 죽던 날, 대평원 북쪽 언덕에서 곰 울음이 들렸네.'},
+  {who:'촌장',text:'…하지만 곰은 사람을 그렇게 찢지 않아. 그 이상은 나도 모르네.'},
+  {who:'나',text:'(곰. 모두가 같은 이름을 말한다. 그런데 본 사람은 아무도 없다.)'},
+ ],
+ 'chief-idle':[{who:'촌장',text:'목책 고칠 일손이 모자라. 힘 좀 쓰는 사람이면 언제든 환영이네.'}],
  'elder-witness':[
   {who:'노년 여성',text:'엘레나? 아이고, 그 아이 덕에 이 다리로 다시 걷는다오. 밤새 내 곁을 지켰지.'},
   {who:'노년 여성',text:'받은 건 많은데… 마지막으로 뭘 해 줬느냐고 물으면, 말이 잘 안 나오는구먼.'},
@@ -65,11 +80,11 @@ export const DIALOGUES=Object.freeze({
  'youth-idle':[{who:'청년',text:'목책이 또 무너졌어요. 다음 습격 전에 고쳐야 하는데.'}],
 });
 
-// Step types: defeat {kind,count} · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
+// Step types: defeat {kind,count,map} · turnIn marks a report (! instead of ?) · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
 export const QUESTS=Object.freeze([
  {id:'M00',title:'늑대와 마차',steps:[
   {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
-  {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-thanks'}},
+  {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],turnIn:true,dialogues:{driver:'driver-thanks'}},
   {id:'road',text:'길을 따라 마을로 가기',type:'reach',map:'village'},
  ]},
  {id:'M01',title:'달빛 여관',steps:[
@@ -77,10 +92,15 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M02',title:'사람들이 기억하는 성녀',steps:[
   {id:'witness',text:'주민 세 사람의 이야기 듣기',type:'talk',targets:['elder','herbalist','youth'],dialogues:{elder:'elder-witness',herbalist:'herbalist-witness',youth:'youth-witness'}},
-  {id:'report',text:'여관 주인에게 돌아가기',type:'talk',targets:['innkeeper'],dialogues:{innkeeper:'inn-report'}},
+  {id:'report',text:'여관 주인에게 돌아가기',type:'talk',targets:['innkeeper'],turnIn:true,dialogues:{innkeeper:'inn-report'}},
+ ]},
+ {id:'M03',title:'마을의 부탁',steps:[
+  {id:'ask',text:'촌장 찾아가기',type:'talk',targets:['chief'],dialogues:{chief:'chief-request'}},
+  {id:'hunt',text:'대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
+  {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
 ]);
-export const CHAPTER_END_NOTE='다음 이야기 · 마을의 부탁과 대평원의 곰';
+export const CHAPTER_END_NOTE='다음 이야기 · 대평원의 곰';
 
 // First-fight coaching, in order. Each line stays until the player has done it.
 // done: moved (metres) · camera (radians turned) · states (controller states)

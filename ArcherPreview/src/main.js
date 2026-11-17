@@ -447,7 +447,7 @@ function updateButtons() {
   $('#potion-button').hidden=!isV2();
   $('#potion-button').disabled=!ready||!boss?.canUsePotion||controller?.captured||controller?.groggy;
   $('#potion-count').textContent=String(boss?.potions.remaining??3);
-  $('#potion-status').textContent=boss?.potions.active?`회복 ${4-boss.potions.pulsesLeft}/4`:'E';
+  $('#potion-status').textContent=boss?.potions.active?`회복 ${4-boss.potions.pulsesLeft}/4`:'1';
   $('#potion-button').classList.toggle('healing',!!boss?.potions.active);
   $('#potion-button').setAttribute('aria-label',`회복 물약, 남은 횟수 ${boss?.potions.remaining??3}회${boss?.potions.active?', 회복 중':''}`);
 }
@@ -1535,6 +1535,7 @@ try {
         await runtime.apply({...runtime.document,revision:runtime.document.revision+1,instances:[...runtime.document.instances,...extra]});return true;
       },
       rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);return true;},
+      setMapMarkers:list=>minimap.setMarkers(list),
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
     // Development-only handle for QA from the console; never present in a build.

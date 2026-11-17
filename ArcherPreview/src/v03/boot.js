@@ -5,6 +5,8 @@ import {createTitleScreen} from './title-screen.js';
 import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {createStory} from './story.js';
+import {createQuestMarkers} from './quest-markers.js';
+import {createCursors} from './cursors.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
@@ -22,7 +24,8 @@ export function setupV03(api){
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
- const story=createStory({api,doc,save,content:api.content??chapter1,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide});
+ const cursors=createCursors(doc);
+ const story=createStory({api,doc,save,content:api.content??chapter1,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
@@ -182,6 +185,7 @@ export function setupV03(api){
   get pilotMovement(){return state.attract?pilot.movement:null;},
   update(dt){
    if(state.disposed)return;
+   if(state.screen!=='play')cursors.set('ui');
    const s=gameState();
    if(s.failed&&!state.failed){fail();return;}
    if(state.screen==='title'){
@@ -204,6 +208,7 @@ export function setupV03(api){
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
+    cursors.set(story.dialogueOpen?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();
     if(state.sinceSave>=15){state.sinceSave=0;save.touch(metaPatch());}
    }
@@ -215,6 +220,6 @@ export function setupV03(api){
    travel:id=>api.travel(id),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

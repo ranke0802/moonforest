@@ -47,8 +47,13 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
  for(const portal of mapPortals(mapId)){const p=project(portal.x,portal.z),x=Math.round(p.x),y=Math.round(p.y);ctx.fillStyle='#17101e';ctx.fillRect(x-3,y-3,7,7);ctx.fillStyle='#cf9fff';ctx.fillRect(x-1,y-2,3,5);ctx.fillRect(x-2,y-1,5,3);}
  return true;
 }
+// Quest glyphs as 3×5 pixel bitmaps (row-major, top to bottom).
+const GLYPHS=Object.freeze({'?':['111','001','011','000','010'],'!':['010','010','010','000','010'],'>':['100','110','111','110','100']});
+const GLYPH_COLORS=Object.freeze({'?':'#ffd54a','!':'#7dffb2','>':'#ffd54a'});
 export class DotMinimap{
- constructor(element,{document=globalThis.document}={}){this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;}
+ constructor(element,{document=globalThis.document}={}){this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;this.markers=[];this.markerRevision=0;}
+ // Story markers [{x,z,glyph:'?'|'!'|'>'}] drawn over the map; off-map ones stick to the edge.
+ setMarkers(list){this.markers=Array.isArray(list)?list:[];this.markerRevision++;this.last='';}
  async setWorld(world){
   const id=world.mapId,generation=++this.generation;this.mapId=id;if(!this.element)return;this.element.hidden=true;if(!this.ctx||!MINIMAP_MAPS[id])return;
   const revision=world.placementRevision??0;
@@ -64,10 +69,19 @@ export class DotMinimap{
  update(actor,time){
   if(!actor||!this.static||this.element.hidden||time<this.next)return;this.next=time+.1;
   const {rect,halfTurn}=MINIMAP_MAPS[this.mapId],p=minimapPoint(rect,actor.position.x,actor.position.z,MINIMAP_SIZE,halfTurn),heading=minimapHeading(rect,actor.rotation.y,halfTurn),angle=Math.atan2(heading.y,heading.x);
-  const x=Math.max(2,Math.min(93,Math.round(p.x))),y=Math.max(2,Math.min(93,Math.round(p.y))),direction=Math.round(angle/(Math.PI/8)),key=`${x},${y},${direction}`;
+  const x=Math.max(2,Math.min(93,Math.round(p.x))),y=Math.max(2,Math.min(93,Math.round(p.y))),direction=Math.round(angle/(Math.PI/8)),key=`${x},${y},${direction},${this.markerRevision},${Math.floor(time*2)%2}`;
   if(key===this.last)return;this.last=key;const ctx=this.ctx;ctx.imageSmoothingEnabled=false;ctx.drawImage(this.static,0,0);
   ctx.fillStyle='#07191d';ctx.fillRect(x-3,y-3,7,7);ctx.fillStyle='#84f6df';ctx.fillRect(x-1,y-1,3,3);
   const dx=Math.cos(direction*Math.PI/8),dy=Math.sin(direction*Math.PI/8);ctx.fillStyle='#effffa';ctx.fillRect(Math.round(x+dx*4)-1,Math.round(y+dy*4)-1,2,2);
+  const blink=Math.floor(time*2)%2===0;
+  for(const mark of this.markers){
+   const bits=GLYPHS[mark.glyph];if(!bits)continue;
+   const m=minimapPoint(rect,mark.x,mark.z,MINIMAP_SIZE,halfTurn),gx=Math.max(1,Math.min(MINIMAP_SIZE-8,Math.round(m.x)-3)),gy=Math.max(1,Math.min(MINIMAP_SIZE-12,Math.round(m.y)-11));
+   // 2× pixels with a dark outline so the glyph reads on any terrain colour.
+   ctx.fillStyle='#1d1406';ctx.fillRect(gx-1,gy-1,8,12);
+   ctx.fillStyle=blink||mark.glyph==='>'?GLYPH_COLORS[mark.glyph]:'#fff6c8';
+   for(let r=0;r<5;r++)for(let c=0;c<3;c++)if(bits[r][c]==='1')ctx.fillRect(gx+c*2,gy+r*2,2,2);
+  }
  }
  hide(){this.generation++;if(this.element)this.element.hidden=true;this.static=null;}
  invalidate(world){this.cache.delete(world.mapId);this.cacheRevisions.delete(world.mapId);return this.setWorld(world);}

@@ -95,17 +95,17 @@ function harness({local=memory(),session=memory(),ready=true}={}){
   resetBattle:()=>{log.push('resetBattle');battle.encounters=[];battle.livingCount=0;}};
  const state={ready,failed:false,character:'warrior-plains',mapId:'great-plains'};
  const camera={alpha:1,beta:.9,radius:17,lowerRadiusLimit:4,upperRadiusLimit:30};
- const made=[],guide={shown:null,hidden:0,show(x,y,z,time,moving){guide.shown={x,y,z,moving};},hide(){guide.shown=null;guide.hidden++;},dispose(){}};
+ const made=[],marks=[],guide={shown:null,hidden:0,show(x,y,z,time,moving){guide.shown={x,y,z,moving};},hide(){guide.shown=null;guide.hidden++;},dispose(){}};
  const createVisual=(_scene,key,{id})=>{const v={id,key,placed:null,disposed:false,place(x,y,z,yaw){v.placed={x,y,z,yaw};},dispose(){v.disposed=true;}};made.push(v);return v;};
  battle.combatCount=0;
- const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait:instant,random:()=>.5,createVisual,createGuide:()=>guide,placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
+ const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait:instant,random:()=>.5,createVisual,createGuide:()=>guide,createMarkers:null,setMapMarkers:list=>marks.push(list),placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
   input:{setSuspended:v=>log.push('suspend:'+v)},actions:{attack:()=>log.push('attack'),dodge:()=>log.push('dodge'),guard:()=>log.push('guard'),move:()=>{}},
   toast:m=>log.push('toast:'+m),getPlayer:()=>player,getController:()=>controller,getState:()=>state,
   resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:async id=>log.push('travel:'+id),
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
- return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,guide,
+ return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
   reveal:async()=>{await settle();shell.update(.016);await settle();for(let i=0;i<90;i++)shell.update(.016);await settle();}};
 }
 
@@ -201,7 +201,11 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M01');
  for(const npc of ['youth','elder'])assert.equal(log.notify({type:'talk',npc}).stepDone,false);
  assert.equal(log.objective(),'주민 세 사람의 이야기 듣기 (2/3)');assert.equal(log.notify({type:'talk',npc:'youth'}).changed,false,'no double count');
- assert.equal(log.notify({type:'talk',npc:'herbalist'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M02');assert.equal(log.finished,true);assert.equal(log.objective(),'');
+ assert.equal(log.notify({type:'talk',npc:'herbalist'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M02');
+ assert.equal(log.notify({type:'talk',npc:'chief'}).stepDone,true);
+ assert.equal(log.notify({type:'defeat',kind:'wolf',map:'village'}).changed,false,'M03 hunts only count on the plains');
+ for(let i=0;i<3;i++)log.notify({type:'defeat',kind:'boar',map:'great-plains'});
+ assert.equal(log.objective(),'촌장에게 알리기');assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M03');assert.equal(log.finished,true);assert.equal(log.objective(),'');
  // Data integrity: every referenced dialogue and NPC exists.
  const ids=new Set(NPCS.map(n=>n.id));
  for(const quest of QUESTS)for(const step of quest.steps)if(step.type==='talk')for(const target of step.targets){assert.ok(ids.has(target),target);assert.ok(DIALOGUES[step.dialogues[target]]?.length,step.dialogues[target]);}
@@ -238,7 +242,8 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.match(hud('.v03-prompt').textContent,/E · 마부와 이야기하기/);
  assert.equal(hud('.v03-tip-title').textContent,'강공격','the next tip waits its turn');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
- key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);
+ key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);
+ const portrait=hud('.v03-dialogue-portrait');assert.equal(portrait.hidden,false);assert.match(portrait.src,/portraits\/driver\.webp$/);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);
  // E advances every line and closes the last one without reopening the talk.
  for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();
  assert.equal(hud('.v03-dialogue').hidden,true,'E closes the conversation');
@@ -248,9 +253,10 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.shell.inspect().story.guide,'exit:village');assert.ok(Math.hypot(h.guide.shown.x+66,h.guide.shown.z+24)>4,'the light is ahead of the player');
  assert.equal(h.log.includes('startWorld'),false);
  h.state.mapId='village';h.state.character='warrior-v3';h.shell.update(.016);
- assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),['innkeeper','elder','herbalist','youth']);
+ assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),['innkeeper','elder','herbalist','chief','youth']);
+ assert.deepEqual(h.marks.at(-1),[{x:-3.4,z:10.6,glyph:'?'}],'the innkeeper carries a ? on the minimap');
  assert.equal(h.save.meta().title,'달빛 여관');assert.match(hud('.v03-banner').textContent,/완료 · 늑대와 마차/);
- h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').textContent,'E · 여관 주인과 이야기하기');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
+ h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').textContent,'E · 여관 주인과 이야기하기');assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
  for(let i=0;i<5;i++)key('Space');await settle();
  assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'사람들이 기억하는 성녀');assert.equal(hud('.v03-quest-objective').textContent,'주민 세 사람의 이야기 듣기 (0/3)');
  // A later document resumes the same quest step.

@@ -42,7 +42,7 @@ export function createQuestLog({quests,storage=null,key=STORE_KEY}){
   // Returns {changed, stepDone, questDone} for one event.
   notify(event){
    const current=step(),result={changed:false,stepDone:false,questDone:null};if(!current||!event)return result;
-   if(current.type==='defeat'&&event.type==='defeat'&&(!current.kind||event.kind===current.kind)){
+   if(current.type==='defeat'&&event.type==='defeat'&&(!current.kind||event.kind===current.kind)&&(!current.map||!event.map||event.map===current.map)){
     state.count++;result.changed=true;if(state.count>=current.count)result.stepDone=true;else save();
    }else if(current.type==='talk'&&event.type==='talk'&&current.targets.includes(event.npc)&&!state.done.includes(event.npc)){
     state.done.push(event.npc);result.changed=true;if(state.done.length>=current.targets.length)result.stepDone=true;else save();
