@@ -25,7 +25,13 @@ Babylon.js 9.31 기반 웹 3D 액션 RPG. 지금 만드는 것은 **MoonForest 0
 - 0.1은 동결이다(`ArcherPreviewSite/index.html`, `deployment-files.json`). 0.2 진입(`moonforest-0.2.html`)은 계속 실행돼야 한다.
   공용 `src` 파일을 고칠 때 0.3 전용 동작은 `edition` 분기(`src/v03/edition.js`) 뒤에 둔다.
 - 생성한 음원은 사용자가 승인하기 전에는 게임에 연결하지 않는다(이전에 반려된 이력이 있다).
-- 커밋·푸시·배포(sync)는 사용자가 요청할 때만 한다.
+- 커밋은 `warrior` 브랜치에 한다(원격 https://github.com/ranke0802/moonforest). 배포(sync)는 사용자가 요청할 때만 한다.
+- 배포 브랜치는 `MoonForest`(구 `archer`)다. CI(`.github/workflows/pages.yml`)는 이 브랜치 push에서만 Pages로 배포한다. `warrior`는 작업 저장용이다.
+- 배포 순서: 사용자가 Windows에서 `Publish-0.3.cmd` 실행(0.2·0.3 빌드와 `ArcherPreviewSite` 반영) → `ArcherPreviewSite`와 보고서를 커밋 → `warrior`와 `MoonForest`에 푸시.
+  배포 검증은 빌드 당시 소스 해시와 현재 소스를 비교하므로, 공용 소스를 바꾸면 0.2도 함께 다시 빌드해야 한다(스크립트가 둘 다 한다).
+- 이 PC의 Linux 셸에서는 GitHub 접속이 막혀 있다. 푸시 방법: PC에서 `git bundle create .cache/v03-push.bundle origin/warrior..warrior` →
+  파일을 클라우드 작업공간으로 가져와 `/home/claude/moonforest`(얕은 partial clone)에서 `git fetch <bundle> warrior:warrior` → `git push origin warrior`.
+  원격 이력이 얕아 조상 관계를 모르면 `git fetch --filter=tree:0 --depth=N origin archer`로 이력을 늘린다. 강제 푸시는 쓰지 않는다.
 - 브라우저 자동조작은 사용자가 허용하기 전까지 쓰지 않는다.
 
 ## 최적화는 기본 요구사항이다

@@ -5,6 +5,10 @@ import {verifyResourceBundles} from './resource-bundles.mjs';
 
 export const RELEASE_V2='moonforest-0.2';
 export const RELEASE_V2_MANIFEST='deployment-files-moonforest-0.2.json';
+export const RELEASE_V3='moonforest-0.3';
+export const RELEASE_V3_MANIFEST='deployment-files-moonforest-0.3.json';
+// Releases after 0.1 that may append content-addressed resources.
+const ADDITIVE_RELEASES=new Set([RELEASE_V2,RELEASE_V3]);
 export const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 // Match the existing village publisher's platform-independent text bytes.
 // Content-addressed files encode their exact source bytes and stay untouched.
@@ -28,7 +32,7 @@ export function assertDescriptor(bytes,item){
 export function assertDeploymentContentGraph(manifest,index){
  const files=new Map(manifest.files.map(item=>[item.path,item])),expected=new Set(Object.keys(index.files).map(name=>'assets/content/'+name));
  const additions=manifest.additiveContent??[];
- if(!Array.isArray(additions)||additions.length&&manifest.release!==RELEASE_V2)throw new Error('Invalid additive content inventory');
+ if(!Array.isArray(additions)||additions.length&&!ADDITIVE_RELEASES.has(manifest.release))throw new Error('Invalid additive content inventory');
  for(const item of additions){
   const actual=files.get(item.path);
   if(!/^assets\/content\/[a-f0-9]{64}\.(?:gltf|bin|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/.test(item.path)||item.path.split('/').at(-1).slice(0,64)!==item.sha256||!actual||actual.sha256!==item.sha256||actual.bytes!==item.bytes||expected.has(item.path))throw new Error('Invalid additive content descriptor: '+item.path);
@@ -44,11 +48,11 @@ export function assertDeploymentContentGraph(manifest,index){
 export async function reviewedDeploymentUnion(site,{requireResourceIndex=false}={}){
  const primaryBytes=await readFile(resolve(site,'deployment-files.json'));
  const manifests=[{name:'deployment-files.json',bytes:primaryBytes,data:JSON.parse(primaryBytes)}];
- const extraBytes=await optionalBytes(resolve(site,RELEASE_V2_MANIFEST));
- if(extraBytes){
+ for(const [release,name] of [[RELEASE_V2,RELEASE_V2_MANIFEST],[RELEASE_V3,RELEASE_V3_MANIFEST]]){
+  const extraBytes=await optionalBytes(resolve(site,name));if(!extraBytes)continue;
   const data=JSON.parse(extraBytes);
-  if(data.release!==RELEASE_V2||data.version!==2||data.baseDeploymentSha256!==sha256(primaryBytes))throw new Error('MoonForest 0.2 preserved deployment mismatch');
-  manifests.push({name:RELEASE_V2_MANIFEST,bytes:extraBytes,data});
+  if(data.release!==release||data.version!==2||data.baseDeploymentSha256!==sha256(primaryBytes))throw new Error(`MoonForest ${release.slice(-3)} preserved deployment mismatch`);
+  manifests.push({name,bytes:extraBytes,data});
  }
  const entries=new Map(),verified=new Set(),verifiedGraphs=new Set();
  for(const {data:manifest}of manifests){
