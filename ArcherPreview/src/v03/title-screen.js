@@ -17,7 +17,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  const menu=el(doc,'nav','v03-menu');menu.setAttribute('aria-label','시작 메뉴');
  const buttons=new Map();
  for(const [id,label] of MENU){const button=el(doc,'button','v03-menu-item',label);button.type='button';button.dataset.action=id;menu.append(button);buttons.set(id,button);}
- const foot=el(doc,'footer','v03-title-foot',`${version} · HYProduce`);
+ const foot=el(doc,'footer','v03-title-foot',`${version} · HYProduct`);
  inner.append(head,menu,foot);
  const panel=el(doc,'div','v03-panel');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');
  const black=el(doc,'div','v03-title-black');
@@ -82,7 +82,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
    return openPanel((box,close)=>{
     box.classList.add('is-confirm');box.append(el(doc,'h2','v03-panel-title',title),el(doc,'p','v03-panel-note',message));
     const row=el(doc,'div','v03-panel-actions'),no=el(doc,'button','v03-panel-back',cancel),yes=el(doc,'button','v03-panel-accept',accept);
-    no.type=yes.type='button';no.addEventListener('click',()=>close(false));yes.addEventListener('click',()=>close(true));row.append(no,yes);box.append(row);
+    no.type=yes.type='button';no.addEventListener('click',()=>close(false));yes.addEventListener('click',()=>close(true));row.append(yes,no);box.append(row);
    }).then(value=>value===true);
   },
   showGallery({sections}){

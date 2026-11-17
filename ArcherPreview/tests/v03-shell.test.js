@@ -105,7 +105,8 @@ function harness({local=memory(),session=memory(),ready=true}={}){
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
- return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,guide};
+ return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,guide,
+  reveal:async()=>{await settle();shell.update(.016);await settle();for(let i=0;i<90;i++)shell.update(.016);await settle();}};
 }
 
 test('first run: logo → title → attract battle → new game without reload → prologue → ambush → living world',async()=>{
@@ -116,6 +117,10 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.equal(h.document.querySelector('[data-action="load"]').disabled,true);
  h.shell.update(.016);await settle();
  assert.ok(h.log.includes('suspend:true'));assert.ok(h.log.includes(`summon:${TITLE_FOE.kind}:${TITLE_FOE.count}`));
+ // The menu waits, black, until the scene is drawn and streaming is quiet.
+ h.state.pending=3;for(let i=0;i<120;i++)h.shell.update(.016);assert.equal(h.document.querySelector('.v03-title').classList.contains('scene-ready'),false);
+ h.click('[data-action="new"]');await settle();assert.equal(h.shell.screen,'title','menu clicks wait for the reveal');
+ h.state.pending=0;for(let i=0;i<80;i++)h.shell.update(.016);
  assert.ok(h.document.querySelector('.v03-title').classList.contains('scene-ready'));
  assert.equal(h.shell.pilotMovement!==null,true);
  // The showcase cannot end: player topped up, foe floored, camera orbits.
@@ -134,7 +139,8 @@ test('first run: logo → title → attract battle → new game without reload �
 test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  const h=harness({ready:false});h.finishSplash();await settle();h.shell.update(.016);
  assert.equal(h.shell.pilotMovement,null);assert.equal(h.log.some(x=>x.startsWith('summon')),false);
- h.click('[data-action="new"]');await settle();assert.ok(h.log.some(x=>x.startsWith('toast:세계를 준비')));assert.equal(h.shell.screen,'title');
+ h.click('[data-action="new"]');await settle();assert.equal(h.shell.screen,'title','nothing happens before the scene is ready');
+ h.state.ready=true;await h.reveal();
  h.click('[data-action="settings"]');await settle();assert.ok(h.log.includes('settings'));
  h.click('[data-action="gallery"]');await settle();assert.equal(h.document.querySelectorAll('.v03-gallery-row').length,3);h.click('.v03-panel-back');await settle();
  h.click('[data-action="quit"]');await settle();h.click('.v03-panel-accept');await settle();
@@ -145,7 +151,7 @@ test('existing saves: load another slot reloads with an intent; overwrite wipes 
  const seed=createSaveSession({local,session,edition:E,now:()=>10});seed.commit({title:'달빛 여관',chapter:1,character:'warrior-v3',place:'숲의 경계 마을'});seed.journey.setItem('moonforest-gold-v1','77');
  const h=harness({local,session});assert.equal(h.save.slot,2,'boots into the first empty slot');
  let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?release=moonforest-0.2&character=warrior-plains&arrival=portal',replace:url=>{replaced=url;}};
- h.finishSplash();await settle();assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
+ h.finishSplash();await h.reveal();assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
  h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();
  assert.match(replaced,/character=warrior-v3/);assert.doesNotMatch(replaced,/arrival/);
  const next=createSaveSession({local,session,edition:E});assert.deepEqual(next.intent,{slot:1,mode:'load'});assert.equal(next.slot,1);assert.equal(next.journey.getItem('moonforest-gold-v1'),'77');
@@ -173,7 +179,7 @@ test('a loading failure hands the screen back to the game error card',async()=>{
 });
 test('0.3 entry and runtime hooks are wired',()=>{
  const html=readFileSync(new URL('../moonforest-0.3.html',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
- assert.match(html,/<div id="v03-splash" aria-hidden="true"><span>HYProduce<\/span><\/div>/);assert.match(html,/<title>MoonForest 0\.3<\/title>/);
+ assert.match(html,/<div id="v03-splash" aria-hidden="true"><span>HYProduct<\/span><\/div>/);assert.match(html,/<title>MoonForest 0\.3<\/title>/);
  assert.match(html,/moonforest-0\.3:intent:v1/);assert.match(html,/src="\/src\/main\.js"/);
  assert.ok(html.indexOf('moonforest-v03-splash"')<html.indexOf('moonforest-startup-guard'));
  for(const hook of ['world.v03?.defeat(event)','!versionRoute.edition&&!elenaReviewMode','world.v03?.update(dt);','world.v03?.pilotMovement??input.value()','!world.v03?.blocksGame','world.v03?.blocksProgress',"await import('./v03/index.js')",'v03Save.journey'])assert.ok(main.includes(hook),hook);
@@ -203,7 +209,7 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  store.setItem('v03-story-v1','{"quest":99,"step":0,"done":[]}');assert.equal(createQuestLog({quests:QUESTS,storage:store}).load(),false);
 });
 test('story: first fight coaching, driver talk, village cast, rest effect and save title',async()=>{
- const h=harness();h.finishSplash();await settle();h.shell.update(.016);await settle();h.click('[data-action="new"]');await settle(40);
+ const h=harness();h.finishSplash();await h.reveal();h.click('[data-action="new"]');await settle(40);
  h.battle.combat.hp=500;
  const hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
  h.shell.update(.016);

@@ -23,7 +23,10 @@ export function setupV03(api){
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
  const story=createStory({api,doc,save,content:api.content??chapter1,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide});
- const state={screen:'boot',attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false};
+ // The title is revealed only once its scene is fully drawn: the attract
+ // battle is in place and scenery streaming has been quiet for a moment.
+ const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
+ const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false};
  const screen=value=>{state.screen=value;html.dataset.v03Screen=value;};
  const title=createTitleScreen({doc,wait,onAction:action=>{void handle(action).catch(report);}});
  const splash=view?.__moonforestSplash;
@@ -105,7 +108,7 @@ export function setupV03(api){
   view.location.replace(url.href);return true;
  }
  async function handle(action){
-  if(state.busy||state.screen!=='title')return;
+  if(state.busy||state.screen!=='title'||!state.revealed)return;
   const index=save.index(),ready=gameState().ready;
   if(action==='new'){
    const anyUsed=index.some(meta=>meta.used);
@@ -139,13 +142,22 @@ export function setupV03(api){
  // ----- boot -----
  function showTitle(){
   if(state.disposed||state.screen!=='boot')return;
-  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();splash?.remove?.();
+  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+ }
+ // After the logo, the game's own download/loading card shows progress; the
+ // title (still black while its scene is prepared) appears when it closes.
+ let loadingWait=null;
+ function afterLoading(next){
+  const Watch=view?.MutationObserver;
+  if(!html.dataset.loading||!Watch){next();return;}
+  loadingWait=new Watch(()=>{if(html.dataset.loading)return;loadingWait.disconnect();loadingWait=null;next();});
+  loadingWait.observe(html,{attributes:true,attributeFilter:['data-loading']});
  }
  if(save.intent){
   // A slot was chosen on a previous document: skip logo and title.
   splash?.remove?.();screen(save.intent.mode==='new'?'opening':'resume');
- }else if(splash?.done)splash.done.then(showTitle);
- else showTitle();
+ }else if(splash?.done)splash.done.then(()=>{splash.remove?.();afterLoading(showTitle);});
+ else afterLoading(showTitle);
  // A loading/frame failure owns the screen: its retry UI must be reachable.
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
@@ -173,7 +185,12 @@ export function setupV03(api){
    const s=gameState();
    if(s.failed&&!state.failed){fail();return;}
    if(state.screen==='title'){
-    if(s.ready&&!state.sceneShown){state.sceneShown=true;title.setSceneReady(true);void startAttract();}
+    if(s.ready&&!state.sceneShown){state.sceneShown=true;void startAttract();}
+    if(state.sceneShown&&!state.revealed){
+     state.prepareTime+=dt;
+     state.quietTime=!state.summoning&&!(s.pending>0)?state.quietTime+dt:0;
+     if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);}
+    }
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
    }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy){
     state.busy=true;api.resetStage(OPENING_STAGE);story.prepare(s.mapId);
@@ -198,6 +215,6 @@ export function setupV03(api){
    travel:id=>api.travel(id),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

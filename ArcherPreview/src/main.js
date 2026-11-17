@@ -1514,7 +1514,9 @@ try {
     const {setupV03}=await import('./v03/index.js');
     world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,
       getPlayer:()=>actor,getController:()=>controller,
-      getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId}),
+      getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId,
+        // Scenery still streaming in (models and higher-resolution textures).
+        pending:(world.environment?.geometryPending??0)+(world.environment?.highTexturePending??0)}),
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
       travel:id=>mapTransition.travel(travelUrl(location.href,id)),
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
