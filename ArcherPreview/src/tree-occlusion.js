@@ -72,7 +72,7 @@ export function prepareTreeOcclusion(meshes) {
 }
 
 // Inside a crown the leaves are at the lens: keep one pixel in eight.
-const CROWN_INSET=.1,CROWN_TRUNK=.3,CROWN_COVERAGE=.125;
+const CROWN_INSET=0,CROWN_TRUNK=.3,CROWN_COVERAGE=.125;
 export class TreeOcclusion {
   constructor(roots) {
     const surfaces=new WeakMap();
