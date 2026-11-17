@@ -31,24 +31,32 @@ function read(mesh){
  }
  return {positions,indices,attributes};
 }
+// One decimated copy of `base` (same material and flags, its own geometry)
+// with at most `maxTriangles`, or null when the mesh cannot be reduced.
+export function deriveDetailMesh(base,maxTriangles,name,source=read(base)){
+ if(!source||base.subMeshes?.length!==1||base.skeleton||base.morphTargetManager)return null;
+ const result=decimateToBudget(source,maxTriangles);if(!result)return null;
+ const scene=base.getScene(),copy=base.clone(name,null,true);copy.parent=null;
+ for(const level of copy.getLODLevels().slice())copy.removeLODLevel(level.mesh);
+ const data=new VertexData();data.positions=result.positions;data.indices=result.indices;
+ for(const [kind,{data:values}] of Object.entries(result.attributes))data.set(values,kind);
+ new Geometry(copy.name,scene,data,false).applyToMesh(copy);
+ copy.releaseSubMeshes();new SubMesh(0,0,result.positions.length/3,0,result.indices.length,copy);
+ copy.metadata={...base.metadata,villageLodLevel:2,detailTriangles:result.triangles};copy.isPickable=false;
+ return copy;
+}
 // Adds the derived levels to `base` and returns the new meshes (the caller
 // owns them: preparation, shader warm-up and disposal).
 export function installDetailLods(base,{prepare=()=>{},tiers=DETAIL_LOD.tiers}={}){
- if(base.subMeshes?.length!==1||base.skeleton||base.morphTargetManager)return [];
  const source=read(base);if(!source)return [];
  const triangles=source.indices.length/3;if(triangles<DETAIL_LOD.minTriangles)return [];
- const scene=base.getScene(),made=[];let previous=triangles;
+ const made=[];let previous=triangles;
  for(const tier of tiers){
-  const result=decimateToBudget(source,Math.max(tier.floor,Math.floor(triangles*tier.share)));
-  if(!result||result.triangles>previous*.7)continue;
-  const copy=base.clone(base.name+'-detail-'+tier.id,null,true);copy.parent=null;
-  for(const level of copy.getLODLevels().slice())copy.removeLODLevel(level.mesh);
-  const data=new VertexData();data.positions=result.positions;data.indices=result.indices;
-  for(const [kind,{data:values}] of Object.entries(result.attributes))data.set(values,kind);
-  new Geometry(copy.name,scene,data,false).applyToMesh(copy);
-  copy.releaseSubMeshes();new SubMesh(0,0,result.positions.length/3,0,result.indices.length,copy);
-  copy.metadata={...base.metadata,villageLodLevel:2,detailLod:tier.id,detailTriangles:result.triangles};copy.isPickable=false;
-  prepare(copy);base.addLODLevel(tier.coverage,copy);made.push(copy);previous=result.triangles;
+  const copy=deriveDetailMesh(base,Math.max(tier.floor,Math.floor(triangles*tier.share)),base.name+'-detail-'+tier.id,source);
+  if(!copy)continue;
+  if(copy.metadata.detailTriangles>previous*.7){copy.dispose();continue;}
+  copy.metadata.detailLod=tier.id;
+  prepare(copy);base.addLODLevel(tier.coverage,copy);made.push(copy);previous=copy.metadata.detailTriangles;
  }
  return made;
 }

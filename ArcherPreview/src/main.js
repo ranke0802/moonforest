@@ -991,7 +991,7 @@ function render(dt) {
     for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
     syncCaveFog();
     world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt,playerDimensions(actor));
-    world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);
+    world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);world.meadow?.update(world.camera.globalPosition,dt);
     frameDiagnostics.measure('worldUpdateMs',worldUpdateStart);
     const hudUpdateStart=frameDiagnostics.mark();
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.guarding?'방어 태세':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
@@ -1608,7 +1608,7 @@ try {
     bossHealthBars.decorate=(element,foe)=>world.v03?.decorateFoeBar?.(element,foe);
     // Development-only handle for QA from the console; never present in a build.
     // The same handle on a build when the address carries ?qa (inspection only).
-    if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get dayCycle(){return world.dayCycle;},get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;}};}
+    if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get dayCycle(){return world.dayCycle;},get meadow(){return world.meadow;},get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;}};}
     if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());
   }
   loadCharacter();

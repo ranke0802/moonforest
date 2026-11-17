@@ -25,6 +25,9 @@ import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 import {groupVillageRecords} from './village-scenery-cache.js';
 import {installDetailLods,detailLodEnabled,DETAIL_LOD_KINDS} from './v04/detail-lod.js';
+import {createMeadow} from './v04/meadow.js';
+import {plainsMeadow} from './v04/meadow-plains.js';
+const MEADOW_SPECS={'great-plains':plainsMeadow};
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -199,6 +202,12 @@ export function loadStreamedVillage(world,{
       if(detailLodEnabled()&&!asset.detailLods){
         asset.detailLods=instances.length&&!outskirtsGround&&instances.every(record=>DETAIL_LOD_KINDS.has(record.placement.kind))
           ?asset.baseMeshes.flatMap(base=>installDetailLods(base,{prepare:mesh=>{prepareVillageInstancing([mesh]);prepareTreeOcclusion([mesh]);}})):[];
+        // Meadow grass over the open map, drawn from the same tuft (v04/meadow.js).
+        const meadowSpec=MEADOW_SPECS[world.mapId];
+        if(meadowSpec&&id==='grass-tuft'&&asset.detailLods.length&&!world.meadow){
+          try{world.meadow=createMeadow(world,{tuft:asset.baseMeshes[0],spec:meadowSpec,amount:world.touchDevice?.75:1});stats.meadow=world.meadow?.stats??null;}
+          catch(error){console.warn('[MoonForest 0.4] meadow unavailable',error);world.meadow=null;}
+        }
         if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
       }
       for(const record of instances)if(!record.meshes.length){
@@ -251,6 +260,7 @@ export function loadStreamedVillage(world,{
       candidates.dispose();outlines.dispose();visibility.dispose();
       for(const r of records)r.root.dispose();
       for(const asset of assets.values())for(const tier of asset.tiers.values())for(const mesh of tier.meshes)if(!mesh.isDisposed())mesh.dispose();
+      world.meadow?.dispose();world.meadow=null;
       for(const asset of assets.values())for(const mesh of asset.detailLods??[])if(!mesh.isDisposed())mesh.dispose();
       for(const c of containers)c.dispose();
       world.scene.onDisposeObservable.remove(disposeObserver);
