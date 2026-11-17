@@ -27,7 +27,9 @@ Babylon.js 9.31 기반 웹 3D 액션 RPG. 지금 만드는 것은 **MoonForest 0
 - 생성한 음원은 사용자가 승인하기 전에는 게임에 연결하지 않는다(이전에 반려된 이력이 있다).
 - 커밋은 `warrior` 브랜치에 한다(원격 https://github.com/ranke0802/moonforest). 배포(sync)는 사용자가 요청할 때만 한다.
 - 배포 브랜치는 `MoonForest`(구 `archer`)다. CI(`.github/workflows/pages.yml`)는 이 브랜치 push에서만 Pages로 배포한다. `warrior`는 작업 저장용이다.
-- 배포 순서: 사용자가 Windows에서 `Publish-0.3.cmd` 실행(0.2·0.3 빌드와 `ArcherPreviewSite` 반영) → `ArcherPreviewSite`와 보고서를 커밋 → `warrior`와 `MoonForest`에 푸시.
+- 배포 순서(2026-11-17부터): `warrior` 커밋을 `archer`(와 `MoonForest`)에 푸시하면 CI가 `scripts/ci-build-releases.mjs`로 0.2·0.3을 소스에서 빌드해 배포한다. 공유 리소스 그래프는 0.1 배포본(`ArcherPreviewSite/assets`)을 쓰므로 로컬의 미커밋 에셋 작업이 배포를 막지 않는다.
+  로컬 빌드가 필요할 때만 `Publish-0.3.cmd`(Windows). 이때 `public/assets/resource-index.json`·`resource-sizes.json`이 배포본과 다르면 막히므로 백업 후 배포본으로 맞추고, 끝나면 되돌린다.
+  `github-pages` 환경은 현재 `archer`만 배포를 허용한다(MoonForest 배포 단계는 설정 전까지 실패).
   배포 검증은 빌드 당시 소스 해시와 현재 소스를 비교하므로, 공용 소스를 바꾸면 0.2도 함께 다시 빌드해야 한다(스크립트가 둘 다 한다).
 - 이 PC의 Linux 셸에서는 GitHub 접속이 막혀 있다. 푸시 방법: PC에서 `git bundle create .cache/v03-push.bundle origin/warrior..warrior` →
   파일을 클라우드 작업공간으로 가져와 `/home/claude/moonforest`(얕은 partial clone)에서 `git fetch <bundle> warrior:warrior` → `git push origin warrior`.
