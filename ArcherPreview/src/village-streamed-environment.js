@@ -9,6 +9,7 @@ import {placementBounds,villageDemand,VillageGeometryStreaming} from './village-
 import {villageLodSources,hasVillageGeometry,VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {VillageVisibility} from './village-visibility.js';
 import {TreeOcclusion,prepareTreeOcclusion,TALL_PROPS} from './tree-occlusion.js';
+import {exitRoadX} from './map-travel.js';
 import {VillageOutlines} from './village-outlines.js';
 import {VillageTextureStreaming} from './village-texture-streaming.js';
 import {applyVillageToon} from './village-toon.js';
@@ -31,6 +32,10 @@ const SCATTER_VEGETATION=false;
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=TALL_PROPS;
+// The village fades only its inner trees (the boundary forest is out of
+// reach), but the exit road runs through that forest out to z 78: trees along
+// it, and within the camera's reach of it, fade as well.
+const villageRoadside=placement=>placement.z>=40&&Math.abs(placement.x-exitRoadX(placement.z))<=36;
 // These authored two-sided surfaces have real open edges in every packed LOD.
 // Keep the source's coloured back faces instead of leaving only the ink hull.
 // Solid walls, foundations and the closed canopy retain the ordinary policy.
@@ -69,6 +74,7 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
     const asset=assets.get(placement.asset);if(!asset)throw new Error('Missing village asset '+placement.asset);
     const {root,facing}=createVillageTransform(world,placement,asset.config),bounds=placementBounds(world,placement,asset.config);
     const essentialStructural=world.cave&&asset.config.essentialStructural===true;
+    if(placement.kind==='tree'||asset.config.category==='tree')root.metadata={...root.metadata,viewCrown:true};
     return {root,facing,placement,bounds,min:bounds.min,max:bounds.max,meshes:[],blocksPlayerView:asset.cover,essentialStructural,structuralReady:!essentialStructural};
   });
   world.caveFog?.updateRecords(records);
@@ -237,7 +243,7 @@ export function loadStreamedVillage(world,{
       }
       // Cave rock walls use a narrow eye-to-player cutaway; never fade an
       // entire room wall like a tree canopy and reveal rooms behind it.
-      const covered=instances.filter(r=>r.blocksPlayerView&&!r.placement.background&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.plains||world.cave||Math.hypot(r.placement.x,r.placement.z)<54));
+      const covered=instances.filter(r=>r.blocksPlayerView&&!r.placement.background&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.plains||world.cave||Math.hypot(r.placement.x,r.placement.z)<54||villageRoadside(r.placement)));
       for(const record of covered){
         if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
         world.treeOcclusion.refreshRoots([record.root]);

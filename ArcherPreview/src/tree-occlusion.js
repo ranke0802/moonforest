@@ -71,6 +71,8 @@ export function prepareTreeOcclusion(meshes) {
   }
 }
 
+// Inside a crown the leaves are at the lens: keep one pixel in eight.
+const CROWN_INSET=.1,CROWN_TRUNK=.3,CROWN_COVERAGE=.125;
 export class TreeOcclusion {
   constructor(roots) {
     const surfaces=new WeakMap();
@@ -101,7 +103,9 @@ export class TreeOcclusion {
         const sphere=mesh.getBoundingInfo().boundingSphere;
         return {inverse:mesh.getWorldMatrix().clone().invert(),center:sphere.centerWorld.clone(),radius:sphere.radiusWorld,levels,screenCoverage,camera:mesh.getScene().activeCamera};
       });
-      const old=this.byRoot.get(root),tree={meshes,parts,min,max,index:old?.index??this.trees.length,coverage:old?.coverage??1,target:old?.target??1};
+      // Trees only: the crown part of the box (above the trunk, corners cut).
+      const crown=root.metadata?.viewCrown===true?{minX:min.x+(max.x-min.x)*CROWN_INSET,maxX:max.x-(max.x-min.x)*CROWN_INSET,minY:min.y+(max.y-min.y)*CROWN_TRUNK,maxY:max.y,minZ:min.z+(max.z-min.z)*CROWN_INSET,maxZ:max.z-(max.z-min.z)*CROWN_INSET}:null;
+      const old=this.byRoot.get(root),tree={meshes,parts,min,max,crown,index:old?.index??this.trees.length,coverage:old?.coverage??1,target:old?.target??1};
       for(const mesh of meshes)mesh.instancedBuffers.treeCoverage=tree.coverage;
       this.byRoot.set(root,tree);
       this.trees[tree.index]=tree;
@@ -138,6 +142,10 @@ export class TreeOcclusion {
       const minX=Math.min(camera.x,player.x),maxX=Math.max(camera.x,player.x),minZ=Math.min(camera.z,player.z),maxZ=Math.max(camera.z,player.z);
       for (const tree of this.trees) {
         if(maxX<tree.min.x||minX>tree.max.x||maxZ<tree.min.z||minZ>tree.max.z){tree.target=1;continue;}
+        // A camera inside a crown sees leaves across the whole screen even
+        // when its line to the player passes between them (village arrival).
+        const crown=tree.crown;
+        if(crown&&camera.x>crown.minX&&camera.x<crown.maxX&&camera.y>crown.minY&&camera.y<crown.maxY&&camera.z>crown.minZ&&camera.z<crown.maxZ){tree.target=CROWN_COVERAGE;continue;}
         tree.target = this.obstructs(tree,camera,this.head) ||
           this.obstructs(tree,camera,this.chest) ? .45 : 1;
       }
