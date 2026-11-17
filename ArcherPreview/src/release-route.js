@@ -2,6 +2,11 @@ export const MOONFOREST_RELEASE='moonforest-0.1';
 export const MOONFOREST_RELEASE_LABEL='MoonForest 0.1 ver';
 export const MOONFOREST_RELEASE_V2='moonforest-0.2';
 export const MOONFOREST_RELEASE_V2_LABEL='MoonForest 0.2 ver';
+// 0.3 is an edition layered on the 0.2 combat ruleset: release stays 0.2,
+// while the edition selects the 0.3 shell, content and save namespace.
+export const MOONFOREST_EDITION_V3='moonforest-0.3';
+export const MOONFOREST_EDITION_V3_LABEL='MoonForest 0.3';
+export const MOONFOREST_EDITION_V3_ENTRY='/moonforest-0.3.html';
 const releaseLabels=new Map([[MOONFOREST_RELEASE,MOONFOREST_RELEASE_LABEL],[MOONFOREST_RELEASE_V2,MOONFOREST_RELEASE_V2_LABEL]]);
 export const isMoonforestRelease=value=>releaseLabels.has(value);
 
@@ -19,8 +24,14 @@ export function releaseRoute(href){
   url.searchParams.set('release',MOONFOREST_RELEASE_V2);
   if(!url.searchParams.has('character'))url.searchParams.set('character','warrior-v3');
  }
+ const edition=url.pathname.endsWith(MOONFOREST_EDITION_V3_ENTRY)?MOONFOREST_EDITION_V3:null;
+ if(edition){
+  url.searchParams.set('release',MOONFOREST_RELEASE_V2);
+  if(!url.searchParams.has('character'))url.searchParams.set('character','warrior-plains');
+  for(const key of ['uiTest','elenaReview'])url.searchParams.delete(key);
+ }
  const release=url.searchParams.get('release');
- return {url,enabled:isMoonforestRelease(release),release:isMoonforestRelease(release)?release:null,label:releaseLabels.get(release)??null};
+ return {url,enabled:isMoonforestRelease(release),release:isMoonforestRelease(release)?release:null,edition,label:edition?MOONFOREST_EDITION_V3_LABEL:releaseLabels.get(release)??null};
 }
 
 export function releaseSelectionUrl(href,value){

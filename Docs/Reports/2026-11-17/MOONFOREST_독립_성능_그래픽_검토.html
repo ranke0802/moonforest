@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MoonForest 독립 성능·그래픽 검토 · 2026-11-17</title>
+<style>
+:root{--bg:#f6f4ef;--paper:#fff;--ink:#1d1b20;--muted:#5d5866;--line:#dcd6cc;--accent:#2f4b6e;--ok:#2e6b3f;--warn:#8a5a00;--bad:#9b2c2c;--gap:#6b4f8a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI","Noto Sans KR","Malgun Gothic",sans-serif}
+main{max-width:1060px;margin:0 auto;padding:28px 20px 80px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px}
+header.top small{color:var(--muted);letter-spacing:.06em}
+h1{font-size:26px;margin:6px 0 8px;line-height:1.3}
+h2{font-size:19px;margin:34px 0 10px;padding-top:8px;border-top:1px solid var(--line)}
+h3{font-size:15px;margin:16px 0 6px}
+p{margin:6px 0 10px}
+.lead{font-size:16px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.b{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:10px;border:1px solid;white-space:nowrap;vertical-align:1px}
+.b.ok{color:var(--ok);border-color:var(--ok)} .b.hy{color:var(--warn);border-color:var(--warn)} .b.na{color:var(--gap);border-color:var(--gap)} .b.bad{color:var(--bad);border-color:var(--bad)} .b.n{color:var(--accent);border-color:var(--accent)}
+details{background:var(--paper);border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:0 14px}
+details[open]{padding-bottom:12px}
+summary{cursor:pointer;padding:11px 0;font-weight:600;list-style:none;display:flex;gap:10px;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸";color:var(--muted);font-weight:400;flex:none}
+details[open]>summary::before{content:"▾"}
+summary .t{flex:1}
+summary .sub{display:block;font-weight:400;color:var(--muted);font-size:13.5px;margin-top:2px}
+table{border-collapse:collapse;width:100%;margin:8px 0 12px;font-size:13.5px;background:var(--paper)}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#efebe3;font-weight:600}
+td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+code{font:12.5px/1.4 ui-monospace,Consolas,monospace;background:#efebe3;padding:1px 4px;border-radius:3px;word-break:break-all}
+ul,ol{margin:6px 0 10px;padding-left:22px}
+li{margin:3px 0}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;font-size:14px;margin:8px 0}
+.kv>b{color:var(--muted);font-weight:600}
+.box{background:var(--paper);border-left:4px solid var(--accent);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.box.warn{border-left-color:var(--warn)}
+.muted{color:var(--muted)}
+footer{margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:12px}
+@media(max-width:640px){.kv{grid-template-columns:1fr}summary{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+<small>MOONFOREST 0.2 · 독립 검토 · 2026-11-17 · 코드·기록 기반 · 브라우저 자동조작 없음 · 코드·에셋·배포 변경 없음</small>
+<h1>MoonForest 독립 성능·그래픽 검토와 개선 계획</h1>
+<p class="lead">모바일 전투의 지속 부하는 대부분 Babylon <code>scene.render</code> 내부의 CPU 작업에서 생깁니다. 그 크기는 화면 해상도보다 <b>동시에 처리하는 개체·인스턴스 수</b>에 따라 커집니다. 해상도와 풍경 거리를 더 낮추는 방식으로는 이 비용이 크게 줄지 않습니다. 개체 등급과 정적 풍경 제출 경로를 바꾸는 쪽이 효과적입니다.</p>
+<div class="legend">
+<span class="b ok">확인됨</span><span class="muted">코드나 기록에서 직접 확인</span>
+<span class="b hy">유력한 가설</span><span class="muted">근거는 있으나 인과는 미확정</span>
+<span class="b na">자료 부족</span><span class="muted">현재 자료로 판단 불가</span>
+</div>
+</header>
+
+<h2 id="basis">0. 검토 기준과 한계</h2>
+<details>
+<summary><span class="t">사용한 자료, 현재 HEAD, 기록과 코드의 시점 차이<span class="sub">최신 실기기 기록은 현재 HEAD보다 두 커밋 앞선 빌드에서 수집됨</span></span></summary>
+<div class="kv">
+<b>현재 HEAD</b><span><code>d0be33d</code>(11-17 13:19, 늑대 경계 R6). 직전 <code>a49f2cd</code>(12:39, 풍경 재검사·A* 할당·셰이더 준비 집중 완화)</span>
+<b>실행 진입점</b><span><code>ArcherPreview/moonforest-0.2.html</code> → <code>src/main.js</code>. 배포본은 <code>ArcherPreviewSite/moonforest-0.2.html</code> → <code>assets/moonforestV2-Ujx1BJHO.js</code>(2.39MB) + <code>babylon-game-*.js</code>(6.3MB). Babylon 9.31.0</span>
+<b>작업 트리</b><span>보고서 JSON 등 798개 항목이 변경·미추적 상태입니다. 실행 소스(<code>ArcherPreview/src</code>)는 줄바꿈 차이를 제외하면 HEAD와 같습니다. 이 검토는 HEAD 소스를 기준으로 합니다.</span>
+<b>실기기 기록</b><span>① 11-16 09:25, <code>oVUhVnLh</code>, 6분 10초, 늑대·곰·엘레나 ② 11-16 13:17, <code>CFNpDlIN</code>, 늑대 4마리 ③ <b>11-17 00:46, <code>ZmTCMIYY</code>, 대평원 R5 19마리</b>(<code>ArcherPreview/reports/performance-followup-2026-11-17/performance-log-analysis.json</code>)</span>
+<b>기기</b><span>UA가 <code>Android 10; K</code>로 축약되어 있어 모델은 확인할 수 없습니다. 이 기기가 S23인지 확인되지 않습니다. 모든 기록이 터치·고화질·3D 85%·1414×652(약 92만 픽셀)·대평원 시야 240% 조건입니다.</span>
+<b>GPU 시간</b><span>모든 기록에서 <code>gpu.status=unsupported</code>입니다. 아래의 CPU 측정값을 GPU 실행 시간으로 해석하지 않습니다.</span>
+<b>화면 자료</b><span>11-13 이후의 실제 게임 화면 캡처는 프로젝트에 없습니다. 참고한 화면은 <code>Sources/ui/moonforest-hud/2026-11-13-v1/raw/reference-mobile.png</code>(11-13, HUD 시안 기준 화면) 하나입니다. R5/R6 배치와 최근 효과가 반영되지 않았으므로 현재 화면으로 취급하지 않습니다.</span>
+</div>
+<p class="box warn">11-17 기록은 <code>a49f2cd</code>의 풍경 후보 재사용, 맵 재질 준비 예산, 컬링 검증 중복 제거가 들어가기 <b>전</b> 빌드에서 수집되었습니다. 따라서 이 기록을 그 수정의 효과나 회귀의 근거로 사용하지 않았습니다.</p>
+<p>세 기록은 경로·카메라·개체 구성·길이가 모두 다릅니다. 통제된 A/B 비교가 아니므로 기록 사이의 차이는 <b>조건 차이</b>로만 해석했습니다.</p>
+</details>
+
+<h2 id="verdict">1. 현재 상태에 대한 냉정한 평가</h2>
+<details open>
+<summary><span class="t">요약 판정<span class="sub">품질 보존과 수명 관리는 상용 수준에 가깝습니다. 개체 수가 늘 때 비용을 통제하는 구조는 아직 없습니다.</span></span></summary>
+<ul>
+<li><b>목표 대비 위치</b> <span class="b ok">확인됨</span> 11-17 대평원 19마리 기록은 활성 평균 36.7FPS, 평균 CPU 작업 24.5ms였습니다. 초 단위 CPU 작업의 p50은 24.2ms, p95는 31.8ms입니다. 전투가 아니라 대부분의 개체가 휴식·주시 중인 상태에서도 60FPS 예산 16.7ms를 넘었습니다. 같은 조건의 늑대 4마리 기록은 58.7FPS·12.3ms였습니다.</li>
+<li><b>비용이 생기는 위치</b> <span class="b ok">확인됨</span> 종료 시점 표본에서 프레임 작업 약 24ms 중 <code>scene.render</code>가 22.3ms였습니다. 내역은 활성 메시 8.3ms, 드로 제출 9.1ms, 렌더 타깃 2.3ms, 애니메이션 2.3ms입니다. 같은 시점 표본에서 WebGL 호출 래퍼의 시간 합은 약 3ms에 그칩니다. 나머지는 엔진 JS의 메시별·인스턴스별 처리입니다. <span class="b hy">유력한 가설</span> 현재 병목은 메인 스레드 CPU이며, 해상도를 낮춰도 크게 줄지 않습니다.</li>
+<li><b>잘 되어 있는 부분</b> 다음 기반은 상용 운영에 필요한 수준입니다.
+<ul>
+<li>셰이더 사전 준비: 사망 페이드·인스턴스 변형 포함</li>
+<li>준비 예산 공유</li>
+<li>맵 수명·취소 처리</li>
+<li>KTX/Meshopt 워커 감독</li>
+<li>외곽선·그림자 캐스터 예산</li>
+<li>종별 지오메트리·텍스처 공유</li>
+</ul>
+11-16에 기록된 85~90ms 사망 셰이더 생성 정체는 코드에서 대응을 확인했습니다.</li>
+<li><b>구조적 부족</b> <span class="b ok">확인됨</span> 맵에 존재하는 모든 몬스터가 매 프레임 같은 비용으로 갱신됩니다. 거리·가시성·교전 상태에 따른 갱신 등급은 비탄의 마녀 한 종에만 있습니다. 정적 풍경도 인스턴스 하나하나가 엔진의 메시로 처리됩니다(thin instance 0건). 따라서 NPC·리젠·보스·효과를 더하면 같은 경로의 비용이 선형으로 늘어납니다.</li>
+<li><b>메모리</b> <span class="b na">자료 부족</span> 종료 JS 힙은 약 624MB(정밀도 낮은 값)로, 앞선 기록의 139~435MB보다 큽니다. 개체 추정 327MB, 음악 PCM 43.8MB, 전사 텍스처 추정 80MiB가 각각 따로 존재하지만 전역 입장 상한은 없습니다(관측 전용). 누수인지 정상 보존인지는 현재 자료로 구분할 수 없습니다.</li>
+<li><b>그래픽</b> <span class="b hy">유력한 가설</span> 배경은 태양 방향 3단 카툰 명암을 쓰지만, 몬스터와 전사는 조명을 받지 않는 unlit 재질입니다. 시간대·날씨 표현을 넣으면 배우만 분리되어 보일 가능성이 큽니다. 최근 실제 화면이 없어 밀도·반복감·색 분리 평가는 확정하지 않았습니다.</li>
+</ul>
+<p class="box">결론: 엔진 교체나 전면 재작성은 필요하지 않습니다. 현재 구조 안에서 <b>개체 등급 갱신</b>, <b>정적 풍경 묶음 제출</b>, <b>핫패스 할당 제거</b>, <b>통합 자원 예산</b> 네 가지가 해결 경로입니다. 다만 19마리를 모두 표시하고 시야 240%를 유지하는 현재 구성에서는 위 개선만으로 S23급 60FPS를 보장할 수 없습니다. "동시에 고비용으로 처리하는 개체 수" 예산을 함께 도입해야 합니다.</p>
+</details>
+
+<h2 id="top5">2. 가장 먼저 해결할 문제 5개</h2>
+<p class="muted">선정 기준은 세 가지입니다. ① 60FPS 목표에 미치는 측정된 영향 ② 콘텐츠 확장과 함께 비용이 커지는지 ③ 화질·판정을 보존하며 해결할 수 있는지. 관련 기존 과제 번호(MF-xx)는 <code>Docs/Reports/2026-11-17/MOONFOREST_미해결문제_개선과제_현황.html</code> 기준입니다.</p>
+
+<details>
+<summary><span class="t">P1. 모든 몬스터가 거리·가시성과 무관하게 매 프레임 같은 비용으로 갱신됨 <span class="b ok">확인됨</span><span class="sub">개체 수에 비례해 증가하며 확장성이 가장 나쁨 · MF-05 관련</span></span></summary>
+<h3>증상</h3><p>몬스터가 휴식하거나 화면 밖에 있어도 프레임 시간이 개체 수만큼 증가합니다. 4마리일 때 12.3ms였던 CPU 작업이 19마리일 때 24.5ms였습니다(비통제 비교).</p>
+<h3>근거</h3>
+<ul>
+<li><code>boss-battle.js:409-431</code> <code>update()</code>는 모든 <code>encounters</code>에 대해 매 프레임 <code>boss.update()</code>를 호출합니다. <code>boss-encounter.js:296-330</code>에서는 매 프레임 <code>brain.update</code>, 이동, <code>animator.transition/update</code>, <code>applyMotionRoot</code>가 실행됩니다.</li>
+<li><code>wolf-v02-encounter.js:131-139</code>도 매 프레임 <code>alignPose</code> → <code>WolfV02LocomotionPose</code>·<code>Support</code>·<code>RunRamLayer</code>·<code>ForepawBrace</code> 보정을 실행합니다.</li>
+<li>시야 검사는 이미 0.15초 간격으로 제한되어 있습니다(<code>wolf-v02-encounter.js:115-118</code>). AI 판단 자체보다 <b>포즈 계산</b>이 남은 비용입니다.</li>
+<li><code>boss-encounter.js:207-218</code> <code>updateRenderRange</code>는 65m 밖의 배우를 숨기기만 합니다. 주석대로 AI·접촉은 계속 돌고, 애니메이션 샘플링도 계속됩니다.</li>
+<li>전례: <code>mourning-elena-encounter.js:118</code>은 교전 중 0, 숨김 1/15초, 기타 1/30초로 <code>sampleInterval</code>을 둡니다. 이 정책이 다른 종에는 없습니다.</li>
+</ul>
+<h3>발생 조건</h3><p>대평원 기본 배치 R5/R6 19개체, 인구 상한 20. 11-17 기록 0~60초 구간 평균 작업 24.3ms. 이 구간의 상태는 대부분 <code>Rest_Lie</code>, <code>Circle_Watch</code>, <code>Wolf_Walk</code>입니다(<code>top[].context.states</code>).</p>
+<h3>근본 원인과 임시 완화</h3><p>근본 원인은 시뮬레이션(상태·영역·판정)과 표현(포즈·스키닝·그림자)이 분리되지 않은 것입니다. 개체 수 상한을 낮추는 것은 임시 완화일 뿐이며, 의도된 게임 배치를 줄이게 되므로 권하지 않습니다.</p>
+<h3>권장 변경</h3>
+<ol>
+<li>표현 등급을 도입합니다. 교전·실제 공격 진행·주시 목표가 플레이어인 근거리 개체는 매 프레임 처리합니다. 화면 안의 비교전 개체는 1/30초, 화면 밖이나 렌더 범위 밖은 1/15초로 샘플링하고, 정지 휴식 자세는 포즈를 동결합니다.</li>
+<li>등급 전환 규칙을 둡니다. 교전·피격·영역 진입이 확정되는 프레임에는 즉시 전체 샘플링으로 승격합니다. 영역 상태·<code>territoryState</code>·HP·접촉창은 매 프레임 그대로 갱신합니다.</li>
+<li>더 간단한 대안: 먼저 <code>Rest_Lie</code>/<code>Alert_Lie</code> 끝자세 유지 구간과 렌더 범위 밖 개체에만 동결을 적용합니다. 이 두 경우는 포즈 변화가 거의 없어 외형 위험이 작습니다.</li>
+</ol>
+<h3>예상 효과</h3><p><b>추정</b>: 개체당 비용 상한을 (24.5−12.3)/15 ≈ 0.8ms로 잡았습니다. 이 값에는 경로·카메라 차이도 섞여 있어 과대 추정일 수 있습니다. 개체당 비용 중 포즈 비중을 30~70%로 가정하고, 비교전 12개체의 갱신 빈도를 1/4로 줄이면 12×0.8×(0.3~0.7)×0.75 ≈ <b>2~5ms</b>입니다. 측정값이 아니라 범위 추정입니다.</p>
+<h3>그래픽·조작감 영향</h3><p>외곽 주시 중 머리 추적이 1/30초 단위로 계단처럼 보일 수 있습니다. R7에서 해결한 주시 떨림이 재발할 위험이 있으므로 주시 중인 개체는 매 프레임 등급에 둡니다. 전투 판정과 입력 지연에는 영향을 주지 않도록 설계합니다(교전 개체는 항상 전체 갱신).</p>
+<h3>난이도·위험·확인</h3><p>중간 난이도. 회귀 위험은 등급 전환 프레임의 포즈 튐과 역재생 기상의 시간 누적 오류입니다. 확인 방법은 세 가지입니다. ① 같은 입력 시퀀스에서 교전 개체의 접촉 결과·타격 시점이 동일한지 확인하는 Node 검사 ② 등급 전환 시 뼈 위치 불연속의 상한 검사 ③ 고정 벤치마크 경로(E6)에서 <code>bossUpdateMs</code>와 <code>sceneMs</code> 비교.</p>
+</details>
+
+<details>
+<summary><span class="t">P2. 정적 풍경이 인스턴스 하나하나 엔진 메시로 처리되어 렌더 CPU를 차지함 <span class="b ok">확인됨</span><span class="sub">활성 메시 선별·드로 제출이 프레임의 약 70% · MF-06 관련</span></span></summary>
+<h3>증상</h3><p>몬스터가 없는 순간에도 렌더 호출만으로 프레임 예산의 상당 부분을 씁니다. 카메라를 회전하면 활성 메시 선별 시간이 크게 뛰는 프레임이 있습니다(11-17 기록 164.67초 39.8ms, 11-16 기록 최대 124.6ms).</p>
+<h3>근거</h3>
+<ul>
+<li>11-17 종료 표본: 씬 메시 3,094개, 활성 후보 스캔 3,094개 중 1,586개 제출, 드로콜 145회, 제출 삼각형 1,264,468개, 셰이더 전환 70회/드로 146회.</li>
+<li>대평원 풍경 레코드는 1,424개입니다(<code>geometryWork.recordsTotal</code>). 코드에 thin instance 사용은 0건이며 진단 집계 한 곳만 있습니다. 풍경은 <code>InstancedMesh</code>와 패스별 인스턴스 저장소를 사용합니다(<code>village-instancing.js</code>, <code>useMonoDataStorageRenderPass=false</code>).</li>
+<li>같은 배치가 본체·외곽선(<code>village-outlines.js:58-62 outlineBatch</code>)·그림자 패스에서 각각 인스턴스 목록을 만듭니다. 외곽선은 매 프레임 배치마다 <code>filter</code>로 새 배열과 객체를 생성합니다.</li>
+<li><code>village-active-candidates.js</code>가 후보 목록을 캐시하지만, 인스턴스 단위의 절두체·LOD·행렬 처리는 엔진 안에서 그대로 실행됩니다.</li>
+</ul>
+<h3>근본 원인과 임시 완화</h3><p>근본 원인은 공간 단위의 묶음 제출 경로가 없다는 것입니다. 풍경 거리 축소는 임시 완화입니다. 사용자가 요청한 240%를 되돌리는 것이므로 기본 해법으로 쓰지 않습니다.</p>
+<h3>권장 변경</h3>
+<ol>
+<li>원거리 대역(LOD2, 외곽선·그림자 대상이 아닌 거리)의 풍경을 <b>셀×자산×LOD 단위 thin instance 묶음</b>으로 바꿉니다. 셀 경계로 절두체 컬링을 하고, 셀 안에서는 개별 컬링을 하지 않습니다.</li>
+<li>외곽선·그림자가 붙는 근거리 대역과 편집 중인 셀은 기존 <code>InstancedMesh</code> 경로를 유지합니다. 편집 도구가 열리면 해당 셀만 기존 경로로 되돌립니다.</li>
+<li>더 간단한 대안: 가장 수가 많은 한 자산군(풀 군락이나 일반 바위)의 LOD2만 시범 적용합니다.</li>
+</ol>
+<h3>부작용</h3><p>셀이 커질수록 화면 밖 인스턴스까지 그리게 됩니다(GPU 정점 비용 증가). 셀 크기는 원거리 LOD2 삼각형 수와 시야 각도를 기준으로 정합니다. 개별 인스턴스 페이드·디더 전환은 thin instance 속성 버퍼로 옮겨야 합니다. LOD 전환이 셀 단위가 되므로 경계에서 동시 전환이 눈에 띌 수 있어, 기존 디더 커버리지를 인스턴스 속성으로 유지해야 합니다.</p>
+<h3>예상 효과</h3><p><b>추정</b>: 활성 메시 비용이 후보 수에 비례한다고 가정합니다. 원거리 대역이 제출 후보의 40~60%를 차지하면 활성 메시 8.3ms 중 약 <b>2~4ms</b>, 여기에 인스턴스 버퍼 갱신 일부가 줄어듭니다. 원거리 비율은 아직 측정하지 않았으므로 시범 전 <code>activeMeshCandidates</code>를 거리 대역별로 집계해야 합니다.</p>
+<h3>난이도·위험·확인</h3><p>중상 난이도. 회귀 위험은 편집·스트리밍 승격·LOD 전환과 셀 단위 수명의 결합입니다. 확인 방법: 네 맵의 동일 카메라 이미지 비교, 편집 도구 ON/OFF 반복, <code>activeMeshesMs</code>·<code>drawSubmissionMs</code>·드로콜·제출 삼각형 비교.</p>
+</details>
+
+<details>
+<summary><span class="t">P3. 여러 처리 구간이 동시에 느려지는 100~260ms 정체 <span class="b hy">유력한 가설</span><span class="sub">셰이더 원인은 대응됨. 남은 것은 할당·GC·스케줄링 계열 · MF-02 관련</span></span></summary>
+<h3>증상</h3><p>전투나 이동 중 0.1~0.26초 동안 화면이 멈춥니다.</p>
+<h3>근거</h3>
+<ul>
+<li>11-17 기록 164.3~165.2초: 작업 190.6ms였고 같은 프레임에서 렌더 호출 117.2ms, 활성 메시 49.2ms, 몬스터 갱신 54.5ms가 함께 증가했습니다. 다음 프레임은 플레이어 애니메이션 55ms, 프렐류드 56.8ms였습니다. 텍스처 작업 idle, 모델·텍스처 대기 0, 직전 업로드 0건.</li>
+<li>11-16 R2 기록 39.86~40.75초에도 플레이어 애니메이션 80.2ms, 풍경 수요 25.7ms, 활성 메시 124.6ms가 동시에 나타났고 셰이더 준비·업로드는 0이었습니다.</li>
+<li>서로 독립적인 구간이 같은 프레임에 함께 커지는 모양은 GC 일시정지나 브라우저 스케줄링과 일치합니다. 다만 GC를 직접 기록한 자료는 없으므로 가설로 둡니다.</li>
+<li>핫패스 할당 지점(코드 확인):
+<ul>
+<li><code>main.js</code> 프레임 함수: 이동 시 <code>actor.position.clone()</code>, <code>new Vector3</code> 3개와 <code>scale/add</code> 임시 객체</li>
+<li><code>boss-encounter.js:300-308</code>: 개체마다 매 프레임 <code>clone</code>, <code>subtract</code>, <code>new Vector3</code></li>
+<li><code>village-outlines.js:59-62</code>: 배치마다 매 프레임 배열과 객체 생성</li>
+<li><code>character-interior-ink.js</code>: 렌더마다 뷰·투영 행렬 <code>clone()</code></li>
+</ul></li>
+<li>종료 JS 힙 약 624MB. 힙이 크면 주 GC 시간도 길어지는 경향이 있습니다.</li>
+</ul>
+<h3>이미 해결되어 재등록하지 않는 것</h3><p>사망 투명·인스턴스 변형의 셰이더 생성(11-16, 85~90ms)은 <code>boss-shader-warmup.js:16-30</code>에서 페이드 0.5 변형과 인스턴스 모드를 함께 준비하도록 이미 바뀌었습니다. 플레이어 바인딩의 반복 생성(11-16 누적 75,888개)도 캐시 4개로 바뀌어 11-17 기록에서는 생성 816개였습니다.</p>
+<h3>권장 변경</h3>
+<ol>
+<li>프레임 함수·개체 갱신·외곽선 배치의 임시 객체를 개체별·모듈별 작업 벡터로 재사용합니다. 대상은 위에서 확인한 지점부터 시작합니다.</li>
+<li>외곽선 배치: <code>visibleInstances</code> 결과 배열을 배치별로 재사용하고, 객체 펼치기 대신 고정 객체의 필드만 교체합니다.</li>
+<li>확인 방법: PC Chrome의 할당 샘플링으로 60초 전투 경로의 할당량(MB/s)을 비교합니다. 이것은 실기기 요구가 아니라 개발 PC에서 하는 측정입니다.</li>
+</ol>
+<h3>예상 효과</h3><p>평균 FPS 상승은 작을 수 있습니다. 목표는 정체 빈도 감소이며, 개선률은 측정 전까지 제시하지 않습니다.</p>
+<h3>난이도·위험</h3><p>낮음~중간. 재사용 벡터가 다음 프레임까지 참조되는 별칭(alias) 버그가 주 위험입니다. 기존 접촉·이동 결과가 같은지 확인하는 검사로 막습니다.</p>
+</details>
+
+<details>
+<summary><span class="t">P4. 메모리 소유자는 많지만 통합 상한이 없고, 저사양 대체 경로가 없음 <span class="b ok">확인됨</span><span class="sub">8GB 기기에서 브라우저 탭이 쓸 수 있는 몫은 그보다 훨씬 작음 · MF-04 관련</span></span></summary>
+<h3>증상</h3><p>장시간 플레이나 개체 증가 뒤 탭 재시작(문맥 손실), 긴 GC, 발열이 생길 위험이 있습니다. 저사양 기기에서는 같은 자원 구성이 그대로 올라옵니다.</p>
+<h3>근거 (11-17 종료 시점)</h3>
+<table>
+<tr><th>항목</th><th>값</th><th>성격</th></tr>
+<tr><td>JS 힙 사용/할당</td><td class="num">약 624MB</td><td>정밀도 낮은 브라우저 보고값. 총 기기 메모리 아님</td></tr>
+<tr><td>authored 배우 어댑터 추정</td><td class="num">327MB</td><td>공유 지오메트리를 포함할 수 있어 합산 금지</td></tr>
+<tr><td>전사 텍스처 GPU 추정(모바일 4K UASTC)</td><td class="num">83.9MB</td><td>프로필 추정</td></tr>
+<tr><td>음악·환경음 PCM</td><td class="num">43.8MB</td><td>상한 48MiB에 근접</td></tr>
+<tr><td>효과음 PCM</td><td class="num">6.3MB</td><td></td></tr>
+<tr><td>디코드 캐시(지오메트리+텍스처)</td><td class="num">27.6MB</td><td>상한 32MiB</td></tr>
+<tr><td>통합 입장 제한</td><td colspan="2"><code>combinedHardLimitEnforced=false</code>, "Observation only"</td></tr>
+</table>
+<ul>
+<li>힙 비교: 11-16 6분 기록 약 139MB, R2 기록 322~435MB, 11-17 624MB. 세션 구성이 달라 누수 여부는 <span class="b na">자료 부족</span>입니다.</li>
+<li>동굴 카메라 필드 <code>witch-cave-camera-data.js</code>(1.78MB base64)는 <code>main.js:50</code>에서 정적으로 가져오며 모듈을 불러올 때 디코드됩니다(<code>witch-cave-camera.js:11-12</code>). 대평원 기록에도 <code>cameraGuard.fieldBytes=1,333,088</code>이 남아 있어, 동굴이 아닌 맵에서도 상주하는 것을 확인했습니다.</li>
+<li>지오메트리 디코드 캐시는 대평원 한 세션에서 적중 50회, 실패 5,335회, 퇴출 3,313회였습니다. 8MiB 보존의 이득이 작습니다.</li>
+</ul>
+<h3>누수와 정상 보존을 구분하는 방법</h3><p>같은 맵을 왕복 N회 하고, 같은 종을 소환·사망 N회 반복한 뒤 힙 스냅샷을 비교합니다. 기준: 왕복 2회차 이후 힙이 평탄해지면 캐시 보존, 계속 증가하면 누수 후보입니다. <code>contentRuntime</code> 소유자 수와 Babylon 메시·지오메트리·텍스처 수를 함께 비교합니다.</p>
+<h3>권장 변경</h3>
+<ol>
+<li>동굴 카메라 데이터를 동굴 진입 시 동적 <code>import</code>로 바꿉니다. 비동굴 맵에서 약 1.8MB 번들과 1.33MB 배열을 줄입니다. 쉽고 위험이 낮습니다.</li>
+<li>긴 곡을 <code>MediaElementAudioSource</code>로 스트리밍합니다. 짧은 환경음 루프는 이음새 문제를 피하기 위해 기존 디코드 방식을 유지합니다. 최대 약 35~40MB의 PCM 상주를 줄입니다(<code>decodedBedBytes=샘플×채널×4</code>). 음원은 그대로이고 재생 경로만 바뀌지만, 프로젝트 규칙에 따라 루프·전환 청취 검수가 필요합니다.</li>
+<li>소유자별 추정을 하나의 예산표로 합치고, 모바일에서는 입장 거부·휴면 축소 정책을 실제로 적용합니다(장기 L2).</li>
+<li>저메모리 기기 대체(<code>navigator.deviceMemory</code>≤4 또는 실패 기록 기반)에 한해 배우 2K 대체를 선택지로 둡니다. S23급과 PC의 승인 품질은 바꾸지 않습니다.</li>
+</ol>
+</details>
+
+<details>
+<summary><span class="t">P5. 측정 체계가 실기기 결정을 지원하지 못함 <span class="b ok">확인됨</span><span class="sub">비통제 기록 3건으로는 패치 효과를 판정할 수 없음 · MF-09 관련</span></span></summary>
+<h3>증상</h3><p>최적화를 적용한 뒤 실제로 좋아졌는지 판단하지 못하고, 매번 새 기록을 해석하는 작업이 반복됩니다.</p>
+<h3>근거</h3>
+<ul>
+<li>세 기록 모두 경로·개체 수·길이가 다르고, 기기 모델과 온도 자료가 없으며, GPU 시간을 지원하지 않습니다.</li>
+<li>전체 프레임 분포는 1초 단위 합계만 있어 전체 p95를 복원할 수 없습니다(<code>limits[0]</code>).</li>
+<li>상세 기록 중에는 1초마다 엔진 메서드를 감싸는 표본 렌더가 생기고(<code>render-cpu-sampler.js</code>), 처치 순간에는 강제 표본을 요청합니다(<code>main.js</code> <code>requestDrawCpuCapture('enemy-defeat')</code>). 따라서 분석 대상인 사망 프레임에 계측 비용이 섞입니다.</li>
+<li>기본 진단을 꺼도 최적화 경로는 동일하게 실행됩니다. 공유 준비 예산과 셰이더 준비는 계측 여부와 무관하다는 것을 코드에서 확인했습니다. 계측을 켰을 때 결과가 좋아 보일 위험은 낮고, 나빠 보일 위험은 표본 프레임에 한정됩니다.</li>
+</ul>
+<h3>권장 변경</h3><p>게임 안에 <b>고정 벤치마크</b>(E6)를 둡니다. 정해진 카메라 경로, 정해진 개체 구성(0·5·10·19마리), 60초 측정을 계측 ON/OFF로 각각 한 번씩 실행합니다. 요약 지표는 초 단위 작업 p50/p95, 50ms 초과 수, 기기 식별 문자열(가능한 경우 <code>userAgentData</code>의 상세 값)입니다. 사용자에게 추가 기록을 요구하지 않습니다. 이후 기록이 생기면 같은 조건에서 비교할 수 있도록 도구만 준비하는 작업입니다.</p>
+<h3>예상 효과·위험</h3><p>성능 향상은 없습니다. 다른 모든 개선의 판정 비용이 줄어듭니다. 난이도와 위험은 낮습니다. 게임 상태를 바꾸지 않는 별도 실행 모드로 구현합니다.</p>
+</details>
+
+<h2 id="keep">3. 이미 적용되어 유지해야 하는 최적화</h2>
+<details>
+<summary><span class="t">코드로 확인한 유지 항목 14개<span class="sub">되돌리거나 우회하지 말 것</span></span></summary>
+<table>
+<tr><th>항목</th><th>위치</th><th>확인 내용</th></tr>
+<tr><td>사망 페이드·인스턴스 변형 사전 준비</td><td><code>boss-shader-warmup.js:16-30</code></td><td>가시도 0.5 변형과 instances 모드, 그림자 준비까지 포함. 11-16 85~90ms 정체에 대응</td></tr>
+<tr><td>준비 프로그램 수명</td><td><code>prepared-effect-lifetime.js</code></td><td>메시당 16, 엔진 128 상한. 11-17 기록에서 거부 0</td></tr>
+<tr><td>공유 2ms 준비 예산</td><td><code>frame-work-coordinator.js</code>, <code>map-shader-cache.js</code></td><td>맵 재질 준비까지 포함(<code>a49f2cd</code>). 계측 OFF에서도 동작</td></tr>
+<tr><td>풍경 후보 동일 투영 재사용</td><td><code>village-texture-demand-cache.js</code></td><td>정지 시점에만 적용. 실기기 효과는 미측정(11-17 기록이 수정 이전 빌드)</td></tr>
+<tr><td>A* 작업공간 재사용</td><td><code>navigation-search-workspace.js</code></td><td>세대 표식 방식. 최초 격자 생성(11-17 680ms 캐시 실패)은 여전히 동기 작업</td></tr>
+<tr><td>0.2 늑대 시야 검사 간격</td><td><code>wolf-v02-encounter.js:115-118</code></td><td>0.15초 간격</td></tr>
+<tr><td>배우 보수적 카메라 경계</td><td><code>mourning-camera-culling.js</code></td><td>본체·외곽선·내부선이 같은 결정을 사용. 화면 밖 그림자는 보존</td></tr>
+<tr><td>내부선 RTT 분리·단일 세트</td><td><code>character-interior-ink.js:96-118</code></td><td>보이는 NPC·마녀가 없으면 후처리 분리. 대평원 늑대 전투에서는 비활성</td></tr>
+<tr><td>늑대 전용 샘플러</td><td><code>wolf-animation.js</code> 외</td><td>11-17 기록에서 늑대 바인딩 생성 0</td></tr>
+<tr><td>플레이어 바인딩 캐시 4</td><td><code>animation.js</code></td><td>생성 반복이 크게 감소</td></tr>
+<tr><td>12개체 이상 분리 공간 후보</td><td><code>enemy-separation.js</code></td><td>기존 결과와 동일함을 검사로 확인</td></tr>
+<tr><td>풍경 외곽선 삼각형 예산</td><td><code>village-outline-policy.js</code></td><td>모바일 160k·96개, PC 260k·144개</td></tr>
+<tr><td>그림자 캐스터 예산</td><td><code>village-shadow-policy.js</code>, <code>world.js:91</code></td><td>모바일 28m·28개, 1024 PCF LOW</td></tr>
+<tr><td>UASTC의 RGBA 확장 금지</td><td><code>village-ktx2.js:31-33</code></td><td>압축 미지원 시 비압축 확장으로 메모리가 폭증하는 것을 방지</td></tr>
+</table>
+</details>
+
+<h2 id="perf">4. 성능 개선 후보</h2>
+<h3>즉시 진행</h3>
+<details>
+<summary><span class="t">I1. 휴식 끝자세와 렌더 범위 밖 개체의 포즈 동결 <span class="b n">P1의 1단계</span><span class="sub">외형 위험이 가장 작은 등급만 먼저</span></span></summary>
+<p>엘레나의 <code>sampleInterval</code> 방식을 몬스터 공용 경로로 옮깁니다. 적용 대상은 <code>Rest_Lie</code>/<code>Alert_Lie</code> 끝자세 유지 구간과 <code>renderVisible===false</code>인 개체입니다. 영역 상태 기계와 HP는 매 프레임 진행합니다. 교전·피격·영역 진입이 확정되면 같은 프레임에 즉시 전체 샘플링합니다.</p>
+<p><b>완료 조건</b>: 교전 개체의 접촉 결과가 기존과 같고, 등급 전환 시 뼈 불연속이 기준 이하이며, 휴식 개체의 <code>bossUpdateMs</code> 기여가 0에 가까워진 것을 Node 표본으로 확인합니다.</p>
+</details>
+<details>
+<summary><span class="t">I2. 프레임 핫패스 임시 객체 제거 <span class="b n">P3</span></span></summary>
+<p>대상: <code>main.js</code> 이동 벡터, <code>boss-encounter.js</code> update/poseAndContacts의 <code>clone/subtract/new Vector3</code>, <code>village-outlines.js</code> <code>outlineBatch</code>, 내부선 행렬 <code>clone</code>. 결과값은 그대로 유지하고 저장 위치만 재사용합니다.</p>
+<p><b>완료 조건</b>: PC 할당 샘플링 기준 60초 전투 경로의 할당량 감소를 확인하고, 기존 접촉·이동 테스트가 동일하게 통과해야 합니다.</p>
+</details>
+<details>
+<summary><span class="t">I3. 동굴 카메라 필드 지연 로드 <span class="b n">P4</span></span></summary>
+<p><code>main.js:50</code>의 정적 import를 동굴 맵 진입 경로의 동적 import로 바꿉니다. 비동굴 맵의 번들 파싱량과 상주 배열이 줄어듭니다.</p>
+<p><b>완료 조건</b>: 마을·평원·숲에서 <code>cameraGuard.fieldBytes</code>가 0이고, 동굴 진입·재진입 시 카메라 보정이 같은 결과를 내야 합니다.</p>
+</details>
+<details>
+<summary><span class="t">I4. 맵 로딩 중 Meshopt 워커의 반복 해제 방지 <span class="b n">MF-03</span></span></summary>
+<p>11-17 기록에서 워커가 4회 생성·해제되었고(<code>idleMs=1000</code>), 마지막 요청은 대기 3.53초, 실제 디코드 0.3ms였습니다. 캐시 상태의 대평원 로딩은 12.4초였습니다(모델 6.2초, 화면 3.1초). 로딩 세션이 끝날 때까지 idle 해제를 미루면 재초기화 비용이 사라집니다.</p>
+<p><b>완료 조건</b>: 로딩 한 번당 워커 생성 1회, 로딩 종료 후 기존 해제 정책으로 복귀.</p>
+</details>
+<h3>작은 실험 후 결정</h3>
+<details>
+<summary><span class="t">E1. 원거리 풍경 셀 단위 thin instance 시범 <span class="b n">P2</span></span></summary>
+<p>먼저 <code>activeMeshCandidates</code>를 거리 대역별로 집계하는 계측을 추가합니다. 그다음 가장 수가 많은 자산 하나의 LOD2만 셀 묶음으로 바꿉니다. 판정 지표는 <code>activeMeshesMs</code>, <code>drawSubmissionMs</code>, 드로콜, 제출 삼각형, 네 맵 동일 카메라 이미지, 편집 ON/OFF 반복입니다. 기대 효과가 1ms 미만이면 중단합니다.</p>
+</details>
+<details>
+<summary><span class="t">E2. 그림자 맵 갱신 분리 <span class="b n">렌더 타깃 2.3ms</span></span></summary>
+<p>현재 1024 그림자 맵을 매 프레임 다시 그립니다(<code>scene-lighting.js:61 refreshRate=1</code>). 이렇게 둔 이유(투영 불일치)가 주석에 남아 있습니다. 대안으로, 정적 캐스터 전용 맵은 초점이 텍셀 스냅 단위를 넘을 때만 갱신하고 배우만 매 프레임 그리는 이중 맵을 시험합니다. 그림자 경계 깜박임·이중 샘플 비용·메모리 1024² 추가를 함께 비교합니다. 이득이 1ms 미만이면 채택하지 않습니다.</p>
+</details>
+<details>
+<summary><span class="t">E3. 4K 텍스처 최초 업로드 분할</span></summary>
+<p>11-17 기록 7.88초에 4096 KTX 업로드 한 건이 CPU 56.3ms를 차지했습니다. 낮은 mip을 먼저 올리고 상위 mip은 다음 프레임에 올리거나, 업로드를 로딩 커튼 안으로 옮깁니다. 최종 해상도는 그대로입니다.</p>
+</details>
+<details>
+<summary><span class="t">E4. 긴 음악의 스트리밍 재생</span></summary>
+<p>P4 권장 2. 음원과 볼륨은 같고 재생 경로만 바뀝니다. 루프 이음새와 전투 음악 전환 타이밍은 사용자 청취 검수 대상입니다.</p>
+</details>
+<details>
+<summary><span class="t">E5. 재질 정렬로 셰이더 전환 축소</span></summary>
+<p>표본 프레임에서 드로 146회 중 셰이더 전환이 70회였습니다. 불투명 렌더링 그룹 안에서 재질·이펙트 기준 정렬을 적용하고 전환 수를 비교합니다. 텍스처 아틀라스 재배치는 UV 검수 규칙의 비용이 크므로 이 실험에 포함하지 않습니다.</p>
+</details>
+<details>
+<summary><span class="t">E6. 고정 벤치마크 모드 <span class="b n">P5</span></span></summary>
+<p>정해진 카메라 경로와 개체 0·5·10·19 구성으로 60초씩 측정합니다. 계측 ON/OFF 각각의 요약 JSON을 남기고, 게임 저장값은 변경하지 않습니다. 이후 모든 실험의 판정 기준이 됩니다.</p>
+</details>
+<details>
+<summary><span class="t">E7. 프레임 속도 안정화 선택지</span></summary>
+<p>평균 36.7FPS는 30과 60 사이를 오가는 불규칙한 프레임 간격을 뜻합니다. 지속적으로 미달할 때 안정적인 30 또는 120Hz 화면의 40으로 고정하는 선택지가 체감상 더 나을 수 있습니다. 이것은 화질 감량이 아니라 프레임 간격 정책입니다. 현재 설정은 30/60 두 값뿐입니다(<code>render-policy.js</code>).</p>
+</details>
+<h3>장기 구조 개선</h3>
+<details>
+<summary><span class="t">L1. 시뮬레이션과 표현의 분리, 표현 등급 예산</span></summary>
+<p>P1의 완성형입니다. 배우를 상태(항상 갱신)와 표현(등급별 갱신)으로 나누고, 프레임마다 "고비용 표현 슬롯"을 거리·교전·화면 점유율로 배정합니다. 6절 기준표와 연결됩니다.</p>
+</details>
+<details>
+<summary><span class="t">L2. 전역 자원 입장 상한 (MF-04)</span></summary>
+<p>배우·풍경 고해상도·디코드 캐시·오디오·컷씬 임대를 하나의 예산표로 합칩니다. 모바일에서는 입장 거부와 휴면 축소를 실제로 실행합니다. 공유 자원은 소유자 수로 나누지 않고 한 번만 계산합니다.</p>
+</details>
+<details>
+<summary><span class="t">L3. 경량 카툰 셰이더 (조건부)</span></summary>
+<p>현재 배우는 <code>PBRMaterial</code>(unlit)에 플러그인을 더한 구조입니다. 변형 하나의 생성에 50~90ms가 기록되었고(11-16), 셰이더 소스도 큽니다. 전용 경량 셰이더는 컴파일과 실행 비용을 모두 줄일 수 있습니다. 대신 sRGB 디코딩·모프·스킨·그림자 수신의 동등성을 다시 검증해야 하고 승인 외형에 영향을 줄 수 있어, L1·L2 이후에 판단합니다.</p>
+</details>
+<details>
+<summary><span class="t">L4. 지형 분할·원경 병합 (MF-06)</span></summary>
+<p>E1 결과를 보고 진행합니다. 원경 산·숲 띠는 셀 병합 메시나 단순 임포스터 띠로 바꾸는 것을 검토합니다. 시야 거리는 유지하고 원경 표현 비용만 낮추는 방향입니다.</p>
+</details>
+
+<h2 id="gfx">5. 그래픽 품질 개선 후보 (비용 대비 효과 순)</h2>
+<p class="muted">최근 실제 화면이 없으므로 아래의 시각적 판단은 모두 가설입니다. 코드·설정으로 확인한 사실과 구분해 표시했습니다.</p>
+<details>
+<summary><span class="t">G1. 배우와 배경의 명도·채도 분리 <span class="b hy">유력한 가설</span><span class="sub">비용 거의 0 · uniform 조정만</span></span></summary>
+<p>11-13 기준 화면에서 회백색 우두머리가 밝은 하늘·원경 안개와 명도가 비슷해 실루엣이 약했습니다. 배경 원거리 톤(<code>VILLAGE_DISTANCE_TONE.farFactor=.62</code>)은 이미 있습니다. 근경 지면 채도를 약간 낮추고 배우에 화면 공간 림(프레넬) 한 항을 더하는 방법을 HTML 검수본으로 비교할 것을 권합니다.</p>
+</details>
+<details>
+<summary><span class="t">G2. 배우의 조명 응답 <span class="b ok">확인됨</span> (코드) / 시각 영향 <span class="b hy">유력한 가설</span></span></summary>
+<p>몬스터는 <code>applyMonsterToon</code>에서 <code>unlit=true, disableLighting=true</code>입니다(<code>monster-toon.js</code>). 캐릭터 스타일은 밝기 배수와 주름선만 더합니다(<code>character-style.js:29-47</code>). 반면 풍경은 태양 방향 3단 명암을 사용합니다(<code>village-toon.js</code>). 시간대·날씨를 표현하면 배우만 고정 조명으로 남습니다. 공용 태양 uniform을 사용하는 2단 램프와 림을 토글 가능한 플러그인으로 더하는 방법을 제안합니다(프래그먼트 연산 몇 개). 승인 외형에 영향을 주므로 기본값은 OFF로 두고 비교 검수합니다.</p>
+</details>
+<details>
+<summary><span class="t">G3. 저비용 시간대·날씨</span></summary>
+<p>태양 방향(<code>setWorldYaw</code>), 반구광 색, 안개 색, 원거리 톤은 모두 uniform입니다. 시간대 4단계(아침·낮·저녁·밤)의 색표만으로 큰 변화를 줄 수 있습니다. G2를 적용하기 전에는 배우가 분리되어 보이므로 G2와 함께 진행합니다.</p>
+</details>
+<details>
+<summary><span class="t">G4. 풍경 반복감 완화 <span class="b hy">유력한 가설</span></span></summary>
+<p>11-13 화면에서 같은 나무가 줄지어 반복되고 지면이 넓은 단색 면으로 보였습니다. 인스턴스 속성 경로(<code>village-instance-attributes.js</code>, 외곽선 색조 속성)가 이미 있으므로 인스턴스별 색조·명도 ±5% 변이와 지형 셰이더의 저주파 월드 노이즈 한 번 샘플로 개선할 수 있습니다. 모델·텍스처는 바꾸지 않습니다.</p>
+</details>
+<details>
+<summary><span class="t">G5. 큰 몬스터의 렌더 범위 팝인 <span class="b ok">확인됨</span> (수치) / 시각 영향 <span class="b na">자료 부족</span></span></summary>
+<p>배우 렌더 범위는 65m+여유 3m(<code>world-limits.js</code> <code>VIEW_DISTANCE</code>)입니다. 반면 대평원 풍경은 240%에서 메시 컬링 216m, 안개 156~192m까지 보입니다. 3.75m 높이의 우두머리가 넓은 평원에서 68m 지점에 갑자기 나타날 수 있습니다. P1 등급의 "포즈 동결 원거리 표시"로 범위를 넓히는 것이 저비용 해법입니다. 원거리에서는 스킨 갱신 없이 드로만 남습니다.</p>
+</details>
+<details>
+<summary><span class="t">G6. 타격·마법 효과 예산</span></summary>
+<p><code>effect-budget.js</code>에 화면 점유율(coverage) 개념이 있지만 검수 효과에만 연결되어 있습니다. 상한도 compact 1.2·standard 2.2·rich 3.2로, 92만 픽셀 모바일에서 화면 몇 장 분량의 겹침을 허용합니다. 실제 전투 효과를 넣기 전에 모바일 기본값을 정해야 합니다. 첫 기준은 단일 배치, 유한 슬롯, 짧은 수명, 가산 혼합, 작은 텍스처입니다. 화면 점유율 상한은 실측 후 확정합니다. 효과 강도는 타이밍(히트스톱·카메라 흔들림·짧은 섬광)으로 먼저 만들고 입자 수는 나중에 늘립니다.</p>
+</details>
+<details>
+<summary><span class="t">G7. 외곽선 일관성과 디더 페이드 <span class="b na">자료 부족</span></span></summary>
+<p>풍경 잉크는 화면 점유율 기반 Bayer 디더 discard로 사라집니다(<code>village-outlines.js</code>). 배우 외곽선은 픽셀 폭을 별도로 계산합니다. 모바일 해상도에서 원거리 디더가 반짝이는지, 같은 거리에서 배우와 풍경의 선 굵기가 일치하는지는 실제 화면으로 확인해야 합니다. discard는 일부 모바일 GPU의 조기 깊이 최적화를 끄므로 GPU 비용 측면에서도 확인 대상입니다.</p>
+</details>
+<details>
+<summary><span class="t">G8. UI 가독성 <span class="b na">자료 부족</span></span></summary>
+<p>11-13 기준 화면에서는 왼쪽 퀘스트 패널이 화면 폭의 약 1/4을 차지했고, HP 수치와 골드 글자가 작았습니다. 상용화 기준으로는 전투 중 퀘스트 패널 자동 축소, 보스 HP와 플레이어 HP의 시선 동선, 최소 글자 크기와 터치 대상 크기 기준을 문서화하는 것이 우선입니다. 현재 HUD(<code>hud-raster-v1</code>)의 실제 모바일 화면은 확인하지 못했습니다.</p>
+</details>
+
+<h2 id="scale">6. NPC·몬스터·컷씬·효과 추가를 위한 확장 기준</h2>
+<details open>
+<summary><span class="t">"맵에 존재하는 수"와 "고비용으로 처리하는 수"를 분리<span class="sub">아래 수치는 시작 제안이며 측정값이 아님. E6 벤치마크로 확정</span></span></summary>
+<table>
+<tr><th>표현 등급</th><th>조건</th><th>포즈</th><th>외곽선</th><th>그림자</th><th>AI·판정</th></tr>
+<tr><td>A 전체</td><td>교전·공격 진행·주시 대상·근거리</td><td>매 프레임</td><td>예</td><td>예</td><td>매 프레임</td></tr>
+<tr><td>B 화면 안 비교전</td><td>배회·휴식·관찰</td><td>1/30초</td><td>예</td><td>근거리만</td><td>매 프레임(시야 검사는 기존 간격)</td></tr>
+<tr><td>C 원거리·화면 밖</td><td>렌더 범위 경계 근처, 카메라 밖</td><td>1/15초 또는 동결</td><td>아니오</td><td>아니오</td><td>매 프레임</td></tr>
+<tr><td>D 숨김</td><td>렌더 범위 밖</td><td>동결</td><td>—</td><td>—</td><td>매 프레임(상태 기계만)</td></tr>
+</table>
+<ul>
+<li><b>모바일 시작 예산(제안)</b>: A 동시 6, A+B 동시 12, 존재 개체 수는 현재 인구 상한 20 유지. 근거: 4마리 12.3ms·19마리 24.5ms 기록에서 추정한 개체당 상한 0.8ms. 실제 배분은 E6 측정으로 다시 계산합니다.</li>
+<li><b>보스</b>: 동시에 A 등급 보스 1. 컷씬 배우는 컷씬 동안 A 슬롯을 임대하고, 같은 수의 일반 개체는 B로 강등합니다.</li>
+<li><b>신규 배우 등록 조건</b>(기존 AGENTS 기준에 추가):
+<ul>
+<li>등급별 포즈 동결·재개 시 불연속 검사</li>
+<li>사전 준비 변형 목록에 불투명·사망 페이드·외곽선·그림자·인스턴스 포함</li>
+<li>종별 공유(지오메트리·재질·텍스처)와 개체별 독립(골격·애니메이터·상태) 구분</li>
+<li>통합 예산표에 한 번만 계산</li>
+</ul></li>
+<li><b>1만~5만 삼각형 몬스터</b>: 스키닝 정점 비용은 패스 수(본체·외곽선·그림자 = 최대 3회)에 비례합니다. 5만 삼각형 개체는 A 등급 슬롯 1.5~2개로 계산하는 가중치를 둡니다(정점 수 비례 가정).</li>
+<li><b>NPC</b>: 내부선 RTT는 보이는 NPC가 있을 때 화면 전체 크기의 추가 패스 2개(법선·깊이 + 합성)를 만듭니다. 마을의 NPC 수가 늘면 이 고정비가 먼저 발생하므로, 내부선이 필요한 NPC는 A/B 등급에서만 등록합니다.</li>
+<li><b>효과</b>: 단일 배치, 유한 슬롯, 맵 변경 시 정리, 효과별 RAF 금지(현행 규칙 유지)에 더해 화면 점유율 예산을 실제 전투 효과에 연결합니다.</li>
+<li><b>컷씬</b>: 기존 scene/loop 재사용. 컷씬 진입 시 B·C 등급 일반 개체의 갱신을 일시 동결하는 정책으로 고품질 배우의 여유를 확보합니다.</li>
+</ul>
+</details>
+
+<h2 id="missed">7. 놓친 위험이나 낭비</h2>
+<details>
+<summary><span class="t">R1. 최신 기록이 현재 빌드보다 앞섬 <span class="b ok">확인됨</span></span></summary>
+<p>11-17 00:46 기록(<code>ZmTCMIYY</code>)은 <code>a49f2cd</code>와 <code>d0be33d</code>보다 앞선 빌드입니다. 현재 배포본은 <code>Ujx1BJHO</code>입니다. 11-17 보고서의 "개선 결과"는 Node 작업량 수치이며 실기기에서는 확인되지 않았습니다.</p>
+</details>
+<details>
+<summary><span class="t">R2. FPS 하락과 시점이 겹치는 개체 수 증가 <span class="b hy">유력한 가설</span></span></summary>
+<p>4마리 기록(58.7FPS)과 19마리 기록(36.7FPS) 사이에 R5의 19개체 기본 배치가 들어갔습니다. 시점이 겹친다는 이유만으로 인과를 확정하지 않지만, 하락의 가장 큰 후보로는 패치 회귀보다 배치 개체 수 증가가 더 유력합니다. 같은 조건의 A/B 비교가 필요합니다(E6).</p>
+</details>
+<details>
+<summary><span class="t">R3. "상자 추가 뒤 느려짐" 이력의 점검 <span class="b ok">확인됨</span></span></summary>
+<p>상자 관련 커밋을 확인했습니다. <code>73e7fed</code>는 공용 <code>village-outlines.js</code>, <code>village-outline-policy.js</code>, <code>map-shader-cache.js</code>를 함께 바꿨지만, 변경은 최소 커버리지·페이드 값의 매개변수화와 <code>instances</code> 준비 옵션 추가였습니다. 새 렌더 패스나 매 프레임 순회는 추가되지 않았습니다. 만료된 상자 효과를 계속 순회하던 비용은 <code>5ddc41e</code>에서 제거되었습니다. 상자 모델은 4,487삼각형이며 11-17 기록에서 표시된 상자는 4개입니다. 현재 자료로는 상자를 지속 저하의 원인으로 볼 근거가 없습니다.</p>
+</details>
+<details>
+<summary><span class="t">R4. 롤백된 미승인 효과음이 0.2 배포 목록에 남아 있고 Git에서 추적되지 않음 <span class="b ok">확인됨</span></span></summary>
+<p><code>ArcherPreview/public</code>의 Git 미추적 파일 115개 중 45개(wav 44, mp3 1, 약 2.7MB)가 <code>deployment-files-moonforest-0.2.json</code>에 포함되어 있습니다. 목록에는 <code>assets/audio-creatures-r1.json</code>도 있습니다. 실행 번들과 소스에는 연결이 없습니다(<code>audio-creatures</code> 참조 0). 미승인 음원이 공개 배포에 남는 문제와, 배포 재현성이 Git 밖 파일에 의존하는 문제가 함께 있습니다.</p>
+</details>
+<details>
+<summary><span class="t">R5. 대평원 시야 240%가 모바일과 PC의 공통 기본값</span></summary>
+<p><code>PLAINS_VIEW_DISTANCE_DEFAULT=2.4</code>이며 기기를 구분하지 않습니다. 사용자 요청 값이므로 되돌리지 않습니다. 대신 원경 표현 비용을 낮추는 E1·L4가 이 기본값을 유지하는 조건이 됩니다.</p>
+</details>
+<details>
+<summary><span class="t">R6. 작업 트리 비대와 문서 운영 비용</span></summary>
+<p>변경·미추적 항목 798개, <code>ArcherPreview/scripts</code>의 미추적 스크립트 99개, 68KB 분량의 <code>AGENTS.md</code>가 있습니다. 작업마다 확인·문서화 비용이 커지고, 어떤 상태가 실제 배포 입력인지 판단하기 어렵습니다(MF-16 관련). 현재 구현 요약은 짧게 유지하고 이력은 문서로 옮기는 정리를 권합니다.</p>
+</details>
+<details>
+<summary><span class="t">R7. 계측 표본이 분석 대상 프레임과 겹침</span></summary>
+<p>상세 기록 중 처치 순간에 강제 렌더 표본을 요청하므로, 사망 프레임 분석에 메서드 래퍼 비용이 섞입니다. 비용 자체는 작을 것으로 보이지만, 사망 정체 원인을 판정할 때 표본 프레임과 비표본 프레임을 구분해야 합니다.</p>
+</details>
+<details>
+<summary><span class="t">R8. 지오메트리 디코드 캐시의 낮은 효용</span></summary>
+<p>적중 50/실패 5,335. 8MiB를 상주시키면서 재방문 이득이 작습니다. 상한을 키울지(재방문 이득) 없앨지(메모리) 결정하려면 맵 왕복 기록이 필요합니다.</p>
+</details>
+
+<h2 id="dont">8. 지금은 하지 않는 편이 나은 작업</h2>
+<details>
+<summary><span class="t">보류 권장 7개</span></summary>
+<ul>
+<li><b>엔진 교체·전면 재작성</b>: 병목은 메시·개체 단위 처리 방식이며 Babylon 안에서 해결 가능한 구조입니다. 수명·준비 체계를 다시 만드는 비용이 큽니다.</li>
+<li><b>해상도·폴리곤·풍경 거리 일괄 감량</b>: CPU 병목일 가능성이 높아 효과가 작고, 승인 품질을 잃습니다.</li>
+<li><b>WebGPU 전환</b>: 드로 제출 비용에는 이득이 있을 수 있습니다. 그러나 모바일 지원 편차와 셰이더 플러그인·KTX·내부선 경로의 재검증 비용이 큽니다. L1·E1 이후에 재검토합니다.</li>
+<li><b>상세 계측 상시 ON, 로그 추가</b>: 비용과 해석 부담만 늘어납니다. 고정 벤치마크(E6)가 더 효율적입니다.</li>
+<li><b>텍스처 아틀라스·UV 재배치</b>: 프로젝트의 UV 검수 기준상 비용이 매우 크고, 셰이더 전환 감소 효과는 재질 정렬(E5)로 먼저 확인할 수 있습니다.</li>
+<li><b>몬스터 수 상한 축소</b>: 의도된 배치를 줄이는 것이므로, 표현 등급으로 비용을 분리하는 것이 먼저입니다.</li>
+<li><b>그림자 격프레임 갱신</b>: 코드 주석대로 광원 이동 시 투영이 어긋납니다. 단순 격프레임 대신 E2의 정적/동적 분리를 시험합니다.</li>
+</ul>
+</details>
+
+<h2 id="plan">9. 다음 구현 작업 실행 순서</h2>
+<details open>
+<summary><span class="t">작게 나눈 순서와 완료 조건<span class="sub">각 단계는 독립적으로 배포·검수 가능</span></span></summary>
+<table>
+<tr><th>#</th><th>작업</th><th>완료 조건</th></tr>
+<tr><td>1</td><td>E6 고정 벤치마크 모드(경로·개체 0/5/10/19·계측 ON/OFF 요약)</td><td>같은 PC에서 3회 반복 시 초 단위 작업 p50 편차 10% 이내. 저장값 불변</td></tr>
+<tr><td>2</td><td>I3 동굴 카메라 필드 지연 로드</td><td>비동굴 맵에서 <code>fieldBytes=0</code>. 동굴 카메라 결과 동일</td></tr>
+<tr><td>3</td><td>I2 핫패스 할당 제거(main·boss-encounter·village-outlines·내부선)</td><td>기존 테스트 동일 통과. PC 할당 샘플링에서 감소 확인</td></tr>
+<tr><td>4</td><td>I1 휴식 끝자세·렌더 범위 밖 포즈 동결</td><td>교전 판정 동일. 전환 불연속 기준 이하. 벤치마크 19마리에서 <code>bossUpdateMs</code> 감소</td></tr>
+<tr><td>5</td><td>I4 로딩 중 Meshopt 워커 유지</td><td>로딩 1회당 워커 생성 1회. 로딩 시간 비교 기록</td></tr>
+<tr><td>6</td><td>R4 배포 위생: 미승인 음원 45개와 <code>audio-creatures-r1.json</code>를 배포 목록에서 제외, public 미추적 정리 방침 결정</td><td>0.2 배포 목록에 미연결 미승인 파일 0. 0.1 보호 목록 불변</td></tr>
+<tr><td>7</td><td>E1 사전 계측: 활성 후보의 거리 대역별 집계</td><td>대역별 비율 확인. 1ms 이상 이득이 예상될 때만 8로 진행</td></tr>
+<tr><td>8</td><td>E1 thin instance 시범(자산 1종 LOD2)</td><td>네 맵 동일 카메라 이미지, 편집 ON/OFF 반복 통과. 벤치마크에서 <code>activeMeshesMs</code> 감소</td></tr>
+<tr><td>9</td><td>P1 확장: B/C 등급(1/30·1/15초) + 원거리 표시 범위 확대(G5)</td><td>주시 떨림 재발 없음(R7 검사). 교전 전환 즉시 승격</td></tr>
+<tr><td>10</td><td>E3·E4 업로드 분할과 음악 스트리밍(청취 검수 포함)</td><td>4K 업로드 단일 프레임 CPU 감소. 음악 루프·전환 사용자 승인</td></tr>
+<tr><td>11</td><td>G1·G2 검수본(토글, 기본 OFF)</td><td>사용자 외형 승인 후에만 기본값 변경</td></tr>
+<tr><td>12</td><td>L2 통합 예산표와 모바일 입장 정책</td><td>소유자 중복 없는 합계. 모바일 상한 초과 시 거부·휴면 축소 동작</td></tr>
+</table>
+<p class="muted">각 단계에서 모델·텍스처·LOD·전투 입력/타이밍/판정은 변경하지 않습니다. 실기기 FPS·발열은 기록이 생길 때까지 "미측정"으로 남깁니다.</p>
+</details>
+
+<h2 id="unknown">현재 자료로 판단할 수 없는 부분</h2>
+<details>
+<summary><span class="t">미확정 목록</span></summary>
+<ul>
+<li>실제 GPU 시간, GPU 병목 여부, 발열에 따른 클록 저하(11-16 6분 기록의 60→30FPS 하락 원인 포함)</li>
+<li>기록 기기가 S23인지 여부</li>
+<li>JS 힙 624MB가 누수인지 캐시·개체 보존인지</li>
+<li>11-17 이후 커밋(<code>a49f2cd</code>, <code>d0be33d</code>)의 실기기 효과</li>
+<li>현재 화면의 색감·밀도·반복감·외곽선 일관성·UI 배치(최근 캡처 없음)</li>
+<li>플레이어 4K UASTC가 기기에서 ASTC로 변환되었는지. 풍경 고해상도 텍스처는 ETC2 RGBA(<code>37492</code>)로 기록되었지만, 전사 텍스처의 형식은 기록에 없습니다.</li>
+<li>개체당 비용 중 포즈·스키닝·드로 각각의 비중(벤치마크로 분해 필요)</li>
+</ul>
+</details>
+
+<footer>
+작성 범위: <code>AGENTS.md</code>, <code>README_PORTABLE.md</code>, HEAD <code>d0be33d</code>의 실행 소스 일부(main·boss-battle·boss-encounter·wolf-v02-encounter·monster-territory·village-*·character-*·scene-lighting·world·render-policy·map-decode-cache·워커 감독·audio-beds·witch-cave-camera), 11-16/11-17 성능 보고서와 <code>performance-log-analysis.json</code>, 11-13 HUD 기준 화면 1장. 게임 코드·에셋·패키지·배포를 변경하지 않았고 브라우저 자동조작을 사용하지 않았습니다. 이전 <code>MM Project</code> 폴더는 사용하지 않았습니다.<br>
+단일 HTML · 외부 파일 없음 · 세부 내용 기본 접힘
+</footer>
+</main>
+</body>
+</html>

@@ -9,6 +9,7 @@ import {MapResumeStore,readMapResume} from './map-resume.js';
 import {uiTestRoute,uiTestSelectionUrl,uiTestStorage} from './ui-test-route.js';
 import {releaseRoute,releaseSelectionUrl,releaseSelectionValue,isMoonforestRelease} from './release-route.js';
 import {releaseStorage} from './release-storage.js';
+import {editionStorage,createSaveSession} from './v03/save-slots.js';
 import {loadAuthoredMap} from './authored-map-loader.js';
 import {authoringCharacter,setupAuthoringNavigation} from './authoring-navigation.js';
 import {readStoryboardOpening,setupStoryboardOpening} from './storyboard-opening.js';
@@ -148,6 +149,7 @@ const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.sea
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
+if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;
 let character = uiRoute.character;
 let uiTest=null;
 let commercialUi, hudLayout, developerTools;
@@ -167,6 +169,8 @@ let resumePose=null;
 const mapSpawn=()=>resumePose??worldSpawn(character,location.search,VILLAGE_SPAWN);
 let mapPortal;
 let chapterQuests;
+// The 0.3 title/prologue must not record quest actions or progress.
+const questLive=()=>world?.v03?.blocksProgress?null:chapterQuests;
 let mapDeparture;
 let mapTransition;
 const movementLimit=(position=actor.position)=>world?.mapId==='village'?villageTravelLimit(position,ARENA_RADIUS):ARENA_RADIUS;
@@ -197,7 +201,10 @@ let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
 try { equipmentStorage = localStorage; } catch { /* Private browsing can disable storage. */ }
+const v03RawStorage=equipmentStorage;
 equipmentStorage=releaseStorage(equipmentStorage,versionRoute.release);
+// 0.3 keeps its own preferences; progress lives in a save slot (journeyStorage).
+if(versionRoute.edition)equipmentStorage=editionStorage(v03RawStorage,equipmentStorage,versionRoute.edition);
 const movementSpeedSettings=setupMovementSpeedSettings({host:$('#common-speed-settings .settings-section-body'),storage:equipmentStorage,onChange:value=>controller?.setMovementSpeed?.(value)});
 const swordTrailSettings=setupSwordTrailSettings({host:$('.settings-display-options'),storage:equipmentStorage,onChange:value=>{swordTrail?.setEnabled(value);renderActivity.wake();frameLoop?.invalidate();}});
 if(import.meta.hot)import.meta.hot.dispose(()=>swordTrailSettings.dispose());
@@ -210,16 +217,17 @@ const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,release:v
 const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onChange:value=>{if(world)setSceneCharacterStyles(world.scene,value);renderActivity.wake();frameLoop?.invalidate();}});
 let travelStorage;
 try { travelStorage=sessionStorage; } catch { /* Travel also works without state storage. */ }
+const v03Save=versionRoute.edition?createSaveSession({local:v03RawStorage,session:travelStorage,edition:versionRoute.edition}):null;
 travelStorage=releaseStorage(travelStorage,versionRoute.release,{inherit:false});
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
-const journeyStorage=uiTestEnabled?uiTestStorage(equipmentStorage):equipmentStorage;
+const journeyStorage=uiTestEnabled?uiTestStorage(equipmentStorage):v03Save?v03Save.journey:equipmentStorage;
 if(uiTestEnabled)travelStorage=uiTestStorage(travelStorage);
 const goldLoot=new GoldLoot({storage:journeyStorage,onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 let goldLootView;
 const minimap=new DotMinimap($('#dot-minimap'));
 let minimapTravel;
 const resumeStore=new MapResumeStore(journeyStorage);
-function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
+function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor||world.v03?.blocksProgress)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
 function restoreMapCamera(){if(!resumePose)return;actor.rotation.y=resumePose.yaw;const c=resumePose.camera;if(c){world.camera.alpha=c.alpha;world.camera.beta=Math.max(world.camera.lowerBetaLimit??.01,Math.min(world.camera.upperBetaLimit??3.13,c.beta));world.camera.radius=c.radius;cameraZoom.apply();}syncCameraFocus(0,{snap:true});resumePose=null;}
 function showMinimap(){minimap.setWorld(world).catch(error=>{console.warn('[Minimap]',error);minimap.hide();});}
 window.addEventListener('pagehide',()=>saveMapPosition(true));
@@ -248,7 +256,7 @@ const shieldInput=new ShieldHoldSources({
   },
   onEnd:()=>{
     const pending=controller?.shieldPending;
-    if(controller?.setShieldHeld?.(false)&&pending&&controller.action?.state==='shieldPush'&&!controller.guarding)chapterQuests?.action('shieldPush');
+    if(controller?.setShieldHeld?.(false)&&pending&&controller.action?.state==='shieldPush'&&!controller.guarding)questLive()?.action('shieldPush');
   },
   onCancel:()=>controller?.cancelShieldInput?.(),
 });
@@ -462,7 +470,7 @@ const actions = {
   },
   cancelDodgeInput(source){return input?.dodgeSprintGesture?.cancel(source);},
   isHudDodgeHeld(pointerType){return input?.dodgeSprintGesture?.hasTouchHud(pointerType)??false;},
-  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){chapterQuests?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
+  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){questLive()?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
   attack() { if (ready && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
@@ -475,10 +483,10 @@ const actions = {
 };
 
 function startDefense(kind){
-  const directionInput=input.value();
+  const directionInput=world.v03?.pilotMovement??input.value();
   if(kind==='dodge'&&controller.captured){if(!boss.escapeGrab())return;audio.play('grab_escape');}
   if(!controller[kind]())return;
-  chapterQuests?.action(kind);
+  questLive()?.action(kind);
   if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();boss?.playerReaction.cancelRecoil();
   if(kind==='dodge'){
     rollDirection=dodgeDirection(directionInput,world.camera.alpha,actor.rotation.y);
@@ -540,6 +548,25 @@ function shootAtTarget() {
   const origin = arrowNode ? arrowNode.getAbsolutePosition().clone() : actor.position.add(new Vector3(0, 1.35, 0));
   const destination = shotTarget?.aimPoint.clone() || origin.add(new Vector3(Math.sin(actor.rotation.y), 0, Math.cos(actor.rotation.y)).scale(12));
   projectiles.fire(origin, destination, shotTarget);audio.play('bow_release',{position:origin});
+}
+
+// 0.3 stage reset: same state clearing as resetBeforeBoss, without its sound,
+// and optionally at an authored stage point when that point is walkable.
+function v03ResetStage(stage){
+  goldLoot.clearDrops();goldLootView.clear();actionAudio.reset();
+  boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;controller.resetStamina?.();controller.cancelAttack?.();
+  staminaNoticeAnchor.reset();staminaFeedback.reset(controller);
+  input.reset();attackSources.clear();attackPointerTypes.clear();strikeSampler.reset();combatResult=null;shotActionId=null;
+  const spawn=mapSpawn(),staged=!!stage&&Number.isFinite(stage.x)&&Number.isFinite(stage.z)&&(!stage.map||stage.map===world.mapId)&&world.navigation?.free?.(stage,playerDimensions(actor).moveRadius,movementLimit(stage))===true;
+  const yaw=staged&&Number.isFinite(stage.yaw)?stage.yaw:null;
+  actor.rotationQuaternion=null;actor.rotation.set(0,(config.forwardYaw||0)+(yaw??0),0);
+  actor.position.set(staged?stage.x:spawn.x,0,staged?stage.z:spawn.z);world.terrain.place(actor.position);
+  animator.transition('idle',{clipTime:0,loop:true,blendDuration:.001});animator.update(.2);
+  applyHitFlash(container.meshes,0);resetCamera();
+  // Start behind the warrior, looking where they face.
+  if(yaw!==null){world.camera.alpha=-Math.PI/2-yaw;world.camera.beta=1.2;syncCameraFocus(0,{snap:true});}
+  syncCaveFog(true);world.lighting.follow(actor.position,true);updateButtons();
+  return staged;
 }
 
 function resetCamera() {
@@ -781,6 +808,7 @@ function render(dt) {
   if(contextRecovery?.blocked)return;
   if(mapDeparture?.departing)return;
   setFrameWorkContext(world.scene,{active:ready&&!loadingAsset&&!mapTransition?.busy,frameId:engine.frameId,generation:world.toolGeneration??0});
+  world.v03?.update(dt);
   world.storyboardOpening?.update();
   world.storyboardEvents?.update();
   if(world.storyboardDeathPlayback){const events=world.storyboardEvents?.inspect();if(!events||!events.active&&!events.queued){world.storyboardDeathPlayback=false;deathScreen.show();return;}}
@@ -801,7 +829,7 @@ function render(dt) {
     simulateFrame=false;boss?.combat?.passiveRecovery?.reset();const focus=world.camera.getTarget();
     world.villageVisibility?.update(world.camera.globalPosition,focus,dt);world.treeOcclusion?.update(world.camera.globalPosition,focus,dt,playerDimensions(actor));world.lighting.follow(focus);world.scene.render(false);return;
   }
-  simulateFrame=dt>0&&!world.storyboardOpening?.blocksGame&&!world.storyboardExitPending;
+  simulateFrame=dt>0&&!world.storyboardOpening?.blocksGame&&!world.storyboardExitPending&&!world.v03?.blocksGame;
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateStaminaNotice();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
   const framePreludeStart=frameDiagnostics.mark();
@@ -818,7 +846,7 @@ function render(dt) {
       if(recoiled)constrainPlayerPosition(beforeRecoil);
       boss.combat.v02Impact?.advance(dt,actor,constrainPlayerPosition);
     }
-    const rawMovement=input.value();
+    const rawMovement=world.v03?.pilotMovement??input.value();
     if(elenaReview){
       const length=Math.hypot(rawMovement.x,rawMovement.y),direction=length>.08?dodgeDirection(rawMovement,world.camera.alpha,elenaReview.actor.rotation.y):{x:0,z:0};
       elenaReview.reviewMovement={x:direction.x*Math.min(1,length),z:direction.z*Math.min(1,length),run:rawMovement.run||controller.runToggled};
@@ -845,7 +873,7 @@ function render(dt) {
       if(elenaReview)text('#attack-hint',elenaReview.phase===2?'5가지 패턴 순환 · J':'7가지 마법 모션 순환 · J');
     }
     combatResult=result;
-    chapterQuests?.strike(result,actor.position);
+    questLive()?.strike(result,actor.position);
     const busy=!!elenaReview||result.moving||result.state!=='idle'||result.chargeProgress>0||attackSources.size>0||input.cameraPointers.size>0||boss.combatCount>0||boss.loading;
     const frameLimit=renderActivity.limit({busy,quality:qualityMode});
     if(engine.maxFPS!==frameLimit)engine.maxFPS=frameLimit;
@@ -965,7 +993,7 @@ try {
   engine.renderEvenInBackground=cinematicAuthoringPreview;
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
-  world.release=versionRoute.release;
+  world.release=versionRoute.release;world.edition=versionRoute.edition??null;
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.weather=weatherSettings;weatherSettings.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
@@ -1026,7 +1054,7 @@ try {
     if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
     applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
     return reacted;
-  },{onDefeat:event=>{try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
+  },{onDefeat:event=>{try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
   boss.combat.defense=equipmentStats(equipmentChoices).defense;
@@ -1302,8 +1330,9 @@ try {
   if(plainsReviewEnabled){const {setupPlainsReview}=await import('./plains-review-controls.js');setupPlainsReview({world,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,x:actor?.position.x,z:actor?.position.z,hp:boss?.playerHp,motion:controller?.state,actionId:controller?.action?.id,charge:controller?.chargeProgress,queued:controller?.queuedAttack}),moveTo:(x,z)=>{input.reset();actor.position.set(x,0,z);world.terrain.place(actor.position);syncCameraFocus(0,{snap:true});},travel:id=>mapTransition.travel(travelUrl(location.href,id))});}
   // Read-only diagnostics make integration QA reproducible without exposing mutable scene objects.
   window.archerPreview = Object.freeze({ inspect: () => ({ ready, character, environment:world.environment, navigation:world.navigation.inspect(), targets:training.targets.map(t=>({id:t.id,position:t.position.asArray(),hits:t.hits})), boss:boss.inspect(), audio:audio.inspect(), renderFrames:frameLoop.frames, equipment: equipment?.inspect() || null, guardToggled: controller?.guardToggled, state: controller?.state, dead: controller?.dead, runToggled: controller?.runToggled, position: actor ? { x: actor.position.x, y: actor.position.y, z: actor.position.z } : null, maxBoneInfluences: maxInfluences, animations: config?.animations, joystickActive: input.joystickPointer !== null, cameraPointerCount: input.cameraPointers.size, camera: { alpha: world.camera.alpha, beta: world.camera.beta, radius: world.camera.radius }, panOffset: { ...input.panOffset } }) });
-  if(isWorldCharacter(character)&&!elenaReviewMode&&new URLSearchParams(location.search).get('legacyUiTest')!=='1'){
-    chapterQuests=setupChapterQuests({root:$('#app'),world,storage:journeyStorage,getWalletState:()=>goldLoot.saveState,onChestOpened:({tier,position})=>{audio.play('gold_pickup',{position,volume:.95+(tier-1)*.1,rate:.85+(tier-1)*.1});if(tier>=4)audio.play('charge_ready',{position,volume:.28,rate:1.05+(tier-4)*.12});},onInteract:({id,kind,mapId})=>world.storyboardEvents?.emit(kind==='npc'?'npc-interact':'object-interact',{targetId:id,mapId}),openEquipment:()=>{const section=$('.character-info')?.closest('details');if(section)section.open=true;$('#motion-speed-toggle').click();},creditGold:total=>goldLoot.creditCumulative('chapter-one',total),getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character,map:world.mapId,position:actor?.position,dead:controller?.dead||boss.playerHp<=0,combat:boss.combatCount>0,busy:controller?.captured||controller?.groggy}),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),heal:amount=>{if(!ready||loadingAsset||boss.playerHp<=0||boss.potions.active)return 0;const gained=Math.min(amount,boss.playerMaxHp-boss.playerHp);if(gained>0){boss.combat.hp+=gained;updateHealthBars();boss.onChange(boss);}return gained;}});uiTest=chapterQuests;
+  // 0.3 runs its own story/quest runtime (src/v03/story.js) instead of the 0.2 chapter quests.
+  if(isWorldCharacter(character)&&!versionRoute.edition&&!elenaReviewMode&&new URLSearchParams(location.search).get('legacyUiTest')!=='1'){
+    chapterQuests=setupChapterQuests({root:$('#app'),world,storage:journeyStorage,getWalletState:()=>goldLoot.saveState,onChestOpened:({tier,position})=>{audio.play('gold_pickup',{position,volume:.95+(tier-1)*.1,rate:.85+(tier-1)*.1});if(tier>=4)audio.play('charge_ready',{position,volume:.28,rate:1.05+(tier-4)*.12});},onInteract:({id,kind,mapId})=>world.storyboardEvents?.emit(kind==='npc'?'npc-interact':'object-interact',{targetId:id,mapId}),openEquipment:()=>{const section=$('.character-info')?.closest('details');if(section)section.open=true;$('#motion-speed-toggle').click();},creditGold:total=>goldLoot.creditCumulative('chapter-one',total),getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy&&!world.v03?.blocksProgress,character,map:world.mapId,position:actor?.position,dead:controller?.dead||boss.playerHp<=0,combat:boss.combatCount>0,busy:controller?.captured||controller?.groggy}),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),heal:amount=>{if(!ready||loadingAsset||boss.playerHp<=0||boss.potions.active)return 0;const gained=Math.min(amount,boss.playerMaxHp-boss.playerHp);if(gained>0){boss.combat.hp+=gained;updateHealthBars();boss.onChange(boss);}return gained;}});uiTest=chapterQuests;
   }else if(uiTestEnabled){
     uiTest=setupUiTest({root:$('#app'),storage:journeyStorage,
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,character}),
@@ -1379,7 +1408,8 @@ try {
       world.authoredMonsters=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
     }).catch(error=>{authoredMonsterTask=null;throw error;});return authoredMonsterTask;
   };
-  try{if(releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&(versionRoute.release==='moonforest-0.2'||journeyStorage?.getItem('moonforest-monster-spawns-v1')))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
+  // 0.3 starts the living world itself, after the title and the first fight.
+  try{if(!versionRoute.edition&&releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&(versionRoute.release==='moonforest-0.2'||journeyStorage?.getItem('moonforest-monster-spawns-v1')))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
   const getActorEditor=async(canOpen=()=>true)=>{
     if(!canOpen())throw new Error('배우 편집 설정이 꺼졌습니다.');
     if(world.developmentActorEditor)return world.developmentActorEditor;
@@ -1479,6 +1509,21 @@ try {
     }else if(authoringEnabled()&&new URLSearchParams(location.search).get('cinematic')==='1'){
       void toolSessions.open('authoring',authoringEnabled,async current=>{const api=await getGameCinematics(current);if(current())api.show();}).catch(error=>{if(authoringEnabled())toast(error.message);});
     }
+  }
+  if(versionRoute.edition){
+    const {setupV03}=await import('./v03/index.js');
+    world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,
+      getPlayer:()=>actor,getController:()=>controller,
+      getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId}),
+      resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
+      travel:id=>mapTransition.travel(travelUrl(location.href,id)),
+      startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
+      rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);return true;},
+      exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
+    world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
+    // Development-only handle for QA from the console; never present in a build.
+    if(import.meta.env.DEV)window.moonforestV03=world.v03;
+    if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());
   }
   loadCharacter();
 } catch (error) {
