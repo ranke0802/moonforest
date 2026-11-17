@@ -37,7 +37,7 @@ export function releaseRoute(href){
   for(const key of ['uiTest','elenaReview'])url.searchParams.delete(key);
  }
  const release=url.searchParams.get('release');
- return {url,enabled:isMoonforestRelease(release),release:isMoonforestRelease(release)?release:null,edition,worldRevision,label:edition?MOONFOREST_EDITION_V3_LABEL:releaseLabels.get(release)??null};
+ return {url,enabled:isMoonforestRelease(release),release:isMoonforestRelease(release)?release:null,edition,worldRevision,label:worldRevision?'MoonForest '+worldRevision:edition?MOONFOREST_EDITION_V3_LABEL:releaseLabels.get(release)??null};
 }
 
 export function releaseSelectionUrl(href,value){

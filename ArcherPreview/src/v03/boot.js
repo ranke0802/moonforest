@@ -56,7 +56,7 @@ export function setupV03(api){
   const placeKey=meta.placeKey||Object.keys(PLACE_NAMES).find(key=>PLACE_NAMES[key]===meta.place);
   return {title:titleKey==='dream'?t('meta.dream'):titleKey?questTitle(titleKey):undefined,place:placeKey?t('place.'+placeKey):undefined};
  };
- const title=createTitleScreen({doc,wait,describe,onAction:action=>{void handle(action).catch(report);}});
+ const title=createTitleScreen({doc,wait,describe,version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
   if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
