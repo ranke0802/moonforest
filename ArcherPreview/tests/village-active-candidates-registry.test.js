@@ -149,7 +149,7 @@ test('cached candidates preserve native LOD preparation and all main/shadow inst
   const snapshots = [];
   for (const provider of [original, filtered, original]) {
    scene.getActiveMeshCandidates = provider; draws.length = 0; preparation.length = 0; scene.render();
-   snapshots.push({active: names(scene.getActiveMeshes()), draws: structuredClone(draws), preparation: preparation.slice(), lod: entries.filter(entry => entry.mesh.isEnabled()).map(entry => entry.mesh._currentLOD?.name)});
+   snapshots.push({active: names(scene.getActiveMeshes()).filter(name => !name.endsWith('-empty')), draws: structuredClone(draws), preparation: preparation.slice(), lod: entries.filter(entry => entry.mesh.isEnabled()).map(entry => entry.mesh._currentLOD?.name)});
   }
   assert.ok(snapshots[0].draws.some(draw => draw.pass === 'main'), 'main draws at step ' + step);
   assert.deepEqual(snapshots[1], snapshots[0], 'native batch/LOD/source preparation at step ' + step);

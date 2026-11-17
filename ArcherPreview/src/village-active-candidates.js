@@ -1,6 +1,6 @@
 import {InstancedMesh,Mesh,Node} from '@babylonjs/core';
 
-const emptyRoot=mesh=>mesh.isReady===Mesh.prototype.isReady&&mesh.getTotalVertices===Mesh.prototype.getTotalVertices&&
+const emptyRoot=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&mesh.isReady===Mesh.prototype.isReady&&mesh.getTotalVertices===Mesh.prototype.getTotalVertices&&
  !mesh.geometry&&!mesh.material&&!mesh.subMeshes?.length&&!mesh.skeleton&&!mesh.morphTargetManager&&!mesh.hasThinInstances&&!mesh.actionManager;
 
 // Only native frozen map instances are registered. Dynamic actors, quest
