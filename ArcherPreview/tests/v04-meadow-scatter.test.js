@@ -35,11 +35,11 @@ test('undergrowth rings the tree crowns, stays off roads and is far sparser than
  for(const cell of meadowCells(spec.radius,MEADOW_CELL)){
   const data=scatterCell(cell.cx,cell.cz,{sample:spec.sampler(cell.x,cell.z,MEADOW_CELL*.71),spacing:spec.layer.spacing,seed:spec.layer.seed,shape:spec.shape});
   for(let i=0;i<data.length;i+=TUFT_STRIDE){
-   shrubs++;assert.ok(plainsRoadDistance(data[i],data[i+1])>=1.6);assert.ok(data[i+2]>=.2&&data[i+2]<=.47,'shrub scale '+data[i+2]);
+   shrubs++;assert.ok(plainsRoadDistance(data[i],data[i+1])>=3);assert.ok(data[i+2]>=.15&&data[i+2]<=.31,'shrub scale '+data[i+2]);
    const crown=Math.min(...trees.map(tree=>Math.hypot(tree.x-data[i],tree.z-data[i+1])/tree.r));
    if(crown>1.6&&plainsStreamDistance(data[i],data[i+1])>9)far++;
   }
  }
- assert.ok(shrubs>10&&shrubs<600,'shrubs: '+shrubs);assert.equal(far,0,'no shrub away from both a crown and the stream');
+ assert.ok(shrubs>5&&shrubs<600,'shrubs: '+shrubs);assert.equal(far,0,'no shrub away from both a crown and the stream');
  console.log(JSON.stringify({shrubs}));
 });

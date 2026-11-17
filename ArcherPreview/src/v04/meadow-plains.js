@@ -44,7 +44,8 @@ export function plainsThicket(trees){
   return (x,z,out)=>{
    out[0]=out[1]=0;
    if(!inside(x,z))return out;
-   const road=local.road(x,z);if(road<1.6)return out;
+   // Well clear of roads and camps: undergrowth must not hide the fight.
+   const road=local.road(x,z);if(road<3)return out;
    const stream=local.stream(x,z);if(stream<3.6)return out;
    let ring=0;
    for(const tree of crowns){
@@ -53,13 +54,15 @@ export function plainsThicket(trees){
     if(w>ring&&valueNoise(tree.x*.37,tree.z*.37,71)>.34)ring=w;
    }
    const bank=(1-smooth((stream-3.6)/5))*smooth((valueNoise(x/9,z/9,83)-.45)/.2);
-   out[0]=Math.min(.6,ring*.55+bank*.3)*smooth((road-1.6)/2);
+   out[0]=Math.min(.4,ring*.3+bank*.2)*smooth((road-3)/3);
    out[1]=smooth((valueNoise(x/6,z/6,97)-.5)/.3);
    return out;
   };
  };
  return Object.freeze({mapId:'great-plains',radius:PLAINS_RADIUS-3,sampler,
-  shape:Object.freeze({width:.2,widthRange:.16,widthTall:.1,stretch:.85,stretchRange:.3,stretchTall:.2}),
+  // Knee to chest high (the bush model is 4 m tall at scale 1): the play
+  // camera always sees the warrior over it.
+  shape:Object.freeze({width:.15,widthRange:.1,widthTall:.05,stretch:.8,stretchRange:.2,stretchTall:.1}),
   // Near cells draw the bush model itself: a decimated bush reads as a blob up close.
   layer:Object.freeze({spacing:1.7,seed:9,nearTriangles:Infinity,farTriangles:120,nearRange:30,thinRange:120,farShare:1,thinShare:.7,sink:.05,clearance:.2})});
 }
