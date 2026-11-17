@@ -3,7 +3,7 @@
   "release": "moonforest-0.2",
   "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
   "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "bytes": 803174607,
+  "bytes": 803174339,
   "files": [
     {
       "path": "app.webmanifest",
@@ -10391,9 +10391,9 @@
       "sha256": "12ae76224925b1e963df3fed25b55559ad0343da6e73aeb641b72b96493d9d18"
     },
     {
-      "path": "assets/moonforestV2-BzuLyK_r.js",
-      "bytes": 2380416,
-      "sha256": "3047fab7dab7341d946eef2a379e5abcc7bcf84c1532c8a693178527c2182fc7"
+      "path": "assets/moonforestV2-ERbQVS8V.js",
+      "bytes": 2380148,
+      "sha256": "d35c8ba439f1c7f19b43964ba6f2720c049bff61f7e453ecd9b84c53ce3f8de9"
     },
     {
       "path": "assets/moonforestV2-SRQLL6OX.css",
@@ -11268,7 +11268,7 @@
     {
       "path": "moonforest-0.2.html",
       "bytes": 40691,
-      "sha256": "511ae2c691d05d88593a65f7a3df7c887d2e1a623a7d8e7402535e201bfb6fdf"
+      "sha256": "d7f4801528c51ca3537e1b21c089f53153de30da71dedde444cca61e29e7db50"
     },
     {
       "path": "moonforest-0.2.webmanifest",

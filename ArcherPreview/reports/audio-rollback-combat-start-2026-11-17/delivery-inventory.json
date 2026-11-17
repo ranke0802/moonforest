@@ -1,0 +1,17 @@
+[
+  {
+    "path": "ArcherPreviewSite/assets/moonforestV2-ERbQVS8V.js",
+    "bytes": 2380148,
+    "sha256": "d35c8ba439f1c7f19b43964ba6f2720c049bff61f7e453ecd9b84c53ce3f8de9"
+  },
+  {
+    "path": "ArcherPreviewSite/moonforest-0.2.html",
+    "bytes": 40691,
+    "sha256": "d7f4801528c51ca3537e1b21c089f53153de30da71dedde444cca61e29e7db50"
+  },
+  {
+    "path": "ArcherPreviewSite/deployment-files-moonforest-0.2.json",
+    "bytes": 512028,
+    "sha256": "2173185716a7cfc9ad829c3ad7d69f389c2cc88c9ef85d5e35a92a948881f0fb"
+  }
+]

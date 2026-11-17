@@ -135,7 +135,7 @@ const elements=new Map();
 const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
 const text=(selector,value)=>{const node=$(selector);if(node.textContent!==value)node.textContent=value;};
 const canvas = $('#viewport');
-const audio=new GameAudio({manifestUrl:releaseRoute(location.href).release==='moonforest-0.2'?new URL(`${import.meta.env.BASE_URL}assets/audio-creatures-r1.json`,location.href):undefined}),actionAudio=new ActionAudio(audio);
+const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
 audio.bindUnlock(document);
 const loading = $('#loading');
 const loadingView=createLoadingView();
@@ -894,7 +894,7 @@ function render(dt) {
     frameDiagnostics.measure('actionAudioMs',actionAudioStart);
     world.developmentActors?.beforeBattle(dt,actor);world.authoredMonsters?.beforeBattle(dt,actor);
     frameDiagnostics.measure('framePreludeMs',framePreludeStart);
-    const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);audio.setBossContext(boss?.encounters);actionAudio.boss(boss,dt);
+    const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);actionAudio.boss(boss,dt);
     world.developmentActors?.afterBattle(actor);world.authoredMonsters?.afterBattle(actor);
     boss?.combat?.recover?.(dt,actor,boss.onDamage,!controller.dead&&boss.playerHp>0);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));

@@ -88,7 +88,7 @@ test('phase1 to phase2 crossfades once, preserves ambience, and stable/multiple 
 });
 
 test('actual ActionAudio victory hold and transformation gap keep the last phase until combat ends; death/restart clear it',async()=>{
- const f=fixture(),router=new ActionAudio(f.audio),enemy=witch(),battle={active:true,encounters:[enemy],playerHp:500,playerMaxHp:500};await start(f);
+ const f=fixture(),router=new ActionAudio(f.audio),enemy=witch(),battle={active:true,encounters:[enemy],playerHp:500,playerMaxHp:500};enemy.brain.mode='attack';await start(f);
  f.audio.setBossContext(battle.encounters);router.boss(battle,.01);await settle(f.audio);const score=f.audio.music.source;enemy.brain.hp=0;
  f.audio.setBossContext(battle.encounters);router.boss(battle,.01);await settle(f.audio);assert.equal(f.audio.music.source,score);assert.equal(f.audio.bossTheme,ELENA_MUSIC_KEYS.mourning);
  f.audio.setBossContext([]);router.boss(battle,3);await settle(f.audio);assert.equal(f.audio.inspect().context,'cave');assert.equal(f.audio.bossTheme,null);
@@ -129,4 +129,19 @@ test('declared and actual oversized scores cannot exceed the existing decoded bu
   const f=fixture({definitions});await start(f);combat(f.audio,[saint()]);await settle(f.audio);assert.equal(f.audio.inspect().context,'boss');assert.ok(f.audio.inspect().decodedBedBytes<=AUDIO_BED_LIMITS.decodedBytes);assert.ok(!f.audio.beds.cache.has('music:elena_saint'));assert.ok(!f.starts.includes('elena_saint.mp3'));
   if(definitions.elena_saint.decodedBytes)assert.ok(!f.requests.includes('elena_saint.mp3'),'known oversize file is rejected before fetch/decode');f.audio.dispose();
  }
+});
+
+test('real music playback waits through range/watch/rise until pursuit or attack and resets on exit',async()=>{
+ const f=fixture(),router=new ActionAudio(f.audio),enemy={...bear(),actor:{position:{x:0,z:0}},territoryState:{enabled:true,engaged:false,phase:'watch'}};
+ Object.assign(enemy.brain,{maxHp:100,serial:1,time:0,mode:'idle',state:'Block6',durations:{Block6:1}});
+ const battle={active:true,encounters:[enemy],playerHp:500,playerMaxHp:500};await start(f);
+ for(const [phase,engaged,mode]of [['ambient',false,'move'],['watch',false,'idle'],['combat',true,'rise'],['combat',true,'idle']]){
+  Object.assign(enemy.territoryState,{phase,engaged});enemy.brain.mode=mode;for(let i=0;i<10;i++)router.boss(battle,.1);await settle(f.audio);
+  assert.equal(f.audio.inspect().context,'cave');assert.equal(f.requests.filter(name=>name==='boss.mp3').length,0);
+ }
+ enemy.brain.mode='move';router.boss(battle,.1);await settle(f.audio);assert.equal(f.audio.inspect().context,'boss');
+ enemy.brain.mode='idle';router.boss(battle,4);await settle(f.audio);assert.equal(f.audio.inspect().context,'boss');
+ enemy.territoryState.engaged=false;router.boss(battle,3);await settle(f.audio);assert.equal(f.audio.inspect().context,'cave');
+ enemy.territoryState.engaged=true;router.boss(battle,1);await settle(f.audio);assert.equal(f.audio.inspect().context,'cave');
+ enemy.brain.mode='attack';enemy.brain.serial++;router.boss(battle,.01);await settle(f.audio);assert.equal(f.audio.inspect().context,'boss');f.audio.dispose();
 });

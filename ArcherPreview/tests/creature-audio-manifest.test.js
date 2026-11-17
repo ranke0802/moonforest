@@ -70,11 +70,11 @@ test('source paths cannot escape the registered creature folder and unrelated sc
   await assert.rejects(prepareCreatureAudio(f),/only the alpha_wolf score/);
 });
 
-test('startup selects creature audio only for 0.2 without reading the later versionRoute binding',async()=>{
+test('withdrawn creature audio stays available for review but startup uses the original manifest',async()=>{
   const main=await readFile(new URL('../src/main.js',import.meta.url),'utf8'),line=main.match(/^const audio=new GameAudio.*$/m)?.[0];assert.ok(line);
   const create=new Function('GameAudio','ActionAudio','releaseRoute','location',line.replace('import.meta.env.BASE_URL',JSON.stringify('/preview/'))+'return audio;');
   class Audio{constructor(options){this.options=options;}}class Actions{}
-  for(const [href,wantsOverlay]of [['https://game.test/preview/moonforest-0.2.html',true],['https://game.test/preview/index.html?release=moonforest-0.2',true],['https://game.test/preview/index.html?release=moonforest-0.1',false],['https://game.test/preview/index.html?character=warrior-plains',false]]){
-    const audio=create(Audio,Actions,releaseRoute,{href});assert.equal(audio.options.manifestUrl?.href,wantsOverlay?'https://game.test/preview/assets/audio-creatures-r1.json':undefined);
+  for(const href of ['https://game.test/preview/moonforest-0.2.html','https://game.test/preview/index.html?release=moonforest-0.2','https://game.test/preview/index.html?release=moonforest-0.1']){
+    const audio=create(Audio,Actions,releaseRoute,{href});assert.equal(audio.options?.manifestUrl,undefined);
   }
 });
