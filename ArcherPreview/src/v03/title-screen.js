@@ -119,7 +119,8 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
     for(const language of languages){
      const button=el(doc,'button','v03-slot v03-language',language.label);button.type='button';button.lang=language.html;button.dataset.language=language.id;
      if(language.id===current){button.classList.add('is-current');button.setAttribute('aria-current','true');}
-     button.addEventListener('click',()=>close(language.id===current?null:{language:language.id}));list.append(button);
+     // Pressed, chosen state first; the reload follows a moment later.
+     button.addEventListener('click',async()=>{if(language.id===current){close(null);return;}if(list.classList.contains('is-done'))return;list.classList.add('is-done');button.classList.add('is-chosen');await wait(550);close({language:language.id});});list.append(button);
     }
     const game=el(doc,'button','v03-slot v03-settings-game',t('settings.game'));game.type='button';game.addEventListener('click',()=>close({game:true}));
     const back=el(doc,'button','v03-panel-back',t('panel.back'));back.type='button';back.addEventListener('click',()=>close(null));

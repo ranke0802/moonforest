@@ -148,3 +148,10 @@ html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opa
 .v03-language-row{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;margin:4px 0 12px;padding:10px 12px;border:1px solid #ae925955;border-radius:6px;background:#ffffff08}
 .v03-language-row select{min-height:40px;font:inherit;color:inherit;background:#22301f;border:1px solid #819071;border-radius:4px;padding:4px 8px}
 .v03-language-row small{grid-column:1/-1;opacity:.75}
+
+/* Language list in title Settings: highlight follows the pointer, a click shows the choice. */
+.v03-language{transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .3s ease}
+.v03-language:hover,.v03-language:focus-visible{transform:translateY(-3px);background:#cfb77b26!important;border-color:#e6cf8f!important;box-shadow:0 8px 22px #cfb77b33}
+.v03-language:active{transform:scale(.96)}
+.v03-languages.is-done .v03-language:not(.is-chosen){opacity:.25}
+.v03-language.is-chosen{transform:scale(1.05);color:#1a1408;background:#e6cf8f!important;border-color:#fff2c8!important;box-shadow:0 0 0 2px #fff2c8aa,0 0 24px #e6cf8f99}
