@@ -30,6 +30,12 @@ export const DIALOGUES=Object.freeze({
   {who:'마부',text:'바퀴를 손봐야 해서 나는 여기 남겠네. 마을은 이 길 끝, 바로 저기야.'},
   {who:'마부',text:'도착하거든 달빛 여관부터 찾게. 주인이 무뚝뚝해도 방은 깨끗하지.'},
  ],
+ // Prologue → first fight: the wolf at the wagon (played by story.beginAmbushScene).
+ 'ambush-scene':[
+  {who:'마부',text:'늑, 늑대다…! 이 녀석, 마차를 노리고 있어!'},
+  {who:'마부',text:'오, 오지 마! 저리 가!'},
+  {who:'나',text:'(물러설 수 없다. 마부를 지켜야 한다.)'},
+ ],
  'driver-idle':[{who:'마부',text:'바퀴만 고치면 나도 뒤따라가겠네. 길 조심하게.'}],
  'inn-arrive':[
   {who:'여관 주인',text:'못 보던 얼굴이군. 이 시기에 이 마을까지 오는 사람은 드문데.'},
@@ -128,12 +134,13 @@ export const CHAPTER_END_NOTE='다음 이야기 · 마물의 숲';
 
 // First-fight coaching, in order. Each line stays until the player has done it.
 // done: moved (metres) · camera (radians turned) · states (controller states)
+// allow: the only actions usable during the lesson · wolf: hold | charge | snap
 export const COMBAT_HINTS=Object.freeze([
- {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',target:'#joystick',done:{moved:1.5}},
- {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',done:{camera:.3}},
- {id:'attack',text:'공격',keys:'J · 좌클릭',touch:'검 버튼',target:'#attack-button',done:{states:['attack','slash','judgment','moveAttack']}},
- {id:'dodge',text:'늑대가 몸을 낮추면 회피',keys:'Space',touch:'장화 버튼',target:'#dodge-button',done:{states:['dodge']}},
- {id:'guard',text:'방패로 밀쳐 빈틈 만들기',keys:'F (길게 누르면 방어)',touch:'방패 버튼 (길게 누르면 방어)',target:'#guard-button',done:{states:['shieldPush','guard']}},
+ {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',target:'#joystick',allow:['move'],wolf:'hold',done:{moved:1.5}},
+ {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',allow:['camera'],wolf:'hold',done:{camera:.3}},
+ {id:'attack',text:'공격',keys:'J · 좌클릭',touch:'검 버튼',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['attack','slash','judgment','moveAttack']}},
+ {id:'dodge',text:'늑대가 달려들면 회피',keys:'Space',touch:'장화 버튼',target:'#dodge-button',allow:['move','camera','dodge'],wolf:'charge',done:{states:['dodge']}},
+ {id:'guard',text:'물려고 들면 방패로 밀치기',keys:'F (길게 누르면 방어)',touch:'방패 버튼 (길게 누르면 방어)',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['shieldPush','guard']}},
 ]);
 
 // One-time tips, shown the first time a feature becomes relevant (per save).

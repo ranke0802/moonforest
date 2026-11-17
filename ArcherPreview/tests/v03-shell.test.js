@@ -226,17 +226,28 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  h.shell.update(.016);
  assert.equal(hud('.v03-quest-title').textContent,'늑대와 마차');assert.equal(hud('.v03-quest-objective').textContent,'늑대를 물리치기 (0/1)');
  assert.deepEqual(h.made.map(v=>v.id),['driver']);assert.equal(h.made[0].placed.y,1.5);
- // Coaching runs in order: move → camera → attack → dodge → shield.
+ // The ambush scene plays first: no control, the wolf is held, captions run.
+ assert.equal(h.shell.story.sceneActive,true);assert.equal(h.shell.allows('move'),false);assert.equal(h.shell.allows('attack'),false);
+ assert.equal(h.document.documentElement.dataset.v03Lock,'move camera attack dodge guard potion');
+ for(let i=0;i<30;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/늑대다/);
+ for(let i=0;i<400;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
+ // Coaching runs in order: move → camera → attack → dodge → shield, each
+ // allowing only its own action.
+ assert.equal(h.shell.allows('move'),true);assert.equal(h.shell.allows('attack'),false);assert.equal(h.shell.allows('camera'),false);
+ assert.equal(h.document.documentElement.dataset.v03Lock,'camera attack dodge guard potion');
  assert.match(hud('.v03-hint').textContent,/^이동 · W A S D/);
  h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^이동/,'attacking early does not skip the movement lesson');
  h.controller.state='idle';h.player.position={x:2,z:0};h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^시점 돌리기/);
- for(let i=0;i<620;i++)h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^공격/,'an ignored lesson gives way after a few seconds');
+ assert.equal(h.shell.allows('camera'),true);assert.equal(h.shell.allows('move'),false);
+ for(let i=0;i<2600;i++)h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^공격/,'an ignored lesson gives way only after a long wait');
+ assert.equal(h.shell.allows('attack'),true);assert.equal(h.shell.allows('dodge'),false);
 
  h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/회피/);
  h.controller.state='dodge';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/방패/);
  h.controller.state='idle';h.controller.guarding=true;h.shell.update(.016);assert.equal(hud('.v03-hint').hidden,true);h.controller.guarding=false;
+ assert.equal(h.shell.allows('attack')&&h.shell.allows('potion'),true,'free fight after the lessons');assert.equal(h.document.documentElement.dataset.v03Lock,undefined);
  // One-time tips: low health shows the potion card once, then it expires.
- assert.equal(hud('.v03-tip-title').textContent,'길잡이 빛');assert.equal(hud('.v03-tip').hidden,true,'the first tip card has expired');
+ assert.ok(h.shell.inspect().story.tips.includes('guide'));assert.equal(hud('.v03-tip').hidden,true,'the first tip card has expired');
  h.battle.combat.hp=200;h.shell.update(.016);
  assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'회복약');assert.match(hud('.v03-tip-lead').textContent,/숫자 1 키/);
  for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);h.battle.combat.hp=500;
@@ -244,7 +255,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // The guide light leads to the wolf during the fight, stopping short of it.
  h.battle.encounters=[{active:true,brain:{hp:300,maxHp:300,mode:'idle'},actor:{position:{x:2,z:14}}}];h.battle.combatCount=1;for(let i=0;i<200;i++)h.shell.update(.016);
  assert.ok(h.guide.shown&&h.guide.shown.z>4&&h.guide.shown.z<12.2,JSON.stringify(h.guide.shown));
- h.player.position={x:-65.6,z:-23.6};h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
+ {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
  assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.match(hud('.v03-prompt').textContent,/E · 마부와 이야기하기/);
  assert.equal(hud('.v03-tip-title').textContent,'강공격','the next tip waits its turn');

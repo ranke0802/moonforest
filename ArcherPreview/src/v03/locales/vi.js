@@ -21,6 +21,7 @@ export default {
   'opening.2':'Tiếng gầm của ma vật. Phía xa, anh ngã xuống.\nTôi vươn tay, nhưng không với tới.',
   'opening.3':'Lời cầu nguyện trong bóng tối.\nKhông có lời đáp.',
   'opening.4':'“Hãy tìm đứa trẻ đó.”',
+  'scene.protect':'Bảo vệ người đánh xe',
   'hud.main':'Chính','hud.chapterNext':'Câu chuyện còn tiếp','hud.complete':'Hoàn thành · {done}','hud.completeNext':'Hoàn thành · {done}  →  {next}','hud.rested':'Đã nghỉ ngơi · Đã ghi lại hành trình',
   'prompt.talkQuest':'Nói chuyện với {name}','prompt.talkIdle':'Bắt chuyện với {name}',
  },
@@ -28,6 +29,7 @@ export default {
   speakers:{'나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
    'driver-thanks':['Phù… sống rồi. Không có cô lính đánh thuê thì cả ngựa lẫn tôi đã thành mồi cho sói.','Dạo này thú trên bình nguyên dữ tợn lạ thường. Trước kia chúng chẳng bao giờ tấn công xe ngựa.','Tôi phải sửa bánh xe nên sẽ ở lại đây. Làng ở cuối con đường này, ngay đằng kia.','Đến nơi thì tìm quán trọ Ánh Trăng trước nhé. Ông chủ cộc cằn nhưng phòng sạch sẽ.'],
+   'ambush-scene':["S-sói…! Nó đang nhắm vào xe ngựa!", "Đ-đừng lại gần! Cút đi!", "(Không thể lùi bước. Phải bảo vệ ông ấy.)"],
    'driver-idle':['Sửa xong bánh xe là tôi theo sau ngay. Đi đường cẩn thận.'],
    'inn-arrive':['Mặt lạ đây. Mùa này hiếm ai đến tận làng này.','Tôi đến theo ủy thác của Giáo hội. Thánh nữ tập sự Elena đã mất tin tức sáu tháng nay.','…Lâu lắm rồi mới nghe lại cái tên đó. Một cô bé tốt. Đã thức trắng đêm chăm người bị thương.','Tôi chẳng biết nhiều. Hãy hỏi bà lão bên giếng, thầy thuốc, và chàng trai đang sửa hàng rào. Mỗi người nhớ một điều khác nhau.','Dùng phòng tầng hai đi. Muốn nghỉ thì cứ gọi tôi. Chuyện hôm nay tôi sẽ ghi vào sổ.'],
    'inn-idle':['Nghỉ lại chứ? Lấy lại sức đi, chuyện hôm nay tôi ghi vào sổ.'],
@@ -58,8 +60,8 @@ export default {
    move:{text:'Di chuyển',keys:'W A S D',touch:'Cần điều khiển góc dưới trái'},
    camera:{text:'Xoay góc nhìn',keys:'Kéo chuột phải · lăn chuột để phóng to',touch:'Kéo nửa phải màn hình · hai ngón để phóng to'},
    attack:{text:'Tấn công',keys:'J · chuột trái',touch:'Nút kiếm'},
-   dodge:{text:'Né khi sói hạ thấp người',keys:'Space',touch:'Nút giày'},
-   guard:{text:'Đẩy bằng khiên để tạo sơ hở',keys:'F (giữ để phòng thủ)',touch:'Nút khiên (giữ để phòng thủ)'},
+   dodge:{text:'Né khi sói lao tới',keys:'Space',touch:'Nút giày'},
+   guard:{text:'Đẩy khiên khi nó định cắn',keys:'F (giữ để phòng thủ)',touch:'Nút khiên (giữ để phòng thủ)'},
   },
   tips:{
    guide:{title:'Ánh sáng dẫn đường',keys:'Đám ánh sáng bay trước đến nơi bạn cần đến.',touch:'Đám ánh sáng bay trước đến nơi bạn cần đến.',text:'Khi không biết đi đâu, hãy theo ánh sáng.'},

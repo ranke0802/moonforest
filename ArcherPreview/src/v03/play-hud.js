@@ -9,11 +9,13 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const hint=make('div','v03-hint');hint.hidden=true;
  const prompt=make('button','v03-prompt');prompt.type='button';prompt.hidden=true;
  const banner=make('div','v03-banner');banner.hidden=true;
+ // Cutscene subtitle: speaker + line, bottom centre.
+ const caption=make('div','v03-caption'),captionWho=make('strong','v03-caption-who'),captionText=make('p','v03-caption-text');caption.append(captionWho,captionText);caption.hidden=true;
  const tip=make('aside','v03-tip'),tipTitle=make('strong','v03-tip-title'),tipLead=make('p','v03-tip-lead'),tipText=make('p','v03-tip-text');
  tip.append(tipTitle,tipLead,tipText);tip.hidden=true;
  // A pulsing ring over the real game button a lesson is about (touch play).
  const ring=make('div','v03-ring');ring.hidden=true;
- root.append(quest,hint,banner,tip,prompt,ring);mount.append(root);
+ root.append(quest,hint,banner,tip,prompt,ring,caption);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
  const last={title:null,objective:null,hint:null,prompt:null,ring:null};
  return {
@@ -23,6 +25,10 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    const changedStep=last.objective!==null&&last.objective!==nextObjective;
    last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;kicker.textContent=t('hud.main');title.textContent=nextTitle??'';objective.textContent=nextObjective??'';
    if(changedStep){quest.classList.remove('is-updated');void quest.offsetWidth;quest.classList.add('is-updated');}
+  },
+  setCaption(value){
+   if(!value){caption.classList.remove('is-in');caption.hidden=true;return;}
+   captionWho.textContent=value.who??'';captionWho.hidden=!value.who;captionText.textContent=value.text;caption.hidden=false;caption.classList.remove('is-in');void caption.offsetWidth;caption.classList.add('is-in');
   },
   setHint(text){if(last.hint===text)return;last.hint=text;hint.hidden=!text;hint.textContent=text??'';},
   setPrompt(text){if(last.prompt===text)return;last.prompt=text;prompt.hidden=!text;prompt.textContent=text??'';},

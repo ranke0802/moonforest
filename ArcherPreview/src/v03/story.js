@@ -29,7 +29,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const cast=[];let mapId=null,near=null,started=false,talking=false,disposed=false;
  // Tutorial state: sequential fight coaching and one-time tips (saved per slot).
  const TIP_KEY='v03-tips-v1',TIP_SECONDS=7.5;
- const HINT_SECONDS=9,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
+ const HINT_SECONDS=40,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
  function loadTips(){tips.seen=new Set();try{const value=JSON.parse(save.journey.getItem(TIP_KEY)??'[]');if(Array.isArray(value))for(const id of value)if(typeof id==='string')tips.seen.add(id);}catch{/* start fresh */}}
  function trigger(when){
   for(const tip of content.TIPS??[]){
@@ -219,8 +219,90 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }finally{talking=false;if(!disposed)api.input.setSuspended(false);}
   return true;
  }
+ // ----- ambush scene -----
+ // Played once as the prologue fades out: the wolf has come out of the grass
+ // at the wagon, snarling at the driver; the camera starts behind the wolf
+ // and swings round behind the player as control is handed over. It runs on
+ // the live scene (no extra loop): the wolf is held, input is suspended.
+ const SCENE_BEATS=Object.freeze([{at:.4,line:0,growl:true},{at:2.2,line:1,growl:true},{at:3.9,line:2}]);
+ const SCENE_SWING=[3.6,5.4],SCENE_END=6.2;
+ const scene={active:false,time:0,beat:0,from:null,to:null,driver:null,driverFrom:null,driverTo:null,radius:0,beta:0};
+ const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+ function beginAmbushScene(){
+  const player=api.getPlayer()?.position,camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];
+  const foe=(api.battle.encounters??[]).find(row=>row.active&&row.brain?.hp>0);
+  if(!player||!camera||!foe||!lines)return false;
+  const wolf=foe.actor.position,dx=player.x-wolf.x,dz=player.z-wolf.z,length=Math.hypot(dx,dz)||1,ux=dx/length,uz=dz/length;
+  // The driver cowers behind the player, so the wolf facing the player also
+  // threatens him, and the player stands between them.
+  const member=cast.find(row=>row.npc.id==='driver');
+  if(member){
+   const want=findFreeSpot(api.world.navigation,{x:player.x+ux*2.3,z:player.z+uz*2.3});
+   scene.driver=member;scene.driverFrom={x:want.x-ux*.9,z:want.z-uz*.9};scene.driverTo=want;
+   const yaw=Math.atan2(wolf.x-want.x,wolf.z-want.z);member.yaw=yaw;
+  }
+  Object.assign(scene,{active:true,time:0,beat:0,from:Math.atan2(wolf.z-player.z,wolf.x-player.x),to:Math.atan2(player.z-wolf.z,player.x-wolf.x),radius:camera.radius,beta:camera.beta});
+  camera.alpha=scene.from;camera.beta=1.2;camera.radius=Math.max(camera.lowerRadiusLimit??1,Math.min(9,scene.radius));
+  api.input.setSuspended(true);
+  return true;
+ }
+ function updateScene(dt){
+  const camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];scene.time+=dt;
+  while(scene.beat<SCENE_BEATS.length&&scene.time>=SCENE_BEATS[scene.beat].at){
+   const beat=SCENE_BEATS[scene.beat++],line=lines[beat.line];
+   hud.setCaption({who:speaker(line.who),text:line.text});
+   if(beat.growl){const foe=(api.battle.encounters??[]).find(row=>row.active);api.playSound?.('wolf_alert',foe?{position:foe.actor.position}:undefined);}
+  }
+  // The driver stumbles back toward the wagon side during the first beats.
+  if(scene.driver){const k=ease(scene.time/1.6),p=scene.driverFrom,q=scene.driverTo,x=p.x+(q.x-p.x)*k,z=p.z+(q.z-p.z)*k;scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,api.world.terrain?.heightAt?.(x,z)??0,z,scene.driver.yaw??0);}
+  // Camera: hold behind the wolf, then swing the short way round.
+  const k=ease((scene.time-SCENE_SWING[0])/(SCENE_SWING[1]-SCENE_SWING[0]));
+  let turn=scene.to-scene.from;turn=Math.atan2(Math.sin(turn),Math.cos(turn));
+  camera.alpha=scene.from+turn*k;camera.beta=1.2+(scene.beta-1.2)*k;camera.radius=Math.min(9,scene.radius)+(scene.radius-Math.min(9,scene.radius))*k;
+  if(scene.time>=SCENE_END){
+   scene.active=false;hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));
+   coachState.alpha=camera.alpha;
+  }
+ }
+ // ----- first-fight tutorial -----
+ // Each lesson allows only its own action (main.js asks allows()), the wolf
+ // plays its part (holds still, charges for the dodge lesson, snaps for the
+ // shield lesson) and neither side can die until the lessons are done.
+ const lessonActive=()=>started&&log.quest()?.id==='M00'&&log.step()?.id==='fight'&&coachState.index<(content.COMBAT_HINTS?.length??0);
+ const LOCKABLE=['move','camera','attack','dodge','guard','potion'];
+ let lockKey='';
+ function allows(kind){
+  if(scene.active)return false;
+  if(!lessonActive())return true;
+  const allow=content.COMBAT_HINTS[coachState.index]?.allow;
+  return !allow||allow.includes(kind);
+ }
+ function showLocks(){
+  const allow=scene.active?[]:lessonActive()?content.COMBAT_HINTS[coachState.index]?.allow:null;
+  const key=allow?LOCKABLE.filter(kind=>!allow.includes(kind)).join(' '):'';
+  if(key===lockKey)return;lockKey=key;
+  if(key)doc.documentElement.dataset.v03Lock=key;else delete doc.documentElement.dataset.v03Lock;
+ }
+ const WOLF_PLAY={charge:['lunge'],snap:['quick-bite']};
+ let wolfPlay=null;
+ function directWolf(){
+  const lesson=lessonActive()?content.COMBAT_HINTS[coachState.index]:null,play=scene.active?'hold':lesson?.wolf??null;
+  for(const foe of api.battle.encounters??[]){
+   const brain=foe.brain;if(!foe.active||!brain||!(brain.hp>0))continue;
+   if(play){
+    // Nobody dies mid-lesson: the wolf keeps a third of its health, the player too.
+    brain.hp=Math.max(brain.hp,brain.maxHp*.35);
+    const combat=api.battle.combat;if(combat&&combat.hp<combat.maxHp*.35)combat.hp=combat.maxHp*.35;
+   }
+   if(play==='hold'&&brain.mode!=='attack'&&brain.mode!=='down'&&brain.mode!=='recover'){brain.behavior='observe';brain.observation=Math.max(brain.observation??0,.6);}
+   if(play!==wolfPlay)brain.configureAttacks?.(WOLF_PLAY[play]?{custom:true,sequence:WOLF_PLAY[play]}:{});
+  }
+  wolfPlay=play;
+ }
  function coach(dt=0){
   const quest=log.quest(),step=log.step(),hints=content.COMBAT_HINTS??[];
+  directWolf();showLocks();
+  if(scene.active){hud.setHint(null);return;}
   if(quest?.id!=='M00'||step?.id!=='fight'||coachState.index>=hints.length){hud.setHint(null);if(!tips.showing)hud.setRing(null);return;}
   const controller=api.getController(),player=api.getPlayer()?.position,camera=api.world.camera;
   if(player){
@@ -237,10 +319,13 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!finished)break;
    coachState.shown=0;coachState.moved=0;coachState.alpha=camera?.alpha??null;
   }
+  // Lessons finished this frame unlock at once.
+  showLocks();directWolf();
   coachState.shown+=dt;
   const hint=hints[coachState.index];
   hud.setHint(hint?`${hint.text} · ${touch?hint.touch:hint.keys}`:null);
-  if(!tips.showing)hud.setRing(touch?hint?.target??null:null);
+  // The ring marks the one control this lesson is about, on PC and touch alike.
+  if(!tips.showing)hud.setRing(hint?.target??null);
  }
  function contextTips(){
   const quest=log.quest(),step=log.step(),key=quest&&step?`step:${quest.id}/${step.id}`:null;
@@ -260,10 +345,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  return {
   get dialogueOpen(){return dialogue.open;},
   get near(){return near!==null;},
+  allows,
+  beginAmbushScene,
+  get sceneActive(){return scene.active;},
   get started(){return started;},
   log,
   start({fresh=false}={}){
    if(fresh||!log.load())log.reset();
+   // A new game opens on the wolf at the wagon (once the cast is placed).
+   scene.pending=fresh===true&&log.quest()?.id==='M00';
    started=true;mapId=null;Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0});
    tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
@@ -279,6 +369,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
+   if(scene.pending){scene.pending=false;beginAmbushScene();}
+   if(scene.active){updateScene(dt);coach(0);updateGuide(dt,null);return;}
    const player=api.getPlayer()?.position;
    if(player&&!talking&&!dialogue.open){
     let best=null,bestSq=TALK_RANGE_SQ;

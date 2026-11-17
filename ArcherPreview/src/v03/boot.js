@@ -51,7 +51,7 @@ export function setupV03(api){
  const title=createTitleScreen({doc,wait,describe,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
  const langReady=Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})).then(()=>{
-  if(state.disposed)return;localizeChapter(content,source);title.relabel();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
  function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
@@ -158,17 +158,34 @@ export function setupV03(api){
   }else if(action==='settings'){
    const choice=await title.showSettings({languages:LANGUAGES,current:language()});
    if(choice?.game)api.openSettings();
-   else if(choice?.language&&writeLanguage(languageStore,choice.language)){
-    // Reload into the new language; the logo is skipped for this one load.
-    try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
-    stopAttract();view.location.reload();
-   }
+   else if(choice?.language)changeLanguage(choice.language);
   }else if(action==='quit'){
    const ok=await title.confirm({title:t('confirm.quitTitle'),message:t('confirm.quit'),accept:t('confirm.quitAccept')});if(!ok)return;
    stopAttract();title.hide();screen('exit');api.exit?.();
   }
  }
 
+ // ----- language change -----
+ // From the title: reload straight to the title. During play: save, then
+ // reload straight back into this record (no logo, no title).
+ function changeLanguage(id){
+  if(id===language()||!writeLanguage(languageStore,id))return false;
+  if(state.screen==='play'){save.touch(metaPatch());if(reloadInto(save.slot,'load',gameState().character))return true;}
+  try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
+  stopAttract();view.location.reload();return true;
+ }
+ // The game's own settings dialog (opened from the title or in play) gets a
+ // language row at the top.
+ function mountLanguageSetting(){
+  const dialog=doc.getElementById('motion-speed-dialog');if(!dialog||dialog.querySelector('.v03-language-row'))return;
+  const row=doc.createElement('label');row.className='v03-language-row';
+  const name=doc.createElement('span');name.textContent=t('settings.language');
+  const select=doc.createElement('select');select.id='v03-language-select';
+  for(const row of LANGUAGES){const option=doc.createElement('option');option.value=row.id;option.lang=row.html;option.textContent=row.label;select.append(option);}
+  select.value=language();select.addEventListener('change',()=>{if(!changeLanguage(select.value))select.value=language();});
+  const note=doc.createElement('small');note.textContent=t('settings.languageNote');
+  row.append(name,select,note);dialog.querySelector('header')?.after(row);
+ }
  // ----- boot -----
  function showTitle(){
   if(state.disposed||state.screen!=='boot')return;
@@ -211,6 +228,8 @@ export function setupV03(api){
   defeat(event){if(state.screen==='play')story.defeat(event);},
   story,
   get pilotMovement(){return state.attract?pilot.movement:null;},
+  // Tutorial gate for main.js actions; everything is allowed outside play.
+  allows(kind){return state.screen!=='play'||story.allows(kind);},
   update(dt){
    if(state.disposed)return;
    if(state.screen!=='play')cursors.set('ui');
@@ -236,7 +255,7 @@ export function setupV03(api){
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
-    cursors.set(story.dialogueOpen?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
+    cursors.set(story.dialogueOpen||story.sceneActive?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();
     if(state.sinceSave>=15){state.sinceSave=0;save.touch(metaPatch());}
    }

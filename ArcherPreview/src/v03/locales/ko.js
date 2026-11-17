@@ -23,6 +23,7 @@ export default {
   'opening.2':'마물의 울음. 멀리서 그가 쓰러진다.\n손을 뻗지만, 닿지 않는다.',
   'opening.3':'어두운 곳에서 올리는 기도.\n응답은 없다.',
   'opening.4':'“그 아이를 찾아라.”',
+  'scene.protect':'마부를 지켜라',
   'hud.main':'메인','hud.chapterNext':'이야기의 다음 장','hud.complete':'완료 · {done}','hud.completeNext':'완료 · {done}  →  {next}','hud.rested':'쉬었습니다 · 여정을 기록했습니다',
   'prompt.talkQuest':({name})=>particle(name,'과','와')+' 이야기하기',
   'prompt.talkIdle':({name})=>name+'에게 말 걸기',

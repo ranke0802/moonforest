@@ -198,7 +198,7 @@ export class PlaygroundInput {
     }
   }
   drag(dx, dy, pan) {
-    if(this.suspended)return;
+    if(this.suspended||this.callbacks.canTurn?.()===false)return;
     if (!pan) {
       this.camera.alpha += dx * .005;
       this.camera.beta = Math.max(this.camera.lowerBetaLimit??.25, Math.min(this.camera.upperBetaLimit??Math.PI-.035, this.camera.beta - dy * .005));
@@ -213,7 +213,7 @@ export class PlaygroundInput {
       if (radius > 4) { this.panOffset.x *= 4 / radius; this.panOffset.z *= 4 / radius; }
     }
   }
-  zoom(factor) { if(!this.suspended)zoomCamera(this.camera, factor); }
+  zoom(factor) { if(!this.suspended&&this.callbacks.canTurn?.()!==false)zoomCamera(this.camera, factor); }
   value() {
     if(this.suspended)return {x:0,y:0,run:false};
     const down = (...codes) => codes.some(c => this.keys.has(c));

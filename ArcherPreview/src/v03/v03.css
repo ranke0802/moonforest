@@ -20,7 +20,7 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-title.is-shown.scene-ready .v03-title-inner{opacity:1;transform:none}
 /* Until its scene is fully drawn the title stays black, with a quiet note. */
 .v03-title:not(.scene-ready) .v03-title-inner{pointer-events:none}
-.v03-title::after{content:attr(data-drawing);position:absolute;right:max(28px,env(safe-area-inset-right));bottom:max(22px,env(safe-area-inset-bottom));font-size:12px;letter-spacing:.3em;color:#ece0bc;opacity:0;transition:opacity .6s ease}
+.v03-title::after{content:attr(data-drawing);position:absolute;left:max(28px,env(safe-area-inset-left));bottom:max(22px,env(safe-area-inset-bottom));font-size:12px;letter-spacing:.3em;color:#ece0bc;opacity:0;transition:opacity .6s ease}
 .v03-title.is-shown:not(.scene-ready)::after{opacity:.55;animation:v03-breathe 1.6s ease-in-out infinite}
 @keyframes v03-breathe{50%{opacity:.2}}
 .v03-title.has-panel .v03-title-inner{opacity:.25;pointer-events:none}
@@ -136,3 +136,15 @@ html[lang=en]{--v03-font:MoonforestUI,'Segoe UI',sans-serif}
 .v03-language,.v03-settings-game{display:flex!important;justify-content:center;align-items:center;min-height:48px!important;text-align:center;font-size:clamp(15px,2.4vmin,18px)}
 .v03-language.is-current{border-color:var(--v03-gold)}
 .v03-settings-game{width:100%;margin-top:6px}
+/* Tutorial locks: controls a lesson does not use are dimmed and inert. */
+html[data-v03-lock~=attack] #attack-button,html[data-v03-lock~=dodge] #dodge-button,html[data-v03-lock~=guard] #guard-button,html[data-v03-lock~=potion] #potion-button{opacity:.22!important;filter:grayscale(1);pointer-events:none}
+html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opacity:.2}
+/* Cutscene subtitle */
+.v03-caption{position:absolute;left:50%;bottom:clamp(110px,22vh,190px);transform:translateX(-50%);width:max-content;max-width:min(720px,88vw);padding:10px 26px 12px;text-align:center;background:linear-gradient(90deg,#0000,#000b 18%,#000b 82%,#0000);opacity:0;transition:opacity .35s ease;pointer-events:none}
+.v03-caption.is-in{opacity:1}
+.v03-caption-who{display:block;font-size:13px;letter-spacing:.14em;color:var(--v03-gold);margin-bottom:4px}
+.v03-caption-text{margin:0;font-size:clamp(16px,2.6vmin,21px);line-height:1.5;color:#fff4d6;text-shadow:0 2px 6px #000;white-space:pre-line}
+/* Language row in the game's settings dialog */
+.v03-language-row{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;margin:4px 0 12px;padding:10px 12px;border:1px solid #ae925955;border-radius:6px;background:#ffffff08}
+.v03-language-row select{min-height:40px;font:inherit;color:inherit;background:#22301f;border:1px solid #819071;border-radius:4px;padding:4px 8px}
+.v03-language-row small{grid-column:1/-1;opacity:.75}

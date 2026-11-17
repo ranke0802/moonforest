@@ -21,6 +21,7 @@ export default {
   'opening.2':'The howl of a fiend. Far away, he falls.\nI reach out, but I cannot reach him.',
   'opening.3':'A prayer offered in the dark.\nNo answer comes.',
   'opening.4':'“Find that child.”',
+  'scene.protect':'Protect the driver',
   'hud.main':'Main','hud.chapterNext':'The story continues','hud.complete':'Complete · {done}','hud.completeNext':'Complete · {done}  →  {next}','hud.rested':'Rested · Journey recorded',
   'prompt.talkQuest':'Talk to {name}','prompt.talkIdle':'Speak to {name}',
  },
@@ -28,6 +29,7 @@ export default {
   speakers:{'나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
    'driver-thanks':['Whew… we made it. If not for you, mercenary, my horse and I would’ve been wolf feed.','The beasts on the plains have turned strangely vicious lately. They never used to attack wagons.','I need to fix this wheel, so I’ll stay here. The village is at the end of this road, just over there.','When you arrive, look for the Moonlight Inn. The owner’s gruff, but the rooms are clean.'],
+   'ambush-scene':["W-wolf…! It’s after the wagon!", "S-stay back! Get away!", "(I can’t back down. I have to protect him.)"],
    'driver-idle':['Once this wheel’s fixed, I’ll follow you. Mind the road.'],
    'inn-arrive':['A new face. Not many come all the way out here this time of year.','I came on the Church’s request. Novice saint Elena has not been heard from in six months.','…Haven’t heard that name in a while. She was a good girl. Tended the wounded all night long.','I don’t know much myself. Ask the old woman by the well, the herbalist, and the young man mending the palisade. Each of them remembers something different.','Take the room upstairs. Talk to me whenever you want to rest. I’ll write today down in my ledger.'],
    'inn-idle':['Staying the night? Get some rest, and I’ll write today down in the ledger.'],
@@ -58,8 +60,8 @@ export default {
    move:{text:'Move',keys:'W A S D',touch:'Stick, bottom left'},
    camera:{text:'Turn the camera',keys:'Right-drag · wheel to zoom',touch:'Drag the right side · pinch to zoom'},
    attack:{text:'Attack',keys:'J · left click',touch:'Sword button'},
-   dodge:{text:'Dodge when the wolf crouches',keys:'Space',touch:'Boot button'},
-   guard:{text:'Shove with your shield to open a gap',keys:'F (hold to guard)',touch:'Shield button (hold to guard)'},
+   dodge:{text:'Dodge when the wolf charges',keys:'Space',touch:'Boot button'},
+   guard:{text:'Shove with your shield when it snaps',keys:'F (hold to guard)',touch:'Shield button (hold to guard)'},
   },
   tips:{
    guide:{title:'Guiding light',keys:'The wisp flies ahead to where you need to go.',touch:'The wisp flies ahead to where you need to go.',text:'When you’re unsure where to go, follow the light.'},

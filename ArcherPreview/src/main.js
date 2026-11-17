@@ -453,27 +453,32 @@ function updateButtons() {
   $('#potion-button').classList.toggle('healing',!!boss?.potions.active);
   $('#potion-button').setAttribute('aria-label',`회복 물약, 남은 횟수 ${boss?.potions.remaining??3}회${boss?.potions.active?', 회복 중':''}`);
 }
+// 0.3 tutorial gate: a step can allow only some actions (move, camera,
+// attack, dodge, guard, potion). Always true outside the tutorial and in 0.2.
+// Movement while the tutorial locks it: a fresh zero intent (the frame adds fields to it).
+const noMovement=()=>({x:0,y:0,run:false});
+const allowed=kind=>world?.v03?.allows?.(kind)!==false;
 const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
-  guard() { if (ready && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
+  guard() { if (ready && allowed('guard') && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
   setShieldHeld(held,source='keyboard',pointerType){
     if(!isV2()){if(held)actions.guard();return false;}
-    if(held&&(!ready||controller.dead||controller.captured||controller.groggy||boss?.playerHp<=0))return false;
+    if(held&&(!ready||!allowed('guard')||controller.dead||controller.captured||controller.groggy||boss?.playerHp<=0))return false;
     return shieldInput.setHeld(source,held,pointerType);
   },
   cancelShieldInput(source){return shieldInput.cancel(source);},
   isHudShieldHeld(pointerType){return shieldInput.hasTouchHud(pointerType);},
-  dodge() { if(ready&&isV2()&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
+  dodge() { if(ready&&isV2()&&allowed('dodge')&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
   setDodgeHeld(held,source='keyboard',pointerType){
     if(!held)return input?.dodgeSprintGesture?.end(source);
-    if(!ready||!isV2()||controller.dead||boss.playerHp<=0||controller.groggy)return false;
+    if(!ready||!isV2()||!allowed('dodge')||controller.dead||boss.playerHp<=0||controller.groggy)return false;
     if(controller.captured){actions.dodge();return false;}
     return input?.dodgeSprintGesture?.begin(source,{pointerType});
   },
   cancelDodgeInput(source){return input?.dodgeSprintGesture?.cancel(source);},
   isHudDodgeHeld(pointerType){return input?.dodgeSprintGesture?.hasTouchHud(pointerType)??false;},
-  potion() { if(ready&&isV2()&&!controller.captured&&!controller.groggy){if(boss.usePotion()){questLive()?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
-  attack() { if (ready && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
+  potion() { if(ready&&isV2()&&allowed('potion')&&!controller.captured&&!controller.groggy){if(boss.usePotion()){questLive()?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
+  attack() { if (ready && allowed('attack') && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
   isHudAttackHeld(pointerType) { return isHudAttackHeld(pointerType); },
@@ -482,6 +487,7 @@ const actions = {
   revive() { if (!ready || !controller.dead) return; controller.revive();audio.setEnvironment(character);audio.play('revive'); input.reset(); updateButtons(); toast('다시 움직일 수 있습니다.'); },
   // Accept direction intent during locks; the controller still prevents displacement.
   canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
+  canTurn() { return allowed('camera'); },
 };
 
 function startDefense(kind){
@@ -514,7 +520,7 @@ function resetBeforeBoss(){
 function setAttackHeld(source, held, pointerType) {
   if(elenaReview){if(held&&ready)elenaReview.requestReviewCast();return;}
   if (held) {
-    if (!ready || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
+    if (!ready || !allowed('attack') || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
     attackSources.add(source);
     if(source.startsWith('button:'))attackPointerTypes.set(source,pointerType??'unknown');
   } else {attackPointerTypes.delete(source);if(attackSources.delete(source))controller?.setAttackHeld(attackSources.size > 0);}
@@ -848,7 +854,7 @@ function render(dt) {
       if(recoiled)constrainPlayerPosition(beforeRecoil);
       boss.combat.v02Impact?.advance(dt,actor,constrainPlayerPosition);
     }
-    const rawMovement=world.v03?.pilotMovement??input.value();
+    const rawMovement=world.v03?.pilotMovement??(allowed('move')?input.value():noMovement());
     if(elenaReview){
       const length=Math.hypot(rawMovement.x,rawMovement.y),direction=length>.08?dodgeDirection(rawMovement,world.camera.alpha,elenaReview.actor.rotation.y):{x:0,z:0};
       elenaReview.reviewMovement={x:direction.x*Math.min(1,length),z:direction.z*Math.min(1,length),run:rawMovement.run||controller.runToggled};
@@ -1538,6 +1544,7 @@ try {
       },
       rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);return true;},
       setMapMarkers:list=>minimap.setMarkers(list),
+      playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
     // Development-only handle for QA from the console; never present in a build.
