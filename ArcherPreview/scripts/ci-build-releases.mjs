@@ -19,13 +19,19 @@ async function restoreShippedGraph(){
  for(const pack of index.bundles){const target=resolve(publicAssets,pack.url);await mkdir(dirname(target),{recursive:true});await copyFile(resolve(site,'assets',pack.url),target);}
  // Published files that are not in git (reviewed content kept only in the
  // site): restore them from the shipped 0.1 inventory, hash-checked.
- const primary=JSON.parse(await readFile(resolve(site,'deployment-files.json'),'utf8'));let restored=0;
- for(const item of primary.files){
-  if(!item.path.startsWith('assets/'))continue;
+ const seen=new Set();let restored=0;
+ const items=[];
+ for(const name of ['deployment-files.json','deployment-files-moonforest-0.2.json','deployment-files-moonforest-0.3.json']){
+  const inv=JSON.parse(await readFile(resolve(site,name),'utf8'));
+  for(const item of [...(inv.files||[]),...(inv.additiveContent||[])])if(item.path.startsWith('assets/')&&!seen.has(item.path)){seen.add(item.path);items.push(item);}
+ }
+ for(const item of items){
   const target=resolve(project,'public',item.path);
   try{await access(target);continue;}catch{/* missing: restore */}
   const bytes=await readFile(resolve(site,item.path));
-  if(createHash('sha256').update(bytes).digest('hex')!==item.sha256)throw new Error('Shipped file does not match its inventory: '+item.path);
+  const text=/\.(json|js|css|html|txt|md|svg)$/.test(item.path)&&!item.path.startsWith('assets/content/');
+  const body=text?Buffer.from(bytes.toString('utf8').replace(/\r\n/g,'\n')):bytes;
+  if(createHash('sha256').update(body).digest('hex')!==item.sha256)throw new Error('Shipped file does not match its inventory: '+item.path);
   await mkdir(dirname(target),{recursive:true});await copyFile(resolve(site,item.path),target);restored++;
  }
  return {revision:index.revision,bundles:index.bundles.length,restored};
