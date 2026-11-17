@@ -4,7 +4,8 @@
 // The shared resource graph is the reviewed one already published with 0.1
 // (ArcherPreviewSite/assets): it is copied into public/ first, so local,
 // uncommitted asset work can never change what 0.1 serves.
-import {readFile,mkdir,copyFile} from 'node:fs/promises';
+import {readFile,mkdir,copyFile,access} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
 import {resolve,dirname} from 'node:path';
 import {buildMoonforestV2} from './build-moonforest-0.2.mjs';
 import {syncMoonforestV2} from './sync-moonforest-0.2.mjs';
@@ -16,7 +17,18 @@ async function restoreShippedGraph(){
  const index=JSON.parse(await readFile(resolve(site,'assets/resource-index.json'),'utf8'));
  await copyFile(resolve(site,'assets/resource-index.json'),resolve(publicAssets,'resource-index.json'));
  for(const pack of index.bundles){const target=resolve(publicAssets,pack.url);await mkdir(dirname(target),{recursive:true});await copyFile(resolve(site,'assets',pack.url),target);}
- return {revision:index.revision,bundles:index.bundles.length};
+ // Published files that are not in git (reviewed content kept only in the
+ // site): restore them from the shipped 0.1 inventory, hash-checked.
+ const primary=JSON.parse(await readFile(resolve(site,'deployment-files.json'),'utf8'));let restored=0;
+ for(const item of primary.files){
+  if(!item.path.startsWith('assets/'))continue;
+  const target=resolve(project,'public',item.path);
+  try{await access(target);continue;}catch{/* missing: restore */}
+  const bytes=await readFile(resolve(site,item.path));
+  if(createHash('sha256').update(bytes).digest('hex')!==item.sha256)throw new Error('Shipped file does not match its inventory: '+item.path);
+  await mkdir(dirname(target),{recursive:true});await copyFile(resolve(site,item.path),target);restored++;
+ }
+ return {revision:index.revision,bundles:index.bundles.length,restored};
 }
 const graph=await restoreShippedGraph();
 console.log('shipped resource graph',graph);
