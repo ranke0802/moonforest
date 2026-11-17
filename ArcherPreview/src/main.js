@@ -206,7 +206,7 @@ function assertFrameHealthy(){
 const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
 // Touch devices: hold the frame cap by trading resolution, view distance and shadows.
-const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice});
+const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition});
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
 function applyAdaptiveShadows(){if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
 function applyAdaptivePerformance(){applyRenderQuality();if(world)applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveShadows();}
