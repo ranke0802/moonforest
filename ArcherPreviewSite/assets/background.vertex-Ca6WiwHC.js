@@ -1,0 +1,1 @@
+export{sa as backgroundVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

@@ -1,0 +1,1 @@
+export{t as iblCopyVoxelBufferToGridComputeShaderWGSL}from"./babylon-lazy~moonforestV3~pbrMaterialLoadingAdapter~gpuRenderParticles.fragment~iblCopyVoxe~d5ef7kj6-B0dJHiyr.js";

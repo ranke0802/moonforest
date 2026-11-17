@@ -1,0 +1,1 @@
+export{q as outlineVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

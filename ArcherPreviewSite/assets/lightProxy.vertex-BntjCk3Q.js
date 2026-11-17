@@ -1,0 +1,1 @@
+export{va as lightProxyVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

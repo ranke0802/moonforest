@@ -1,0 +1,1 @@
+export{ri as openpbrPixelShader}from"./babylon-game-BavIJ2PR.js";

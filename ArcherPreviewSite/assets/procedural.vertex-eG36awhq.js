@@ -1,0 +1,1 @@
+export{Wr as proceduralVertexShaderWGSL}from"./babylon-game-49hCKjAt.js";

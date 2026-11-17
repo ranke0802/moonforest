@@ -1,0 +1,1 @@
+export{bn as passCubePixelShader}from"./babylon-game-BavIJ2PR.js";

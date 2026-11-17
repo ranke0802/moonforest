@@ -1,0 +1,1 @@
+export{$t as fxaaPixelShaderWGSL}from"./babylon-game-49hCKjAt.js";

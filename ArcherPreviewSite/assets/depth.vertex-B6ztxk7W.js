@@ -1,0 +1,1 @@
+export{Nt as depthVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

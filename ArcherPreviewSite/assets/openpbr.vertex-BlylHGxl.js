@@ -1,0 +1,1 @@
+export{si as openpbrVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

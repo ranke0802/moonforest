@@ -1,0 +1,1 @@
+export{xr as defaultVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

@@ -1,0 +1,1 @@
+export{X as outlinePixelShader}from"./babylon-game-BavIJ2PR.js";

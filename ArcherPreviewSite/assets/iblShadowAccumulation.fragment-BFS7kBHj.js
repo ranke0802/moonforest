@@ -1,0 +1,1 @@
+export{z as iblShadowAccumulationPixelShader}from"./babylon-game-BavIJ2PR.js";

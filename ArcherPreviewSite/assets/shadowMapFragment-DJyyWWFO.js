@@ -1,0 +1,1 @@
+export{ja as shadowMapFragment}from"./babylon-game-BavIJ2PR.js";

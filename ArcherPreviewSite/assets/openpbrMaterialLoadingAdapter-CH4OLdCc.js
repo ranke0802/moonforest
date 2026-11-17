@@ -1,0 +1,1 @@
+export{n as OpenPBRMaterialLoadingAdapter}from"./babylon-game-BavIJ2PR.js";

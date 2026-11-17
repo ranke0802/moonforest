@@ -1,0 +1,1 @@
+export{Cd as bonesVertexWGSL}from"./babylon-game-BavIJ2PR.js";

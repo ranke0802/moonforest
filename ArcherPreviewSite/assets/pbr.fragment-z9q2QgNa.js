@@ -1,0 +1,1 @@
+export{ci as pbrPixelShader}from"./babylon-game-49hCKjAt.js";

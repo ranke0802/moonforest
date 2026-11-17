@@ -1,0 +1,1 @@
+export{hr as OptimizeIndices}from"./babylon-game-BavIJ2PR.js";

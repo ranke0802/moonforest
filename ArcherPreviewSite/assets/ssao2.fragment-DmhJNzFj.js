@@ -1,0 +1,1 @@
+export{Gn as ssao2PixelShader}from"./babylon-game-49hCKjAt.js";

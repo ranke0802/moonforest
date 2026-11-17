@@ -1,0 +1,1 @@
+export{Yr as _KTXTextureLoader}from"./babylon-game-BavIJ2PR.js";

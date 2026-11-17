@@ -1,0 +1,1 @@
+export{hi as pbrVertexShader}from"./babylon-game-BavIJ2PR.js";

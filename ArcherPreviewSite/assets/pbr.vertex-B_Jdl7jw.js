@@ -1,0 +1,1 @@
+export{Ti as pbrVertexShaderWGSL}from"./babylon-game-49hCKjAt.js";

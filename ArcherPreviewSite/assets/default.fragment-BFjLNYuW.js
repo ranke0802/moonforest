@@ -1,0 +1,1 @@
+export{wr as defaultPixelShader}from"./babylon-game-BavIJ2PR.js";

@@ -1,0 +1,1 @@
+export{On as volumetricLightScatteringPassVertexShaderWGSL}from"./babylon-game-49hCKjAt.js";

@@ -1,0 +1,1 @@
+export{ki as colorPixelShader}from"./babylon-game-BavIJ2PR.js";

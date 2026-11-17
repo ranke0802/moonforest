@@ -1,0 +1,1 @@
+export{$i as lightFragmentWGSL}from"./babylon-game-BavIJ2PR.js";

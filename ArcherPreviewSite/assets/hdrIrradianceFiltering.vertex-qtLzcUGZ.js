@@ -1,0 +1,1 @@
+export{Ir as hdrIrradianceFilteringVertexShaderWGSL}from"./babylon-game-49hCKjAt.js";

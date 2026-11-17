@@ -1,0 +1,1 @@
+export{kd as morphTargetsVertexGlobalDeclarationWGSL}from"./babylon-game-BavIJ2PR.js";

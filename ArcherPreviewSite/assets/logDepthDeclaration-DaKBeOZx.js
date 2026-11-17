@@ -1,0 +1,1 @@
+export{da as logDepthDeclarationWGSL}from"./babylon-game-BavIJ2PR.js";

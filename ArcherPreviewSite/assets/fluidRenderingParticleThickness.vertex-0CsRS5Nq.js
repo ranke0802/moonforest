@@ -1,0 +1,1 @@
+export{St as fluidRenderingParticleThicknessVertexShaderWGSL}from"./babylon-game-49hCKjAt.js";

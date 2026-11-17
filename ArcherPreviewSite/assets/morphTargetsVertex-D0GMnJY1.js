@@ -1,0 +1,1 @@
+export{Id as morphTargetsVertex}from"./babylon-game-49hCKjAt.js";

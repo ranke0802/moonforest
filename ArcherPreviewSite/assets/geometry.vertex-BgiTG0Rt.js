@@ -1,0 +1,1 @@
+export{st as geometryVertexShader}from"./babylon-game-BavIJ2PR.js";

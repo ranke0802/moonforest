@@ -1,0 +1,1 @@
+export{Dn as volumetricLightScatteringPassPixelShaderWGSL}from"./babylon-game-49hCKjAt.js";

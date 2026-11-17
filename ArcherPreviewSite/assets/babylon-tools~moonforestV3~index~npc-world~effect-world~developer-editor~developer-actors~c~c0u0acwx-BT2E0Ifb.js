@@ -1,0 +1,1 @@
+import{i as e}from"./babylon-tools~moonforestV3~index~npc-world~effect-world~developer-editor~developer-actors~c~oyjm163y-BqltO0ki.js";var t=class{static get Now(){return e()&&window.performance&&window.performance.now?window.performance.now():Date.now()}};export{t};

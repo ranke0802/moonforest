@@ -1,0 +1,1 @@
+export{Ar as gaussianSplattingFragmentDeclarationWGSL}from"./babylon-game-BavIJ2PR.js";

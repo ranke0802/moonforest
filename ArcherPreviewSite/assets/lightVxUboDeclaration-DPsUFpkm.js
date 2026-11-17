@@ -1,0 +1,1 @@
+export{fa as lightVxUboDeclarationWGSL}from"./babylon-game-BavIJ2PR.js";

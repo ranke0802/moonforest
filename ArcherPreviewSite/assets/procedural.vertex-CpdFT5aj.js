@@ -1,0 +1,1 @@
+export{Ur as proceduralVertexShader}from"./babylon-game-49hCKjAt.js";

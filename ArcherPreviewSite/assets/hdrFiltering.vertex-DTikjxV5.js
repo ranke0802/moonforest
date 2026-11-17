@@ -1,0 +1,1 @@
+export{Hr as hdrFilteringVertexShader}from"./babylon-game-49hCKjAt.js";

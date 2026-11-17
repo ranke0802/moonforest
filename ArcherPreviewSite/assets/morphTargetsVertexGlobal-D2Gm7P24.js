@@ -1,0 +1,1 @@
+export{Ld as morphTargetsVertexGlobal}from"./babylon-game-BavIJ2PR.js";

@@ -1,0 +1,1 @@
+export{kn as volumetricLightScatteringPixelShaderWGSL}from"./babylon-game-BavIJ2PR.js";

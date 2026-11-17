@@ -1,0 +1,1 @@
+export{li as bumpFragment}from"./babylon-game-BavIJ2PR.js";

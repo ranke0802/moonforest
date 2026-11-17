@@ -1,0 +1,1 @@
+export{Cr as defaultVertexShader}from"./babylon-game-49hCKjAt.js";

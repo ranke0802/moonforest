@@ -1,0 +1,1 @@
+export{Oi as colorVertexShader}from"./babylon-game-BavIJ2PR.js";

@@ -1,0 +1,1 @@
+export{_t as fluidRenderingRenderPixelShaderWGSL}from"./babylon-game-49hCKjAt.js";

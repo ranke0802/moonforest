@@ -1,0 +1,1 @@
+export{co as clipPlaneFragment}from"./babylon-game-BavIJ2PR.js";

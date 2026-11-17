@@ -1,0 +1,1 @@
+export{Zn as particlesVertexShader}from"./babylon-game-49hCKjAt.js";

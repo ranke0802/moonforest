@@ -1,0 +1,1 @@
+export{Hd as bonesDeclaration}from"./babylon-game-49hCKjAt.js";

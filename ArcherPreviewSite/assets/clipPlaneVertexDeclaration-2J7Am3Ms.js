@@ -1,0 +1,1 @@
+export{eo as clipPlaneVertexDeclarationWGSL}from"./babylon-game-BavIJ2PR.js";

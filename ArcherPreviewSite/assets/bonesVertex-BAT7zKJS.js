@@ -1,0 +1,1 @@
+export{Pd as bonesVertex}from"./babylon-game-49hCKjAt.js";

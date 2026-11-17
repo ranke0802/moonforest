@@ -1,0 +1,1 @@
+export{Br as hdrFilteringVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

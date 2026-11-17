@@ -1,0 +1,1 @@
+export{lr as lodPixelShaderWGSL}from"./babylon-game-49hCKjAt.js";

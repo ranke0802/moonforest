@@ -1,0 +1,1 @@
+export{Ri as lightUboDeclaration}from"./babylon-game-BavIJ2PR.js";

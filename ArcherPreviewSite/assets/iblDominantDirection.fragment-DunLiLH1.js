@@ -1,0 +1,1 @@
+export{C as iblDominantDirectionPixelShader}from"./babylon-game-BavIJ2PR.js";

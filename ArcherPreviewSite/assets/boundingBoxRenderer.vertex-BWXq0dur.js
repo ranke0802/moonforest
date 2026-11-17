@@ -1,0 +1,1 @@
+export{tt as boundingBoxRendererVertexShaderWGSL}from"./babylon-game-BavIJ2PR.js";

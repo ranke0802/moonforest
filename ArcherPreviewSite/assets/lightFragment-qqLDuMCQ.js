@@ -1,0 +1,1 @@
+export{Ni as lightFragment}from"./babylon-game-49hCKjAt.js";

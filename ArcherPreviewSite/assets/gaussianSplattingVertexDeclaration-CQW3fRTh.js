@@ -1,0 +1,1 @@
+export{Mr as gaussianSplattingVertexDeclaration}from"./babylon-game-BavIJ2PR.js";

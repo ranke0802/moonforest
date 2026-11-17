@@ -1,0 +1,12 @@
+{
+  "id": "./moonforest-0.3.html",
+  "name": "MoonForest 0.3 · 비탄의 마녀",
+  "short_name": "MoonForest",
+  "lang": "ko",
+  "start_url": "./moonforest-0.3.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#0b101c"
+}

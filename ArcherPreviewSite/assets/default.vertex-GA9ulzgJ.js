@@ -1,0 +1,1 @@
+export{Cr as defaultVertexShader}from"./babylon-game-BavIJ2PR.js";

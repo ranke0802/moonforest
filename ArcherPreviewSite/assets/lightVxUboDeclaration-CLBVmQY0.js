@@ -1,0 +1,1 @@
+export{qi as lightVxUboDeclaration}from"./babylon-game-BavIJ2PR.js";

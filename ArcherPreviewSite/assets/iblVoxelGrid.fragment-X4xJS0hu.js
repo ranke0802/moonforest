@@ -1,0 +1,1 @@
+export{y as iblVoxelGridPixelShaderWGSL}from"./babylon-game-BavIJ2PR.js";

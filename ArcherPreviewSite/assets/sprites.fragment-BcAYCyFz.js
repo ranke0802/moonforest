@@ -1,0 +1,1 @@
+export{h as spritesPixelShader}from"./babylon-game-BavIJ2PR.js";

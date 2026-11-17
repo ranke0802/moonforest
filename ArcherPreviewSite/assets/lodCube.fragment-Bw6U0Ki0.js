@@ -1,0 +1,1 @@
+export{ur as lodCubePixelShaderWGSL}from"./babylon-game-BavIJ2PR.js";

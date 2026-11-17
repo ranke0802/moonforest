@@ -1,0 +1,1 @@
+export{Wi as shadowsVertex}from"./babylon-game-BavIJ2PR.js";

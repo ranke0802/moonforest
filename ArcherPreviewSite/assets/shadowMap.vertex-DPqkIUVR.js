@@ -1,0 +1,1 @@
+export{wa as shadowMapVertexShader}from"./babylon-game-BavIJ2PR.js";

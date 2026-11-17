@@ -1,0 +1,1 @@
+export{w as iblDominantDirectionPixelShaderWGSL}from"./babylon-game-49hCKjAt.js";

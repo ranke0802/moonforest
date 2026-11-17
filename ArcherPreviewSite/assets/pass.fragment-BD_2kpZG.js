@@ -1,0 +1,1 @@
+export{xn as passPixelShader}from"./babylon-game-49hCKjAt.js";

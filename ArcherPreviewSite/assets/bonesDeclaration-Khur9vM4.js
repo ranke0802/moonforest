@@ -1,0 +1,1 @@
+export{jd as bonesDeclarationWGSL}from"./babylon-game-49hCKjAt.js";
