@@ -188,6 +188,7 @@ const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.sear
 let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
+const lungeState={id:null,done:0};
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const meleeTargetPoint=new Vector3();
 const staminaFeedback=new StaminaFailureFeedback();
@@ -917,6 +918,22 @@ function render(dt) {
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
       }else if(target&&Vector3.Distance(actor.position,target.actor.position)<(target.meleeAimDistance??4)){const point=meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
       meleeAim?.begin(result,actor,target);
+    }
+    // 0.3 light combo: the warrior steps into each swing (profile from the edition),
+    // eased over the opening of the clip, stopping short of the nearest foe.
+    const lunge=world.v03?.lunge?.[result.state];
+    if(isV2()&&lunge&&attacking&&result.actionId!=null&&!result.hitStopped){
+      if(lungeState.id!==result.actionId){lungeState.id=result.actionId;lungeState.done=0;}
+      const duration=controller.durations?.[result.state]||1,f=Math.min(1,(result.clipTime??0)/(duration*lunge.until)),want=lunge.distance*(1-(1-f)**2)*playerDimensions(actor).ratio;
+      let step=want-lungeState.done;lungeState.done=want;
+      const target=boss.nearestTarget(actor.position);
+      if(target?.actor)step=Math.min(step,Math.max(0,Vector3.Distance(actor.position,target.actor.position)-(lunge.stop??1.3)));
+      if(step>1e-4){
+        const yaw=actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[result.state]??0),before=actor.position.clone();
+        actor.position.x+=Math.sin(yaw)*step;actor.position.z+=Math.cos(yaw)*step;
+        constrainDodge(actor.position,before,world.navigation,boss.encounters,movementLimit(before),playerDimensions(actor));
+        if(world.mapId==='village')clampVillageExit(actor.position,before);
+      }
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
     training.setSelected(selectedTarget);

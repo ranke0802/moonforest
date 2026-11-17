@@ -245,6 +245,7 @@ export function setupV03(api){
   // Cutscene camera target and short slow motion (read by main.js each frame).
   get cameraFocus(){return state.screen==='play'?story.cameraFocus:null;},
   get timeScale(){return state.screen==='play'?story.timeScale:1;},
+  get lunge(){return state.screen==='play'?story.lunge:null;},
   update(dt){
    if(state.disposed)return;
    if(state.screen!=='play')cursors.set('ui');

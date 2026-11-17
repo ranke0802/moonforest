@@ -343,13 +343,17 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // a shield raised within JUST_WINDOW before contact is a just guard: longer
  // enemy stagger, stamina back, a short slow-motion beat.
  const COMBAT_COMBO=Object.freeze(['slash','attack','judgment']),COMBO_COST=Object.freeze({judgment:15});
+ // Normal combo hits flinch smaller foes and push them back ~0.4 m; the
+ // warrior steps forward into each swing (main.js reads lunge per state).
+ const LIGHT_HIT=Object.freeze({push:2.5,skip:Object.freeze(['bear','elena','mourning-elena'])});
+ const LUNGE=Object.freeze({slash:{distance:.55,until:.35},attack:{distance:.7,until:.35},judgment:{distance:.9,until:.3}});
  const JUST_WINDOW=.25,JUST_STAGGER=1.6,JUST_REFUND=20,JUST_SLOW=.4;
  const combatState={controller:null,combat:null,justCount:0};
  function configureCombat(){
   const controller=api.getController?.();
   if(controller&&controller!==combatState.controller&&'combo' in controller){controller.combo=COMBAT_COMBO;controller.comboCost=COMBO_COST;combatState.controller=controller;}
   const combat=api.battle?.combat;
-  if(combat&&combat!==combatState.combat){combat.justGuard={window:JUST_WINDOW,stagger:JUST_STAGGER};combat.onJustGuard=justGuard;combatState.combat=combat;}
+  if(combat&&combat!==combatState.combat){combat.justGuard={window:JUST_WINDOW,stagger:JUST_STAGGER};combat.lightHit=LIGHT_HIT;combat.onJustGuard=justGuard;combatState.combat=combat;}
  }
  function justGuard(){
   combatState.justCount++;slow.left=Math.max(slow.left,JUST_SLOW);
@@ -442,6 +446,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get sceneActive(){return scene.active;},
   get cameraFocus(){return scene.active?scene.cameraFocus:null;},
   get timeScale(){return slow.left>0?SLOW_SCALE:1;},
+  get lunge(){return scene.active?null:LUNGE;},
   get started(){return started;},
   log,
   start({fresh=false}={}){

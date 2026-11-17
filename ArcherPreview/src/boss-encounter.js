@@ -420,7 +420,11 @@ export class BossEncounter {
         // A released shield push should trigger the same fall response as a
         // heavy strike without changing its damage, hit feedback or input.
         const shieldPush=hit.id==='shield-push';
-        if(!this.brain.hit(shieldPush?{...hit,heavy:true,ignoreDefense:true}:hit))continue;
+        // Optional light-combo reaction (an edition sets combat.lightHit): normal
+        // hits make smaller foes flinch and slide back a little.
+        const light=this.combat.lightHit,flinch=!!light&&!hit.heavy&&!shieldPush&&!light.skip?.includes(this.kind);
+        if(!this.brain.hit(shieldPush?{...hit,heavy:true,ignoreDefense:true}:flinch?{...hit,interruptsBoss:true}:hit))continue;
+        if(flinch&&this.brain.hp>0&&this.brain.mode!=='down'){const away=this.actor.position.subtract(player.position);away.y=0;if(away.lengthSquared()>1e-8)this.knockVelocity.copyFrom(away.normalize().scale(light.push));}
         if(this.brain.hp>0)this.animator?.reactToHit?.();
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;
         applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
