@@ -287,3 +287,13 @@ html[data-edition] #help-dialog .v03-guide-row dt{margin:0;font-size:13px;line-h
  .v03-hud:has(.v03-hint:not([hidden])) .v03-tip{top:calc(max(58px,env(safe-area-inset-top)) + 46px)}
 }
 html[lang=ko] .v03-tip,html[lang=ko] .v03-dialogue-text,html[lang=ko] .v03-quest,html[lang=ko] .v03-hint,html[lang=ko] .v03-guide-row,html[lang=ko] .v03-caption-text{word-break:keep-all}
+
+/* ----- Touch screens: the quest panel (left), the tip card (top), the quest
+   banner (above the hero) and the talk prompt (below the hero) each keep
+   their own place. Measured at 760x350 with all four on screen. ----- */
+@media (pointer:coarse){
+ .v03-tip{margin-left:calc(min(280px,60vw)/-2 + 30px)}
+ .v03-banner{top:calc(max(10px,env(safe-area-inset-top)) + 122px)}
+ .v03-hud:has(.v03-hint:not([hidden])) .v03-banner{top:max(10px,env(safe-area-inset-top))}
+ .v03-prompt{bottom:clamp(58px,18vh,120px)}
+}
