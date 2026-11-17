@@ -272,3 +272,27 @@ html[data-v03-vital] #app #gold-balance:before{content:'';display:inline-block;w
  .v03-menu-item{min-height:40px;padding-top:4px!important;padding-bottom:4px!important}
  .v03-title-foot{left:auto;right:max(18px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}
 }
+
+/* ----- While a conversation is open the play HUD steps back: only the
+   speaker, the line and the top-right menu remain. ----- */
+html[data-v03-talk] #app .action-controls,html[data-v03-talk] #app #joystick-hint,html[data-v03-talk] #app #joystick,html[data-v03-talk] .v03-quest,html[data-v03-talk] .v03-tip,html[data-v03-talk] .v03-hint,html[data-v03-talk] .v03-prompt,html[data-v03-talk] #app #dot-minimap,html[data-v03-talk] #app #live-fps,html[data-v03-talk] #app #gold-balance,html[data-v03-talk] #app #player-hud{opacity:0!important;pointer-events:none!important;transition:opacity .25s ease}
+
+/* ----- Fall screen: the game's own typeface and palette. ----- */
+html[data-edition] #death-title{font-family:MoonforestUI,'Malgun Gothic',sans-serif;font-size:clamp(30px,8.5vmin,64px);font-weight:700;letter-spacing:.34em;text-indent:.34em;color:#b9413c;text-shadow:0 2px 0 #1a0606,0 0 28px #7a1c1c80}
+html[data-edition] #death-hint{font-family:MoonforestUI,'Malgun Gothic',sans-serif;font-size:clamp(12px,1.9vmin,15px);letter-spacing:.2em;color:#cdbf9a}
+
+/* ----- Controls guide (settings → controls): one row per action, showing
+   the touch wording on touch screens and the keys elsewhere. ----- */
+html[data-edition] #help-dialog>:not(#close-help):not(.v03-guide){display:none!important}
+html[data-edition] #help-dialog{scale:none;width:min(680px,calc(100vw - 28px));max-height:calc(100dvh - 16px);margin:auto;padding:14px 18px 16px;border:1px solid #ae925980;border-radius:6px;background:linear-gradient(180deg,#18241cf7,#101812f7);color:#e8dec0;box-shadow:0 18px 60px #000c;scrollbar-width:thin;scrollbar-color:#ae925980 transparent}
+html[data-edition] #help-dialog::backdrop{background:#0009}
+html[data-edition] #help-dialog #close-help{top:8px;right:10px;width:44px;height:44px;color:#e8dec0;background:none;border:0;font-size:24px}
+.v03-guide-title{display:inline-block;margin:0 14px 10px 0;font-size:clamp(17px,2.8vmin,22px);letter-spacing:.14em;color:#f4ead0}
+.v03-guide-mode{display:inline-block;margin:0;font-size:12px;letter-spacing:.2em;color:var(--v03-gold,#cfb77b);opacity:.85}
+.v03-guide-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 14px;margin:0}
+.v03-guide-row{display:grid;grid-template-columns:minmax(64px,30%) 1fr;gap:10px;align-items:baseline;padding:6px 10px;background:#ffffff0a;border:1px solid #ae925930;border-radius:4px}
+html[data-edition] #help-dialog .v03-guide-row dt{margin:0;font-size:13px;line-height:1.45;font-weight:700;color:#f4ead0;overflow-wrap:anywhere}
+.v03-guide-row dd{margin:0;font-size:12.5px;line-height:1.45;opacity:.86;overflow-wrap:anywhere}
+.v03-guide .is-touch{display:none}
+@media (pointer:coarse){.v03-guide dd.is-touch{display:block}.v03-guide p.is-touch{display:inline-block}.v03-guide .is-keys{display:none}}
+@media (max-width:560px){.v03-guide-list{grid-template-columns:minmax(0,1fr)}}

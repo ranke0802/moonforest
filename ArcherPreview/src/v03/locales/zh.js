@@ -10,7 +10,7 @@ export default {
   'confirm.overwriteTitle':'覆盖记录','confirm.overwrite':'将清除记录{slot}并重新开始。此操作无法撤销。','confirm.overwriteAccept':'重新开始',
   'confirm.quitTitle':'退出','confirm.quit':'要退出游戏吗？','confirm.quitAccept':'退出',
   'gallery.title':'画廊','gallery.note':'旅途中见过的场景与遇到的存在都会记录在这里。','gallery.scenes':'场景','gallery.bestiary':'图鉴','gallery.titles':'称号',
-  'slot.none':'没有记录','settings.display':'画面','settings.performance':'性能诊断','settings.controls':'操作说明','settings.version':'版本 · 更新','settings.toTitle':'返回标题','settings.toTitleConfirm':'再按一次即可保存并返回','settings.title':'设置','settings.language':'语言','settings.game':'游戏设置','settings.languageNote':'更改语言后将重新载入画面。',
+  'slot.none':'没有记录','settings.display':'画面','settings.performance':'性能诊断','settings.controls':'操作说明','settings.version':'版本 · 更新','settings.toTitle':'返回标题','settings.toTitleConfirm':'再按一次即可保存并返回','death.title':'倒下了','death.hint':'点击画面重新站起','guide.touch':'触屏','guide.keys':'键盘 · 鼠标','guide.combo':'连击','guide.comboText':'连续按攻击，第三下会打出重击。','guide.dodge':'闪避','guide.guard':'盾牌','guide.justGuard':'精准格挡','guide.justGuardText':'在攻击命中前一瞬举盾，敌人会大幅失衡。','settings.title':'设置','settings.language':'语言','settings.game':'游戏设置','settings.languageNote':'更改语言后将重新载入画面。',
   'toast.failed':'无法继续，请重试。','toast.noStorage':'无法使用存储，因此无法打开记录。','toast.wipeFailed':'无法清除记录。','toast.preparing':'世界正在准备中，请稍候。',
   'meta.dream':'梦',
   'place.warrior-v3':'森林边境村','place.warrior-plains':'大平原','place.warrior-v4':'魔物之森','place.warrior-v5':'魔女洞窟',

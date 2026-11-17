@@ -12,6 +12,8 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null}){
  layer.append(portrait,box);mount.append(layer);
  let shownArt=null;
  let lines=null,index=0,finish=null;
+ // While someone speaks the play HUD steps back (CSS reads this flag).
+ const talking=on=>{const data=doc.documentElement?.dataset;if(!data)return;if(on)data.v03Talk='';else delete data.v03Talk;};
  function show(){
   const line=lines[index];who.textContent=line.who?speaker(line.who):'';who.hidden=!line.who;text.textContent=line.text;
   box.classList.toggle('is-self',line.who==='나');
@@ -22,7 +24,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null}){
  function step(){
   if(!lines)return;
   if(++index<lines.length){show();return;}
-  const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;shownArt=null;portrait.hidden=true;portrait.classList.remove('is-in');done?.(played);
+  const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;talking(false);shownArt=null;portrait.hidden=true;portrait.classList.remove('is-in');done?.(played);
  }
  next.addEventListener('click',step);
  layer.addEventListener('click',event=>{if(event.target===layer)step();});
@@ -39,10 +41,10 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null}){
   // Resolves with the played lines when the last one is dismissed.
   play(script){
    if(lines||!Array.isArray(script)||!script.length)return Promise.resolve(null);
-   lines=script;index=0;layer.hidden=false;show();next.focus?.({preventScroll:true});
+   lines=script;index=0;layer.hidden=false;talking(true);show();next.focus?.({preventScroll:true});
    return new Promise(resolve=>{finish=resolve;});
   },
-  cancel(){if(!lines)return;const done=finish;lines=null;finish=null;layer.hidden=true;done?.(null);},
+  cancel(){if(!lines)return;const done=finish;lines=null;finish=null;layer.hidden=true;talking(false);done?.(null);},
   dispose(){this.cancel();doc.removeEventListener('keydown',onKey,true);layer.remove();},
  };
 }
