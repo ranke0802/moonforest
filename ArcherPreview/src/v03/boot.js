@@ -60,7 +60,7 @@ export function setupV03(api){
  const title=createTitleScreen({doc,wait,describe,version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
-  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));labelDeathScreen();mountControlsGuide();state.langReady=true;
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));mountControlsGuide();state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
  function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
@@ -209,6 +209,25 @@ export function setupV03(api){
   const note=doc.createElement('small');note.textContent=t('settings.languageNote');
   row.append(name,select,note);dialog.querySelector('header')?.after(row);
   tidySettings(dialog);
+ }
+ // Controls guide for players, built from the lesson and tip text already
+ // written per language. It replaces the review-era help text (v03.css).
+ function mountControlsGuide(){
+  const dialog=doc.getElementById('help-dialog');if(!dialog||dialog.querySelector('.v03-guide'))return;
+  const hint=id=>content.COMBAT_HINTS?.find(row=>row.id===id),tip=id=>content.TIPS?.find(row=>row.id===id);
+  const both=key=>({touch:t(key),keys:t(key)});
+  const rows=[
+   [hint('move')?.text,hint('move')],[hint('camera')?.text,hint('camera')],[hint('attack')?.text,hint('attack')],
+   [t('guide.combo'),both('guide.comboText')],[tip('charge')?.title,tip('charge')],
+   [t('guide.dodge'),hint('dodge')],[tip('sprint')?.title,tip('sprint')],
+   [t('guide.guard'),hint('guard')],[t('guide.justGuard'),both('guide.justGuardText')],
+   [tip('potion')?.title,tip('potion')],[tip('talk')?.title,tip('talk')],
+  ].filter(([name,row])=>name&&row);
+  const make=(tag,className,text)=>{const node=doc.createElement(tag);node.className=className;if(text!==undefined)node.textContent=text;return node;};
+  const guide=make('section','v03-guide'),list=make('dl','v03-guide-list');
+  guide.append(make('h2','v03-guide-title',t('settings.controls')),make('p','v03-guide-mode is-touch',t('guide.touch')),make('p','v03-guide-mode is-keys',t('guide.keys')));
+  for(const [name,row] of rows){const item=make('div','v03-guide-row');item.append(make('dt','',name),make('dd','is-touch',row.touch),make('dd','is-keys',row.keys));list.append(item);}
+  guide.append(list);dialog.append(guide);
  }
  // Controls guide for players, built from the lesson and tip text already
  // written per language. It replaces the review-era help text (v03.css).

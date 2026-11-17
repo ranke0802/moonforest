@@ -263,10 +263,6 @@ html[data-v03-vital] #app #gold-balance:before{content:'';display:inline-block;w
    speaker, the line and the top-right menu remain. ----- */
 html[data-v03-talk] #app .action-controls,html[data-v03-talk] #app #joystick-hint,html[data-v03-talk] #app #joystick,html[data-v03-talk] .v03-quest,html[data-v03-talk] .v03-tip,html[data-v03-talk] .v03-hint,html[data-v03-talk] .v03-prompt,html[data-v03-talk] #app #dot-minimap,html[data-v03-talk] #app #live-fps,html[data-v03-talk] #app #gold-balance,html[data-v03-talk] #app #player-hud{opacity:0!important;pointer-events:none!important;transition:opacity .25s ease}
 
-/* ----- Fall screen: the game's own typeface and palette. ----- */
-html[data-edition] #death-title{font-family:MoonforestUI,'Malgun Gothic',sans-serif;font-size:clamp(30px,8.5vmin,64px);font-weight:700;letter-spacing:.34em;text-indent:.34em;color:#b9413c;text-shadow:0 2px 0 #1a0606,0 0 28px #7a1c1c80}
-html[data-edition] #death-hint{font-family:MoonforestUI,'Malgun Gothic',sans-serif;font-size:clamp(12px,1.9vmin,15px);letter-spacing:.2em;color:#cdbf9a}
-
 /* ----- Controls guide (settings → controls): one row per action, showing
    the touch wording on touch screens and the keys elsewhere. ----- */
 html[data-edition] #help-dialog>:not(#close-help):not(.v03-guide){display:none!important}
