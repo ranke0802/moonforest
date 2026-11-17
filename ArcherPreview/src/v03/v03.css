@@ -230,3 +230,7 @@ html[data-v03-vital] #app{--v03-quest-top:calc(clamp(20px,4vh,44px) + 52px)}
  .v03-slot-detail{font-size:12px}
  .v03-panel-back,.v03-panel-accept{min-height:40px}
 }
+
+/* The monster summon panel is a test tool: in the story edition it shows only
+   with ?dev (or ?qa) in the address. */
+html[data-edition]:not([data-dev]) #open-summon{display:none!important}

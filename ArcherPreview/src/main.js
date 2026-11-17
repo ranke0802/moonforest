@@ -158,6 +158,7 @@ if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
 if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;
 if(versionRoute.worldRevision)document.documentElement.dataset.world=versionRoute.worldRevision;
+{const query=new URLSearchParams(location.search);if(import.meta.env.DEV||query.has('dev')||query.has('qa'))document.documentElement.dataset.dev='';}
 let character = uiRoute.character;
 let uiTest=null;
 let commercialUi, hudLayout, developerTools;

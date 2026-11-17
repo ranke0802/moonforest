@@ -21,7 +21,9 @@ export const MEADOW=Object.freeze({cell:MEADOW_CELL,spacing:.8,nearTriangles:84,
 export function createScatterLayer(world,{name,sources,spec,amount=1,now=()=>performance.now()}){
  const scene=world.scene,options={...MEADOW,...spec.layer},templates=[];
  for(const [index,source] of sources.entries()){
-  const near=deriveDetailMesh(source,options.nearTriangles,name+'-near-'+index),far=deriveDetailMesh(source,options.farTriangles,name+'-far-'+index);
+  // nearTriangles: Infinity keeps the model itself for nearby cells.
+  const full=()=>{const mesh=source.clone(name+'-near-'+index,null,true);mesh.parent=null;for(const level of mesh.getLODLevels().slice())mesh.removeLODLevel(level.mesh);mesh.makeGeometryUnique();mesh.isPickable=false;return mesh;};
+  const near=options.nearTriangles===Infinity?full():deriveDetailMesh(source,options.nearTriangles,name+'-near-'+index),far=deriveDetailMesh(source,options.farTriangles,name+'-far-'+index);
   if(!near||!far){near?.dispose();far?.dispose();continue;}
   // Thin-instance matrices are world placements: fold the model's own node
   // transform (and the loader's handedness flip) into the copies once.

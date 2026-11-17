@@ -17,17 +17,26 @@ export function clusterDecimate({positions,indices,attributes={}},cells){
   cellOf[i]=key;const reach=(x-cx)**2+(y-cy)**2+(z-cz)**2,old=best.get(key);
   if(!old||reach>old.reach)best.set(key,{vertex:i,reach,slot:-1});
  }
- const outIndices=[],seen=new Set(),order=[];
+ // Output is unwelded: three vertices per triangle. Texture coordinates are
+ // taken from ONE source vertex for the whole triangle — baked atlases are
+ // made of small islands, and interpolating between islands samples the dark
+ // gaps between them (a decimated bush turned almost black).
+ const triangles=[],seen=new Set();
  for(let i=0;i<indices.length;i+=3){
   const a=best.get(cellOf[indices[i]]),b=best.get(cellOf[indices[i+1]]),c=best.get(cellOf[indices[i+2]]);
   if(a===b||b===c||a===c)continue;
-  for(const cell of [a,b,c])if(cell.slot<0){cell.slot=order.length;order.push(cell.vertex);}
-  const s=[a.slot,b.slot,c.slot].sort((p,q)=>p-q),key=s[0]+s[1]*65536+s[2]*4294967296;
-  if(seen.has(key))continue;seen.add(key);outIndices.push(a.slot,b.slot,c.slot);
+  const s=[a.vertex,b.vertex,c.vertex].sort((p,q)=>p-q),key=s[0]+'/'+s[1]+'/'+s[2];
+  if(seen.has(key))continue;seen.add(key);triangles.push(a.vertex,b.vertex,c.vertex);
  }
- const pick=(source,width)=>{const out=new Float32Array(order.length*width);for(let i=0;i<order.length;i++)for(let k=0;k<width;k++)out[i*width+k]=source[order[i]*width+k];return out;};
- const outAttributes={};for(const [name,{data,size:width}] of Object.entries(attributes))outAttributes[name]={data:pick(data,width),size:width};
- return {positions:pick(positions,3),indices:outIndices,attributes:outAttributes,triangles:outIndices.length/3};
+ const count3=triangles.length,outPositions=new Float32Array(count3*3),outIndices=new Array(count3);
+ for(let i=0;i<count3;i++){const v=triangles[i];outPositions[i*3]=positions[v*3];outPositions[i*3+1]=positions[v*3+1];outPositions[i*3+2]=positions[v*3+2];outIndices[i]=i;}
+ const outAttributes={};
+ for(const [name,{data,size:width}] of Object.entries(attributes)){
+  const out=new Float32Array(count3*width),flat=/^uv\d*$/.test(name);
+  for(let i=0;i<count3;i++){const v=triangles[flat?i-i%3:i];for(let k=0;k<width;k++)out[i*width+k]=data[v*width+k];}
+  outAttributes[name]={data:out,size:width};
+ }
+ return {positions:outPositions,indices:outIndices,attributes:outAttributes,triangles:count3/3};
 }
 
 // The finest grid (2…maxCells per axis) whose result stays within the budget.

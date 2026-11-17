@@ -60,5 +60,6 @@ export function plainsThicket(trees){
  };
  return Object.freeze({mapId:'great-plains',radius:PLAINS_RADIUS-3,sampler,
   shape:Object.freeze({width:.2,widthRange:.16,widthTall:.1,stretch:.85,stretchRange:.3,stretchTall:.2}),
-  layer:Object.freeze({spacing:1.7,seed:9,nearTriangles:360,farTriangles:44,nearRange:38,thinRange:120,farShare:1,thinShare:.7,sink:.05,clearance:.2})});
+  // Near cells draw the bush model itself: a decimated bush reads as a blob up close.
+  layer:Object.freeze({spacing:1.7,seed:9,nearTriangles:Infinity,farTriangles:120,nearRange:30,thinRange:120,farShare:1,thinShare:.7,sink:.05,clearance:.2})});
 }

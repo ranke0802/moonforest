@@ -17,6 +17,8 @@ test('decimation keeps the outline, valid indices and matching attributes',()=>{
  assert.equal(result.indices.length%3,0);assert.equal(result.attributes.uv.data.length/2,result.positions.length/3);
  for(const i of result.indices)assert.ok(i>=0&&i<result.positions.length/3);
  for(let i=0;i<result.indices.length;i+=3)assert.equal(new Set(result.indices.slice(i,i+3)).size,3,'no collapsed triangle');
+ // One texture coordinate per triangle (no interpolation across atlas islands).
+ const uv=result.attributes.uv.data;for(let i=0;i<result.indices.length;i+=3){const [p,q,r]=result.indices.slice(i,i+3);assert.equal(uv[p*2],uv[q*2]);assert.equal(uv[p*2+1],uv[r*2+1]);}
  const a=bounds(source.positions),b=bounds(result.positions);
  for(let k=0;k<6;k++)assert.ok(Math.abs(a[k]-b[k])<.36,'outline kept on axis '+k);
 });
