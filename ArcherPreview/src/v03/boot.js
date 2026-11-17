@@ -110,12 +110,18 @@ export function setupV03(api){
   screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume});
   maybeStartWorld();
  }
+ const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
  async function beginNewGame(){
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
   stopAttract();
   // The title can be on another map (a record was resumed there): travel and let the opening run after the load.
-  if(OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map){save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));reloadInto(save.slot,'new',null);return;}
+  // Travel in place first: a page reload leaves fullscreen and drops the
+  // landscape lock on phones. Reload only if the in-app trip fails.
+  if(OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map){
+   let moved=false;try{moved=await api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])===true;}catch(error){console.warn('[MoonForest 0.3] opening travel failed',error);}
+   if(!moved||gameState().mapId!==OPENING_STAGE.map){save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));reloadInto(save.slot,'new',null);return;}
+  }
   api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
   screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
   // Prepare the ambush behind the black stage; the simulation stays frozen

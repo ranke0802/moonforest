@@ -107,6 +107,7 @@ import {setupWolfMaulNotice} from './wolf-maul-notice.js';
 import {ShieldHoldSources,bindShieldHoldButton} from './shield-hold-input.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
+import { AdaptivePerformance } from './adaptive-performance.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
@@ -204,6 +205,11 @@ function assertFrameHealthy(){
 }
 const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
+// Touch devices: hold the frame cap by trading resolution, view distance and shadows.
+const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice});
+function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
+function applyAdaptiveShadows(){if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
+function applyAdaptivePerformance(){applyRenderQuality();if(world)applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveShadows();}
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
 let equipment, equipmentStorage;
@@ -218,7 +224,7 @@ if(import.meta.hot)import.meta.hot.dispose(()=>swordTrailSettings.dispose());
 const weatherSettings=setupWeatherSettings({host:$('.settings-display-options'),storage:equipmentStorage,getWorld:()=>world,onChange:()=>{renderActivity.wake();frameLoop?.invalidate();}});
 const frameRateControl=setupFrameRateControl({select:$('#frame-rate-select'),storage:equipmentStorage,activity:renderActivity,onChange:fps=>{if(engine)engine.maxFPS=fps;}});
 if(import.meta.hot)import.meta.hot.dispose(()=>frameRateControl.dispose());
-const plainsViewDistanceControl=setupPlainsViewDistanceControl({select:$('#plains-view-distance-select'),storage:equipmentStorage,onChange:value=>{if(world)applyPlainsViewDistance(world,value);renderActivity.wake();frameLoop?.invalidate();}});
+const plainsViewDistanceControl=setupPlainsViewDistanceControl({select:$('#plains-view-distance-select'),storage:equipmentStorage,onChange:value=>{if(world)applyPlainsViewDistance(world,effectivePlainsView(value));renderActivity.wake();frameLoop?.invalidate();}});
 if(import.meta.hot)import.meta.hot.dispose(()=>plainsViewDistanceControl.dispose());
 const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,release:versionRoute.release,onChange:value=>boss?.setAttackSettings(value)});
 const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onChange:value=>{if(world)setSceneCharacterStyles(world.scene,value);renderActivity.wake();frameLoop?.invalidate();}});
@@ -378,7 +384,7 @@ function updateStaminaNotice(){staminaNoticeAnchor.update(screenProjection,actor
 
 function applyRenderQuality() {
   if (!engine) return;
-  const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice,renderScaleControl.value);
+  const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice,renderScaleControl.value)*adaptivePerformance.settings.scale;
   const viewportKey=`${canvas.clientWidth}:${canvas.clientHeight}:${ratio}`;
   // Babylon divides CSS dimensions by this value. HiDPI requires its reciprocal.
   // setHardwareScalingLevel already resizes. Map arrival reapplies lighting,
@@ -391,7 +397,7 @@ function applyRenderQuality() {
   resizeScreenProjection();
   renderActivity.wake();
   engine.maxFPS=renderActivity.limit({quality:qualityMode});
-  world?.lighting.setQuality(qualityMode);
+  world?.lighting.setQuality(qualityMode);applyAdaptiveShadows();
   $('#quality-select').value = qualityMode;
   if(!document.hidden)frameLoop?.invalidate();
 }
@@ -1052,7 +1058,7 @@ try {
         setReady:value=>{ready=value;updateButtons();},resetInput:()=>{input?.reset();cancelAttackInput();},reconcile:()=>reconcilePlayback()},options);
     };
   }
-  applyPlainsViewDistance(world,plainsViewDistanceControl.value);
+  applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));
   setupCaveStoryInspection({world,getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,combat:(boss?.combatCount??0)>0,busy:controller?.captured||controller?.groggy}),onOpen:()=>{input?.reset();cancelAttackInput();}});
   world.caveCamera=new CaveCameraGuard(world);
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
@@ -1070,7 +1076,7 @@ try {
   world.villageOverview=isVillage()&&villageOverview;
   if(world.villageOverview){world.scene.fogStart=200;world.scene.fogEnd=260;world.camera.maxZ=500;}
   if(villageReviewEnabled)villageReview=createVillageReview(world,{forcedMobile:villageForceMobile});
-  world.lighting.setQuality(qualityMode);
+  world.lighting.setQuality(qualityMode);applyAdaptiveShadows();
   screenProjection=new ScreenProjection(world.scene);
   resizeScreenProjection();
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
@@ -1158,7 +1164,7 @@ try {
       const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url),loadingGeneration=mapLoadingGeneration;
       url.searchParams.delete('elenaReview');
       url.searchParams.delete('waypoint');
-      replaceWorldMap(world,destination);applyPlainsViewDistance(world,plainsViewDistanceControl.value);character=destination;history.replaceState(null,'',url);
+      replaceWorldMap(world,destination);applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveShadows();character=destination;history.replaceState(null,'',url);
       const handoff=context?.boundary?.to===destination?context.boundary:null;
       const spawn=handoff?.position??waypoint?.position??mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
       syncCaveFog(true);
@@ -1206,6 +1212,7 @@ try {
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
+    if(adaptivePerformance.sample(dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/(engine.maxFPS||60)}))applyAdaptivePerformance();
     try{render(dt);}catch(error){
       world.toolLease?.cancel('error',{restore:false});
       frameFailure={name:error.name??'Error',message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;

@@ -22,7 +22,7 @@ export default {
   'opening.3':'暗闇で捧げる祈り。\n答えはない。',
   'opening.4':'「あの子を探せ」',
   'scene.protect':'御者を守れ',
-  'rotate.title':'端末を横向きにしてください','rotate.tap':'タップすると横向きの全画面に切り替わります。','rotate.ios':'横向きでプレイできます。ホーム画面に追加すると、アドレスバーなしの全画面で遊べます。','ios.add':'ホーム画面に追加','ios.step1':'Safari下部の共有ボタン（□↑）をタップします。','ios.step2':'「ホーム画面に追加」を選びます。','ios.step3':'ホーム画面のMoonForestアイコンから起動し、横向きにしてプレイします。',
+  'rotate.install':'アプリとしてインストール（常に横画面）','rotate.title':'端末を横向きにしてください','rotate.tap':'タップすると横向きの全画面に切り替わります。','rotate.ios':'横向きでプレイできます。ホーム画面に追加すると、アドレスバーなしの全画面で遊べます。','ios.add':'ホーム画面に追加','ios.step1':'Safari下部の共有ボタン（□↑）をタップします。','ios.step2':'「ホーム画面に追加」を選びます。','ios.step3':'ホーム画面のMoonForestアイコンから起動し、横向きにしてプレイします。',
   'hud.main':'メイン','hud.chapterNext':'物語の続き','reward.got':'報酬 · {items}','reward.gold':'{n} G','reward.potions':'回復薬 {n}個','reward.armor.leather':'革の鎧（防御力+2）','combat.justGuard':'ジャストガード！','hud.complete':'完了 · {done}','hud.completeNext':'完了 · {done}  →  {next}','hud.rested':'休みました · 旅を記録しました',
   'prompt.actionQuest':'話す','prompt.actionIdle':'話しかける',
   'prompt.talkQuest':'{name}と話す','prompt.talkIdle':'{name}に話しかける',
