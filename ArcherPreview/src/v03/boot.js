@@ -10,7 +10,7 @@ import {createCursors} from './cursors.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
-import {LANGUAGES,readLanguage,writeLanguage,useLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
+import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
 // the key (placeKey) for display in any language.
@@ -50,7 +50,7 @@ export function setupV03(api){
  };
  const title=createTitleScreen({doc,wait,describe,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
- const langReady=Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})).then(()=>{
+ const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
   if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;

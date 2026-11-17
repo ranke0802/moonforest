@@ -86,7 +86,8 @@ export default {
   '짧게 누르고 떼면 회피 · 0.2초 이상 누르는 동안 질주 · Space':'Nhấn để né · giữ để chạy nhanh · Space','짧게 누르고 떼면 방패 밀치기 · 0.2초 이상 누르는 동안 방어 · 스태미나 초당 5 · F':'Nhấn để đẩy khiên · giữ để phòng thủ · 5 thể lực/giây · F',
   '짧게 누르면 일반 공격 · 0.45초 길게 누르면 심판의 검':'Nhấn để đánh · giữ 0,45 giây cho Kiếm Phán Xét','방패 밀치기, 길게 누르면 방어 태세':'Đẩy khiên, giữ để phòng thủ','회피, 길게 누르면 질주':'Né, giữ để chạy nhanh',
   '자동 저장 · 설정 중 전투 일시정지':'Tự động lưu · tạm dừng chiến đấu khi cài đặt','개별 배율 초기화':'Đặt lại tốc độ','범위 적용':'Áp dụng','기본값':'Mặc định','최소 배율 제한':'Giới hạn thu nhỏ','최대 배율 제한':'Giới hạn phóng to','공격 속도':'Tốc độ đánh','회피 속도':'Tốc độ né',
+  '화면 준비하는 중':'Đang chuẩn bị màn hình','용량 확인 중':'Đang kiểm tra dung lượng','실행 파일을 불러오지 못했습니다':'Không tải được tệp trò chơi','페이지를 새로 불러와 다시 시도해 주세요. 저장된 리소스는 유지됩니다.':'Hãy tải lại trang và thử lại. Dữ liệu đã tải vẫn được giữ.','페이지 새로 불러오기':'Tải lại trang','알 수 없는 오류':'Lỗi không xác định',
   '● 나':'● Bạn','◆ 포탈':'◆ Cổng','소환':'Triệu hồi',
  },
- legacyPatterns:[[/^회복 (\d)\/4$/,'Hồi $1/4'],[/^회복 물약, 남은 횟수 (\d+)회(, 회복 중)?$/,'Thuốc hồi phục, còn $1']],
+ legacyPatterns:[[/^화면 준비하는 중 \((\d+)\/(\d+)\)$/,'Đang chuẩn bị màn hình ($1/$2)'],[/^불러오는 중 \(([\d.]+)\/([\d.]+)MB\)$/,'Đang tải ($1/$2 MB)'],[/^불러오는 중 (.+)$/,'Đang tải $1'],[/^회복 (\d)\/4$/,'Hồi $1/4'],[/^회복 물약, 남은 횟수 (\d+)회(, 회복 중)?$/,'Thuốc hồi phục, còn $1']],
 };

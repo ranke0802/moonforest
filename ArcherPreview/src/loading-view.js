@@ -1,5 +1,7 @@
 import {downloadText} from './resource-downloads.js';
 import {loadingArtFor} from './loading-art.js';
+// Visible lines follow the 0.3 player's language (identity in Korean / 0.2).
+import {tr} from './v03/i18n.js';
 
 export function needsModuleReload(error){
   const seen=new Set();
@@ -46,22 +48,22 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
     setDiagnostics(provider){diagnostics=provider;},
     begin(character){
       failed=false;resetError();phase='download';progress=0;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');
-      get('retry-load').hidden=true;get('retry-load').textContent='다시 불러오기';get('loading-title').textContent='불러오는 중';get('loading-text').textContent='불러오는 중';get('loading-bytes').textContent='0.0 / 0.0 MB';get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
+      get('retry-load').hidden=true;get('retry-load').textContent=tr('다시 불러오기');get('loading-title').textContent=tr('불러오는 중');get('loading-text').textContent=tr('불러오는 중');get('loading-bytes').textContent=tr('0.0 / 0.0 MB');get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
       if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');}}
       return generation;
     },
     download(state={},expectedGeneration){
       if(!current(expectedGeneration)||phase!=='download')return;
       const validBytes=Number.isFinite(state.loaded)&&state.loaded>=0&&Number.isFinite(state.total)&&state.total>=0;
-      get('loading-bytes').textContent=state.unavailable||!validBytes?'용량 확인 중':downloadText(state);
-      get('loading-text').textContent=state.complete||(!state.unavailable&&state.total===0)?'화면 준비하는 중':validBytes&&!state.unavailable?`불러오는 중 (${(state.loaded/1e6).toFixed(1)}/${(state.total/1e6).toFixed(1)}MB)`:'불러오는 중';
+      get('loading-bytes').textContent=tr(state.unavailable||!validBytes?'용량 확인 중':downloadText(state));
+      get('loading-text').textContent=tr(state.complete||(!state.unavailable&&state.total===0)?'화면 준비하는 중':validBytes&&!state.unavailable?`불러오는 중 (${(state.loaded/1e6).toFixed(1)}/${(state.total/1e6).toFixed(1)}MB)`:'불러오는 중');
       const ratio=state.unavailable?0:state.complete||state.total===0?1:Number.isFinite(state.ratio)?state.ratio:validBytes&&state.total>0?state.loaded/state.total:0;
       progressTo(Math.max(0,Math.min(1,ratio))*70);
     },
     preparing(state,expectedGeneration){
-      if(!current(expectedGeneration))return;phase='preparing';progressTo(70);get('loading-bytes').textContent='';
-      if(Number.isFinite(state?.completed)&&Number.isFinite(state?.total)&&state.total>0&&state.completed>=0){const total=Math.floor(state.total),completed=Math.min(total,Math.floor(state.completed));if(total>0){get('loading-text').textContent=`화면 준비하는 중 (${completed}/${total})`;progressTo(70+29*completed/total);return;}}
-      get('loading-text').textContent='화면 준비하는 중';
+      if(!current(expectedGeneration))return;phase='preparing';progressTo(70);get('loading-bytes').textContent=tr('');
+      if(Number.isFinite(state?.completed)&&Number.isFinite(state?.total)&&state.total>0&&state.completed>=0){const total=Math.floor(state.total),completed=Math.min(total,Math.floor(state.completed));if(total>0){get('loading-text').textContent=tr(`화면 준비하는 중 (${completed}/${total})`);progressTo(70+29*completed/total);return;}}
+      get('loading-text').textContent=tr('화면 준비하는 중');
     },
     reveal(expectedGeneration){if(!current(expectedGeneration))return false;progressTo(100);overlay.hidden=true;if(art){art.hidden=true;art.removeAttribute('src');}delete doc.documentElement.dataset.loading;return true;},
     fail(title,message,{retry=true,retryLabel='다시 불러오기',error,phase}={}){
@@ -71,13 +73,13 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
       let context;try{context=diagnostics();report=JSON.stringify({...context,kind:'loading-failure',failure},null,2);}catch(captureError){report=JSON.stringify({kind:'loading-failure',failure,diagnosticCaptureError:loadingErrorRecord(captureError)},null,2);}
       failed=true;
       doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.add('error');
-      get('loading-title').textContent=title;get('loading-text').textContent=message;
-      get('retry-load').hidden=!retry;get('retry-load').textContent=retryLabel;get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
+      get('loading-title').textContent=tr(title);get('loading-text').textContent=tr(message);
+      get('retry-load').hidden=!retry;get('retry-load').textContent=tr(retryLabel);get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
       if(detail)detail.hidden=false;if(summary)summary.textContent=`${failure.name}: ${failure.message}`+(failure.code?`\n코드: ${failure.code}`:'')+(failure.stage||phase?`\n단계: ${failure.stage??phase}`:'')+(failure.loaderMessage?`\n상세: ${failure.loaderMessage}`:'');if(stack)stack.textContent=[failure.stack,failure.cause?.stack].filter(Boolean).join('\n\n원인:\n')||'추가 호출 기록이 없습니다.';if(copy)copy.hidden=false;
     },
     stream(state){
       get('stream-loading').hidden=state.complete||state.total===0||state.unavailable;
-      get('stream-bytes').textContent='불러오는 중 '+downloadText(state);get('stream-progress').style.width=Math.min(100,state.ratio*100)+'%';
+      get('stream-bytes').textContent=tr('불러오는 중 '+downloadText(state));get('stream-progress').style.width=Math.min(100,state.ratio*100)+'%';
     },
   };
 }

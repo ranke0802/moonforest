@@ -86,7 +86,8 @@ export default {
   '짧게 누르고 떼면 회피 · 0.2초 이상 누르는 동안 질주 · Space':'Tap to dodge · hold to sprint · Space','짧게 누르고 떼면 방패 밀치기 · 0.2초 이상 누르는 동안 방어 · 스태미나 초당 5 · F':'Tap to shield bash · hold to guard · 5 stamina/s · F',
   '짧게 누르면 일반 공격 · 0.45초 길게 누르면 심판의 검':'Tap to attack · hold 0.45s for the Sword of Judgment','방패 밀치기, 길게 누르면 방어 태세':'Shield bash; hold to guard','회피, 길게 누르면 질주':'Dodge; hold to sprint',
   '자동 저장 · 설정 중 전투 일시정지':'Auto-saved · combat pauses in settings','개별 배율 초기화':'Reset speeds','범위 적용':'Apply','기본값':'Defaults','최소 배율 제한':'Min zoom limit','최대 배율 제한':'Max zoom limit','공격 속도':'Attack speed','회피 속도':'Dodge speed',
+  '화면 준비하는 중':'Preparing the scene','용량 확인 중':'Checking size','실행 파일을 불러오지 못했습니다':'Could not load the game files','페이지를 새로 불러와 다시 시도해 주세요. 저장된 리소스는 유지됩니다.':'Reload the page and try again. Downloaded resources are kept.','페이지 새로 불러오기':'Reload page','알 수 없는 오류':'Unknown error',
   '● 나':'● You','◆ 포탈':'◆ Portal','소환':'Summon',
  },
- legacyPatterns:[[/^회복 (\d)\/4$/,'Healing $1/4'],[/^회복 물약, 남은 횟수 (\d+)회(, 회복 중)?$/,'Potion, $1 left']],
+ legacyPatterns:[[/^화면 준비하는 중 \((\d+)\/(\d+)\)$/,'Preparing the scene ($1/$2)'],[/^불러오는 중 \(([\d.]+)\/([\d.]+)MB\)$/,'Loading ($1/$2 MB)'],[/^불러오는 중 (.+)$/,'Loading $1'],[/^회복 (\d)\/4$/,'Healing $1/4'],[/^회복 물약, 남은 횟수 (\d+)회(, 회복 중)?$/,'Potion, $1 left']],
 };

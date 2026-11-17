@@ -129,7 +129,9 @@ import { createGoldLootView } from './gold-loot-view.js';
 import { attachCharacterOutlines } from './character-outlines.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
 // Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
-import {tr} from './v03/i18n.js';
+import {tr,startLanguage} from './v03/i18n.js';
+// 0.3 only (its splash defines __moonforestSplash): load the language before the loading card.
+if(globalThis.__moonforestSplash)void startLanguage();
 
 globalThis.__moonforestStartup?.entered();
 const gameSelection=setupGameSelection(document.getElementById('app'));

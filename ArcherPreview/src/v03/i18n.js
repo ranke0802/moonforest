@@ -32,6 +32,13 @@ export async function useLanguage(id,{doc=null}={}){
  if(doc){const html=doc.documentElement;html.lang=LANGUAGES.find(row=>row.id===next).html;html.dataset.lang=next;}
  return next;
 }
+// The 0.3 page's language, started once: after the first-launch picker in the
+// splash (if it is showing), so the loading card is already translated.
+let starting=null;
+export function startLanguage(view=globalThis){
+ starting??=Promise.resolve(view.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(view.localStorage)??'ko',{doc:view.document??null}));
+ return starting;
+}
 // Test hook: install a pack directly.
 export function setPack(id,value){current=id;pack=value??ko;}
 
