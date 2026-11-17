@@ -61,7 +61,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   return result;
  }
  // ----- guide light -----
- const GUIDE_MAX_GAP=6;
+ const GUIDE_MAX_GAP=8,GUIDE_PATH_RADIUS=.45;
+ const walkable=(x,z)=>{const nav=api.world.navigation;if(!nav?.free)return true;try{return nav.free({x,z},.22);}catch{return true;}};
+ // Straight hop from the player to a point, used only for the short orbit.
+ const clearLine=(from,x,z)=>{for(let i=1;i<=3;i++){const k=i/3;if(!walkable(from.x+(x-from.x)*k,from.z+(z-from.z)*k))return false;}return true;};
  const guide={visual:null,track:createGuideTrack(),key:null,originX:0,originZ:0,age:0,time:0,failed:false,shown:false,x:0,y:0,z:0,sway:0,lift:1.25},guidePoint={x:0,z:0};
  function guideTarget(player){
   const step=log.step();if(!step||api.battle.combatCount>0&&step.type!=='defeat')return null;
@@ -72,7 +75,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    let best=null,bestSq=Infinity;
    for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
    if(!best||bestSq<16)return null;
-   guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',direct:true,stopShort:2.6};
+   guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};
   }
   if(step.type==='talk'){
    let best=null,bestSq=Infinity,away=null;
@@ -127,15 +130,19 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const target=guideTarget(player),time=guide.time,blend=1-Math.exp(-dt*1.6);
   if(!target){
    guide.key=null;guide.sway+=(.3-guide.sway)*blend;guide.lift+=(1.9-guide.lift)*blend;
-   const angle=time*.55,wantX=player.x+Math.cos(angle)*1.6,wantZ=player.z+Math.sin(angle)*1.6;
+   // Circle the player, but never inside a wall, tree or prop: fall back to
+   // hovering just above the player's shoulder.
+   const angle=time*.55;let wantX=player.x+Math.cos(angle)*1.6,wantZ=player.z+Math.sin(angle)*1.6;
+   if(!walkable(wantX,wantZ)||!clearLine(player,wantX,wantZ)){wantX=player.x+.35;wantZ=player.z+.35;}
    const wantY=(api.world.terrain?.heightAt?.(wantX,wantZ)??0)+guide.lift+Math.sin(time*1.9)*.18;
    chase(dt,wantX,wantY,wantZ);guide.visual.show(guide.x,guide.y,guide.z,time,false);return;
   }
   guide.age+=dt;
   const moved=Math.hypot(player.x-guide.originX,player.z-guide.originZ);
-  if(target.key!==guide.key||guide.age>1.2&&(target.direct||moved>5)){
+  if(target.key!==guide.key||guide.age>1.2&&(target.chase||moved>5)){
    const points=[{x:player.x,z:player.z}];
-   if(!target.direct){try{for(const p of api.world.navigation?.path?.(player,guidePoint,.3)??[])points.push({x:p.x,z:p.z});}catch{/* fall back to a straight line */}}
+   // Walkable route at the player's own width, so the light only goes where the player can.
+   try{for(const p of api.world.navigation?.path?.(player,guidePoint,GUIDE_PATH_RADIUS)??[])points.push({x:p.x,z:p.z});}catch{/* fall back to a straight line */}
    // The path search stays inside the map's enemy area; exits on a road
    // beyond it (the village gate road) are reached by the last straight leg.
    const last=points[points.length-1];
@@ -150,9 +157,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const sx=(Math.sin(time*1.13)+Math.sin(time*.71+1.3)*.6)*guide.sway*.6,sz=(Math.cos(time*.97+.4)+Math.sin(time*.53+2.1)*.6)*guide.sway*.6;
   const sy=Math.sin(time*1.9)*.22+Math.sin(time*.83+.7)*.14;
   let wantX=p.x+sx,wantZ=p.z+sz;
-  // Stay on screen: a light parked at a far exit is pulled back toward the player.
-  const gx=wantX-player.x,gz=wantZ-player.z,gap=Math.hypot(gx,gz);
-  if(gap>GUIDE_MAX_GAP){wantX=player.x+gx/gap*GUIDE_MAX_GAP;wantZ=player.z+gz/gap*GUIDE_MAX_GAP;}
+  // The drift never pushes the light into scenery: near walls it stays on the route.
+  if(!walkable(wantX,wantZ)){wantX=p.x;wantZ=p.z;}
+  // Stay on screen: when the player has wandered off, the route is rebuilt from
+  // where they stand (the light comes back along it) instead of cutting across.
+  if(Math.hypot(p.x-player.x,p.z-player.z)>GUIDE_MAX_GAP&&guide.age>.5)guide.key=null;
   const wantY=(api.world.terrain?.heightAt?.(wantX,wantZ)??0)+guide.lift+sy;
   chase(dt,wantX,wantY,wantZ);guide.visual.show(guide.x,guide.y,guide.z,time,moving);
  }

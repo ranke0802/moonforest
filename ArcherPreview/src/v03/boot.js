@@ -220,6 +220,7 @@ export function setupV03(api){
    // Height/walkability samples for laying out story spots: [[x,z],...] → [{x,z,h,free}]
    probe(points){const w=api.world;return points.map(([x,z])=>({x,z,h:+(w.terrain?.heightAt?.(x,z)??0).toFixed(2),free:w.navigation?.free?.({x,z},.6)??null}));},
    travel:id=>api.travel(id),
+   foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
   dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},

@@ -1,7 +1,7 @@
 // Path-following logic for the guide light. Pure maths over {x,z} points; the
 // visual lives in guide-wisp.js. The light keeps a lead ahead of the player,
 // waits when they fall behind, and never teleports when the path is rebuilt.
-const LEAD=7,MAX_SPEED=12,REJOIN=6;
+const LEAD=5.5,MAX_SPEED=12,REJOIN=6;
 export function createGuideTrack(){
  let points=[],lengths=[0],total=0,s=0;const position={x:0,z:0},scratch={s:0,distance:Infinity};
  function project(p){

@@ -274,13 +274,13 @@ test('guide track keeps a lead, waits for the player and survives a path rebuild
  assert.equal(track.update(.1,{x:0,z:0}),false);
  track.setPath([{x:0,z:0},{x:0,z:40}]);const player={x:0,z:0};
  for(let i=0;i<120;i++)track.update(1/60,player);
- assert.ok(Math.abs(track.position.z-7)<.2,'waits about seven metres ahead: '+track.position.z);
- player.z=10;for(let i=0;i<120;i++)track.update(1/60,player);assert.ok(Math.abs(track.position.z-17)<.3);
+ assert.ok(Math.abs(track.position.z-5.5)<.2,'waits about five and a half metres ahead: '+track.position.z);
+ player.z=10;for(let i=0;i<120;i++)track.update(1/60,player);assert.ok(Math.abs(track.position.z-15.5)<.3);
  // Rebuilding the path from the player's new position does not pull the light back.
  const before=track.position.z;track.setPath([{x:0,z:10},{x:0,z:40}]);assert.ok(Math.abs(track.position.z-before)<.01);
  player.z=38;let arrived=false;for(let i=0;i<240;i++)arrived=track.update(1/60,player,{stopShort:1.5});
  assert.equal(arrived,true);assert.ok(Math.abs(track.position.z-38.5)<.01);
  // A corner is followed along the path, not cut across.
- track.clear();track.setPath([{x:0,z:0},{x:0,z:5},{x:5,z:5}]);for(let i=0;i<300;i++)track.update(1/60,{x:0,z:4});
+ track.clear();track.setPath([{x:0,z:0},{x:0,z:5},{x:5,z:5}]);for(let i=0;i<300;i++)track.update(1/60,{x:0,z:4.6});
  assert.ok(Math.abs(track.position.z-5)<.01&&track.position.x>4.9);
 });
