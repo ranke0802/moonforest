@@ -27,6 +27,7 @@ import {groupVillageRecords} from './village-scenery-cache.js';
 import {installDetailLods,detailLodEnabled,DETAIL_LOD_KINDS} from './v04/detail-lod.js';
 import {createMeadow,createScatterLayer} from './v04/meadow.js';
 import {plainsMeadow,plainsThicket} from './v04/meadow-plains.js';
+const SCATTER_VEGETATION=false;
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -202,7 +203,10 @@ export function loadStreamedVillage(world,{
         asset.detailLods=instances.length&&!outskirtsGround&&instances.every(record=>DETAIL_LOD_KINDS.has(record.placement.kind))
           ?asset.baseMeshes.flatMap(base=>installDetailLods(base,{prepare:mesh=>{prepareVillageInstancing([mesh]);prepareTreeOcclusion([mesh]);}})):[];
         // Scattered vegetation over the open map, drawn from the same models (v04/meadow.js).
-        const layerSpec=world.mapId==='great-plains'?id==='grass-tuft'?plainsMeadow:id==='bush'?plainsThicket(records.filter(record=>record.placement.kind==='tree'&&record.max&&record.min).map(record=>({x:record.placement.x,z:record.placement.z,r:Math.max(1.2,(record.max.x-record.min.x+record.max.z-record.min.z)/4-.35)}))):null:null;
+        // Switched off (2026-11-18): the evenly scattered tufts and dark shrubs read as
+        // litter on the ground, not as a meadow. The plains keep their authored
+        // placements until vegetation is redone by hand-composed patches.
+        const layerSpec=!SCATTER_VEGETATION?null:world.mapId==='great-plains'?id==='grass-tuft'?plainsMeadow:id==='bush'?plainsThicket(records.filter(record=>record.placement.kind==='tree'&&record.max&&record.min).map(record=>({x:record.placement.x,z:record.placement.z,r:Math.max(1.2,(record.max.x-record.min.x+record.max.z-record.min.z)/4-.35)}))):null:null;
         if(layerSpec&&!(world.meadow?.has(id))){
           try{world.meadow??=createMeadow();world.meadow.add(createScatterLayer(world,{name:id,sources:asset.baseMeshes,spec:layerSpec,amount:world.touchDevice?.75:1}));stats.meadow=world.meadow.layers.map(layer=>layer.stats);}
           catch(error){console.warn('[MoonForest 0.4] scattered vegetation unavailable',id,error);}
