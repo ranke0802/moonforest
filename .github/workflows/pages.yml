@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify source and release contracts without repacking assets
+        run: node --test ArcherPreview/tests/release-route.test.js ArcherPreview/tests/chapter-quest.test.js ArcherPreview/tests/progress-save-recovery.test.js ArcherPreview/tests/gold-loot.test.js ArcherPreview/tests/context-recovery.test.js ArcherPreview/tests/source-provenance.test.js ArcherPreview/tests/release-deployment.test.js ArcherPreview/tests/stage-pages.test.js
       - uses: actions/configure-pages@v5
       - name: Verify and stage the published resource graph
         run: node ArcherPreview/scripts/stage-pages.mjs _site

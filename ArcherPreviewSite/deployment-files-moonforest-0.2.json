@@ -3,7 +3,2141 @@
   "release": "moonforest-0.2",
   "baseDeploymentSha256": "0726cc807e86a0c60378e1815a8445f2137fd22116686140a66f2efda42a9f1b",
   "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "bytes": 803174339,
+  "sourceProvenance": {
+    "version": 1,
+    "algorithm": "sha256-lf",
+    "fingerprint": "53b62d6e8cbc4d5e0297f3342238b9debda209d76706d1f0ea81897bfcb48a7e",
+    "files": [
+      {
+        "path": "ArcherPreview/moonforest-0.2.html",
+        "bytes": 33680,
+        "sha256": "cf11da9606f9a4b6a78c6f49e7a32df37382ee703329cb2c32a04fca4f63657c"
+      },
+      {
+        "path": "ArcherPreview/package-lock.json",
+        "bytes": 58309,
+        "sha256": "c76e0bbbd7cb299892d0e02d263f901df70c646af9f852b26cad295daf81f8f1"
+      },
+      {
+        "path": "ArcherPreview/package.json",
+        "bytes": 1569,
+        "sha256": "903934053835c1ba7f483b5b9d90f95375954ed53d60ddf4164bb3f1c8cc0450"
+      },
+      {
+        "path": "ArcherPreview/scripts/build-moonforest-0.2.mjs",
+        "bytes": 6109,
+        "sha256": "635960083db24226563bf8c240bc5a4a5f171a60f05b59bee744f8fd90a58444"
+      },
+      {
+        "path": "ArcherPreview/scripts/build-village-site.mjs",
+        "bytes": 13245,
+        "sha256": "174b6a26246d9034e2c25d4836a1e14f66e2d81c74a93dd05e2110ed9f90e233"
+      },
+      {
+        "path": "ArcherPreview/scripts/release-deployment.mjs",
+        "bytes": 5874,
+        "sha256": "8bcebed9c705966155af5673539c662511bf85b25e07621c3a41faa28d72fe76"
+      },
+      {
+        "path": "ArcherPreview/scripts/resource-bundles.mjs",
+        "bytes": 4461,
+        "sha256": "2301549635a45c94169c13535047b4d6cb7261b06d0dca6420e3c2a04c9495ab"
+      },
+      {
+        "path": "ArcherPreview/scripts/runtime-module-graph.mjs",
+        "bytes": 2626,
+        "sha256": "f06f8ddfe939136803a31852798e0bf90c320b592c98e4b6560b52161a4de283"
+      },
+      {
+        "path": "ArcherPreview/scripts/source-provenance.mjs",
+        "bytes": 3401,
+        "sha256": "236bdad30e3da8fa1eaa2515fffa176c5b2b0fcb4b4324c68390fd22b8506f80"
+      },
+      {
+        "path": "ArcherPreview/scripts/stage-pages.mjs",
+        "bytes": 1479,
+        "sha256": "8a04a959d5dad0f66bf3a3e82b52b0362a0f853bf67ae2e4b7fd25d8e10bcd8b"
+      },
+      {
+        "path": "ArcherPreview/scripts/sync-moonforest-0.2.mjs",
+        "bytes": 4062,
+        "sha256": "a4ce48e07316b9aff4d9aa3f877ea3d6b7703648a4b7c0904d948c22b73b3e1a"
+      },
+      {
+        "path": "ArcherPreview/src/action-audio.js",
+        "bytes": 6658,
+        "sha256": "4b4c56b696215e534cb40a2a8f0344f4cb365612d28acd525e6b68dde82fe524"
+      },
+      {
+        "path": "ArcherPreview/src/actor-definitions.js",
+        "bytes": 8429,
+        "sha256": "acb574c0b6adf9c1ff1ad450b5e672facd609d91c1895d0287f466b0a4a053af"
+      },
+      {
+        "path": "ArcherPreview/src/actor-editor.js",
+        "bytes": 30530,
+        "sha256": "8f25c8b4be5624b08fe950b7ccb23f341e0ca126d37fbcbdcb542de0c63a8fb6"
+      },
+      {
+        "path": "ArcherPreview/src/actor-encounter-adapter.js",
+        "bytes": 20511,
+        "sha256": "123be4c3739ffd11f310b1c71f7d93d370b3e7beb9de7ec2f95a46944d62a523"
+      },
+      {
+        "path": "ArcherPreview/src/actor-population.js",
+        "bytes": 16494,
+        "sha256": "eae81107db967cf3c31f58de91da260c81d4157fd6005e0218570c8045d849b4"
+      },
+      {
+        "path": "ArcherPreview/src/animation.js",
+        "bytes": 10444,
+        "sha256": "b82d9ac94e75f838a57481ea41164c4408388c18557d6efa52abc79744fb94d6"
+      },
+      {
+        "path": "ArcherPreview/src/app-display.js",
+        "bytes": 316,
+        "sha256": "2be78b0926bc6a94cd4a132379ea3b578e7fa38ae20dbb7ae4ed98610fc9ccda"
+      },
+      {
+        "path": "ArcherPreview/src/asset-catalog.js",
+        "bytes": 422283,
+        "sha256": "64b3cd178794e5d980612b28085395d8c132d061eb933b0c49a4172383129a95"
+      },
+      {
+        "path": "ArcherPreview/src/audio-beds.js",
+        "bytes": 7526,
+        "sha256": "436a5213bceabdef2ebb860e23c55eab0fae024cc84ae1f27b1575f3e503ba74"
+      },
+      {
+        "path": "ArcherPreview/src/authored-interactions.js",
+        "bytes": 6232,
+        "sha256": "e1f8196507da2584f963949d9c708953710fd7b7bbacb7ad444aeeca2ee2fb2a"
+      },
+      {
+        "path": "ArcherPreview/src/authored-map-index.json",
+        "bytes": 269,
+        "sha256": "6ef022f6e18217862765f3579e1b8617f1db229ef1066200025e487b19f5c9d6"
+      },
+      {
+        "path": "ArcherPreview/src/authored-map-loader.js",
+        "bytes": 4351,
+        "sha256": "2a15e300eb7d146d2478805381595e23cbc536d121d5f62c42cb97bf7cb7be11"
+      },
+      {
+        "path": "ArcherPreview/src/authored-monster-runtime.js",
+        "bytes": 9331,
+        "sha256": "2fa424d59414a4a809acce8e34731591652b16d79c2390a9ecc0011d7fe46a0a"
+      },
+      {
+        "path": "ArcherPreview/src/authored-placement-runtime.js",
+        "bytes": 43169,
+        "sha256": "5da8abbe2fd8469c93f9178d2852077d01aa338544d472a43e9278e3b852383c"
+      },
+      {
+        "path": "ArcherPreview/src/authoring-navigation.js",
+        "bytes": 5389,
+        "sha256": "e832e452ade95a7a6d34bcdbd9f37cfde62b844ddd7fde34fc7b66a9107904df"
+      },
+      {
+        "path": "ArcherPreview/src/bear-combat-contact.js",
+        "bytes": 10461,
+        "sha256": "ad7593588aa04744bf5dac97e7788e74dd5824fa623a07c7932201071aef443d"
+      },
+      {
+        "path": "ArcherPreview/src/bear-locomotion.js",
+        "bytes": 2286,
+        "sha256": "604b0028a9d484cf501c3f1e06b3248ad1d694a8e18e30b3581be61c4d1de7f0"
+      },
+      {
+        "path": "ArcherPreview/src/bear-size.js",
+        "bytes": 1312,
+        "sha256": "9baaa07d01fae10ff8afa27593071e06949834619f7ec3da2c5c4a50b3c1b1a7"
+      },
+      {
+        "path": "ArcherPreview/src/boss-battle.js",
+        "bytes": 35164,
+        "sha256": "baefd45b87673b25a2fd1bd1c713b7648ec03837764a56ce8bc31e3395866f84"
+      },
+      {
+        "path": "ArcherPreview/src/boss-diagnostics.js",
+        "bytes": 11272,
+        "sha256": "d695967e5725773db59ab4322eaf7fed1211aa2f024b8b08b587121880879c86"
+      },
+      {
+        "path": "ArcherPreview/src/boss-encounter.js",
+        "bytes": 39823,
+        "sha256": "b5dcb695d02db3353a18bc64032f5e8f13946b2b6e59f8658c5256592a7aea3e"
+      },
+      {
+        "path": "ArcherPreview/src/boss-gpu-preparation.js",
+        "bytes": 3447,
+        "sha256": "302b9dea774747dd59c2d2ff74ef317736be4d83d2a2c0975378fd790c6dad59"
+      },
+      {
+        "path": "ArcherPreview/src/boss-grab.js",
+        "bytes": 6191,
+        "sha256": "2b349da3974b7aa9f8bf60aad677b8157bd26f3c0407a6449ec8d2ebb60f24b6"
+      },
+      {
+        "path": "ArcherPreview/src/boss-health-bar.js",
+        "bytes": 4305,
+        "sha256": "5188068166bbf72374c47894925d1bbc5d12e32f6a92fc6b5977f2b3f594daa1"
+      },
+      {
+        "path": "ArcherPreview/src/boss-models.js",
+        "bytes": 4566,
+        "sha256": "87050c7b0d6c13129160c82dd1bdaf5a5b296cb323d01d3c18cb78d770c3cf5d"
+      },
+      {
+        "path": "ArcherPreview/src/boss-music.js",
+        "bytes": 820,
+        "sha256": "95d2e0c4c9880788ace922ee627692d1d531875112f5f025ada4827d4f811a4c"
+      },
+      {
+        "path": "ArcherPreview/src/boss-pattern-settings.js",
+        "bytes": 6895,
+        "sha256": "17dd8a8361cb8cd52d8619cf4872b4768c7609034b7e43c16388e8c4082f4027"
+      },
+      {
+        "path": "ArcherPreview/src/boss-preparation.js",
+        "bytes": 5389,
+        "sha256": "00e5b8de5591073ae2ef7bdfae8216073fa038bd88580c2ca32e1cdb19af8342"
+      },
+      {
+        "path": "ArcherPreview/src/boss-selection.js",
+        "bytes": 1169,
+        "sha256": "9d0de53a93579aa111388c1bf63b29a0ea57fd432414bd944d01258ecb889ed1"
+      },
+      {
+        "path": "ArcherPreview/src/boss-shader-warmup.js",
+        "bytes": 3086,
+        "sha256": "68fe46ad5a97ee63b364e2981c7d746b6f76b519acafc8c7799ae0b928903360"
+      },
+      {
+        "path": "ArcherPreview/src/boss-spec.js",
+        "bytes": 9056,
+        "sha256": "b590fda1a70e2d79288da7577cc75cf99893cf94d908b0584188b471232510dc"
+      },
+      {
+        "path": "ArcherPreview/src/camera-follow.js",
+        "bytes": 3392,
+        "sha256": "c75ef07ce55c30e9da27eb2069632dbd808024c3cf1ac64e9c221eef65bb40f1"
+      },
+      {
+        "path": "ArcherPreview/src/camera-pitch.js",
+        "bytes": 3266,
+        "sha256": "2cf2089d26c500d5a46e480f6a3c4f0f792019cba7364b714e06463fc53d3eac"
+      },
+      {
+        "path": "ArcherPreview/src/camera-zoom.js",
+        "bytes": 4010,
+        "sha256": "f7eabcab6d2139e30ee06b71c6600ef383dba548a50c0d4492e49da516b6b5d7"
+      },
+      {
+        "path": "ArcherPreview/src/cave-fog-binding.js",
+        "bytes": 1736,
+        "sha256": "9ed02102082cfd1e5fcf3ff14173d1f4d10a4e4fab1da5d1c2dc1be1947a1b85"
+      },
+      {
+        "path": "ArcherPreview/src/cave-fog-cover.js",
+        "bytes": 5246,
+        "sha256": "55e12975800619d2b9a9ceed4ff39e1df77e8a5f7c3ffe78255da172e2861b14"
+      },
+      {
+        "path": "ArcherPreview/src/cave-fog-of-war.js",
+        "bytes": 9819,
+        "sha256": "5fbb3d29f094c90d33f3a497c8cccd02c1865fc7888e75c621dd7d82353002c4"
+      },
+      {
+        "path": "ArcherPreview/src/cave-fog-runtime.js",
+        "bytes": 23599,
+        "sha256": "5df720cee74a155bd063d7dd6e86e454b5578f05326eccaad4a1fa83a7ea60e0"
+      },
+      {
+        "path": "ArcherPreview/src/cave-laboratory-collision-data.js",
+        "bytes": 140096,
+        "sha256": "f32fbe510716e7cab718ffc4689e3f2cf92207fd00f6d3104647e37d141a32e8"
+      },
+      {
+        "path": "ArcherPreview/src/cave-laboratory-collision.js",
+        "bytes": 2141,
+        "sha256": "2cb185e4da0bc1c95e2bcb3502d8e5f44b4f84ae59b3a0ddeae837db13dcb6d4"
+      },
+      {
+        "path": "ArcherPreview/src/cave-laboratory-geometry.js",
+        "bytes": 5814,
+        "sha256": "2336663386aaa7f694abf5d4ae3a5e06cf67b5c1f48575d0f66ec491cac79126"
+      },
+      {
+        "path": "ArcherPreview/src/cave-laboratory-terrain-data.js",
+        "bytes": 10983,
+        "sha256": "0311e48d538331a198fc504ac5f0fc387a5892ce67a3e85f3f3f639fa3f646c8"
+      },
+      {
+        "path": "ArcherPreview/src/cave-laboratory-terrain.js",
+        "bytes": 1801,
+        "sha256": "945bfee28e0cdc5468e34417192a70e22029e69b16cdceb9c233c932989bca92"
+      },
+      {
+        "path": "ArcherPreview/src/cave-laboratory-vault.js",
+        "bytes": 2098,
+        "sha256": "220bcb33cd379f7cccdae4907bf61f1a7aff225494794d1ceb3806539846b3f7"
+      },
+      {
+        "path": "ArcherPreview/src/cave-lantern-mounts.js",
+        "bytes": 12059,
+        "sha256": "b63ad4fd849ba911c57624e7b9719b948f382c9a7b177f4b558c9697de5e87e7"
+      },
+      {
+        "path": "ArcherPreview/src/cave-lantern-supports.js",
+        "bytes": 1748,
+        "sha256": "fe20dd4cb93f5b5cdc68bf15eddd6d0068fd58fea77528f691408d8b3b7c4539"
+      },
+      {
+        "path": "ArcherPreview/src/cave-natural-dressing-data.js",
+        "bytes": 15178,
+        "sha256": "804d676bd1c0487a25968fd0f92913e5aa1272e80ff9ef7782e4252e82fd9f48"
+      },
+      {
+        "path": "ArcherPreview/src/cave-natural-dressing.js",
+        "bytes": 7726,
+        "sha256": "0b7d29cf96bf4754d7dd5c44a4d650baafc0c1e4d06ca0f1ed4ef4b6d174118a"
+      },
+      {
+        "path": "ArcherPreview/src/cave-painted-light-runtime.js",
+        "bytes": 7346,
+        "sha256": "f4767e8681c7e2618fe7c85530680a4645304bdbbb7902ac41c895c18e40ee0c"
+      },
+      {
+        "path": "ArcherPreview/src/cave-painted-light.js",
+        "bytes": 10254,
+        "sha256": "619782969d27a6e984cce8b7fdece31270b9e9e9e7f38c603d931ed0fc0ab8c5"
+      },
+      {
+        "path": "ArcherPreview/src/cave-player-fill.js",
+        "bytes": 2065,
+        "sha256": "87cde0b24db7c3a675e94b25e250f034a1f1aab17e3c6467335f4d35a62326fb"
+      },
+      {
+        "path": "ArcherPreview/src/cave-rock-palette.js",
+        "bytes": 1867,
+        "sha256": "08551f5c2bd842817b775414d400b4a4a58009a627a5cd0951092d7e6965445d"
+      },
+      {
+        "path": "ArcherPreview/src/cave-rock-shell.js",
+        "bytes": 4417,
+        "sha256": "6c68819a500cbe09197c6eb6e176e1a964c9fd2e8bb5ba763097d9151d2c00ce"
+      },
+      {
+        "path": "ArcherPreview/src/cave-story-inspection.js",
+        "bytes": 5481,
+        "sha256": "95f9dff770ccd42962d7aef0b27d548e6ddf0535acde52364654e2e4b0053e01"
+      },
+      {
+        "path": "ArcherPreview/src/cave-story.css",
+        "bytes": 1481,
+        "sha256": "3fa332e9707cf2068be389d93d5a69927d36b81c8d309722b43d2d9dc3dbb59e"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-quest-data.js",
+        "bytes": 23661,
+        "sha256": "ebc6aa6c78b1b62e84dabd30e89be5a215f72f59395a9893fae9c82a4655938c"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-quest-points.js",
+        "bytes": 7351,
+        "sha256": "26b73c7a5e245a049e6dc37f274e274e211658b843716874d4d6b0fb421b711e"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-quest-props.js",
+        "bytes": 12247,
+        "sha256": "e61c2e0e1c71760acc9a2f029447c9366a5c470d890aeb5ebde9d327eb5f2171"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-quest-state.js",
+        "bytes": 10713,
+        "sha256": "3a693d1f2bdb0731b70c05cf032cc551f91e31a7f5f6be5f2fec450844a642ae"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-quest.css",
+        "bytes": 17943,
+        "sha256": "8dffbfa91df079c22b19ffb267f2730cffee959b7cc73fdbfe2f70c93f430d5b"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-quest.js",
+        "bytes": 30812,
+        "sha256": "33b2a9db7571f45d99e64f2225685f09ad397667010f13f0289f77af060ccfcf"
+      },
+      {
+        "path": "ArcherPreview/src/chapter-save-controls.js",
+        "bytes": 7078,
+        "sha256": "97cd160c7a5d48a5fccb98e5c9c1dcb4197e65faf9d6a64b35753b40d0ef51fb"
+      },
+      {
+        "path": "ArcherPreview/src/character-ink-shaders.js",
+        "bytes": 5247,
+        "sha256": "7ce083b5157ce89f8828a02c83cde0bd666b82ad53daf72ef69e43e7a9c4d10b"
+      },
+      {
+        "path": "ArcherPreview/src/character-ink-stencil.js",
+        "bytes": 901,
+        "sha256": "0dae2e0ee694bfada658ab65bc49aaf1c89bfe9681d938418b68a1ac09e3a916"
+      },
+      {
+        "path": "ArcherPreview/src/character-interior-ink.js",
+        "bytes": 12703,
+        "sha256": "55e20d0d1a2b25b44a5cee21901270bf55e4d75d8e3ef70ac78cc14180a11528"
+      },
+      {
+        "path": "ArcherPreview/src/character-outlines.js",
+        "bytes": 11134,
+        "sha256": "fd740ba0ba25d990f1e8d9f816a5508c2e85cab95c429bd61675ec944870e50c"
+      },
+      {
+        "path": "ArcherPreview/src/character-render-cost.js",
+        "bytes": 3821,
+        "sha256": "80a4617f16cd607c6d34058a8894aad5ee9ee48c30308a360ba8e925549c73fd"
+      },
+      {
+        "path": "ArcherPreview/src/character-style-settings.js",
+        "bytes": 6617,
+        "sha256": "24b23eeccf0d3521e968969c066451ac2ff009acafc988ad6a7fa6530be456ac"
+      },
+      {
+        "path": "ArcherPreview/src/character-style.js",
+        "bytes": 5996,
+        "sha256": "213e31ceb4d16ba522a1e012c224b5360d6e7e4d770a9ec20f97cd680eaeada4"
+      },
+      {
+        "path": "ArcherPreview/src/chest-loot-fx.js",
+        "bytes": 5918,
+        "sha256": "76dc89ba7cc585e91cb5551c45792beea94d1f1e69afd4f1adb0f645bc0cea3b"
+      },
+      {
+        "path": "ArcherPreview/src/chest-loot-motion.js",
+        "bytes": 2738,
+        "sha256": "8b2db1ec9f2e972da6cd5372e5eb6727faa751913e70a12c31a47e2e3128acd8"
+      },
+      {
+        "path": "ArcherPreview/src/chest-opening.js",
+        "bytes": 9201,
+        "sha256": "a95fdff0a58e9db01320d9356cdc79d61503c1a1d3a3fb871e04e0fd41a234d1"
+      },
+      {
+        "path": "ArcherPreview/src/chest-reward-data.js",
+        "bytes": 3611,
+        "sha256": "9378ec62a79c43ce3e6eceb8f2d2c88cec6f4434368142bc9fec2e3559cf7ef1"
+      },
+      {
+        "path": "ArcherPreview/src/chest-reward-editor.js",
+        "bytes": 5542,
+        "sha256": "303cd2d08e536ddbf957634b507e15e15b4b2360a69edaa423366bb691821c8e"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-assets.js",
+        "bytes": 3507,
+        "sha256": "5a2635be73a3d5f5ea7d4e8698b09ca5af5ffda19dbf849ab96326bd460ffef6"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-audio.js",
+        "bytes": 7288,
+        "sha256": "42700f9630dc90e852ef6044de13c120af770c992b07577887d4c66e60a3f866"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-authoring.js",
+        "bytes": 6263,
+        "sha256": "d326579b02da0f39d87fc6514b5aa6bf461c1bf5b8b407ceaaba674dabd4d390"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-camera-controls.js",
+        "bytes": 8981,
+        "sha256": "6edcbed6be01b8e64b19c0aa05867f666690bf0b93f91be2e26b56170fc55e0d"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-document.js",
+        "bytes": 28620,
+        "sha256": "1df439b504f93619c96cef3d92faae3ca290afeb4f485c85457e58bf8f64899f"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-editing.js",
+        "bytes": 8665,
+        "sha256": "3232ef0c5a72f9e49ef519a23bc28bf6bbd4d25d5aaf83e3a809d5b436b6f886"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-game.js",
+        "bytes": 34802,
+        "sha256": "723cdd318ae02cbf75e30d12847187af5cf206b5bcd6a0b12547628b6a9c53b3"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-ground.js",
+        "bytes": 3431,
+        "sha256": "fe3e8ca95fb545577ef82ec55baa6f701cd70d338139eddca55dda1ad3f57916"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-interaction.js",
+        "bytes": 9539,
+        "sha256": "07d9f37aeeac037fca4b44485826b0a27980c11bc17d7968193300acf2a11939"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-media.js",
+        "bytes": 9829,
+        "sha256": "d9f97552269aa98e7af05660c6497a4ebb1a6416e949c28c9acfb81c38777f61"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-path-view.js",
+        "bytes": 2767,
+        "sha256": "04347d1b5eea9c381cc51bf42286f082146065d88f389fb23d173df58ec13b63"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-player.js",
+        "bytes": 10857,
+        "sha256": "402658d2355458867f0f14a5b60b15a56dc6907a539114de85115f870787d985"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-protocol.js",
+        "bytes": 3279,
+        "sha256": "d83925f0275de78ddf509c83d9812c60be5c336025d46836c15b128d8a86281d"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-registry.js",
+        "bytes": 6315,
+        "sha256": "c30f8d88958e921939f8bb501077c5c2d3cbe352b1a89ce5a5e030511656f5a7"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-registry.json",
+        "bytes": 36,
+        "sha256": "7c1051f6e2bc3943b7c1dbe4da229694455681b8875a346c99279e555edb733f"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-scene-host.js",
+        "bytes": 35741,
+        "sha256": "89fb77642b439f9d57831899b3aa8c775e8754efa33a72e26540ec4110edaff4"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-scenery-distance.js",
+        "bytes": 5009,
+        "sha256": "ec48e9ade96670e5d7b35d7744892497fc7eb18c36c00f1c4e0a42f77608371b"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-studio-display.js",
+        "bytes": 14733,
+        "sha256": "26cff75a1eea71e006a2432d8c4fd1c9f065bd43f4115ded7e853e39da389987"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-studio.css",
+        "bytes": 30087,
+        "sha256": "05fadf71620b4942e285527a300e35a8b71a40d5985cb9bc4b86b461386e38f5"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-studio.js",
+        "bytes": 118035,
+        "sha256": "cea9350822940085c657275c0f89c2705d6669cc9a31d93eddd6ca08f9d5fe33"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-subtitles.js",
+        "bytes": 11402,
+        "sha256": "174034696f212c247d8eff1cea7ea741ce87739b854cf77bb385f73da5e90f6d"
+      },
+      {
+        "path": "ArcherPreview/src/cinematic-visual-adapter.js",
+        "bytes": 10052,
+        "sha256": "25478f4eecfd552f8e900e8bcdc99922de4e210366d4bf9b39f185e15f9c0e5a"
+      },
+      {
+        "path": "ArcherPreview/src/combat-damage.js",
+        "bytes": 774,
+        "sha256": "854152974f79865e5225fe50c88f8de716556eba759b328b7021050b2fd14d70"
+      },
+      {
+        "path": "ArcherPreview/src/combat-music-gate.js",
+        "bytes": 1240,
+        "sha256": "a56a2bfc062822cbc620c0d8bba1c35a4cbb6bbc98d0eb7c0a9cb3ba73ca0b46"
+      },
+      {
+        "path": "ArcherPreview/src/combat-readability.js",
+        "bytes": 1206,
+        "sha256": "1772e87a298220001cac7bcbd7093e6fb3a46b842f674b134f24dd67b86d7dc9"
+      },
+      {
+        "path": "ArcherPreview/src/commercial-ui.css",
+        "bytes": 7951,
+        "sha256": "ef67e196397438a1387b58ab4406905a1d8f83f1a07506db41d46e82ced34eaa"
+      },
+      {
+        "path": "ArcherPreview/src/commercial-ui.js",
+        "bytes": 4398,
+        "sha256": "fb6fd22438acc4cdc3224453e7a29012e9d1f51e8e2449ac3c4b3ea02dc34ca7"
+      },
+      {
+        "path": "ArcherPreview/src/content-runtime-budget.js",
+        "bytes": 9234,
+        "sha256": "7c0ddfe2325a3e60c148bd224f4365fa70d21916fdfafc1385f61492a2b1708b"
+      },
+      {
+        "path": "ArcherPreview/src/context-recovery.js",
+        "bytes": 3194,
+        "sha256": "fa772d5e36ab7a195b2029f85f6328eeb3bc03b582e573247abd1bec05a8b7fc"
+      },
+      {
+        "path": "ArcherPreview/src/controller.js",
+        "bytes": 6694,
+        "sha256": "0b01850d8276d01c2880c35c5c10409af4f8f565cbe9491e25580572f18e0a14"
+      },
+      {
+        "path": "ArcherPreview/src/damage-numbers.js",
+        "bytes": 1978,
+        "sha256": "1633d042f264f6b934d17232b82f1431e48aacb5b0e8119ce054d09214e830f6"
+      },
+      {
+        "path": "ArcherPreview/src/death-screen.js",
+        "bytes": 579,
+        "sha256": "e60cb337fe0483be57c87ef7b0235e666921a9019b2deea30abfea82e08b550d"
+      },
+      {
+        "path": "ArcherPreview/src/developer-actors.js",
+        "bytes": 11416,
+        "sha256": "49d8f36fbfef5f1b2028c7195961db3f88b5bb073d122f96b9c52a169671a5c6"
+      },
+      {
+        "path": "ArcherPreview/src/developer-editor.js",
+        "bytes": 67563,
+        "sha256": "10bd76e5e0ba905993cbbdf335668d8e2e3481e050ae3b9f73976301b585a802"
+      },
+      {
+        "path": "ArcherPreview/src/developer-tools.js",
+        "bytes": 5402,
+        "sha256": "16b102f792a1f98f59fbecfd648604eda75eb02c6cad06a2f31f04cbb4dc3d33"
+      },
+      {
+        "path": "ArcherPreview/src/diagnostic-burst-budget.js",
+        "bytes": 1030,
+        "sha256": "5f8314567e23cd80bbe22fb6fea1a16fd32d458d55dbab160dcc6908006e99c3"
+      },
+      {
+        "path": "ArcherPreview/src/dodge-collision.js",
+        "bytes": 3832,
+        "sha256": "506f7fa3c740fbba49a0d4082db5226d629eb4dbf0bd4b9816ce586c5071dd84"
+      },
+      {
+        "path": "ArcherPreview/src/dodge-sprint-input.js",
+        "bytes": 1905,
+        "sha256": "b558f3e8c184e0c10329da3ed899270e2ee69632dd6f568b00eadec86c5c7b84"
+      },
+      {
+        "path": "ArcherPreview/src/dodge.js",
+        "bytes": 833,
+        "sha256": "752038956a00d23f475d2b94b328404f1677a50c1c546f63c7858e411a7c0f64"
+      },
+      {
+        "path": "ArcherPreview/src/dormant-encounter-pool.js",
+        "bytes": 2314,
+        "sha256": "647aa228b9a4e07cf1dcf8b776ffd3a51cc1316d25903fa558160e005cb97a76"
+      },
+      {
+        "path": "ArcherPreview/src/dot-minimap.css",
+        "bytes": 4135,
+        "sha256": "ce7e9b00612bb270d4c33fdcab56612e2fe74c965df6151d85bb54014889c8a6"
+      },
+      {
+        "path": "ArcherPreview/src/dot-minimap.js",
+        "bytes": 6930,
+        "sha256": "c1db182e1860bbe6018c7b6e22cfa8d71a8edf29585f1db0d27655a8388509af"
+      },
+      {
+        "path": "ArcherPreview/src/editable-asset-index.js",
+        "bytes": 32948,
+        "sha256": "5e6b4d90a3ad59064f5b9e37a0fca830af264987367a2d8485ef7a0dda642ac4"
+      },
+      {
+        "path": "ArcherPreview/src/editor-cave-collision-data.js",
+        "bytes": 2348631,
+        "sha256": "ec4cfea28fd0574a03490ac80c02478e4b5720de245da2f4e1448e92f484a998"
+      },
+      {
+        "path": "ArcherPreview/src/editor-cave-collision.js",
+        "bytes": 5286,
+        "sha256": "1de3fd4bb7ec11810f804d8e501673aa3eb4ebc04dbc239b20b05a32eb775fc9"
+      },
+      {
+        "path": "ArcherPreview/src/editor-cave-grid.js",
+        "bytes": 5255,
+        "sha256": "ba40e844f05e750c3786bd2e5becbadd9ace73416780500a4da7ec2fe2f4ad40"
+      },
+      {
+        "path": "ArcherPreview/src/editor-workspace.js",
+        "bytes": 6055,
+        "sha256": "f81b60a31236436322e9f979f55a3b4722bd301096d00c4e58fb437577abc3f2"
+      },
+      {
+        "path": "ArcherPreview/src/effect-budget.js",
+        "bytes": 2273,
+        "sha256": "bbf3f98406d602c7a55ecb000b29c47fa6bb8d0eac96d6cd38e35a1f773ead00"
+      },
+      {
+        "path": "ArcherPreview/src/effect-review-settings.js",
+        "bytes": 1876,
+        "sha256": "88dc9a3abe77d460a67d1252eb966c298023d6de59de8f3734ac20eb86d13632"
+      },
+      {
+        "path": "ArcherPreview/src/effect-world.js",
+        "bytes": 7590,
+        "sha256": "0c6a45194c5720f08d9d5d0d3c94c3afac90141111d172b65e46a85210a977ff"
+      },
+      {
+        "path": "ArcherPreview/src/elena-charge.js",
+        "bytes": 1087,
+        "sha256": "01cf9658f3308c3f2369c62fbadf9c1aa01fbd3cad52a14c968ed562187d53a6"
+      },
+      {
+        "path": "ArcherPreview/src/elena-encounter.js",
+        "bytes": 15848,
+        "sha256": "044e61d7ff4c32d27c3ed23716b1a60043c070c5d3b7c82d6b33014f442b69e4"
+      },
+      {
+        "path": "ArcherPreview/src/elena-ground-magic.js",
+        "bytes": 14275,
+        "sha256": "5926677da1349927aec7b45eec4b9d5fafee5ce620af93030abb82a5c212bc1b"
+      },
+      {
+        "path": "ArcherPreview/src/elena-ground-surface.js",
+        "bytes": 9197,
+        "sha256": "36bebf0be96730f8b5d1beaa7b1652cc28ea4dd2ea0e1d3bd363bde77d49bea5"
+      },
+      {
+        "path": "ArcherPreview/src/elena-magic.js",
+        "bytes": 2508,
+        "sha256": "30009d7ed44ab31cc2e2761e481e89ea35f2b29ed0302bcacd86b2eddf0466e4"
+      },
+      {
+        "path": "ArcherPreview/src/elena-reposition.js",
+        "bytes": 4860,
+        "sha256": "11dec80e2fa922822802bdc16501539c82e446c26b86e98c0750e0b22e3eeba6"
+      },
+      {
+        "path": "ArcherPreview/src/elena-spec.js",
+        "bytes": 9965,
+        "sha256": "c8388df2e19a3fd63dc11fa93dea02b8296e0c3b9e829f7a84dbf14d773bf950"
+      },
+      {
+        "path": "ArcherPreview/src/elena-style.js",
+        "bytes": 3792,
+        "sha256": "7517b3a8113288dac251e814b522ca948108eb076235c4768481c5db031f7f5e"
+      },
+      {
+        "path": "ArcherPreview/src/enemy-collision.js",
+        "bytes": 681,
+        "sha256": "62ce9f5326eb1570342b57daa55d7d9bfe53ee88fffeb7485f3afb0324dbbfd5"
+      },
+      {
+        "path": "ArcherPreview/src/enemy-death.js",
+        "bytes": 2359,
+        "sha256": "d751f2d8c3ba352d04c45b6dc8abde7f62bd5bf7cc2edd0519a8020213966b69"
+      },
+      {
+        "path": "ArcherPreview/src/enemy-separation.js",
+        "bytes": 3922,
+        "sha256": "62c441ee7a76c9fe40b98ad84abd17c65490be76af5a6d83b5b7927807d72b05"
+      },
+      {
+        "path": "ArcherPreview/src/environment.js",
+        "bytes": 5511,
+        "sha256": "e30783378f80e36a58fab2e0b1d49efbbf877db29a939512b39b330d3fca0974"
+      },
+      {
+        "path": "ArcherPreview/src/equipment-stats.js",
+        "bytes": 1169,
+        "sha256": "0e17867058694a0b1c92a7aba8af436b8c9751b000a6256b0709a96deceeb4f4"
+      },
+      {
+        "path": "ArcherPreview/src/equipment.js",
+        "bytes": 5697,
+        "sha256": "26ba1b1725e4e747bb88ba244fcd9d8b19051ae6fed8b272311e2de4438e8840"
+      },
+      {
+        "path": "ArcherPreview/src/forest-layout.js",
+        "bytes": 2603,
+        "sha256": "5e622aedbf32ed1b40c4147599e2f652eeb091c5dad691e97b65700742908439"
+      },
+      {
+        "path": "ArcherPreview/src/frame-diagnostics.js",
+        "bytes": 28085,
+        "sha256": "5a7d1327a5f0274d4204915c49b27f99df43bb83f2806a34ff0fd94f2ab1f576"
+      },
+      {
+        "path": "ArcherPreview/src/frame-loop.js",
+        "bytes": 1450,
+        "sha256": "d700f046f89f37a6c5c0fd6d2b139bc0483b22c61c4045430e152fa186692810"
+      },
+      {
+        "path": "ArcherPreview/src/frame-rate-settings.js",
+        "bytes": 683,
+        "sha256": "251501ab27eee8afc90477fc0bd2657df35b8a844b3a8d47d4159f968af4ace2"
+      },
+      {
+        "path": "ArcherPreview/src/frame-work-coordinator.js",
+        "bytes": 3245,
+        "sha256": "32b136cb0a07f57e68ecc06b685ddea9da0574cd116ff7f1b5f18e27cffc4809"
+      },
+      {
+        "path": "ArcherPreview/src/fullscreen.js",
+        "bytes": 6437,
+        "sha256": "01634a4c849daaccaa8dbd478b0ac8f5539985360399d7874f8496fa8717ed76"
+      },
+      {
+        "path": "ArcherPreview/src/game-audio.js",
+        "bytes": 15688,
+        "sha256": "838a20063211c396589b10019c796f1b6e76db15237c2b23899e8bf465ba3491"
+      },
+      {
+        "path": "ArcherPreview/src/game-selection.css",
+        "bytes": 889,
+        "sha256": "dbb6de7ab186e787907fabcf1887b5b940c7ac50aeefced77fa88bde782543cd"
+      },
+      {
+        "path": "ArcherPreview/src/game-selection.js",
+        "bytes": 1749,
+        "sha256": "04673d4fefe72d5d6d8c72865e94ec78abe871f7d4d853b69de0ae4beb291102"
+      },
+      {
+        "path": "ArcherPreview/src/game-tool-lease.js",
+        "bytes": 8714,
+        "sha256": "c517e6bf30dc356dbbb4627af9744ca7500be9c81bc499ea762840b4e90ee870"
+      },
+      {
+        "path": "ArcherPreview/src/goblin-encounter.js",
+        "bytes": 1197,
+        "sha256": "81aaa4a8cbd41cf06e592f8dc65f14cdafdd15bed48aeb5639936a2418bd04c0"
+      },
+      {
+        "path": "ArcherPreview/src/goblin-spec.js",
+        "bytes": 5267,
+        "sha256": "27948167477214c40c6e56367bff7f79237fc5dc71cb5b8f0653882f4ceb8ecf"
+      },
+      {
+        "path": "ArcherPreview/src/gold-loot-view.js",
+        "bytes": 6170,
+        "sha256": "7d8a56377391aae0cc61289fe5f54b466ece5556faee40960370a4800f078eb5"
+      },
+      {
+        "path": "ArcherPreview/src/gold-loot.js",
+        "bytes": 4213,
+        "sha256": "c2873af35480c628bfe7d077d2c0a4962b5e901d4c1454260e03beeba611d38d"
+      },
+      {
+        "path": "ArcherPreview/src/great-plains-decor.js",
+        "bytes": 2474,
+        "sha256": "e4b7840bdb6895e154457cefd33671bb7718d4982b4e4a60ec4fa9de94d1db74"
+      },
+      {
+        "path": "ArcherPreview/src/great-plains-layout.js",
+        "bytes": 23107,
+        "sha256": "79bc8575f9a0927470c53fd7aaff0f27fad10dd9f86af72ffd2d682e1f2c07f1"
+      },
+      {
+        "path": "ArcherPreview/src/great-plains-terrain.js",
+        "bytes": 2069,
+        "sha256": "f742031d73dbf24b73fe977c06d975173ffc4e08e38b750b29867f1125659d7e"
+      },
+      {
+        "path": "ArcherPreview/src/healing-potion.js",
+        "bytes": 991,
+        "sha256": "660b400b11f46724c738a3c4e6afac06e5a612666454f81c6d2112213a00a365"
+      },
+      {
+        "path": "ArcherPreview/src/hit-feedback.js",
+        "bytes": 2369,
+        "sha256": "0d89797920d133aea5ae372e50cd1d70f61d1197a485e45b869eb93048d8d76c"
+      },
+      {
+        "path": "ArcherPreview/src/hud-layout-default.json",
+        "bytes": 423,
+        "sha256": "8040c9838116a4139e896741eaae91ab475801d2130ebc237579544cfbfb5a2b"
+      },
+      {
+        "path": "ArcherPreview/src/hud-layout.css",
+        "bytes": 5982,
+        "sha256": "51393ff107cb0308a1bb50c7116cc2ac2e4901b08c1a577a7b98ff46a090c953"
+      },
+      {
+        "path": "ArcherPreview/src/hud-layout.js",
+        "bytes": 28888,
+        "sha256": "a05af8e9ba2080e9d2b3a4b6fe056a34baa69cab1857b4b572be5591354ef084"
+      },
+      {
+        "path": "ArcherPreview/src/hud-raster-v1.css",
+        "bytes": 11305,
+        "sha256": "2f13c8707c50ceb91632b21105edae19f8757990ade9a303deba8cc70f8a1f25"
+      },
+      {
+        "path": "ArcherPreview/src/hud-raster-v1.js",
+        "bytes": 6863,
+        "sha256": "0309443a2dae57af611b784b26f97b91a967ec2a74e873f5e61b15cf307958f2"
+      },
+      {
+        "path": "ArcherPreview/src/hud-top-actions.js",
+        "bytes": 827,
+        "sha256": "6e6d31e1e62855af3baf26299d99f249317e4be465e69d0d441428d95dec2735"
+      },
+      {
+        "path": "ArcherPreview/src/hud-v1-art/source.json",
+        "bytes": 404,
+        "sha256": "4a05d35f4a82e0b19372c1619caf22598528323e1fa57f7397b00158995c1551"
+      },
+      {
+        "path": "ArcherPreview/src/input.js",
+        "bytes": 15065,
+        "sha256": "17ff8399c751104be2882b3c8e22fe1c344f5395cbe7df0a536676bdf3134edc"
+      },
+      {
+        "path": "ArcherPreview/src/interaction-data.js",
+        "bytes": 734,
+        "sha256": "43865ea6653745761711ea75c6853b0e5ac01c7a9998c7c81cef56f43de88d6b"
+      },
+      {
+        "path": "ArcherPreview/src/item-acquisition-notice.js",
+        "bytes": 3567,
+        "sha256": "c367706957024f7d3a92d01f48be50b5da75ffa0a6bbe8f920666211b1ab7471"
+      },
+      {
+        "path": "ArcherPreview/src/item-drop-data.js",
+        "bytes": 1735,
+        "sha256": "d6fd99fd673564395b18aa60736a8c4056e24f27ffc34d93ffeee354cce135a3"
+      },
+      {
+        "path": "ArcherPreview/src/item-drop-view.js",
+        "bytes": 6698,
+        "sha256": "ad442fd4ff566481238ad1657f7535a425e1973b8cf4eb38476848672584dee6"
+      },
+      {
+        "path": "ArcherPreview/src/ktx-worker-supervisor.js",
+        "bytes": 13526,
+        "sha256": "884da20940894aff0c38197548728ce96d08a16241cfdc3b4b15e1b5bbbff5d7"
+      },
+      {
+        "path": "ArcherPreview/src/live-actor-handles.js",
+        "bytes": 1715,
+        "sha256": "f7ed7db549a1af2e64baac145cdec048db16255ee116df69a617c2dde1450bc2"
+      },
+      {
+        "path": "ArcherPreview/src/load-diagnostics.js",
+        "bytes": 1955,
+        "sha256": "e700613e14ae857766386d8a80f428c3cef9c152adbdb279cc372aae64151ce6"
+      },
+      {
+        "path": "ArcherPreview/src/loading-art.js",
+        "bytes": 1000,
+        "sha256": "fbb7d939844168785c3f5a079d8b7fb4f607cf0344b5d20007e0aa46a9627f24"
+      },
+      {
+        "path": "ArcherPreview/src/loading-view.js",
+        "bytes": 8215,
+        "sha256": "3354c40b2b89210df815609f5c3147c648b9a86bac82d285092cc51121dc6bcc"
+      },
+      {
+        "path": "ArcherPreview/src/long-frame-recording.js",
+        "bytes": 4984,
+        "sha256": "d861ca7f823cab4201add8d042e35be3e12419833d849f91099ed54cf135709c"
+      },
+      {
+        "path": "ArcherPreview/src/loot-rarity.js",
+        "bytes": 1470,
+        "sha256": "e8f3e313890b32ccc6930557e1e70c3542cee277cb831a799c91a697d0314698"
+      },
+      {
+        "path": "ArcherPreview/src/main.js",
+        "bytes": 134663,
+        "sha256": "fbf99f7fb489a52855170702d5736e2a168281d74dd524b5d2af7761fb15ae07"
+      },
+      {
+        "path": "ArcherPreview/src/map-container.js",
+        "bytes": 6761,
+        "sha256": "54a227dacf6fd9302d059f870e96a52b6d55b68df3d8d7879895603df18bac7d"
+      },
+      {
+        "path": "ArcherPreview/src/map-decode-cache.js",
+        "bytes": 6960,
+        "sha256": "c555c60c025ff1f39c6f52cfd02bec758f5f727ba9eeeeedbc94419c8e7c75e3"
+      },
+      {
+        "path": "ArcherPreview/src/map-departure.js",
+        "bytes": 691,
+        "sha256": "f29df909fe813b7743a4edd91bfed74c5579fb0435711696d233fb0d67f6602a"
+      },
+      {
+        "path": "ArcherPreview/src/map-load-lifetime.js",
+        "bytes": 4248,
+        "sha256": "6f550a153e89d13eb2dd8ffc082a34568a87a10279c82db3f40cda6003caa17d"
+      },
+      {
+        "path": "ArcherPreview/src/map-manifests.js",
+        "bytes": 1144,
+        "sha256": "ff926a92670432e6ed96b39da1731be37e430641b87f19818592315db7be6d21"
+      },
+      {
+        "path": "ArcherPreview/src/map-navigation-cache.js",
+        "bytes": 4287,
+        "sha256": "d4157195e9ffd34cf87b5a159235b647a8765e96e94a52efb5c956f75ca93220"
+      },
+      {
+        "path": "ArcherPreview/src/map-polygon-estimate.js",
+        "bytes": 2277,
+        "sha256": "b752be7cbf5a36412370b1992923c1f8710fd6bce5bf726b4a303c7311f8f190"
+      },
+      {
+        "path": "ArcherPreview/src/map-resource-inspector.css",
+        "bytes": 1484,
+        "sha256": "ccb4cc34db3379301b59e2a6a53b70394a8e99a57be190ae38875fb9f76bc193"
+      },
+      {
+        "path": "ArcherPreview/src/map-resource-inspector.js",
+        "bytes": 14335,
+        "sha256": "4a916013d1517baec120b109b8f1c60c8084dac435a343de9ee271cbdacc044e"
+      },
+      {
+        "path": "ArcherPreview/src/map-resource-inventory.js",
+        "bytes": 13539,
+        "sha256": "610c9b539013888ba1ae666a7abd57c63998d7920d033c541692b975395045db"
+      },
+      {
+        "path": "ArcherPreview/src/map-resume.js",
+        "bytes": 3006,
+        "sha256": "415ee5788a59ba96ea89382cce43eaa273ae3c967ba9e6e98160e25001632aaf"
+      },
+      {
+        "path": "ArcherPreview/src/map-route.js",
+        "bytes": 3763,
+        "sha256": "0d70e6535d8c05e3d5337db5384eeaeb445a78e112edabf3b5f4198e6deff323"
+      },
+      {
+        "path": "ArcherPreview/src/map-shader-cache.js",
+        "bytes": 2413,
+        "sha256": "09888d5b7664d9c8e5949bca320970dbaeeccb1d08e90fcbb712abd5b5c8f95b"
+      },
+      {
+        "path": "ArcherPreview/src/map-terrain-cache.js",
+        "bytes": 1389,
+        "sha256": "9232ae7e1acc4ee1c430b29c53cac1dde906f953e1cf3b6856cf917e66d11100"
+      },
+      {
+        "path": "ArcherPreview/src/map-texture-lifetime.js",
+        "bytes": 3121,
+        "sha256": "c9df8e780ada2e57bd19588cbbf21d1a37af26c39b3a05249ac421c720ef497a"
+      },
+      {
+        "path": "ArcherPreview/src/map-transition.js",
+        "bytes": 3307,
+        "sha256": "40de749347bcff13c166001ab8ec508e1f54e52f21ea912bca51f064fa69b625"
+      },
+      {
+        "path": "ArcherPreview/src/map-travel.js",
+        "bytes": 7407,
+        "sha256": "e73ac4a2380e6a7762696e11ea2fecedc57799fe5dd1e2a84627c3d6accd91c0"
+      },
+      {
+        "path": "ArcherPreview/src/map-waypoints.js",
+        "bytes": 621,
+        "sha256": "d50711c1587ecae8d396e2becf914521c52a7c16c0b83f974e6f54da3c3dbff2"
+      },
+      {
+        "path": "ArcherPreview/src/melee-collision.js",
+        "bytes": 5529,
+        "sha256": "e26c68325624763a9187865c1287d1febc11714506e85665f514a968c4a8df97"
+      },
+      {
+        "path": "ArcherPreview/src/meshopt-worker-supervisor.js",
+        "bytes": 12095,
+        "sha256": "60136804bba7f7a44da40b41e39dd2adeae7e0db65fb2fde1f4e0c7d28399d6a"
+      },
+      {
+        "path": "ArcherPreview/src/minimap-travel.js",
+        "bytes": 6848,
+        "sha256": "37ecc06a2c3f47ddcaa44b07cdb76b6c4d3c33c047b2b9e92ce249ca13d1998b"
+      },
+      {
+        "path": "ArcherPreview/src/mobile-texture-policy.js",
+        "bytes": 1089,
+        "sha256": "93581b9581d203e98880726c009da66f792139afff0539e0317ebfca7faed998"
+      },
+      {
+        "path": "ArcherPreview/src/mobile-ui.css",
+        "bytes": 4421,
+        "sha256": "0a5b5768a3ba4a49c2fa721df75a500f4f147c0bf134f9e99161f95252d8e258"
+      },
+      {
+        "path": "ArcherPreview/src/mobile-viewport.css",
+        "bytes": 3711,
+        "sha256": "f87ffac62679ffbcfb4e1cb31287a91c9ca9514c4557f4197a2bb421a6a2192c"
+      },
+      {
+        "path": "ArcherPreview/src/monster-forest-layout.js",
+        "bytes": 4007,
+        "sha256": "2363b275e550d7d4301ad0360f73031fa4758237716273b6818c0b11a44a635a"
+      },
+      {
+        "path": "ArcherPreview/src/monster-forest-terrain.js",
+        "bytes": 880,
+        "sha256": "6289b3c621d7694660311fbe530305c42689bdbc1bc081be4097902e006238e9"
+      },
+      {
+        "path": "ArcherPreview/src/monster-group-scheduler.js",
+        "bytes": 4663,
+        "sha256": "a00b32633af25f1ce1301644869820b267851a661dc7e83ad5b6de3f0e34acf8"
+      },
+      {
+        "path": "ArcherPreview/src/monster-scenery-space.js",
+        "bytes": 5637,
+        "sha256": "3e67bf1c863165306c3426523ad9878ecdb6d91a61a64246bd5adbadc40e4ca3"
+      },
+      {
+        "path": "ArcherPreview/src/monster-selection.js",
+        "bytes": 984,
+        "sha256": "61fa92c0cb24f47d4e0f2f14ef1b7ba77035d532e53bd86cb9fdf1c3a7dca301"
+      },
+      {
+        "path": "ArcherPreview/src/monster-spawn-document.js",
+        "bytes": 11666,
+        "sha256": "db0423968c0815f085a70d664920a9e103eecf183117eeae0dc7c8109cdd95e2"
+      },
+      {
+        "path": "ArcherPreview/src/monster-spawn-editor.js",
+        "bytes": 9636,
+        "sha256": "a2313e06856139236591262152ed6c351cffbaaebe0919055f376ed0fc743e29"
+      },
+      {
+        "path": "ArcherPreview/src/monster-territory.js",
+        "bytes": 19170,
+        "sha256": "5f53c3c12547c79df1dd562e08a71518b760ebbe48c5816a3f8d886acc46ef7e"
+      },
+      {
+        "path": "ArcherPreview/src/monster-toon.js",
+        "bytes": 1966,
+        "sha256": "1825a938c70913c52c19e3b9ca2a5486ccde05bfe01aea0a9a97b87b7600d03a"
+      },
+      {
+        "path": "ArcherPreview/src/monster-watch-look.js",
+        "bytes": 3995,
+        "sha256": "8807a04cd692b9b4b1fa355c2c0e8a243b338710508eb601730b7f978193bc2b"
+      },
+      {
+        "path": "ArcherPreview/src/motion-speed-controls.js",
+        "bytes": 3931,
+        "sha256": "a4700b9bf7fb35e688d5a8cbce32dbef3aae8391334c898671efdd25609dba82"
+      },
+      {
+        "path": "ArcherPreview/src/mountain-backdrop.js",
+        "bytes": 5855,
+        "sha256": "e290aa59c76ac2c5f9442d23fb6fad38587c5f4beb781d03589a2a0552009faa"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-camera-culling.js",
+        "bytes": 13948,
+        "sha256": "b3e36883e6977349689a4a95fe05f10d0366b238d893373fab3986e08a031a71"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-cave-clearance-data.js",
+        "bytes": 6107,
+        "sha256": "3f888d5d95e2d9f1594bf579744c8c3c2157f6d920679ffd62a8a68874d9c001"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-cave-clearance.js",
+        "bytes": 1902,
+        "sha256": "d7a76c396a9970881148baf7922ffaaa4cce69be8140078ec165fa3da2fd5737"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-cave-navigation.js",
+        "bytes": 5363,
+        "sha256": "e171894faa490bd3295db9c986bf9398bae43dedbf3b12543ea6f02f49cbc88e"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-death-depth-data.js",
+        "bytes": 72239,
+        "sha256": "cc397a00ddecef0241b274b6151d84936a9f32c35b4682b202bcee36f82d2e93"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-death-depth.js",
+        "bytes": 2606,
+        "sha256": "ea0262fc4d39a39d5c992c182c17f286656c78b1ecbc1c03e1c56b292b8e9d3c"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-death-knee-data.js",
+        "bytes": 37219,
+        "sha256": "7ab251d2449e92df1d62e361d17e65cdb1a76605499857bfe7d232ae8483590d"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-death-knee.js",
+        "bytes": 1112,
+        "sha256": "ae1a40ecb75efc65724a05b84d0bddf9a7de135e56d67a669f7009e4aa74a011"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-elena-animation.js",
+        "bytes": 21213,
+        "sha256": "808b77ce69cf102498f1a5c0fd067f5174660d5fce2b1591541c8d38520b65a8"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-elena-encounter.js",
+        "bytes": 8847,
+        "sha256": "1e6c0660d6a4c515106ceac1e208ef5f9af5f97a4dbc23193e7c1e7b10498388"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-elena-hurt.js",
+        "bytes": 4546,
+        "sha256": "28853fe021c3539cff1ffceb2b67a2fbe6873c718e3c62ae83fb7b47164439a9"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-elena-look.js",
+        "bytes": 6855,
+        "sha256": "04cbd78bcdd153907c09d9685367fac7a591c386e28a2a0db5ea717833121280"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-hair-guides.js",
+        "bytes": 3007,
+        "sha256": "d3143b9e7bdafddf18386ecbb76936f18da0529de3bfb370f5c884cd304b48d9"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-locomotion.js",
+        "bytes": 5625,
+        "sha256": "b9df1f57eff40721004aa71b04448a0f00788ef922a14d97a452fc09d87c3179"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-motion-v2.js",
+        "bytes": 1501,
+        "sha256": "da4629525754d81783de718bc120b3d284f7dd4c4b5234e72f50618d5cb2b742"
+      },
+      {
+        "path": "ArcherPreview/src/mourning-slam.js",
+        "bytes": 2486,
+        "sha256": "95912b085739630941530804073c04bb5d273b90397258ac857e4b3a065305cf"
+      },
+      {
+        "path": "ArcherPreview/src/movement-speed-settings.js",
+        "bytes": 2243,
+        "sha256": "d7d4e65d869cf717346e0264aa33047eca6b04691c00ce88e34bc353128405c0"
+      },
+      {
+        "path": "ArcherPreview/src/native-review.js",
+        "bytes": 1416,
+        "sha256": "73e11028610d56c49e117db949b4f3bf7172c556f120bb430ca5b41fdbb7fcc5"
+      },
+      {
+        "path": "ArcherPreview/src/native-warrior.js",
+        "bytes": 1970,
+        "sha256": "6d91910e864faaea73570e41660d8400a1c7336e71f03d94fbd7780a1401444b"
+      },
+      {
+        "path": "ArcherPreview/src/navigation-segment-cells.js",
+        "bytes": 1426,
+        "sha256": "e2d01b26fec04369279692a14587ad72c54f780f1c2e934c2ccece0503c7cfe5"
+      },
+      {
+        "path": "ArcherPreview/src/navigation.js",
+        "bytes": 5967,
+        "sha256": "fa60c92087ff2cc7f5abb4fc0b817131eda8c6909720a5629ca63d515f915adf"
+      },
+      {
+        "path": "ArcherPreview/src/nearby-editor.js",
+        "bytes": 7868,
+        "sha256": "e058b7db123e9301ca345cc14a7f46be9aaf0aa861cdb9b299eec73828eb52fb"
+      },
+      {
+        "path": "ArcherPreview/src/npc-ink-shaders.js",
+        "bytes": 44,
+        "sha256": "a9fb79fe83d9c457d5d30990c668b13684e1fff75058fedd84aaa860bd422321"
+      },
+      {
+        "path": "ArcherPreview/src/npc-interior-ink.js",
+        "bytes": 127,
+        "sha256": "df13e500843350e3b85ac26824bf209693db5e696dc0dd02d34ec5a46241b2d9"
+      },
+      {
+        "path": "ArcherPreview/src/npc-library.js",
+        "bytes": 7780,
+        "sha256": "18b7c923d2dc99cc701eea35fcfd0f5875f42e843e83a8715a0aec9349718cd2"
+      },
+      {
+        "path": "ArcherPreview/src/npc-look.js",
+        "bytes": 3371,
+        "sha256": "85920bda6e183960b7ed1f6356e6c53bf62b611a8af61d5483dedc795100fe10"
+      },
+      {
+        "path": "ArcherPreview/src/npc-packages.js",
+        "bytes": 12348,
+        "sha256": "a58e8f9daf0d02f3e9cb64318a41f99ffef987ff3bfcf3f309cfd223a79d0762"
+      },
+      {
+        "path": "ArcherPreview/src/npc-world.js",
+        "bytes": 12972,
+        "sha256": "87db31a0840b0512c909f235074754b5069151912156eeb594a6791586353e9e"
+      },
+      {
+        "path": "ArcherPreview/src/outdoor-vista.js",
+        "bytes": 4306,
+        "sha256": "0a98a0caaddda9973238363ba3d9f9e870b5449eecb959f21d9acb996bf520b7"
+      },
+      {
+        "path": "ArcherPreview/src/overlay-readiness.js",
+        "bytes": 974,
+        "sha256": "db6d461ab7a9090c938d94b789d82c44a959d03003501f5bdcf9485c4078d517"
+      },
+      {
+        "path": "ArcherPreview/src/passive-health-regen.js",
+        "bytes": 838,
+        "sha256": "c4821eded576009af3cbd86815d5d641eba5b67c1a7805037292c4276bdf89cd"
+      },
+      {
+        "path": "ArcherPreview/src/placement-document.js",
+        "bytes": 17333,
+        "sha256": "ef037e8b43dbfb09b9942c5e1f7277d51fb0acffa48e5c6926effc0d113db8d4"
+      },
+      {
+        "path": "ArcherPreview/src/placement-preview.js",
+        "bytes": 7831,
+        "sha256": "7006d25d05f496204d8c6e89649d5ea12fe57b4c04981f29fde6a6166d8be909"
+      },
+      {
+        "path": "ArcherPreview/src/plains-boundary-atmosphere.js",
+        "bytes": 1703,
+        "sha256": "dc38833d315155d8c1789b728e11059492e424a8a827fe52393877ea7f83c870"
+      },
+      {
+        "path": "ArcherPreview/src/plains-cliff-collision.js",
+        "bytes": 2171,
+        "sha256": "f0fe14481c394e0aabf9aaaa965efadae128bc2ee8a44efd903b34bb5caf9965"
+      },
+      {
+        "path": "ArcherPreview/src/plains-forest-boundary.js",
+        "bytes": 950,
+        "sha256": "3d74c029e7c90a988f27e5d018bb8f312e5988bf6fff074d94ec8e8e327f6bc6"
+      },
+      {
+        "path": "ArcherPreview/src/plains-forest-edge.js",
+        "bytes": 2602,
+        "sha256": "b8c357a153cf43b70ad70e924065d0f8d2ea6a9b594187bd6389cb0dcb29d528"
+      },
+      {
+        "path": "ArcherPreview/src/plains-monster-spawns.js",
+        "bytes": 7672,
+        "sha256": "0adb5c3e5251e13a99b9d5b2c9a57dcfc81f7ca83c173b37fed8c30ddd82e037"
+      },
+      {
+        "path": "ArcherPreview/src/plains-overview.js",
+        "bytes": 1989,
+        "sha256": "410152da4b25e7e52bbe56cb975d2aaf5c659ed937a8bfb47432ac3bf74a01c0"
+      },
+      {
+        "path": "ArcherPreview/src/plains-review-controls.js",
+        "bytes": 2158,
+        "sha256": "e882b3d10f81b3858e035c1476113477482169fd77980e1ae793b38e3bc945dd"
+      },
+      {
+        "path": "ArcherPreview/src/plains-river.js",
+        "bytes": 7218,
+        "sha256": "36ee5c48d95a39bd44d7d7ee5420ce410d4387f797fca7129a99eea9539ddbdd"
+      },
+      {
+        "path": "ArcherPreview/src/plains-tree-transition.js",
+        "bytes": 2684,
+        "sha256": "94ff36d429d6c33dda8463a3ffc6aea10108d7fab055b2f946136ffd87c684a6"
+      },
+      {
+        "path": "ArcherPreview/src/plains-view-distance.js",
+        "bytes": 2603,
+        "sha256": "ae9b6ebe059bcbc4ac474963666a1d6cfa495e645e2068ac4a05d4d06e06a4a0"
+      },
+      {
+        "path": "ArcherPreview/src/player-combat.js",
+        "bytes": 2783,
+        "sha256": "186e3fe0232f970a952f7912cdc8a30d4521af086304be11a53d280debf3a939"
+      },
+      {
+        "path": "ArcherPreview/src/player-detail.js",
+        "bytes": 2070,
+        "sha256": "f7bc2d5bf720cd5c6109ec912e083059d8672e65085776ab6a46ad7b10b52ace"
+      },
+      {
+        "path": "ArcherPreview/src/player-dimensions.js",
+        "bytes": 1498,
+        "sha256": "5c83e0fa93fd543dd51feb693c221983f7883127906027adba57b62454147e26"
+      },
+      {
+        "path": "ArcherPreview/src/player-health-bar.js",
+        "bytes": 3807,
+        "sha256": "84a8aec68671df0553d158f88f69cb7080f9f75423e2c0d003207c0185e4e96f"
+      },
+      {
+        "path": "ArcherPreview/src/player-melee-aim.js",
+        "bytes": 13034,
+        "sha256": "d4f1c58b174489e30d0ad61cf80e3bd8120b18c7221b6ce7d8ed909afeeb7079"
+      },
+      {
+        "path": "ArcherPreview/src/player-strike-timings.js",
+        "bytes": 108,
+        "sha256": "34b67f719fc4218b8340c94e3739024463c670f2c209bdbc18a6edbff94d8e9b"
+      },
+      {
+        "path": "ArcherPreview/src/player-strikes.js",
+        "bytes": 4085,
+        "sha256": "8767ddb797a826f673ce219c7c236b364d35271269573ce796848d81ab2d400d"
+      },
+      {
+        "path": "ArcherPreview/src/player-texture-profile.js",
+        "bytes": 4678,
+        "sha256": "5d3a61174b44e99b7ab1ac5721a949fb25c3258d9b831b875a8ab953faa7f798"
+      },
+      {
+        "path": "ArcherPreview/src/player-texture-settings.js",
+        "bytes": 4621,
+        "sha256": "4e847e7ccadfcb934fb3b25c802f817d130cec655e195575532837cef4bd8d03"
+      },
+      {
+        "path": "ArcherPreview/src/portal-mist.js",
+        "bytes": 3412,
+        "sha256": "286600aac376fe00452596adf85078482f3d229f7e9caa10e4332c9ce686e591"
+      },
+      {
+        "path": "ArcherPreview/src/pose-matrices.js",
+        "bytes": 990,
+        "sha256": "5e4b247b7dcc3534d4d843659488a5a15b9a3e10da42440a5514b461d94863e2"
+      },
+      {
+        "path": "ArcherPreview/src/preparation-review-settings.css",
+        "bytes": 829,
+        "sha256": "b240bd2f813fa3043976d660a7427d18f6495bd376024baaf3bec4b85549843a"
+      },
+      {
+        "path": "ArcherPreview/src/prepared-effect-lifetime.js",
+        "bytes": 5283,
+        "sha256": "21bc0a2f718e7acbc37a6019d5d6da644146f823c442b87bd422ca750e2f075c"
+      },
+      {
+        "path": "ArcherPreview/src/projectiles.js",
+        "bytes": 3053,
+        "sha256": "dae6aa8f10e674462e0df9e0a2300af9c6f8f29ece56e2078b81a9f687e52191"
+      },
+      {
+        "path": "ArcherPreview/src/quest-asset-review.js",
+        "bytes": 3790,
+        "sha256": "cc100ff1559eb0df01e4d22e44a4a4d9dfcb0438320a197e93f46d7bdbc981bf"
+      },
+      {
+        "path": "ArcherPreview/src/regular-boar-brain.js",
+        "bytes": 5323,
+        "sha256": "5e6cbebd4ba77eb7fa83de25ea643212882e442ce192429ad41807b981dc6150"
+      },
+      {
+        "path": "ArcherPreview/src/regular-wolf-catalog.json",
+        "bytes": 17726,
+        "sha256": "b8b5ac40ccf4c437c5baa217bfe2314370c9c9405749bb704c61f391e7540836"
+      },
+      {
+        "path": "ArcherPreview/src/regular-wolf-encounter.js",
+        "bytes": 4767,
+        "sha256": "3efb9c63e18f3d34aead57708927d137b85d8e415be37227a0d352f28b3cc32d"
+      },
+      {
+        "path": "ArcherPreview/src/regular-wolf-source-locks.json",
+        "bytes": 1773,
+        "sha256": "24944e4b3540977578c899da3f9fc192db7634ec8887f408554639b53cc508d8"
+      },
+      {
+        "path": "ArcherPreview/src/regular-wolf-spec.js",
+        "bytes": 5442,
+        "sha256": "91b4ef0a8720db8ea0ff73f526220bc8f0ffb166b2bf3fe18b48480a72024b70"
+      },
+      {
+        "path": "ArcherPreview/src/release-route.js",
+        "bytes": 2279,
+        "sha256": "8cd1620814eb231420d25799982afa2a3442335df2b77d5a2acc4bd490ea44fc"
+      },
+      {
+        "path": "ArcherPreview/src/release-storage.js",
+        "bytes": 1129,
+        "sha256": "a642ecb0274319bce7f1abf56e70bbd419f163557d94624218b43f1ec8ad2b23"
+      },
+      {
+        "path": "ArcherPreview/src/render-cpu-sampler.js",
+        "bytes": 7317,
+        "sha256": "8186a12f351830ef0eb060ea356fca43792bdd913114fb9bc782c0d367247a84"
+      },
+      {
+        "path": "ArcherPreview/src/render-policy.js",
+        "bytes": 1391,
+        "sha256": "f7ebf4830fc4cbb6cce3c24988fd4fc0aef8fbc14e16f8c10e6474cbbfccba7f"
+      },
+      {
+        "path": "ArcherPreview/src/render-scale-settings.js",
+        "bytes": 2909,
+        "sha256": "69744711993f08e89206c77c97b5f6db7a9b8016a9cbed640e324cdcf9fb81b9"
+      },
+      {
+        "path": "ArcherPreview/src/render-variant-state.js",
+        "bytes": 2744,
+        "sha256": "76100a3fe0ac44ca1899ce2e0ff640080a75bd364800e36969a324501b719c40"
+      },
+      {
+        "path": "ArcherPreview/src/resource-bundles.js",
+        "bytes": 3516,
+        "sha256": "592fd04ef8ee45d8e4b76bec868a9c12f31a7cfee7118d267b7e7a1d3dd90593"
+      },
+      {
+        "path": "ArcherPreview/src/resource-cache.js",
+        "bytes": 3220,
+        "sha256": "bb291fba9f7d3b1694229e0b96c1b2cbfd2becf12390126a9e559fd4f6a86b50"
+      },
+      {
+        "path": "ArcherPreview/src/resource-downloads.js",
+        "bytes": 9371,
+        "sha256": "f6c5e106865831aa657cd5fb813e1fcf8acd328f67619ddf1d7ed2daa40fd59a"
+      },
+      {
+        "path": "ArcherPreview/src/resource-index.js",
+        "bytes": 2109,
+        "sha256": "3543db1c26ccbd28d7b40666d933d00690cdcf3cc601712422b2641aa6350c7d"
+      },
+      {
+        "path": "ArcherPreview/src/resource-load-ledger.js",
+        "bytes": 6479,
+        "sha256": "b0d389e6f4cdf8b919cf140b3f2ca487ac21c8966cc98d8b2a2fa48efbe51f6a"
+      },
+      {
+        "path": "ArcherPreview/src/resource-repair.js",
+        "bytes": 5568,
+        "sha256": "7a1df037968e61d0405cd3859e71186e62b4df0287aa990e219120979ca4c21b"
+      },
+      {
+        "path": "ArcherPreview/src/runtime-timers.js",
+        "bytes": 555,
+        "sha256": "657c5cdc21744337b679d7bfa8e33fc97e8213e981646fc7c087b1786ffe201a"
+      },
+      {
+        "path": "ArcherPreview/src/runtime-version.js",
+        "bytes": 6713,
+        "sha256": "7956a7d43e21041bd285dde7413a095099ab728b241fded454da25e554a40cf2"
+      },
+      {
+        "path": "ArcherPreview/src/scene-diagnostics.js",
+        "bytes": 11081,
+        "sha256": "e0996749d44ece1dfa65c1344a45cdc62e618bd8bf501f9d7f3d3fad49e60fca"
+      },
+      {
+        "path": "ArcherPreview/src/scene-lighting.js",
+        "bytes": 7971,
+        "sha256": "18d203d328c615805350a82cf35da11db1206a27c414b00695d409feffd8066e"
+      },
+      {
+        "path": "ArcherPreview/src/scene-ready.js",
+        "bytes": 9028,
+        "sha256": "f99dba80e65882dc7de6d71a5a3e0e6f3c4238f1e4ecf1c377af1519a21a4537"
+      },
+      {
+        "path": "ArcherPreview/src/scenery-collision-policy.js",
+        "bytes": 429,
+        "sha256": "5d3387a208c3a90a54bb8a54d62ea657f3964bbee971d6cb15dceaee8097a8a9"
+      },
+      {
+        "path": "ArcherPreview/src/scenery-distance-state.js",
+        "bytes": 2508,
+        "sha256": "c12a5ae089dfe73dadc05b1b37a24ba789b004422bbb2e8bb8f2791e67fbe154"
+      },
+      {
+        "path": "ArcherPreview/src/screen-projection.js",
+        "bytes": 1198,
+        "sha256": "f66746d5e5510d1204d5bdcc3960806237ef24f7f01cfe4fee84b86e3b8eec3a"
+      },
+      {
+        "path": "ArcherPreview/src/serial-player-textures.js",
+        "bytes": 1248,
+        "sha256": "c40aff654309c1efd77892fc71a79e7bf82e543de4d52a8ee68e1e903027def7"
+      },
+      {
+        "path": "ArcherPreview/src/settings-panel.js",
+        "bytes": 9919,
+        "sha256": "497fd85df86e9cc3fcbadcde06a6531c59d0f0fe38cc5732ca4da0a00159d0ba"
+      },
+      {
+        "path": "ArcherPreview/src/shield-hold-input.js",
+        "bytes": 2785,
+        "sha256": "6b6c783f0940e942966db7c96e379900e3271b3eeeeb72c47a4d3047aafd159e"
+      },
+      {
+        "path": "ArcherPreview/src/sky.js",
+        "bytes": 6457,
+        "sha256": "495aec689ca32d1cd601c0f09560e163ebb6bea9c278a95f4f4ec3c3c7d61a35"
+      },
+      {
+        "path": "ArcherPreview/src/stamina-feedback.js",
+        "bytes": 1472,
+        "sha256": "9ba33e815a0085a7141bc65fe3bf735ca66b4155d8f82c79702f184f7a07d17e"
+      },
+      {
+        "path": "ArcherPreview/src/stamina-notice-anchor.js",
+        "bytes": 914,
+        "sha256": "4717fb7b7bd2de48017979c3fda5ab7b3a0b42733bfb41fb2758c0ec08b48bc8"
+      },
+      {
+        "path": "ArcherPreview/src/startup-resources.js",
+        "bytes": 6467,
+        "sha256": "20763ed303a366ddc92285615297d36ffe2f99536a264e5e7aaa0efcefc3f167"
+      },
+      {
+        "path": "ArcherPreview/src/static-map-instances.js",
+        "bytes": 2470,
+        "sha256": "0be2d4e1f94b246b144d0f56d9457e1cf6109ba07e3b25faf4e039d9cfd5091c"
+      },
+      {
+        "path": "ArcherPreview/src/story-npc-settings.js",
+        "bytes": 2135,
+        "sha256": "ffd497c4434d98bfe8c2c25b54cff6fe82e377bdd9eeff2d0f638fda84180866"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-document.js",
+        "bytes": 7958,
+        "sha256": "e7202eae4739296ddaf5a9d37665b27bc1fd70beda41c4b947343adfb2d22439"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-editor.js",
+        "bytes": 20079,
+        "sha256": "531f59843f450984f4366b8824f73f14f221abe426560b7ee2a973f503054d38"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-events-editor.js",
+        "bytes": 7114,
+        "sha256": "406488bde68809ae65dd9c8f7e2494b9832aaa0a527048b6c21734faf25066d7"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-events.js",
+        "bytes": 2909,
+        "sha256": "bc093f3bca020f1a487a2e853248059216d164550b71204c86ed9aac8770caa8"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-live.js",
+        "bytes": 3913,
+        "sha256": "6119c735b11699a3fb5e7c7dcc95a815ccb1fec57ac94742c06d37b492cab1da"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-opening.js",
+        "bytes": 5556,
+        "sha256": "86612a56430fcee4a21af3671e8ccb0e9df6a266776d8af0e59bb463049a6304"
+      },
+      {
+        "path": "ArcherPreview/src/storyboard-runner.js",
+        "bytes": 5290,
+        "sha256": "f0339a9cb9cb4186f0a24e5c1407583fa1062124f3d49554d4d7673ac11f005b"
+      },
+      {
+        "path": "ArcherPreview/src/styles.css",
+        "bytes": 47072,
+        "sha256": "b39ef7fb8cc9de549df26d01939a655a343c19fc127f85a91912634ab1ba817f"
+      },
+      {
+        "path": "ArcherPreview/src/summon-limits.js",
+        "bytes": 347,
+        "sha256": "1e478a5994541ed8b894f57b7c45c1b0c4b4f314644d6f027ac2e40546078934"
+      },
+      {
+        "path": "ArcherPreview/src/summon-panel.js",
+        "bytes": 1235,
+        "sha256": "c96924f9403753c3564bf40c453ff4925ac0d6fdf84b1d1555104dd77589932b"
+      },
+      {
+        "path": "ArcherPreview/src/sword-trail.js",
+        "bytes": 6265,
+        "sha256": "e497fa2d3a781312bf544ac0be4d69cd545f3d97251a89155b2d90de81fccbf9"
+      },
+      {
+        "path": "ArcherPreview/src/targets.js",
+        "bytes": 12036,
+        "sha256": "d757565570d4975dab3305abf48fcb0ffd31046d65a772028890652aa34fac41"
+      },
+      {
+        "path": "ArcherPreview/src/terrain-edit.js",
+        "bytes": 2107,
+        "sha256": "84ac7a5b7d91d6e9b8e64c143a9db7b654e0521bcacadaa0d474954ddb6646d2"
+      },
+      {
+        "path": "ArcherPreview/src/terrain-mesh.js",
+        "bytes": 3125,
+        "sha256": "b315d4a704f5d8af1ca435fe7cd4cc5843ecc8f430ea71a1748f0aa15f0524f4"
+      },
+      {
+        "path": "ArcherPreview/src/terrain.js",
+        "bytes": 1990,
+        "sha256": "6664160c97ccbe4a8df1e7fea0f31ff58649f24f1d346f5ebcf70d0901f9f9b9"
+      },
+      {
+        "path": "ArcherPreview/src/tool-camera-input.js",
+        "bytes": 3030,
+        "sha256": "629ba5ac2db601a59c1c5c571bf5608c86bc49e34ab181402583419c45585cd6"
+      },
+      {
+        "path": "ArcherPreview/src/tool-fine-zoom.js",
+        "bytes": 1540,
+        "sha256": "90564c94d048f724c2c811275f46fc386f7d610ddfd668b24ec6430ea500f0c7"
+      },
+      {
+        "path": "ArcherPreview/src/tool-visibility-settings.js",
+        "bytes": 5465,
+        "sha256": "a34535f02c61f0530030449f3dfcc38f3391f36d0fe7c40a6053172022f7dd5a"
+      },
+      {
+        "path": "ArcherPreview/src/tree-lod.js",
+        "bytes": 1072,
+        "sha256": "7ab58e11c90027c842bcdf91c1d642f2cff356e665437b6d1081a5c97b49a44a"
+      },
+      {
+        "path": "ArcherPreview/src/tree-material.js",
+        "bytes": 2942,
+        "sha256": "74301aae5dd071152ee7e4c104327307873fd46e5df2a3a0ad0ecff9c49481d8"
+      },
+      {
+        "path": "ArcherPreview/src/tree-occlusion.js",
+        "bytes": 6992,
+        "sha256": "d6d6b6043b8abccc66553be74fc611111f3c98e846053a6decf7ffa476312a80"
+      },
+      {
+        "path": "ArcherPreview/src/tree-view-surface.js",
+        "bytes": 4757,
+        "sha256": "e8ace8e08f8e274a4848834a2cab9e4735dc03bddfa854367edf16187d5b4882"
+      },
+      {
+        "path": "ArcherPreview/src/ui-test-art/provenance.json",
+        "bytes": 1707,
+        "sha256": "e28e29d132a14625f35652fe4e906e8d0b05093b293e760692b68e89034cedcf"
+      },
+      {
+        "path": "ArcherPreview/src/ui-test-route.js",
+        "bytes": 1092,
+        "sha256": "503a8826e8fab21d64564e94d0f33f36876780160efe6655e4de7229f217d135"
+      },
+      {
+        "path": "ArcherPreview/src/ui-test-state.js",
+        "bytes": 3195,
+        "sha256": "4117908752ba54a35960af89d03f84fb010226c22b31324d19b38611fc6a5e7e"
+      },
+      {
+        "path": "ArcherPreview/src/ui-test.css",
+        "bytes": 21732,
+        "sha256": "b10841005e55c6d2c6ea5c0dde6beb1867d0d55624a4ff4b0d7243d99a0a59db"
+      },
+      {
+        "path": "ArcherPreview/src/ui-test.js",
+        "bytes": 18897,
+        "sha256": "8d46b285c6d0a46e8a959a659f3d7fd8c62ee16e63cf11189e0ce39e607954a0"
+      },
+      {
+        "path": "ArcherPreview/src/viewport-resize.js",
+        "bytes": 5722,
+        "sha256": "74cf4bdad623952bbbcd04c6281de6800857c806811289096de0278c350686cc"
+      },
+      {
+        "path": "ArcherPreview/src/village-active-candidates.js",
+        "bytes": 5207,
+        "sha256": "de1311a64ef00dd48aa63c31dee91da9caf8b9f4b64d51eb6146c0bed163a033"
+      },
+      {
+        "path": "ArcherPreview/src/village-collision.js",
+        "bytes": 3349,
+        "sha256": "a7e08da8df6a2031cbdede344d9188ee9335486828a13060d70954187702008e"
+      },
+      {
+        "path": "ArcherPreview/src/village-demand.js",
+        "bytes": 16465,
+        "sha256": "f60d423c6b09727de9e4b8b0944b41043881c93eb066da23141ce6b187011318"
+      },
+      {
+        "path": "ArcherPreview/src/village-environment.js",
+        "bytes": 10661,
+        "sha256": "b9f3fa1cb91f4c3d4d07359b99a679ffc756d237e7a27db2ecfdcd5c735e7eca"
+      },
+      {
+        "path": "ArcherPreview/src/village-ground-layout.js",
+        "bytes": 1624,
+        "sha256": "e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed"
+      },
+      {
+        "path": "ArcherPreview/src/village-ground.js",
+        "bytes": 7367,
+        "sha256": "b92e269a4e0da08770c93a1ddc5ed588a223b7f59bd35caa051949cc446b7f52"
+      },
+      {
+        "path": "ArcherPreview/src/village-instance-attributes.js",
+        "bytes": 3598,
+        "sha256": "35de6fc1abaaf1d4445ae1c38cf45be3a49349826c125c8dfd531cc5ab5d978e"
+      },
+      {
+        "path": "ArcherPreview/src/village-instancing.js",
+        "bytes": 858,
+        "sha256": "9082a1c4e4b796f27ac5515a5c84920cc8535c5cdb78050b5a26aae88d7df20d"
+      },
+      {
+        "path": "ArcherPreview/src/village-ktx2.js",
+        "bytes": 2298,
+        "sha256": "28a30c330cf2d4193e200316fcff65acfdbb0c0c4ebf36f0c5415b55bc526844"
+      },
+      {
+        "path": "ArcherPreview/src/village-layout.js",
+        "bytes": 16654,
+        "sha256": "ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2"
+      },
+      {
+        "path": "ArcherPreview/src/village-lod.js",
+        "bytes": 1583,
+        "sha256": "b92f131cc6bf62052e45c46f9bf3f73e119fb523861e56b5a16b55b4dd6b0a01"
+      },
+      {
+        "path": "ArcherPreview/src/village-meshopt.js",
+        "bytes": 1020,
+        "sha256": "9b0200760f92cf3dd64b7d6aacdbf871fd81ad844c82ea54ab5d529e8d4ce164"
+      },
+      {
+        "path": "ArcherPreview/src/village-navigation.js",
+        "bytes": 10030,
+        "sha256": "6e4b79ea928c0085cbd399c267d3c2d9bf25989c4a083374af71bcc6d2c10e6e"
+      },
+      {
+        "path": "ArcherPreview/src/village-occlusion.js",
+        "bytes": 6629,
+        "sha256": "4fd9d74f4669d2ed76c95a54823fe24e828121f0830eee05938da6d81205b147"
+      },
+      {
+        "path": "ArcherPreview/src/village-outline-policy.js",
+        "bytes": 1900,
+        "sha256": "b171174e32d170c686c93da6be8947417d1dfb09b693f2e6b9948aec168da1fe"
+      },
+      {
+        "path": "ArcherPreview/src/village-outlines.js",
+        "bytes": 15390,
+        "sha256": "79c98d2364ced0d53264f428fdfd2fb22a8f6e85fd03eaf0d52a4917d4e37efb"
+      },
+      {
+        "path": "ArcherPreview/src/village-outskirts-skirt.js",
+        "bytes": 337,
+        "sha256": "f426378dcfd05bfbfce0d349e7a9f4822b3f52285d725999288accab34692232"
+      },
+      {
+        "path": "ArcherPreview/src/village-plains-boundary.js",
+        "bytes": 1484,
+        "sha256": "8de2ea94680080b2c852c8b50419f14e80e849d543290679fe3c2eb414e96304"
+      },
+      {
+        "path": "ArcherPreview/src/village-plains-handoff.js",
+        "bytes": 1116,
+        "sha256": "97fe7fba3960e8f6099c9cf096ebc11afe93909f5b8427600a6f0bee719a6a1e"
+      },
+      {
+        "path": "ArcherPreview/src/village-plains-outskirts-ground.js",
+        "bytes": 3952,
+        "sha256": "0c565761b15fb7826bd1405f2e2aeed807c997319a40dcd3acd217d062b682e5"
+      },
+      {
+        "path": "ArcherPreview/src/village-plains-outskirts.js",
+        "bytes": 2015,
+        "sha256": "41c820db786c2324890bfe8219640f64c9892f40be7d06a2770453fa210676e8"
+      },
+      {
+        "path": "ArcherPreview/src/village-policy.js",
+        "bytes": 257,
+        "sha256": "d1706dd87baefec43cb3f5d96cb87bbb2ec0fe14ad7be5a9b4c08091c90bad62"
+      },
+      {
+        "path": "ArcherPreview/src/village-review.js",
+        "bytes": 6770,
+        "sha256": "ab9de1af3f9af06b445a87ecdcbca5dc53f93b284e59d42e425462d62c1f912a"
+      },
+      {
+        "path": "ArcherPreview/src/village-scenery-cache.js",
+        "bytes": 2510,
+        "sha256": "bb960adfa7126f25b147de8b141205b5d210f4c80911ab3599d33c70d9e91350"
+      },
+      {
+        "path": "ArcherPreview/src/village-shadow-fade.js",
+        "bytes": 4163,
+        "sha256": "a93e02f37c7dafbea9b75208223ad90c37402a2812894987d05f59edc200bd27"
+      },
+      {
+        "path": "ArcherPreview/src/village-shadow-policy.js",
+        "bytes": 1263,
+        "sha256": "23a04e4a9304839565982d4b02b87feb6871812b6168aeceffae274383202362"
+      },
+      {
+        "path": "ArcherPreview/src/village-streamed-environment.js",
+        "bytes": 21486,
+        "sha256": "18a004878eb62877dd738d30ccf7aa1c354719d5b53b027107f27c5ba41dc37e"
+      },
+      {
+        "path": "ArcherPreview/src/village-terrain.js",
+        "bytes": 1562,
+        "sha256": "eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3"
+      },
+      {
+        "path": "ArcherPreview/src/village-texture-budget.js",
+        "bytes": 2491,
+        "sha256": "ef8555806595a7dca52bd59ed8c8fdb6358262d0b3f5a82c9f296b4f23dc1521"
+      },
+      {
+        "path": "ArcherPreview/src/village-texture-streaming.js",
+        "bytes": 20822,
+        "sha256": "8afbd51d9ebb542ea1977b136ca9f6c498fb0207dd25e94f419f3f9335313ab8"
+      },
+      {
+        "path": "ArcherPreview/src/village-toon.js",
+        "bytes": 6666,
+        "sha256": "05a5fda41bf0359cd58c62b9676b32aaad5c0601f332def27f6e409cb9fffb98"
+      },
+      {
+        "path": "ArcherPreview/src/village-training.js",
+        "bytes": 1414,
+        "sha256": "3ccf18095bb166eae9587ad3c1ff55f7a36948b934b3ee1306f46e25b0435863"
+      },
+      {
+        "path": "ArcherPreview/src/village-visibility.js",
+        "bytes": 8365,
+        "sha256": "253698ad33153b9017bb9c66eaf1f91aa534b5107ce8b37473f722f18bb2d56d"
+      },
+      {
+        "path": "ArcherPreview/src/village-work-budget.js",
+        "bytes": 1185,
+        "sha256": "06f4f0f48ec94c10d2fb03dffd6cbcfaacf93153260aed8c282bf7571448f544"
+      },
+      {
+        "path": "ArcherPreview/src/warrior-controller.js",
+        "bytes": 3545,
+        "sha256": "f1833938bcccaed1fb55480d1eec79e76af4b129b0d0450657ed09b12a5d0608"
+      },
+      {
+        "path": "ArcherPreview/src/warrior-v2.js",
+        "bytes": 19818,
+        "sha256": "057145e42dd1cbdb7c7a56a8595d9bfd73d5d8704be525261ba1118e9cefb2ea"
+      },
+      {
+        "path": "ArcherPreview/src/weather-settings.js",
+        "bytes": 1927,
+        "sha256": "f4f99916f574a54c8e71ce3fb1c01ccfb96dc16215642537051d17e0b21d6c78"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-atmosphere.js",
+        "bytes": 13349,
+        "sha256": "fe9ac2dc2591dbd7f3b2be3b50010c791d52359c4893834be9dd871e650eca93"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-camera-data.js",
+        "bytes": 1777743,
+        "sha256": "661cb320af2b1581214fce63e8fc8aa26f2381b49fe500b5326d628ff86ee67e"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-camera.js",
+        "bytes": 11651,
+        "sha256": "eeddf418cf474810789da1f09d79fd56622010aa5e36c413c3b97ef7ad229526"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-collision-data.js",
+        "bytes": 3818,
+        "sha256": "5e38efcf9c391c6f9f92c7b7264bc02ecde76c33bdfa7742fc0c899211f3745e"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-collision.js",
+        "bytes": 1444,
+        "sha256": "270a093f154d430b8d047a2232b7cb7a681502ba95971d2503253425e5ea66d4"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-layout.js",
+        "bytes": 17852,
+        "sha256": "705ce1290b7f686f368d65b7a4e863cf935800baa81005f40bc033e9b055fbe4"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-navigation.js",
+        "bytes": 2021,
+        "sha256": "7f22e6454689f94e854e94b6ce343e3d35416133e960b55d31907d4d9bc3e645"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-ramp-profile.js",
+        "bytes": 14152,
+        "sha256": "189268654955514ddfe191ad861e2f2b99e89f98fac7b721c4c7b62df6635047"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-sight-data.js",
+        "bytes": 10208,
+        "sha256": "521e35dd388cc59aa9d4b861768526df098466deb6da0b0adf82ebaed6e764b8"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-sight.js",
+        "bytes": 979,
+        "sha256": "a91971b8ff9b1651b0a497ff967af2110fffd5d47281b852f9c874e0782f9c7f"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-surfaces.js",
+        "bytes": 11708,
+        "sha256": "518d98a4198c22ec2639e46814399e7413be140901bac2e88e898ee22f87a1a7"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-terrain.js",
+        "bytes": 4366,
+        "sha256": "8539d4d79b32e1d132c904aba8fcde501c1ea8e99fffdaa832249204dd13793d"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-visibility.js",
+        "bytes": 1793,
+        "sha256": "e685f268cfe2f7de5e02326f5731dac6324fdb5d9ab01f5d6cdbf41424ab4019"
+      },
+      {
+        "path": "ArcherPreview/src/witch-cave-water.js",
+        "bytes": 592,
+        "sha256": "7bde4b25d7e2287ae675efe77cde3d57f1d1c8db5eda9f7cf642be390c51091b"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-animation.js",
+        "bytes": 4148,
+        "sha256": "6182612af54ad45da90ff23a1131cd1cf4c12596a370187ee340dc68090de42e"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-encounter.js",
+        "bytes": 7492,
+        "sha256": "212438587908928e67874be87b9ccf5e5db49201cf3099380b27a2af9f770aad"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-grab.js",
+        "bytes": 1105,
+        "sha256": "663d16f7c5070d2988cba56dc4c7b5aa22af8127653b3f5d702a65c4874eb2cf"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-maul-notice.js",
+        "bytes": 1102,
+        "sha256": "8063bf7e0f17deaa0522bcde9651bb9138617fcbad99b440a8dc14724796e3ae"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-spec.js",
+        "bytes": 7216,
+        "sha256": "3948b30eefc7591d95eae86996d7d985d10be464eb6ce68467802cb04b7061b4"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-air-reaction.js",
+        "bytes": 4682,
+        "sha256": "bd5e767b0a342f32955fec6ca07eb85b8c3a5a932ed8e89bb9cb610ac1e962d3"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-attack-clips.json",
+        "bytes": 537828,
+        "sha256": "f4ad7c1371bdc46b1ede8c8e644c01d406d97f435c6a15e3ca6e0a66a7c9efb9"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-authored-clips.js",
+        "bytes": 4676,
+        "sha256": "bb5d76a4107097f6cdddf6502d75a1e4db09436e19a64d7f1a9f0e65751f88e0"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-authored-history.js",
+        "bytes": 744,
+        "sha256": "929e6b8be8b82159334eb3c1aeadd2ae4a053876f49c6c509589cea8e364d5f6"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-combat-r13-clips.json",
+        "bytes": 2194474,
+        "sha256": "851d233fbd2b8ecda0888500ac969f14b3d5e453bd9dfd8803ab1c5abae9df94"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-contact-shapes.js",
+        "bytes": 484,
+        "sha256": "aafe95e1c23f193de3f97bc920e4111c399775e84ddee2c8e1ac9a159dcf67e1"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-encounter.js",
+        "bytes": 33365,
+        "sha256": "bd3462b2643d2d61991b8e677ff05366978fe928e82e26d10038325e4848a4e0"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-feral-clips.json",
+        "bytes": 1232044,
+        "sha256": "1a918dea6cc78940ad672302b51d815ca1766d4f6b5e0d79263fcc2ddc787c93"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-grab.js",
+        "bytes": 4364,
+        "sha256": "ffffee7f711aaeaf95eee9f5dd5c0a860db307b3d86c24c930457807389a96bb"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-hurt.js",
+        "bytes": 3315,
+        "sha256": "a1ccd709eb6be22ce95e79f9b2f87c6381f5324e9d2206043d5fa66523eab14f"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-locomotion.js",
+        "bytes": 16525,
+        "sha256": "703b2e33bf326317f9b02286894c6fb5a557203372f33eacb21c771d99067a98"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-momentum-r14-clips.json",
+        "bytes": 598116,
+        "sha256": "fce00e51779662436b4411d8ebb14359817dec0bbca0edef5b2eb77acffafa2f"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-momentum.js",
+        "bytes": 4092,
+        "sha256": "b391259ddfe9900e744dbc6427d91b27222fc48fe86540b6a952ed17abfe63de"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-predator-clips.json",
+        "bytes": 1546290,
+        "sha256": "7653422f2e4654ea8ace0f7d4e4872c4f15f37bf41ba735fae701d4f2e2cfd97"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-ram-clips.json",
+        "bytes": 1901323,
+        "sha256": "334c7cfabd841dfb36daca3bf88db80fe7a98132698e3f454ae70d05eb8c82c1"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-ram.js",
+        "bytes": 14223,
+        "sha256": "52d26963893906fd4ebae36af948f4748b3d19d0cd916b6394e1c888beb860f0"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-run-ram-overlay.json",
+        "bytes": 8913,
+        "sha256": "d0b875443c8eabab9ca5668b4e055e09b03b5591ac502618c56ab5264a447d01"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-run-ram.js",
+        "bytes": 6809,
+        "sha256": "c54098f318e8f5a22bfffd0297c346126cca996bf44e14f9bceaa1555aaf0e91"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-shield.js",
+        "bytes": 4133,
+        "sha256": "ad8715b80ba07bf2b856c42075d5cf7c8a676f22d7677a138fc5fd76f7abc065"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-spec.js",
+        "bytes": 33959,
+        "sha256": "08781e986393d3304494118306f83bb3528ea1368c3822827caf6991ce126c01"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-support.js",
+        "bytes": 1216,
+        "sha256": "7fdf45a8359e07ebcf4404d82c7b85526fa0bef1820194410c7e15f50273f783"
+      },
+      {
+        "path": "ArcherPreview/src/wolf-v02-telegraph.js",
+        "bytes": 7029,
+        "sha256": "eda731dddc21608dc9e25ce458c17092113ae80b066d6f72729b3516eb474a25"
+      },
+      {
+        "path": "ArcherPreview/src/world-limits.js",
+        "bytes": 1227,
+        "sha256": "1c0e5b652cb9c0e69d588872008dbcd9991c050a2754e3985294e96c3c8fee77"
+      },
+      {
+        "path": "ArcherPreview/src/world.js",
+        "bytes": 13623,
+        "sha256": "3a5685022a6b333789c32591b5f10c4148eb75641c312394238cf6d91ea46bb4"
+      },
+      {
+        "path": "ArcherPreview/vite.config.js",
+        "bytes": 906,
+        "sha256": "891448a4d5608d96e84cf902c02c168780657ba90f1260007718255eb862c537"
+      }
+    ],
+    "baseCommit": "748f77f482096825b30fae953c2dfde9d2d00f1b",
+    "dirty": true
+  },
+  "bytes": 803190083,
   "files": [
     {
       "path": "app.webmanifest",
@@ -1716,9 +3850,9 @@
       "sha256": "5e1cff3204e83150ca382d91354e2060fcfc210205fad0262cab14c2e3dd8c5d"
     },
     {
-      "path": "assets/chapter-quest-data-CxYFHS46.js",
-      "bytes": 17488,
-      "sha256": "a9228cf974a1b31687ee0f66169689ec487b6480ead4783d98f89c8c5ffc7679"
+      "path": "assets/chapter-quest-data-DUM6rV9a.js",
+      "bytes": 17717,
+      "sha256": "19c0b32335027267b554dde03678592ca8eec59777c06033bd6e573ae5f038e0"
     },
     {
       "path": "assets/character.json",
@@ -10391,14 +12525,14 @@
       "sha256": "12ae76224925b1e963df3fed25b55559ad0343da6e73aeb641b72b96493d9d18"
     },
     {
-      "path": "assets/moonforestV2-ERbQVS8V.js",
-      "bytes": 2380148,
-      "sha256": "d35c8ba439f1c7f19b43964ba6f2720c049bff61f7e453ecd9b84c53ce3f8de9"
+      "path": "assets/moonforestV2-0Hr5Melq.css",
+      "bytes": 125035,
+      "sha256": "d050c58dd3c6b789fb850f4b72e1234f758eade72e9343e6ebc052ecd75e82ef"
     },
     {
-      "path": "assets/moonforestV2-SRQLL6OX.css",
-      "bytes": 124409,
-      "sha256": "25689ed38514ee467c20cb6c83bf17e24ea4626c9e66cbf59771bc8a3c718c66"
+      "path": "assets/moonforestV2-grKA-yi9.js",
+      "bytes": 2393205,
+      "sha256": "c37b437ff38c8d1ec2ecaff8a872353b1e95231729f9224c3fd122e03d0044cb"
     },
     {
       "path": "assets/morphTargetsVertex-2rpeEI8d.js",
@@ -10986,9 +13120,9 @@
       "sha256": "c94b50a88d18e89ae3bf17f32e3d78c0bab460b7466915d850b001c36e7e4c3c"
     },
     {
-      "path": "assets/storyboard-editor-DffTRuzk.js",
+      "path": "assets/storyboard-editor-CrpXXRqR.js",
       "bytes": 23397,
-      "sha256": "b4299fe10e67e0871779ad8894b3e3eccb2bd26870adf3adbafd7d1eb65b18b9"
+      "sha256": "7182358efe269949fc33fe1e05712865ac12d01089a7d6eee979dc8b812eb7d8"
     },
     {
       "path": "assets/storyboard-live-aKw3H2yo.js",
@@ -11267,8 +13401,8 @@
     },
     {
       "path": "moonforest-0.2.html",
-      "bytes": 40691,
-      "sha256": "d7f4801528c51ca3537e1b21c089f53153de30da71dedde444cca61e29e7db50"
+      "bytes": 42523,
+      "sha256": "bf8daa56fb9d978714d8bdcb8e4e29b778cb08add7283f711e688151a9e58efe"
     },
     {
       "path": "moonforest-0.2.webmanifest",

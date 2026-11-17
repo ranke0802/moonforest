@@ -1,0 +1,16 @@
+// Post-audit implementation. Historical observations remain inside each issue.
+export const implementations={
+ 'MF-17':{status:'implemented',current:'저장소 없음·접근 거부·용량 초과·무시되는 쓰기를 저장 성공으로 표시하지 않도록 수정했습니다. 가방에서 의뢰 저장 상태와 골드 저장 실패를 구분하고 저장 재시도·기록 JSON 내보내기를 제공합니다.',next:['PC·모바일에서 실제 브라우저 저장 제한/실패 안내의 사용감을 확인합니다. 자동 검사는 실제 기기의 저장 공간 상황을 재현한 검수가 아닙니다.'],sources:['ArcherPreview/src/chapter-save-controls.js','ArcherPreview/tests/progress-save-recovery.test.js','ArcherPreview/tests/chapter-save-controls.test.js']},
+ 'MF-18':{status:'partial',current:'손상·미지원 원본의 자동 덮어쓰기를 차단하고, 정상본 보관과 원문 포함 기록 내보내기를 추가했습니다. 의뢰·가방만 되돌리면 별도 골드 잔액/정산 원장과 어긋날 수 있어, 전체 세이브 가져오기·복구 버튼은 아직 노출하지 않습니다.',next:['골드 잔액·중복 입금 원장과 의뢰 진행을 한 단위로 복원하는 중단/재시도 안전 절차를 구현한 뒤 파일 가져오기와 복구를 연결합니다.','현재 내보내기는 의뢰·가방·경험치·미수령 보상의 보관/분석용이며 전체 게임 세이브가 아닙니다.'],sources:['ArcherPreview/src/chapter-save-controls.js','ArcherPreview/tests/progress-save-recovery.test.js']},
+ 'MF-19':{status:'partial',current:'다른 창에서 바뀐 최신 원문과 현재 창의 저장 기준을 비교하여 오래된 의뢰·골드 원장의 덮어쓰기를 감지하고 중단합니다. 충돌한 진행은 이번 실행의 메모리에 남습니다. 이 비교는 서로 다른 탭의 완전 동시 쓰기를 묶는 원자 잠금은 아닙니다.',next:['진짜 동시 쓰기까지 막는 단일 활성 탭/작성자 잠금 정책과 충돌 진행의 사용자 선택 복구는 후속입니다.','오래된 창은 덮어쓰기 없이 충돌 안내와 기록 내보내기를 제공합니다.'],sources:['ArcherPreview/tests/progress-save-recovery.test.js','ArcherPreview/src/chapter-save-controls.js']},
+ 'MF-20':{status:'implemented',current:'획득 누적 골드에 걸린 100,000 제한만 제거했습니다. 기존 소지 골드와 입금 원장을 그대로 읽고 100,000 이후의 새 보상도 한 번씩 정산합니다. 다른 물품/목표 상한과 전투 보상량은 유지했습니다.',next:['실제 장기 진행에서 기존 저장 잔액과 새 보상 표시를 확인합니다. 상한 이후 이미 과거에 누락된 골드를 추정하여 임의 보상하지는 않습니다.'],sources:['ArcherPreview/tests/progress-save-recovery.test.js','ArcherPreview/tests/gold-loot.test.js']},
+ 'MF-21':{status:'partial',current:'M06의 구울·Q08의 홉고블린은 실제 런타임 적이 없고 Q03의 반려동물 이벤트도 미구현입니다. 의뢰 화면에 미구현 이유를 명시했습니다. 기존 다른 적 처치나 제작용 사실 입력을 실제 이야기 완주로 바꾸지는 않았습니다.',next:['구울 문지기·홉고블린 배우/전투/스폰과 Q03 반려동물 이벤트를 실제 콘텐츠로 구현한 뒤 연결합니다.','이야기 전체 완주와 첫 15분 흐름 검수는 여전히 후속입니다.'],sources:['ArcherPreview/src/chapter-quest-data.js','ArcherPreview/src/chapter-quest.js','ArcherPreview/tests/chapter-save-controls.test.js']},
+ 'MF-24':{status:'implemented',current:'0.2 빌드에 실행 소스·스크립트·패키지 입력의 해시 기록을 추가했습니다. 빌드 중 입력이 바뀌거나 빌드 후 소스가 달라지면 동기화/Pages 게시를 거부합니다. Pages는 Node 24와 저장·보상·복구·배포의 작은 계약 검사를 먼저 실행합니다.',next:['이후 배포는 새 소스로 빌드한 준비 산출물을 검수하고 동일 해시 입력으로 게시합니다. 과거 배포 목록에는 이 새 출처 필드를 소급 위조하지 않습니다.','사용자 시각 승인과 실제 기기 성능 확인은 자동 계약 검사와 구분합니다.'],sources:['ArcherPreview/scripts/source-provenance.mjs','ArcherPreview/tests/source-provenance.test.js','ArcherPreview/tests/release-deployment.test.js','.github/workflows/pages.yml']},
+ 'MF-25':{status:'implemented',current:'첫 모듈 요청·해석 실패와 30초 무응답에 명시적 재시도 안내를 추가했습니다. 그래픽 연결 손실은 입력·프레임·음악을 정지하고 SDK 복원 완료 뒤 기존 설정/사망 정지 상태를 존중합니다. 20초 복구 실패와 늦은 복원은 전투를 자동 재개하지 않습니다.',next:['실제 기기의 그래픽 연결 손실·복원과 재시도 화면 사용감은 사용자 검수 대상입니다. 새 GPU 패스·동기 대기·상시 폴링을 추가하지 않았습니다.'],sources:['ArcherPreview/src/context-recovery.js','ArcherPreview/tests/context-recovery.test.js']},
+};
+export function applyImplementations(issues){
+ for(const issue of issues){const update=implementations[issue.id];if(!update)continue;
+  issue.auditStatus=issue.status;issue.auditCurrent=issue.current;issue.evidence=[...issue.evidence];
+  Object.assign(issue,update,{appliedAt:'2026-11-17',sources:[...new Set([...issue.sources,...update.sources])]});
+ }
+}

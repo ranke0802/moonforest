@@ -78,6 +78,7 @@
 #chapter-dialog .chapter-grid button{min-height:42px;font-size:12px}
 #chapter-dialog[data-screen=bag] .chapter-dialog-content{display:flex;flex-direction:column;overflow:hidden}
 .chapter-bag-meta{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;font-size:11px;color:#adbf9e;margin-bottom:13px;flex-shrink:0}
+.chapter-save-controls{width:100%;font-size:12px;color:#d5d8bd}.chapter-save-controls>summary{cursor:pointer;padding:5px 0}.chapter-save-body{max-height:32dvh;overflow:auto;overscroll-behavior:contain;padding:4px 0 10px;line-height:1.7}.chapter-save-body p{margin:6px 0}.chapter-save-body label{display:block;margin-top:10px}.chapter-save-body input[type=file]{display:block;max-width:100%;margin-top:5px}.chapter-save-body button{min-height:40px;font-size:12px}.chapter-save-body a{color:#f0d790}.chapter-save-body textarea{box-sizing:border-box;width:100%;min-height:80px}.chapter-save-body [data-save-status]{color:#f0db9e}
 .chapter-bag-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:19px;flex-shrink:0}
 .chapter-bag-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,340px);gap:22px;flex:1;min-height:0}
 .chapter-bag-items{min-height:0;overflow:auto;overscroll-behavior:contain;padding:3px}

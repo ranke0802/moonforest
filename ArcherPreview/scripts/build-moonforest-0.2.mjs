@@ -5,10 +5,12 @@ import {build} from 'vite';
 import {collectVillageSiteFiles} from './build-village-site.mjs';
 import {verifyResourceBundles} from './resource-bundles.mjs';
 import {verifyRuntimeModuleGraph} from './runtime-module-graph.mjs';
+import {captureSourceProvenance,verifySourceProvenance,sourceCommitInfo} from './source-provenance.mjs';
 import {RELEASE_V2,RELEASE_V2_MANIFEST,sha256,publishedBytes,deploymentPath,optionalBytes,assertDescriptor,assertDeploymentContentGraph} from './release-deployment.mjs';
 
 const project=resolve(import.meta.dirname,'..');
 export async function buildMoonforestV2(){
+ const repository=resolve(project,'..'),sourceProvenance={...await captureSourceProvenance(repository),...sourceCommitInfo(repository)};
  const outDir=resolve(project,'dist/moonforest-0.2'),site=resolve(project,'../ArcherPreviewSite'),publicRoot=resolve(project,'public');
  const child=relative(project,outDir);
  if(!child||child.startsWith('..')||isAbsolute(child))throw new Error('Build directory must stay inside the project');
@@ -61,7 +63,8 @@ export async function buildMoonforestV2(){
  if(bytes>=1_000_000_000)throw new Error('MoonForest 0.2 exceeds the 1 GB budget');
  const sharedContent=new Set(Object.keys(resourceIndex.files).map(name=>'assets/content/'+name));
  const additiveContent=reviewedFiles.filter(item=>item.path.startsWith('assets/content/')&&!sharedContent.has(item.path));
- const manifest={version:2,release:RELEASE_V2,baseDeploymentSha256:sha256(primaryBytes),resourceRevision:resourceIndex.revision,bytes,files:reviewedFiles,...(additiveContent.length?{additiveContent}:{})};
+ await verifySourceProvenance(repository,sourceProvenance);
+ const manifest={version:2,release:RELEASE_V2,baseDeploymentSha256:sha256(primaryBytes),resourceRevision:resourceIndex.revision,sourceProvenance,bytes,files:reviewedFiles,...(additiveContent.length?{additiveContent}:{})};
  assertDeploymentContentGraph(manifest,resourceIndex);
  await writeFile(resolve(outDir,RELEASE_V2_MANIFEST),JSON.stringify(manifest,null,2)+'\n');
  const result={outDir,release:RELEASE_V2,manifestCount,runtimeGraph,bundleAudit,files:reviewedFiles.length,bytes,reusedFiles:reused.length,reusedBytes:reused.reduce((sum,item)=>sum+item.bytes,0),stagedBytes};

@@ -6,6 +6,7 @@ import {join,resolve} from 'node:path';
 import {stagePages} from '../scripts/stage-pages.mjs';
 import {syncMoonforestV2} from '../scripts/sync-moonforest-0.2.mjs';
 import {sha256,publishedBytes,RELEASE_V2_MANIFEST,reviewedDeploymentUnion,deploymentPath} from '../scripts/release-deployment.mjs';
+import {captureSourceProvenance,SOURCE_ENTRY_FILES} from '../scripts/source-provenance.mjs';
 
 test('publish comparisons normalize Windows text without changing hashed content or source bytes',()=>{
  const source=Buffer.from('{"approved":true}\r\n'),original=Buffer.from(source),published=Buffer.from('{"approved":true}\n');
@@ -68,5 +69,17 @@ test('Pages rejects conflicting release graphs and changes to the frozen deploym
   f.manifest.files.find(item=>item.path==='assets/alpha-wolf.json').sha256='f'.repeat(64);await writeFile(join(f.site,RELEASE_V2_MANIFEST),JSON.stringify(f.manifest));await assert.rejects(reviewedDeploymentUnion(f.site),/disagree on shared deployment path/);
   await writeFile(join(f.site,'deployment-files.json'),Buffer.concat([f.primaryBytes,Buffer.from('\n')]));await assert.rejects(reviewedDeploymentUnion(f.site),/preserved deployment mismatch/);
   assert.throws(()=>deploymentPath(f.site,'../outside'),/Unsafe/);assert.throws(()=>deploymentPath(f.site,'assets\\outside'),/Unsafe/);
+ }finally{await f.cleanup();}
+});
+test('sync and Pages refuse a reviewed build whose source has since changed',async()=>{
+ const f=await fixture();try{
+  for(const path of ['src','scripts'])await mkdir(join(f.root,'ArcherPreview',path),{recursive:true});
+  for(const path of [...SOURCE_ENTRY_FILES,'ArcherPreview/src/main.js'])await writeFile(join(f.root,path),'reviewed source\n');
+  f.manifest.sourceProvenance=await captureSourceProvenance(f.root);
+  await writeFile(join(f.dist,RELEASE_V2_MANIFEST),JSON.stringify(f.manifest));
+  await syncMoonforestV2({...f,repository:f.root,writeReport:false});
+  await writeFile(join(f.root,'ArcherPreview/src/main.js'),'not the reviewed source\n');
+  await assert.rejects(stagePages(f.root,join(f.root,'unreviewed-publish')),/Reviewed build source differs/);
+  await assert.rejects(syncMoonforestV2({...f,repository:f.root,writeReport:false}),/Reviewed build source differs/);
  }finally{await f.cleanup();}
 });

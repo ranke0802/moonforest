@@ -2,10 +2,12 @@ import {copyFile,mkdir,writeFile} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {reviewedDeploymentUnion} from './release-deployment.mjs';
+import {verifySourceProvenance} from './source-provenance.mjs';
 
 export async function stagePages(repository,output,{requireResourceIndex=false}={}){
  const root=resolve(repository),site=resolve(root,'ArcherPreviewSite'),destination=resolve(output);
  const reviewed=await reviewedDeploymentUnion(site,{requireResourceIndex});
+ for(const manifest of reviewed.manifests)if(manifest.data?.sourceProvenance)await verifySourceProvenance(root,manifest.data.sourceProvenance);
  for(const item of reviewed.entries){
   const target=resolve(destination,'ArcherPreviewSite',item.path);await mkdir(dirname(target),{recursive:true});await copyFile(resolve(site,item.path),target);
  }

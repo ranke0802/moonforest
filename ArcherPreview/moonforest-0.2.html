@@ -204,6 +204,26 @@
         <details class="help-note"><summary>음악 · 효과음 크레딧</summary><p>‘The Summoning’ by <a href="https://www.scottbuckley.com.au/library/the-summoning/" target="_blank" rel="noopener">Scott Buckley</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC-BY 4.0</a> (전투 루프와 짧은 전환음으로 편집). Additional Sound FX by Will Leamon · OGA-BY 3.0. 폴리 녹음: Ben Jaszczak &amp; Brian Nelson, artisticdude, Iwan ‘qubodup’ Gabovitch · CC0. <a href="./AUDIO_CREDITS.txt" target="_blank" rel="noopener">전체 출처와 라이선스</a></p></details>
       </dialog>
     </main>
+    <script id="moonforest-startup-guard">
+      // This small classic script also runs when the game's module cannot load.
+      (()=>{
+        let entered=false,failed=false,retried=false,timer;
+        const get=id=>document.getElementById(id);
+        const retry=()=>{if(retried)return;retried=true;const url=new URL(location.href);url.searchParams.set('_reload',String(Date.now()));location.replace(url.href);};
+        const fail=reason=>{
+          if(entered||failed)return;failed=true;clearTimeout(timer);
+          document.documentElement.dataset.loading='true';get('loading').hidden=false;get('loading').classList.add('error');
+          get('loading-title').textContent='게임 실행 파일을 불러오지 못했습니다';
+          get('loading-text').textContent='연결을 확인한 뒤 다시 불러오기를 눌러 주세요. 저장된 진행과 리소스는 지우지 않습니다.';
+          get('loading-error').hidden=false;get('loading-error-message').textContent='시작 단계: '+reason+'\n버전: MoonForest 0.2 · '+(new URL(location.href).searchParams.get('rev')||'현재 빌드');
+          const button=get('retry-load');button.hidden=false;button.textContent='다시 불러오기';button.addEventListener('click',retry,{once:true});
+        };
+        const error=event=>{if(event.target?.tagName==='SCRIPT'||event.target===window)fail(event.message||'실행 파일 요청 또는 모듈 해석 실패');};
+        window.addEventListener('error',error,true);
+        timer=setTimeout(()=>fail('실행 파일 응답이 30초 동안 없습니다'),30000);
+        window.__moonforestStartup={entered(){entered=true;clearTimeout(timer);window.removeEventListener('error',error,true);get('retry-load').removeEventListener('click',retry);delete window.__moonforestStartup;}};
+      })();
+    </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

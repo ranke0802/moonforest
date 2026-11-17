@@ -157,7 +157,8 @@ export const CHAPTER_QUESTS=[
       }
     ],
     "recovery": "종 선택 변경 가능. 동물은 죽거나 유실되지 않는다. 테이밍 전투·메인 단서에 필요 없음.",
-    "pendingBinding": "동물 친밀도·명령 이벤트"
+    "pendingBinding": "동물 친밀도·명령 이벤트",
+    "unavailableReason": "반려동물 친밀도와 명령 목표는 준비 중입니다."
   },
   {
     "id": "Q04",
@@ -410,7 +411,8 @@ export const CHAPTER_QUESTS=[
       }
     ],
     "recovery": "홉고블린 실패 시 공터 밖 야영점에서 재도전. 펜던트·주요 단서 진행은 유지. 쓰러진 왕은 저장 후 재보상 없음.",
-    "pendingBinding": "홉고블린 처치 이벤트"
+    "pendingBinding": "홉고블린 처치 이벤트",
+    "unavailableReason": "홉고블린 우두머리 전투는 준비 중입니다."
   },
   {
     "id": "M04",
@@ -526,7 +528,8 @@ export const CHAPTER_QUESTS=[
       }
     ],
     "recovery": "구울 처치 플래그와 문 개방 저장. 사망 후 퍼즐 재수행 불필요. 움직이는 물체로 판을 눌러야 하는 물리 퍼즐 대신 짧은 순서 조작.",
-    "pendingBinding": "구울 문지기 처치 이벤트"
+    "pendingBinding": "구울 문지기 처치 이벤트",
+    "unavailableReason": "구울 문지기 전투는 준비 중입니다."
   },
   {
     "id": "M07",

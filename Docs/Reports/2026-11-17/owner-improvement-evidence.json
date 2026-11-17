@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-17",
+  "method": "Direct Node imports; synthetic in-memory storage only",
+  "noRealSaveModified": true,
+  "noGameSourceModified": true,
+  "browserAutomation": false,
+  "unavailableStorage": {
+    "underlyingStorage": null,
+    "reportedVolatile": true,
+    "inMemoryGold": 1
+  },
+  "corruptSave": {
+    "original": "{broken",
+    "afterSave": "{broken",
+    "preserved": true
+  },
+  "unsupportedVersion": {
+    "originalVersion": 999,
+    "afterSaveVersion": 999,
+    "originalGoldPreserved": true
+  },
+  "concurrentSnapshots": {
+    "firstTabGold": 10,
+    "secondTabGold": 20,
+    "persistedGold": 10,
+    "secondTabStatus": "conflict",
+    "merged": false
+  },
+  "cumulativeGold": {
+    "firstReward": 100000,
+    "nextReward": 25,
+    "firstCredit": 100000,
+    "nextCredit": 25,
+    "afterChapterTotal": 100025,
+    "policyIntentUnknown": true
+  },
+  "limitations": [
+    "These are conditional code-path reproductions, not evidence a user has lost data.",
+    "No assertion of a deployed-browser failure rate or financial loss.",
+    "The intended gold cap and multi-tab policy are not defined by these checks."
+  ]
+}

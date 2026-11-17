@@ -1,11 +1,13 @@
 import {readFile,writeFile,mkdir,copyFile,lstat} from 'node:fs/promises';
 import {resolve,dirname} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {verifySourceProvenance} from './source-provenance.mjs';
 import {RELEASE_V2,RELEASE_V2_MANIFEST,sha256,deploymentPath,optionalBytes,assertDescriptor,reviewedDeploymentUnion,assertDeploymentContentGraph} from './release-deployment.mjs';
 
 export async function syncMoonforestV2({repository=resolve(import.meta.dirname,'../..'),dist=resolve(repository,'ArcherPreview/dist/moonforest-0.2'),site=resolve(repository,'ArcherPreviewSite'),writeReport=true}={}){
  const manifestBytes=await readFile(resolve(dist,RELEASE_V2_MANIFEST)),manifest=JSON.parse(manifestBytes),primaryBytes=await readFile(resolve(site,'deployment-files.json')),primary=JSON.parse(primaryBytes);
  if(manifest.version!==2||manifest.release!==RELEASE_V2||manifest.baseDeploymentSha256!==sha256(primaryBytes)||manifest.resourceRevision!==primary.resourceRevision)throw new Error('MoonForest 0.2 preserved deployment mismatch');
+ if(manifest.sourceProvenance)await verifySourceProvenance(repository,manifest.sourceProvenance);
  // Verify the live releases before adding any new files. The original HTML,
  // manifests, bundles and all referenced chunks remain immutable.
  await reviewedDeploymentUnion(site,{requireResourceIndex:true});
