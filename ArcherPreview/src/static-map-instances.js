@@ -25,6 +25,9 @@ export function instantiateStaticMap(container,name){
  for(const source of nodes){
   const geometry=source.getTotalVertices?.()>0;
   const node=geometry?source.createInstance(name(source.name)):source.getClassName()==='Mesh'?new Mesh(name(source.name),scene):new TransformNode(name(source.name),scene);
+  // Static props: the bounding-sphere test alone decides visibility (the
+  // extra box test per instance per frame is measurable on phones).
+  if(geometry)node.cullingStrategy=1;
   created.set(source,node);
   node.position.copyFrom(source.position);node.scaling.copyFrom(source.scaling);
   if(source.rotationQuaternion)node.rotationQuaternion=source.rotationQuaternion.clone();else node.rotation.copyFrom(source.rotation);

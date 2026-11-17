@@ -252,6 +252,7 @@ export function setupV03(api){
   get cameraFocus(){return state.screen==='play'?story.cameraFocus:null;},
   get timeScale(){return state.screen==='play'?story.timeScale:1;},
   get lunge(){return state.screen==='play'?story.lunge:null;},
+  get questSpot(){return state.screen==='play'?story.questSpot:null;},
   update(dt){
    if(state.disposed)return;
    if(state.screen!=='play')cursors.set('ui');

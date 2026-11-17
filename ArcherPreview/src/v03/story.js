@@ -72,7 +72,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   return result;
  }
  // ----- guide light -----
- const GUIDE_MAX_GAP=8,GUIDE_PATH_RADIUS=.45;
+ const GUIDE_MAX_GAP=8,GUIDE_PATH_RADIUS=.34;
  const walkable=(x,z)=>{const nav=api.world.navigation;if(!nav?.free)return true;try{return nav.free({x,z},.22);}catch{return true;}};
  // Straight hop from the player to a point, used only for the short orbit.
  const clearLine=(from,x,z)=>{for(let i=1;i<=3;i++){const k=i/3;if(!walkable(from.x+(x-from.x)*k,from.z+(z-from.z)*k))return false;}return true;};
@@ -122,20 +122,23 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const staged={key:null,busy:false,next:0,introduced:new Set()};
  function stageFight(player){
   const step=log.step(),quest=log.quest();
-  if(!step?.summon||step.type!=='defeat'||step.map!==mapId||!player||staged.busy||talking||dialogue.open)return;
+  if(step?.type!=='defeat'||!step.at||step.map!==mapId||!player||staged.busy||talking||dialogue.open)return;
+  const tune=step.tune??step.summon?.tune;
+  if(!step.summon&&!step.intro&&!tune)return;
   const key=quest.id+'/'+step.id;
   const inside=(step.at.x-player.x)**2+(step.at.z-player.z)**2<=step.at.radius**2;
-  // A step may be fought against the map's own resident (summon.after): the
-  // story only calls a stand-in when none has shown up for that many seconds.
+  // While a foe of the step is alive: apply the 0.3 balance and play the
+  // arrival line once, before the fight starts.
   if(livingFoe(step.kind)){
-   staged.key=key;staged.since=null;if(step.summon.tune)tuneFoes(step.summon.kind,step.summon.tune);
+   staged.key=key;staged.since=null;if(tune)tuneFoes(step.kind,tune);
    if(inside&&step.intro&&!staged.introduced.has(key)&&content.DIALOGUES[step.intro]&&api.battle.combatCount===0){
     staged.introduced.add(key);staged.busy=true;talking=true;api.input.setSuspended(true);
     void dialogue.play(content.DIALOGUES[step.intro]).catch(()=>{}).finally(()=>{talking=false;staged.busy=false;if(!disposed){api.input.setSuspended(false);if(step.arrival)hud.flash(step.arrival);}});
    }
    return;
   }
-  if(api.battle.loading||api.battle.combatCount>0||guide.time<staged.next)return;
+  // No summon: the step is fought against the resident placed on the map.
+  if(!step.summon||api.battle.loading||api.battle.combatCount>0||guide.time<staged.next)return;
   if(!inside){staged.since=null;return;}
   if(step.summon.after){staged.since??=guide.time;if(guide.time-staged.since<step.summon.after)return;}
   staged.busy=true;
@@ -148,7 +151,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(disposed||log.step()!==step)return;
     const left=Math.max(1,step.summon.count-log.snapshot().count);
     const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind);
-    if(ok!==false&&step.summon.tune)tuneFoes(step.summon.kind,step.summon.tune);
+    if(ok!==false&&tune)tuneFoes(step.summon.kind,tune);
     if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
    }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}
    finally{staged.busy=false;staged.key=key;staged.next=guide.time+4;}
@@ -462,6 +465,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get cameraFocus(){return scene.active?scene.cameraFocus:null;},
   get timeScale(){return slow.left>0?SLOW_SCALE:1;},
   get lunge(){return scene.active?null:LUNGE;},
+  // Where the current step is fought on this map (monster groups near it load first).
+  get questSpot(){const step=log.step();return started&&step?.type==='defeat'&&step.at&&step.map===(api.world?.mapId??mapId)?step.at:null;},
   get started(){return started;},
   log,
   start({fresh=false}={}){
@@ -478,7 +483,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // the player sees the stage.
   prepare(id){
    placeProps(id);
-   try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,.3);}catch{/* warm-up only */}
+   try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,GUIDE_PATH_RADIUS);}catch{/* warm-up only */}
   },
   update(dt,s){
    if(!started||disposed||!s.ready)return;

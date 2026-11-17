@@ -206,7 +206,7 @@ function assertFrameHealthy(){
 const touchDevice=villageForceMobile||matchMedia('(pointer: coarse)').matches;
 const renderActivity=new RenderActivity(touchDevice);
 // Touch devices: hold the frame cap by trading resolution, view distance and shadows.
-const ADAPTIVE_LEVEL_KEY='moonforest-adaptive-level-v1';
+const ADAPTIVE_LEVEL_KEY='moonforest-adaptive-level-v2';
 let adaptiveStoredLevel=0;try{adaptiveStoredLevel=Number(globalThis.localStorage?.getItem(ADAPTIVE_LEVEL_KEY))||0;}catch{/* storage optional */}
 const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition,level:adaptiveStoredLevel});
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
@@ -1457,7 +1457,7 @@ try {
       versionRoute.release==='moonforest-0.2'?import('./plains-monster-spawns.js'):null,
     ]).then(([{createAuthoredMonsterRuntime},defaults])=>{
       if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
-      const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,storage:journeyStorage,defaultDocument:defaults?.PLAINS_MONSTER_SPAWNS,defaultRevision:defaults?.PLAINS_MONSTER_SPAWNS_REVISION,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}},onError:error=>console.error('[몬스터 배치]',error)});
+      const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,getFocus:()=>world.v03?.questSpot??null,storage:journeyStorage,defaultDocument:defaults?.PLAINS_MONSTER_SPAWNS,defaultRevision:defaults?.PLAINS_MONSTER_SPAWNS_REVISION,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}},onError:error=>console.error('[몬스터 배치]',error)});
       world.authoredMonsters=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
     }).catch(error=>{authoredMonsterTask=null;throw error;});return authoredMonsterTask;
   };

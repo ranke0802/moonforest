@@ -4,14 +4,14 @@
 // back up after a long calm stretch; a level that drops again soon after a
 // step up becomes the floor for the session. Pure logic: main.js applies it.
 export const ADAPTIVE_LEVELS=Object.freeze([
- Object.freeze({scale:1,viewCap:null,rangeScale:1,shadows:true}),
- // The 2026-11-17 phone recording was CPU-bound (active-mesh selection and
- // draw submission, 1.0–1.5 M triangles on the plains), so the view distance
- // and the shadow pass go first; resolution follows for the GPU.
- Object.freeze({scale:1,viewCap:1.8,rangeScale:1,shadows:true}),
- Object.freeze({scale:.9,viewCap:1.4,rangeScale:1,detailRange:70,shadows:true}),
- Object.freeze({scale:.85,viewCap:1.2,rangeScale:.9,detailRange:55,shadows:false}),
- Object.freeze({scale:.75,viewCap:1,rangeScale:.8,detailRange:42,shadows:false}),
+ // Only the 3D render resolution is traded. View distance, ground detail,
+ // the village range and shadows are part of the authored look (the plains
+ // panorama from the bear's hill, the forest ring around the village) and
+ // are never reduced here — phone recordings also showed they bought little
+ // (CPU 22.5 → 18.6 ms/frame on the plains with all of them cut).
+ Object.freeze({scale:1,viewCap:null,rangeScale:1,detailRange:0,shadows:true}),
+ Object.freeze({scale:.9,viewCap:null,rangeScale:1,detailRange:0,shadows:true}),
+ Object.freeze({scale:.8,viewCap:null,rangeScale:1,detailRange:0,shadows:true}),
 ]);
 const WINDOW_MS=2000,CALM_MS=20000,PROBE_MS=8000;
 

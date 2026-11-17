@@ -130,7 +130,7 @@ export const DIALOGUES=Object.freeze({
  'youth-idle':[{who:'청년',text:'목책이 또 무너졌어요. 다음 습격 전에 고쳐야 하는데.'}],
 });
 
-// Step types: defeat {kind,count,map,at,summon,intro,arrival} (at: lead there; summon once the player is inside) · turnIn marks a report (! instead of ?) · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
+// Step types: defeat {kind,count,map,at,summon,tune,intro,arrival} (at: lead there; summon: call story foes once the player is inside — omit it to fight the map's own resident; tune: 0.3 balance for foes of that kind) · turnIn marks a report (! instead of ?) · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
 export const QUESTS=Object.freeze([
  {id:'M00',reward:{gold:30},title:'늑대와 마차',steps:[
   {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
@@ -150,7 +150,7 @@ export const QUESTS=Object.freeze([
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
  {id:'M04',reward:{gold:120,armor:'leather'},title:'대평원의 곰',steps:[
-  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},summon:{kind:'bear',count:1,after:8,tune:{hp:650,damage:.7}},arrival:'대평원의 곰이 모습을 드러냈다'},
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},tune:{hp:650,damage:.7},arrival:'대평원의 곰이 모습을 드러냈다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-bear'}},
  ]},
  {id:'M05',reward:{gold:150,potions:2},title:'마을을 습격한 고블린',steps:[
@@ -159,7 +159,7 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M06',reward:{gold:250},title:'우두머리 늑대',steps:[
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-alpha'}},
-  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28},summon:{kind:'wolf',count:1,after:8},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
+  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-alpha'}},
  ]},
  {id:'M07',reward:{gold:200,potions:1},title:'마물의 숲',steps:[

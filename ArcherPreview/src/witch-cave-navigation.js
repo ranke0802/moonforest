@@ -7,6 +7,8 @@ import {caveLaboratoryClearance} from './cave-laboratory-collision.js';
 // native structure uses its exact, conservatively quantised local certificate.
 const clearance=(x,z)=>Math.min(caveClearance(x,z),caveMeshClearance(x,z),caveLaboratoryClearance(x,z));
 export class CaveNavigation extends VillageNavigation {
+  // Cave corridors are narrow: every actor keeps its exact route grid.
+  sharedRouteGrids=false;
   clearanceAt(x,z,radius=0){return clearance(x,z);}
   free(p,radius,limit=ARENA_RADIUS){return this.clearanceAt(p.x,p.z,radius)>=radius+.08&&super.free(p,radius,limit);}
   segmentClear(a,b,radius=0,combat=false){

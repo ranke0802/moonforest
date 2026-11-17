@@ -36,6 +36,8 @@ class RouteHeap {
 
 // Same analytic circles and sweep rule as the original navigator, with a static
 // spatial index for the larger village. AI/path rules and movement stay intact.
+export const ROUTE_GRID_RADII=Object.freeze([.34,.7,1.7]);
+export const routeGridRadius=radius=>ROUTE_GRID_RADII.find(size=>radius<=size+1e-9)??radius;
 export class VillageNavigation extends ArenaNavigation {
   constructor(obstacles){
     super(obstacles);this.cells=new Map();this.gridMetadata=new WeakMap();this.obstacleCells=new WeakMap();this.segmentCellPruningSafe=true;
@@ -51,7 +53,13 @@ export class VillageNavigation extends ArenaNavigation {
       }
     }
   }
+  // Route grids are built per radius over the whole map (tens of thousands
+  // of cells): building one for each actor size froze the game for up to
+  // 0.9 s mid-fight on phones. Open-air maps therefore share three sizes; a
+  // smaller actor routes on the next larger grid (exact collision is
+  // unchanged — only the waypoint search is a little more conservative).
   grid(radius,limit){
+    if(this.sharedRouteGrids!==false)radius=routeGridRadius(radius);
     const nodes=super.grid(radius,limit);
     if(!this.gridMetadata.has(nodes)){
       const component=new Int32Array(nodes.length);component.fill(-1);

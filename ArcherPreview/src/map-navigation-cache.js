@@ -1,7 +1,7 @@
 // Cache only immutable grid decisions, not navigators, routes, scene objects or
 // the large node/edge object graph. Each arrival restores independently owned
 // nodes with exactly the original coordinates, neighbour order and edge costs.
-export const MAP_NAVIGATION_CACHE_BYTES=512*1024;
+export const MAP_NAVIGATION_CACHE_BYTES=1024*1024;
 const pools=new WeakMap(),directions=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 const sameBytes=(a,b)=>a.length===b.length&&a.every((value,i)=>value===b[i]);
 const methodKeys=['constructor','grid','free','segmentClear','clearanceAt'],methods=nav=>methodKeys.map(key=>nav[key]);
