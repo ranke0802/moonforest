@@ -96,12 +96,12 @@ test('null-target boundary event from a changing HUD label inside game does not 
  window.emit('pointerout',{pointerType:'mouse',relatedTarget:null,target:canvas,clientX:1001,clientY:300});assert.equal(cancels,1);assert.equal(input.value().y,0);input.dispose();
 });
 
-test('E uses one potion per fresh press and ignores autorepeat and form typing',()=>{
+test('1 uses one potion per fresh press and ignores autorepeat and form typing',()=>{
   let uses=0;setup({potion:()=>uses++});
-  const event={code:'KeyE',target:{tagName:'BODY'},repeat:false};
+  const event={code:'Digit1',target:{tagName:'BODY'},repeat:false};
   window.emit('keydown',event);window.emit('keydown',{...event,repeat:true});window.emit('keydown',event);
-  assert.equal(uses,1);window.emit('keyup',{code:'KeyE'});window.emit('keydown',event);assert.equal(uses,2);
-  window.emit('keyup',{code:'KeyE'});window.emit('keydown',{...event,target:{tagName:'INPUT'}});assert.equal(uses,2);
+  assert.equal(uses,1);window.emit('keyup',{code:'Digit1'});window.emit('keydown',event);assert.equal(uses,2);
+  window.emit('keyup',{code:'Digit1'});window.emit('keydown',{...event,target:{tagName:'INPUT'}});assert.equal(uses,2);
 });
 
 test('DOM stub: dynamic joystick originates at touch, moves, and resets on pointercancel', () => {

@@ -10,9 +10,11 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const banner=make('div','v03-banner');banner.hidden=true;
  const tip=make('aside','v03-tip'),tipTitle=make('strong','v03-tip-title'),tipLead=make('p','v03-tip-lead'),tipText=make('p','v03-tip-text');
  tip.append(tipTitle,tipLead,tipText);tip.hidden=true;
- root.append(quest,hint,banner,tip,prompt);mount.append(root);
+ // A pulsing ring over the real game button a lesson is about (touch play).
+ const ring=make('div','v03-ring');ring.hidden=true;
+ root.append(quest,hint,banner,tip,prompt,ring);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
- const last={title:null,objective:null,hint:null,prompt:null};
+ const last={title:null,objective:null,hint:null,prompt:null,ring:null};
  return {
   element:root,
   setQuest(nextTitle,nextObjective){
@@ -29,6 +31,14 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
   setTip(value){
    if(!value){tip.hidden=true;tip.classList.remove('is-shown');return;}
    tipTitle.textContent=value.title;tipLead.textContent=value.lead;tipText.textContent=value.text??'';tip.hidden=false;tip.classList.remove('is-shown');void tip.offsetWidth;tip.classList.add('is-shown');
+  },
+  // Points at a game control. Layout is read once here, never per frame.
+  setRing(selector){
+   if(last.ring===selector)return;last.ring=selector;
+   const target=selector?doc.querySelector(selector):null,box=target&&!target.hidden?target.getBoundingClientRect?.():null;
+   if(!box||!box.width){ring.hidden=true;return;}
+   const size=Math.max(box.width,box.height)+18;
+   ring.style.width=ring.style.height=size+'px';ring.style.left=box.left+box.width/2-size/2+'px';ring.style.top=box.top+box.height/2-size/2+'px';ring.hidden=false;
   },
   dispose(){root.remove();},
  };

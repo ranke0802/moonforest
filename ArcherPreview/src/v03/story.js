@@ -4,6 +4,7 @@
 import {createQuestLog} from './quests.js';
 import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
+import {createGuideTrack} from './guide-track.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -20,7 +21,7 @@ export function particle(word,withFinal,withoutFinal){
  const code=word.charCodeAt(word.length-1)-0xac00;
  return word+(code>=0&&code<=11171&&code%28?withFinal:withoutFinal);
 }
-export function createStory({api,doc,save,content,createVisual}){
+export function createStory({api,doc,save,content,createVisual,createGuide=null}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
  const log=createQuestLog({quests:content.QUESTS,storage:save.journey});
  const dialogue=createDialogue({doc});
@@ -28,7 +29,7 @@ export function createStory({api,doc,save,content,createVisual}){
  const cast=[];let mapId=null,near=null,started=false,talking=false,disposed=false;
  // Tutorial state: sequential fight coaching and one-time tips (saved per slot).
  const TIP_KEY='v03-tips-v1',TIP_SECONDS=7.5;
- const coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
+ const HINT_SECONDS=9,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
  function loadTips(){tips.seen=new Set();try{const value=JSON.parse(save.journey.getItem(TIP_KEY)??'[]');if(Array.isArray(value))for(const id of value)if(typeof id==='string')tips.seen.add(id);}catch{/* start fresh */}}
  function trigger(when){
   for(const tip of content.TIPS??[]){
@@ -38,9 +39,9 @@ export function createStory({api,doc,save,content,createVisual}){
   }
  }
  function runTips(dt){
-  if(tips.showing){tips.left-=dt;if(tips.left<=0){tips.showing=null;hud.setTip(null);}return;}
+  if(tips.showing){tips.left-=dt;if(tips.left<=0){tips.showing=null;hud.setTip(null);hud.setRing(null);}return;}
   if(!tips.queue.length||dialogue.open)return;
-  const tip=tips.queue.shift();tips.showing=tip;tips.left=TIP_SECONDS;hud.setTip({title:tip.title,lead:touch?tip.touch:tip.keys,text:tip.text});
+  const tip=tips.queue.shift();tips.showing=tip;tips.left=TIP_SECONDS;hud.setTip({title:tip.title,lead:touch?tip.touch:tip.keys,text:tip.text});if(touch&&tip.target)hud.setRing(tip.target);
  }
  function refresh(){
   const quest=log.quest();
@@ -56,9 +57,61 @@ export function createStory({api,doc,save,content,createVisual}){
   }
   return result;
  }
+ // ----- guide light -----
+ const guide={visual:null,track:createGuideTrack(),key:null,originX:0,originZ:0,age:0,time:0,failed:false},guidePoint={x:0,z:0};
+ function guideTarget(player){
+  const step=log.step();if(!step||api.battle.combatCount>0&&step.type!=='defeat')return null;
+  if(step.type==='defeat'){
+   // Lead toward the nearest living foe, stopping short of it.
+   let best=null,bestSq=Infinity;
+   for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0))continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
+   if(!best||bestSq<16)return null;
+   guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',direct:true,stopShort:2.6};
+  }
+  if(step.type==='talk'){
+   let best=null,bestSq=Infinity,away=null;
+   for(const id of step.targets){
+    if(!log.isTarget(id))continue;
+    const member=cast.find(row=>row.npc.id===id);
+    if(member){const sq=(member.x-player.x)**2+(member.z-player.z)**2;if(sq<bestSq){best=member;bestSq=sq;}}
+    else away??=content.NPCS.find(npc=>npc.id===id);
+   }
+   if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'npc:'+best.npc.id,direct:false,stopShort:1.4};}
+   const exit=away&&content.ROUTES?.[mapId]?.[away.map];if(!exit)return null;
+   guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+away.map,direct:false,stopShort:0};
+  }
+  if(step.type==='reach'){
+   const exit=content.ROUTES?.[mapId]?.[step.map];if(!exit)return null;
+   guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};
+  }
+  return null;
+ }
+ function updateGuide(dt,player){
+  guide.time+=dt;
+  const target=!createGuide||guide.failed||talking||dialogue.open||!player?null:guideTarget(player);
+  if(!target){guide.visual?.hide();guide.key=null;return;}
+  try{guide.visual??=createGuide(api.world.scene);}catch(error){guide.failed=true;console.warn('[MoonForest 0.3] guide light unavailable',error);return;}
+  guide.age+=dt;
+  const moved=Math.hypot(player.x-guide.originX,player.z-guide.originZ);
+  if(target.key!==guide.key||guide.age>1.2&&(target.direct||moved>5)){
+   const points=[{x:player.x,z:player.z}];
+   if(!target.direct){try{for(const p of api.world.navigation?.path?.(player,guidePoint,.3)??[])points.push({x:p.x,z:p.z});}catch{/* fall back to a straight line */}}
+   if(points.length<2)points.push({x:guidePoint.x,z:guidePoint.z});
+   guide.track.setPath(points);guide.key=target.key;guide.originX=player.x;guide.originZ=player.z;guide.age=0;
+  }
+  const before=guide.track.distance,arrived=guide.track.update(dt,player,{stopShort:target.stopShort}),moving=guide.track.distance-before>dt*1.5;
+  const p=guide.track.position,ground=api.world.terrain?.heightAt?.(p.x,p.z)??0;
+  // Hovering: a slow bob, plus a small circle while it waits for the player.
+  const swing=moving?0:.32,lift=arrived?1.75:1.25;
+  guide.visual.show(p.x+Math.cos(guide.time*1.7)*swing,ground+lift+Math.sin(guide.time*2.6)*.15,p.z+Math.sin(guide.time*1.7)*swing,guide.time,moving);
+ }
  function clearCast(){for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);}
+ function placeProps(id){
+  const props=(content.PROPS??[]).filter(prop=>prop.map===id);
+  if(props.length)void Promise.resolve(api.placeProps?.(props)).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
+ }
  function buildCast(id){
-  clearCast();
+  clearCast();placeProps(id);
   const world=api.world,scene=world.scene;if(!scene||scene.isDisposed)return;
   for(const npc of content.NPCS){
    if(npc.map!==id)continue;
@@ -85,9 +138,9 @@ export function createStory({api,doc,save,content,createVisual}){
   }finally{talking=false;if(!disposed)api.input.setSuspended(false);}
   return true;
  }
- function coach(){
+ function coach(dt=0){
   const quest=log.quest(),step=log.step(),hints=content.COMBAT_HINTS??[];
-  if(quest?.id!=='M00'||step?.id!=='fight'||coachState.index>=hints.length){hud.setHint(null);return;}
+  if(quest?.id!=='M00'||step?.id!=='fight'||coachState.index>=hints.length){hud.setHint(null);if(!tips.showing)hud.setRing(null);return;}
   const controller=api.getController(),player=api.getPlayer()?.position,camera=api.world.camera;
   if(player){
    if(coachState.lastX!==null)coachState.moved+=Math.hypot(player.x-coachState.lastX,player.z-coachState.lastZ);
@@ -98,12 +151,15 @@ export function createStory({api,doc,save,content,createVisual}){
   // Skip past everything already done this frame, then show the next line.
   for(;coachState.index<hints.length;coachState.index++){
    const done=hints[coachState.index].done;
-   const finished=done.moved!==undefined?coachState.moved>=done.moved:done.camera!==undefined?Math.abs((camera?.alpha??0)-(coachState.alpha??0))>=done.camera:done.states.includes(stateName);
+   // A line nobody acts on must not block the lessons after it.
+   const finished=coachState.shown>=HINT_SECONDS||(done.moved!==undefined?coachState.moved>=done.moved:done.camera!==undefined?Math.abs((camera?.alpha??0)-(coachState.alpha??0))>=done.camera:done.states.includes(stateName));
    if(!finished)break;
-   if(done.camera!==undefined||done.moved!==undefined){coachState.moved=0;coachState.alpha=camera?.alpha??null;}
+   coachState.shown=0;coachState.moved=0;coachState.alpha=camera?.alpha??null;
   }
+  coachState.shown+=dt;
   const hint=hints[coachState.index];
   hud.setHint(hint?`${hint.text} · ${touch?hint.touch:hint.keys}`:null);
+  if(!tips.showing)hud.setRing(touch?hint?.target??null:null);
  }
  function contextTips(){
   const quest=log.quest(),step=log.step(),key=quest&&step?`step:${quest.id}/${step.id}`:null;
@@ -126,12 +182,18 @@ export function createStory({api,doc,save,content,createVisual}){
   log,
   start({fresh=false}={}){
    if(fresh||!log.load())log.reset();
-   started=true;mapId=null;Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null});
+   started=true;mapId=null;Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0});
    tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
    const quest=log.quest();if(quest)save.touch({title:quest.title});
   },
   defeat(event){if(started)emit({type:'defeat',kind:event?.kind});},
+  // Called behind the prologue: scenery and the path grid are ready before
+  // the player sees the stage.
+  prepare(id){
+   placeProps(id);
+   try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,.3);}catch{/* warm-up only */}
+  },
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
@@ -142,9 +204,9 @@ export function createStory({api,doc,save,content,createVisual}){
     near=api.battle.combatCount>0?null:best;
     hud.setPrompt(near?`${touch?'':'E · '}${log.isTarget(near.npc.id)?particle(near.npc.name,'과','와')+' 이야기하기':near.npc.name+'에게 말 걸기'}`:null);
    }
-   coach();contextTips();runTips(dt);
+   coach(dt);contextTips();runTips(dt);updateGuide(dt,player);
   },
-  inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,tips:[...tips.seen],tip:tips.showing?.id??null}),
-  dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);clearCast();dialogue.dispose();hud.dispose();},
+  inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null}),
+  dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();dialogue.dispose();hud.dispose();},
  };
 }

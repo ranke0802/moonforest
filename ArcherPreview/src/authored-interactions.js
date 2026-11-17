@@ -1,4 +1,4 @@
-// Independent player-facing text interactions; chapter quests retain G and
+// Independent player-facing text interactions; chapter quests also use E and
 // their own existing reward/progress rules. No author-supplied HTML is executed.
 export function setupAuthoredInteractions({root,world,getState,getLiveNpc=()=>[],resetInput=()=>{},onPauseChange=()=>{},onInteract=()=>{}}){
  const doc=root.ownerDocument,win=doc.defaultView,button=doc.createElement('button'),dialog=doc.createElement('dialog'),style=doc.createElement('style');let disposed=false,nearest=null,lastUpdate=-Infinity,lastFocus=null;
@@ -21,10 +21,10 @@ export function setupAuthoredInteractions({root,world,getState,getLiveNpc=()=>[]
    const amount=Math.max(0,1-.2/row.distance),end={x:position.x+(row.point.x-position.x)*amount,z:position.z+(row.point.z-position.z)*amount};return world.navigation.segmentClear(position,end,.05);
   }).sort((a,b)=>a.distance-b.distance)[0]??null;
  }
- function update(time=0,force=false){if(disposed||!force&&time-lastUpdate<.15)return;lastUpdate=time;nearest=findNearest();button.hidden=!nearest;if(nearest)button.textContent=nearest.interaction.label+' · U';}
+ function update(time=0,force=false){if(disposed||!force&&time-lastUpdate<.15)return;lastUpdate=time;nearest=findNearest();button.hidden=!nearest;if(nearest)button.textContent=nearest.interaction.label+' · E';}
  function open(){if(disposed||dialog.open)return;nearest=findNearest();if(!nearest)return;if(nearest.chest){if(world.openAuthoredChest?.(nearest.id)){button.hidden=true;onInteract({id:nearest.id,kind:nearest.kind,mapId:world.mapId});}return;}lastFocus=doc.activeElement;dialog.querySelector('h2').textContent=nearest.name;dialog.querySelector('p').textContent=nearest.interaction.text;resetInput();dialog.showModal();button.hidden=true;onPauseChange();onInteract({id:nearest.id,kind:nearest.kind,mapId:world.mapId});}
  function close(){if(dialog.open)dialog.close();}
- const key=event=>{if(event.code!=='KeyU'||event.repeat||event.ctrlKey||event.altKey||event.metaKey||/INPUT|SELECT|TEXTAREA/.test(event.target?.tagName??''))return;if(findNearest()){event.preventDefault();open();}};
+ const key=event=>{if(event.code!=='KeyE'||event.repeat||event.ctrlKey||event.altKey||event.metaKey||/INPUT|SELECT|TEXTAREA/.test(event.target?.tagName??''))return;if(findNearest()){event.preventDefault();open();}};
  const closed=()=>{resetInput();onPauseChange();if(lastFocus?.isConnected)lastFocus.focus?.({preventScroll:true});};button.addEventListener('click',open);dialog.querySelector('[data-interaction-close]').addEventListener('click',close);dialog.addEventListener('close',closed);win.addEventListener('keydown',key);
  return {update,isOpen:()=>dialog.open,close,inspect:()=>({nearest:nearest?.id??null,open:dialog.open}),dispose(){if(disposed)return;disposed=true;if(dialog.open)dialog.close();win.removeEventListener('keydown',key);button.removeEventListener('click',open);dialog.querySelector('[data-interaction-close]').removeEventListener('click',close);dialog.removeEventListener('close',closed);button.remove();dialog.remove();style.remove();}};
 }

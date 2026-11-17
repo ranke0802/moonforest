@@ -1,7 +1,20 @@
 // Chapter 1 content for the first ten minutes (M1). Data only: the story
 // runtime reads it; nothing here touches the engine.
+// The opening happens on the village road, about 35 m from the gate: close
+// enough that the first walk is short and safe.
+export const OPENING_STAGE=Object.freeze({map:'great-plains',x:-62.5,z:-20.9,yaw:-2.097});
+// Scenery the story adds to a map (real assets, placed through the map's own
+// placement runtime so streaming, collision and outlines work as usual).
+export const PROPS=Object.freeze([
+ {id:'v03-opening-wagon',asset:'covered-wagon',map:'great-plains',x:-64.3,z:-25.8,yaw:-2.097},
+]);
+// Where to walk to leave a map toward another one (used by the guide light).
+export const ROUTES=Object.freeze({
+ 'great-plains':{village:{x:-92.6,z:-34.6}},
+ village:{'great-plains':{x:.35,z:74.5}},
+});
 export const NPCS=Object.freeze([
- {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:17.4,z:70.2,yaw:-2.1,idle:'driver-idle'},
+ {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-65.6,z:-23.6,yaw:.6,idle:'driver-idle'},
  {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle'},
  {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle'},
@@ -13,7 +26,7 @@ export const DIALOGUES=Object.freeze({
  'driver-thanks':[
   {who:'마부',text:'허… 살았네. 용병 양반 아니었으면 말이고 나고 늑대 밥이 됐을 걸세.'},
   {who:'마부',text:'요즘 평원 짐승들이 이상하게 사나워. 예전엔 마차를 덮치진 않았는데.'},
-  {who:'마부',text:'바퀴를 손봐야 해서 나는 여기 남겠네. 마을은 서쪽 길을 따라가면 금방이야.'},
+  {who:'마부',text:'바퀴를 손봐야 해서 나는 여기 남겠네. 마을은 이 길 끝, 바로 저기야.'},
   {who:'마부',text:'도착하거든 달빛 여관부터 찾게. 주인이 무뚝뚝해도 방은 깨끗하지.'},
  ],
  'driver-idle':[{who:'마부',text:'바퀴만 고치면 나도 뒤따라가겠네. 길 조심하게.'}],
@@ -55,9 +68,9 @@ export const DIALOGUES=Object.freeze({
 // Step types: defeat {kind,count} · talk {targets:[npc],dialogues:{npc:id}} · reach {map}
 export const QUESTS=Object.freeze([
  {id:'M00',title:'늑대와 마차',steps:[
-  {id:'fight',text:'늑대를 물리치기',type:'defeat',kind:'wolf',count:1},
+  {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-thanks'}},
-  {id:'road',text:'서쪽 길을 따라 마을로 가기',type:'reach',map:'village'},
+  {id:'road',text:'길을 따라 마을로 가기',type:'reach',map:'village'},
  ]},
  {id:'M01',title:'달빛 여관',steps:[
   {id:'inn',text:'여관 주인과 이야기하기',type:'talk',targets:['innkeeper'],dialogues:{innkeeper:'inn-arrive'}},
@@ -72,17 +85,18 @@ export const CHAPTER_END_NOTE='다음 이야기 · 마을의 부탁과 대평원
 // First-fight coaching, in order. Each line stays until the player has done it.
 // done: moved (metres) · camera (radians turned) · states (controller states)
 export const COMBAT_HINTS=Object.freeze([
- {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',done:{moved:1.5}},
- {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면을 드래그',done:{camera:.3}},
- {id:'attack',text:'공격',keys:'J · 좌클릭',touch:'검 버튼',done:{states:['attack','slash','judgment','moveAttack']}},
- {id:'dodge',text:'늑대가 몸을 낮추면 회피',keys:'Space',touch:'회피 버튼',done:{states:['dodge']}},
- {id:'guard',text:'방패로 밀쳐 빈틈 만들기',keys:'F (길게 누르면 방어)',touch:'방패 버튼',done:{states:['shieldPush','guard']}},
+ {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',target:'#joystick',done:{moved:1.5}},
+ {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',done:{camera:.3}},
+ {id:'attack',text:'공격',keys:'J · 좌클릭',touch:'검 버튼',target:'#attack-button',done:{states:['attack','slash','judgment','moveAttack']}},
+ {id:'dodge',text:'늑대가 몸을 낮추면 회피',keys:'Space',touch:'장화 버튼',target:'#dodge-button',done:{states:['dodge']}},
+ {id:'guard',text:'방패로 밀쳐 빈틈 만들기',keys:'F (길게 누르면 방어)',touch:'방패 버튼 (길게 누르면 방어)',target:'#guard-button',done:{states:['shieldPush','guard']}},
 ]);
 
 // One-time tips, shown the first time a feature becomes relevant (per save).
 // when: low-hp · near-npc · step:<quest>/<step> · effect:<name>
 export const TIPS=Object.freeze([
- {id:'potion',when:'low-hp',title:'회복약',keys:'E 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 동안에도 움직일 수 있습니다.'},
+ {id:'guide',when:'step:M00/fight',title:'길잡이 빛',keys:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',touch:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',text:'어디로 갈지 모를 때는 빛을 따라가세요.'},
+ {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 동안에도 움직일 수 있습니다.'},
  {id:'charge',when:'step:M00/driver',title:'강공격',keys:'공격(J · 좌클릭)을 길게 누르면 심판의 검을 내려칩니다.',touch:'검 버튼을 길게 누르면 심판의 검을 내려칩니다.',text:'느리지만 강합니다. 빈틈이 보일 때 쓰세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
  {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 왼쪽 목표와 오른쪽 위 지도를 따라가세요.'},

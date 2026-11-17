@@ -5,7 +5,7 @@ export const HUD_RASTER_SPRITES=Object.freeze({
  attack:{selector:'#attack-button',atlas:'combat',row:0,key:'KeyJ'},
  guard:{selector:'#guard-button',atlas:'combat',row:1,key:'KeyF'},
  dodge:{selector:'#dodge-button',atlas:'combat',row:2,key:'Space'},
- potion:{selector:'#potion-button',atlas:'combat',row:3,key:'KeyE'},
+ potion:{selector:'#potion-button',atlas:'combat',row:3,key:'Digit1'},
  inventory:{selector:'.top-actions [data-chapter="bag"],.top-actions [data-uit-action="inventory"]',atlas:'menu',row:0},
  journal:{selector:'.top-actions [data-chapter="journal"],.top-actions [data-uit-action="journal"]',atlas:'menu',row:1},
  settings:{selector:'#motion-speed-toggle',atlas:'menu',row:2},

@@ -1518,6 +1518,20 @@ try {
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
       travel:id=>mapTransition.travel(travelUrl(location.href,id)),
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
+      // Adds story scenery through the map's placement runtime (streaming,
+      // collision and outlines included). Already-present ids are skipped.
+      placeProps:async props=>{
+        const runtime=world.authoredPlacements;if(!runtime||runtime.disposed||runtime.mapId!==world.mapId||!runtime.applied)return false;
+        const have=new Set(runtime.document.instances.map(instance=>instance.instanceId)),extra=[];
+        for(const prop of props){
+          if(have.has(prop.id))continue;
+          const entry=runtime.catalog?.entries?.find(row=>row.assetId===prop.asset);if(!entry)continue;
+          const half=(prop.yaw??0)/2;
+          extra.push({instanceId:prop.id,assetId:prop.asset,assetVersion:entry.contentHash??entry.version,transform:{position:[prop.x,world.terrain.heightAt(prop.x,prop.z),prop.z],rotation:[0,Math.sin(half),0,Math.cos(half)],scale:prop.scale??1},attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'solid'});
+        }
+        if(!extra.length)return true;
+        await runtime.apply({...runtime.document,revision:runtime.document.revision+1,instances:[...runtime.document.instances,...extra]});return true;
+      },
       rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);return true;},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());

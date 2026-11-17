@@ -68,7 +68,7 @@ export class PlaygroundInput {
   keyDown(e) {
     if(this.suspended)return;
     if (document.querySelector('dialog[open]') || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
-    const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR', 'KeyF', 'KeyE', 'Space'];
+    const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR', 'KeyF', 'KeyE', 'Digit1', 'Space'];
     if (!controls.includes(e.code)) return;
     e.preventDefault();
     const wasDown = this.keys.has(e.code);
@@ -84,7 +84,7 @@ export class PlaygroundInput {
       if(!wasDown&&!e.repeat){if(this.callbacks.setShieldHeld)this.callbacks.setShieldHeld(true,'keyboard');else this.callbacks.guard?.();}
     } else if(e.code==='Space'){
       if(!wasDown&&!e.repeat){if(this.callbacks.setDodgeHeld)this.callbacks.setDodgeHeld(true,'keyboard');else this.callbacks.dodge?.();}
-    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, KeyE: this.callbacks.potion }[e.code])?.();
+    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, Digit1: this.callbacks.potion }[e.code])?.();
   }
   pointerDown(e) {
     if(this.suspended)return;

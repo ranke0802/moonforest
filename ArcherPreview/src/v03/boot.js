@@ -6,6 +6,7 @@ import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {createStory} from './story.js';
 import {createActorVisual} from './placeholder-actor.js';
+import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
 
 export const PLACE_NAMES=Object.freeze({'warrior-v3':'숲의 경계 마을','warrior-plains':'대평원','warrior-v4':'마물의 숲','warrior-v5':'마녀의 동굴'});
@@ -13,9 +14,7 @@ export const TITLE_FOE=Object.freeze({kind:'wolf',count:1,hpFloor:.45});
 // The first fight is one wolf: enough to learn every basic without pressure.
 export const AMBUSH=Object.freeze({kind:'gray-wolf',count:1});
 const GALLERY=Object.freeze([{id:'scenes',label:'장면',total:12},{id:'bestiary',label:'도감',total:14},{id:'titles',label:'칭호',total:10}]);
-// Beside the caravan wagon on the plains road. main.js falls back to the map
-// spawn if this point is not walkable.
-export const OPENING_STAGE=Object.freeze({map:'great-plains',x:14.5,z:68.5,yaw:Math.PI*.6});
+export const OPENING_STAGE=chapter1.OPENING_STAGE;
 const TITLE_CAMERA=Object.freeze({radius:10.5,beta:1.24,orbit:.075});
 
 export function setupV03(api){
@@ -23,7 +22,7 @@ export function setupV03(api){
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
- const story=createStory({api,doc,save,content:api.content??chapter1,createVisual:api.createVisual??createActorVisual});
+ const story=createStory({api,doc,save,content:api.content??chapter1,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide});
  const state={screen:'boot',attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false};
  const screen=value=>{state.screen=value;html.dataset.v03Screen=value;};
  const title=createTitleScreen({doc,wait,onAction:action=>{void handle(action).catch(report);}});
@@ -69,14 +68,17 @@ export function setupV03(api){
  // ----- starting a game -----
  function metaPatch(extra={}){const s=gameState();return {character:s.character,place:PLACE_NAMES[s.character]??'',playSeconds:state.playSeconds,level:1,...extra};}
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
+ // Roaming monsters appear only after the opening quest: the first walk to
+ // the village is safe.
+ function maybeStartWorld(){if(!state.worldStarted&&story.started&&story.log.quest()?.id!=='M00')startWorld();}
  async function enterPlay({resume=false}={}){
   screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume});
-  if(resume||!state.ambush)startWorld();
+  maybeStartWorld();
  }
  async function beginNewGame(){
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
-  stopAttract();api.resetStage(OPENING_STAGE);title.hide();
+  stopAttract();api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
   screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',playSeconds:0}));state.playSeconds=0;
   // Prepare the ambush behind the black stage; the simulation stays frozen
   // (blocksGame) until the dream ends, so nothing can attack early.
@@ -174,7 +176,7 @@ export function setupV03(api){
     if(s.ready&&!state.sceneShown){state.sceneShown=true;title.setSceneReady(true);void startAttract();}
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
    }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy){
-    state.busy=true;api.resetStage(OPENING_STAGE);
+    state.busy=true;api.resetStage(OPENING_STAGE);story.prepare(s.mapId);
     void (async()=>{
      save.commit(metaPatch({chapter:1,title:'꿈',playSeconds:0}));state.ambush=true;
      const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(()=>false);
@@ -185,8 +187,7 @@ export function setupV03(api){
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
-    // The living plains start once the first fight is over.
-    if(state.ambush&&battle.livingCount===0&&!battle.loading){state.ambush=false;startWorld();}
+    maybeStartWorld();
     if(state.sinceSave>=15){state.sinceSave=0;save.touch(metaPatch());}
    }
   },
