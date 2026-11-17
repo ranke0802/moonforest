@@ -25,9 +25,8 @@ import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 import {groupVillageRecords} from './village-scenery-cache.js';
 import {installDetailLods,detailLodEnabled,DETAIL_LOD_KINDS} from './v04/detail-lod.js';
-import {createMeadow} from './v04/meadow.js';
-import {plainsMeadow} from './v04/meadow-plains.js';
-const MEADOW_SPECS={'great-plains':plainsMeadow};
+import {createMeadow,createScatterLayer} from './v04/meadow.js';
+import {plainsMeadow,plainsThicket} from './v04/meadow-plains.js';
 
 const geometry=c=>c.meshes.filter(m=>m.getTotalVertices?.()>0);
 const tallProps=new Set(['watchtower','well','market-stall','covered-wagon','wood-03-plank-gate']);
@@ -202,11 +201,11 @@ export function loadStreamedVillage(world,{
       if(detailLodEnabled()&&!asset.detailLods){
         asset.detailLods=instances.length&&!outskirtsGround&&instances.every(record=>DETAIL_LOD_KINDS.has(record.placement.kind))
           ?asset.baseMeshes.flatMap(base=>installDetailLods(base,{prepare:mesh=>{prepareVillageInstancing([mesh]);prepareTreeOcclusion([mesh]);}})):[];
-        // Meadow grass over the open map, drawn from the same tuft (v04/meadow.js).
-        const meadowSpec=MEADOW_SPECS[world.mapId];
-        if(meadowSpec&&id==='grass-tuft'&&asset.detailLods.length&&!world.meadow){
-          try{world.meadow=createMeadow(world,{tuft:asset.baseMeshes[0],spec:meadowSpec,amount:world.touchDevice?.75:1});stats.meadow=world.meadow?.stats??null;}
-          catch(error){console.warn('[MoonForest 0.4] meadow unavailable',error);world.meadow=null;}
+        // Scattered vegetation over the open map, drawn from the same models (v04/meadow.js).
+        const layerSpec=world.mapId==='great-plains'?id==='grass-tuft'?plainsMeadow:id==='bush'?plainsThicket(records.filter(record=>record.placement.kind==='tree'&&record.max&&record.min).map(record=>({x:record.placement.x,z:record.placement.z,r:Math.max(1.2,(record.max.x-record.min.x+record.max.z-record.min.z)/4-.35)}))):null:null;
+        if(layerSpec&&!(world.meadow?.has(id))){
+          try{world.meadow??=createMeadow();world.meadow.add(createScatterLayer(world,{name:id,sources:asset.baseMeshes,spec:layerSpec,amount:world.touchDevice?.75:1}));stats.meadow=world.meadow.layers.map(layer=>layer.stats);}
+          catch(error){console.warn('[MoonForest 0.4] scattered vegetation unavailable',id,error);}
         }
         if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
       }

@@ -12,7 +12,8 @@
 @keyframes v04-rain-far{from{transform:rotate(9deg) translate3d(0,-384px,0)}to{transform:rotate(9deg) translate3d(0,0,0)}}
 @keyframes v04-rain-near{from{transform:rotate(13deg) translate3d(0,-256px,0)}to{transform:rotate(13deg) translate3d(0,0,0)}}
 .v04-flash{inset:0;background:#dbe6ff;mix-blend-mode:screen;opacity:0}
-.v04-clock{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:5px;display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 7px;white-space:nowrap;font:11px/1.5 MoonforestUI,sans-serif;letter-spacing:.08em;color:#f1e6c6;background:linear-gradient(90deg,#101a1400,#101a14c4 22%,#101a14c4 78%,#101a1400);text-shadow:0 1px 2px #000;pointer-events:none}
+/* Left of the minimap, level with its top: under it sits the potion button on phones. */
+.v04-clock{position:absolute;right:100%;top:6%;margin-right:6px;display:inline-flex;align-items:center;gap:5px;padding:2px 9px 2px 7px;white-space:nowrap;font:11px/1.5 MoonforestUI,sans-serif;letter-spacing:.08em;color:#f1e6c6;background:linear-gradient(90deg,#101a1400,#101a14c4 30%,#101a14c4);border-right:2px solid #e6c97e99;text-shadow:0 1px 2px #000;pointer-events:none}
 .v04-clock[hidden]{display:none}
 .v04-clock>i{width:13px;height:13px;color:#e6c97e;display:inline-flex}
 .v04-clock>i>svg{width:100%;height:100%;fill:currentColor}
