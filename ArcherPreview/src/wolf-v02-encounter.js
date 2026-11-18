@@ -50,6 +50,7 @@ function sampleYaw(clip,time){
 // The 0.2 variant owns decisions, movement and bounded post-sampler attention /
 // fixed-length foot support. R8's sampler, model library, shared paint/ink,
 // preparation, pool and death lifecycle remain the implementation used by 0.1.
+const RAW_POSE=(()=>{try{return new URLSearchParams(globalThis.location?.search??'').get('wolfpose')==='raw';}catch{return false;}})();
 export class WolfV02Encounter extends WolfEncounter{
   constructor(...args){
     super(...args);
@@ -137,6 +138,9 @@ export class WolfV02Encounter extends WolfEncounter{
     this.v02Pose??=new WolfV02LocomotionPose(this);
     this.v02Pose.restore();
     if(!this.v14Air.alignWithHeight())super.alignPose();
+    // Phone diagnosis (?wolfpose=raw): draw the sampled clip without the
+    // procedural crouch/plant/aim layers, to isolate per-frame pose flicker.
+    if(RAW_POSE)return true;
     const orbit=(this.brain.behavior==='flank'||this.brain.mode==='ramEvade')&&ORBIT_CLIPS.has(this.brain.state);
     this.v02Support??=new WolfV02Support(this);
     this.v14RunLayer??=new WolfV02RunRamLayer(this);
