@@ -119,6 +119,9 @@ export function setupV03(api){
  // ----- starting a game -----
  function metaPatch(extra={}){const s=gameState();return {character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:'',playSeconds:state.playSeconds,level:1,...extra};}
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
+ // Behind the title / resume screen the map's monster species load ahead of
+ // play (nothing is placed until startWorld).
+ function prepareWorld(){if(state.worldPrepared||state.worldStarted)return;state.worldPrepared=true;api.prepareWorld?.();}
  // Roaming monsters appear only after the opening quest: the first walk to
  // the village is safe.
  function maybeStartWorld(){if(!state.worldStarted&&story.started&&story.log.quest()?.id!=='M00')startWorld();}
@@ -257,7 +260,7 @@ export function setupV03(api){
  function showTitle(){
   if(state.disposed||state.screen!=='boot')return;
   if(!state.langReady){void langReady.then(showTitle);return;}
-  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();prepareWorld();
  }
  // After the logo, the game's own download/loading card shows progress; the
  // title (still black while its scene is prepared) appears when it closes.
@@ -332,6 +335,7 @@ export function setupV03(api){
      save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await opening.release();
     })().catch(report);
    }else if(state.screen==='resume'&&s.ready&&state.langReady){
+    prepareWorld();
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);

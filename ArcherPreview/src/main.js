@@ -1464,16 +1464,18 @@ try {
     }).catch(error=>{npcWorldTask=null;throw error;});return npcWorldTask;
   };
   let authoredMonsterTask=null;
-  const getAuthoredMonsters=async()=>{
-    if(world.authoredMonsters)return world.authoredMonsters;
+  // active:false prepares (title / resume screen: species preloaded) without
+  // placing monsters; startWorld activates the same runtime.
+  const getAuthoredMonsters=async({active=true}={})=>{
+    if(world.authoredMonsters){if(active)world.authoredMonsters.activate?.();return world.authoredMonsters;}
     authoredMonsterTask??=Promise.all([
       import('./authored-monster-runtime.js'),
       versionRoute.release==='moonforest-0.2'?import('./plains-monster-spawns.js'):null,
     ]).then(([{createAuthoredMonsterRuntime},defaults])=>{
       if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
-      const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,getFocus:()=>world.v03?.questSpot??null,storage:journeyStorage,defaultDocument:defaults?.PLAINS_MONSTER_SPAWNS,defaultRevision:defaults?.PLAINS_MONSTER_SPAWNS_REVISION,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}},onError:error=>console.error('[몬스터 배치]',error)});
+      const runtime=createAuthoredMonsterRuntime({world,battle:boss,active,getPlayer:()=>actor,getFocus:()=>world.v03?.questSpot??null,storage:journeyStorage,defaultDocument:defaults?.PLAINS_MONSTER_SPAWNS,defaultRevision:defaults?.PLAINS_MONSTER_SPAWNS_REVISION,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}},onError:error=>console.error('[몬스터 배치]',error)});
       world.authoredMonsters=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
-    }).catch(error=>{authoredMonsterTask=null;throw error;});world.authoredMonstersTask=authoredMonsterTask;return authoredMonsterTask;
+    }).catch(error=>{authoredMonsterTask=null;throw error;});world.authoredMonstersTask=authoredMonsterTask;return authoredMonsterTask.then(runtime=>{if(active)runtime.activate?.();return runtime;});
   };
   // 0.3 starts the living world itself, after the title and the first fight.
   try{if(!versionRoute.edition&&releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&(versionRoute.release==='moonforest-0.2'||journeyStorage?.getItem('moonforest-monster-spawns-v1')))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
@@ -1587,6 +1589,7 @@ try {
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
       travel:id=>mapTransition.travel(travelUrl(location.href,id)),
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
+      prepareWorld:()=>{void getAuthoredMonsters({active:false}).then(runtime=>runtime.preload?.()).catch(error=>console.error('[몬스터 배치]',error));},
       // Adds story scenery through the map's placement runtime (streaming,
       // collision and outlines included). Already-present ids are skipped.
       placeProps:async props=>{
