@@ -91,7 +91,10 @@ function makeManager(scene){
   attach();
   post.onActivateObservable.add(()=>{
    const input=post.inputTexture;
-   if(!input.depthStencilTexture){const stencil=!!engine.isStencilEnable;input.createDepthStencilTexture(0,false,stencil,input.samples,stencil?Constants.TEXTUREFORMAT_DEPTH24_STENCIL8:Constants.TEXTUREFORMAT_DEPTH32_FLOAT,'npc-main-render-depth');input.resolveMSAADepth=true;engine.bindFramebuffer(input);}
+   if(!input.depthStencilTexture){const stencil=!!engine.isStencilEnable;input.createDepthStencilTexture(0,false,stencil,input.samples,stencil?Constants.TEXTUREFORMAT_DEPTH24_STENCIL8:Constants.TEXTUREFORMAT_DEPTH32_FLOAT,'npc-main-render-depth');input.resolveMSAADepth=true;engine.bindFramebuffer(input);// A fresh depth attachment holds undefined data: without this clear the first
+   // frame after every (re)creation (NPC in view, resize, map arrival) failed
+   // the depth test everywhere and showed only the clear colour (sky flash).
+   engine.clear(scene.clearColor,true,true,!!engine.isStencilEnable);}
   });
   post.onApplyObservable.add(effect=>{
    const s=target.getSize(),canvas=engine.getRenderingCanvas(),cssHeight=canvas?.getBoundingClientRect?.().height||canvas?.clientHeight||s.height,pixelRatio=s.height/cssHeight;
@@ -108,6 +111,10 @@ function makeManager(scene){
    // path encodes before this pass; deferred image processing remains linear.
    effect.setColor3('ink',scene.imageProcessingConfiguration.applyByPostProcess?linearInk:displayInk);effect.setArray2('npcProfiles',profiles.subarray(0,maximumProfiles*2));
   });
+  // Warm the new pass off-screen (input, MSAA and depth attachments) before
+  // its first visible frame: allocating them mid-frame showed one frame of
+  // bare clear colour each time the pass was rebuilt (resize, NPC in view).
+  try{const wasAttached=attached;post.activate(camera,null,true);engine.clear(scene.clearColor,true,true,!!engine.isStencilEnable);engine.restoreDefaultFramebuffer();if(!wasAttached)detach();}catch(error){console.warn('[NPC ink] warm-up skipped',error);}
  }
  function collect(){
   if(disposed)return;active.length=0;

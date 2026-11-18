@@ -290,9 +290,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const animator=foe.animator,clips=foe.config?.animations??{};if(!animator)return;
   let clip=null,clock=0;
   foe.storyHold=dt=>{
-   const want=scene.shot===2?(clips.run??'Wolf_Run_R5'):(clips.watch??'Circle_Watch_R5');
+   // Gait chosen by updateScene from the wolf's real travel speed, so the feet
+   // never walk or run on the spot.
+   const want=scene.wolfGait==='run'?(clips.run??'Wolf_Run_R5'):scene.wolfGait==='walk'?(clips.walk??'Wolf_Walk_R5'):(clips.watch??'Circle_Watch_R5');
    if(want!==clip){clip=want;clock=0;}
-   clock+=dt;const length=animator.durations?.[clip]??1;
+   clock+=dt*(scene.wolfRate??1);const length=animator.durations?.[clip]??1;
    animator.transition(clip,{clipTime:clock%length,actionId:'story-'+clip,blendDuration:.25});animator.update(dt);
   };
  }
@@ -309,12 +311,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const foe=(api.battle.encounters??[]).find(row=>row.active&&row.brain?.hp>0),member=cast.find(row=>row.npc.id==='driver');
   if(!player||!camera||!foe||!lines||!member)return false;
   const D={x:member.x,z:member.z},ux=player.x-D.x,uz=player.z-D.z,len=Math.hypot(ux,uz)||1,c=Math.cos(.7),s=Math.sin(.7);
-  // The wolf stands far off the road, 12 m from the driver, a little to the side of the warrior.
+  // The wolf appears far off the road, 14 m from the driver, a little to the
+  // side of the warrior, and walks in (then runs) on its own feet.
   const dir={x:(ux*c-uz*s)/len,z:(ux*s+uz*c)/len};
-  const far=freeNear({x:D.x+dir.x*12,z:D.z+dir.z*12}),charge=freeNear({x:D.x+dir.x*5.2,z:D.z+dir.z*5.2}),guard=freeNear({x:D.x+dir.x*2.4,z:D.z+dir.z*2.4});
+  const far=freeNear({x:D.x+dir.x*14,z:D.z+dir.z*14}),charge=freeNear({x:D.x+dir.x*5.2,z:D.z+dir.z*5.2}),guard=freeNear({x:D.x+dir.x*2.4,z:D.z+dir.z*2.4});
   foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
   if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(D.x-far.x,D.z-far.z);
   scene.driver=member;scene.wolf=foe;scene.points={D,far,charge,guard,start:{x:player.x,z:player.z}};
+  scene.wolfAt={x:far.x,z:far.z};scene.wolfSpeed=0;scene.wolfGait='watch';scene.wolfRate=1;
   // The shots pose the wolf; its own AI sits out until the scene ends.
   holdWolf(foe);
   Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta});
@@ -334,19 +338,30 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    scene.shot=shot;
    if(shot===0||shot===2)api.playSound?.('wolf_alert',{position:wolf.actor.position});
   }
-  // Shots. Close shots look across the subject from the other party's side.
-  if(shot===0)frame(P.far,.7,alphaFrom(P.D,P.far)+.35,4.6,1.32);
+  // The wolf walks in during the first two shots and runs at the third,
+  // easing to a stop at the charge point; the gait follows the real speed.
+  {const W=scene.wolfAt,bal=wolf.brain?.balance??{},walk=bal.walkSpeed??1.2,run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
+   const dx=P.charge.x-W.x,dz=P.charge.z-W.z,dist=Math.hypot(dx,dz);
+   const want=dist<.03?0:Math.min(shot<2?walk:run,dist*2.2);
+   scene.wolfSpeed+=Math.max(-9*dt,Math.min(7*dt,want-scene.wolfSpeed));
+   const step=Math.min(dist,scene.wolfSpeed*dt);if(dist>1e-6){W.x+=dx/dist*step;W.z+=dz/dist*step;}
+   const v=scene.wolfSpeed;scene.wolfGait=v>2.4?'run':v>.12?'walk':'watch';
+   scene.wolfRate=scene.wolfGait==='run'?rate*Math.max(.6,Math.min(1.3,v/run)):scene.wolfGait==='walk'?rate*Math.max(.45,Math.min(1.4,v/walk)):1;
+   wolf.actor.position.x=W.x;wolf.actor.position.z=W.z;wolf.actor.position.y=heightAt(W.x,W.z);
+   if(wolf.actor.rotation)wolf.actor.rotation.y=Math.atan2(P.D.x-W.x,P.D.z-W.z);}
+  const W=scene.wolfAt;
+  // Shots. Close shots look across the subject from the other party's side;
+  // the wolf shots track the walking/running wolf.
+  if(shot===0)frame(W,.7,alphaFrom(P.D,W)+.35,4.6,1.32);
   else if(shot===1){
    frame(P.D,1.45,alphaFrom(P.far,P.D)-.25,3.6,1.3);
    // The driver stumbles back, shaking.
    const k=ease((now-SCENE.driverShot)/1.4),shake=Math.sin(now*38)*.035,x=P.D.x-(P.far.x-P.D.x)/12*.9*k+shake,z=P.D.z-(P.far.z-P.D.z)/12*.9*k;
    scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,heightAt(x,z),z,Math.atan2(P.far.x-x,P.far.z-z));
   }else if(shot===2){
-   const mid={x:(P.D.x+P.charge.x)/2,z:(P.D.z+P.charge.z)/2};
+   // Wide on the charge, the frame riding between the running wolf and the driver.
+   const mid={x:(P.D.x+W.x)/2,z:(P.D.z+W.z)/2};
    frame(mid,1,alphaFrom(P.start,mid)+.6,8.5,1.18);
-   // The wolf charges the driver.
-   const k=ease((now-SCENE.chargeShot)/.75),x=P.far.x+(P.charge.x-P.far.x)*k,z=P.far.z+(P.charge.z-P.far.z)*k;
-   wolf.actor.position.x=x;wolf.actor.position.z=z;wolf.actor.position.y=heightAt(x,z);if(wolf.actor.rotation)wolf.actor.rotation.y=Math.atan2(P.D.x-x,P.D.z-z);
    // The warrior rolls in between: face the guard spot and dodge for real.
    if(!scene.rolled&&now>=SCENE.rollAt&&player){
     scene.rolled=true;const p=player.position;if(player.rotation)player.rotation.y=Math.atan2(P.guard.x-p.x,P.guard.z-p.z);
