@@ -3,7 +3,7 @@ import {releaseMapTexture} from './map-texture-lifetime.js';
 import {VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {sceneryProjection,projectedSceneryCoverage} from './village-scenery-cache.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
-import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS,mapLoadAbortError,mapLoadTimeoutError} from './map-load-lifetime.js';
+import {MapLoadLifetime,MAP_MODEL_TIMEOUT_MS,mapLoadAbortError,mapLoadTimeoutError,stacklessError} from './map-load-lifetime.js';
 import {sceneryHighTextureProfile} from './mobile-texture-policy.js';
 import {runtimeTimers} from './runtime-timers.js';
 import {VillageTextureDemandCache} from './village-texture-demand-cache.js';
@@ -177,7 +177,7 @@ export class VillageTextureStreaming {
     this.stats.highTexturePeak=Math.max(this.stats.highTexturePeak??0,this.stats.highTextureBytes+this.stats.highTextureReserved);
   }
   async loadTexture(config,old,role){
-    if(this.disposed||this.contextLost)throw Object.assign(new Error('Map texture released'),{name:'AbortError'});
+    if(this.disposed||this.contextLost)throw stacklessError(()=>Object.assign(new Error('Map texture released'),{name:'AbortError'}));
     const url=new URL(config.url,this.url).href,scene=this.world.scene;
     const texture=await new Promise((resolve,reject)=>{
       let item,settled=false;
@@ -197,7 +197,7 @@ export class VillageTextureStreaming {
           releaseMapTexture(item,scene);reject(error);
         }else resolve(item);
       };
-      const cancel=()=>finish(Object.assign(new Error('Map texture released'),{name:'AbortError'}));
+      const cancel=()=>finish(stacklessError(()=>Object.assign(new Error('Map texture released'),{name:'AbortError'})));
       const expired=()=>finish(lifetime.signal.reason);
       lifetime.signal.addEventListener('abort',expired,{once:true});
       this.textureWaiters.add(cancel);

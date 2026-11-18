@@ -29,7 +29,13 @@ export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,f
   // engine. Its AssetContainer is not populated until importMeshAsync finishes.
   const getLoader=loader._getLoader.bind(loader);
   loader._getLoader=data=>{
-    lifetime.check();const before=new Set(scene.onDisposeObservable.observers);implementation=getLoader(data);
+    // Weak on purpose. This snapshot lives as long as the container (its dispose
+    // closure shares this scope), and a strong Set kept every scene-disposal
+    // observer of that moment alive: the current map's release closure and the
+    // previous containers' own observers, which chained back through every
+    // earlier load. A model that outlives a map (the 0.3 story cast) therefore
+    // pinned each map it had seen (heap snapshot 2026-11-19, ~280 MB per plains visit).
+    lifetime.check();const before=new WeakSet(scene.onDisposeObservable.observers);implementation=getLoader(data);
     const importMesh=implementation.importMeshAsync.bind(implementation),bufferView=implementation.loadBufferViewAsync.bind(implementation),image=implementation.loadImageAsync.bind(implementation);
     implementation.importMeshAsync=(names,target,container,...args)=>{observer=target.onDisposeObservable.observers.find(o=>!before.has(o));bindContainer(container);lifetime.check();return importMesh(names,target,container,...args);};
     // A completed old worker may fill the bounded CPU decode cache, but cannot

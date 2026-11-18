@@ -1,7 +1,8 @@
 // Preparation owns no gameplay clock. Long vertex proofs yield only at fixed
 // block boundaries, preserving the synchronous arithmetic and buffer order.
 import {createFrameWorkLease} from './frame-work-coordinator.js';
-export function bossPreparationCancelled(){const error=new Error('보스 준비 요청이 변경되었습니다.');error.name='AbortError';return error;}
+import {stacklessError} from './map-load-lifetime.js';
+export function bossPreparationCancelled(){return stacklessError(()=>{const error=new Error('보스 준비 요청이 변경되었습니다.');error.name='AbortError';return error;});}
 export function bossPreparationTimeout(){const error=new Error('화면 준비 시간이 초과되었습니다. 새로고침해 주세요.');error.name='TimeoutError';return error;}
 export function bossPreparationFrame(signal){
   if(signal?.aborted)return Promise.reject(signal.reason??bossPreparationCancelled());

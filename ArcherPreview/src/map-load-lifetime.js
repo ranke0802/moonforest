@@ -1,7 +1,18 @@
 import {runtimeTimers} from './runtime-timers.js';
 export const MAP_MODEL_TIMEOUT_MS=45000;
-export const mapLoadAbortError=()=>Object.assign(new Error('맵 모델 준비가 취소되었습니다.'),{name:'AbortError',code:'MAP_MODEL_ABORTED'});
-export const mapLoadTimeoutError=(timeoutMs,stage='model')=>Object.assign(new Error(`리소스 준비 시간이 초과되었습니다 (${Math.round(timeoutMs/1000)}초). 다시 시도해 주세요.`),{name:'TimeoutError',code:stage==='model'?'MAP_MODEL_TIMEOUT':'MAP_SETUP_TIMEOUT',timeoutMs,stage});
+// A cancellation reason lives as long as anything still holds its AbortSignal
+// (a closed lifetime, a late callback, a texture's stored load handler). V8
+// keeps every function of an error's captured stack alive until that stack is
+// first formatted, and on a map change those functions are the closures that
+// own the map being released: each plains visit stayed in memory (~280 MB on
+// PC; heap snapshot 2026-11-19: signal.reason -> call sites -> loader scope).
+// Cancellation is expected control flow, so these errors carry no stack.
+export function stacklessError(create){
+  const limit=Error.stackTraceLimit;if(typeof limit!=='number')return create();
+  Error.stackTraceLimit=0;try{return create();}finally{Error.stackTraceLimit=limit;}
+}
+export const mapLoadAbortError=()=>stacklessError(()=>Object.assign(new Error('맵 모델 준비가 취소되었습니다.'),{name:'AbortError',code:'MAP_MODEL_ABORTED'}));
+export const mapLoadTimeoutError=(timeoutMs,stage='model')=>stacklessError(()=>Object.assign(new Error(`리소스 준비 시간이 초과되었습니다 (${Math.round(timeoutMs/1000)}초). 다시 시도해 주세요.`),{name:'TimeoutError',code:stage==='model'?'MAP_MODEL_TIMEOUT':'MAP_SETUP_TIMEOUT',timeoutMs,stage}));
 
 const identityKeys=['scene','terrain','ground','floorMaterial','placements','environmentManifest','groundManifest','mapId','villageLoadOwner'];
 export const mapLoadSnapshot=(world,{loadOwner=true}={})=>Object.fromEntries(identityKeys.filter(key=>loadOwner||key!=='villageLoadOwner').map(key=>[key,world[key]]));
@@ -47,5 +58,6 @@ export class MapLoadLifetime {
   }
   run(task,options){return this.wait(Promise.resolve().then(()=>{this.check();return task(this.signal);}),options);}
   finishDeadline(){this.closed=true;if(this.timer!==undefined){this.cancelTimer(this.timer);this.timer=undefined;}}
-  close(){this.finishDeadline();this.parent?.removeEventListener('abort',this.forward);}
+  // A closed lifetime no longer keeps its owner's signal (and that signal's reason) alive.
+  close(){this.finishDeadline();this.parent?.removeEventListener('abort',this.forward);this.parent=null;this.forward=null;}
 }

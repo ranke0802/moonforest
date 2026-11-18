@@ -21,7 +21,7 @@ import {VillageActiveCandidates} from './village-active-candidates.js';
 import {VillageWorkBudget} from './village-work-budget.js';
 import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
-import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
+import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot,stacklessError} from './map-load-lifetime.js';
 import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 import {groupVillageRecords} from './village-scenery-cache.js';
@@ -282,7 +282,7 @@ export function loadStreamedVillage(world,{
     try{
       await streaming.initial(plan);
       initializing=false;
-      if(disposed)throw Object.assign(new Error('Map load was released'),{name:'AbortError'});
+      if(disposed)throw stacklessError(()=>Object.assign(new Error('Map load was released'),{name:'AbortError'}));
       textures=new VillageTextureStreaming(world,assets,records,url,stats,{cacheCandidates:true});
       world.villageRenderRecords=records;stats.ready=true;return stats;
     }catch(error){dispose();throw error;}

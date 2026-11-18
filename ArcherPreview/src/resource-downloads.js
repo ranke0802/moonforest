@@ -1,6 +1,6 @@
 import {CONTENT_NAME as CONTENT,validateResourceIndex,planResourceTransfers} from './resource-index.js';
 import {canExtractResourceBundles,extractResourceBundle} from './resource-bundles.js';
-import {MapLoadLifetime} from './map-load-lifetime.js';
+import {MapLoadLifetime,stacklessError} from './map-load-lifetime.js';
 import {ResourceLoadLedger} from './resource-load-ledger.js';
 export function resourceUrl(path,base){
   const url=new URL(path,base);
@@ -20,7 +20,7 @@ export class ResourceDownloads {
     this.idleTimeoutMs=idleTimeoutMs;this.timers=timers;
     this.ledger=new ResourceLoadLedger({base,sizes,now,maxEntries:ledgerMaxEntries,timing:ledgerTiming});
   }
-  cancel(){this.ledger.close();this.abort.abort(new DOMException('Map resources released','AbortError'));}
+  cancel(){this.ledger.close();this.abort.abort(stacklessError(()=>new DOMException('Map resources released','AbortError')));}
   markReady(){this.ledger.markReady();}
   snapshot(){return this.ledger.snapshot();}
   noteReuse(paths,options){this.ledger.reuse(paths,options);}
