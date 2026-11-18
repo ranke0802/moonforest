@@ -298,7 +298,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function releaseWolf(foe){
   if(!foe?.storyHold)return;foe.storyHold=null;
-  const brain=foe.brain;if(brain&&foe.animator)foe.animator.transition(brain.state,{clipTime:brain.time??0,actionId:brain.serial,blendDuration:.25});
+  const brain=foe.brain;
+  // It charged and stands facing the warrior: never fall back to the lying
+  // rest it was summoned in (it used to lie down, then get up again).
+  if(brain&&/_Lie_|Rise_From_Lie/.test(brain.state??'')&&typeof brain.start==='function'){brain.start('Circle_Watch_R5','idle');brain.behavior='observe';brain.observation=Math.max(brain.observation??0,.6);}
+  if(brain&&foe.animator)foe.animator.transition(brain.state,{clipTime:brain.time??0,actionId:brain.serial,blendDuration:.25});
  }
  function beginAmbushScene(){
   const player=api.getPlayer()?.position,camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];
