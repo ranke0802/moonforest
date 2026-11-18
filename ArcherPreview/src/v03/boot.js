@@ -12,6 +12,7 @@ import {createOrientationGate} from './orientation-gate.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createCastVisuals} from './cast-models.js';
+import {setupGameSelection} from '../game-selection.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
@@ -28,13 +29,16 @@ const GALLERY=Object.freeze([{id:'scenes',total:12},{id:'bestiary',total:14},{id
 export const OPENING_STAGE=chapter1.OPENING_STAGE;
 const TITLE_CAMERA=Object.freeze({radius:10.5,beta:1.24,orbit:.075});
 
-// Real cast models stay behind ?cast=1 until the review captures are approved.
-const castPreview=()=>{try{return new URLSearchParams(globalThis.location?.search??'').get('cast')==='1';}catch{return false;}};
+// Real cast models are the default (reviewed 2026-11-18); ?cast=0 brings back the blocks.
+const castPreview=()=>{try{return new URLSearchParams(globalThis.location?.search??'').get('cast')!=='0';}catch{return true;}};
 export function setupV03(api){
  const {root,save,battle,input,actions}=api,doc=root.ownerDocument,view=doc.defaultView,html=doc.documentElement;
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
+ // 0.3's layers (dialogue, prompts, quest, tips, title) live on <body>, outside
+ // #app: no right-click menu or text selection there either (inputs excepted).
+ const selection=setupGameSelection(doc.body);
  const cursors=createCursors(doc);
  // Phones play in landscape only, from the moment the language is chosen.
  const gate=createOrientationGate({doc});
@@ -347,6 +351,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

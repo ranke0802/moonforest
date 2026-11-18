@@ -146,6 +146,7 @@ html[data-loading] .v03-hud{display:none}
 @keyframes v03-banner{0%{opacity:0;transform:translate(-50%,8px)}12%,78%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-6px)}}
 .v03-dialogue{z-index:20005;display:flex;align-items:flex-end;justify-content:center;padding:0 16px max(22px,env(safe-area-inset-bottom));background:linear-gradient(0deg,#000000b0 0%,#00000000 46%)}
 .v03-dialogue-box{position:relative;width:min(780px,100%);min-height:118px;padding:16px 22px 46px;background:linear-gradient(180deg,#18241cf5,#0f1712f5);border:1px solid #ae925990;border-radius:6px;box-shadow:0 12px 40px #000a;opacity:0;transform:translateY(6px)}
+.v03-dialogue-box{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .v03-dialogue-box.is-in{opacity:1;transform:none;transition:opacity .18s ease,transform .18s ease}
 .v03-dialogue-who{display:block;margin-bottom:6px;font-size:clamp(14px,2.2vmin,17px);letter-spacing:.1em;color:var(--v03-gold)}
 .v03-dialogue-text{margin:0;font-size:clamp(15px,2.5vmin,19px);line-height:1.75;white-space:pre-line}

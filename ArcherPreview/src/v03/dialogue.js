@@ -27,6 +27,9 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null}){
   const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;talking(false);shownArt=null;portrait.hidden=true;portrait.classList.remove('is-in');done?.(played);
  }
  next.addEventListener('click',step);
+ // Touching anywhere on the box advances too (thumb-friendly on phones); the
+ // button keeps its own click, so one tap never advances twice.
+ box.addEventListener('click',event=>{if(!next.contains(event.target))step();});
  layer.addEventListener('click',event=>{if(event.target===layer)step();});
  const onKey=event=>{
   if(!lines||event.repeat)return;
