@@ -7,12 +7,12 @@ const run=(guard,ms,seconds,options)=>{let changed=null;for(let t=0;t<seconds*10
 test('slow frames step the quality down one level per window, never past the last',()=>{
  let clock=0;const guard=new AdaptivePerformance({now:()=>clock});
  assert.equal(run(guard,16.7,6),null,'a steady 60 fps changes nothing');
- assert.equal(run(guard,22,2.1)?.scale,ADAPTIVE_LEVELS[1].scale);
+ assert.equal(run(guard,22,2.1)?.actorShadowRange,ADAPTIVE_LEVELS[1].actorShadowRange);
  run(guard,22,30);assert.equal(guard.level,ADAPTIVE_LEVELS.length-1);
  assert.equal(guard.settings.shadows,true,'shadows are never switched off');assert.equal(guard.settings.rangeScale,1);
  // The plains view is the very last thing given up, and only partly.
- assert.ok(ADAPTIVE_LEVELS.slice(0,4).every(level=>level.viewCap===null));assert.equal(guard.settings.viewCap,1.6);
- assert.ok(ADAPTIVE_LEVELS.every((level,i)=>i===0||level.scale<=ADAPTIVE_LEVELS[i-1].scale),'resolution never rises with a lower level');
+ assert.ok(ADAPTIVE_LEVELS.slice(0,3).every(level=>level.viewCap===null));assert.equal(guard.settings.viewCap,1.6);
+ assert.ok(ADAPTIVE_LEVELS.every(level=>level.scale===1),'the render resolution is never traded (outlines must stay crisp)');
 });
 
 test('a long calm stretch steps back up; a quick relapse pins the floor',()=>{

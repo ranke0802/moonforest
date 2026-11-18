@@ -31,7 +31,7 @@ import {setupHudRasterV1} from './hud-raster-v1.js';
 import {setupCaveStoryInspection} from './cave-story-inspection.js';
 import {setupGameSelection} from './game-selection.js';
 import {setupDeveloperToolSettings,createDeveloperToolSessions} from './tool-visibility-settings.js';
-import { Engine, SceneLoader, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
+import { Engine, SceneLoader, SharpenPostProcess, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {selectPlayerTextureProfile,playerTextureCapabilities} from './player-texture-profile.js';
@@ -403,6 +403,19 @@ function resizeScreenProjection(){
 
 function updateStaminaNotice(){staminaNoticeAnchor.update(screenProjection,actor,{visible:ready&&!loadingAsset&&!mapTransition?.busy&&isV2()&&!controller?.dead&&boss?.playerHp>0});}
 
+// Phones draw below the screen's own pixel density and the browser stretches
+// the picture: a light sharpen pass (last in the chain, after the NPC ink)
+// keeps outlines and edges crisp. It carries the MSAA when it is the first
+// pass, so antialiasing is unchanged. Desktops at native density skip it.
+let phoneSharpen=null,phoneSharpenCamera=null;
+function syncPhoneSharpen(){
+  const camera=world?.camera;if(!engine||!camera||camera.isDisposed?.())return;
+  const native=globalThis.devicePixelRatio||1,css=Math.max(1,canvas.clientWidth||1),render=engine.getRenderWidth()/css,forced=new URLSearchParams(location.search).get('sharpen'),want=forced==='1'?true:forced==='0'?false:touchDevice&&render<native*.95;
+  if(phoneSharpen&&(!want||phoneSharpenCamera!==camera)){try{phoneSharpen.dispose(phoneSharpenCamera);}catch{}phoneSharpen=null;phoneSharpenCamera=null;}
+  if(!want||phoneSharpen)return;
+  try{phoneSharpen=new SharpenPostProcess('phone-sharpen',1,camera,undefined,engine);phoneSharpen.edgeAmount=.32;phoneSharpen.colorAmount=1;phoneSharpen.samples=Math.min(4,engine.getCaps().maxMSAASamples||1);phoneSharpenCamera=camera;}
+  catch(error){console.warn('[render] sharpen unavailable',error);phoneSharpen=null;phoneSharpenCamera=null;}
+}
 function applyRenderQuality() {
   if (!engine) return;
   const ratio = renderPixelRatio(window.devicePixelRatio, qualityMode, touchDevice,renderScaleControl.value)*adaptivePerformance.settings.scale;
@@ -418,7 +431,7 @@ function applyRenderQuality() {
   resizeScreenProjection();
   renderActivity.wake();
   engine.maxFPS=renderActivity.limit({quality:qualityMode});
-  world?.lighting.setQuality(qualityMode);applyAdaptiveShadows();
+  world?.lighting.setQuality(qualityMode);applyAdaptiveShadows();syncPhoneSharpen();
   $('#quality-select').value = qualityMode;
   if(!document.hidden)frameLoop?.invalidate();
 }

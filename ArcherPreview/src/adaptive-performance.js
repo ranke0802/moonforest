@@ -4,20 +4,19 @@
 // back up after a long calm stretch; a level that drops again soon after a
 // step up becomes the floor for the session. Pure logic: main.js applies it.
 export const ADAPTIVE_LEVELS=Object.freeze([
- // Ordered by how little a phone player can see the change: first the 3D
- // resolution, then distant actors' shadows (a few texels each at phone
- // size), then the shadow map refreshing every other frame, and only at the
- // end a gentle pull-in of the plains view (2.4 -> 1.8 -> 1.6). Each level
- // engages only while the device misses its frame target and steps back up
- // after a calm stretch, so a device that keeps up sees the authored look.
- // (The GPU, not the CPU, bounds phones: the shadow pass alone was ~40 % of
- // triangles and draw calls on the plains, measured 2026-11-18.)
+ // Ordered by how little a phone player can see the change. Resolution is
+ // never traded (a softer picture blurs the outlines the art depends on):
+ // first distant actors' shadows (a few texels each at phone size), then the
+ // shadow map refreshing every other frame, and last a gentle pull-in of the
+ // plains view (2.4 -> 1.8 -> 1.6). Each level engages only while the device
+ // misses its frame target and steps back up after a calm stretch.
+ // (Phones are GPU-bound: the shadow pass alone was ~40 % of triangles and
+ // draw calls on the plains, measured 2026-11-18.)
  Object.freeze({scale:1,viewCap:null,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:32,shadowRefresh:1}),
- Object.freeze({scale:.9,viewCap:null,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:32,shadowRefresh:1}),
- Object.freeze({scale:.85,viewCap:null,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:20,shadowRefresh:1}),
- Object.freeze({scale:.8,viewCap:null,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:20,shadowRefresh:2}),
- Object.freeze({scale:.8,viewCap:1.8,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:16,shadowRefresh:2}),
- Object.freeze({scale:.75,viewCap:1.6,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:16,shadowRefresh:2}),
+ Object.freeze({scale:1,viewCap:null,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:20,shadowRefresh:1}),
+ Object.freeze({scale:1,viewCap:null,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:20,shadowRefresh:2}),
+ Object.freeze({scale:1,viewCap:1.8,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:16,shadowRefresh:2}),
+ Object.freeze({scale:1,viewCap:1.6,rangeScale:1,detailRange:0,shadows:true,actorShadowRange:16,shadowRefresh:2}),
 ]);
 const WINDOW_MS=2000,CALM_MS=20000,PROBE_MS=8000;
 
