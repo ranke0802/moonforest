@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "complete": true,
+  "assets": {
+    "moonforest-tripo-farmer": {
+      "name": "농부",
+      "category": "npc",
+      "version": "2026-11-18-tripo-v1",
+      "scale": 1,
+      "bodyHeight": 1.850000023841858,
+      "animations": {
+        "idle": "Idle_Stand",
+        "walk": "Casual_Walk",
+        "talk": "Talk_with_Hands_Open",
+        "chat": "Stand_and_Chat",
+        "greet": "Big_Wave_Hello",
+        "agree": "Agree_Gesture",
+        "listen": "Listening_Gesture"
+      },
+      "npc": {
+        "sourceSha256": "42434fe5bcdee8929c5edf6d42374482c64d7a2aa52eb1ef28f5712630e4f380",
+        "look": {
+          "toon": true,
+          "pbr": false,
+          "outline": true,
+          "outlinePixels": 0.4,
+          "interior": true,
+          "interiorStrength": 0.25,
+          "brightness": 1.2
+        },
+        "clips": [
+          {
+            "key": "Idle_Stand",
+            "uiLabel": "기본 대기",
+            "gameState": "idle",
+            "loopCandidate": true
+          },
+          {
+            "key": "Casual_Walk",
+            "uiLabel": "걷기",
+            "gameState": "walk",
+            "loopCandidate": true
+          },
+          {
+            "key": "Talk_with_Hands_Open",
+            "uiLabel": "설명",
+            "gameState": "talk",
+            "loopCandidate": true
+          },
+          {
+            "key": "Stand_and_Chat",
+            "uiLabel": "대화",
+            "gameState": "chat",
+            "loopCandidate": true
+          },
+          {
+            "key": "Big_Wave_Hello",
+            "uiLabel": "인사",
+            "gameState": "greet",
+            "loopCandidate": false
+          },
+          {
+            "key": "Agree_Gesture",
+            "uiLabel": "끄덕임",
+            "gameState": "agree",
+            "loopCandidate": false
+          },
+          {
+            "key": "Listening_Gesture",
+            "uiLabel": "듣기",
+            "gameState": "listen",
+            "loopCandidate": true
+          }
+        ],
+        "rootMotion": "in-place",
+        "defaultClip": "Idle_Stand"
+      },
+      "model": "./content/3b48edec38c81a881ee30957e230709a398193b2fade7f6d14780afc3ea712f6.gltf",
+      "resources": [
+        "./content/ee72d7af3336632a4a3690346efea6b01e1a1782cfbf3779293a7c4425586440.jpg",
+        "./content/e3eee1585fbef8b5d59a21ca5157a30d954180422e64c426508bba9047b8198c.bin",
+        "./content/7f8540fbbfae3809ea3df5384be55ae7feec9d9629a69d5b3a5e28023f82a7bc.bin",
+        "./content/24aeea667bb8f0492d0661c249e3c9bb49bdccad3f62cb956716aefc34c3b366.bin",
+        "./content/1a25f5465d6bf5389d794d712dceb2a6318d41c57664218a249a39ffb64e6bd6.bin",
+        "./content/df23fc82029fb416fdfa0b2c37654f1e6942b081d693f8fba5a3c153f2ac0ff3.bin",
+        "./content/d926431b905267c25a3e01616e4b5c1ef80500b50547aeeadb2c034ddf8f054c.bin",
+        "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
+        "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
+        "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
+        "./content/3b48edec38c81a881ee30957e230709a398193b2fade7f6d14780afc3ea712f6.gltf"
+      ],
+      "visualReview": "APPROVED",
+      "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
+      "sourceModelSha256": "42434fe5bcdee8929c5edf6d42374482c64d7a2aa52eb1ef28f5712630e4f380"
+    }
+  }
+}

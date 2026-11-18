@@ -11,6 +11,7 @@ import {createCursors} from './cursors.js';
 import {createOrientationGate} from './orientation-gate.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createActorVisual} from './placeholder-actor.js';
+import {createCastVisuals} from './cast-models.js';
 import {createGuideWisp} from './guide-wisp.js';
 import * as chapter1 from './data/chapter1.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
@@ -27,6 +28,8 @@ const GALLERY=Object.freeze([{id:'scenes',total:12},{id:'bestiary',total:14},{id
 export const OPENING_STAGE=chapter1.OPENING_STAGE;
 const TITLE_CAMERA=Object.freeze({radius:10.5,beta:1.24,orbit:.075});
 
+// Real cast models stay behind ?cast=1 until the review captures are approved.
+const castPreview=()=>{try{return new URLSearchParams(globalThis.location?.search??'').get('cast')==='1';}catch{return false;}};
 export function setupV03(api){
  const {root,save,battle,input,actions}=api,doc=root.ownerDocument,view=doc.defaultView,html=doc.documentElement;
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
@@ -44,7 +47,7 @@ export function setupV03(api){
  // chapter data once the language pack has loaded; nothing player-facing
  // appears before that (title and play wait for langReady).
  const languageStore=api.languageStorage??view?.localStorage??null,source=api.content??chapter1,content=cloneChapter(source);
- const story=createStory({api,doc,save,content,createVisual:api.createVisual??createActorVisual,createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers});
+ const story=createStory({api,doc,save,content,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
