@@ -348,3 +348,15 @@ html[data-v03-vital] #app[data-hud-input=pc]{--v03-quest-top:calc(clamp(20px,4vh
 html[data-edition="moonforest-0.3"] body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 html[data-edition="moonforest-0.3"] :is(input,textarea,select,[contenteditable="true"]){-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 html[data-edition="moonforest-0.3"] img{-webkit-user-drag:none;user-drag:none}
+
+/* Loading card: the prologue's haze over the map art. Two soft lights drift,
+   dust motes rise and the art itself breathes slowly (GPU-only transforms). */
+html[data-edition="moonforest-0.3"] #loading-art{animation:v03-loading-drift 26s ease-in-out infinite alternate;filter:brightness(.8) saturate(.92)}
+html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;left:-15%;right:-15%;top:-15%;height:260%;will-change:transform;z-index:1;pointer-events:none;
+ background-image:radial-gradient(circle,#ffe8b8 0 1.4px,#0000 2.4px),radial-gradient(circle,#d8ceff 0 1.2px,#0000 2.2px),radial-gradient(circle,#fff3d6 0 1px,#0000 2px);
+ background-size:230px 260px,310px 290px,170px 210px;background-position:0 0,90px 140px,40px 60px;
+ animation:v03-loading-motes 24s linear infinite;opacity:.6}
+@keyframes v03-loading-drift{from{transform:scale(1.03) translate(-.8%,.4%)}to{transform:scale(1.1) translate(.8%,-.4%)}}
+@keyframes v03-loading-motes{from{transform:translate3d(0,0,0)}to{transform:translate3d(2%,-45%,0)}}
+@media (prefers-reduced-motion:reduce){html[data-edition="moonforest-0.3"] #loading-art,html[data-edition="moonforest-0.3"] #loading::after{animation:none}}
+html[data-v03-screen="opening"] #loading-art{animation:v03-cover 40s ease-out both}
