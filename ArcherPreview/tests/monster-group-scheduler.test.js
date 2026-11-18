@@ -38,3 +38,15 @@ test('pack members appear one by one as each is ready, leader first',async()=>{
  assert.deepEqual(shown,['leader','second','third']);assert.equal(scheduler.inspect()[0].state,'active');
  scheduler.dispose();
 });
+
+test('a packmate that fails to load never removes the leader already in the fight',async()=>{
+ const shown=[],removed=[],errors=[];
+ const scheduler=createMonsterGroupScheduler({spawn:async row=>{if(row.id==='second')throw new Error('decoder timeout');return {id:row.id};},commit:handles=>shown.push(...handles.map(h=>h.id)),remove:handle=>removed.push(handle.id),isAlive:()=>true,onError:error=>errors.push(error.message)});
+ scheduler.load([member('leader'),member('second'),member('third')]);scheduler.update(0);await tick();await tick();await tick();
+ assert.deepEqual(shown,['leader','third'],'each member is shown once; the failed one sits out');
+ assert.deepEqual(removed,[],'nothing already shown is taken away');
+ assert.deepEqual(errors,['decoder timeout']);
+ const row=scheduler.inspect()[0];assert.equal(row.state,'active');assert.equal(row.dead,1,'the failed member counts as gone for completion');
+ scheduler.update(1);await tick();assert.deepEqual(shown,['leader','third'],'no second commit of the same handles');
+ scheduler.dispose();
+});

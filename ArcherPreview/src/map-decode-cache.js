@@ -13,7 +13,9 @@ export class DecodeCache {
 const pools=new WeakMap();
 export function mapDecodePools(engine){
   let pool=pools.get(engine);if(pool)return pool;
-  pool={geometry:new DecodeCache(8*1048576),textures:new DecodeCache(24*1048576,96),disposed:false};pools.set(engine,pool);
+  // Geometry views are tiny (tens of bytes to a few KiB): a 256-entry cap evicted
+  // within one plains visit and re-queued tens of thousands of worker decodes.
+  pool={geometry:new DecodeCache(8*1048576,8192),textures:new DecodeCache(24*1048576,96),disposed:false};pools.set(engine,pool);
   engine.onDisposeObservable.addOnce(()=>{pool.disposed=true;pool.geometry.clear();pool.textures.clear();pools.delete(engine);});return pool;
 }
 export function inspectMapDecodeCache(engine){const p=engine&&pools.get(engine);return p?{geometry:p.geometry.inspect(),textures:p.textures.inspect()}:null;}

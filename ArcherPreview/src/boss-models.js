@@ -2,6 +2,7 @@ import { AbstractMesh, TransformNode } from '@babylonjs/core';
 import {loadBossModelContainer,prepareBossCloneSource,cloneBossMorphManager} from './boss-gpu-preparation.js';
 import {readMapManifest} from './map-manifests.js';
 import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
+import {recoverMeshoptWorkerPool} from './meshopt-worker-supervisor.js';
 
 export function instantiateBossModel(container, timings) {
   // Independent skeletons and animation targets; geometry/materials/textures stay shared.
@@ -43,6 +44,9 @@ export class BossModelLibrary {
         const url=new URL(`${import.meta.env?.BASE_URL??'/'}assets/${this.manifest}.json`,location.href);
         const config=await lifetime.wait(readMapManifest(url,{timeoutMs,timers}));check();
         // This loader owns partial/late containers through the same lifetime.
+        // A decoder latched failed by an earlier scenery timeout must not make
+        // every later monster model fail; start this load on a clean worker.
+        recoverMeshoptWorkerPool();
         const container=await loadBossModelContainer(this.scene,new URL(config.model,url),{lifetime});
         try{check();for(const group of container.animationGroups)group.stop();check();}
         catch(error){container.dispose();throw error;}

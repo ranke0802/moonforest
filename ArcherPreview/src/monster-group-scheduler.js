@@ -3,19 +3,30 @@ export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>t
  let generation=0,groups=new Map(),disposed=false,paused=true,loadedAt=0;const preparationLimit=Number.isFinite(preparationGroups)?Math.max(1,Math.floor(preparationGroups)):Infinity;
  const safeRemove=handle=>{try{remove(handle);}catch(error){onError(error);}};
  const release=group=>{if(!group.admitted)return;group.admitted=false;try{releaseAdmission(group.members);}catch(error){onError(error);}};
+ const FAILED_RETRY_SECONDS=6;
+ const cancel=prepared=>{for(const [,old] of prepared)safeRemove(old);};
  function leave(){generation++;paused=true;for(const group of groups.values()){for(const handle of group.handles.values())safeRemove(handle);release(group);}groups=new Map();}
  function load(rows,{permanentlyDead=[]}={}){leave();loadedAt=now();const dead=new Set(permanentlyDead);for(const row of rows){if(dead.has(row.id))continue;let group=groups.get(row.groupId);if(!group){const delay=row.spawnMode==='start'?0:row.delaySeconds*(.5+random());group={id:row.groupId,members:[],handles:new Map(),dead:new Set(),state:'waiting',remaining:delay,initialDelaySeconds:delay,pending:false,preparedCount:0,startedAt:null,readyAt:null,firstShownAt:null};groups.set(row.groupId,group);}group.members.push(row);}}
  async function launch(group){
-  const epoch=generation;group.pending=true;group.state='preparing';group.startedAt=now();group.readyAt=null;group.firstShownAt=null;group.preparedCount=0;const prepared=[];
+  const epoch=generation;group.pending=true;group.state='preparing';group.startedAt=now();group.readyAt=null;group.firstShownAt=null;group.preparedCount=0;const prepared=[],failed=[];
   // Each member appears as soon as it is ready (the leader is listed first),
-  // instead of the whole pack waiting for its last model. The group still
-  // respawns and completes as one.
-  const shown=new Set();
-  try{for(const row of group.members){const handle=await spawn(row,{isCurrent:()=>!disposed&&generation===epoch});if(disposed||generation!==epoch){safeRemove(handle);for(const [,old] of prepared)safeRemove(old);return;}prepared.push([row.id,handle]);group.preparedCount=prepared.length;
-    if(canCommit()){commit([handle]);shown.add(handle);group.firstShownAt??=now();}}
-   if(disposed||generation!==epoch)return;group.handles=new Map(prepared);group.dead.clear();group.state='prepared';group.readyAt=now();
-   const rest=[...group.handles.values()].filter(handle=>!shown.has(handle));if(!rest.length||canCommit()){if(rest.length)commit(rest);group.state='active';}
-  }catch(error){for(const [,handle] of prepared)safeRemove(handle);group.handles.clear();release(group);if(generation===epoch&&!disposed){group.state='waiting';group.remaining=2;onError(error);}}
+  // instead of the whole pack waiting for its last model. A member that fails
+  // to load sits this cycle out: it never takes already-shown packmates (the
+  // one the player may be fighting) down with it.
+  const shown=group.shown=new Set();const current=()=>!disposed&&generation===epoch;
+  try{
+   for(const row of group.members){
+    let handle;
+    try{handle=await spawn(row,{isCurrent:current});}
+    catch(error){if(!current())return cancel(prepared);failed.push(row.id);onError(error);continue;}
+    if(!current()){safeRemove(handle);return cancel(prepared);}
+    prepared.push([row.id,handle]);group.preparedCount=prepared.length;
+    if(canCommit()){commit([handle]);shown.add(handle);group.firstShownAt??=now();}
+   }
+   if(!prepared.length){release(group);group.state='waiting';group.remaining=FAILED_RETRY_SECONDS;return;}
+   group.handles=new Map(prepared);group.dead=new Set(failed);group.state='prepared';group.readyAt=now();
+   const rest=[...group.handles.values()].filter(handle=>!shown.has(handle));if(!rest.length||canCommit()){if(rest.length){commit(rest);for(const handle of rest)shown.add(handle);}group.state='active';}
+  }catch(error){for(const [,handle] of prepared)safeRemove(handle);group.handles.clear();release(group);if(current()){group.state='waiting';group.remaining=FAILED_RETRY_SECONDS;onError(error);}}
   finally{if(generation===epoch){group.pending=false;startReady();}}
  }
  // focus() → {x,z} | null: groups still waiting are prepared nearest that
@@ -37,7 +48,7 @@ export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>t
  }
  function update(dt,{paused:isPaused=false}={}){paused=isPaused;if(disposed||paused)return;dt=Math.max(0,Number.isFinite(dt)?dt:0);for(const group of groups.values()){
   if(group.pending)continue;
-  if(group.state==='prepared'){if(!canCommit())continue;try{commit([...group.handles.values()]);group.state='active';}catch(error){for(const handle of group.handles.values())safeRemove(handle);group.handles.clear();release(group);group.state='waiting';group.remaining=2;onError(error);}}
+  if(group.state==='prepared'){if(!canCommit())continue;const rest=[...group.handles.values()].filter(handle=>!group.shown?.has(handle));try{if(rest.length)commit(rest);group.state='active';}catch(error){for(const handle of group.handles.values())safeRemove(handle);group.handles.clear();release(group);group.state='waiting';group.remaining=2;onError(error);}}
   else if(group.state==='active'){
    for(const [id,handle] of group.handles)if(!group.dead.has(id)&&!isAlive(handle)){group.dead.add(id);if(!group.members[0].respawn)onPermanentDeath(id);}
    if(group.dead.size===group.members.length){for(const handle of group.handles.values())safeRemove(handle);group.handles.clear();release(group);if(group.members[0].respawn){group.state='waiting';group.remaining=group.members[0].delaySeconds;}else group.state='complete';}

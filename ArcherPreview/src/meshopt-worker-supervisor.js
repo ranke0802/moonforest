@@ -22,8 +22,11 @@ export function meshoptWorkerMain(){
 // No engine/scene/texture references or caller AbortSignals are retained. A map
 // may stop awaiting its result, but cannot cancel another map's shared healthy
 // decode. Only this worker's own fault/deadline, idle or explicit dispose ends it.
+// Streaming scenery decodes in bursts seconds apart; a 1 s release recreated
+// the worker (and its WASM) dozens of times per visit.
+export const MESHOPT_WORKER_IDLE_MS=8000;
 export class MeshoptWorkerSupervisor{
- constructor({createWorker,decoderUrl,timeoutMs=45000,queueTimeoutMs=45000,initTimeoutMs=45000,decodeTimeoutMs=45000,idleMs=1000,timers={}}){
+ constructor({createWorker,decoderUrl,timeoutMs=45000,queueTimeoutMs=45000,initTimeoutMs=45000,decodeTimeoutMs=45000,idleMs=MESHOPT_WORKER_IDLE_MS,timers={}}){
   Object.assign(this,{createWorker,decoderUrl,timeoutMs,queueTimeoutMs,initTimeoutMs,decodeTimeoutMs,idleMs});const clock=runtimeTimers(timers);this.now=clock.now;this.schedule=clock.setTimeout;this.unschedule=clock.clearTimeout;
   this.queue=[];this.active=null;this.lease=null;this.failed=null;this.disposed=false;this.sequence=0;
   this.counts={created:0,terminated:0,completed:0,failed:0,recoveries:0,workerFaults:0};

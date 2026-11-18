@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
 import {Worker as NodeWorker} from 'node:worker_threads';
 import {MeshoptEncoder,MeshoptDecoder} from 'meshoptimizer';
-import {MeshoptWorkerSupervisor,meshoptWorkerMain,installMeshoptWorkerSupervisor,recoverMeshoptWorkerPool,inspectMeshoptWorkerPool} from '../src/meshopt-worker-supervisor.js';
+import {MESHOPT_WORKER_IDLE_MS,MeshoptWorkerSupervisor,meshoptWorkerMain,installMeshoptWorkerSupervisor,recoverMeshoptWorkerPool,inspectMeshoptWorkerPool} from '../src/meshopt-worker-supervisor.js';
 import {MapLoadLifetime} from '../src/map-load-lifetime.js';
 import {MeshoptCompression} from '@babylonjs/core/Meshes/Compression/meshoptCompression.js';
 
@@ -23,8 +23,8 @@ function fixture(t,options={}){const timers=clock(),workers=[],pool=new MeshoptW
 
 test('one owned worker serializes shared jobs, keeps source bytes attached and retires only when truly idle',async t=>{
  const f=fixture(t),a=f.decode(),b=f.decode();assert.equal(f.workers.length,1);f.workers[0].ready();assert.notStrictEqual(f.workers[0].messages[1].source.buffer,input.buffer);assert.equal(input.byteLength,4);
- f.workers[0].complete();await a;await tick();assert.equal(f.workers.length,1);f.workers[0].complete();await b;await tick();f.timers.advance(999);assert.equal(f.workers[0].terminated,0);
- const c=f.decode();f.timers.advance(1001);assert.equal(f.workers[0].terminated,0,'old idle timer cannot kill a new active job');f.workers[0].complete();await c;await tick();f.timers.advance(1000);assert.equal(f.workers[0].terminated,1);assert.equal(f.pool.inspect().counts.completed,3);assert.equal(f.timers.size,0);
+ f.workers[0].complete();await a;await tick();assert.equal(f.workers.length,1);f.workers[0].complete();await b;await tick();f.timers.advance(MESHOPT_WORKER_IDLE_MS-1);assert.equal(f.workers[0].terminated,0);
+ const c=f.decode();f.timers.advance(MESHOPT_WORKER_IDLE_MS+1);assert.equal(f.workers[0].terminated,0,'old idle timer cannot kill a new active job');f.workers[0].complete();await c;await tick();f.timers.advance(MESHOPT_WORKER_IDLE_MS);assert.equal(f.workers[0].terminated,1);assert.equal(f.pool.inspect().counts.completed,3);assert.equal(f.timers.size,0);
 });
 for(const kind of ['error','messageerror','init-error','decode-error'])test('worker '+kind+' latches first failure and queued jobs never auto-retry; explicit recovery creates a clean worker',async t=>{
  const f=fixture(t),a=f.decode().catch(e=>e),b=f.decode().catch(e=>e),old=f.workers[0];
