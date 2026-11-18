@@ -28,6 +28,48 @@ const geometry=container=>container.meshes.filter(mesh=>mesh.getTotalVertices?.(
 const clone=value=>structuredClone(value);
 const CELL=4;
 
+// Route grids span the whole map (79,524 cells on the plains: about 0.4 s each
+// on a PC, seconds on a phone). The map warms them while loading, but an
+// authored overlay replaces the navigator, and its empty grid cache used to be
+// filled by the first detour search of a fight (phone record 2026-11-19: 0.6 s
+// and 3.7 s freezes inside the monster update). An overlay changes a handful
+// of solids, so its grids are the base grids with only the cells those solids
+// can reach decided again: same node order, neighbour order and edge costs as
+// ArenaNavigation.grid builds.
+const GRID_DIRECTIONS=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
+export function deriveRouteGrids(base,navigation,changed){
+ for(const [key,source]of base.grids??[]){
+  const [radius,limit]=key.split(':').map(Number),n=Math.round(Math.sqrt(source.length));
+  if(!Number.isFinite(radius)||!Number.isFinite(limit)||n<3||n*n!==source.length)continue;
+  const step=source[1].x-source[0].x,origin=source[0].x;if(!(step>0))continue;
+  const nodes=source.slice(),decide=new Uint8Array(nodes.length),connect=new Uint8Array(nodes.length);
+  const mark=(flags,obstacle,reach)=>{
+   const x0=Math.max(0,Math.floor((obstacle.x-reach-origin)/step)),x1=Math.min(n-1,Math.ceil((obstacle.x+reach-origin)/step)),z0=Math.max(0,Math.floor((obstacle.z-reach-origin)/step)),z1=Math.min(n-1,Math.ceil((obstacle.z+reach-origin)/step));
+   for(let z=z0;z<=z1;z++)for(let x=x0;x<=x1;x++)flags[z*n+x]=1;
+  };
+  for(const obstacle of changed){
+   // The navigator's own index treats a solid as reaching radius + 1.5 m.
+   const reach=(obstacle.radius??0)+1.5+radius+.1;
+   if(!Number.isFinite(obstacle.x)||!Number.isFinite(obstacle.z)||!Number.isFinite(reach)){nodes.length=0;break;}
+   mark(decide,obstacle,reach);mark(connect,obstacle,reach+step);
+  }
+  if(!nodes.length)continue;
+  // Untouched cells stay the base grid's own (read-only) nodes; only the cells
+  // decided again get nodes of their own.
+  for(let i=0;i<nodes.length;i++)if(connect[i]){const node=source[i];nodes[i]={x:node.x,z:node.z,free:decide[i]?navigation.free(node,radius+.035,limit):node.free,edges:node.edges};}
+  for(let i=0;i<nodes.length;i++){
+   if(!connect[i])continue;
+   const node=nodes[i],edges=[],x=i%n,z=(i-x)/n;
+   if(node.free)for(const [dx,dz]of GRID_DIRECTIONS){
+    const xx=x+dx,zz=z+dz,j=zz*n+xx;if(xx<0||xx>=n||zz<0||zz>=n||!nodes[j].free)continue;
+    if(navigation.segmentClear(node,nodes[j],radius+.025))edges.push([j,step*Math.hypot(dx,dz)]);
+   }
+   node.edges=edges;
+  }
+  navigation.grids.set(key,nodes);
+ }
+}
+
 // Inherit every original navigator method, including cave baked clearance.
 // Only owned obstacle/index/path-cache fields change on a COMMIT. Eligible
 // source colliders can be replaced by exact ID; baked clearance stays intact.
@@ -45,6 +87,8 @@ export function createAuthoredPlacementNavigation(base,obstacles,revision,{remov
    }
   }
  }
+ // A cave clearance edit changes free space everywhere; those grids are rebuilt on demand.
+ if(!force)deriveRouteGrids(base,navigation,[...obstacles,...base.obstacles.filter(obstacle=>removed.has(obstacle.id))]);
  const routeRevisions=new WeakMap();
  navigation.steer=function(from,goal,radius,cache,dt,limit){
   if(cache&&routeRevisions.get(cache)!==revision){cache.route=null;cache.age=Infinity;routeRevisions.set(cache,revision);}
