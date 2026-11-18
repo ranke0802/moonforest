@@ -191,7 +191,7 @@ const villageForceMobile=villageReviewEnabled&&new URLSearchParams(location.sear
 let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
-const lungeState={id:null,done:0,span:0};
+const lungeState={id:null,done:0,span:0,foe:null,reach:0};
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const meleeTargetPoint=new Vector3();
 const staminaFeedback=new StaminaFailureFeedback();
@@ -938,7 +938,10 @@ function render(dt) {
       // from the foe it was aimed at, as the light combo tracks height: a fixed
       // step left a standing fox short of (or behind) the descending blade.
       if(lungeState.id!==result.actionId){lungeState.id=result.actionId;lungeState.done=0;const foe=lunge.reach?boss.nearestTarget(actor.position):null,ratio=playerDimensions(actor).ratio,gap=foe?.actor?Vector3.Distance(actor.position,foe.actor.position):Infinity;
-        lungeState.span=gap<lunge.reach*ratio+(lunge.stop??1.3)?Math.max(0,gap-(lunge.stop??1.3)):lunge.distance*ratio;}
+        lungeState.foe=gap<lunge.reach*ratio+(lunge.stop??1.3)?foe:null;lungeState.reach=lunge.reach?lunge.reach*ratio:0;
+        lungeState.span=lungeState.foe?Math.max(0,gap-(lunge.stop??1.3)):lunge.distance*ratio;}
+      // Home on a foe that keeps moving while the leap is still closing.
+      if(lungeState.foe?.actor&&lungeState.foe.active)lungeState.span=Math.min(lungeState.reach,Math.max(lungeState.span,lungeState.done+Vector3.Distance(actor.position,lungeState.foe.actor.position)-(lunge.stop??1.3)));
       const duration=controller.durations?.[result.state]||1,f=Math.min(1,(result.clipTime??0)/(duration*lunge.until)),want=lungeState.span*(1-(1-f)**2);
       let step=want-lungeState.done;lungeState.done=want;
       const target=boss.nearestTarget(actor.position);
