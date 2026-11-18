@@ -497,6 +497,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // fights far across the plains). The map prepares that pack first.
   get questSpot(){
    if(!started)return null;const map=api.world?.mapId??mapId,step=log.step(),steps=log.quest()?.steps??[];
+   // "Defeat any N" here and now: the nearest packs to the player come first,
+   // not a later step's fight across the map (that queued the hunt behind it).
+   if(step?.type==='defeat'&&!step.at)return null;
    for(const row of steps.slice(Math.max(0,steps.indexOf(step))))if(row.type==='defeat'&&row.at&&row.map===map)return row.at;
    return null;
   },

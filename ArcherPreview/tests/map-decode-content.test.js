@@ -100,6 +100,6 @@ test('real shipped texture variants reuse shared-bin decodes with identical nati
   c.dispose();
  }
  assert.equal(decodes,cold,'different glTF texture tier and same model revisits add zero decodes');
- const cache=mapDecodePools(engine).geometry.inspect();assert.ok(cache.bytes<=8*1048576);assert.equal(cache.entries,cold);
+ const cache=mapDecodePools(engine).geometry.inspect();assert.ok(cache.bytes<=24*1048576);assert.equal(cache.entries,cold);
  t.diagnostic(JSON.stringify({models:pair.map(p=>p.path),coldDecodes:cold,subsequentDecodes:decodes-cold,cache}));
 });

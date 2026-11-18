@@ -51,19 +51,27 @@ export class PlayerMeleeAim{
   this.axis=new Vector3();this.up=new Vector3(0,1,0);this.localAxis=new Vector3();this.localUp=new Vector3();this.pivot=new Vector3();this.point=new Vector3();this.inverseParent=Matrix.Identity();this.localDelta=Quaternion.Identity();this.yawDelta=Quaternion.Identity();this.combinedDelta=Quaternion.Identity();
   this.endpoints=[[0,0,0],[0,0,0]];this.yawed=[[0,0,0],[0,0,0]];this.rotated=[[0,0,0],[0,0,0]];this.reset();
  }
- reset(){this.restore();this.action=null;this.target=null;this.pitch=this.yaw=this.extension=0;this.lastPitch=this.lastYaw=this.lastExtension=0;this.lastError=this.lastNeckError=null;this.resetFit();}
+ reset(){this.restore();this.action=null;this.target=this.candidate=null;this.pitch=this.yaw=this.extension=0;this.lastPitch=this.lastYaw=this.lastExtension=0;this.lastError=this.lastNeckError=null;this.resetFit();}
  resetFit(){this.fitReady=false;this.fitClock=0;this.lastWideTime=-Infinity;this.fitPitch=this.fitYaw=this.fitExtension=0;this.fullFitCount=this.localFitCount=0;}
  restore(){for(const arm of Object.values(this.arms))if(arm&&(arm.changed||arm.elbow?.changed)){if(arm.changed)arm.node.rotationQuaternion.copyFrom(arm.original);if(arm.elbow?.changed){arm.elbow.node.rotationQuaternion.copyFrom(arm.elbow.original);arm.elbow.changed=false;}arm.changed=false;for(const node of arm.branch){node.markAsDirty();node.computeWorldMatrix();}}}
  begin(result,player,target){
   if(result.actionId===this.action)return;
   this.action=result.actionId;this.pitch=this.yaw=this.extension=0;
   this.resetFit();
-  const dx=(target?.actor.position.x??player.position.x)-player.position.x,dz=(target?.actor.position.z??player.position.z)-player.position.z,distance=Math.hypot(dx,dz);
+  // The foe chosen at the start stays a candidate for the whole action: the
+  // judgment leap (and the light-combo step) closes from beyond 3 m, and an
+  // aim decided only at the first frame left the descending blade at the
+  // player's own chest height, above a standing fox.
+  this.candidate=target?.regularWolfId?target:null;this.target=null;this.acquire(player);
+ }
+ acquire(player){
+  const target=this.candidate;if(this.target||!target?.active||!(target.brain?.hp>0))return;
+  const dx=target.actor.position.x-player.position.x,dz=target.actor.position.z-player.position.z,distance=Math.hypot(dx,dz);
   const forward=distance>1e-6?(dx*Math.sin(player.rotation.y)+dz*Math.cos(player.rotation.y))/distance:1;
-  this.target=target?.regularWolfId&&target.active&&target.brain?.hp>0&&distance<3&&forward>.2?target:null;
+  if(distance<3&&forward>.2)this.target=target;
  }
  apply(result,player,dt=1/60){
-  this.restore();const strikes=PLAYER_STRIKES[result?.state],target=this.target;
+  this.restore();if(result?.actionId===this.action)this.acquire(player);const strikes=PLAYER_STRIKES[result?.state],target=this.target;
   if(!strikes||result.actionId!==this.action||result.captured||result.staggered||result.guarding||result.shieldPending||!target?.active||target.brain?.hp<=0){this.pitch=0;return;}
   const time=result.clipTime??0,end=strikes.at(-1).to,envelope=clamp(time/.22,0,1)*clamp((end+.18-time)/.18,0,1);
   if(envelope<=0)return;
