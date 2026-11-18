@@ -5,7 +5,7 @@
     "moonforest-tripo-elder-woman": {
       "name": "노년 여성",
       "category": "npc",
-      "version": "2026-11-18-tripo-v1",
+      "version": "2026-11-18-tripo-v2",
       "scale": 1,
       "bodyHeight": 1.850000023841858,
       "animations": {
@@ -18,7 +18,7 @@
         "listen": "Listening_Gesture"
       },
       "npc": {
-        "sourceSha256": "be138a6239fd66e172b00a9553135b122e00e4a7197e8c986e0ca583f68c96b2",
+        "sourceSha256": "02913839a857028280309a320466b460856525011ca3abfd1dfb31700de8294d",
         "look": {
           "toon": true,
           "pbr": false,
@@ -75,10 +75,10 @@
         "rootMotion": "in-place",
         "defaultClip": "Idle_Stand"
       },
-      "model": "./content/e78712c6c1e537c2fbf4d9b8c0fd178c4d3667b44b2dc0a74fb6f02d9c73fbfc.gltf",
+      "model": "./content/0ee54712a2e9997f1a83affb72c6b4d1c72abe6b085e91ba31d9c3a004454156.gltf",
       "resources": [
         "./content/cad76bfb72334d754842e22803971921a2bfc535a2fcba72d4d479c3595d00dc.jpg",
-        "./content/c2e9d41549e11537e27f387e0f06dc78200ac1b3b585712bf14cdddcd9db9a84.bin",
+        "./content/3c6f6c894e81cc14d7373219e221ccf4c7a350a5675a3f9258bb8d6ab45be454.bin",
         "./content/19bc3d5f5f3946fb248438cf85e6d60491fce1a75e26d1255c365fd43137bbfa.bin",
         "./content/24aeea667bb8f0492d0661c249e3c9bb49bdccad3f62cb956716aefc34c3b366.bin",
         "./content/1a25f5465d6bf5389d794d712dceb2a6318d41c57664218a249a39ffb64e6bd6.bin",
@@ -87,11 +87,11 @@
         "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
         "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
         "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
-        "./content/e78712c6c1e537c2fbf4d9b8c0fd178c4d3667b44b2dc0a74fb6f02d9c73fbfc.gltf"
+        "./content/0ee54712a2e9997f1a83affb72c6b4d1c72abe6b085e91ba31d9c3a004454156.gltf"
       ],
       "visualReview": "APPROVED",
       "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
-      "sourceModelSha256": "be138a6239fd66e172b00a9553135b122e00e4a7197e8c986e0ca583f68c96b2"
+      "sourceModelSha256": "02913839a857028280309a320466b460856525011ca3abfd1dfb31700de8294d"
     }
   }
 }

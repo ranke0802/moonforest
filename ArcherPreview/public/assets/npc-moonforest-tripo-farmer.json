@@ -5,7 +5,7 @@
     "moonforest-tripo-farmer": {
       "name": "농부",
       "category": "npc",
-      "version": "2026-11-18-tripo-v1",
+      "version": "2026-11-18-tripo-v2",
       "scale": 1,
       "bodyHeight": 1.850000023841858,
       "animations": {
@@ -18,7 +18,7 @@
         "listen": "Listening_Gesture"
       },
       "npc": {
-        "sourceSha256": "42434fe5bcdee8929c5edf6d42374482c64d7a2aa52eb1ef28f5712630e4f380",
+        "sourceSha256": "54581f90ac641f6f2ffd2196ac6790e7d854d2c4f4c6ec012e8bd3f3162baaa9",
         "look": {
           "toon": true,
           "pbr": false,
@@ -75,10 +75,10 @@
         "rootMotion": "in-place",
         "defaultClip": "Idle_Stand"
       },
-      "model": "./content/3b48edec38c81a881ee30957e230709a398193b2fade7f6d14780afc3ea712f6.gltf",
+      "model": "./content/ec3e4fc63303ddba992dad79eb19bccfb9e76dd06c17ae7f89e8c19bd737c3e7.gltf",
       "resources": [
         "./content/ee72d7af3336632a4a3690346efea6b01e1a1782cfbf3779293a7c4425586440.jpg",
-        "./content/e3eee1585fbef8b5d59a21ca5157a30d954180422e64c426508bba9047b8198c.bin",
+        "./content/f3a6068e3d316b84a6d4ffc708156e769397a5ddd2f9a196dcfffc78ad257a3c.bin",
         "./content/7f8540fbbfae3809ea3df5384be55ae7feec9d9629a69d5b3a5e28023f82a7bc.bin",
         "./content/24aeea667bb8f0492d0661c249e3c9bb49bdccad3f62cb956716aefc34c3b366.bin",
         "./content/1a25f5465d6bf5389d794d712dceb2a6318d41c57664218a249a39ffb64e6bd6.bin",
@@ -87,11 +87,11 @@
         "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
         "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
         "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
-        "./content/3b48edec38c81a881ee30957e230709a398193b2fade7f6d14780afc3ea712f6.gltf"
+        "./content/ec3e4fc63303ddba992dad79eb19bccfb9e76dd06c17ae7f89e8c19bd737c3e7.gltf"
       ],
       "visualReview": "APPROVED",
       "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
-      "sourceModelSha256": "42434fe5bcdee8929c5edf6d42374482c64d7a2aa52eb1ef28f5712630e4f380"
+      "sourceModelSha256": "54581f90ac641f6f2ffd2196ac6790e7d854d2c4f4c6ec012e8bd3f3162baaa9"
     }
   }
 }

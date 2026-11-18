@@ -5,7 +5,7 @@
     "moonforest-tripo-vigilante": {
       "name": "자경단 전사",
       "category": "npc",
-      "version": "2026-11-18-tripo-v1",
+      "version": "2026-11-18-tripo-v2",
       "scale": 1,
       "bodyHeight": 1.850000023841858,
       "animations": {
@@ -18,7 +18,7 @@
         "listen": "Listening_Gesture"
       },
       "npc": {
-        "sourceSha256": "20de2c7dd5d94f43a83cd971fd2a32223bc8babd179afd19bbaee3011e049028",
+        "sourceSha256": "dd09c6a38ce09d0d1de5f88e6d1a5f8370d5f79f79e64181d8f037c1ca33baa1",
         "look": {
           "toon": true,
           "pbr": false,
@@ -75,10 +75,10 @@
         "rootMotion": "in-place",
         "defaultClip": "Idle_Stand"
       },
-      "model": "./content/6db1715a921f84aedc3379b65d07e6feaff35a609f3b16b2aa8e904641f9d97f.gltf",
+      "model": "./content/1c6b9e07f85155e278bd059ea67865733b22909028f25017e41536651615510c.gltf",
       "resources": [
         "./content/b4dd69842c7cc0eff3fc332401088eced317876b55d91feeff1cff9a2baa6a54.jpg",
-        "./content/ff632f7d024c3f9b923c666cef2d013cd7cd2e88a76734bf73e43de5e893fb73.bin",
+        "./content/9ca03456ae14ecfc1133ed312a6db9aacac861391f5604880b1b0c09f7515e9f.bin",
         "./content/bf1693c7b24aca23e7df63c0277f4af42b3e1701bd257bfdcf04a55eeb25ab67.bin",
         "./content/ded2547b3a7b1b4aa2356d577442247ca87eeb0398f4ee4eef914d82ed997f2e.bin",
         "./content/1a25f5465d6bf5389d794d712dceb2a6318d41c57664218a249a39ffb64e6bd6.bin",
@@ -87,11 +87,11 @@
         "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
         "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
         "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
-        "./content/6db1715a921f84aedc3379b65d07e6feaff35a609f3b16b2aa8e904641f9d97f.gltf"
+        "./content/1c6b9e07f85155e278bd059ea67865733b22909028f25017e41536651615510c.gltf"
       ],
       "visualReview": "APPROVED",
       "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
-      "sourceModelSha256": "20de2c7dd5d94f43a83cd971fd2a32223bc8babd179afd19bbaee3011e049028"
+      "sourceModelSha256": "dd09c6a38ce09d0d1de5f88e6d1a5f8370d5f79f79e64181d8f037c1ca33baa1"
     }
   }
 }
