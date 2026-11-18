@@ -267,6 +267,9 @@ export function setupV03(api){
  if(save.intent){
   // A slot was chosen on a previous document: skip logo and title.
   splash?.remove?.();screen(save.intent.mode==='new'?'opening':'resume');
+  // Between the loading card and the dream, never show the raw camera (it
+  // can start inside a tree crown): keep the prologue cover up.
+  if(save.intent.mode==='new')opening.cover({art:true});
  }else if(splash?.done)splash.done.then(()=>{splash.remove?.();afterLoading(showTitle);});
  else afterLoading(showTitle);
  // A loading/frame failure owns the screen: its retry UI must be reachable.

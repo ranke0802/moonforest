@@ -67,7 +67,8 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
   // Fades the black stage away to reveal the game.
   async release(){if(layer.hidden)return;layer.classList.add('is-releasing');await wait(900);layer.hidden=true;layer.classList.remove('is-releasing');},
   // Shows the black stage without captions (used to hide a stage swap).
-  cover(){layer.classList.remove('is-releasing');line.textContent='';clear();layer.hidden=false;},
+  // art: keep the prologue cover painting up (new game, before the dream).
+  cover({art=false}={}){layer.classList.remove('is-releasing');line.textContent='';clear();layer.hidden=false;if(art)show({image:PROLOGUE_COVER,drift:'breathe',seconds:30});},
   cancel(){run++;clear();layer.hidden=true;},
   dispose(){run++;layer.remove();},
  };
