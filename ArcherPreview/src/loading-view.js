@@ -73,6 +73,11 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
       let context;try{context=diagnostics();report=JSON.stringify({...context,kind:'loading-failure',failure},null,2);}catch(captureError){report=JSON.stringify({kind:'loading-failure',failure,diagnosticCaptureError:loadingErrorRecord(captureError)},null,2);}
       failed=true;
       doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.add('error');
+      // A deploy replaces every hashed chunk: a page whose cached HTML/main
+      // still names the previous build fails its lazy import. Reload once on
+      // its own with a fresh URL (no tap needed); a repeat within a minute
+      // waits for the player's tap as before.
+      if(reloadRequired)try{const key='moonforest-module-auto-reload',store=globalThis.sessionStorage,last=Number(store?.getItem(key)??0),now=Date.now();if(!(now-last<60000)){store?.setItem(key,String(now));setTimeout(()=>{try{this.retryPageIfRequired();}catch{}},400);}}catch{}
       get('loading-title').textContent=tr(title);get('loading-text').textContent=tr(message);
       get('retry-load').hidden=!retry;get('retry-load').textContent=tr(retryLabel);get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
       if(detail)detail.hidden=false;if(summary)summary.textContent=`${failure.name}: ${failure.message}`+(failure.code?`\n코드: ${failure.code}`:'')+(failure.stage||phase?`\n단계: ${failure.stage??phase}`:'')+(failure.loaderMessage?`\n상세: ${failure.loaderMessage}`:'');if(stack)stack.textContent=[failure.stack,failure.cause?.stack].filter(Boolean).join('\n\n원인:\n')||'추가 호출 기록이 없습니다.';if(copy)copy.hidden=false;
