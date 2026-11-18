@@ -228,7 +228,7 @@ const ADAPTIVE_LEVEL_KEY='moonforest-adaptive-level-v2';
 let adaptiveStoredLevel=0;try{adaptiveStoredLevel=Number(globalThis.localStorage?.getItem(ADAPTIVE_LEVEL_KEY))||0;}catch{/* storage optional */}
 const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition,level:adaptiveStoredLevel});
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
-function applyAdaptiveShadows(){if(world)world.detailCullRange=adaptivePerformance.settings.detailRange??0;if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
+function applyAdaptiveShadows(){const guard=adaptivePerformance.settings;if(world?.lighting){world.lighting.actorShadowRange=guard.actorShadowRange??32;const map=world.lighting.shadows?.getShadowMap?.();if(map)map.refreshRate=guard.shadowRefresh??1;}if(world)world.detailCullRange=adaptivePerformance.settings.detailRange??0;if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
 function applyAdaptivePerformance(){try{globalThis.localStorage?.setItem(ADAPTIVE_LEVEL_KEY,String(adaptivePerformance.level));}catch{/* storage optional */}applyRenderQuality();if(world){applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale);world.detailCullRange=adaptivePerformance.settings.detailRange??0;}applyAdaptiveShadows();}
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();

@@ -38,6 +38,7 @@ class PaintedModelShade extends MaterialPluginBase {
 //  - outline shells only duplicate their body's silhouette;
 //  - animated actors beyond ACTOR_SHADOW_RANGE cast a few texels at most.
 export const ACTOR_SHADOW_RANGE=32;
+// The frame guard may pull this in on a struggling phone (lighting.actorShadowRange).
 const isOutlineCaster=mesh=>mesh.metadata?.moonforestOutline===true||/_Outline$/.test(mesh.name);
 export function installShadowCasterCulling(shadows,lighting){
   const map=shadows.getShadowMap(),casters=[],forward=new Vector3(),right=new Vector3(),up=new Vector3(),offset=new Vector3();let frame=-1;
@@ -51,7 +52,7 @@ export function installShadowCasterCulling(shadows,lighting){
       const sphere=mesh.getBoundingInfo?.()?.boundingSphere;if(!sphere){casters.push(mesh);continue;}
       sphere.centerWorld.subtractToRef(focus,offset);const radius=sphere.radiusWorld;
       if(Math.abs(Vector3.Dot(offset,right))>half+radius||Math.abs(Vector3.Dot(offset,up))>half+radius)continue;
-      if(mesh.skeleton&&offset.length()-radius>ACTOR_SHADOW_RANGE)continue;
+      if(mesh.skeleton&&offset.length()-radius>(lighting.actorShadowRange??ACTOR_SHADOW_RANGE))continue;
       casters.push(mesh);
     }
     return casters;

@@ -9,7 +9,10 @@ test('slow frames step the quality down one level per window, never past the las
  assert.equal(run(guard,16.7,6),null,'a steady 60 fps changes nothing');
  assert.equal(run(guard,22,2.1)?.scale,ADAPTIVE_LEVELS[1].scale);
  run(guard,22,30);assert.equal(guard.level,ADAPTIVE_LEVELS.length-1);
- assert.equal(guard.settings.shadows,true,'shadows, view distance and detail are never traded');assert.equal(guard.settings.viewCap,null);assert.equal(guard.settings.rangeScale,1);
+ assert.equal(guard.settings.shadows,true,'shadows are never switched off');assert.equal(guard.settings.rangeScale,1);
+ // The plains view is the very last thing given up, and only partly.
+ assert.ok(ADAPTIVE_LEVELS.slice(0,4).every(level=>level.viewCap===null));assert.equal(guard.settings.viewCap,1.6);
+ assert.ok(ADAPTIVE_LEVELS.every((level,i)=>i===0||level.scale<=ADAPTIVE_LEVELS[i-1].scale),'resolution never rises with a lower level');
 });
 
 test('a long calm stretch steps back up; a quick relapse pins the floor',()=>{
