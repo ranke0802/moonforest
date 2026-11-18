@@ -263,7 +263,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const member=near,questLine=log.dialogueFor(member.npc.id),lines=content.DIALOGUES[questLine??member.npc.idle];
   if(!lines)return false;
   talking=true;hud.setPrompt(null);api.input.setSuspended(true);
-  const at=api.getPlayer?.()?.position;member.visual.talk?.(true,at?{x:at.x,z:at.z}:null);
+  member.visual.talk?.(true,()=>api.getPlayer?.()?.position??null);
   try{
    const played=await dialogue.play(lines);
    if(played&&!disposed){runEffects(played);if(questLine)emit({type:'talk',npc:member.npc.id});}
