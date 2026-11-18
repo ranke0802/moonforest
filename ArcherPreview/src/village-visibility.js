@@ -105,7 +105,7 @@ export class VillageVisibility {
     if(states.size!==active.size)for(const record of states.keys())if(!active.has(record))states.delete(record);
     this.shadowStateReady=true;
     if(!changed){this.stats.shadowUpdateSkips=(this.stats.shadowUpdateSkips??0)+1;return;}
-    this.stats.shadowUpdates=(this.stats.shadowUpdates??0)+1;this.world.lighting?.invalidateStaticShadows?.();
+    this.stats.shadowUpdates=(this.stats.shadowUpdates??0)+1;
     const next=this.shadowScratch;next.clear();let major=0,fading=0;
     for(const r of this.castRecords)if(!active.has(r)){
       r.shadowCaster=false;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.delete(r);

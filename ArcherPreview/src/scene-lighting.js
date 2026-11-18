@@ -1,5 +1,5 @@
 import { MaterialPluginBase, ShadowGenerator, Vector3 } from '@babylonjs/core';
-import {installVillageShadowFade,prepareShadowFade} from './village-shadow-fade.js';
+import {installVillageShadowFade,prepareShadowFade,shadowFadeAttribute} from './village-shadow-fade.js';
 import {installStaticShadowCache,staticShadowCasters} from './static-shadow-cache.js';
 
 // Painted character maps are emissive to retain their authored colors. Reuse the
@@ -58,9 +58,9 @@ export function installShadowCasterCulling(shadows,lighting){
         if(mesh.skeleton&&offset.length()-radius>(lighting.actorShadowRange??ACTOR_SHADOW_RANGE))continue;
       }
       casters.push(mesh);
-      // Static casters only count while drawable, so hiding/showing one
-      // changes the static list and refreshes the cached depth.
-      if(staticShadowCasters.has(mesh)){if(mesh.isEnabled()&&mesh.isVisible)statics.push(mesh);}
+      // Static casters only count while drawable and fully faded in, so a
+      // fading shadow is drawn live and only the settled set refreshes the cache.
+      if(staticShadowCasters.has(mesh)&&(mesh.instancedBuffers?.[shadowFadeAttribute]??1)>=.999){if(mesh.isEnabled()&&mesh.isVisible)statics.push(mesh);}
       else dynamics.push(mesh);
     }
     return lists;
