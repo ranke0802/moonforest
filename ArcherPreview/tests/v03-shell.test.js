@@ -75,8 +75,9 @@ test('title screen: five menu entries, keyboard order, slot panel and confirm',a
  assert.deepEqual(slotSummary({slot:2,used:false}),{title:'빈 기록',detail:'새로운 여정을 시작합니다'});assert.equal(formatPlayTime(59),'0분');
  title.dispose();assert.equal(document.querySelector('.v03-title'),null);
 });
-test('prologue lasts 15 to 20 seconds, shows every beat and can be skipped',async()=>{
- assert.ok(dreamSeconds()>=15&&dreamSeconds()<=20,String(dreamSeconds()));
+// Painted prologue (2026-11-18): slow cross-fades per beat, still skippable.
+test('prologue lasts 18 to 26 seconds, shows every beat and can be skipped',async()=>{
+ assert.ok(dreamSeconds()>=18&&dreamSeconds()<=26,String(dreamSeconds()));
  const {document}=dom(),seen=[];
  const opening=createOpening({doc:document,wait:async()=>{const text=document.querySelector('.v03-opening-line').textContent;if(text&&seen.at(-1)!==text)seen.push(text);}});
  assert.equal(await opening.play(),'done');assert.deepEqual(seen,DREAM_BEATS.map(beat=>t(beat.key)));assert.equal(opening.active,true);
