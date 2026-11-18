@@ -2,6 +2,11 @@ import {MaterialPluginBase,VertexBuffer} from '@babylonjs/core';
 import {CHARACTER_STYLE_DEFAULTS} from './character-style-settings.js';
 
 const scenes=new WeakMap(),surfacePlugins=new WeakMap(),inkPlugins=new WeakMap();
+// Master switch for every drawn interior line (material ink on the hero,
+// bosses, wolves, NPC looks). Off by default (2026-11-18); outlines stay.
+let interiorLines=false;
+export function setInteriorLinesEnabled(value){interiorLines=!!value;}
+export function interiorLinesEnabled(){return interiorLines;}
 const neutral=Object.freeze({outline:true,outlineWidth:0,internal:false,internalStrength:0,brightness:1});
 export function characterStyleFor(mesh){
   if(mesh?.metadata?.npcCharacterStyle)return mesh.metadata.npcCharacterStyle;
@@ -35,7 +40,7 @@ export class CharacterSurfaceStyle extends MaterialPluginBase{
     const boss=mesh.metadata?.characterStyleGroup==='boss'&&!mesh.metadata?.elenaInlineFlash;
     // Other monsters predate Elena's painted bands. The common default must be
     // neutral on their approved surface; only adjustments add extra crease ink.
-    buffer.updateFloat2('characterPaint',style.brightness/(boss?1.35:1),style.internal?Math.max(0,style.internalStrength-(boss ? .2 : 0)):0);
+    buffer.updateFloat2('characterPaint',style.brightness/(boss?1.35:1),interiorLines&&style.internal?Math.max(0,style.internalStrength-(boss ? .2 : 0)):0);
   }
   getCustomCode(type){if(type!=='fragment')return null;return {CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:`
     float characterPaintFactor = characterPaint.x;

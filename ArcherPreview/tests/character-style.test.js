@@ -8,7 +8,9 @@ import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {CharacterStyleSettings,CHARACTER_STYLE_DEFAULTS,normalizeCharacterStyles,setupCharacterStylePanel} from '../src/character-style-settings.js';
-import {applyCharacterSurfaceStyle,setSceneCharacterStyles,characterStyleFor} from '../src/character-style.js';
+import {applyCharacterSurfaceStyle,setSceneCharacterStyles,characterStyleFor,setInteriorLinesEnabled} from '../src/character-style.js';
+// These cases check the per-character line strength, so the master switch is on.
+setInteriorLinesEnabled(true);
 import {applyMonsterToon} from '../src/monster-toon.js';
 import {applyElenaStyle} from '../src/elena-style.js';
 import {attachCharacterOutlines} from '../src/character-outlines.js';
