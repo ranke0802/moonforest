@@ -284,6 +284,22 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const heightAt=(x,z)=>api.world.terrain?.heightAt?.(x,z)??0;
  const alphaFrom=(from,to)=>Math.atan2(from.z-to.z,from.x-to.x);// camera on `from`'s side looking at `to`
  function freeNear(point){const nav=api.world.navigation;try{return nav?.free?.(point,.6)?point:nav?.findFree?.(point,.6)??point;}catch{return point;}}
+// One clip per shot, on the scene's own clock: the snarl and watch, the charge
+ // run, then watching the warrior who now stands between them.
+ function holdWolf(foe){
+  const animator=foe.animator,clips=foe.config?.animations??{};if(!animator)return;
+  let clip=null,clock=0;
+  foe.storyHold=dt=>{
+   const want=scene.shot===2?(clips.run??'Wolf_Run_R5'):(clips.watch??'Circle_Watch_R5');
+   if(want!==clip){clip=want;clock=0;}
+   clock+=dt;const length=animator.durations?.[clip]??1;
+   animator.transition(clip,{clipTime:clock%length,actionId:'story-'+clip,blendDuration:.25});animator.update(dt);
+  };
+ }
+ function releaseWolf(foe){
+  if(!foe?.storyHold)return;foe.storyHold=null;
+  const brain=foe.brain;if(brain&&foe.animator)foe.animator.transition(brain.state,{clipTime:brain.time??0,actionId:brain.serial,blendDuration:.25});
+ }
  function beginAmbushScene(){
   const player=api.getPlayer()?.position,camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];
   const foe=(api.battle.encounters??[]).find(row=>row.active&&row.brain?.hp>0),member=cast.find(row=>row.npc.id==='driver');
@@ -295,6 +311,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
   if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(D.x-far.x,D.z-far.z);
   scene.driver=member;scene.wolf=foe;scene.points={D,far,charge,guard,start:{x:player.x,z:player.z}};
+  // The shots pose the wolf; its own AI sits out until the scene ends.
+  holdWolf(foe);
   Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta});
   api.input.setSuspended(true);
   return true;
@@ -341,6 +359,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }
   if(now>=SCENE.end){
    scene.active=false;scene.cameraFocus=null;camera.radius=scene.radius;camera.beta=scene.beta;
+   releaseWolf(wolf);
    hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera.alpha;
   }
  }
@@ -498,8 +517,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
-   if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;api.input.setSuspended(false);}}
-   if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);scene.active=false;scene.cameraFocus=null;hud.setCaption(null);api.input.setSuspended(false);}coach(0);updateGuide(dt,null);return;}
+   if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
+   if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);scene.active=false;releaseWolf(scene.wolf);scene.cameraFocus=null;hud.setCaption(null);api.input.setSuspended(false);}coach(0);updateGuide(dt,null);return;}
    const player=api.getPlayer()?.position;
    if(player&&!talking&&!dialogue.open){
     let best=null,bestSq=TALK_RANGE_SQ;

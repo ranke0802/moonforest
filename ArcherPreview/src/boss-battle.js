@@ -423,6 +423,9 @@ export class BossBattle {
     const interval=this.farUpdateInterval>1?Math.floor(this.farUpdateInterval):1,frame=this.farUpdateFrame=(this.farUpdateFrame??0)+1;let slot=0;
     for (const boss of this.encounters){
       let step=dt;slot++;
+      // A story shot owns this actor (position, facing and clip): its own AI
+      // must not also turn/move/re-clip it, or the two alternate frame by frame.
+      if(boss.storyHold&&boss.active){try{boss.storyHold(step);}catch(error){boss.storyHold=null;console.warn('[story hold]',error);}continue;}
       const far=boss._far=interval>1&&boss.active&&boss.renderVisible===false&&boss.brain?.hp>0&&!boss.grab?.active&&boss.actor&&(boss.actor.position.x-player.position.x)**2+(boss.actor.position.z-player.position.z)**2>FAR_UPDATE_DISTANCE**2;
       if(far){
         boss._farDt=(boss._farDt??0)+dt;

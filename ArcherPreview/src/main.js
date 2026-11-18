@@ -1050,6 +1050,7 @@ try {
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.weather=weatherSettings;weatherSettings.mapChanged();world.dayCycle?.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
+  if(new URLSearchParams(location.search).get('posetrace')==='1')void import('./pose-trace.js').then(({installPoseTrace})=>installPoseTrace({scene:world.scene,getEncounters:()=>boss?.encounters,getPlayer:()=>actor,getShield:()=>shieldNode})).catch(error=>console.warn('[pose trace]',error));
   if(releaseEnabled){
     world.loadAuthoredMap=async()=>{
       const mapId=world.mapId;
