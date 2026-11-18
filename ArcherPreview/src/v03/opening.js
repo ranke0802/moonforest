@@ -44,7 +44,10 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
  const shade=doc.createElement('div');shade.className='v03-opening-shade';
  const flash=doc.createElement('div');flash.className='v03-opening-flash';
  const lids=[0,1].map(i=>{const lid=doc.createElement('div');lid.className='v03-opening-lid '+(i?'is-low':'is-high');return lid;});
- layer.append(...planes.map(p=>p.plane),rim,veil,motes,glow,shade,line,flash,...lids,skip);mount.append(layer);
+ // Out-of-focus world behind the opening lids (a backdrop blur inside this
+ // layer: filtering the game canvas itself let it paint over the lids).
+ const focus=doc.createElement('div');focus.className='v03-opening-focus';
+ layer.append(...planes.map(p=>p.plane),rim,veil,motes,glow,shade,line,flash,focus,...lids,skip);mount.append(layer);
  let run=0,front=0;
  const show=beat=>{
   const next=planes[front=1-front],prev=planes[1-front];
@@ -99,10 +102,7 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
   async release(){
    if(layer.hidden)return;
    if(layer.dataset.woke==='1'){
-    const view=doc.getElementById?.('viewport');
-    if(view){view.style.transition='none';view.style.filter='blur(7px) brightness(.85)';void view.offsetWidth;view.style.transition='filter 1.9s ease-out';view.style.filter='';}
     layer.classList.add('is-waking');await wait(2100);
-    if(view){view.style.transition='';view.style.filter='';}
     layer.hidden=true;layer.classList.remove('is-waking');delete layer.dataset.woke;return;
    }
    layer.classList.add('is-releasing');await wait(900);layer.hidden=true;layer.classList.remove('is-releasing');

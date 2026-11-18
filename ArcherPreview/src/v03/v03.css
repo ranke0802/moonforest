@@ -372,7 +372,7 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 .v03-opening[data-tone] .v03-opening-haze{animation:v03-ghost 5.5s ease-in-out infinite alternate}
 @keyframes v03-ghost{from{transform:translate(-.6%,-.2%)}to{transform:translate(.9%,.35%)}}
 .v03-opening-plane.is-in[data-drift="reveal"]{animation-name:v03-reveal;animation-timing-function:cubic-bezier(.45,0,.25,1)}
-@keyframes v03-reveal{0%{opacity:0;transform:scale(2.3) translate(26%,-30%)}8%{opacity:1}22%{transform:scale(2.2) translate(25%,-28%)}100%{opacity:1;transform:scale(1.03) translate(0,0)}}
+@keyframes v03-reveal{0%{opacity:0;transform:scale(2.3) translate(26%,-30%)}8%{opacity:1}22%{transform:scale(2.2) translate(25%,-28%)}100%{opacity:1;transform:scale(1.04) translate(0,11%)}}
 .v03-opening[data-tone="cosmic"] .v03-opening-art{filter:brightness(.62) saturate(.82) contrast(1.06)}
 .v03-opening[data-tone="cosmic"] .v03-opening-glow{opacity:.2;background:radial-gradient(circle at 50% 18%,#e8d6ff 0%,#0000 42%);animation:v03-candle 2.3s ease-in-out infinite alternate}
 @keyframes v03-candle{from{opacity:.14}to{opacity:.24}}
@@ -389,6 +389,9 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 .v03-opening-lid.is-low{bottom:0;background:linear-gradient(to top,#000 78%,#0000);border-radius:50% 50% 0 0/18% 18% 0 0}
 .v03-opening.is-waking{background:transparent;transition:none}
 .v03-opening.is-waking .v03-opening-lid{display:block}
+.v03-opening-focus{position:absolute;inset:0;z-index:2;display:none;pointer-events:none;-webkit-backdrop-filter:blur(8px) brightness(.85);backdrop-filter:blur(8px) brightness(.85)}
+.v03-opening.is-waking .v03-opening-focus{display:block;animation:v03-focus 1.9s ease-out both}
+@keyframes v03-focus{0%,30%{opacity:1}100%{opacity:0}}
 .v03-opening.is-waking .v03-opening-lid.is-high{animation:v03-lid-high 2.05s ease-in-out both}
 .v03-opening.is-waking .v03-opening-lid.is-low{animation:v03-lid-low 2.05s ease-in-out both}
 .v03-opening.is-waking .v03-opening-skip,.v03-opening.is-waking .v03-opening-veil,.v03-opening.is-waking .v03-opening-motes,.v03-opening.is-waking .v03-opening-rim{display:none}
