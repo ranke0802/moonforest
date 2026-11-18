@@ -35,9 +35,11 @@ export const DIALOGUES=Object.freeze({
  ],
  // Prologue → first fight: the wolf at the wagon (played by story.beginAmbushScene).
  'ambush-scene':[
-  {who:'마부',text:'늑, 늑대다…! 이 녀석, 마차를 노리고 있어!'},
+  {who:'마부',text:'일, 일어나쇼! 늑대요, 늑대가 마차를 노려요!'},
   {who:'마부',text:'오, 오지 마! 저리 가!'},
   {who:'나',text:'(물러설 수 없다. 마부를 지켜야 한다.)'},
+  // Shown first, as the warrior wakes from the dream (index kept for the locales).
+  {who:'나',text:'(…꿈, 이었나.)'},
  ],
  'driver-idle':[{who:'마부',text:'바퀴만 고치면 나도 뒤따라가겠네. 길 조심하게.'}],
  'inn-arrive':[

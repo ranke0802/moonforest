@@ -16,6 +16,8 @@ export default {
   'place.warrior-v3':'Làng Bìa Rừng','place.warrior-plains':'Đại Bình Nguyên','place.warrior-v4':'Rừng Ma Vật','place.warrior-v5':'Hang Phù Thủy',
   'dialogue.next':'Tiếp','dialogue.close':'Đóng',
   'opening.skip':'Bỏ qua',
+  'opening.intro.0':'…Lại là giấc mơ ấy.',
+  'opening.intro.1':'Thế giới đã được bày ra trên bàn ăn của một ai đó.',
   'opening.0':'Chàng trai chìa bàn tay bị thương.\nÁnh sáng lan ra từ đầu ngón tay tôi, phủ lên vết thương.',
   'opening.1':'Con đường làng ta từng sánh bước.\nTôi không nhớ đã nói gì. Chỉ còn lại hơi ấm.',
   'opening.2':'Tiếng gầm của ma vật. Phía xa, anh ngã xuống.\nTôi vươn tay, nhưng không với tới.',
@@ -31,7 +33,7 @@ export default {
   speakers:{'나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
    'driver-thanks':['Phù… sống rồi. Không có cô lính đánh thuê thì cả ngựa lẫn tôi đã thành mồi cho sói.','Dạo này thú trên bình nguyên dữ tợn lạ thường. Trước kia chúng chẳng bao giờ tấn công xe ngựa.','Tôi phải sửa bánh xe nên sẽ ở lại đây. Làng ở cuối con đường này, ngay đằng kia.','Đến nơi thì tìm quán trọ Ánh Trăng trước nhé. Ông chủ cộc cằn nhưng phòng sạch sẽ.'],
-   'ambush-scene':["S-sói…! Nó đang nhắm vào xe ngựa!", "Đ-đừng lại gần! Cút đi!", "(Không thể lùi bước. Phải bảo vệ ông ấy.)"],
+   'ambush-scene':["D-dậy đi! Sói… nó đang nhắm vào xe ngựa!", "Đ-đừng lại gần! Cút đi!", "(Không thể lùi bước. Phải bảo vệ ông ấy.)", "(…Là mơ sao?)"],
    'driver-idle':['Sửa xong bánh xe là tôi theo sau ngay. Đi đường cẩn thận.'],
    'inn-arrive':['Mặt lạ đây. Mùa này hiếm ai đến tận làng này.','Tôi đến theo ủy thác của Giáo hội. Thánh nữ tập sự Elena đã mất tin tức sáu tháng nay.','…Lâu lắm rồi mới nghe lại cái tên đó. Một cô bé tốt. Đã thức trắng đêm chăm người bị thương.','Tôi chẳng biết nhiều. Hãy hỏi bà lão bên giếng, thầy thuốc, và chàng trai đang sửa hàng rào. Mỗi người nhớ một điều khác nhau.','Dùng phòng tầng hai đi. Muốn nghỉ thì cứ gọi tôi. Chuyện hôm nay tôi sẽ ghi vào sổ.'],
    'inn-idle':['Nghỉ lại chứ? Lấy lại sức đi, chuyện hôm nay tôi ghi vào sổ.'],

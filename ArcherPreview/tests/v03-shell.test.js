@@ -5,7 +5,7 @@ import {parseHTML} from 'linkedom';
 import {createAttractPilot} from '../src/v03/attract-pilot.js';
 import {t,setPack,localizeChapter,cloneChapter,tr} from '../src/v03/i18n.js';
 import {createTitleScreen,slotSummary,formatPlayTime} from '../src/v03/title-screen.js';
-import {createOpening,dreamSeconds,DREAM_BEATS} from '../src/v03/opening.js';
+import {createOpening,dreamSeconds,DREAM_BEATS,INTRO} from '../src/v03/opening.js';
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
 import {createSaveSession} from '../src/v03/save-slots.js';
 
@@ -76,11 +76,11 @@ test('title screen: five menu entries, keyboard order, slot panel and confirm',a
  title.dispose();assert.equal(document.querySelector('.v03-title'),null);
 });
 // Painted prologue (2026-11-18): slow cross-fades per beat, still skippable.
-test('prologue lasts 18 to 26 seconds, shows every beat and can be skipped',async()=>{
- assert.ok(dreamSeconds()>=18&&dreamSeconds()<=26,String(dreamSeconds()));
+test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can be skipped',async()=>{
+ assert.ok(dreamSeconds()>=30&&dreamSeconds()<=40,String(dreamSeconds()));
  const {document}=dom(),seen=[];
  const opening=createOpening({doc:document,wait:async()=>{const text=document.querySelector('.v03-opening-line').textContent;if(text&&seen.at(-1)!==text)seen.push(text);}});
- assert.equal(await opening.play(),'done');assert.deepEqual(seen,DREAM_BEATS.map(beat=>t(beat.key)));assert.equal(opening.active,true);
+ assert.equal(await opening.play(),'done');assert.deepEqual(seen,[...INTRO.lines.map(row=>t(row.key)),...DREAM_BEATS.map(beat=>t(beat.key))]);assert.equal(opening.active,true);
  await opening.release();assert.equal(opening.active,false);
  let waits=0;const quick=createOpening({doc:document,wait:async()=>{if(++waits===3)document.querySelectorAll('.v03-opening-skip')[1].dispatchEvent(new document.defaultView.Event('click'));}});
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
@@ -235,7 +235,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.shell.story.sceneActive,true);assert.equal(h.shell.allows('move'),false);assert.equal(h.shell.allows('attack'),false);
  assert.equal(h.document.documentElement.dataset.v03Lock,'move camera attack dodge guard potion');
  h.shell.update(.016);assert.ok(h.shell.story.cameraFocus,'the first shot frames the wolf, not the player');
- for(let i=0;i<160;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/늑대다/);
+ for(let i=0;i<160;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/일어나쇼/);
  for(let i=0;i<400;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
  // Coaching runs in order: move → camera → attack → dodge → shield, each
  // allowing only its own action.

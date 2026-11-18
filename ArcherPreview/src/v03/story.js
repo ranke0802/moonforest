@@ -9,6 +9,7 @@ import {PLAINS_MONSTER_GROUPS} from '../plains-monster-spawns.js';
 import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
 import {clearAlpha} from './title-camera.js';
+import {createWagonHorse} from './wagon-horse.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -236,10 +237,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(key!==markerKey){markerKey=key;api.setMapMarkers?.(mapMarks.slice());}
   markers?.update(guide.time);
  }
- function clearCast(){for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
+ let wagonHorse=null;
+ function clearCast(){wagonHorse?.dispose();wagonHorse=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   if(props.length)void Promise.resolve(api.placeProps?.(props)).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
+  // The driver's wagon has its horse in the shafts.
+  const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
+  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
  }
  function buildCast(id){
   clearCast();placeProps(id);
@@ -278,7 +283,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  //  3. the wolf charges the driver (wide)
  //  4. the warrior rolls in between and stands guard (camera swings behind)
  const SCENE=Object.freeze({wolfShot:0,driverShot:2.3,chargeShot:4.3,rollAt:4.75,heroShot:5.9,end:7.6});
- const SCENE_LINES=Object.freeze([{at:2.4,line:0},{at:4.35,line:1},{at:6.0,line:2}]);
+ const SCENE_LINES=Object.freeze([{at:.35,line:3},{at:2.4,line:0},{at:4.35,line:1},{at:6.0,line:2}]);
  const scene={active:false,pending:false,time:0,beat:0,shot:-1,driver:null,wolf:null,points:null,rolled:false,rollWindow:false,radius:0,beta:0,focus:{x:0,y:0,z:0},cameraFocus:null};
  const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
  const heightAt=(x,z)=>api.world.terrain?.heightAt?.(x,z)??0;

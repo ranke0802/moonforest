@@ -113,7 +113,9 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-opening-skip:hover,.v03-opening-skip:focus-visible{opacity:1}
 @media (prefers-reduced-motion:reduce){.v03-opening-plane.is-in{animation:none}.v03-opening-motes{display:none}}
 /* A new game loads behind the prologue cover painting (00), not the map art. */
-html[data-v03-screen="opening"] #loading-art{display:block!important;content:url("./prologue/00.webp");filter:brightness(.78) saturate(.92);animation:v03-cover 40s ease-out both}
+/* New game: the loading card stays dark (dust motes only); the cosmic cut is
+   first seen as the dream's entrance. */
+html[data-v03-screen="opening"] #loading-art{display:none!important}
 html[data-v03-screen="opening"] #loading-title{visibility:hidden}
 @keyframes v03-cover{from{transform:scale(1.02)}to{transform:scale(1.1)}}
 @media (prefers-reduced-motion:reduce){[data-v03-layer] *{transition-duration:.01s!important}}
@@ -360,4 +362,36 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 @keyframes v03-loading-drift{from{transform:scale(1.03) translate(-.8%,.4%)}to{transform:scale(1.1) translate(.8%,-.4%)}}
 @keyframes v03-loading-motes{from{transform:translate3d(0,0,0)}to{transform:translate3d(2%,-45%,0)}}
 @media (prefers-reduced-motion:reduce){html[data-edition="moonforest-0.3"] #loading-art,html[data-edition="moonforest-0.3"] #loading::after{animation:none}}
-html[data-v03-screen="opening"] #loading-art{animation:v03-cover 40s ease-out both}
+
+/* ----- Prologue direction (2026-11-18): dream frame, cosmic entrance, wake ----- */
+.v03-opening-rim{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.6s ease;
+ -webkit-backdrop-filter:blur(7px) saturate(.8);backdrop-filter:blur(7px) saturate(.8);
+ -webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#0000 48%,#000 92%);mask-image:radial-gradient(ellipse 62% 58% at 50% 46%,#0000 48%,#000 92%);
+ background:radial-gradient(ellipse 70% 64% at 50% 46%,#0000 50%,#0d0a1a99 100%)}
+.v03-opening[data-dream] .v03-opening-rim,.v03-opening[data-tone]:not([data-tone="wake"]) .v03-opening-rim{opacity:1}
+.v03-opening[data-tone] .v03-opening-haze{animation:v03-ghost 5.5s ease-in-out infinite alternate}
+@keyframes v03-ghost{from{transform:translate(-.6%,-.2%)}to{transform:translate(.9%,.35%)}}
+.v03-opening-plane.is-in[data-drift="reveal"]{animation-name:v03-reveal;animation-timing-function:cubic-bezier(.45,0,.25,1)}
+@keyframes v03-reveal{0%{opacity:0;transform:scale(2.3) translate(26%,-30%)}8%{opacity:1}22%{transform:scale(2.2) translate(25%,-28%)}100%{opacity:1;transform:scale(1.03) translate(0,0)}}
+.v03-opening[data-tone="cosmic"] .v03-opening-art{filter:brightness(.62) saturate(.82) contrast(1.06)}
+.v03-opening[data-tone="cosmic"] .v03-opening-glow{opacity:.2;background:radial-gradient(circle at 50% 18%,#e8d6ff 0%,#0000 42%);animation:v03-candle 2.3s ease-in-out infinite alternate}
+@keyframes v03-candle{from{opacity:.14}to{opacity:.24}}
+.v03-opening-shade{position:absolute;inset:0;pointer-events:none;opacity:0;transform:translateY(-100%);background:linear-gradient(to bottom,#000 0%,#000 62%,#0000 100%);transition:opacity 1.2s ease,transform 0s linear 1.2s}
+.v03-opening.is-shading .v03-opening-shade{opacity:1;transform:translateY(0);transition:transform 1.4s cubic-bezier(.55,0,.75,.4),opacity .25s ease}
+.v03-opening-plane.is-in[data-drift="fork"]{animation:v03-fork .95s cubic-bezier(.6,0,.9,.4) both}
+@keyframes v03-fork{0%{opacity:0;transform:scale(1.15)}12%{opacity:1}100%{opacity:1;transform:scale(2.9) translate(3%,-4%);filter:brightness(1.5) contrast(1.2)}}
+.v03-opening[data-tone="wake"] .v03-opening-art{filter:brightness(.8) saturate(.7) contrast(1.15)}
+.v03-opening-flash{position:absolute;inset:0;z-index:2;pointer-events:none;background:#fff8ec;opacity:0;transition:opacity .3s ease}
+.v03-opening.is-flash .v03-opening-flash{opacity:.85;transition:opacity .38s ease-in}
+.v03-opening.is-white .v03-opening-flash{opacity:1}
+.v03-opening-lid{position:absolute;left:-5%;right:-5%;height:56%;z-index:3;display:none;pointer-events:none}
+.v03-opening-lid.is-high{top:0;background:linear-gradient(to bottom,#000 78%,#0000);border-radius:0 0 50% 50%/0 0 18% 18%}
+.v03-opening-lid.is-low{bottom:0;background:linear-gradient(to top,#000 78%,#0000);border-radius:50% 50% 0 0/18% 18% 0 0}
+.v03-opening.is-waking{background:transparent;transition:none}
+.v03-opening.is-waking .v03-opening-lid{display:block}
+.v03-opening.is-waking .v03-opening-lid.is-high{animation:v03-lid-high 2.05s ease-in-out both}
+.v03-opening.is-waking .v03-opening-lid.is-low{animation:v03-lid-low 2.05s ease-in-out both}
+.v03-opening.is-waking .v03-opening-skip,.v03-opening.is-waking .v03-opening-veil,.v03-opening.is-waking .v03-opening-motes,.v03-opening.is-waking .v03-opening-rim{display:none}
+@keyframes v03-lid-high{0%{transform:translateY(0)}30%{transform:translateY(-38%)}46%{transform:translateY(-14%)}100%{transform:translateY(-104%)}}
+@keyframes v03-lid-low{0%{transform:translateY(0)}30%{transform:translateY(38%)}46%{transform:translateY(14%)}100%{transform:translateY(104%)}}
+@media (prefers-reduced-motion:reduce){.v03-opening-plane.is-in[data-drift="reveal"],.v03-opening-plane.is-in[data-drift="fork"]{animation:none;opacity:1}.v03-opening[data-tone] .v03-opening-haze{animation:none}}
