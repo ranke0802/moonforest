@@ -96,10 +96,12 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   const resolveGroups=()=>HUD_GROUPS.map(g=>({...g,selector:selectors[g.id]??g.selector})).map(g=>({...g,node:root.querySelector(g.selector)})).filter(g=>g.node);
   let groups=resolveGroups();
   const original=new Map(groups.map(g=>[g.id,{translate:g.node.style.translate||'',scale:g.node.style.scale||'',origin:g.node.style.transformOrigin||''}]));
-  const orientationOf=box=>box.width>=box.height?'landscape':'portrait';
+  // PC (mouse and keyboard) keeps its own layout and default, apart from the
+  // touch layouts: the reviewed landscape default is sized for phone thumbs.
+  const orientationOf=box=>root.dataset.hudInput==='pc'?'pc':box.width>=box.height?'landscape':'portrait';
   let orientation=orientationDefaults?orientationOf(root.getBoundingClientRect()):null;
   const storageKey=()=>orientation?`${HUD_LAYOUT_KEY}:${orientation}`:HUD_LAYOUT_KEY;
-  const orientedDefault=()=>orientation==='landscape'&&orientationDefaults?.landscape?parseHudLayout(orientationDefaults.landscape):defaultHudLayout();
+  const orientedDefault=()=>orientationDefaults?.[orientation]?parseHudLayout(orientationDefaults[orientation]):defaultHudLayout();
   function loadCommitted(){let value=orientedDefault();try{const raw=storage?.getItem(storageKey());if(raw)value=parseHudLayout(raw);}catch{storageError=true;}return value;}
   const dialog=doc.createElement('dialog');dialog.id='hud-layout-dialog';dialog.dataset.ui='';dialog.setAttribute('aria-label','HUD 위치와 크기 편집');
   dialog.innerHTML=`<section class="hud-layout-panel"><header><strong>UI 편집</strong><span id="hud-layout-current"></span><button type="button" class="hud-layout-collapse" data-hud-collapse aria-expanded="true" title="편집 창 접기">▾</button><button type="button" data-hud-command="reset-all">초기화</button><button type="button" data-hud-command="cancel">취소</button><button type="button" data-hud-command="save">저장</button></header><p>화면의 UI를 선택해 드래그하세요. PC는 가장자리, 모바일은 두 손가락으로 크기를 조절합니다.</p><details class="hud-layout-options"><summary>다른 항목 · 세부 설정</summary><label>편집할 항목<select id="hud-layout-selection">${groups.map(g=>`<option value="${g.id}">${g.label}</option>`).join('')}</select></label><p id="hud-layout-note"></p><div class="hud-layout-fields">${[['x','가로 위치'],['y','세로 위치'],['scale','크기']].map(([key,label])=>`<label>${label}<input type="range" data-hud-field="${key}" aria-label="${label}" step="1"><output data-hud-output="${key}"></output></label>`).join('')}</div><div class="hud-layout-actions"><button type="button" data-hud-command="reset">선택 초기화</button></div><details><summary>배치 내보내기 · 가져오기</summary><textarea id="hud-layout-json" aria-label="HUD 배치 데이터" spellcheck="false"></textarea><div class="hud-layout-actions"><button type="button" data-hud-command="export">내보내기</button><button type="button" data-hud-command="import">가져오기</button></div></details></details><p id="hud-layout-status" role="status" aria-live="polite"></p></section>`;
@@ -138,6 +140,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   function draw(){
     if(disposed)return;
     const viewport=root.getBoundingClientRect();if(!viewport.width||!viewport.height)return;
+    if(!editing&&groupsChanged()){rebind();return;}
     view={width:viewport.width,height:viewport.height,left:viewport.left,top:viewport.top};
     // Turning the device swaps to that orientation's own layout.
     if(orientationDefaults&&!editing){const next=orientationOf(viewport);if(next!==orientation){orientation=next;committed=loadCommitted();}}
@@ -199,7 +202,11 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     (root.querySelector('#motion-speed-toggle')??root.querySelector('#viewport'))?.focus({preventScroll:true});
     onClose(save&&storageError?'배치를 적용했습니다. 저장 공간을 사용할 수 없어 이번 접속에서만 유지됩니다.':save?'HUD 배치를 저장했습니다.':'HUD 편집을 취소했습니다.');
   }
+  // HUD parts created after setup (0.3's quest panel) join the editor and get
+  // their saved place as soon as they exist.
+  const groupsChanged=()=>{const next=resolveGroups();return next.length!==groups.length||next.some((g,i)=>groups[i]?.id!==g.id||groups[i]?.node!==g.node);};
   function open(){
+    if(groupsChanged())rebind();
     if(editing||disposed||!getReady())return false;
     resetInput();editing=true;editSession++;fileRequest++;draft=JSON.parse(JSON.stringify(committed));root.setAttribute('data-hud-editing','');
     root.querySelector('#motion-speed-dialog')?.close();dialog.showModal();status.textContent=storageError?'저장 배치를 읽지 못했거나 저장 공간을 사용할 수 없습니다.':'';updatePreview();draw();onPauseChange();dialog.querySelector('[data-hud-command="save"]').focus();return true;
