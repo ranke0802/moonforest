@@ -11,8 +11,8 @@ test('one group finishes and publishes before an unrelated slow model can occupy
  async function scenario(preparationGroups){let finishFar,tail=Promise.resolve();const order=[],commits=[],far=new Promise(resolve=>finishFar=resolve),scheduler=createMonsterGroupScheduler({preparationGroups,spawn:row=>{const task=tail.then(async()=>{order.push(row.id);if(row.id==='far')await far;return {id:row.id};});tail=task.catch(()=>{});return task;},commit:handles=>commits.push(handles.map(handle=>handle.id))});
   scheduler.load([member('near1',{delaySeconds:45}),member('near2',{delaySeconds:45}),member('far',{groupId:'far-pack',delaySeconds:45})]);scheduler.update(0);await tick();return {scheduler,order,commits,finishFar};
  }
- const old=await scenario(Infinity);assert.deepEqual(old.order,['near1','far']);assert.deepEqual(old.commits,[],'round-robin group awaits put near2 behind an unrelated cold model');old.finishFar();await tick();old.scheduler.dispose();
- const fixed=await scenario(1);assert.deepEqual(fixed.order,['near1','near2','far']);assert.deepEqual(fixed.commits,[['near1','near2']]);assert.equal(fixed.scheduler.inspect()[0].initialDelaySeconds,0,'respawn45 never becomes first-spawn delay');assert.equal(fixed.scheduler.inspect()[0].preparedCount,2);assert.equal(fixed.scheduler.inspect()[0].state,'active');assert.equal(fixed.scheduler.inspect()[1].state,'preparing');fixed.scheduler.leave();fixed.finishFar();await tick();assert.deepEqual(fixed.scheduler.inspect(),[]);fixed.scheduler.dispose();
+ const old=await scenario(Infinity);assert.deepEqual(old.order,['near1','far']);assert.deepEqual(old.commits,[['near1']],'round-robin group awaits put near2 behind an unrelated cold model (near1 is already out)');old.finishFar();await tick();old.scheduler.dispose();
+ const fixed=await scenario(1);assert.deepEqual(fixed.order,['near1','near2','far']);assert.deepEqual(fixed.commits,[['near1'],['near2']],'each member appears as it is ready');assert.equal(fixed.scheduler.inspect()[0].initialDelaySeconds,0,'respawn45 never becomes first-spawn delay');assert.equal(fixed.scheduler.inspect()[0].preparedCount,2);assert.equal(fixed.scheduler.inspect()[0].state,'active');assert.equal(fixed.scheduler.inspect()[1].state,'preparing');fixed.scheduler.leave();fixed.finishFar();await tick();assert.deepEqual(fixed.scheduler.inspect(),[]);fixed.scheduler.dispose();
 });
 
 test('waiting groups are prepared nearest the focus point first, re-read every frame',async()=>{
@@ -25,5 +25,16 @@ test('waiting groups are prepared nearest the focus point first, re-read every f
  // The player turns toward the west pack while the east one is preparing.
  point={x:-100,z:0};await tick();scheduler.update(0);await tick();
  assert.equal(started[1],'west','the focus moved: the next group follows it');
+ scheduler.dispose();
+});
+
+test('pack members appear one by one as each is ready, leader first',async()=>{
+ const shown=[];let release;const gate=new Promise(r=>release=r);
+ const scheduler=createMonsterGroupScheduler({spawn:async row=>{if(row.id!=='leader')await gate;return {id:row.id};},commit:handles=>shown.push(...handles.map(h=>h.id)),isAlive:()=>true});
+ scheduler.load([member('leader'),member('second'),member('third')]);scheduler.update(0);await tick();
+ assert.deepEqual(shown,['leader'],'the leader is out before the rest are ready');
+ assert.equal(scheduler.inspect()[0].state,'preparing');
+ release();await tick();await tick();await tick();
+ assert.deepEqual(shown,['leader','second','third']);assert.equal(scheduler.inspect()[0].state,'active');
  scheduler.dispose();
 });
