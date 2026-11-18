@@ -11,7 +11,7 @@ import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexDeclaration.js'
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobal.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertex.js';
 
-const scenes=new WeakMap();
+const scenes=new WeakMap(),managers=new Set();
 const linearInk=new Color3(.052,.040,.054);
 const srgbChannel=value=>value<=.0031308?12.92*value:1.055*Math.pow(value,1/2.4)-.055;
 const displayInk=new Color3(srgbChannel(linearInk.r),srgbChannel(linearInk.g),srgbChannel(linearInk.b));
@@ -153,13 +153,13 @@ function makeManager(scene){
 }
 
 export function registerNpcInteriorInk(mesh,{root,look,height=1.85,baseScale=1}={}){
- const scene=mesh.getScene();let manager=scenes.get(scene);if(!manager){manager=makeManager(scene);scenes.set(scene,manager);}manager.register(mesh,{root,look,height,baseScale});
+ const scene=mesh.getScene();let manager=scenes.get(scene);if(!manager){manager=makeManager(scene);scenes.set(scene,manager);managers.add(manager);const owned=manager;scene.onDisposeObservable.addOnce(()=>managers.delete(owned));}manager.register(mesh,{root,look,height,baseScale});
 }
 // Settings: the whole interior-ink pass on/off (outer outlines are separate).
 export const INTERIOR_INK_KEY='moonforest-interior-ink-v2';
 // v2 (2026-11-18): one switch for all interior lines, off by default.
 let interiorInkEnabled=false;
-export function setInteriorInkEnabled(value){interiorInkEnabled=!!value;if(!interiorInkEnabled)for(const owner of scenes.values())owner.releaseResources?.();}
+export function setInteriorInkEnabled(value){interiorInkEnabled=!!value;if(!interiorInkEnabled)for(const owner of managers)owner.releaseResources?.();}
 export function setupInteriorInkSettings({host,storage,onChange=()=>{},onToggle=()=>{}}){
  const doc=host.ownerDocument,label=doc.createElement('label'),input=doc.createElement('input'),note=doc.createElement('small');
  input.type='checkbox';input.id='interior-ink-toggle';label.append(input,' 내부선 (전체)');note.textContent='모든 캐릭터 몸 안쪽에 그리는 선입니다. 끄면 가벼워집니다. 바깥 외곽선과 원본 그림의 선은 그대로예요.';host.append(label,note);
