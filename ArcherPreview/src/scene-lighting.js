@@ -32,6 +32,32 @@ class PaintedModelShade extends MaterialPluginBase {
   }
 }
 
+// Plains/village shadow passes drew every registered caster (~450K triangles a
+// frame on the plains). The map covers a fixed box around the focus, so:
+//  - casters wholly outside that box in the light's plane cannot touch it;
+//  - outline shells only duplicate their body's silhouette;
+//  - animated actors beyond ACTOR_SHADOW_RANGE cast a few texels at most.
+export const ACTOR_SHADOW_RANGE=32;
+const isOutlineCaster=mesh=>mesh.metadata?.moonforestOutline===true||/_Outline$/.test(mesh.name);
+export function installShadowCasterCulling(shadows,lighting){
+  const map=shadows.getShadowMap(),casters=[],forward=new Vector3(),right=new Vector3(),up=new Vector3(),offset=new Vector3();let frame=-1;
+  map.getCustomRenderList=(_layer,list,length)=>{
+    const id=lighting.scene.getFrameId();if(id===frame)return casters;frame=id;casters.length=0;
+    const key=lighting.key;key.direction.normalizeToRef(forward);Vector3.CrossToRef(Vector3.UpReadOnly,forward,right);
+    if(right.lengthSquared()<1e-8)right.set(1,0,0);right.normalize();Vector3.CrossToRef(forward,right,up);
+    const half=key.shadowFrustumSize/2,focus=lighting.focus;
+    for(let i=0;i<length;i++){
+      const mesh=list[i];if(!mesh||isOutlineCaster(mesh))continue;
+      const sphere=mesh.getBoundingInfo?.()?.boundingSphere;if(!sphere){casters.push(mesh);continue;}
+      sphere.centerWorld.subtractToRef(focus,offset);const radius=sphere.radiusWorld;
+      if(Math.abs(Vector3.Dot(offset,right))>half+radius||Math.abs(Vector3.Dot(offset,up))>half+radius)continue;
+      if(mesh.skeleton&&offset.length()-radius>ACTOR_SHADOW_RANGE)continue;
+      casters.push(mesh);
+    }
+    return casters;
+  };
+}
+
 export class SceneLighting {
   constructor(scene, { ambient, key, rim, shadows, touchDevice, village=false }) {
     Object.assign(this, { scene, ambient, key, rim, shadows, touchDevice, village });
@@ -59,6 +85,7 @@ export class SceneLighting {
     // samples the previous map with the new projection on the skipped frame.
     // Keep one bounded map synchronized with the pose and light every frame.
     shadows.getShadowMap().refreshRate = 1;
+    installShadowCasterCulling(shadows,this);
     if(village)installVillageShadowFade(shadows);
   }
   setWorldYaw(yaw){

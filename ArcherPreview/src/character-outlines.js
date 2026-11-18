@@ -135,6 +135,7 @@ export function prepareEnemyExteriorOutline(mesh){
   mesh.metadata={...mesh.metadata,enemyFadeExterior:true};return true;
 }
 
+export const OUTLINE_FAR_DISTANCE=32;
 export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferCameraCulling=false}={}) {
   const added = [];
   for (const source of [...asset.meshes]) {
@@ -168,6 +169,9 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     shell.renderOutline = false; shell.renderOverlay = false;
     shell.alwaysSelectAsActiveMesh = source.alwaysSelectAsActiveMesh;
     shell.visibility = source.visibility; shell.isVisible = source.isVisible;
+    // Beyond this the ink is under a pixel wide on a body tens of pixels tall:
+    // drop the extra hull pass. The player's own outline always stays.
+    if(kind!=='warrior')shell.addLODLevel(OUTLINE_FAR_DISTANCE,null);
     if(kind==='warrior')registerCharacterInk(shell,'player');
     else if(kind==='bear'||kind==='goblin'||kind==='elena'||kind==='wolf')registerCharacterInk(shell,mourning?'mourning':'boss');
     added.push(shell);
