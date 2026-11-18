@@ -16,8 +16,8 @@ varying vec2 vUV;
 uniform sampler2D staticDepth;
 void main(void){gl_FragDepth=texture2D(staticDepth,vUV).r;gl_FragColor=vec4(1.0);}`;
 const ALWAYS=519;
-// Staged rollout: opt-in (?shadowcache=1) until checked on the live build.
-export const STATIC_SHADOW_CACHE_OPT_IN=true;
+// Checked live on plains + village 2026-11-18 (identical frames); ?shadowcache=0 turns it off.
+export const STATIC_SHADOW_CACHE_OPT_IN=false;
 
 export function staticShadowCacheAllowed(engine){
   const forced=new URLSearchParams(globalThis.location?.search??'').get('shadowcache');
