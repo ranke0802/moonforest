@@ -343,3 +343,8 @@ html[lang=ko] .v03-tip,html[lang=ko] .v03-dialogue-text,html[lang=ko] .v03-quest
 
 /* PC: the gold line sits clear of the quest panel's first line. */
 html[data-v03-vital] #app[data-hud-input=pc]{--v03-quest-top:calc(clamp(20px,4vh,44px) + 62px)}
+/* In-game text is never selectable or draggable (long-press menus too); only
+   text fields are. Open specific areas only when asked. */
+html[data-edition="moonforest-0.3"] body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html[data-edition="moonforest-0.3"] :is(input,textarea,select,[contenteditable="true"]){-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+html[data-edition="moonforest-0.3"] img{-webkit-user-drag:none;user-drag:none}
