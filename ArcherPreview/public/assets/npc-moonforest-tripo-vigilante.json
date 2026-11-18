@@ -5,7 +5,7 @@
     "moonforest-tripo-vigilante": {
       "name": "자경단 전사",
       "category": "npc",
-      "version": "2026-11-18-tripo-v2",
+      "version": "2026-11-18-tripo-v3",
       "scale": 1,
       "bodyHeight": 1.850000023841858,
       "animations": {
@@ -18,7 +18,7 @@
         "listen": "Listening_Gesture"
       },
       "npc": {
-        "sourceSha256": "dd09c6a38ce09d0d1de5f88e6d1a5f8370d5f79f79e64181d8f037c1ca33baa1",
+        "sourceSha256": "1a799c44bbe6780b9d80ca9cd2b282c29f7128ce7995806c89ec17fd0bc99ead",
         "look": {
           "toon": true,
           "pbr": false,
@@ -75,23 +75,23 @@
         "rootMotion": "in-place",
         "defaultClip": "Idle_Stand"
       },
-      "model": "./content/1c6b9e07f85155e278bd059ea67865733b22909028f25017e41536651615510c.gltf",
+      "model": "./content/4a7aba22a3e12b6c33efde90f4387e9559ad4884300388472acd120dbef68770.gltf",
       "resources": [
         "./content/b4dd69842c7cc0eff3fc332401088eced317876b55d91feeff1cff9a2baa6a54.jpg",
-        "./content/9ca03456ae14ecfc1133ed312a6db9aacac861391f5604880b1b0c09f7515e9f.bin",
+        "./content/63f86a1b8c1e6e24a6ae80614743ea8f2a2e26d9b18b21a824c804bb40c457c7.bin",
         "./content/bf1693c7b24aca23e7df63c0277f4af42b3e1701bd257bfdcf04a55eeb25ab67.bin",
-        "./content/ded2547b3a7b1b4aa2356d577442247ca87eeb0398f4ee4eef914d82ed997f2e.bin",
+        "./content/de70dcee4036c1f8d3d5139576e0cdacc9e2d973aae5da08dbe21af5fde6373b.bin",
         "./content/1a25f5465d6bf5389d794d712dceb2a6318d41c57664218a249a39ffb64e6bd6.bin",
         "./content/df23fc82029fb416fdfa0b2c37654f1e6942b081d693f8fba5a3c153f2ac0ff3.bin",
         "./content/d926431b905267c25a3e01616e4b5c1ef80500b50547aeeadb2c034ddf8f054c.bin",
         "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
         "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
         "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
-        "./content/1c6b9e07f85155e278bd059ea67865733b22909028f25017e41536651615510c.gltf"
+        "./content/4a7aba22a3e12b6c33efde90f4387e9559ad4884300388472acd120dbef68770.gltf"
       ],
       "visualReview": "APPROVED",
       "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
-      "sourceModelSha256": "dd09c6a38ce09d0d1de5f88e6d1a5f8370d5f79f79e64181d8f037c1ca33baa1"
+      "sourceModelSha256": "1a799c44bbe6780b9d80ca9cd2b282c29f7128ce7995806c89ec17fd0bc99ead"
     }
   }
 }

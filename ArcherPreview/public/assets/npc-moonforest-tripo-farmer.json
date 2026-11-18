@@ -5,7 +5,7 @@
     "moonforest-tripo-farmer": {
       "name": "농부",
       "category": "npc",
-      "version": "2026-11-18-tripo-v2",
+      "version": "2026-11-18-tripo-v3",
       "scale": 1,
       "bodyHeight": 1.850000023841858,
       "animations": {
@@ -18,7 +18,7 @@
         "listen": "Listening_Gesture"
       },
       "npc": {
-        "sourceSha256": "54581f90ac641f6f2ffd2196ac6790e7d854d2c4f4c6ec012e8bd3f3162baaa9",
+        "sourceSha256": "342d46641f24001206a6f397e4a40937ed3b1577a42cef89c257491af378f5c8",
         "look": {
           "toon": true,
           "pbr": false,
@@ -75,23 +75,23 @@
         "rootMotion": "in-place",
         "defaultClip": "Idle_Stand"
       },
-      "model": "./content/ec3e4fc63303ddba992dad79eb19bccfb9e76dd06c17ae7f89e8c19bd737c3e7.gltf",
+      "model": "./content/f47735e72ff146da76c5f55d2b0469e01943a5cde4d208b38f3afa2d62d462ce.gltf",
       "resources": [
         "./content/ee72d7af3336632a4a3690346efea6b01e1a1782cfbf3779293a7c4425586440.jpg",
-        "./content/f3a6068e3d316b84a6d4ffc708156e769397a5ddd2f9a196dcfffc78ad257a3c.bin",
+        "./content/70f2fd6ec08a2d59e1f6231b2324a41f9ae24fc3cafd7fb27cc449e25bc656f9.bin",
         "./content/7f8540fbbfae3809ea3df5384be55ae7feec9d9629a69d5b3a5e28023f82a7bc.bin",
-        "./content/24aeea667bb8f0492d0661c249e3c9bb49bdccad3f62cb956716aefc34c3b366.bin",
+        "./content/4a619afc5b51cf2ebdb7e677cfb4374514d4156fb0cba903006f389d2181de5f.bin",
         "./content/1a25f5465d6bf5389d794d712dceb2a6318d41c57664218a249a39ffb64e6bd6.bin",
         "./content/df23fc82029fb416fdfa0b2c37654f1e6942b081d693f8fba5a3c153f2ac0ff3.bin",
         "./content/d926431b905267c25a3e01616e4b5c1ef80500b50547aeeadb2c034ddf8f054c.bin",
         "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
         "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
         "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
-        "./content/ec3e4fc63303ddba992dad79eb19bccfb9e76dd06c17ae7f89e8c19bd737c3e7.gltf"
+        "./content/f47735e72ff146da76c5f55d2b0469e01943a5cde4d208b38f3afa2d62d462ce.gltf"
       ],
       "visualReview": "APPROVED",
       "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
-      "sourceModelSha256": "54581f90ac641f6f2ffd2196ac6790e7d854d2c4f4c6ec012e8bd3f3162baaa9"
+      "sourceModelSha256": "342d46641f24001206a6f397e4a40937ed3b1577a42cef89c257491af378f5c8"
     }
   }
 }
