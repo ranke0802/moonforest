@@ -468,7 +468,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get timeScale(){return slow.left>0?SLOW_SCALE:1;},
   get lunge(){return scene.active?null:LUNGE;},
   // Where the current step is fought on this map (monster groups near it load first).
-  get questSpot(){const step=log.step();return started&&step?.type==='defeat'&&step.at&&step.map===(api.world?.mapId??mapId)?step.at:null;},
+  // Where this quest's fight on the current map is: the current step, or a later
+  // step of the same quest (M06 talks to the driver first, then the alpha pack
+  // fights far across the plains). The map prepares that pack first.
+  get questSpot(){
+   if(!started)return null;const map=api.world?.mapId??mapId,step=log.step(),steps=log.quest()?.steps??[];
+   for(const row of steps.slice(Math.max(0,steps.indexOf(step))))if(row.type==='defeat'&&row.at&&row.map===map)return row.at;
+   return null;
+  },
   get started(){return started;},
   log,
   start({fresh=false}={}){
