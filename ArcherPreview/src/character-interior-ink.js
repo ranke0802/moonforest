@@ -124,7 +124,7 @@ function makeManager(scene){
   // postprocess SDK texture cache, rather than retaining old-size inputs.
   if(post&&(camera!==scene.activeCamera||s.width!==old.width||s.height!==old.height||post.samples!==samplesFor(scene.activeCamera)))releaseResources();
   if(!scene.activeCamera||!engine.getCaps().depthTextureExtension){releaseResources();return;}
-  if(!active.length||!scene.postProcessesEnabled){detach();return;}
+  if(!active.length||!scene.postProcessesEnabled||!interiorInkEnabled){detach();return;}
   if(!post)createResources(scene.activeCamera);else attach();
   profiles.fill(0);profileIds.clear();rootScales.clear();keys.clear();
   for(const mesh of active){const value=entries.get(mesh),root=value.root;
@@ -154,6 +154,17 @@ function makeManager(scene){
 
 export function registerNpcInteriorInk(mesh,{root,look,height=1.85,baseScale=1}={}){
  const scene=mesh.getScene();let manager=scenes.get(scene);if(!manager){manager=makeManager(scene);scenes.set(scene,manager);}manager.register(mesh,{root,look,height,baseScale});
+}
+// Settings: the whole interior-ink pass on/off (outer outlines are separate).
+export const INTERIOR_INK_KEY='moonforest-interior-ink-v1';
+let interiorInkEnabled=true;
+export function setInteriorInkEnabled(value){interiorInkEnabled=!!value;if(!interiorInkEnabled)for(const owner of scenes.values())owner.releaseResources?.();}
+export function setupInteriorInkSettings({host,storage,onChange=()=>{}}){
+ const doc=host.ownerDocument,label=doc.createElement('label'),input=doc.createElement('input'),note=doc.createElement('small');
+ input.type='checkbox';input.id='interior-ink-toggle';label.append(input,' 캐릭터 내부선');note.textContent='캐릭터 몸 안쪽의 선입니다. 끄면 화면 전체 추가 처리가 없어져 가벼워집니다(바깥 외곽선은 유지).';host.append(label,note);
+ let enabled=true;try{const value=storage?.getItem(INTERIOR_INK_KEY);if(value==='0'||value==='1')enabled=value==='1';}catch{}input.checked=enabled;setInteriorInkEnabled(enabled);
+ const change=()=>{enabled=input.checked;try{storage?.setItem(INTERIOR_INK_KEY,enabled?'1':'0');}catch{}setInteriorInkEnabled(enabled);onChange(enabled);};input.addEventListener('change',change);
+ return {get enabled(){return enabled;},dispose(){input.removeEventListener('change',change);label.remove();note.remove();}};
 }
 export function inspectNpcInteriorInk(scene){return scenes.get(scene)?.inspect()??{registered:0,visible:0,renderTargets:0,postProcesses:0,attachedPostProcesses:0,idleRetained:false,normalFrames:0,resourceCycles:0,worldDepthRenders:0,rafOwned:false};}
 export function releaseNpcInteriorInkResources(scene){scenes.get(scene)?.releaseResources();}

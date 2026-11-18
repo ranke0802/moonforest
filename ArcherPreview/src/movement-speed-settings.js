@@ -1,8 +1,9 @@
-export const MOVEMENT_SPEED_KEY='moonforest-movement-speed-v1';
-export const defaultMovementSpeed=()=>({walk:1,sprint:1.8});
+// v2: the default walk became 1.4x (older stored 1.0x defaults are not carried).
+export const MOVEMENT_SPEED_KEY='moonforest-movement-speed-v2';
+export const defaultMovementSpeed=()=>({walk:1.4,sprint:1.8});
 export function normalizeMovementSpeed(value){
  const numeric=(v,fallback,min,max)=>typeof v==='number'&&Number.isFinite(v)?Math.max(min,Math.min(max,v)):fallback;
- return {walk:numeric(value?.walk,1,.5,2),sprint:numeric(value?.sprint,1.8,.5,3)};
+ return {walk:numeric(value?.walk,1.4,.5,2),sprint:numeric(value?.sprint,1.8,.5,3)};
 }
 export function setupMovementSpeedSettings({host,storage,onChange=()=>{}}){
  const doc=host.ownerDocument,box=doc.createElement('div');box.className='camera-zoom-options';
