@@ -255,22 +255,23 @@ html[data-v03-vital] #app #gold-balance{top:calc(env(safe-area-inset-top) + var(
 html[data-v03-vital] .v03-quest{top:calc(env(safe-area-inset-top) + var(--v03-quest-top,74px))}
 html[data-v03-vital] #app{--v03-quest-top:calc(clamp(20px,4vh,44px) + 52px)}
 
-/* ----- Panels on short landscape screens (phones): three records side by
-   side so nothing scrolls, and a themed scrollbar wherever one is needed. ----- */
+/* ----- Panels on short landscape screens (phones): the records stay one
+   above another as on PC, compact so the list fits without scrolling, and a
+   themed scrollbar wherever one is needed. ----- */
 .v03-panel-box{scrollbar-width:thin;scrollbar-color:#ae925980 transparent}
 .v03-panel-box::-webkit-scrollbar{width:6px;height:6px}
 .v03-panel-box::-webkit-scrollbar-thumb{background:#ae925980;border-radius:3px}
 .v03-panel-box::-webkit-scrollbar-track{background:transparent}
 @media (max-height:480px) and (orientation:landscape){
  .v03-panel{padding:10px max(14px,env(safe-area-inset-right)) 10px max(14px,env(safe-area-inset-left))}
- .v03-panel-box{width:min(760px,100%);padding:14px 18px}
+ .v03-panel-box{width:min(540px,100%);padding:12px 18px}
  .v03-panel-title{margin-bottom:2px}
  .v03-panel-note{margin-bottom:10px;font-size:13px;line-height:1.4}
- .v03-slots{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:12px}
- .v03-slot{grid-template-columns:30px 1fr;column-gap:9px;min-height:58px;padding:8px 10px!important}
+ .v03-slots{grid-template-columns:1fr;gap:6px;margin-bottom:10px}
+ .v03-slot{grid-template-columns:30px 1fr;column-gap:10px;min-height:48px;padding:6px 12px!important}
  .v03-slot-number{width:30px;height:30px;font-size:14px}
- .v03-slot-title{font-size:14px;overflow-wrap:anywhere}
- .v03-slot-detail{font-size:12px}
+ .v03-slot-title{font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .v03-slot-detail{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .v03-panel-back,.v03-panel-accept{min-height:40px}
 }
 
