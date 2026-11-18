@@ -1,4 +1,5 @@
 import { SceneLoader, TransformNode, Texture, Color3, Quaternion, Vector3 } from '@babylonjs/core';
+import {markStaticShadowCaster} from './static-shadow-cache.js';
 import { TREE_PLACEMENTS, GRASS_BEDS } from './forest-layout.js';
 import { attachTreeLod, addDistanceCull } from './tree-lod.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
@@ -61,7 +62,7 @@ export async function loadTrainingGround(world,training){
       for(const node of instance.rootNodes)node.parent=root;
       for(const node of root.getDescendants(false)){
         node.isPickable=false;
-        if(node.getTotalVertices?.()>0){if(shadow)world.shadows.addShadowCaster(node,false);}
+        if(node.getTotalVertices?.()>0){if(shadow){markStaticShadowCaster(node);world.shadows.addShadowCaster(node,false);}}
         node.computeWorldMatrix(true);node.freezeWorldMatrix?.();
       }
       root.freezeWorldMatrix();plants.push(root);return root;

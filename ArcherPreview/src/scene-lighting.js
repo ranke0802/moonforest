@@ -1,5 +1,6 @@
 import { MaterialPluginBase, ShadowGenerator, Vector3 } from '@babylonjs/core';
 import {installVillageShadowFade,prepareShadowFade} from './village-shadow-fade.js';
+import {installStaticShadowCache,staticShadowCasters} from './static-shadow-cache.js';
 
 // Painted character maps are emissive to retain their authored colors. Reuse the
 // existing PBR normals and shadow result instead of adding another render pass.
@@ -41,22 +42,31 @@ export const ACTOR_SHADOW_RANGE=32;
 // The frame guard may pull this in on a struggling phone (lighting.actorShadowRange).
 const isOutlineCaster=mesh=>mesh.metadata?.moonforestOutline===true||/_Outline$/.test(mesh.name);
 export function installShadowCasterCulling(shadows,lighting){
-  const map=shadows.getShadowMap(),casters=[],forward=new Vector3(),right=new Vector3(),up=new Vector3(),offset=new Vector3();let frame=-1;
-  map.getCustomRenderList=(_layer,list,length)=>{
-    const id=lighting.scene.getFrameId();if(id===frame)return casters;frame=id;casters.length=0;
+  const map=shadows.getShadowMap(),casters=[],statics=[],dynamics=[],lists={all:casters,statics,dynamics},forward=new Vector3(),right=new Vector3(),up=new Vector3(),offset=new Vector3();let frame=-1;
+  const collect=()=>{
+    const id=lighting.scene.getFrameId();if(id===frame)return lists;frame=id;casters.length=0;statics.length=0;dynamics.length=0;
+    const list=map.renderList??[],length=list.length;
     const key=lighting.key;key.direction.normalizeToRef(forward);Vector3.CrossToRef(Vector3.UpReadOnly,forward,right);
     if(right.lengthSquared()<1e-8)right.set(1,0,0);right.normalize();Vector3.CrossToRef(forward,right,up);
     const half=key.shadowFrustumSize/2,focus=lighting.focus;
     for(let i=0;i<length;i++){
       const mesh=list[i];if(!mesh||isOutlineCaster(mesh))continue;
-      const sphere=mesh.getBoundingInfo?.()?.boundingSphere;if(!sphere){casters.push(mesh);continue;}
-      sphere.centerWorld.subtractToRef(focus,offset);const radius=sphere.radiusWorld;
-      if(Math.abs(Vector3.Dot(offset,right))>half+radius||Math.abs(Vector3.Dot(offset,up))>half+radius)continue;
-      if(mesh.skeleton&&offset.length()-radius>(lighting.actorShadowRange??ACTOR_SHADOW_RANGE))continue;
+      const sphere=mesh.getBoundingInfo?.()?.boundingSphere;
+      if(sphere){
+        sphere.centerWorld.subtractToRef(focus,offset);const radius=sphere.radiusWorld;
+        if(Math.abs(Vector3.Dot(offset,right))>half+radius||Math.abs(Vector3.Dot(offset,up))>half+radius)continue;
+        if(mesh.skeleton&&offset.length()-radius>(lighting.actorShadowRange??ACTOR_SHADOW_RANGE))continue;
+      }
       casters.push(mesh);
+      // Static casters only count while drawable, so hiding/showing one
+      // changes the static list and refreshes the cached depth.
+      if(staticShadowCasters.has(mesh)){if(mesh.isEnabled()&&mesh.isVisible)statics.push(mesh);}
+      else dynamics.push(mesh);
     }
-    return casters;
+    return lists;
   };
+  lighting.shadowCasterLists=collect;
+  map.getCustomRenderList=()=>{collect();return lighting.staticShadows?.active?dynamics:casters;};
 }
 
 export class SceneLighting {
@@ -89,6 +99,8 @@ export class SceneLighting {
     shadows.getShadowMap().refreshRate = 1;
     installShadowCasterCulling(shadows,this);
     if(village)installVillageShadowFade(shadows);
+    this.staticShadows=installStaticShadowCache(this,{decorate:village?installVillageShadowFade:null});
+    if(this.staticShadows)this.scene.metadata={...this.scene.metadata,staticShadows:this.staticShadows};
   }
   setWorldYaw(yaw){
     if(this.worldYaw===yaw)return;this.worldYaw=yaw;
@@ -126,6 +138,7 @@ export class SceneLighting {
     // shader, nor invalidate the incoming shader again after it was compiled.
     for(const material of dirty)material.markDirty(true);
   }
+  invalidateStaticShadows(){this.staticShadows?.invalidate();}
   refreshReceivers() {
     // Assets arrive after the first frame. Frozen receivers may have compiled
     // while the cast list was empty, so explicitly rebuild those shader defines.
@@ -140,8 +153,11 @@ export class SceneLighting {
       // 2m jumps change the sampling phase and make stationary edges shimmer.
       const forward=this.shadowForward,right=this.shadowRight,up=this.shadowUp;
       this.key.direction.normalizeToRef(forward);Vector3.CrossToRef(this.worldUp,forward,right);right.normalize();Vector3.CrossToRef(forward,right,up);
-      const texel=this.key.shadowFrustumSize/this.shadows.getShadowMap().getSize().width;
-      const u=Math.round(Vector3.Dot(this.requestedFocus,right)/texel)*texel,v=Math.round(Vector3.Dot(this.requestedFocus,up)/texel)*texel,d=Vector3.Dot(this.requestedFocus,forward);
+      // A whole number of texels per step keeps edges still; with the static
+      // shadow cache the step is ~2 m so the cached depth is not redrawn every
+      // frame while walking (the box keeps a wide margin around the player).
+      const texel=this.key.shadowFrustumSize/this.shadows.getShadowMap().getSize().width,step=this.staticShadows?Math.max(1,Math.round(2/texel))*texel:texel;
+      const u=Math.round(Vector3.Dot(this.requestedFocus,right)/step)*step,v=Math.round(Vector3.Dot(this.requestedFocus,up)/step)*step,d=this.staticShadows?Math.round(Vector3.Dot(this.requestedFocus,forward)/step)*step:Vector3.Dot(this.requestedFocus,forward);
       x=right.x*u+up.x*v+forward.x*d;y=right.y*u+up.y*v+forward.y*d;z=right.z*u+up.z*v+forward.z*d;
     }
     if(!force&&this.focus.x===x&&this.focus.y===y&&this.focus.z===z)return;

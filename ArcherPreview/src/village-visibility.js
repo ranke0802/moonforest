@@ -4,6 +4,7 @@ import { plainsRenderRange } from './plains-view-distance.js';
 import {selectVillageShadowCasters} from './village-shadow-policy.js';
 import {ShadowFadeBudget,shadowFadeAttribute} from './village-shadow-fade.js';
 import {caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
+import {markStaticShadowCaster} from './static-shadow-cache.js';
 import {sceneryDistanceRange as cinematicSceneryRange} from './scenery-distance-state.js';
 
 export function cellKey(x,z,size=16){return `${Math.floor(x/size)}:${Math.floor(z/size)}`;}
@@ -104,7 +105,7 @@ export class VillageVisibility {
     if(states.size!==active.size)for(const record of states.keys())if(!active.has(record))states.delete(record);
     this.shadowStateReady=true;
     if(!changed){this.stats.shadowUpdateSkips=(this.stats.shadowUpdateSkips??0)+1;return;}
-    this.stats.shadowUpdates=(this.stats.shadowUpdates??0)+1;
+    this.stats.shadowUpdates=(this.stats.shadowUpdates??0)+1;this.world.lighting?.invalidateStaticShadows?.();
     const next=this.shadowScratch;next.clear();let major=0,fading=0;
     for(const r of this.castRecords)if(!active.has(r)){
       r.shadowCaster=false;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.delete(r);
@@ -117,7 +118,7 @@ export class VillageVisibility {
       for(const mesh of r.meshes){if(mesh.instancedBuffers)mesh.instancedBuffers[shadowFadeAttribute]=fade;next.add(mesh);}
     }
     for(const m of this.cast)if(!next.has(m))this.world.shadows.removeShadowCaster(m,false);
-    for(const m of next)if(!this.cast.has(m))this.world.shadows.addShadowCaster(m,false);
+    for(const m of next)if(!this.cast.has(m)){markStaticShadowCaster(m);this.world.shadows.addShadowCaster(m,false);}
     this.shadowScratch=this.cast;this.cast=next;Object.assign(this.stats,{shadowCasters:next.size,majorShadowCasters:major,fadingShadows:fading});
   }
   dispose(){this.occlusion.dispose();for(const m of this.cast)this.world.shadows.removeShadowCaster(m,false);this.cast.clear();for(const r of this.castRecords)r.shadowCaster=false;this.castRecords.clear();this.shadowFade.clear();this.shadowState.clear();}
