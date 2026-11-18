@@ -1606,6 +1606,8 @@ try {
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
       travel:id=>mapTransition.travel(travelUrl(location.href,id)),
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
+      setScore:(key,fade)=>audio?.setScore?.(key,fade),
+      setSfxMuted:value=>audio?.setSfxMuted?.(value),
       prepareWorld:()=>{void getAuthoredMonsters({active:false}).then(runtime=>runtime.preload?.()).catch(error=>console.error('[몬스터 배치]',error));},
       // Adds story scenery through the map's placement runtime (streaming,
       // collision and outlines included). Already-present ids are skipped.

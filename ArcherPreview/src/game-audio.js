@@ -20,7 +20,7 @@ export class GameAudio {
     this.musicWanted=false;this.beds=new AudioBeds(this);this.environment=null;this.combatMode=null;this.bossTheme=null;
     this.manifestUrl=manifestUrl;
     this.audioSession=audioSession;this.now=now;this.resumeAttempts=0;this.resumePending=null;this.gestureCleanup=null;
-    this.suspended=false;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
+    this.suspended=false;this.sfxMuted=false;this.score=null;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
     this.loadTimeoutMs=loadTimeoutMs;this.retryDelayMs=retryDelayMs;this.timers=timers;this.audioGeneration=0;this.audioLifetimes=new Set();this.sfxSources=new Map();this.sfxDecodeJobs=new Set();this.sfxLoading=null;
   }
   bindUnlock(target){
@@ -146,7 +146,12 @@ export class GameAudio {
   onBedError(channel,key){
     if(channel==='music'&&key===this.bossTheme&&this.combatMode==='boss')this.selectBed();
   }
+  // A screen score (0.3 title / prologue) overrides the map's music; the
+  // screen's own sound effects can be muted (the title's demo fight).
+  setScore(key,fade=1.6){key=key&&this.beds.definitions.music?.[key]?key:null;if(key===this.score)return;this.score=key;if(key){this.musicWanted=false;this.beds.request('music',key,fade);}else this.selectBed();}
+  setSfxMuted(value){this.sfxMuted=!!value;if(this.sfxMuted)this.stopVoices();}
   selectBed(){
+    if(this.score){this.beds.request('music',this.score);return;}
     const mode=this.combatMode==='dead'?null:this.combatMode||this.environment;
     const key=mode==='boss'?availableBossMusic(this.bossTheme,this.beds.definitions.music,this.beds.failed):mode;
     this.musicWanted=mode==='boss';this.beds.request('music',key);
@@ -161,7 +166,7 @@ export class GameAudio {
   play(name,{position,volume=1,rate=1}={}){
     const variants=this.variants.get(name)||[name],index=this.variantIndex.get(name)||0;
     const context=this.context,buffer=this.buffers.get(variants[index%variants.length])||this.buffers.get(name);
-    if(this.suspended||context?.state!=='running'||!buffer){this.dropped++;return false;}
+    if(this.suspended||this.sfxMuted||context?.state!=='running'||!buffer){this.dropped++;return false;}
     const settings={...DEFAULTS,...this.cueSettings?.[name],...SETTINGS[name]},now=context.currentTime;
     if(now-(this.lastPlayed.get(name)??-Infinity)<settings.cooldown)return false;
     const distance=position?Math.hypot(position.x-this.listener.x,position.z-this.listener.z):0;
