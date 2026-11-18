@@ -194,6 +194,19 @@ let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elap
 const lungeState={id:null,done:0,span:0,foe:null,reach:0};
 // The map's monster species are ready before the loading cover lifts (capped,
 // so a slow network still reaches the game; packs then finish in play).
+// The loading cover lifts only after the world has really been drawn: game
+// frames run behind it until every visible mesh is ready (capped). Lifting it
+// on the first frame showed the bare sky colour for 0.1-0.3 s on every arrival.
+async function settleWorldBehindCover(maxMs=2500){
+ const sc=world?.scene;if(!sc||sc.isDisposed)return;const start=performance.now();let rendered=0,seen=0,clean=0;
+ const o=sc.onAfterRenderObservable.add(()=>{rendered++;});
+ try{while(performance.now()-start<maxMs){
+  await new Promise(resolve=>{const t=setTimeout(resolve,60);requestAnimationFrame(()=>{clearTimeout(t);resolve();});});
+  if(sc.isDisposed)return;if(rendered===seen){try{sc.render();}catch{return;}}seen=rendered;
+  let pending=false;for(const mesh of sc.meshes){if(mesh.isVisible&&mesh.getTotalVertices()>0&&mesh.isEnabled()&&!mesh.isReady(true)){pending=true;break;}}
+  clean=pending?0:clean+1;if(rendered>=6&&clean>=3)break;
+ }}finally{sc.onAfterRenderObservable.remove(o);}
+}
 async function preloadMapMonsters(){try{const runtime=world?.authoredMonsters??await world?.authoredMonstersTask?.catch?.(()=>null);if(!runtime?.preload)return;let timer;await Promise.race([runtime.preload(),new Promise(resolve=>{timer=setTimeout(resolve,20000);})]);clearTimeout(timer);}catch(error){console.error('[몬스터 준비]',error);}}
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const meleeTargetPoint=new Vector3();
@@ -781,7 +794,8 @@ async function loadCharacter() {
     assertFrameHealthy();
     loadDiagnostics.finish();
     mapResourceInspector.captureReady();
-    loadingView.reveal(loadingGeneration);showMinimap();if(world.villageStreaming)world.villageStreaming.active=true;
+    if(world.villageStreaming)world.villageStreaming.active=true;await settleWorldBehindCover();
+    loadingView.reveal(loadingGeneration);showMinimap();
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
   } catch (error) {
@@ -1213,10 +1227,12 @@ try {
       world.storyboardEvents?.emit('map-enter',{mapId:world.mapId});
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       assertFrameHealthy();
-      applyRenderQuality();loadDiagnostics.finish();mapResourceInspector.captureReady();loadingView.reveal(mapLoadingGeneration);showMinimap();world.villageStreaming.active=true;
+      applyRenderQuality();loadDiagnostics.finish();mapResourceInspector.captureReady();
       const modalOpen=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen()||contextRecovery?.blocked===true);
       audio.setSuspended(document.hidden||modalOpen||contextRecovery?.blocked===true);
+      world.villageStreaming.active=true;await settleWorldBehindCover();
+      loadingView.reveal(mapLoadingGeneration);showMinimap();
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
     onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
