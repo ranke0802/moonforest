@@ -6,8 +6,10 @@ import {SceneLoader,TransformNode,Vector3} from '@babylonjs/core';
 import {attachCharacterOutlines} from '../character-outlines.js';
 
 const MODEL=new URL('./models/wagon-horse.glb',import.meta.url);
-// Model units: 87 tall (ear tips), 98 long, feet at y=0, head toward -z.
-export const WAGON_HORSE=Object.freeze({height:2.05,ahead:3.35,side:0,turn:Math.PI,breath:.012,breathRate:1.35});
+// Model units: 87 tall (ear tips), 98 long, feet at y=0, head toward +z.
+// The wagon's tongue is its local -x end; WAGON.yaw already points that way,
+// so the horse stands 3.55 m out along it with the tongue between its flanks.
+export const WAGON_HORSE=Object.freeze({height:2.05,ahead:3.55,side:0,turn:0,breath:.012,breathRate:1.35});
 
 export function createWagonHorse({scene,heightAt=()=>0,wagon}){
  let disposed=false,container=null,root=null,observer=null,time=Math.random()*10;
