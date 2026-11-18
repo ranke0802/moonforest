@@ -244,6 +244,25 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
     };
     adapters.add(adapter);return adapter;
   }
+  // Hold a species' model library for the map (the loading screen waits on
+  // it): download, decode and shader compile happen once, before play, so a
+  // spawn later is only a clone. A held library survives its last actor.
+  create.retain=definition=>{
+    if(disposed)throw bossPreparationCancelled();
+    if(typeof definition==='string')definition=getActorDefinition(definition);
+    const entry=entryFor(definition);entry.references++;let released=false;
+    const ready=(async()=>{
+      await entry.library.load();if(released||disposed||entry.warmed)return;entry.warmed=true;
+      let asset=null;
+      try{
+        asset=instantiateBossModel(entry.library.container);
+        const meshes=asset.meshes.filter(mesh=>mesh.material&&mesh.getTotalVertices?.()>0);
+        await Promise.all(meshes.map(mesh=>mesh.material.forceCompilationAsync?.(mesh)?.catch?.(()=>{})));
+      }catch{entry.warmed=false;}
+      finally{if(asset){for(const group of asset.animationGroups??[])group.dispose();for(const mesh of asset.meshes)if(!mesh.isDisposed())mesh.dispose(false,false);for(const node of asset.transformNodes)if(!node.isDisposed())node.dispose(false,false);for(const skeleton of asset.skeletons??[])if(!skeleton.isDisposed?.())skeleton.dispose();}}
+    })();
+    return {ready,release(){if(released)return;released=true;entry.references--;return releaseEntry(entry);}};
+  };
   create.inspect=()=>({actors:adapters.size,libraries:entries.size,keys:[...entries.keys()],modelLoads:[...entries.values()].reduce((sum,entry)=>sum+(entry.library.loads??0),0)});
   create.dispose=()=>{
     if(disposed)return;const pending=[];for(const adapter of [...adapters]){const value=adapter.dispose();if(value)pending.push(value);}disposed=true;

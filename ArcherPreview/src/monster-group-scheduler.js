@@ -29,14 +29,17 @@ export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>t
   }catch(error){for(const [,handle] of prepared)safeRemove(handle);group.handles.clear();release(group);if(current()){group.state='waiting';group.remaining=FAILED_RETRY_SECONDS;onError(error);}}
   finally{if(generation===epoch){group.pending=false;startReady();}}
  }
- // focus() → {x,z} | null: groups still waiting are prepared nearest that
- // point first (the quest spot, else the player), so the pack the player is
- // walking to is not queued behind the rest of the map.
+ // focus() → {x,z} | {player,spot} | null. Packs the player can already see
+ // (within NEAR_FOCUS of them) come first, nearest first; the rest are
+ // prepared nearest the quest spot (else the player).
+ const NEAR_FOCUS=45;
  function byFocus(){
-  const list=[...groups.values()],point=focus?.();
-  if(!point||!Number.isFinite(point.x)||!Number.isFinite(point.z))return list;
-  const gap=group=>{let best=Infinity;for(const row of group.members){const d=(row.x-point.x)**2+(row.z-point.z)**2;if(d<best)best=d;}return best;};
-  return list.map(group=>[gap(group),group]).sort((a,b)=>a[0]-b[0]).map(entry=>entry[1]);
+  const list=[...groups.values()],value=focus?.(),valid=p=>p&&Number.isFinite(p.x)&&Number.isFinite(p.z);
+  const player=valid(value?.player)?value.player:valid(value)?value:null,spot=valid(value?.spot)?value.spot:null;
+  if(!player&&!spot)return list;
+  const gap=(group,point)=>{let best=Infinity;for(const row of group.members){const d=(row.x-point.x)**2+(row.z-point.z)**2;if(d<best)best=d;}return Math.sqrt(best);};
+  const key=group=>{const near=player?gap(group,player):Infinity;return near<=NEAR_FOCUS?[0,near]:[1,spot?gap(group,spot):near];};
+  return list.map(group=>[key(group),group]).sort((a,b)=>a[0][0]-b[0][0]||a[0][1]-b[0][1]).map(entry=>entry[1]);
  }
  function startReady(){
   if(disposed||paused||!canCommit())return;let preparing=[...groups.values()].filter(group=>group.pending).length;

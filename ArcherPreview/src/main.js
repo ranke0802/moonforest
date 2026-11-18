@@ -192,6 +192,9 @@ let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 const lungeState={id:null,done:0,span:0,foe:null,reach:0};
+// The map's monster species are ready before the loading cover lifts (capped,
+// so a slow network still reaches the game; packs then finish in play).
+async function preloadMapMonsters(){try{const runtime=world?.authoredMonsters??await world?.authoredMonstersTask?.catch?.(()=>null);if(!runtime?.preload)return;let timer;await Promise.race([runtime.preload(),new Promise(resolve=>{timer=setTimeout(resolve,20000);})]);clearTimeout(timer);}catch(error){console.error('[몬스터 준비]',error);}}
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const meleeTargetPoint=new Vector3();
 const staminaFeedback=new StaminaFailureFeedback();
@@ -772,7 +775,7 @@ async function loadCharacter() {
     await prepareModelShaders(preparedPlayer,{preparation:createBossPreparation({scene:world.scene,isCurrent:()=>container===preparedPlayer&&world.toolGeneration===preparedGeneration&&!world.scene.isDisposed}),shadows:world.shadows});
     // Keep the loading artwork through shader readiness and the first correctly
     // configured character/UI frame. Do not expose the legacy default scene.
-    assertFrameHealthy();updatePlainsBoundaryAtmosphere(world,actor.position,true);syncCaveFog(true);world.scene.render();await chapterQuests?.prepareEffects();await world.goldLootView?.prepare();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});
+    assertFrameHealthy();updatePlainsBoundaryAtmosphere(world,actor.position,true);syncCaveFog(true);world.scene.render();await chapterQuests?.prepareEffects();await world.goldLootView?.prepare();await preloadMapMonsters();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});
     assertFrameHealthy();world.scene.render();ready=true;audio.setEnvironment(character);updateButtons();render(0);
     await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     assertFrameHealthy();
@@ -1202,7 +1205,7 @@ try {
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();world.authoredPlacements?.update(0,actor);
       await skyReady;
-      assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await chapterQuests?.prepareEffects();await world.goldLootView?.prepare();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});assertFrameHealthy();world.scene.render();
+      assertFrameHealthy();loadDiagnostics.phase('screen');syncCaveFog(true);world.scene.render();await chapterQuests?.prepareEffects();await world.goldLootView?.prepare();await preloadMapMonsters();await waitForSceneReady(world.scene,{onProgress:progress=>loadingView.preparing(progress,loadingGeneration)});assertFrameHealthy();world.scene.render();
     },
     finish:async()=>{
       assertFrameHealthy();
@@ -1470,7 +1473,7 @@ try {
       if(world.scene.isDisposed)throw new Error('맵을 다시 열어 주세요.');
       const runtime=createAuthoredMonsterRuntime({world,battle:boss,getPlayer:()=>actor,getFocus:()=>world.v03?.questSpot??null,storage:journeyStorage,defaultDocument:defaults?.PLAINS_MONSTER_SPAWNS,defaultRevision:defaults?.PLAINS_MONSTER_SPAWNS_REVISION,getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,dead:controller?.dead||boss.playerHp<=0,paused:document.hidden||!!document.querySelector('dialog[open]')||!!world.toolLease?.active||!!world.storyboardOpening?.blocksGame}),onDefeat:(event,row)=>{if(chapterQuests)chapterQuests.defeat(event,{rewardEnabled:row.rewardEnabled,dropAssetId:row.drop.assetId,dropEffectEnabled:row.drop.effectEnabled});else if(row.rewardEnabled)goldLoot.drop(event.kind,event.position);world.developmentStoryboardLive?.defeat(event);try{world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}},onError:error=>console.error('[몬스터 배치]',error)});
       world.authoredMonsters=runtime;world.scene.onDisposeObservable.addOnce(()=>runtime.dispose());return runtime;
-    }).catch(error=>{authoredMonsterTask=null;throw error;});return authoredMonsterTask;
+    }).catch(error=>{authoredMonsterTask=null;throw error;});world.authoredMonstersTask=authoredMonsterTask;return authoredMonsterTask;
   };
   // 0.3 starts the living world itself, after the title and the first fight.
   try{if(!versionRoute.edition&&releaseEnabled&&!uiTestEnabled&&new URLSearchParams(location.search).get('cinematicPreview')!=='1'&&(versionRoute.release==='moonforest-0.2'||journeyStorage?.getItem('moonforest-monster-spawns-v1')))void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));}catch(error){console.error('[몬스터 배치]',error);}
