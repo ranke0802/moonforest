@@ -1,6 +1,6 @@
 // Mouse cursors for 0.3: small hand-drawn SVGs in the game's gold-and-ink
 // palette, switched by situation through one attribute on <html>:
-// ui (menus, dialogue) · play (sword) · combat (blooded sword) · talk (someone
+// ui (menus, dialogue) · play (arrow, out of combat) · combat (blooded sword) · talk (someone
 // to speak to) · camera (right-drag turning the view). Loading shows the moon.
 // No per-frame DOM writes: the attribute changes only when the mode does.
 const INK='#1b140b',GOLD='#e8cf8f',BRIGHT='#ffe6a6',SILVER='#e4ecf2',MOON='#bfe3ff';
@@ -22,7 +22,8 @@ export function cursorCss(art=CURSOR_ART){
  return [
   `html[data-v03-cursor],html[data-v03-cursor] body,html[data-v03-cursor] canvas{cursor:${c('arrow',3,2,'auto')}}`,
   `html[data-v03-cursor] ${CLICKABLE}{cursor:${c('point',3,2,'pointer')}}`,
-  `html[data-v03-cursor=play] canvas{cursor:${c('sword',3,3,'crosshair')}}`,
+  // Out of combat the game's own arrow; the sword only while fighting.
+  `html[data-v03-cursor=play] canvas{cursor:${c('arrow',3,2,'auto')}}`,
   `html[data-v03-cursor=combat] canvas{cursor:${c('combat',3,3,'crosshair')}}`,
   `html[data-v03-cursor=talk] canvas{cursor:${c('talk',3,2,'pointer')}}`,
   `html[data-v03-cursor=camera],html[data-v03-cursor=camera] *{cursor:${c('camera',16,16,'grabbing')}!important}`,
