@@ -405,6 +405,25 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   let start=attacking&&!ATTACK_STATES.has(slow.player);slow.player=state;
   for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')start=true;slow.foes.set(foe,mode);}
   if(start&&first)slow.left=SLOW_SECONDS;
+  updateSlowZoom();
+ }
+ // A light push-in while slow motion lasts (user request 2026-11-19): the
+ // field of view narrows by up to 9 % and eases back, on real time so the slow
+ // itself does not stretch the zoom. FOV only: the player's zoom distance,
+ // pitch and the camera guard are untouched.
+ const SLOW_ZOOM=.09,SLOW_ZOOM_IN=.12,SLOW_ZOOM_OUT=.35;
+ const zoom={weight:0,base:null,last:0,camera:null};
+ function updateSlowZoom(){
+  const camera=api.world?.camera;if(!camera||!Number.isFinite(camera.fov))return;
+  const now=performance.now(),dt=zoom.last?Math.min(.1,(now-zoom.last)/1000):0;zoom.last=now;
+  if(zoom.camera!==camera){zoom.camera=camera;zoom.weight=0;zoom.base=null;}
+  const target=slow.left>0?1:0;
+  if(zoom.weight===0&&target===0){zoom.base=null;return;}
+  zoom.base??=camera.fov;
+  zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
+  const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
+  camera.fov=zoom.base*(1-SLOW_ZOOM*eased);
+  if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;}
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
  // Taps chain three hits (slash → thrust → judgment finisher at half stamina);
