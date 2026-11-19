@@ -412,7 +412,13 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
 .v03-download-line{position:fixed;left:0;right:0;bottom:0;height:2px;z-index:20020;pointer-events:none;background:#ffffff14}
 .v03-download-line i{position:absolute;inset:0;background:linear-gradient(90deg,#ae9259,#ece0bc);transform:scaleX(0);transform-origin:left center;transition:transform .4s ease-out}
-/* One tap before the dream on a reloaded page (sound needs a gesture). */
-.v03-tap-begin{position:fixed;left:50%;bottom:16vh;z-index:20030;transform:translateX(-50%);padding:10px 22px;font:500 clamp(15px,2.4vmin,20px)/1.2 var(--v03-font);letter-spacing:.14em;color:#ece0bc;background:#0006;border:1px solid #ae925966;border-radius:3px;cursor:pointer;animation:v03-tap-pulse 2.4s ease-in-out infinite;transition:opacity .35s ease}
-.v03-tap-begin.is-gone{opacity:0;pointer-events:none;animation:none}
-@keyframes v03-tap-pulse{0%,100%{opacity:.55}50%{opacity:1}}
+/* A reloaded new game: sound needs one gesture on the new page. Instead of a
+   technical prompt, the cover offers the story's first action (close your
+   eyes); a tap anywhere does it. */
+.v03-tap-begin{position:fixed;inset:0;z-index:20030;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:18px;padding:0 24px 18vh;font-family:var(--v03-font);color:#ece0bc;background:linear-gradient(to top,#000a,#0000 55%);border:0;cursor:pointer;transition:opacity .45s ease}
+.v03-tap-lead{font-size:clamp(17px,2.9vmin,26px);letter-spacing:.08em;text-shadow:0 2px 12px #000;animation:v03-tap-in 1.6s ease both}
+.v03-tap-act{font-size:clamp(13px,2vmin,17px);letter-spacing:.2em;opacity:.7;animation:v03-tap-pulse 2.6s ease-in-out 1.2s infinite both}
+.v03-tap-begin.is-gone{opacity:0;pointer-events:none}
+.v03-tap-begin.is-gone *{animation:none}
+@keyframes v03-tap-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes v03-tap-pulse{0%,100%{opacity:.35}50%{opacity:.95}}

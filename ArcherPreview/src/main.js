@@ -1664,6 +1664,8 @@ try {
       addPotions:count=>{if(!boss)return 0;const before=boss.potions.remaining;boss.potions.remaining=Math.min(POTION.uses,before+count);updateButtons();return boss.potions.remaining-before;},
       grantArmor:id=>{if(!V03_ARMOR_DEFENSE[id])return false;try{if(journeyStorage?.getItem(V03_ARMOR_KEY)===id)return false;journeyStorage?.setItem(V03_ARMOR_KEY,id);}catch{return false;}if(boss)boss.combat.defense=playerDefense();audio.play('equip');return true;},
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
+      // Starts sound without a tap where the browser already allows it (a reloaded new game).
+      unlockAudio:()=>{try{return audio.unlock();}catch{return null;}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
     // 0.4 world: time of day and weather (shares the 0.3 story and saves).

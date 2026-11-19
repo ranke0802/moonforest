@@ -306,7 +306,7 @@ export function setupV03(api){
  }
  function tapToBegin(){
   return new Promise(resolve=>{
-   const hint=doc.createElement('button');hint.type='button';hint.className='v03-tap-begin';hint.textContent=t('opening.tapToBegin');(doc.body??doc.documentElement).append(hint);
+   const hint=doc.createElement('button');hint.type='button';hint.className='v03-tap-begin';hint.innerHTML='';const lead=doc.createElement('span');lead.className='v03-tap-lead';lead.textContent=t('opening.tapLead');const act=doc.createElement('span');act.className='v03-tap-act';act.textContent=t('opening.tapToBegin');hint.append(lead,act);hint.setAttribute('aria-label',t('opening.tapToBegin'));(doc.body??doc.documentElement).append(hint);
    const kinds=['pointerdown','keydown','touchend'];
    const go=event=>{if(event.type==='keydown'&&event.repeat)return;for(const kind of kinds)view.removeEventListener(kind,go,true);hint.classList.add('is-gone');setTimeout(()=>hint.remove(),400);resolve();};
    for(const kind of kinds)view.addEventListener(kind,go,{capture:true});
@@ -331,7 +331,7 @@ export function setupV03(api){
   // dream waits on its cover for one tap (2026-11-19, user: prologue silent).
   void langReady.then(async()=>{
    if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;
-   if(!audioAllowed())await tapToBegin();
+   if(audioAllowed())api.unlockAudio?.();else await tapToBegin();
    if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;
    state.dream=opening.play();
   });
