@@ -1,6 +1,6 @@
 # 0.3 현재 상태
 
-갱신: 2026-11-17 14:55
+갱신: 2026-11-19 23:55
 
 ## 지금 단계: M0 껍데기 — 코드 작성 완료, 화면 확인 전
 
@@ -153,3 +153,9 @@ PC
 - NPC 생동감: `cast-models.js` behave(), story가 village NPC에 roam 부여. 턱 늘어짐은 목 위주 시선으로 대응(원인 추정, 화면 확인 필요).
 - 보류: 0.3 설정 창의 개발용 항목 숨김(사용자 답 대기), 첫 실행 흐름(타이틀 전 프롤로그 vs 그림 타이틀, 사용자 답 대기), 폰 성능 기록 분석(새 기록 필요), PC 60Hz 상한(제외됨).
 - 도트음은 승인 전이라 `?blip=1`에서만.
+
+## 2026-11-19 23:55 — 오프닝 재구성, 말 리그
+- 오프닝(`story.js` SCENE): 대평원 부감 → 잠든 주인공(짐칸, 뒤쪽 낮은 시점) → 마부 비명 → 눈 뜨기(`.v03-wake-veil`, 시점) → 늑대가 장작통 뒤에서 말에게 도약 → 말·마차 함께 쓰러짐 → 전투. 주인공 눕히기는 `holdsPlayer`(main.js 지면 고정 생략).
+- 말(`models/wagon-horse-rig.glb`, Blender 스크립트 `.cache/blender/horse_rig_v19.py`): Idle(12초)·Walk·Gallop·Nervous·Rear·Fall·Down·GetUp(늑대 Rise_From_Lie 단계 참고). 쓰러짐 계열은 프레임마다 지면 고정(꼬리 제외).
+- 마차 충돌: 맵 마차 `collision:'none'`, 자세별 상자를 `createAuthoredPlacementNavigation`으로 교체(약참조).
+- 화면 미확인: 내장 브라우저가 숨김 상태면 로딩이 70%에서 멈춘다(앱 창을 앞에 두어야 함).

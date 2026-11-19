@@ -340,7 +340,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function horseMotion(dt=0){
   if(!wagonHorse||scene.active)return;
   if(wagonDown()){horseState.down=true;horseState.rising=0;wagonHorse.play('Horse_Down');return;}
-  if(horseState.down){horseState.down=false;horseState.rising=2.4;wagonHorse.play('Horse_GetUp');}
+  if(horseState.down){horseState.down=false;horseState.rising=2.8;wagonHorse.play('Horse_GetUp');}
   if(horseState.rising>0){horseState.rising-=dt;if(horseState.rising>0)return;}
   wagonHorse.play('Horse_Idle');
  }
@@ -574,9 +574,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    const k=ease(now/SCENE.sleepShot),back=28-21.5*k,side=14-11.8*k,up=26-22.6*k,ahead=8*(1-k);
    frameEye(W0.x-fx*back+rx*side,ground+up,W0.z-fz*back+rz*side,W0.x+fx*ahead,ground+1.5*k,W0.z+fz*ahead);
   }else if(shot===1){
-   // Through the open back of the wagon: the warrior asleep in the bed.
-   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),back=4.3-.8*k;
-   frameEye(W0.x-fx*back+rx*.2,ground+1.95,W0.z-fz*back+rz*.2,W0.x-fx*.4,ground+.95,W0.z-fz*.4);
+   // Low through the open back, between the tail rails: the warrior asleep in
+   // the bed (from 1.9 m the bed's high sides hid him; checked in renders of
+   // the wagon from behind: 1.5 m just past the tailboard sees the whole bed).
+   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),back=3.25-.4*k;
+   frameEye(W0.x-fx*back+rx*.1,ground+1.5,W0.z-fz*back+rz*.1,W0.x-fx*.3,ground+1.0,W0.z-fz*.3);
   }else if(shot===2){
    // From his eyes: the canopy overhead, then up to the bench as he sits up.
    const pitch=scene.pitch,c=Math.cos(pitch),s=Math.sin(pitch),feet={x:W0.x+fx*.55+rx*.15,z:W0.z+fz*.55+rz*.15};
