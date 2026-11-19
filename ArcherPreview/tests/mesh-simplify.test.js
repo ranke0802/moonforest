@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {NullEngine,Scene,MeshBuilder,VertexBuffer} from '@babylonjs/core';
-globalThis.document??={documentElement:{dataset:{edition:'0.3'}}};
+globalThis.document??={documentElement:{dataset:{edition:'0.3'}}};globalThis.location??={search:'?simplify=1',href:'https://x/?simplify=1'};
 const {simplifierReady,simplifyOwnMesh,simplifySharedShell}=await import('../src/mesh-simplify.js');
 await simplifierReady();
 const bumpy=scene=>{const m=MeshBuilder.CreateGround('g',{width:40,height:40,subdivisions:60},scene);const p=m.getVerticesData('position');for(let i=0;i<p.length;i+=3)p[i+1]=Math.sin(p[i]*.05)*.5;m.setVerticesData('position',p);return m;};

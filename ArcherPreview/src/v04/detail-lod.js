@@ -37,9 +37,11 @@ export const detailTiersFor=(kinds,{world=globalThis.document?.documentElement?.
  let best=-1;for(const kind of new Set(kinds)){const at=SIZE_CLASS.indexOf(DETAIL_LOD_KIND_TIERS[kind]);if(at<0)return null;if(best<0||at<best)best=at;}
  return best<0?null:SIZE_CLASS[best];
 };
-// 0.4 world, and 0.3 (any edition) unless ?detaillod=0.
+// 0.4 world. In 0.3 only with ?detaillod=1: it cuts triangles, and the
+// phone bench (2026-11-19) showed the GPU was not the limit, so the coarser
+// distance is not worth the look by default.
 export const detailLodEnabled=()=>{const data=globalThis.document?.documentElement?.dataset;if(!data)return false;if(data.world==='0.4')return true;
- return !!data.edition&&new URLSearchParams(globalThis.location?.search??'').get('detaillod')!=='0';};
+ return !!data.edition&&new URLSearchParams(globalThis.location?.search??'').get('detaillod')==='1';};
 
 function read(mesh){
  const positions=mesh.getVerticesData('position'),indices=mesh.getIndices();

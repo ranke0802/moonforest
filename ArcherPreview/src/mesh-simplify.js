@@ -6,11 +6,12 @@ import {MeshoptSimplifier} from 'meshoptimizer/simplifier';
 // the GPU shades fewer vertices. Used where the shape is all that matters:
 // the terrain surface and the inverted-hull outlines (2026-11-19: on the
 // plains the ground was 93K triangles and character hulls 74–150K).
-// 0.3 only; ?simplify=0 turns it off.
+// 0.3 only, opt-in with ?simplify=1.
 let ready=null,available=false;
 export const simplifierAvailable=()=>available;
 export function simplifierReady(){return ready??=MeshoptSimplifier.ready.then(()=>{available=!!MeshoptSimplifier.supported;return available;},()=>false);}
-export const simplifyEnabled=()=>{const data=globalThis.document?.documentElement?.dataset;return !!data?.edition&&new URLSearchParams(globalThis.location?.search??'').get('simplify')!=='0';};
+// Opt-in (?simplify=1): triangles only; the phone was not GPU-bound (2026-11-19).
+export const simplifyEnabled=()=>{const data=globalThis.document?.documentElement?.dataset;return !!data?.edition&&new URLSearchParams(globalThis.location?.search??'').get('simplify')==='1';};
 
 // → Uint32Array of the reduced indices, or null when it would not save enough.
 export function simplifyIndices(positions,indices,{ratio=.5,error=.01,absolute=false,minSaving=.15}={}){
