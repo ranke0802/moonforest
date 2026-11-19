@@ -57,10 +57,10 @@ export function setupV03(api){
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
  const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false,langReady:false};
- // Each screen has its score: the title (and 'drawing the world') a quiet
- // forest theme with its demo fight silent, the prologue the saint's theme;
- // play returns to the map's own music and sound.
- const SCREEN_SCORE=Object.freeze({boot:'forest',title:'forest',resume:'forest',opening:'elena_saint'});
+ // Each screen has its score: the title (and 'drawing the world') the saint's
+ // theme with its demo fight silent, the prologue the quiet forest theme
+ // (swapped 2026-11-19, user choice); play returns to the map's own music.
+ const SCREEN_SCORE=Object.freeze({boot:'elena_saint',title:'elena_saint',resume:'elena_saint',opening:'forest'});
  const screen=value=>{state.screen=value;html.dataset.v03Screen=value;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
