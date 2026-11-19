@@ -12,6 +12,9 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const promptKey=make('span','v03-prompt-key'),promptMark=make('span','v03-prompt-mark'),promptName=make('strong','v03-prompt-name'),promptAction=make('span','v03-prompt-action');
  const promptText=make('span','v03-prompt-text');promptText.append(promptName,promptAction);prompt.append(promptKey,promptText,promptMark);
  const banner=make('div','v03-banner');banner.hidden=true;
+ // The banner is one-shot: once its animation ends it is hidden, so hiding
+ // and showing the HUD (map loading) cannot replay the last message.
+ banner.addEventListener('animationend',()=>{banner.classList.remove('is-shown');banner.hidden=true;});
  // Cutscene subtitle: speaker + line, bottom centre.
  const caption=make('div','v03-caption'),captionWho=make('strong','v03-caption-who'),captionText=make('p','v03-caption-text');caption.append(captionWho,captionText);caption.hidden=true;
  const tip=make('aside','v03-tip'),tipTitle=make('strong','v03-tip-title'),tipLead=make('p','v03-tip-lead'),tipText=make('p','v03-tip-text');
