@@ -1654,7 +1654,7 @@ try {
           if(have.has(prop.id))continue;
           const entry=runtime.catalog?.entries?.find(row=>row.assetId===prop.asset);if(!entry)continue;
           const half=(prop.yaw??0)/2;
-          extra.push({instanceId:prop.id,assetId:prop.asset,assetVersion:entry.contentHash??entry.version,transform:{position:[prop.x,world.terrain.heightAt(prop.x,prop.z),prop.z],rotation:[0,Math.sin(half),0,Math.cos(half)],scale:prop.scale??1},attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:prop.collision??'solid'});
+          extra.push({instanceId:prop.id,assetId:prop.asset,assetVersion:entry.version??entry.contentHash,transform:{position:[prop.x,world.terrain.heightAt(prop.x,prop.z),prop.z],rotation:[0,Math.sin(half),0,Math.cos(half)],scale:prop.scale??1},attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:prop.collision??'solid'});
         }
         if(!extra.length)return true;
         await runtime.apply({...runtime.document,revision:runtime.document.revision+1,instances:[...runtime.document.instances,...extra]});return true;

@@ -251,7 +251,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // The wolf's hiding place: a bush clump on open ground with a clear run to
   // the horse (2026-11-19: it used to start between trees and shake against them).
   const hide=ambushHide(id);
-  const cover=hide?AMBUSH_BUSHES.map((bush,i)=>({id:'v03-ambush-bush-'+i,asset:bush.asset,map:id,x:hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z:hide.z+bush.dx*hide.r.z+bush.df*hide.f.z,yaw:bush.yaw,collision:'none'})):[];
+  const cover=hide?AMBUSH_BUSHES.map((bush,i)=>({id:'v03-ambush-grass-'+i,asset:bush.asset,map:id,x:hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z:hide.z+bush.dx*hide.r.z+bush.df*hide.f.z,yaw:bush.yaw,scale:bush.scale,collision:'none'})):[];
   // The wagon first, the wolf's cover after it: a rejected bush never costs the wagon.
   if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error))
    .then(()=>{if(!disposed&&cover.length)return api.placeProps?.(cover);}).catch(error=>console.warn('[MoonForest 0.3] ambush cover unavailable',error));
@@ -326,9 +326,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
  // Searched once per map visit from the walkable map: ahead of the wagon on the
  // wolf's side, open around it, and a straight walkable line to the horse.
- // Native scale only: the placement validator rejects scales outside the asset's
- // approved range, and one bad row drops the whole apply (2026-11-19: no wagon).
- const AMBUSH_BUSHES=Object.freeze([{asset:'bush',dx:0,df:0,yaw:.4},{asset:'bush',dx:1,df:.8,yaw:2.1},{asset:'bush',dx:-.9,df:.7,yaw:4.0},{asset:'bush',dx:.4,df:-1,yaw:1.2},{asset:'bush',dx:-.6,df:-.8,yaw:5.3}]);
+ // The cover is tall grass (grass-tuft, already loaded on the plains, scaled
+ // up to wolf height): the placement runtime cannot load a new asset type here
+ // (its cache is full), so a 'bush' row was rejected (2026-11-19).
+ const AMBUSH_BUSHES=Object.freeze([{asset:'grass-tuft',dx:0,df:0,yaw:.4,scale:2.9},{asset:'grass-tuft',dx:1.1,df:.6,yaw:2.1,scale:2.5},{asset:'grass-tuft',dx:-1,df:.5,yaw:4.0,scale:2.6},{asset:'grass-tuft',dx:.5,df:-1,yaw:1.2,scale:2.4},{asset:'grass-tuft',dx:-.6,df:-.9,yaw:5.3,scale:2.7},{asset:'grass-tuft',dx:1.6,df:-.3,yaw:3.1,scale:2.2},{asset:'grass-tuft',dx:-1.7,df:-.2,yaw:.9,scale:2.3}]);
  let hideCache=null;
  function ambushHide(id){
   const prop=(content.PROPS??[]).find(row=>row.asset==='covered-wagon'&&row.map===id);if(!prop)return null;

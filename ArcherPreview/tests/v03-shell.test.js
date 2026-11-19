@@ -145,7 +145,7 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.ok(h.log.includes(`resetStage:${OPENING_STAGE.x},${OPENING_STAGE.z}`));assert.ok(h.log.includes(`summon:${AMBUSH.kind}:${AMBUSH.count}`));assert.ok(h.log.includes('suspend:false'));
  assert.deepEqual([h.camera.alpha,h.camera.beta,h.camera.radius],[1,.9,17],'title camera is restored before the stage reset');
  assert.equal(h.save.meta().used,true);assert.equal(h.save.meta().title,'늑대와 마차');assert.equal(h.document.querySelector('.v03-title').hidden,true);
- assert.ok(h.log.includes('props:v03-opening-wagon'),'story scenery is placed behind the prologue');assert.ok(h.log.some(x=>x.startsWith('props:v03-ambush-bush-0')),'then the wolf\'s bushes, in their own apply');
+ assert.ok(h.log.includes('props:v03-opening-wagon'),'story scenery is placed behind the prologue');assert.ok(h.log.some(x=>x.startsWith('props:v03-ambush-grass-0')),'then the wolf\'s bushes, in their own apply');
  h.battle.livingCount=0;for(let i=0;i<1000;i++)h.shell.update(.016);assert.ok(h.save.meta().playSeconds>=15);
  assert.equal(h.log.includes('startWorld'),false,'roaming monsters wait until the opening quest is done');
 });
