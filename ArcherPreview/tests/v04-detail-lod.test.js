@@ -24,11 +24,13 @@ test('small scenery gains two far levels chosen by screen coverage; the source m
  scene.dispose();engine.dispose();
 });
 
-test('0.3 tiers: trees and walls get their own coverage, mixed big/small kinds get none',async()=>{
- const {detailTiersFor,DETAIL_LOD_KIND_TIERS}=await import('../src/v04/detail-lod.js');
- assert.equal(detailTiersFor(['tree','tree']),DETAIL_LOD_KIND_TIERS.tree);
- assert.equal(detailTiersFor(['prop']),DETAIL_LOD_KIND_TIERS.wall);
- assert.equal(detailTiersFor(['shrub','rock']),DETAIL_LOD.tiers);
- assert.equal(detailTiersFor(['tree','shrub']),null);
- assert.ok(DETAIL_LOD_KIND_TIERS.tree[0].coverage>DETAIL_LOD_KIND_TIERS.tree[1].coverage);
+test('0.3 tiers: size classes by kind; mixed kinds take the largest; 0.4 keeps its own',async()=>{
+ const {detailTiersFor,DETAIL_LOD_KIND_TIERS:K}=await import('../src/v04/detail-lod.js');
+ assert.equal(detailTiersFor(['tree','tree'],{world:'0.3'}),K.tree);
+ assert.equal(detailTiersFor(['prop'],{world:'0.3'}),K.wall);
+ assert.equal(detailTiersFor(['shrub','rock'],{world:'0.3'}),K.shrub);
+ assert.equal(detailTiersFor(['tree','shrub'],{world:'0.3'}),K.tree);
+ assert.equal(detailTiersFor(['building'],{world:'0.3'}),null);
+ assert.equal(detailTiersFor(['shrub'],{world:'0.4'}),DETAIL_LOD.tiers);
+ assert.ok(K.tree[0].coverage>K.tree[1].coverage&&K.tree[0].coverage>K.shrub[0].coverage);
 });

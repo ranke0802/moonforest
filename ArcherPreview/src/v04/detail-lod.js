@@ -18,24 +18,25 @@ export const DETAIL_LOD=Object.freeze({
  ]),
 });
 export const DETAIL_LOD_KINDS=new Set(['ground-detail','rock','shrub','fence','garden','tree','wall','prop']);
-// Larger scenery reaches a given coverage much farther away, so its derived
-// levels start at higher coverage. 0.3 measurement (2026-11-19, village edge):
-// the packed "far" levels are nearly full detail (round oak 2,383 / 3,085,
-// bush 2,238 / 2,499), so 122 bushes and 83 trees up to 125 m away cost
-// ~520K triangles per frame.
-const WALL_TIERS=Object.freeze([
- Object.freeze({id:'mid',coverage:.006,share:.3,floor:120}),
- Object.freeze({id:'far',coverage:.0015,share:.1,floor:40}),
-]);
-export const DETAIL_LOD_KIND_TIERS=Object.freeze({
- tree:Object.freeze([
-  Object.freeze({id:'mid',coverage:.012,share:.35,floor:400}),
-  Object.freeze({id:'far',coverage:.004,share:.12,floor:150}),
- ]),
- wall:WALL_TIERS,prop:WALL_TIERS,
-});
-export const detailTiersFor=kinds=>{const set=new Set(kinds);if(set.size===1){const [kind]=set;if(DETAIL_LOD_KIND_TIERS[kind])return DETAIL_LOD_KIND_TIERS[kind];}
- for(const kind of set)if(DETAIL_LOD_KIND_TIERS[kind])return null;return DETAIL_LOD.tiers;};
+// 0.3 (phone budget): the packed "far" levels are nearly full detail (round
+// oak 2,383 / 3,085, bush 2,238 / 2,499), so at the village edge 122 bushes
+// and 83 trees up to 125 m away cost ~520K triangles (measured 2026-11-19).
+// Derived levels start by screen coverage per size class: a round oak reaches
+// `mid` at ~35 m and `far` at ~60 m, a bush at ~25 m / ~45 m.
+const tiers=(mid,far)=>Object.freeze([Object.freeze({id:'mid',...mid}),Object.freeze({id:'far',...far})]);
+const TREE_TIERS=tiers({coverage:.03,share:.35,floor:400},{coverage:.01,share:.12,floor:150});
+const WALL_TIERS=tiers({coverage:.008,share:.3,floor:120},{coverage:.0025,share:.1,floor:40});
+const SMALL_TIERS=tiers({coverage:.004,share:.2,floor:60},{coverage:.0012,share:.06,floor:24});
+export const DETAIL_LOD_KIND_TIERS=Object.freeze({tree:TREE_TIERS,wall:WALL_TIERS,prop:WALL_TIERS,fence:WALL_TIERS,garden:WALL_TIERS,shrub:SMALL_TIERS,rock:SMALL_TIERS,'ground-detail':SMALL_TIERS});
+const SIZE_CLASS=[TREE_TIERS,WALL_TIERS,SMALL_TIERS];
+// One asset can be placed as several kinds; it takes the largest class among
+// them (later = smaller), so nothing switches earlier than its biggest use.
+// The 0.4 world keeps its original (distance-preserving) tiers.
+export const detailTiersFor=(kinds,{world=globalThis.document?.documentElement?.dataset?.world}={})=>{
+ if(world==='0.4')return DETAIL_LOD.tiers;
+ let best=-1;for(const kind of new Set(kinds)){const at=SIZE_CLASS.indexOf(DETAIL_LOD_KIND_TIERS[kind]);if(at<0)return null;if(best<0||at<best)best=at;}
+ return best<0?null:SIZE_CLASS[best];
+};
 // 0.4 world, and 0.3 (any edition) unless ?detaillod=0.
 export const detailLodEnabled=()=>{const data=globalThis.document?.documentElement?.dataset;if(!data)return false;if(data.world==='0.4')return true;
  return !!data.edition&&new URLSearchParams(globalThis.location?.search??'').get('detaillod')!=='0';};
