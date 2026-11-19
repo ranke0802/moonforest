@@ -245,16 +245,16 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   markers?.update(guide.time);
  }
  let wagonHorse=null;
- function clearCast(){wagonHorse?.dispose();wagonHorse=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
+ function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   // The wolf's hiding place: a bush clump on open ground with a clear run to
   // the horse (2026-11-19: it used to start between trees and shake against them).
   const hide=ambushHide(id);
-  const cover=hide?AMBUSH_BUSHES.map((bush,i)=>({id:'v03-ambush-grass-'+i,asset:bush.asset,map:id,x:hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z:hide.z+bush.dx*hide.r.z+bush.df*hide.f.z,yaw:bush.yaw,scale:bush.scale,collision:'none'})):[];
-  // The wagon first, the wolf's cover after it: a rejected bush never costs the wagon.
-  if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error))
-   .then(()=>{if(!disposed&&cover.length)return api.placeProps?.(cover);}).catch(error=>console.warn('[MoonForest 0.3] ambush cover unavailable',error));
+  // The wagon first; then the wolf's cover: copies of the map's own bushes
+  // (the placement runtime cannot load a new asset type: its cache is full).
+  if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
+  if(hide)placeCover(hide);
   // The driver's wagon has its horse in the shafts.
   const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
   if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
@@ -326,20 +326,36 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
  // Searched once per map visit from the walkable map: ahead of the wagon on the
  // wolf's side, open around it, and a straight walkable line to the horse.
- // The cover is tall grass (grass-tuft, already loaded on the plains, scaled
- // up to wolf height): the placement runtime cannot load a new asset type here
- // (its cache is full), so a 'bush' row was rejected (2026-11-19).
- // Taller than the wolf (~1.5 m at 3.6x) and thick in front of it (measured on the deploy: 2.6x left its head out).
- const AMBUSH_BUSHES=Object.freeze([{asset:'grass-tuft',dx:0,df:.2,yaw:.4,scale:3.8},{asset:'grass-tuft',dx:1.1,df:.7,yaw:2.1,scale:3.5},{asset:'grass-tuft',dx:-1.1,df:.6,yaw:4.0,scale:3.6},{asset:'grass-tuft',dx:.5,df:-.9,yaw:1.2,scale:3.4},{asset:'grass-tuft',dx:-.6,df:-.8,yaw:5.3,scale:3.7},{asset:'grass-tuft',dx:1.7,df:-.2,yaw:3.1,scale:3.2},{asset:'grass-tuft',dx:-1.8,df:-.1,yaw:.9,scale:3.3},{asset:'grass-tuft',dx:.2,df:1.4,yaw:2.7,scale:3.0},{asset:'grass-tuft',dx:-.4,df:-1.6,yaw:4.6,scale:3.1},{asset:'grass-tuft',dx:2.2,df:.9,yaw:5.9,scale:2.8}]);
+ // Bigger than the map's own bushes (about 2 m), a thick clump the wolf waits in.
+ const AMBUSH_BUSHES=Object.freeze([{dx:0,df:.3,yaw:.4,scale:1.35},{dx:1.6,df:-.2,yaw:2.1,scale:1.2},{dx:-1.5,df:-.1,yaw:4.0,scale:1.25},{dx:.3,df:-1.5,yaw:1.2,scale:1.15}]);
+ let coverNodes=[];
+ function clearCover(){for(const node of coverNodes)try{node.dispose(false,false);}catch{}coverNodes=[];}
+ function placeCover(hide){
+  clearCover();
+  const bushes=(api.world?.villageRenderRecords??[]).filter(row=>row.placement?.asset==='bush'&&row.root&&!row.root.isDisposed?.());
+  const template=bushes.find(row=>row.root.isEnabled())??bushes[0];
+  if(!template?.root?.instantiateHierarchy)return;
+  for(const [i,bush] of AMBUSH_BUSHES.entries()){
+   try{
+    const copy=template.root.instantiateHierarchy(null,{doNotInstantiate:false},(source,clone)=>{clone.name='v03-ambush-bush-'+i+'-'+source.name;});
+    if(!copy)continue;
+    const x=hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z=hide.z+bush.dx*hide.r.z+bush.df*hide.f.z;
+    copy.position.set(x,heightAt(x,z),z);if(copy.rotationQuaternion)copy.rotationQuaternion=null;copy.rotation.y=bush.yaw;copy.scaling.scaleInPlace(bush.scale);
+    copy.setEnabled(true);for(const mesh of copy.getChildMeshes()){mesh.isPickable=false;mesh.setEnabled(true);}
+    copy.computeWorldMatrix(true);for(const node of copy.getDescendants()){node.computeWorldMatrix?.(true);node.freezeWorldMatrix?.();}copy.freezeWorldMatrix();
+    coverNodes.push(copy);
+   }catch(error){console.warn('[MoonForest 0.3] ambush cover',error);break;}
+  }
+ }
  let hideCache=null;
  function ambushHide(id){
   const prop=(content.PROPS??[]).find(row=>row.asset==='covered-wagon'&&row.map===id);if(!prop)return null;
   if(hideCache?.map===id)return hideCache.spot;
   const nav=api.world?.navigation,free=(x,z,radius)=>{try{return nav?.free?nav.free({x,z},radius):true;}catch{return true;}};
   const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
-  const H={x:prop.x+f.x*3.55,z:prop.z+f.z*3.55},charge={x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2};
+  const H={x:prop.x+f.x*3.55,z:prop.z+f.z*3.55},charge={x:H.x+r.x*WOLF_SIDE*4.2,z:H.z+r.z*WOLF_SIDE*4.2};
   let spot=null;
-  search:for(const ahead of [9,11,7,13,15])for(const side of [6,8,5,10,12]){
+  search:for(const ahead of [10,12,8,14])for(const side of [10,9,11,8,12,7]){
    const x=prop.x+f.x*ahead+r.x*WOLF_SIDE*side,z=prop.z+f.z*ahead+r.z*WOLF_SIDE*side;
    if(!free(x,z,1.6))continue;
    const dx=charge.x-x,dz=charge.z-z,length=Math.hypot(dx,dz);let clear=true;
@@ -387,7 +403,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // at the horse's flank.
   const hide=ambushHide(api.world?.mapId??mapId);
   const far=hide?{x:hide.x,z:hide.z}:freeNear({x:S.x+f.x*13+r.x*WOLF_SIDE*13,z:S.z+f.z*13+r.z*WOLF_SIDE*13});
-  const charge=hide?{x:hide.charge.x,z:hide.charge.z}:freeNear({x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2});
+  const charge=hide?{x:hide.charge.x,z:hide.charge.z}:freeNear({x:H.x+r.x*WOLF_SIDE*4.2,z:H.z+r.z*WOLF_SIDE*4.2});
   // The warrior ends between the wolf and the driver.
   const guard=freeNear({x:(D.x+charge.x)/2+r.x*.6,z:(D.z+charge.z)/2+r.z*.6});
   foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
@@ -550,7 +566,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // ----- slow motion -----
  // In the first fight, the start of every attack (the warrior's or the
  // wolf's) plays 0.3 s of real time at 30 % speed: the moment reads clearly.
- const SLOW_SCALE=.3,SLOW_SECONDS=.3,ATTACK_STATES=new Set(['attack','slash','judgment','moveAttack']);
+ const SLOW_SCALE=.18,SLOW_SECONDS=.45,ATTACK_STATES=new Set(['attack','slash','judgment','moveAttack']);
  const slow={left:0,player:null,foes:new WeakMap()};
  function updateSlow(dt){
   slow.left=Math.max(0,slow.left-dt);
@@ -565,7 +581,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // field of view narrows by up to 9 % and eases back, on real time so the slow
  // itself does not stretch the zoom. FOV only: the player's zoom distance,
  // pitch and the camera guard are untouched.
- const SLOW_ZOOM=.09,SLOW_ZOOM_IN=.12,SLOW_ZOOM_OUT=.35;
+ // Stronger since 2026-11-19 evening (user: hard to notice): 20 % push-in.
+ const SLOW_ZOOM=.2,SLOW_ZOOM_IN=.1,SLOW_ZOOM_OUT=.45;
  const zoom={weight:0,base:null,last:0,camera:null};
  function updateSlowZoom(){
   const camera=api.world?.camera;if(!camera||!Number.isFinite(camera.fov))return;
