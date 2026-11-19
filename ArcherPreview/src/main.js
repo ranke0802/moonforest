@@ -794,7 +794,7 @@ async function loadCharacter() {
     $('#run-button').hidden = isWarrior();
     $('.secondary-actions').hidden = isWarrior();
     $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
-    $('.keyboard-hint strong').textContent = isWarrior() ? '달리기 이동' : '이동';
+    $('.keyboard-hint strong').textContent = tr(isWarrior() ? '달리기 이동' : '이동');
     $('.keyboard-hint small').textContent = isV2() ? 'J 공격 · 길게 심판 · F 짧게 밀치기 / 길게 방어 · Space 짧게 회피 / 길게 질주' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
     $('#attack-hint').textContent = isV2() ? '짧게 일반 · 길게 심판 · J' : isWarrior() ? '길게 눌러 연속 검술 · J' : '길게 눌러 연사 · J';
@@ -807,7 +807,7 @@ async function loadCharacter() {
     $('#guard-button span').textContent = '방패 밀치기';
     $('#guard-button').title='짧게 누르고 떼면 방패 밀치기 · 0.2초 이상 누르는 동안 방어 · 스태미나 초당 5 · F';
     $('#guard-button').setAttribute('aria-label','방패 밀치기, 길게 누르면 방어 태세');
-    canvas.setAttribute('aria-label', isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.');
+    canvas.setAttribute('aria-label', tr(isWarrior() ? '전사 3D 화면. WASD 달리기 이동. 좌클릭 또는 J: 짧게 일반 공격, 길게 강공격. 우클릭 드래그 회전, 휠 확대 축소.' : '궁수 3D 검수 화면. WASD 이동, J 공격, H 피격, K 쓰러짐, R 부활.'));
     if(isVillage()&&arrival){boss.combat.hp=arrival.hp;boss.potions.remaining=arrival.potions;}
     resetCamera();
     // First entry faces the warrior; an explicit portal arrival or saved

@@ -1,4 +1,5 @@
 import {arrangeTopActions} from './hud-top-actions.js';
+import {tr} from './v03/i18n.js';
 const controllers=new WeakMap();
 
 export const COMMERCIAL_UI_ART=Object.freeze({
@@ -29,8 +30,8 @@ export function setupCommercialUi({root,onDiagnostics=()=>root.querySelector('#d
     if(disposed)return;
     for(const [kind,selector,label]of topSelectors){
       const node=root.querySelector('.top-actions')?.querySelector(selector);if(!node)continue;
-      node.classList.add('commercial-top','commercial-top-'+kind);node.dataset.commercialLabel=label;decorated.add(node);
-      if(!node.title){node.title=node.getAttribute('aria-label')||label;addedTitles.set(node,node.title);}
+      node.classList.add('commercial-top','commercial-top-'+kind);node.dataset.commercialLabel=tr(label);decorated.add(node);
+      if(!node.title){node.title=tr(node.getAttribute('aria-label')||label);addedTitles.set(node,node.title);}
     }
     for(const [id,kind]of [['attack-button','sword'],['guard-button','shield'],['dodge-button','boot'],['potion-button','potion']]){
       const node=root.querySelector('#'+id);if(!node||node.querySelector('.commercial-action-art'))continue;

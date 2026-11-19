@@ -1,5 +1,6 @@
 import { Matrix, Vector3 } from '@babylonjs/core';
 import {primaryHealthBoss,encounterInCombat} from './combat-readability.js';
+import {tr} from './v03/i18n.js';
 
 // CSS coordinates, independent of render resolution / device pixel ratio.
 export function projectBossHealth(scene,position,width,height){
@@ -41,16 +42,16 @@ export class BossHealthBars {
         element.style.left='0';element.style.top='0';
         element.dataset.bossId = String(boss.id);
         element.dataset.kind = boss.regularWolfId?'monster':boss.kind;
-        element.setAttribute('aria-label', `${boss.displayName??(boss.kind==='goblin'?'고블린':'곰 보스')} ${boss.number??boss.id} 체력`);
+        element.setAttribute('aria-label', `${tr(boss.displayName??(boss.kind==='goblin'?'고블린':'곰 보스'))} ${boss.number??boss.id} ${tr('체력')}`);
         item = { element, progress: element.querySelector('progress'), state: element.querySelector('.sr-only'), text: element.querySelector('span:last-child') };
-        item.progress.setAttribute('aria-label', boss.regularWolfId?'일반 몬스터 체력':boss.kind === 'goblin' ? '고블린 체력' : '보스 체력');
+        item.progress.setAttribute('aria-label', tr(boss.regularWolfId?'일반 몬스터 체력':boss.kind === 'goblin' ? '고블린 체력' : '보스 체력'));
         this.items.set(boss.id, item);
       }
       const snapshot = `${boss.brain.hp}:${boss.brain.maxHp}:${boss.brain.label}:${boss.brain.mode}:${boss.brain.stagger > 0}:${encounters.length}`;
       if (item.snapshot !== snapshot) {
         item.snapshot = snapshot;
         item.progress.max = boss.brain.maxHp; item.progress.value = boss.brain.hp;
-        item.text.textContent = `${boss.displayName?boss.displayName+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp<=0?(boss.kind==='elena'&&boss.phase===1?'광폭화 · ':'격파 · '):''}${this.showNumbers?`${boss.brain.hp} / ${boss.brain.maxHp}`:''}`.replace(/ · $/,'');
+        item.text.textContent = `${boss.displayName?tr(boss.displayName)+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `${tr('곰')} ${boss.number??boss.id} · ` : ''}${boss.brain.hp<=0?tr(boss.kind==='elena'&&boss.phase===1?'광폭화':'격파')+' · ':''}${this.showNumbers?`${boss.brain.hp} / ${boss.brain.maxHp}`:''}`.replace(/ · $/,'');
         item.state.textContent = boss.brain.label;
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }

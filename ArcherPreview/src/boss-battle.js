@@ -5,6 +5,7 @@ import {WolfEncounter} from './wolf-encounter.js';
 import {WolfV02Encounter} from './wolf-v02-encounter.js';
 import {WOLF_BALANCE} from './wolf-spec.js';
 import { Vector3 } from '@babylonjs/core';
+import {tr} from './v03/i18n.js';
 import { BossEncounter } from './boss-encounter.js';
 import { BossModelLibrary } from './boss-models.js';
 import { PlayerCombat } from './player-combat.js';
@@ -215,7 +216,7 @@ export class BossBattle {
   bossChanged(boss) {
     if (boss.lastHit && boss.lastHit !== boss.lastReportedHit) {
       boss.lastReportedHit = boss.lastHit;
-      this.lastHit = this.encounters.length > 1 ? `${boss.displayName??(boss.kind==='goblin'?'고블린':'곰')} ${boss.number??boss.id} · ${boss.lastHit}` : boss.lastHit;
+      this.lastHit = this.encounters.length > 1 ? `${tr(boss.displayName??(boss.kind==='goblin'?'고블린':'곰'))} ${boss.number??boss.id} · ${boss.lastHit}` : boss.lastHit;
     }
     if (!this.updating && !this.loading) this.onChange(this);
   }

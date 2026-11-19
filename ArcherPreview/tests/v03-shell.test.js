@@ -43,7 +43,12 @@ test('attract pilot converts world steering to the camera frame used by the game
 test('attract pilot attacks in range, defends against an attack and escapes a grab',()=>{
  const calls=[],actions={attack:()=>calls.push('attack'),dodge:()=>calls.push('dodge'),guard:()=>calls.push('guard'),move:()=>calls.push('move')};
  let roll=.2;const pilot=createAttractPilot({random:()=>roll});
- const near={player:{x:0,z:0},target:{x:0,z:3},targetRadius:1,cameraAlpha:0,actions};
+ // Two metres from the edge it never swings at air: it steps in instead.
+ const ring={player:{x:0,z:0},target:{x:0,z:3},targetRadius:1,cameraAlpha:0,actions};
+ for(let i=0;i<80;i++)pilot.update(.016,ring);
+ assert.equal(calls.includes('attack'),false,'no swing out of reach');assert.ok(pilot.movement.y!==0||pilot.movement.x!==0,'closing in');
+ calls.length=0;pilot.reset();
+ const near={player:{x:0,z:0},target:{x:0,z:2},targetRadius:1,cameraAlpha:0,actions};
  for(let i=0;i<80;i++)pilot.update(.016,near);
  assert.ok(calls.includes('attack'));
  // The swing commits: no movement while the blade is out.
@@ -200,12 +205,12 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  const store=memory(),log=createQuestLog({quests:QUESTS,storage:store});log.reset();
  assert.equal(log.objective(),'늑대를 물리치기 (0/1)');
  assert.equal(log.notify({type:'talk',npc:'driver'}).changed,false);
- assert.equal(log.notify({type:'defeat',kind:'gray-wolf'}).stepDone,true,'the first fight counts whatever was defeated');assert.equal(log.step().id,'driver');
+ assert.equal(log.notify({type:'defeat',kind:'gray-wolf'}).stepDone,true,'the first fight counts whatever was defeated');assert.equal(log.step().id,'wagon');
  const counted=createQuestLog({quests:[{id:'T',title:'t',steps:[{id:'a',text:'잡기',type:'defeat',kind:'wolf',count:3}]}],storage:memory()});counted.reset();
  assert.equal(counted.notify({type:'defeat',kind:'bear'}).changed,false);counted.notify({type:'defeat',kind:'wolf'});assert.equal(counted.objective(),'잡기 (1/3)');counted.notify({type:'defeat',kind:'wolf'});assert.equal(counted.notify({type:'defeat',kind:'wolf'}).questDone,'T');
- assert.equal(log.dialogueFor('driver'),'driver-thanks');assert.equal(log.dialogueFor('elder'),null);
- const again=createQuestLog({quests:QUESTS,storage:store});assert.equal(again.load(),true);assert.equal(again.step().id,'driver');
- log.notify({type:'talk',npc:'driver'});assert.equal(log.notify({type:'reach',map:'great-plains'}).changed,false);
+ assert.equal(log.dialogueFor('driver'),'driver-wagon');assert.equal(log.dialogueFor('elder'),null);
+ const again=createQuestLog({quests:QUESTS,storage:store});assert.equal(again.load(),true);assert.equal(again.step().id,'wagon');
+ log.notify({type:'talk',npc:'driver'});assert.equal(log.dialogueFor('driver'),'driver-thanks');log.notify({type:'talk',npc:'driver'});assert.equal(log.notify({type:'reach',map:'great-plains'}).changed,false);
  assert.equal(log.notify({type:'reach',map:'village'}).questDone,'M00');assert.equal(log.quest().id,'M01');
  assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M01');
  for(const npc of ['youth','elder'])assert.equal(log.notify({type:'talk',npc}).stepDone,false);
@@ -235,13 +240,13 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  const hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
  h.shell.update(.016);
  assert.equal(hud('.v03-quest-title').textContent,'늑대와 마차');assert.equal(hud('.v03-quest-objective').textContent,'늑대를 물리치기 (0/1)');
- assert.deepEqual(h.made.map(v=>v.id),['driver']);assert.equal(h.made[0].placed.y,1.5);
+ assert.deepEqual(h.made.map(v=>v.id),['driver']);assert.equal(h.made[0].placed.y,2.55,'the driver rides on the wagon bench');
  // The ambush scene plays first: no control, the wolf is held, captions run.
  assert.equal(h.shell.story.sceneActive,true);assert.equal(h.shell.allows('move'),false);assert.equal(h.shell.allows('attack'),false);
  assert.equal(h.document.documentElement.dataset.v03Lock,'move camera attack dodge guard potion');
  h.shell.update(.016);assert.ok(h.shell.story.cameraFocus,'the first shot frames the wolf, not the player');
- for(let i=0;i<160;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/일어나쇼/);
- for(let i=0;i<400;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
+ for(let i=0;i<160;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/깨셨수/);
+ for(let i=0;i<700;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
  // Coaching runs in order: move → camera → attack → dodge → shield, each
  // allowing only its own action.
  assert.equal(h.shell.allows('move'),true);assert.equal(h.shell.allows('attack'),false);assert.equal(h.shell.allows('camera'),false);
@@ -271,12 +276,18 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.guide.shown,null,'the guide light stays hidden during the opening fight');
  {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
- assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'!','the driver is a report: !');
+ assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'?','helping with the wagon is a new request: ?');
  assert.ok(h.shell.inspect().story.tips.includes('guide'),'the guide light appears after the fight, and its card with it');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
  key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);
  const portrait=hud('.v03-dialogue-portrait');assert.equal(portrait.hidden,false);assert.match(portrait.src,/portraits\/driver\.webp$/);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);
  // E advances every line and closes the last one without reopening the talk.
+ // Three lines, then the wagon is set upright (1.8 s, no control) and the
+ // driver's thanks follow on their own: four more lines.
+ for(let i=0;i<3;i++){key('KeyE');await settle(2);}await settle();
+ assert.equal(hud('.v03-dialogue').hidden,true);assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');
+ for(let i=0;i<130;i++)h.shell.update(.016);await settle();
+ assert.equal(hud('.v03-dialogue').hidden,false,'the thanks start by themselves after the lift');
  for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();
  assert.equal(hud('.v03-dialogue').hidden,true,'E closes the conversation');
  assert.equal(h.shell.blocksGame,false);assert.equal(hud('.v03-quest-objective').textContent,'길을 따라 마을로 가기');assert.equal(h.log.at(-1),'suspend:false');

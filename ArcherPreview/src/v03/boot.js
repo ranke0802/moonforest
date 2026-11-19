@@ -16,6 +16,7 @@ import {setupGameSelection} from '../game-selection.js';
 import {createGuideWisp} from './guide-wisp.js';
 import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
+import {watchTranslations,translateLabels} from './live-translate.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
@@ -74,8 +75,9 @@ export function setupV03(api){
  };
  const title=createTitleScreen({doc,wait,describe,version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
+ let liveText=null;
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
-  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));mountControlsGuide();state.langReady=true;
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));translateLabels(doc.getElementById('app'));liveText=watchTranslations(doc);mountControlsGuide();state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
  function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
@@ -298,8 +300,20 @@ export function setupV03(api){
  // the card would have closed. Downloads stay in the resource cache as before.
  let earlyLine=null,earlyWatch=null;
  function endEarlyLine(){earlyWatch?.disconnect();earlyWatch=null;earlyLine?.remove();earlyLine=null;delete html.dataset.v03EarlyDream;}
+ function audioAllowed(){
+  try{const policy=view?.navigator?.getAutoplayPolicy?.('audiocontext');if(policy)return policy==='allowed';}catch{}
+  try{const Ctor=view?.AudioContext??view?.webkitAudioContext;if(!Ctor)return true;const probe=new Ctor();const running=probe.state==='running';probe.close?.().catch?.(()=>{});return running;}catch{return false;}
+ }
+ function tapToBegin(){
+  return new Promise(resolve=>{
+   const hint=doc.createElement('button');hint.type='button';hint.className='v03-tap-begin';hint.textContent=t('opening.tapToBegin');(doc.body??doc.documentElement).append(hint);
+   const kinds=['pointerdown','keydown','touchend'];
+   const go=event=>{if(event.type==='keydown'&&event.repeat)return;for(const kind of kinds)view.removeEventListener(kind,go,true);hint.classList.add('is-gone');setTimeout(()=>hint.remove(),400);resolve();};
+   for(const kind of kinds)view.addEventListener(kind,go,{capture:true});
+  });
+ }
  function startEarlyDream(){
-  opening.cover();
+  opening.cover({art:true});
   html.dataset.v03EarlyDream='1';
   const source=doc.getElementById('loading-progress'),Watch=view?.MutationObserver;
   earlyLine=doc.createElement('div');earlyLine.className='v03-download-line';earlyLine.setAttribute('aria-hidden','true');
@@ -312,7 +326,15 @@ export function setupV03(api){
   };
   if(Watch){earlyWatch=new Watch(sync);if(source)earlyWatch.observe(source,{attributes:true,attributeFilter:['style']});earlyWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
   sync();
-  void langReady.then(()=>{if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;state.dream=opening.play();});
+  // A reloaded page has had no tap yet: browsers keep its sound off (no music,
+  // no typing blips) until one. Unless the browser already allows audio, the
+  // dream waits on its cover for one tap (2026-11-19, user: prologue silent).
+  void langReady.then(async()=>{
+   if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;
+   if(!audioAllowed())await tapToBegin();
+   if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;
+   state.dream=opening.play();
+  });
  }
  if(save.intent){
   // A slot was chosen on a previous document: skip logo and title.
@@ -402,6 +424,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

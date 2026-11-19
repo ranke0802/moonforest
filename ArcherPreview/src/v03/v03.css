@@ -412,3 +412,7 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
 .v03-download-line{position:fixed;left:0;right:0;bottom:0;height:2px;z-index:20020;pointer-events:none;background:#ffffff14}
 .v03-download-line i{position:absolute;inset:0;background:linear-gradient(90deg,#ae9259,#ece0bc);transform:scaleX(0);transform-origin:left center;transition:transform .4s ease-out}
+/* One tap before the dream on a reloaded page (sound needs a gesture). */
+.v03-tap-begin{position:fixed;left:50%;bottom:16vh;z-index:20030;transform:translateX(-50%);padding:10px 22px;font:500 clamp(15px,2.4vmin,20px)/1.2 var(--v03-font);letter-spacing:.14em;color:#ece0bc;background:#0006;border:1px solid #ae925966;border-radius:3px;cursor:pointer;animation:v03-tap-pulse 2.4s ease-in-out infinite;transition:opacity .35s ease}
+.v03-tap-begin.is-gone{opacity:0;pointer-events:none;animation:none}
+@keyframes v03-tap-pulse{0%,100%{opacity:.55}50%{opacity:1}}

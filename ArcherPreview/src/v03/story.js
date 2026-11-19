@@ -10,6 +10,7 @@ import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
 import {clearAlpha} from './title-camera.js';
 import {createWagonHorse} from './wagon-horse.js';
+import {createWagonRig} from './wagon-rig.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -247,7 +248,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function clearCast(){wagonHorse?.dispose();wagonHorse=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
-  if(props.length)void Promise.resolve(api.placeProps?.(props)).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
+  if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
   // The driver's wagon has its horse in the shafts.
   const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
   if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
@@ -260,12 +261,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    try{
     const visual=createVisual(scene,npc.visual,{id:npc.id}),spot=findFreeSpot(world.navigation,npc);
     visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);
+    // Village folk stroll a little around their spot; the driver stays by his wagon.
+    if(npc.roam!==false&&npc.id!=='driver')visual.roam?.({radius:npc.roam??2.2,free:(x,z)=>{try{return world.navigation?.free?.({x,z},.4)??true;}catch{return true;}},heightAt:(x,z)=>world.terrain?.heightAt?.(x,z)??0,player:()=>api.getPlayer?.()?.position??null});
     cast.push({npc,visual,x:spot.x,z:spot.z});
    }catch(error){console.warn('[MoonForest 0.3] cast member unavailable',npc.id,error);}
   }
  }
  function runEffects(lines){
   for(const line of lines)for(const effect of line.effects??[]){
+   if(effect==='right-wagon'){startLift(()=>{if(!disposed)void interact();});continue;}
    if(effect==='rest'){api.rest?.();save.touch({});hud.flash(t('hud.rested'));trigger('effect:rest');}
   }
  }
@@ -278,24 +282,36 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   try{
    const played=await dialogue.play(lines);
    if(played&&!disposed){runEffects(played);if(questLine)emit({type:'talk',npc:member.npc.id});}
-  }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
+  }finally{talking=false;member.visual.talk?.(false);if(!disposed&&!lift.active)api.input.setSuspended(false);}
   return true;
  }
- // ----- ambush scene -----
- // Played once as the prologue fades out, as a few shots on the live scene
- // (no extra loop; input suspended, the wolf held by the tutorial):
- //  1. far off, the wolf snarls (close on the wolf)
- //  2. the driver panics (close on the driver, he stumbles back)
- //  3. the wolf charges the driver (wide)
- //  4. the warrior rolls in between and stands guard (camera swings behind)
- const SCENE=Object.freeze({wolfShot:0,driverShot:2.3,chargeShot:4.3,rollAt:4.75,heroShot:5.9,end:7.6});
- const SCENE_LINES=Object.freeze([{at:.35,line:3},{at:2.4,line:0},{at:4.35,line:1},{at:6.0,line:2}]);
- const scene={active:false,pending:false,time:0,beat:0,shot:-1,driver:null,wolf:null,points:null,rolled:false,rollWindow:false,radius:0,beta:0,focus:{x:0,y:0,z:0},cameraFocus:null};
+ // ----- ambush scene (2026-11-19 rework: the wagon ride) -----
+ // Played once as the prologue fades out, as shots on the live scene (no
+ // extra loop; input suspended, the wolf held by the tutorial):
+ //  1. ride: from the driver's bench, the wagon rolls toward the village
+ //  2. far off in the grass, a wolf watches the road (close on the wolf)
+ //  3. ride again: the wolf breaks cover and runs at the horse
+ //  4. the horse rears, the wagon tips onto its side (wide)
+ //  5. the warrior gets up and rolls in between; the camera swings behind
+ // The wagon and horse are the map's own (wagon-rig.js, wagon-horse.js);
+ // without them (tests, a failed load) the shots still run.
+ const SCENE=Object.freeze({wolfShot:4.0,chargeShot:5.9,crash:7.4,tipStart:7.55,tipSeconds:.6,aftermath:8.5,rollAt:9.15,heroShot:10.2,end:12.0,ride:24});
+ const SCENE_LINES=Object.freeze([{at:.3,line:0},{at:2.3,line:1},{at:4.2,line:2},{at:6.1,line:3},{at:8.6,line:4},{at:10.3,line:5}]);
+ // The wagon falls to its left, away from the road side where the driver and
+ // the warrior end up; the wolf comes from the right.
+ const WAGON_FALL=-1,WOLF_SIDE=1;
+ const scene={active:false,pending:false,time:0,beat:0,shot:-1,driver:null,wolf:null,points:null,rolled:false,rollWindow:false,radius:0,beta:0,focus:{x:0,y:0,z:0},cameraFocus:null,hidden:null,shake:0};
  const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
  const heightAt=(x,z)=>api.world.terrain?.heightAt?.(x,z)??0;
  const alphaFrom=(from,to)=>Math.atan2(from.z-to.z,from.x-to.x);// camera on `from`'s side looking at `to`
  function freeNear(point){const nav=api.world.navigation;try{return nav?.free?.(point,.6)?point:nav?.findFree?.(point,.6)??point;}catch{return point;}}
-// One clip per shot, on the scene's own clock: the snarl and watch, the charge
+ const openingWagon=()=>(content.PROPS??[]).find(prop=>prop.asset==='covered-wagon'&&prop.map===(api.world?.mapId??mapId))??null;
+ const wagonRig=createWagonRig({runtime:()=>api.world?.authoredPlacements,id:(content.PROPS??[]).find(prop=>prop.asset==='covered-wagon')?.id??'',heightAt:(x,z)=>heightAt(x,z)});
+ // The wagon lies on its side from the ambush until the driver and the
+ // warrior set it back up (M00 fight / wagon steps), also after a reload.
+ const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
+ function poseWagonForStory(){if(!scene.active&&!scene.pending&&!lift.active&&wagonDown())wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});}
+ // One clip per shot, on the scene's own clock: the snarl and watch, the charge
  // run, then watching the warrior who now stands between them.
  function holdWolf(foe){
   const animator=foe.animator,clips=foe.config?.animations??{};if(!animator)return;
@@ -317,22 +333,32 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(brain&&/_Lie_|Rise_From_Lie/.test(brain.state??'')&&typeof brain.start==='function'){brain.start('Circle_Watch_R5','idle');brain.behavior='observe';brain.observation=Math.max(brain.observation??0,.6);}
   if(brain&&foe.animator)foe.animator.transition(brain.state,{clipTime:brain.time??0,actionId:brain.serial,blendDuration:.25});
  }
+ function showPlayer(on){
+  const root=api.getPlayer?.();if(!root?.setEnabled)return;
+  if(!on){if(scene.hidden===null){scene.hidden=root.isEnabled?.()!==false;root.setEnabled(false);}return;}
+  if(scene.hidden!==null){root.setEnabled(scene.hidden);scene.hidden=null;}
+ }
  function beginAmbushScene(){
   const player=api.getPlayer()?.position,camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'];
   const foe=(api.battle.encounters??[]).find(row=>row.active&&row.brain?.hp>0),member=cast.find(row=>row.npc.id==='driver');
   if(!player||!camera||!foe||!lines||!member)return false;
-  const D={x:member.x,z:member.z},ux=player.x-D.x,uz=player.z-D.z,len=Math.hypot(ux,uz)||1,c=Math.cos(.7),s=Math.sin(.7);
-  // The wolf appears far off the road, 14 m from the driver, a little to the
-  // side of the warrior, and walks in (then runs) on its own feet.
-  const dir={x:(ux*c-uz*s)/len,z:(ux*s+uz*c)/len};
-  const far=freeNear({x:D.x+dir.x*14,z:D.z+dir.z*14}),charge=freeNear({x:D.x+dir.x*5.2,z:D.z+dir.z*5.2}),guard=freeNear({x:D.x+dir.x*2.4,z:D.z+dir.z*2.4});
+  const prop=openingWagon(),S=prop?{x:prop.x,z:prop.z}:{x:member.x,z:member.z},yaw=prop?.yaw??(member.npc.yaw??0);
+  const f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
+  const H={x:S.x+f.x*3.55,z:S.z+f.z*3.55},D={x:member.x,z:member.z};
+  // The wolf waits in the grass ahead and to the right of the road, then runs
+  // at the horse's flank.
+  const far=freeNear({x:S.x+f.x*13+r.x*WOLF_SIDE*13,z:S.z+f.z*13+r.z*WOLF_SIDE*13});
+  const charge=freeNear({x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2});
+  // The warrior ends between the wolf and the driver.
+  const guard=freeNear({x:(D.x+charge.x)/2+r.x*.6,z:(D.z+charge.z)/2+r.z*.6});
   foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
-  if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(D.x-far.x,D.z-far.z);
-  scene.driver=member;scene.wolf=foe;scene.points={D,far,charge,guard,start:{x:player.x,z:player.z}};
+  if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(S.x-far.x,S.z-far.z);
+  scene.driver=member;scene.wolf=foe;scene.points={S,H,D,far,charge,guard,f,r,yaw,start:{x:player.x,z:player.z}};
   scene.wolfAt={x:far.x,z:far.z};scene.wolfSpeed=0;scene.wolfGait='watch';scene.wolfRate=1;
-  // The shots pose the wolf; its own AI sits out until the scene ends.
   holdWolf(foe);
-  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta});
+  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false});
+  // The warrior rides on the bench (the shot is from there): not drawn yet.
+  showPlayer(false);
   api.input.setSuspended(true);
   return true;
  }
@@ -341,57 +367,108 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   scene.focus.x=target.x;scene.focus.z=target.z;scene.focus.y=heightAt(target.x,target.z)+height;scene.cameraFocus=scene.focus;
   camera.alpha=alpha;camera.beta=beta;camera.radius=Math.max(camera.lowerRadiusLimit??1,radius);
  }
+ // Metres the wagon still has to roll before the crash spot (eases to a stop
+ // as the horse rears).
+ function rideAlong(now){const k=Math.min(1,now/SCENE.crash);return SCENE.ride*(1-k)*(1-k*.35);}
  function updateScene(dt){
   const camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'],P=scene.points,wolf=scene.wolf,player=api.getPlayer();scene.time+=dt;const now=scene.time;
-  while(scene.beat<SCENE_LINES.length&&now>=SCENE_LINES[scene.beat].at){const line=lines[SCENE_LINES[scene.beat++].line];hud.setCaption({who:speaker(line.who),text:line.text});}
-  const shot=now<SCENE.driverShot?0:now<SCENE.chargeShot?1:now<SCENE.heroShot?2:3;
+  while(scene.beat<SCENE_LINES.length&&now>=SCENE_LINES[scene.beat].at){const line=lines[SCENE_LINES[scene.beat++].line];if(line)hud.setCaption({who:speaker(line.who),text:line.text});}
+  const shot=now<SCENE.wolfShot?0:now<SCENE.chargeShot?1:now<SCENE.crash?2:now<SCENE.aftermath?3:now<SCENE.heroShot?4:5;
   if(shot!==scene.shot){
    scene.shot=shot;
-   if(shot===0||shot===2)api.playSound?.('wolf_alert',{position:wolf.actor.position});
+   if(shot===1)api.playSound?.('wolf_alert',{position:wolf.actor.position});
+   if(shot===3){scene.shake=.45;api.playSound?.('wolf_alert',{position:wolf.actor.position,rate:1.2});}
   }
-  // The wolf walks in during the first two shots and runs at the third,
-  // easing to a stop at the charge point; the gait follows the real speed.
-  {const W=scene.wolfAt,bal=wolf.brain?.balance??{},walk=bal.walkSpeed??1.2,run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
-   const dx=P.charge.x-W.x,dz=P.charge.z-W.z,dist=Math.hypot(dx,dz);
-   const want=dist<.03?0:Math.min(shot<2?walk:run,dist*2.2);
-   scene.wolfSpeed+=Math.max(-9*dt,Math.min(7*dt,want-scene.wolfSpeed));
-   const step=Math.min(dist,scene.wolfSpeed*dt);if(dist>1e-6){W.x+=dx/dist*step;W.z+=dz/dist*step;}
+  // Wagon and horse: rolling, then the rear and the fall.
+  const along=rideAlong(now),fx=P.f.x,fz=P.f.z;
+  const W0={x:P.S.x-fx*along,z:P.S.z-fz*along};
+  const tip=ease((now-SCENE.tipStart)/SCENE.tipSeconds);
+  // Moves until it lands, then rests frozen (one settle, not one per frame).
+  if(!scene.landed){const landed=now>=SCENE.tipStart+SCENE.tipSeconds;wagonRig.pose({along,tip:landed?1:tip*tip,side:WAGON_FALL},{rest:landed});if(landed){scene.landed=true;scene.shake=Math.max(scene.shake,.3);api.playSound?.('land',{volume:.9,rate:.7});}}
+  if(wagonHorse){
+   wagonHorse.place(W0.x+fx*3.55,W0.z+fz*3.55,P.yaw);
+   wagonHorse.pose.gallop=now<SCENE.crash?Math.min(1,now/.6):0;
+   const rear=now<SCENE.crash?0:now<SCENE.crash+.35?ease((now-SCENE.crash)/.35):now<SCENE.crash+1.5?1:Math.max(0,1-(now-SCENE.crash-1.5)/.6);
+   wagonHorse.pose.rear=rear;
+  }
+  // The driver rides on the bench, then is thrown clear by the fall.
+  if(now<SCENE.crash){const x=W0.x+fx*1.25,z=W0.z+fz*1.25;scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,heightAt(x,z)+1.05,z,P.yaw);}
+  else if(!scene.thrown){scene.thrown=true;scene.driver.x=P.D.x;scene.driver.z=P.D.z;scene.driver.visual.place(P.D.x,heightAt(P.D.x,P.D.z),P.D.z,Math.atan2(P.charge.x-P.D.x,P.charge.z-P.D.z));}
+  // The wolf: watches, then runs at the horse; after the crash it faces the warrior.
+  {const Wf=scene.wolfAt,bal=wolf.brain?.balance??{},walk=bal.walkSpeed??1.2,run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
+   const target=now<SCENE.chargeShot?P.far:P.charge;
+   const dx=target.x-Wf.x,dz=target.z-Wf.z,dist=Math.hypot(dx,dz);
+   const want=dist<.03?0:Math.min(now<SCENE.chargeShot?walk:run*1.15,dist*2.2);
+   scene.wolfSpeed+=Math.max(-9*dt,Math.min(9*dt,want-scene.wolfSpeed));
+   const step=Math.min(dist,scene.wolfSpeed*dt);if(dist>1e-6){Wf.x+=dx/dist*step;Wf.z+=dz/dist*step;}
    const v=scene.wolfSpeed;scene.wolfGait=v>2.4?'run':v>.12?'walk':'watch';
    scene.wolfRate=scene.wolfGait==='run'?rate*Math.max(.6,Math.min(1.3,v/run)):scene.wolfGait==='walk'?rate*Math.max(.45,Math.min(1.4,v/walk)):1;
-   wolf.actor.position.x=W.x;wolf.actor.position.z=W.z;wolf.actor.position.y=heightAt(W.x,W.z);
-   if(wolf.actor.rotation)wolf.actor.rotation.y=Math.atan2(P.D.x-W.x,P.D.z-W.z);}
-  const W=scene.wolfAt;
-  // Shots. Close shots look across the subject from the other party's side;
-  // the wolf shots track the walking/running wolf.
-  if(shot===0)frame(W,.7,alphaFrom(P.D,W)+.35,4.6,1.32);
-  else if(shot===1){
-   frame(P.D,1.45,alphaFrom(P.far,P.D)-.25,3.6,1.3);
-   // The driver stumbles back, shaking.
-   const k=ease((now-SCENE.driverShot)/1.4),shake=Math.sin(now*38)*.035,x=P.D.x-(P.far.x-P.D.x)/12*.9*k+shake,z=P.D.z-(P.far.z-P.D.z)/12*.9*k;
-   scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,heightAt(x,z),z,Math.atan2(P.far.x-x,P.far.z-z));
-  }else if(shot===2){
-   // Wide on the charge, the frame riding between the running wolf and the driver.
-   const mid={x:(P.D.x+W.x)/2,z:(P.D.z+W.z)/2};
-   frame(mid,1,alphaFrom(P.start,mid)+.6,8.5,1.18);
-   // The warrior rolls in between: face the guard spot and dodge for real.
+   wolf.actor.position.x=Wf.x;wolf.actor.position.z=Wf.z;wolf.actor.position.y=heightAt(Wf.x,Wf.z);
+   const look=now<SCENE.aftermath?(now<SCENE.chargeShot?W0:P.H):P.guard;
+   if(wolf.actor.rotation)wolf.actor.rotation.y=Math.atan2(look.x-Wf.x,look.z-Wf.z);}
+  const Wf=scene.wolfAt;
+  scene.shake=Math.max(0,scene.shake-dt);const jolt=scene.shake>0?Math.sin(now*61)*.05*scene.shake/.45:0;
+  if(shot===0||shot===2){
+   // From the bench: over the horse, down the road (the wolf crosses in from the right on 2).
+   const bench={x:W0.x+fx*.4,z:W0.z+fz*.4},ahead={x:W0.x+fx*7,z:W0.z+fz*7};
+   const look=shot===2?{x:ahead.x*.6+Wf.x*.4,z:ahead.z*.6+Wf.z*.4}:ahead;
+   frame(look,1.2,alphaFrom(bench,look),Math.hypot(look.x-bench.x,look.z-bench.z),1.43+Math.sin(now*13)*.006);
+  }else if(shot===1){
+   // Close on the wolf in the grass.
+   frame(Wf,.7,alphaFrom(W0,Wf)+.45,4.4,1.34);
+  }else if(shot===3){
+   // Wide, from the road side: the horse rears and the wagon goes over.
+   const side={x:P.S.x+P.r.x*9+fx*2,z:P.S.z+P.r.z*9+fz*2},mid={x:(P.S.x+P.H.x)/2,z:(P.S.z+P.H.z)/2};
+   frame(mid,1.1+jolt,alphaFrom(side,mid)+jolt,10,1.2);
+  }else if(shot===4){
+   // The warrior is on his feet by the wreck; he rolls in between.
+   showPlayer(true);
+   if(player&&!scene.placed){scene.placed=true;const p=player.position,spot=freeNear({x:P.S.x+P.r.x*2.2,z:P.S.z+P.r.z*2.2});p.x=spot.x;p.z=spot.z;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(P.guard.x-p.x,P.guard.z-p.z);}
+   const mid={x:(P.D.x+Wf.x)/2,z:(P.D.z+Wf.z)/2};
+   frame(mid,1,alphaFrom(P.S,mid)+.9,8.5,1.2);
    if(!scene.rolled&&now>=SCENE.rollAt&&player){
     scene.rolled=true;const p=player.position;if(player.rotation)player.rotation.y=Math.atan2(P.guard.x-p.x,P.guard.z-p.z);
     scene.rollWindow=true;try{api.actions?.dodge?.();}finally{scene.rollWindow=false;}
    }
   }else{
-   // Settle exactly on the guard spot facing the wolf, then swing behind.
-   if(player){const p=player.position,k=Math.min(1,dt*6);p.x+=(P.guard.x-p.x)*k;p.z+=(P.guard.z-p.z)*k;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(P.charge.x-p.x,P.charge.z-p.z);}
-   // Behind the warrior, but never behind the wagon (it hid the wolf).
-   const k=ease((now-SCENE.heroShot)/1.3),behind=clearAlpha(alphaFrom(P.D,P.charge),P.guard,(content.PROPS??[]).filter(prop=>prop.map===mapId));
+   // Settle on the guard spot facing the wolf, then swing behind.
+   showPlayer(true);
+   if(player){const p=player.position,k=Math.min(1,dt*6);p.x+=(P.guard.x-p.x)*k;p.z+=(P.guard.z-p.z)*k;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(Wf.x-p.x,Wf.z-p.z);}
+   const k=ease((now-SCENE.heroShot)/1.3),behind=clearAlpha(alphaFrom(P.D,Wf),P.guard,(content.PROPS??[]).filter(prop=>prop.map===mapId));
    scene.cameraFocus=null;
    let turn=behind-camera.alpha;turn=Math.atan2(Math.sin(turn),Math.cos(turn));camera.alpha+=turn*Math.min(1,dt*4);
    camera.beta+=(scene.beta-camera.beta)*Math.min(1,dt*3);camera.radius+=(scene.radius-camera.radius)*k*Math.min(1,dt*3);
   }
-  if(now>=SCENE.end){
-   scene.active=false;scene.cameraFocus=null;camera.radius=scene.radius;camera.beta=scene.beta;
-   releaseWolf(wolf);
-   hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera.alpha;
-  }
+  if(now>=SCENE.end)endScene();
+ }
+ function endScene(){
+  const camera=api.world.camera;scene.active=false;scene.cameraFocus=null;
+  if(camera){camera.radius=scene.radius;camera.beta=scene.beta;}
+  showPlayer(true);
+  if(wagonHorse){wagonHorse.pose.gallop=0;wagonHorse.pose.rear=0;}
+  wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});
+  releaseWolf(scene.wolf);
+  hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera?.alpha??coachState.alpha;
+ }
+ // ----- setting the wagon back up (M00, after the fight) -----
+ // The 'right-wagon' dialogue effect: the wagon rises over 1.8 s while the
+ // warrior faces it, then the driver's thanks play at once.
+ const LIFT_SECONDS=1.8;
+ const lift={active:false,time:0,then:null};
+ function startLift(then){
+  if(lift.active)return;lift.active=true;lift.time=0;lift.then=then;api.input.setSuspended(true);
+  const prop=openingWagon(),player=api.getPlayer?.();
+  if(prop&&player?.rotation){const p=player.position;player.rotation.y=Math.atan2(prop.x-p.x,prop.z-p.z);}
+  api.playSound?.('shield_up',{volume:.6});
+ }
+ function updateLift(dt){
+  if(!lift.active)return false;
+  lift.time+=dt;const k=Math.min(1,lift.time/LIFT_SECONDS);
+  // A heave, a pause at the tipping point, then it drops onto its wheels.
+  const up=k<.55?ease(k/.55)*.75:k<.7?.75:.75+ease((k-.7)/.3)*.25;
+  if(k<1)wagonRig.pose({along:0,tip:1-up,side:WAGON_FALL});
+  else{wagonRig.upright();lift.active=false;api.input.setSuspended(false);api.playSound?.('land',{volume:.8});const then=lift.then;lift.then=null;then?.();}
+  return true;
  }
  // ----- slow motion -----
  // In the first fight, the start of every attack (the warrior's or the
@@ -576,7 +653,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
    if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
-   if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);scene.active=false;releaseWolf(scene.wolf);scene.cameraFocus=null;hud.setCaption(null);api.input.setSuspended(false);}coach(0);updateGuide(dt,null);return;}
+   if(updateLift(dt)){updateGuide(dt,null);return;}
+   if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);return;}
+   // Strolling actors: talk range and markers follow where they stand now.
+   for(const member of cast){const at=member.visual.position;if(at){member.x=at.x;member.z=at.z;}}
    const player=api.getPlayer()?.position;
    if(player&&!talking&&!dialogue.open){
     let best=null,bestSq=TALK_RANGE_SQ;

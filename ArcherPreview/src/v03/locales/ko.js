@@ -20,6 +20,7 @@ export default {
   'place.warrior-v3':'숲의 경계 마을','place.warrior-plains':'대평원','place.warrior-v4':'마물의 숲','place.warrior-v5':'마녀의 동굴',
   'dialogue.next':'다음','dialogue.close':'닫기',
   'opening.skip':'건너뛰기',
+  'opening.tapToBegin':'화면을 눌러 시작',
   'opening.intro.0':'…또, 그 꿈이다.',
   'opening.intro.1':'세계는, 누군가의 식탁 위에 차려져 있었다.',
   'opening.0':'상처 입은 손을 내미는 청년.\n내 손끝에서 번진 빛이 상처를 덮는다.',

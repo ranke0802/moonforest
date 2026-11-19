@@ -2,7 +2,7 @@
 // shafts in front of the covered wagon. It breathes (a slow chest/back swell)
 // and shifts its weight now and then so it never reads as a statue; a rigged
 // walk/idle can replace this later without moving the placement.
-import {SceneLoader,TransformNode,Vector3} from '@babylonjs/core';
+import {Matrix,SceneLoader,TransformNode,Vector3} from '@babylonjs/core';
 import {attachCharacterOutlines} from '../character-outlines.js';
 
 const MODEL=new URL('./models/wagon-horse.glb',import.meta.url);
@@ -13,6 +13,9 @@ export const WAGON_HORSE=Object.freeze({height:2.05,ahead:3.55,side:0,turn:0,bre
 
 export function createWagonHorse({scene,heightAt=()=>0,wagon}){
  let disposed=false,container=null,root=null,observer=null,time=Math.random()*10;
+ // Story control (wagon ride, ambush): gallop 0..1 bobs and rocks the body,
+ // rear 0..1 lifts the forehand about the hind hooves.
+ const pose={gallop:0,rear:0};let rearSign=0;const pivot=new Vector3(),turned=new Vector3(),rotation=new Matrix();
  const ready=(async()=>{
   const href=MODEL.href,base=href.slice(0,href.lastIndexOf('/')+1),file=href.slice(href.lastIndexOf('/')+1);
   container=await SceneLoader.LoadAssetContainerAsync(base,file,scene);
@@ -36,12 +39,21 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon}){
    body.scaling.x=s*(1+WAGON_HORSE.breath*.35*(breath+1));
    // A slow weight shift every few seconds.
    body.rotation.z=Math.sin(time*.37)*.012;
+   // Gallop: a quick bob and fore/aft rock. Rear: pitch about the hind hooves.
+   const stride=time*Math.PI*2*2.1,g=pose.gallop,half=98*s*.42;
+   if(!rearSign){Vector3.TransformCoordinatesFromFloatsToRef(0,0,1,Matrix.RotationX(.3),turned);rearSign=turned.y>0?1:-1;}
+   const pitch=rearSign*(pose.rear*.62+g*Math.sin(stride)*.05);
+   pivot.set(0,0,-half);Matrix.RotationXToRef(pitch,rotation);Vector3.TransformCoordinatesToRef(pivot,rotation,turned);
+   body.rotation.x=pitch;body.position.set(0,Math.abs(Math.sin(stride))*.07*g+(pivot.y-turned.y),pivot.z-turned.z);
   });
   return root;
  })().catch(error=>{console.warn('[MoonForest 0.3] wagon horse unavailable',error);return null;});
  return {
   ready,
   get root(){return root;},
+  pose,
+  // Moves the horse (story ride); y follows the ground.
+  place(x,z,yaw){if(!root)return;root.position.set(x,heightAt(x,z),z);root.rotation.y=yaw;},
   dispose(){
    disposed=true;if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}
    if(container){for(const mesh of container.meshes)for(const child of mesh.getChildMeshes?.(false)??[])child.dispose(false,false);container.dispose();container=null;}

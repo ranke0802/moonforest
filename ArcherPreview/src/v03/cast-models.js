@@ -21,6 +21,12 @@ export const CAST_MODELS=Object.freeze({
  'chief-son':'moonforest-tripo-vigilante',
 });
 const MODEL_HEIGHT=1.85,IDLE='Idle_Stand',GAZE_IN=.35,GAZE_OUT=.8,GAZE_LINGER=1.2,EYE_HEIGHT=1.45;
+// Living cast (2026-11-19, user: NPCs stood frozen): idle fidgets, a short
+// stroll around home when given room (roam), a stop and a look when the player
+// comes close, and the whole body turning to face whoever talks to them.
+const WALK='Casual_Walk',WALK_SPEED=.95,TURN_RATE=3.2,FADE=.3,NOTICE=3.4,NOTICE_SQ=NOTICE*NOTICE;
+const FIDGETS=Object.freeze(['Stand_and_Chat','Agree_Gesture','Listening_Gesture']);
+const TALK_CLIPS=Object.freeze(['Talk_with_Hands_Open','Listening_Gesture']);
 const RETRY_LIMIT=3,RETRY_MS=2500;
 const UP=new Vector3(0,1,0),clamp=(value,limit)=>Math.max(-limit,Math.min(limit,value));
 const quatY=yaw=>[0,Math.sin(yaw/2),0,Math.cos(yaw/2)];
@@ -50,7 +56,10 @@ function createGaze(asset){
   const pitch=Math.atan2(forward.y,Math.hypot(forward.x,forward.z)),wantPitch=Math.atan2(target.y-origin.y,Math.hypot(target.x-origin.x,target.z-origin.z));
   rotate(node,right,-clamp(wantPitch-pitch,pitchLimit)*weight);
  };
- return {apply(target,weight){if(weight<=0)return;aim(neck,target,weight*.45,.35,.18);aim(head,target,weight,.6,.3);}};
+ // The turn sits mostly on the neck: on these rigs the chin is skinned to the
+ // neck, so a head-only turn pulled the jaw long (user, 2026-11-19). The body
+ // turns for anything wider (see tick), so the limits stay small.
+ return {apply(target,weight){if(weight<=0)return;aim(neck,target,weight*.85,.42,.14);aim(head,target,weight*.25,.12,.08);}};
 }
 
 export function createCastVisuals({getWorld,fallback=createActorVisual,loadRuntime,now=()=>performance.now()}={}){
@@ -94,17 +103,67 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   // Pose the root directly: the shared runtime's own setters refuse records
   // once its map bookkeeping moves on, and this actor is owned by the story.
   const apply=record=>{const root=record.encounter.actor,yaw=pose.yaw;root.position.copyFromFloats(...pose.position);root.rotationQuaternion?.copyFromFloats(0,Math.sin(yaw/2),0,Math.cos(yaw/2));root.computeWorldMatrix(true);};
+  // Behaviour state (all per actor, no per-frame allocation).
+  const live={mode:'idle',clip:IDLE,from:null,fromTime:0,fade:0,clipTime:0,next:2+Math.random()*4,target:{x:0,z:0},roam:null,talking:false,talkIndex:0,yaw:null,face:null};
+  const length=(record,clip)=>record.entry.geometry.clipDurations?.[clip]??0;
+  const play=(record,clip)=>{if(clip===live.clip||!length(record,clip))return;live.from=live.clip;live.fromTime=live.clipTime;live.fade=FADE;live.clip=clip;live.clipTime=0;};
+  const turnToward=(yaw,dt)=>{const step=wrap(yaw-live.yaw);live.yaw+=clamp(step,TURN_RATE*dt);pose.yaw=live.yaw;return Math.abs(step)<.05;};
+  function chooseIdle(record){
+   const fidget=Math.random()<.4?FIDGETS[Math.floor(Math.random()*FIDGETS.length)]:IDLE;
+   play(record,length(record,fidget)?fidget:IDLE);live.mode='idle';live.next=Math.max(3,length(record,live.clip))*(1+Math.random()*.6);
+  }
+  function chooseWalk(record){
+   const roam=live.roam;if(!roam)return false;
+   for(let i=0;i<6;i++){
+    const angle=Math.random()*Math.PI*2,distance=roam.radius*(.35+Math.random()*.65),x=roam.home.x+Math.cos(angle)*distance,z=roam.home.z+Math.sin(angle)*distance;
+    const mx=(x+pose.position[0])/2,mz=(z+pose.position[2])/2;
+    if(roam.free&&(!roam.free(x,z)||!roam.free(mx,mz)))continue;
+    live.target.x=x;live.target.z=z;live.mode='walk';play(record,WALK);live.next=12;return true;
+   }
+   return false;
+  }
+  function behave(record,dt){
+   live.yaw??=pose.yaw;live.next-=dt;
+   const player=live.roam?.player?.()??null,at=watch?.();
+   if(at){
+    // In conversation: face the speaker with the whole body, talk with the hands.
+    live.mode='talk';turnToward(Math.atan2(at.x-pose.position[0],at.z-pose.position[2]),dt);
+    if(!TALK_CLIPS.includes(live.clip)||live.clipTime>=length(record,live.clip)){live.talkIndex=(live.talkIndex+1)%TALK_CLIPS.length;play(record,TALK_CLIPS[live.talkIndex]);}
+    return;
+   }
+   if(live.mode==='talk'){chooseIdle(record);live.next=2.5;}
+   // Someone close by: stop and look over (a light gaze), then carry on.
+   const dx=player?player.x-pose.position[0]:0,dz=player?player.z-pose.position[2]:0,close=player&&dx*dx+dz*dz<NOTICE_SQ;
+   live.face=close?player:null;
+   if(close){if(live.mode==='walk'){chooseIdle(record);}turnToward(Math.atan2(dx,dz),dt*.5);return;}
+   if(live.mode==='walk'){
+    const tx=live.target.x-pose.position[0],tz=live.target.z-pose.position[2],gap=Math.hypot(tx,tz);
+    if(gap<.15||live.next<=0){chooseIdle(record);return;}
+    const aligned=turnToward(Math.atan2(tx,tz),dt);const speed=aligned?WALK_SPEED:WALK_SPEED*.35,step=Math.min(gap,speed*dt);
+    const x=pose.position[0]+tx/gap*step,z=pose.position[2]+tz/gap*step;
+    pose.position[0]=x;pose.position[2]=z;pose.position[1]=live.roam.heightAt?.(x,z)??pose.position[1];
+    return;
+   }
+   if(live.next<=0){if(!(live.roam&&Math.random()<.55&&chooseWalk(record)))chooseIdle(record);}
+  }
   const actor={
    tick(dt){
     if(!ready||disposed)return;const record=npc.get(instanceId);if(!record?.ready)return;
-    time+=dt;clock+=dt;const length=record.entry.geometry.clipDurations?.[IDLE]??4;
-    record.clipId=IDLE;record.clock=clock;record.loop=true;
-    try{record.sampler.sample([{clipId:IDLE,time:clock%length,weight:1}],clock);}catch{return;}
+    time+=dt;clock+=dt;
+    behave(record,dt);
+    live.clipTime+=dt;live.fromTime+=dt;live.fade=Math.max(0,live.fade-dt);
+    const cur=length(record,live.clip)||4,w=live.fade>0?1-live.fade/FADE:1;
+    record.clipId=live.clip;record.clock=clock;record.loop=true;
+    try{
+     if(w<1&&live.from){const prev=length(record,live.from)||4;record.sampler.sample([{clipId:live.from,time:live.fromTime%prev,weight:1-w},{clipId:live.clip,time:live.clipTime%cur,weight:w}],clock);}
+     else record.sampler.sample([{clipId:live.clip,time:live.clipTime%cur,weight:1}],clock);
+    }catch{return;}
+    apply(record);
     if(releaseAt&&time>=releaseAt){watch=null;releaseAt=0;}
-    const at=watch?.();
+    const at=watch?.()??live.face;
     gazeWeight=at?Math.min(1,gazeWeight+dt/GAZE_IN):Math.max(0,gazeWeight-dt/GAZE_OUT);
-    if(at)eye.set(at.x,at.y+EYE_HEIGHT,at.z);
-    if(gazeWeight>0){gaze??=createGaze(record.encounter.asset);gaze?.apply(eye,ease(gazeWeight));}
+    if(at)eye.set(at.x,(at.y??pose.position[1])+EYE_HEIGHT,at.z);
+    if(gazeWeight>0){gaze??=createGaze(record.encounter.asset);gaze?.apply(eye,ease(gazeWeight)*(watch?1:.7));}
    },
   };
   const spawn=()=>ensure().then(async world=>{
@@ -120,12 +179,17 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   return {
    id,key,label:spec.label,placeholder:false,height:spec.height??1.7,
    place(x,y,z,yaw=0){
-    pose={position:[x,y,z],yaw};
+    pose={position:[x,y,z],yaw};live.yaw=yaw;if(live.roam){live.roam.home.x=x;live.roam.home.z=z;}if(live.mode==='walk')live.mode='idle';
     if(block)return block.place(x,y,z,yaw);
     if(wake){const resolve=wake;wake=null;resolve();}
     if(ready){const record=npc.get(instanceId);if(record?.ready)apply(record);}
    },
-   // Only the actor the player is talking to follows them with its eyes.
+   // Lets the actor stroll within radius of home (the story owns placement:
+   // place() moves home too). free(x,z): walkable; player(): {x,y,z} or null.
+   roam(options){live.roam=options?{radius:options.radius??2.5,home:{x:pose?.position[0]??0,z:pose?.position[2]??0},free:options.free??null,heightAt:options.heightAt??null,player:options.player??null}:null;if(!live.roam&&live.mode==='walk')live.mode='idle';},
+   // Where the actor stands now (it may have strolled off its placed spot).
+   get position(){return pose?{x:pose.position[0],z:pose.position[2]}:null;},
+   // Only the actor the player is talking to turns and talks to them.
    talk(on,watchTarget){
     if(block||!pose)return;
     if(on&&watchTarget){watch=watchTarget;releaseAt=0;}

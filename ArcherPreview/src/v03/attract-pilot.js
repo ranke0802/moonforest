@@ -2,7 +2,9 @@
 // same movement vector and action calls as the input device: no scripted
 // animation, no special combat path. One reusable movement object, no
 // per-frame allocation.
-const ENGAGE=3.1,TOO_CLOSE=1.5,THREAT=5.2;
+// HIT: swing only this close (edge to edge) so the blows land; farther in the
+// ring it circles, then steps in. Fewer swings at air (user, 2026-11-19).
+const ENGAGE=3.1,TOO_CLOSE=.45,THREAT=5.2,HIT=1.15;
 export function createAttractPilot({random=Math.random}={}){
  const movement={x:0,y:0,run:false};
  let attackWait=.9,commit=0,defendWait=0,escapeWait=0,strafe=1,strafeWait=1.8,moving=false,combo=0;
@@ -35,10 +37,11 @@ export function createAttractPilot({random=Math.random}={}){
    else if(reach<TOO_CLOSE&&!targetAttacking){steer(-nx*.7-nz*strafe*.5,-nz*.7+nx*strafe*.5,cameraAlpha);movement.run=false;}
    else{
     movement.run=false;
-    if(attackWait<=0&&!busy){
+    if(attackWait<=0&&!busy&&reach<=HIT){
      // Stand still for the swing so the game's own melee aim faces the target.
      stop();combo=(combo+1)%3;commit=.42;attackWait=combo===0?1.1+random()*.7:.38+random()*.2;actions.attack();
-    }else steer(-nz*strafe*.8+nx*.25,nx*strafe*.8+nz*.25,cameraAlpha);
+    }else if(attackWait<=0&&!busy){steer(nx,nz,cameraAlpha);combo=0;}// ready: close in, then swing
+    else steer(-nz*strafe*.8+nx*.25,nx*strafe*.8+nz*.25,cameraAlpha);
    }
    const now=movement.x!==0||movement.y!==0;
    if(now&&!moving)actions.move();
