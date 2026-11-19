@@ -16,6 +16,7 @@ import {createAuthoredPlacementNavigation} from '../authored-placement-runtime.j
 import {createWagonHorse} from './wagon-horse.js';
 import {createWagonRig} from './wagon-rig.js';
 import {createWagonModel} from './wagon-model.js';
+import {createSleepPose} from './sleep-pose.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -340,7 +341,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function horseMotion(dt=0){
   if(!wagonHorse||scene.active)return;
   if(wagonDown()){horseState.down=true;horseState.rising=0;wagonHorse.play('Horse_Down');return;}
-  if(horseState.down){horseState.down=false;horseState.rising=2.8;wagonHorse.play('Horse_GetUp');}
+  if(horseState.down){horseState.down=false;horseState.rising=3.1;wagonHorse.play('Horse_GetUp');}
   if(horseState.rising>0){horseState.rising-=dt;if(horseState.rising>0)return;}
   wagonHorse.play('Horse_Idle');
  }
@@ -493,7 +494,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   scene.upper=camera.upperRadiusLimit;camera.upperRadiusLimit=Math.max(camera.upperRadiusLimit??0,80);
   Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false,sleeping:true,pitch:-Math.PI/2,horse:null});
   // The warrior sleeps in the wagon bed (held off the ground by holdsPlayer).
-  showPlayer(true);
+  showPlayer(true);startSleepPose();
   api.input.setSuspended(true);
   return true;
  }
@@ -517,9 +518,19 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const veil=document.createElement('div');veil.className='v03-wake-veil';veil.setAttribute('aria-hidden','true');document.body.append(veil);scene.veil=veil;
  }
  // Lying in the bed: feet toward the bench, head toward the open back.
+ // The limbs are laid along the body by sleep-pose.js (the model has no lying
+ // clip), applied each frame after the animation; the lying body's back sits
+ // 0.19 m above its feet pivot (measured on the model).
+ const sleepPoses=new WeakMap();
+ function startSleepPose(){
+  const root=api.getPlayer?.(),bscene=api.world?.scene;if(!root||!bscene)return;
+  let pose=sleepPoses.get(root);if(!pose){try{pose=createSleepPose(root);}catch(error){console.warn('[MoonForest 0.3] sleep pose skipped',error);return;}sleepPoses.set(root,pose);}
+  scene.sleepWeight=1;scene.sleepObserver=bscene.onBeforeRenderObservable.add(()=>{if(scene.active&&scene.sleeping)pose.apply(scene.sleepWeight);});scene.sleepScene=bscene;
+ }
+ function stopSleepPose(){if(scene.sleepObserver){scene.sleepScene?.onBeforeRenderObservable.remove(scene.sleepObserver);}scene.sleepObserver=null;scene.sleepScene=null;}
  function poseSleeper(player,W0,ground,pitch){
   const P=scene.points,p=player.position;
-  p.x=W0.x+P.f.x*.55+P.r.x*.15;p.z=W0.z+P.f.z*.55+P.r.z*.15;p.y=ground+.8+.15*Math.cos(pitch+Math.PI/2);
+  p.x=W0.x+P.f.x*.55+P.r.x*.15;p.z=W0.z+P.f.z*.55+P.r.z*.15;p.y=ground+.8-.19*Math.cos(pitch+Math.PI/2);
   if(player.rotation){player.rotation.y=P.yaw;player.rotation.x=pitch;player.rotation.z=0;}
  }
  function updateScene(dt){
@@ -540,7 +551,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(wagonHorse){
    wagonHorse.place(W0.x+fx*3.55,W0.z+fz*3.55,P.yaw);
    const speed=SCENE.ride/SCENE.crash*Math.max(0,1-now/SCENE.crash)*(1.35-.7*now/SCENE.crash);
-   const clip=now<SCENE.attack?'Horse_Walk':now<SCENE.lunge?'Horse_Nervous':now<SCENE.tipStart?'Horse_Rear':now<SCENE.tipStart+1.4?'Horse_Fall':'Horse_Down';
+   const clip=now<SCENE.attack?'Horse_Walk':now<SCENE.lunge?'Horse_Nervous':now<SCENE.tipStart?'Horse_Rear':now<SCENE.tipStart+1.5?'Horse_Fall':'Horse_Down';
    wagonHorse.play(clip);if(clip==='Horse_Walk')wagonHorse.speed?.(Math.max(.4,Math.min(1.3,speed/1.6)));
   }
   // The driver rides on the bench, then is thrown clear by the fall.
@@ -548,9 +559,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   else if(!scene.thrown){scene.thrown=true;scene.driver.x=P.D.x;scene.driver.z=P.D.z;scene.driver.visual.place(P.D.x,heightAt(P.D.x,P.D.z),P.D.z,Math.atan2(P.charge.x-P.D.x,P.charge.z-P.D.z));}
   // The warrior: asleep in the bed, sits up after the scream, thrown out in the fall.
   if(player&&now<SCENE.tipStart){
-   const k=ease((now-SCENE.sitUp)/SCENE.sitSeconds);scene.pitch=-Math.PI/2+(Math.PI/2-.3)*k;
+   const k=ease((now-SCENE.sitUp)/SCENE.sitSeconds);scene.pitch=-Math.PI/2+(Math.PI/2-.3)*k;scene.sleepWeight=1-k;
    poseSleeper(player,W0,ground,scene.pitch);
-  }else if(scene.sleeping){scene.sleeping=false;if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}showPlayer(false);}
+  }else if(scene.sleeping){scene.sleeping=false;stopSleepPose();if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}showPlayer(false);}
   // The wolf: waits behind the firewood, breaks out round its side, springs at the horse.
   {const Wf=scene.wolfAt,bal=wolf.brain?.balance??{},run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
    let target=P.far;
@@ -619,7 +630,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const camera=api.world.camera;scene.active=false;scene.cameraFocus=null;wakeVeil(false);
   if(camera&&scene.upper!==undefined){camera.upperRadiusLimit=scene.upper;scene.upper=undefined;}
   if(camera){camera.radius=scene.radius;camera.beta=scene.beta;}
-  const player=api.getPlayer?.();if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}scene.sleeping=false;
+  const player=api.getPlayer?.();if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}scene.sleeping=false;stopSleepPose();
   showPlayer(true);
   wagonHorse?.play('Horse_Down');horseState.down=true;
   wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});
@@ -917,6 +928,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    coach(dt);updateSlow(dt);configureCombat();contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
   inspect:()=>({lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
-  dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
+  dispose(){if(disposed)return;disposed=true;stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }
