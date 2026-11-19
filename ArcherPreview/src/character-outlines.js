@@ -136,6 +136,14 @@ export function prepareEnemyExteriorOutline(mesh){
 }
 
 export const OUTLINE_FAR_DISTANCE=32;
+// Far outlines are drawn by default again (2026-11-19); the settings switch
+// turns the 32 m cut back on. Shells are actors' own meshes and leave this set
+// when they are disposed.
+const farOutlineShells=new Set();let farOutlines=true;
+export function setFarOutlinesEnabled(value){
+  value=!!value;if(value===farOutlines)return;farOutlines=value;
+  for(const shell of farOutlineShells){if(shell.isDisposed()){farOutlineShells.delete(shell);continue;}if(value)shell.removeLODLevel(null);else shell.addLODLevel(OUTLINE_FAR_DISTANCE,null);}
+}
 export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferCameraCulling=false}={}) {
   const added = [];
   for (const source of [...asset.meshes]) {
@@ -169,9 +177,9 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     shell.renderOutline = false; shell.renderOverlay = false;
     shell.alwaysSelectAsActiveMesh = source.alwaysSelectAsActiveMesh;
     shell.visibility = source.visibility; shell.isVisible = source.isVisible;
-    // Beyond this the ink is under a pixel wide on a body tens of pixels tall:
-    // drop the extra hull pass. The player's own outline always stays.
-    if(kind!=='warrior')shell.addLODLevel(OUTLINE_FAR_DISTANCE,null);
+    // With the switch off, the extra hull pass is dropped beyond this distance
+    // (the ink is thin there). The player's own outline always stays.
+    if(kind!=='warrior'){farOutlineShells.add(shell);shell.onDisposeObservable.addOnce(()=>farOutlineShells.delete(shell));if(!farOutlines)shell.addLODLevel(OUTLINE_FAR_DISTANCE,null);}
     if(kind==='warrior')registerCharacterInk(shell,'player');
     else if(kind==='bear'||kind==='goblin'||kind==='elena'||kind==='wolf')registerCharacterInk(shell,mourning?'mourning':'boss');
     added.push(shell);

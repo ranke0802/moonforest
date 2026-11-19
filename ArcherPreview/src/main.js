@@ -128,7 +128,8 @@ import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
 import { GoldLoot } from './gold-loot.js';
 import { createGoldLootView } from './gold-loot-view.js';
-import { attachCharacterOutlines } from './character-outlines.js';
+import { attachCharacterOutlines,setFarOutlinesEnabled } from './character-outlines.js';
+import {setupQualityRestoreSettings} from './quality-restore-settings.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
 // Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
 import {tr,startLanguage} from './v03/i18n.js';
@@ -228,7 +229,7 @@ const ADAPTIVE_LEVEL_KEY='moonforest-adaptive-level-v2';
 let adaptiveStoredLevel=0;try{adaptiveStoredLevel=Number(globalThis.localStorage?.getItem(ADAPTIVE_LEVEL_KEY))||0;}catch{/* storage optional */}
 const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition,level:adaptiveStoredLevel});
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
-function applyAdaptiveShadows(){const guard=adaptivePerformance.settings;if(world?.lighting){world.lighting.actorShadowRange=guard.actorShadowRange??32;const map=world.lighting.shadows?.getShadowMap?.();if(map)map.refreshRate=guard.shadowRefresh??1;}if(world)world.detailCullRange=adaptivePerformance.settings.detailRange??0;if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
+function applyAdaptiveShadows(){const guard=adaptivePerformance.settings;if(world?.lighting){const restore=qualityRestore.value;world.lighting.actorShadowRange=restore.farActorShadows?Infinity:guard.actorShadowRange??32;const map=world.lighting.shadows?.getShadowMap?.();if(map)map.refreshRate=restore.steadyShadows?1:guard.shadowRefresh??1;}if(world)world.detailCullRange=adaptivePerformance.settings.detailRange??0;if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
 function applyAdaptivePerformance(){try{globalThis.localStorage?.setItem(ADAPTIVE_LEVEL_KEY,String(adaptivePerformance.level));}catch{/* storage optional */}applyRenderQuality();if(world){applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale);world.detailCullRange=adaptivePerformance.settings.detailRange??0;}applyAdaptiveShadows();}
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();
@@ -241,6 +242,7 @@ if(versionRoute.edition)equipmentStorage=editionStorage(v03RawStorage,equipmentS
 const movementSpeedSettings=setupMovementSpeedSettings({host:$('#common-speed-settings .settings-section-body'),storage:equipmentStorage,onChange:value=>controller?.setMovementSpeed?.(value)});
 const swordTrailSettings=setupSwordTrailSettings({host:$('.settings-display-options'),storage:equipmentStorage,onChange:value=>{swordTrail?.setEnabled(value);renderActivity.wake();frameLoop?.invalidate();}});
 const interiorInkSettings=setupInteriorInkSettings({host:$('.settings-display-options'),storage:equipmentStorage,onToggle:setInteriorLinesEnabled,onChange:()=>{renderActivity.wake();frameLoop?.invalidate();}});
+const qualityRestore=setupQualityRestoreSettings({host:$('.settings-display-options'),storage:equipmentStorage,onChange:value=>{setFarOutlinesEnabled(value.farOutlines);applyAdaptiveShadows();renderActivity.wake();frameLoop?.invalidate();}});setFarOutlinesEnabled(qualityRestore.value.farOutlines);
 if(import.meta.hot)import.meta.hot.dispose(()=>swordTrailSettings.dispose());
 const weatherSettings=setupWeatherSettings({host:$('.settings-display-options'),storage:equipmentStorage,getWorld:()=>world,onChange:()=>{renderActivity.wake();frameLoop?.invalidate();}});
 const frameRateControl=setupFrameRateControl({select:$('#frame-rate-select'),storage:equipmentStorage,activity:renderActivity,onChange:fps=>{if(engine)engine.maxFPS=fps;}});
