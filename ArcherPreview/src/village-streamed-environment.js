@@ -25,7 +25,7 @@ import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,c
 import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 import {groupVillageRecords} from './village-scenery-cache.js';
-import {installDetailLods,detailLodEnabled,DETAIL_LOD_KINDS} from './v04/detail-lod.js';
+import {installDetailLods,detailLodEnabled,detailTiersFor,DETAIL_LOD_KINDS} from './v04/detail-lod.js';
 import {createMeadow,createScatterLayer} from './v04/meadow.js';
 import {plainsMeadow,plainsThicket} from './v04/meadow-plains.js';
 const SCATTER_VEGETATION=false;
@@ -206,8 +206,8 @@ export function loadStreamedVillage(world,{
       const instances=recordsByAsset.get(id)??[];
       // 0.4: derived far-distance levels for small scenery (see v04/detail-lod.js).
       if(detailLodEnabled()&&!asset.detailLods){
-        asset.detailLods=instances.length&&!outskirtsGround&&instances.every(record=>DETAIL_LOD_KINDS.has(record.placement.kind))
-          ?asset.baseMeshes.flatMap(base=>installDetailLods(base,{prepare:mesh=>{prepareVillageInstancing([mesh]);prepareTreeOcclusion([mesh]);}})):[];
+        const tiers=instances.length&&!outskirtsGround&&instances.every(record=>DETAIL_LOD_KINDS.has(record.placement.kind))?detailTiersFor(instances.map(record=>record.placement.kind)):null;
+        asset.detailLods=tiers?asset.baseMeshes.flatMap(base=>installDetailLods(base,{tiers,prepare:mesh=>{prepareVillageInstancing([mesh]);prepareTreeOcclusion([mesh]);}})):[];
         // Scattered vegetation over the open map, drawn from the same models (v04/meadow.js).
         // Switched off (2026-11-18): the evenly scattered tufts and dark shrubs read as
         // litter on the ground, not as a meadow. The plains keep their authored

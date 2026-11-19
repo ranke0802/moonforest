@@ -23,3 +23,12 @@ test('small scenery gains two far levels chosen by screen coverage; the source m
  assert.equal(detailLodEnabled(),false,'only the 0.4 world turns it on');assert.ok(DETAIL_LOD.tiers[0].coverage>DETAIL_LOD.tiers[1].coverage);
  scene.dispose();engine.dispose();
 });
+
+test('0.3 tiers: trees and walls get their own coverage, mixed big/small kinds get none',async()=>{
+ const {detailTiersFor,DETAIL_LOD_KIND_TIERS}=await import('../src/v04/detail-lod.js');
+ assert.equal(detailTiersFor(['tree','tree']),DETAIL_LOD_KIND_TIERS.tree);
+ assert.equal(detailTiersFor(['prop']),DETAIL_LOD_KIND_TIERS.wall);
+ assert.equal(detailTiersFor(['shrub','rock']),DETAIL_LOD.tiers);
+ assert.equal(detailTiersFor(['tree','shrub']),null);
+ assert.ok(DETAIL_LOD_KIND_TIERS.tree[0].coverage>DETAIL_LOD_KIND_TIERS.tree[1].coverage);
+});
