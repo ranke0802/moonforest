@@ -47,7 +47,7 @@ import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
 import {updatePlainsBoundaryAtmosphere} from './plains-boundary-atmosphere.js';
 import {travelWaypoint} from './map-waypoints.js';
-import {applyPlayerDetail} from './player-detail.js';
+import {applyPlayerDetail} from './player-detail.js';import {mergePlayerMeshes} from './player-mesh-merge.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
@@ -705,6 +705,8 @@ async function loadCharacter() {
     if (actor) actor.dispose();
     container = await SceneLoader.LoadAssetContainerAsync(rootUrl, modelUrl.pathname.split('/').pop() + modelUrl.search, world.scene, null, modelUrl.pathname.endsWith('.gltf') ? '.gltf' : '.glb');
     container.addAllToScene();
+    // 0.3: join rigid shield parts and same-material baked outlines (35 → ~19 player draws). ?mergeplayer=0 turns it off.
+    if (isWarrior()&&versionRoute.edition) mergePlayerMeshes(container,{keep:['Bunnyguard_Shield','Golden_Oathblade'],enabled:new URLSearchParams(location.search).get('mergeplayer')!=='0'});
     if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
     for (const group of container.animationGroups) group.stop();
     actor = new TransformNode('player-world-transform', world.scene);
