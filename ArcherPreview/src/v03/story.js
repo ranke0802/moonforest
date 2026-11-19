@@ -248,6 +248,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function clearCast(){wagonHorse?.dispose();wagonHorse=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
+  // The wolf's hiding place: a bush clump on open ground with a clear run to
+  // the horse (2026-11-19: it used to start between trees and shake against them).
+  const hide=ambushHide(id);
+  if(hide)for(const [i,bush] of AMBUSH_BUSHES.entries())props.push({id:'v03-ambush-bush-'+i,asset:bush.asset,map:id,x:hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z:hide.z+bush.dx*hide.r.z+bush.df*hide.f.z,yaw:bush.yaw,scale:bush.scale,collision:'none'});
   if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
   // The driver's wagon has its horse in the shafts.
   const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
@@ -269,20 +273,28 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function runEffects(lines){
   for(const line of lines)for(const effect of line.effects??[]){
-   if(effect==='right-wagon'){startLift(()=>{if(!disposed)void interact();});continue;}
+   if(effect==='right-wagon')continue;// handled by interact (needs the member)
    if(effect==='rest'){api.rest?.();save.touch({});hud.flash(t('hud.rested'));trigger('effect:rest');}
   }
  }
  async function interact(){
-  if(!started||talking||dialogue.open||!near||api.battle.combatCount>0)return false;
+  if(!started||talking||dialogue.open||api.battle.combatCount>0)return false;
+  // While the wagon waits, E means push (at the roof side next to the driver).
+  if(lift.active)return nearLift(api.getPlayer?.()?.position)?push():false;
+  if(!near)return false;
   const member=near,questLine=log.dialogueFor(member.npc.id),lines=content.DIALOGUES[questLine??member.npc.idle];
   if(!lines)return false;
   talking=true;hud.setPrompt(null);api.input.setSuspended(true);
   member.visual.talk?.(true,()=>api.getPlayer?.()?.position??null);
   try{
    const played=await dialogue.play(lines);
-   if(played&&!disposed){runEffects(played);if(questLine)emit({type:'talk',npc:member.npc.id});}
-  }finally{talking=false;member.visual.talk?.(false);if(!disposed&&!lift.active)api.input.setSuspended(false);}
+   if(played&&!disposed){
+    runEffects(played);
+    // Setting the wagon up: the step completes when it stands again (updateLift).
+    const heave=played.some(line=>line.effects?.includes('right-wagon'));
+    if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
+   }
+  }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
   return true;
  }
  // ----- ambush scene (2026-11-19 rework: the wagon ride) -----
@@ -310,6 +322,26 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // The wagon lies on its side from the ambush until the driver and the
  // warrior set it back up (M00 fight / wagon steps), also after a reload.
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
+ // Searched once per map visit from the walkable map: ahead of the wagon on the
+ // wolf's side, open around it, and a straight walkable line to the horse.
+ const AMBUSH_BUSHES=Object.freeze([{asset:'bush',dx:0,df:0,yaw:.4,scale:1.35},{asset:'bush',dx:.9,df:.7,yaw:2.1,scale:1.1},{asset:'bush',dx:-.8,df:.6,yaw:4.0,scale:1.05},{asset:'bush',dx:.3,df:-.9,yaw:1.2,scale:.95}]);
+ let hideCache=null;
+ function ambushHide(id){
+  const prop=(content.PROPS??[]).find(row=>row.asset==='covered-wagon'&&row.map===id);if(!prop)return null;
+  if(hideCache?.map===id)return hideCache.spot;
+  const nav=api.world?.navigation,free=(x,z,radius)=>{try{return nav?.free?nav.free({x,z},radius):true;}catch{return true;}};
+  const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
+  const H={x:prop.x+f.x*3.55,z:prop.z+f.z*3.55},charge={x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2};
+  let spot=null;
+  search:for(const ahead of [9,11,7,13,15])for(const side of [6,8,5,10,12]){
+   const x=prop.x+f.x*ahead+r.x*WOLF_SIDE*side,z=prop.z+f.z*ahead+r.z*WOLF_SIDE*side;
+   if(!free(x,z,1.6))continue;
+   const dx=charge.x-x,dz=charge.z-z,length=Math.hypot(dx,dz);let clear=true;
+   for(let d=.5;d<length;d+=.5)if(!free(x+dx*d/length,z+dz*d/length,.55)){clear=false;break;}
+   if(clear){spot={x,z,f,r,charge};break search;}
+  }
+  hideCache={map:id,spot};return spot;
+ }
  function poseWagonForStory(){if(!scene.active&&!scene.pending&&!lift.active&&wagonDown())wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});}
  // One clip per shot, on the scene's own clock: the snarl and watch, the charge
  // run, then watching the warrior who now stands between them.
@@ -347,8 +379,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const H={x:S.x+f.x*3.55,z:S.z+f.z*3.55},D={x:member.x,z:member.z};
   // The wolf waits in the grass ahead and to the right of the road, then runs
   // at the horse's flank.
-  const far=freeNear({x:S.x+f.x*13+r.x*WOLF_SIDE*13,z:S.z+f.z*13+r.z*WOLF_SIDE*13});
-  const charge=freeNear({x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2});
+  const hide=ambushHide(api.world?.mapId??mapId);
+  const far=hide?{x:hide.x,z:hide.z}:freeNear({x:S.x+f.x*13+r.x*WOLF_SIDE*13,z:S.z+f.z*13+r.z*WOLF_SIDE*13});
+  const charge=hide?{x:hide.charge.x,z:hide.charge.z}:freeNear({x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2});
   // The warrior ends between the wolf and the driver.
   const guard=freeNear({x:(D.x+charge.x)/2+r.x*.6,z:(D.z+charge.z)/2+r.z*.6});
   foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
@@ -451,24 +484,56 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera?.alpha??coachState.alpha;
  }
  // ----- setting the wagon back up (M00, after the fight) -----
- // The 'right-wagon' dialogue effect: the wagon rises over 1.8 s while the
- // warrior faces it, then the driver's thanks play at once.
- const LIFT_SECONDS=1.8;
- const lift={active:false,time:0,then:null};
- function startLift(then){
-  if(lift.active)return;lift.active=true;lift.time=0;lift.then=then;api.input.setSuspended(true);
-  const prop=openingWagon(),player=api.getPlayer?.();
-  if(prop&&player?.rotation){const p=player.position;player.rotation.y=Math.atan2(prop.x-p.x,prop.z-p.z);}
-  api.playSound?.('shield_up',{volume:.6});
+ // The driver's 'right-wagon' line sends him to the toppled wagon; the warrior
+ // walks round to the roof side next to him and pushes (E, three heaves with
+ // the shield shove). The wagon rises a third per heave and drops onto its
+ // wheels on the last; then the driver's thanks play (2026-11-19, user).
+ const PUSHES=3,HEAVE_SECONDS=.55,PUSH_RANGE=1.7,PUSH_RANGE_SQ=PUSH_RANGE*PUSH_RANGE;
+ const lift={active:false,spot:null,helper:null,count:0,from:1,to:1,time:0,member:null};
+ function liftSpots(){
+  const prop=openingWagon();if(!prop)return null;const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
+  // The wagon lies on its WAGON_FALL side: its roof edge is out there.
+  const out=2.9;
+  return {player:freeNear({x:prop.x+r.x*WAGON_FALL*out-f.x*.7,z:prop.z+r.z*WAGON_FALL*out-f.z*.7}),helper:freeNear({x:prop.x+r.x*WAGON_FALL*out+f.x*.9,z:prop.z+r.z*WAGON_FALL*out+f.z*.9}),face:{x:prop.x,z:prop.z}};
  }
- function updateLift(dt){
-  if(!lift.active)return false;
-  lift.time+=dt;const k=Math.min(1,lift.time/LIFT_SECONDS);
-  // A heave, a pause at the tipping point, then it drops onto its wheels.
-  const up=k<.55?ease(k/.55)*.75:k<.7?.75:.75+ease((k-.7)/.3)*.25;
-  if(k<1)wagonRig.pose({along:0,tip:1-up,side:WAGON_FALL});
-  else{wagonRig.upright();lift.active=false;api.input.setSuspended(false);api.playSound?.('land',{volume:.8});const then=lift.then;lift.then=null;then?.();}
+ function startLift(member){
+  const spots=liftSpots();if(!spots||!member)return false;
+  Object.assign(lift,{active:true,spot:spots.player,helper:spots.helper,face:spots.face,count:0,from:1,to:1,time:HEAVE_SECONDS,member});
+  const yaw=Math.atan2(spots.face.x-spots.helper.x,spots.face.z-spots.helper.z);
+  if(member.visual.walkTo)member.visual.walkTo(spots.helper.x,spots.helper.z,{yaw,heightAt});
+  else{member.x=spots.helper.x;member.z=spots.helper.z;member.visual.place(spots.helper.x,heightAt(spots.helper.x,spots.helper.z),spots.helper.z,yaw);}
   return true;
+ }
+ // Called by interact() while the lift waits for the warrior.
+ function nearLift(player){if(!lift.active||!player||!lift.spot)return false;const dx=player.x-lift.spot.x,dz=player.z-lift.spot.z;return dx*dx+dz*dz<=PUSH_RANGE_SQ;}
+ function push(){
+  if(!lift.active||lift.time<HEAVE_SECONDS||lift.count>=PUSHES)return false;
+  const player=api.getPlayer?.();if(player?.rotation){const p=player.position;player.rotation.y=Math.atan2(lift.face.x-p.x,lift.face.z-p.z);}
+  try{api.actions?.guard?.();}catch{/* the heave still counts */}
+  lift.member?.visual.gesture?.('Agree_Gesture');
+  lift.count++;lift.from=lift.to;lift.to=1-lift.count/PUSHES;lift.time=0;
+  api.playSound?.(lift.count<PUSHES?'shield_up':'land',{volume:.75});
+  return true;
+ }
+ function updateLift(dt,player){
+  if(!lift.active)return false;
+  if(lift.time<HEAVE_SECONDS){
+   lift.time=Math.min(HEAVE_SECONDS,lift.time+dt);const k=ease(lift.time/HEAVE_SECONDS);
+   // A heave lifts past the mark and settles back a little; the last drops it home.
+   const over=lift.count<PUSHES?Math.sin(k*Math.PI)*.04:0;
+   wagonRig.pose({along:0,tip:Math.max(0,lift.from+(lift.to-lift.from)*k-over),side:WAGON_FALL},{rest:lift.time>=HEAVE_SECONDS&&lift.count<PUSHES});
+   if(lift.time>=HEAVE_SECONDS&&lift.count>=PUSHES){
+    wagonRig.upright();const member=lift.member;lift.active=false;lift.member=null;hud.setPrompt(null);
+    emit({type:'talk',npc:'driver'});
+    if(member&&!disposed){near=member;void interact();}
+    return true;
+   }
+  }
+  if(lift.count<PUSHES&&!talking&&!dialogue.open){
+   if(nearLift(player))hud.setPrompt({key:touch?null:'E',name:t('prompt.wagonName'),action:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),mark:null,label:t('prompt.pushWagon',{n:lift.count,total:PUSHES})});
+   else hud.setPrompt(null);
+  }
+  return false;
  }
  // ----- slow motion -----
  // In the first fight, the start of every attack (the warrior's or the
@@ -653,12 +718,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
    if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
-   if(updateLift(dt)){updateGuide(dt,null);return;}
    if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);return;}
    // Strolling actors: talk range and markers follow where they stand now.
    for(const member of cast){const at=member.visual.position;if(at){member.x=at.x;member.z=at.z;}}
    const player=api.getPlayer()?.position;
-   if(player&&!talking&&!dialogue.open){
+   if(updateLift(dt,player))return;
+   if(player&&!talking&&!dialogue.open&&!lift.active){
     let best=null,bestSq=TALK_RANGE_SQ;
     for(const member of cast){const dx=member.x-player.x,dz=member.z-player.z,sq=dx*dx+dz*dz;if(sq<bestSq){best=member;bestSq=sq;}}
     near=api.battle.combatCount>0?null:best;
@@ -669,7 +734,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }
    coach(dt);updateSlow(dt);configureCombat();contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
-  inspect:()=>({started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
+  inspect:()=>({lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
   dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }

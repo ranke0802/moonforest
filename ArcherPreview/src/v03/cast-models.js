@@ -104,7 +104,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   // once its map bookkeeping moves on, and this actor is owned by the story.
   const apply=record=>{const root=record.encounter.actor,yaw=pose.yaw;root.position.copyFromFloats(...pose.position);root.rotationQuaternion?.copyFromFloats(0,Math.sin(yaw/2),0,Math.cos(yaw/2));root.computeWorldMatrix(true);};
   // Behaviour state (all per actor, no per-frame allocation).
-  const live={mode:'idle',clip:IDLE,from:null,fromTime:0,fade:0,clipTime:0,next:2+Math.random()*4,target:{x:0,z:0},roam:null,talking:false,talkIndex:0,yaw:null,face:null};
+  const live={walkYaw:null,walkHeight:null,gestureLeft:0,mode:'idle',clip:IDLE,from:null,fromTime:0,fade:0,clipTime:0,next:2+Math.random()*4,target:{x:0,z:0},roam:null,talking:false,talkIndex:0,yaw:null,face:null};
   const length=(record,clip)=>record.entry.geometry.clipDurations?.[clip]??0;
   const play=(record,clip)=>{if(clip===live.clip||!length(record,clip))return;live.from=live.clip;live.fromTime=live.clipTime;live.fade=FADE;live.clip=clip;live.clipTime=0;};
   const turnToward=(yaw,dt)=>{const step=wrap(yaw-live.yaw);live.yaw+=clamp(step,TURN_RATE*dt);pose.yaw=live.yaw;return Math.abs(step)<.05;};
@@ -131,17 +131,18 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
     if(!TALK_CLIPS.includes(live.clip)||live.clipTime>=length(record,live.clip)){live.talkIndex=(live.talkIndex+1)%TALK_CLIPS.length;play(record,TALK_CLIPS[live.talkIndex]);}
     return;
    }
-   if(live.mode==='talk'){chooseIdle(record);live.next=2.5;}
+   if(live.mode==='talk'){if(live.walkYaw!==null){live.mode='walk';play(record,WALK);live.next=20;}else{chooseIdle(record);live.next=2.5;}}
    // Someone close by: stop and look over (a light gaze), then carry on.
    const dx=player?player.x-pose.position[0]:0,dz=player?player.z-pose.position[2]:0,close=player&&dx*dx+dz*dz<NOTICE_SQ;
    live.face=close?player:null;
-   if(close){if(live.mode==='walk'){chooseIdle(record);}turnToward(Math.atan2(dx,dz),dt*.5);return;}
+   if(close&&live.walkYaw===null&&live.gestureLeft<=0){if(live.mode==='walk'){chooseIdle(record);}turnToward(Math.atan2(dx,dz),dt*.5);return;}
+   if(live.gestureLeft>0){live.gestureLeft-=dt;if(live.gestureLeft<=0)chooseIdle(record);return;}
    if(live.mode==='walk'){
     const tx=live.target.x-pose.position[0],tz=live.target.z-pose.position[2],gap=Math.hypot(tx,tz);
-    if(gap<.15||live.next<=0){chooseIdle(record);return;}
+    if(gap<.15||live.next<=0){if(live.walkYaw!==null){live.yaw=live.walkYaw;pose.yaw=live.walkYaw;live.walkYaw=null;}chooseIdle(record);return;}
     const aligned=turnToward(Math.atan2(tx,tz),dt);const speed=aligned?WALK_SPEED:WALK_SPEED*.35,step=Math.min(gap,speed*dt);
     const x=pose.position[0]+tx/gap*step,z=pose.position[2]+tz/gap*step;
-    pose.position[0]=x;pose.position[2]=z;pose.position[1]=live.roam.heightAt?.(x,z)??pose.position[1];
+    pose.position[0]=x;pose.position[2]=z;pose.position[1]=(live.walkHeight??live.roam?.heightAt)?.(x,z)??pose.position[1];
     return;
    }
    if(live.next<=0){if(!(live.roam&&Math.random()<.55&&chooseWalk(record)))chooseIdle(record);}
@@ -189,6 +190,9 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
    roam(options){live.roam=options?{radius:options.radius??2.5,home:{x:pose?.position[0]??0,z:pose?.position[2]??0},free:options.free??null,heightAt:options.heightAt??null,player:options.player??null}:null;if(!live.roam&&live.mode==='walk')live.mode='idle';},
    // Where the actor stands now (it may have strolled off its placed spot).
    get position(){return pose?{x:pose.position[0],z:pose.position[2]}:null;},
+   // Story moves: walk to a spot (then face yaw), or play one gesture.
+   walkTo(x,z,{yaw=null,heightAt=null}={}){if(!pose)return;live.target.x=x;live.target.z=z;live.walkYaw=yaw;live.walkHeight=heightAt;live.mode='walk';live.next=20;live.gestureLeft=0;const record=npc?.get?.(instanceId);if(record?.ready)play(record,WALK);else live.clip=WALK;},
+   gesture(clip){const record=npc?.get?.(instanceId);if(!record?.ready||!length(record,clip))return;live.mode='idle';play(record,clip);live.gestureLeft=Math.min(2.2,length(record,clip));},
    // Only the actor the player is talking to turns and talks to them.
    talk(on,watchTarget){
     if(block||!pose)return;

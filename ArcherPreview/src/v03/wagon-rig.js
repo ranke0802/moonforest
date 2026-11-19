@@ -26,7 +26,10 @@ export function createWagonRig({runtime,id,heightAt=()=>0}){
   }catch{/* constant width */}
   return true;
  }
- function thaw(row){if(moving)return;moving=true;row.root.unfreezeWorldMatrix();for(const node of row.root.getDescendants())node.unfreezeWorldMatrix?.();}
+ // The placement runtime refreezes its records whenever it re-applies them
+ // (story props arrive, a model upgrade): thaw whenever the root is frozen,
+ // not once (2026-11-19: the wagon stayed parked while the horse ran).
+ function thaw(row){if(moving&&!row.root.isWorldMatrixFrozen)return;moving=true;row.root.unfreezeWorldMatrix();for(const node of row.root.getDescendants())node.unfreezeWorldMatrix?.();}
  function settle(row){
   moving=false;row.root.computeWorldMatrix(true);
   for(const node of row.root.getDescendants()){node.computeWorldMatrix?.(true);node.freezeWorldMatrix?.();}

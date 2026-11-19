@@ -145,7 +145,7 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.ok(h.log.includes(`resetStage:${OPENING_STAGE.x},${OPENING_STAGE.z}`));assert.ok(h.log.includes(`summon:${AMBUSH.kind}:${AMBUSH.count}`));assert.ok(h.log.includes('suspend:false'));
  assert.deepEqual([h.camera.alpha,h.camera.beta,h.camera.radius],[1,.9,17],'title camera is restored before the stage reset');
  assert.equal(h.save.meta().used,true);assert.equal(h.save.meta().title,'늑대와 마차');assert.equal(h.document.querySelector('.v03-title').hidden,true);
- assert.ok(h.log.includes('props:v03-opening-wagon'),'story scenery is placed behind the prologue');
+ assert.ok(h.log.some(x=>x.startsWith('props:v03-opening-wagon,v03-ambush-bush-0')),'story scenery (wagon, the wolf\'s bushes) is placed behind the prologue');
  h.battle.livingCount=0;for(let i=0;i<1000;i++)h.shell.update(.016);assert.ok(h.save.meta().playSeconds>=15);
  assert.equal(h.log.includes('startWorld'),false,'roaming monsters wait until the opening quest is done');
 });
@@ -294,12 +294,16 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);
  const portrait=hud('.v03-dialogue-portrait');assert.equal(portrait.hidden,false);assert.match(portrait.src,/portraits\/driver\.webp$/);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);
  // E advances every line and closes the last one without reopening the talk.
- // Three lines, then the wagon is set upright (1.8 s, no control) and the
- // driver's thanks follow on their own: four more lines.
+ // Three lines; then the driver goes to the wagon and the warrior pushes it
+ // up with him (E three times at the roof side); his thanks follow.
  for(let i=0;i<3;i++){key('KeyE');await settle(2);}await settle();
- assert.equal(hud('.v03-dialogue').hidden,true);assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');
- for(let i=0;i<130;i++)h.shell.update(.016);await settle();
- assert.equal(hud('.v03-dialogue').hidden,false,'the thanks start by themselves after the lift');
+ assert.equal(hud('.v03-dialogue').hidden,true);assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기','the step completes when the wagon stands');
+ const spot=h.shell.inspect().story.lift;assert.ok(spot,'the wagon waits for a push');
+ key('KeyE');await settle();assert.equal(h.shell.inspect().story.lift.count,0,'pushing needs the warrior at the wagon');
+ h.player.position={x:spot.x,z:spot.z};h.shell.update(.016);assert.match(hud('.v03-prompt').getAttribute('aria-label'),/밀기 \(0\/3\)/);
+ for(let push=1;push<=3;push++){key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}
+ assert.equal(h.log.filter(x=>x==='guard').length>=3,true,'each heave is a shield shove');
+ assert.equal(hud('.v03-dialogue').hidden,false,'the thanks start by themselves once it stands');
  for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();
  assert.equal(hud('.v03-dialogue').hidden,true,'E closes the conversation');
  assert.equal(h.shell.blocksGame,false);assert.equal(hud('.v03-quest-objective').textContent,'길을 따라 마을로 가기');assert.equal(h.log.at(-1),'suspend:false');
