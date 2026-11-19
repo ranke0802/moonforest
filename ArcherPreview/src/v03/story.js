@@ -1,6 +1,8 @@
 // Story runtime for 0.3: places the cast for the current map, runs
 // conversations, feeds quest events and coaches the first fight. It is driven
 // by boot.js from the game frame; it owns no timer or frame loop.
+import {TransformNode} from '@babylonjs/core/Meshes/transformNode.js';
+import {Quaternion} from '@babylonjs/core/Maths/math.vector.js';
 import {createQuestLog} from './quests.js';
 import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
@@ -344,16 +346,30 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   clearCover();
   const bushes=(api.world?.villageRenderRecords??[]).filter(row=>row.placement?.asset==='bush'&&row.root&&!row.root.isDisposed?.());
   const template=bushes.find(row=>row.root.isEnabled())??bushes[0];
-  if(!template?.root?.instantiateHierarchy)return;
+  const scene=api.world?.scene;if(!template||!scene)return;
+  // Plain instances of the bush's own source meshes (createInstance carries the
+  // source's instanced buffers such as treeCoverage). instantiateHierarchy made
+  // instances without them and the shared draw read null: the frame loop
+  // stopped (2026-11-19, measured on the deploy).
+  template.root.computeWorldMatrix(true);const inverse=template.root.getWorldMatrix().clone().invert();
+  const parts=[];
+  for(const mesh of template.meshes??[]){
+   const source=mesh.sourceMesh??null;if(!source||source.isDisposed?.())continue;
+   mesh.computeWorldMatrix(true);parts.push({source,local:mesh.getWorldMatrix().multiply(inverse)});
+  }
+  if(!parts.length)return;
   for(const [i,bush] of AMBUSH_BUSHES.entries()){
    try{
-    const copy=template.root.instantiateHierarchy(null,{doNotInstantiate:false},(source,clone)=>{clone.name='v03-ambush-bush-'+i+'-'+source.name;});
-    if(!copy)continue;
     const x=hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z=hide.z+bush.dx*hide.r.z+bush.df*hide.f.z;
-    copy.position.set(x,heightAt(x,z),z);if(copy.rotationQuaternion)copy.rotationQuaternion=null;copy.rotation.y=bush.yaw;copy.scaling.scaleInPlace(bush.scale);
-    copy.setEnabled(true);for(const mesh of copy.getChildMeshes()){mesh.isPickable=false;mesh.setEnabled(true);}
-    copy.computeWorldMatrix(true);for(const node of copy.getDescendants()){node.computeWorldMatrix?.(true);node.freezeWorldMatrix?.();}copy.freezeWorldMatrix();
-    coverNodes.push(copy);
+    const root=new TransformNode('v03-ambush-bush-'+i,scene);root.position.set(x,heightAt(x,z),z);root.rotation.y=bush.yaw;root.scaling.setAll(bush.scale);
+    for(const part of parts){
+     const instance=part.source.createInstance('v03-ambush-bush-'+i+'-'+part.source.name);
+     if(part.source.instancedBuffers)for(const key of Object.keys(part.source.instancedBuffers))instance.instancedBuffers[key]=key==='treeCoverage'?1:part.source.instancedBuffers[key];
+     instance.parent=root;part.local.decompose(instance.scaling,instance.rotationQuaternion??=new Quaternion(),instance.position);
+     instance.isPickable=false;
+    }
+    root.computeWorldMatrix(true);for(const node of root.getDescendants()){node.computeWorldMatrix?.(true);node.freezeWorldMatrix?.();}root.freezeWorldMatrix();
+    coverNodes.push(root);
    }catch(error){console.warn('[MoonForest 0.3] ambush cover',error);break;}
   }
  }
