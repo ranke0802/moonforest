@@ -24,6 +24,9 @@ function fixture(t){
 }
 const counts=f=>[f.scene.meshes.length,f.scene.transformNodes.length,f.scene.geometries.length,f.scene.materials.length,f.scene.textures.length];
 const drop={id:1,amount:100,position:{x:0,y:.04,z:1},age:.3};
+// A successful preparation keeps its one disabled coin: Babylon 9.31 drops an
+// effect with its last user, so releasing the probe released the shader too.
+const withKeeper=before=>[before[0]+1,...before.slice(1)];
 
 test('first actual visible coin clones reuse the prepared StandardMaterial effect and shared geometry without any preparation draw',async t=>{
   const f=fixture(t),before=counts(f),positions=Array.from(f.template.getVerticesData('position')),indices=Array.from(f.template.getIndices());
@@ -31,7 +34,8 @@ test('first actual visible coin clones reuse the prepared StandardMaterial effec
   assert.equal(f.view.inspect().status,'preparing');assert.equal(f.view.inspect().runs,1);
   await first;
   assert.equal(f.view.inspect().status,'ready');assert.ok(f.view.inspect().lastDurationMs>=0);assert.equal(f.view.inspect().geometryBindings,1);
-  assert.equal(f.renders,0);assert.equal(f.draws,0);assert.deepEqual(counts(f),before);assert.equal(f.template.isVisible,false);
+  assert.equal(f.renders,0);assert.equal(f.draws,0);assert.deepEqual(counts(f),withKeeper(before));assert.equal(f.template.isVisible,false);
+  {const kept=f.scene.getMeshByName('gold-coin-preparation');assert.ok(kept,'the prepared coin stays to hold its shader');assert.equal(kept.isEnabled(),false);}
   const prepared=f.checks.find(c=>c.ready);assert.ok(prepared);assert.equal(prepared.visible,true);assert.equal(prepared.enabled,false);assert.equal(prepared.instances,false);
   assert.ok(f.bindings.some(b=>b.effect===prepared.effect&&b.index===f.template.geometry.getIndexBuffer()));
   assert.ok(f.template.geometry.getVertexBuffer('position').getBuffer());assert.ok(f.template.geometry.getVertexBuffer('normal').getBuffer());
@@ -50,7 +54,7 @@ test('first actual visible coin clones reuse the prepared StandardMaterial effec
 });
 
 test('repeated map preparation keeps one template and rechecks changed fog defines before another first drop',async t=>{
-  const f=fixture(t),before=counts(f);await f.view.prepare({frame:async()=>{}});const effects=f.effects.size;
+  const f=fixture(t);await f.view.prepare({frame:async()=>{}});const before=counts(f),effects=f.effects.size;
   for(let map=0;map<12;map++){
     await f.view.prepare({frame:async()=>{}});assert.deepEqual(counts(f),before);
     f.view.sync([{...drop,id:map+1}]);f.view.sync([]);assert.deepEqual(counts(f),before);assert.equal(f.host.children.length,0);
@@ -69,7 +73,7 @@ test('preparation timeout restores material state, releases the probe and permit
   assert.equal(f.view.inspect().status,'failed');assert.equal(f.view.inspect().error.name,'TimeoutError');
   assert.deepEqual(counts(f),before);assert.deepEqual([f.material.checkReadyOnEveryCall,f.material.allowShaderHotSwapping],initial);
   await new Promise(resolve=>setTimeout(resolve,25));assert.equal(calls,1,'no timeout retry survives the failed job');
-  f.material.isReadyForSubMesh=ready;await f.view.prepare({frame:async()=>{}});assert.deepEqual(counts(f),before);
+  f.material.isReadyForSubMesh=ready;await f.view.prepare({frame:async()=>{}});assert.deepEqual(counts(f),withKeeper(before));
 });
 
 test('shader readiness errors clean up without changing material or live loot',async t=>{

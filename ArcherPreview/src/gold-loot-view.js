@@ -8,7 +8,11 @@ export function createGoldLootView(scene,host,{visibleAt=()=>true}={}) {
   const template=MeshBuilder.CreateCylinder('gold-coin-template',{diameter:.19,height:.035,tessellation:10},scene);
   template.material=material;template.isVisible=false;template.isPickable=false;
   const records=new Map(),anchor=new Vector3();
-  let disposed=false,preparing=null,activePreparation=null;
+  // The prepared coin stays (disabled) for the view's life: Babylon 9.31 counts
+  // an effect's users and drops it with its last mesh. Disposing the probe
+  // after preparing released the shader again, and the first real drop built
+  // it in its own frame (25-106 ms frames at a kill on a phone, 2026-11-20).
+  let disposed=false,preparing=null,activePreparation=null,keeper=null;
   const preparationState={status:'idle',runs:0,checks:0,geometryBindings:0,lastDurationMs:null,error:null};
   function remove(record){record.root.dispose(false,false);record.label.remove();}
   function coin(name,parent,index){
@@ -26,7 +30,7 @@ export function createGoldLootView(scene,host,{visibleAt=()=>true}={}) {
       preparing=(async()=>{
         // Use a real visible-coin clone, disabled only from scene traversal. The
         // hidden template's visibility is not the first drop's material variant.
-        const probe=coin('gold-coin-preparation',null,0);probe.setEnabled(false);
+        const probe=keeper&&!keeper.isDisposed()?keeper:coin('gold-coin-preparation',null,0);probe.setEnabled(false);let kept=false;
         const check=()=>{if(disposed||scene.isDisposed)throw bossPreparationCancelled();job.check();};
         try{
           probe.computeWorldMatrix(true);await job.nextFrame();
@@ -50,12 +54,12 @@ export function createGoldLootView(scene,host,{visibleAt=()=>true}={}) {
               // Babylon 9.31 binds the shared vertex/index buffers and caches its
               // effect's vertex-array layout here. No mesh or scene is drawn.
               for(const sub of probe.subMeshes){probe._bind(sub,sub.effect,material.fillMode,false);preparationState.geometryBindings++;}
-              check();preparationState.status='ready';
+              check();preparationState.status='ready';kept=true;keeper=probe;
               return;
             }
             await job.sleep(16);
           }
-        }finally{probe.dispose(false,false);}
+        }finally{if(!kept){probe.dispose(false,false);if(keeper===probe)keeper=null;}}
       })().catch(error=>{if(!disposed)preparationState.status='failed';preparationState.error={name:error.name,message:error.message};throw error;})
         .finally(()=>{preparationState.lastDurationMs=Math.max(0,clock()-started);preparing=null;activePreparation=null;});
       return preparing;
@@ -81,7 +85,7 @@ export function createGoldLootView(scene,host,{visibleAt=()=>true}={}) {
     },
     project(projection){for(const {root,label} of records.values()){anchor.copyFrom(root.position);anchor.y+=.22;const p=projection.project(anchor),visible=visibleAt(root.position);root.setEnabled(visible);label.hidden=!p.visible||!visible;label.style.transform=`translate3d(${p.x}px,${p.y}px,0) translate(-50%,-100%)`;}},
     clear(){for(const record of records.values())remove(record);records.clear();},
-    dispose(){if(disposed)return;disposed=true;preparationState.status='disposed';activePreparation?.cancel();scene.onDisposeObservable.remove(disposeObserver);this.clear();template.dispose();material.dispose();},
+    dispose(){if(disposed)return;disposed=true;preparationState.status='disposed';activePreparation?.cancel();scene.onDisposeObservable.remove(disposeObserver);this.clear();keeper?.dispose(false,false);keeper=null;template.dispose();material.dispose();},
   };
   const disposeObserver=scene.onDisposeObservable.addOnce(()=>view.dispose());
   return view;

@@ -37,7 +37,7 @@ function glyphMaterial(scene,glyph){
  return material;
 }
 export function createQuestMarkers(scene){
- const materials={},marks=new Map();
+ const materials={},marks=new Map(),probes=new Map();
  const material=glyph=>materials[glyph]??=glyphMaterial(scene,glyph);
  return {
   // id → glyph ('?' | '!' | null) at a fixed head height.
@@ -56,6 +56,17 @@ export function createQuestMarkers(scene){
   // A stepped bob (whole pixels, a few frames per step) suits the pixel glyph.
   update(time){for(const [,mark] of marks)if(mark.glyph){const bob=Math.round(Math.sin(time*2.4+mark.x)*3)*.03;mark.mesh.position.set(mark.x,mark.y+bob,mark.z);}},
   clear(){for(const [,mark] of marks)mark.mesh.dispose();marks.clear();},
-  dispose(){this.clear();for(const glyph in materials){materials[glyph].diffuseTexture?.dispose();materials[glyph].dispose();}},
+  // Builds the glyph shaders ahead of first use (see guide-wisp.js warm).
+  // The probe planes stay (disabled) until dispose: Babylon 9.31 counts an
+  // effect's users and drops it with its last mesh, so a probe that is
+  // disposed after compiling leaves nothing prepared (measured 2026-11-20).
+  warm(glyphs=['?','!']){
+   for(const glyph of glyphs)try{
+    if(probes.has(glyph))continue;
+    const probe=MeshBuilder.CreatePlane('v03-marker-warm-'+(glyph==='?'?'q':'x'),{width:.4,height:.4},scene);probe.isPickable=false;probe.setEnabled(false);probe.renderingGroupId=1;probe.billboardMode=7;
+    probes.set(glyph,probe);probe.material=material(glyph);void material(glyph).forceCompilationAsync(probe).catch(()=>{});
+   }catch{/* compiled on first use instead */}
+  },
+  dispose(){this.clear();for(const probe of probes.values())probe.dispose();probes.clear();for(const glyph in materials){materials[glyph].diffuseTexture?.dispose();materials[glyph].dispose();}},
  };
 }

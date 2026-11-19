@@ -250,6 +250,20 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(key!==markerKey){markerKey=key;api.setMapMarkers?.(mapMarks.slice());}
   markers?.update(guide.time);
  }
+ // The guide light and the quest marks first show in the frame the opening
+ // fight ends; their shaders are built behind the prologue or the loading
+ // cover instead (CLAUDE.md: first-use preparation happens while hidden).
+ // Called behind the prologue and again as play starts (each warm is a no-op
+ // once its shaders exist; the dust needs its texture ready, which it is by then).
+ function warmStoryVisuals(){
+  if(!api.world?.scene)return;
+  try{if(createGuide&&!guide.failed){guide.visual??=createGuide(api.world.scene);guide.visual.warm?.();}}catch(error){console.warn('[MoonForest 0.3] guide warm skipped',error);}
+  try{if(createMarkers){markers??=createMarkers(api.world.scene);markers.warm?.();}}catch(error){console.warn('[MoonForest 0.3] marker warm skipped',error);}
+ }
+ // The coin material was prepared at page load under the title's lights; the
+ // variant used in play differed and was built in the frame of the first kill
+ // (measured 2026-11-20). Prepared again here, behind the prologue or cover.
+ function warmLoot(){try{const job=api.world?.goldLootView?.prepare?.();job?.catch?.(()=>{});}catch{/* built on first use instead */}}
  let wagonHorse=null,wagonModel=null,hiddenWagon=null;
  function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;hiddenWagon=null;wagonRig.dispose();lift.active=false;lift.member=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
@@ -898,7 +912,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(fresh||!log.load())log.reset();
    // A new game opens on the wolf at the wagon (once the cast is placed).
    scene.pending=fresh===true&&log.quest()?.id==='M00';
-   started=true;mapId=null;Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0});
+   started=true;mapId=null;warmStoryVisuals();warmLoot();Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0});
    tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
    const quest=log.quest();if(quest)save.touch({title:quest.title,titleKey:quest.id});
@@ -907,7 +921,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
   prepare(id){
-   placeProps(id);
+   placeProps(id);warmStoryVisuals();warmLoot();
    try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,GUIDE_PATH_RADIUS);}catch{/* warm-up only */}
   },
   update(dt,s){

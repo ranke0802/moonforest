@@ -44,6 +44,10 @@ export function createGuideWisp(scene){
   // Once the airborne dust has faded the system stops updating altogether.
   hide(){if(!shown)return;shown=false;core.setEnabled(false);dust.emitRate=0;stopTimer=setTimeout(()=>{stopTimer=null;if(!shown&&dustRunning){dustRunning=false;dust.stop();}},2000);},
   get visible(){return shown;},
+  // Builds the two shaders (core, dust) ahead of first use. They used to be
+  // created in the frame the first fight ended: 25-106 ms frames on a phone
+  // at the wolf's defeat (performance records, 2026-11-20).
+  warm(){try{void material.forceCompilationAsync(core).catch(()=>{});dust.isReady();}catch{/* compiled on first use instead */}},
   dispose(){if(stopTimer)clearTimeout(stopTimer);dust.dispose(false);core.dispose(false,false);material.dispose(false,false);texture.dispose();},
  };
 }
