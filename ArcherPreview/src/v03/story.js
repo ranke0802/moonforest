@@ -251,7 +251,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   markers?.update(guide.time);
  }
  let wagonHorse=null,wagonModel=null,hiddenWagon=null;
- function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;hiddenWagon=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
+ function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;hiddenWagon=null;wagonRig.dispose();lift.active=false;lift.member=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   // The wolf's hiding place: a bush clump on open ground with a clear run to
@@ -638,6 +638,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   wagonHorse?.play('Horse_Down');horseState.down=true;
   wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});
   releaseWolf(scene.wolf);
+  // The scene state outlives the map: drop what it borrowed (CLAUDE.md, memory review 4).
+  scene.wolf=null;scene.driver=null;scene.points=null;
   hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera?.alpha??coachState.alpha;
  }
  // ----- the wagon's own collision -----

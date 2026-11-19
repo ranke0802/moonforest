@@ -3,7 +3,11 @@
 import {readFileSync,writeFileSync,appendFileSync} from 'node:fs';
 const LOG=process.env.PROBE_LOG;const say=(...a)=>{const line=a.join(' ');if(LOG)appendFileSync(LOG,line+'\n');else console.log(line);};const T0=Date.now();
 import v8 from 'node:v8';
-import {NullEngine,PBRMaterial,Vector3} from '@babylonjs/core';
+// Node has no canvas: label textures (plains decor) only need a no-op 2D context.
+{const ctx=new Proxy({},{get:(t,k)=>k==='measureText'?()=>({width:10}):k==='getImageData'?(x,y,w,h)=>({data:new Uint8ClampedArray(w*h*4),width:w,height:h}):typeof k==='string'?(t[k]??(()=>{})):undefined,set:(t,k,v)=>{t[k]=v;return true;}});
+ globalThis.OffscreenCanvas??=class{constructor(w,h){this.width=w;this.height=h;}getContext(){return ctx;}};}
+import {NullEngine,PBRMaterial,RawTexture,Vector3} from '@babylonjs/core';
+import {VillageGroundDetail} from '../src/village-ground.js';
 import {MeshoptCompression} from '@babylonjs/core/Meshes/Compression/meshoptCompression.js';
 import {MeshoptDecoder} from 'meshoptimizer';
 import '@babylonjs/loaders/glTF/index.js';
@@ -24,10 +28,14 @@ const loadContainer=async(model,scene,options={})=>{
  const file=model.pathname.split('/').at(-1),modelUrl=new URL('content/'+file,base),gltf=JSON.parse(readFileSync(modelUrl));
  for(const b of gltf.buffers)if(b.uri){const bytes=readFileSync(new URL(b.uri,modelUrl));b.uri='data:application/octet-stream;base64,'+bytes.toString('base64');}
  const container=await readMapContainer(scene,gltf,'',{skipMaterials:true,fileName:file,...options}),geometry=container.meshes.filter(m=>m.getTotalVertices()>0);
- const materials=gltf.materials.map((source,i)=>{const m=new PBRMaterial(file+'-'+i,scene);return m;});
+ const materials=gltf.materials.map((source,i)=>{const m=new PBRMaterial(file+'-'+i,scene);m.albedoTexture=pixel(scene);return m;});
  for(const m of geometry)m.material=materials[gltf.meshes[0]?.primitives[0]?.material??0];container.materials.push(...materials);readyRaw();return container;
 };
-const services={initialize:async()=>{},ground:async()=>{},loadContainer};
+// Stand-ins for the GPU textures the map code expects (2026-11-20: the plains
+// outskirts ground borrows the village floor's detail texture and each
+// model's own colour texture).
+const pixel=scene=>RawTexture.CreateRGBATexture(new Uint8Array([128,128,128,255]),1,1,scene);
+const services={initialize:async()=>{},ground:async world=>{const material=world.floorMaterial;if(material&&!material.pluginManager?.getPlugin('MoonforestGroundDetail'))new VillageGroundDetail(material,pixel(world.scene));},loadContainer};
 const place=()=>{const p=world.plains?{x:-55,z:37}:{x:0,z:70};world.camera.setTarget(new Vector3(p.x,world.terrain.heightAt(p.x,p.z)+WARRIOR_DIMENSIONS.stableFocusHeight,p.z));world.camera.alpha=1.2;world.camera.beta=.95;world.camera.radius=13;world.camera.getViewMatrix();world.camera.getProjectionMatrix();readyRaw();return p;};
 const mb=()=>{globalThis.gc();const m=process.memoryUsage();return {heap:Math.round(m.heapUsed/1e6),ext:Math.round(m.external/1e6),ab:Math.round(m.arrayBuffers/1e6)};};
 const weak=[];const log=[];

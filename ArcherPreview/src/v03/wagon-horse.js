@@ -4,7 +4,8 @@
 // gallop footfalls), Horse_Nervous (head tosses, side-steps, pawing) and
 // Horse_Rear. It stands between the wagon's shafts in its harness; play()
 // cross-fades between the clips.
-import {SceneLoader,TransformNode,Vector3} from '@babylonjs/core';
+import {TransformNode,Vector3} from '@babylonjs/core';
+import {loadOwnedModel} from './owned-model.js';
 import {attachCharacterOutlines} from '../character-outlines.js';
 import {applyMonsterToon} from '../monster-toon.js';
 
@@ -17,7 +18,7 @@ export const HORSE_CLIPS=Object.freeze(['Horse_Idle','Horse_Walk','Horse_Gallop'
 const ONCE=new Set(['Horse_Rear','Horse_Fall','Horse_GetUp']);
 
 export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
- let disposed=false,container=null,root=null,observer=null;const casters=[],painted=new Set();
+ let disposed=false,container=null,root=null,observer=null;const casters=[];
  const groups=new Map();let current=null,previous=null,fade=0,wanted='Horse_Idle';
  function start(name,{loop=true}={}){
   const group=groups.get(name);wanted=name;if(!group||group===current)return;
@@ -27,20 +28,18 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   if(!previous)fade=1;
  }
  const ready=(async()=>{
-  const href=MODEL.href,base=href.slice(0,href.lastIndexOf('/')+1),file=href.slice(href.lastIndexOf('/')+1);
-  container=await SceneLoader.LoadAssetContainerAsync(base,file,scene);
+  container=await loadOwnedModel(scene,MODEL);
   if(disposed){container.dispose();container=null;return null;}
   root=new TransformNode('v03-wagon-horse',scene);
   const s=WAGON_HORSE.height/87;
   const body=new TransformNode('v03-wagon-horse-body',scene);body.parent=root;
   for(const node of container.rootNodes)node.parent=body;
   body.scaling.setAll(s);body.rotation.y=WAGON_HORSE.turn;
-  container.addAllToScene();
   for(const group of container.animationGroups){group.stop();groups.set(group.name,group);}
   for(const mesh of container.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
   // Painted like the other actors (2026-11-19, user: it had no cartoon shading
   // and no shadow): the monsters' unlit toon material and character bands.
-  try{applyMonsterToon(container);for(const mesh of container.meshes){mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};if(mesh.material?.metadata?.moonforestMonsterToon)painted.add(mesh.material);}}catch(error){console.warn('[MoonForest 0.3] horse toon skipped',error);}
+  try{applyMonsterToon(container);for(const mesh of container.meshes){mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};if(mesh.material?.metadata?.moonforestMonsterToon)container.own(mesh.material);}}catch(error){console.warn('[MoonForest 0.3] horse toon skipped',error);}
   try{attachCharacterOutlines(container,'wolf',{skipBoneProof:true});}catch(error){console.warn('[MoonForest 0.3] horse outline skipped',error);}
   // Casts on the ground like the wolf (outline hulls excluded); removed on dispose.
   if(shadows)for(const mesh of container.meshes)if(mesh.getTotalVertices?.()>0&&!mesh.metadata?.moonforestOutline&&!/outline/i.test(mesh.name)){shadows.addShadowCaster(mesh,false);casters.push(mesh);}
@@ -68,10 +67,10 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   place(x,z,yaw){if(!root)return;root.position.set(x,heightAt(x,z),z);root.rotation.y=yaw;},
   dispose(){
    disposed=true;for(const mesh of casters.splice(0))try{shadows?.removeShadowCaster(mesh,false);}catch{}
-   // The toon copies are this model's own (the loader's textures go with the container).
-   for(const material of painted)try{material.dispose(false,false);}catch{}painted.clear();if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}
-   for(const group of groups.values())group.stop();groups.clear();
-   if(container){for(const mesh of container.meshes)for(const child of mesh.getChildMeshes?.(false)??[])child.dispose(false,false);container.dispose();container=null;}
+   if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}
+   for(const group of groups.values())group.stop();groups.clear();current=previous=null;
+   // Meshes, outline shells, clips, loader materials and the toon copies all go with the model.
+   if(container){container.dispose();container=null;}
    root?.dispose();root=null;
   },
  };
