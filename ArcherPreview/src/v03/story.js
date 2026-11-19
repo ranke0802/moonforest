@@ -12,6 +12,7 @@ import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
 import {clearAlpha} from './title-camera.js';
 import {blocksView} from '../tree-occlusion.js';
+import {createAuthoredPlacementNavigation} from '../authored-placement-runtime.js';
 import {createWagonHorse} from './wagon-horse.js';
 import {createWagonRig} from './wagon-rig.js';
 import {createWagonModel} from './wagon-model.js';
@@ -261,7 +262,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(hide)placeCover(hide);
   // The driver's wagon has its horse in the shafts.
   const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
-  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonModel?.dispose();wagonModel=createWagonModel({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
+  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonModel?.dispose();wagonModel=createWagonModel({scene,wagon,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
  }
  function buildCast(id){
   clearCast();placeProps(id);
@@ -303,18 +304,19 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
   return true;
  }
- // ----- ambush scene (2026-11-19 rework: the wagon ride) -----
+ // ----- opening scene (2026-11-19 second rework, user storyboard) -----
  // Played once as the prologue fades out, as shots on the live scene (no
  // extra loop; input suspended, the wolf held by the tutorial):
- //  1. ride: from the driver's bench, the wagon rolls toward the village
- //  2. far off in the grass, a wolf watches the road (close on the wolf)
- //  3. ride again: the wolf breaks cover and runs at the horse
- //  4. the horse rears, the wagon tips onto its side (wide)
- //  5. the warrior gets up and rolls in between; the camera swings behind
- // The wagon and horse are the map's own (wagon-rig.js, wagon-horse.js);
- // without them (tests, a failed load) the shots still run.
- const SCENE=Object.freeze({wolfShot:4.0,chargeShot:5.9,crash:7.4,tipStart:7.55,tipSeconds:.6,aftermath:8.5,rollAt:9.15,heroShot:10.2,end:12.0,ride:24});
- const SCENE_LINES=Object.freeze([{at:.3,line:0},{at:2.3,line:1},{at:4.2,line:2},{at:6.1,line:3},{at:8.6,line:4},{at:10.3,line:5}]);
+ //  0. over the Great Plains, slowly closing on the wagon rolling down the road
+ //  1. through the wagon's back: the warrior asleep in the bed
+ //  2. the driver screams; the warrior wakes (eyes opening, from his view) and sits up
+ //  3. the wolf breaks from behind the firewood and springs at the horse
+ //  4. the horse goes down and takes the wagon over with it
+ //  5. the warrior is on his feet by the wreck and rolls in between
+ //  6. the camera settles behind him: the fight starts with horse and wagon down
+ // Without the wagon and horse models (tests, a failed load) the shots still run.
+ const SCENE=Object.freeze({sleepShot:6,scream:9,sitUp:10.7,sitSeconds:.9,attack:12.2,lunge:13.35,crash:13.9,tipStart:14.0,tipSeconds:.65,heroShot:15.6,rollAt:16.2,settle:17.4,end:19,ride:17});
+ const SCENE_LINES=Object.freeze([{at:9.0,line:0},{at:10.5,line:1},{at:12.3,line:2},{at:14.4,line:3},{at:16.5,line:4}]);
  // The wagon falls to its left, away from the road side where the driver and
  // the warrior end up; the wolf comes from the right.
  const WAGON_FALL=-1,WOLF_SIDE=1;
@@ -333,7 +335,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  // The horse: gallops on the ride, rears at the wolf, stays nervous while the
  // wagon is down, calm again once it stands.
- function horseMotion(){if(!wagonHorse||scene.active)return;wagonHorse.play(wagonDown()?'Horse_Nervous':'Horse_Idle');}
+ // Outside the scene: down while the wagon is, then up on its feet and calm.
+ const horseState={down:false,rising:0};
+ function horseMotion(dt=0){
+  if(!wagonHorse||scene.active)return;
+  if(wagonDown()){horseState.down=true;horseState.rising=0;wagonHorse.play('Horse_Down');return;}
+  if(horseState.down){horseState.down=false;horseState.rising=2.4;wagonHorse.play('Horse_GetUp');}
+  if(horseState.rising>0){horseState.rising-=dt;if(horseState.rising>0)return;}
+  wagonHorse.play('Horse_Idle');
+ }
  // The wagon lies on its side from the ambush until the driver and the
  // warrior set it back up (M00 fight / wagon steps), also after a reload.
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
@@ -364,8 +374,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    for(const mesh of bush.meshes)mesh.instancedBuffers.treeCoverage=bush.coverage;
   }
  }
+ let coverAt=null;
  function placeCover(hide){
-  clearCover();
+  clearCover();coverAt=hide;
   const bushes=(api.world?.villageRenderRecords??[]).filter(row=>row.placement?.asset==='bush'&&row.root&&!row.root.isDisposed?.());
   const template=bushes.find(row=>row.root.isEnabled())??bushes[0];
   const scene=api.world?.scene;if(!template||!scene)return;
@@ -382,7 +393,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(!parts.length)return;
   for(const [i,bush] of AMBUSH_BUSHES.entries()){
    try{
-    const x=hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z=hide.z+bush.dx*hide.r.z+bush.df*hide.f.z;
+    const R=hide.coverR??hide.r,F=hide.coverF??hide.f,x=hide.x+bush.dx*R.x+bush.df*F.x,z=hide.z+bush.dx*R.z+bush.df*F.z;
     const root=new TransformNode('v03-ambush-bush-'+i,scene);root.position.set(x,heightAt(x,z),z);root.rotation.y=bush.yaw;root.scaling.setAll(bush.scale);const meshes=[];
     for(const part of parts){
      const instance=part.source.createInstance('v03-ambush-bush-'+i+'-'+part.source.name);
@@ -399,13 +410,25 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }
  }
  let hideCache=null;
+ // Behind the roadside firewood as the driver sees it (2026-11-19, user), with a
+ // way out round the side nearer the horse. Falls back to open grass ahead.
  function ambushHide(id){
   const prop=(content.PROPS??[]).find(row=>row.asset==='covered-wagon'&&row.map===id);if(!prop)return null;
   if(hideCache?.map===id)return hideCache.spot;
   const nav=api.world?.navigation,free=(x,z,radius)=>{try{return nav?.free?nav.free({x,z},radius):true;}catch{return true;}};
   const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
   const H={x:prop.x+f.x*3.55,z:prop.z+f.z*3.55},charge={x:H.x+r.x*WOLF_SIDE*4.2,z:H.z+r.z*WOLF_SIDE*4.2};
+  const driver=(content.NPCS??[]).find(npc=>npc.id==='driver'&&npc.map===id),from=driver?{x:driver.x,z:driver.z}:{x:prop.x,z:prop.z};
+  let wood=null,best=26*26;
+  for(const row of api.world?.villageRenderRecords??[]){const p=row.placement;if(p?.asset!=='firewood')continue;const dx=p.x-prop.x,dz=p.z-prop.z,d=dx*dx+dz*dz;if(d<best){best=d;wood=p;}}
   let spot=null;
+  if(wood){
+   const dx=wood.x-from.x,dz=wood.z-from.z,length=Math.hypot(dx,dz)||1,ux=dx/length,uz=dz/length,px=-uz,pz=ux;
+   const a={x:wood.x+px*2.3,z:wood.z+pz*2.3},b={x:wood.x-px*2.3,z:wood.z-pz*2.3};
+   const out=Math.hypot(a.x-H.x,a.z-H.z)<Math.hypot(b.x-H.x,b.z-H.z)?a:b;
+   for(const back of [2.3,2.7,1.9,3.1]){const x=wood.x+ux*back,z=wood.z+uz*back;if(free(x,z,.9)){spot={x,z,f,r,charge,out,coverF:{x:ux,z:uz},coverR:{x:px,z:pz}};break;}}
+   if(spot){hideCache={map:id,spot};return spot;}
+  }
   search:for(const ahead of [10,12,8,14])for(const side of [10,9,11,8,12,7]){
    const x=prop.x+f.x*ahead+r.x*WOLF_SIDE*side,z=prop.z+f.z*ahead+r.z*WOLF_SIDE*side;
    if(!free(x,z,1.6))continue;
@@ -413,7 +436,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    for(let d=.5;d<length;d+=.5)if(!free(x+dx*d/length,z+dz*d/length,.55)){clear=false;break;}
    if(clear){spot={x,z,f,r,charge};break search;}
   }
-  hideCache={map:id,spot};return spot;
+  // Not cached: the firewood may only be streamed in later this visit.
+  return spot;
  }
  function poseWagonForStory(){if(!scene.active&&!scene.pending&&!lift.active&&wagonDown()&&!wagonRig.holds(1))wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});}
  // One clip per shot, on the scene's own clock: the snarl and watch, the charge
@@ -424,10 +448,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   foe.storyHold=dt=>{
    // Gait chosen by updateScene from the wolf's real travel speed, so the feet
    // never walk or run on the spot.
-   const want=scene.wolfGait==='run'?(clips.run??'Wolf_Run_R5'):scene.wolfGait==='walk'?(clips.walk??'Wolf_Walk_R5'):(clips.watch??'Circle_Watch_R5');
+   const want=scene.wolfGait==='lunge'?(clips.lunge??'Run_Dodge_Lunge_R5'):scene.wolfGait==='run'?(clips.run??'Wolf_Run_R5'):scene.wolfGait==='walk'?(clips.walk??'Wolf_Walk_R5'):(clips.watch??'Circle_Watch_R5');
    if(want!==clip){clip=want;clock=0;}
    clock+=dt*(scene.wolfRate??1);const length=animator.durations?.[clip]??1;
-   animator.transition(clip,{clipTime:clock%length,actionId:'story-'+clip,blendDuration:.25});animator.update(dt);
+   // The spring at the horse plays once and holds its end.
+   const at=scene.wolfGait==='lunge'?Math.min(clock,length-.02):clock%length;
+   animator.transition(clip,{clipTime:at,actionId:'story-'+clip,blendDuration:.18});animator.update(dt);
   };
  }
  function releaseWolf(foe){
@@ -450,30 +476,30 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const prop=openingWagon(),S=prop?{x:prop.x,z:prop.z}:{x:member.x,z:member.z},yaw=prop?.yaw??(member.npc.yaw??0);
   const f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
   const H={x:S.x+f.x*3.55,z:S.z+f.z*3.55},D={x:member.x,z:member.z};
-  // The wolf waits in the grass ahead and to the right of the road, then runs
-  // at the horse's flank.
   const hide=ambushHide(api.world?.mapId??mapId);
+  if(hide&&hide!==coverAt)placeCover(hide);
   const far=hide?{x:hide.x,z:hide.z}:freeNear({x:S.x+f.x*13+r.x*WOLF_SIDE*13,z:S.z+f.z*13+r.z*WOLF_SIDE*13});
-  const charge=hide?{x:hide.charge.x,z:hide.charge.z}:freeNear({x:H.x+r.x*WOLF_SIDE*4.2,z:H.z+r.z*WOLF_SIDE*4.2});
+  const out=hide?.out??far;
+  // It springs at the horse's flank on its side of the road.
+  const charge={x:H.x+r.x*WOLF_SIDE*2.2,z:H.z+r.z*WOLF_SIDE*2.2};
   // The warrior ends between the wolf and the driver.
   const guard=freeNear({x:(D.x+charge.x)/2+r.x*.6,z:(D.z+charge.z)/2+r.z*.6});
   foe.actor.position.x=far.x;foe.actor.position.z=far.z;foe.actor.position.y=heightAt(far.x,far.z);
-  if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(S.x-far.x,S.z-far.z);
-  scene.driver=member;scene.wolf=foe;scene.points={S,H,D,far,charge,guard,f,r,yaw,start:{x:player.x,z:player.z}};
-  scene.wolfAt={x:far.x,z:far.z};scene.wolfSpeed=0;scene.wolfGait='watch';scene.wolfRate=1;
+  if(foe.actor.rotation)foe.actor.rotation.y=Math.atan2(out.x-far.x,out.z-far.z);
+  scene.driver=member;scene.wolf=foe;scene.points={S,H,D,far,out,charge,guard,f,r,yaw,start:{x:player.x,z:player.z}};
+  scene.wolfAt={x:far.x,z:far.z};scene.wolfSpeed=0;scene.wolfGait='watch';scene.wolfRate=1;scene.wolfOut=false;
   holdWolf(foe);
-  // The shots need a longer arm than play allows (a clamped arm put the bench
-  // camera inside the horse, measured on the deploy); restored at the end.
-  scene.upper=camera.upperRadiusLimit;camera.upperRadiusLimit=Math.max(camera.upperRadiusLimit??0,40);
-  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false});
-  // The warrior rides on the bench (the shot is from there): not drawn yet.
-  showPlayer(false);
+  // The shots need a longer arm than play allows; restored at the end.
+  scene.upper=camera.upperRadiusLimit;camera.upperRadiusLimit=Math.max(camera.upperRadiusLimit??0,80);
+  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false,sleeping:true,pitch:-Math.PI/2,horse:null});
+  // The warrior sleeps in the wagon bed (held off the ground by holdsPlayer).
+  showPlayer(true);
   api.input.setSuspended(true);
   return true;
  }
  // Camera at an eye point looking at a target point (both in world units).
  function frameEye(ex,ey,ez,tx,ty,tz){
-  const camera=api.world.camera,dx=ex-tx,dy=ey-ty,dz=ez-tz,radius=Math.max(.5,Math.hypot(dx,dy,dz));
+  const camera=api.world.camera,dx=ex-tx,dy=ey-ty,dz=ez-tz,radius=Math.max(.3,Math.hypot(dx,dy,dz));
   scene.focus.x=tx;scene.focus.y=ty;scene.focus.z=tz;scene.cameraFocus=scene.focus;
   camera.alpha=Math.atan2(dz,dx);camera.beta=Math.acos(Math.max(-1,Math.min(1,dy/radius)));camera.radius=radius;
  }
@@ -482,66 +508,93 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   scene.focus.x=target.x;scene.focus.z=target.z;scene.focus.y=heightAt(target.x,target.z)+height;scene.cameraFocus=scene.focus;
   camera.alpha=alpha;camera.beta=beta;camera.radius=Math.max(camera.lowerRadiusLimit??1,radius);
  }
- // Metres the wagon still has to roll before the crash spot (eases to a stop
- // as the horse rears).
+ // Metres the wagon still has to roll before it stops where the wolf strikes.
  function rideAlong(now){const k=Math.min(1,now/SCENE.crash);return SCENE.ride*(1-k)*(1-k*.35);}
+ // The eyes-opening veil (one CSS animation, removed with the scene).
+ function wakeVeil(on){
+  if(!on){scene.veil?.remove();scene.veil=null;return;}
+  if(scene.veil||typeof document==='undefined')return;
+  const veil=document.createElement('div');veil.className='v03-wake-veil';veil.setAttribute('aria-hidden','true');document.body.append(veil);scene.veil=veil;
+ }
+ // Lying in the bed: feet toward the bench, head toward the open back.
+ function poseSleeper(player,W0,ground,pitch){
+  const P=scene.points,p=player.position;
+  p.x=W0.x+P.f.x*.55+P.r.x*.15;p.z=W0.z+P.f.z*.55+P.r.z*.15;p.y=ground+.8+.15*Math.cos(pitch+Math.PI/2);
+  if(player.rotation){player.rotation.y=P.yaw;player.rotation.x=pitch;player.rotation.z=0;}
+ }
  function updateScene(dt){
-  const camera=api.world.camera,lines=content.DIALOGUES['ambush-scene'],P=scene.points,wolf=scene.wolf,player=api.getPlayer();scene.time+=dt;const now=scene.time;
+  const lines=content.DIALOGUES['ambush-scene'],P=scene.points,wolf=scene.wolf,player=api.getPlayer();scene.time+=dt;const now=scene.time;
   while(scene.beat<SCENE_LINES.length&&now>=SCENE_LINES[scene.beat].at){const line=lines[SCENE_LINES[scene.beat++].line];if(line)hud.setCaption({who:speaker(line.who),text:line.text});}
-  const shot=now<SCENE.wolfShot?0:now<SCENE.chargeShot?1:now<SCENE.crash?2:now<SCENE.aftermath?3:now<SCENE.heroShot?4:5;
+  const shot=now<SCENE.sleepShot?0:now<SCENE.scream?1:now<SCENE.attack?2:now<SCENE.crash?3:now<SCENE.heroShot?4:now<SCENE.settle?5:6;
   if(shot!==scene.shot){
    scene.shot=shot;
-   if(shot===1)api.playSound?.('wolf_alert',{position:wolf.actor.position});
-   if(shot===3){scene.shake=.45;api.playSound?.('wolf_alert',{position:wolf.actor.position,rate:1.2});}
+   if(shot===2){scene.shake=.5;wakeVeil(true);api.playSound?.('wolf_alert',{position:wolf.actor.position,volume:.6});}
+   if(shot===3){wakeVeil(false);api.playSound?.('wolf_alert',{position:wolf.actor.position,rate:1.15});}
+   if(shot===4)scene.shake=.45;
   }
-  // Wagon and horse: rolling, then the rear and the fall.
+  // Wagon and horse: rolling at a walk, stopping as the wolf strikes, then over.
   const along=rideAlong(now),fx=P.f.x,fz=P.f.z;
-  const W0={x:P.S.x-fx*along,z:P.S.z-fz*along};
+  const W0={x:P.S.x-fx*along,z:P.S.z-fz*along},ground=heightAt(W0.x,W0.z);
   const tip=ease((now-SCENE.tipStart)/SCENE.tipSeconds);
-  // Moves until it lands, then rests frozen (one settle, not one per frame).
-  if(!scene.landed){const landed=now>=SCENE.tipStart+SCENE.tipSeconds;wagonRig.pose({along,tip:landed?1:tip*tip,side:WAGON_FALL},{rest:landed});if(landed){scene.landed=true;scene.shake=Math.max(scene.shake,.3);api.playSound?.('land',{volume:.9,rate:.7});}}
+  if(!scene.landed){const landed=now>=SCENE.tipStart+SCENE.tipSeconds;wagonRig.pose({along,tip:landed?1:tip*tip,side:WAGON_FALL},{rest:landed});if(landed){scene.landed=true;scene.shake=Math.max(scene.shake,.35);api.playSound?.('land',{volume:.9,rate:.7});}}
   if(wagonHorse){
    wagonHorse.place(W0.x+fx*3.55,W0.z+fz*3.55,P.yaw);
-   wagonHorse.play(now<SCENE.crash?'Horse_Gallop':now<SCENE.crash+2.4?'Horse_Rear':'Horse_Nervous');
+   const speed=SCENE.ride/SCENE.crash*Math.max(0,1-now/SCENE.crash)*(1.35-.7*now/SCENE.crash);
+   const clip=now<SCENE.attack?'Horse_Walk':now<SCENE.lunge?'Horse_Nervous':now<SCENE.tipStart?'Horse_Rear':now<SCENE.tipStart+1.4?'Horse_Fall':'Horse_Down';
+   wagonHorse.play(clip);if(clip==='Horse_Walk')wagonHorse.speed?.(Math.max(.4,Math.min(1.3,speed/1.6)));
   }
   // The driver rides on the bench, then is thrown clear by the fall.
-  if(now<SCENE.crash){const x=W0.x+fx*1.25,z=W0.z+fz*1.25;scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,heightAt(x,z)+1.05,z,P.yaw);}
+  if(now<SCENE.tipStart){const x=W0.x+fx*1.25,z=W0.z+fz*1.25;scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,ground+1.05,z,P.yaw);}
   else if(!scene.thrown){scene.thrown=true;scene.driver.x=P.D.x;scene.driver.z=P.D.z;scene.driver.visual.place(P.D.x,heightAt(P.D.x,P.D.z),P.D.z,Math.atan2(P.charge.x-P.D.x,P.charge.z-P.D.z));}
-  // The wolf: watches, then runs at the horse; after the crash it faces the warrior.
-  {const Wf=scene.wolfAt,bal=wolf.brain?.balance??{},walk=bal.walkSpeed??1.2,run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
-   const target=now<SCENE.chargeShot?P.far:P.charge;
+  // The warrior: asleep in the bed, sits up after the scream, thrown out in the fall.
+  if(player&&now<SCENE.tipStart){
+   const k=ease((now-SCENE.sitUp)/SCENE.sitSeconds);scene.pitch=-Math.PI/2+(Math.PI/2-.3)*k;
+   poseSleeper(player,W0,ground,scene.pitch);
+  }else if(scene.sleeping){scene.sleeping=false;if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}showPlayer(false);}
+  // The wolf: waits behind the firewood, breaks out round its side, springs at the horse.
+  {const Wf=scene.wolfAt,bal=wolf.brain?.balance??{},run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
+   let target=P.far;
+   if(now>=SCENE.attack){if(!scene.wolfOut&&Math.hypot(P.out.x-Wf.x,P.out.z-Wf.z)<.6)scene.wolfOut=true;target=scene.wolfOut?P.charge:P.out;}
    const dx=target.x-Wf.x,dz=target.z-Wf.z,dist=Math.hypot(dx,dz);
-   const want=dist<.03?0:Math.min(now<SCENE.chargeShot?walk:run*1.15,dist*2.2);
-   scene.wolfSpeed+=Math.max(-9*dt,Math.min(9*dt,want-scene.wolfSpeed));
+   // Paced so it reaches the horse as the spring starts.
+   const left=Math.max(.25,SCENE.lunge-now),path=dist+(scene.wolfOut?0:Math.hypot(P.charge.x-P.out.x,P.charge.z-P.out.z));
+   const want=now<SCENE.attack||dist<.03?0:Math.min(run*1.6,Math.max(run*.8,path/left));
+   scene.wolfSpeed+=Math.max(-14*dt,Math.min(14*dt,want-scene.wolfSpeed));
    const step=Math.min(dist,scene.wolfSpeed*dt);if(dist>1e-6){Wf.x+=dx/dist*step;Wf.z+=dz/dist*step;}
-   const v=scene.wolfSpeed;scene.wolfGait=v>2.4?'run':v>.12?'walk':'watch';
-   scene.wolfRate=scene.wolfGait==='run'?rate*Math.max(.6,Math.min(1.3,v/run)):scene.wolfGait==='walk'?rate*Math.max(.45,Math.min(1.4,v/walk)):1;
+   const v=scene.wolfSpeed;
+   scene.wolfGait=now>=SCENE.lunge&&now<SCENE.heroShot?'lunge':v>2.4?'run':v>.12?'walk':'watch';
+   scene.wolfRate=scene.wolfGait==='run'?rate*Math.max(.6,Math.min(1.4,v/run)):1;
    wolf.actor.position.x=Wf.x;wolf.actor.position.z=Wf.z;wolf.actor.position.y=heightAt(Wf.x,Wf.z);
-   const look=now<SCENE.aftermath?(now<SCENE.chargeShot?W0:P.H):P.guard;
-   if(wolf.actor.rotation)wolf.actor.rotation.y=Math.atan2(look.x-Wf.x,look.z-Wf.z);}
-  const Wf=scene.wolfAt;
+   const look=now<SCENE.attack?P.out:now<SCENE.heroShot?{x:W0.x+fx*3.55,z:W0.z+fz*3.55}:P.guard;
+   if(wolf.actor.rotation&&Math.hypot(look.x-Wf.x,look.z-Wf.z)>.2)wolf.actor.rotation.y=Math.atan2(look.x-Wf.x,look.z-Wf.z);}
+  const Wf=scene.wolfAt,rx=P.r.x,rz=P.r.z;
   scene.shake=Math.max(0,scene.shake-dt);const jolt=scene.shake>0?Math.sin(now*61)*.05*scene.shake/.45:0;
-  if(shot===0||shot===2){
-   // From the bench: over the horse, down the road (the wolf crosses in from the right on 2).
-   // High over the bench, looking down the road: the horse's back and head sit
-   // low in frame and its (unrigged) legs stay out of view.
-   // (2026-11-19: placed by height from the wagon's own ground; the old arm
-   // took its height from the road far ahead and sank under the wagon.)
-   const rx=P.r.x,rz=P.r.z,ground=heightAt(W0.x,W0.z),bob=Math.sin(now*11)*.03;
-   const eye={x:W0.x+fx*1.6+rx*.3,z:W0.z+fz*1.6+rz*.3},ahead={x:W0.x+fx*14,z:W0.z+fz*14};
-   const look=shot===2?{x:ahead.x*.55+Wf.x*.45,z:ahead.z*.55+Wf.z*.45}:ahead;
-   frameEye(eye.x,ground+2.9+bob,eye.z,look.x,ground+.4,look.z);
+  if(shot===0){
+   // Over the plains, closing slowly on the wagon from behind and to the side.
+   const k=ease(now/SCENE.sleepShot),back=28-21.5*k,side=14-11.8*k,up=26-22.6*k,ahead=8*(1-k);
+   frameEye(W0.x-fx*back+rx*side,ground+up,W0.z-fz*back+rz*side,W0.x+fx*ahead,ground+1.5*k,W0.z+fz*ahead);
   }else if(shot===1){
-   // Close on the wolf in the grass.
-   frame(Wf,.7,alphaFrom(W0,Wf)+1.1,6.2,1.3);
+   // Through the open back of the wagon: the warrior asleep in the bed.
+   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),back=4.3-.8*k;
+   frameEye(W0.x-fx*back+rx*.2,ground+1.95,W0.z-fz*back+rz*.2,W0.x-fx*.4,ground+.95,W0.z-fz*.4);
+  }else if(shot===2){
+   // From his eyes: the canopy overhead, then up to the bench as he sits up.
+   const pitch=scene.pitch,c=Math.cos(pitch),s=Math.sin(pitch),feet={x:W0.x+fx*.55+rx*.15,z:W0.z+fz*.55+rz*.15};
+   const ex=feet.x+fx*1.55*s,ez=feet.z+fz*1.55*s,ey=ground+.95+1.55*c+jolt;
+   const lx=ex+fx*(3*c+1.2),lz=ez+fz*(3*c+1.2),ly=ey-3*s-.4*(1-c);
+   frameEye(ex,ey,ez,lx,ly,lz);
   }else if(shot===3){
-   // Wide, from the road side: the horse rears and the wagon goes over.
-   const side={x:P.S.x+P.r.x*9+fx*2,z:P.S.z+P.r.z*9+fz*2},mid={x:(P.S.x+P.H.x)/2,z:(P.S.z+P.H.z)/2};
-   frame(mid,1.1+jolt,alphaFrom(side,mid)+jolt,10,1.2);
+   // Past the horse's far side: the wolf breaks cover and comes for it.
+   const H={x:W0.x+fx*3.55,z:W0.z+fz*3.55},mid={x:(H.x+Wf.x)/2,z:(H.z+Wf.z)/2};
+   frameEye(H.x-rx*WOLF_SIDE*5.5+fx*4.5,heightAt(H.x,H.z)+2.6,H.z-rz*WOLF_SIDE*5.5+fz*4.5,mid.x,heightAt(mid.x,mid.z)+1,mid.z);
   }else if(shot===4){
+   // Front quarter, wide: the horse goes down and the wagon over with it.
+   const mid={x:(P.S.x+P.H.x)/2,z:(P.S.z+P.H.z)/2},g=heightAt(mid.x,mid.z);
+   frameEye(mid.x+fx*8+rx*WOLF_SIDE*6,g+3.4+jolt,mid.z+fz*8+rz*WOLF_SIDE*6,mid.x-fx*.5,g+1+jolt,mid.z-fz*.5);
+  }else if(shot===5){
    // The warrior is on his feet by the wreck; he rolls in between.
    showPlayer(true);
-   if(player&&!scene.placed){scene.placed=true;const p=player.position,spot=freeNear({x:P.S.x+P.r.x*2.2,z:P.S.z+P.r.z*2.2});p.x=spot.x;p.z=spot.z;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(P.guard.x-p.x,P.guard.z-p.z);}
+   if(player&&!scene.placed){scene.placed=true;const p=player.position,spot=freeNear({x:P.S.x+rx*WOLF_SIDE*2.6,z:P.S.z+rz*WOLF_SIDE*2.6});p.x=spot.x;p.z=spot.z;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(P.guard.x-p.x,P.guard.z-p.z);}
    const mid={x:(P.D.x+Wf.x)/2,z:(P.D.z+Wf.z)/2};
    frame(mid,1,alphaFrom(P.S,mid)+.9,8.5,1.2);
    if(!scene.rolled&&now>=SCENE.rollAt&&player){
@@ -551,8 +604,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }else{
    // Settle on the guard spot facing the wolf, then swing behind.
    showPlayer(true);
+   const camera=api.world.camera;
    if(player){const p=player.position,k=Math.min(1,dt*6);p.x+=(P.guard.x-p.x)*k;p.z+=(P.guard.z-p.z)*k;p.y=heightAt(p.x,p.z);if(player.rotation)player.rotation.y=Math.atan2(Wf.x-p.x,Wf.z-p.z);}
-   const k=ease((now-SCENE.heroShot)/1.3),behind=clearAlpha(alphaFrom(P.D,Wf),P.guard,(content.PROPS??[]).filter(prop=>prop.map===mapId));
+   const k=ease((now-SCENE.settle)/1.3),behind=clearAlpha(alphaFrom(P.D,Wf),P.guard,(content.PROPS??[]).filter(prop=>prop.map===mapId));
    scene.cameraFocus=null;
    let turn=behind-camera.alpha;turn=Math.atan2(Math.sin(turn),Math.cos(turn));camera.alpha+=turn*Math.min(1,dt*4);
    camera.beta+=(scene.beta-camera.beta)*Math.min(1,dt*3);camera.radius+=(scene.radius-camera.radius)*k*Math.min(1,dt*3);
@@ -560,14 +614,38 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(now>=SCENE.end)endScene();
  }
  function endScene(){
-  const camera=api.world.camera;scene.active=false;scene.cameraFocus=null;
+  const camera=api.world.camera;scene.active=false;scene.cameraFocus=null;wakeVeil(false);
   if(camera&&scene.upper!==undefined){camera.upperRadiusLimit=scene.upper;scene.upper=undefined;}
   if(camera){camera.radius=scene.radius;camera.beta=scene.beta;}
+  const player=api.getPlayer?.();if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}scene.sleeping=false;
   showPlayer(true);
-  wagonHorse?.play('Horse_Nervous');
+  wagonHorse?.play('Horse_Down');horseState.down=true;
   wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});
   releaseWolf(scene.wolf);
   hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera?.alpha??coachState.alpha;
+ }
+ // ----- the wagon's own collision -----
+ // The map's placed wagon does not collide (its box was the rotated model's
+ // square bounds and blocked both the standing and the fallen spot; 2026-11-19,
+ // user). One box follows the story wagon: standing (with the horse in the
+ // shafts) or lying on its fall side. The navigation is replaced, never edited,
+ // and only weakly referenced here (it belongs to the map).
+ let navBase=null,navOurs=null,blockState=null,blockSerial=0;
+ function wagonCollision(state){
+  const world=api.world,nav=world?.navigation;if(!nav)return;
+  const ours=navOurs?.deref();
+  if(nav!==ours){if(ours||!navBase||navBase.deref()!==nav){navBase=new WeakRef(nav);}navOurs=null;blockState=null;}
+  if(state===blockState)return;
+  const base=navBase?.deref(),prop=openingWagon();
+  if(!state||!base||!prop||mapId!==prop.map){if(ours&&world.navigation===ours&&base)world.navigation=base;navOurs=null;blockState=state??null;return;}
+  const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
+  // Wagon frame: standing spans -2.6..4.6 along (bed to horse), +-1.3 across;
+  // lying, the canopy reaches out to 4.3 on the fall side.
+  const along=state==='up'?1.0:.8,across=state==='up'?0:WAGON_FALL*2.6,halfWidth=state==='up'?1.3:1.75,halfDepth=state==='up'?3.6:3.5;
+  const x=prop.x+f.x*along+r.x*across,z=prop.z+f.z*along+r.z*across;
+  const block={id:'v03-story-wagon-'+state,shape:'box',x,z,yaw,halfWidth,halfDepth,radius:Math.hypot(halfWidth,halfDepth),height:1.6,source:'v03-story-wagon'};
+  try{const next=createAuthoredPlacementNavigation(base,[block],'v03-wagon-'+(++blockSerial));world.navigation=next;navOurs=new WeakRef(next);blockState=state;}
+  catch(error){console.warn('[MoonForest 0.3] wagon collision skipped',error);blockState=state;}
  }
  // ----- setting the wagon back up (M00, after the fight) -----
  // The driver's 'right-wagon' line sends him to the toppled wagon; the warrior
@@ -575,7 +653,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // the shield shove). The wagon rises a third per heave and drops onto its
  // wheels on the last; then the driver's thanks play (2026-11-19, user).
  const PUSHES=3,HEAVE_SECONDS=.55,PUSH_RANGE=1.7,PUSH_RANGE_SQ=PUSH_RANGE*PUSH_RANGE;
- const lift={active:false,spot:null,helper:null,count:0,from:1,to:1,time:0,member:null,cued:false,caption:0};
+ const lift={active:false,spot:null,helper:null,count:0,from:1,to:1,time:0,member:null,cued:false,caption:0,called:-1,callIn:0};
  const COUNT_KEYS=Object.freeze(['lift.one','lift.two','lift.three']);
  // The driver must stand at his place before the first heave (it used to be
  // pushable while he was still walking over; 2026-11-19, user).
@@ -584,12 +662,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function liftSpots(){
   const prop=openingWagon();if(!prop)return null;const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
   // The wagon lies on its WAGON_FALL side: its roof edge is out there.
-  const out=2.9;
+  const out=4.9;
   return {player:freeNear({x:prop.x+r.x*WAGON_FALL*out-f.x*.7,z:prop.z+r.z*WAGON_FALL*out-f.z*.7}),helper:freeNear({x:prop.x+r.x*WAGON_FALL*out+f.x*.9,z:prop.z+r.z*WAGON_FALL*out+f.z*.9}),face:{x:prop.x,z:prop.z}};
  }
  function startLift(member){
   const spots=liftSpots();if(!spots||!member)return false;
-  Object.assign(lift,{active:true,spot:spots.player,helper:spots.helper,face:spots.face,count:0,from:1,to:1,time:HEAVE_SECONDS,member,cued:false,caption:0});
+  Object.assign(lift,{active:true,spot:spots.player,helper:spots.helper,face:spots.face,count:0,from:1,to:1,time:HEAVE_SECONDS,member,cued:false,caption:0,called:-1,callIn:0});
   const yaw=Math.atan2(spots.face.x-spots.helper.x,spots.face.z-spots.helper.z);
   if(member.visual.walkTo)member.visual.walkTo(spots.helper.x,spots.helper.z,{yaw,heightAt});
   else{member.x=spots.helper.x;member.z=spots.helper.z;member.visual.place(spots.helper.x,heightAt(spots.helper.x,spots.helper.z),spots.helper.z,yaw);}
@@ -598,11 +676,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Called by interact() while the lift waits for the warrior.
  function nearLift(player){if(!lift.active||!player||!lift.spot)return false;const dx=player.x-lift.spot.x,dz=player.z-lift.spot.z;return dx*dx+dz*dz<=PUSH_RANGE_SQ;}
  function push(){
-  if(!lift.active||lift.time<HEAVE_SECONDS||lift.count>=PUSHES||!driverPlaced())return false;
+  if(!lift.active||lift.time<HEAVE_SECONDS||lift.count>=PUSHES||!driverPlaced()||lift.called!==lift.count)return false;
   const player=api.getPlayer?.();if(player?.rotation){const p=player.position;player.rotation.y=Math.atan2(lift.face.x-p.x,lift.face.z-p.z);}
   try{api.actions?.guard?.();}catch{/* the heave still counts */}
   lift.member?.visual.gesture?.('Agree_Gesture');
-  lift.count++;lift.from=lift.to;lift.to=1-lift.count/PUSHES;lift.time=0;driverSays(COUNT_KEYS[lift.count-1]);
+  lift.count++;lift.from=lift.to;lift.to=1-lift.count/PUSHES;lift.time=0;lift.callIn=.35;lift.caption=.5;
   api.playSound?.(lift.count<PUSHES?'shield_up':'land',{volume:.75});
   return true;
  }
@@ -610,7 +688,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(!lift.active)return false;
   if(lift.caption>0){lift.caption-=dt;if(lift.caption<=0)hud.setCaption(null);}
   const placed=driverPlaced();
-  if(placed&&!lift.cued){lift.cued=true;driverSays('lift.ready');lift.caption=2.2;}
+  if(placed&&!lift.cued){lift.cued=true;driverSays('lift.ready');lift.caption=0;lift.callIn=1.6;}
+  // The driver calls the count first ("하나!"), then the warrior pushes.
+  if(placed&&lift.cued&&lift.count<PUSHES&&lift.time>=HEAVE_SECONDS&&lift.called!==lift.count){lift.callIn-=dt;if(lift.callIn<=0){lift.called=lift.count;driverSays(COUNT_KEYS[lift.count]);lift.caption=0;}}
   if(lift.time<HEAVE_SECONDS){
    lift.time=Math.min(HEAVE_SECONDS,lift.time+dt);const k=ease(lift.time/HEAVE_SECONDS);
    // A heave lifts past the mark and settles back a little; the last drops it home.
@@ -624,7 +704,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }
   }
   if(lift.count<PUSHES&&!talking&&!dialogue.open){
-   if(nearLift(player)&&!placed)hud.setPrompt({key:null,name:t('prompt.wagonName'),action:t('prompt.waitDriver'),mark:null,label:t('prompt.waitDriver')});
+   if(nearLift(player)&&(!placed||lift.called!==lift.count))hud.setPrompt({key:null,name:t('prompt.wagonName'),action:t('prompt.waitDriver'),mark:null,label:t('prompt.waitDriver')});
    else if(nearLift(player))hud.setPrompt({key:touch?null:'E',name:t('prompt.wagonName'),action:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),mark:null,label:t('prompt.pushWagon',{n:lift.count,total:PUSHES})});
    else hud.setPrompt(null);
   }
@@ -778,6 +858,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   beginAmbushScene,
   get sceneActive(){return scene.active;},
   get cameraFocus(){return scene.active?scene.cameraFocus:null;},
+  // The warrior lies in the wagon bed during the opening: main.js keeps him off the ground snap.
+  get holdsPlayer(){return scene.active&&scene.sleeping===true;},
   get timeScale(){return slow.left>0?SLOW_SCALE:1;},
   get lunge(){return scene.active?null:LUNGE;},
   // Where the current step is fought on this map (monster groups near it load first).
@@ -819,7 +901,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // Strolling actors: talk range and markers follow where they stand now.
    for(const member of cast){const at=member.visual.position;if(at){member.x=at.x;member.z=at.z;}}
    const player=api.getPlayer()?.position;
-   if(wagonDown())poseWagonForStory();horseMotion();
+   if(wagonDown())poseWagonForStory();horseMotion(dt);wagonCollision(scene.active?null:wagonDown()||lift.active?'down':'up');
    if(updateLift(dt,player))return;
    if(player&&!talking&&!dialogue.open&&!lift.active){
     let best=null,bestSq=TALK_RANGE_SQ;

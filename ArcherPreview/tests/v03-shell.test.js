@@ -257,8 +257,10 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.shell.story.sceneActive,true);assert.equal(h.shell.allows('move'),false);assert.equal(h.shell.allows('attack'),false);
  assert.equal(h.document.documentElement.dataset.v03Lock,'move camera attack dodge guard potion');
  h.shell.update(.016);assert.ok(h.shell.story.cameraFocus,'the first shot frames the wolf, not the player');
- for(let i=0;i<160;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/깨셨수/);
- for(let i=0;i<700;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
+ // The driver's scream comes after the slow approach and the sleeping warrior (9 s).
+ for(let i=0;i<560;i++)h.shell.update(.016);assert.equal(hud('.v03-caption').hidden,true,'no line over the opening shots');
+ for(let i=0;i<30;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/으아악/);
+ for(let i=0;i<650;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
  // Coaching runs in order: move → camera → attack → dodge → shield, each
  // allowing only its own action.
  assert.equal(h.shell.allows('move'),true);assert.equal(h.shell.allows('attack'),false);assert.equal(h.shell.allows('camera'),false);
@@ -300,8 +302,10 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-dialogue').hidden,true);assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기','the step completes when the wagon stands');
  const spot=h.shell.inspect().story.lift;assert.ok(spot,'the wagon waits for a push');
  key('KeyE');await settle();assert.equal(h.shell.inspect().story.lift.count,0,'pushing needs the warrior at the wagon');
- h.player.position={x:spot.x,z:spot.z};h.shell.update(.016);assert.match(hud('.v03-prompt').getAttribute('aria-label'),/밀기 \(0\/3\)/);
- for(let push=1;push<=3;push++){key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}
+ h.player.position={x:spot.x,z:spot.z};h.shell.update(.016);assert.match(hud('.v03-prompt').getAttribute('aria-label'),/마부를 기다리는 중/,'until the driver calls');
+ // The driver calls each heave first ("하나!"); E before his call does nothing.
+ key('KeyE');await settle();assert.equal(h.shell.inspect().story.lift.count,0,'no push before the driver calls');
+ for(let push=1;push<=3;push++){for(let i=0;i<130;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,[/하나/,/둘/,/셋/][push-1]);assert.match(hud('.v03-prompt').getAttribute('aria-label'),new RegExp(`밀기 \\(${push-1}/3\\)`));key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}
  assert.equal(h.log.filter(x=>x==='guard').length>=3,true,'each heave is a shield shove');
  assert.equal(hud('.v03-dialogue').hidden,false,'the thanks start by themselves once it stands');
  for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();

@@ -1023,7 +1023,7 @@ function render(dt) {
     controller.commitSprintMovement?.(sprintRequested,sprintActual);
     // Authored jump/roll poses remain local to the actor. Only its ground anchor
     // follows terrain; a boss holding or throwing the actor owns its altitude.
-    if(!result.captured&&!boss.grab.active)world.terrain.place(actor.position);
+    if(!result.captured&&!boss.grab.active&&!world.v03?.holdsPlayer)world.terrain.place(actor.position);
     if (attacking && shotTarget && !isWarrior()) {
       const direction = shotTarget.aimPoint.subtract(actor.position);
       faceHeading(Math.atan2(direction.x, direction.z) - (config.attackYaw?.[result.state] || 0), dt);

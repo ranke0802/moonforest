@@ -6,7 +6,7 @@ export const OPENING_STAGE=Object.freeze({map:'great-plains',x:-62.5,z:-20.9,yaw
 // Scenery the story adds to a map (real assets, placed through the map's own
 // placement runtime so streaming, collision and outlines work as usual).
 export const PROPS=Object.freeze([
- {id:'v03-opening-wagon',asset:'covered-wagon',map:'great-plains',x:-64.3,z:-25.8,yaw:-2.097},
+ {id:'v03-opening-wagon',asset:'covered-wagon',map:'great-plains',x:-64.3,z:-25.8,yaw:-2.097,collision:'none'},
 ]);
 // Where to walk to leave a map toward another one (used by the guide light).
 export const ROUTES=Object.freeze({
@@ -42,11 +42,10 @@ export const DIALOGUES=Object.freeze({
  ],
  // Prologue → first fight: the wagon ride and the wolf (played by story.beginAmbushScene).
  'ambush-scene':[
-  {who:'나',text:'(…꿈이었나.)'},
-  {who:'마부',text:'깨셨수? 조금만 더 가면 마을이우. 저 언덕만 넘으면 금방이오.'},
-  {who:'나',text:'(풀숲이… 이상하게 조용하네.)'},
-  {who:'마부',text:'워, 워어! 늑대다! 말이 놀라…!'},
-  {who:'마부',text:'아이고, 마, 말이…! 늑대요, 늑대!'},
+  {who:'마부',text:'으아악!'},
+  {who:'나',text:'(…뭐, 뭐야?)'},
+  {who:'마부',text:'느, 늑대다! 워, 워어!'},
+  {who:'마부',text:'아이고, 마, 말이…!'},
   {who:'나',text:'(일단 마부부터 지키자.)'},
  ],
  'driver-idle':[{who:'마부',text:'바퀴만 고치면 나도 곧 뒤따라가겠수. 길 조심하시우.'}],

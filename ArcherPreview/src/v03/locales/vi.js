@@ -30,7 +30,7 @@ export default {
   'scene.protect':'Bảo vệ người đánh xe',
   'sky.clear':'Quang','sky.cloudy':'Nhiều mây','sky.rain':'Mưa','sky.storm':'Bão','rotate.install':'Cài như ứng dụng (luôn ngang)','rotate.title':'Hãy xoay ngang thiết bị','rotate.tap':'Chạm để chuyển sang toàn màn hình ngang.','rotate.ios':'Trò chơi chơi ở chế độ ngang. Thêm vào Màn hình chính để chơi toàn màn hình không có thanh trình duyệt.','ios.add':'Thêm vào Màn hình chính','ios.step1':'Chạm nút Chia sẻ (□↑) trong Safari.','ios.step2':"Chọn 'Thêm vào Màn hình chính'.",'ios.step3':'Mở MoonForest từ Màn hình chính và xoay ngang thiết bị.',
   'hud.main':'Chính','hud.chapterNext':'Câu chuyện còn tiếp','reward.got':'Phần thưởng · {items}','reward.gold':'{n} G','reward.potions':'{n} bình hồi máu','reward.armor.leather':'Giáp da (Phòng thủ +2)','combat.justGuard':'Đỡ hoàn hảo!','hud.complete':'Hoàn thành · {done}','hud.completeNext':'Hoàn thành · {done}  →  {next}','hud.rested':'Đã nghỉ ngơi · Đã ghi lại hành trình',
-  'prompt.actionQuest':'Nói chuyện','prompt.actionIdle':'Bắt chuyện','prompt.wagonName':'Xe ngựa','prompt.pushWagon':'Đẩy ({n}/{total})','prompt.waitDriver':'Đang chờ bác đánh xe','lift.ready':'Rồi, đếm tới ba là cùng đẩy nghen!','lift.one':'Một…!','lift.two':'Hai…!','lift.three':'Ba!',
+  'prompt.actionQuest':'Nói chuyện','prompt.actionIdle':'Bắt chuyện','prompt.wagonName':'Xe ngựa','prompt.pushWagon':'Đẩy ({n}/{total})','prompt.waitDriver':'Đang chờ bác đánh xe','lift.ready':'Rồi, nghe tui hô là cùng đẩy nghen!','lift.one':'Một!','lift.two':'Hai!','lift.three':'Ba!',
   'prompt.talkQuest':'Nói chuyện với {name}','prompt.talkIdle':'Bắt chuyện với {name}',
  },
  story:{
@@ -38,7 +38,7 @@ export default {
   dialogues:{
    'driver-wagon':['Phù… sống rồi. Hổng có cậu thì tui với con ngựa thành mồi cho sói rồi.','Ngại thiệt, mà cậu phụ tui dựng cái xe lên được hông? Một mình tui đẩy hoài hổng nhúc nhích.','Được. Bác vào chỗ rồi mình cùng đẩy.'],
    'driver-thanks':['Ối, dựng lên rồi, lên rồi! …Trời đất, cái bánh xe nát bét luôn rồi.','Mà cũng may. Làng ở ngay đằng kia, từ đây đi bộ chút xíu là tới.','Cậu cứu mạng tui, tui phải biếu cậu cái gì chớ. Suýt nữa con gái một của tui mất cha rồi… Cảm ơn cậu nhiều lắm.','Hổng bao nhiêu, cậu cầm lấy nghen. Vô làng thì tìm quán trọ Ánh Trăng trước. Ông chủ hơi cộc, mà phòng sạch sẽ lắm.'],
-   'ambush-scene':['(…Là mơ sao.)','Cậu dậy rồi hả? Đi thêm chút nữa là tới làng. Qua khỏi ngọn đồi kia là tới liền.','(Bụi cỏ… im lặng lạ thường.)','Hí, hí! Sói kìa! Ngựa nó hoảng…!','Trời ơi, con, con ngựa…! Sói! Sói kìa!','(Trước hết phải bảo vệ bác đánh xe.)'],
+   'ambush-scene':['Áaaa!','(…Gì, gì vậy?)','S-sói! Hí, hí!','Trời ơi, c-con ngựa…!','(Trước hết phải bảo vệ bác đánh xe.)'],
    'driver-idle':['Sửa xong cái bánh là tui theo sau liền. Đi đường cẩn thận nghen.'],
    'inn-arrive':['Mặt lạ đây. Mùa này ít ai chịu lặn lội tới tận làng này.','Tôi đến theo ủy thác của Giáo hội. Thánh nữ tập sự Elena đã bặt tin sáu tháng rồi.','…Lâu lắm mới nghe lại cái tên đó. Một đứa tốt bụng. Nó từng thức trắng đêm bên người bị thương.','Ta không biết nhiều. Hỏi bà cụ bên giếng, thầy thuốc, và cậu trai đang sửa hàng rào đi. Mỗi người sẽ nhớ hơi khác nhau.','Cứ dùng phòng trên lầu. Muốn nghỉ thì cứ gọi ta. Chuyện hôm nay ta sẽ ghi vào sổ.'],
    'inn-idle':['Nghỉ một lát chứ? Chuyện hôm nay ta sẽ ghi vào sổ.'],

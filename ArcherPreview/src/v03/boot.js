@@ -379,6 +379,7 @@ export function setupV03(api){
   allows(kind){return state.screen!=='play'||story.allows(kind);},
   // Cutscene camera target and short slow motion (read by main.js each frame).
   get cameraFocus(){return state.screen==='play'?story.cameraFocus:null;},
+  get holdsPlayer(){return state.screen==='play'&&story.holdsPlayer===true;},
   get timeScale(){return state.screen==='play'?story.timeScale:1;},
   get lunge(){return state.screen==='play'?story.lunge:null;},
   get questSpot(){return state.screen==='play'?story.questSpot:null;},
