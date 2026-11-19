@@ -21,6 +21,7 @@ export const CAST_MODELS=Object.freeze({
  'chief-son':'moonforest-tripo-vigilante',
 });
 const MODEL_HEIGHT=1.85,IDLE='Idle_Stand',GAZE_IN=.35,GAZE_OUT=.8,GAZE_LINGER=1.2,EYE_HEIGHT=1.45;
+const RETRY_LIMIT=3,RETRY_MS=2500;
 const UP=new Vector3(0,1,0),clamp=(value,limit)=>Math.max(-limit,Math.min(limit,value));
 const quatY=yaw=>[0,Math.sin(yaw/2),0,Math.cos(yaw/2)];
 const wrap=angle=>Math.atan2(Math.sin(angle),Math.cos(angle));
@@ -81,9 +82,14 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   let pose=null,ready=false,disposed=false,npc=null,block=null,wake=null;
   let clock=Math.random()*4,watch=null,gaze=null,gazeWeight=0,releaseAt=0,time=0;const eye=new Vector3();
   const transform=()=>({position:pose.position,rotation:quatY(pose.yaw),scale});
+  // A failed load (often a transient abort while a map trip settles) shows the
+  // block for now and retries; a later success replaces the block with the
+  // model (2026-11-19: the driver stayed a block for the rest of the session).
+  let attempts=0;
   const swapToBlock=error=>{
-   if(disposed||block)return;actors.delete(actor);console.warn('[MoonForest 0.3] cast model unavailable',key,error);
-   block=fallback(scene,key,{id});if(pose)block.place(...pose.position,pose.yaw);
+   if(disposed)return;actors.delete(actor);console.warn('[MoonForest 0.3] cast model unavailable',key,error);
+   if(!block){block=fallback(scene,key,{id});if(pose)block.place(...pose.position,pose.yaw);}
+   if(++attempts<=RETRY_LIMIT&&!scene.isDisposed)setTimeout(()=>{if(!disposed&&!scene.isDisposed)void spawn();},RETRY_MS*attempts);
   };
   // Pose the root directly: the shared runtime's own setters refuse records
   // once its map bookkeeping moves on, and this actor is owned by the story.
@@ -101,13 +107,16 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
     if(gazeWeight>0){gaze??=createGaze(record.encounter.asset);gaze?.apply(eye,ease(gazeWeight));}
    },
   };
-  void ensure().then(async world=>{
+  const spawn=()=>ensure().then(async world=>{
    npc=world;if(disposed)return;if(!pose)await new Promise(resolve=>{wake=resolve;});
    if(disposed)return;
+   try{world.remove(instanceId,{persist:false});}catch{}
    await world.add(assetId,{instanceId,...transform(),clipId:IDLE,loop:true,persist:false});
    if(disposed){world.remove(instanceId,{persist:false});return;}
+   if(block){block.dispose();block=null;}
    ready=true;world.setTransform(instanceId,transform());actors.add(actor);
   }).catch(swapToBlock);
+  void spawn();
   return {
    id,key,label:spec.label,placeholder:false,height:spec.height??1.7,
    place(x,y,z,yaw=0){
