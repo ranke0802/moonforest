@@ -144,17 +144,25 @@ export function setupV03(api){
   // The title can be on another map (a record was resumed there): travel and let the opening run after the load.
   // Travel in place first: a page reload leaves fullscreen and drops the
   // landscape lock on phones. Reload only if the in-app trip fails.
-  if(OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map){
-   let moved=false;try{moved=await api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])===true;}catch(error){console.warn('[MoonForest 0.3] opening travel failed',error);}
-   if(!moved||gameState().mapId!==OPENING_STAGE.map){save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));reloadInto(save.slot,'new',null);return;}
+  // The dream plays at once; when the title stood on another map, the trip to
+  // the opening map loads underneath it (the dream layer covers everything).
+  // Before 2026-11-19 the trip ran first behind a plain black screen (~10 s on
+  // a phone when the last record was on the plains).
+  const travelling=OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map
+   ?Promise.resolve().then(()=>api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])).then(moved=>moved===true,error=>{console.warn('[MoonForest 0.3] opening travel failed',error);return false;})
+   :null;
+  screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
+  const dream=opening.play();
+  if(travelling){
+   const moved=await travelling;
+   if(!moved||gameState().mapId!==OPENING_STAGE.map){reloadInto(save.slot,'new',null);return;}
   }
   api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
-  screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
   // Prepare the ambush behind the black stage; the simulation stays frozen
   // (blocksGame) until the dream ends, so nothing can attack early.
   state.ambush=true;
   const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(error=>{console.warn('[MoonForest 0.3] ambush unavailable',error);return false;});
-  await opening.play();
+  await dream;
   const ready=await Promise.race([ambush,wait(6000).then(()=>null)]);
   if(ready===false)state.ambush=false;
   save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
@@ -239,7 +247,7 @@ export function setupV03(api){
   const rows=[
    [hint('move')?.text,hint('move')],[hint('camera')?.text,hint('camera')],[hint('attack')?.text,hint('attack')],
    [t('guide.combo'),both('guide.comboText')],[tip('charge')?.title,tip('charge')],
-   [t('guide.dodge'),hint('dodge')],[tip('sprint')?.title,tip('sprint')],
+   [t('guide.dodge'),hint('dodge')],[tip('sprint')?.title,tip('sprint')],[tip('stamina')?.title,tip('stamina')],
    [t('guide.guard'),hint('guard')],[t('guide.justGuard'),both('guide.justGuardText')],
    [tip('potion')?.title,tip('potion')],[tip('talk')?.title,tip('talk')],
   ].filter(([name,row])=>name&&row);

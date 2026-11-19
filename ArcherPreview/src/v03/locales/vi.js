@@ -85,6 +85,7 @@ export default {
    charge:{title:'Đòn mạnh',keys:'Giữ tấn công (J · chuột trái) để giáng Kiếm Phán Xét.',touch:'Giữ nút kiếm để giáng Kiếm Phán Xét.',text:'Chậm nhưng mạnh. Dùng khi thấy sơ hở.'},
    talk:{title:'Trò chuyện',keys:'Nhấn E khi ở gần để bắt chuyện.',touch:'Chạm nút hiện ra khi lại gần để bắt chuyện.',text:'Không thể trò chuyện khi đang chiến đấu.'},
    sprint:{title:'Chạy nhanh',keys:'Giữ Space để chạy.',touch:'Giữ nút né để chạy.',text:'Tốn thể lực. Hãy theo mục tiêu bên trái và bản đồ góc trên phải.'},
+   stamina:{title:'Thể lực',keys:'Thanh màu vàng dưới máu là thể lực. Tấn công, né, khiên và chạy nhanh đều tiêu hao nó.',touch:'Thanh màu vàng dưới máu là thể lực. Tấn công, né, khiên và chạy nhanh đều tiêu hao nó.',text:'Khi cạn bạn phải chờ một chút. Ngừng hành động thì thể lực sẽ hồi lại.'},
    rest:{title:'Nghỉ ngơi và ghi lại',keys:'Nói chuyện với chủ quán trọ để nghỉ.',touch:'Nói chuyện với chủ quán trọ để nghỉ.',text:'Hồi đầy máu và thuốc, đồng thời ghi lại hành trình.'},
    witness:{title:'Thu thập lời kể',keys:'Hỏi ba người theo thứ tự tùy ý.',touch:'Hỏi ba người theo thứ tự tùy ý.',text:'Mục tiêu sẽ cho biết bạn đã nghe ai.'},
   },

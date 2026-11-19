@@ -190,7 +190,8 @@ export const COMBAT_HINTS=Object.freeze([
 ]);
 
 // One-time tips, shown the first time a feature becomes relevant (per save).
-// when: low-hp · near-npc · step:<quest>/<step> · effect:<name>
+// when: low-hp · low-stamina · near-npc · step:<quest>/<step> · effect:<name>
+// (low-stamina also fires once the first-fight lessons are done)
 export const TIPS=Object.freeze([
  {id:'guide',when:'guide-shown',title:'길잡이 빛',keys:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',touch:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',text:'어디로 갈지 모를 때는 빛을 따라가세요.'},
  {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 동안에도 움직일 수 있습니다.'},
@@ -198,6 +199,7 @@ export const TIPS=Object.freeze([
  {id:'charge',when:'step:M00/driver',title:'강공격',keys:'공격(J · 좌클릭)을 길게 누르면 심판의 검을 내려칩니다.',touch:'검 버튼을 길게 누르면 심판의 검을 내려칩니다.',text:'느리지만 강합니다. 빈틈이 보일 때 쓰세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
  {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 왼쪽 목표와 오른쪽 위 지도를 따라가세요.'},
+ {id:'stamina',when:'low-stamina',title:'스태미나',keys:'체력 아래 노란 막대가 스태미나입니다. 공격·회피·방패·질주에 쓰입니다.',touch:'체력 아래 노란 막대가 스태미나입니다. 공격·회피·방패·질주에 쓰입니다.',text:'다 쓰면 잠시 기다려야 합니다. 동작을 멈추면 다시 차오릅니다.'},
  {id:'rest',when:'effect:rest',title:'휴식과 기록',keys:'여관 주인에게 말을 걸면 쉴 수 있습니다.',touch:'여관 주인에게 말을 걸면 쉴 수 있습니다.',text:'체력과 회복약이 채워지고 여정이 기록됩니다.'},
  {id:'witness',when:'step:M02/witness',title:'증언 모으기',keys:'세 사람에게 순서와 상관없이 물어보세요.',touch:'세 사람에게 순서와 상관없이 물어보세요.',text:'누구에게 들었는지는 목표에 표시됩니다.'},
 ]);

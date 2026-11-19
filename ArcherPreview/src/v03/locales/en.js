@@ -85,6 +85,7 @@ export default {
    charge:{title:'Heavy attack',keys:'Hold attack (J · left click) to bring down the Sword of Judgment.',touch:'Hold the sword button to bring down the Sword of Judgment.',text:'Slow but powerful. Use it when you see an opening.'},
    talk:{title:'Talk',keys:'Press E nearby to talk.',touch:'Tap the button that appears when you get close.',text:'You can’t talk during combat.'},
    sprint:{title:'Sprint',keys:'Hold Space to run.',touch:'Hold the dodge button to run.',text:'Uses stamina. Follow the objective on the left and the map at the top right.'},
+   stamina:{title:'Stamina',keys:'The yellow bar under your health is stamina. Attacks, dodges, the shield and sprinting use it.',touch:'The yellow bar under your health is stamina. Attacks, dodges, the shield and sprinting use it.',text:'When it runs out you must wait a moment. It refills when you stop acting.'},
    rest:{title:'Rest and record',keys:'Talk to the innkeeper to rest.',touch:'Talk to the innkeeper to rest.',text:'Restores health and potions, and records your journey.'},
    witness:{title:'Gathering testimony',keys:'Ask the three in any order.',touch:'Ask the three in any order.',text:'The objective shows whom you’ve heard from.'},
   },

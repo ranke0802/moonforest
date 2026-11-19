@@ -254,6 +254,9 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.shell.allows('attack')&&h.shell.allows('potion'),true,'free fight after the lessons');assert.equal(h.document.documentElement.dataset.v03Lock,undefined);
  // One-time tips: low health shows the potion card once, then it expires.
  assert.ok(!h.shell.inspect().story.tips.includes('guide'),'the guide light card waits for the light itself');
+ // Stamina is explained as soon as the first-fight lessons are over.
+ h.shell.update(.016);assert.equal(hud('.v03-tip-title').textContent,'스태미나');
+ for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);
  h.battle.combat.hp=200;h.shell.update(.016);
  assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'회복약');assert.match(hud('.v03-tip-lead').textContent,/숫자 1 키/);
  for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);h.battle.combat.hp=500;

@@ -499,6 +499,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(near)trigger('near-npc');
   const combat=api.battle.combat;
   if(combat&&combat.maxHp>0&&combat.hp>0&&combat.hp/combat.maxHp<.6)trigger('low-hp');
+  // Stamina: explained the first time it runs low, or as soon as the
+  // first-fight lessons are over (attacks and dodges have used it by then).
+  if(tips.seen.has('stamina'))return;
+  const controller=api.getController?.(),max=controller?.maxStamina;
+  const low=max>0&&Number.isFinite(controller.stamina)&&controller.stamina<max*.3;
+  if(low||quest?.id==='M00'&&step?.id==='fight'&&coachState.index>=(content.COMBAT_HINTS?.length??0))trigger('low-stamina');
  }
  const onKey=event=>{
   if(event.code!=='KeyE'||event.repeat||event.defaultPrevented||!started||dialogue.open)return;
