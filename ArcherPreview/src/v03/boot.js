@@ -2,7 +2,7 @@
 // It owns no engine, scene, frame loop or timer loop: main.js calls update(dt)
 // from the existing game frame, and every stage change goes through `api`.
 import {createTitleScreen} from './title-screen.js';
-import {createOpening} from './opening.js';
+import {createOpening,warmPrologueArt} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
@@ -37,6 +37,7 @@ export function setupV03(api){
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
  const pilot=createAttractPilot({random:api.random});
  const opening=createOpening({doc,wait});
+ try{warmPrologueArt(view);}catch{}
  // 0.3's layers (dialogue, prompts, quest, tips, title) live on <body>, outside
  // #app: no right-click menu or text selection there either (inputs excepted).
  const selection=setupGameSelection(doc.body);
@@ -61,6 +62,8 @@ export function setupV03(api){
  // theme with its demo fight silent, the prologue the quiet forest theme
  // (swapped 2026-11-19, user choice); play returns to the map's own music.
  const SCREEN_SCORE=Object.freeze({boot:'elena_saint',title:'elena_saint',resume:'elena_saint',opening:'forest'});
+ // Prologue scores start downloading during the logo too (cached afterwards).
+ for(const key of new Set([SCREEN_SCORE.title,SCREEN_SCORE.opening]))try{void Promise.resolve(api.prefetchScore?.(key)).catch(()=>{});}catch{}
  const screen=value=>{state.screen=value;html.dataset.v03Screen=value;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
@@ -288,19 +291,42 @@ export function setupV03(api){
   loadingWait=new Watch(()=>{if(html.dataset.loading)return;loadingWait.disconnect();loadingWait=null;next();});
   loadingWait.observe(html,{attributes:true,attributeFilter:['data-loading']});
  }
+ // New game on a fresh document (2026-11-19, user): the dream needs only its
+ // paintings, captions and score, so it starts as soon as the language is set
+ // and the game downloads underneath. The loading card is hidden; a thin line
+ // at the bottom follows its progress (#loading-progress width) and goes when
+ // the card would have closed. Downloads stay in the resource cache as before.
+ let earlyLine=null,earlyWatch=null;
+ function endEarlyLine(){earlyWatch?.disconnect();earlyWatch=null;earlyLine?.remove();earlyLine=null;delete html.dataset.v03EarlyDream;}
+ function startEarlyDream(){
+  opening.cover();
+  html.dataset.v03EarlyDream='1';
+  const source=doc.getElementById('loading-progress'),Watch=view?.MutationObserver;
+  earlyLine=doc.createElement('div');earlyLine.className='v03-download-line';earlyLine.setAttribute('aria-hidden','true');
+  const fill=doc.createElement('i');earlyLine.append(fill);(doc.body??doc.documentElement).append(earlyLine);
+  let last=-1;
+  const sync=()=>{
+   if(!html.dataset.loading){endEarlyLine();return;}
+   const value=Math.max(0,Math.min(100,parseFloat(source?.style?.width)||0));
+   if(value!==last){last=value;fill.style.transform=`scaleX(${value/100})`;}
+  };
+  if(Watch){earlyWatch=new Watch(sync);if(source)earlyWatch.observe(source,{attributes:true,attributeFilter:['style']});earlyWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
+  sync();
+  void langReady.then(()=>{if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;state.dream=opening.play();});
+ }
  if(save.intent){
   // A slot was chosen on a previous document: skip logo and title.
   splash?.remove?.();screen(save.intent.mode==='new'?'opening':'resume');
   // Between the loading card and the dream, never show the raw camera (it
   // can start inside a tree crown): keep the prologue cover up.
-  if(save.intent.mode==='new')opening.cover();
+  if(save.intent.mode==='new')startEarlyDream();
  }else if(splash?.done)splash.done.then(()=>{splash.remove?.();afterLoading(showTitle);});
  else afterLoading(showTitle);
  // A loading/frame failure owns the screen: its retry UI must be reachable.
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
   if(state.failed||state.disposed)return;
-  state.failed=true;stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
+  state.failed=true;endEarlyLine();stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
  }
  const loadingCard=doc.getElementById('loading'),Observer=view?.MutationObserver;
  const loadingWatch=loadingCard&&Observer?new Observer(()=>{if(loadingCard.classList.contains('error'))fail();}):null;
@@ -352,7 +378,7 @@ export function setupV03(api){
     void (async()=>{
      save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.ambush=true;
      const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(()=>false);
-     await opening.play();const ok=await Promise.race([ambush,wait(6000).then(()=>null)]);if(ok===false)state.ambush=false;
+     await (state.dream??opening.play());state.dream=null;const ok=await Promise.race([ambush,wait(6000).then(()=>null)]);if(ok===false)state.ambush=false;
      save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await opening.release();
     })().catch(report);
    }else if(state.screen==='resume'&&s.ready&&state.langReady){

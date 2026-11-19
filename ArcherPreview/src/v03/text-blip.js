@@ -7,7 +7,10 @@
 export const TEXT_BLIP_KEY='moonforest-0.3-text-blip-v1';
 // .05 was inaudible under the music on a laptop (user, 2026-11-19).
 export const BLIP_GAIN=.16;
-export const BLIP_SECONDS=.03;
+// Duller since 2026-11-19 (user): triangle through a low-pass, an octave
+// lower, a slightly longer tail.
+export const BLIP_SECONDS=.045;
+export const BLIP_LOWPASS_HZ=1100;
 const MAX_VOICES=3;
 const MIN_GAP=.035;
 let enabled=null,shared=null,armedView=null;
@@ -33,13 +36,16 @@ const STEPS=[0,2,4,7,9,12,14];
 export function voicePitch(who){
  const key=String(who??'');let h=2166136261;
  for(const ch of key){h^=ch.codePointAt(0);h=Math.imul(h,16777619)>>>0;}
- if(!key)return 330;
- return 392*2**(STEPS[h%STEPS.length]/12)*(h&128?1:.5);
+ if(!key)return 220;
+ return 196*2**(STEPS[h%STEPS.length]/12)*(h&128?1:.75);
 }
 
 function makeShared(contextFactory){
  const context=contextFactory();
- const out=context.createGain();out.gain.value=BLIP_GAIN;out.connect(context.destination);
+ const out=context.createGain();out.gain.value=BLIP_GAIN;
+ const tone=context.createBiquadFilter?.();
+ if(tone){tone.type='lowpass';tone.frequency.value=BLIP_LOWPASS_HZ;tone.Q.value=.7;out.connect(tone);tone.connect(context.destination);}
+ else out.connect(context.destination);
  return {context,out,voices:0,last:-1};
 }
 const defaultFactory=view=>()=>{const Ctor=view?.AudioContext??view?.webkitAudioContext??globalThis.AudioContext;return new Ctor({latencyHint:'interactive'});};
@@ -73,7 +79,10 @@ export function createTextBlip({view=globalThis,contextFactory=null,random=Math.
    return this.play(who);
   },
   play(who){
-   if(!shared){if(contextFactory&&isEnabled()){try{shared=makeShared(contextFactory);}catch{return false;}}else return false;}
+   // The prologue after a new-game reload types before any gesture on the new
+   // document: create the context here too (the site's earlier activation
+   // usually lets it run; if not it stays suspended until a gesture resumes it).
+   if(!shared){if(!isEnabled())return false;try{shared=makeShared(contextFactory??defaultFactory(armedView??view));}catch{return false;}}
    const {context,out}=shared;
    // A context the browser suspended (tab switch, autoplay) is resumed here;
    // this blip is skipped, the next ones play.
@@ -82,7 +91,7 @@ export function createTextBlip({view=globalThis,contextFactory=null,random=Math.
    if(shared.voices>=MAX_VOICES||t-shared.last<MIN_GAP)return false;
    shared.last=t;shared.voices++;
    const osc=context.createOscillator(),env=context.createGain();
-   osc.type=who?'square':'triangle';
+   osc.type='triangle';
    osc.frequency.value=voicePitch(who);
    if(osc.detune)osc.detune.value=(random()-.5)*60;
    const g=env.gain;g.setValueAtTime(0,t);g.linearRampToValueAtTime(1,t+.004);g.exponentialRampToValueAtTime(.001,t+BLIP_SECONDS);

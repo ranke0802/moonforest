@@ -22,7 +22,8 @@ export function updateBossHealthPosition(scene,encounter,element,projection,{fix
 }
 
 export class BossHealthBars {
-  constructor(template) { this.template = template; this.items = new Map(); }
+  // showNumbers:false (0.3) hides the "hp / max" figures; the bar alone shows health.
+  constructor(template,{showNumbers=true}={}) { this.template = template; this.items = new Map(); this.showNumbers = showNumbers; }
   update(scene, encounters, projection, {playerPosition}={}) {
     const primary=primaryHealthBoss(encounters,playerPosition??scene.activeCamera?.target,this.primaryId);this.primaryId=primary?.id;
     const visible = new Set();
@@ -49,7 +50,7 @@ export class BossHealthBars {
       if (item.snapshot !== snapshot) {
         item.snapshot = snapshot;
         item.progress.max = boss.brain.maxHp; item.progress.value = boss.brain.hp;
-        item.text.textContent = `${boss.displayName?boss.displayName+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp<=0?(boss.kind==='elena'&&boss.phase===1?'광폭화 · ':'격파 · '):''}${boss.brain.hp} / ${boss.brain.maxHp}`;
+        item.text.textContent = `${boss.displayName?boss.displayName+' · ':encounters.length > 1 && boss.kind !== 'goblin' ? `곰 ${boss.number??boss.id} · ` : ''}${boss.brain.hp<=0?(boss.kind==='elena'&&boss.phase===1?'광폭화 · ':'격파 · '):''}${this.showNumbers?`${boss.brain.hp} / ${boss.brain.maxHp}`:''}`.replace(/ · $/,'');
         item.state.textContent = boss.brain.label;
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }

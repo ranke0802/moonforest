@@ -406,3 +406,9 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 /* Typewriter text (2026-11-19): the untyped rest keeps its place invisibly so wraps never jump. */
 .v03-type-rest{visibility:hidden}
 .v03-sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* New game on a fresh document: the dream plays while the game downloads; the
+   loading card hides behind it and a thin line at the bottom shows progress. */
+html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
+.v03-download-line{position:fixed;left:0;right:0;bottom:0;height:2px;z-index:20020;pointer-events:none;background:#ffffff14}
+.v03-download-line i{position:absolute;inset:0;background:linear-gradient(90deg,#ae9259,#ece0bc);transform:scaleX(0);transform-origin:left center;transition:transform .4s ease-out}

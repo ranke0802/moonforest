@@ -1147,7 +1147,7 @@ try {
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   goldLootView=world.goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
-  bossHealthBars=new BossHealthBars($('#boss-hud'));
+  bossHealthBars=new BossHealthBars($('#boss-hud'),{showNumbers:!versionRoute.edition});
   playerHealthBar=new PlayerHealthBar($('#player-health'));
   boss=new BossBattle(world,encounter=>{
     const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');

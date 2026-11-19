@@ -24,6 +24,15 @@ export const DREAM_BEATS=Object.freeze([
 ]);
 // Real running time: opening pause + every caption's hold and fade-out.
 export const dreamSeconds=()=>.5+INTRO.seconds+FADE_SECONDS+DREAM_BEATS.reduce((sum,beat)=>sum+beat.seconds+FADE_SECONDS,0)+WAKE_SECONDS;
+// Fetches and decodes the paintings early (from the logo on) so the dream
+// starts without waiting; the browser cache keeps them for later visits.
+let warmed=null;
+export function warmPrologueArt(view=globalThis){
+ if(warmed)return warmed;
+ const Img=view?.Image;if(!Img)return warmed=[];
+ warmed=[PROLOGUE_COVER,...DREAM_BEATS.map(beat=>beat.image)].map(url=>{const img=new Img();img.decoding='async';img.src=url;img.decode?.().catch(()=>{});return img;});
+ return warmed;
+}
 const MOTES=14;
 // Captions type out (typewriter.js). A caption's hold starts only once it is
 // fully shown; a tap, click, Enter or Space on the dream shows it at once.
