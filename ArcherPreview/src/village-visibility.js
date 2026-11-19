@@ -1,7 +1,7 @@
 import { Frustum, Vector3 } from '@babylonjs/core';
 import { VillageOcclusion } from './village-occlusion.js';
 import { plainsRenderRange } from './plains-view-distance.js';
-import {selectVillageShadowCasters} from './village-shadow-policy.js';
+import {selectVillageShadowCasters,villageShadowTarget} from './village-shadow-policy.js';
 import {ShadowFadeBudget,shadowFadeAttribute} from './village-shadow-fade.js';
 import {caveFogAllowsRecord,caveFogRootEnabled} from './cave-fog-of-war.js';
 import {markStaticShadowCaster} from './static-shadow-cache.js';
@@ -18,7 +18,7 @@ export class VillageVisibility {
     world.camera.getViewMatrix();world.camera.getProjectionMatrix();
     this.planes=Frustum.GetPlanes(world.camera.getTransformationMatrix());
     this.cast=new Set();this.castRecords=new Set();this.shadowTimer=0;this.stats={cells:0,activeCells:0,activeInstances:0,shadowCasters:0};
-    this.shadowFade=new ShadowFadeBudget(touch?28:44);
+    this.shadowFade=new ShadowFadeBudget(touch?40:72);
     this.shadowScratch=new Set();this.shadowCandidateFlags=new Uint8Array(records.length);
     this.shadowState=new Map();this.shadowStateReady=false;
     for(const [index,record] of records.entries()){
@@ -58,7 +58,7 @@ export class VillageVisibility {
     if(this.world.lighting?.shadowsActive===false)this.shadowFade.clear();
     else if(this.shadowTimer<=0){
       this.shadowTimer=.35;
-      this.shadowFade.select(selectVillageShadowCasters(this.shadowCandidates(player),player,this.touch,this.castRecords));
+      const target=this.shadowTargetPoint??={x:0,z:0};target.x=player.x;target.z=player.z;this.shadowFade.select(selectVillageShadowCasters(this.shadowCandidates(player),player,this.touch,this.castRecords),r=>villageShadowTarget(r,target,this.touch));
     }
     this.updateShadows(dt);
     const moved=Vector3.DistanceSquared(this.camera,camera)>1;

@@ -42,9 +42,9 @@ test('orbiting retains off-camera casters and all their actual shadow draws with
 });
 test('small movements around the caster budget boundary retain existing casters; moving away still releases them',()=>{
  const record=(id,x)=>({root:{isEnabled:()=>true},placement:{id,kind:'tree'},min:{x:x-.5,z:-.5},max:{x:x+.5,z:.5}});
- const fixed=Array.from({length:27},(_,i)=>record('fixed'+i,2+i*.15)),a=record('a',-20),b=record('b',20.02),records=[...fixed,a,b];
+ const fixed=Array.from({length:39},(_,i)=>record('fixed'+i,2+i*.1)),a=record('a',-20),b=record('b',20.02),records=[...fixed,a,b];
  let chosen=selectVillageShadowCasters(records,{x:0,z:0},true);assert.ok(chosen.includes(a));
- for(const x of [.05,-.05,.1,-.1]){chosen=selectVillageShadowCasters(records,{x,z:0},true,new Set(chosen));assert.ok(chosen.includes(a));assert.equal(chosen.length,28);}
+ for(const x of [.05,-.05,.1,-.1]){chosen=selectVillageShadowCasters(records,{x,z:0},true,new Set(chosen));assert.ok(chosen.includes(a));assert.equal(chosen.length,40);}
  chosen=selectVillageShadowCasters(records,{x:25,z:0},true,new Set(chosen));assert.ok(!chosen.includes(a));assert.ok(chosen.includes(b));
 });
 for(const touch of [true,false])test('moving village shadow projection stays aligned to texels '+(touch?'mobile':'desktop'),t=>{

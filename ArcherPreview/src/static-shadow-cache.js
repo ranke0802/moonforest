@@ -16,8 +16,10 @@ varying vec2 vUV;
 uniform sampler2D staticDepth;
 void main(void){gl_FragDepth=texture2D(staticDepth,vUV).r;gl_FragColor=vec4(1.0);}`;
 const ALWAYS=519;
-// Checked live on plains + village 2026-11-18 (identical frames); ?shadowcache=0 turns it off.
-export const STATIC_SHADOW_CACHE_OPT_IN=false;
+// Off by default since 2026-11-19: shadows flickered on every step while
+// walking (PC and phone), the cache refresh being the suspect. ?shadowcache=1
+// turns it back on for comparison.
+export const STATIC_SHADOW_CACHE_OPT_IN=true;
 
 export function staticShadowCacheAllowed(engine){
   const forced=new URLSearchParams(globalThis.location?.search??'').get('shadowcache');

@@ -56,15 +56,18 @@ if (vVillageShadowFade < 0.999) {
 // budget, transitions cannot double the number of shadow casters.
 export class ShadowFadeBudget {
   constructor(limit,duration=.7){this.limit=limit;this.duration=duration;this.active=new Map();this.desired=new Set();this.initial=true;}
-  select(records){this.desired=new Set(records.slice(0,this.limit));if(this.initial){for(const r of this.desired)this.active.set(r,1);this.initial=false;}}
+  // targetOf(record) → 0..1: the strength a selected record settles at
+  // (distance-proportional); omitted, every selected record goes to full.
+  select(records,targetOf=null){this.desired=new Map();for(const r of records.slice(0,this.limit))this.desired.set(r,targetOf?targetOf(r):1);if(this.initial){for(const [r,target] of this.desired)this.active.set(r,target);this.initial=false;}}
   update(dt){
     const step=Math.max(0,Math.min(dt,.1))/this.duration;
     for(const [r,value] of this.active){
       if(r.root.isDisposed?.()){this.active.delete(r);continue;}
-      const next=this.desired.has(r)?Math.min(1,value+step):Math.max(0,value-step);
-      if(next===0&&!this.desired.has(r))this.active.delete(r);else this.active.set(r,next);
+      const target=this.desired.get(r)??0;
+      const next=value<target?Math.min(target,value+step):Math.max(target,value-step);
+      if(next===0&&!(this.desired.get(r)>0))this.active.delete(r);else this.active.set(r,next);
     }
-    for(const r of this.desired)if(this.active.size<this.limit&&!this.active.has(r)&&!r.root.isDisposed?.())this.active.set(r,0);
+    for(const [r,target] of this.desired)if(target>0&&this.active.size<this.limit&&!this.active.has(r)&&!r.root.isDisposed?.())this.active.set(r,0);
     return this.active;
   }
   clear(){this.active.clear();this.desired.clear();}

@@ -25,3 +25,16 @@ test('per-instance shadow fade is supplied to the existing depth draw; color vis
  const data=source._userInstancedBuffersStorage.data[shadowFadeAttribute];assert.ok(data.includes(.25));assert.ok(data.includes(.75));
  const lod=source.clone('stream-lod',null,true);prepareShadowFade(lod);assert.equal(lod._userInstancedBuffersStorage.strides[shadowFadeAttribute],1);assert.equal(lod.instancedBuffers[shadowFadeAttribute],1);
 });
+
+test('selected shadows settle at a distance-proportional strength and fade toward it',async()=>{
+ const {villageShadowTarget}=await import('../src/village-shadow-policy.js');
+ const tree=x=>({root:{isDisposed:()=>false},placement:{kind:'tree'},min:{x,z:0},max:{x,z:0}});
+ assert.equal(villageShadowTarget(tree(10),{x:0,z:0},false),1);
+ assert.ok(Math.abs(villageShadowTarget(tree(32),{x:0,z:0},false)-.5)<1e-9,'halfway through the 8 m band');
+ assert.equal(villageShadowTarget(tree(40),{x:0,z:0},false),0);
+ const near=tree(5),edge=tree(32),f=new ShadowFadeBudget(10,.7);
+ f.select([near,edge],r=>villageShadowTarget(r,{x:0,z:0},false));f.update(.016);
+ for(let i=0;i<120;i++){f.select([near,edge],r=>villageShadowTarget(r,{x:0,z:0},false));f.update(.016);}
+ assert.equal(f.active.get(near),1);assert.ok(Math.abs(f.active.get(edge)-.5)<1e-6);
+ let last=f.active.get(edge);for(let i=0;i<5;i++){f.select([near,edge],r=>villageShadowTarget(r,{x:-6,z:0},false));f.update(.05);const v=f.active.get(edge);assert.ok(v<last&&last-v<=.05/.7+1e-9,'fades gradually');last=v;}
+});

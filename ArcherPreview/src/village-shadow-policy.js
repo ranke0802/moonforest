@@ -1,6 +1,6 @@
 const major=new Set(['building','tree','tower','landmark']);
 export function selectVillageShadowCasters(records,player,touch,previous=new Set()){
-  const range=touch?28:36,limit=touch?28:44;
+  const range=touch?28:36,limit=touch?40:72;
   const candidates=records.filter(r=>!r.root.isDisposed?.()&&(r.root.isEnabled()||r.cellActive===false)&&r.placement.kind!=='ground-detail')
     .map(r=>{
       const dx=Math.max(r.min.x-player.x,0,player.x-r.max.x),dz=Math.max(r.min.z-player.z,0,player.z-r.max.z);
@@ -15,4 +15,15 @@ export function selectVillageShadowCasters(records,player,touch,previous=new Set
   const chosen=new Set(selected.map(v=>v.r));
   for(const v of candidates){if(selected.length===limit)break;if(!chosen.has(v.r)){selected.push(v);chosen.add(v.r);}}
   return selected.map(v=>v.r);
+}
+
+// Distance-proportional shadow strength (2026-11-19: shadows popped on and
+// off at the selection edge). Big casters fade over the last 8 m of the range,
+// small ones over the last 4 m of their 14 m reach; the fade budget moves each
+// shadow toward this value, so crossing the edge is a gradual dissolve.
+export function villageShadowTarget(r,player,touch){
+  const range=touch?28:36,dx=Math.max(r.min.x-player.x,0,player.x-r.max.x),dz=Math.max(r.min.z-player.z,0,player.z-r.max.z),distance=Math.hypot(dx,dz);
+  const important=major.has(r.placement.kind)||(/^cave-0[134]/.test(r.placement.asset??''));
+  const reach=important?range:14,band=important?8:4;
+  return Math.max(0,Math.min(1,(reach-distance)/band));
 }

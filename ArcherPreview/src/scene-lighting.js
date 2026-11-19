@@ -92,6 +92,9 @@ export class SceneLighting {
     key.shadowFrustumSize = village?(touchDevice?64:80):32;
     key.shadowMinZ = 1; key.shadowMaxZ = village?120:65;
     key.autoUpdateExtends = false;
+    // Shadows dissolve toward the edge of the shadow box instead of ending at a
+    // hard line that moves with the player (2026-11-19).
+    shadows.frustumEdgeFalloff = village ? .25 : 0;
     shadows.filteringQuality = touchDevice ? ShadowGenerator.QUALITY_LOW : ShadowGenerator.QUALITY_MEDIUM;
     // Skipping alternate shadow passes halves animated shadow updates; worse,
     // a moving light
