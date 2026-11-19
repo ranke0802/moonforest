@@ -9,6 +9,9 @@ const usable=raw=>!!raw&&typeof raw.getItem==='function'&&typeof raw.setItem==='
 function prefixed(raw,prefix,fallback=null,inherited=[]){
  const inherit=new Set(inherited);
  return {
+  // Points the same object at another namespace (a new game in another slot
+  // without a page reload: every holder of this storage follows).
+  rebind(next){prefix=next;},
   get available(){return usable(raw);},
   getItem(key){
    let value=null;try{value=raw?.getItem(prefix+key)??null;}catch{value=null;}
@@ -80,10 +83,15 @@ export function clearIntent(session,edition){try{session?.removeItem(editionPref
 export function createSaveSession({local,session,edition,now=()=>Date.now()}){
  const intent=readIntent(session,edition);clearIntent(session,edition);
  let last=null;try{last=Number(local?.getItem(editionPrefix(edition)+LAST_KEY));}catch{last=null;}
- const index=readSlotIndex(local,edition),slot=chooseBootSlot(index,{requested:intent?.slot??null,last});
+ const index=readSlotIndex(local,edition);let slot=chooseBootSlot(index,{requested:intent?.slot??null,last});
  const journey=slotStorage(local,edition,slot);
  return {
-  edition,slot,intent,journey,
+  edition,intent,journey,
+  get slot(){return slot;},
+  // New game in place (2026-11-19): wipe the target slot and bind this page's
+  // progress storage to it, so the title's own click keeps sound and no reload
+  // is needed. The caller resets what it keeps in memory.
+  restartIn(target){if(!validSlot(target)||!wipeSlot(local,edition,target))return false;slot=target;journey.rebind(slotPrefix(edition,target));return true;},
   get available(){return usable(local);},
   index:()=>readSlotIndex(local,edition),
   meta:()=>readSlotIndex(local,edition)[slot-1],

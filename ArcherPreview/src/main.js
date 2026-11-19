@@ -1665,6 +1665,8 @@ try {
       grantArmor:id=>{if(!V03_ARMOR_DEFENSE[id])return false;try{if(journeyStorage?.getItem(V03_ARMOR_KEY)===id)return false;journeyStorage?.setItem(V03_ARMOR_KEY,id);}catch{return false;}if(boss)boss.combat.defense=playerDefense();audio.play('equip');return true;},
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       // Starts sound without a tap where the browser already allows it (a reloaded new game).
+      // A new game in place (0.3): the slot storage was wiped and rebound; drop what memory still holds from the old record.
+      restartProgress:()=>{goldLoot.reload();resumePose=null;resumeStore.last='';if(boss){boss.combat.defense=playerDefense();boss.potions.reset?.();boss.combat.hp=boss.playerMaxHp;}controller?.resetStamina?.();updateHealthBars?.();return true;},
       unlockAudio:()=>{try{return audio.unlock();}catch{return null;}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
     world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());

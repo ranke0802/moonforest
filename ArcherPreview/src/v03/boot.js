@@ -197,10 +197,14 @@ export function setupV03(api){
    const meta=index[slot-1];
    if(meta.used){
     const ok=await title.confirm({title:t('confirm.overwriteTitle'),message:t('confirm.overwrite',{slot}),accept:t('confirm.overwriteAccept')});if(!ok)return;
-    if(!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}
-    reloadInto(slot,'new',null);return;
    }
-   if(slot!==save.slot){reloadInto(slot,'new',null);return;}
+   // In place (2026-11-19, user): wipe and bind the slot on this page so the
+   // click that started the game keeps its sound; reload only as a fallback.
+   if(meta.used||slot!==save.slot){
+    if(!ready||!api.restartProgress){if(meta.used&&!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}reloadInto(slot,'new',null);return;}
+    if(!save.restartIn(slot)){api.toast?.(t('toast.wipeFailed'));return;}
+    api.restartProgress();
+   }
    if(!ready){api.toast?.(t('toast.preparing'));return;}
    await beginNewGame();
   }else if(action==='load'){

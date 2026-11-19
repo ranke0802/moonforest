@@ -96,7 +96,7 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
 });
 
-function harness({local=memory(),session=memory(),ready=true}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false}={}){
  const {document,window,root}=dom(),log=[];
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
@@ -115,6 +115,7 @@ function harness({local=memory(),session=memory(),ready=true}={}){
   toast:m=>log.push('toast:'+m),creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},getPlayer:()=>player,getController:()=>controller,getState:()=>state,
   resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:async id=>log.push('travel:'+id),
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
+ if(inPlace)api.restartProgress=()=>{log.push('restartProgress');return true;};
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
  return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
@@ -173,6 +174,17 @@ test('existing saves: load another slot reloads with an intent; overwrite wipes 
  assert.equal(replaced,null,'overwrite asks first');h.click('.v03-panel-accept');await settle();
  assert.match(replaced,/moonforest-0\.3\.html/);assert.doesNotMatch(replaced,/character=/);
  const fresh=createSaveSession({local,session,edition:E});assert.deepEqual(fresh.intent,{slot:1,mode:'new'});assert.equal(fresh.meta().used,false);assert.equal(fresh.journey.getItem('moonforest-gold-v1'),null);
+});
+test('new game over a used slot restarts in place: no reload, the slot is wiped and rebound',async()=>{
+ const local=memory(),session=memory();
+ const seed=createSaveSession({local,session,edition:E,now:()=>10});seed.commit({title:'달빛 여관',chapter:1,character:'warrior-v3',place:'숲의 경계 마을'});seed.journey.setItem('moonforest-gold-v1','77');
+ const h=harness({local,session,inPlace:true});assert.equal(h.save.slot,2);
+ let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?release=moonforest-0.2&character=warrior-plains',replace:url=>{replaced=url;}};
+ h.finishSplash();await h.reveal();
+ h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('.v03-panel-accept');await settle(20);
+ assert.equal(replaced,null,'no page reload: the click that started the game keeps its sound');
+ assert.ok(h.log.includes('restartProgress'));assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),null,'the old record is gone');
+ assert.ok(['opening','play'].includes(h.shell.screen));assert.equal(h.save.meta().used,true,'the slot is a save again once the game starts');
 });
 test('a document opened with an intent skips logo and title',async()=>{
  const local=memory(),session=memory();createSaveSession({local,session,edition:E}).request(1,'new');
