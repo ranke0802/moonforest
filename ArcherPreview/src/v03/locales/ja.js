@@ -1,6 +1,7 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'bench.running':'性能を計測中（約50秒）。画面に触れないでください。','bench.done':'計測完了','bench.copy':'コピー','bench.save':'ファイル保存','bench.close':'閉じる',
   'title.aria':'MoonForest タイトル画面','title.kicker':'悲嘆の魔女','title.sub':'縁の食卓 · 第一幕','title.menu':'メインメニュー','title.drawing':'世界を描いています',
   'menu.new':'はじめから','menu.load':'つづきから','menu.gallery':'ギャラリー','menu.settings':'設定','menu.quit':'終了',
   'time.hm':'{h}時間{m}分','time.m':'{m}分',

@@ -133,6 +133,8 @@ export function setupV03(api){
  async function enterPlay({resume=false}={}){
   screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume});
   maybeStartWorld();
+  // ?bench: one fixed measurement after entering play (structure plan, phase 0).
+  if(!state.bench&&new URLSearchParams(view?.location?.search??'').has('bench')){state.bench={dispose(){}};void import('./bench.js').then(({createBench})=>{if(state.disposed)return;state.bench=createBench({doc,getWorld:()=>api.world,info:()=>({foes:(battle.encounters??[]).filter(foe=>foe.active).length})});return state.bench.run();}).catch(error=>console.error('[bench]',error));}
  }
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
  async function beginNewGame(){
@@ -366,6 +368,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

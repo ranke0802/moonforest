@@ -1,6 +1,7 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'bench.running':'Đang đo hiệu năng (khoảng 50 giây). Vui lòng không chạm vào màn hình.','bench.done':'Đã đo xong','bench.copy':'Sao chép','bench.save':'Lưu tệp','bench.close':'Đóng',
   'title.aria':'Màn hình tiêu đề MoonForest','title.kicker':'Phù thủy Bi thương','title.sub':'Bàn tiệc Duyên phận · Hồi I','title.menu':'Menu chính','title.drawing':'Đang vẽ thế giới',
   'menu.new':'Chơi mới','menu.load':'Tiếp tục','menu.gallery':'Thư viện','menu.settings':'Cài đặt','menu.quit':'Thoát',
   'time.hm':'{h} giờ {m} phút','time.m':'{m} phút',
