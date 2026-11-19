@@ -1,6 +1,8 @@
 import {BossDiagnostics,bossComparisonLines} from './boss-diagnostics.js';
 import {LongFrameRecording} from './long-frame-recording.js';
 import {DiagnosticBurstBudget} from './diagnostic-burst-budget.js';
+import {onBeforePageReload} from './page-reload-hooks.js';
+import {storeCarriedRecording,takeCarriedRecording} from './recording-carry.js';
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {
@@ -108,6 +110,19 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   const stopRecording=reason=>{if(recording.state!=='recording')return;clearTimeout(recordingTimer);recordingTimer=null;finishBurst(now());recording.stop(reason);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();};
   longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(metadata());burstUntil=0;burstBudget=new DiagnosticBurstBudget({durationMs:recording.durationMs});recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
   longStop?.addEventListener('click',()=>stopRecording('manual'));
+  // Continue a recording across the game's own reloads (new game, load, language,
+  // back to title): saved before the navigation, resumed on the next document.
+  const carry=reason=>recording.state==='recording'?storeCarriedRecording(recording.exportState(reason)).catch(()=>false):Promise.resolve(false);
+  onBeforePageReload(()=>carry('page-reload'));
+  globalThis.addEventListener?.('pagehide',()=>{void carry('pagehide');});
+  void takeCarriedRecording().then(saved=>{
+    if(!saved||recording.state==='recording'||Date.now()-saved.savedAtWallMs>120000||Date.now()-saved.wallStartMs>=recording.durationMs)return;
+    if(!enabled){enabled=true;try{storage?.setItem(key,'1');}catch{/* session only */}sync();}
+    if(!recording.importState(saved))return;
+    burstUntil=0;burstBudget=new DiagnosticBurstBudget({durationMs:recording.durationMs});
+    recordingTimer=setTimeout(()=>stopRecording('duration-limit'),Math.max(0,recording.durationMs-(now()-recording.startMs)));
+    syncRecording();if(longStatus)longStatus.textContent='새로고침 전 기록을 이어서 기록하는 중입니다.';
+  }).catch(()=>{});
   longDownload?.addEventListener('click',()=>{
     if(recording.state==='idle')return;
     try{

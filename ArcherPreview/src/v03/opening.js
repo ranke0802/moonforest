@@ -96,6 +96,9 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
    }finally{skip.removeEventListener('click',onSkip);line.textContent='';delete layer.dataset.tone;delete layer.dataset.dream;layer.classList.remove('is-shading','is-flash','is-white');clear();}
    return skipped?'skipped':'done';
   },
+  // True while the opaque black stage fully hides the 3D scene (not while it
+  // fades or opens like eyelids onto the world).
+  get covering(){return !layer.hidden&&!layer.classList.contains('is-releasing')&&!layer.classList.contains('is-waking')&&layer.dataset.woke!=='1';},
   // Fades the black stage away to reveal the game.
   // After a full dream the black opens like eyelids on a blurred world that
   // comes into focus (a half blink on the way); a skipped dream just fades.

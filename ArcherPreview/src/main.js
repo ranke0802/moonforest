@@ -130,6 +130,7 @@ import { GoldLoot } from './gold-loot.js';
 import { createGoldLootView } from './gold-loot-view.js';
 import { attachCharacterOutlines,setFarOutlinesEnabled } from './character-outlines.js';
 import {setupQualityRestoreSettings} from './quality-restore-settings.js';
+import {runBeforePageReload} from './page-reload-hooks.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
 // Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
 import {tr,startLanguage} from './v03/i18n.js';
@@ -409,7 +410,7 @@ function updateStaminaNotice(){staminaNoticeAnchor.update(screenProjection,actor
 // the picture: a light sharpen pass (last in the chain, after the NPC ink)
 // keeps outlines and edges crisp. It carries the MSAA when it is the first
 // pass, so antialiasing is unchanged. Desktops at native density skip it.
-let phoneSharpen=null,phoneSharpenCamera=null;
+let phoneSharpen=null,phoneSharpenCamera=null,coveredFrames=0;
 function syncPhoneSharpen(){
   const camera=world?.camera;if(!engine||!camera||camera.isDisposed?.())return;
   const native=globalThis.devicePixelRatio||1,css=Math.max(1,canvas.clientWidth||1),render=engine.getRenderWidth()/css,forced=new URLSearchParams(location.search).get('sharpen'),want=forced==='1'?true:forced==='0'?false:touchDevice&&render<native*.95;
@@ -900,6 +901,7 @@ function render(dt) {
   }
   simulateFrame=dt>0&&!world.storyboardOpening?.blocksGame&&!world.storyboardExitPending&&!world.v03?.blocksGame;
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
+  if(!simulateFrame&&world.v03?.stageHidden&&(coveredFrames=(coveredFrames+1)%12)!==0)return;
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateStaminaNotice();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
   const framePreludeStart=frameDiagnostics.mark();
   elapsed += dt;
@@ -1186,7 +1188,7 @@ try {
   mapDeparture=createMapDeparture({
     prepare:href=>{world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{staminaNoticeAnchor.dispose();input.dispose();audio.dispose();engine.dispose();},
-    navigate:url=>location.replace(url),
+    navigate:url=>{void runBeforePageReload().finally(()=>location.replace(url));},
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
   });
   let mapLoadingGeneration;
@@ -1622,6 +1624,7 @@ try {
       travel:id=>mapTransition.travel(travelUrl(location.href,id)),
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
       setScore:(key,fade)=>audio?.setScore?.(key,fade),
+      prefetchScore:key=>audio?.prefetchScore?.(key),
       setSfxMuted:value=>audio?.setSfxMuted?.(value),
       prepareWorld:()=>{void getAuthoredMonsters({active:false}).then(runtime=>runtime.preload?.()).catch(error=>console.error('[몬스터 배치]',error));},
       // Adds story scenery through the map's placement runtime (streaming,

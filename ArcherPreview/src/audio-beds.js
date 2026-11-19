@@ -59,6 +59,20 @@ export class AudioBeds {
     }
     return bytes<=AUDIO_BED_LIMITS.decodedBytes&&this.cacheBytes()+bytes<=AUDIO_BED_LIMITS.decodedBytes;
   }
+  // Decode a bed ahead of its first use (0.3: the prologue score while the
+  // title plays), so the switch starts at once. Never evicts an audible bed.
+  async prefetch(channel,key){
+   const definition=this.definitions?.[channel]?.[key],id=channel+':'+key,context=this.owner.context;
+   if(!definition||this.cache.has(id)||this.prefetching?.has(id)||this.disposed)return false;
+   (this.prefetching??=new Set()).add(id);
+   try{
+    const r=await this.owner.fetcher(new URL(definition.url,this.base),{cache:'force-cache'});if(!r.ok)return false;
+    const data=await r.arrayBuffer();if(this.disposed||!context||context.state==='closed'||this.cache.has(id))return false;
+    const buffer=await context.decodeAudioData(data);if(this.disposed||this.cache.has(id))return false;
+    if(!this.makeRoom(channel,key,decodedBedBytes(buffer)))return false;
+    this.cache.set(id,buffer);return true;
+   }catch{return false;}finally{this.prefetching.delete(id);}
+  }
   cacheBytes(){return [...this.cache.values()].reduce((sum,buffer)=>sum+decodedBedBytes(buffer),0);}
   async drain(){
     for(const channel of ['music','ambience']){

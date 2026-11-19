@@ -14,6 +14,7 @@ import {createActorVisual} from './placeholder-actor.js';
 import {createCastVisuals} from './cast-models.js';
 import {setupGameSelection} from '../game-selection.js';
 import {createGuideWisp} from './guide-wisp.js';
+import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
@@ -169,7 +170,7 @@ export function setupV03(api){
   if(!save.request(slot,mode)){api.toast?.(t('toast.noStorage'));return false;}
   const url=new URL(view.location.href);for(const key of ['arrival','from'])url.searchParams.delete(key);
   if(character&&PLACE_NAMES[character])url.searchParams.set('character',character);else url.searchParams.delete('character');
-  view.location.replace(url.href);return true;
+  void runBeforePageReload().finally(()=>view.location.replace(url.href));return true;
  }
  async function handle(action){
   if(state.busy||state.screen!=='title'||!state.revealed)return;
@@ -212,7 +213,7 @@ export function setupV03(api){
   if(id===language()||!writeLanguage(languageStore,id))return false;
   if(state.screen==='play'){save.touch(metaPatch());if(reloadInto(save.slot,'load',gameState().character))return true;}
   try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
-  stopAttract();view.location.reload();return true;
+  stopAttract();void runBeforePageReload().finally(()=>view.location.reload());return true;
  }
  // The game's own settings dialog (opened from the title or in play) gets a
  // language row at the top.
@@ -256,7 +257,7 @@ export function setupV03(api){
    if(!armed){leave.textContent=t('settings.toTitleConfirm');leave.classList.add('is-armed');armed=view.setTimeout(()=>{armed=0;leave.textContent=t('settings.toTitle');leave.classList.remove('is-armed');},3000);return;}
    view.clearTimeout(armed);save.touch(metaPatch());
    try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
-   view.location.reload();
+   void runBeforePageReload().finally(()=>view.location.reload());
   });
   host.append(leave);
  }
@@ -265,6 +266,8 @@ export function setupV03(api){
   if(state.disposed||state.screen!=='boot')return;
   if(!state.langReady){void langReady.then(showTitle);return;}
   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();prepareWorld();
+  // The prologue score is decoded while the title plays: it starts with the dream.
+  try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}
  }
  // After the logo, the game's own download/loading card shows progress; the
  // title (still black while its scene is prepared) appears when it closes.
@@ -299,6 +302,10 @@ export function setupV03(api){
   get screen(){return state.screen;},
   // Title/prologue never write progress, quests or map position.
   get blocksProgress(){return state.screen!=='play';},
+  // The prologue's black stage hides the world: main.js draws it only now and
+  // then (uploads keep moving) so the ambush wolf's preparation and the
+  // prologue's own animation get the frame time.
+  get stageHidden(){return (state.screen==='opening'||state.screen==='resume')&&opening.covering;},
   // The simulation is frozen while the prologue covers the stage.
   get blocksGame(){return state.screen==='opening'||state.screen==='exit'||story.dialogueOpen||gate.active;},
   // Called by the game when an enemy is defeated.

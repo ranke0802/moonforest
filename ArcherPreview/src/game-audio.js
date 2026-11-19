@@ -148,6 +148,7 @@ export class GameAudio {
   }
   // A screen score (0.3 title / prologue) overrides the map's music; the
   // screen's own sound effects can be muted (the title's demo fight).
+  prefetchScore(key){if(!key||!this.beds.definitions?.music?.[key])return Promise.resolve(false);if(!this.context)this.makeContext?.();return this.beds.prefetch('music',key);}
   setScore(key,fade=1.6){key=key&&this.beds.definitions.music?.[key]?key:null;if(key===this.score)return;this.score=key;if(key){this.musicWanted=false;this.beds.request('music',key,fade);}else this.selectBed();}
   setSfxMuted(value){this.sfxMuted=!!value;if(this.sfxMuted)this.stopVoices();}
   selectBed(){
