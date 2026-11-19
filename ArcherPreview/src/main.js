@@ -871,7 +871,8 @@ async function prepareElenaReview(){
 }
 
 function updateHealthBars() {
-  bossHealthBars.update(world.scene,boss.encounters,screenProjection,{playerPosition:actor?.position});
+  // 0.3 story shots (the ambush) show no health bars.
+  bossHealthBars.update(world.scene,world.v03?.story?.sceneActive?[]:boss.encounters,screenProjection,{playerPosition:actor?.position});
   const nearGiant=ready&&isV2()&&world.cave&&boss.playerHp>0&&boss.encounters.some(enemy=>enemy.active&&enemy.phase===2&&enemy.brain.hp>0&&enemy.renderVisible!==false&&enemy.fogVisible!==false&&Vector3.DistanceSquared(actor.position,enemy.actor.position)<=6.5*6.5);
   const markerClear=nearGiant&&cavePlayerMarkerClear(world.terrain,world.camera.globalPosition,actor.position);
   playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp,stamina:controller?.stamina??100,maxStamina:controller?.maxStamina??100,marker:{enabled:nearGiant,clearToPlayer:markerClear,groundY:actor?world.terrain.heightAt(actor.position.x,actor.position.z):0}},screenProjection);

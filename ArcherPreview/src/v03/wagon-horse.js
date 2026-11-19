@@ -42,9 +42,9 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon}){
    // Gallop: a quick bob and fore/aft rock. Rear: pitch about the hind hooves.
    const stride=time*Math.PI*2*2.1,g=pose.gallop,half=98*s*.42;
    if(!rearSign){Vector3.TransformCoordinatesFromFloatsToRef(0,0,1,Matrix.RotationX(.3),turned);rearSign=turned.y>0?1:-1;}
-   const pitch=rearSign*(pose.rear*.62+g*Math.sin(stride)*.05);
+   const pitch=rearSign*(pose.rear*.62+g*Math.sin(stride)*.015);
    pivot.set(0,0,-half);Matrix.RotationXToRef(pitch,rotation);Vector3.TransformCoordinatesToRef(pivot,rotation,turned);
-   body.rotation.x=pitch;body.position.set(0,Math.abs(Math.sin(stride))*.07*g+(pivot.y-turned.y),pivot.z-turned.z);
+   body.rotation.x=pitch;body.position.set(0,Math.abs(Math.sin(stride))*.03*g+(pivot.y-turned.y),pivot.z-turned.z);
   });
   return root;
  })().catch(error=>{console.warn('[MoonForest 0.3] wagon horse unavailable',error);return null;});

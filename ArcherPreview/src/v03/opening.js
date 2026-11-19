@@ -114,6 +114,8 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
      layer.classList.remove('is-flash','is-white');if(!skipped)layer.dataset.woke='1';
     }
    }finally{typewriter.stop();skip.removeEventListener('click',onSkip);doc.removeEventListener('keydown',hurry);line.textContent='';said.textContent='';delete layer.dataset.tone;delete layer.dataset.dream;layer.classList.remove('is-shading','is-flash','is-white');clear();}
+   // Skipped too: the release still wakes the warrior (dim, brighten, focus) (user, 2026-11-19).
+   if(skipped&&id===run)layer.dataset.woke='1';
    return skipped?'skipped':'done';
   },
   // True while the opaque black stage fully hides the 3D scene (not while it
