@@ -760,7 +760,8 @@ async function loadCharacter() {
     applyCharacterSurfaceStyle(container,'player');
     if (isWarrior()) attachCharacterOutlines(container, 'warrior');
     if (config.expectedMaxBoneInfluences && maxInfluences < config.expectedMaxBoneInfluences) throw new Error('모델의 스키닝 가중치가 설정과 일치하지 않습니다. 내보낸 파일을 확인해야 합니다.');
-    animator = new CharacterAnimator(container.animationGroups, config.animations,{bindingCacheSize:isV2()?4:0});
+    // 0.3: every player clip keeps its bindings, created during loading, so a clip change never allocates (S23: 14 ms spikes).
+    animator = new CharacterAnimator(container.animationGroups, config.animations,{bindingCacheSize:isV2()?(versionRoute.edition?Object.keys(config.animations).length:4):0,prewarmBindings:isV2()&&!!versionRoute.edition});
     const speeds=isV2()?Object.fromEntries(Object.entries(config.speeds??{}).map(([key,value])=>[key,value*dimensions.ratio])):config.speeds;
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds, ...(isV2()?{holdNow:()=>performance.now()}:{}) });
     movementSpeedSettings.apply(controller);

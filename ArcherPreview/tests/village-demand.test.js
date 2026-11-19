@@ -40,7 +40,9 @@ test('real village startup requests a subset of tiers and leaves distant off-cam
 test('streaming loads one tier at a time, waits for activation and never automatically retries a failed tier',async t=>{
  const {world,records}=fixture(t),loaded=new Set(),requests=[],stats={};let finish;
  const stream=new VillageGeometryStreaming(world,records,r=>{requests.push(r);return new Promise(resolve=>{finish=()=>{loaded.add(r.id+':'+r.level);resolve();};});},r=>loaded.has(r.id+':'+r.level),stats);
- t.after(()=>stream.dispose());stream.update(0);assert.equal(requests.length,0);stream.active=true;stream.update(300);stream.update(600);assert.equal(requests.length,1);
+ t.after(()=>stream.dispose());stream.update(0);assert.equal(requests.length,0);stream.active=true;
+ // Demand is time-sliced: the first request may follow a few frames later.
+ for(let now=300;!requests.length&&now<300+64*16;now+=16)stream.update(now);stream.update(2000);assert.equal(requests.length,1);
  finish();await stream.pending;stream.update(900);assert.equal(requests.length,2);assert.notDeepEqual(requests[0],requests[1]);finish();await stream.pending;
  const next=villageDemand(world,records).find(r=>!loaded.has(r.id+':'+r.level));stream.load=async()=>{throw new Error('503');};stream.update(1200);await stream.pending;
  assert.ok(stream.failed.has(next.id+':'+next.level));let nextRequest;stream.load=async r=>{nextRequest=r;loaded.add(r.id+':'+r.level);};stream.update(1500);await stream.pending;assert.notDeepEqual(nextRequest,next);

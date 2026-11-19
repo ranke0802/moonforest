@@ -1,14 +1,15 @@
 /** Cross-fades authored full-body clips. Moving attacks already contain the walking leg cycle. */
 export class CharacterAnimator {
-  constructor(groups, names, {bindingCacheSize=0}={}) {
+  constructor(groups, names, {bindingCacheSize=0,prewarmBindings=false}={}) {
     this.clips = {};
     this.active = new Map();
     this.current = null;
     this.actionId = null;
     // Opt-in inactive bindings only; active fades keep their original lifetime.
-    this.bindingCacheSize=Math.min(6,Math.max(0,Math.floor(bindingCacheSize)||0));
+    // The budget never exceeds the distinct clip count (one binding set per clip).
+    this.bindingCacheSize=Math.min(Object.keys(names).length,Math.max(0,Math.floor(bindingCacheSize)||0));
     this.bindingCache=new Map();
-    this.bindingCounts={created:0,reused:0,evicted:0};
+    this.bindingCounts={created:0,reused:0,evicted:0,prewarmed:0};
     for (const [state, name] of Object.entries(names)) {
       const group = groups.find(g => g.name === name);
       if (!group) throw new Error(`필수 동작을 찾지 못했습니다: ${name}`);
@@ -36,6 +37,35 @@ export class CharacterAnimator {
         for(const {target,animation}of group.targetedAnimations){const index=channels.get(target)?.get(animation.targetProperty);if(index===undefined||seen.has(index))this.bindingCacheCompatible=false;seen.add(index);}
       }
     }
+    if(prewarmBindings)this.prewarmBindings();
+  }
+  // Native start: ~3 Animatables per bone. Paused at weight 0; controller time drives goToFrame.
+  startBindings(group,loop,entry){
+    group.start(loop, 1, group.from, group.to, false);
+    this.bindingCounts.created+=group.animatables?.length??0;
+    group.pause();group.setWeightForAllAnimatables(0);
+    if(this.bindingCacheCompatible){
+      entry.nativeCallbacks=group.animatables.flatMap(native=>[native.onAnimationEnd,native.onAnimationLoop]);
+      entry.nativeChannels=group.targetedAnimations.flatMap(({target,animation})=>[target,animation,animation.getKeys()]);
+      entry.bindingFrom=group.from;entry.bindingTo=group.to;
+    }
+    return entry;
+  }
+  // Loading-time warm-up: create every clip's paused binding set once so a clip
+  // change during play only reuses (no Animatable/RuntimeAnimation allocation).
+  // A paused native animatable returns at the top of Animatable._animate.
+  prewarmBindings(){
+    if(!this.bindingCacheCompatible||!this.bindingCacheSize)return 0;
+    let warmed=0;
+    for(const [state,group]of Object.entries(this.clips)){
+      if(this.bindingCache.size>=this.bindingCacheSize)break;
+      if(this.active.has(state)||this.bindingCache.has(state)||group.isStarted)continue;
+      const before=this.bindingCounts.created;
+      const entry=this.startBindings(group,false,{group,weight:0,target:0,clipTime:0,blendDuration:.14});
+      if(this.cacheBindings(state,entry)){warmed+=this.bindingCounts.created-before;}else group.stop();
+    }
+    this.bindingCounts.prewarmed+=warmed;
+    return warmed;
   }
   canCacheBindings(entry){
     const group=entry.group;
@@ -92,17 +122,15 @@ export class CharacterAnimator {
       const cached=this.bindingCache.get(state);this.bindingCache.delete(state);
       const reused=cached&&cached.group===group&&this.canCacheBindings(cached);
       if(cached&&!reused){cached.group.stop(true);this.bindingCounts.evicted++;}
-      if(!reused)group.start(loop, 1, group.from, group.to, false);
-      this.bindingCounts[reused?'reused':'created']+=group.animatables?.length??0;
       // Sample from the controller's seconds, not a second Babylon wall clock.
       // This also prevents hidden tabs / dropped frames from moving the arrow ahead of its event.
-      if(!reused){group.pause();group.setWeightForAllAnimatables(0);}
-      entry = { group, weight: previous === null ? 1 : 0, target: 1, clipTime: 0, blendDuration };
-      if(this.bindingCacheCompatible){
-        entry.nativeCallbacks=reused?cached.nativeCallbacks:group.animatables.flatMap(native=>[native.onAnimationEnd,native.onAnimationLoop]);
-        entry.nativeChannels=reused?cached.nativeChannels:group.targetedAnimations.flatMap(({target,animation})=>[target,animation,animation.getKeys()]);
-        entry.bindingFrom=group.from;entry.bindingTo=group.to;
+      if(reused){
+        // Reuse the cached entry object: its native proofs stay valid; reset playback fields.
+        this.bindingCounts.reused+=group.animatables?.length??0;
+        entry=cached;entry.weight=previous === null ? 1 : 0;entry.target=1;entry.clipTime=0;entry.blendDuration=blendDuration;
+        entry.appliedWeight=undefined;entry.controlled=false;entry.freezeOnExit=false;entry.actionId=null;
       }
+      else entry=this.startBindings(group,loop,{ group, weight: previous === null ? 1 : 0, target: 1, clipTime: 0, blendDuration });
       this.active.set(state, entry);
     }
     if(this.retainBindings&&previous===null)entry.weight=1;

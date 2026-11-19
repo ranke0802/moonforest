@@ -17,7 +17,7 @@ const tracks=gltf.animations.map(clip=>({name:clip.name,channels:clip.channels.m
  assert.ok(['LINEAR','STEP'].includes(sampler.interpolation??'LINEAR'));
  return {...channel.target,interpolation:sampler.interpolation??'LINEAR',times:read(sampler.input).flat(),values:read(sampler.output)};
 })}));
-function fixture(limit,configure=()=>{}){
+function fixture(limit,configure=()=>{},options={}){
  const engine=new NullEngine(),scene=new Scene(engine);scene.useRightHandedSystem=true;
  const nodes=gltf.nodes.map(n=>{const node=new TransformNode(n.name,scene);node.position.copyFromFloats(...(n.translation??[0,0,0]));node.rotationQuaternion=Quaternion.FromArray(n.rotation??[0,0,0,1]);node.scaling.copyFromFloats(...(n.scale??[1,1,1]));return node;});
  gltf.nodes.forEach((node,i)=>(node.children??[]).forEach(child=>nodes[child].parent=nodes[i]));
@@ -27,7 +27,7 @@ function fixture(limit,configure=()=>{}){
  }return group;});
  configure(groups,nodes);
  let nativeStarts=0;const start=scene.beginDirectAnimation.bind(scene);scene.beginDirectAnimation=(...args)=>{nativeStarts++;return start(...args);};
- const animator=new CharacterAnimator(groups,config.animations,{bindingCacheSize:limit}),sampler=new PlayerStrikeSampler(),sword=nodes.find(node=>node.name==='Golden_Oathblade'),shield=nodes.find(node=>node.name==='Bunnyguard_Shield');
+ const animator=new CharacterAnimator(groups,config.animations,{bindingCacheSize:limit,...options}),sampler=new PlayerStrikeSampler(),sword=nodes.find(node=>node.name==='Golden_Oathblade'),shield=nodes.find(node=>node.name==='Bunnyguard_Shield');
  return {engine,scene,nodes,groups,animator,sampler,sword,shield,get nativeStarts(){return nativeStarts;},dispose(){animator.dispose();assert.equal(scene._activeAnimatables.length,0);for(const group of groups)for(const {animation}of group.targetedAnimations)assert.equal(animation.runtimeAnimations.length,0);scene.dispose();engine.dispose();}};
 }
 function worldPose(f){return f.nodes.flatMap(node=>Array.from(node.computeWorldMatrix(true).m));}
@@ -85,8 +85,8 @@ test('real warrior rapid superseded fades remain normalized and bounded at cache
  }finally{for(const f of fixtures)f.dispose();}
 });
 
-test('cache budget is explicitly bounded at six and event/sparse/additive/blending safeguards still reject reuse',()=>{
- for(const [requested,expected]of [[2,2],[4,4],[6,6],[100,6],[-1,0],[NaN,0]]){const f=fixture(requested);try{assert.equal(f.animator.bindingCacheSize,expected);}finally{f.dispose();}}
+test('cache budget is bounded by the clip count and event/sparse/additive/blending safeguards still reject reuse',()=>{
+ for(const [requested,expected]of [[2,2],[4,4],[6,6],[100,Object.keys(config.animations).length],[-1,0],[NaN,0]]){const f=fixture(requested);try{assert.equal(f.animator.bindingCacheSize,expected);}finally{f.dispose();}}
  for(const kind of ['event','sparse','additive','blending','group-observer','native-observer']){
   const f=fixture(6,groups=>{if(kind==='sparse'){const group=groups.find(group=>group.name===config.animations.idle);group.removeTargetedAnimation(group.targetedAnimations[0].animation);}});let callbacks=0;
   try{
@@ -112,4 +112,38 @@ test('a late observer at cache size six gets a fresh binding without a stale com
   group.onAnimationGroupEndObservable.add(()=>ended++);step('idle');assert.equal(ended,0);assert.equal(f.animator.inspectBindingCache().created,before.created+group.targetedAnimations.length);
   step('run');assert.equal(ended,1);assert.equal(f.animator.bindingCache.has('idle'),false);
  }finally{f.dispose();}
+});
+
+test('prewarmed player bindings: every clip switch after loading reuses native animatables with identical poses/strikes',t=>{
+ const clipCount=Object.keys(config.animations).length,reference=fixture(0),warm=fixture(clipCount,()=>{},{prewarmBindings:true});
+ try{
+  const states=Object.keys(config.animations);assert.ok(states.length>=9);
+  const snapshot=warm.animator.inspectBindingCache(),tracksPerClip=warm.animator.clips.idle.targetedAnimations.length;
+  assert.equal(snapshot.eligible,true);assert.equal(snapshot.cached,clipCount);assert.equal(warm.nativeStarts,clipCount*tracksPerClip);assert.equal(snapshot.created,clipCount*tracksPerClip);assert.equal(snapshot.prewarmed,clipCount*tracksPerClip);
+  assert.equal(warm.scene._activeAnimatables.length,clipCount*tracksPerClip);
+  assert.ok(warm.scene._activeAnimatables.every(native=>native.paused&&native.weight===0));
+  const warmed=new Set(warm.scene._activeAnimatables),runtimeBefore=warm.groups.reduce((sum,group)=>sum+group.targetedAnimations.reduce((n,{animation})=>n+animation.runtimeAnimations.length,0),0);
+  // Every ordered pair of clips, plus the combat loop, with interrupted fades.
+  const sequence=[];for(const a of states)for(const b of states)if(a!==b)sequence.push(a,b);sequence.push(...loops);
+  let actionId=0,maxError=0,strikes=0;
+  for(const [i,state]of sequence.entries()){
+   actionId++;const frames=i%5===0?2:6;
+   for(let frame=0;frame<frames;frame++){
+    const result={state,clipTime:(frame+1)/6*Math.min(1.5,reference.animator.durations[state]),actionId,loop:['idle','run'].includes(state),blendDuration:.1};
+    let pose;
+    for(const f of [reference,warm]){f.animator.transition(state,result);f.animator.update(1/60);f.scene._animate(0);}
+    pose=worldPose(reference);const other=worldPose(warm);for(let k=0;k<pose.length;k++)maxError=Math.max(maxError,Math.abs(pose[k]-other[k]));
+    const a=reference.sampler.sample(result,reference.sword,reference.shield),b=warm.sampler.sample(result,warm.sword,warm.shield);assert.deepEqual(b,a);strikes+=a?.contacts.length??0;
+    assert.ok(Math.abs([...warm.animator.active.values()].reduce((sum,entry)=>sum+entry.weight,0)-1)<1e-7);
+    for(const state of warm.animator.active.keys())assert.ok(Math.abs(warm.animator.active.get(state).weight-reference.animator.active.get(state).weight)<1e-12);
+    assert.deepEqual([...warm.animator.active.keys()],[...reference.animator.active.keys()]);
+   }
+  }
+  assert.ok(maxError<2e-5,`world pose error ${maxError}`);assert.ok(strikes>0);
+  const after=warm.animator.inspectBindingCache();
+  assert.equal(warm.nativeStarts,clipCount*tracksPerClip,'no Babylon start after warm-up');assert.equal(after.created,snapshot.created);assert.equal(after.evicted,0);assert.ok(after.reused>0);
+  assert.equal(warm.scene._activeAnimatables.length,warmed.size);assert.ok(warm.scene._activeAnimatables.every(native=>warmed.has(native)),'no new Animatable objects');
+  assert.equal(warm.groups.reduce((sum,group)=>sum+group.targetedAnimations.reduce((n,{animation})=>n+animation.runtimeAnimations.length,0),0),runtimeBefore,'no new RuntimeAnimations');
+  t.diagnostic(JSON.stringify({clips:clipCount,tracksPerClip,retainedAnimatables:warmed.size,transitions:sequence.length,referenceCreated:reference.animator.inspectBindingCache().created,warmCreated:after.created,reused:after.reused,maxWorldMatrixError:maxError}));
+ }finally{reference.dispose();warm.dispose();}
 });

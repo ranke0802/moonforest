@@ -1,6 +1,6 @@
 import {Vector3,Matrix,Quaternion} from '@babylonjs/core';
 import {villageLodTier,VILLAGE_LOD_COVERAGE} from './village-lod.js';
-import {groupVillageRecords,sceneryProjection,projectedSceneryCoverage} from './village-scenery-cache.js';
+import {groupVillageRecords,sceneryProjection,projectedSceneryCoverage,sceneryCoverageAt} from './village-scenery-cache.js';
 import {plainsRenderRange} from './plains-view-distance.js';
 import {sceneryDistanceRange as cinematicSceneryRange,sceneryDistanceScale as cinematicSceneryScale} from './scenery-distance-state.js';
 
@@ -141,18 +141,101 @@ function villageDemandDirect(world,records){
   return [...wanted.values()].sort((a,b)=>b.priority-a.priority||a.level-b.level);
 }
 
+// Time-sliced demand (2026-11-19, S23 trace: sceneryDemandMs up to ~16 ms).
+// A camera change used to evaluate every candidate record inside one
+// after-render callback. A job freezes the camera inputs once (frustum planes,
+// position, target, range, coverage view and distance scale), then walks the
+// candidate cells and the records in the original order across frames with a
+// unit cap and a time cap. Per-record tests, insertion order and the final sort
+// are those of villageDemand(), so a finished job equals villageDemand() for
+// the frozen camera. Non-candidate records are skipped by a flag read only.
+export const DEMAND_SLICE_UNITS=256;
+export const DEMAND_SLICE_MS=1.5;
+const DEMAND_CLOCK_STRIDE=32;
+export class VillageDemandJob {
+  constructor(world,records,index,flags){
+    const camera=world.camera;camera.getViewMatrix();camera.getProjectionMatrix();
+    const view=sceneryProjection(camera),target=camera.target??camera.getTarget();
+    this.world=world;this.records=records;this.length=records.length;this.camera=camera;
+    this.view={mode:view.mode,minZ:view.minZ,screenArea:view.screenArea,x:view.x,y:view.y,z:view.z};
+    this.planes=view.planes.map(p=>p.clone());this.position=camera.globalPosition.clone();this.target=target.clone();
+    this.range=cinematicSceneryRange(world)?.cellCull??(world.villageOverview?(world.plains?420:260):plainsRenderRange(world).cellCull);
+    this.scale=cinematicSceneryScale(world);this.wanted=new Map();this.result=null;
+    this.index=index&&index.length===records.length&&!world.villageOverview?index:null;
+    this.all=true;this.cell=0;this.i=0;this.count=records.length;this.phase=1;this.units=0;this.slices=0;
+    if(this.index){
+      const finite=[this.position.x,this.position.y,this.position.z,this.target.x,this.target.y,this.target.z,this.range].every(Number.isFinite)&&
+        this.planes.every(p=>[p.normal.x,p.normal.y,p.normal.z,p.d].every(Number.isFinite));
+      // Same fallback as villageDemandCandidates(): non-finite input checks all.
+      if(finite){this.all=false;this.flags=flags;flags.fill(0);this.count=0;this.phase=0;}
+    }
+  }
+  visible(center,radius){const planes=this.planes;for(let k=0;k<planes.length;k++)if(!(planes[k].dotCoordinate(center)>=-radius-10))return false;return true;}
+  request(record,tier,close,coverage,distance){
+    const wanted=this.wanted,key=record.placement.asset+':'+tier,priority=(close?1000:0)+coverage*100-distance;
+    if(!wanted.has(key)||wanted.get(key).priority<priority)wanted.set(key,{id:record.placement.asset,level:tier,priority});
+  }
+  // Returns true when the plan is complete. Always makes progress (>=1 unit).
+  step(maxUnits=DEMAND_SLICE_UNITS,milliseconds=DEMAND_SLICE_MS,now=null){
+    const started=now?now():0,over=units=>units>=maxUnits||(now&&units>0&&units%DEMAND_CLOCK_STRIDE===0&&now()-started>=milliseconds);
+    let units=0;this.slices++;
+    if(this.phase===0){
+      const cells=this.index.cells,flags=this.flags,range=this.range;
+      while(this.cell<cells.length){
+        if(over(units))break;
+        const cell=cells[this.cell++],{center,radius}=cell;units++;
+        if(Vector3.Distance(this.position,center)-radius>range+12)continue;
+        const close=Vector3.Distance(this.target,center)-radius<18;
+        if(!close&&!this.visible(center,radius))continue;
+        for(const i of cell.indices)flags[i]=1;this.count+=cell.indices.length;
+      }
+      if(this.cell<cells.length){this.units=units;return false;}
+      this.phase=1;
+    }
+    if(this.phase===1){
+      const {world,records,flags,all,range,view,scale}=this,length=records.length;
+      while(this.i<length){
+        if(!all&&!flags[this.i]){this.i++;continue;}
+        if(over(units))break;
+        const record=records[this.i++];units++;
+        if(world.caveFog?.fog.ready&&!world.caveFog.fog.boundsVisible(record.min??record.bounds.min,record.max??record.bounds.max,2))continue;
+        const sphere=record.bounds,{center,radius}=sphere,distance=Vector3.Distance(this.position,center)-radius;
+        const close=Vector3.Distance(this.target,center)-radius<18;
+        if(distance>range+12||(!close&&!this.visible(center,radius)))continue;
+        const raw=sceneryCoverageAt(view,sphere.centerWorld??center,sphere.radiusWorld??radius),coverage=scale===1?raw:raw*scale*scale,level=villageLodTier(coverage);
+        this.request(record,level,close,coverage,distance);
+        if(level===1&&coverage>VILLAGE_LOD_COVERAGE.mid*.72)this.request(record,0,close,coverage,distance);
+        if(level===2&&coverage>VILLAGE_LOD_COVERAGE.far*.72)this.request(record,1,close,coverage,distance);
+      }
+      if(this.i<length){this.units=units;return false;}
+      this.phase=2;
+      if(over(units)){this.units=units;return false;}
+    }
+    this.result=[...this.wanted.values()].sort((a,b)=>b.priority-a.priority||a.level-b.level);
+    this.wanted=null;this.flags=null;this.phase=3;this.units=units+1;return true;
+  }
+}
+
 // Placement bounds are immutable for this village instance. A stationary view
 // has the same demand even while downloads complete: filter the cached plan
 // against the current loaded tiers, without rescanning all 698 placements.
 export class VillageDemandCache {
   constructor(world,records,stats={}){
     Object.assign(this,{world,records,stats});this.previous=new Float64Array(30);this.previous.fill(NaN);this.plan=null;
-    this.index=null;this.indexLength=-1;
-    stats.demandEvaluations=0;stats.demandCacheHits=0;
+    this.index=null;this.indexLength=-1;this.job=null;this.jobFlags=null;
+    stats.demandEvaluations=0;stats.demandCacheHits=0;stats.demandSlices=0;stats.demandSliceMaxUnits=0;stats.demandJobSlicesMax=0;
   }
-  invalidate(){this.plan=null;}
-  get(){
+  invalidate(){this.plan=null;this.job=null;}
+  // get() evaluates synchronously (original path). get(budget) with
+  // {maxUnits,milliseconds,now} returns the plan, or null while a time-sliced
+  // evaluation is still running; call again on a later frame to continue.
+  get(budget=null){
     const {world,records}=this,camera=world.camera;
+    if(this.job){
+      const job=this.job,fogRevision=world.caveFog?.fog.revision??0,fogReady=!!world.caveFog?.fog.ready;
+      if(!budget||job.camera!==camera||job.records!==records||job.length!==records.length||job.overview!==!!world.villageOverview||job.fogRevision!==fogRevision||job.fogReady!==fogReady)this.job=null;
+      else return this.advance(budget);
+    }
     camera.getViewMatrix();camera.getProjectionMatrix();
     const matrix=camera.getTransformationMatrix().m,position=camera.globalPosition,target=camera.target??camera.getTarget();
     const values=[position.x,position.y,position.z,target.x,target.y,target.z,camera.screenArea,camera.minZ,camera.mode,Number(!!world.touchDevice),Number(!!world.villageOverview),records.length,plainsRenderRange(world).cellCull,cinematicSceneryScale(world)];
@@ -161,9 +244,29 @@ export class VillageDemandCache {
     for(let i=0;i<16;i++)if(this.previous[i]!==matrix[i])changed=true;
     for(let i=0;i<values.length;i++)if(this.previous[16+i]!==values[i])changed=true;
     if(!changed){this.stats.demandCacheHits++;return this.plan;}
-    this.camera=camera;this.previous.set(matrix);this.previous.set(values,16);
     if(!world.villageOverview&&this.indexLength!==records.length){this.index=records.length>=DEMAND_INDEX_MIN_RECORDS?createVillageDemandIndex(records):null;this.indexLength=records.length;}
-    this.stats.demandEvaluations++;return this.plan=villageDemand(world,records,this.index,this.stats);
+    this.stats.demandEvaluations++;
+    if(budget){
+      // Commit the camera key only when the job finishes. A camera that moved
+      // meanwhile is seen as a change on the next call and starts a new job.
+      if(this.index&&this.jobFlags?.length!==records.length)this.jobFlags=new Uint8Array(records.length);
+      const job=this.job=new VillageDemandJob(world,records,this.index,this.jobFlags);
+      job.key=new Float64Array(30);job.key.fill(NaN);job.key.set(matrix);job.key.set(values,16);
+      job.fogRevision=fogRevision;job.fogReady=!!world.caveFog?.fog.ready;job.overview=!!world.villageOverview;
+      if(this.stats){this.stats.demandRecordsTotal=records.length;}
+      return this.advance(budget);
+    }
+    this.camera=camera;this.previous.set(matrix);this.previous.set(values,16);
+    return this.plan=villageDemand(world,records,this.index,this.stats);
+  }
+  advance(budget){
+    const job=this.job,done=job.step(budget.maxUnits??DEMAND_SLICE_UNITS,budget.milliseconds??DEMAND_SLICE_MS,budget.now??null),stats=this.stats;
+    stats.demandSlices++;if(job.units>stats.demandSliceMaxUnits)stats.demandSliceMaxUnits=job.units;
+    if(!done)return null;
+    if(job.slices>stats.demandJobSlicesMax)stats.demandJobSlicesMax=job.slices;
+    stats.demandRecordsTotal=job.length;stats.demandRecordsChecked=job.count;
+    this.job=null;this.camera=job.camera;this.previous.set(job.key);
+    return this.plan=job.result;
   }
 }
 
@@ -171,7 +274,7 @@ export class VillageGeometryStreaming {
   constructor(world,records,load,has,stats,{recordsByAsset=null,assets=null}={}){
     Object.assign(this,{world,records,load,has,stats});this.failed=new Set();this.active=false;this.pending=null;this.next=0;this.disposed=false;
     this.recordsByAsset=recordsByAsset;this.assets=assets;this.indexedRecords=records;this.indexedLength=records.length;this.settledAssets=new Map();this.settledHas=has;
-    stats.geometryCompleteSkips=0;
+    stats.geometryCompleteSkips=0;this.demandBudget={maxUnits:DEMAND_SLICE_UNITS,milliseconds:DEMAND_SLICE_MS,now:()=>performance.now()};
     stats.geometrySettledEvaluations=0;stats.geometrySettledCacheHits=0;
     this.demand=new VillageDemandCache(world,records,stats);
     this.observer=world.scene.onAfterRenderObservable.add(()=>{
@@ -225,11 +328,15 @@ export class VillageGeometryStreaming {
     return seen.size>0;
   }
   update(now){
-    if(this.disposed||!this.active||this.pending||this.stats.highTexturePending||now<this.next)return;this.next=now+200;
+    // A time-sliced demand job continues on the next frames, ahead of the
+    // 200 ms cadence; a new evaluation still starts at most every 200 ms.
+    const continuing=!!this.demand.job;
+    if(this.disposed||!this.active||this.pending||this.stats.highTexturePending||(!continuing&&now<this.next))return;if(!continuing)this.next=now+200;
     const started=this.world.frameDiagnostics?.mark();let request;
     try{
-      if(this.allGeometrySettled()){this.stats.geometryCompleteSkips++;return;}
-      request=this.demand.get().find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
+      if(this.allGeometrySettled()){this.demand.job=null;this.stats.geometryCompleteSkips++;return;}
+      const plan=this.demand.get(this.demandBudget);
+      request=plan?.find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
     }finally{this.world.frameDiagnostics?.measure('sceneryDemandMs',started??null);}
     if(!request)return;
     this.stats.geometryPending=1;

@@ -22,13 +22,18 @@ export function sceneryProjection(camera){
  return view;
 }
 
+// One formula for the shared live view and for frozen snapshots (time-sliced
+// demand keeps its own copy of mode/minZ/screenArea/x/y/z across frames).
+export function sceneryCoverageAt(view,center,radius){
+ const distance=view.mode===1?view.minZ:Math.hypot(center.x-view.x,center.y-view.y,center.z-view.z),projected=radius*view.minZ/Math.max(distance,.001);
+ return Math.PI*projected*projected/view.screenArea;
+}
 export function projectedSceneryCoverage(view,sphere,world){
  const center=sphere.centerWorld??sphere.center,radius=sphere.radiusWorld??sphere.radius;
  let entry=view.coverage.get(sphere);
  if(!entry||entry.revision!==view.revision||entry.x!==center.x||entry.y!==center.y||entry.z!==center.z||entry.radius!==radius){
-  const distance=view.mode===1?view.minZ:Math.hypot(center.x-view.x,center.y-view.y,center.z-view.z),projected=radius*view.minZ/Math.max(distance,.001);
   if(!entry){entry={};view.coverage.set(sphere,entry);}
-  entry.revision=view.revision;entry.x=center.x;entry.y=center.y;entry.z=center.z;entry.radius=radius;entry.coverage=Math.PI*projected*projected/view.screenArea;view.coverageCalculations++;
+  entry.revision=view.revision;entry.x=center.x;entry.y=center.y;entry.z=center.z;entry.radius=radius;entry.coverage=sceneryCoverageAt(view,center,radius);view.coverageCalculations++;
  }else view.coverageCacheHits++;
  // Ink intentionally omits world and preserves its original unscaled cutoff;
  // texture/demand retain each world's exact cinematic/plains distance policy.
