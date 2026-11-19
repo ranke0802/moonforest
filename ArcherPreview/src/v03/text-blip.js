@@ -5,7 +5,8 @@
 // gesture after the blip is enabled, a few oscillators at a time.
 // The game has no user SFX volume setting yet, so the level is a fixed low gain.
 export const TEXT_BLIP_KEY='moonforest-0.3-text-blip-v1';
-export const BLIP_GAIN=.05;
+// .05 was inaudible under the music on a laptop (user, 2026-11-19).
+export const BLIP_GAIN=.16;
 export const BLIP_SECONDS=.03;
 const MAX_VOICES=3;
 const MIN_GAP=.035;
@@ -74,7 +75,9 @@ export function createTextBlip({view=globalThis,contextFactory=null,random=Math.
   play(who){
    if(!shared){if(contextFactory&&isEnabled()){try{shared=makeShared(contextFactory);}catch{return false;}}else return false;}
    const {context,out}=shared;
-   if(context.state&&context.state!=='running')return false;
+   // A context the browser suspended (tab switch, autoplay) is resumed here;
+   // this blip is skipped, the next ones play.
+   if(context.state&&context.state!=='running'){context.resume?.().catch?.(()=>{});return false;}
    const t=context.currentTime??0;
    if(shared.voices>=MAX_VOICES||t-shared.last<MIN_GAP)return false;
    shared.last=t;shared.voices++;

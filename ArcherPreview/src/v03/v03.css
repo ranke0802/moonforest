@@ -388,7 +388,11 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 .v03-opening-lid.is-high{top:0;background:linear-gradient(to bottom,#000 78%,#0000);border-radius:0 0 50% 50%/0 0 18% 18%}
 .v03-opening-lid.is-low{bottom:0;background:linear-gradient(to top,#000 78%,#0000);border-radius:50% 50% 0 0/18% 18% 0 0}
 .v03-opening.is-waking{background:transparent;transition:none}
-.v03-opening.is-waking .v03-opening-lid{display:block}
+/* 2026-11-19: no eyelids (user: looked cheap). The whole screen dims and
+   brightens once while the blurred world comes into focus. */
+.v03-opening.is-waking .v03-opening-lid{display:none}
+.v03-opening.is-waking{animation:v03-wake-dim 2.05s ease-in-out both}
+@keyframes v03-wake-dim{0%{background:#000}38%{background:#0000002e}58%{background:#000000a8}100%{background:#0000}}
 .v03-opening-focus{position:absolute;inset:0;z-index:2;display:none;pointer-events:none;-webkit-backdrop-filter:blur(8px) brightness(.85);backdrop-filter:blur(8px) brightness(.85)}
 .v03-opening.is-waking .v03-opening-focus{display:block;animation:v03-focus 1.9s ease-out both}
 @keyframes v03-focus{0%,30%{opacity:1}100%{opacity:0}}
