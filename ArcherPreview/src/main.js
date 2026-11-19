@@ -1266,7 +1266,7 @@ try {
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
     frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
-    if(adaptivePerformance.sample(dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/(engine.maxFPS||60)}))applyAdaptivePerformance();
+    if(adaptivePerformance.sample(dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/Math.min(engine.maxFPS||60,60)}))applyAdaptivePerformance();
     try{render(dt);}catch(error){
       world.toolLease?.cancel('error',{restore:false});
       frameFailure={name:error.name??'Error',message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;

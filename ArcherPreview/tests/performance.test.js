@@ -31,7 +31,7 @@ test('explicit 30 FPS stays capped during idle, gestures and sustained combat',(
 
 test('an explicit 60 FPS choice survives idle, combat and quality changes on touch and desktop',()=>{
  for(const touch of [true,false]){
-  const policy=new RenderActivity(touch);assert.equal(policy.limit(),60);policy.setTargetFps(60);
+  const policy=new RenderActivity(touch);assert.equal(policy.limit(),touch?60:120,'PC defaults to 120 FPS (2026-11-19)');policy.setTargetFps(60);
   for(let i=0;i<600;i++){policy.wake();assert.equal(policy.limit({busy:i%2===0,quality:['high','balanced','battery'][i%3]}),60);}
   policy.setTargetFps(30);assert.equal(policy.limit({busy:true}),30);
  }

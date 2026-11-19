@@ -18,10 +18,10 @@ export class RenderActivity {
     this.touchDevice = touchDevice;
     this.now = now;
     this.lastActive = now();
-    this.targetFps = 60;
+    this.targetFps = touchDevice ? 60 : 120;
   }
   wake() { this.lastActive = this.now(); }
-  setTargetFps(value) { this.targetFps=Number(value)===60?60:30;return this.targetFps; }
+  setTargetFps(value) { const fps=Number(value);this.targetFps=fps===120?120:fps===30?30:60;return this.targetFps; }
   limit({ busy = false } = {}) {
     if (busy) this.wake();
     // Explicit user choice is independent of device and resolution quality.
