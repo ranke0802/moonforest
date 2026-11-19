@@ -4,7 +4,7 @@ export const SLOT_COUNT=3;
 const INDEX_KEY='slots:v1',INTENT_KEY='intent:v1',LAST_KEY='last-slot:v1';
 // Display/input preferences a returning 0.2 player keeps. Progress, authored
 // drafts and combat sequences are intentionally not inherited.
-export const INHERITED_PREFERENCES=Object.freeze(['archer-render-quality','moonforest-frame-rate-v1','moonforest-render-scale-v1','moonforest-plains-view-distance-v2','moonforest-weather-v1','moonforest-sword-trail-v1','moonforest-camera-motion-follow-v1','moonforest-camera-upward-limit-v1','moonforest-player-texture-pc-v1','moonforest-movement-speed-v1','moonforest-character-style-v1']);
+export const INHERITED_PREFERENCES=Object.freeze(['archer-render-quality','moonforest-frame-rate-v2','moonforest-render-scale-v1','moonforest-plains-view-distance-v2','moonforest-weather-v1','moonforest-sword-trail-v1','moonforest-camera-motion-follow-v1','moonforest-camera-upward-limit-v1','moonforest-player-texture-pc-v1','moonforest-movement-speed-v1','moonforest-character-style-v1']);
 const usable=raw=>!!raw&&typeof raw.getItem==='function'&&typeof raw.setItem==='function';
 function prefixed(raw,prefix,fallback=null,inherited=[]){
  const inherit=new Set(inherited);

@@ -1,4 +1,5 @@
-export const FRAME_RATE_KEY='moonforest-frame-rate-v1';
+// v2 (2026-11-19): the v1 value was mostly the old 60 default; PC now starts at 120.
+export const FRAME_RATE_KEY='moonforest-frame-rate-v2';
 export const FRAME_RATES=[30,60,120];
 // PC defaults to 120 (2026-11-19): a frame that fits 8.3 ms leaves a phone at
 // 60 fps half its budget idle. Touch devices keep 60 by default.
