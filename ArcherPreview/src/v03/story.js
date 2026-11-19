@@ -329,7 +329,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // The cover is tall grass (grass-tuft, already loaded on the plains, scaled
  // up to wolf height): the placement runtime cannot load a new asset type here
  // (its cache is full), so a 'bush' row was rejected (2026-11-19).
- const AMBUSH_BUSHES=Object.freeze([{asset:'grass-tuft',dx:0,df:0,yaw:.4,scale:2.9},{asset:'grass-tuft',dx:1.1,df:.6,yaw:2.1,scale:2.5},{asset:'grass-tuft',dx:-1,df:.5,yaw:4.0,scale:2.6},{asset:'grass-tuft',dx:.5,df:-1,yaw:1.2,scale:2.4},{asset:'grass-tuft',dx:-.6,df:-.9,yaw:5.3,scale:2.7},{asset:'grass-tuft',dx:1.6,df:-.3,yaw:3.1,scale:2.2},{asset:'grass-tuft',dx:-1.7,df:-.2,yaw:.9,scale:2.3}]);
+ // Taller than the wolf (~1.5 m at 3.6x) and thick in front of it (measured on the deploy: 2.6x left its head out).
+ const AMBUSH_BUSHES=Object.freeze([{asset:'grass-tuft',dx:0,df:.2,yaw:.4,scale:3.8},{asset:'grass-tuft',dx:1.1,df:.7,yaw:2.1,scale:3.5},{asset:'grass-tuft',dx:-1.1,df:.6,yaw:4.0,scale:3.6},{asset:'grass-tuft',dx:.5,df:-.9,yaw:1.2,scale:3.4},{asset:'grass-tuft',dx:-.6,df:-.8,yaw:5.3,scale:3.7},{asset:'grass-tuft',dx:1.7,df:-.2,yaw:3.1,scale:3.2},{asset:'grass-tuft',dx:-1.8,df:-.1,yaw:.9,scale:3.3},{asset:'grass-tuft',dx:.2,df:1.4,yaw:2.7,scale:3.0},{asset:'grass-tuft',dx:-.4,df:-1.6,yaw:4.6,scale:3.1},{asset:'grass-tuft',dx:2.2,df:.9,yaw:5.9,scale:2.8}]);
  let hideCache=null;
  function ambushHide(id){
   const prop=(content.PROPS??[]).find(row=>row.asset==='covered-wagon'&&row.map===id);if(!prop)return null;
@@ -394,6 +395,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   scene.driver=member;scene.wolf=foe;scene.points={S,H,D,far,charge,guard,f,r,yaw,start:{x:player.x,z:player.z}};
   scene.wolfAt={x:far.x,z:far.z};scene.wolfSpeed=0;scene.wolfGait='watch';scene.wolfRate=1;
   holdWolf(foe);
+  // The shots need a longer arm than play allows (a clamped arm put the bench
+  // camera inside the horse, measured on the deploy); restored at the end.
+  scene.upper=camera.upperRadiusLimit;camera.upperRadiusLimit=Math.max(camera.upperRadiusLimit??0,40);
   Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false});
   // The warrior rides on the bench (the shot is from there): not drawn yet.
   showPlayer(false);
@@ -483,6 +487,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function endScene(){
   const camera=api.world.camera;scene.active=false;scene.cameraFocus=null;
+  if(camera&&scene.upper!==undefined){camera.upperRadiusLimit=scene.upper;scene.upper=undefined;}
   if(camera){camera.radius=scene.radius;camera.beta=scene.beta;}
   showPlayer(true);
   if(wagonHorse){wagonHorse.pose.gallop=0;wagonHorse.pose.rear=0;}
