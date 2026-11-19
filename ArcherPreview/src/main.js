@@ -208,7 +208,7 @@ async function settleWorldBehindCover(maxMs=2500){
   clean=pending?0:clean+1;if(rendered>=6&&clean>=3)break;
  }}finally{sc.onAfterRenderObservable.remove(o);}
 }
-async function preloadMapMonsters(){try{const runtime=world?.authoredMonsters??await world?.authoredMonstersTask?.catch?.(()=>null);if(!runtime?.preload)return;let timer;await Promise.race([runtime.preload(),new Promise(resolve=>{timer=setTimeout(resolve,20000);})]);clearTimeout(timer);}catch(error){console.error('[몬스터 준비]',error);}}
+async function preloadMapMonsters(){try{const runtime=world?.authoredMonsters??await world?.authoredMonstersTask?.catch?.(()=>null);if(!runtime?.preload)return;let timer;await Promise.race([runtime.active&&runtime.prepareForLoading?runtime.prepareForLoading({deadlineMs:20000}):runtime.preload(),new Promise(resolve=>{timer=setTimeout(resolve,22000);})]);clearTimeout(timer);}catch(error){console.error('[몬스터 준비]',error);}}
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const meleeTargetPoint=new Vector3();
 const staminaFeedback=new StaminaFailureFeedback();

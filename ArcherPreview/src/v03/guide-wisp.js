@@ -29,19 +29,21 @@ export function createGuideWisp(scene){
  dust.minSize=.045;dust.maxSize=.16;dust.minLifeTime=.6;dust.maxLifeTime=1.7;
  dust.direction1=new Vector3(-.4,.45,-.4);dust.direction2=new Vector3(.4,.1,.4);dust.minEmitPower=.12;dust.maxEmitPower=.55;
  dust.gravity=new Vector3(0,-.5,0);dust.minAngularSpeed=-2;dust.maxAngularSpeed=2;dust.emitRate=0;dust.updateSpeed=.016;
- dust.start();
- let shown=false;
+ let shown=false,dustRunning=false,stopTimer=null;
  return {
   show(x,y,z,time=0,moving=false){
    emitter.set(x,y,z);core.position.set(x,y,z);
    // Sized to read at the default follow-camera distance (about 17 m).
    const pulse=.46+Math.sin(time*5.1)*.05+Math.sin(time*8.3)*.02;core.scaling.setAll(pulse);
    const rate=moving?90:44;if(dust.emitRate!==rate)dust.emitRate=rate;
+   if(stopTimer){clearTimeout(stopTimer);stopTimer=null;}
+   if(!dustRunning){dustRunning=true;dust.start();}
    if(!shown){shown=true;core.setEnabled(true);}
   },
   // Stops emitting; dust already in the air fades on its own.
-  hide(){if(!shown)return;shown=false;core.setEnabled(false);dust.emitRate=0;},
+  // Once the airborne dust has faded the system stops updating altogether.
+  hide(){if(!shown)return;shown=false;core.setEnabled(false);dust.emitRate=0;stopTimer=setTimeout(()=>{stopTimer=null;if(!shown&&dustRunning){dustRunning=false;dust.stop();}},2000);},
   get visible(){return shown;},
-  dispose(){dust.dispose(false);core.dispose(false,false);material.dispose(false,false);texture.dispose();},
+  dispose(){if(stopTimer)clearTimeout(stopTimer);dust.dispose(false);core.dispose(false,false);material.dispose(false,false);texture.dispose();},
  };
 }

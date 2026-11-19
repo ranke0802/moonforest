@@ -173,7 +173,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   guide.time+=dt;
   // While a quest is open the light never leaves: with a goal it leads the
   // way, without one (a fight, a goal it cannot path to) it circles the player.
-  if(!createGuide||guide.failed||talking||dialogue.open||!player||!log.step()){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
+  // Not during the opening fight and its tutorial (the light starts with the
+  // driver's talk), and not while a fight is on: it would only add glare and
+  // overdraw around the player where the combat effects already are.
+  const opening=log.quest()?.id==='M00'&&log.step()?.id==='fight';
+  if(!createGuide||guide.failed||talking||dialogue.open||!player||!log.step()||opening||api.battle?.combatCount>0){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
   try{guide.visual??=createGuide(api.world.scene);}catch(error){guide.failed=true;console.warn('[MoonForest 0.3] guide light unavailable',error);return;}
   const target=guideTarget(player),time=guide.time,blend=1-Math.exp(-dt*1.6);
   if(!target){

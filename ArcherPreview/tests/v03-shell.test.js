@@ -258,9 +258,9 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'회복약');assert.match(hud('.v03-tip-lead').textContent,/숫자 1 키/);
  for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);h.battle.combat.hp=500;
  // No talking during combat; the title/prologue never count defeats.
- // The guide light leads to the wolf during the fight, stopping short of it.
+ // No guide light in the opening fight (it starts with the driver's talk) nor in any fight (2026-11-19).
  h.battle.encounters=[{active:true,brain:{hp:300,maxHp:300,mode:'idle'},actor:{position:{x:2,z:14}}}];h.battle.combatCount=1;for(let i=0;i<200;i++)h.shell.update(.016);
- assert.ok(h.guide.shown&&h.guide.shown.z>4&&h.guide.shown.z<12.2,JSON.stringify(h.guide.shown));
+ assert.equal(h.guide.shown,null,'the guide light stays hidden during the opening fight');
  {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
  assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'!','the driver is a report: !');

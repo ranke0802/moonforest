@@ -48,7 +48,7 @@ test('village keeps bounded shadows in balanced mode and registers every LOD rec
  const {scene,engine,lighting,key,shadows}=setup(true,true),map=shadows.getShadowMap();
  const meshes=[0,1,2].map(i=>MeshBuilder.CreateBox('lod'+i,{},scene));lighting.registerMeshes(meshes);
  lighting.setQuality('balanced');assert.equal(scene.shadowsEnabled,true);assert.ok(meshes.every(m=>m.receiveShadows));
- assert.equal(key.shadowFrustumSize,40);assert.equal(map.getSize().width,1024);assert.equal(map,shadows.getShadowMap());
+ assert.equal(key.shadowFrustumSize,64);assert.equal(map.getSize().width,1024);assert.equal(map,shadows.getShadowMap());
  lighting.follow(new Vector3(18,0,-8));assert.ok(Vector3.Distance(key.position.add(key.direction.scale(45)),new Vector3(18,0,-8))<.05);
  lighting.setQuality('battery');assert.equal(scene.shadowsEnabled,false);assert.ok(meshes.every(m=>!m.receiveShadows));
  scene.dispose();engine.dispose();

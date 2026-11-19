@@ -1,6 +1,6 @@
 // One scheduler per map, driven by the existing game tick. The host owns actors.
 export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>true,canLaunch=()=>true,releaseAdmission=()=>{},remove=()=>{},isAlive=()=>true,onPermanentDeath=()=>{},onError=()=>{},random=Math.random,preparationGroups=Infinity,now=()=>performance.now(),focus=null}){
- let generation=0,groups=new Map(),disposed=false,paused=true,loadedAt=0;const preparationLimit=Number.isFinite(preparationGroups)?Math.max(1,Math.floor(preparationGroups)):Infinity;
+ let generation=0,groups=new Map(),disposed=false,paused=true,loadedAt=0,warming=false;const preparationLimit=Number.isFinite(preparationGroups)?Math.max(1,Math.floor(preparationGroups)):Infinity;
  const safeRemove=handle=>{try{remove(handle);}catch(error){onError(error);}};
  const release=group=>{if(!group.admitted)return;group.admitted=false;try{releaseAdmission(group.members);}catch(error){onError(error);}};
  const FAILED_RETRY_SECONDS=6;
@@ -42,7 +42,7 @@ export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>t
   return list.map(group=>[key(group),group]).sort((a,b)=>a[0][0]-b[0][0]||a[0][1]-b[0][1]).map(entry=>entry[1]);
  }
  function startReady(){
-  if(disposed||paused||!canCommit())return;let preparing=[...groups.values()].filter(group=>group.pending).length;
+  if(disposed||!warming&&(paused||!canCommit()))return;let preparing=[...groups.values()].filter(group=>group.pending).length;
   for(const group of byFocus())if(['waiting','capacity-wait','prepare-wait'].includes(group.state)&&group.remaining===0){
    if(preparing>=preparationLimit){group.state='prepare-wait';continue;}
    const admission=canLaunch(group.members);if(admission!==true){group.state='capacity-wait';group.capacityReason=typeof admission==='string'?admission:'capacity';continue;}
@@ -58,5 +58,17 @@ export function createMonsterGroupScheduler({spawn,commit=()=>{},canCommit=()=>t
   }
   else if(['waiting','capacity-wait','prepare-wait'].includes(group.state))group.remaining=Math.max(0,group.remaining-dt);
  }startReady();}
- return {load,leave,update,inspect:()=>[...groups.values()].map(g=>({id:g.id,state:g.state,remaining:g.remaining,initialDelaySeconds:g.initialDelaySeconds,count:g.members.length,preparedCount:g.preparedCount,dead:g.dead.size,capacityReason:g.capacityReason??null,admitted:!!g.admitted,prepareQueueMs:g.startedAt===null?null:Math.max(0,g.startedAt-loadedAt),preparationWallMs:g.readyAt===null||g.startedAt===null?null:Math.max(0,g.readyAt-g.startedAt),readyElapsedMs:g.readyAt===null?null:Math.max(0,g.readyAt-loadedAt),firstShownMs:g.firstShownAt==null?null:Math.max(0,g.firstShownAt-loadedAt)})),dispose(){if(disposed)return;leave();disposed=true;}};
+ // Behind the loading screen: prepare every pack that is due now (clone,
+ // shaders, outlines) while the game is not running, leaving them hidden. The
+ // next update reveals them, so arriving costs no model work in play
+ // (phone record 2026-11-19: ~13 s at 15-35 fps after entering the plains).
+ async function prewarm({deadlineMs=20000}={}){
+  if(disposed)return;const epoch=generation,until=now()+deadlineMs;warming=true;
+  try{
+   startReady();
+   const busy=()=>[...groups.values()].some(group=>group.pending||group.remaining===0&&group.state==='prepare-wait');
+   while(!disposed&&generation===epoch&&busy()&&now()<until)await new Promise(resolve=>setTimeout(resolve,50));
+  }finally{warming=false;}
+ }
+ return {load,leave,update,prewarm,inspect:()=>[...groups.values()].map(g=>({id:g.id,state:g.state,remaining:g.remaining,initialDelaySeconds:g.initialDelaySeconds,count:g.members.length,preparedCount:g.preparedCount,dead:g.dead.size,capacityReason:g.capacityReason??null,admitted:!!g.admitted,prepareQueueMs:g.startedAt===null?null:Math.max(0,g.startedAt-loadedAt),preparationWallMs:g.readyAt===null||g.startedAt===null?null:Math.max(0,g.readyAt-g.startedAt),readyElapsedMs:g.readyAt===null?null:Math.max(0,g.readyAt-loadedAt),firstShownMs:g.firstShownAt==null?null:Math.max(0,g.firstShownAt-loadedAt)})),dispose(){if(disposed)return;leave();disposed=true;}};
 }

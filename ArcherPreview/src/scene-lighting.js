@@ -87,8 +87,9 @@ export class SceneLighting {
     // A stable arena-sized frustum avoids per-frame bounds fitting and preserves
     // useful shadow texels when tall trees enter the cast list.
     key.position = key.direction.scale(-this.lightDistance);
-    // Phones: a 40 m box (approved 2026-11-18): sharper texels, fewer casters.
-    key.shadowFrustumSize = village?(touchDevice?40:80):32;
+    // Phones: a 64 m box again (user choice 2026-11-19: wider reach over the
+    // sharper 40 m box; the static shadow cache keeps the extra casters cheap).
+    key.shadowFrustumSize = village?(touchDevice?64:80):32;
     key.shadowMinZ = 1; key.shadowMaxZ = village?120:65;
     key.autoUpdateExtends = false;
     shadows.filteringQuality = touchDevice ? ShadowGenerator.QUALITY_LOW : ShadowGenerator.QUALITY_MEDIUM;
