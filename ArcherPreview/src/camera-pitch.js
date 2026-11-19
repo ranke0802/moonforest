@@ -28,8 +28,12 @@ export class CameraPitch {
     const c=this.camera;c.lowerBetaLimit=CAMERA_LOWER_BETA;c.upperBetaLimit=this.warrior?(this.settings.upwardLimited?WARRIOR_UPPER_BETA:UNRESTRICTED_UPPER_BETA):ARCHER_UPPER_BETA;
     c.beta=Math.max(c.lowerBetaLimit,Math.min(c.upperBetaLimit,c.beta));
   }
-  follow(baseFocus,dt,{snap=false}={}){
-    this.apply();const c=this.camera,lift=upwardFocusLift(c,this.warrior,this.bodyScale??1);
+  // exact: a scripted shot (0.3 cutscenes) places the eye itself; no lift.
+  follow(baseFocus,dt,{snap=false,exact=false}={}){
+    const c=this.camera;
+    // Scripted shots may look up from below (a warrior waking on his back): open the pitch range for them.
+    if(exact){c.lowerBetaLimit=.01;c.upperBetaLimit=Math.PI-.02;}else this.apply();
+    const lift=exact?0:upwardFocusLift(c,this.warrior,this.bodyScale??1);
     this.adjusted.copyFrom(baseFocus);this.adjusted.y+=lift;
     if(snap)this.next.copyFrom(this.adjusted);else Vector3.LerpToRef(c.target,this.adjusted,1-Math.exp(-10*Math.max(0,dt)),this.next);
     // Increasing pitch/radius can lower the eye in a single input event. The

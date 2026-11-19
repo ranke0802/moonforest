@@ -462,7 +462,8 @@ export class BossEncounter {
     this.grab.update(this.dt,{boss:this.actor,nodes:this.nodes,serial:this.brain.serial,state:this.brain.state,clipTime:this.brain.time,
       duration:this.brain.durations[this.brain.state],interrupted:this.brain.stagger>0||this.brain.hp<=0});
     if(!player.position.equals(beforeGrab))this.world.navigation?.constrain(player.position,beforeGrab,playerDimensions(player).moveRadius,ARENA_RADIUS);
-    if(!this.combat.grabOwner){this.world.terrain?.place(player.position);player.computeWorldMatrix(true);}
+    // 0.3 opening: the warrior lies in the wagon bed, off the ground (story holdsPlayer).
+    if(!this.combat.grabOwner&&!this.world.v03?.holdsPlayer){this.world.terrain?.place(player.position);player.computeWorldMatrix(true);}
     return hitStop;
   }
   showDefense(kind,actionId){

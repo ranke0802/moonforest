@@ -5,7 +5,9 @@
 // instance: that one stays only for collision, hidden.
 import {Matrix,Quaternion,Vector3} from '@babylonjs/core';
 
-export const WAGON_TIP=Object.freeze({angle:1.42,halfWidth:1.3});
+// A full quarter turn: at 1.42 rad the wagon rested on its wheel rims with the
+// canopy held off the ground (2026-11-20, user: it floated).
+export const WAGON_TIP=Object.freeze({angle:Math.PI/2,halfWidth:1.3});
 const AXIS_Z=new Vector3(0,0,1),local=new Vector3(),moved=new Vector3(),offset=new Vector3(),roll=new Quaternion(),turn=new Matrix();
 let tipSign=0;
 function topSign(){if(!tipSign){const probe=Vector3.TransformCoordinates(new Vector3(0,1,0),Matrix.RotationZ(.3));tipSign=probe.x>0?1:-1;}return tipSign;}

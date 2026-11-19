@@ -26,8 +26,11 @@ export function createSleepPose(root){
  // Node lookup once per player model (the model lives as long as the player).
  const byName=new Map();for(const node of root.getDescendants(false))byName.set(node.name,node);
  const links=CHAINS.map(row=>Array.isArray(row)?{bone:byName.get(row[0]),child:byName.get(row[1]),dir:row[2],spread:row[3]}:{bone:byName.get(row.twist),a:byName.get(row.a),child:byName.get(row.b),twist:true,face:row.face===true}).filter(link=>link.bone&&link.child&&link.bone.parent&&(!link.twist||link.a));
+ const hips=byName.get('mixamorig:Hips')??null;
  return {
   get ready(){return links.length>0;},
+  // Height of the hips joint above the root after the pose (the lying body's centre line).
+  hipsAbove(){if(!hips)return 0;root.computeWorldMatrix(true);hips.computeWorldMatrix(true);return hips.absolutePosition.y-root.absolutePosition.y;},
   // weight 0..1; the root's own axes define the body's up and left.
   apply(weight){
    if(!(weight>0)||!links.length)return;

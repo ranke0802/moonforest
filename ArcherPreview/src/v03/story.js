@@ -341,7 +341,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function horseMotion(dt=0){
   if(!wagonHorse||scene.active)return;
   if(wagonDown()){horseState.down=true;horseState.rising=0;wagonHorse.play('Horse_Down');return;}
-  if(horseState.down){horseState.down=false;horseState.rising=3.1;wagonHorse.play('Horse_GetUp');}
+  if(horseState.down){horseState.down=false;horseState.rising=4.4;wagonHorse.play('Horse_GetUp');}
   if(horseState.rising>0){horseState.rising-=dt;if(horseState.rising>0)return;}
   wagonHorse.play('Horse_Idle');
  }
@@ -520,17 +520,21 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Lying in the bed: feet toward the bench, head toward the open back.
  // The limbs are laid along the body by sleep-pose.js (the model has no lying
  // clip), applied each frame after the animation; the lying body's back sits
- // 0.19 m above its feet pivot (measured on the model).
+ // 0.17-0.19 m above its feet pivot (measured on the model).
  const sleepPoses=new WeakMap();
+ // The bed's floor, measured in the game by a ray on the wagon model (1.01 m;
+ // the Blender vertex count guess of 0.8 put him under the boards).
+ const BED=1.01;
  function startSleepPose(){
   const root=api.getPlayer?.(),bscene=api.world?.scene;if(!root||!bscene)return;
   let pose=sleepPoses.get(root);if(!pose){try{pose=createSleepPose(root);}catch(error){console.warn('[MoonForest 0.3] sleep pose skipped',error);return;}sleepPoses.set(root,pose);}
-  scene.sleepWeight=1;scene.sleepObserver=bscene.onBeforeRenderObservable.add(()=>{if(scene.active&&scene.sleeping)pose.apply(scene.sleepWeight);});scene.sleepScene=bscene;
+  scene.sleepWeight=1;scene.hipsAbove=0;scene.sleepObserver=bscene.onBeforeRenderObservable.add(()=>{if(scene.active&&scene.sleeping){pose.apply(scene.sleepWeight);scene.hipsAbove=pose.hipsAbove();}});scene.sleepScene=bscene;
  }
  function stopSleepPose(){if(scene.sleepObserver){scene.sleepScene?.onBeforeRenderObservable.remove(scene.sleepObserver);}scene.sleepObserver=null;scene.sleepScene=null;}
  function poseSleeper(player,W0,ground,pitch){
   const P=scene.points,p=player.position;
-  p.x=W0.x+P.f.x*.55+P.r.x*.15;p.z=W0.z+P.f.z*.55+P.r.z*.15;p.y=ground+.8-.19*Math.cos(pitch+Math.PI/2);
+  p.x=W0.x+P.f.x*.55+P.r.x*.15;p.z=W0.z+P.f.z*.55+P.r.z*.15;// Lying: the body's centre line 0.16 m over the boards (hips height from the last frame's pose).
+  const lying=Math.cos(pitch+Math.PI/2);p.y=ground+BED+(.16-(scene.hipsAbove??0))*lying;
   if(player.rotation){player.rotation.y=P.yaw;player.rotation.x=pitch;player.rotation.z=0;}
  }
  function updateScene(dt){
@@ -551,7 +555,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(wagonHorse){
    wagonHorse.place(W0.x+fx*3.55,W0.z+fz*3.55,P.yaw);
    const speed=SCENE.ride/SCENE.crash*Math.max(0,1-now/SCENE.crash)*(1.35-.7*now/SCENE.crash);
-   const clip=now<SCENE.attack?'Horse_Walk':now<SCENE.lunge?'Horse_Nervous':now<SCENE.tipStart?'Horse_Rear':now<SCENE.tipStart+1.5?'Horse_Fall':'Horse_Down';
+   const clip=now<SCENE.attack?'Horse_Walk':now<SCENE.lunge?'Horse_Nervous':now<SCENE.tipStart?'Horse_Rear':now<SCENE.tipStart+1.7?'Horse_Fall':'Horse_Down';
    wagonHorse.play(clip);if(clip==='Horse_Walk')wagonHorse.speed?.(Math.max(.4,Math.min(1.3,speed/1.6)));
   }
   // The driver rides on the bench, then is thrown clear by the fall.
@@ -585,15 +589,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    const k=ease(now/SCENE.sleepShot),back=28-21.5*k,side=14-11.8*k,up=26-22.6*k,ahead=8*(1-k);
    frameEye(W0.x-fx*back+rx*side,ground+up,W0.z-fz*back+rz*side,W0.x+fx*ahead,ground+1.5*k,W0.z+fz*ahead);
   }else if(shot===1){
-   // Low through the open back, between the tail rails: the warrior asleep in
-   // the bed (from 1.9 m the bed's high sides hid him; checked in renders of
-   // the wagon from behind: 1.5 m just past the tailboard sees the whole bed).
-   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),back=3.25-.4*k;
-   frameEye(W0.x-fx*back+rx*.1,ground+1.5,W0.z-fz*back+rz*.1,W0.x-fx*.3,ground+1.0,W0.z-fz*.3);
+   // Inside the canopy, over his chest: the warrior asleep in the bed (from
+   // behind the bed's high sides hid him; framed in the game, 2026-11-20).
+   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),a=.9-.25*k,B=ground+BED;
+   frameEye(W0.x+fx*a+rx*.45,B+1.6,W0.z+fz*a+rz*.45,W0.x-fx*.6,B+.1,W0.z-fz*.6);
   }else if(shot===2){
    // From his eyes: the canopy overhead, then up to the bench as he sits up.
    const pitch=scene.pitch,c=Math.cos(pitch),s=Math.sin(pitch),feet={x:W0.x+fx*.55+rx*.15,z:W0.z+fz*.55+rz*.15};
-   const ex=feet.x+fx*1.55*s,ez=feet.z+fz*1.55*s,ey=ground+.95+1.55*c+jolt;
+   const ex=feet.x+fx*1.55*s,ez=feet.z+fz*1.55*s,ey=ground+BED+.2+1.55*c+jolt;
    const lx=ex+fx*(3*c+1.2),lz=ez+fz*(3*c+1.2),ly=ey-3*s-.4*(1-c);
    frameEye(ex,ey,ez,lx,ly,lz);
   }else if(shot===3){

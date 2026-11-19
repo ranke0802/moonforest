@@ -25,6 +25,8 @@ export function createWagonModel({scene,wagon,heightAt=()=>0,shadows=null}){
   for(const node of container.rootNodes)node.parent=body;
   container.addAllToScene();
   for(const mesh of container.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
+  // The canopy is seen from inside in the opening (the warrior wakes under it).
+  for(const mesh of container.meshes)if(mesh.material)mesh.material.backFaceCulling=false;
   // Painted like the other actors (2026-11-19, user: it had no cartoon shading
   // and no shadow): the monsters' unlit toon material and character bands.
   try{applyMonsterToon(container);for(const mesh of container.meshes){mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};if(mesh.material?.metadata?.moonforestMonsterToon)painted.add(mesh.material);}}catch(error){console.warn('[MoonForest 0.3] wagon toon skipped',error);}
