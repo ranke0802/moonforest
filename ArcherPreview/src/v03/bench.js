@@ -66,7 +66,7 @@ export function createBench({doc,getWorld,info=()=>({}),travel=null,isReady=()=>
    const world=getWorld(),scene=world.scene,camera=world.camera;await wait(8000);
    const alpha=camera.alpha;const r=await phase(scene,seconds,orbitSeconds?(dt,elapsed)=>{camera.alpha=alpha+Math.PI*2*Math.min(1,elapsed/(orbitSeconds*1000));}:null);camera.alpha=alpha;
    visits.push({label,map:world.mapId,loadMs,fpsAvg:r.fpsAvg,fps1Low:r.fps1Low,frameMsMedian:r.frameMsMedian,stalls:r.stallsOver100ms,cpu:r.cpuMedian,jsHeapMB:heap(),...sceneCounts(scene)});
-   show(t('bench.running')+` (${visits.length}/7)`);
+   show(t('bench.trip',{step:visits.length}));
   };
   const go=async id=>{const start=performance.now();await travel(id);const ok=await waitReady();if(!ok)throw new Error('bench: map did not finish loading: '+id);return Math.round(performance.now()-start);};
   let load=getWorld().mapId==='great-plains'?null:await go('warrior-plains');
@@ -81,7 +81,7 @@ export function createBench({doc,getWorld,info=()=>({}),travel=null,isReady=()=>
  async function run(){
   const world=getWorld(),scene=world?.scene,engine=scene?.getEngine(),camera=world?.camera;
   if(!scene||!camera)throw new Error('bench: no scene');
-  show(t('bench.running'));await wait(SETTLE_SECONDS*1000);if(disposed)return null;
+  show(t(mode==='roundtrip'&&travel?'bench.trip':'bench.running',{step:0}));await wait(SETTLE_SECONDS*1000);if(disposed)return null;
   if(mode==='roundtrip'&&travel){
    const engine0=scene.getEngine(),trip=await roundtrip();if(!trip)return null;
    const result={version:1,mode,at:new Date().toISOString(),...info(),device:{ua:doc.defaultView?.navigator?.userAgent,dpr:doc.defaultView?.devicePixelRatio,hardwareScaling:engine0.getHardwareScalingLevel(),render:[engine0.getRenderWidth(),engine0.getRenderHeight()]},...trip};

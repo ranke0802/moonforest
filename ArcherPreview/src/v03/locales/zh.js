@@ -1,6 +1,7 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'bench.trip':'正在测量往返（约5分钟，{step}/5），请勿触碰屏幕。',
   'bench.running':'正在测量性能（约50秒），请勿触碰屏幕。','bench.done':'测量完成','bench.copy':'复制','bench.save':'保存文件','bench.close':'关闭',
   'title.aria':'MoonForest 标题画面','title.kicker':'悲叹的魔女','title.sub':'缘分的餐桌 · 第一幕','title.menu':'主菜单','title.drawing':'正在描绘世界',
   'menu.new':'新游戏','menu.load':'继续游戏','menu.gallery':'画廊','menu.settings':'设置','menu.quit':'退出',
