@@ -1,3 +1,4 @@
+import {simplifierAvailable,simplifySharedShell} from './mesh-simplify.js';
 import { Color3, Matrix, Mesh, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
 import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
@@ -180,6 +181,8 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     // With the switch off, the extra hull pass is dropped beyond this distance
     // (the ink is thin there). The player's own outline always stays.
     if(kind!=='warrior'){farOutlineShells.add(shell);shell.onDisposeObservable.addOnce(()=>farOutlineShells.delete(shell));if(!farOutlines)shell.addLODLevel(OUTLINE_FAR_DISTANCE,null);}
+    // 0.3: the hull keeps half its triangles over the body's own vertex buffers.
+    if(simplifierAvailable())simplifySharedShell(shell,{ratio:.5,error:.01});
     if(kind==='warrior')registerCharacterInk(shell,'player');
     else if(kind==='bear'||kind==='goblin'||kind==='elena'||kind==='wolf')registerCharacterInk(shell,mourning?'mourning':'boss');
     added.push(shell);

@@ -47,7 +47,7 @@ import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
 import {updatePlainsBoundaryAtmosphere} from './plains-boundary-atmosphere.js';
 import {travelWaypoint} from './map-waypoints.js';
-import {applyPlayerDetail} from './player-detail.js';import {mergePlayerMeshes} from './player-mesh-merge.js';
+import {applyPlayerDetail} from './player-detail.js';import {mergePlayerMeshes} from './player-mesh-merge.js';import {simplifierReady,simplifyEnabled,simplifyOwnMesh} from './mesh-simplify.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
@@ -158,7 +158,7 @@ const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.sea
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
-if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;
+if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;if(simplifyEnabled())void simplifierReady();
 if(versionRoute.worldRevision)document.documentElement.dataset.world=versionRoute.worldRevision;
 {const query=new URLSearchParams(location.search);if(import.meta.env.DEV||query.has('dev')||query.has('qa'))document.documentElement.dataset.dev='';}
 let character = uiRoute.character;
@@ -708,6 +708,8 @@ async function loadCharacter() {
     // 0.3: join rigid shield parts and same-material baked outlines (35 → ~19 player draws). ?mergeplayer=0 turns it off.
     if (isWarrior()&&versionRoute.edition) mergePlayerMeshes(container,{keep:['Bunnyguard_Shield','Golden_Oathblade'],enabled:new URLSearchParams(location.search).get('mergeplayer')!=='0'});
     if (isWarrior()) equipment = new WarriorEquipment(container, equipmentChoices);
+    // 0.3: the player's baked inverted-hull outlines keep half their triangles (shape-only meshes).
+    if (isWarrior()&&simplifyEnabled()){const owned=container;void simplifierReady().then(ok=>{if(!ok||container!==owned)return;for(const mesh of owned.meshes)if(/_Outline\b|_Outline \+/.test(mesh.name)&&!mesh.isDisposed())simplifyOwnMesh(mesh,{ratio:.5,error:.01});});}
     for (const group of container.animationGroups) group.stop();
     actor = new TransformNode('player-world-transform', world.scene);
     if(isVillage()){actor.position.set(mapSpawn().x,0,mapSpawn().z);world.terrain.place(actor.position);}

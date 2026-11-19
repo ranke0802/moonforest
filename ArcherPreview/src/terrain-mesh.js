@@ -1,5 +1,6 @@
 import {Mesh,MeshBuilder,VertexBuffer,VertexData} from '@babylonjs/core';
 import {restoreLaboratoryFloorNormals} from './cave-laboratory-terrain.js';
+import {simplifierReady,simplifyEnabled,simplifyOwnMesh} from './mesh-simplify.js';
 
 export function createTerrainGround(scene,terrain,{borderExtension=0,borderHeight=null}={}){
   const mesh=MeshBuilder.CreateGround('forest-floor',{width:terrain.size,height:terrain.size,subdivisions:terrain.subdivisions},scene);
@@ -21,7 +22,11 @@ export function createTerrainGround(scene,terrain,{borderExtension=0,borderHeigh
   restoreLaboratoryFloorNormals(normals,terrain);
   mesh.setVerticesData(VertexBuffer.PositionKind,positions,false);mesh.setVerticesData(VertexBuffer.NormalKind,normals,false);
   mesh.setVerticesData(VertexBuffer.UVKind,uvs,false);
-  mesh.refreshBoundingInfo();return mesh;
+  mesh.refreshBoundingInfo();
+  // 0.3: drop triangles that stay within 4 cm of the surface (plains 93K). Heights,
+  // normals and UVs at the kept vertices are unchanged; gameplay reads the height field.
+  if(simplifyEnabled())void simplifierReady().then(ok=>{if(ok&&!mesh.isDisposed())simplifyOwnMesh(mesh,{ratio:.12,error:.04,absolute:true});});
+  return mesh;
 }
 
 // A 64-segment flat ribbon follows the ground. Updating only visible/moving
