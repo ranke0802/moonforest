@@ -9,7 +9,7 @@ const close=(a,b)=>a.length===b.length&&a.every((v,i)=>Vector3.Distance(v,b[i])<
 test('rigid parts with one material and parent become one mesh in the same place',()=>{
  const scene=new Scene(new NullEngine());const hand=new TransformNode('hand',scene);hand.position.set(1,2,3);hand.rotation.y=.7;
  const leather=new StandardMaterial('leather',scene),gold=new StandardMaterial('gold',scene);
- const parts=[0,1,2].map(i=>{const m=MeshBuilder.CreateBox('pad_'+i,{size:.1},scene);m.parent=hand;m.position.set(i*.2,.1,0);m.rotation.z=i*.3;m.material=leather;return m;});
+ const parts=[0,1,2].map(i=>{const m=MeshBuilder.CreateBox('pad_'+i,{size:.1},scene);m.sideOrientation=1;m.parent=hand;m.position.set(i*.2,.1,0);m.rotation.z=i*.3;m.material=leather;return m;});
  const shield=MeshBuilder.CreateBox('Shield',{size:1},scene);shield.parent=hand;shield.material=leather;
  const rivet=MeshBuilder.CreateBox('rivet',{size:.05},scene);rivet.parent=hand;rivet.material=gold;
  const container={meshes:[shield,...parts,rivet],animationGroups:[]};
@@ -17,7 +17,7 @@ test('rigid parts with one material and parent become one mesh in the same place
  const stats=mergePlayerMeshes(container,{keep:['Shield']});
  assert.equal(stats.groups,1);assert.equal(container.meshes.length,3,'shield, merged pads, rivet');
  const merged=container.meshes.find(m=>m.metadata?.moonforestMergedFrom);
- assert.equal(merged.parent,hand);assert.equal(merged.material,leather);
+ assert.equal(merged.parent,hand);assert.equal(merged.sideOrientation,1,'winding follows the glTF parts');assert.equal(merged.material,leather);
  assert.ok(close(worldPoints(merged),before),'every vertex keeps its world position');
  hand.position.set(-4,0,9);assert.ok(merged.getWorldMatrix()!==null&&close(worldPoints(merged),parts.length?worldPoints(merged):[]));
  assert.ok(parts.every(m=>m.isDisposed()));assert.ok(!shield.isDisposed()&&!rivet.isDisposed());

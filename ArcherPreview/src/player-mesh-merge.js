@@ -44,7 +44,9 @@ export function mergePlayerMeshes(container,{keep=[],enabled=true}={}){
   merged.parent=first.parent;
   if(skinned){merged.position.copyFrom(first.position);if(first.rotationQuaternion)merged.rotationQuaternion=first.rotationQuaternion.clone();else merged.rotation.copyFrom(first.rotation);merged.scaling.copyFrom(first.scaling);merged.skeleton=first.skeleton;merged.numBoneInfluencers=first.numBoneInfluencers;}
   merged.material=first.material;
-  for(const key of ['isVisible','visibility','receiveShadows','renderingGroupId','layerMask','isPickable','alwaysSelectAsActiveMesh','computeBonesUsingShaders'])merged[key]=first[key];
+  // glTF parts are clockwise; a new Mesh defaults to counter-clockwise and
+  // would show an inverted-hull outline's front faces (black hair).
+  for(const key of ['sideOrientation','overrideMaterialSideOrientation','isVisible','visibility','receiveShadows','renderingGroupId','layerMask','isPickable','alwaysSelectAsActiveMesh','computeBonesUsingShaders'])merged[key]=first[key];
   merged.metadata={...first.metadata,moonforestMergedFrom:parts.map(mesh=>mesh.name)};
   merged.setEnabled(first.isEnabled(false));
   const at=container.meshes.indexOf(first);container.meshes.splice(at,0,merged);
