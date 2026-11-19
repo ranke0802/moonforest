@@ -47,7 +47,7 @@ import {createMapTransition,carryPortalPose} from './map-transition.js';
 import {captureVillagePlainsHandoff} from './village-plains-handoff.js';
 import {updatePlainsBoundaryAtmosphere} from './plains-boundary-atmosphere.js';
 import {travelWaypoint} from './map-waypoints.js';
-import {applyPlayerDetail} from './player-detail.js';import {mergePlayerMeshes} from './player-mesh-merge.js';import {simplifierReady,simplifyEnabled,simplifyOwnMesh} from './mesh-simplify.js';
+import {applyPlayerDetail} from './player-detail.js';import {mergePlayerMeshes} from './player-mesh-merge.js';import {createRefreshMeter,calibrationMs} from './display-refresh.js';import {simplifierReady,simplifyEnabled,simplifyOwnMesh} from './mesh-simplify.js';
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
@@ -356,7 +356,19 @@ const mapWorkDiagnostics=()=>({
     lastPromoteMs:world.environment.highTextureLastPromoteMs??null,
   }:null,
 });
-const frameDiagnostics=createFrameDiagnostics({storage:equipmentStorage,loads:loadDiagnostics,
+const refreshMeter=createRefreshMeter(window);
+// Once a second while a long recording runs: what the scene holds, a fixed CPU
+// reference, the browser refresh rate and the monster cost of the last frame.
+let probePlayerBindings=null;
+function recordingProbe(){
+  const scene=world?.scene,counts=animator?.bindingCounts,previous=probePlayerBindings,memory=performance.memory,profile=boss?.profile;
+  probePlayerBindings=counts?{...counts}:null;
+  return {map:world?.mapId??null,hz:refreshMeter.hz,calibrationMs:calibrationMs(),targetFps:engine?.maxFPS??null,
+    meshes:scene?.meshes.length??null,activeMeshes:scene?.getActiveMeshes().length??null,skeletons:scene?.skeletons.length??null,animationGroups:scene?.animationGroups.length??null,animatables:scene?._activeAnimatables?.length??null,
+    jsHeapMB:memory?Math.round(memory.usedJSHeapSize/1048576):null,foes:boss?.encounters?.filter(foe=>foe.active).length??null,engaged:profile?.engaged??null,nearFoes:profile?.near??null,farFoes:profile?.far??null,maxFoe:profile?.maxKind?`${profile.maxKind}:${profile.maxState}`:null,
+    playerClipStarts:counts&&previous?counts.created-previous.created:null,playerClipReuses:counts&&previous?counts.reused-previous.reused:null};
+}
+const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equipmentStorage,loads:loadDiagnostics,
   contentRuntime:()=>inspectContentRuntimeBudget({world,battle:boss,audio,playerTextureProfile:playerTextureSelection,decodeCache:inspectMapDecodeCache(engine)}),
   onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
   onDrawCpuEnabled:enabled=>sceneDiagnostics.setDrawCpuEnabled(enabled),
@@ -1025,7 +1037,7 @@ function render(dt) {
     frameDiagnostics.measure('actionAudioMs',actionAudioStart);
     world.developmentActors?.beforeBattle(dt,actor);world.authoredMonsters?.beforeBattle(dt,actor);
     frameDiagnostics.measure('framePreludeMs',framePreludeStart);
-    const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);actionAudio.boss(boss,dt);
+    if(boss)boss.profile=frameDiagnostics.collecting?(boss.profile??{}):null;const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);if(boss?.profile){const p=boss.profile;frameDiagnostics.set('bossNearMs',p.nearMs);frameDiagnostics.set('bossFarMs',p.farMs);frameDiagnostics.set('bossSeparationMs',p.separationMs);frameDiagnostics.set('bossPostMs',p.postMs);frameDiagnostics.set('bossMaxOneMs',p.maxMs);}actionAudio.boss(boss,dt);
     world.developmentActors?.afterBattle(actor);world.authoredMonsters?.afterBattle(actor);
     boss?.combat?.recover?.(dt,actor,boss.onDamage,!controller.dead&&boss.playerHp>0);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
@@ -1048,7 +1060,7 @@ function render(dt) {
     frameDiagnostics.measure('hudUpdateMs',hudUpdateStart);
   }
   statusTime += dt;
-  if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
+  if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',refreshMeter.hz?`${fps} FPS · ${refreshMeter.hz}Hz`:`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   const sceneCallStart=frameDiagnostics.mark();
   world.scene.render(!world.caveCamera?.applied);
   frameDiagnostics.measure('sceneCallMs',sceneCallStart);

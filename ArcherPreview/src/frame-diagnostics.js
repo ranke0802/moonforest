@@ -72,7 +72,7 @@ export function readFrameDiagnosticPreference(storage,key='moonforest-frame-diag
 export const DRAW_CPU_DIAGNOSTICS_KEY='moonforest-draw-cpu-diagnostics-v1';
 export function readDrawCpuDiagnosticPreference(storage){try{return storage?.getItem(DRAW_CPU_DIAGNOSTICS_KEY)==='1';}catch{return false;}}
 
-export function createFrameDiagnostics({doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),contentRuntime=()=>null,zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onDrawCpuEnabled=()=>{},onContinuousDraw=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
+export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>performance.now(),clipboard=globalThis.navigator?.clipboard,metadata=()=>({}),context=()=>({}),loads,memory=()=>({}),contentRuntime=()=>null,zoom=()=>null,renderMetrics=()=>({}),onEnabled=()=>{},onDrawCpuEnabled=()=>{},onContinuousDraw=()=>{},onCollecting=()=>{},onMapChanged=()=>{},onReset=()=>{}}={}){
   const get=id=>doc.getElementById(id),panel=get('frame-diagnostics'),toggle=get('frame-diagnostics-toggle'),copy=get('copy-frame-diagnostics'),reset=get('reset-frame-diagnostics'),status=get('frame-diagnostics-status'),fallback=get('frame-diagnostics-export');
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
@@ -92,13 +92,13 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;if(!value){recording.break();finishBurst(now());}onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
-  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,playerMeleeAimMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0};
+  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,playerMeleeAimMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0,bossNearMs:0,bossFarMs:0,bossSeparationMs:0,bossPostMs:0,bossMaxOneMs:0};
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
   // last play snapshot and refresh only asynchronous GPU state/retained age.
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};if(sample&&Object.hasOwn(sample,'drawCpu'))metrics={...metrics,drawCpu:sample.drawCpu};};
   enabled=readFrameDiagnosticPreference(storage,key);
   let drawCpuEnabled=!!drawCpuToggle&&readDrawCpuDiagnosticPreference(storage);
-  const recording=new LongFrameRecording({now});let recordingTimer=null,burstUntil=0,burstBudget=null;
+  const recording=new LongFrameRecording({now});recording.probe=probe;let recordingTimer=null,burstUntil=0,burstBudget=null;
   const finishBurst=at=>{if(!burstUntil)return;onContinuousDraw(false);recording.detailBursts.at(-1).endedAtMs=at;burstUntil=0;};
   const startBurst=(at,critical,reason)=>{
     if(recording.state!=='recording'||!drawCpuEnabled||!collecting||burstUntil)return false;
@@ -211,6 +211,9 @@ export function createFrameDiagnostics({doc=document,storage,now=()=>performance
     snapshot,
     refresh:paint,
     get enabled(){return enabled;},
+    get collecting(){return collecting;},
+    // A value measured elsewhere (e.g. the monster cost breakdown) for this frame.
+    set(name,value){if(collecting&&name in sections&&Number.isFinite(value))sections[name]=value;},
     captureEvent(reason){return startBurst(now(),true,String(reason??'event').slice(0,64));},
     mark(){return collecting?now():null;},
     measure(name,start){if(start!==null&&collecting&&name in sections)sections[name]+=Math.max(0,now()-start);},

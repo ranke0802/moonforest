@@ -12,8 +12,17 @@ export class LongFrameRecording {
  record({startMs,intervalMs,workMs,targetFps,metrics,sections,context}){
   if(this.state!=='recording')return;
   const second=Math.floor((startMs-this.startMs)/1000);if(second<0)return;
-  if(!this.bucket||this.bucket.second!==second){this.flush();this.bucket={second,frames:0,frameTotalMs:0,workTotalMs:0,maxIntervalMs:0,maxWorkMs:0};}
+  if(!this.bucket||this.bucket.second!==second){
+   this.flush();this.bucket={second,frames:0,frameTotalMs:0,workTotalMs:0,maxIntervalMs:0,maxWorkMs:0,sum:{},max:{},render:{sceneMs:0,activeMeshesMs:0,drawSubmissionMs:0,renderTargetsMs:0,drawCalls:0,submittedTriangles:0},renderMax:{sceneMs:0}};
+   // Once a second: scene counts, a fixed CPU reference and the browser's
+   // refresh rate (see main.js recordingProbe). One call, not per frame.
+   if(this.probe){try{this.bucket.probe=this.probe();}catch(error){this.bucket.probe={error:String(error?.message??error)};}}
+  }
   const b=this.bucket;b.frames++;this.frames++;b.frameTotalMs+=intervalMs;b.workTotalMs+=workMs;b.maxIntervalMs=Math.max(b.maxIntervalMs,intervalMs);b.maxWorkMs=Math.max(b.maxWorkMs,workMs);
+  // Every frame, not only slow ones: section and render totals per second, so
+  // averages are not biased toward the frames that happened to be slow.
+  for(const key in sections){const value=sections[key];if(!value)continue;b.sum[key]=(b.sum[key]??0)+value;if(value>(b.max[key]??0))b.max[key]=value;}
+  if(metrics){const r=b.render;for(const key in r){const value=metrics[key];if(Number.isFinite(value))r[key]+=value;}if(metrics.sceneMs>b.renderMax.sceneMs)b.renderMax.sceneMs=metrics.sceneMs;}
   const draw=metrics?.drawCpu?.latest;
   // Match the original scene render to this JS frame. A stale sampled value
   // must never be attributed to an unrelated frame interval.

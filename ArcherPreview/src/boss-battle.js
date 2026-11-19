@@ -421,6 +421,10 @@ export class BossBattle {
     // the player thinks and animates every Nth frame with the summed time.
     // Nothing visible changes; the AI sees the same elapsed seconds.
     const interval=this.farUpdateInterval>1?Math.floor(this.farUpdateInterval):1,frame=this.farUpdateFrame=(this.farUpdateFrame??0)+1;let slot=0;
+    // Optional cost breakdown for the frame recorder (set by the diagnostics;
+    // off it costs one branch per foe). Near = drawn or close, far = skipped-rate.
+    const profile=this.profile,clock=profile?performance.now.bind(performance):null;
+    if(profile){profile.nearMs=profile.farMs=profile.separationMs=profile.postMs=profile.maxMs=0;profile.near=profile.far=profile.engaged=0;profile.maxKind='';profile.maxState='';}
     for (const boss of this.encounters){
       let step=dt;slot++;
       // A story shot owns this actor (position, facing and clip): its own AI
@@ -433,12 +437,16 @@ export class BossBattle {
         step=Math.min(.1,boss._farDt);
       }
       boss._farDt=0;boss._farSkipped=false;
+      const began=profile?clock():0;
       boss._battleUpdateToken=updateToken;try{boss.update(step, player);}finally{boss._battleUpdateToken=null;}
+      if(profile){const spent=clock()-began;if(far){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxState=boss.brain?.state??'';}}
     }
     if(this.world.prefetchResources&&this.encounters.some(b=>b.kind==='elena'&&b.phase===1&&b.engaged))this.preloadMourning({modelsOnly:this.encounters.some(b=>b.kind==='elena'&&b.manualSummon)});
     const running=this.frameEncounters;running.length=0;
     for(const boss of this.encounters)if(boss.active&&!boss.corpseGone){(boss.separationFrom??=new Vector3()).copyFrom(boss.actor.position);running.push(boss);}
+    const separationBegan=profile?clock():0;
     if(running.length>1)separateBosses(running,this.combat.grabOwner,this.world.release==='moonforest-0.2'?this.separationWorkspace:undefined);
+    const postBegan=profile?clock():0;if(profile)profile.separationMs=postBegan-separationBegan;
     for(const boss of running){
       if(boss._farSkipped)continue;
       const position=boss.actor.position,navigation=boss.movementNavigation??this.world.navigation,terrain=this.world.terrain,proof=boss._reconciledMotion;
@@ -450,6 +458,7 @@ export class BossBattle {
       boss.warningRing.update(position,boss.attackRange(boss.motionSpec(boss.brain.state)));
       if(proof){proof.token=proof.actor=proof.scene=proof.navigation=proof.obstacles=proof.cells=proof.terrain=proof.heights=null;}
     }
+    if(profile)profile.postMs=clock()-postBegan;
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {
