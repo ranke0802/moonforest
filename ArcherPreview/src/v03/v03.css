@@ -398,3 +398,7 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 @keyframes v03-lid-high{0%{transform:translateY(0)}30%{transform:translateY(-38%)}46%{transform:translateY(-14%)}100%{transform:translateY(-104%)}}
 @keyframes v03-lid-low{0%{transform:translateY(0)}30%{transform:translateY(38%)}46%{transform:translateY(14%)}100%{transform:translateY(104%)}}
 @media (prefers-reduced-motion:reduce){.v03-opening-plane.is-in[data-drift="reveal"],.v03-opening-plane.is-in[data-drift="fork"]{animation:none;opacity:1}.v03-opening[data-tone] .v03-opening-haze{animation:none}}
+
+/* Typewriter text (2026-11-19): the untyped rest keeps its place invisibly so wraps never jump. */
+.v03-type-rest{visibility:hidden}
+.v03-sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}

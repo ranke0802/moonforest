@@ -8,6 +8,11 @@ import {createTitleScreen,slotSummary,formatPlayTime} from '../src/v03/title-scr
 import {createOpening,dreamSeconds,DREAM_BEATS,INTRO} from '../src/v03/opening.js';
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
 import {createSaveSession} from '../src/v03/save-slots.js';
+import {setTypewriterEnabled} from '../src/v03/typewriter.js';
+
+// These flows assert whole lines and one key per line; typing is covered by
+// tests/v03-typewriter.test.js.
+setTypewriterEnabled(false);
 
 const E='moonforest-0.3';
 const instant=()=>Promise.resolve();
