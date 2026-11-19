@@ -11,6 +11,7 @@ import {t,speaker} from './i18n.js';
 import {clearAlpha} from './title-camera.js';
 import {createWagonHorse} from './wagon-horse.js';
 import {createWagonRig} from './wagon-rig.js';
+import {createWagonModel} from './wagon-model.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -244,8 +245,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(key!==markerKey){markerKey=key;api.setMapMarkers?.(mapMarks.slice());}
   markers?.update(guide.time);
  }
- let wagonHorse=null;
- function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
+ let wagonHorse=null,wagonModel=null,hiddenWagon=null;
+ function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;hiddenWagon=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   // The wolf's hiding place: a bush clump on open ground with a clear run to
@@ -257,7 +258,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(hide)placeCover(hide);
   // The driver's wagon has its horse in the shafts.
   const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
-  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
+  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonModel?.dispose();wagonModel=createWagonModel({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
  }
  function buildCast(id){
   clearCast();placeProps(id);
@@ -320,7 +321,16 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const alphaFrom=(from,to)=>Math.atan2(from.z-to.z,from.x-to.x);// camera on `from`'s side looking at `to`
  function freeNear(point){const nav=api.world.navigation;try{return nav?.free?.(point,.6)?point:nav?.findFree?.(point,.6)??point;}catch{return point;}}
  const openingWagon=()=>(content.PROPS??[]).find(prop=>prop.asset==='covered-wagon'&&prop.map===(api.world?.mapId??mapId))??null;
- const wagonRig=createWagonRig({runtime:()=>api.world?.authoredPlacements,id:(content.PROPS??[]).find(prop=>prop.asset==='covered-wagon')?.id??'',heightAt:(x,z)=>heightAt(x,z)});
+ const wagonRig=createWagonRig({getRoot:()=>wagonModel?.root??null,heightAt:(x,z)=>heightAt(x,z)});
+ // The map's placed wagon stays for collision; the shafted story wagon is drawn instead.
+ function hidePlacedWagon(){
+  const id=openingWagon()?.id;if(!id)return;
+  const record=api.world?.authoredPlacements?.records?.get?.(id);if(!record||record===hiddenWagon)return;
+  for(const mesh of record.meshes??[])mesh.isVisible=false;hiddenWagon=record;
+ }
+ // The horse: gallops on the ride, rears at the wolf, stays nervous while the
+ // wagon is down, calm again once it stands.
+ function horseMotion(){if(!wagonHorse||scene.active)return;wagonHorse.play(wagonDown()?'Horse_Nervous':'Horse_Idle');}
  // The wagon lies on its side from the ambush until the driver and the
  // warrior set it back up (M00 fight / wagon steps), also after a reload.
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
@@ -364,7 +374,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }
   hideCache={map:id,spot};return spot;
  }
- function poseWagonForStory(){if(!scene.active&&!scene.pending&&!lift.active&&wagonDown())wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});}
+ function poseWagonForStory(){if(!scene.active&&!scene.pending&&!lift.active&&wagonDown()&&!wagonRig.holds(1))wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});}
  // One clip per shot, on the scene's own clock: the snarl and watch, the charge
  // run, then watching the warrior who now stands between them.
  function holdWolf(foe){
@@ -445,9 +455,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(!scene.landed){const landed=now>=SCENE.tipStart+SCENE.tipSeconds;wagonRig.pose({along,tip:landed?1:tip*tip,side:WAGON_FALL},{rest:landed});if(landed){scene.landed=true;scene.shake=Math.max(scene.shake,.3);api.playSound?.('land',{volume:.9,rate:.7});}}
   if(wagonHorse){
    wagonHorse.place(W0.x+fx*3.55,W0.z+fz*3.55,P.yaw);
-   wagonHorse.pose.gallop=now<SCENE.crash?Math.min(1,now/.6):0;
-   const rear=now<SCENE.crash?0:now<SCENE.crash+.35?ease((now-SCENE.crash)/.35):now<SCENE.crash+1.5?1:Math.max(0,1-(now-SCENE.crash-1.5)/.6);
-   wagonHorse.pose.rear=rear;
+   wagonHorse.play(now<SCENE.crash?'Horse_Gallop':now<SCENE.crash+2.4?'Horse_Rear':'Horse_Nervous');
   }
   // The driver rides on the bench, then is thrown clear by the fall.
   if(now<SCENE.crash){const x=W0.x+fx*1.25,z=W0.z+fz*1.25;scene.driver.x=x;scene.driver.z=z;scene.driver.visual.place(x,heightAt(x,z)+1.05,z,P.yaw);}
@@ -506,7 +514,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(camera&&scene.upper!==undefined){camera.upperRadiusLimit=scene.upper;scene.upper=undefined;}
   if(camera){camera.radius=scene.radius;camera.beta=scene.beta;}
   showPlayer(true);
-  if(wagonHorse){wagonHorse.pose.gallop=0;wagonHorse.pose.rear=0;}
+  wagonHorse?.play('Horse_Nervous');
   wagonRig.pose({along:0,tip:1,side:WAGON_FALL},{rest:true});
   releaseWolf(scene.wolf);
   hud.setCaption(null);api.input.setSuspended(false);hud.flash(t('scene.protect'));coachState.alpha=camera?.alpha??coachState.alpha;
@@ -751,6 +759,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // Strolling actors: talk range and markers follow where they stand now.
    for(const member of cast){const at=member.visual.position;if(at){member.x=at.x;member.z=at.z;}}
    const player=api.getPlayer()?.position;
+   hidePlacedWagon();if(wagonDown())poseWagonForStory();horseMotion();
    if(updateLift(dt,player))return;
    if(player&&!talking&&!dialogue.open&&!lift.active){
     let best=null,bestSq=TALK_RANGE_SQ;
