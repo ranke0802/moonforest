@@ -89,7 +89,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   const spec=ACTOR_VISUALS[key]??{label:key,height:1.7},scale=(spec.height??1.7)/MODEL_HEIGHT;
   const instanceId=`v03-cast-${String(id).replace(/[^A-Za-z0-9._:-]/g,'-')}-${++serial}`;
   let pose=null,ready=false,disposed=false,npc=null,block=null,wake=null;
-  let clock=Math.random()*4,watch=null,gaze=null,gazeWeight=0,releaseAt=0,time=0;const eye=new Vector3();
+  let clock=Math.random()*4,watch=null,gaze=null,gazeWeight=0,releaseAt=0,time=0,pending=0;const eye=new Vector3();
   const transform=()=>({position:pose.position,rotation:quatY(pose.yaw),scale});
   // A failed load (often a transient abort while a map trip settles) shows the
   // block for now and retries; a later success replaces the block with the
@@ -150,6 +150,14 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   const actor={
    tick(dt){
     if(!ready||disposed)return;const record=npc.get(instanceId);if(!record?.ready)return;
+    // Presentation tiers (CLAUDE.md): near or talking every frame, mid range
+    // at 30 Hz, far at 15 Hz; behaviour and walking still advance by the
+    // accumulated time (2026-11-20: five village folk sampled every frame).
+    pending+=dt;
+    const cam=scene.activeCamera?.globalPosition;let interval=0;
+    if(cam&&!watch&&live.mode!=='talk'){const dx=cam.x-pose.position[0],dz=cam.z-pose.position[2],d2=dx*dx+dz*dz;interval=d2<144?0:d2<900?1/30:1/15;}
+    if(pending<interval)return;
+    dt=Math.min(.25,pending);pending=0;
     time+=dt;clock+=dt;
     behave(record,dt);
     live.clipTime+=dt;live.fromTime+=dt;live.fade=Math.max(0,live.fade-dt);
