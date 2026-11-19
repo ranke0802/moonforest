@@ -45,6 +45,18 @@ export function installStaticShadowCache(lighting,{decorate}={}){
   map.getCustomRenderList=()=>state.statics;
   const isReady=cache.isReady.bind(cache);
   cache.isReady=(...args)=>{const ready=isReady(...args);if(!ready)state.missing=true;return ready;};
+  // A caster joins the cached set only once the cache generator can draw it.
+  // Until then it stays in the live map. Otherwise a newly streamed tree's
+  // shadow vanished for as long as its cache shader compiled (phones: a
+  // visible on/off flicker while walking, 2026-11-19), then reappeared.
+  const readySet=new WeakSet();
+  state.readyFor=mesh=>{
+    if(readySet.has(mesh))return true;
+    const source=mesh.sourceMesh??mesh,instances=!!mesh.sourceMesh||!!source.hasInstances||!!source.hasThinInstances,subMeshes=source.subMeshes??[];
+    if(!subMeshes.length)return false;
+    for(const subMesh of subMeshes)if(!isReady(subMesh,instances,false))return false;
+    readySet.add(mesh);return true;
+  };
 
   const renderer=new EffectRenderer(engine);
   const copy=new EffectWrapper({engine,name:'moonforest-static-shadow-copy',fragmentShader:COPY_DEPTH,samplerNames:['staticDepth'],uniformNames:[]});

@@ -60,7 +60,7 @@ export function installShadowCasterCulling(shadows,lighting){
       casters.push(mesh);
       // Static casters only count while drawable and fully faded in, so a
       // fading shadow is drawn live and only the settled set refreshes the cache.
-      if(staticShadowCasters.has(mesh)&&(mesh.instancedBuffers?.[shadowFadeAttribute]??1)>=.999){if(mesh.isEnabled()&&mesh.isVisible)statics.push(mesh);}
+      if(staticShadowCasters.has(mesh)&&(mesh.instancedBuffers?.[shadowFadeAttribute]??1)>=.999&&(lighting.staticShadows?.readyFor?.(mesh)??true)){if(mesh.isEnabled()&&mesh.isVisible)statics.push(mesh);}
       else dynamics.push(mesh);
     }
     return lists;
