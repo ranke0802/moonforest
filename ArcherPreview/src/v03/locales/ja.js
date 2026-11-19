@@ -30,13 +30,13 @@ export default {
   'scene.protect':'御者を守れ',
   'sky.clear':'晴れ','sky.cloudy':'曇り','sky.rain':'雨','sky.storm':'嵐','rotate.install':'アプリとしてインストール（常に横画面）','rotate.title':'端末を横向きにしてください','rotate.tap':'タップすると横向きの全画面に切り替わります。','rotate.ios':'横向きでプレイできます。ホーム画面に追加すると、アドレスバーなしの全画面で遊べます。','ios.add':'ホーム画面に追加','ios.step1':'Safari下部の共有ボタン（□↑）をタップします。','ios.step2':'「ホーム画面に追加」を選びます。','ios.step3':'ホーム画面のMoonForestアイコンから起動し、横向きにしてプレイします。',
   'hud.main':'メイン','hud.chapterNext':'物語の続き','reward.got':'報酬 · {items}','reward.gold':'{n} G','reward.potions':'回復薬 {n}個','reward.armor.leather':'革の鎧（防御力+2）','combat.justGuard':'ジャストガード！','hud.complete':'完了 · {done}','hud.completeNext':'完了 · {done}  →  {next}','hud.rested':'休みました · 旅を記録しました',
-  'prompt.actionQuest':'話す','prompt.actionIdle':'話しかける','prompt.wagonName':'馬車','prompt.pushWagon':'押す（{n}/{total}）',
+  'prompt.actionQuest':'話す','prompt.actionIdle':'話しかける','prompt.wagonName':'馬車','prompt.pushWagon':'押す（{n}/{total}）','prompt.waitDriver':'御者を待っている','lift.ready':'よし、三つ数えたら一緒に押すぞ！','lift.one':'いち…！','lift.two':'にの…！','lift.three':'さん！',
   'prompt.talkQuest':'{name}と話す','prompt.talkIdle':'{name}に話しかける',
  },
  story:{
   speakers:{'나':'私','마부':'御者','여관 주인':'宿の主人','노년 여성':'老婦人','약초사':'薬草師','촌장':'村長','청년':'青年','요아힘':'ヨアヒム','비비앙':'ヴィヴィアン','엘레나':'エレナ'},
   dialogues:{
-   'driver-wagon':['ふう…助かった。あんたがおらんかったら、馬もわしも今ごろ狼の餌じゃったわい。','厚かましいが、馬車を起こすのを手伝ってくれんかの？ わし一人じゃびくともせんでな。','一緒に持ち上げましょう。いち、にの、さん！'],
+   'driver-wagon':['ふう…助かった。あんたがおらんかったら、馬もわしも今ごろ狼の餌じゃったわい。','厚かましいが、馬車を起こすのを手伝ってくれんかの？ わし一人じゃびくともせんでな。','いいですよ。位置についたら一緒に押しましょう。'],
    'driver-thanks':['おおっ、起きた起きた！ …ありゃあ、車輪が見事に砕けとるわ。','それでも運がよかった。村はすぐそこじゃで、ここからはちいと歩けば着くわい。','命を助けてもろうたんじゃ、何か礼をせにゃならん。一人娘を親なし子にするとこじゃった…本当にありがとうよ。','わずかじゃが受け取っとくれ。村に着いたら、まず月明かりの宿を訪ねなされ。主人は無愛想じゃが、部屋はきれいじゃよ。'],
    'ambush-scene':['（…夢だったのか。）','目が覚めなすったか？ もう少しで村じゃ。あの丘を越えればすぐじゃよ。','（草むらが…妙に静かだ。）','どう、どうどう！ 狼じゃ！ 馬が驚いて…！','ひいっ、う、馬が…！ 狼じゃ、狼じゃあ！','（まずは御者さんを守ろう。）'],
    'driver-idle':['車輪さえ直せば、わしもすぐ後から行くでな。道中気をつけなされ。'],

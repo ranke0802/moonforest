@@ -30,13 +30,13 @@ export default {
   'scene.protect':'Protect the driver',
   'sky.clear':'Clear','sky.cloudy':'Cloudy','sky.rain':'Rain','sky.storm':'Storm','rotate.install':'Install as app (always landscape)','rotate.title':'Please turn your device sideways','rotate.tap':'Tap to switch to fullscreen landscape.','rotate.ios':'The game plays in landscape. Add it to your Home Screen to play fullscreen without browser bars.','ios.add':'Add to Home Screen','ios.step1':'Tap the Share button (□↑) in Safari.','ios.step2':"Choose 'Add to Home Screen'.",'ios.step3':'Launch MoonForest from the Home Screen and turn your device sideways.',
   'hud.main':'Main','hud.chapterNext':'The story continues','reward.got':'Reward · {items}','reward.gold':'{n} G','reward.potions':'{n} Healing Potion(s)','reward.armor.leather':'Leather Armor (Defense +2)','combat.justGuard':'Just Guard!','hud.complete':'Complete · {done}','hud.completeNext':'Complete · {done}  →  {next}','hud.rested':'Rested · Journey recorded',
-  'prompt.actionQuest':'Talk','prompt.actionIdle':'Chat','prompt.wagonName':'Wagon','prompt.pushWagon':'Push ({n}/{total})',
+  'prompt.actionQuest':'Talk','prompt.actionIdle':'Chat','prompt.wagonName':'Wagon','prompt.pushWagon':'Push ({n}/{total})','prompt.waitDriver':'Waiting for the driver','lift.ready':'Right, push on three!','lift.one':'One…!','lift.two':'Two…!','lift.three':'Three!',
   'prompt.talkQuest':'Talk to {name}','prompt.talkIdle':'Speak to {name}',
  },
  story:{
   speakers:{'나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
-   'driver-wagon':['Whew… made it out alive. If it weren’t for you, friend, me an’ my horse’d be wolf chow for sure.','Ain’t proud to ask, but could you help me set the wagon upright? Won’t budge an inch with just me.','Let’s lift it together. One, two, three!'],
+   'driver-wagon':['Whew… made it out alive. If it weren’t for you, friend, me an’ my horse’d be wolf chow for sure.','Ain’t proud to ask, but could you help me set the wagon upright? Won’t budge an inch with just me.','Sure. Get in place and we’ll push together.'],
    'driver-thanks':['Well, look at that, she’s up! …Oh, dear. That wheel’s smashed to bits.','Still, could be worse. Village is just yonder, so it’s only a short walk from here.','You saved my life—least I can do is give you somethin’. Nearly left my only girl without a pa… Thank you, truly.','Ain’t much, but you take it. When you get to the village, look for the Moonlight Inn first. Innkeeper’s a gruff one, but the rooms are clean.'],
    'ambush-scene':['(…Was that a dream?)','You awake? Village ain’t far now. Just over that hill and we’re there.','(The grass… it’s oddly quiet.)','Whoa, whoa there! Wolf! The horse is spooked—!','Oh no, th-the horse…! Wolf! It’s a wolf!','(Protect the driver first.)'],
    'driver-idle':['Soon as I fix this wheel, I’ll be right behind you. Watch yourself on the road.'],

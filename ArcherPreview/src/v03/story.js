@@ -11,6 +11,7 @@ import {PLAINS_MONSTER_GROUPS} from '../plains-monster-spawns.js';
 import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
 import {clearAlpha} from './title-camera.js';
+import {blocksView} from '../tree-occlusion.js';
 import {createWagonHorse} from './wagon-horse.js';
 import {createWagonRig} from './wagon-rig.js';
 import {createWagonModel} from './wagon-model.js';
@@ -317,7 +318,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // The wagon falls to its left, away from the road side where the driver and
  // the warrior end up; the wolf comes from the right.
  const WAGON_FALL=-1,WOLF_SIDE=1;
- const scene={active:false,pending:false,time:0,beat:0,shot:-1,driver:null,wolf:null,points:null,rolled:false,rollWindow:false,radius:0,beta:0,focus:{x:0,y:0,z:0},cameraFocus:null,hidden:null,shake:0};
+ const scene={active:false,pending:false,time:0,beat:0,shot:-1,driver:null,wolf:null,points:null,rolled:false,rollWindow:false,radius:0,beta:0,focus:{x:0,y:0,z:0,snap:true},cameraFocus:null,hidden:null,shake:0};
  const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
  const heightAt=(x,z)=>api.world.terrain?.heightAt?.(x,z)??0;
  const alphaFrom=(from,to)=>Math.atan2(from.z-to.z,from.x-to.x);// camera on `from`'s side looking at `to`
@@ -338,10 +339,31 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
  // Searched once per map visit from the walkable map: ahead of the wagon on the
  // wolf's side, open around it, and a straight walkable line to the horse.
- // Bigger than the map's own bushes (about 2 m), a thick clump the wolf waits in.
- const AMBUSH_BUSHES=Object.freeze([{dx:0,df:.3,yaw:.4,scale:1.35},{dx:1.6,df:-.2,yaw:2.1,scale:1.2},{dx:-1.5,df:-.1,yaw:4.0,scale:1.25},{dx:.3,df:-1.5,yaw:1.2,scale:1.15}]);
- let coverNodes=[];
- function clearCover(){for(const node of coverNodes)try{node.dispose(false,false);}catch{}coverNodes=[];}
+ // A little over the map's own bush size (they are .7-.94): 1.15-1.35 read as
+ // out of place (2026-11-19, user). Three, loosely spaced.
+ const AMBUSH_BUSHES=Object.freeze([{dx:0,df:.3,yaw:.4,scale:1.0},{dx:1.9,df:-.4,yaw:2.1,scale:.9},{dx:-1.8,df:-.2,yaw:4.0,scale:.95}]);
+ let coverNodes=[];const cover=[];
+ function clearCover(){for(const node of coverNodes)try{node.dispose(false,false);}catch{}coverNodes=[];cover.length=0;}
+ // The cover fades like the map's trees when it stands between the camera and
+ // the player (or the scene's subject), checked every 0.1 s.
+ const COVER_SEEN=.15,coverAim={x:0,y:0,z:0};let coverCheck=0;
+ function updateCover(dt){
+  if(!cover.length)return;
+  const camera=api.world?.camera,eye=camera?.globalPosition;if(!eye)return;
+  coverCheck-=dt;
+  if(coverCheck<=0){
+   coverCheck=.1;
+   const subject=scene.active?scene.cameraFocus:null,player=api.getPlayer?.()?.position;
+   if(subject){coverAim.x=subject.x;coverAim.y=subject.y;coverAim.z=subject.z;}else if(player){coverAim.x=player.x;coverAim.y=player.y+1;coverAim.z=player.z;}else return;
+   for(const bush of cover)bush.target=blocksView(eye,coverAim,bush.min,bush.max,0)?COVER_SEEN:1;
+  }
+  const step=Math.min(dt,.1)*4;
+  for(const bush of cover){
+   if(bush.coverage===bush.target)continue;
+   bush.coverage+=Math.sign(bush.target-bush.coverage)*Math.min(step,Math.abs(bush.target-bush.coverage));
+   for(const mesh of bush.meshes)mesh.instancedBuffers.treeCoverage=bush.coverage;
+  }
+ }
  function placeCover(hide){
   clearCover();
   const bushes=(api.world?.villageRenderRecords??[]).filter(row=>row.placement?.asset==='bush'&&row.root&&!row.root.isDisposed?.());
@@ -361,15 +383,18 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   for(const [i,bush] of AMBUSH_BUSHES.entries()){
    try{
     const x=hide.x+bush.dx*hide.r.x+bush.df*hide.f.x,z=hide.z+bush.dx*hide.r.z+bush.df*hide.f.z;
-    const root=new TransformNode('v03-ambush-bush-'+i,scene);root.position.set(x,heightAt(x,z),z);root.rotation.y=bush.yaw;root.scaling.setAll(bush.scale);
+    const root=new TransformNode('v03-ambush-bush-'+i,scene);root.position.set(x,heightAt(x,z),z);root.rotation.y=bush.yaw;root.scaling.setAll(bush.scale);const meshes=[];
     for(const part of parts){
      const instance=part.source.createInstance('v03-ambush-bush-'+i+'-'+part.source.name);
      if(part.source.instancedBuffers)for(const key of Object.keys(part.source.instancedBuffers))instance.instancedBuffers[key]=key==='treeCoverage'?1:part.source.instancedBuffers[key];
      instance.parent=root;part.local.decompose(instance.scaling,instance.rotationQuaternion??=new Quaternion(),instance.position);
-     instance.isPickable=false;
+     instance.isPickable=false;meshes.push(instance);
     }
     root.computeWorldMatrix(true);for(const node of root.getDescendants()){node.computeWorldMatrix?.(true);node.freezeWorldMatrix?.();}root.freezeWorldMatrix();
     coverNodes.push(root);
+    const min={x:Infinity,y:Infinity,z:Infinity},max={x:-Infinity,y:-Infinity,z:-Infinity};
+    for(const mesh of meshes){const box=mesh.getBoundingInfo().boundingBox;for(const k of ['x','y','z']){min[k]=Math.min(min[k],box.minimumWorld[k]);max[k]=Math.max(max[k],box.maximumWorld[k]);}}
+    if(meshes.length&&Number.isFinite(min.x))cover.push({meshes,min,max,coverage:1,target:1});
    }catch(error){console.warn('[MoonForest 0.3] ambush cover',error);break;}
   }
  }
@@ -446,6 +471,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   api.input.setSuspended(true);
   return true;
  }
+ // Camera at an eye point looking at a target point (both in world units).
+ function frameEye(ex,ey,ez,tx,ty,tz){
+  const camera=api.world.camera,dx=ex-tx,dy=ey-ty,dz=ez-tz,radius=Math.max(.5,Math.hypot(dx,dy,dz));
+  scene.focus.x=tx;scene.focus.y=ty;scene.focus.z=tz;scene.cameraFocus=scene.focus;
+  camera.alpha=Math.atan2(dz,dx);camera.beta=Math.acos(Math.max(-1,Math.min(1,dy/radius)));camera.radius=radius;
+ }
  function frame(target,height,alpha,radius,beta){
   const camera=api.world.camera;
   scene.focus.x=target.x;scene.focus.z=target.z;scene.focus.y=heightAt(target.x,target.z)+height;scene.cameraFocus=scene.focus;
@@ -494,12 +525,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // From the bench: over the horse, down the road (the wolf crosses in from the right on 2).
    // High over the bench, looking down the road: the horse's back and head sit
    // low in frame and its (unrigged) legs stay out of view.
-   const bench={x:W0.x+fx*.2,z:W0.z+fz*.2},ahead={x:W0.x+fx*15,z:W0.z+fz*15};
+   // (2026-11-19: placed by height from the wagon's own ground; the old arm
+   // took its height from the road far ahead and sank under the wagon.)
+   const rx=P.r.x,rz=P.r.z,ground=heightAt(W0.x,W0.z),bob=Math.sin(now*11)*.03;
+   const eye={x:W0.x+fx*1.6+rx*.3,z:W0.z+fz*1.6+rz*.3},ahead={x:W0.x+fx*14,z:W0.z+fz*14};
    const look=shot===2?{x:ahead.x*.55+Wf.x*.45,z:ahead.z*.55+Wf.z*.45}:ahead;
-   frame(look,1.1,alphaFrom(bench,look),Math.hypot(look.x-bench.x,look.z-bench.z),1.41+Math.sin(now*11)*.004);
+   frameEye(eye.x,ground+2.9+bob,eye.z,look.x,ground+.4,look.z);
   }else if(shot===1){
    // Close on the wolf in the grass.
-   frame(Wf,.7,alphaFrom(W0,Wf)+.45,4.4,1.34);
+   frame(Wf,.7,alphaFrom(W0,Wf)+1.1,6.2,1.3);
   }else if(shot===3){
    // Wide, from the road side: the horse rears and the wagon goes over.
    const side={x:P.S.x+P.r.x*9+fx*2,z:P.S.z+P.r.z*9+fz*2},mid={x:(P.S.x+P.H.x)/2,z:(P.S.z+P.H.z)/2};
@@ -541,7 +575,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // the shield shove). The wagon rises a third per heave and drops onto its
  // wheels on the last; then the driver's thanks play (2026-11-19, user).
  const PUSHES=3,HEAVE_SECONDS=.55,PUSH_RANGE=1.7,PUSH_RANGE_SQ=PUSH_RANGE*PUSH_RANGE;
- const lift={active:false,spot:null,helper:null,count:0,from:1,to:1,time:0,member:null};
+ const lift={active:false,spot:null,helper:null,count:0,from:1,to:1,time:0,member:null,cued:false,caption:0};
+ const COUNT_KEYS=Object.freeze(['lift.one','lift.two','lift.three']);
+ // The driver must stand at his place before the first heave (it used to be
+ // pushable while he was still walking over; 2026-11-19, user).
+ function driverPlaced(){const at=lift.member?.visual?.position;if(!at||!lift.helper)return !lift.member?.visual?.walkTo;const dx=at.x-lift.helper.x,dz=at.z-lift.helper.z;return dx*dx+dz*dz<.36;}
+ function driverSays(key){hud.setCaption({who:speaker('마부'),text:t(key)});lift.caption=1.3;}
  function liftSpots(){
   const prop=openingWagon();if(!prop)return null;const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
   // The wagon lies on its WAGON_FALL side: its roof edge is out there.
@@ -550,7 +589,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function startLift(member){
   const spots=liftSpots();if(!spots||!member)return false;
-  Object.assign(lift,{active:true,spot:spots.player,helper:spots.helper,face:spots.face,count:0,from:1,to:1,time:HEAVE_SECONDS,member});
+  Object.assign(lift,{active:true,spot:spots.player,helper:spots.helper,face:spots.face,count:0,from:1,to:1,time:HEAVE_SECONDS,member,cued:false,caption:0});
   const yaw=Math.atan2(spots.face.x-spots.helper.x,spots.face.z-spots.helper.z);
   if(member.visual.walkTo)member.visual.walkTo(spots.helper.x,spots.helper.z,{yaw,heightAt});
   else{member.x=spots.helper.x;member.z=spots.helper.z;member.visual.place(spots.helper.x,heightAt(spots.helper.x,spots.helper.z),spots.helper.z,yaw);}
@@ -559,30 +598,34 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Called by interact() while the lift waits for the warrior.
  function nearLift(player){if(!lift.active||!player||!lift.spot)return false;const dx=player.x-lift.spot.x,dz=player.z-lift.spot.z;return dx*dx+dz*dz<=PUSH_RANGE_SQ;}
  function push(){
-  if(!lift.active||lift.time<HEAVE_SECONDS||lift.count>=PUSHES)return false;
+  if(!lift.active||lift.time<HEAVE_SECONDS||lift.count>=PUSHES||!driverPlaced())return false;
   const player=api.getPlayer?.();if(player?.rotation){const p=player.position;player.rotation.y=Math.atan2(lift.face.x-p.x,lift.face.z-p.z);}
   try{api.actions?.guard?.();}catch{/* the heave still counts */}
   lift.member?.visual.gesture?.('Agree_Gesture');
-  lift.count++;lift.from=lift.to;lift.to=1-lift.count/PUSHES;lift.time=0;
+  lift.count++;lift.from=lift.to;lift.to=1-lift.count/PUSHES;lift.time=0;driverSays(COUNT_KEYS[lift.count-1]);
   api.playSound?.(lift.count<PUSHES?'shield_up':'land',{volume:.75});
   return true;
  }
  function updateLift(dt,player){
   if(!lift.active)return false;
+  if(lift.caption>0){lift.caption-=dt;if(lift.caption<=0)hud.setCaption(null);}
+  const placed=driverPlaced();
+  if(placed&&!lift.cued){lift.cued=true;driverSays('lift.ready');lift.caption=2.2;}
   if(lift.time<HEAVE_SECONDS){
    lift.time=Math.min(HEAVE_SECONDS,lift.time+dt);const k=ease(lift.time/HEAVE_SECONDS);
    // A heave lifts past the mark and settles back a little; the last drops it home.
    const over=lift.count<PUSHES?Math.sin(k*Math.PI)*.04:0;
    wagonRig.pose({along:0,tip:Math.max(0,lift.from+(lift.to-lift.from)*k-over),side:WAGON_FALL},{rest:lift.time>=HEAVE_SECONDS&&lift.count<PUSHES});
    if(lift.time>=HEAVE_SECONDS&&lift.count>=PUSHES){
-    wagonRig.upright();const member=lift.member;lift.active=false;lift.member=null;hud.setPrompt(null);
+    wagonRig.upright();const member=lift.member;lift.active=false;lift.member=null;hud.setPrompt(null);hud.setCaption(null);lift.caption=0;
     emit({type:'talk',npc:'driver'});
     if(member&&!disposed){near=member;void interact();}
     return true;
    }
   }
   if(lift.count<PUSHES&&!talking&&!dialogue.open){
-   if(nearLift(player))hud.setPrompt({key:touch?null:'E',name:t('prompt.wagonName'),action:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),mark:null,label:t('prompt.pushWagon',{n:lift.count,total:PUSHES})});
+   if(nearLift(player)&&!placed)hud.setPrompt({key:null,name:t('prompt.wagonName'),action:t('prompt.waitDriver'),mark:null,label:t('prompt.waitDriver')});
+   else if(nearLift(player))hud.setPrompt({key:touch?null:'E',name:t('prompt.wagonName'),action:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),mark:null,label:t('prompt.pushWagon',{n:lift.count,total:PUSHES})});
    else hud.setPrompt(null);
   }
   return false;
@@ -771,11 +814,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
    if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
+   hidePlacedWagon();updateCover(dt);
    if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);return;}
    // Strolling actors: talk range and markers follow where they stand now.
    for(const member of cast){const at=member.visual.position;if(at){member.x=at.x;member.z=at.z;}}
    const player=api.getPlayer()?.position;
-   hidePlacedWagon();if(wagonDown())poseWagonForStory();horseMotion();
+   if(wagonDown())poseWagonForStory();horseMotion();
    if(updateLift(dt,player))return;
    if(player&&!talking&&!dialogue.open&&!lift.active){
     let best=null,bestSq=TALK_RANGE_SQ;

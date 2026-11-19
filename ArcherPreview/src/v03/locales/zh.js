@@ -30,13 +30,13 @@ export default {
   'scene.protect':'保护车夫',
   'sky.clear':'晴','sky.cloudy':'多云','sky.rain':'雨','sky.storm':'暴风雨','rotate.install':'安装为应用（始终横屏）','rotate.title':'请将设备横过来','rotate.tap':'点击切换为横屏全屏。','rotate.ios':'本游戏需横屏游玩。添加到主屏幕后可无浏览器栏全屏游玩。','ios.add':'添加到主屏幕','ios.step1':'点击 Safari 底部的分享按钮（□↑）。','ios.step2':'选择“添加到主屏幕”。','ios.step3':'从主屏幕的 MoonForest 图标启动，并将设备横过来。',
   'hud.main':'主线','hud.chapterNext':'故事未完待续','reward.got':'奖励 · {items}','reward.gold':'{n} G','reward.potions':'回复药水 {n} 瓶','reward.armor.leather':'皮甲（防御力 +2）','combat.justGuard':'完美格挡！','hud.complete':'完成 · {done}','hud.completeNext':'完成 · {done}  →  {next}','hud.rested':'已休息 · 旅程已记录',
-  'prompt.actionQuest':'交谈','prompt.actionIdle':'搭话','prompt.wagonName':'马车','prompt.pushWagon':'推（{n}/{total}）',
+  'prompt.actionQuest':'交谈','prompt.actionIdle':'搭话','prompt.wagonName':'马车','prompt.pushWagon':'推（{n}/{total}）','prompt.waitDriver':'等车夫就位','lift.ready':'好嘞，数到三一起推！','lift.one':'一……！','lift.two':'二……！','lift.three':'三！',
   'prompt.talkQuest':'与{name}交谈','prompt.talkIdle':'向{name}搭话',
  },
  story:{
   speakers:{'나':'我','마부':'车夫','여관 주인':'旅店老板','노년 여성':'老妇人','약초사':'草药师','촌장':'村长','청년':'青年','요아힘':'约阿希姆','비비앙':'薇薇安','엘레나':'艾莲娜'},
   dialogues:{
-   'driver-wagon':['呼……捡回一条命。要不是你啊，俺跟俺的马早就喂了狼咯。','怪不好意思的，能帮俺把马车扶起来不？俺一个人咋推都纹丝不动。','一起抬吧。一、二、三！'],
+   'driver-wagon':['呼……捡回一条命。要不是你啊，俺跟俺的马早就喂了狼咯。','怪不好意思的，能帮俺把马车扶起来不？俺一个人咋推都纹丝不动。','好。您站好位置，咱们一起推。'],
    'driver-thanks':['哎哟，起来了起来了！……哎呀，这轮子碎得稀巴烂。','不过还算走运。村子就在前头，从这儿走几步就到了。','你救了俺的命，俺咋也得表示表示。差点就让俺那独生闺女没了爹……真是谢谢你嘞。','不多，你收着。到了村里先去找月光旅店。老板脸冷了点，可屋子干净着呢。'],
    'ambush-scene':['（……是梦吗。）','醒啦？再走一会儿就到村子了。翻过那道坡就到。','（草丛里……静得反常。）','吁，吁——！狼！马受惊了……！','哎哟，马、马……！狼啊，有狼！','（先保护车夫要紧。）'],
    'driver-idle':['等俺把轮子修好，马上就跟上。路上当心着点。'],

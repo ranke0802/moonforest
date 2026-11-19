@@ -32,7 +32,7 @@ export const DIALOGUES=Object.freeze({
  'driver-wagon':[
   {who:'마부',text:'휴우… 살았다. 용병 양반 아니었으면 말이고 나고 꼼짝없이 늑대 밥이었수.'},
   {who:'마부',text:'염치없지만 마차 좀 같이 세워 주겠수? 나 혼자선 꿈쩍도 안 해서.'},
-  {who:'나',text:'같이 들어요. 하나, 둘, 셋!',effects:['right-wagon']},
+  {who:'나',text:'좋아요. 자리 잡으시면 같이 밀죠.',effects:['right-wagon']},
  ],
  'driver-thanks':[
   {who:'마부',text:'어이쿠, 섰다 섰어! …아이고, 바퀴가 아주 박살이 났구먼.'},

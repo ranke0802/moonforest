@@ -8,8 +8,10 @@ import {SceneLoader,TransformNode,Quaternion} from '@babylonjs/core';
 import {attachCharacterOutlines} from '../character-outlines.js';
 
 const MODEL=new URL('./models/covered-wagon-shafts.glb',import.meta.url);
-// Model front is glTF -X; the wagon's heading is the root's local +Z.
-export const WAGON_MODEL=Object.freeze({turn:-Math.PI/2});
+// The wagon's heading is the root's local +Z. The world is right-handed, so the
+// glTF loader does not mirror the model: its front (shafts) needs +PI/2 here
+// (-PI/2 put the shafts behind, away from the horse; 2026-11-19 user video).
+export const WAGON_MODEL=Object.freeze({turn:Math.PI/2});
 
 export function createWagonModel({scene,wagon,heightAt=()=>0}){
  let disposed=false,container=null,root=null;
