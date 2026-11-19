@@ -253,7 +253,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  h.controller.state='idle';h.controller.guarding=true;h.shell.update(.016);assert.equal(hud('.v03-hint').hidden,true);h.controller.guarding=false;
  assert.equal(h.shell.allows('attack')&&h.shell.allows('potion'),true,'free fight after the lessons');assert.equal(h.document.documentElement.dataset.v03Lock,undefined);
  // One-time tips: low health shows the potion card once, then it expires.
- assert.ok(h.shell.inspect().story.tips.includes('guide'));assert.equal(hud('.v03-tip').hidden,true,'the first tip card has expired');
+ assert.ok(!h.shell.inspect().story.tips.includes('guide'),'the guide light card waits for the light itself');
  h.battle.combat.hp=200;h.shell.update(.016);
  assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'회복약');assert.match(hud('.v03-tip-lead').textContent,/숫자 1 키/);
  for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);h.battle.combat.hp=500;
@@ -264,7 +264,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
  assert.equal(hud('.v03-quest-objective').textContent,'마부와 이야기하기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'!','the driver is a report: !');
- assert.equal(hud('.v03-tip-title').textContent,'강공격','the next tip waits its turn');
+ assert.ok(h.shell.inspect().story.tips.includes('guide'),'the guide light appears after the fight, and its card with it');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
  key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);
  const portrait=hud('.v03-dialogue-portrait');assert.equal(portrait.hidden,false);assert.match(portrait.src,/portraits\/driver\.webp$/);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);

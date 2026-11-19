@@ -179,6 +179,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const opening=log.quest()?.id==='M00'&&log.step()?.id==='fight';
   if(!createGuide||guide.failed||talking||dialogue.open||!player||!log.step()||opening||api.battle?.combatCount>0){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
   try{guide.visual??=createGuide(api.world.scene);}catch(error){guide.failed=true;console.warn('[MoonForest 0.3] guide light unavailable',error);return;}
+  // Its explanation card comes with the light's first appearance (once per record).
+  trigger('guide-shown');
   const target=guideTarget(player),time=guide.time,blend=1-Math.exp(-dt*1.6);
   if(!target){
    guide.key=null;guide.sway+=(.3-guide.sway)*blend;guide.lift+=(1.9-guide.lift)*blend;

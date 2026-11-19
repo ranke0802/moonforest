@@ -192,7 +192,7 @@ export const COMBAT_HINTS=Object.freeze([
 // One-time tips, shown the first time a feature becomes relevant (per save).
 // when: low-hp · near-npc · step:<quest>/<step> · effect:<name>
 export const TIPS=Object.freeze([
- {id:'guide',when:'step:M00/fight',title:'길잡이 빛',keys:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',touch:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',text:'어디로 갈지 모를 때는 빛을 따라가세요.'},
+ {id:'guide',when:'guide-shown',title:'길잡이 빛',keys:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',touch:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',text:'어디로 갈지 모를 때는 빛을 따라가세요.'},
  {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 동안에도 움직일 수 있습니다.'},
  {id:'boss',when:'step:M04/bear',title:'큰 짐승',keys:'몸을 크게 젖히면 강한 공격이 옵니다. Space로 피하거나 F를 길게 눌러 막으세요.',touch:'몸을 크게 젖히면 강한 공격이 옵니다. 장화 버튼으로 피하거나 방패 버튼을 길게 눌러 막으세요.',text:'공격이 끝난 직후가 반격할 때입니다.'},
  {id:'charge',when:'step:M00/driver',title:'강공격',keys:'공격(J · 좌클릭)을 길게 누르면 심판의 검을 내려칩니다.',touch:'검 버튼을 길게 누르면 심판의 검을 내려칩니다.',text:'느리지만 강합니다. 빈틈이 보일 때 쓰세요.'},
