@@ -134,7 +134,7 @@ export function setupV03(api){
   screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume});
   maybeStartWorld();
   // ?bench: one fixed measurement after entering play (structure plan, phase 0).
-  if(!state.bench&&new URLSearchParams(view?.location?.search??'').has('bench')){state.bench={dispose(){}};void import('./bench.js').then(({createBench})=>{if(state.disposed)return;state.bench=createBench({doc,getWorld:()=>api.world,info:()=>({foes:(battle.encounters??[]).filter(foe=>foe.active).length})});return state.bench.run();}).catch(error=>console.error('[bench]',error));}
+  if(!state.bench&&new URLSearchParams(view?.location?.search??'').has('bench')){state.bench={dispose(){}};void import('./bench.js').then(({createBench})=>{if(state.disposed)return;const mode=new URLSearchParams(view?.location?.search??'').get('bench')==='roundtrip'?'roundtrip':'orbit';state.bench=createBench({doc,mode,travel:id=>api.travel(id),isReady:()=>api.getState?.().ready!==false,getWorld:()=>api.world,info:()=>({foes:(battle.encounters??[]).filter(foe=>foe.active).length})});return state.bench.run();}).catch(error=>console.error('[bench]',error));}
  }
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
  async function beginNewGame(){
