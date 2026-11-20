@@ -100,7 +100,7 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
      for(const row of INTRO.lines){await hold((row.at-clock)*1000);if(skipped||id!==run)break;await caption(row.key);await hold((row.until-row.at)*1000);line.classList.remove('is-in');clock=row.until;}
      await hold((INTRO.seconds-clock)*1000);
      // The cloche's shadow falls over the village, into the memories.
-     layer.classList.add('is-shading');await hold(FADE_SECONDS*1000);
+     if(!skipped&&id===run){layer.classList.add('is-shading');await hold(FADE_SECONDS*1000);}
     }
     for(const beat of DREAM_BEATS){
      if(skipped||id!==run)break;
@@ -125,7 +125,9 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
     // dream showed last stays up, the white of the wake or, when skipped, the
     // painting of that moment, and release() dissolves it into the scene.
     // A cancelled dream (another one started) clears as before.
-    if(id!==run){delete layer.dataset.tone;delete layer.dataset.dream;layer.classList.remove('is-shading','is-flash','is-white');clear();}
+    // The cloche's shadow never stays: it would fall over the picture while it dissolves (seen 2026-11-20 on a skip).
+    layer.classList.remove('is-shading');
+    if(id!==run){delete layer.dataset.tone;delete layer.dataset.dream;layer.classList.remove('is-flash','is-white');clear();}
    }
    if(skipped&&id===run)layer.dataset.woke='1';
    return skipped?'skipped':'done';
