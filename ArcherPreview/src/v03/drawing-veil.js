@@ -89,12 +89,14 @@ export function createDrawingVeil({doc,mount,label=()=>'',left=n=>String(n),rand
    root.addEventListener('pointermove',onMove,{passive:true});root.addEventListener('pointerdown',onDown,{passive:true});root.addEventListener('pointerleave',onLeave,{passive:true});
   },
   // ratio 0..1, remaining: things still being prepared. Written only on change.
+  // remaining may also be ready text (the megabytes still to download).
   setProgress(ratio,remaining){
-   const value=Math.max(0,Math.min(100,Math.floor((Number(ratio)||0)*100))),count=Math.max(0,Math.round(Number(remaining)||0));
+   const value=Math.max(0,Math.min(100,Math.floor((Number(ratio)||0)*100)));
+   const count=typeof remaining==='string'?remaining:Math.max(0,Math.round(Number(remaining)||0));
    if(value!==shownPct){shownPct=value;pct.textContent=value+'%';fill.style.transform=`scaleX(${value/100})`;}
-   if(count!==shownLeft){shownLeft=count;rest.textContent=count>0?left(count):'';}
+   if(count!==shownLeft){shownLeft=count;rest.textContent=typeof count==='string'?count:count>0?left(count):'';}
   },
-  relabel(){word.textContent=label();if(shownLeft>0)rest.textContent=left(shownLeft);},
+  relabel(){word.textContent=label();if(typeof shownLeft==='number'&&shownLeft>0)rest.textContent=left(shownLeft);},
   stop(){
    if(!active)return;active=false;root.classList.remove('is-active');
    root.removeEventListener('pointermove',onMove);root.removeEventListener('pointerdown',onDown);root.removeEventListener('pointerleave',onLeave);
@@ -109,21 +111,24 @@ export function createDrawingVeil({doc,mount,label=()=>'',left=n=>String(n),rand
  };
 }
 
-// Progress of the black title's preparation (boot.js feeds it every frame,
-// the veil writes only on change). Phases: the world loading (time-eased,
-// it gives no count), the scene's pending models and textures (counted
-// against the most seen), then the quiet wait before the reveal. Never goes back.
-export function createDrawingProgress({quiet=1.2,limit=25,loadEase=8}={}){
- let ratio=0,peak=0,loadTime=0;
+// Progress of the black title (boot.js feeds it; the veil writes only on
+// change). Phases: the download (the loading card's own ratio, up to 50%),
+// the world starting (time-eased, no count), the scene's pending models and
+// textures (counted against the most seen), then the quiet wait before the
+// reveal. Never goes back.
+export function createDrawingProgress({quiet=1.2,limit=25,loadEase=4}={}){
+ let ratio=0,peak=0,loadTime=0,download=null;
  return {
+  // ratio 0..1 of the download; text: what is left, ready to show. null when the card closed.
+  download(value,text=''){download=value===null?null:{value:Math.max(0,Math.min(1,Number(value)||0)),text};},
   update({dt=0,ready=false,pending=0,summoning=false,quietTime=0,prepareTime=0}){
-   const left=Math.max(0,pending)+(summoning?1:0)+(ready?0:1);
-   let value;
-   if(!ready){loadTime+=dt;value=.3*(1-Math.exp(-loadTime/loadEase));}
+   let left=Math.max(0,pending)+(summoning?1:0)+(ready?0:1),value;
+   if(download){value=.5*download.value;if(download.text)left=download.text;}
+   else if(!ready){loadTime+=dt;value=.5+.15*(1-Math.exp(-loadTime/loadEase));}
    else{
     peak=Math.max(peak,left);
     const done=peak?(peak-left)/peak:1;
-    value=.3+.6*done+.1*Math.min(1,quietTime/quiet);
+    value=.65+.3*done+.05*Math.min(1,quietTime/quiet);
     if(prepareTime>=limit||(!left&&quietTime>=quiet))value=1;
    }
    ratio=Math.max(ratio,Math.min(1,value));

@@ -3,7 +3,7 @@ export default {
  ui:{
   'bench.trip':'Measuring round trips (about 5 min, {step}/5). Please do not touch the screen.',
   'bench.running':'Measuring performance (about 50 s). Please do not touch the screen.','bench.done':'Measurement finished','bench.copy':'Copy','bench.save':'Save file','bench.close':'Close',
-  'title.aria':'MoonForest title screen','title.kicker':'The Witch of Sorrow','title.sub':'A Table of Bonds · Act I','title.menu':'Main menu','title.drawing':'Drawing the world','title.drawingLeft':'{n} left',
+  'title.aria':'MoonForest title screen','title.kicker':'The Witch of Sorrow','title.sub':'A Table of Bonds · Act I','title.menu':'Main menu','title.drawing':'Drawing the world','title.drawingLeft':'{n} left','title.drawingMb':'{mb} MB left',
   'menu.new':'New Game','menu.load':'Continue','menu.gallery':'Gallery','menu.settings':'Settings','menu.quit':'Quit',
   'time.hm':'{h}h {m}m','time.m':'{m}m',
   'slot.empty':'Empty','slot.emptyDetail':'Begin a new journey','slot.title':'Ch.{chapter} · {title}','slot.journey':'Journey',

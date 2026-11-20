@@ -21,6 +21,12 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 /* Until its scene is fully drawn the title stays black, with a quiet note. */
 .v03-title:not(.scene-ready) .v03-title-inner{pointer-events:none}
 @keyframes v03-breathe{50%{opacity:.2}}
+/* The dust motes still rise through the black while the world is drawn (the blurry wash is gone). */
+.v03-title-shade::after{content:"";position:absolute;inset:-20%;pointer-events:none;opacity:0;transition:opacity 1.6s ease}
+.v03-title-shade::after{background-image:radial-gradient(circle,#ffe8b8 0 1.4px,#0000 2.4px),radial-gradient(circle,#d8ceff 0 1.2px,#0000 2.2px),radial-gradient(circle,#fff3d6 0 1px,#0000 2px);background-size:230px 260px,310px 290px,170px 210px;background-position:0 0,90px 140px,40px 60px;opacity:0;animation:v03-motes-rise 22s linear infinite;mask-image:radial-gradient(ellipse 70% 65% at 50% 55%,#000 30%,#0000 80%);-webkit-mask-image:radial-gradient(ellipse 70% 65% at 50% 55%,#000 30%,#0000 80%)}
+.v03-title.is-shown:not(.scene-ready) .v03-title-shade::after{opacity:.7}
+@keyframes v03-motes-rise{from{background-position:0 0,90px 140px,40px 60px}to{background-position:40px -520px,10px -440px,90px -360px}}
+@media (prefers-reduced-motion:reduce){.v03-title-shade::after{animation:none}}
 /* "Drawing the world" (2026-11-20, user): no drifting lights; the prologue's
    cosmic cut under full black, seen only through the pointer's light, a burst
    of motes on a click, and a gold progress line along the bottom. */

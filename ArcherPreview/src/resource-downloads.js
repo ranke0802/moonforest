@@ -82,7 +82,15 @@ export class ResourceDownloads {
       // This page writes the stream to CacheStorage. Tell the worker not to tee
       // and write a second copy of large player textures at the same time.
       this.stats.fileRequests++;
-      const response=await step('resource-response',()=>this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'},signal}),response=>{response.body?.cancel().catch(()=>{});});
+      // A server busy for a moment (GitHub Pages answered 503 right after a
+      // deploy, 2026-11-20) gets two more tries before the error card.
+      let response=null;
+      for(let attempt=0;;attempt++){
+        response=await step('resource-response',()=>this.fetcher(url,{cache:'force-cache',headers:{'X-Moonforest-Cache-Writer':'page'},signal}),response=>{response.body?.cancel().catch(()=>{});});
+        if(response.ok||attempt>=2||!(response.status>=500||response.status===429)||signal.aborted)break;
+        await response.body?.cancel().catch(()=>{});
+        await new Promise(resolve=>setTimeout(resolve,700*(attempt+1)));
+      }
       if(signal.aborted){await response.body?.cancel().catch(()=>{});signal.throwIfAborted();}
       if(!response.ok)throw new Error(`리소스 다운로드 실패 (${response.status})`);
       let received=0;const reader=response.body?.getReader();

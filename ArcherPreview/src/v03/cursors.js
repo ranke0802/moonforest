@@ -28,6 +28,8 @@ export function cursorCss(art=CURSOR_ART){
   `html[data-v03-cursor=talk] canvas{cursor:${c('talk',3,2,'pointer')}}`,
   `html[data-v03-cursor=camera],html[data-v03-cursor=camera] *{cursor:${c('camera',16,16,'grabbing')}!important}`,
   `html[data-v03-cursor][data-loading],html[data-v03-cursor][data-loading] *{cursor:${c('wait',16,16,'progress')}!important}`,
+  // The black title doubles as the download screen: the game arrow there.
+  `html[data-v03-cursor][data-loading] .v03-veil{cursor:${c('arrow',3,2,'auto')}!important}`,
  ].join('\n');
 }
 export function createCursors(doc){

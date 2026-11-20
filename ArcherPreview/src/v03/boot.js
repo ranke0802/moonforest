@@ -290,12 +290,30 @@ export function setupV03(api){
  function showTitle(){
   if(state.disposed||state.screen!=='boot')return;
   if(!state.langReady){void langReady.then(showTitle);return;}
-  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();prepareWorld();
+  // Since 2026-11-20 (user) the black title with its veil is the download
+  // screen too: it shows at once and follows the loading card underneath
+  // (that card stays for errors). The world is prepared once the card closes.
+  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();watchDownload();afterLoading(prepareWorld);
   // The prologue score is decoded while the title plays: it starts with the dream.
   try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}
  }
- // After the logo, the game's own download/loading card shows progress; the
- // title (still black while its scene is prepared) appears when it closes.
+ // The loading card's progress (#loading-progress width, #loading-bytes
+ // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
+ let downloadWatch=null;
+ function watchDownload(){
+  const bar=doc.getElementById('loading-progress'),bytes=doc.getElementById('loading-bytes'),Watch=view?.MutationObserver;
+  const sync=()=>{
+   if(!html.dataset.loading||state.screen!=='title'){downloadWatch?.disconnect();downloadWatch=null;drawing.download(null);return;}
+   const value=(parseFloat(bar?.style?.width)||0)/100,numbers=String(bytes?.textContent??'').match(/[\d.]+/g)?.map(Number)??[];
+   const mb=numbers.length>=2&&numbers[1]>numbers[0]?(numbers[1]-numbers[0]).toFixed(1):'';
+   drawing.download(value,mb?t('title.drawingMb',{mb}):'');
+   const p=drawing.update({});title.setProgress(p.ratio,p.remaining);
+  };
+  if(!html.dataset.loading)return;
+  if(Watch){downloadWatch=new Watch(sync);for(const node of [bar,bytes])if(node)downloadWatch.observe(node,{attributes:true,attributeFilter:['style'],childList:true,characterData:true,subtree:true});downloadWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
+  sync();
+ }
+ // Runs next() once the game's own download/loading card has closed.
  let loadingWait=null;
  function afterLoading(next){
   const Watch=view?.MutationObserver;
@@ -352,8 +370,8 @@ export function setupV03(api){
   // Between the loading card and the dream, never show the raw camera (it
   // can start inside a tree crown): keep the prologue cover up.
   if(save.intent.mode==='new')startEarlyDream();
- }else if(splash?.done)splash.done.then(()=>{splash.remove?.();afterLoading(showTitle);});
- else afterLoading(showTitle);
+ }else if(splash?.done)splash.done.then(()=>{splash.remove?.();showTitle();});
+ else showTitle();
  // A loading/frame failure owns the screen: its retry UI must be reachable.
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
@@ -441,6 +459,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }
