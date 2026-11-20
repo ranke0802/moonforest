@@ -54,7 +54,8 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-title-sub{margin:10px 0 0;font-size:clamp(12px,1.8vmin,17px);letter-spacing:.2em;opacity:.78}
 .v03-menu{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(2px,.8vh,8px)}
 .v03-menu-item{position:relative;min-height:44px;padding:6px 26px 6px 22px!important;font-size:clamp(16px,2.9vmin,24px)!important;letter-spacing:.12em;text-align:left;text-shadow:0 1px 6px #000;opacity:.82;transition:opacity .18s ease,transform .18s ease,color .18s ease}
-.v03-menu-item::before{content:"";position:absolute;left:0;top:50%;width:10px;height:2px;background:var(--v03-gold);opacity:0;transform:translateX(-6px);transition:opacity .18s ease,transform .18s ease}
+/* The marker is a ▶ drawn with borders (2026-11-20, user: not a hyphen), sized by the entry's own text and centred on it. */
+.v03-menu-item::before{content:"";position:absolute;left:1px;top:50%;width:0;height:0;margin-top:-.34em;border-style:solid;border-width:.34em 0 .34em .56em;border-color:transparent transparent transparent var(--v03-gold);opacity:0;transform:translateX(-6px);transition:opacity .18s ease,transform .18s ease}
 .v03-menu-item:hover:not(:disabled),.v03-title.is-keyed .v03-menu-item:focus{opacity:1;color:#fff4d6;transform:translateX(6px)}
 .v03-menu-item:hover:not(:disabled)::before,.v03-title.is-keyed .v03-menu-item:focus::before{opacity:1;transform:none}
 .v03-title:focus,.v03-title:not(.is-keyed) .v03-menu-item:focus,.v03-title:not(.is-keyed) .v03-menu-item:focus-visible{outline:none}

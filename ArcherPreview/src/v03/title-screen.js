@@ -69,7 +69,11 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   if(!button||button.disabled||disposed||!panel.hidden||layer.classList.contains('is-leaving'))return;
   onAction(button.dataset.action);
  });
- layer.addEventListener('keydown',event=>{
+ // Heard on the document: the game canvas takes the focus once the scene is
+ // up (seen 2026-11-20), and the keys would never reach the layer.
+ const onKey=event=>{
+  if(disposed||layer.hidden||layer.classList.contains('is-leaving')||doc.querySelector('dialog[open]'))return;
+  const tag=event.target?.tagName;if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA')return;
   if(event.key==='Escape'&&!panel.hidden){event.preventDefault();closePanel(null);return;}
   const step=NAV[event.code]??NAV[event.key];if(step===undefined||event.ctrlKey||event.metaKey||event.altKey)return;
   const scope=panel.hidden?menu:panel,items=[...scope.querySelectorAll('button:not([disabled])')];if(!items.length)return;
@@ -77,7 +81,8 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   // Nothing marked yet: the first press marks the first entry.
   const at=items.indexOf(doc.activeElement),next=(at+step+items.length)%items.length;
   items[at<0?0:next].focus?.({preventScroll:true});
- });
+ };
+ doc.addEventListener('keydown',onKey);
  return {
   element:layer,
   get visible(){return !layer.hidden;},
@@ -149,6 +154,6 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
    });
   },
   closePanel:()=>closePanel(null),
-  dispose(){if(disposed)return;disposed=true;closePanel(null);veil.dispose();layer.remove();},
+  dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey);closePanel(null);veil.dispose();layer.remove();},
  };
 }
