@@ -16,8 +16,8 @@ export function applyMinimapArrivalPose(actor,camera,pan,{destination,position,w
 }
 
 export const MINIMAP_REGIONS=Object.freeze([
- {map:'village',character:'warrior-v3',label:'마을',note:'성문 앞길로 이동'},
- {map:'great-plains',character:'warrior-plains',label:'대평원',note:'길의 입구로 이동'},
+ {map:'village',character:'warrior-v3',label:'몬트하임 마을',note:'성문 앞길로 이동'},
+ {map:'great-plains',character:'warrior-plains',label:'윈드몬 대평원',note:'길의 입구로 이동'},
  {map:'monster-forest',character:'warrior-v4',label:'마물의 숲',note:'숲 입구로 이동'},
  {map:'witch-cave',character:'warrior-v5',label:'마녀의 동굴',note:'동굴 입구로 이동'},
  {...ELENA_SANCTUARY_WAYPOINT,waypoint:ELENA_SANCTUARY_WAYPOINT.id,note:'성녀의 거처 앞길로 이동'},

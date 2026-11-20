@@ -89,7 +89,10 @@ test('opening: the caption hold starts after typing, a click completes it',async
  for(let i=0;i<200&&!tw.typing;i++)await new Promise(r=>setImmediate(r));
  assert.equal(tw.typing,true);const before=waits.length;
  await new Promise(r=>setImmediate(r));assert.equal(waits.length,before,'no hold runs while the caption types');
- c.advance(250);assert.ok(Array.from(visible(line)).length>=3,JSON.stringify(visible(line)));
+ // The line fades in first (0.45 s), then types at the prologue's slower pace (60 ms a character).
+ c.advance(300);assert.equal(visible(line),'','nothing is typed while the line is still fading in');
+ c.advance(200);assert.equal(Array.from(visible(line)).length,1,'the first character comes when the line is up');
+ c.advance(600);const typed=Array.from(visible(line)).length;assert.ok(typed>=3&&typed<Array.from(line.textContent).length,JSON.stringify(visible(line)));
  line.parentNode.dispatchEvent(new window.Event('click'));assert.equal(tw.typing,false);assert.equal(visible(line),line.textContent,'a click shows the caption at once');
  // Finish every remaining caption as soon as it starts.
  const pump=setInterval(()=>tw.complete(),1);

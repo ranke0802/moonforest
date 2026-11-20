@@ -77,7 +77,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   refresh();
   if(result.questDone){
    const done=content.QUESTS.find(quest=>quest.id===result.questDone),next=log.quest();
-   hud.flash(next?t('hud.completeNext',{done:done.title,next:next.title}):t('hud.complete',{done:done.title}));
+   // The quest's end as a guide card (2026-11-20, user: the same form as the
+   // guide notices, clear of the yellow messages in the middle). It comes
+   // first; a card it cuts short is shown again after it.
+   if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
+   tips.queue.unshift({title:t('hud.questDone'),keys:done.title,touch:done.title,text:next?t('hud.questNext',{next:next.title}):''});
    grantReward(done);
    save.touch({title:next?.title??done.title,titleKey:(next??done).id});
   }
@@ -719,12 +723,17 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const base=navBase?.deref(),prop=openingWagon();
   if(!state||!base||!prop||mapId!==prop.map){if(ours&&world.navigation===ours&&base)world.navigation=base;navOurs=null;blockState=state??null;return;}
   const yaw=prop.yaw??0,f={x:Math.sin(yaw),z:Math.cos(yaw)},r={x:Math.cos(yaw),z:-Math.sin(yaw)};
-  // Wagon frame: standing spans -2.6..4.6 along (bed to horse), +-1.3 across;
-  // lying, the canopy reaches out to 4.3 on the fall side.
-  const along=state==='up'?1.0:.8,across=state==='up'?0:WAGON_FALL*2.6,halfWidth=state==='up'?1.3:1.75,halfDepth=state==='up'?3.6:3.5;
-  const x=prop.x+f.x*along+r.x*across,z=prop.z+f.z*along+r.z*across;
-  const block={id:'v03-story-wagon-'+state,shape:'box',x,z,yaw,halfWidth,halfDepth,radius:Math.hypot(halfWidth,halfDepth),height:1.6,source:'v03-story-wagon'};
-  try{const next=createAuthoredPlacementNavigation(base,[block],'v03-wagon-'+(++blockSerial));world.navigation=next;navOurs=new WeakRef(next);blockState=state;}
+  // Wagon frame: standing spans -2.6..4.6 along (bed to horse), +-1.3 across.
+  // Lying, the body spans -2.7..1.4 along and the canopy reaches out to 4.35
+  // on the fall side; the horse lies ahead of it. 2026-11-20 (user: the
+  // ground in front of the fallen wagon could not be walked on): the lying
+  // box used to reach 4.3 m ahead for the shafts, which now lie on the
+  // ground; only the wagon's body and the horse block the way.
+  const up=state==='up',along=up?1:-.65,across=up?0:WAGON_FALL*2.6,halfWidth=up?1.3:1.75,halfDepth=up?3.6:2.05;
+  const box=(id,a,s,w,d)=>({id,shape:'box',x:prop.x+f.x*a+r.x*s,z:prop.z+f.z*a+r.z*s,yaw,halfWidth:w,halfDepth:d,radius:Math.hypot(w,d),height:1.6,source:'v03-story-wagon'});
+  const blocks=[box('v03-story-wagon-'+state,along,across,halfWidth,halfDepth)];
+  if(!up)blocks.push(box('v03-story-horse-down',3.45,.15,.65,1.15));
+  try{const next=createAuthoredPlacementNavigation(base,blocks,'v03-wagon-'+(++blockSerial));world.navigation=next;navOurs=new WeakRef(next);blockState=state;}
   catch(error){console.warn('[MoonForest 0.3] wagon collision skipped',error);blockState=state;}
  }
  // ----- talking is safe (2026-11-20, user) -----
@@ -1055,17 +1064,24 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // in the settings (slow-fx.js), and in later fights too: there only when the
  // warrior's own attack starts and not within SLOW_REST of the last beat, so
  // a pack of wolves does not keep the screen slow.
- const SLOW_SCALE=.18,SLOW_REST=2.5,ATTACK_STATES=new Set(['attack','slash','judgment','moveAttack']);
- const slow={left:0,rest:0,player:null,foes:new WeakMap()};
+ // 2026-11-20 16:15 (user: repeated this often, the tension drops): one beat
+ // per fight, on the first attack of that fight, the warrior's or a foe's,
+ // whichever comes first. The tutorial fight too. A fight ends after
+ // SLOW_CALM seconds with nothing in combat.
+ const SLOW_SCALE=.18,SLOW_CALM=4,ATTACK_STATES=new Set(['attack','slash','judgment','moveAttack']);
+ const slow={left:0,player:null,foes:new WeakMap(),used:false,calm:0,first:false};
  const slowSetting=()=>slowFx?.value??SLOW_FX_DEFAULT;
  function updateSlow(dt){
-  slow.left=Math.max(0,slow.left-dt);slow.rest=Math.max(0,slow.rest-dt);
+  slow.left=Math.max(0,slow.left-dt);
   const fx=slowSetting(),first=log.quest()?.id==='M00'&&log.step()?.id==='fight'&&!scene.active;
   const state=api.getController()?.state??null,attacking=ATTACK_STATES.has(state);
-  const mine=attacking&&!ATTACK_STATES.has(slow.player);let start=mine;slow.player=state;
-  for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')start=true;slow.foes.set(foe,mode);}
+  const mine=attacking&&!ATTACK_STATES.has(slow.player);let theirs=false;slow.player=state;
+  for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')theirs=true;slow.foes.set(foe,mode);}
+  const fighting=first||api.battle.combatCount>0;
+  if(first!==slow.first){slow.first=first;if(first)slow.used=false;}
+  if(fighting)slow.calm=0;else if(slow.calm<SLOW_CALM&&(slow.calm+=dt)>=SLOW_CALM)slow.used=false;
   if(!fx.on)slow.left=0;
-  else if(first?start:fx.everywhere&&mine&&slow.rest<=0&&!scene.active&&api.battle.combatCount>0){slow.left=fx.seconds;slow.rest=fx.seconds+SLOW_REST;}
+  else if((mine||theirs)&&!slow.used&&!scene.active&&(first||fx.everywhere&&fighting)){slow.used=true;slow.left=Math.max(slow.left,fx.seconds);}
   updateSlowZoom();
  }
  // A light push-in while slow motion lasts (user request 2026-11-19): the
@@ -1081,6 +1097,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const now=performance.now(),dt=zoom.last?Math.min(.1,(now-zoom.last)/1000):0;zoom.last=now;
   if(zoom.camera!==camera){zoom.camera=camera;zoom.weight=0;zoom.base=null;}
   const target=slow.left>0?1:0;
+  // Focus lines at the screen's edge for as long as the beat lasts (hud: one
+  // small canvas, written only when the value changes).
+  hud.setFocus(target===1&&slowSetting().lines);
   if(zoom.weight===0&&target===0){zoom.base=null;return;}
   zoom.base??=camera.fov;
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
@@ -1170,7 +1189,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   for(;coachState.index<hints.length;coachState.index++){
    const done=hints[coachState.index].done;
    // A line nobody acts on must not block the lessons after it.
-   const acting=done.states?done.states.includes(stateName):false;
+   // combo: the chain's nth hit (the finisher); charged: the held attack, not the chain's.
+   const chained=controller?.attackIndex??0,acting=done.states?done.states.includes(stateName)&&(!done.combo||chained>=done.combo)&&(!done.charged||chained===0):false;
    // hold: the action kept up for that long in all (the guard stance).
    if(done.hold){if(acting)coachState.held+=dt;}
    const finished=coachState.shown>=HINT_SECONDS||(done.moved!==undefined?coachState.moved>=done.moved:done.camera!==undefined?Math.abs((camera?.alpha??0)-(coachState.alpha??0))>=done.camera:done.hold?coachState.held>=done.hold:acting);
@@ -1212,6 +1232,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   allows,
   beginAmbushScene,
   get sceneActive(){return scene.active;},
+  // True while a new game's opening scene has not been able to start yet.
+  get scenePending(){return scene.pending;},
   get cameraFocus(){return scene.active?scene.cameraFocus:null;},
   // The warrior lies in the wagon bed during the opening: main.js keeps him off the ground snap.
   get holdsPlayer(){return scene.active&&scene.sleeping===true;},
@@ -1234,7 +1256,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   start({fresh=false}={}){
    if(fresh||!log.load())log.reset();
    // A new game opens on the wolf at the wagon (once the cast is placed).
-   scene.pending=fresh===true&&log.quest()?.id==='M00';
+   scene.pending=fresh===true&&log.quest()?.id==='M00';scene.pendingFor=0;
    started=true;mapId=null;warmStoryVisuals();warmLoot();Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0});
    tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
@@ -1249,8 +1271,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   },
   update(dt,s){
    if(!started||disposed||!s.ready)return;
-   if(s.mapId!==mapId){mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});}
-   if(scene.pending){scene.pending=false;try{beginAmbushScene();}catch(error){console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
+   if(s.mapId!==mapId){
+    mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});
+    // The place's name in the middle of the screen on arrival (2026-11-20,
+    // user). Not over the opening scene.
+    if(!scene.pending&&!scene.active){const key='place.'+s.character,name=t(key);if(name!==key)hud.showPlace(name);}
+   }
+   // It waits for the wolf and the driver to be there (a few seconds at most): the stage stays covered meanwhile (boot.js).
+   if(scene.pending){scene.pendingFor=(scene.pendingFor??0)+dt;try{if(beginAmbushScene()||scene.pendingFor>4){scene.pending=false;scene.pendingFor=0;}}catch(error){scene.pending=false;scene.pendingFor=0;console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
    hidePlacedWagon();updateCover(dt);
    if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);updateBubble(dt);return;}
    // Strolling actors: talk range and markers follow where they stand now.

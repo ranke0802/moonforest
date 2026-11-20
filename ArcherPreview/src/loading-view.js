@@ -27,7 +27,9 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
   const progressTo=value=>{progress=Math.max(progress,Math.max(0,Math.min(100,value)));get('loading-progress').style.width=progress+'%';track.setAttribute('aria-valuenow',String(Math.round(progress)));};
   const current=expected=>!failed&&(expected===undefined||expected===generation);
   // Loading artwork is decorative and never participates in scene readiness.
-  art?.addEventListener?.('error',()=>{art.hidden=true;});
+  art?.addEventListener?.('error',()=>{art.hidden=true;overlay.dataset.art='none';});
+  // data-art: 'pending' until the picture is on screen (0.3 shows the words only after it), then 'ready'; 'none' without a picture.
+  art?.addEventListener?.('load',()=>{if(!art.hidden&&overlay.dataset.art==='pending')overlay.dataset.art='ready';});
   const resetError=()=>{generation++;report=null;reloadRequired=false;reloadRequested=false;if(detail){detail.hidden=true;const disclosure=detail.querySelector('details');if(disclosure)disclosure.open=false;}if(summary)summary.textContent='';if(stack)stack.textContent='';if(copy){copy.hidden=true;copy.disabled=false;}if(status)status.textContent='';if(fallback){fallback.hidden=true;fallback.value='';}};
   const copyReport=async()=>{
     if(!failed||!report||copy?.disabled)return;const id=generation,value=report;if(copy)copy.disabled=true;
@@ -49,7 +51,7 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
     begin(character){
       failed=false;resetError();phase='download';progress=0;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');
       get('retry-load').hidden=true;get('retry-load').textContent=tr('다시 불러오기');get('loading-title').textContent=tr('불러오는 중');get('loading-text').textContent=tr('불러오는 중');get('loading-bytes').textContent=tr('0.0 / 0.0 MB');get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
-      if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');}
+      if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';overlay.dataset.art='pending';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');overlay.dataset.art='none';}
         // Which place the art shows (0.3 adds its name and a line about it).
         if(image?.id)overlay.dataset.place=image.id;else delete overlay.dataset.place;}
       return generation;
@@ -67,7 +69,7 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
       if(Number.isFinite(state?.completed)&&Number.isFinite(state?.total)&&state.total>0&&state.completed>=0){const total=Math.floor(state.total),completed=Math.min(total,Math.floor(state.completed));if(total>0){get('loading-text').textContent=tr(`화면 준비하는 중 (${completed}/${total})`);progressTo(70+29*completed/total);return;}}
       get('loading-text').textContent=tr('화면 준비하는 중');
     },
-    reveal(expectedGeneration){if(!current(expectedGeneration))return false;progressTo(100);overlay.hidden=true;if(art){art.hidden=true;art.removeAttribute('src');}delete doc.documentElement.dataset.loading;return true;},
+    reveal(expectedGeneration){if(!current(expectedGeneration))return false;progressTo(100);overlay.hidden=true;if(art){art.hidden=true;art.removeAttribute('src');}delete overlay.dataset.art;delete doc.documentElement.dataset.loading;return true;},
     fail(title,message,{retry=true,retryLabel='다시 불러오기',error,phase}={}){
       resetError();const failure={...loadingErrorRecord(error??message),phase:phase??null,at:new Date().toISOString()};
       reloadRequired=needsModuleReload(error);

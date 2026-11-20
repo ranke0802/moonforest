@@ -52,14 +52,16 @@ test('actual loading DOM replaces map art on every attempt and rejects failed or
  for(const character of [...characters,...characters.toReversed()]){
   const id=f.view.begin(character);assert.ok(Number.isInteger(id)&&id>previous);previous=id;
   assert.equal(f.get('loading-art').getAttribute('src'),loadingArtFor(character).url);assert.equal(f.get('loading-art').hidden,false);assert.equal(f.get('loading-art').style.objectPosition,loadingArtFor(character).position);
+  // The picture first: 'pending' until it has loaded (0.3 holds the words back until then).
+  assert.equal(f.get('loading').dataset.art,'pending');f.get('loading-art').dispatchEvent(new f.window.Event('load'));assert.equal(f.get('loading').dataset.art,'ready');
   f.view.download({loaded:3e6,total:12e6,ratio:.25},id);assert.match(f.get('loading-text').textContent,/불러오는 중 \(3\.0\s*\/\s*12\.0\s*MB\)/);assert.equal(f.get('loading-progress').style.width,'17.5%');
   const error=Object.assign(Error('controlled model failure'),{code:'MODEL_PROBE',stage:'model'});f.view.fail('목적지 준비 실패','실제 오류를 유지합니다.',{error});const failed=snapshot(f);
   f.view.download({loaded:12e6,total:12e6,ratio:1,complete:true},id);f.view.preparing({completed:9,total:9},id);assert.equal(f.view.reveal(id),false);assert.deepEqual(snapshot(f),failed);
   const retry=f.view.begin(character);assert.ok(retry>id);const begun=snapshot(f);f.view.download({loaded:1,total:1,ratio:1},id);f.view.preparing({completed:1,total:1},id);assert.equal(f.view.reveal(id),false);assert.deepEqual(snapshot(f),begun);
   f.view.preparing({completed:2,total:5},retry);const preparing=snapshot(f);f.view.download({loaded:1,total:1,ratio:1},retry);assert.deepEqual(snapshot(f),preparing,'late download phase cannot overwrite preparation counts');assert.equal(f.view.reveal(retry),true);assert.equal(f.get('loading').hidden,true);previous=retry;visits++;
  }
- const legacy=f.view.begin('archer');assert.equal(f.get('loading-art').hidden,true);assert.equal(f.get('loading-art').hasAttribute('src'),false);f.view.preparing(undefined,legacy);assert.equal(f.view.reveal(legacy),true);
- const current=f.view.begin('warrior-v5');f.get('loading-art').dispatchEvent(new f.window.Event('error'));assert.equal(f.get('loading-art').hidden,true);assert.equal(f.view.failed,false);f.view.preparing({completed:1,total:1},current);assert.equal(f.view.reveal(current),true,'decorative image failure never blocks an otherwise ready game');
+ const legacy=f.view.begin('archer');assert.equal(f.get('loading').dataset.art,'none');assert.equal(f.get('loading-art').hidden,true);assert.equal(f.get('loading-art').hasAttribute('src'),false);f.view.preparing(undefined,legacy);assert.equal(f.view.reveal(legacy),true);
+ const current=f.view.begin('warrior-v5');f.get('loading-art').dispatchEvent(new f.window.Event('error'));assert.equal(f.get('loading').dataset.art,'none','a failed picture never holds the words back');assert.equal(f.get('loading-art').hidden,true);assert.equal(f.view.failed,false);f.view.preparing({completed:1,total:1},current);assert.equal(f.view.reveal(current),true,'decorative image failure never blocks an otherwise ready game');
  results.push({case:'real-loading-view-generations',mapAttempts:visits,legacyFallback:true,decorativeArtFailureNonfatal:true});
 });
 

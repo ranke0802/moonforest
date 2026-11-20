@@ -5,7 +5,8 @@
 // not repeat until all were shown.
 // The loading card (#loading) stays the shared one: this only adds two small
 // blocks to it and follows its state (shown/hidden, which place) with one
-// observer. Text comes from the UI locale (load.*). Only opacity and
+// observer. The words wait for the picture (data-art, 2026-11-20 user: text
+// came up on black before the art). Text comes from the UI locale (load.*). Only opacity and
 // transform of these small blocks animate (v03.css).
 export const LOAD_PLACES=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
 export const LOAD_TIPS=Object.freeze(['combo','justGuard','sprint','stamina','potion','guide','rest','beast','heavy','dodge']);
@@ -38,7 +39,7 @@ export function createLoadingLore({doc,t,random=Math.random,Observer=doc.default
   tip.classList.remove('is-in');void tip.offsetWidth;tip.classList.add('is-in');
  }
  function sync(){
-  const error=overlay.classList.contains('error'),id=overlay.dataset.place??null,known=id&&LOAD_PLACES.includes(id),show=!overlay.hidden&&!error;
+  const error=overlay.classList.contains('error'),id=overlay.dataset.place??null,known=id&&LOAD_PLACES.includes(id),show=!overlay.hidden&&!error&&overlay.dataset.art!=='pending';
   if(show&&known&&shownPlace!==id){shownPlace=id;place.textContent=t('load.place.'+id);about.textContent=t('load.about.'+id);lore.classList.remove('is-in');void lore.offsetWidth;lore.classList.add('is-in');}
   lore.hidden=!(show&&known);
   if(show&&!visible)showNext();
@@ -48,7 +49,7 @@ export function createLoadingLore({doc,t,random=Math.random,Observer=doc.default
  const onTap=event=>{event.preventDefault();event.stopPropagation();showNext();};
  tip.addEventListener('click',onTap);
  const observer=Observer?new Observer(sync):null;
- observer?.observe(overlay,{attributes:true,attributeFilter:['hidden','class','data-place']});
+ observer?.observe(overlay,{attributes:true,attributeFilter:['hidden','class','data-place','data-art']});
  sync();
  return {
   sync,next:showNext,

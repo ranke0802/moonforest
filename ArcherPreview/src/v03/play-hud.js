@@ -1,6 +1,23 @@
 // In-game 0.3 HUD pieces: quest tracker, coaching hint, interaction prompt and
 import {t} from './i18n.js';
 // a short banner. Text nodes are written only when their value changes.
+// The focus-line picture: FOCUS_LINES wedges with their points toward the
+// middle, in a fixed pseudo-random order (the same picture every visit).
+// k: distance from the middle as a share of the way to the screen's edge.
+const FOCUS_LINES=84;
+export function paintFocus(canvas){
+ const ctx=canvas.getContext?.('2d');if(!ctx)return false;
+ const w=canvas.width,h=canvas.height,cx=w/2,cy=h/2;let seed=20261120;
+ const rand=()=>(seed=(seed*1664525+1013904223)>>>0)/4294967296;
+ ctx.clearRect(0,0,w,h);
+ for(let i=0;i<FOCUS_LINES;i++){
+  const angle=(i+rand()*.9)/FOCUS_LINES*Math.PI*2,half=.0025+rand()*rand()*.016,tip=.6+rand()*.34,out=1.7;
+  const ax=Math.cos(angle),ay=Math.sin(angle),bx=Math.cos(angle-half),by=Math.sin(angle-half),dx=Math.cos(angle+half),dy=Math.sin(angle+half);
+  ctx.fillStyle='rgba(255,244,214,'+(.45+rand()*.5).toFixed(2)+')';
+  ctx.beginPath();ctx.moveTo(cx+ax*cx*tip,cy+ay*cy*tip);ctx.lineTo(cx+bx*cx*out,cy+by*cy*out);ctx.lineTo(cx+dx*cx*out,cy+dy*cy*out);ctx.closePath();ctx.fill();
+ }
+ return true;
+}
 export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const make=(tag,className)=>{const node=doc.createElement(tag);node.className=className;return node;};
  const root=make('div','v03-hud');root.dataset.v03Hud='';
@@ -25,7 +42,16 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  // A speech bubble over a speaker in the world (the driver's shouts). One
  // element, reused; the story moves it with the speaker (transform only).
  const bubble=make('div','v03-bubble'),bubbleBody=make('span','v03-bubble-body');bubble.append(bubbleBody);bubble.hidden=true;
- root.append(quest,hint,banner,tip,prompt,ring,caption,bubble);mount.append(root);
+ // Focus lines for the slow-motion beat (2026-11-20, user: light, a little
+ // like a comic). One small canvas drawn once here, stretched over the screen:
+ // wedges from the edge toward the middle, the middle left clear. Showing it
+ // is a class: opacity and mirrored transforms only (v03.css), no frame work.
+ const focus=make('canvas','v03-focus');focus.width=640;focus.height=360;focus.setAttribute('aria-hidden','true');paintFocus(focus);
+ // The name of the place on arrival: one line between two ruled ornaments,
+ // one-shot like the banner (opacity and transform only, v03.css).
+ const place=make('div','v03-place'),placeName=make('strong','v03-place-name');place.append(make('i','v03-place-rule'),placeName,make('i','v03-place-rule'));place.hidden=true;
+ place.addEventListener('animationend',event=>{if(event.target!==place)return;place.classList.remove('is-shown');place.hidden=true;});
+ root.append(focus,quest,hint,banner,place,tip,prompt,ring,caption,bubble);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
  const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
  return {
@@ -49,6 +75,7 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    const fresh=last.hint!==text;last.hint=text;last.hintHow=how;hint.hidden=!text;hintWhat.textContent=text??'';hintHow.textContent=text&&how?how:'';hintHow.hidden=!(text&&how);
    if(text&&fresh)try{hint.animate?.([{opacity:0,transform:'translateX(-50%) scale(.86)'},{opacity:1,transform:'translateX(-50%) scale(1.06)',offset:.6},{opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:420,easing:'ease-out'});}catch{}
   },
+  setFocus(on){on=!!on;if(last.focus===on)return;last.focus=on;focus.classList.toggle('is-on',on);},
   // The bubble's line (null hides it). A new line pops in.
   setBubble(text){
    if(last.bubble===text)return;last.bubble=text;bubble.hidden=!text;bubbleBody.textContent=text??'';
@@ -73,6 +100,7 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
   },
   // One-shot message (quest complete, saved). CSS runs the whole animation.
   flash(text){banner.textContent=text;banner.hidden=false;banner.classList.remove('is-shown');void banner.offsetWidth;banner.classList.add('is-shown');},
+  showPlace(name){placeName.textContent=name;place.hidden=false;place.classList.remove('is-shown');void place.offsetWidth;place.classList.add('is-shown');},
   // One-time tutorial card; pass null to hide it.
   setTip(value){
    if(!value){tip.hidden=true;tip.classList.remove('is-shown');return;}

@@ -6,6 +6,8 @@
 // (kept invisible so the layout and line wraps never move while typing). Only
 // those two nodes' data is written, and only when the visible length changes.
 // One timer per active line; it stops when the line ends or is stopped.
+// start() takes a pace (a multiple of the step times: the prologue types
+// slower than talk) and a delay before the first character.
 export const CHAR_MS=25;
 export const SENTENCE_PAUSE_MS=120;
 export const COMMA_PAUSE_MS=60;
@@ -24,9 +26,9 @@ export function pauseAfter(ch,next){
  return 0;
 }
 // Cost in ms to reveal chars[i] (spaces are free).
-const stepCost=(chars,i)=>(isSpace(chars[i])?0:CHAR_MS)+(i>0?pauseAfter(chars[i-1],chars[i]):0);
+const stepCost=(chars,i,pace=1)=>((isSpace(chars[i])?0:CHAR_MS)+(i>0?pauseAfter(chars[i-1],chars[i]):0))*pace;
 // The first character shows at once; this is the time to the last one.
-export function typingMs(text){const chars=Array.from(String(text??''));let ms=0;for(let i=1;i<chars.length;i++)ms+=stepCost(chars,i);return ms;}
+export function typingMs(text,pace=1){const chars=Array.from(String(text??''));let ms=0;for(let i=1;i<chars.length;i++)ms+=stepCost(chars,i,pace);return ms;}
 
 // Global switch: null follows the page (?typewriter=0, reduced motion).
 let forced=null;
@@ -47,7 +49,7 @@ export function createTypewriter({doc,enabled,schedule,cancel,now,onChar=null}={
  schedule??=(fn,ms)=>(view.setTimeout??globalThis.setTimeout).call(view.setTimeout?view:globalThis,fn,ms);
  cancel??=handle=>(view.clearTimeout??globalThis.clearTimeout).call(view.clearTimeout?view:globalThis,handle);
  now??=()=>(view.performance??globalThis.performance)?.now?.()??Date.now();
- let chars=null,full='',shown=0,offset=0,due=0,timer=null,shownNode=null,restNode=null,resolveDone=null,voiceKey=null,visible=0;
+ let chars=null,full='',shown=0,offset=0,due=0,pace=1,timer=null,shownNode=null,restNode=null,resolveDone=null,voiceKey=null,visible=0;
  const write=()=>{shownNode.data=full.slice(0,offset);restNode.data=full.slice(offset);};
  const finish=()=>{
   if(timer!==null){cancel(timer);timer=null;}
@@ -61,7 +63,7 @@ export function createTypewriter({doc,enabled,schedule,cancel,now,onChar=null}={
   while(shown<chars.length&&due<=at){
    const ch=chars[shown];offset+=ch.length;shown++;
    if(!isQuiet(ch)){visible++;quietOnly=false;lastVisible=ch;}
-   if(shown<chars.length)due+=stepCost(chars,shown);
+   if(shown<chars.length)due+=stepCost(chars,shown,pace);
   }
   if(shown!==from)write();
   if(!quietOnly&&onChar)try{onChar(lastVisible,visible,voiceKey);}catch{}
@@ -72,7 +74,7 @@ export function createTypewriter({doc,enabled,schedule,cancel,now,onChar=null}={
   get typing(){return chars!==null;},
   // Types text into node (its children are replaced). Resolves when the line
   // is fully shown or stopped. who: voice key for the blip.
-  start(node,text,{who=null}={}){
+  start(node,text,{who=null,pace:rate=1,delay=0}={}){
    this.stop();
    full=String(text??'');
    node.textContent='';
@@ -82,8 +84,8 @@ export function createTypewriter({doc,enabled,schedule,cancel,now,onChar=null}={
    voiceKey=who;visible=0;shown=0;offset=0;
    const promise=new Promise(resolve=>{resolveDone=resolve;});
    if(!full||!enabled()){chars=[];offset=full.length;write();finish();return promise;}
-   chars=Array.from(full);due=now();
-   tick();
+   chars=Array.from(full);pace=rate>0?rate:1;due=now()+Math.max(0,delay);
+   if(delay>0)timer=schedule(tick,delay);else tick();
    return promise;
   },
   // Shows the rest of the line at once.

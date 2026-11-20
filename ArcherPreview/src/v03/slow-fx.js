@@ -4,11 +4,12 @@
 // far it zooms, how long it lasts, and whether fights after the tutorial get
 // it too. Everything is on by default. Stored per browser.
 export const SLOW_FX_KEY='moonforest:slow-fx:v1';
-export const SLOW_FX_DEFAULT=Object.freeze({on:true,everywhere:true,zoom:.32,seconds:.7});
+// lines: focus lines at the screen's edge while the beat lasts (2026-11-20).
+export const SLOW_FX_DEFAULT=Object.freeze({on:true,everywhere:true,lines:true,zoom:.32,seconds:.7});
 // [min, max, step]
 export const SLOW_FX_RANGE=Object.freeze({zoom:[.1,.5,.02],seconds:[.3,1.2,.05]});
 const within=(value,[min,max],fallback)=>Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback;
-const normal=raw=>Object.freeze({on:raw.on!==false,everywhere:raw.everywhere!==false,zoom:within(+raw.zoom,SLOW_FX_RANGE.zoom,SLOW_FX_DEFAULT.zoom),seconds:within(+raw.seconds,SLOW_FX_RANGE.seconds,SLOW_FX_DEFAULT.seconds)});
+const normal=raw=>Object.freeze({on:raw.on!==false,everywhere:raw.everywhere!==false,lines:raw.lines!==false,zoom:within(+raw.zoom,SLOW_FX_RANGE.zoom,SLOW_FX_DEFAULT.zoom),seconds:within(+raw.seconds,SLOW_FX_RANGE.seconds,SLOW_FX_DEFAULT.seconds)});
 
 // value: one frozen object, replaced only when a setting changes (the story
 // reads it every frame).
@@ -39,10 +40,10 @@ export function mountSlowFxSettings({doc,host,fx,t}){
   input.addEventListener('input',()=>{out.textContent=show(fx.set({[key]:+input.value})[key]);});
   row.append(make('span','',label),input,out);body.append(row);return input;
  };
- const on=toggle('on',t('settings.slow')),everywhere=toggle('everywhere',t('settings.slowEverywhere'));
+ const on=toggle('on',t('settings.slow')),everywhere=toggle('everywhere',t('settings.slowEverywhere')),lines=toggle('lines',t('settings.slowLines'));
  const zoom=slider('zoom',t('settings.slowZoom'),value=>Math.round(value*100)+'%'),seconds=slider('seconds',t('settings.slowSeconds'),value=>value.toFixed(2)+'s');
  // The rest only matters while the beat is on.
- function sync(){const off=!fx.value.on;everywhere.disabled=off;zoom.disabled=off;seconds.disabled=off;}
+ function sync(){const off=!fx.value.on;everywhere.disabled=off;lines.disabled=off;zoom.disabled=off;seconds.disabled=off;}
  sync();void on;
  const after=host.querySelectorAll(':scope > .settings-section')[1];
  if(after)after.after(section);else host.prepend(section);

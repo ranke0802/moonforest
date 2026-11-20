@@ -34,6 +34,8 @@ export function warmPrologueArt(view=globalThis){
  return warmed;
 }
 const MOTES=14;
+// Captions: 60 ms a character (talk is 25), starting once the line is up.
+export const TYPE_PACE=2.4,TYPE_DELAY_MS=450;
 // Captions type out (typewriter.js). A caption's hold starts only once it is
 // fully shown; a tap, click, Enter or Space on the dream shows it at once.
 export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),blip=createTextBlip({view:doc.defaultView??globalThis}),typewriter=createTypewriter({doc,onChar:(ch,count,who)=>blip?.onChar(ch,count,who)}),typing=()=>typewriterEnabled(doc.defaultView??globalThis)}){
@@ -65,7 +67,10 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
  let run=0,front=0;
  // How long a caption takes to type (0 when typing is off): the paintings
  // hold that much longer so a caption never outlives its picture.
- const typeMs=key=>key&&typing()?typingMs(t(key)):0;
+ // The caption's line fades in first (v03.css, 0.5 s), then types at a
+ // reading pace (2026-11-20, user: the first row was already there when the
+ // line became visible and the second rattled out).
+ const typeMs=key=>key&&typing()?TYPE_DELAY_MS+typingMs(t(key),TYPE_PACE):0;
  const hurry=event=>{if(layer.hidden||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;typewriter.complete();};
  layer.addEventListener('click',hurry);
  const show=beat=>{
@@ -82,10 +87,10 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
   async play(){
    const id=++run;let skipped=false;const onSkip=()=>{skipped=true;typewriter.stop();};
    skip.addEventListener('click',onSkip);doc.addEventListener('keydown',hurry);
-   skip.textContent=t('opening.skip');layer.hidden=false;layer.classList.remove('is-releasing','is-waking','is-flash','is-white');delete layer.dataset.woke;line.textContent='';said.textContent='';
+   skip.textContent=t('opening.skip');layer.hidden=false;layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;line.textContent='';said.textContent='';
    const hold=async ms=>{for(let left=ms;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));};
    // Types the caption; resolves when it is fully shown (or skipped).
-   const caption=key=>{const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
+   const caption=key=>{const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null,pace:TYPE_PACE,delay:key?TYPE_DELAY_MS:0});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
    try{
     await wait(500);
     // 1. The entrance: the table of fate, revealed from the warrior upward.
@@ -111,30 +116,35 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
      layer.dataset.tone='wake';show({image:INTRO.image,drift:'fork',seconds:1});
      await hold(450);layer.classList.add('is-flash');await hold(380);
      clear();layer.classList.add('is-white');await hold(WAKE_SECONDS*1000-830);
-     layer.classList.remove('is-flash','is-white');if(!skipped)layer.dataset.woke='1';
+     // The white stays up: release() dissolves it into the scene.
+     if(!skipped)layer.dataset.woke='1';
     }
-   }finally{typewriter.stop();skip.removeEventListener('click',onSkip);doc.removeEventListener('keydown',hurry);line.textContent='';said.textContent='';delete layer.dataset.tone;delete layer.dataset.dream;layer.classList.remove('is-shading','is-flash','is-white');clear();}
-   // Skipped too: the release still wakes the warrior (dim, brighten, focus) (user, 2026-11-19).
+   }finally{
+    typewriter.stop();skip.removeEventListener('click',onSkip);doc.removeEventListener('keydown',hurry);line.textContent='';said.textContent='';line.classList.remove('is-in');
+    // 2026-11-20 (user: no black between the dream and the wagon): what the
+    // dream showed last stays up, the white of the wake or, when skipped, the
+    // painting of that moment, and release() dissolves it into the scene.
+    // A cancelled dream (another one started) clears as before.
+    if(id!==run){delete layer.dataset.tone;delete layer.dataset.dream;layer.classList.remove('is-shading','is-flash','is-white');clear();}
+   }
    if(skipped&&id===run)layer.dataset.woke='1';
    return skipped?'skipped':'done';
   },
   // True while the opaque black stage fully hides the 3D scene (not while it
   // fades or opens like eyelids onto the world).
   get covering(){return !layer.hidden&&!layer.classList.contains('is-releasing')&&!layer.classList.contains('is-waking')&&layer.dataset.woke!=='1';},
-  // Fades the black stage away to reveal the game.
-  // After a full dream the black opens like eyelids on a blurred world that
-  // comes into focus (a half blink on the way); a skipped dream just fades.
+  // Fades the stage away to reveal the game.
   async release(){
    if(layer.hidden)return;
-   if(layer.dataset.woke==='1'){
-    layer.classList.add('is-waking');await wait(2100);
-    layer.hidden=true;layer.classList.remove('is-waking');delete layer.dataset.woke;return;
-   }
-   layer.classList.add('is-releasing');await wait(900);layer.hidden=true;layer.classList.remove('is-releasing');
+   // One cross-fade for every case (v03.css: 1.3 s after the dream, 0.85 s
+   // for a plain cover). Before 2026-11-20 the dream ended on black that
+   // dimmed and brightened like eyes opening.
+   layer.classList.add('is-releasing');await wait(layer.dataset.woke==='1'?1350:900);
+   layer.hidden=true;layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;delete layer.dataset.tone;delete layer.dataset.dream;clear();
   },
   // Shows the black stage without captions (used to hide a stage swap).
   // art: keep the prologue cover painting up (new game, before the dream).
-  cover({art=false}={}){typewriter.stop();layer.classList.remove('is-releasing');line.textContent='';said.textContent='';clear();layer.hidden=false;if(art)show({image:PROLOGUE_COVER,drift:'breathe',seconds:30});},
+  cover({art=false}={}){typewriter.stop();layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;delete layer.dataset.tone;delete layer.dataset.dream;line.textContent='';said.textContent='';clear();layer.hidden=false;if(art)show({image:PROLOGUE_COVER,drift:'breathe',seconds:30});},
   cancel(){run++;typewriter.stop();clear();layer.hidden=true;},
   dispose(){run++;typewriter.stop();layer.removeEventListener('click',hurry);doc.removeEventListener('keydown',hurry);layer.remove();},
  };

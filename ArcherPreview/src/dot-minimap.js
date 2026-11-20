@@ -7,8 +7,8 @@ import {CAVE_ROUTES,CAVE_ROOMS,caveSurface} from './witch-cave-layout.js';
 import {tr} from './v03/i18n.js';
 export const MINIMAP_SIZE=96;
 export const MINIMAP_MAPS=Object.freeze({
- village:{label:'마을',rect:[-52,-44,104,128],fill:'#314433',road:'#a49570'},
- 'great-plains':{label:'대평원',rect:[-110,-110,220,220],fill:'#62663c',road:'#c3ab7d'},
+ village:{label:'몬트하임 마을',rect:[-52,-44,104,128],fill:'#314433',road:'#a49570'},
+ 'great-plains':{label:'윈드몬 대평원',rect:[-110,-110,220,220],fill:'#62663c',road:'#c3ab7d'},
  'monster-forest':{label:'마물의 숲',rect:[-66,-66,132,132],halfTurn:true,fill:'#263830',road:'#8d8763'},
  'witch-cave':{label:'마녀의 동굴',rect:[-64,-56,128,120],halfTurn:true,fill:'#141722',road:'#857969'},
 });

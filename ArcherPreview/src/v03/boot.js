@@ -151,6 +151,12 @@ export function setupV03(api){
   // ?bench: one fixed measurement after entering play (structure plan, phase 0).
   if(!state.bench&&new URLSearchParams(view?.location?.search??'').has('bench')){state.bench={dispose(){}};void import('./bench.js').then(({createBench})=>{if(state.disposed)return;const mode=new URLSearchParams(view?.location?.search??'').get('bench')==='roundtrip'?'roundtrip':'orbit';state.bench=createBench({doc,mode,travel:id=>api.travel(id),isReady:()=>api.getState?.().ready!==false,getWorld:()=>api.world,info:()=>({foes:(battle.encounters??[]).filter(foe=>foe.active).length})});return state.bench.run();}).catch(error=>console.error('[bench]',error));}
  }
+ // The dream's black stage is released only once the opening scene runs
+ // (2026-11-20, user: now and then the stage showed the warrior, the wagon
+ // and the wolf standing about for a moment before the first shot). The scene
+ // starts in the first play frame when the wolf and the driver are ready; if
+ // they are not, the stage stays covered for up to five seconds.
+ async function sceneUp(){for(let left=5000;left>0&&!state.disposed&&story.scenePending&&!story.sceneActive;left-=50)await wait(50);}
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
  async function beginNewGame(){
   // Seamless path: the title already runs on the opening map.
@@ -181,7 +187,7 @@ export function setupV03(api){
   const ready=await Promise.race([ambush,wait(6000).then(()=>null)]);
   if(ready===false)state.ambush=false;
   save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
-  await enterPlay();state.busy=false;
+  await enterPlay();state.busy=false;await sceneUp();
   await opening.release();
  }
  async function continueHere(){
@@ -460,7 +466,7 @@ export function setupV03(api){
      save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.ambush=true;
      const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(()=>false);
      await (state.dream??opening.play());state.dream=null;const ok=await Promise.race([ambush,wait(6000).then(()=>null)]);if(ok===false)state.ambush=false;
-     save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await opening.release();
+     save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await sceneUp();await opening.release();
     })().catch(report);
    }else if(state.screen==='resume'&&s.ready&&state.langReady){
     prepareWorld();

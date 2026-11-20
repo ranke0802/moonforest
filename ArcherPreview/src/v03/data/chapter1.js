@@ -150,7 +150,7 @@ export const QUESTS=Object.freeze([
   {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
   {id:'wagon',text:'마부를 도와 마차 세우기',type:'talk',targets:['driver'],dialogues:{driver:'driver-wagon'}},
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],turnIn:true,dialogues:{driver:'driver-thanks'}},
-  {id:'road',text:'길을 따라 마을로 가기',type:'reach',map:'village'},
+  {id:'road',text:'길을 따라 몬트하임 마을로 가기',type:'reach',map:'village'},
  ]},
  {id:'M01',reward:{potions:1},title:'달빛 여관',steps:[
   {id:'inn',text:'여관 주인과 이야기하기',type:'talk',targets:['innkeeper'],dialogues:{innkeeper:'inn-arrive'}},
@@ -161,7 +161,7 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M03',reward:{gold:60,potions:1},title:'마을의 부탁',steps:[
   {id:'ask',text:'촌장 찾아가기',type:'talk',targets:['chief'],dialogues:{chief:'chief-request'}},
-  {id:'hunt',text:'대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
+  {id:'hunt',text:'윈드몬 대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
  {id:'M04',reward:{gold:120,armor:'leather'},title:'대평원의 곰',steps:[
@@ -199,15 +199,16 @@ export const CHAPTER_END_NOTE='1장 끝 · 다음 이야기 · 엘레나의 일�
 // hold the guard, a normal attack, the shield shove and the heavy attack.
 // wolf: feed (tearing at the fallen horse) · hold · charge · snap.
 // done: moved (metres walked) · camera (radians turned) · states (the
-// player's action; with hold, for that many seconds).
+// player's action; with hold, for that many seconds; with combo, as the
+// nth hit of a chain; with charged, from the held attack only).
 export const COMBAT_HINTS=Object.freeze([
  {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',target:'#joystick',allow:['move'],wolf:'feed',done:{moved:8}},
  {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',allow:['camera'],wolf:'feed',done:{camera:.3}},
  {id:'dodge',text:'늑대가 달려들면 회피',keys:'Space',touch:'장화 버튼',target:'#dodge-button',allow:['move','camera','dodge'],wolf:'charge',done:{states:['dodge']}},
  {id:'guard',text:'방어 태세',keys:'F를 길게 누르고 있기',touch:'방패 버튼을 길게 누르고 있기',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['guard'],hold:.8}},
- {id:'attack',text:'일반 공격',keys:'J · 좌클릭을 짧게',touch:'검 버튼을 짧게',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['attack','slash','moveAttack']}},
+ {id:'attack',text:'연속 공격',keys:'J · 좌클릭을 이어서 세 번',touch:'검 버튼을 이어서 세 번',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['judgment'],combo:3}},
  {id:'push',text:'방패 밀치기',keys:'F를 짧게',touch:'방패 버튼을 짧게',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['shieldPush']}},
- {id:'heavy',text:'강공격',keys:'J · 좌클릭을 길게 눌렀다 떼기',touch:'검 버튼을 길게 눌렀다 떼기',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['judgment']}},
+ {id:'heavy',text:'강공격',keys:'J · 좌클릭을 길게 눌렀다 떼기',touch:'검 버튼을 길게 눌렀다 떼기',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['judgment'],charged:true}},
 ]);
 
 // One-time tips, shown the first time a feature becomes relevant (per save).

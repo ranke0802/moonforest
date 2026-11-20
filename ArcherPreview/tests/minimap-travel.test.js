@@ -40,7 +40,7 @@ test('a minimap tap opens five destinations in the requested order, keeps the cu
  f.click('.minimap-travel-launch span');assert.equal(f.api.isOpen(),true);assert.deepEqual(f.pause,[true]);assert.equal(f.resets,1);
  const launcher=f.root.querySelector('.minimap-travel-launch');assert.equal(launcher.type,'button');assert.equal(launcher.getAttribute('aria-haspopup'),'dialog');assert.equal(launcher.getAttribute('aria-expanded'),'true');
  assert.equal(f.root.querySelectorAll('[data-region]').length,5);
- assert.deepEqual([...f.root.querySelectorAll('[data-region]')].map(b=>b.querySelector('strong').textContent),['마을','대평원','마물의 숲','마녀의 동굴','비탄의 성소']);
+ assert.deepEqual([...f.root.querySelectorAll('[data-region]')].map(b=>b.querySelector('strong').textContent),['몬트하임 마을','윈드몬 대평원','마물의 숲','마녀의 동굴','비탄의 성소']);
  for(const region of MINIMAP_REGIONS){const button=f.root.querySelector(`[data-region="${region.id}"]`);assert.equal(button.querySelector('strong').textContent,region.label);assert.equal(button.disabled,!region.waypoint&&region.character===f.state.character);}
  f.click('footer [data-region-close]');await tick();assert.equal(f.api.isOpen(),false);assert.deepEqual(f.pause,[true,false]);assert.equal(launcher.getAttribute('aria-expanded'),'false');assert.equal(f.requests.length,0);
  f.click('.minimap-travel-launch');f.root.querySelector('#minimap-travel-dialog').dispatchEvent(new f.window.Event('cancel',{cancelable:true}));await tick();assert.equal(f.api.isOpen(),false);assert.deepEqual(f.pause,[true,false,true,false]);
@@ -49,16 +49,16 @@ test('a minimap tap opens five destinations in the requested order, keeps the cu
 test('actual chooser and warm minimap header show region names separately from destination notes',async t=>{
  const f=fixture();t.after(()=>f.api.dispose());f.click('.minimap-travel-launch');
  for(const [character,label,note]of [
-  ['warrior-v3','마을','현재 지역'],['warrior-plains','대평원','길의 입구로 이동'],
+  ['warrior-v3','몬트하임 마을','현재 지역'],['warrior-plains','윈드몬 대평원','길의 입구로 이동'],
   ['warrior-v4','마물의 숲','숲 입구로 이동'],['warrior-v5','마녀의 동굴','동굴 입구로 이동'],
  ]){
   const button=f.root.querySelector(`[data-region="${character}"]`);assert.equal(button.querySelector('strong').textContent,label);assert.equal(button.querySelector('small').textContent,note);assert.doesNotMatch(button.textContent,/undefined|null/);
  }
  f.api.close();await tick();f.state.character='warrior-plains';f.click('.minimap-travel-launch');
- const current=f.root.querySelector('[data-region="warrior-plains"]');assert.equal(current.querySelector('strong').textContent,'대평원');assert.equal(current.querySelector('small').textContent,'현재 지역');assert.equal(current.disabled,true);
+ const current=f.root.querySelector('[data-region="warrior-plains"]');assert.equal(current.querySelector('strong').textContent,'윈드몬 대평원');assert.equal(current.querySelector('small').textContent,'현재 지역');assert.equal(current.disabled,true);
  f.element.querySelector('canvas').getContext=()=>({});const map=new DotMinimap(f.element,{document:f.document});
  // The normal cached-raster path updates the real header without new rendering.
- map.cache.set('great-plains',{});map.cacheRevisions.set('great-plains',0);await map.setWorld({mapId:'great-plains'});assert.equal(f.element.querySelector('strong').textContent,'대평원');assert.equal(f.element.hidden,false);map.dispose();
+ map.cache.set('great-plains',{});map.cacheRevisions.set('great-plains',0);await map.setWorld({mapId:'great-plains'});assert.equal(f.element.querySelector('strong').textContent,'윈드몬 대평원');assert.equal(f.element.hidden,false);map.dispose();
 });
 
 test('travel safety is checked again at selection, while other dialogs and loading never open another modal',async t=>{

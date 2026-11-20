@@ -1132,7 +1132,9 @@ try {
   setupCaveStoryInspection({world,getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy,dead:controller?.dead||boss?.playerHp<=0,combat:(boss?.combatCount??0)>0,busy:controller?.captured||controller?.groggy}),onOpen:()=>{input?.reset();cancelAttackInput();}});
   world.caveCamera=new CaveCameraGuard(world);
   setSceneCharacterStyles(world.scene,characterStylePanel.settings.value);
-  cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`});
+  cameraZoom=new CameraZoom(world.camera,{referenceRadius:isVillage()?17:4.8,storage:equipmentStorage,key:`moonforest-camera-zoom-${isVillage()?'world':'training'}-v1`,
+    // 0.3 (2026-11-20, user): the furthest view is 2x by default (was 1.2x).
+    ...(versionRoute.edition?{minZoom:2,defaultsVersion:3}:{})});
   cameraPitch=new CameraPitch(world.camera,{warrior:isWarrior(),storage:equipmentStorage});
   cameraFollow=new CameraFollow({storage:equipmentStorage});
   const cameraSettingChanged=()=>{syncCameraFocus(0,{snap:true});frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();};
