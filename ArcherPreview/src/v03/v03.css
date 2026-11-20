@@ -446,3 +446,6 @@ html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
 /* The black title is the download screen (boot.js sets data-v03-veil for the logo -> title path only): the loading card under it stays black instead of flashing its painting while a language pack loads. Loading a save and map travel keep the card with its progress; errors always show. */
 html[data-v03-veil] #app>#loading:not(.error){background:#000!important}
 html[data-v03-veil] #app>#loading:not(.error)>*,html[data-v03-veil] #app>#loading:not(.error)::before,html[data-v03-veil] #app>#loading:not(.error)::after{visibility:hidden!important}
+/* PC: the strong-attack gauge rings the sword icon only (2026-11-20, user: it ran round the icon and the J key together; the button there is 72x40 with the icon in its left 40 px). */
+html[data-edition="moonforest-0.3"] #app[data-raster-hud][data-hud-input=pc] #attack-button.is-charging{box-shadow:none}
+html[data-edition="moonforest-0.3"] #app[data-raster-hud][data-hud-input=pc] #attack-button.is-charging::after{inset:auto;left:-1px;top:-1px;width:42px;height:42px}
