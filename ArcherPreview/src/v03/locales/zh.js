@@ -21,7 +21,7 @@ export default {
   'opening.tapLead':'……那个梦，又来了。',
   'opening.tapToBegin':'闭上眼睛 ▸',
   'opening.intro.0':'……又是那个梦。',
-  'opening.intro.1':'世界，被摆在了某人的餐桌上。',
+  'opening.intro.1':'在那个梦里，世界看起来像是摆在某人餐桌上的什么东西。',
   'opening.0':'青年伸出受伤的手。\n光从我的指尖蔓延，覆上了伤口。',
   'opening.1':'曾并肩走过的村路。\n记不起说过什么，只留下了温暖。',
   'opening.2':'魔物的嘶吼。远处，他倒下了。\n我伸出手，却够不到。',

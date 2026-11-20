@@ -21,7 +21,7 @@ export default {
   'opening.tapLead':'…Giấc mơ ấy lại đến.',
   'opening.tapToBegin':'Nhắm mắt lại ▸',
   'opening.intro.0':'…Lại là giấc mơ ấy.',
-  'opening.intro.1':'Thế giới đã được bày ra trên bàn ăn của một ai đó.',
+  'opening.intro.1':'Trong giấc mơ ấy, thế giới trông như một thứ gì đó được bày trên bàn ăn của ai đó.',
   'opening.0':'Chàng trai chìa bàn tay bị thương.\nÁnh sáng lan ra từ đầu ngón tay tôi, phủ lên vết thương.',
   'opening.1':'Con đường làng ta từng sánh bước.\nTôi không nhớ đã nói gì. Chỉ còn lại hơi ấm.',
   'opening.2':'Tiếng gầm của ma vật. Phía xa, anh ngã xuống.\nTôi vươn tay, nhưng không với tới.',

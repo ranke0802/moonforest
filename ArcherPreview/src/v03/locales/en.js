@@ -21,7 +21,7 @@ export default {
   'opening.tapLead':'The dream is coming back…',
   'opening.tapToBegin':'Close your eyes ▸',
   'opening.intro.0':'…That dream, again.',
-  'opening.intro.1':'The world had been laid out on someone’s table.',
+  'opening.intro.1':'In that dream, the world looks like something laid out on someone’s table.',
   'opening.0':'A young man holds out his wounded hand.\nLight spreads from my fingertips and covers the wound.',
   'opening.1':'The village road we walked side by side.\nI can’t recall what we said. Only the warmth remains.',
   'opening.2':'The howl of a fiend. Far away, he falls.\nI reach out, but I cannot reach him.',
