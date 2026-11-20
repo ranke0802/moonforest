@@ -195,6 +195,8 @@ let villageReview;
 let engine, world, actor, controller, animator, container, config, input, reviewFocus, cameraZoom, cameraPitch, cameraPitchControls, cameraFollow;
 let ready = false, loadingAsset = false, maxInfluences = 0, statusTime = 0, elapsed = 0;
 const lungeState={id:null,done:0,span:0,foe:null,reach:0};
+// 0.3 combat target (src/v03/combat-target.js): whether the running strike was aimed by a held direction, and the guard's last state.
+let strikeByInput=false,guardFaced=false;
 // The map's monster species are ready before the loading cover lifts (capped,
 // so a slow network still reaches the game; packs then finish in play).
 // The loading cover lifts only after the world has really been drawn: game
@@ -980,12 +982,23 @@ function render(dt) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
-      const target=isV2()?boss.nearestTarget(actor.position):null;
-      if(isV2()&&Math.hypot(movement.x||0,movement.y||0)>.08){
+      // 0.3: without a direction the strike turns to the foe being fought (the one hit or hitting), a chain to the foe of its first swing.
+      const nearest=isV2()?boss.nearestTarget(actor.position):null,target=nearest&&world.v03?.aimTarget?world.v03.aimTarget(actor.position,nearest):nearest;
+      strikeByInput=isV2()&&Math.hypot(movement.x||0,movement.y||0)>.08;
+      if(strikeByInput){
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<(target.meleeAimDistance??4)){const point=meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
+      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<Math.max(target.meleeAimDistance??4,world.v03?.aimReach??0)){const point=meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
       meleeAim?.begin(result,actor,target);
+    }
+    // 0.3: the guard raised without a direction turns to that foe too (once, as it goes up).
+    if(isV2()&&world.v03?.aimTarget){
+      const guard=!!result.guarding&&!result.captured&&!result.staggered;
+      if(guard&&!guardFaced&&Math.hypot(movement.x||0,movement.y||0)<=.08){
+        const foe=world.v03.aimTarget(actor.position,boss.nearestTarget(actor.position),false);
+        if(foe?.actor&&Vector3.Distance(actor.position,foe.actor.position)<Math.max(foe.meleeAimDistance??4,world.v03.aimReach??0))actor.rotation.y=Math.atan2(foe.actor.position.x-actor.position.x,foe.actor.position.z-actor.position.z);
+      }
+      guardFaced=guard;
     }
     // 0.3 light combo: the warrior steps into each swing (profile from the edition),
     // eased over the opening of the clip, stopping short of the nearest foe.
@@ -994,12 +1007,15 @@ function render(dt) {
       // A lunge with reach (the judgment leap) closes to its striking distance
       // from the foe it was aimed at, as the light combo tracks height: a fixed
       // step left a standing fox short of (or behind) the descending blade.
-      if(lungeState.id!==result.actionId){lungeState.id=result.actionId;lungeState.done=0;const foe=lunge.reach?boss.nearestTarget(actor.position):null,ratio=playerDimensions(actor).ratio,gap=foe?.actor?Vector3.Distance(actor.position,foe.actor.position):Infinity;
+      if(lungeState.id!==result.actionId){lungeState.id=result.actionId;lungeState.done=0;const foe=lunge.reach?world.v03?.chainFoe??boss.nearestTarget(actor.position):null,ratio=playerDimensions(actor).ratio,gap=foe?.actor?Vector3.Distance(actor.position,foe.actor.position):Infinity;
         lungeState.foe=gap<lunge.reach*ratio+(lunge.stop??1.3)?foe:null;lungeState.reach=lunge.reach?lunge.reach*ratio:0;
         lungeState.span=lungeState.foe?Math.max(0,gap-(lunge.stop??1.3)):lunge.distance*ratio;}
       // Home on a foe that keeps moving while the leap is still closing.
       if(lungeState.foe?.actor&&lungeState.foe.active)lungeState.span=Math.min(lungeState.reach,Math.max(lungeState.span,lungeState.done+Vector3.Distance(actor.position,lungeState.foe.actor.position)-(lunge.stop??1.3)));
       const duration=controller.durations?.[result.state]||1,f=Math.min(1,(result.clipTime??0)/(duration*lunge.until)),want=lungeState.span*(1-(1-f)**2);
+      // A strike that was not aimed by hand keeps turning to its chain's foe while it closes in (a bounded turn rate).
+      const chase=f<1&&!strikeByInput?world.v03?.chainFoe:null;
+      if(chase?.actor){let turn=Math.atan2(chase.actor.position.x-actor.position.x,chase.actor.position.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0)-actor.rotation.y;turn=Math.atan2(Math.sin(turn),Math.cos(turn));const most=4*dt;actor.rotation.y+=Math.max(-most,Math.min(most,turn));}
       let step=want-lungeState.done;lungeState.done=want;
       const target=boss.nearestTarget(actor.position);
       if(target?.actor)step=Math.min(step,Math.max(0,Vector3.Distance(actor.position,target.actor.position)-(lunge.stop??1.3)));
@@ -1153,7 +1169,7 @@ try {
   resizeScreenProjection();
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   goldLootView=world.goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
-  const damageFeedback=(...args)=>{damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
+  const damageFeedback=(...args)=>{world?.v03?.combatEvent?.(args[3],args[6]??args[7]);damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
   bossHealthBars=new BossHealthBars($('#boss-hud'),{showNumbers:!versionRoute.edition});
   playerHealthBar=new PlayerHealthBar($('#player-health'));
   boss=new BossBattle(world,encounter=>{

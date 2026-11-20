@@ -509,7 +509,7 @@ export class BossEncounter {
       }
       if(this.actor)this.bossReaction.start(this.actor.position.subtract(this.player.position),{flashDuration:.45,recoil:false});
       applyHitFlash(this.asset?.meshes,this.brain.flash,this.brain.flashDuration);
-      this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'BLOCK',false,'block');this.onChange(this);
+      this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),'BLOCK',false,'block',0,false,null,this);this.onChange(this);
     }else this.hitPlayer(damage,source,{superArmor:action?.state==='judgment'&&action.actionId!=null,knockdown:heavy});
     return true;
   }
@@ -522,7 +522,7 @@ export class BossEncounter {
     if(knockdown)this.onPlayerHit(PLAYER_STAGGER,{knockdown:true,landed});
     else if(!grabImpact)this.onPlayerHit(PLAYER_STAGGER);
     this.lastHit=this.playerHp?`전사 피격 · −${damage}`:'전투 종료 · 보스를 다시 소환하세요';
-    this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),`−${damage}`,false,'player',0,critical);this.onChange(this);
+    this.onDamage(this.player.position.add(new Vector3(0,playerDimensions(this.player).feedbackHeight,0)),`−${damage}`,false,'player',0,critical,null,this);this.onChange(this);
   }
   inspect(){return {id:this.id,kind:this.kind,active:this.active,state:this.brain?.state,label:this.brain?.label,hp:this.brain?.hp,playerHp:this.playerHp,hits:this.hitCount,knockbacks:this.heavyCount,position:this.actor?.position.asArray(),clips:this.asset?.animationGroups.length,visited:[...(this.brain?.visited||[])]};}
 }
