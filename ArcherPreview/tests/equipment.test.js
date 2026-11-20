@@ -46,3 +46,38 @@ test('equipment preferences survive reloading and gracefully handle invalid or u
   assert.doesNotThrow(() => saveEquipmentChoices(blocked, { sword: 'original', shield: 'original' }));
   assert.deepEqual(readEquipmentChoices(blocked), { sword: 'original', shield: 'original' });
 });
+
+test('a sword with a shape of its own swaps geometry and painting on the same mount, shell included, and goes back', async () => {
+  const engine = new NullEngine(), scene = new Scene(engine);
+  const mount = new TransformNode('hand', scene), source = new PBRMaterial('painted', scene); source.emissiveTexture = new Texture(null, scene);
+  const sword = MeshBuilder.CreateBox('Golden_Oathblade', {}, scene), shield = MeshBuilder.CreateBox('Bunnyguard_Shield', {}, scene);
+  for (const mesh of [sword, shield]) { mesh.material = source; mesh.parent = mount; }
+  const shell = sword.clone('Golden_Oathblade / silhouette'); shell.parent = sword;
+  const standard = sword.geometry; assert.equal(shell.geometry, standard, 'the outline shell shares the sword geometry');
+  // The model the loader hands over: one mesh with its own geometry and painting.
+  const made = [];
+  const loadModel = async (url, target) => {
+    assert.match(String(url), /soldier-sword\.glb$/); assert.equal(target, scene);
+    const mesh = MeshBuilder.CreateCylinder('Soldier_Sword', {}, scene), material = new PBRMaterial('soldier', scene); material.albedoTexture = new Texture(null, scene); mesh.material = material; mesh.setEnabled(false);
+    const container = { meshes: [mesh], disposed: false, dispose() { this.disposed = true; mesh.dispose(false, true); } }; made.push(container); return container;
+  };
+  const equipment = new WarriorEquipment({ meshes: [sword, shield] }, {}, { loadModel });
+  try {
+    assert.equal(equipment.select('sword', 'soldier-sword'), 'soldier-sword');
+    assert.equal(sword.geometry, standard, 'unchanged until the model has arrived');
+    await new Promise(resolve => setTimeout(resolve, 0));
+    const worn = made[0].meshes[0].geometry;
+    assert.equal(sword.geometry, worn); assert.equal(shell.geometry, worn, 'the shell follows');
+    assert.equal(sword.material.emissiveTexture, made[0].meshes[0].material.albedoTexture);
+    assert.equal(sword.parent, mount); assert.equal(shield.geometry !== worn, true);
+    // A colour variant of the standard sword puts everything back; choosing the model again does not load twice.
+    equipment.select('sword', 'violet-silver');
+    assert.equal(sword.geometry, standard); assert.equal(shell.geometry, standard); assert.equal(sword.material.emissiveTexture, source.emissiveTexture);
+    equipment.select('sword', 'soldier-sword'); await new Promise(resolve => setTimeout(resolve, 0));
+    assert.equal(made.length, 1); assert.equal(sword.geometry, worn);
+    // The shield slot has no such choice.
+    assert.equal(equipment.select('shield', 'soldier-sword'), 'original');
+    equipment.dispose(); await new Promise(resolve => setTimeout(resolve, 0));
+    assert.equal(sword.geometry, standard); assert.equal(shell.geometry, standard); assert.equal(sword.material, source); assert.equal(made[0].disposed, true);
+  } finally { scene.dispose(); engine.dispose(); }
+});

@@ -67,7 +67,7 @@ import { observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { POTION } from './healing-potion.js';
-import { EQUIPMENT_STYLES, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
+import { equipmentStyles, WarriorEquipment, readEquipmentChoices, saveEquipmentChoices } from './equipment.js';
 import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import {createLoadingView} from './loading-view.js';
@@ -277,7 +277,7 @@ window.addEventListener('pagehide',()=>saveMapPosition(true));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)saveMapPosition(true);});
 for (const slot of ['sword', 'shield']) {
   const select = $(`#${slot}-select`);
-  for (const style of EQUIPMENT_STYLES) select.add(new Option(equipmentLabel(slot,style), style.id));
+  for (const style of equipmentStyles(slot)) select.add(new Option(equipmentLabel(slot,style), style.id));
   select.value = equipmentChoices[slot];
   select.addEventListener('change', () => {
     if (!ready || !equipment) return;
@@ -285,7 +285,7 @@ for (const slot of ['sword', 'shield']) {
     if(boss)boss.combat.defense=playerDefense();
     audio.play('equip');
     saveEquipmentChoices(equipmentStorage, equipmentChoices);
-    $('#equipment-status').textContent = `${equipmentLabel(slot,EQUIPMENT_STYLES.find(style => style.id === select.value))} 적용`;
+    $('#equipment-status').textContent = `${equipmentLabel(slot,equipmentStyles(slot).find(style => style.id === select.value))} 적용`;
   });
 }
 let training, projectiles, shotTarget = null, shotActionId = null, hiddenArrowForAction = null, arrowNode, arrowMesh;

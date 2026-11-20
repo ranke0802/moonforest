@@ -1,17 +1,18 @@
-import { MaterialPluginBase } from '@babylonjs/core';
-import { EQUIPMENT_STYLES } from './equipment-stats.js';
-export { EQUIPMENT_STYLES } from './equipment-stats.js';
+import { MaterialPluginBase, SceneLoader } from '@babylonjs/core';
+import { equipmentStyle } from './equipment-stats.js';
+export { EQUIPMENT_STYLES, equipmentStyles } from './equipment-stats.js';
+// Swords with their own shape (equipment-stats.js SWORD_MODELS), fitted to the standard sword's local frame.
+const SWORD_MODEL_URLS = { 'soldier-sword': new URL('./v03/models/soldier-sword.glb', import.meta.url) };
 const STORAGE_KEY = 'moonforest-warrior-equipment-v1';
 const MESH_NAMES = { sword: 'Golden_Oathblade', shield: 'Bunnyguard_Shield' };
-const styleOf = id => EQUIPMENT_STYLES.find(style => style.id === id) || EQUIPMENT_STYLES[0];
 
 export function readEquipmentChoices(storage) {
   let saved;
   try { saved = JSON.parse(storage?.getItem(STORAGE_KEY) || '{}'); } catch { /* Use defaults. */ }
-  return { sword: styleOf(saved?.sword).id, shield: styleOf(saved?.shield).id };
+  return { sword: equipmentStyle('sword', saved?.sword).id, shield: equipmentStyle('shield', saved?.shield).id };
 }
 export function saveEquipmentChoices(storage, choices) {
-  try { storage?.setItem(STORAGE_KEY, JSON.stringify({ sword: styleOf(choices.sword).id, shield: styleOf(choices.shield).id })); } catch { /* Session selection still works. */ }
+  try { storage?.setItem(STORAGE_KEY, JSON.stringify({ sword: equipmentStyle('sword', choices.sword).id, shield: equipmentStyle('shield', choices.shield).id })); } catch { /* Session selection still works. */ }
 }
 
 // Reuse the authored UV map and its painted grain, seams and highlights. Only the
@@ -73,8 +74,9 @@ class EquipmentPalette extends MaterialPluginBase {
 }
 
 export class WarriorEquipment {
-  constructor(container, choices = {}) {
-    this.slots = {};
+  // loadModel(url, scene) resolves an asset container holding one mesh (tests pass their own).
+  constructor(container, choices = {}, { loadModel = (url, scene) => SceneLoader.LoadAssetContainerAsync(url.href ?? String(url), '', scene, undefined, '.glb') } = {}) {
+    this.slots = {}; this.loadModel = loadModel; this.shapes = new Map(); this.shapeTicket = 0; this.disposed = false;
     for (const [slot, name] of Object.entries(MESH_NAMES)) {
       const mesh = container.meshes.find(candidate => candidate.name === name);
       if (!mesh?.material?.emissiveTexture) throw new Error(`${name}: 장비 재질을 찾지 못했습니다.`);
@@ -95,13 +97,38 @@ export class WarriorEquipment {
   select(slot, id) {
     const entry = this.slots[slot];
     if (!entry) throw new Error(`Unknown equipment slot: ${slot}`);
-    const style = styleOf(id);
+    const style = equipmentStyle(slot, id);
     entry.palette.variant = style.value;
     entry.style = style.id;
+    if (slot === 'sword') this.shape(style.model ?? null);
     return style.id;
+  }
+  // The sword's shape: null is the standard sword. A model is loaded once (a small file, on first use) and its
+  // geometry and painting are put on the standard sword's mesh and on its outline shell, which share one geometry.
+  shape(model) {
+    const entry = this.slots.sword; if (!entry || (entry.model ?? null) === (model ?? null)) return;
+    entry.model = model ?? null; const ticket = ++this.shapeTicket;
+    if (!model) { this.wear(null); return; }
+    const url = SWORD_MODEL_URLS[model]; if (!url) return;
+    let pending = this.shapes.get(model);
+    if (!pending) { pending = Promise.resolve(this.loadModel(url, entry.mesh.getScene())); this.shapes.set(model, pending); }
+    pending.then(container => { if (this.disposed) { container.dispose(); return; } if (ticket === this.shapeTicket) this.wear(container); })
+      .catch(error => { this.shapes.delete(model); console.warn('[Equipment] sword model unavailable', model, error); });
+  }
+  wear(container) {
+    const entry = this.slots.sword, standard = entry.geometry ??= entry.mesh.geometry;
+    const source = container?.meshes.find(mesh => mesh.getTotalVertices?.() > 0), next = source?.geometry ?? standard;
+    for (const mesh of [entry.mesh, ...entry.mesh.getChildMeshes(true)]) if (mesh.geometry && mesh.geometry !== next && (mesh === entry.mesh || mesh.geometry === entry.worn || mesh.geometry === standard)) next.applyToMesh(mesh);
+    entry.worn = next;
+    const painting = source?.material?.albedoTexture ?? source?.material?.diffuseTexture ?? source?.material?.emissiveTexture;
+    entry.material.emissiveTexture = painting ?? entry.original.emissiveTexture;
   }
   inspect() { return Object.fromEntries(Object.entries(this.slots).map(([slot, entry]) => [slot, entry.style])); }
   dispose() {
+    this.disposed = true; this.shapeTicket++;
+    if (this.slots.sword?.geometry) this.wear(null);
+    for (const pending of this.shapes.values()) pending.then(container => container.dispose()).catch(() => {});
+    this.shapes.clear();
     for (const entry of Object.values(this.slots)) {
       entry.mesh.material = entry.original;
       // Both variants share the original map; the asset container owns that texture.
