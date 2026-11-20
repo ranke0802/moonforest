@@ -305,8 +305,10 @@ export function setupV03(api){
   const sync=()=>{
    if(!html.dataset.loading||state.screen!=='title'){downloadWatch?.disconnect();downloadWatch=null;drawing.download(null);return;}
    const value=(parseFloat(bar?.style?.width)||0)/100,numbers=String(bytes?.textContent??'').match(/[\d.]+/g)?.map(Number)??[];
-   const mb=numbers.length>=2&&numbers[1]>numbers[0]?(numbers[1]-numbers[0]).toFixed(1):'';
-   drawing.download(value,mb?t('title.drawingMb',{mb}):'');
+   // "3.2 / 5.4MB" while files are still coming; a download means a first drawing.
+   const bytesText=numbers.length>=2&&numbers[1]>0&&numbers[0]<numbers[1]?`${numbers[0].toFixed(1)} / ${numbers[1].toFixed(1)}MB`:'';
+   if(bytesText)title.veil.setFirst(true);
+   drawing.download(value,bytesText);
    const p=drawing.update({});title.setProgress(p.ratio,p.remaining);
   };
   if(!html.dataset.loading)return;

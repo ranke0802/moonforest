@@ -53,6 +53,8 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-veil-word{animation:v03-breathe 2.4s ease-in-out infinite}
 .v03-veil-pct{font-weight:400;color:#f6d566;letter-spacing:.08em;min-width:3.2em}
 .v03-veil-left{opacity:.65;letter-spacing:.12em}
+.v03-veil-memory{position:absolute;left:max(28px,env(safe-area-inset-left));bottom:calc(max(18px,env(safe-area-inset-bottom)) + 26px);margin:0;font-size:12px;letter-spacing:.2em;color:#ece0bc;opacity:0;pointer-events:none;transition:opacity 1.2s ease}
+.v03-veil.is-first .v03-veil-memory{opacity:.5}
 @media (prefers-reduced-motion:reduce){.v03-veil-word{animation:none}}
 .v03-title.has-panel .v03-title-inner{opacity:.25;pointer-events:none}
 .v03-title-kicker{margin:0 0 6px;font-size:clamp(12px,1.6vmin,16px);letter-spacing:.42em;color:var(--v03-gold);opacity:.9}

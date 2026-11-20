@@ -2,6 +2,8 @@
 import {t} from './i18n.js';
 import {createDrawingVeil} from './drawing-veil.js';
 const MENU=['new','load','gallery','settings','quit'];
+// Set once the title's world has been fully drawn on this browser.
+export const WORLD_DRAWN_KEY='moonforest:world-drawn:v1';
 const el=(doc,tag,className,text)=>{const node=doc.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
 export function formatPlayTime(seconds){
  const total=Math.max(0,Math.floor(Number(seconds)||0)),h=Math.floor(total/3600),m=Math.floor(total%3600/60);
@@ -29,7 +31,9 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  const black=el(doc,'div','v03-title-black');
  layer.append(shade,inner,panel,black);mount.append(layer);
  // While the scene is drawn behind the black: the cosmic cut seen by the pointer's light, and progress.
- const veil=createDrawingVeil({doc,mount:layer,label:()=>t('title.drawing'),left:n=>t('title.drawingLeft',{n})});
+ // A world drawn once before (kept in the browser) is "unfolded" the next time.
+ const drawnBefore=(()=>{try{return doc.defaultView?.localStorage?.getItem(WORLD_DRAWN_KEY)==='1';}catch{return false;}})();
+ const veil=createDrawingVeil({doc,mount:layer,first:!drawnBefore,label:first=>t(first?'title.drawingFirst':'title.drawingAgain'),memory:()=>t('title.drawingMemory'),left:n=>t('title.drawingLeft',{n})});
  layer.insertBefore(veil.element,inner);
  // All visible words come from the language pack; relabel() reapplies them.
  function label(){
@@ -70,7 +74,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   relabel:label,
   show(){if(disposed)return;layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');if(!layer.classList.contains('scene-ready'))veil.start();focusFirst();},
   // The scene behind becomes visible only once it is really ready.
-  setSceneReady(value){layer.classList.toggle('scene-ready',!!value);if(value){veil.setProgress(1,0);veil.stop();}},
+  setSceneReady(value){layer.classList.toggle('scene-ready',!!value);if(value){veil.setProgress(1,0);veil.stop();try{doc.defaultView?.localStorage?.setItem(WORLD_DRAWN_KEY,'1');}catch{/* told again next time */}}},
   // Preparation progress for the black title (ratio 0..1, things still being prepared).
   setProgress(ratio,remaining){veil.setProgress(ratio,remaining);},
   get veil(){return veil;},

@@ -26,7 +26,9 @@ function lens(doc,className,size){
  return {frame,place(x,y){const left=x-size/2,top=y-size/2;frame.style.transform=`translate3d(${left}px,${top}px,0)`;art.style.transform=`translate3d(${-left}px,${-top}px,0)`;}};
 }
 
-export function createDrawingVeil({doc,mount,label=()=>'',left=n=>String(n),random=Math.random}){
+// label(first): the note's words for a first drawing (download) or a later one;
+// memory(): the line above it on a first drawing ("a world once drawn stays").
+export function createDrawingVeil({doc,mount,label=()=>'',memory=()=>'',left=n=>String(n),random=Math.random,first=true}){
  const view=doc.defaultView;
  const root=el(doc,'div','v03-veil');root.setAttribute('aria-hidden','true');
  try{root.style.cursor=`${CURSOR_ART.arrow} 3 2, auto`;}catch{/* system cursor */}
@@ -41,8 +43,10 @@ export function createDrawingVeil({doc,mount,label=()=>'',left=n=>String(n),rand
  const bar=el(doc,'div','v03-veil-bar'),fill=el(doc,'i');bar.append(fill);
  const note=el(doc,'p','v03-veil-note'),word=el(doc,'span','v03-veil-word'),pct=el(doc,'b','v03-veil-pct'),rest=el(doc,'span','v03-veil-left');
  note.append(word,pct,rest);
+ const remember=el(doc,'p','v03-veil-memory');
  root.insertBefore(glow,root.firstChild);root.insertBefore(hover.frame,glow);
- root.append(bar,note);mount.append(root);
+ root.append(bar,remember,note);mount.append(root);
+ root.classList.toggle('is-first',!!first);
 
  let active=false,disposed=false,frame=0,x=0,y=0,seen=false,next=0,lastMove=0,shownPct=-1,shownLeft=-1;
  const reduced=(()=>{try{return view?.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;}catch{return false;}})();
@@ -85,7 +89,7 @@ export function createDrawingVeil({doc,mount,label=()=>'',left=n=>String(n),rand
   get active(){return active;},
   start(){
    if(disposed||active)return;active=true;root.classList.add('is-active');
-   word.textContent=label();
+   word.textContent=label(first);remember.textContent=memory();
    root.addEventListener('pointermove',onMove,{passive:true});root.addEventListener('pointerdown',onDown,{passive:true});root.addEventListener('pointerleave',onLeave,{passive:true});
   },
   // ratio 0..1, remaining: things still being prepared. Written only on change.
@@ -96,7 +100,10 @@ export function createDrawingVeil({doc,mount,label=()=>'',left=n=>String(n),rand
    if(value!==shownPct){shownPct=value;pct.textContent=value+'%';fill.style.transform=`scaleX(${value/100})`;}
    if(count!==shownLeft){shownLeft=count;rest.textContent=typeof count==='string'?count:count>0?left(count):'';}
   },
-  relabel(){word.textContent=label();if(typeof shownLeft==='number'&&shownLeft>0)rest.textContent=left(shownLeft);},
+  // First drawing (nothing kept yet, or a download running) or a later one.
+  setFirst(value){value=!!value;if(value===first)return;first=value;root.classList.toggle('is-first',first);word.textContent=label(first);},
+  get first(){return first;},
+  relabel(){word.textContent=label(first);remember.textContent=memory();if(typeof shownLeft==='number'&&shownLeft>0)rest.textContent=left(shownLeft);},
   stop(){
    if(!active)return;active=false;root.classList.remove('is-active');
    root.removeEventListener('pointermove',onMove);root.removeEventListener('pointerdown',onDown);root.removeEventListener('pointerleave',onLeave);

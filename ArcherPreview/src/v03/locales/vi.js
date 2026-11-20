@@ -3,7 +3,7 @@ export default {
  ui:{
   'bench.trip':'Đang đo khứ hồi (khoảng 5 phút, {step}/5). Vui lòng không chạm vào màn hình.',
   'bench.running':'Đang đo hiệu năng (khoảng 50 giây). Vui lòng không chạm vào màn hình.','bench.done':'Đã đo xong','bench.copy':'Sao chép','bench.save':'Lưu tệp','bench.close':'Đóng',
-  'title.aria':'Màn hình tiêu đề MoonForest','title.kicker':'Phù thủy Bi thương','title.sub':'Bàn tiệc Duyên phận · Hồi I','title.menu':'Menu chính','title.drawing':'Đang vẽ thế giới','title.drawingLeft':'còn {n}','title.drawingMb':'còn {mb} MB',
+  'title.aria':'Màn hình tiêu đề MoonForest','title.kicker':'Phù thủy Bi thương','title.sub':'Bàn tiệc Duyên phận · Hồi I','title.menu':'Menu chính','title.drawing':'Đang vẽ thế giới','title.drawingLeft':'còn {n}','title.drawingFirst':'Đang vẽ thế giới lần đầu…','title.drawingAgain':'Đang mở ra thế giới đã vẽ','title.drawingMemory':'Thế giới đã vẽ một lần sẽ được ghi nhớ.',
   'menu.new':'Chơi mới','menu.load':'Tiếp tục','menu.gallery':'Thư viện','menu.settings':'Cài đặt','menu.quit':'Thoát',
   'time.hm':'{h} giờ {m} phút','time.m':'{m} phút',
   'slot.empty':'Trống','slot.emptyDetail':'Bắt đầu hành trình mới','slot.title':'Chương {chapter} · {title}','slot.journey':'Hành trình',
