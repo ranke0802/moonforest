@@ -21,25 +21,25 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 /* Until its scene is fully drawn the title stays black, with a quiet note. */
 .v03-title:not(.scene-ready) .v03-title-inner{pointer-events:none}
 @keyframes v03-breathe{50%{opacity:.2}}
-/* The dust motes still rise through the black while the world is drawn (the blurry wash is gone). */
-.v03-title-shade::after{content:"";position:absolute;inset:-20%;pointer-events:none;opacity:0;transition:opacity 1.6s ease}
-.v03-title-shade::after{background-image:radial-gradient(circle,#ffe8b8 0 1.4px,#0000 2.4px),radial-gradient(circle,#d8ceff 0 1.2px,#0000 2.2px),radial-gradient(circle,#fff3d6 0 1px,#0000 2px);background-size:230px 260px,310px 290px,170px 210px;background-position:0 0,90px 140px,40px 60px;opacity:0;animation:v03-motes-rise 22s linear infinite;mask-image:radial-gradient(ellipse 70% 65% at 50% 55%,#000 30%,#0000 80%);-webkit-mask-image:radial-gradient(ellipse 70% 65% at 50% 55%,#000 30%,#0000 80%)}
-.v03-title.is-shown:not(.scene-ready) .v03-title-shade::after{opacity:.7}
-@keyframes v03-motes-rise{from{background-position:0 0,90px 140px,40px 60px}to{background-position:40px -520px,10px -440px,90px -360px}}
-@media (prefers-reduced-motion:reduce){.v03-title-shade::after{animation:none}}
 /* "Drawing the world" (2026-11-20, user): no drifting lights; the prologue's
    cosmic cut under full black, seen only through the pointer's light, a burst
    of motes on a click, and a gold progress line along the bottom. */
 .v03-veil{position:absolute;inset:0;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .8s ease;touch-action:none}
 .v03-title.is-shown:not(.scene-ready) .v03-veil{opacity:1;pointer-events:auto}
 .v03-title.scene-ready .v03-veil{transition-duration:1.4s}
-.v03-veil-art{position:absolute;left:0;top:0;width:100vw;height:100vh;height:100dvh;background:#000 center/cover no-repeat;will-change:transform}
-.v03-veil-flash{position:absolute;left:0;top:0;overflow:hidden;border-radius:50%;will-change:transform,opacity;pointer-events:none}
+.v03-veil[hidden]{display:none!important}
+/* Rising dust: small dots moved by the compositor (was a tiled background whose position animated: a screen-sized repaint every frame, 2026-11-20 review). */
+.v03-veil-dust{position:absolute;inset:0;pointer-events:none}
+.v03-veil-dot{position:absolute;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;border-radius:50%;background:#ffe8b8;opacity:0;animation:v03-dust 22s linear infinite}
+.v03-veil-dot.is-violet{background:#d8ceff;width:2.5px;height:2.5px}.v03-veil-dot.is-small{background:#fff3d6;width:2px;height:2px}
+@keyframes v03-dust{0%{opacity:0;transform:translate3d(0,260px,0)}12%,85%{opacity:var(--o,.6)}100%{opacity:0;transform:translate3d(0,-260px,0)}}
+@media (prefers-reduced-motion:reduce){.v03-veil-dot{animation:none;opacity:var(--o,.6)}}
+.v03-veil-art{position:absolute;left:0;top:0;width:100vw;height:100vh;height:100dvh;background:#000 center/cover no-repeat}
+.v03-veil-flash{position:absolute;left:0;top:0;overflow:hidden;border-radius:50%;pointer-events:none}
 .v03-veil-flash{opacity:0;-webkit-mask-image:radial-gradient(closest-side,#000 0%,#000c 30%,#0000 100%);mask-image:radial-gradient(closest-side,#000 0%,#000c 30%,#0000 100%)}
-.v03-veil-flash .v03-veil-art{filter:brightness(.8)}
-.v03-veil-ring{position:absolute;left:0;top:0;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,#0000 55%,#ffe7a866 72%,#0000 100%);mix-blend-mode:screen;opacity:0;pointer-events:none}
+.v03-veil-ring{position:absolute;left:0;top:0;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,#0000 55%,#ffe7a866 72%,#0000 100%);opacity:0;pointer-events:none}
 .v03-veil-spark{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
-.v03-veil-mote{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff1c8;box-shadow:0 0 8px 2px #f5d27a99;opacity:0;will-change:transform,opacity}
+.v03-veil-mote{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff1c8;box-shadow:0 0 8px 2px #f5d27a99;opacity:0}
 .v03-veil-mote:nth-child(3n){background:#dcd4ff;box-shadow:0 0 8px 2px #a99cf099}
 .v03-veil-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#f3cf5a1f}
 .v03-veil-bar>i{position:absolute;inset:0;background:linear-gradient(90deg,#c99a2e,#f6d566 70%,#fff0b0);box-shadow:0 0 10px #f3cf5aaa;transform:scaleX(0);transform-origin:0 50%;transition:transform .5s ease-out}
@@ -443,7 +443,6 @@ html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
 .v03-wake-veil{position:fixed;inset:0;z-index:850;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 50%,#000000c0 0%,#000 78%);animation:v03-wake-veil 3.1s ease-in-out both}
 @keyframes v03-wake-veil{0%{opacity:1}24%{opacity:1}38%{opacity:.3}47%{opacity:.92}63%{opacity:.12}73%{opacity:.45}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.v03-wake-veil{animation-duration:.8s}}
-
-/* 0.3 start-up: the loading card stays black (the title veil shows progress); its painting flashed while a language pack loaded (2026-11-20). In play the card is the map-travel card as before. */
-html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error){background:#000!important}
-html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error)>*,html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error)::before,html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error)::after{visibility:hidden!important}
+/* The black title is the download screen (boot.js sets data-v03-veil for the logo -> title path only): the loading card under it stays black instead of flashing its painting while a language pack loads. Loading a save and map travel keep the card with its progress; errors always show. */
+html[data-v03-veil] #app>#loading:not(.error){background:#000!important}
+html[data-v03-veil] #app>#loading:not(.error)>*,html[data-v03-veil] #app>#loading:not(.error)::before,html[data-v03-veil] #app>#loading:not(.error)::after{visibility:hidden!important}

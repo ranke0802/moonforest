@@ -560,7 +560,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function stopSleepPose(){if(scene.sleepObserver){scene.sleepScene?.onBeforeRenderObservable.remove(scene.sleepObserver);}scene.sleepObserver=null;scene.sleepScene=null;if(scene.sleepRoot){hideArms(scene.sleepRoot,false);scene.sleepRoot=null;}}
  // Where he sits: near the back of the bed, facing the bench (the wagon's front).
- function seatAt(W0){const P=scene.points;return {x:W0.x-P.f.x*SEAT_BACK,z:W0.z-P.f.z*SEAT_BACK};}
+ // One reused point: called several times a frame during the scene.
+ const seatSpot={x:0,z:0};
+ function seatAt(W0){const P=scene.points;seatSpot.x=W0.x-P.f.x*SEAT_BACK;seatSpot.z=W0.z-P.f.z*SEAT_BACK;return seatSpot;}
  function poseSleeper(player,W0,ground){
   const P=scene.points,p=player.position,seat=seatAt(W0);
   p.x=seat.x;p.z=seat.z;p.y=ground+BED+SEAT_HIPS-(scene.hipsAbove??0);

@@ -24,7 +24,8 @@ const CHAINS=Object.freeze([
  ['mixamorig:RightUpLeg','mixamorig:RightLeg',[.08,1,-.1]],['mixamorig:RightLeg','mixamorig:RightFoot',[-.12,1,-.04]],
 ]);
 const FORWARD=new Vector3(0,0,1),from=new Vector3(),to=new Vector3(),dozed=new Vector3(),side=new Vector3(),up=new Vector3(),front=new Vector3(),turn=new Quaternion(),world=new Quaternion(),parentWorld=new Quaternion(),none=Quaternion.Identity(),scratch=new Vector3();
-const toFrame=(out,[u,f,l])=>{out.set(0,0,0);up.scaleToRef(u,scratch);out.addInPlace(scratch);front.scaleToRef(f,scratch);out.addInPlace(scratch);side.scaleToRef(l,scratch);out.addInPlace(scratch);return out.normalize();};
+// v: [up, front, left]. Indexed, not destructured: this runs per bone per frame.
+const toFrame=(out,v)=>{out.set(0,0,0);up.scaleToRef(v[0],scratch);out.addInPlace(scratch);front.scaleToRef(v[1],scratch);out.addInPlace(scratch);side.scaleToRef(v[2],scratch);out.addInPlace(scratch);return out.normalize();};
 
 export function createSitPose(root){
  // Node lookup once per player model (the model lives as long as the player).

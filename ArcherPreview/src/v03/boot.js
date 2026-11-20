@@ -71,7 +71,7 @@ export function setupV03(api){
  for(const key of new Set([SCREEN_SCORE.title,SCREEN_SCORE.opening]))try{void Promise.resolve(api.prefetchScore?.(key)).catch(()=>{});}catch{}
  // Where this run is, for the next run to read if the page is killed (run-trail.js).
  const trail=createRunTrail({storage:(()=>{try{return view?.localStorage??null;}catch{return null;}})()});
- const screen=value=>{state.screen=value;trail.mark(value);html.dataset.v03Screen=value;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
+ const screen=value=>{state.screen=value;trail.mark(value);html.dataset.v03Screen=value;if(value!=='title')delete html.dataset.v03Veil;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
  const describe=meta=>{
@@ -293,15 +293,24 @@ export function setupV03(api){
   // Since 2026-11-20 (user) the black title with its veil is the download
   // screen too: it shows at once and follows the loading card underneath
   // (that card stays for errors). The world is prepared once the card closes.
-  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();watchDownload();afterLoading(prepareWorld);
-  // The prologue score is decoded while the title plays: it starts with the dream.
-  try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}
+  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();watchDownload();
+  // The prologue score is decoded once the download and world loading are over
+  // (as before the title became the download screen), not on top of them.
+  afterLoading(()=>{prepareWorld();try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}});
  }
  // The loading card's progress (#loading-progress width, #loading-bytes
  // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
  let downloadWatch=null;
  // Beside the percent: the megabytes while downloading, then what is being drawn (user, 2026-11-20).
- const stageText=p=>typeof p.remaining==='string'?p.remaining:t('title.stage.'+drawStage(p.ratio));
+ // Fed every frame while the title is black: one input object reused, the
+ // stage's words looked up only when the stage changes (no per-frame strings).
+ const drawInput={dt:0,ready:false,pending:0,summoning:false,quietTime:0,prepareTime:0},drawIdle=Object.freeze({});
+ let stageKey='',stageWords='';
+ function showProgress(p){
+  let text=p.remaining;
+  if(typeof text!=='string'){const key=drawStage(p.ratio);if(key!==stageKey){stageKey=key;stageWords=t('title.stage.'+key);}text=stageWords;}
+  title.setProgress(p.ratio,text);
+ }
  function watchDownload(){
   const bar=doc.getElementById('loading-progress'),bytes=doc.getElementById('loading-bytes'),Watch=view?.MutationObserver;
   const sync=()=>{
@@ -311,7 +320,7 @@ export function setupV03(api){
    const bytesText=numbers.length>=2&&numbers[1]>0&&numbers[0]<numbers[1]?`${numbers[0].toFixed(1)} / ${numbers[1].toFixed(1)}MB`:'';
    if(bytesText)title.veil.setFirst(true);
    drawing.download(value,bytesText);
-   const p=drawing.update({});title.setProgress(p.ratio,stageText(p));
+   showProgress(drawing.update(drawIdle));
   };
   if(!html.dataset.loading)return;
   if(Watch){downloadWatch=new Watch(sync);for(const node of [bar,bytes])if(node)downloadWatch.observe(node,{attributes:true,attributeFilter:['style'],childList:true,characterData:true,subtree:true});downloadWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
@@ -374,8 +383,11 @@ export function setupV03(api){
   // Between the loading card and the dream, never show the raw camera (it
   // can start inside a tree crown): keep the prologue cover up.
   if(save.intent.mode==='new')startEarlyDream();
- }else if(splash?.done)splash.done.then(()=>{splash.remove?.();showTitle();});
- else showTitle();
+ }else{
+  // Logo -> title: the loading card under the black title stays black (v03.css).
+  html.dataset.v03Veil='1';
+  if(splash?.done)splash.done.then(()=>{splash.remove?.();showTitle();});else showTitle();
+ }
  // A loading/frame failure owns the screen: its retry UI must be reachable.
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
@@ -431,7 +443,7 @@ export function setupV03(api){
      state.quietTime=!state.summoning&&!(s.pending>0)?state.quietTime+dt:0;
      if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);}
     }
-    if(!state.revealed){const p=drawing.update({dt,ready:state.sceneShown,pending:s.pending??0,summoning:state.summoning,quietTime:state.quietTime,prepareTime:state.prepareTime});title.setProgress(p.ratio,stageText(p));}
+    if(!state.revealed){drawInput.dt=dt;drawInput.ready=state.sceneShown;drawInput.pending=s.pending??0;drawInput.summoning=state.summoning;drawInput.quietTime=state.quietTime;drawInput.prepareTime=state.prepareTime;showProgress(drawing.update(drawInput));}
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
    }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy&&state.langReady){
     // The opening is on the plains road; a document opened on another map goes there first.
@@ -467,6 +479,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;},
  };
 }

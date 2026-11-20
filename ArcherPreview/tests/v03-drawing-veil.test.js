@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
-import {createDrawingProgress,createDrawingVeil,drawStage} from '../src/v03/drawing-veil.js';
+import {createDrawingProgress,createDrawingVeil,drawStage,dustCount,flashSize} from '../src/v03/drawing-veil.js';
 
 test('drawing progress: download to 50%, world start, pending work and the quiet wait, never back',()=>{
  const p=createDrawingProgress({quiet:1.2,limit:25,loadEase:4});
@@ -33,11 +33,25 @@ test('the veil writes progress only on change and lets go of its listeners on st
  const fill=root.querySelector('.v03-veil-bar>i');fill.style.transform='x';veil.setProgress(.429,12);assert.equal(fill.style.transform,'x','same percent: no write');
  veil.setProgress(.3,'3.2 / 5.4MB');assert.equal(root.querySelector('.v03-veil-left').textContent,'3.2 / 5.4MB');
  veil.setProgress(1,0);assert.equal(root.querySelector('.v03-veil-left').textContent,'');
- veil.stop();assert.deepEqual(removed,['pointerdown']);assert.equal(veil.active,false);
- veil.dispose();assert.equal(mount.querySelector('.v03-veil'),null);
+ veil.stop();assert.deepEqual(removed.filter(kind=>kind==='pointerdown'),['pointerdown']);assert.equal(veil.active,false);
+ assert.ok(added.includes('transitionend'),'the fade end takes it out of rendering');
+ veil.dispose();assert.equal(veil.inspect().hidden,true);assert.equal(mount.querySelector('.v03-veil'),null);
 });
 
 test('after the download the note says what is being drawn, in order',()=>{
  assert.equal(drawStage(.5),'ground');assert.equal(drawStage(.6),'trees');assert.equal(drawStage(.7),'people');
  assert.equal(drawStage(.8),'critters');assert.equal(drawStage(.86),'beasts');assert.equal(drawStage(.95),'monsters');assert.equal(drawStage(1),'monsters');
+});
+
+test('progress returns one reused result and nothing screen-sized is kept as a layer',()=>{
+ const p=createDrawingProgress(),input={dt:.1,ready:true,pending:4};
+ assert.equal(p.update(input),p.update(input),'the same result object every frame');
+ assert.equal(flashSize(1600,890),757);assert.equal(flashSize(1920,1080),760);assert.equal(flashSize(844,390),332);assert.equal(flashSize(320,240),260);
+ assert.equal(dustCount(1600,890),64);assert.equal(dustCount(844,390),18);assert.equal(dustCount(320,240),14);
+ const {document}=parseHTML('<html><body><section></section></body></html>');
+ const veil=createDrawingVeil({doc:document,mount:document.querySelector('section')});
+ assert.equal(veil.inspect().dots,veil.element.querySelectorAll('.v03-veil-dot').length);assert.ok(veil.inspect().dots>=14&&veil.inspect().dots<=64);
+ for(const node of veil.element.querySelectorAll('*'))assert.equal(node.style.willChange||'',''); 
+ veil.start();veil.stop();veil.start();assert.equal(veil.inspect().hidden,false,'shown again when restarted');
+ veil.dispose();
 });
