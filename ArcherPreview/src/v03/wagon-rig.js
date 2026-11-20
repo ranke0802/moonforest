@@ -5,15 +5,21 @@
 // instance: that one stays only for collision, hidden.
 import {Matrix,Quaternion,Vector3} from '@babylonjs/core';
 
-// A full quarter turn: at 1.42 rad the wagon rested on its wheel rims with the
-// canopy held off the ground (2026-11-20, user: it floated).
-export const WAGON_TIP=Object.freeze({angle:Math.PI/2,halfWidth:1.3});
+// Where the wagon comes to rest on its side. Measured on the model's cross
+// section (2026-11-20, user: the fallen wagon floated): at a quarter turn only
+// the wheel hubs touched and the canopy hung 0.5 m in the air; it rests on the
+// wheel rim (1.14, 1.28) and the canopy shoulder (0.76, 2.37), 19 degrees
+// further over. The wheels stand 1.14 m out from the centre line.
+export const WAGON_TIP=Object.freeze({angle:1.9,halfWidth:1.14,settleBy:.12});
 const AXIS_Z=new Vector3(0,0,1),local=new Vector3(),moved=new Vector3(),offset=new Vector3(),roll=new Quaternion(),turn=new Matrix();
 let tipSign=0;
 function topSign(){if(!tipSign){const probe=Vector3.TransformCoordinates(new Vector3(0,1,0),Matrix.RotationZ(.3));tipSign=probe.x>0?1:-1;}return tipSign;}
 
 // getRoot(): the wagon's root TransformNode (rotationQuaternion = its yaw) or null.
-export function createWagonRig({getRoot,heightAt=()=>0,halfWidth=WAGON_TIP.halfWidth}){
+// getContact(): the model's outline points in the root's frame (Float32Array
+// xyz, wagon-model.js) or null. With them the tipped wagon is set down on the
+// ground at every angle: its lowest point touches, wherever the ground is.
+export function createWagonRig({getRoot,heightAt=()=>0,getContact=null,halfWidth=WAGON_TIP.halfWidth}){
  let base=null,baseQ=null,yaw=0,current={along:0,tip:0,side:1},posed=null;
  const node=()=>{const root=getRoot?.();return root&&!root.isDisposed?.()?root:null;};
  function capture(root){
@@ -34,6 +40,16 @@ export function createWagonRig({getRoot,heightAt=()=>0,halfWidth=WAGON_TIP.halfW
   local.set(side*halfWidth,0,0);roll.toRotationMatrix(turn);Vector3.TransformCoordinatesToRef(local,turn,moved);
   offset.set(local.x-moved.x,local.y-moved.y,0);baseQ.toRotationMatrix(turn);Vector3.TransformCoordinatesToRef(offset,turn,moved);
   root.position.set(x+moved.x,base.position.y+ground+moved.y,z+moved.z);
+  const contact=tip>0?getContact?.():null;
+  if(contact?.length){
+   root.rotationQuaternion.toRotationMatrix(turn);const m=turn.m,px=root.position.x,py=root.position.y,pz=root.position.z;let gap=Infinity;
+   for(let i=0;i<contact.length;i+=3){
+    const lx=contact[i],ly=contact[i+1],lz=contact[i+2],clear=py+lx*m[1]+ly*m[5]+lz*m[9]-heightAt(px+lx*m[0]+ly*m[4]+lz*m[8],pz+lx*m[2]+ly*m[6]+lz*m[10]);
+    if(clear<gap)gap=clear;
+   }
+   // Eased in over the first few degrees so leaving upright does not step.
+   if(gap<Infinity)root.position.y-=gap*Math.min(1,tip/WAGON_TIP.settleBy);
+  }
   posed={root,tip};
   return true;
  }

@@ -341,7 +341,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const alphaFrom=(from,to)=>Math.atan2(from.z-to.z,from.x-to.x);// camera on `from`'s side looking at `to`
  function freeNear(point){const nav=api.world.navigation;try{return nav?.free?.(point,.6)?point:nav?.findFree?.(point,.6)??point;}catch{return point;}}
  const openingWagon=()=>(content.PROPS??[]).find(prop=>prop.asset==='covered-wagon'&&prop.map===(api.world?.mapId??mapId))??null;
- const wagonRig=createWagonRig({getRoot:()=>wagonModel?.root??null,heightAt:(x,z)=>heightAt(x,z)});
+ const wagonRig=createWagonRig({getRoot:()=>wagonModel?.root??null,getContact:()=>wagonModel?.contact??null,heightAt:(x,z)=>heightAt(x,z)});
  // The map's placed wagon stays for collision; the shafted story wagon is drawn instead.
  function hidePlacedWagon(){
   const id=openingWagon()?.id;if(!id)return;
@@ -364,9 +364,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const wagonDown=()=>log.quest()?.id==='M00'&&['fight','wagon'].includes(log.step()?.id);
  // Searched once per map visit from the walkable map: ahead of the wagon on the
  // wolf's side, open around it, and a straight walkable line to the horse.
- // A little over the map's own bush size (they are .7-.94): 1.15-1.35 read as
- // out of place (2026-11-19, user). Three, loosely spaced.
- const AMBUSH_BUSHES=Object.freeze([{dx:0,df:.3,yaw:.4,scale:1.0},{dx:1.9,df:-.4,yaw:2.1,scale:.9},{dx:-1.8,df:-.2,yaw:4.0,scale:.95}]);
+ // Sized like the map's own bushes (2026-11-20, user: still far too big, over
+ // the firewood and the handcart). Measured in the game: the map's bush roots
+ // are scaled 0.23-0.31 (placement scale x 0.33, 1.3-2.2 m across) while these
+ // were made at 0.9-1.0, 6-7 m across and 4 m tall. `scale` is a placement
+ // scale now, a little over the map's largest so a wolf fits behind one.
+ const AMBUSH_BUSHES=Object.freeze([{dx:0,df:.35,yaw:.4,scale:1.15},{dx:1.25,df:-.25,yaw:2.1,scale:.95},{dx:-1.2,df:-.1,yaw:4.0,scale:1.05}]);
  let coverNodes=[];const cover=[];
  function clearCover(){for(const node of coverNodes)try{node.dispose(false,false);}catch{}coverNodes=[];cover.length=0;}
  // The cover fades like the map's trees when it stands between the camera and
@@ -406,10 +409,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    mesh.computeWorldMatrix(true);parts.push({source,local:mesh.getWorldMatrix().multiply(inverse)});
   }
   if(!parts.length)return;
+  // The map scales a bush's root by its placement scale times the model's own unit.
+  const unit=(template.root.scaling.x||1)/(template.placement?.scale||1);
+  // Off the props around the hide (firewood, handcart): the first clear spot, stepping away from the driver.
+  const nav=api.world?.navigation,clear=(x,z)=>{try{return nav?.free?nav.free({x,z},.9):true;}catch{return true;}};
   for(const [i,bush] of AMBUSH_BUSHES.entries()){
    try{
-    const R=hide.coverR??hide.r,F=hide.coverF??hide.f,x=hide.x+bush.dx*R.x+bush.df*F.x,z=hide.z+bush.dx*R.z+bush.df*F.z;
-    const root=new TransformNode('v03-ambush-bush-'+i,scene);root.position.set(x,heightAt(x,z),z);root.rotation.y=bush.yaw;root.scaling.setAll(bush.scale);const meshes=[];
+    const R=hide.coverR??hide.r,F=hide.coverF??hide.f;let x=hide.x+bush.dx*R.x+bush.df*F.x,z=hide.z+bush.dx*R.z+bush.df*F.z;
+    if(!clear(x,z))search:for(const back of [.5,1,1.5,2])for(const side of [0,.7,-.7]){const cx=x+F.x*back+R.x*side,cz=z+F.z*back+R.z*side;if(clear(cx,cz)){x=cx;z=cz;break search;}}
+    const root=new TransformNode('v03-ambush-bush-'+i,scene);root.position.set(x,heightAt(x,z),z);root.rotation.y=bush.yaw;root.scaling.setAll(bush.scale*unit);const meshes=[];
     for(const part of parts){
      const instance=part.source.createInstance('v03-ambush-bush-'+i+'-'+part.source.name);
      if(part.source.instancedBuffers)for(const key of Object.keys(part.source.instancedBuffers))instance.instancedBuffers[key]=key==='treeCoverage'?1:part.source.instancedBuffers[key];

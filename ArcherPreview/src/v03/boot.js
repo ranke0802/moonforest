@@ -17,6 +17,7 @@ import {createGuideWisp} from './guide-wisp.js';
 import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
+import {createRunTrail} from './run-trail.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
@@ -65,7 +66,9 @@ export function setupV03(api){
  const SCREEN_SCORE=Object.freeze({boot:'elena_saint',title:'elena_saint',resume:'elena_saint',opening:'forest'});
  // Prologue scores start downloading during the logo too (cached afterwards).
  for(const key of new Set([SCREEN_SCORE.title,SCREEN_SCORE.opening]))try{void Promise.resolve(api.prefetchScore?.(key)).catch(()=>{});}catch{}
- const screen=value=>{state.screen=value;html.dataset.v03Screen=value;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
+ // Where this run is, for the next run to read if the page is killed (run-trail.js).
+ const trail=createRunTrail({storage:(()=>{try{return view?.localStorage??null;}catch{return null;}})()});
+ const screen=value=>{state.screen=value;trail.mark(value);html.dataset.v03Screen=value;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
  const describe=meta=>{
@@ -357,11 +360,15 @@ export function setupV03(api){
  const loadingCard=doc.getElementById('loading'),Observer=view?.MutationObserver;
  const loadingWatch=loadingCard&&Observer?new Observer(()=>{if(loadingCard.classList.contains('error'))fail();}):null;
  loadingWatch?.observe(loadingCard,{attributes:true,attributeFilter:['class']});
- const onPageHide=()=>{if(state.screen==='play')save.touch(metaPatch());};
+ const onPageHide=()=>{trail.end();if(state.screen==='play')save.touch(metaPatch());};
+ const onVisibility=()=>trail.setHidden(doc.hidden===true);
+ doc.addEventListener?.('visibilitychange',onVisibility);
  view?.addEventListener?.('pagehide',onPageHide);
 
  return {
   get screen(){return state.screen;},
+  // The run before this one (stage it last reached; ended=false and hidden=false: killed on screen).
+  get previousRun(){return trail.previous;},
   // Title/prologue never write progress, quests or map position.
   get blocksProgress(){return state.screen!=='play';},
   // The prologue's black stage hides the world: main.js draws it only now and
@@ -413,6 +420,7 @@ export function setupV03(api){
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
+    if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;trail.mark(state.trailScene?'play:opening-scene':'play');}
     if(!story.sceneActive)vitality.update(dt);
     cursors.set(story.dialogueOpen||story.sceneActive?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();
@@ -429,6 +437,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
+  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;},
  };
 }

@@ -46,7 +46,8 @@ void main(void){
  gl_FragColor=vec4(n*.5+.5,.5+npcProfileId/128.0);
 }`;
 
-function makeManager(scene){
+// onDisposed(manager): told once when the manager is gone (its last mesh left, or the scene).
+function makeManager(scene,onDisposed=null){
  const engine=scene.getEngine(),entries=new Map(),profiles=new Float32Array(128),profileIds=new Map(),rootScales=new Map();
  let normalMaterial=null,target=null,post=null,camera=null,cameraDispose=null,attached=false,normalDepthView=null,mainDepthView=null,disposed=false,rendering=false,normalFrames=0,resourceCycles=0;
  const active=[],keys=new Map();
@@ -140,9 +141,13 @@ function makeManager(scene){
   const view=scene.getViewMatrix().clone(),projection=scene.getProjectionMatrix().clone();
   rendering=true;try{target.render(false,false);normalFrames++;}finally{rendering=false;scene.setTransformMatrix(view,projection);}
  });
- function dispose(){if(disposed)return;disposed=true;releaseResources(true);scene.onBeforeRenderObservable.remove(before);scene.postProcessManager.onBeforeRenderObservable.remove(render);scene.onDisposeObservable.remove(onDispose);for(const [mesh,value]of entries)mesh.onDisposeObservable.remove(value.observer);entries.clear();scenes.delete(scene);}
+ // The manager outlives nothing: `active` and `keys` held the last frame's NPC
+ // meshes, and the module's `managers` set (plus a scene observer per manager)
+ // held the manager, so every village visit's villagers stayed in memory after
+ // the map was left (2026-11-20, measured: 10 of 10 skinned meshes still held).
+ function dispose(){if(disposed)return;disposed=true;releaseResources(true);active.length=0;keys.clear();scene.onBeforeRenderObservable.remove(before);scene.postProcessManager.onBeforeRenderObservable.remove(render);scene.onDisposeObservable.remove(onDispose);for(const [mesh,value]of entries)mesh.onDisposeObservable.remove(value.observer);entries.clear();scenes.delete(scene);onDisposed?.(api);}
  const onDispose=scene.onDisposeObservable.addOnce(dispose);
- return {register(mesh,value){const existing=entries.get(mesh);if(existing){Object.assign(existing,value);return;}const observer=mesh.onDisposeObservable.addOnce(()=>{entries.delete(mesh);if(!entries.size)dispose();});entries.set(mesh,{...value,observer});},async prepare(meshes,preparation){
+ const api={register(mesh,value){const existing=entries.get(mesh);if(existing){Object.assign(existing,value);return;}const observer=mesh.onDisposeObservable.addOnce(()=>{entries.delete(mesh);if(!entries.size)dispose();});entries.set(mesh,{...value,observer});},async prepare(meshes,preparation){
   if(disposed||!engine.getCaps().depthTextureExtension)return;
   const selected=meshes.filter(mesh=>entries.has(mesh));if(!selected.length)return;
   const material=ensureNormalMaterial();
@@ -150,10 +155,11 @@ function makeManager(scene){
   // no normal render, framebuffer allocation, per-actor pass or private timer.
   for(const mesh of selected){await preparation.pause();for(;;){preparation.check();if(material.isReady(mesh,false))break;const effect=material.getEffect();if(effect?.getCompilationError?.()&&effect.allFallbacksProcessed?.())throw new Error('내부선 셰이더를 준비하지 못했습니다.');await preparation.sleep(16);}}
  },releaseResources(){active.length=0;releaseResources();},inspect:()=>({registered:entries.size,visible:active.length,renderTargets:target?1:0,postProcesses:post?1:0,attachedPostProcesses:attached?1:0,idleRetained:!!post&&!attached,normalFrames,resourceCycles,worldDepthRenders:0,rafOwned:false,maximumProfiles,depthSupported:!!engine.getCaps().depthTextureExtension}),dispose};
+ return api;
 }
 
 export function registerNpcInteriorInk(mesh,{root,look,height=1.85,baseScale=1}={}){
- const scene=mesh.getScene();let manager=scenes.get(scene);if(!manager){manager=makeManager(scene);scenes.set(scene,manager);managers.add(manager);const owned=manager;scene.onDisposeObservable.addOnce(()=>managers.delete(owned));}manager.register(mesh,{root,look,height,baseScale});
+ const scene=mesh.getScene();let manager=scenes.get(scene);if(!manager){manager=makeManager(scene,owned=>managers.delete(owned));scenes.set(scene,manager);managers.add(manager);}manager.register(mesh,{root,look,height,baseScale});
 }
 // Settings: the whole interior-ink pass on/off (outer outlines are separate).
 export const INTERIOR_INK_KEY='moonforest-interior-ink-v2';
