@@ -20,6 +20,7 @@ import {createSitPose} from './sit-pose.js';
 import {createLiePose,createCrouchPose,createPushPose} from './story-poses.js';
 import {layOnBack} from './bone-pose.js';
 import {SLOW_FX_DEFAULT} from './slow-fx.js';
+import {pinScreenArea,unpinScreenArea} from './zoom-lod-pin.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -1095,17 +1096,18 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function updateSlowZoom(){
   const camera=api.world?.camera;if(!camera||!Number.isFinite(camera.fov))return;
   const now=performance.now(),dt=zoom.last?Math.min(.1,(now-zoom.last)/1000):0;zoom.last=now;
-  if(zoom.camera!==camera){zoom.camera=camera;zoom.weight=0;zoom.base=null;}
+  if(zoom.camera!==camera){unpinScreenArea(zoom.camera);zoom.camera=camera;zoom.weight=0;zoom.base=null;}
   const target=slow.left>0?1:0;
   // Focus lines at the screen's edge for as long as the beat lasts (hud: one
   // small canvas, written only when the value changes).
   hud.setFocus(target===1&&slowSetting().lines);
   if(zoom.weight===0&&target===0){zoom.base=null;return;}
-  zoom.base??=camera.fov;
+  // Scenery detail keeps the un-zoomed view for the length of the push-in (zoom-lod-pin.js).
+  if(zoom.base===null){zoom.base=camera.fov;pinScreenArea(camera);}
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
   camera.fov=zoom.base*(1-slowSetting().zoom*eased);
-  if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;}
+  if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;unpinScreenArea(camera);}
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
  // Taps chain three hits (slash → thrust → judgment finisher at half stamina);

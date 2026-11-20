@@ -52,7 +52,7 @@ export class PlayerMeleeAim{
   this.endpoints=[[0,0,0],[0,0,0]];this.yawed=[[0,0,0],[0,0,0]];this.rotated=[[0,0,0],[0,0,0]];this.reset();
  }
  reset(){this.restore();this.action=null;this.target=this.candidate=null;this.pitch=this.yaw=this.extension=0;this.lastPitch=this.lastYaw=this.lastExtension=0;this.lastError=this.lastNeckError=null;this.resetFit();}
- resetFit(){this.fitReady=false;this.fitClock=0;this.lastWideTime=-Infinity;this.fitPitch=this.fitYaw=this.fitExtension=0;this.fullFitCount=this.localFitCount=0;}
+ resetFit(){this.fitReady=false;this.fitClock=0;this.lastWideTime=-Infinity;this.wideMissed=false;this.fitPitch=this.fitYaw=this.fitExtension=0;this.fullFitCount=this.localFitCount=0;}
  restore(){for(const arm of Object.values(this.arms))if(arm&&(arm.changed||arm.elbow?.changed)){if(arm.changed)arm.node.rotationQuaternion.copyFrom(arm.original);if(arm.elbow?.changed){arm.elbow.node.rotationQuaternion.copyFrom(arm.elbow.original);arm.elbow.changed=false;}arm.changed=false;for(const node of arm.branch){node.markAsDirty();node.computeWorldMatrix();}}}
  begin(result,player,target){
   if(result.actionId===this.action)return;
@@ -135,8 +135,11 @@ export class PlayerMeleeAim{
    search(neighbors(this.fitPitch,.13,-.26,1.17),neighbors(this.fitYaw,.26,-1.04,1.04),extensionLimit>.01?neighbors(this.fitExtension,.26,0,extensionLimit):[0]);this.localFitCount++;
   }
   const contactLead=time>=strikes[0].from-.28&&time<=end;
-  if(!this.fitReady||((bestError>.005||bestNeckError>.04)&&contactLead&&this.fitClock-this.lastWideTime>=.15)){
+  // The wide grid is 324 poses (85 ms on a phone, recording 2026-11-20). When it could not
+  // reach the target it will not reach it 0.15 s later either: wait longer before the next one.
+  if(!this.fitReady||((bestError>.005||bestNeckError>.04)&&contactLead&&this.fitClock-this.lastWideTime>=(this.wideMissed?.6:.15))){
    search(angles,aimYaws,extensions);this.fitReady=true;this.lastWideTime=this.fitClock;this.fullFitCount++;
+   this.wideMissed=bestError>.005||bestNeckError>.04;
   }
   this.fitPitch=best;this.fitYaw=bestYaw;this.fitExtension=bestExtension;
   const desired=best*envelope,limit=Math.max(0,dt)*8;this.pitch+=clamp(desired-this.pitch,-limit,limit);this.yaw+=clamp(bestYaw*envelope-this.yaw,-limit,limit);this.extension+=clamp(bestExtension*envelope-this.extension,-limit,limit);
