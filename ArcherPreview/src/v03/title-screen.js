@@ -43,7 +43,15 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  }
  label();
  let disposed=false,panelClose=null,lastFocus=null;
- const focusFirst=()=>{const target=[...buttons.values()].find(button=>!button.disabled);target?.focus?.({preventScroll:true});};
+ // 2026-11-20 (user): no entry is boxed when the title comes up. The box and
+ // its marker show once the menu is moved with the keys (arrows, or W/S; A/D
+ // and left/right only wake it), and go again when the pointer takes over.
+ // The layer itself holds the focus until then, so the keys reach it.
+ layer.tabIndex=-1;
+ const NAV={ArrowDown:1,ArrowUp:-1,KeyS:1,KeyW:-1,ArrowRight:0,ArrowLeft:0,KeyD:0,KeyA:0};
+ const focusFirst=()=>{layer.classList.remove('is-keyed');layer.focus?.({preventScroll:true});};
+ const unkey=()=>{if(layer.classList.contains('is-keyed'))layer.classList.remove('is-keyed');};
+ layer.addEventListener('pointermove',unkey);layer.addEventListener('pointerdown',unkey);
  function closePanel(result=null){
   if(panel.hidden)return;panel.hidden=true;panel.replaceChildren();layer.classList.remove('has-panel');
   const done=panelClose;panelClose=null;lastFocus?.focus?.({preventScroll:true});lastFocus=null;done?.(result);
@@ -63,9 +71,11 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  });
  layer.addEventListener('keydown',event=>{
   if(event.key==='Escape'&&!panel.hidden){event.preventDefault();closePanel(null);return;}
-  if(event.key!=='ArrowDown'&&event.key!=='ArrowUp')return;
+  const step=NAV[event.code]??NAV[event.key];if(step===undefined||event.ctrlKey||event.metaKey||event.altKey)return;
   const scope=panel.hidden?menu:panel,items=[...scope.querySelectorAll('button:not([disabled])')];if(!items.length)return;
-  event.preventDefault();const at=items.indexOf(doc.activeElement),next=(at+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;
+  event.preventDefault();layer.classList.add('is-keyed');
+  // Nothing marked yet: the first press marks the first entry.
+  const at=items.indexOf(doc.activeElement),next=(at+step+items.length)%items.length;
   items[at<0?0:next].focus?.({preventScroll:true});
  });
  return {

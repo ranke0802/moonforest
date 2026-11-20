@@ -89,7 +89,7 @@ export function setupV03(api){
  const title=createTitleScreen({doc,wait,describe,version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
  // The first-launch picker lives in the splash, so the choice is read after it.
  let liveText=null;
- const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
+ const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.picked??view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})).finally(()=>{try{view?.__moonforestSplash?.packReady?.();}catch{/* the splash is gone */}}):startLanguage(view)).then(()=>{
   if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));translateLabels(doc.getElementById('app'));liveText=watchTranslations(doc);mountControlsGuide();loadingLore??=createLoadingLore({doc,t});state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;

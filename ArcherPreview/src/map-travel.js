@@ -103,5 +103,7 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
     if(portal.roadPassage&&available&&!automaticPending){automaticPending=true;activate();return;}
     const label=available?`${portal.label} · T`:state.enemies>0?'전투 종료 후 이동 가능':'이동 지점에 가까이 가세요';
     if(button.textContent!==label)button.textContent=label;
+    // Why it shows (0.3 hides the 'come closer' notice: it popped up on every arrival, user 2026-11-20).
+    const why=available?'ready':state.enemies>0?'combat':'far';if(button.dataset.state!==why)button.dataset.state=why;
   }};
 }

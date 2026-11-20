@@ -68,6 +68,14 @@ test('title screen: five menu entries, keyboard order, slot panel and confirm',a
  assert.equal(title.visible,false);title.show();assert.equal(title.visible,true);
  const labels=[...title.element.querySelectorAll('.v03-menu-item')].map(b=>b.textContent);
  assert.deepEqual(labels,['새로하기','불러오기','갤러리','설정','끝내기']);
+ // No entry is boxed until the menu is moved with the keys (arrows or W/S); the pointer takes it away again.
+ const press=(key,code)=>{const event=new document.defaultView.Event('keydown',{bubbles:true,cancelable:true});event.key=key;event.code=code;title.element.dispatchEvent(event);return event.defaultPrevented;};
+ assert.equal(title.element.classList.contains('is-keyed'),false);assert.equal(title.element.tabIndex,-1);
+ assert.equal(press('Enter','Enter'),false);assert.equal(title.element.classList.contains('is-keyed'),false,'other keys do not mark the menu');
+ assert.equal(press('s','KeyS'),true);assert.equal(title.element.classList.contains('is-keyed'),true,'W/S move the menu like the arrows');
+ title.element.dispatchEvent(new document.defaultView.Event('pointermove',{bubbles:true}));assert.equal(title.element.classList.contains('is-keyed'),false);
+ assert.equal(press('ArrowDown','ArrowDown'),true);assert.equal(title.element.classList.contains('is-keyed'),true);
+ title.show();assert.equal(title.element.classList.contains('is-keyed'),false,'shown again: unmarked');
  title.setEnabled('load',false);assert.equal(title.element.querySelector('[data-action="load"]').disabled,true);
  title.element.querySelector('[data-action="load"]').dispatchEvent(new document.defaultView.Event('click',{bubbles:true}));
  title.element.querySelector('[data-action="new"]').dispatchEvent(new document.defaultView.Event('click',{bubbles:true}));

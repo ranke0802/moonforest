@@ -36,7 +36,11 @@ export async function useLanguage(id,{doc=null}={}){
 // splash (if it is showing), so the loading card is already translated.
 let starting=null;
 export function startLanguage(view=globalThis){
- starting??=Promise.resolve(view.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(view.localStorage)??'ko',{doc:view.document??null}));
+ // Since 2026-11-20 it starts as soon as the language is known (picked), not
+ // when the logo ends, and tells the splash when the pack is here: the picker
+ // waits for that before the logo.
+ const splash=view.__moonforestSplash;
+ starting??=Promise.resolve(splash?.picked??splash?.done).then(()=>useLanguage(readLanguage(view.localStorage)??'ko',{doc:view.document??null})).finally(()=>{try{splash?.packReady?.();}catch{/* the splash is gone */}});
  return starting;
 }
 // Test hook: install a pack directly.
