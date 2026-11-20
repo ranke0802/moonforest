@@ -18,7 +18,7 @@ import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
 import {createRunTrail} from './run-trail.js';
-import {createDrawingProgress} from './drawing-veil.js';
+import {createDrawingProgress,drawStage} from './drawing-veil.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
@@ -300,6 +300,8 @@ export function setupV03(api){
  // The loading card's progress (#loading-progress width, #loading-bytes
  // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
  let downloadWatch=null;
+ // Beside the percent: the megabytes while downloading, then what is being drawn (user, 2026-11-20).
+ const stageText=p=>typeof p.remaining==='string'?p.remaining:t('title.stage.'+drawStage(p.ratio));
  function watchDownload(){
   const bar=doc.getElementById('loading-progress'),bytes=doc.getElementById('loading-bytes'),Watch=view?.MutationObserver;
   const sync=()=>{
@@ -309,7 +311,7 @@ export function setupV03(api){
    const bytesText=numbers.length>=2&&numbers[1]>0&&numbers[0]<numbers[1]?`${numbers[0].toFixed(1)} / ${numbers[1].toFixed(1)}MB`:'';
    if(bytesText)title.veil.setFirst(true);
    drawing.download(value,bytesText);
-   const p=drawing.update({});title.setProgress(p.ratio,p.remaining);
+   const p=drawing.update({});title.setProgress(p.ratio,stageText(p));
   };
   if(!html.dataset.loading)return;
   if(Watch){downloadWatch=new Watch(sync);for(const node of [bar,bytes])if(node)downloadWatch.observe(node,{attributes:true,attributeFilter:['style'],childList:true,characterData:true,subtree:true});downloadWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
@@ -426,7 +428,7 @@ export function setupV03(api){
      state.quietTime=!state.summoning&&!(s.pending>0)?state.quietTime+dt:0;
      if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);}
     }
-    if(!state.revealed){const p=drawing.update({dt,ready:state.sceneShown,pending:s.pending??0,summoning:state.summoning,quietTime:state.quietTime,prepareTime:state.prepareTime});title.setProgress(p.ratio,p.remaining);}
+    if(!state.revealed){const p=drawing.update({dt,ready:state.sceneShown,pending:s.pending??0,summoning:state.summoning,quietTime:state.quietTime,prepareTime:state.prepareTime});title.setProgress(p.ratio,stageText(p));}
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
    }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy&&state.langReady){
     // The opening is on the plains road; a document opened on another map goes there first.

@@ -33,16 +33,10 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-veil{position:absolute;inset:0;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .8s ease;touch-action:none}
 .v03-title.is-shown:not(.scene-ready) .v03-veil{opacity:1;pointer-events:auto}
 .v03-title.scene-ready .v03-veil{transition-duration:1.4s}
-.v03-veil-lens,.v03-veil-flash{position:absolute;left:0;top:0;overflow:hidden;border-radius:50%;will-change:transform;pointer-events:none}
 .v03-veil-art{position:absolute;left:0;top:0;width:100vw;height:100vh;height:100dvh;background:#000 center/cover no-repeat;will-change:transform}
-.v03-veil-lens{opacity:0;transition:opacity .9s ease;-webkit-mask-image:radial-gradient(closest-side,#000 0%,#000a 35%,#0000 100%);mask-image:radial-gradient(closest-side,#000 0%,#000a 35%,#0000 100%)}
-.v03-veil-lens .v03-veil-art{filter:brightness(.42) saturate(.8)}
-.v03-veil.is-lit .v03-veil-lens{opacity:1}
+.v03-veil-flash{position:absolute;left:0;top:0;overflow:hidden;border-radius:50%;will-change:transform,opacity;pointer-events:none}
 .v03-veil-flash{opacity:0;-webkit-mask-image:radial-gradient(closest-side,#000 0%,#000c 30%,#0000 100%);mask-image:radial-gradient(closest-side,#000 0%,#000c 30%,#0000 100%)}
 .v03-veil-flash .v03-veil-art{filter:brightness(.8)}
-.v03-veil-glow{position:absolute;left:0;top:0;width:320px;height:320px;border-radius:50%;background:radial-gradient(closest-side,#ffe9b438,#f3cf7a14 45%,#0000 100%);mix-blend-mode:screen;opacity:0;transition:opacity .9s ease;will-change:transform;pointer-events:none}
-.v03-veil.is-lit .v03-veil-glow{opacity:1}
-.v03-veil.is-idle .v03-veil-lens,.v03-veil.is-idle .v03-veil-glow{opacity:0;transition-duration:2.2s}
 .v03-veil-ring{position:absolute;left:0;top:0;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,#0000 55%,#ffe7a866 72%,#0000 100%);mix-blend-mode:screen;opacity:0;pointer-events:none}
 .v03-veil-spark{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
 .v03-veil-mote{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff1c8;box-shadow:0 0 8px 2px #f5d27a99;opacity:0;will-change:transform,opacity}
@@ -50,12 +44,10 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-veil-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#f3cf5a1f}
 .v03-veil-bar>i{position:absolute;inset:0;background:linear-gradient(90deg,#c99a2e,#f6d566 70%,#fff0b0);box-shadow:0 0 10px #f3cf5aaa;transform:scaleX(0);transform-origin:0 50%;transition:transform .5s ease-out}
 .v03-veil-note{position:absolute;left:max(28px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));margin:0;display:flex;align-items:baseline;gap:.9em;font-size:12px;letter-spacing:.24em;color:#ece0bc;opacity:.7;pointer-events:none;white-space:nowrap}
-.v03-veil-word{animation:v03-breathe 2.4s ease-in-out infinite}
 .v03-veil-pct{font-weight:400;color:#f6d566;letter-spacing:.08em;min-width:3.2em}
 .v03-veil-left{opacity:.65;letter-spacing:.12em}
 .v03-veil-memory{position:absolute;left:max(28px,env(safe-area-inset-left));bottom:calc(max(18px,env(safe-area-inset-bottom)) + 26px);margin:0;font-size:12px;letter-spacing:.2em;color:#ece0bc;opacity:0;pointer-events:none;transition:opacity 1.2s ease}
 .v03-veil.is-first .v03-veil-memory{opacity:.5}
-@media (prefers-reduced-motion:reduce){.v03-veil-word{animation:none}}
 .v03-title.has-panel .v03-title-inner{opacity:.25;pointer-events:none}
 .v03-title-kicker{margin:0 0 6px;font-size:clamp(12px,1.6vmin,16px);letter-spacing:.42em;color:var(--v03-gold);opacity:.9}
 .v03-title-logo{margin:0;font-size:clamp(34px,8.2vmin,84px);font-weight:700;letter-spacing:.12em;line-height:1.05;color:#f4ead0;text-shadow:0 2px 18px #000,0 0 42px #cfb77b40}
@@ -450,3 +442,7 @@ html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
 .v03-wake-veil{position:fixed;inset:0;z-index:850;pointer-events:none;background:radial-gradient(ellipse 70% 55% at 50% 50%,#000000c0 0%,#000 78%);animation:v03-wake-veil 3.1s ease-in-out both}
 @keyframes v03-wake-veil{0%{opacity:1}24%{opacity:1}38%{opacity:.3}47%{opacity:.92}63%{opacity:.12}73%{opacity:.45}100%{opacity:0}}
 @media (prefers-reduced-motion:reduce){.v03-wake-veil{animation-duration:.8s}}
+
+/* 0.3 start-up: the loading card stays black (the title veil shows progress); its painting flashed while a language pack loaded (2026-11-20). In play the card is the map-travel card as before. */
+html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error){background:#000!important}
+html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error)>*,html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error)::before,html:not([data-v03-screen=play]):not([data-v03-screen=failed]) #app>#loading:not(.error)::after{visibility:hidden!important}

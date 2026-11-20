@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
-import {createDrawingProgress,createDrawingVeil} from '../src/v03/drawing-veil.js';
+import {createDrawingProgress,createDrawingVeil,drawStage} from '../src/v03/drawing-veil.js';
 
 test('drawing progress: download to 50%, world start, pending work and the quiet wait, never back',()=>{
  const p=createDrawingProgress({quiet:1.2,limit:25,loadEase:4});
@@ -22,7 +22,8 @@ test('the veil writes progress only on change and lets go of its listeners on st
  const mount=document.querySelector('section');const added=[],removed=[];
  const veil=createDrawingVeil({doc:document,mount,first:false,label:first=>first?'처음으로 세계를 그리는 중…':'그려 둔 세계를 펼치는 중',memory:()=>'한 번 그린 세계는 기억에 남습니다.',left:n=>`남은 것 ${n}개`});
  const root=veil.element;root.addEventListener=(k)=>added.push(k);root.removeEventListener=(k)=>removed.push(k);
- veil.start();assert.deepEqual(added.sort(),['pointerdown','pointerleave','pointermove']);
+ veil.start();assert.deepEqual(added,['pointerdown'],'no light follows the pointer, only clicks and taps');
+ assert.equal(root.querySelector('.v03-veil-lens,.v03-veil-glow'),null);
  assert.equal(root.querySelector('.v03-veil-word').textContent,'그려 둔 세계를 펼치는 중');assert.equal(root.classList.contains('is-first'),false);
  veil.setFirst(true);assert.equal(root.querySelector('.v03-veil-word').textContent,'처음으로 세계를 그리는 중…');assert.equal(root.classList.contains('is-first'),true);
  assert.equal(root.querySelector('.v03-veil-memory').textContent,'한 번 그린 세계는 기억에 남습니다.');
@@ -32,6 +33,11 @@ test('the veil writes progress only on change and lets go of its listeners on st
  const fill=root.querySelector('.v03-veil-bar>i');fill.style.transform='x';veil.setProgress(.429,12);assert.equal(fill.style.transform,'x','same percent: no write');
  veil.setProgress(.3,'3.2 / 5.4MB');assert.equal(root.querySelector('.v03-veil-left').textContent,'3.2 / 5.4MB');
  veil.setProgress(1,0);assert.equal(root.querySelector('.v03-veil-left').textContent,'');
- veil.stop();assert.deepEqual(removed.sort(),['pointerdown','pointerleave','pointermove']);assert.equal(veil.active,false);
+ veil.stop();assert.deepEqual(removed,['pointerdown']);assert.equal(veil.active,false);
  veil.dispose();assert.equal(mount.querySelector('.v03-veil'),null);
+});
+
+test('after the download the note says what is being drawn, in order',()=>{
+ assert.equal(drawStage(.5),'ground');assert.equal(drawStage(.6),'trees');assert.equal(drawStage(.7),'people');
+ assert.equal(drawStage(.8),'critters');assert.equal(drawStage(.86),'beasts');assert.equal(drawStage(.95),'monsters');assert.equal(drawStage(1),'monsters');
 });

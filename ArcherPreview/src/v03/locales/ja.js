@@ -3,7 +3,7 @@ export default {
  ui:{
   'bench.trip':'往復計測中（約5分、{step}/5）。画面に触れないでください。',
   'bench.running':'性能を計測中（約50秒）。画面に触れないでください。','bench.done':'計測完了','bench.copy':'コピー','bench.save':'ファイル保存','bench.close':'閉じる',
-  'title.aria':'MoonForest タイトル画面','title.kicker':'悲嘆の魔女','title.sub':'縁の食卓 · 第一幕','title.menu':'メインメニュー','title.drawing':'世界を描いています','title.drawingLeft':'残り {n}','title.drawingFirst':'はじめて世界を描いています…','title.drawingAgain':'描いておいた世界を広げています','title.drawingMemory':'一度描いた世界は記憶に残ります。',
+  'title.aria':'MoonForest タイトル画面','title.kicker':'悲嘆の魔女','title.sub':'縁の食卓 · 第一幕','title.menu':'メインメニュー','title.drawing':'世界を描いています','title.drawingLeft':'残り {n}','title.drawingFirst':'はじめて世界を描いています…','title.drawingAgain':'描いておいた世界を広げています','title.drawingMemory':'一度描いた世界は記憶に残ります。','title.stage.ground':'地面を描いています','title.stage.trees':'木々を描いています','title.stage.people':'この世界に暮らす人々を描いています','title.stage.critters':'かわいい動物たちを描いています','title.stage.beasts':'獰猛な獣たちを描いています','title.stage.monsters':'恐ろしいモンスターを描いています',
   'menu.new':'はじめから','menu.load':'つづきから','menu.gallery':'ギャラリー','menu.settings':'設定','menu.quit':'終了',
   'time.hm':'{h}時間{m}分','time.m':'{m}分',
   'slot.empty':'空き','slot.emptyDetail':'新しい旅をはじめます','slot.title':'第{chapter}章 · {title}','slot.journey':'旅',

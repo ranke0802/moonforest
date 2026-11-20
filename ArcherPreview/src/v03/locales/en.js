@@ -3,7 +3,7 @@ export default {
  ui:{
   'bench.trip':'Measuring round trips (about 5 min, {step}/5). Please do not touch the screen.',
   'bench.running':'Measuring performance (about 50 s). Please do not touch the screen.','bench.done':'Measurement finished','bench.copy':'Copy','bench.save':'Save file','bench.close':'Close',
-  'title.aria':'MoonForest title screen','title.kicker':'The Witch of Sorrow','title.sub':'A Table of Bonds · Act I','title.menu':'Main menu','title.drawing':'Drawing the world','title.drawingLeft':'{n} left','title.drawingFirst':'Drawing the world for the first time…','title.drawingAgain':'Unfolding the world you drew','title.drawingMemory':'A world once drawn stays remembered.',
+  'title.aria':'MoonForest title screen','title.kicker':'The Witch of Sorrow','title.sub':'A Table of Bonds · Act I','title.menu':'Main menu','title.drawing':'Drawing the world','title.drawingLeft':'{n} left','title.drawingFirst':'Drawing the world for the first time…','title.drawingAgain':'Unfolding the world you drew','title.drawingMemory':'A world once drawn stays remembered.','title.stage.ground':'Drawing the ground','title.stage.trees':'Drawing the trees','title.stage.people':'Drawing the people who live here','title.stage.critters':'Drawing the cute animals','title.stage.beasts':'Drawing the fierce beasts','title.stage.monsters':'Drawing the fearsome monsters',
   'menu.new':'New Game','menu.load':'Continue','menu.gallery':'Gallery','menu.settings':'Settings','menu.quit':'Quit',
   'time.hm':'{h}h {m}m','time.m':'{m}m',
   'slot.empty':'Empty','slot.emptyDetail':'Begin a new journey','slot.title':'Ch.{chapter} · {title}','slot.journey':'Journey',

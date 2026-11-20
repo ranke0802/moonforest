@@ -5,7 +5,7 @@ export default {
  ui:{
   'bench.trip':'왕복 성능 측정 중 (약 5분, {step}/5). 화면을 건드리지 마세요.',
   'bench.running':'성능 측정 중 (약 50초). 화면을 건드리지 마세요.','bench.done':'성능 측정 완료','bench.copy':'복사','bench.save':'파일 저장','bench.close':'닫기',
-  'title.aria':'MoonForest 시작 화면','title.kicker':'비탄의 마녀','title.sub':'인연의 식탁 · 제1막','title.menu':'시작 메뉴','title.drawing':'세계를 그리는 중','title.drawingLeft':'남은 것 {n}개','title.drawingFirst':'처음으로 세계를 그리는 중…','title.drawingAgain':'그려 둔 세계를 펼치는 중','title.drawingMemory':'한 번 그린 세계는 기억에 남습니다.',
+  'title.aria':'MoonForest 시작 화면','title.kicker':'비탄의 마녀','title.sub':'인연의 식탁 · 제1막','title.menu':'시작 메뉴','title.drawing':'세계를 그리는 중','title.drawingLeft':'남은 것 {n}개','title.drawingFirst':'처음으로 세계를 그리는 중…','title.drawingAgain':'그려 둔 세계를 펼치는 중','title.drawingMemory':'한 번 그린 세계는 기억에 남습니다.','title.stage.ground':'바닥을 그리고 있어요','title.stage.trees':'나무를 그리고 있어요','title.stage.people':'세계에 살아가는 사람들을 그리고 있어요','title.stage.critters':'귀여운 동물들을 그리고 있어요','title.stage.beasts':'사나운 동물들을 그리고 있어요','title.stage.monsters':'무서운 몬스터를 그리고 있어요',
   'menu.new':'새로하기','menu.load':'불러오기','menu.gallery':'갤러리','menu.settings':'설정','menu.quit':'끝내기',
   'time.hm':'{h}시간 {m}분','time.m':'{m}분',
   'slot.empty':'빈 기록','slot.emptyDetail':'새로운 여정을 시작합니다','slot.title':'{chapter}장 · {title}','slot.journey':'여정',
