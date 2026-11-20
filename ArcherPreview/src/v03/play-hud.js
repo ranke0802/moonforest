@@ -36,7 +36,8 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    if(!value){caption.classList.remove('is-in');caption.hidden=true;return;}
    captionWho.textContent=value.who??'';captionWho.hidden=!value.who;captionText.textContent=value.text;caption.hidden=false;caption.classList.remove('is-in');void caption.offsetWidth;caption.classList.add('is-in');
   },
-  setHint(text){if(last.hint===text)return;last.hint=text;hint.hidden=!text;hint.textContent=text??'';},
+  // A new step pops in (scale + fade, compositor only).
+  setHint(text){if(last.hint===text)return;last.hint=text;hint.hidden=!text;hint.textContent=text??'';if(text)try{hint.animate?.([{opacity:0,transform:'translateX(-50%) scale(.86)'},{opacity:1,transform:'translateX(-50%) scale(1.06)',offset:.6},{opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:420,easing:'ease-out'});}catch{}},
   // value: null | {key,name,action,label,mark:'?'|'!'|null}
   setPrompt(value){
    const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}`:null;if(last.prompt===id)return;last.prompt=id;

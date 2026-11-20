@@ -78,7 +78,8 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   // Input is routed explicitly: joystick/action pointers never enter the camera handler.
   camera.inputs.clear();
   const sky = new MovingSky(scene);
-  const mountains = createMountainBackdrop(scene);
+  // 0.3 edition: the broken, natural ridgeline (0.1/0.2 keep the original).
+  const mountains = createMountainBackdrop(scene,{natural:!!globalThis.document?.documentElement?.dataset?.edition});
   const ambient = new HemisphericLight('moon-sky', new Vector3(0, 1, .3), scene);
   ambient.intensity = 1.05;
   ambient.diffuse = new Color3(.85, .89, 1);

@@ -293,7 +293,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'?','helping with the wagon is a new request: ?');
  assert.ok(h.shell.inspect().story.tips.includes('guide'),'the guide light appears after the fight, and its card with it');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
- key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,true);
+ key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,false,'the world keeps moving while talking');assert.equal(h.log.at(-1),'suspend:true','input is held instead');
  const portrait=hud('.v03-dialogue-portrait');assert.equal(portrait.hidden,false);assert.match(portrait.src,/portraits\/driver\.webp$/);assert.equal(hud('.v03-dialogue-who').textContent,'마부');assert.ok(h.log.filter(x=>x==='suspend:true').length>=2);
  // E advances every line and closes the last one without reopening the talk.
  // Three lines; then the driver goes to the wagon and the warrior pushes it

@@ -12,6 +12,24 @@ export const MOUNTAIN_RIDGE_LAYOUT=Object.freeze({
   far:Object.freeze({segments:128,radii:Object.freeze([79,90,110,123,143])}),
   near:Object.freeze({segments:192,radii:Object.freeze([43,50,55,58,68,86])}),
 });
+// 0.3 (2026-11-20, user: the mountains read as round bulges): concave peak
+// sides instead of a smoothstep dome, and ridged noise along the crest so the
+// skyline breaks into shoulders and notches. Same mesh, same vertex count.
+function ridged(angle, seed) {
+  let sum=0, amp=1, freq=7, total=0;
+  for (let k=0;k<4;k++) { sum+=amp*(1-Math.abs(Math.sin(angle*freq+seed*(k+1)*1.7))); total+=amp; amp*=.5; freq*=2.13; }
+  return sum/total;
+}
+function naturalHeight(angle, peaks, far) {
+  let height=0;
+  for (const [center,top,width] of peaks) {
+    const distance=Math.abs(Math.atan2(Math.sin(angle-center),Math.cos(angle-center)));
+    const t=Math.max(0,1-distance/(width*1.15));
+    height=Math.max(height,top*Math.pow(t,1.6));
+  }
+  const crest=ridged(angle,far?2.3:.7)-.62;
+  return Math.max(0,height+crest*(far?7:2.6)*(.35+.65*Math.min(1,height/(far?14:6))));
+}
 function peakHeight(angle, peaks) {
   let height=0;
   for (const [center,top,width] of peaks) {
@@ -24,7 +42,7 @@ function peakHeight(angle, peaks) {
 
 // Two closed, irregular ridgelines. All shading is baked into vertex colors at
 // creation; no textures, lights, shadows, collision, animation or frame updates.
-export function createMountainBackdrop(scene) {
+export function createMountainBackdrop(scene, {natural=false}={}) {
   const positions = [], colors = [], indices = [];
   function triangle(a, b, c, palette, variation, far) {
     const ux = b[0]-a[0], uy = b[1]-a[1], uz = b[2]-a[2];
@@ -48,7 +66,7 @@ export function createMountainBackdrop(scene) {
     const points = [], profiles = [];
     for (let i=0;i<segments;i++) {
       const angle = i/segments*TAU;
-      const height = (far?4:1.5)+peakHeight(angle,far?farPeaks:nearPeaks);
+      const height = (far?4:1.5)+(natural?naturalHeight(angle,far?farPeaks:nearPeaks,far):peakHeight(angle,far?farPeaks:nearPeaks));
       const cliff = clamp((Math.sin(angle*3+.6)*.6+Math.cos(angle*5-1.8)*.4-.05)*3);
       const bend = Math.sin(angle*3-.5)*3+Math.sin(angle*9)*1.6;
       profiles.push({angle,cliff});
@@ -58,7 +76,8 @@ export function createMountainBackdrop(scene) {
         // Soft slopes between outcrops, with steeper faces only in cliff patches.
         const shelf = !far && row===3 ? fraction-(1-cliff)*.2 : fraction;
         const ridgeAngle=angle+Math.sin(angle*5+row*2)*.012*(row?1:0);
-        const relief=row===0||row===rows.length-1?0:Math.sin(angle*29+row*2.3)*.35;
+        // Natural: gullies down the faces (ridged noise per row), not one smooth hump.
+        const relief=row===0||row===rows.length-1?0:natural?(ridged(angle*1.3+row*.9,row+4)-.6)*(far?3.2:1.2)*fraction:Math.sin(angle*29+row*2.3)*.35;
         return [Math.cos(ridgeAngle)*radius, height*shelf+offset+relief, Math.sin(ridgeAngle)*radius];
       }));
     }

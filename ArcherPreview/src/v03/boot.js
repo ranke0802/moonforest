@@ -401,7 +401,10 @@ export function setupV03(api){
   // prologue's own animation get the frame time.
   get stageHidden(){return (state.screen==='opening'||state.screen==='resume')&&opening.covering;},
   // The simulation is frozen while the prologue covers the stage.
-  get blocksGame(){return state.screen==='opening'||state.screen==='exit'||story.dialogueOpen||gate.active;},
+  // Dialogue no longer stops the world (2026-11-20, user: the player and the NPC
+  // froze mid-stride). Input is suspended while talking, so the player settles
+  // into idle and the speaker keeps its talking motion.
+  get blocksGame(){return state.screen==='opening'||state.screen==='exit'||gate.active;},
   // Called by the game when an enemy is defeated.
   defeat(event){if(state.screen==='play')story.defeat(event);},
   decorateFoeBar(element,foe){if(state.screen==='play')vitality.decorate(element,foe);},
@@ -460,6 +463,7 @@ export function setupV03(api){
    // Height/walkability samples for laying out story spots: [[x,z],...] → [{x,z,h,free}]
    probe(points){const w=api.world;return points.map(([x,z])=>({x,z,h:+(w.terrain?.heightAt?.(x,z)??0).toFixed(2),free:w.navigation?.free?.({x,z},.6)??null}));},
    travel:id=>api.travel(id),
+   castVisual:id=>story.castVisual?.(id)??null,
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),

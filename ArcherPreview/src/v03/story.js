@@ -16,7 +16,7 @@ import {createAuthoredPlacementNavigation} from '../authored-placement-runtime.j
 import {createWagonHorse} from './wagon-horse.js';
 import {createWagonRig} from './wagon-rig.js';
 import {createWagonModel} from './wagon-model.js';
-import {createSleepPose} from './sleep-pose.js';
+import {createSitPose} from './sit-pose.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -514,7 +514,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   holdWolf(foe);
   // The shots need a longer arm than play allows; restored at the end.
   scene.upper=camera.upperRadiusLimit;camera.upperRadiusLimit=Math.max(camera.upperRadiusLimit??0,80);
-  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false,sleeping:true,pitch:-Math.PI/2,horse:null});
+  Object.assign(scene,{active:true,time:0,beat:0,shot:-1,rolled:false,rollWindow:false,radius:camera.radius,beta:camera.beta,shake:0,thrown:false,placed:false,landed:false,sleeping:true,doze:1,horse:null});
   // The warrior sleeps in the wagon bed (held off the ground by holdsPlayer).
   showPlayer(true);startSleepPose();
   api.input.setSuspended(true);
@@ -539,25 +539,32 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(scene.veil||typeof document==='undefined')return;
   const veil=document.createElement('div');veil.className='v03-wake-veil';veil.setAttribute('aria-hidden','true');document.body.append(veil);scene.veil=veil;
  }
- // Lying in the bed: feet toward the bench, head toward the open back.
- // The limbs are laid along the body by sleep-pose.js (the model has no lying
- // clip), applied each frame after the animation; the lying body's back sits
- // 0.17-0.19 m above its feet pivot (measured on the model).
- const sleepPoses=new WeakMap();
- // The bed's floor, measured in the game by a ray on the wagon model (1.01 m;
- // the Blender vertex count guess of 0.8 put him under the boards).
- const BED=1.01;
+ // Seated in the bed (2026-11-20, user: lying with sword and shield looked odd):
+ // back to the tailgate, facing the bench, legs out along the boards, dozing
+ // with the head down, unarmed. The limbs are set by sit-pose.js each frame
+ // after the animation (the model has no sitting clip). The sword and shield
+ // (and their outline shells) are hidden while he sits and come back with him.
+ const sitPoses=new WeakMap();
+ // The bed's floor, measured in the game by a ray on the wagon model.
+ const BED=1.01,SEAT_BACK=1.05,SEAT_HIPS=.13;
+ const ARMS=/^(Golden_Oathblade|Bunnyguard_Shield)( \/|$)/;
+ function hideArms(root,hide){
+  if(hide){scene.arms=[];for(const mesh of root.getChildMeshes?.(false)??[])if(ARMS.test(mesh.name)&&mesh.isEnabled(false)){mesh.setEnabled(false);scene.arms.push(mesh);}}
+  else{for(const mesh of scene.arms??[])if(!mesh.isDisposed?.())mesh.setEnabled(true);scene.arms=null;}
+ }
  function startSleepPose(){
   const root=api.getPlayer?.(),bscene=api.world?.scene;if(!root||!bscene)return;
-  let pose=sleepPoses.get(root);if(!pose){try{pose=createSleepPose(root);}catch(error){console.warn('[MoonForest 0.3] sleep pose skipped',error);return;}sleepPoses.set(root,pose);}
-  scene.sleepWeight=1;scene.hipsAbove=0;scene.sleepObserver=bscene.onBeforeRenderObservable.add(()=>{if(scene.active&&scene.sleeping){pose.apply(scene.sleepWeight);scene.hipsAbove=pose.hipsAbove();}});scene.sleepScene=bscene;
+  let pose=sitPoses.get(root);if(!pose){try{pose=createSitPose(root);}catch(error){console.warn('[MoonForest 0.3] sit pose skipped',error);return;}sitPoses.set(root,pose);}
+  hideArms(root,true);
+  scene.sleepWeight=1;scene.doze=1;scene.hipsAbove=0;scene.sleepObserver=bscene.onBeforeRenderObservable.add(()=>{if(scene.active&&scene.sleeping){pose.apply(scene.sleepWeight,scene.doze);scene.hipsAbove=pose.hipsAbove();}});scene.sleepScene=bscene;scene.sleepRoot=root;
  }
- function stopSleepPose(){if(scene.sleepObserver){scene.sleepScene?.onBeforeRenderObservable.remove(scene.sleepObserver);}scene.sleepObserver=null;scene.sleepScene=null;}
- function poseSleeper(player,W0,ground,pitch){
-  const P=scene.points,p=player.position;
-  p.x=W0.x+P.f.x*.55+P.r.x*.15;p.z=W0.z+P.f.z*.55+P.r.z*.15;// Lying: the body's centre line 0.16 m over the boards (hips height from the last frame's pose).
-  const lying=Math.cos(pitch+Math.PI/2);p.y=ground+BED+(.16-(scene.hipsAbove??0))*lying;
-  if(player.rotation){player.rotation.y=P.yaw;player.rotation.x=pitch;player.rotation.z=0;}
+ function stopSleepPose(){if(scene.sleepObserver){scene.sleepScene?.onBeforeRenderObservable.remove(scene.sleepObserver);}scene.sleepObserver=null;scene.sleepScene=null;if(scene.sleepRoot){hideArms(scene.sleepRoot,false);scene.sleepRoot=null;}}
+ // Where he sits: near the back of the bed, facing the bench (the wagon's front).
+ function seatAt(W0){const P=scene.points;return {x:W0.x-P.f.x*SEAT_BACK,z:W0.z-P.f.z*SEAT_BACK};}
+ function poseSleeper(player,W0,ground){
+  const P=scene.points,p=player.position,seat=seatAt(W0);
+  p.x=seat.x;p.z=seat.z;p.y=ground+BED+SEAT_HIPS-(scene.hipsAbove??0);
+  if(player.rotation){player.rotation.y=P.yaw;player.rotation.x=0;player.rotation.z=0;}
  }
  function updateScene(dt){
   const lines=content.DIALOGUES['ambush-scene'],P=scene.points,wolf=scene.wolf,player=api.getPlayer();scene.time+=dt;const now=scene.time;
@@ -585,8 +592,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   else if(!scene.thrown){scene.thrown=true;scene.driver.x=P.D.x;scene.driver.z=P.D.z;scene.driver.visual.place(P.D.x,heightAt(P.D.x,P.D.z),P.D.z,Math.atan2(P.charge.x-P.D.x,P.charge.z-P.D.z));}
   // The warrior: asleep in the bed, sits up after the scream, thrown out in the fall.
   if(player&&now<SCENE.tipStart){
-   const k=ease((now-SCENE.sitUp)/SCENE.sitSeconds);scene.pitch=-Math.PI/2+(Math.PI/2-.3)*k;scene.sleepWeight=1-k;
-   poseSleeper(player,W0,ground,scene.pitch);
+   // Asleep with the head down; after the scream he looks up (still seated until the fall).
+   const k=ease((now-SCENE.sitUp)/SCENE.sitSeconds);scene.doze=1-k;scene.sleepWeight=1;
+   poseSleeper(player,W0,ground);
   }else if(scene.sleeping){scene.sleeping=false;stopSleepPose();if(player?.rotation){player.rotation.x=0;player.rotation.z=0;}showPlayer(false);}
   // The wolf: waits behind the firewood, breaks out round its side, springs at the horse.
   {const Wf=scene.wolfAt,bal=wolf.brain?.balance??{},run=bal.runSpeed??4.2,rate=bal.locomotionPlaybackRate??1;
@@ -611,15 +619,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    const k=ease(now/SCENE.sleepShot),back=28-21.5*k,side=14-11.8*k,up=26-22.6*k,ahead=8*(1-k);
    frameEye(W0.x-fx*back+rx*side,ground+up,W0.z-fz*back+rz*side,W0.x+fx*ahead,ground+1.5*k,W0.z+fz*ahead);
   }else if(shot===1){
-   // Inside the canopy, over his chest: the warrior asleep in the bed (from
-   // behind the bed's high sides hid him; framed in the game, 2026-11-20).
-   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),a=.9-.25*k,B=ground+BED;
-   frameEye(W0.x+fx*a+rx*.45,B+1.6,W0.z+fz*a+rz*.45,W0.x-fx*.6,B+.1,W0.z-fz*.6);
+   // Inside the canopy from the bench end: the warrior dozing against the
+   // tailgate, head down (2026-11-20 seated version).
+   const k=ease((now-SCENE.sleepShot)/(SCENE.scream-SCENE.sleepShot)),seat=seatAt(W0),B=ground+BED,near=1.5-.35*k;
+   frameEye(seat.x+fx*near+rx*.3,B+1.02,seat.z+fz*near+rz*.3,seat.x,B+.62,seat.z);
   }else if(shot===2){
-   // From his eyes: the canopy overhead, then up to the bench as he sits up.
-   const pitch=scene.pitch,c=Math.cos(pitch),s=Math.sin(pitch),feet={x:W0.x+fx*.55+rx*.15,z:W0.z+fz*.55+rz*.15};
-   const ex=feet.x+fx*1.55*s,ez=feet.z+fz*1.55*s,ey=ground+BED+.2+1.55*c+jolt;
-   const lx=ex+fx*(3*c+1.2),lz=ez+fz*(3*c+1.2),ly=ey-3*s-.4*(1-c);
+   // From his eyes: his lap and the boards, then up to the bench as he wakes.
+   const seat=seatAt(W0),k=1-(scene.doze??0),ex=seat.x+fx*.3,ez=seat.z+fz*.3,ey=ground+BED+SEAT_HIPS+.86+jolt;
+   const lx=ex+fx*(1+2.5*k),lz=ez+fz*(1+2.5*k),ly=ey-.95+1.05*k;
    frameEye(ex,ey,ez,lx,ly,lz);
   }else if(shot===3){
    // Past the horse's far side: the wolf breaks cover and comes for it.
@@ -954,6 +961,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }
    coach(dt);updateSlow(dt);configureCombat();contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
+  // QA: a cast member's visual (gesture, position) by NPC id.
+  castVisual:id=>cast.find(member=>member.npc.id===id)?.visual??null,
   inspect:()=>({lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
   dispose(){if(disposed)return;disposed=true;stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };

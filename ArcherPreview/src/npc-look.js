@@ -31,6 +31,9 @@ export function applyNpcLook(asset,value={}, {root,referenceHeight=1.85,baseScal
  // triangle-edge derivatives. Keep the older surface-style crease branch off.
  const look=npcLookProfile(value),style={outline:look.outline&&look.outlinePixels>0,outlineWidth:look.outlinePixels,internal:false,internalStrength:0,brightness:1};
  applyCharacterSurfaceStyle(asset,'npc');
+ // Open cloth (sleeves, shawls, aprons) shows its inside instead of the black
+ // outline hull behind it (2026-11-20, user: black shards at sleeves in gestures).
+ for(const mesh of asset.meshes)if(mesh.material&&!isRuntimeOutline(mesh)&&mesh.material.backFaceCulling!==false){mesh.material.backFaceCulling=false;if('twoSidedLighting' in mesh.material)mesh.material.twoSidedLighting=true;}
  for(const mesh of asset.meshes){mesh.metadata={...mesh.metadata,characterStyleGroup:'npc',npcCharacterStyle:{...style},npcLook:{...look}};if(isRuntimeOutline(mesh)){mesh.metadata.outlinePixels=look.outlinePixels;npcOutlineColor(mesh.material);registerCharacterInk(mesh,'npc');mesh.setEnabled(style.outline);}else if(mesh.getTotalVertices?.()>0){if(mesh.material?.getClassName()==='PBRMaterial'&&!plugins.has(mesh.material))plugins.set(mesh.material,new NpcToonBands(mesh.material));if(root)registerNpcInteriorInk(mesh,{root,look,height:referenceHeight,baseScale});}}
  return look;
 }

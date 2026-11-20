@@ -26,6 +26,11 @@ const MODEL_HEIGHT=1.85,IDLE='Idle_Stand',GAZE_IN=.35,GAZE_OUT=.8,GAZE_LINGER=1.
 // comes close, and the whole body turning to face whoever talks to them.
 const WALK='Casual_Walk',WALK_SPEED=.95,TURN_RATE=3.2,FADE=.3,NOTICE=3.4,NOTICE_SQ=NOTICE*NOTICE;
 const FIDGETS=Object.freeze(['Stand_and_Chat','Agree_Gesture','Listening_Gesture']);
+// Clips a model cannot play cleanly. The blacksmith's apron is skinned to his
+// right hand: in Agree_Gesture the hand to the chest drags the apron up like
+// cheese (2026-11-20, user; seen at 1.0-1.5 s of the clip in the game).
+const SKIP_CLIPS=Object.freeze({'moonforest-tripo-blacksmith':new Set(['Agree_Gesture'])});
+const STAND_IN=Object.freeze({Agree_Gesture:'Talk_with_Hands_Open'});
 const TALK_CLIPS=Object.freeze(['Talk_with_Hands_Open','Listening_Gesture']);
 const RETRY_LIMIT=3,RETRY_MS=2500;
 const UP=new Vector3(0,1,0),clamp=(value,limit)=>Math.max(-limit,Math.min(limit,value));
@@ -105,7 +110,8 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   const apply=record=>{const root=record.encounter.actor,yaw=pose.yaw;root.position.copyFromFloats(...pose.position);root.rotationQuaternion?.copyFromFloats(0,Math.sin(yaw/2),0,Math.cos(yaw/2));root.computeWorldMatrix(true);};
   // Behaviour state (all per actor, no per-frame allocation).
   const live={walkYaw:null,walkHeight:null,gestureLeft:0,mode:'idle',clip:IDLE,from:null,fromTime:0,fade:0,clipTime:0,next:2+Math.random()*4,target:{x:0,z:0},roam:null,talking:false,talkIndex:0,yaw:null,face:null};
-  const length=(record,clip)=>record.entry.geometry.clipDurations?.[clip]??0;
+  const skip=SKIP_CLIPS[assetId];
+  const length=(record,clip)=>skip?.has(clip)?0:record.entry.geometry.clipDurations?.[clip]??0;
   const play=(record,clip)=>{if(clip===live.clip||!length(record,clip))return;live.from=live.clip;live.fromTime=live.clipTime;live.fade=FADE;live.clip=clip;live.clipTime=0;};
   const turnToward=(yaw,dt)=>{const step=wrap(yaw-live.yaw);live.yaw+=clamp(step,TURN_RATE*dt);pose.yaw=live.yaw;return Math.abs(step)<.05;};
   function chooseIdle(record){
@@ -200,7 +206,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
    get position(){return pose?{x:pose.position[0],z:pose.position[2]}:null;},
    // Story moves: walk to a spot (then face yaw), or play one gesture.
    walkTo(x,z,{yaw=null,heightAt=null}={}){if(!pose)return;live.target.x=x;live.target.z=z;live.walkYaw=yaw;live.walkHeight=heightAt;live.mode='walk';live.next=20;live.gestureLeft=0;const record=npc?.get?.(instanceId);if(record?.ready)play(record,WALK);else live.clip=WALK;},
-   gesture(clip){const record=npc?.get?.(instanceId);if(!record?.ready||!length(record,clip))return;live.mode='idle';play(record,clip);live.gestureLeft=Math.min(2.2,length(record,clip));},
+   gesture(clip){const record=npc?.get?.(instanceId);if(record?.ready&&!length(record,clip)&&STAND_IN[clip])clip=STAND_IN[clip];if(!record?.ready||!length(record,clip))return;live.mode='idle';play(record,clip);live.gestureLeft=Math.min(2.2,length(record,clip));},
    // Only the actor the player is talking to turns and talks to them.
    talk(on,watchTarget){
     if(block||!pose)return;

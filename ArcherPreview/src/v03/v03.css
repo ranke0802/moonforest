@@ -146,7 +146,8 @@ html[data-loading] .v03-hud{display:none}
 .v03-quest-objective{margin:3px 0 0;font-size:clamp(13px,2vmin,15px);line-height:1.45;text-shadow:0 1px 4px #000}
 .v03-quest.is-updated .v03-quest-objective{animation:v03-pulse .9s ease}
 @keyframes v03-pulse{0%{color:#fff4b8;transform:translateX(6px)}100%{color:inherit;transform:none}}
-.v03-hint{position:absolute;left:50%;bottom:clamp(96px,22vh,170px);transform:translateX(-50%);padding:8px 18px;font-size:clamp(14px,2.4vmin,18px);letter-spacing:.06em;white-space:nowrap;background:#0b0f0dcc;border:1px solid #cfb77b80;border-radius:4px;text-shadow:0 1px 4px #000}
+/* Tutorial steps (2026-11-20, user): big gold words in the middle like the stamina notice, not a small box at the bottom. */
+.v03-hint{position:absolute;left:50%;top:30%;transform:translateX(-50%);max-width:min(900px,86vw);padding:0 12px;font-size:clamp(20px,3.8vmin,38px);font-weight:700;line-height:1.35;letter-spacing:.04em;text-align:center;white-space:normal;color:#ffe8ad;background:none;border:0;text-shadow:0 1px 2px #000,0 0 14px #000c,0 0 2px #000;pointer-events:none}
 .v03-prompt{position:absolute;left:50%;bottom:clamp(150px,32vh,250px);display:flex;align-items:center;gap:12px;min-height:46px;padding:7px 34px 7px 12px;pointer-events:auto;font:inherit;color:#f4ead0;text-align:left;background:linear-gradient(90deg,#101a1400,#101a14d9 14%,#101a14d9 72%,#101a1400);border:0;border-radius:0;cursor:pointer;touch-action:manipulation;opacity:0;transform:translate(-50%,6px);transition:opacity .22s ease,transform .22s ease}
 .v03-prompt.is-in{opacity:1;transform:translate(-50%,0)}
 .v03-prompt::before,.v03-prompt::after{content:'';position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,#cfb77b00,#cfb77bcc 30%,#cfb77bcc 70%,#cfb77b00)}
@@ -162,14 +163,14 @@ html[data-loading] .v03-hud{display:none}
 .v03-banner.is-shown{animation:v03-banner 3.6s ease forwards}
 @keyframes v03-banner{0%{opacity:0;transform:translate(-50%,8px)}12%,78%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-6px)}}
 .v03-dialogue{z-index:20005;display:flex;align-items:flex-end;justify-content:center;padding:0 16px max(22px,env(safe-area-inset-bottom));background:linear-gradient(0deg,#000000b0 0%,#00000000 46%)}
-.v03-dialogue-box{position:relative;width:min(780px,100%);min-height:118px;padding:16px 22px 46px;background:linear-gradient(180deg,#18241cf5,#0f1712f5);border:1px solid #ae925990;border-radius:6px;box-shadow:0 12px 40px #000a;opacity:0;transform:translateY(6px)}
+.v03-dialogue-box{position:relative;width:min(max(780px,54vw),1400px,100%);min-height:clamp(118px,15vh,240px);padding:clamp(16px,1.6vmin,28px) clamp(22px,2.2vmin,40px) clamp(46px,4.6vmin,76px);background:linear-gradient(180deg,#18241cf5,#0f1712f5);border:1px solid #ae925990;border-radius:6px;box-shadow:0 12px 40px #000a;opacity:0;transform:translateY(6px)}
 .v03-dialogue-box{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .v03-dialogue-box.is-in{opacity:1;transform:none;transition:opacity .18s ease,transform .18s ease}
-.v03-dialogue-who{display:block;margin-bottom:6px;font-size:clamp(14px,2.2vmin,17px);letter-spacing:.1em;color:var(--v03-gold)}
-.v03-dialogue-text{margin:0;font-size:clamp(15px,2.5vmin,19px);line-height:1.75;white-space:pre-line}
+.v03-dialogue-who{display:block;margin-bottom:.4em;font-size:clamp(14px,2vmin,26px);letter-spacing:.1em;color:var(--v03-gold)}
+.v03-dialogue-text{margin:0;font-size:clamp(15px,2.3vmin,30px);line-height:1.75;white-space:pre-line}
 .v03-dialogue-box.is-self .v03-dialogue-text{color:#c9d4e6;font-style:italic}
 .v03-dialogue-box.is-self .v03-dialogue-who{color:#9fb4d6}
-.v03-dialogue-next{position:absolute!important;right:14px;bottom:10px;min-height:36px;padding:4px 16px!important;font-size:14px!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
+.v03-dialogue-next{position:absolute!important;right:clamp(14px,1.4vmin,24px);bottom:clamp(10px,1vmin,18px);min-height:clamp(36px,3.4vmin,56px);padding:.3em 1.1em!important;font-size:clamp(14px,1.7vmin,22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 .v03-dialogue-next:hover{background:#cfb77b22!important}
 
 .v03-tip{position:absolute;right:max(18px,env(safe-area-inset-right));top:clamp(150px,34vh,260px);width:min(320px,42vw);padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
@@ -184,14 +185,14 @@ html[data-loading] .v03-hud{display:none}
 /* Small touch screens: keep the lesson line clear of the action buttons and
    the tip card clear of the minimap. */
 @media (pointer:coarse){
- .v03-hint{bottom:auto;top:max(58px,env(safe-area-inset-top));font-size:clamp(13px,3.6vmin,17px);white-space:normal;text-align:center;max-width:72vw}
+ .v03-hint{top:max(64px,26%);font-size:clamp(18px,5vmin,26px);max-width:78vw}
  .v03-tip{top:calc(max(58px,env(safe-area-inset-top)) + 46px);right:auto;left:50%;margin-left:calc(min(280px,60vw)/-2);width:min(280px,60vw);padding:8px 12px 9px}
  .v03-prompt{bottom:clamp(120px,34vh,220px);min-height:52px;padding:9px 38px 9px 18px}
  .v03-quest{top:clamp(64px,17vh,120px);max-width:46vw}
  .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
 }
 
-.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:clamp(120px,21vh,200px);-webkit-mask-image:linear-gradient(to top,transparent 0,#000 18%);mask-image:linear-gradient(to top,transparent 0,#000 18%);height:min(68vh,560px);width:auto;max-width:42vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
+.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:21vh;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 18%);mask-image:linear-gradient(to top,transparent 0,#000 18%);height:68vh;width:auto;max-width:42vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
 .v03-dialogue-portrait.is-in{opacity:1;transform:none;transition:opacity .35s ease,transform .35s ease}
 .v03-dialogue-box{z-index:1}
 @media (pointer:coarse),(max-height:520px){.v03-dialogue-portrait{height:min(58vh,420px);max-width:38vw}}

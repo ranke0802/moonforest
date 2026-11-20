@@ -97,6 +97,10 @@ function outlineMaterial(scene,exterior=false) {
   material.backFaceCulling = true;
   material.cullBackFaces = false;
   material.disableDepthWrite = true;
+  // The shell sits a hair behind the body in depth (2026-11-20, user: NPCs looked
+  // torn). With the thin NPC hull (0.4 px) it won the depth test against its own
+  // body along every edge and showed as black dots and slashes over faces and hair.
+  if(!exterior){material.zOffset=2;material.zOffsetUnits=4;}
   const srgb=x=>x<=.0031308?x*12.92:1.055*Math.pow(x,1/2.4)-.055;
   material.setColor3('outlineColor', exterior===true?new Color3(...[.028,.022,.030].map(srgb)):new Color3(.035,.025,.035));
   if(exterior)configureCharacterExteriorStencil(null,material,exterior==='enemy'?2:1);
