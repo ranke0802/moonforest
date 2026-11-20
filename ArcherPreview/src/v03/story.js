@@ -875,7 +875,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   showLocks();directWolf();
   coachState.shown+=dt;
   const hint=hints[coachState.index];
-  hud.setHint(hint?`${hint.text} · ${touch?hint.touch:hint.keys}`:null);
+  if(hint)hud.setHint(hint.text,touch?hint.touch:hint.keys);else hud.setHint(null);
   // The ring marks the one control this lesson is about, on PC and touch alike.
   if(!tips.showing)hud.setRing(hint?.target??null);
  }

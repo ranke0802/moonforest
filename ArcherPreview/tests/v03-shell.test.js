@@ -265,7 +265,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // allowing only its own action.
  assert.equal(h.shell.allows('move'),true);assert.equal(h.shell.allows('attack'),false);assert.equal(h.shell.allows('camera'),false);
  assert.equal(h.document.documentElement.dataset.v03Lock,'camera attack dodge guard potion');
- assert.match(hud('.v03-hint').textContent,/^이동 · W A S D/);
+ assert.equal(hud('.v03-hint-what').textContent,'이동');assert.equal(hud('.v03-hint-how').textContent,'W A S D','what to do and how are two lines, never one joined string');
  h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^이동/,'attacking early does not skip the movement lesson');
  h.controller.state='idle';h.player.position={x:2,z:0};h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^시점 돌리기/);
  assert.equal(h.shell.allows('camera'),true);assert.equal(h.shell.allows('move'),false);

@@ -6,7 +6,8 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const root=make('div','v03-hud');root.dataset.v03Hud='';
  const quest=make('section','v03-quest'),kicker=make('small','v03-quest-kicker'),title=make('strong','v03-quest-title'),objective=make('p','v03-quest-objective');
  kicker.textContent=t('hud.main');quest.append(kicker,title,objective);quest.hidden=true;
- const hint=make('div','v03-hint');hint.hidden=true;
+ // Two lines at most: what to do, then how (keys or touch control), each on one line.
+ const hint=make('div','v03-hint'),hintWhat=make('strong','v03-hint-what'),hintHow=make('span','v03-hint-how');hint.append(hintWhat,hintHow);hint.hidden=true;
  // Interaction plate: key cap · name · action. The whole plate is the touch target.
  const prompt=make('button','v03-prompt');prompt.type='button';prompt.hidden=true;
  const promptKey=make('span','v03-prompt-key'),promptMark=make('span','v03-prompt-mark'),promptName=make('strong','v03-prompt-name'),promptAction=make('span','v03-prompt-action');
@@ -23,7 +24,7 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const ring=make('div','v03-ring');ring.hidden=true;
  root.append(quest,hint,banner,tip,prompt,ring,caption);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
- const last={title:null,objective:null,hint:null,prompt:null,ring:null};
+ const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null};
  return {
   element:root,
   setQuest(nextTitle,nextObjective){
@@ -36,8 +37,13 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    if(!value){caption.classList.remove('is-in');caption.hidden=true;return;}
    captionWho.textContent=value.who??'';captionWho.hidden=!value.who;captionText.textContent=value.text;caption.hidden=false;caption.classList.remove('is-in');void caption.offsetWidth;caption.classList.add('is-in');
   },
-  // A new step pops in (scale + fade, compositor only).
-  setHint(text){if(last.hint===text)return;last.hint=text;hint.hidden=!text;hint.textContent=text??'';if(text)try{hint.animate?.([{opacity:0,transform:'translateX(-50%) scale(.86)'},{opacity:1,transform:'translateX(-50%) scale(1.06)',offset:.6},{opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:420,easing:'ease-out'});}catch{}},
+  // A new step pops in (scale + fade, compositor only). Called every frame:
+  // two arguments, no joined string, DOM written only when either changes.
+  setHint(text,how=null){
+   if(last.hint===text&&last.hintHow===how)return;
+   const fresh=last.hint!==text;last.hint=text;last.hintHow=how;hint.hidden=!text;hintWhat.textContent=text??'';hintHow.textContent=text&&how?how:'';hintHow.hidden=!(text&&how);
+   if(text&&fresh)try{hint.animate?.([{opacity:0,transform:'translateX(-50%) scale(.86)'},{opacity:1,transform:'translateX(-50%) scale(1.06)',offset:.6},{opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:420,easing:'ease-out'});}catch{}
+  },
   // value: null | {key,name,action,label,mark:'?'|'!'|null}
   setPrompt(value){
    const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}`:null;if(last.prompt===id)return;last.prompt=id;
