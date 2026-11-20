@@ -13,6 +13,7 @@ import {createCursors} from './cursors.js';
 import {createOrientationGate} from './orientation-gate.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createCombatTarget} from './combat-target.js';
+import {createCapeSpring} from './cape-spring.js';
 import {createActorVisual} from './placeholder-actor.js';
 import {createCastVisuals} from './cast-models.js';
 import {setupGameSelection} from '../game-selection.js';
@@ -54,6 +55,19 @@ export function setupV03(api){
  const vitality=createVitalityHud({doc,battle});
  // The foe being fought: what an attack or the guard turns to without a direction (combat-target.js).
  const combatTarget=createCombatTarget();
+ // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
+ // A model without the cloth grid, or a world without a scene (tests), leaves a stub so it is not tried every frame.
+ // Until it has been judged on screen it runs on the development server and with ?cape=1 only (2026-11-20).
+ let cape=null;
+ const capeWanted=(()=>{try{return !!import.meta.env?.DEV||new URLSearchParams(view?.location?.search??'').get('cape')==='1';}catch{return false;}})();
+ function bindCape(){
+  if(!capeWanted)return;
+  const root=api.getPlayer?.()??null,scene=api.world?.scene??null;
+  if(cape&&cape.root===root&&cape.scene===scene)return;
+  cape?.dispose();cape=null;if(!root||!scene)return;
+  let made=null;try{made=scene.onAfterAnimationsObservable&&root.getDescendants?createCapeSpring({scene,root,getScale:()=>state.screen==='play'?story.timeScale:1}):null;}catch(error){console.warn('[MoonForest 0.3] cape spring skipped',error);}
+  cape=made??{root,scene,dispose(){},inspect:()=>null,takeCost:()=>0,setEnabled(){}};
+ }
  // Game cursors start after the splash (and its language picker) is done.
  void Promise.resolve(view?.__moonforestSplash?.done).then(()=>{if(!state.disposed)cursors.enable();});
  // Language: chosen on the first launch (inline splash) or in Settings, kept
@@ -456,6 +470,7 @@ export function setupV03(api){
    if(state.screen!=='play')cursors.set('ui');
    const s=gameState();
    if(s.failed&&!state.failed){fail();return;}
+   if(s.ready)bindCape();
    if(state.screen==='title'){
     if(s.ready&&!state.sceneShown){state.sceneShown=true;void startAttract();}
     if(state.sceneShown&&!state.revealed){
@@ -492,6 +507,8 @@ export function setupV03(api){
   // QA helpers. main.js exposes this object on window only in development.
   debug:{
    skipFight(){battle.resetBattle();for(let i=0;i<AMBUSH.count;i++)story.defeat({kind:'wolf'});},
+   // The cape's spring on or off (to compare), and its average cost per frame in microseconds.
+   cape(on){cape?.setEnabled(on);return cape?.inspect()??null;},capeCost(){return cape?.takeCost()??0;},
    teleport(x,z,yaw=0){return api.resetStage({x,z,yaw});},
    // Height/walkability samples for laying out story spots: [[x,z],...] → [{x,z,h,free}]
    probe(points){const w=api.world;return points.map(([x,z])=>({x,z,h:+(w.terrain?.heightAt?.(x,z)??0).toFixed(2),free:w.navigation?.free?.({x,z},.6)??null}));},
@@ -500,6 +517,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;},
+  dispose(){if(state.disposed)return;state.disposed=true;cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;},
  };
 }
