@@ -97,8 +97,10 @@ test('opening: the caption hold starts after typing, a click completes it',async
  assert.ok(waits.slice(before).every(w=>!w.typing),'holds only ran with no caption typing');
 });
 
-test('blip: off by default, ?blip=1 or the stored setting turns it on',()=>{
- resetTextBlip();assert.equal(textBlipEnabled({location:{search:''},localStorage:{getItem:()=>null}}),false);
+test('blip: on by default, ?blip=0 or a stored 0 turns it off',()=>{
+ resetTextBlip();assert.equal(textBlipEnabled({location:{search:''},localStorage:{getItem:()=>null}}),true);
+ resetTextBlip();assert.equal(textBlipEnabled({location:{search:'?blip=0'},localStorage:{getItem:()=>null}}),false);
+ resetTextBlip();assert.equal(textBlipEnabled({location:{search:''},localStorage:{getItem:k=>k===TEXT_BLIP_KEY?'0':null}}),false);
  resetTextBlip();assert.equal(textBlipEnabled({location:{search:'?blip=1'}}),true);
  resetTextBlip();assert.equal(textBlipEnabled({location:{search:''},localStorage:{getItem:k=>k===TEXT_BLIP_KEY?'1':null}}),true);
  resetTextBlip();const stored={};setTextBlipEnabled(true,{view:{localStorage:{setItem:(k,v)=>{stored[k]=v;}}}});assert.equal(stored[TEXT_BLIP_KEY],'1');assert.equal(textBlipEnabled(),true);

@@ -1,7 +1,7 @@
 // Text blip (2026-11-19): a tiny synthesized retro "dot" per few typed
-// characters. Generated sound needs the user's approval before it ships on,
-// so it is OFF unless ?blip=1 or localStorage 'moonforest-0.3-text-blip-v1'
-// is '1'. No sound files: one shared AudioContext, created on the first user
+// characters. On by default since 2026-11-20 (user approved: "the dot sound
+// should play in dialogue"); ?blip=0 or localStorage
+// 'moonforest-0.3-text-blip-v1' = '0' turns it off. No sound files: one shared AudioContext, created on the first user
 // gesture after the blip is enabled, a few oscillators at a time.
 // The game has no user SFX volume setting yet, so the level is a fixed low gain.
 export const TEXT_BLIP_KEY='moonforest-0.3-text-blip-v1';
@@ -18,7 +18,7 @@ const storage=view=>{try{return view?.localStorage??null;}catch{return null;}};
 export function textBlipEnabled(view=globalThis){
  if(enabled!==null)return enabled;
  try{const q=new URLSearchParams(view?.location?.search??'').get('blip');if(q==='1')return enabled=true;if(q==='0')return enabled=false;}catch{}
- try{enabled=storage(view)?.getItem(TEXT_BLIP_KEY)==='1';}catch{enabled=false;}
+ try{enabled=storage(view)?.getItem(TEXT_BLIP_KEY)!=='0';}catch{enabled=true;}
  return enabled;
 }
 // For a future settings toggle. persist=false changes only this page.
