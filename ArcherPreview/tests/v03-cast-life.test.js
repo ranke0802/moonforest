@@ -21,7 +21,9 @@ function harness(){
 }
 const settle=()=>new Promise(resolve=>setTimeout(resolve,0));
 
-test('a roaming actor strolls within its radius and plays the walk',async()=>{
+test('a roaming actor strolls within its radius and plays the walk',async t=>{
+ // Seeded: walks and fidgets are random draws, and an unlucky minute had no fidget (CI 2026-11-20).
+ let seed=7;const random=Math.random;Math.random=()=>((seed=Math.imul(seed,1664525)+1013904223>>>0)/4294967296);t.after(()=>{Math.random=random;});
  const h=harness(),v=h.visuals(h.scene,'innkeeper',{id:'innkeeper'});
  v.place(10,0,10,0);await settle();await settle();
  v.roam({radius:2,free:()=>true,heightAt:()=>0,player:()=>({x:100,y:0,z:100})});
