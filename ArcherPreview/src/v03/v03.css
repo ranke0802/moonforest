@@ -20,19 +20,34 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-title.is-shown.scene-ready .v03-title-inner{opacity:1;transform:none}
 /* Until its scene is fully drawn the title stays black, with a quiet note. */
 .v03-title:not(.scene-ready) .v03-title-inner{pointer-events:none}
-.v03-title::after{content:attr(data-drawing);position:absolute;left:max(28px,env(safe-area-inset-left));bottom:max(22px,env(safe-area-inset-bottom));font-size:12px;letter-spacing:.3em;color:#ece0bc;opacity:0;transition:opacity .6s ease}
-.v03-title.is-shown:not(.scene-ready)::after{opacity:.55;animation:v03-breathe 1.6s ease-in-out infinite}
 @keyframes v03-breathe{50%{opacity:.2}}
-/* While the world is drawn behind the black title: two soft lights drift and
-   breathe, and dust motes rise through them (same palette as the prologue). */
-.v03-title-shade::before,.v03-title-shade::after{content:"";position:absolute;inset:-20%;pointer-events:none;opacity:0;transition:opacity 1.6s ease}
-.v03-title.is-shown:not(.scene-ready) .v03-title-shade::before,.v03-title.is-shown:not(.scene-ready) .v03-title-shade::after{opacity:1}
-.v03-title-shade::before{background:radial-gradient(closest-side at 34% 58%,#e9c98a2e,#e9c98a00 70%),radial-gradient(closest-side at 68% 38%,#9f8fd82a,#9f8fd800 70%),radial-gradient(closest-side at 52% 72%,#f4e3b81c,#f4e3b800 60%);filter:blur(8px);animation:v03-wisp 14s ease-in-out infinite alternate}
-.v03-title-shade::after{background-image:radial-gradient(circle,#ffe8b8 0 1.4px,#0000 2.4px),radial-gradient(circle,#d8ceff 0 1.2px,#0000 2.2px),radial-gradient(circle,#fff3d6 0 1px,#0000 2px);background-size:230px 260px,310px 290px,170px 210px;background-position:0 0,90px 140px,40px 60px;opacity:0;animation:v03-motes-rise 22s linear infinite;mask-image:radial-gradient(ellipse 70% 65% at 50% 55%,#000 30%,#0000 80%);-webkit-mask-image:radial-gradient(ellipse 70% 65% at 50% 55%,#000 30%,#0000 80%)}
-.v03-title.is-shown:not(.scene-ready) .v03-title-shade::after{opacity:.7}
-@keyframes v03-wisp{0%{transform:translate(-3%,2%) scale(1)}50%{transform:translate(2%,-2%) scale(1.08)}100%{transform:translate(4%,1%) scale(.96)}}
-@keyframes v03-motes-rise{from{background-position:0 0,90px 140px,40px 60px}to{background-position:40px -520px,10px -440px,90px -360px}}
-@media (prefers-reduced-motion:reduce){.v03-title-shade::before,.v03-title-shade::after{animation:none}}
+/* "Drawing the world" (2026-11-20, user): no drifting lights; the prologue's
+   cosmic cut under full black, seen only through the pointer's light, a burst
+   of motes on a click, and a gold progress line along the bottom. */
+.v03-veil{position:absolute;inset:0;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .8s ease;touch-action:none}
+.v03-title.is-shown:not(.scene-ready) .v03-veil{opacity:1;pointer-events:auto}
+.v03-title.scene-ready .v03-veil{transition-duration:1.4s}
+.v03-veil-lens,.v03-veil-flash{position:absolute;left:0;top:0;overflow:hidden;border-radius:50%;will-change:transform;pointer-events:none}
+.v03-veil-art{position:absolute;left:0;top:0;width:100vw;height:100vh;height:100dvh;background:#000 center/cover no-repeat;will-change:transform}
+.v03-veil-lens{opacity:0;transition:opacity .9s ease;-webkit-mask-image:radial-gradient(closest-side,#000 0%,#000a 35%,#0000 100%);mask-image:radial-gradient(closest-side,#000 0%,#000a 35%,#0000 100%)}
+.v03-veil-lens .v03-veil-art{filter:brightness(.42) saturate(.8)}
+.v03-veil.is-lit .v03-veil-lens{opacity:1}
+.v03-veil-flash{opacity:0;-webkit-mask-image:radial-gradient(closest-side,#000 0%,#000c 30%,#0000 100%);mask-image:radial-gradient(closest-side,#000 0%,#000c 30%,#0000 100%)}
+.v03-veil-flash .v03-veil-art{filter:brightness(.8)}
+.v03-veil-glow{position:absolute;left:0;top:0;width:320px;height:320px;border-radius:50%;background:radial-gradient(closest-side,#ffe9b438,#f3cf7a14 45%,#0000 100%);mix-blend-mode:screen;opacity:0;transition:opacity .9s ease;will-change:transform;pointer-events:none}
+.v03-veil.is-lit .v03-veil-glow{opacity:1}
+.v03-veil.is-idle .v03-veil-lens,.v03-veil.is-idle .v03-veil-glow{opacity:0;transition-duration:2.2s}
+.v03-veil-ring{position:absolute;left:0;top:0;width:120px;height:120px;border-radius:50%;background:radial-gradient(closest-side,#0000 55%,#ffe7a866 72%,#0000 100%);mix-blend-mode:screen;opacity:0;pointer-events:none}
+.v03-veil-spark{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
+.v03-veil-mote{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff1c8;box-shadow:0 0 8px 2px #f5d27a99;opacity:0;will-change:transform,opacity}
+.v03-veil-mote:nth-child(3n){background:#dcd4ff;box-shadow:0 0 8px 2px #a99cf099}
+.v03-veil-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#f3cf5a1f}
+.v03-veil-bar>i{position:absolute;inset:0;background:linear-gradient(90deg,#c99a2e,#f6d566 70%,#fff0b0);box-shadow:0 0 10px #f3cf5aaa;transform:scaleX(0);transform-origin:0 50%;transition:transform .5s ease-out}
+.v03-veil-note{position:absolute;left:max(28px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));margin:0;display:flex;align-items:baseline;gap:.9em;font-size:12px;letter-spacing:.24em;color:#ece0bc;opacity:.7;pointer-events:none;white-space:nowrap}
+.v03-veil-word{animation:v03-breathe 2.4s ease-in-out infinite}
+.v03-veil-pct{font-weight:400;color:#f6d566;letter-spacing:.08em;min-width:3.2em}
+.v03-veil-left{opacity:.65;letter-spacing:.12em}
+@media (prefers-reduced-motion:reduce){.v03-veil-word{animation:none}}
 .v03-title.has-panel .v03-title-inner{opacity:.25;pointer-events:none}
 .v03-title-kicker{margin:0 0 6px;font-size:clamp(12px,1.6vmin,16px);letter-spacing:.42em;color:var(--v03-gold);opacity:.9}
 .v03-title-logo{margin:0;font-size:clamp(34px,8.2vmin,84px);font-weight:700;letter-spacing:.12em;line-height:1.05;color:#f4ead0;text-shadow:0 2px 18px #000,0 0 42px #cfb77b40}

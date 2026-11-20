@@ -3,7 +3,7 @@ export default {
  ui:{
   'bench.trip':'正在测量往返（约5分钟，{step}/5），请勿触碰屏幕。',
   'bench.running':'正在测量性能（约50秒），请勿触碰屏幕。','bench.done':'测量完成','bench.copy':'复制','bench.save':'保存文件','bench.close':'关闭',
-  'title.aria':'MoonForest 标题画面','title.kicker':'悲叹的魔女','title.sub':'缘分的餐桌 · 第一幕','title.menu':'主菜单','title.drawing':'正在描绘世界',
+  'title.aria':'MoonForest 标题画面','title.kicker':'悲叹的魔女','title.sub':'缘分的餐桌 · 第一幕','title.menu':'主菜单','title.drawing':'正在描绘世界','title.drawingLeft':'剩余 {n}',
   'menu.new':'新游戏','menu.load':'继续游戏','menu.gallery':'画廊','menu.settings':'设置','menu.quit':'退出',
   'time.hm':'{h}小时{m}分','time.m':'{m}分',
   'slot.empty':'空','slot.emptyDetail':'开始新的旅程','slot.title':'第{chapter}章 · {title}','slot.journey':'旅程',

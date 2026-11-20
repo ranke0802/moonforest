@@ -1,5 +1,6 @@
 // Title screen DOM. Opacity/transform transitions only; no per-frame work.
 import {t} from './i18n.js';
+import {createDrawingVeil} from './drawing-veil.js';
 const MENU=['new','load','gallery','settings','quit'];
 const el=(doc,tag,className,text)=>{const node=doc.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
 export function formatPlayTime(seconds){
@@ -27,9 +28,12 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  const panel=el(doc,'div','v03-panel');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');
  const black=el(doc,'div','v03-title-black');
  layer.append(shade,inner,panel,black);mount.append(layer);
+ // While the scene is drawn behind the black: the cosmic cut seen by the pointer's light, and progress.
+ const veil=createDrawingVeil({doc,mount:layer,label:()=>t('title.drawing'),left:n=>t('title.drawingLeft',{n})});
+ layer.insertBefore(veil.element,inner);
  // All visible words come from the language pack; relabel() reapplies them.
  function label(){
-  layer.setAttribute('aria-label',t('title.aria'));layer.dataset.drawing=t('title.drawing');menu.setAttribute('aria-label',t('title.menu'));
+  layer.setAttribute('aria-label',t('title.aria'));layer.dataset.drawing=t('title.drawing');veil?.relabel();menu.setAttribute('aria-label',t('title.menu'));
   kicker.textContent=t('title.kicker');sub.textContent=t('title.sub');
   for(const [id,button] of buttons)button.textContent=t('menu.'+id);
  }
@@ -64,9 +68,12 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   element:layer,
   get visible(){return !layer.hidden;},
   relabel:label,
-  show(){if(disposed)return;layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');focusFirst();},
+  show(){if(disposed)return;layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');if(!layer.classList.contains('scene-ready'))veil.start();focusFirst();},
   // The scene behind becomes visible only once it is really ready.
-  setSceneReady(value){layer.classList.toggle('scene-ready',!!value);},
+  setSceneReady(value){layer.classList.toggle('scene-ready',!!value);if(value){veil.setProgress(1,0);veil.stop();}},
+  // Preparation progress for the black title (ratio 0..1, things still being prepared).
+  setProgress(ratio,remaining){veil.setProgress(ratio,remaining);},
+  get veil(){return veil;},
   setEnabled(action,enabled){const button=buttons.get(action);if(button)button.disabled=!enabled;},
   // Fades the whole screen to black, then hides the layer. The caller swaps
   // the stage while it is black.
@@ -128,6 +135,6 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
    });
   },
   closePanel:()=>closePanel(null),
-  dispose(){if(disposed)return;disposed=true;closePanel(null);layer.remove();},
+  dispose(){if(disposed)return;disposed=true;closePanel(null);veil.dispose();layer.remove();},
  };
 }
