@@ -154,6 +154,8 @@ html[data-loading] .v03-hud{display:none}
 .v03-hint-how{font-size:clamp(13px,min(2.5vmin,1.75vw),24px);font-weight:400;letter-spacing:.06em;white-space:nowrap;color:#f4ead0}
 .v03-prompt{position:absolute;left:50%;bottom:clamp(150px,32vh,250px);display:flex;align-items:center;gap:12px;min-height:46px;padding:7px 34px 7px 12px;pointer-events:auto;font:inherit;color:#f4ead0;text-align:left;background:linear-gradient(90deg,#101a1400,#101a14d9 14%,#101a14d9 72%,#101a1400);border:0;border-radius:0;cursor:pointer;touch-action:manipulation;opacity:0;transform:translate(-50%,6px);transition:opacity .22s ease,transform .22s ease}
 .v03-prompt.is-in{opacity:1;transform:translate(-50%,0)}
+/* A caption (the driver's count while the wagon is pushed) sits where the prompt is: the prompt stands above it. */
+.v03-hud.has-caption .v03-prompt{bottom:calc(clamp(110px,22vh,190px) + 124px)}
 .v03-prompt::before,.v03-prompt::after{content:'';position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,#cfb77b00,#cfb77bcc 30%,#cfb77bcc 70%,#cfb77b00)}
 .v03-prompt::before{top:0}.v03-prompt::after{bottom:0}
 .v03-prompt:hover .v03-prompt-key,.v03-prompt:focus-visible .v03-prompt-key{background:#cfb77b;color:#14100a}
@@ -453,3 +455,36 @@ html[data-v03-veil] #app>#loading:not(.error)>*,html[data-v03-veil] #app>#loadin
 /* PC: the strong-attack gauge rings the sword icon only (2026-11-20, user: it ran round the icon and the J key together; the button there is 72x40 with the icon in its left 40 px). */
 html[data-edition="moonforest-0.3"] #app[data-raster-hud][data-hud-input=pc] #attack-button.is-charging{box-shadow:none}
 html[data-edition="moonforest-0.3"] #app[data-raster-hud][data-hud-input=pc] #attack-button.is-charging::after{inset:auto;left:-1px;top:-1px;width:42px;height:42px}
+
+/* Combat effects in the settings (slow-fx.js) */
+.v03-slowfx-note{margin:0;font-size:13px;opacity:.8}
+.v03-slowfx-row{display:flex;align-items:center;gap:10px;min-height:40px;font-size:14px}
+.v03-slowfx-row input[type=checkbox]{width:20px;height:20px;accent-color:var(--v03-gold,#cfb77b)}
+.v03-slowfx-row.is-range{display:grid;grid-template-columns:minmax(64px,auto) 1fr 56px}
+.v03-slowfx-row input[type=range]{width:100%;accent-color:var(--v03-gold,#cfb77b)}
+.v03-slowfx-row output{text-align:right;font-variant-numeric:tabular-nums}
+.v03-slowfx-row:has(input:disabled){opacity:.45}
+
+/* A line over a speaker's head (play-hud.js setBubble/moveBubble): the point is the bubble's bottom centre. */
+.v03-bubble{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;transform:translate3d(-999px,-999px,0)}
+.v03-bubble-body{position:absolute;left:0;bottom:9px;translate:-50% 0;display:block;width:max-content;max-width:min(300px,62vw);padding:8px 14px 9px;font-size:clamp(15px,2.5vmin,21px);line-height:1.4;color:#fff4d6;text-align:center;white-space:pre-line;background:#101a14f2;border:1px solid #ae9259;border-radius:10px;box-shadow:0 4px 14px #0009}
+.v03-bubble-body::after{content:"";position:absolute;left:50%;bottom:-7px;width:12px;height:12px;margin-left:-6px;background:#101a14;border-right:1px solid #ae9259;border-bottom:1px solid #ae9259;transform:rotate(45deg)}
+html[lang=ko] .v03-bubble-body{word-break:keep-all}
+
+/* Map loading: the place and a tip over the art (loading-lore.js). Small blocks; only their opacity and transform move. */
+html[data-edition="moonforest-0.3"] #loading::before{background:linear-gradient(to top,rgba(0,0,0,.84),rgba(0,0,0,.5) 26%,transparent 60%)}
+#loading .v03-lore{position:fixed;z-index:2;left:max(26px,env(safe-area-inset-left));bottom:clamp(118px,25vh,200px);max-width:min(640px,calc(100vw - 52px));font-family:var(--v03-font);text-shadow:0 2px 8px #000,0 0 2px #000;pointer-events:none;opacity:0;transform:translateY(10px);transition:opacity .9s ease .2s,transform .9s ease .2s}
+#loading .v03-lore.is-in{opacity:1;transform:none}
+.v03-lore-place{margin:0 0 8px!important;font-size:clamp(26px,5.2vmin,46px)!important;font-weight:700!important;letter-spacing:.08em;line-height:1.2;color:#f2dc9c}
+.v03-lore-place::after{content:"";display:block;width:clamp(120px,22vw,240px);height:1px;margin-top:9px;background:linear-gradient(90deg,#cfb77bcc,#cfb77b00)}
+.v03-lore-about{margin:0!important;font-size:clamp(14px,2.3vmin,19px)!important;line-height:1.7!important;color:#f4ead0!important}
+#loading .v03-loadtip{position:fixed;z-index:3;left:max(20px,env(safe-area-inset-left));bottom:clamp(46px,9vh,70px);display:flex;align-items:baseline;gap:12px;max-width:min(780px,calc(100vw - 40px));min-height:44px;margin:0;padding:9px 38px 9px 14px;text-align:left;font-family:var(--v03-font);color:#f4ead0;background:linear-gradient(90deg,#101a14ee,#101a14cc 72%,#101a1400);border:0;border-left:2px solid var(--v03-gold,#cfb77b);border-radius:0;cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity .35s ease,transform .35s ease}
+#loading .v03-loadtip.is-in{opacity:1;transform:none}
+#loading .v03-loadtip[data-kind=story]{border-left-color:#a994e6}
+.v03-loadtip-kind{flex:none;font-size:12px;letter-spacing:.16em;color:var(--v03-gold,#cfb77b)}
+.v03-loadtip[data-kind=story] .v03-loadtip-kind{color:#c9b8ff}
+.v03-loadtip-text{font-size:clamp(13px,2.1vmin,16px);line-height:1.55;text-shadow:0 1px 3px #000}
+.v03-loadtip-next{position:absolute;right:14px;top:50%;translate:0 -50%;color:var(--v03-gold,#cfb77b);opacity:.85}
+html[lang=ko] .v03-lore-about,html[lang=ko] .v03-loadtip-text{word-break:keep-all}
+html[data-v03-screen="opening"] #loading .v03-lore,html[data-v03-screen="opening"] #loading .v03-loadtip,#loading.error .v03-lore,#loading.error .v03-loadtip{display:none!important}
+@media (prefers-reduced-motion:reduce){#loading .v03-lore,#loading .v03-loadtip{transition:none}}

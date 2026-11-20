@@ -261,20 +261,31 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  for(let i=0;i<560;i++)h.shell.update(.016);assert.equal(hud('.v03-caption').hidden,true,'no line over the opening shots');
  for(let i=0;i<30;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,/으아악/);
  for(let i=0;i<650;i++)h.shell.update(.016);assert.equal(h.shell.story.sceneActive,false);assert.equal(hud('.v03-caption').hidden,true);
- // Coaching runs in order: move → camera → attack → dodge → shield, each
- // allowing only its own action.
+ // Coaching runs in the order the user set (2026-11-20): move → camera →
+ // dodge → guard stance (held) → normal attack → shield shove → heavy attack,
+ // each allowing only its own action.
  assert.equal(h.shell.allows('move'),true);assert.equal(h.shell.allows('attack'),false);assert.equal(h.shell.allows('camera'),false);
  assert.equal(h.document.documentElement.dataset.v03Lock,'camera attack dodge guard potion');
  assert.equal(hud('.v03-hint-what').textContent,'이동');assert.equal(hud('.v03-hint-how').textContent,'W A S D','what to do and how are two lines, never one joined string');
  h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^이동/,'attacking early does not skip the movement lesson');
- h.controller.state='idle';h.player.position={x:2,z:0};h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^시점 돌리기/);
+ h.controller.state='idle';const from={...h.player.position};h.player.position={...from,x:from.x+2};h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^이동/,'a couple of steps are not enough: the walk lasts eight metres');
+ h.player.position={...from,x:from.x+9};h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^시점 돌리기/);
  assert.equal(h.shell.allows('camera'),true);assert.equal(h.shell.allows('move'),false);
- for(let i=0;i<2600;i++)h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^공격/,'an ignored lesson gives way only after a long wait');
- assert.equal(h.shell.allows('attack'),true);assert.equal(h.shell.allows('dodge'),false);
+ for(let i=0;i<2600;i++)h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/회피/,'an ignored lesson gives way only after a long wait');
+ assert.equal(h.shell.allows('dodge'),true);assert.equal(h.shell.allows('attack'),false);
 
- h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/회피/);
- h.controller.state='dodge';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/방패/);
- h.controller.state='idle';h.controller.guarding=true;h.shell.update(.016);assert.equal(hud('.v03-hint').hidden,true);h.controller.guarding=false;
+ h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/회피/,'only a dodge passes the dodge lesson');
+ h.controller.state='dodge';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방어 태세/);
+ // The guard has to be held: a moment of it is not enough.
+ h.controller.state='idle';h.controller.guarding=true;for(let i=0;i<10;i++)h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방어 태세/);
+ for(let i=0;i<50;i++)h.shell.update(.016);h.controller.guarding=false;assert.match(hud('.v03-hint').textContent,/^일반 공격/);
+ h.controller.state='judgment';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^일반 공격/,'the heavy attack does not pass the normal attack lesson');
+ h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방패 밀치기/);
+ h.controller.state='shieldPush';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/);
+ h.controller.state='slash';h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'a normal attack does not pass the heavy attack lesson');
+ h.controller.state='judgment';h.shell.update(.016);h.controller.state='idle';
+ // The lessons done: one line stays in the middle until the wolf is down.
+ assert.equal(hud('.v03-hint').hidden,false);assert.equal(hud('.v03-hint-what').textContent,'늑대를 처치하세요');
  assert.equal(h.shell.allows('attack')&&h.shell.allows('potion'),true,'free fight after the lessons');assert.equal(h.document.documentElement.dataset.v03Lock,undefined);
  // One-time tips: low health shows the potion card once, then it expires.
  assert.ok(!h.shell.inspect().story.tips.includes('guide'),'the guide light card waits for the light itself');
@@ -290,7 +301,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.guide.shown,null,'the guide light stays hidden during the opening fight');
  {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
- assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'?','helping with the wagon is a new request: ?');
+ assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').hidden,true,'no ? or ! after the button: the mark over his head says it');
  assert.ok(h.shell.inspect().story.tips.includes('guide'),'the guide light appears after the fight, and its card with it');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));
  key('KeyE');await settle();assert.deepEqual(potionKey,[],'E near an NPC talks and never reaches the potion key');assert.equal(h.shell.blocksGame,false,'the world keeps moving while talking');assert.equal(h.log.at(-1),'suspend:true','input is held instead');
@@ -305,8 +316,8 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  h.player.position={x:spot.x,z:spot.z};h.shell.update(.016);assert.match(hud('.v03-prompt').getAttribute('aria-label'),/마부를 기다리는 중/,'until the driver calls');
  // The driver calls each heave first ("하나!"); E before his call does nothing.
  key('KeyE');await settle();assert.equal(h.shell.inspect().story.lift.count,0,'no push before the driver calls');
- for(let push=1;push<=3;push++){for(let i=0;i<130;i++)h.shell.update(.016);assert.match(hud('.v03-caption-text').textContent,[/하나/,/둘/,/셋/][push-1]);assert.match(hud('.v03-prompt').getAttribute('aria-label'),new RegExp(`밀기 \\(${push-1}/3\\)`));key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}
- assert.equal(h.log.filter(x=>x==='guard').length>=3,true,'each heave is a shield shove');
+ for(let push=1;push<=3;push++){for(let i=0;i<130;i++)h.shell.update(.016);assert.match(hud('.v03-bubble-body').textContent,[/하나/,/둘/,/셋/][push-1],'his count is a bubble over his head');assert.equal(hud('.v03-caption').hidden,true);assert.match(hud('.v03-prompt').getAttribute('aria-label'),new RegExp(`밀기 \\(${push-1}/3\\)`));key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}
+ assert.equal(h.log.filter(x=>x==='guard').length,0,'a heave is a push now, not a shield shove');assert.equal(hud('.v03-bubble').hidden,true,'the count goes with the last heave');
  assert.equal(hud('.v03-dialogue').hidden,false,'the thanks start by themselves once it stands');
  for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();
  assert.equal(hud('.v03-dialogue').hidden,true,'E closes the conversation');
@@ -319,7 +330,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),['innkeeper','elder','herbalist','chief','youth']);
  assert.deepEqual(h.marks.at(-1),[{x:-3.4,z:10.6,glyph:'?'}],'the innkeeper carries a ? on the minimap');
  assert.equal(h.save.meta().title,'달빛 여관');assert.match(hud('.v03-banner').textContent,/완료 · 늑대와 마차/);
- h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'여관 주인과 이야기하기');assert.equal(hud('.v03-prompt-mark').textContent,'?');assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
+ h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'여관 주인과 이야기하기');assert.equal(hud('.v03-prompt-mark').hidden,true);assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
  for(let i=0;i<5;i++)key('Space');await settle();
  assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'사람들이 기억하는 성녀');assert.equal(hud('.v03-quest-objective').textContent,'주민 세 사람의 이야기 듣기 (0/3)');
  assert.ok(h.log.includes('gold:v03-quest-M00:30'),'M00 pays its gold reward once');assert.equal(h.log.filter(x=>x.startsWith('gold:v03-quest-M00')).length,1);

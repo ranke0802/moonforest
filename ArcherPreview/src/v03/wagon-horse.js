@@ -4,7 +4,7 @@
 // gallop footfalls), Horse_Nervous (head tosses, side-steps, pawing) and
 // Horse_Rear. It stands between the wagon's shafts in its harness; play()
 // cross-fades between the clips.
-import {TransformNode,Vector3} from '@babylonjs/core';
+import {Quaternion,TransformNode,Vector3} from '@babylonjs/core';
 import {loadOwnedModel} from './owned-model.js';
 import {attachCharacterOutlines} from '../character-outlines.js';
 import {applyMonsterToon} from '../monster-toon.js';
@@ -16,9 +16,22 @@ export const WAGON_HORSE=Object.freeze({height:2.05,ahead:3.55,side:0,turn:0,fad
 export const HORSE_CLIPS=Object.freeze(['Horse_Idle','Horse_Walk','Horse_Gallop','Horse_Nervous','Horse_Rear','Horse_Fall','Horse_Down','Horse_GetUp']);
 // Played once, holding the last frame.
 const ONCE=new Set(['Horse_Rear','Horse_Fall','Horse_GetUp']);
+// Down but alive (2026-11-20, user: it lay dead still): quick shallow breaths
+// in the chest, the head coming off the ground now and then, a leg twitching.
+// Set over the Horse_Down clip each frame it plays: a chest scale and four
+// bones tipped a little, nothing allocated. [bone, its child joint, lift, kick]
+const STIR=Object.freeze({breath:.018,breathRate:3.6,liftRate:.52,kickRate:1.7,bones:[['neck1','neck2',.1,0],['neck2','head',.17,0],['fcan.L','fhoof.L',0,.07],['hcan.R','hhoof.R',0,.05]]});
+const from=new Vector3(),to=new Vector3(),turn=new Quaternion(),world=new Quaternion(),parentWorld=new Quaternion();
+// Tips a bone so its joint points (dx,dy,dz) further that way (world units on the unit direction).
+function nudge(bone,child,dx,dy,dz){
+ bone.computeWorldMatrix(true);child.computeWorldMatrix(true);
+ child.absolutePosition.subtractToRef(bone.absolutePosition,from);if(from.lengthSquared()<1e-10||!bone.parent||!bone.rotationQuaternion)return;
+ from.normalize();to.set(from.x+dx,from.y+dy,from.z+dz).normalize();Quaternion.FromUnitVectorsToRef(from,to,turn);
+ bone.parent.absoluteRotationQuaternion.conjugateToRef(parentWorld);turn.multiplyToRef(bone.absoluteRotationQuaternion,world);parentWorld.multiplyToRef(world,bone.rotationQuaternion);
+}
 
 export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
- let disposed=false,container=null,root=null,observer=null;const casters=[];
+ let disposed=false,container=null,root=null,observer=null,chest=null,stirTime=0,breathing=false;const casters=[],stirBones=[];
  const groups=new Map();let current=null,previous=null,fade=0,wanted='Horse_Idle';
  function start(name,{loop=true}={}){
   const group=groups.get(name);wanted=name;if(!group||group===current)return;
@@ -36,6 +49,8 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   for(const node of container.rootNodes)node.parent=body;
   body.scaling.setAll(s);body.rotation.y=WAGON_HORSE.turn;
   for(const group of container.animationGroups){group.stop();groups.set(group.name,group);}
+  const node=name=>container.transformNodes.find(row=>row.name===name)??null;
+  chest=node('chest');for(const row of STIR.bones){const bone=node(row[0]),child=node(row[1]);if(bone&&child)stirBones.push({bone,child,lift:row[2],kick:row[3]});}
   for(const mesh of container.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
   // Painted like the other actors (2026-11-19, user: it had no cartoon shading
   // and no shadow): the monsters' unlit toon material and character bands.
@@ -48,10 +63,19 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   root.position=new Vector3(x,heightAt(x,z),z);root.rotation.y=yaw;
   start(wanted,{loop:!ONCE.has(wanted)});
   observer=scene.onBeforeRenderObservable.add(()=>{
-   if(!current||fade>=1)return;
-   fade=Math.min(1,fade+Math.min(.1,scene.getEngine().getDeltaTime()/1000)/WAGON_HORSE.fade);
-   current.setWeightForAllAnimatables(fade);previous?.setWeightForAllAnimatables(1-fade);
-   if(fade>=1&&previous){previous.stop();previous=null;}
+   const dt=Math.min(.1,scene.getEngine().getDeltaTime()/1000);
+   if(current&&fade<1){
+    fade=Math.min(1,fade+dt/WAGON_HORSE.fade);
+    current.setWeightForAllAnimatables(fade);previous?.setWeightForAllAnimatables(1-fade);
+    if(fade>=1&&previous){previous.stop();previous=null;}
+   }
+   // Lying on the ground: breathing and stirring over the clip.
+   if(wanted==='Horse_Down'&&current&&fade>=1){
+    stirTime+=dt;const lift=Math.max(0,Math.sin(stirTime*STIR.liftRate)),kick=Math.max(0,Math.sin(stirTime*STIR.kickRate+1.3)),head=lift*lift*lift*lift,jerk=kick*kick*kick*kick*kick*kick*kick*kick;
+    if(chest){chest.scaling.setAll(1+STIR.breath*Math.sin(stirTime*STIR.breathRate));breathing=true;}
+    const side=Math.cos(root.rotation.y),ahead=-Math.sin(root.rotation.y);
+    for(const row of stirBones)nudge(row.bone,row.child,side*row.kick*jerk,row.lift*head+row.kick*jerk*.4,ahead*row.kick*jerk);
+   }else if(breathing){breathing=false;chest?.scaling.setAll(1);}
   });
   return root;
  })().catch(error=>{console.warn('[MoonForest 0.3] wagon horse unavailable',error);return null;});
@@ -68,7 +92,7 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   dispose(){
    disposed=true;for(const mesh of casters.splice(0))try{shadows?.removeShadowCaster(mesh,false);}catch{}
    if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}
-   for(const group of groups.values())group.stop();groups.clear();current=previous=null;
+   for(const group of groups.values())group.stop();groups.clear();current=previous=null;chest=null;stirBones.length=0;
    // Meshes, outline shells, clips, loader materials and the toon copies all go with the model.
    if(container){container.dispose();container=null;}
    root?.dispose();root=null;

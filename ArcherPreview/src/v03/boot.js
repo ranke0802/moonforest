@@ -6,6 +6,8 @@ import {createOpening,warmPrologueArt} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
+import {createSlowFx,mountSlowFxSettings} from './slow-fx.js';
+import {createLoadingLore} from './loading-lore.js';
 import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
 import {createOrientationGate} from './orientation-gate.js';
@@ -56,7 +58,9 @@ export function setupV03(api){
  // chapter data once the language pack has loaded; nothing player-facing
  // appears before that (title and play wait for langReady).
  const languageStore=api.languageStorage??view?.localStorage??null,source=api.content??chapter1,content=cloneChapter(source);
- const story=createStory({api,doc,save,content,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers});
+ let loadingLore=null;
+ const slowFx=createSlowFx((()=>{try{return view.localStorage;}catch{return null;}})());
+ const story=createStory({api,doc,save,content,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
@@ -83,7 +87,7 @@ export function setupV03(api){
  // The first-launch picker lives in the splash, so the choice is read after it.
  let liveText=null;
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})):startLanguage(view)).then(()=>{
-  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));translateLabels(doc.getElementById('app'));liveText=watchTranslations(doc);mountControlsGuide();state.langReady=true;
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));translateLabels(doc.getElementById('app'));liveText=watchTranslations(doc);mountControlsGuide();loadingLore??=createLoadingLore({doc,t});state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
  function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
@@ -260,11 +264,12 @@ export function setupV03(api){
   const hint=id=>content.COMBAT_HINTS?.find(row=>row.id===id),tip=id=>content.TIPS?.find(row=>row.id===id);
   const both=key=>({touch:t(key),keys:t(key)});
   const rows=[
-   [hint('move')?.text,hint('move')],[hint('camera')?.text,hint('camera')],[hint('attack')?.text,hint('attack')],
-   [t('guide.combo'),both('guide.comboText')],[tip('charge')?.title,tip('charge')],
-   [t('guide.dodge'),hint('dodge')],[tip('sprint')?.title,tip('sprint')],[tip('stamina')?.title,tip('stamina')],
-   [t('guide.guard'),hint('guard')],[t('guide.justGuard'),both('guide.justGuardText')],
-   [tip('potion')?.title,tip('potion')],[tip('talk')?.title,tip('talk')],
+   [hint('move')?.text,hint('move')],[hint('camera')?.text,hint('camera')],
+   [t('guide.dodge'),hint('dodge')],[tip('sprint')?.title,tip('sprint')],
+   [hint('guard')?.text,hint('guard')],[t('guide.justGuard'),both('guide.justGuardText')],
+   [hint('attack')?.text,hint('attack')],[t('guide.combo'),both('guide.comboText')],
+   [hint('push')?.text,hint('push')],[hint('heavy')?.text,hint('heavy')],
+   [tip('stamina')?.title,tip('stamina')],[tip('potion')?.title,tip('potion')],[tip('talk')?.title,tip('talk')],
   ].filter(([name,row])=>name&&row);
   const make=(tag,className,text)=>{const node=doc.createElement(tag);node.className=className;if(text!==undefined)node.textContent=text;return node;};
   const guide=make('section','v03-guide'),list=make('dl','v03-guide-list');
@@ -274,6 +279,7 @@ export function setupV03(api){
  }
  function tidySettings(dialog){
   const host=dialog.querySelector('.settings-sections');if(!host)return;
+  mountSlowFxSettings({doc,host,fx:slowFx,t});
   // Back to the title: saved first; a second tap within three seconds confirms.
   const leave=doc.createElement('button');leave.type='button';leave.className='v03-settings-leave';leave.dataset.ui='';leave.textContent=t('settings.toTitle');
   let armed=0;
@@ -479,6 +485,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;},
+  dispose(){if(state.disposed)return;state.disposed=true;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;},
  };
 }

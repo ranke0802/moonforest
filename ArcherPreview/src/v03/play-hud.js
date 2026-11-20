@@ -22,9 +22,12 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  tip.append(tipTitle,tipLead,tipText);tip.hidden=true;
  // A pulsing ring over the real game button a lesson is about (touch play).
  const ring=make('div','v03-ring');ring.hidden=true;
- root.append(quest,hint,banner,tip,prompt,ring,caption);mount.append(root);
+ // A speech bubble over a speaker in the world (the driver's shouts). One
+ // element, reused; the story moves it with the speaker (transform only).
+ const bubble=make('div','v03-bubble'),bubbleBody=make('span','v03-bubble-body');bubble.append(bubbleBody);bubble.hidden=true;
+ root.append(quest,hint,banner,tip,prompt,ring,caption,bubble);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
- const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null};
+ const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
  return {
   element:root,
   setQuest(nextTitle,nextObjective){
@@ -34,6 +37,8 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    if(changedStep){quest.classList.remove('is-updated');void quest.offsetWidth;quest.classList.add('is-updated');}
   },
   setCaption(value){
+   // The prompt moves up out of a caption's way (v03.css).
+   root.classList.toggle('has-caption',!!value);
    if(!value){caption.classList.remove('is-in');caption.hidden=true;return;}
    captionWho.textContent=value.who??'';captionWho.hidden=!value.who;captionText.textContent=value.text;caption.hidden=false;caption.classList.remove('is-in');void caption.offsetWidth;caption.classList.add('is-in');
   },
@@ -43,6 +48,19 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    if(last.hint===text&&last.hintHow===how)return;
    const fresh=last.hint!==text;last.hint=text;last.hintHow=how;hint.hidden=!text;hintWhat.textContent=text??'';hintHow.textContent=text&&how?how:'';hintHow.hidden=!(text&&how);
    if(text&&fresh)try{hint.animate?.([{opacity:0,transform:'translateX(-50%) scale(.86)'},{opacity:1,transform:'translateX(-50%) scale(1.06)',offset:.6},{opacity:1,transform:'translateX(-50%) scale(1)'}],{duration:420,easing:'ease-out'});}catch{}
+  },
+  // The bubble's line (null hides it). A new line pops in.
+  setBubble(text){
+   if(last.bubble===text)return;last.bubble=text;bubble.hidden=!text;bubbleBody.textContent=text??'';
+   if(!text){last.bubbleX=last.bubbleY=NaN;return;}
+   try{bubbleBody.animate?.([{opacity:0,transform:'scale(.8)'},{opacity:1,transform:'scale(1.05)',offset:.6},{opacity:1,transform:'scale(1)'}],{duration:260,easing:'ease-out'});}catch{}
+  },
+  // Where the speaker's head is on screen (CSS pixels), kept inside the view
+  // (width, height). Written only when it moved.
+  moveBubble(x,y,width,height){
+   const px=Math.round(Math.max(90,Math.min(width-90,x))),py=Math.round(Math.max(64,Math.min(height-40,y)));
+   if(px===last.bubbleX&&py===last.bubbleY)return;last.bubbleX=px;last.bubbleY=py;
+   bubble.style.transform=`translate3d(${px}px,${py}px,0)`;
   },
   // value: null | {key,name,action,label,mark:'?'|'!'|null}
   setPrompt(value){

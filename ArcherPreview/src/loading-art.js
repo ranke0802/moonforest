@@ -10,5 +10,5 @@ export function loadingArtFor(character){
  if(typeof character!=='string'||!Object.hasOwn(manifest.characters,character))return null;
  const art=manifest.artworks[manifest.characters[character]],base=import.meta.env?.BASE_URL??'./',fallback=new URL('../',import.meta.url);
  let root;try{root=new URL(base,globalThis.location?.href??globalThis.document?.baseURI??fallback);}catch{root=new URL(base,fallback);}
- return {url:new URL('assets/'+art.url.replace(/^\.\//,''),root).href,label:art.label,position:art.position};
+ return {id:manifest.characters[character],url:new URL('assets/'+art.url.replace(/^\.\//,''),root).href,label:art.label,position:art.position};
 }

@@ -1,12 +1,17 @@
 // Chapter 1 content for the first ten minutes (M1). Data only: the story
 // runtime reads it; nothing here touches the engine.
-// The opening happens on the village road, about 35 m from the gate: close
+// The opening happens on the village road, about 24 m from the gate: close
 // enough that the first walk is short and safe.
-export const OPENING_STAGE=Object.freeze({map:'great-plains',x:-62.5,z:-20.9,yaw:-2.097});
+// 2026-11-20 (user: the wagon came down a slope over the grass): everything
+// stands on the road itself now, on its straight flat stretch west of the
+// lookout crossroads (-61,-20) -> (-79,-30). The wagon stops 12 m past the
+// crossroads on the road's centre line, heading along it (yaw -2.078); the
+// ride before it runs over ground between 0.64 and 0.21 m.
+export const OPENING_STAGE=Object.freeze({map:'great-plains',x:-69.6,z:-21,yaw:-2.078});
 // Scenery the story adds to a map (real assets, placed through the map's own
 // placement runtime so streaming, collision and outlines work as usual).
 export const PROPS=Object.freeze([
- {id:'v03-opening-wagon',asset:'covered-wagon',map:'great-plains',x:-64.3,z:-25.8,yaw:-2.097,collision:'none'},
+ {id:'v03-opening-wagon',asset:'covered-wagon',map:'great-plains',x:-71.49,z:-25.83,yaw:-2.078,collision:'none'},
 ]);
 // Where to walk to leave a map toward another one (used by the guide light).
 export const ROUTES=Object.freeze({
@@ -17,7 +22,7 @@ export const ROUTES=Object.freeze({
  'witch-cave':{'monster-forest':{x:-46,z:47},'great-plains':{x:-46,z:47},village:{x:-46,z:47}},
 });
 export const NPCS=Object.freeze([
- {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-65.6,z:-23.6,yaw:.6,idle:'driver-idle'},
+ {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-72.87,z:-30.14,yaw:.42,idle:'driver-idle'},
  {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle'},
  {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle'},
@@ -189,12 +194,20 @@ export const CHAPTER_END_NOTE='1장 끝 · 다음 이야기 · 엘레나의 일�
 // First-fight coaching, in order. Each line stays until the player has done it.
 // done: moved (metres) · camera (radians turned) · states (controller states)
 // allow: the only actions usable during the lesson · wolf: hold | charge | snap
+// The first fight's lessons, in the order the user set (2026-11-20): walk and
+// look around while the wolf is busy with the horse, then dodge its charge,
+// hold the guard, a normal attack, the shield shove and the heavy attack.
+// wolf: feed (tearing at the fallen horse) · hold · charge · snap.
+// done: moved (metres walked) · camera (radians turned) · states (the
+// player's action; with hold, for that many seconds).
 export const COMBAT_HINTS=Object.freeze([
- {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',target:'#joystick',allow:['move'],wolf:'hold',done:{moved:1.5}},
- {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',allow:['camera'],wolf:'hold',done:{camera:.3}},
- {id:'attack',text:'공격',keys:'J · 좌클릭',touch:'검 버튼',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['attack','slash','judgment','moveAttack']}},
+ {id:'move',text:'이동',keys:'W A S D',touch:'왼쪽 아래 스틱',target:'#joystick',allow:['move'],wolf:'feed',done:{moved:8}},
+ {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',allow:['camera'],wolf:'feed',done:{camera:.3}},
  {id:'dodge',text:'늑대가 달려들면 회피',keys:'Space',touch:'장화 버튼',target:'#dodge-button',allow:['move','camera','dodge'],wolf:'charge',done:{states:['dodge']}},
- {id:'guard',text:'물려고 들면 방패로 밀치기',keys:'F (길게 누르면 방어)',touch:'방패 버튼 (길게 누르면 방어)',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['shieldPush','guard']}},
+ {id:'guard',text:'방어 태세',keys:'F를 길게 누르고 있기',touch:'방패 버튼을 길게 누르고 있기',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['guard'],hold:.8}},
+ {id:'attack',text:'일반 공격',keys:'J · 좌클릭을 짧게',touch:'검 버튼을 짧게',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['attack','slash','moveAttack']}},
+ {id:'push',text:'방패 밀치기',keys:'F를 짧게',touch:'방패 버튼을 짧게',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['shieldPush']}},
+ {id:'heavy',text:'강공격',keys:'J · 좌클릭을 길게 눌렀다 떼기',touch:'검 버튼을 길게 눌렀다 떼기',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['judgment']}},
 ]);
 
 // One-time tips, shown the first time a feature becomes relevant (per save).
@@ -204,7 +217,6 @@ export const TIPS=Object.freeze([
  {id:'guide',when:'guide-shown',title:'길잡이 빛',keys:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',touch:'빛무리가 가야 할 곳으로 먼저 날아갑니다.',text:'어디로 갈지 모를 때는 빛을 따라가세요.'},
  {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 동안에도 움직일 수 있습니다.'},
  {id:'boss',when:'step:M04/bear',title:'큰 짐승',keys:'몸을 크게 젖히면 강한 공격이 옵니다. Space로 피하거나 F를 길게 눌러 막으세요.',touch:'몸을 크게 젖히면 강한 공격이 옵니다. 장화 버튼으로 피하거나 방패 버튼을 길게 눌러 막으세요.',text:'공격이 끝난 직후가 반격할 때입니다.'},
- {id:'charge',when:'step:M00/driver',title:'강공격',keys:'공격(J · 좌클릭)을 길게 누르면 심판의 검을 내려칩니다.',touch:'검 버튼을 길게 누르면 심판의 검을 내려칩니다.',text:'느리지만 강합니다. 빈틈이 보일 때 쓰세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
  {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 왼쪽 목표와 오른쪽 위 지도를 따라가세요.'},
  {id:'stamina',when:'low-stamina',title:'스태미나',keys:'체력 아래 노란 막대가 스태미나입니다. 공격·회피·방패·질주에 쓰입니다.',touch:'체력 아래 노란 막대가 스태미나입니다. 공격·회피·방패·질주에 쓰입니다.',text:'다 쓰면 잠시 기다려야 합니다. 동작을 멈추면 다시 차오릅니다.'},

@@ -49,7 +49,9 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
     begin(character){
       failed=false;resetError();phase='download';progress=0;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');
       get('retry-load').hidden=true;get('retry-load').textContent=tr('다시 불러오기');get('loading-title').textContent=tr('불러오는 중');get('loading-text').textContent=tr('불러오는 중');get('loading-bytes').textContent=tr('0.0 / 0.0 MB');get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
-      if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');}}
+      if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');}
+        // Which place the art shows (0.3 adds its name and a line about it).
+        if(image?.id)overlay.dataset.place=image.id;else delete overlay.dataset.place;}
       return generation;
     },
     download(state={},expectedGeneration){

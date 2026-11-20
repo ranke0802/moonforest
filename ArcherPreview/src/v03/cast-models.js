@@ -93,7 +93,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   if(!assetId)return fallback(scene,key,{id});
   const spec=ACTOR_VISUALS[key]??{label:key,height:1.7},scale=(spec.height??1.7)/MODEL_HEIGHT;
   const instanceId=`v03-cast-${String(id).replace(/[^A-Za-z0-9._:-]/g,'-')}-${++serial}`;
-  let pose=null,ready=false,disposed=false,npc=null,block=null,wake=null;
+  let pose=null,ready=false,disposed=false,npc=null,block=null,wake=null,overlay=null,overlayEvery=0;
   let clock=Math.random()*4,watch=null,gaze=null,gazeWeight=0,releaseAt=0,time=0,pending=0;const eye=new Vector3();
   const transform=()=>({position:pose.position,rotation:quatY(pose.yaw),scale});
   // A failed load (often a transient abort while a map trip settles) shows the
@@ -109,7 +109,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   // once its map bookkeeping moves on, and this actor is owned by the story.
   const apply=record=>{const root=record.encounter.actor,yaw=pose.yaw;root.position.copyFromFloats(...pose.position);root.rotationQuaternion?.copyFromFloats(0,Math.sin(yaw/2),0,Math.cos(yaw/2));root.computeWorldMatrix(true);};
   // Behaviour state (all per actor, no per-frame allocation).
-  const live={walkYaw:null,walkHeight:null,gestureLeft:0,mode:'idle',clip:IDLE,from:null,fromTime:0,fade:0,clipTime:0,next:2+Math.random()*4,target:{x:0,z:0},roam:null,talking:false,talkIndex:0,yaw:null,face:null};
+  const live={walkYaw:null,walkHeight:null,walkSpeed:WALK_SPEED,gestureLeft:0,mode:'idle',clip:IDLE,from:null,fromTime:0,fade:0,clipTime:0,next:2+Math.random()*4,target:{x:0,z:0},roam:null,talking:false,talkIndex:0,yaw:null,face:null};
   const skip=SKIP_CLIPS[assetId];
   const length=(record,clip)=>skip?.has(clip)?0:record.entry.geometry.clipDurations?.[clip]??0;
   const play=(record,clip)=>{if(clip===live.clip||!length(record,clip))return;live.from=live.clip;live.fromTime=live.clipTime;live.fade=FADE;live.clip=clip;live.clipTime=0;};
@@ -146,7 +146,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
    if(live.mode==='walk'){
     const tx=live.target.x-pose.position[0],tz=live.target.z-pose.position[2],gap=Math.hypot(tx,tz);
     if(gap<.15||live.next<=0){if(live.walkYaw!==null){live.yaw=live.walkYaw;pose.yaw=live.walkYaw;live.walkYaw=null;}chooseIdle(record);return;}
-    const aligned=turnToward(Math.atan2(tx,tz),dt);const speed=aligned?WALK_SPEED:WALK_SPEED*.35,step=Math.min(gap,speed*dt);
+    const aligned=turnToward(Math.atan2(tx,tz),dt);const pace=live.walkYaw!==null?live.walkSpeed:WALK_SPEED,speed=aligned?pace:pace*.35,step=Math.min(gap,speed*dt);
     const x=pose.position[0]+tx/gap*step,z=pose.position[2]+tz/gap*step;
     pose.position[0]=x;pose.position[2]=z;pose.position[1]=(live.walkHeight??live.roam?.heightAt)?.(x,z)??pose.position[1];
     return;
@@ -161,12 +161,14 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
     // accumulated time (2026-11-20: five village folk sampled every frame).
     pending+=dt;
     const cam=scene.activeCamera?.globalPosition;let interval=0;
-    if(cam&&!watch&&live.mode!=='talk'){const dx=cam.x-pose.position[0],dz=cam.z-pose.position[2],d2=dx*dx+dz*dz;interval=d2<144?0:d2<900?1/30:1/15;}
+    if(overlay)interval=overlayEvery;
+    else if(cam&&!watch&&live.mode!=='talk'){const dx=cam.x-pose.position[0],dz=cam.z-pose.position[2],d2=dx*dx+dz*dz;interval=d2<144?0:d2<900?1/30:1/15;}
     if(pending<interval)return;
     dt=Math.min(.25,pending);pending=0;
     time+=dt;clock+=dt;
-    behave(record,dt);
-    live.clipTime+=dt;live.fromTime+=dt;live.fade=Math.max(0,live.fade-dt);
+    // A story pose owns the body (see overlay): no strolling, fidgets or gaze under it.
+    if(overlay){if(live.clip!==IDLE)play(record,IDLE);live.mode='idle';live.gestureLeft=0;}else behave(record,dt);
+    live.clipTime+=live.mode==='walk'&&live.walkYaw!==null?dt*live.walkSpeed/WALK_SPEED:dt;live.fromTime+=dt;live.fade=Math.max(0,live.fade-dt);
     const cur=length(record,live.clip)||4,w=live.fade>0?1-live.fade/FADE:1;
     record.clipId=live.clip;record.clock=clock;record.loop=true;
     try{
@@ -174,6 +176,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
      else record.sampler.sample([{clipId:live.clip,time:live.clipTime%cur,weight:1}],clock);
     }catch{return;}
     apply(record);
+    if(overlay){try{const every=overlay(record.encounter.actor,record.encounter.asset,dt);overlayEvery=typeof every==='number'?every:0;}catch(error){overlay=null;console.warn('[MoonForest 0.3] cast pose stopped',error);}return;}
     if(releaseAt&&time>=releaseAt){watch=null;releaseAt=0;}
     const at=watch?.()??live.face;
     gazeWeight=at?Math.min(1,gazeWeight+dt/GAZE_IN):Math.max(0,gazeWeight-dt/GAZE_OUT);
@@ -205,8 +208,15 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
    // Where the actor stands now (it may have strolled off its placed spot).
    get position(){return pose?{x:pose.position[0],z:pose.position[2]}:null;},
    // Story moves: walk to a spot (then face yaw), or play one gesture.
-   walkTo(x,z,{yaw=null,heightAt=null}={}){if(!pose)return;live.target.x=x;live.target.z=z;live.walkYaw=yaw;live.walkHeight=heightAt;live.mode='walk';live.next=20;live.gestureLeft=0;const record=npc?.get?.(instanceId);if(record?.ready)play(record,WALK);else live.clip=WALK;},
+   // speed: metres a second (the clip keeps step with it).
+   walkTo(x,z,{yaw=null,heightAt=null,speed=WALK_SPEED}={}){if(!pose)return;live.walkSpeed=speed;live.target.x=x;live.target.z=z;live.walkYaw=yaw;live.walkHeight=heightAt;live.mode='walk';live.next=20;live.gestureLeft=0;const record=npc?.get?.(instanceId);if(record?.ready)play(record,WALK);else live.clip=WALK;},
    gesture(clip){const record=npc?.get?.(instanceId);if(record?.ready&&!length(record,clip)&&STAND_IN[clip])clip=STAND_IN[clip];if(!record?.ready||!length(record,clip))return;live.mode='idle';play(record,clip);live.gestureLeft=Math.min(2.2,length(record,clip));},
+   // A story pose over the idle clip (lying thrown, pushing the wagon):
+   // fn(root, asset, dt) runs each frame after the clip is sampled and may
+   // set the root and turn bones; null hands the body back. It may return
+   // the seconds until it needs to run again (a slow pose: 1/30), else it
+   // runs every frame.
+   overlay(fn){overlay=typeof fn==='function'?fn:null;overlayEvery=0;},
    // Only the actor the player is talking to turns and talks to them.
    talk(on,watchTarget){
     if(block||!pose)return;

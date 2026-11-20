@@ -13,6 +13,9 @@ import {Matrix,Quaternion,Vector3} from '@babylonjs/core';
 export const WAGON_TIP=Object.freeze({angle:1.9,halfWidth:1.14,settleBy:.12});
 const AXIS_Z=new Vector3(0,0,1),local=new Vector3(),moved=new Vector3(),offset=new Vector3(),roll=new Quaternion(),turn=new Matrix();
 let tipSign=0;
+// The wagon's rotation with its top turned `angle` radians toward `side`
+// (what falls off it turns the same way). Written into out.
+export function tipQuaternion(out,yaw,side,angle){Quaternion.RotationYawPitchRollToRef(yaw,0,0,out);Quaternion.RotationAxisToRef(AXIS_Z,side*topSign()*angle,roll);return out.multiplyInPlace(roll);}
 function topSign(){if(!tipSign){const probe=Vector3.TransformCoordinates(new Vector3(0,1,0),Matrix.RotationZ(.3));tipSign=probe.x>0?1:-1;}return tipSign;}
 
 // getRoot(): the wagon's root TransformNode (rotationQuaternion = its yaw) or null.
@@ -56,6 +59,8 @@ export function createWagonRig({getRoot,heightAt=()=>0,getContact=null,halfWidth
  return {
   get ready(){return !!node();},
   get yaw(){const root=node();if(root)capture(root);return yaw;},
+  // 0 upright .. 1 on its side, as last posed.
+  get tip(){return current.tip;},
   pose,
   // True while the wagon still shows the last pose at this tip.
   holds(tip){const root=node();return !!root&&posed?.root===root&&posed.tip===tip;},
