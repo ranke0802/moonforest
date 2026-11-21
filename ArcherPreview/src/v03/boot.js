@@ -161,7 +161,13 @@ export function setupV03(api){
  }
 
  // ----- starting a game -----
- function metaPatch(extra={}){const s=gameState();return {character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:'',playSeconds:state.playSeconds,level:1,...extra};}
+ // While a record is being continued on another map (state.arriving) the page still stands on
+ // the map it left: the record keeps its own place until the trip is over. (2026-11-21: a save
+ // in that gap wrote the wrong map into the record.)
+ function metaPatch(extra={}){
+  const s=gameState(),here=state.arriving?{}:{character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:''};
+  return {...here,playSeconds:state.playSeconds,level:1,...extra};
+ }
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
  // Behind the title / resume screen the map's monster species load ahead of
  // play (nothing is placed until startWorld).
@@ -217,9 +223,16 @@ export function setupV03(api){
  async function continueHere(){
   const back=state.returnPose?.map===gameState().mapId?state.returnPose:undefined;state.returnPose=null;
   state.busy=true;await title.leave();stopAttract();api.resetStage(back);opening.cover();title.hide();
-  const meta=save.meta(),s=gameState();
-  await enterPlay({resume:true});
-  if(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character])await api.travel(meta.character,{resume:true});
+  const meta=save.meta(),s=gameState(),elsewhere=!!(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character]);
+  state.arriving=elsewhere;
+  try{
+   await enterPlay({resume:true});
+   if(elsewhere){
+    // If the trip does not get there, open the record on its own map in a clean document rather than play it on the wrong one.
+    const moved=await Promise.resolve(api.travel(meta.character,{resume:true})).then(value=>value===true,error=>{console.warn('[MoonForest 0.3] could not travel to the record\'s map',error);return false;});
+    if(!moved||gameState().character!==meta.character){if(reloadInto(save.slot,'load',meta.character))return;}
+   }
+  }finally{state.arriving=false;}
   state.busy=false;await opening.release();
  }
  function reloadInto(slot,mode,character){

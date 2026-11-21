@@ -104,7 +104,7 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
 });
 
-function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null}={}){
  const {document,window,root}=dom(),log=[];
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
@@ -121,7 +121,7 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
  const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait:instant,random:()=>.5,createVisual,createGuide:()=>guide,createMarkers:null,setMapMarkers:list=>marks.push(list),placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
   input:{setSuspended:v=>log.push('suspend:'+v)},actions:{attack:()=>log.push('attack'),dodge:()=>log.push('dodge'),guard:()=>log.push('guard'),move:()=>{}},
   toast:m=>log.push('toast:'+m),creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},getPlayer:()=>player,getController:()=>controller,getState:()=>state,
-  resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:async id=>log.push('travel:'+id),
+  resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:travel?id=>travel(id,state,log):async id=>{log.push('travel:'+id);state.character=id;return true;},
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  if(inPlace)api.restartProgress=()=>{log.push('restartProgress');return true;};
  if(stopWorld)api.stopWorld=()=>log.push('stopWorld');
@@ -212,6 +212,26 @@ test('loading another record on the same page: the slot is bound, the game reads
  assert.ok(h.shell.inspect().playSeconds>=321,'the record\'s own play time');
  // And the record that was bound before is untouched.
  assert.equal(createSaveSession({local,session:memory(),edition:E}).index()[1].used,false);
+});
+test('a record on another map keeps its own place while the page is still on the way there; a failed trip reloads',async()=>{
+ const seedRecord=local=>{const seed=createSaveSession({local,session:memory(),edition:E,now:()=>10});seed.commit({title:'달빛 여관',chapter:1,character:'warrior-v3',place:'숲의 경계 마을',placeKey:'warrior-v3',playSeconds:50});};
+ // The trip takes a while; a save happens in the middle of it (the tab is hidden).
+ let finish;const local=memory(),session=memory();seedRecord(local);
+ const h=harness({local,session,reloadProgress:true,travel:(id,state,log)=>new Promise(resolve=>{log.push('travel:'+id);finish=()=>{state.character=id;resolve(true);};})});
+ h.finishSplash();await h.reveal();assert.equal(h.state.character,'warrior-plains');
+ h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle(20);
+ assert.ok(h.log.includes('travel:warrior-v3'));
+ h.window.dispatchEvent(new h.window.Event('pagehide'));for(let i=0;i<1100;i++)h.shell.update(.016);
+ assert.equal(h.save.meta().character,'warrior-v3','the record still says where it was saved, not where the page stands');assert.equal(h.save.meta().place,'숲의 경계 마을');
+ finish();await settle(20);for(let i=0;i<1100;i++)h.shell.update(.016);
+ assert.equal(h.save.meta().character,'warrior-v3');assert.equal(h.shell.screen,'play');
+ // The trip fails: the record is opened on its own map in a clean document instead.
+ const local2=memory(),session2=memory();seedRecord(local2);let replaced=null;
+ const g=harness({local:local2,session:session2,reloadProgress:true,travel:async(id,state,log)=>{log.push('travel:'+id);return false;}});
+ g.window.location={href:'https://test.invalid/moonforest-0.3.html?character=warrior-plains',replace:url=>{replaced=url;}};
+ g.finishSplash();await g.reveal();g.click('[data-action="load"]');await settle();g.click('.v03-slot[data-slot="1"]');await settle(40);
+ assert.ok(replaced&&new URL(replaced).searchParams.get('character')==='warrior-v3','reloads on the record\'s map');
+ assert.equal(g.save.meta().character,'warrior-v3');assert.deepEqual(readIntent(session2,E),{slot:1,mode:'load'});
 });
 test('existing saves: load another slot reloads with an intent; overwrite wipes first',async()=>{
  const local=memory(),session=memory();
