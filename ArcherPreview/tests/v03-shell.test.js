@@ -104,7 +104,7 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
 });
 
-function harness({local=memory(),session=memory(),ready=true,inPlace=false}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false}={}){
  const {document,window,root}=dom(),log=[];
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
@@ -124,6 +124,7 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false}={}){
   resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:async id=>log.push('travel:'+id),
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  if(inPlace)api.restartProgress=()=>{log.push('restartProgress');return true;};
+ if(stopWorld)api.stopWorld=()=>log.push('stopWorld');
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
  return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
@@ -156,6 +157,34 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.ok(h.log.includes('props:v03-opening-wagon'),'story scenery is placed behind the prologue');
  h.battle.livingCount=0;for(let i=0;i<1000;i++)h.shell.update(.016);assert.ok(h.save.meta().playSeconds>=15);
  assert.equal(h.log.includes('startWorld'),false,'roaming monsters wait until the opening quest is done');
+});
+test('back to the title: only from play, and without the game\'s hooks the caller falls back to the reload',async()=>{
+ const h=harness();h.finishSplash();await h.reveal();
+ assert.equal(await h.shell.returnToTitle(),false,'not from the title itself');
+ h.click('[data-action="new"]');await settle(40);assert.equal(h.shell.screen,'play');
+ assert.equal(await h.shell.returnToTitle(),false,'a game without the stopWorld hook falls back to the reload');assert.equal(h.shell.screen,'play');
+});
+test('back to the title: with the game\'s hooks the same page shows the title again and the record goes on',async()=>{
+ const h=harness({stopWorld:true});
+ h.finishSplash();await h.reveal();h.click('[data-action="new"]');await settle(40);assert.equal(h.shell.screen,'play');
+ h.battle.livingCount=0;for(let i=0;i<200;i++)h.shell.update(.016);
+ const quest=h.shell.inspect().story.quest,made=h.made.length;assert.ok(quest);
+ h.log.length=0;
+ assert.equal(await h.shell.returnToTitle(),true);
+ assert.equal(h.shell.screen,'title');assert.equal(h.document.documentElement.dataset.v03Screen,'title');
+ assert.equal(h.document.querySelector('.v03-title').hidden,false);
+ assert.ok(h.log.includes('stopWorld'));assert.ok(h.log.some(line=>line.startsWith('resetStage:')&&line!=='resetStage:spawn'),'the stage is cleared where the player stands');assert.ok(h.log.includes(`summon:${TITLE_FOE.kind}:${TITLE_FOE.count}`),'the title battle runs again');
+ assert.equal(h.shell.inspect().story.started,false);assert.equal(h.shell.inspect().story.cast.length,0,'the cast is put away');
+ assert.ok(h.made.filter(v=>v.disposed).length>0||made===0);
+ assert.equal(h.shell.blocksProgress,true);assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
+ for(let i=0;i<60;i++)h.shell.update(.016);assert.notEqual(h.shell.pilotMovement,null,'the showcase drives the player again');
+ // Continue: the same record, on the same page.
+ h.log.length=0;h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="'+h.save.slot+'"]');await settle(40);
+ assert.equal(h.shell.screen,'play');assert.equal(h.shell.inspect().story.started,true);assert.equal(h.shell.inspect().story.quest,quest,'the same quest goes on');
+ assert.ok(h.log.some(line=>line.startsWith('resetStage:')&&line!=='resetStage:spawn'),'back where the player left, not at the map spawn');
+ assert.ok(h.shell.inspect().story.cast.length>=0);assert.equal(h.shell.blocksProgress,false);
+ // And back once more: it works every time, not only the first.
+ assert.equal(await h.shell.returnToTitle(),true);assert.equal(h.shell.screen,'title');
 });
 test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  const h=harness({ready:false});h.finishSplash();await settle();h.shell.update(.016);

@@ -1675,6 +1675,8 @@ try {
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
       travel:id=>mapTransition.travel(travelUrl(location.href,id)),
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
+      // The reverse: the roaming monsters leave (back to the title on the same page). A runtime still loading is stopped once it arrives.
+      stopWorld:()=>{if(world.authoredMonsters)world.authoredMonsters.deactivate?.();else void world.authoredMonstersTask?.then(runtime=>runtime.deactivate?.(),()=>{});},
       setScore:(key,fade)=>audio?.setScore?.(key,fade),
       prefetchScore:key=>audio?.prefetchScore?.(key),
       setSfxMuted:value=>audio?.setSfxMuted?.(value),

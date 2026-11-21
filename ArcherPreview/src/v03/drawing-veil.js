@@ -171,7 +171,9 @@ export function createDrawingProgress({quiet=1.2,limit=25,expectedStart=4,expect
    else{
     peak=Math.max(peak,left);if(left)pendingTime+=dt;
     const done=peak?(peak-left)/peak:1,passed=left?phaseShare(pendingTime,expectedPending):1;
-    value=.65+.3*Math.max(done,passed)+.05*Math.min(1,quietTime/quiet);
+    // The counted share, and of what is left the share that time says has passed: it keeps moving
+    // after a count ran ahead of the clock (deployed build: 1.5 s standing at 80%).
+    value=.65+.3*(done+(1-done)*passed)+.05*Math.min(1,quietTime/quiet);
     if(prepareTime>=limit||(!left&&quietTime>=quiet))value=1;
    }
    ratio=Math.max(ratio,Math.min(1,value));

@@ -408,3 +408,12 @@ PC
 - 확인: 새 테스트(enemy-travel-rule 2, hit-scale 2, monster-territory 12, loading-estimate 6) 통과, 왕복 누수 검사 통과. 화면 미확인.
 - 이전부터 실패(HEAD에서도 같은 수): `goblin-contacts`, `wolf-v02-combat-r13-incoming`, `wolf-v02-ram-runtime` 6, `wolf-v02-integration` 3, `wolf-v02-orbit-navigation` 3, `map-travel-prefetch` 1, `startup-frame-failure` 22, `map-loading-art-flow` 1.
 - `?qa`를 주소에 붙이면 `window.moonforestQA`(engine, battle, world)가 열린다. 배포본 확인에 쓸 수 있다.
+
+## 2026-11-21 09:50 — 타이틀 복귀를 재로딩 없이 (3차, 배포 대상)
+
+- 조사: 새 게임·같은 칸 이어하기·맵 이동은 이미 페이지를 유지했다(`resetStage`, `restartProgress`, `api.travel`). 재로딩이 남은 곳은 ① 설정의 "타이틀로", ② 다른 기록 칸 불러오기(`reloadInto`), ③ 실패 시 대비책.
+- ①을 없앴다. `boot.js` `returnToTitle()`: 저장 → 검은 막 → `story.stop()`(등장인물·마차·표식·길잡이 빛·팁·진행 중인 장면/대화 정리, 기록은 그대로) → `api.stopWorld()`(`authored-monster-runtime.js` `deactivate()`: 배치된 몬스터 철수, 다음 `activate()`에서 다시 배치) → `api.resetStage(선 자리)` → 타이틀 표시·자동 전투 → 막 걷기. 이어하기는 `story.start({fresh:false})`로 같은 퀘스트를 잇고, 돌아가기 전 위치(`state.returnPose`)로 되돌린다.
+- 부품이 없거나 실패하면 false를 돌려주고 호출한 쪽이 예전처럼 재로딩한다.
+- ②는 남았다: 골드·장비·위치 등 0.2 쪽 시스템이 기록 칸을 부팅 때만 읽는다. "가벼운 초기화 + 상태 적용" 입구를 그 시스템들에 추가해야 한다(다음 단계).
+- 타이틀 진행 값: 개수가 시간보다 앞서 가면 멈추던 문제(배포본 80%에서 1.5초) 수정 — 센 몫 + 남은 몫 중 시간이 지난 만큼.
+- 확인: `v03-shell` 16개(타이틀 왕복 2개 추가) 통과. 실제 게임 화면은 배포 후 확인 예정.

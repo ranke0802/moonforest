@@ -68,12 +68,12 @@ test('with the estimate the model stage moves the bar by the time it took last t
 });
 
 test('the title keeps moving between counts and remembers its own phases',()=>{
- const p=createDrawingProgress({expectedStart:4,expectedPending:6});p.download(null);
- let last=.5;for(let i=0;i<60;i++){const r=p.update({dt:.1,ready:false}).ratio;assert.ok(r>last&&r<.65);last=r;}
+ let clock=0;const p=createDrawingProgress({expectedStart:4,expectedPending:6,glide:.35,now:()=>clock});p.download(1,'');p.update({});for(let i=0;i<20;i++){clock+=100;p.update({});}p.download(null);
+ let last=p.ratio;assert.equal(last,.5);for(let i=0;i<60;i++){clock+=100;const r=p.update({dt:.1,ready:false}).ratio;assert.ok(r>last&&r<.65);last=r;}
  // six pending items that finish one every two seconds: no 5% jumps, no standing still
  const steps=[];let pending=6;
- for(let i=0;i<120;i++){if(i&&i%20===0)pending--;const r=p.update({dt:.1,ready:true,pending}).ratio;steps.push(r-last);last=r;}
- assert.ok(Math.max(...steps)<.02,'largest step '+Math.max(...steps));assert.ok(steps.filter(step=>step>0).length>100);
+ for(let i=0;i<120;i++){if(i&&i%20===0)pending--;clock+=100;const r=p.update({dt:.1,ready:true,pending}).ratio;steps.push(r-last);last=r;}
+ assert.ok(Math.max(...steps)<=.035+1e-9,'largest step '+Math.max(...steps));assert.equal(steps.filter(step=>step>0).length,120,'never stands still, even after a count ran ahead of the clock');
  assert.ok(last<=.95);
  assert.deepEqual([Math.round(p.measured.start*10),Math.round(p.measured.pending*10)],[60,120]);
  assert.equal(p.update({dt:.1,ready:true,pending:0,quietTime:1.2}).ratio,1);

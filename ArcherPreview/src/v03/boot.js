@@ -215,7 +215,8 @@ export function setupV03(api){
   await opening.release();
  }
  async function continueHere(){
-  state.busy=true;await title.leave();stopAttract();api.resetStage();opening.cover();title.hide();
+  const back=state.returnPose?.map===gameState().mapId?state.returnPose:undefined;state.returnPose=null;
+  state.busy=true;await title.leave();stopAttract();api.resetStage(back);opening.cover();title.hide();
   const meta=save.meta(),s=gameState();
   await enterPlay({resume:true});
   if(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character])await api.travel(meta.character);
@@ -316,11 +317,39 @@ export function setupV03(api){
   leave.addEventListener('click',()=>{
    if(state.screen!=='play')return;
    if(!armed){leave.textContent=t('settings.toTitleConfirm');leave.classList.add('is-armed');armed=view.setTimeout(()=>{armed=0;leave.textContent=t('settings.toTitle');leave.classList.remove('is-armed');},3000);return;}
-   view.clearTimeout(armed);save.touch(metaPatch());
-   try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
-   void runBeforePageReload().finally(()=>view.location.reload());
+   view.clearTimeout(armed);armed=0;leave.textContent=t('settings.toTitle');leave.classList.remove('is-armed');save.touch(metaPatch());
+   // On this page when it can be done (the loaded world stays); the reload is the fallback.
+   try{dialog.close?.();}catch{/* stays open: the reload below closes it */}
+   void returnToTitle().then(done=>{
+    if(done)return;
+    try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
+    void runBeforePageReload().finally(()=>view.location.reload());
+   });
   });
   host.append(leave);
+ }
+ // Back to the title without reloading the page (user, 2026-11-21: the reload ran the
+ // whole loading again). The loaded world, models and textures stay; only the play is put
+ // away: the story's cast and marks (story.stop), the roaming monsters (api.stopWorld) and
+ // the fight and stage in hand (api.resetStage). The record was saved by the caller.
+ // Resolves false when a part is missing or it fails: the caller reloads as before.
+ async function returnToTitle(){
+  if(state.busy||state.screen!=='play'||state.disposed)return false;
+  if(typeof story.stop!=='function'||typeof api.stopWorld!=='function'||typeof api.resetStage!=='function')return false;
+  state.busy=true;
+  try{
+   opening.cover();
+   // Where the player stood: the title's showcase fight wanders, continuing puts them back here.
+   const at=api.getPlayer()?.position;state.returnPose=at&&Number.isFinite(at.x)&&Number.isFinite(at.z)?{x:at.x,z:at.z,map:gameState().mapId}:null;
+   story.stop();api.stopWorld();state.worldStarted=false;
+   api.resetStage(state.returnPose??undefined);
+   state.ambush=false;state.sinceSave=0;state.trailScene=false;
+   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+   await startAttract();
+   await opening.release();
+   return true;
+  }catch(error){console.warn('[MoonForest 0.3] could not return to the title on this page',error);return false;}
+  finally{state.busy=false;}
  }
  // ----- boot -----
  function showTitle(){
@@ -442,6 +471,8 @@ export function setupV03(api){
 
  return {
   get screen(){return state.screen;},
+  // Back to the title on this page; false when it could not be done (the settings button then reloads).
+  returnToTitle,
   // The run before this one (stage it last reached; ended=false and hidden=false: killed on screen).
   get previousRun(){return trail.previous;},
   // Title/prologue never write progress, quests or map position.

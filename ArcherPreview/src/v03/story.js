@@ -1267,6 +1267,25 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    refresh();
    const quest=log.quest();if(quest)save.touch({title:quest.title,titleKey:quest.id});
   },
+  // The reverse of start() (user, 2026-11-21: going back to the title reloaded the page and
+  // ran the whole loading again). The play is put away, cast, wagon, markers, guide light,
+  // tips, a scene or a talk in hand, so the title can stand on the same loaded world. The
+  // record is not touched: start({fresh:false}) picks it up again.
+  stop(){
+   if(!started)return false;
+   if(scene.active){try{endScene();}catch(error){console.warn('[MoonForest 0.3] scene left open',error);scene.active=false;showPlayer(true);api.input.setSuspended(false);}}
+   scene.pending=false;scene.pendingFor=0;
+   try{dialogue.cancel();}catch{/* nothing open */}talking=false;
+   clearCast();mapId=null;started=false;
+   guide.visual?.hide();guide.key=null;guide.shown=false;
+   try{api.setMapMarkers?.([]);}catch{/* optional */}
+   tips.queue.length=0;tips.showing=null;tips.step=null;
+   hud.setTip(null);hud.setCaption(null);hud.setPrompt(null);hud.setHint(null);hud.setRing(null);hud.setFocus(false);
+   slow.left=0;slow.calm=0;
+   if(zoom.base!==null&&zoom.camera){zoom.camera.fov=zoom.base;unpinScreenArea(zoom.camera);}zoom.weight=0;zoom.base=null;
+   staged.key=null;staged.busy=false;staged.next=0;
+   return true;
+  },
   defeat(event){if(started)emit({type:'defeat',kind:event?.kind,map:mapId});},
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
