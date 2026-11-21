@@ -2,14 +2,17 @@
 // a moment and the camera pushes in. 2026-11-20 (user): a stronger push-in, a
 // longer beat, and the player's own choice in the settings: on or off, how
 // far it zooms, how long it lasts, and whether fights after the tutorial get
-// it too. Everything is on by default. Stored per browser.
-export const SLOW_FX_KEY='moonforest:slow-fx:v1';
+// it too. Stored per browser.
+// 2026-11-21 (user): the focus lines cost many frames on the phone, so the slow
+// beat and the lines are OFF by default until they are optimised. The key moved
+// to v2 so that a choice stored while they were on by default does not keep them on.
+export const SLOW_FX_KEY='moonforest:slow-fx:v2';
 // lines: focus lines at the screen's edge while the beat lasts (2026-11-20).
-export const SLOW_FX_DEFAULT=Object.freeze({on:true,everywhere:true,lines:true,zoom:.32,seconds:.7});
+export const SLOW_FX_DEFAULT=Object.freeze({on:false,everywhere:true,lines:false,zoom:.32,seconds:.7});
 // [min, max, step]
 export const SLOW_FX_RANGE=Object.freeze({zoom:[.1,.5,.02],seconds:[.3,1.2,.05]});
 const within=(value,[min,max],fallback)=>Number.isFinite(value)?Math.max(min,Math.min(max,value)):fallback;
-const normal=raw=>Object.freeze({on:raw.on!==false,everywhere:raw.everywhere!==false,lines:raw.lines!==false,zoom:within(+raw.zoom,SLOW_FX_RANGE.zoom,SLOW_FX_DEFAULT.zoom),seconds:within(+raw.seconds,SLOW_FX_RANGE.seconds,SLOW_FX_DEFAULT.seconds)});
+const normal=raw=>Object.freeze({on:raw.on===true,everywhere:raw.everywhere!==false,lines:raw.lines===true,zoom:within(+raw.zoom,SLOW_FX_RANGE.zoom,SLOW_FX_DEFAULT.zoom),seconds:within(+raw.seconds,SLOW_FX_RANGE.seconds,SLOW_FX_DEFAULT.seconds)});
 
 // value: one frozen object, replaced only when a setting changes (the story
 // reads it every frame).

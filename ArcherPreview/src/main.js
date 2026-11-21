@@ -122,7 +122,7 @@ import {inspectMapTerrainCache} from './map-terrain-cache.js';
 import {inspectMapNavigationCache} from './map-navigation-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import {setupFrameRateControl} from './frame-rate-settings.js';
-import {enableSplitTextureUpload,splitTextureUploadStats} from './split-texture-upload.js';
+import {enableSplitTextureUpload,splitTextureUploadStats,splitUploadRequested} from './split-texture-upload.js';
 import {setupRenderScaleControl,renderResolutionSnapshot} from './render-scale-settings.js';
 import {setupPlainsViewDistanceControl,applyPlainsViewDistance,applyAdaptiveRange,plainsRenderRange} from './plains-view-distance.js';
 import { ScreenProjection } from './screen-projection.js';
@@ -156,9 +156,11 @@ const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
 const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabled;
+const splitUploadOn=splitUploadRequested(location.search); // read before the route below rewrites the address
 const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1';
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
+if(versionRoute.edition)loadingView.enableEstimate(); // 0.3: the model stage moves the bar too (phase-share.js)
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
 if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;if(simplifyEnabled())void simplifierReady();
 if(versionRoute.worldRevision)document.documentElement.dataset.world=versionRoute.worldRevision;
@@ -1121,8 +1123,8 @@ try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance',loseContextOnDispose:true });
   engine.maxFPS=renderActivity.limit();
-  // 0.3: large KTX2 textures reach the GPU in strips over several frames (one megabyte a frame on phones).
-  if(versionRoute.edition&&new URLSearchParams(location.search).get('splitupload')!=='0')enableSplitTextureUpload(engine,{bytesPerFrame:()=>loadingAsset?16<<20:touchDevice?1<<20:4<<20});
+  // 0.3, opt-in while under review (?splitupload=1): large KTX2 textures reach the GPU in strips over several frames.
+  if(versionRoute.edition&&splitUploadOn)enableSplitTextureUpload(engine,{bytesPerFrame:()=>loadingAsset?16<<20:touchDevice?1<<20:4<<20});
   // The Studio controls live outside the preview iframe. Moving focus to
   // those controls blurs its window even while the document stays visible.
   // Actual hidden/modal suspension is still owned by syncPlayback below.

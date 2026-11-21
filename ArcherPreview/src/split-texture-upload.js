@@ -22,6 +22,19 @@ const blocks=(width,height)=>Math.ceil(width/4)*Math.ceil(height/4);
 const bytesOf=data=>data instanceof Uint8Array?data:ArrayBuffer.isView(data)?new Uint8Array(data.buffer,data.byteOffset,data.byteLength):new Uint8Array(data);
 const alive=internal=>!!internal?._hardwareTexture?.underlyingResource;
 
+// Under review it is opt-in, apart from the existing upload: ?splitupload=1 turns it on for
+// this tab and stays on across the game's page reloads (map travel); ?splitupload=0 turns it off.
+const SWITCH_KEY='moonforest:splitupload';
+export function splitUploadRequested(search,storage){
+  let value=null;
+  try{value=new URLSearchParams(search??'').get('splitupload');}catch{}
+  try{
+    storage??=globalThis.sessionStorage;
+    if(value==='1')storage?.setItem(SWITCH_KEY,'1');else if(value==='0')storage?.removeItem(SWITCH_KEY);
+    return value==='1'||(value!=='0'&&storage?.getItem(SWITCH_KEY)==='1');
+  }catch{return value==='1';}
+}
+
 export function enableSplitTextureUpload(engine,options={}){
   if(!engine)return null;
   if(states.has(engine))return states.get(engine);

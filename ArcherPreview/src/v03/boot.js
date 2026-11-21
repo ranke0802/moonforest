@@ -23,6 +23,7 @@ import * as chapter1 from './data/chapter1.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
 import {createRunTrail} from './run-trail.js';
 import {createDrawingProgress,drawStage} from './drawing-veil.js';
+import {expectedPhaseMs,rememberPhaseMs} from '../phase-share.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
@@ -82,7 +83,7 @@ export function setupV03(api){
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
  // Progress shown on the black title while it is drawn (drawing-veil.js).
- const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT});
+ const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT,expectedStart:expectedPhaseMs('title:start',4000)/1000,expectedPending:expectedPhaseMs('title:pending',5000)/1000});
  const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false,langReady:false};
  // Each screen has its score: the title (and 'drawing the world') the saint's
  // theme with its demo fight silent, the prologue the quiet forest theme
@@ -476,7 +477,7 @@ export function setupV03(api){
     if(state.sceneShown&&!state.revealed){
      state.prepareTime+=dt;
      state.quietTime=!state.summoning&&!(s.pending>0)?state.quietTime+dt:0;
-     if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);}
+     if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);const took=drawing.measured;rememberPhaseMs('title:start',took.start*1000);rememberPhaseMs('title:pending',took.pending*1000);}
     }
     if(!state.revealed){drawInput.dt=dt;drawInput.ready=state.sceneShown;drawInput.pending=s.pending??0;drawInput.summoning=state.summoning;drawInput.quietTime=state.quietTime;drawInput.prepareTime=state.prepareTime;showProgress(drawing.update(drawInput));}
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
@@ -498,7 +499,7 @@ export function setupV03(api){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
     combatTarget.update(dt,api.getController()?.state,api.getPlayer()?.position,s.mapId);
     if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;trail.mark(state.trailScene?'play:opening-scene':'play');}
-    if(!story.sceneActive)vitality.update(dt);
+    if(story.sceneActive)vitality.present();else vitality.update(dt);
     cursors.set(story.dialogueOpen||story.sceneActive?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();
     if(state.sinceSave>=15){state.sinceSave=0;save.touch(metaPatch());}

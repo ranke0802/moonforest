@@ -290,10 +290,10 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // The chain has to reach its third hit: one swing, or the held heavy attack, is not enough.
  h.controller.state='slash';h.controller.attackIndex=1;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^연속 공격/,'one swing does not pass the combo lesson');
  h.controller.state='judgment';h.controller.attackIndex=0;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^연속 공격/,'the held heavy attack does not pass the combo lesson');
- h.controller.state='judgment';h.controller.attackIndex=3;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방패 밀치기/);
+ h.controller.state='attack';h.controller.attackIndex=2;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방패 밀치기/,'two hits in a row pass it (the third hit is gone, user 2026-11-21)');
  h.controller.state='shieldPush';h.controller.attackIndex=0;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/);
  h.controller.state='slash';h.controller.attackIndex=1;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'a normal attack does not pass the heavy attack lesson');
- h.controller.state='judgment';h.controller.attackIndex=3;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'nor does the chain\'s finisher');
+ h.controller.state='attack';h.controller.attackIndex=2;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'nor does the chain\'s second hit');
  h.controller.state='judgment';h.controller.attackIndex=0;h.shell.update(.016);h.controller.state='idle';
  // The lessons done: one line stays in the middle until the wolf is down.
  assert.equal(hud('.v03-hint').hidden,false);assert.equal(hud('.v03-hint-what').textContent,'늑대를 처치하세요');

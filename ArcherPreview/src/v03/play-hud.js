@@ -37,6 +37,8 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const caption=make('div','v03-caption'),captionWho=make('strong','v03-caption-who'),captionText=make('p','v03-caption-text');caption.append(captionWho,captionText);caption.hidden=true;
  const tip=make('aside','v03-tip'),tipTitle=make('strong','v03-tip-title'),tipLead=make('p','v03-tip-lead'),tipText=make('p','v03-tip-text');
  tip.append(tipTitle,tipLead,tipText);tip.hidden=true;
+ // Its one-shot animation over, the card is gone (the lesson line it stood in for comes back, v03.css).
+ tip.addEventListener('animationend',event=>{if(event.target!==tip)return;tip.classList.remove('is-shown');tip.hidden=true;});
  // A pulsing ring over the real game button a lesson is about (touch play).
  const ring=make('div','v03-ring');ring.hidden=true;
  // A speech bubble over a speaker in the world (the driver's shouts). One

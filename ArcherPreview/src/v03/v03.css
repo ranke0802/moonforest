@@ -41,8 +41,9 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-veil-spark{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none}
 .v03-veil-mote{position:absolute;left:-3px;top:-3px;width:6px;height:6px;border-radius:50%;background:#fff1c8;box-shadow:0 0 8px 2px #f5d27a99;opacity:0}
 .v03-veil-mote:nth-child(3n){background:#dcd4ff;box-shadow:0 0 8px 2px #a99cf099}
-.v03-veil-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#f3cf5a1f}
-.v03-veil-bar>i{position:absolute;inset:0;background:linear-gradient(90deg,#c99a2e,#f6d566 70%,#fff0b0);box-shadow:0 0 10px #f3cf5aaa;transform:scaleX(0);transform-origin:0 50%;transition:transform .5s ease-out}
+/* Every loading bar is the map-travel one (user, 2026-11-21): 3px, track #ffffff35, flat #e9d8af fill, .12s linear. */
+.v03-veil-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:#ffffff35}
+.v03-veil-bar>i{position:absolute;inset:0;background:#e9d8af;transform:scaleX(0);transform-origin:0 50%;transition:transform .12s linear}
 .v03-veil-note{position:absolute;left:max(28px,env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));margin:0;display:flex;align-items:baseline;gap:.9em;font-size:12px;letter-spacing:.24em;color:#ece0bc;opacity:.7;pointer-events:none;white-space:nowrap}
 .v03-veil-pct{font-weight:400;color:#f6d566;letter-spacing:.08em;min-width:3.2em}
 .v03-veil-left{opacity:.65;letter-spacing:.12em}
@@ -184,7 +185,8 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-next{position:absolute!important;right:clamp(14px,1.4vmin,24px);bottom:clamp(10px,1vmin,18px);min-height:clamp(36px,3.4vmin,56px);padding:.3em 1.1em!important;font-size:clamp(14px,1.7vmin,22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 .v03-dialogue-next:hover{background:#cfb77b22!important}
 
-.v03-tip{position:absolute;right:max(18px,env(safe-area-inset-right));top:clamp(150px,34vh,260px);width:min(320px,42vw);padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
+/* The tip card stands where every other notice does (user, 2026-11-21): centred, at the lesson line's height, on desktop and touch alike. The lesson line steps aside while a card is up. */
+.v03-tip{position:absolute;left:50%;top:30%;width:min(320px,42vw);margin-left:calc(min(320px,42vw)/-2);padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
 .v03-tip.is-shown{animation:v03-tip 7.5s ease forwards}
 @keyframes v03-tip{0%{opacity:0;transform:translateX(14px)}6%,90%{opacity:1;transform:none}100%{opacity:0;transform:translateX(8px)}}
 .v03-tip-title{display:block;font-size:clamp(14px,2.2vmin,16px);letter-spacing:.14em;color:var(--v03-gold)}
@@ -197,7 +199,7 @@ html[data-loading] .v03-hud{display:none}
    the tip card clear of the minimap. */
 @media (pointer:coarse){
  .v03-hint{top:max(64px,26%)}.v03-hint-what{font-size:clamp(18px,min(5vmin,2.6vw),26px)}.v03-hint-how{font-size:clamp(14px,min(3.4vmin,1.75vw),18px)}
- .v03-tip{top:calc(max(58px,env(safe-area-inset-top)) + 46px);right:auto;left:50%;margin-left:calc(min(280px,60vw)/-2);width:min(280px,60vw);padding:8px 12px 9px}
+ .v03-tip{top:max(64px,26%);margin-left:calc(min(280px,60vw)/-2);width:min(280px,60vw);padding:8px 12px 9px}
  .v03-prompt{bottom:clamp(120px,34vh,220px);min-height:52px;padding:9px 38px 9px 18px}
  .v03-quest{top:clamp(64px,17vh,120px);max-width:46vw}
  .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
@@ -355,13 +357,10 @@ html[data-edition] #help-dialog .v03-guide-row dt{margin:0;font-size:13px;line-h
 @media (pointer:coarse){.v03-guide dd.is-touch{display:block}.v03-guide p.is-touch{display:inline-block}.v03-guide .is-keys{display:none}}
 @media (max-width:560px){.v03-guide-list{grid-template-columns:minmax(0,1fr)}}
 
-/* ----- Tip card on touch screens: at the top edge, so it never covers the
-   hero in the middle of the screen. It drops below the lesson line only while
-   a lesson line is showing. Korean text wraps between words, not inside. ----- */
-@media (pointer:coarse){
- .v03-tip{top:max(10px,env(safe-area-inset-top))}
- .v03-hud:has(.v03-hint:not([hidden])) .v03-tip{top:calc(max(58px,env(safe-area-inset-top)) + 46px)}
-}
+/* ----- While a tip card is up the lesson line under it is hidden (same place).
+   Korean text wraps between words, not inside. ----- */
+.v03-hint{transition:opacity .2s ease}
+.v03-hud:has(.v03-tip.is-shown) .v03-hint{opacity:0}
 html[lang=ko] .v03-tip,html[lang=ko] .v03-dialogue-text,html[lang=ko] .v03-quest,html[lang=ko] .v03-hint,html[lang=ko] .v03-guide-row,html[lang=ko] .v03-caption-text{word-break:keep-all}
 
 /* ----- Touch screens: the quest panel (left), the tip card (top), the quest
@@ -440,8 +439,8 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 /* New game on a fresh document: the dream plays while the game downloads; the
    loading card hides behind it and a thin line at the bottom shows progress. */
 html[data-v03-early-dream] #loading:not(.error){opacity:0;pointer-events:none}
-.v03-download-line{position:fixed;left:0;right:0;bottom:0;height:2px;z-index:20020;pointer-events:none;background:#ffffff14}
-.v03-download-line i{position:absolute;inset:0;background:linear-gradient(90deg,#ae9259,#ece0bc);transform:scaleX(0);transform-origin:left center;transition:transform .4s ease-out}
+.v03-download-line{position:fixed;left:0;right:0;bottom:0;height:3px;z-index:20020;pointer-events:none;background:#ffffff35}
+.v03-download-line i{position:absolute;inset:0;background:#e9d8af;transform:scaleX(0);transform-origin:left center;transition:transform .12s linear}
 /* A reloaded new game: sound needs one gesture on the new page. Instead of a
    technical prompt, the cover offers the story's first action (close your
    eyes); a tap anywhere does it. */

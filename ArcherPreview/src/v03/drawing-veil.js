@@ -21,6 +21,7 @@
 // Lifetime: owned by the title screen; stop() when the scene is ready,
 // dispose() with the title.
 import {CURSOR_ART} from './cursors.js';
+import {phaseShare} from '../phase-share.js';
 
 export const VEIL_ART=new URL('./prologue/00.webp',import.meta.url).href;
 export const VEIL=Object.freeze({flash:760,flashMin:260,flashOfScreen:.85,bursts:4,motes:14,dustPerPixel:5.6e-5,dustMin:14,dustMax:64,fadeMs:2500});
@@ -143,32 +144,38 @@ export const DRAW_STAGES=Object.freeze([[.58,'ground'],[.65,'trees'],[.75,'peopl
 export function drawStage(ratio){for(let i=0;i<DRAW_STAGES.length;i++)if(ratio<DRAW_STAGES[i][0])return DRAW_STAGES[i][1];return 'monsters';}
 
 // Progress of the black title (boot.js feeds it; the veil writes only on
-// change). Phases: the download (the loading card's own ratio, up to 50%),
-// the world starting (time-eased, no count), the scene's pending models and
-// textures (counted against the most seen), then the quiet wait before the
-// reveal. Never goes back.
+// change). Phases: the download and the game's own loading (the loading
+// card's ratio, up to 50%), the world starting (no count), the scene's
+// pending models and textures (counted against the most seen), then the quiet
+// wait before the reveal. Never goes back.
+// Fine steps (user, 2026-11-21): a phase without counts, and the long gaps
+// between counts (a handful of pending items made 5% jumps), move by how long
+// that phase took last time on this device (phase-share.js); the counts and
+// the phase ends correct it. expectedStart/expectedPending are in seconds.
 // update() is called every frame while the title is black: it takes one
 // caller-owned input object and returns the same result object each time.
-export function createDrawingProgress({quiet=1.2,limit=25,loadEase=4}={}){
- let ratio=0,peak=0,loadTime=0,downloading=false,downloadValue=0,downloadText='';
- const out={ratio:0,remaining:0};
+export function createDrawingProgress({quiet=1.2,limit=25,expectedStart=4,expectedPending=5}={}){
+ let ratio=0,peak=0,loadTime=0,pendingTime=0,downloading=false,downloadValue=0,downloadText='';
+ const out={ratio:0,remaining:0},took={start:0,pending:0};
  return {
   // ratio 0..1 of the download; text: what is left, ready to show. null when the card closed.
   download(value,text=''){downloading=value!==null;downloadValue=downloading?Math.max(0,Math.min(1,Number(value)||0)):0;downloadText=downloading?text:'';},
   update({dt=0,ready=false,pending=0,summoning=false,quietTime=0,prepareTime=0}){
    let left=Math.max(0,pending)+(summoning?1:0)+(ready?0:1),value;
    if(downloading){value=.5*downloadValue;if(downloadText)left=downloadText;}
-   else if(!ready){loadTime+=dt;value=.5+.15*(1-Math.exp(-loadTime/loadEase));}
+   else if(!ready){loadTime+=dt;value=.5+.15*phaseShare(loadTime,expectedStart);}
    else{
-    peak=Math.max(peak,left);
-    const done=peak?(peak-left)/peak:1;
-    value=.65+.3*done+.05*Math.min(1,quietTime/quiet);
+    peak=Math.max(peak,left);if(left)pendingTime+=dt;
+    const done=peak?(peak-left)/peak:1,passed=left?phaseShare(pendingTime,expectedPending):1;
+    value=.65+.3*Math.max(done,passed)+.05*Math.min(1,quietTime/quiet);
     if(prepareTime>=limit||(!left&&quietTime>=quiet))value=1;
    }
    ratio=Math.max(ratio,Math.min(1,value));
    out.ratio=ratio;out.remaining=left;
    return out;
   },
+  // Seconds each uncounted phase really took, for the next run.
+  get measured(){took.start=loadTime;took.pending=pendingTime;return took;},
   get ratio(){return ratio;},
  };
 }

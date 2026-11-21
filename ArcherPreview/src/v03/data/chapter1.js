@@ -206,7 +206,7 @@ export const COMBAT_HINTS=Object.freeze([
  {id:'camera',text:'시점 돌리기',keys:'마우스 우클릭 드래그 · 휠로 확대',touch:'화면 오른쪽을 드래그 · 두 손가락으로 확대',allow:['camera'],wolf:'feed',done:{camera:.3}},
  {id:'dodge',text:'늑대가 달려들면 회피',keys:'Space',touch:'장화 버튼',target:'#dodge-button',allow:['move','camera','dodge'],wolf:'charge',done:{states:['dodge']}},
  {id:'guard',text:'방어 태세',keys:'F를 길게 누르고 있기',touch:'방패 버튼을 길게 누르고 있기',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['guard'],hold:.8}},
- {id:'attack',text:'연속 공격',keys:'J · 좌클릭을 이어서 세 번',touch:'검 버튼을 이어서 세 번',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['judgment'],combo:3}},
+ {id:'attack',text:'연속 공격',keys:'J · 좌클릭을 이어서 두 번',touch:'검 버튼을 이어서 두 번',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['attack'],combo:2}},
  {id:'push',text:'방패 밀치기',keys:'F를 짧게',touch:'방패 버튼을 짧게',target:'#guard-button',allow:['move','camera','guard'],wolf:'snap',done:{states:['shieldPush']}},
  {id:'heavy',text:'강공격',keys:'J · 좌클릭을 길게 눌렀다 떼기',touch:'검 버튼을 길게 눌렀다 떼기',target:'#attack-button',allow:['move','camera','attack'],wolf:'hold',done:{states:['judgment'],charged:true}},
 ]);

@@ -6,7 +6,7 @@ import {createVitality,createVitalBar,VITALITY} from './vitality.js';
 export function createVitalityHud({doc,battle}){
  const player={life:createVitality(VITALITY.player),bar:createVitalBar(doc,'v03-vital v03-vital-player'),owed:0};
  const foes=new WeakMap();
- let mounted=false;
+ let mounted=false,presented=false;
  function mount(){
   const hud=doc.getElementById('player-hud');if(!hud)return;
   hud.insertBefore(player.bar.element,hud.firstChild);doc.documentElement.dataset.v03Vital='';mounted=true;
@@ -21,6 +21,14 @@ export function createVitalityHud({doc,battle}){
   return row;
  }
  return {
+  // A story scene does not run the health, but the bar must already be the
+  // 0.3 one (user, 2026-11-21: the old moon HUD showed from the wake until the
+  // first lesson, because the bar was mounted by the first update()).
+  present(){
+   if(!mounted)mount();if(!mounted||presented)return;
+   const combat=battle.combat;if(!(combat&&combat.maxHp>0))return;
+   player.life.step(0,combat.hp,combat.maxHp,combat.hp>0);player.bar.draw(player.life.view());presented=true;
+  },
   update(dt){
    if(!mounted)mount();
    const combat=battle.combat;

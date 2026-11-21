@@ -1110,10 +1110,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;unpinScreenArea(camera);}
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
- // Taps chain three hits (slash → thrust → judgment finisher at half stamina);
+ // Taps chain two hits (slash → thrust);
  // a shield raised within JUST_WINDOW before contact is a just guard: longer
  // enemy stagger, stamina back, a short slow-motion beat.
- const COMBAT_COMBO=Object.freeze(['slash','attack','judgment']),COMBO_COST=Object.freeze({judgment:15});
+ // 2026-11-21 (user): taps chain two hits only. The third, the judgment finisher, comes back later as a skill;
+ // holding the button still charges the strong attack.
+ const COMBAT_COMBO=Object.freeze(['slash','attack']),COMBO_COST=Object.freeze({});
  // Normal combo hits flinch smaller foes and push them back ~0.4 m; the
  // warrior steps forward into each swing (main.js reads lunge per state).
  const LIGHT_HIT=Object.freeze({push:2.5,skip:Object.freeze(['bear','elena','mourning-elena'])});

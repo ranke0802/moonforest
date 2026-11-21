@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {enableSplitTextureUpload,disableSplitTextureUpload,splitTextureUpload,splitTextureUploadStats,splitTextureUploadDone} from '../src/split-texture-upload.js';
+import {enableSplitTextureUpload,disableSplitTextureUpload,splitTextureUpload,splitTextureUploadStats,splitTextureUploadDone,splitUploadRequested} from '../src/split-texture-upload.js';
 
 const ASTC=37808;
 function rig({error=0,version=2}={}){
@@ -137,4 +137,16 @@ test('the sRGB choice Babylon makes is the one used, eight-byte blocks work, odd
   assert.deepEqual([await settled(waits[0]),await settled(waits[1]),srgb.isReady,eight.isReady],[true,true,true,true]);
   assert.deepEqual([frameObservers.length,timers.length],[0,0]);
   assert.equal(splitTextureUpload(engine,texture(2048),internalTexture(),{}),false);
+});
+
+test('it is off unless the address asks for it, and the choice stays with the tab',()=>{
+  const store=new Map(),storage={getItem:k=>store.get(k)??null,setItem:(k,v)=>store.set(k,v),removeItem:k=>store.delete(k)};
+  assert.equal(splitUploadRequested('',storage),false,'the existing version by default');
+  assert.equal(splitUploadRequested('?character=warrior-v3&splitupload=1',storage),true);
+  assert.equal(splitUploadRequested('?character=warrior-v3',storage),true,'kept after the game reloads the page without the query');
+  assert.equal(splitUploadRequested('?splitupload=0',storage),false);
+  assert.equal(splitUploadRequested('',storage),false,'and off stays off');
+  const broken={getItem(){throw new Error('denied');},setItem(){throw new Error('denied');},removeItem(){}};
+  assert.equal(splitUploadRequested('?splitupload=1',broken),true,'storage refused: the address still decides');
+  assert.equal(splitUploadRequested('',broken),false);
 });
