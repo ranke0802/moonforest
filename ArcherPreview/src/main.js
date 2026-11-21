@@ -189,7 +189,7 @@ const isVillage = () => isWorldCharacter(character);
 const isForest=()=>character==='warrior-v4';
 const isPlains=()=>character==='warrior-plains';
 const isCave=()=>character==='warrior-v5';
-let resumePose=null;
+let resumePose=null,travelResume=false;
 const mapSpawn=()=>resumePose??worldSpawn(character,location.search,VILLAGE_SPAWN);
 let mapPortal;
 let chapterQuests;
@@ -1252,7 +1252,7 @@ try {
     prepare:href=>{
       world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
-      saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
+      if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();mapResourceInspector.begin();effectReviewGeneration++;world.effectWorld?.clear();setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
@@ -1270,6 +1270,7 @@ try {
       url.searchParams.delete('waypoint');
       replaceWorldMap(world,destination);applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale,true);applyAdaptiveShadows();character=destination;history.replaceState(null,'',url);
       const handoff=context?.boundary?.to===destination?context.boundary:null;
+      if(travelResume){travelResume=false;resumePose=readMapResume(journeyStorage,destination,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:false});}
       const spawn=handoff?.position??waypoint?.position??mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
       syncCaveFog(true);
       if(handoff){actor.rotation.y=handoff.yaw;world.camera.alpha=handoff.alpha;if(handoff.pan&&input.panOffset)Object.assign(input.panOffset,handoff.pan);}
@@ -1309,7 +1310,7 @@ try {
       loadingView.reveal(mapLoadingGeneration);showMinimap();
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
-    onError:error=>{loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
+    onError:error=>{travelResume=false;loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
   });
   minimapTravel=setupMinimapTravel({element:$('#dot-minimap'),root:$('#app'),
     getState:()=>({character,ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:boss.loading,busy:mapTransition?.failed||frameLoop?.failed||frameLoop?.loadingFailed,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount}),
@@ -1677,7 +1678,9 @@ try {
         // Scenery still streaming in (models and higher-resolution textures).
         pending:(world.environment?.geometryPending??0)+(world.environment?.highTexturePending??0)}),
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
-      travel:id=>mapTransition.travel(travelUrl(location.href,id)),
+      // resume: continuing a record that was saved on another map. The player arrives where the
+      // record left them, not at the road's end, and the place stood on now is not written into that record.
+      travel:(id,options)=>{travelResume=options?.resume===true;return mapTransition.travel(travelUrl(location.href,id));},
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
       // The reverse: the roaming monsters leave (back to the title on the same page). A runtime still loading is stopped once it arrives.
       stopWorld:()=>{if(world.authoredMonsters)world.authoredMonsters.deactivate?.();else void world.authoredMonstersTask?.then(runtime=>runtime.deactivate?.(),()=>{});},

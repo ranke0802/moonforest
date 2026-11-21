@@ -219,7 +219,7 @@ export function setupV03(api){
   state.busy=true;await title.leave();stopAttract();api.resetStage(back);opening.cover();title.hide();
   const meta=save.meta(),s=gameState();
   await enterPlay({resume:true});
-  if(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character])await api.travel(meta.character);
+  if(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character])await api.travel(meta.character,{resume:true});
   state.busy=false;await opening.release();
  }
  function reloadInto(slot,mode,character){

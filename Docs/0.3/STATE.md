@@ -430,3 +430,4 @@ PC
   - `frame-work-coordinator.js`: 예산(2ms)을 넘긴 준비 단계 이름별 합계 `preparationBudget.overrunsByStep`(24개 한도).
   - `long-task-log.js`: 브라우저 longtask(50ms 이상) 최근 60개 `metadata.longTasks`(시작·길이, 프레임 이벤트와 같은 시계).
 - 다음 폰 기록에서 볼 것: `streamLoad`의 maxMs가 큰 단계, `overrunsByStep`, `longTasks`와 느린 프레임의 시각 대조, `slowCalls`의 mesh.
+- 배포본 확인(7510475, PC): 3번 칸으로 부팅 → 타이틀에서 1번 칸 불러오기: 같은 문서, 1번 칸의 퀘스트·플레이 시간·저장 위치(-67.3,-24.1)로 시작. 타이틀로 돌아가 2번 칸(마을) 불러오기: 같은 문서, 마을 로딩만, 퀘스트 M02·골드 30G·등장인물 5. 단, 맵이 다른 칸은 저장 위치가 아니라 관문 도착 지점(0.3,70)에 섰다 → `api.travel(id,{resume:true})`로 수정(저장 위치로 도착, 이동 직전 위치를 그 칸에 쓰지 않음).
