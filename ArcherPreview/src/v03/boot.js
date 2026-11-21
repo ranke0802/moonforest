@@ -23,6 +23,9 @@ import * as chapter1 from './data/chapter1.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
 import {createRunTrail} from './run-trail.js';
 import {createDrawingProgress,drawStage} from './drawing-veil.js';
+import {expectedPhaseMs,rememberPhaseMs} from '../phase-share.js';
+import {setMonsterCombatLeashScale} from '../monster-territory.js';
+import {setHitScale} from '../hit-scale.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
@@ -53,6 +56,10 @@ export function setupV03(api){
  const gate=createOrientationGate({doc});
  // Tekken-style health (recoverable part) for the player and monsters, in play only.
  const vitality=createVitalityHud({doc,battle});
+ // A fight that has begun holds out to three alert radii (user, 2026-11-21; monster-territory.js).
+ setMonsterCombatLeashScale(3);
+ // Hits land a little more generously: monster hurt volumes, the player's blade and the player's own body, 15 % each (user, 2026-11-21).
+ setHitScale({monsterHurt:1.15,playerStrike:1.15,playerHurt:1.15});
  // The foe being fought: what an attack or the guard turns to without a direction (combat-target.js).
  const combatTarget=createCombatTarget();
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
@@ -82,7 +89,7 @@ export function setupV03(api){
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
  // Progress shown on the black title while it is drawn (drawing-veil.js).
- const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT});
+ const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT,expectedStart:expectedPhaseMs('title:start',4000)/1000,expectedPending:expectedPhaseMs('title:pending',5000)/1000,glide:.35});
  const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false,langReady:false};
  // Each screen has its score: the title (and 'drawing the world') the saint's
  // theme with its demo fight silent, the prologue the quiet forest theme
@@ -154,7 +161,13 @@ export function setupV03(api){
  }
 
  // ----- starting a game -----
- function metaPatch(extra={}){const s=gameState();return {character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:'',playSeconds:state.playSeconds,level:1,...extra};}
+ // While a record is being continued on another map (state.arriving) the page still stands on
+ // the map it left: the record keeps its own place until the trip is over. (2026-11-21: a save
+ // in that gap wrote the wrong map into the record.)
+ function metaPatch(extra={}){
+  const s=gameState(),here=state.arriving?{}:{character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:''};
+  return {...here,playSeconds:state.playSeconds,level:1,...extra};
+ }
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
  // Behind the title / resume screen the map's monster species load ahead of
  // play (nothing is placed until startWorld).
@@ -208,10 +221,18 @@ export function setupV03(api){
   await opening.release();
  }
  async function continueHere(){
-  state.busy=true;await title.leave();stopAttract();api.resetStage();opening.cover();title.hide();
-  const meta=save.meta(),s=gameState();
-  await enterPlay({resume:true});
-  if(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character])await api.travel(meta.character);
+  const back=state.returnPose?.map===gameState().mapId?state.returnPose:undefined;state.returnPose=null;
+  state.busy=true;await title.leave();stopAttract();api.resetStage(back);opening.cover();title.hide();
+  const meta=save.meta(),s=gameState(),elsewhere=!!(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character]);
+  state.arriving=elsewhere;
+  try{
+   await enterPlay({resume:true});
+   if(elsewhere){
+    // If the trip does not get there, open the record on its own map in a clean document rather than play it on the wrong one.
+    const moved=await Promise.resolve(api.travel(meta.character,{resume:true})).then(value=>value===true,error=>{console.warn('[MoonForest 0.3] could not travel to the record\'s map',error);return false;});
+    if(!moved||gameState().character!==meta.character){if(reloadInto(save.slot,'load',meta.character))return;}
+   }
+  }finally{state.arriving=false;}
   state.busy=false;await opening.release();
  }
  function reloadInto(slot,mode,character){
@@ -243,7 +264,14 @@ export function setupV03(api){
   }else if(action==='load'){
    const slot=await title.chooseSlot({mode:'load',index,bootSlot:save.slot});if(slot===null)return;
    const meta=index[slot-1];if(!meta.used)return;
-   if(slot!==save.slot){reloadInto(slot,'load',meta.character);return;}
+   if(slot!==save.slot){
+    // In place when the game can read a record again on this page (user, 2026-11-21: no
+    // reload, the loaded world stays); otherwise a clean document as before.
+    if(!ready||!api.reloadProgress||!save.bindTo||!save.bindTo(slot)){reloadInto(slot,'load',meta.character);return;}
+    api.reloadProgress();
+    state.playSeconds=save.meta().playSeconds??0;state.sinceSave=0;state.returnPose=null;state.ambush=false;
+    if(state.worldStarted){api.stopWorld?.();state.worldStarted=false;}
+   }
    if(!ready){api.toast?.(t('toast.preparing'));return;}
    await continueHere();
   }else if(action==='gallery'){
@@ -309,11 +337,39 @@ export function setupV03(api){
   leave.addEventListener('click',()=>{
    if(state.screen!=='play')return;
    if(!armed){leave.textContent=t('settings.toTitleConfirm');leave.classList.add('is-armed');armed=view.setTimeout(()=>{armed=0;leave.textContent=t('settings.toTitle');leave.classList.remove('is-armed');},3000);return;}
-   view.clearTimeout(armed);save.touch(metaPatch());
-   try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
-   void runBeforePageReload().finally(()=>view.location.reload());
+   view.clearTimeout(armed);armed=0;leave.textContent=t('settings.toTitle');leave.classList.remove('is-armed');save.touch(metaPatch());
+   // On this page when it can be done (the loaded world stays); the reload is the fallback.
+   try{dialog.close?.();}catch{/* stays open: the reload below closes it */}
+   void returnToTitle().then(done=>{
+    if(done)return;
+    try{view.sessionStorage?.setItem(SKIP_LOGO_KEY,'1');}catch{/* the logo plays again */}
+    void runBeforePageReload().finally(()=>view.location.reload());
+   });
   });
   host.append(leave);
+ }
+ // Back to the title without reloading the page (user, 2026-11-21: the reload ran the
+ // whole loading again). The loaded world, models and textures stay; only the play is put
+ // away: the story's cast and marks (story.stop), the roaming monsters (api.stopWorld) and
+ // the fight and stage in hand (api.resetStage). The record was saved by the caller.
+ // Resolves false when a part is missing or it fails: the caller reloads as before.
+ async function returnToTitle(){
+  if(state.busy||state.screen!=='play'||state.disposed)return false;
+  if(typeof story.stop!=='function'||typeof api.stopWorld!=='function'||typeof api.resetStage!=='function')return false;
+  state.busy=true;
+  try{
+   opening.cover();
+   // Where the player stood: the title's showcase fight wanders, continuing puts them back here.
+   const at=api.getPlayer()?.position;state.returnPose=at&&Number.isFinite(at.x)&&Number.isFinite(at.z)?{x:at.x,z:at.z,map:gameState().mapId}:null;
+   story.stop();api.stopWorld();state.worldStarted=false;
+   api.resetStage(state.returnPose??undefined);
+   state.ambush=false;state.sinceSave=0;state.trailScene=false;
+   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+   await startAttract();
+   await opening.release();
+   return true;
+  }catch(error){console.warn('[MoonForest 0.3] could not return to the title on this page',error);return false;}
+  finally{state.busy=false;}
  }
  // ----- boot -----
  function showTitle(){
@@ -329,7 +385,7 @@ export function setupV03(api){
  }
  // The loading card's progress (#loading-progress width, #loading-bytes
  // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
- let downloadWatch=null;
+ let downloadWatch=null,glideTimer=0;
  // Beside the percent: the megabytes while downloading, then what is being drawn (user, 2026-11-20).
  // Fed every frame while the title is black: one input object reused, the
  // stage's words looked up only when the stage changes (no per-frame strings).
@@ -350,6 +406,8 @@ export function setupV03(api){
    if(bytesText)title.veil.setFirst(true);
    drawing.download(value,bytesText);
    showProgress(drawing.update(drawIdle));
+   // The card writes only when its value changes; while the shown value is still running up to it, come back (one timer).
+   if(drawing.gliding&&!glideTimer)glideTimer=view.setTimeout(()=>{glideTimer=0;sync();},50);
   };
   if(!html.dataset.loading)return;
   if(Watch){downloadWatch=new Watch(sync);for(const node of [bar,bytes])if(node)downloadWatch.observe(node,{attributes:true,attributeFilter:['style'],childList:true,characterData:true,subtree:true});downloadWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
@@ -433,10 +491,25 @@ export function setupV03(api){
 
  return {
   get screen(){return state.screen;},
+  // Back to the title on this page; false when it could not be done (the settings button then reloads).
+  returnToTitle,
   // The run before this one (stage it last reached; ended=false and hidden=false: killed on screen).
   get previousRun(){return trail.previous;},
   // Title/prologue never write progress, quests or map position.
   get blocksProgress(){return state.screen!=='play';},
+  // A map trip waits here before it takes the loading picture away: the place's people load
+  // their models and upload their textures behind it and not in the first seconds of play
+  // (2026-11-21: five 2048 px textures, 55-88 ms each, one frame of 0.9 s on a laptop).
+  async arrival(maxMs=4000){
+   if(state.screen!=='play'||state.disposed)return false;
+   const started=performance.now(),left=()=>maxMs-(performance.now()-started);
+   while(left()>0&&!state.disposed){
+    const settled=story.castReady(gameState().mapId);
+    if(settled){await Promise.race([settled,wait(Math.max(0,left()))]);return left()>0;}
+    await wait(30);// the cast is built by the first frame on the new map
+   }
+   return false;
+  },
   // The prologue's black stage hides the world: main.js draws it only now and
   // then (uploads keep moving) so the ambush wolf's preparation and the
   // prologue's own animation get the frame time.
@@ -476,7 +549,7 @@ export function setupV03(api){
     if(state.sceneShown&&!state.revealed){
      state.prepareTime+=dt;
      state.quietTime=!state.summoning&&!(s.pending>0)?state.quietTime+dt:0;
-     if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);}
+     if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);const took=drawing.measured;rememberPhaseMs('title:start',took.start*1000);rememberPhaseMs('title:pending',took.pending*1000);}
     }
     if(!state.revealed){drawInput.dt=dt;drawInput.ready=state.sceneShown;drawInput.pending=s.pending??0;drawInput.summoning=state.summoning;drawInput.quietTime=state.quietTime;drawInput.prepareTime=state.prepareTime;showProgress(drawing.update(drawInput));}
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
@@ -498,7 +571,7 @@ export function setupV03(api){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
     combatTarget.update(dt,api.getController()?.state,api.getPlayer()?.position,s.mapId);
     if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;trail.mark(state.trailScene?'play:opening-scene':'play');}
-    if(!story.sceneActive)vitality.update(dt);
+    if(story.sceneActive)vitality.present();else vitality.update(dt);
     cursors.set(story.dialogueOpen||story.sceneActive?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();
     if(state.sinceSave>=15){state.sinceSave=0;save.touch(metaPatch());}

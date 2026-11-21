@@ -6,6 +6,7 @@ import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
 import { createFarTreeMaterial } from './tree-material.js';
 import { SCENERY_VIEW_DISTANCE } from './world-limits.js';
 import { initializeVillageMeshopt } from './village-meshopt.js';
+import { initializeVillageKtx2 } from './village-ktx2.js';
 
 export async function loadTrainingGround(world,training){
   if(world.environmentPromise)return world.environmentPromise;
@@ -14,6 +15,8 @@ export async function loadTrainingGround(world,training){
     // Install the same pinned, bounded local decoder before any parallel import;
     // otherwise Babylon silently falls back to its external default decoder.
     await initializeVillageMeshopt();
+    // The grass and the scarecrow take KTX2 colour textures (texture-replacements.js): same rule for that decoder.
+    await initializeVillageKtx2();
     const url=new URL(`${import.meta.env?.BASE_URL??'./'}assets/environment.json`,location.href),response=await fetch(url,{cache:'no-cache'});
     if(!response.ok)throw new Error('훈련장 에셋을 불러오지 못했습니다.');
     const manifest=await response.json();

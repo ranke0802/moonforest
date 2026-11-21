@@ -7,18 +7,19 @@ import ko from '../src/v03/locales/ko.js';
 
 const store=(seed={})=>{const map=new Map(Object.entries(seed));return {getItem:key=>map.has(key)?map.get(key):null,setItem:(key,value)=>map.set(key,String(value)),map};};
 
-test('slow-motion settings: on by default, kept per browser, clamped',()=>{
- assert.deepEqual(SLOW_FX_DEFAULT,{on:true,everywhere:true,lines:true,zoom:.32,seconds:.7});
+test('slow-motion settings: off by default, kept per browser, clamped',()=>{
+ assert.deepEqual(SLOW_FX_DEFAULT,{on:false,everywhere:true,lines:false,zoom:.32,seconds:.7},'off until optimised (user, 2026-11-21)');
+ assert.equal(SLOW_FX_KEY,'moonforest:slow-fx:v2','a choice stored under the old default is not read');
  const storage=store(),fx=createSlowFx(storage);
  assert.equal(fx.value,SLOW_FX_DEFAULT,'nothing stored: the defaults, one shared object');
  const before=fx.value;fx.set({zoom:.44});
- assert.notEqual(fx.value,before,'a change replaces the object');assert.equal(fx.value.zoom,.44);assert.equal(fx.value.on,true);
+ assert.notEqual(fx.value,before,'a change replaces the object');assert.equal(fx.value.zoom,.44);assert.equal(fx.value.on,false);
  assert.equal(JSON.parse(storage.map.get(SLOW_FX_KEY)).zoom,.44);
  fx.set({zoom:9,seconds:-1});assert.equal(fx.value.zoom,SLOW_FX_RANGE.zoom[1]);assert.equal(fx.value.seconds,SLOW_FX_RANGE.seconds[0]);
- fx.set({on:false,everywhere:false,lines:false});
- const again=createSlowFx(storage);assert.equal(again.value.on,false);assert.equal(again.value.everywhere,false);assert.equal(again.value.lines,false);
+ fx.set({on:true,everywhere:false,lines:true});
+ const again=createSlowFx(storage);assert.equal(again.value.on,true,'the player\'s own choice is kept');assert.equal(again.value.everywhere,false);assert.equal(again.value.lines,true);
  assert.equal(createSlowFx(store({[SLOW_FX_KEY]:'{broken'})).value,SLOW_FX_DEFAULT,'unreadable storage falls back');
- assert.equal(createSlowFx(null).value.on,true);
+ assert.equal(createSlowFx(null).value.on,false);
 });
 
 test('slow-motion settings: one section in the settings dialog',()=>{
@@ -28,9 +29,10 @@ test('slow-motion settings: one section in the settings dialog',()=>{
  assert.equal(host.children[2],section,'after the first two sections');assert.equal(section.querySelector('summary').textContent,'전투 연출');
  assert.equal(mountSlowFxSettings({doc:document,host,fx,t}),null,'mounted once');
  const [on,everywhere,lines]=section.querySelectorAll('input[type=checkbox]'),[zoom,seconds]=section.querySelectorAll('input[type=range]');
- assert.equal(on.checked,true);assert.equal(everywhere.checked,true);assert.equal(+zoom.value,.32);assert.equal(+seconds.value,.7);
+ assert.equal(on.checked,false,'off by default');assert.equal(lines.checked,false,'focus lines off by default');assert.equal(everywhere.checked,true);assert.equal(+zoom.value,.32);assert.equal(+seconds.value,.7);
+ on.checked=true;on.dispatchEvent(new document.defaultView.Event('change'));assert.equal(fx.value.on,true);
+ lines.checked=true;lines.dispatchEvent(new document.defaultView.Event('change'));assert.equal(fx.value.lines,true,'the player can still turn them on');
  on.checked=false;on.dispatchEvent(new document.defaultView.Event('change'));
- assert.equal(lines.checked,true,'focus lines on by default');lines.checked=false;lines.dispatchEvent(new document.defaultView.Event('change'));assert.equal(fx.value.lines,false);
  assert.equal(fx.value.on,false);assert.equal(everywhere.disabled,true);assert.equal(lines.disabled,true);assert.equal(zoom.disabled,true);
  zoom.value='.4';zoom.dispatchEvent(new document.defaultView.Event('input'));assert.equal(fx.value.zoom,.4);assert.equal(section.querySelector('output').textContent,'40%');
 });

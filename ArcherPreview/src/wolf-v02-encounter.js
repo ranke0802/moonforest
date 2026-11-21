@@ -2,7 +2,7 @@ import {Vector3} from '@babylonjs/core';
 import {WolfEncounter} from './wolf-encounter.js';
 import {WolfV02Brain,WOLF_V02_COMBAT_PROFILES,WOLF_V02_KNOCKBACK_SCALE,WOLF_V02_ORBIT,WOLF_V02_GAIT,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_BACK_RUN,WOLF_V02_AIR_REACTION} from './wolf-v02-spec.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
-import {playerDimensions} from './player-dimensions.js';
+import {playerDimensions,playerHurtRadius} from './player-dimensions.js';
 import {installWolfV02AttackClips} from './wolf-v02-authored-clips.js';
 import {segmentDistanceSquared} from './melee-collision.js';
 import {WolfV02LocomotionPose} from './wolf-v02-locomotion.js';
@@ -186,7 +186,7 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   pinBiteContact(){
-    const player=this.player.position,d=playerDimensions(this.player),low=player.y+d.moveRadius,high=player.y+d.height-d.moveRadius,radius=this.contactShape('jaw').radius+d.moveRadius;
+    const player=this.player.position,d=playerDimensions(this.player),low=player.y+d.moveRadius,high=player.y+d.height-d.moveRadius,radius=this.contactShape('jaw').radius+playerHurtRadius(this.player);
     let separation=Infinity,part=null;
     for(const name of ['jaw','head']){
       const point=this.nodes[name].getAbsolutePosition(),distance=Math.hypot(point.x-player.x,point.z-player.z,Math.max(low-point.y,point.y-high,0));
@@ -353,7 +353,7 @@ export class WolfV02Encounter extends WolfEncounter{
       if(!this.v02Ram.canAttempt())return false;
       if(this.v02RamPhase.config.kind==='maul')return this.v02Ram.maulContact(points,this.v02PreviousContactTime??wolfRamContactTime(this.brain),wolfRamContactTime(this.brain));
     }
-    const dimensions=playerDimensions(this.player),bodyRadius=dimensions.moveRadius;
+    const dimensions=playerDimensions(this.player),bodyRadius=playerHurtRadius(this.player);
     const low=bodyRadius,high=dimensions.height-bodyRadius,player=this.player.position;
     const action=this.v02RamPhase?.config??this.brain.action,time=this.v02RamPhase?wolfRamContactTime(this.brain):this.brain.time,previousTime=this.v02PreviousContactTime,key=this.v02RamPhase?.key??this.brain.serial;
     const maxPlayerStep=Math.min(2,Math.max(.8,32*Math.max(0,this.dt??0)));

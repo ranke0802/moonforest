@@ -1,6 +1,6 @@
 import {Vector3} from '@babylonjs/core';
 import {segmentDistanceSquared} from './melee-collision.js';
-import {playerDimensions} from './player-dimensions.js';
+import {playerDimensions,playerHurtRadius} from './player-dimensions.js';
 import {WOLF_V02_RAM_PHASES,WOLF_V02_RAM_CHASE} from './wolf-v02-spec.js';
 export const wolfRamContactTime=brain=>brain.action?.momentumRam?(brain.ramContactTime??0):brain.time;
 
@@ -34,7 +34,7 @@ export class WolfRamSequence{
   const nodes=this.e.playerNodes,hips=nodes?.['mixamorig:Hips'],chest=nodes?.['mixamorig:Spine2'];
   if(!hips||!chest||hips.isDisposed?.()||chest.isDisposed?.())return;
   this.a.copyFrom(hips.getAbsolutePosition());this.b.copyFrom(chest.getAbsolutePosition());
-  this.aim.copyFrom(this.a).addInPlace(this.b).scaleInPlace(.5);this.bodyRadius=playerDimensions(player).moveRadius;
+  this.aim.copyFrom(this.a).addInPlace(this.b).scaleInPlace(.5);this.bodyRadius=playerHurtRadius(player);
   this.geometryValid=this.a.y-player.position.y<.45&&this.b.y-player.position.y<.45;
   const ownCapture=this.e.grab.maulHolding&&this.e.combat.grabOwner===this.e&&this.e.grab.player===player&&result?.captured===true;
   this.proneValid=this.geometryValid&&result?.state==='knockdown'&&(ownCapture||result.knockedDown===true&&!result.captured&&!this.e.combat.grabOwner)&&this.e.playerAlive;

@@ -12,7 +12,7 @@ import {createBossPreparation} from '../src/boss-preparation.js';
 import {regularWolfManifest,isRegularWolf} from '../src/regular-wolf-spec.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {setWorldCharacter} from '../src/world-limits.js';
-import {MONSTER_DISENGAGE_SECONDS} from '../src/monster-territory.js';
+import {MONSTER_DISENGAGE_SECONDS,setMonsterCombatLeashScale} from '../src/monster-territory.js';
 import {PLAINS_MONSTER_SPAWNS} from '../src/plains-monster-spawns.js';
 
 const prepare=()=>createBossPreparation({incremental:false});
@@ -213,4 +213,28 @@ test('actual quadruped watch faces stay clear of the chest in lying, standing an
   await adapter.dispose();
  }
  t.diagnostic(poses+' real model/pose/target conditions; no skin/texture/LOD edits or GPU claim');
+});
+
+test('0.3 leash: a fight that has begun holds to three alert radii, and a monster walking home resumes at once inside it',async t=>{
+ const f=await fixture(t);f.world.mapId='village';f.player.position.set(0,0,3);
+ setMonsterCombatLeashScale(3);t.after(()=>setMonsterCombatLeashScale(1));
+ const adapter=f.factory('gray-wolf.r1'),zone={x:0,z:0,radius:12,combatRadius:4,wanderRadius:2,returnRadius:.4,reengageRadius:10};
+ await adapter.activate({position:new Vector3(),row:{territory:zone}},{preparation:prepare()});const e=adapter.encounter,state=e.territoryState;e.brain.random=()=>.5;
+ const run=(frames,dt=.1)=>{for(let i=0;i<frames;i++)e.update(dt,f.player);};
+ run(14);assert.equal(state.phase,'combat');
+ // Not yet fought: the authored circle still decides who is noticed (checked below after the return).
+ f.player.position.z=20;run(2);assert.equal(state.phase,'combat','beyond the alert circle (12) the fight goes on');
+ f.player.position.z=35;e.actor.position.set(0,0,10);run(2);assert.equal(state.phase,'combat','still inside three radii (36)');
+ f.player.position.z=37;run(1);assert.equal(state.phase,'disengage','past three radii the monster gives up');assert.equal(state.engaged,false);
+ // During the pause before it turns home: coming back inside the wide circle resumes the fight.
+ f.player.position.z=30;run(1);assert.equal(state.phase,'combat','back inside the wide circle during the pause: combat at once, no watch');
+ f.player.position.z=40;run(1);assert.equal(state.phase,'disengage');
+ run(Math.ceil(MONSTER_DISENGAGE_SECONDS/.1)+2);assert.equal(state.phase,'return');assert.equal(adapter.snapshot().territory.returning,true);
+ f.player.position.z=34;run(1);assert.equal(state.phase,'combat','walking home, not arrived: the fight resumes at once');assert.equal(state.engaged,true);
+ // Let it go all the way home: the wide circle no longer applies.
+ f.player.position.z=60;run(1);run(Math.ceil(MONSTER_DISENGAGE_SECONDS/.1)+2);assert.equal(state.phase,'return');
+ for(let i=0;i<600&&state.phase==='return';i++)e.update(.1,f.player);
+ assert.notEqual(state.phase,'return','arrived home');
+ f.player.position.z=20;run(5);assert.equal(state.engaged,false,'home again: outside the alert circle is not a fight');assert.equal(state.phase,'ambient');
+ f.player.position.z=11;run(3);assert.equal(state.phase,'watch','and the authored circle is the one that notices');
 });

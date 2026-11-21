@@ -71,7 +71,10 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
  // reading pace (2026-11-20, user: the first row was already there when the
  // line became visible and the second rattled out).
  const typeMs=key=>key&&typing()?TYPE_DELAY_MS+typingMs(t(key),TYPE_PACE):0;
- const hurry=event=>{if(layer.hidden||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;typewriter.complete();};
+ // A tap (or Enter/Space) while a caption types shows all of it; the next one
+ // moves on to the next caption without waiting out its hold (user, 2026-11-21).
+ let advance=false;
+ const hurry=event=>{if(layer.hidden||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;if(event.type==='keydown'&&event.repeat)return;if(!typewriter.complete())advance=true;};
  layer.addEventListener('click',hurry);
  const show=beat=>{
   const next=planes[front=1-front],prev=planes[1-front];
@@ -88,9 +91,11 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
    const id=++run;let skipped=false;const onSkip=()=>{skipped=true;typewriter.stop();};
    skip.addEventListener('click',onSkip);doc.addEventListener('keydown',hurry);
    skip.textContent=t('opening.skip');layer.hidden=false;layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;line.textContent='';said.textContent='';
-   const hold=async ms=>{for(let left=ms;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));};
+   // hold: a caption's reading time, cut short by the second tap. pause: fades and the wake, never cut.
+   const hold=async ms=>{for(let left=ms;left>0&&!skipped&&!advance&&id===run;left-=100)await wait(Math.min(100,left));};
+   const pause=async ms=>{for(let left=ms;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));};
    // Types the caption; resolves when it is fully shown (or skipped).
-   const caption=key=>{const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null,pace:TYPE_PACE,delay:key?TYPE_DELAY_MS:0});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
+   const caption=key=>{advance=false;const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null,pace:TYPE_PACE,delay:key?TYPE_DELAY_MS:0});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
    try{
     await wait(500);
     // 1. The entrance: the table of fate, revealed from the warrior upward.
@@ -100,22 +105,22 @@ export function createOpening({doc,mount=doc.body,wait=ms=>new Promise(resolve=>
      for(const row of INTRO.lines){await hold((row.at-clock)*1000);if(skipped||id!==run)break;await caption(row.key);await hold((row.until-row.at)*1000);line.classList.remove('is-in');clock=row.until;}
      await hold((INTRO.seconds-clock)*1000);
      // The cloche's shadow falls over the village, into the memories.
-     if(!skipped&&id===run){layer.classList.add('is-shading');await hold(FADE_SECONDS*1000);}
+     if(!skipped&&id===run){layer.classList.add('is-shading');await pause(FADE_SECONDS*1000);}
     }
     for(const beat of DREAM_BEATS){
      if(skipped||id!==run)break;
      layer.dataset.tone=beat.tone;show({...beat,seconds:beat.seconds+typeMs(beat.key)/1000});layer.classList.remove('is-shading');
      await caption(beat.key);
      // Poll in short steps so a skip never waits for a whole caption.
-     for(let left=beat.seconds*1000;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));
+     await hold(beat.seconds*1000);
      line.classList.remove('is-in');
-     for(let left=FADE_SECONDS*1000;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));
+     await pause(FADE_SECONDS*1000);
     }
     // 2. The wake: the table stabs back, rushes at the fork, whites out.
     if(!skipped&&id===run){
      layer.dataset.tone='wake';show({image:INTRO.image,drift:'fork',seconds:1});
-     await hold(450);layer.classList.add('is-flash');await hold(380);
-     clear();layer.classList.add('is-white');await hold(WAKE_SECONDS*1000-830);
+     await pause(450);layer.classList.add('is-flash');await pause(380);
+     clear();layer.classList.add('is-white');await pause(WAKE_SECONDS*1000-830);
      // The white stays up: release() dissolves it into the scene.
      if(!skipped)layer.dataset.woke='1';
     }

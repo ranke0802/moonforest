@@ -193,9 +193,10 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
    if(block){block.dispose();block=null;}
    ready=true;world.setTransform(instanceId,transform());actors.add(actor);
   }).catch(swapToBlock);
-  void spawn();
+  // Resolves once the model stands there (its textures uploaded) or the block took its place.
+  const settled=spawn();
   return {
-   id,key,label:spec.label,placeholder:false,height:spec.height??1.7,
+   id,key,label:spec.label,placeholder:false,height:spec.height??1.7,settled,
    place(x,y,z,yaw=0){
     pose={position:[x,y,z],yaw};live.yaw=yaw;if(live.roam){live.roam.home.x=x;live.roam.home.z=z;}if(live.mode==='walk')live.mode='idle';
     if(block)return block.place(x,y,z,yaw);
