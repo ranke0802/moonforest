@@ -4,6 +4,7 @@ import {VillageNavigation,ROUTE_GRID_RADII} from '../src/village-navigation.js';
 import {plainsObstacles} from '../src/great-plains-layout.js';
 import {plainsCliffObstacles} from '../src/plains-cliff-collision.js';
 import {createAuthoredPlacementNavigation} from '../src/authored-placement-runtime.js';
+import {gridEdges} from '../src/navigation.js';
 
 // An authored overlay must arrive with the map's route grids already decided,
 // and they must be exactly the grids a full rebuild would produce.
@@ -24,9 +25,9 @@ test('an authored overlay derives the same plains route grids as a full rebuild,
   const key=`${radius}:${limit}`,want=control.grid(radius,limit),got=derived.grids.get(key),before=base.grids.get(key);
   assert.equal(got.length,want.length);
   for(let i=0;i<want.length;i++){
-   const a=got[i],b=want[i];
-   if(a.x!==b.x||a.z!==b.z||a.free!==b.free||a.edges.length!==b.edges.length||a.edges.some((edge,k)=>edge[0]!==b.edges[k][0]||edge[1]!==b.edges[k][1]))assert.fail(`radius ${radius} node ${i} (${b.x},${b.z}) differs from a full rebuild`);
-   if(a.free!==before[i].free||a.edges.length!==before[i].edges.length)changed++;
+   const a=got[i],b=want[i],edges=gridEdges(got,i),wanted=gridEdges(want,i);
+   if(a.x!==b.x||a.z!==b.z||a.free!==b.free||edges.length!==wanted.length||edges.some((edge,k)=>edge[0]!==wanted[k][0]||edge[1]!==wanted[k][1]))assert.fail(`radius ${radius} node ${i} (${b.x},${b.z}) differs from a full rebuild`);
+   if(a.free!==before[i].free||edges.length!==gridEdges(before,i).length)changed++;
   }
   assert.equal(derived.grid(radius,limit),got,'the navigator serves the derived grid, it does not build another');
  }

@@ -18,6 +18,7 @@ import {initializeVillageMeshopt} from './village-meshopt.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
 import {villageObstacles} from './village-layout.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
+import {GRID_DIRECTIONS,linksOf,setLinks} from './navigation.js';
 import {caveFogRootEnabled} from './cave-fog-of-war.js';
 import {buildEditedTerrain,publishEditedTerrain} from './terrain-edit.js';
 import {prepareChestOpening,createChestOpening} from './chest-opening.js';
@@ -36,12 +37,11 @@ const CELL=4;
 // of solids, so its grids are the base grids with only the cells those solids
 // can reach decided again: same node order, neighbour order and edge costs as
 // ArenaNavigation.grid builds.
-const GRID_DIRECTIONS=[[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]];
 export function deriveRouteGrids(base,navigation,changed){
  for(const [key,source]of base.grids??[]){
   const [radius,limit]=key.split(':').map(Number),n=Math.round(Math.sqrt(source.length));
   if(!Number.isFinite(radius)||!Number.isFinite(limit)||n<3||n*n!==source.length)continue;
-  const step=source[1].x-source[0].x,origin=source[0].x;if(!(step>0))continue;
+  const step=source[1].x-source[0].x,origin=source[0].x,baseLinks=linksOf(source);if(!(step>0)||!baseLinks)continue;
   const nodes=source.slice(),decide=new Uint8Array(nodes.length),connect=new Uint8Array(nodes.length);
   const mark=(flags,obstacle,reach)=>{
    const x0=Math.max(0,Math.floor((obstacle.x-reach-origin)/step)),x1=Math.min(n-1,Math.ceil((obstacle.x+reach-origin)/step)),z0=Math.max(0,Math.floor((obstacle.z-reach-origin)/step)),z1=Math.min(n-1,Math.ceil((obstacle.z+reach-origin)/step));
@@ -56,17 +56,18 @@ export function deriveRouteGrids(base,navigation,changed){
   if(!nodes.length)continue;
   // Untouched cells stay the base grid's own (read-only) nodes; only the cells
   // decided again get nodes of their own.
-  for(let i=0;i<nodes.length;i++)if(connect[i]){const node=source[i];nodes[i]={x:node.x,z:node.z,free:decide[i]?navigation.free(node,radius+.035,limit):node.free,edges:node.edges};}
+  for(let i=0;i<nodes.length;i++)if(connect[i]){const node=source[i];nodes[i]={x:node.x,z:node.z,free:decide[i]?navigation.free(node,radius+.035,limit):node.free};}
+  const links={...baseLinks,mask:baseLinks.mask.slice()};
   for(let i=0;i<nodes.length;i++){
    if(!connect[i])continue;
-   const node=nodes[i],edges=[],x=i%n,z=(i-x)/n;
-   if(node.free)for(const [dx,dz]of GRID_DIRECTIONS){
-    const xx=x+dx,zz=z+dz,j=zz*n+xx;if(xx<0||xx>=n||zz<0||zz>=n||!nodes[j].free)continue;
-    if(navigation.segmentClear(node,nodes[j],radius+.025))edges.push([j,step*Math.hypot(dx,dz)]);
+   const node=nodes[i],x=i%n,z=(i-x)/n;let bits=0;
+   if(node.free)for(let d=0;d<8;d++){
+    const xx=x+GRID_DIRECTIONS[d][0],zz=z+GRID_DIRECTIONS[d][1],j=zz*n+xx;if(xx<0||xx>=n||zz<0||zz>=n||!nodes[j].free)continue;
+    if(navigation.segmentClear(node,nodes[j],radius+.025))bits|=1<<d;
    }
-   node.edges=edges;
+   links.mask[i]=bits;
   }
-  navigation.grids.set(key,nodes);
+  setLinks(nodes,links);navigation.grids.set(key,nodes);
  }
 }
 

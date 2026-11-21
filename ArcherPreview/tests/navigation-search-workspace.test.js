@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {NavigationSearchWorkspace} from '../src/navigation-search-workspace.js';
+import {gridEdges} from '../src/navigation.js';
 
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // The previous implementation's score initialization and stable sort/pop tie
@@ -16,7 +17,7 @@ function previousPath(nav,from,goal,radius,limit){
  while(open.length){
   open.sort((a,b)=>b.f-a.f);const {i}=open.pop();if(closed[i])continue;closed[i]=1;
   if(i===g){const route=[];for(let j=g;j>=0;j=parents[j])route.push(nodes[j]);route.reverse();route.push(target);return route;}
-  for(const [j,cost]of nodes[i].edges){const next=scores[i]+cost;if(next>=scores[j])continue;scores[j]=next;parents[j]=i;open.push({i:j,f:next+distance(nodes[j],target)});}
+  for(const [j,cost]of gridEdges(nodes,i)){const next=scores[i]+cost;if(next>=scores[j])continue;scores[j]=next;parents[j]=i;open.push({i:j,f:next+distance(nodes[j],target)});}
  }
  return [];
 }
