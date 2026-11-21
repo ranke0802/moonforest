@@ -123,6 +123,7 @@ import {inspectMapNavigationCache} from './map-navigation-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import {setupFrameRateControl} from './frame-rate-settings.js';
 import {enableSplitTextureUpload,splitTextureUploadStats,splitUploadRequested} from './split-texture-upload.js';
+import {createLongTaskLog} from './long-task-log.js';
 import {setupRenderScaleControl,renderResolutionSnapshot} from './render-scale-settings.js';
 import {setupPlainsViewDistanceControl,applyPlainsViewDistance,applyAdaptiveRange,plainsRenderRange} from './plains-view-distance.js';
 import { ScreenProjection } from './screen-projection.js';
@@ -157,6 +158,7 @@ const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button'
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
 const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabled;
 const splitUploadOn=splitUploadRequested(location.search); // read before the route below rewrites the address
+const longTaskLog=versionRoute.edition?createLongTaskLog():null;
 const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1';
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
@@ -353,6 +355,8 @@ const mapWorkDiagnostics=()=>({
   renderResolution:renderResolution(),
   playerTextures:playerTextureSelection,
   preparationBudget:world?.scene?frameWorkSnapshot(world.scene):null,
+  // Which step of a streamed scenery load takes the main thread, and the browser's own long tasks (0.3 diagnostics).
+  streamLoad:world?.environment?.streamLoad??null,longTasks:longTaskLog?.snapshot()??null,
   preparedShaders:engine?inspectPreparedEffects(engine):null,
   reviewEffects:world?.effectWorld?.inspect()??null,
   activeMeshCandidates:world?.environment?.activeMeshCandidates?{...world.environment.activeMeshCandidates}:null,
@@ -1703,6 +1707,8 @@ try {
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       // Starts sound without a tap where the browser already allows it (a reloaded new game).
       // A new game in place (0.3): the slot storage was wiped and rebound; drop what memory still holds from the old record.
+      // Another record was bound to this page (save.bindTo): read again what is kept in memory from the record.
+      reloadProgress:()=>{goldLoot.reload();resumeStore.last='';resumePose=readMapResume(journeyStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:false});if(boss){boss.combat.defense=playerDefense();boss.potions.reset?.();boss.combat.hp=boss.playerMaxHp;}controller?.resetStamina?.();world.authoredMonsters?.reloadSaved?.();updateHealthBars?.();return true;},
       restartProgress:()=>{goldLoot.reload();resumePose=null;resumeStore.last='';if(boss){boss.combat.defense=playerDefense();boss.potions.reset?.();boss.combat.hp=boss.playerMaxHp;}controller?.resetStamina?.();updateHealthBars?.();return true;},
       unlockAudio:()=>{try{return audio.unlock();}catch{return null;}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});

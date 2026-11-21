@@ -419,3 +419,14 @@ PC
 - 확인: `v03-shell` 16개(타이틀 왕복 2개 추가) 통과. 실제 게임 화면은 배포 후 확인 예정.
 - 배포본 확인(29de34b, PC 내장 브라우저, `?qa`): 이어하기(3번 칸, M00) → `returnToTitle()` 0.9초, 같은 문서(재로딩 없음), 로딩 화면 없음, 타이틀 표시·자동 전투 재개, 등장인물 0 → 다시 이어하기: 같은 퀘스트·같은 위치(-87,-32) → 다시 타이틀. 설정 창의 "타이틀로" 버튼 두 번 누르기 경로도 같은 결과, 콘솔 오류 0. 타이틀 진행 값은 44→51→…→83→84…93으로 끊김 없이 올라감. 폰에서는 미확인.
 - 다음 후보: 다른 기록 칸 불러오기를 재로딩 없이(0.2 쪽 시스템의 "초기화 + 상태 적용" 입구), 남은 끊김(지형 조각 나눠 켜기, 셰이더 컴파일 메시 이름 기록), 분할 올리기 브라우저 누수 확인·폰 기록 비교.
+
+## 2026-11-21 11:00 — 남은 항목 (배포 대상)
+
+- **다른 기록 칸 불러오기를 재로딩 없이**: `save.bindTo(slot)`(지우지 않고 그 칸에 연결) → `api.reloadProgress()`(골드, 이어하기 위치, 방어구, 물약·체력·스태미나, 몬스터 처치 기록 `runtime.reloadSaved()`) → 플레이 시간 다시 읽기 → `continueHere()`. 퀘스트·팁은 `story.start`가 그 칸에서 읽는다. 맵이 다르면 그 맵만 로딩. 부품이 없거나 연결 실패 시 기존 재로딩.
+- **분할 올리기 브라우저 누수 확인**(배포본 29de34b, PC, `?splitupload=1&qa`): 평원↔마을 7회 이동. 맵 소유 객체(배치 기록 80개 표본·그 메시·재질 텍스처의 InternalTexture, 2048 이상 포함)를 WeakRef로 잡아 이동 후 GC 압박 뒤 확인 → 떠난 맵의 기록·메시·텍스처 생존 0. 지형 객체는 직전 맵 것만 잠깐 남았다가 다음 이동 뒤 지워짐. GC 후 `usedJSHeapSize` 최솟값 1164~1167MB로 일정. 누수 없음. (참고: PC 고급 프로필의 JS 힙이 1.16GB로 크다. 별도 과제.)
+- **남은 끊김 — 원인 특정 계측**: 폰 기록(11/20)의 "이동 · 모델 준비" 60ms 이상 프레임 30개를 다시 보면 (가) `workMs`≈0인데 간격만 60~160ms(프레임 루프 밖 작업), (나) `drawSubmissionMs` 57~95ms 두 종류. 단계 이름이 기록에 없어 추측으로 고치지 않고 계측을 넣었다:
+  - `render-cpu-sampler.js`: 느린 `createEffect`를 요청한 메시·재질 이름(`slowCalls[].mesh/material`). 느린 요청이 있던 렌더 끝에 그 프레임의 활성 메시만(600개 한도) 한 번 훑는다.
+  - `village-streamed-environment.js`: 맵이 뜬 뒤 풍경 불러오기의 동기 구간별 시간 `metadata.streamLoad`(setup, install, instance, outlines, occlusion: 횟수·합·최댓값·가장 오래 걸린 자산).
+  - `frame-work-coordinator.js`: 예산(2ms)을 넘긴 준비 단계 이름별 합계 `preparationBudget.overrunsByStep`(24개 한도).
+  - `long-task-log.js`: 브라우저 longtask(50ms 이상) 최근 60개 `metadata.longTasks`(시작·길이, 프레임 이벤트와 같은 시계).
+- 다음 폰 기록에서 볼 것: `streamLoad`의 maxMs가 큰 단계, `overrunsByStep`, `longTasks`와 느린 프레임의 시각 대조, `slowCalls`의 mesh.

@@ -92,6 +92,12 @@ export function createSaveSession({local,session,edition,now=()=>Date.now()}){
   // progress storage to it, so the title's own click keeps sound and no reload
   // is needed. The caller resets what it keeps in memory.
   restartIn(target){if(!validSlot(target)||!wipeSlot(local,edition,target))return false;slot=target;journey.rebind(slotPrefix(edition,target));return true;},
+  // Load another record in place (2026-11-21): bind this page's progress storage to an
+  // existing record, nothing is wiped. The caller reads again what it keeps in memory.
+  bindTo(target){
+   if(!validSlot(target)||!readSlotIndex(local,edition)[target-1].used)return false;
+   slot=target;journey.rebind(slotPrefix(edition,target));try{local?.setItem(editionPrefix(edition)+LAST_KEY,String(slot));}catch{/* optional */}return true;
+  },
   get available(){return usable(local);},
   index:()=>readSlotIndex(local,edition),
   meta:()=>readSlotIndex(local,edition)[slot-1],

@@ -7,7 +7,7 @@ import {t,setPack,localizeChapter,cloneChapter,tr} from '../src/v03/i18n.js';
 import {createTitleScreen,slotSummary,formatPlayTime} from '../src/v03/title-screen.js';
 import {createOpening,dreamSeconds,DREAM_BEATS,INTRO} from '../src/v03/opening.js';
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
-import {createSaveSession} from '../src/v03/save-slots.js';
+import {createSaveSession,readIntent} from '../src/v03/save-slots.js';
 import {setTypewriterEnabled} from '../src/v03/typewriter.js';
 
 // These flows assert whole lines and one key per line; typing is covered by
@@ -104,7 +104,7 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
 });
 
-function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false}={}){
  const {document,window,root}=dom(),log=[];
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
@@ -125,6 +125,7 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  if(inPlace)api.restartProgress=()=>{log.push('restartProgress');return true;};
  if(stopWorld)api.stopWorld=()=>log.push('stopWorld');
+ if(reloadProgress)api.reloadProgress=()=>{log.push('reloadProgress');return true;};
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
  return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
@@ -197,6 +198,20 @@ test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  h.click('[data-action="gallery"]');await settle();assert.equal(h.document.querySelectorAll('.v03-gallery-row').length,3);h.click('.v03-panel-back');await settle();
  h.click('[data-action="quit"]');await settle();h.click('.v03-panel-accept');await settle();
  assert.ok(h.log.includes('exit'));assert.equal(h.shell.screen,'exit');assert.equal(h.shell.blocksGame,true);
+});
+test('loading another record on the same page: the slot is bound, the game reads it again, nothing reloads',async()=>{
+ const local=memory(),session=memory();
+ const seed=createSaveSession({local,session,edition:E,now:()=>10});seed.commit({title:'달빛 여관',chapter:1,character:'warrior-plains',place:'윈드몬 대평원',playSeconds:321});seed.journey.setItem('moonforest-gold-v1','77');
+ const h=harness({local,session,reloadProgress:true,stopWorld:true});assert.equal(h.save.slot,2,'boots into the first empty slot');
+ let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?character=warrior-plains',replace:url=>{replaced=url;}};
+ h.finishSplash();await h.reveal();
+ h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle(40);
+ assert.equal(replaced,null,'no reload');assert.equal(readIntent(session,E),null,'no intent left for a next document');
+ assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),'77','the page now reads record 1');
+ assert.ok(h.log.includes('reloadProgress'));assert.equal(h.shell.screen,'play');assert.equal(h.shell.inspect().story.started,true);
+ assert.ok(h.shell.inspect().playSeconds>=321,'the record\'s own play time');
+ // And the record that was bound before is untouched.
+ assert.equal(createSaveSession({local,session:memory(),edition:E}).index()[1].used,false);
 });
 test('existing saves: load another slot reloads with an intent; overwrite wipes first',async()=>{
  const local=memory(),session=memory();

@@ -251,7 +251,14 @@ export function setupV03(api){
   }else if(action==='load'){
    const slot=await title.chooseSlot({mode:'load',index,bootSlot:save.slot});if(slot===null)return;
    const meta=index[slot-1];if(!meta.used)return;
-   if(slot!==save.slot){reloadInto(slot,'load',meta.character);return;}
+   if(slot!==save.slot){
+    // In place when the game can read a record again on this page (user, 2026-11-21: no
+    // reload, the loaded world stays); otherwise a clean document as before.
+    if(!ready||!api.reloadProgress||!save.bindTo||!save.bindTo(slot)){reloadInto(slot,'load',meta.character);return;}
+    api.reloadProgress();
+    state.playSeconds=save.meta().playSeconds??0;state.sinceSave=0;state.returnPose=null;state.ambush=false;
+    if(state.worldStarted){api.stopWorld?.();state.worldStarted=false;}
+   }
    if(!ready){api.toast?.(t('toast.preparing'));return;}
    await continueHere();
   }else if(action==='gallery'){

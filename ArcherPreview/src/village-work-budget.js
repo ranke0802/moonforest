@@ -7,6 +7,7 @@ export class VillageWorkBudget {
     Object.assign(this,{active,cancelled,now,frame,milliseconds});this.started=now();
     this.shared=createFrameWorkLease({scene,coordinator,now});this.sharedStarted=false;
   }
-  due(){if(!this.active()||this.cancelled()){this.shared?.reset();this.sharedStarted=false;return false;}if(this.sharedStarted)this.shared?.checkpoint();else{this.shared?.reset();this.sharedStarted=true;}return this.now()-this.started>=this.milliseconds||this.shared?.due()===true;}
+  // label: what the stretch since the last call was (kept by the coordinator for stretches over the budget).
+  due(label=null){if(!this.active()||this.cancelled()){this.shared?.reset();this.sharedStarted=false;return false;}if(this.sharedStarted)this.shared?.checkpoint(label);else{this.shared?.reset();this.sharedStarted=true;}return this.now()-this.started>=this.milliseconds||this.shared?.due()===true;}
   async yield(){this.shared?.checkpoint();do{const token=this.shared?.beforeWait();await this.frame();this.shared?.afterWait(token);}while(!this.cancelled()&&this.active()&&this.shared?.due());this.started=this.now();}
 }

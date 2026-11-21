@@ -186,6 +186,14 @@ export function loadStreamedVillage(world,{
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
     const has=r=>hasVillageGeometry(assets.get(r.id),r.level);
+    // Main-thread time of each synchronous stretch of a streamed load once the map is up
+    // (diagnostics; phone recording 2026-11-20: long frames while scenery is prepared, with
+    // nothing to say which step). A count, a sum and the worst single stretch with its asset.
+    const streamLoad=stats.streamLoad={};
+    const stageTime=(name,since,id,level)=>{
+      if(initializing)return;const ms=performance.now()-since;let row=streamLoad[name];if(!row)row=streamLoad[name]={count:0,ms:0,maxMs:0,worst:null};
+      row.count++;row.ms+=ms;if(ms>row.maxMs){row.maxMs=ms;row.worst=id+':'+level;}
+    };
     const load=async({id,level})=>{
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
       const lifetime=new MapLoadLifetime({signal:controller.signal,timeoutMs:modelTimeoutMs,timers:modelTimers}),cancelled=()=>disposed||lifetime.signal.aborted;
@@ -194,15 +202,16 @@ export function loadStreamedVillage(world,{
       await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();
       const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime}),{onLate:container=>container?.dispose()});
       lifetime.check();containers.push(container);
+      let since=performance.now();
       const meshes=geometry(container);
       const outskirtsGround=applyVillagePlainsOutskirtsGround(world,container,{config:asset.config});
       if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
       prepareVillageInstancing(meshes);if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
       for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
-      world.lighting.registerMeshes(meshes);
+      world.lighting.registerMeshes(meshes);stageTime('setup',since,id,level);
       await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled}));lifetime.check();
-      installVillageGeometry(asset,container,level,world);
+      since=performance.now();installVillageGeometry(asset,container,level,world);stageTime('install',since,id,level);
       const instances=recordsByAsset.get(id)??[];
       // 0.4: derived far-distance levels for small scenery (see v04/detail-lod.js).
       if(detailLodEnabled()&&!asset.detailLods){
@@ -220,21 +229,23 @@ export function loadStreamedVillage(world,{
         if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
       }
       for(const record of instances)if(!record.meshes.length){
-        if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
+        if(work.due('instance:'+id))await lifetime.run(()=>work.yield());lifetime.check();
+        since=performance.now();
         const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
         for(const node of instance.rootNodes)node.parent=record.facing;
         const children=record.root.getChildMeshes();
         record.meshes=children.filter(m=>m.getTotalVertices()>0);
         for(const mesh of children)if(!mesh.getTotalVertices())candidates.addEmptyRoot(mesh);
         for(const mesh of record.meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();candidates.add(mesh);}
-        record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;
+        record.facing.freezeWorldMatrix();record.root.freezeWorldMatrix();stats.instances++;stageTime('instance',since,id,level);
       }
       world.caveFog?.updateRecords(instances);
       const activeSources=[...new Set([...asset.baseMeshes,...[...asset.tiers.values()].flatMap(t=>t.meshes),...(asset.detailLods??[])])];
       world.lighting.registerMeshes(activeSources);
       if(!outskirtsGround){
+        since=performance.now();
         for(const mesh of activeSources)outlines.sourceFor(mesh);
-        outlines.addRecords(instances);await lifetime.run(()=>outlines.prepare(activeSources,{cancelled}));lifetime.check();
+        outlines.addRecords(instances);stageTime('outlines',since,id,level);await lifetime.run(()=>outlines.prepare(activeSources,{cancelled}));lifetime.check();
       }
       if(level===2&&instances.some(r=>r.essentialStructural)){
         for(const record of instances)if(record.essentialStructural)record.structuralReady=true;
@@ -245,8 +256,8 @@ export function loadStreamedVillage(world,{
       // entire room wall like a tree canopy and reveal rooms behind it.
       const covered=instances.filter(r=>r.blocksPlayerView&&!r.placement.background&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.plains||world.cave||Math.hypot(r.placement.x,r.placement.z)<54||villageRoadside(r.placement)));
       for(const record of covered){
-        if(work.due())await lifetime.run(()=>work.yield());lifetime.check();
-        world.treeOcclusion.refreshRoots([record.root]);
+        if(work.due('occlusion:'+id))await lifetime.run(()=>work.yield());lifetime.check();
+        since=performance.now();world.treeOcclusion.refreshRoots([record.root]);stageTime('occlusion',since,id,level);
       }
       stats.loadedLods[level]++;stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
       });pendingLoads.add(operation);
