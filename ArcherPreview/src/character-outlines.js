@@ -7,6 +7,7 @@ import {characterStyleFor,registerCharacterInk} from './character-style.js';
 import {configureCharacterExteriorStencil} from './character-ink-stencil.js';
 import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots,trimEmptyBoneSlotsAsync} from './character-render-cost.js';
 import {prepareMourningCameraCulling,prepareMourningCameraCullingAsync} from './mourning-camera-culling.js';
+import {canPosedClone,posedClone} from './posed-bounds.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/bonesVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/morphTargetsVertexGlobalDeclaration.js';
@@ -65,23 +66,14 @@ const materials = new WeakMap();
 const widths = { sword: .0025, shield: .0035, wolf: .003, bear: .006, goblin: .004, elena: .003, scarecrow: .0035 };
 export const isRuntimeOutline = mesh => mesh.metadata?.moonforestOutline === true;
 
-// Keep Babylon's complete Mesh clone pipeline, including posed bounds. Its
-// initial refresh also builds a Vector3 for every vertex, but silhouettes are
-// never pickable or collision meshes. Avoid just that unused point cache.
-class CharacterOutlineMesh extends Mesh {
-  constructor(name,scene,parent,source){super(name,scene,parent,source,true);this._outlineCloneComplete=true;}
-  refreshBoundingInfo(applySkeletonOrOptions=false,applyMorph=false){
-    if(!this._outlineCloneComplete&&applySkeletonOrOptions===true&&applyMorph===true)
-      return super.refreshBoundingInfo({applySkeleton:true,applyMorph:true,updatePositionsArray:false});
-    return super.refreshBoundingInfo(applySkeletonOrOptions,applyMorph);
-  }
-}
+// Keep Babylon's complete Mesh clone pipeline, including posed bounds, but
+// take those bounds from an earlier clone of the same geometry in the same
+// pose when there is one (posed-bounds.js). Silhouettes are never pickable or
+// collision meshes, so the per-vertex point cache is not built either.
 function cloneOutlineMesh(source,name){
   // Custom mesh classes or hooks retain their own cloning behavior untouched.
-  if(source.constructor!==Mesh||source.onClonedObservable?.hasObservers()||source.clone!==Mesh.prototype.clone||source._copySource!==Mesh.prototype._copySource||
-     source.refreshBoundingInfo!==Mesh.prototype.refreshBoundingInfo||source._getData!==Mesh.prototype._getData)
-    return source.clone(name,source,true);
-  return new CharacterOutlineMesh(name,source.getScene(),source,source);
+  if(!canPosedClone(source))return source.clone(name,source,true);
+  return posedClone(source,name,source,true);
 }
 
 function outlineMaterial(scene,exterior=false) {

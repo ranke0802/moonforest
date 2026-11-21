@@ -92,7 +92,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
   detailDialog?.addEventListener('close',()=>expand?.setAttribute('aria-expanded','false'));
   const setCollecting=value=>{if(collecting!==value){collecting=value;if(!value){recording.break();finishBurst(now());}onCollecting(value);}};
   comparison?.addEventListener('keydown',event=>{if(event.target?.tagName==='SUMMARY'&&['Space','Enter'].includes(event.code))event.stopPropagation();});
-  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,playerMeleeAimMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0,bossNearMs:0,bossFarMs:0,bossSeparationMs:0,bossPostMs:0,bossMaxOneMs:0};
+  let nextMemory=0,memorySample={},metrics={},sections={bossUpdateMs:0,contactsMs:0,worldUpdateMs:0,hudUpdateMs:0,framePreludeMs:0,playerControllerMs:0,playerAnimationMs:0,playerMeleeAimMs:0,actionAudioMs:0,sceneryGeometryMs:0,sceneryDemandMs:0,sceneryLoadStartMs:0,sceneryTextureMs:0,sceneryOcclusionMs:0,sceneCallMs:0,bossNearMs:0,bossFarMs:0,bossSeparationMs:0,bossPostMs:0,bossMaxOneMs:0,navGridMs:0,navPathMs:0};
   // Paused preview renders can change Babylon's shared CPU counters. Keep the
   // last play snapshot and refresh only asynchronous GPU state/retained age.
   const refreshGpu=()=>{const sample=renderMetrics();if(sample&&Object.hasOwn(sample,'gpu'))metrics={...metrics,gpu:sample.gpu};if(sample&&Object.hasOwn(sample,'drawCpu'))metrics={...metrics,drawCpu:sample.drawCpu};};

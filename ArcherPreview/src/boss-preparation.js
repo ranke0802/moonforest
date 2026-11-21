@@ -18,15 +18,19 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
   const stats={yields:0,slices:0,blocks:0,maxSliceMs:0,coalescedPauses:0,frameWaitMs:0,steps:[]};
   const controller=new AbortController(),started=now(),waiters=new Set();let reason=null,sliceStarted=started,sliceBlocks=0,firstFrame=true;
   const shared=incremental?createFrameWorkLease({scene,coordinator,now}):null;let sharedStarted=false;
-  const checkpoint=()=>{if(sharedStarted)shared?.checkpoint();else{shared?.reset();sharedStarted=true;}};
+  // last: the boundary the running stretch began at. A stretch over the shared budget is recorded
+  // as 'after <that boundary>' (or the label its caller gives), so a recording names the code that
+  // ran long between two boundaries; before 2026-11-22 they were all 'unlabelled'.
+  let last='start';
+  const checkpoint=(label='after '+last)=>{if(sharedStarted)shared?.checkpoint(label);else{shared?.reset();sharedStarted=true;}};
   const cancel=(error=bossPreparationCancelled())=>{if(reason)return;reason=error;controller.abort(error);for(const reject of [...waiters])reject(error);};
   const check=()=>{if(!reason&&!isCurrent())cancel();if(!reason&&now()-started>=timeoutMs)cancel(bossPreparationTimeout());if(reason)throw reason;};
   const preparation={incremental,stats,check,cancel,signal:controller.signal,get pendingWaits(){return waiters.size;},
     // Account synchronous SDK work before a final ready check returns. Without
     // this boundary its last slice was invisible to another preparation owner.
-    checkpoint(){check();checkpoint();},
-    wait(value){
-      try{check();}catch(error){Promise.resolve(value).catch(()=>{});return Promise.reject(error);}checkpoint();
+    checkpoint(label){check();checkpoint(label);},
+    wait(value,label='wait'){
+      try{check();}catch(error){Promise.resolve(value).catch(()=>{});return Promise.reject(error);}checkpoint();last=label;
       return new Promise((resolve,reject)=>{
         let done=false,timer;
         const finish=(error,result)=>{if(done)return;done=true;clearTimeout(timer);waiters.delete(abort);shared?.reset();if(error)reject(error);else resolve(result);};
@@ -37,9 +41,9 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
     sleep(ms){
       check();const signal=controller.signal;
       const delay=new Promise((resolve,reject)=>{let timer;const abort=()=>{clearTimeout(timer);signal.removeEventListener('abort',abort);reject(signal.reason??bossPreparationCancelled());};signal.addEventListener('abort',abort,{once:true});timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},ms);});
-      return this.wait(delay);
+      return this.wait(delay,last);
     },
-    async nextFrame(){check();checkpoint();stats.yields++;const start=now(),token=shared?.beforeWait();await this.wait(frame(controller.signal));shared?.afterWait(token);stats.frameWaitMs+=Math.max(0,now()-start);sliceStarted=now();sliceBlocks=0;firstFrame=false;},
+    async nextFrame(){check();checkpoint();stats.yields++;const start=now(),token=shared?.beforeWait();await this.wait(frame(controller.signal),last);shared?.afterWait(token);stats.frameWaitMs+=Math.max(0,now()-start);sliceStarted=now();sliceBlocks=0;firstFrame=false;},
     async pause(){
       check();if(!incremental)return;checkpoint();
       // Cheap preparation boundaries can share one task slice. The first
@@ -49,7 +53,7 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
       while(shared?.due())await this.nextFrame();
       sliceBlocks++;
     },
-    async step(name,fn){await this.pause();const start=now();let value;try{value=fn();}finally{shared?.charge(Math.max(0,now()-start),name);}stats.steps.push({name,ms:Math.max(0,now()-start)});check();return value;},
+    async step(name,fn){await this.pause();const start=now();let value;try{value=fn();}finally{shared?.charge(Math.max(0,now()-start),name);}stats.steps.push({name,ms:Math.max(0,now()-start)});last=name;check();return value;},
     async run(work){
       check();if(!incremental)return runPreparationSync(work);checkpoint();
       let next;
@@ -59,7 +63,7 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
         stats.slices++;stats.maxSliceMs=Math.max(stats.maxSliceMs,Math.max(0,now()-start));
         if(!next.done)await this.nextFrame();
       }while(!next.done);
-      check();return next.value;
+      last='run';check();return next.value;
     }
   };return preparation;
 }

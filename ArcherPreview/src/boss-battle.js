@@ -16,7 +16,7 @@ import { ELENA_HOME, ELENA_SIZE, MOURNING_SIZE } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
 import { ENEMY_ARENA_RADIUS, enemyLimitAt, clampEnemyTravel } from './world-limits.js';
 import { createBossPreparation } from './boss-preparation.js';
-import { ArenaNavigation } from './navigation.js';
+import { ArenaNavigation, navigationWork } from './navigation.js';
 import { VillageNavigation } from './village-navigation.js';
 import { CaveNavigation } from './witch-cave-navigation.js';
 import { MourningCaveNavigation } from './mourning-cave-navigation.js';
@@ -426,7 +426,7 @@ export class BossBattle {
     // Optional cost breakdown for the frame recorder (set by the diagnostics;
     // off it costs one branch per foe). Near = drawn or close, far = skipped-rate.
     const profile=this.profile,clock=profile?performance.now.bind(performance):null;
-    if(profile){profile.nearMs=profile.farMs=profile.separationMs=profile.postMs=profile.maxMs=0;profile.near=profile.far=profile.engaged=0;profile.maxKind='';profile.maxState='';}
+    if(profile){profile.nearMs=profile.farMs=profile.separationMs=profile.postMs=profile.maxMs=0;profile.near=profile.far=profile.engaged=0;profile.maxKind='';profile.maxState='';profile.maxFrom='';navigationWork.gridMs=navigationWork.pathMs=0;}
     for (const boss of this.encounters){
       let step=dt;slot++;
       // A story shot owns this actor (position, facing and clip): its own AI
@@ -439,9 +439,9 @@ export class BossBattle {
         step=Math.min(.1,boss._farDt);
       }
       boss._farDt=0;boss._farSkipped=false;
-      const began=profile?clock():0;
+      const began=profile?clock():0,stateBefore=profile?boss.brain?.state:null;
       boss._battleUpdateToken=updateToken;try{boss.update(step, player);}finally{boss._battleUpdateToken=null;}
-      if(profile){const spent=clock()-began;if(far){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxState=boss.brain?.state??'';}}
+      if(profile){const spent=clock()-began;if(far){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxFrom=stateBefore??'';profile.maxState=boss.brain?.state??'';}}
     }
     if(this.world.prefetchResources&&this.encounters.some(b=>b.kind==='elena'&&b.phase===1&&b.engaged))this.preloadMourning({modelsOnly:this.encounters.some(b=>b.kind==='elena'&&b.manualSummon)});
     const running=this.frameEncounters;running.length=0;
@@ -460,7 +460,7 @@ export class BossBattle {
       boss.warningRing.update(position,boss.attackRange(boss.motionSpec(boss.brain.state)));
       if(proof){proof.token=proof.actor=proof.scene=proof.navigation=proof.obstacles=proof.cells=proof.terrain=proof.heights=null;}
     }
-    if(profile)profile.postMs=clock()-postBegan;
+    if(profile){profile.postMs=clock()-postBegan;profile.navGridMs=navigationWork.gridMs;profile.navPathMs=navigationWork.pathMs;}
     this.updating = false; this.onChange(this);
   }
   poseAndContacts(player, result, sample, shield) {

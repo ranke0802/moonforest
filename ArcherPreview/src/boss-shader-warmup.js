@@ -8,7 +8,7 @@ import {createPreparedEffectLease} from './prepared-effect-lifetime.js';
 // export as an alias for callers while player/NPC/cutscenes use the same path.
 export async function prepareModelShaders(asset,{preparation,frame,now,shadows,timeoutMs=45000,includeInstanceVariants=true}={}){
  const scene=asset.meshes[0]?.getScene?.(),job=preparation??createBossPreparation({frame,now,timeoutMs,scene,isCurrent:()=>!scene?.isDisposed&&!asset.meshes.some(mesh=>mesh.isDisposed?.())}),visibilityStates=new Map(),lease=createPreparedEffectLease();let committed=false;
- const waitReady=async(mesh,read)=>{for(;;){job.check();const result=read();job.checkpoint?.();if(result.ready){lease.retain(mesh,result.effect);return;}if(shaderVariantError(result.effect))throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');await job.sleep(16);}};
+ const waitReady=async(mesh,read)=>{for(;;){job.check();const result=read();job.checkpoint?.('shader:'+(mesh.name??''));if(result.ready){lease.retain(mesh,result.effect);return;}if(shaderVariantError(result.effect))throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');await job.sleep(16);}};
  try{
   for(const mesh of asset.meshes){
    if(!mesh.getTotalVertices?.()||!mesh.material)continue;

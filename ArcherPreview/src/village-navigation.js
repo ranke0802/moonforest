@@ -1,4 +1,4 @@
-import { ArenaNavigation, linksOf } from './navigation.js';
+import { ArenaNavigation, linksOf, navigationWork } from './navigation.js';
 import { ARENA_RADIUS, enemyLimitAt, offEnemyTravelShape } from './world-limits.js';
 import { obstacleClearance, sweepObstacle } from './village-collision.js';
 import {visitSegmentCells} from './navigation-segment-cells.js';
@@ -113,6 +113,9 @@ export class VillageNavigation extends ArenaNavigation {
     return best;
   }
   path(from,goal,radius,limit=enemyLimitAt(from)){
+    const began=performance.now();try{return this.route(from,goal,radius,limit);}finally{navigationWork.pathMs+=performance.now()-began;}
+  }
+  route(from,goal,radius,limit){
     this.pathsBuilt++;
     const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);
     if(this.segmentClear(start,target,radius+.025))return [target];

@@ -27,16 +27,18 @@ export function cloneBossMorphManager(source,scene){
   }catch(error){copy.dispose();throw error;}
 }
 
+// Shared colour textures are swapped for KTX2 only once our decoder is ready (texture-replacements.js).
+// Without it the model's own JPG/PNG load as before, so a decoder problem never blocks a monster.
+const ktx2Decoder=()=>initializeVillageKtx2().catch(()=>{});
 export function loadBossModelContainer(scene,model,{lifetime}={}){
-  // Actor colour textures may be swapped for KTX2 (the bear): our own decoder first, in every world.
   if(lifetime)return lifetime.run(async()=>{
-    await lifetime.run(()=>initializeVillageKtx2());
+    await lifetime.run(ktx2Decoder);
     const response=await lifetime.run(()=>fetch(model,{cache:'force-cache',signal:lifetime.signal}));
     if(!response.ok)throw new Error(`배우 모델을 불러오지 못했습니다 (${response.status}).`);
     const json=await lifetime.run(()=>response.json());
     return readMapContainer(scene,json,new URL('.',model).href,{lifetime,fileName:model.pathname.split('/').pop(),onMeshLoaded:prepareBossMorphUpload});
   },{onLate:container=>container?.dispose()});
-  return initializeVillageKtx2().then(()=>LoadAssetContainerAsync(model.pathname.split('/').pop(),scene,{
+  return ktx2Decoder().then(()=>LoadAssetContainerAsync(model.pathname.split('/').pop(),scene,{
     rootUrl:new URL('.',model).href,pluginExtension:'.gltf',
     pluginOptions:{gltf:{onMeshLoaded:prepareBossMorphUpload}},
   }));

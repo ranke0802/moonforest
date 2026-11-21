@@ -412,7 +412,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equi
     cameraZoom:cameraZoom?.snapshot()??null,
     viewportResize:world?.viewportResize?.snapshot?.()??null,cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
-    map:character,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
+    map:character,slowFoe:boss?.profile?.maxMs>=8?{kind:boss.profile.maxKind,from:boss.profile.maxFrom,state:boss.profile.maxState,ms:Math.round(boss.profile.maxMs)}:null,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
 loadingView.setDiagnostics(()=>frameDiagnostics.snapshot());
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
@@ -1079,7 +1079,7 @@ function render(dt) {
     frameDiagnostics.measure('actionAudioMs',actionAudioStart);
     world.developmentActors?.beforeBattle(dt,actor);world.authoredMonsters?.beforeBattle(dt,actor);
     frameDiagnostics.measure('framePreludeMs',framePreludeStart);
-    if(boss)boss.profile=frameDiagnostics.collecting?(boss.profile??{}):null;const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);if(boss?.profile){const p=boss.profile;frameDiagnostics.set('bossNearMs',p.nearMs);frameDiagnostics.set('bossFarMs',p.farMs);frameDiagnostics.set('bossSeparationMs',p.separationMs);frameDiagnostics.set('bossPostMs',p.postMs);frameDiagnostics.set('bossMaxOneMs',p.maxMs);}actionAudio.boss(boss,dt);
+    if(boss)boss.profile=frameDiagnostics.collecting?(boss.profile??{}):null;const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);if(boss?.profile){const p=boss.profile;frameDiagnostics.set('bossNearMs',p.nearMs);frameDiagnostics.set('bossFarMs',p.farMs);frameDiagnostics.set('bossSeparationMs',p.separationMs);frameDiagnostics.set('bossPostMs',p.postMs);frameDiagnostics.set('bossMaxOneMs',p.maxMs);frameDiagnostics.set('navGridMs',p.navGridMs);frameDiagnostics.set('navPathMs',p.navPathMs);}actionAudio.boss(boss,dt);
     world.developmentActors?.afterBattle(actor);world.authoredMonsters?.afterBattle(actor);
     boss?.combat?.recover?.(dt,actor,boss.onDamage,!controller.dead&&boss.playerHp>0);
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));

@@ -5,6 +5,8 @@ const EPS=.002;
 // grid shape. One byte per node (bit d = an edge towards GRID_DIRECTIONS[d])
 // replaces a list of [index,cost] pairs per node, which was about two million
 // small objects on the plains.
+// Search cost since the battle's last update began, for the performance record (boss-battle.js).
+export const navigationWork={gridMs:0,pathMs:0};
 export const GRID_DIRECTIONS=Object.freeze([[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]);
 const gridLinkTable=new WeakMap();
 export function gridLinks(n,step){
@@ -78,7 +80,7 @@ export class ArenaNavigation {
     const key=`${radius}:${limit}`;if(this.grids.has(key))return this.grids.get(key);
     // Coarser waypoints bound route-search cost in the larger arena. Actual
     // collision and sliding still use the exact swept circles above.
-    const step=limit>12?.75:.5,n=Math.floor(limit*2/step)+1,nodes=[],links=gridLinks(n,step),mask=links.mask;
+    const began=performance.now(),step=limit>12?.75:.5,n=Math.floor(limit*2/step)+1,nodes=[],links=gridLinks(n,step),mask=links.mask;
     for(let z=0;z<n;z++)for(let x=0;x<n;x++){const p={x:x*step-limit,z:z*step-limit};nodes.push({...p,free:this.free(p,radius+.035,limit)});}
     for(let z=0;z<n;z++)for(let x=0;x<n;x++){
       const i=z*n+x;if(!nodes[i].free)continue;
@@ -87,7 +89,7 @@ export class ArenaNavigation {
         if(this.segmentClear(nodes[i],nodes[j],radius+.025))mask[i]|=1<<d;
       }
     }
-    setLinks(nodes,links);this.grids.set(key,nodes);return nodes;
+    setLinks(nodes,links);this.grids.set(key,nodes);navigationWork.gridMs+=performance.now()-began;return nodes;
   }
   path(from,goal,radius,limit=enemyLimitAt(from)){
     this.pathsBuilt++;const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);

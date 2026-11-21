@@ -112,7 +112,7 @@ export class BossEncounter {
       })();
       this.assetAcquisition=acquiring;acquiring.catch(()=>{if(this.assetAcquisition===acquiring)this.assetAcquisition=null;});
       }
-      await preparation.wait(this.assetAcquisition);
+      await preparation.wait(this.assetAcquisition,'asset');
     }
     preparation.check();this.preparationPhase('model');
     if(this.assetPreparationStep<1){await preparation.step('skin-flags',()=>{

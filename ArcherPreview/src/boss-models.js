@@ -1,8 +1,9 @@
-import { AbstractMesh, TransformNode } from '@babylonjs/core';
+import { AbstractMesh, Mesh, TransformNode } from '@babylonjs/core';
 import {loadBossModelContainer,prepareBossCloneSource,cloneBossMorphManager} from './boss-gpu-preparation.js';
 import {readMapManifest} from './map-manifests.js';
 import {MapLoadLifetime,mapLoadAbortError} from './map-load-lifetime.js';
 import {recoverMeshoptWorkerPool} from './meshopt-worker-supervisor.js';
+import {canPosedClone,posedClone} from './posed-bounds.js';
 
 export function instantiateBossModel(container, timings) {
   // Independent skeletons and animation targets; geometry/materials/textures stay shared.
@@ -12,10 +13,14 @@ export function instantiateBossModel(container, timings) {
   // source's final slot policy before the clone's first thaw/upload, scoped to
   // these source objects and this synchronous call; no global prototype hook.
   const managers=[...new Set(container.meshes.map(mesh=>mesh.morphTargetManager).filter(Boolean))],originals=new Map();let instance;
+  // Same scoping for the meshes: a clone takes its posed bounds from the first
+  // clone of that geometry (posed-bounds.js) and skips the CPU skinning pass.
+  const sources=container.meshes.filter(mesh=>mesh.getTotalVertices?.()>0&&!Object.hasOwn(mesh,'clone')&&canPosedClone(mesh));
   try{
+    for(const mesh of sources)mesh.clone=(name='',parent=null,doNotCloneChildren)=>parent&&parent._addToSceneRootNodes===undefined?Mesh.prototype.clone.call(mesh,name,parent,doNotCloneChildren):posedClone(mesh,name,parent,doNotCloneChildren);
     for(const manager of managers){originals.set(manager,Object.getOwnPropertyDescriptor(manager,'clone'));manager.clone=()=>cloneBossMorphManager(manager,container.scene);}
     instance = container.instantiateModelsToScene(name => name, false, { doNotInstantiate: true });
-  }finally{for(const [manager,descriptor]of originals){if(descriptor)Object.defineProperty(manager,'clone',descriptor);else delete manager.clone;}}
+  }finally{for(const mesh of sources)delete mesh.clone;for(const [manager,descriptor]of originals){if(descriptor)Object.defineProperty(manager,'clone',descriptor);else delete manager.clone;}}
   if(timings){timings.push({name:'model-clone',ms:Math.max(0,performance.now()-started)});started=performance.now();}
   const nodes = [...new Set(instance.rootNodes.flatMap(root => [root, ...root.getDescendants(false)]))];
   const asset={
