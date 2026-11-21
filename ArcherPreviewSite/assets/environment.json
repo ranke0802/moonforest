@@ -148,11 +148,11 @@
       ]
     },
     "grass-tuft": {
-      "model": "./content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf",
+      "model": "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
       "resources": [
         "./content/9843bae88856bb97b091e49d290869865b78545160171bb210b70003812ca2d2.bin",
-        "./content/c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2",
-        "./content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf"
+        "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+        "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf"
       ],
       "bytes": 1836899,
       "triangles": 1455,
@@ -180,12 +180,12 @@
       ]
     },
     "scarecrow": {
-      "model": "./content/d0f77247efdb2b97356522f9213bda8aeba5ae8359b168e81b8735c84e391d0c.gltf",
+      "model": "./content/a1b992ec1973b54f41d85fbca4936e6231ca06849f49d21248ee1cbc76e91dbf.gltf",
       "resources": [
-        "./content/6bf3b8874526704f61c661bb37da04aed43808d1c5dfa34794aa456319c68b77.ktx2",
+        "./content/a7a6bc98a461f098e5d680c24a6bfb580f706dc1662e14c27998778376e7282d.jpg",
         "./content/9cb48d27a85ed589b3acb04c9f955db2e66048c1ae760713af129d7ed2ca1f09.jpg",
         "./content/19c25d2bb7d6ec59ef7c3a4bba91a42bf714377ddec3624cb08225d44c7daee7.bin",
-        "./content/d0f77247efdb2b97356522f9213bda8aeba5ae8359b168e81b8735c84e391d0c.gltf"
+        "./content/a1b992ec1973b54f41d85fbca4936e6231ca06849f49d21248ee1cbc76e91dbf.gltf"
       ]
     }
   },

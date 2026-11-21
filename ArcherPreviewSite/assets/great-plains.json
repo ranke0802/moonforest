@@ -656,11 +656,11 @@
       "lods": [
         {
           "level": 0,
-          "model": "./content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf",
+          "model": "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
           "resources": [
             "./content/9843bae88856bb97b091e49d290869865b78545160171bb210b70003812ca2d2.bin",
-            "./content/c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2",
-            "./content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf"
+            "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+            "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf"
           ],
           "bytes": 1836899,
           "textureSize": 1024,
@@ -668,11 +668,11 @@
         },
         {
           "level": 1,
-          "model": "./content/70f9ae66f93e69c60a90140704855080ba1390b8d967fbd42d847e764a045366.gltf",
+          "model": "./content/0913c927634033ed215d22de75c8a1f83a79a132f22bb936a93275ad80ff24ee.gltf",
           "resources": [
             "./content/4ebde8ec61d103679f2b74577525108736eb5e25bf88f0426c3f4010fafe46a7.bin",
-            "./content/c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2",
-            "./content/70f9ae66f93e69c60a90140704855080ba1390b8d967fbd42d847e764a045366.gltf"
+            "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+            "./content/0913c927634033ed215d22de75c8a1f83a79a132f22bb936a93275ad80ff24ee.gltf"
           ],
           "bytes": 1834411,
           "textureSize": 1024,
@@ -680,11 +680,11 @@
         },
         {
           "level": 2,
-          "model": "./content/95775b6d9ec5f7e958c54d6060a2b455b2dd51b465ee879646522564e016b5dc.gltf",
+          "model": "./content/c8d98d90345612a64390096d6abfb96aa1268b4df52d95d591a49a7dfaf9cfef.gltf",
           "resources": [
             "./content/c7272d0a733af2c8346ecad90ab982795d5f3888c593c4f2bf80deabde874ab7.bin",
-            "./content/c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2",
-            "./content/95775b6d9ec5f7e958c54d6060a2b455b2dd51b465ee879646522564e016b5dc.gltf"
+            "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+            "./content/c8d98d90345612a64390096d6abfb96aa1268b4df52d95d591a49a7dfaf9cfef.gltf"
           ],
           "bytes": 1831376,
           "textureSize": 1024,
@@ -693,11 +693,11 @@
       ],
       "mobileNear": {
         "level": 0,
-        "model": "./content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf",
+        "model": "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf",
         "resources": [
           "./content/9843bae88856bb97b091e49d290869865b78545160171bb210b70003812ca2d2.bin",
-          "./content/c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2",
-          "./content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf"
+          "./content/a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg",
+          "./content/1011a8ce7e8b27557fdceec555bfa61bbfa0f9794dc13b1ca60068c167b175d6.gltf"
         ],
         "bytes": 1836899,
         "textureSize": 1024,
