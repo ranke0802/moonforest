@@ -51,3 +51,15 @@ test('noncanonical edge layouts bypass the compact cache without changing the na
  warmMapNavigation(engine,nav,'village',4);assert.equal(inspectMapNavigationCache(engine).entries,0);assert.equal(nav.grid(.34,4)[0].x,123);
  engine.onDisposeObservable.notifyObservers(engine);
 });
+
+test('extra limits are warmed and restored with the map, and change nothing when there are none',()=>{
+ const engine=fakeEngine(),make=()=>new VillageNavigation([{id:'post',x:0,z:0,radius:.8,height:2}]);
+ const a=make();warmMapNavigation(engine,a,'village',4,{limits:[7.5,4]});
+ assert.deepEqual([...a.grids.keys()],['0.34:4','0.7:4','0.34:7.5','0.7:7.5'],'the usual limit first, a repeated one once');
+ const b=make();warmMapNavigation(engine,b,'village',4,{limits:[7.5]});
+ assert.equal(inspectMapNavigationCache(engine).hits,1);assert.equal(gridsHash(b),gridsHash(a));
+ const wide=b.grids.get('0.34:7.5'),route=b.path({x:-3,z:.1},{x:3,z:.1},.34,7.5);
+ assert.equal(b.grids.get('0.34:7.5'),wide,'a search at the wide limit uses the warmed grid');assert.ok(route.length>1);
+ const c=make();warmMapNavigation(engine,c,'village',4);
+ assert.deepEqual([...c.grids.keys()],['0.34:4','0.7:4']);assert.equal(inspectMapNavigationCache(engine).misses,2,'a different set of limits is a different snapshot');
+});

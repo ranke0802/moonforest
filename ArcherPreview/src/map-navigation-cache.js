@@ -25,10 +25,11 @@ function restore(grid){
  const {n,step,limit,free,edges}=grid,links=gridLinks(n,step);links.mask.set(edges);
  return setLinks(Array.from({length:n*n},(_,i)=>({x:(i%n)*step-limit,z:Math.floor(i/n)*step-limit,free:!!(free[i>>3]&(1<<(i&7)))})),links);
 }
-export function warmMapNavigation(engine,navigation,mapId,limit,{radii=[.34,.7],now=()=>performance.now()}={}){
- const started=now();
- if(!['village','great-plains','monster-forest','witch-cave'].includes(mapId)){for(const radius of radii)navigation.grid(radius,limit);return;}
- const pool=poolFor(engine),signature=new TextEncoder().encode(JSON.stringify([navigation.obstacles,radii,limit])),hooks=methods(navigation),old=pool.entries.get(mapId);
+// limits: other radii the map's monsters and the guide search with (the village's exit road).
+export function warmMapNavigation(engine,navigation,mapId,limit,{radii=[.34,.7],limits=[],now=()=>performance.now()}={}){
+ const started=now(),reach=[limit,...limits.filter(extra=>extra!==limit)];
+ if(!['village','great-plains','monster-forest','witch-cave'].includes(mapId)){for(const each of reach)for(const radius of radii)navigation.grid(radius,each);return;}
+ const pool=poolFor(engine),signature=new TextEncoder().encode(JSON.stringify(reach.length>1?[navigation.obstacles,radii,limit,reach]:[navigation.obstacles,radii,limit])),hooks=methods(navigation),old=pool.entries.get(mapId);
  // Instance-bound callbacks may capture a scene or mutable collision state.
  // Only the authored prototype methods may enter the cross-map snapshot.
  const canonical=methodKeys.every(key=>!Object.hasOwn(navigation,key));
@@ -38,7 +39,7 @@ export function warmMapNavigation(engine,navigation,mapId,limit,{radii=[.34,.7],
   for(const grid of old.grids){const key=`${grid.radius}:${grid.limit}`;if(!navigation.grids.has(key))navigation.grids.set(key,restore(grid));navigation.grid(grid.radius,grid.limit);}
  }else{
   pool.misses++;if(old){pool.bytes-=old.bytes;pool.entries.delete(mapId);}
-  const grids=radii.map(radius=>{const nodes=navigation.grid(radius,limit);return canonical?encode(nodes,radius,limit):null;});
+  const grids=reach.flatMap(each=>radii.map(radius=>{const nodes=navigation.grid(radius,each);return canonical?encode(nodes,radius,each):null;}));
   if(grids.every(Boolean)){
    const bytes=signature.byteLength+grids.reduce((sum,grid)=>sum+grid.bytes,0);
    if(bytes<=MAP_NAVIGATION_CACHE_BYTES){

@@ -51,7 +51,7 @@ import {applyPlayerDetail} from './player-detail.js';import {mergePlayerMeshes} 
 import {CaveCameraGuard,cavePlayerMarkerClear} from './witch-cave-camera.js';
 import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
-import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit,safeRoadArrival} from './map-travel.js';
+import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit,safeRoadArrival,VILLAGE_EXIT_LIMIT} from './map-travel.js';
 import { createWorld,replaceWorldMap } from './world.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
@@ -61,7 +61,7 @@ import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
 import {CameraFollow,setupCameraFollowControls} from './camera-follow.js';
 import {CameraZoom,setupCameraZoomControls} from './camera-zoom.js';
 import {CameraPitch,setupCameraPitchControls} from './camera-pitch.js';
-import { ARENA_RADIUS, setEnemyTravelRule } from './world-limits.js';
+import { ARENA_RADIUS, VILLAGE_MAP, setEnemyTravelRule } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
 import { observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
@@ -168,9 +168,11 @@ if(versionRoute.edition)loadingView.enableEstimate(); // 0.3: the model stage mo
 // 0.3 (user, 2026-11-21): monsters may use the road out of the village, the strip the player walks
 // (map-travel.js), instead of stopping at the village circle.
 if(versionRoute.edition)setEnemyTravelRule({
-  limit:(position,normal)=>world?.mapId==='village'?villageTravelLimit(position,normal+.5)-.5:normal,
-  clamp:(position,previous)=>{if(world?.mapId==='village')clampVillageExit(position,previous);},
-  outside:(point,limit)=>world?.mapId==='village'&&limit>ARENA_RADIUS&&Math.hypot(point.x,point.z)>ARENA_RADIUS&&villageTravelLimit(point,0)===0,
+  // VILLAGE_MAP and not world.mapId: the route grids are built while a map loads, before the world says where it is.
+  limit:(position,normal)=>VILLAGE_MAP?villageTravelLimit(position,normal+.5)-.5:normal,
+  clamp:(position,previous)=>{if(VILLAGE_MAP)clampVillageExit(position,previous);},
+  outside:(point,limit)=>VILLAGE_MAP&&limit>ARENA_RADIUS&&Math.hypot(point.x,point.z)>ARENA_RADIUS&&villageTravelLimit(point,0)===0,
+  warmLimits:()=>VILLAGE_MAP?[VILLAGE_EXIT_LIMIT-.5]:[],
 });
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
 if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;if(simplifyEnabled())void simplifierReady();
@@ -359,6 +361,8 @@ const mapWorkDiagnostics=()=>({
   preparationBudget:world?.scene?frameWorkSnapshot(world.scene):null,
   // Which step of a streamed scenery load takes the main thread, and the browser's own long tasks (0.3 diagnostics).
   streamLoad:world?.environment?.streamLoad??null,longTasks:longTaskLog?.snapshot()??null,
+  // true while the loading picture still covers the stage (frames already run behind it to settle the map)
+  covered:document.documentElement.dataset.loading!==undefined,
   preparedShaders:engine?inspectPreparedEffects(engine):null,
   reviewEffects:world?.effectWorld?.inspect()??null,
   activeMeshCandidates:world?.environment?.activeMeshCandidates?{...world.environment.activeMeshCandidates}:null,
