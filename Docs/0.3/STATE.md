@@ -511,3 +511,19 @@ NPC KTX2: 변환 완료(ktx v4.4.2, `.cache/actor-ktx2`). `scripts/apply-npc-ktx
   - 결론: 0.1의 JS를 다시 빌드하지 않고는 공유 에셋의 텍스처 형식을 바꿀 수 없다. 0.1 재빌드는 vite가 필요해 Windows에서만 된다.
   - 배포 파이프라인에서 배운 것: 배포 검사는 리소스 목록의 content가 매니페스트가 쓰는 것과 정확히 같기를 요구한다(옛 파일을 목록에 남기면 실패). 묶음(.mfp.gz)은 `gzipSync(level 6)`로 멤버를 이어 붙인 것이라 다시 만들 수 있다. 빌드는 시작 전에 세 인벤토리(0.1·0.2·0.3)가 배포본과 일치하는지 본다(`reviewedDeploymentUnion`). 되돌린 커밋에 이 작업을 하는 스크립트(`apply-shared-ktx2.py`, `repack-shared-ktx2.mjs`)가 들어 있다(3982c16, a01afd9 참고).
 - 남은 비압축 2048: 풀(대평원), 허수아비(마을, +1254 한 장), 곰. 0.3에서만 바꾸려면 0.3 전용 매니페스트 경로가 필요하다.
+
+## 2026-11-21 21:00 — 풀·허수아비·곰 KTX2(0.1 포함): 방법을 바꿔야 한다 (미완, 작업 트리는 깨끗함)
+
+사용자 지시: 풀·허수아비·곰도, 0.1도 KTX2로 바꾼다(0.1 동결보다 우선).
+
+모델 glTF를 바꾸는 방식(NPC에 쓴 방식)은 공유 에셋에는 맞지 않는다. 확인한 것:
+- 모델의 content hash가 곧 에셋 버전이다. 풀은 `geometryBudget`(appliedModelSha256·nativeConfigSha256, `scripts/approved-scenery-policy.mjs`)에 묶여 있고, 허수아비는 버전이 content hash 그대로라 배치 문서가 가리키는 버전과 어긋난다(0.1에서 난 `Placement catalog/runtime asset version conflict`). `tests/asset-catalog.test.js` 3·4번이 이걸 잡는다.
+- 훈련장(`environment.js`)과 곰 로더(`boss-encounter.js`, `boss-gpu-preparation.js`)는 KTX2 디코더를 초기화하지 않는다(메시옵트만). 그대로면 Babylon이 외부 CDN 디코더를 찾는다. `tests/legacy-training-decoder.test.js`가 이 경로를 검사한다(fetch를 environment.json만 허용).
+- 0.1은 vite 빌드라 Windows에서만 다시 만들 수 있다(`build-village-site.mjs` → `sync-village-site.mjs`). 그 뒤 0.2·0.3 인벤토리도 맞춰야 CI가 통과한다(`reviewedDeploymentUnion`).
+
+다음에 할 방식(권장): **모델은 건드리지 않고 실행 중에 텍스처만 바꿔 끼운다.**
+1. glTF 로더 확장(애니메이션 확장과 같은 방식)에서, 이미지 이름이 교체 표에 있으면 KTX2로 텍스처를 만든다(`KHR_texture_basisu`가 하는 `_createTextureAsync` 호출과 같은 형태). 표: JPG/PNG 이름 → KTX2 이름 3개.
+2. 세 로더 경로에 `initializeVillageKtx2()`를 넣고 위 테스트를 맞춘다.
+3. KTX2 3개를 배포 그래프에 넣는다: content에 추가하고, 리소스 목록(`files`에 추가, revision 재계산)과 세 인벤토리에 항목 추가. 옛 파일을 빼지 않으므로 묶음은 그대로다(오늘 한 번 성공한 절차).
+4. 0.2·0.3은 CI 배포로 바로 KTX2가 된다. 0.1은 Windows에서 재빌드해야 새 코드가 들어간다(사용자 실행용 `.cmd` 필요).
+변환된 KTX2는 `.cache/actor-ktx2/uastc/`에 있다(풀 a22ee8b1, 허수아비 a7a6bc98, 곰 1b34cc21). 허수아비 1254px 한 장은 4의 배수가 아니라 아직 변환하지 않았다.
