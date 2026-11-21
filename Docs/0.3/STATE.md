@@ -527,3 +527,13 @@ NPC KTX2: 변환 완료(ktx v4.4.2, `.cache/actor-ktx2`). `scripts/apply-npc-ktx
 3. KTX2 3개를 배포 그래프에 넣는다: content에 추가하고, 리소스 목록(`files`에 추가, revision 재계산)과 세 인벤토리에 항목 추가. 옛 파일을 빼지 않으므로 묶음은 그대로다(오늘 한 번 성공한 절차).
 4. 0.2·0.3은 CI 배포로 바로 KTX2가 된다. 0.1은 Windows에서 재빌드해야 새 코드가 들어간다(사용자 실행용 `.cmd` 필요).
 변환된 KTX2는 `.cache/actor-ktx2/uastc/`에 있다(풀 a22ee8b1, 허수아비 a7a6bc98, 곰 1b34cc21). 허수아비 1254px 한 장은 4의 배수가 아니라 아직 변환하지 않았다.
+
+## 2026-11-21 21:20 — 풀·허수아비·곰 KTX2: 0.2·0.3 적용(118ec94), 0.1은 재빌드 남음
+
+- `src/texture-replacements.js`: glTF 로더 확장이 교체 표의 JPG/PNG 대신 KTX2로 텍스처를 만든다(모델 파일·버전 그대로). 자체 디코더가 준비된 뒤에만 바꾼다(`village-ktx2.js`가 `setTextureReplacementsReady(true)`).
+- 훈련장(`environment.js`)과 곰 로더(`boss-encounter.js`, `boss-gpu-preparation.js`)에 `initializeVillageKtx2()` 추가.
+- KTX2 3장은 `public/assets/texture-replacements.json`이 가리켜 배포에 들어간다(0.2·0.3의 추가 content로 실린다. 0.1 공유 목록·인벤토리는 건드리지 않았다).
+- 확인: Babylon 9.31 브라우저에서 같은 모델이 준비 전 RGBA 2048 / 준비 후 BC7 sRGB 2048, 렌더 PSNR 59.6dB. 배포본 0.3 대평원에서 풀이 KTX2로 올라가고 JPG는 안 올라감, 비압축 2048 없음(허수아비 1254 한 장만 남음). 0.2 마을·0.1 훈련장 정상 로드.
+- 확인 못 한 것: 곰을 실제로 소환해 본 것, 폰.
+- 남은 것: **0.1 재빌드**(Windows, `build-village-site.mjs` → `sync-village-site.mjs`, 이후 0.2·0.3 인벤토리 맞춤). 로컬 public의 리소스 목록이 배포본보다 216개(82.5MB, NPC 에셋) 많다 → 0.1 그래프에 섞이지 않게 먼저 확인할 것. 허수아비 1254px 한 장(4의 배수로 맞춰야 변환 가능, 사용자 확인 필요).
+- `tests/asset-catalog.test.js` 3번(카탈로그가 최신인지)은 이 변경 전에도 로컬에서 실패한다(원인 미확인, CI 목록에는 없는 테스트).

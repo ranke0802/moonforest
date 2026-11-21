@@ -208,3 +208,4 @@
 - 진단: 느린 프레임의 스크립트 이름(long-animation-frame), 로딩 그림에 덮인 프레임 표시(`covered`).
 - 0.3: 등장인물 7명 색상 텍스처를 KTX2(UASTC)로(GPU 장당 약 22MB → 5.6MB). 변환은 `Convert-Actor-KTX2.cmd`.
 - 풀·허수아비·곰 KTX2는 0.1이 깨져 되돌림(공유 에셋은 0.1 재빌드 없이는 형식을 바꿀 수 없다).
+- 공용: 풀·허수아비·곰 색상 텍스처를 불러올 때 KTX2로 교체(`texture-replacements.js`). 모델 파일은 그대로. 훈련장·곰 로더에 KTX2 디코더 초기화. 0.1은 재빌드 전까지 JPG/PNG.
