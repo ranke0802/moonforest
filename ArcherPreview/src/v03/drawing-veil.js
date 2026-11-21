@@ -152,10 +152,14 @@ export function drawStage(ratio){for(let i=0;i<DRAW_STAGES.length;i++)if(ratio<D
 // between counts (a handful of pending items made 5% jumps), move by how long
 // that phase took last time on this device (phase-share.js); the counts and
 // the phase ends correct it. expectedStart/expectedPending are in seconds.
+// glide (share of the bar per second, 0 = off): when real work finishes in a
+// lump the value would jump (measured on the deployed build: 37→49, 49→66,
+// 71→80, 86→95). With a glide the shown value runs up to it at that pace by the
+// wall clock instead, so the number counts through every percent.
 // update() is called every frame while the title is black: it takes one
 // caller-owned input object and returns the same result object each time.
-export function createDrawingProgress({quiet=1.2,limit=25,expectedStart=4,expectedPending=5}={}){
- let ratio=0,peak=0,loadTime=0,pendingTime=0,downloading=false,downloadValue=0,downloadText='';
+export function createDrawingProgress({quiet=1.2,limit=25,expectedStart=4,expectedPending=5,glide=0,now=()=>performance.now()}={}){
+ let ratio=0,shown=0,seen=null,peak=0,loadTime=0,pendingTime=0,downloading=false,downloadValue=0,downloadText='';
  const out={ratio:0,remaining:0},took={start:0,pending:0};
  return {
   // ratio 0..1 of the download; text: what is left, ready to show. null when the card closed.
@@ -171,11 +175,18 @@ export function createDrawingProgress({quiet=1.2,limit=25,expectedStart=4,expect
     if(prepareTime>=limit||(!left&&quietTime>=quiet))value=1;
    }
    ratio=Math.max(ratio,Math.min(1,value));
-   out.ratio=ratio;out.remaining=left;
+   if(glide>0&&ratio<1){
+    // At most a tenth of a second per call: after a long stall the value still runs up, it does not leap.
+    const at=now(),passed=seen===null?0:Math.min(.1,Math.max(0,(at-seen)/1000));seen=at;
+    shown=Math.max(shown,Math.min(ratio,shown+glide*passed));
+   }else shown=ratio;
+   out.ratio=shown;out.remaining=left;
    return out;
   },
   // Seconds each uncounted phase really took, for the next run.
   get measured(){took.start=loadTime;took.pending=pendingTime;return took;},
-  get ratio(){return ratio;},
+  get ratio(){return shown;},
+  // Still running up to the real value (the caller keeps calling update until this is false).
+  get gliding(){return shown<ratio;},
  };
 }

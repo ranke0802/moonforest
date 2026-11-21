@@ -169,7 +169,7 @@ export const QUESTS=Object.freeze([
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-bear'}},
  ]},
  {id:'M05',reward:{gold:150,potions:2},title:'마을을 습격한 고블린',steps:[
-  {id:'raid',text:'목책에서 고블린 막아내기',type:'defeat',kind:'goblin',count:4,map:'village',at:{x:0,z:28,radius:11},summon:{kind:'goblin',count:4},intro:'raid-start',arrival:'고블린 습격!'},
+  {id:'raid',text:'목책에서 고블린 막아내기',type:'defeat',kind:'goblin',count:4,map:'village',at:{x:0,z:28,radius:11},summon:{kind:'goblin',count:4,from:{x:-1.2,z:58}},intro:'raid-start',arrival:'고블린 습격!'},
   {id:'report',text:'청년과 이야기하기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'youth-goblin'}},
  ]},
  {id:'M06',reward:{gold:250},title:'우두머리 늑대',steps:[

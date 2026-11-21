@@ -185,8 +185,7 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-next{position:absolute!important;right:clamp(14px,1.4vmin,24px);bottom:clamp(10px,1vmin,18px);min-height:clamp(36px,3.4vmin,56px);padding:.3em 1.1em!important;font-size:clamp(14px,1.7vmin,22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 .v03-dialogue-next:hover{background:#cfb77b22!important}
 
-/* The tip card stands where every other notice does (user, 2026-11-21): centred, at the lesson line's height, on desktop and touch alike. The lesson line steps aside while a card is up. */
-.v03-tip{position:absolute;left:50%;top:30%;width:min(320px,42vw);margin-left:calc(min(320px,42vw)/-2);padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
+.v03-tip{position:absolute;right:max(18px,env(safe-area-inset-right));top:clamp(150px,34vh,260px);width:min(320px,42vw);padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
 .v03-tip.is-shown{animation:v03-tip 7.5s ease forwards}
 @keyframes v03-tip{0%{opacity:0;transform:translateX(14px)}6%,90%{opacity:1;transform:none}100%{opacity:0;transform:translateX(8px)}}
 .v03-tip-title{display:block;font-size:clamp(14px,2.2vmin,16px);letter-spacing:.14em;color:var(--v03-gold)}
@@ -199,7 +198,7 @@ html[data-loading] .v03-hud{display:none}
    the tip card clear of the minimap. */
 @media (pointer:coarse){
  .v03-hint{top:max(64px,26%)}.v03-hint-what{font-size:clamp(18px,min(5vmin,2.6vw),26px)}.v03-hint-how{font-size:clamp(14px,min(3.4vmin,1.75vw),18px)}
- .v03-tip{top:max(64px,26%);margin-left:calc(min(280px,60vw)/-2);width:min(280px,60vw);padding:8px 12px 9px}
+ .v03-tip{top:max(10px,env(safe-area-inset-top));right:auto;left:50%;margin-left:calc(min(280px,60vw)/-2);width:min(280px,60vw);padding:8px 12px 9px}
  .v03-prompt{bottom:clamp(120px,34vh,220px);min-height:52px;padding:9px 38px 9px 18px}
  .v03-quest{top:clamp(64px,17vh,120px);max-width:46vw}
  .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
@@ -357,10 +356,13 @@ html[data-edition] #help-dialog .v03-guide-row dt{margin:0;font-size:13px;line-h
 @media (pointer:coarse){.v03-guide dd.is-touch{display:block}.v03-guide p.is-touch{display:inline-block}.v03-guide .is-keys{display:none}}
 @media (max-width:560px){.v03-guide-list{grid-template-columns:minmax(0,1fr)}}
 
-/* ----- While a tip card is up the lesson line under it is hidden (same place).
+/* ----- Tip card on touch screens: always at the top edge, centred, so it never
+   covers the hero in the middle of the screen (user, 2026-11-21: the stamina card
+   used to drop below the lesson line and sat over the play area). The lesson line
+   under it steps aside while the card is up. Desktop keeps the card at the right.
    Korean text wraps between words, not inside. ----- */
 .v03-hint{transition:opacity .2s ease}
-.v03-hud:has(.v03-tip.is-shown) .v03-hint{opacity:0}
+@media (pointer:coarse){.v03-hud:has(.v03-tip.is-shown) .v03-hint{opacity:0}}
 html[lang=ko] .v03-tip,html[lang=ko] .v03-dialogue-text,html[lang=ko] .v03-quest,html[lang=ko] .v03-hint,html[lang=ko] .v03-guide-row,html[lang=ko] .v03-caption-text{word-break:keep-all}
 
 /* ----- Touch screens: the quest panel (left), the tip card (top), the quest

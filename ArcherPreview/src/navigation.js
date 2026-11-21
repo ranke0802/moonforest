@@ -1,4 +1,4 @@
-import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
+import { ARENA_RADIUS, enemyLimitAt } from './world-limits.js';
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const EPS=.002;
 function hitTime(a,delta,c,radius){
@@ -72,7 +72,7 @@ export class ArenaNavigation {
     }
     this.grids.set(key,nodes);return nodes;
   }
-  path(from,goal,radius,limit=ENEMY_ARENA_RADIUS){
+  path(from,goal,radius,limit=enemyLimitAt(from)){
     this.pathsBuilt++;const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);
     if(this.segmentClear(start,target,radius+.025))return [target];
     const nodes=this.grid(radius,limit);
@@ -87,7 +87,7 @@ export class ArenaNavigation {
     }
     return [];
   }
-  steer(from,goal,radius,cache,dt,limit=ENEMY_ARENA_RADIUS){
+  steer(from,goal,radius,cache,dt,limit=enemyLimitAt(from)){
     if(this.segmentClear(from,goal,radius+.03)){cache.route=null;return goal;}
     cache.age=(cache.age??0)+dt;
     if(!cache.route||cache.age>.65||distance(goal,cache.goal)>.8){cache.route=this.path(from,goal,radius,limit);cache.goal={x:goal.x,z:goal.z};cache.age=0;}

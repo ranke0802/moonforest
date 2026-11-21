@@ -1,6 +1,7 @@
 import { Vector3 } from '@babylonjs/core';
 import { boostSwordStrike } from './equipment-stats.js';
 import {LEGACY_PLAYER_DIMENSIONS} from './player-dimensions.js';
+import {hitScale} from './hit-scale.js';
 import {JUDGMENT_CONTACT_END} from './player-strike-timings.js';
 // Thrust_Slash's two authored passes are centered left of the actor's forward
 // axis. Aim the whole action once; keep the source pose and real blade intact.
@@ -24,6 +25,9 @@ export class PlayerStrikeSampler{
     node.computeWorldMatrix(true);
     const local=result.state==='shieldPush'?[[-.66,0,.192],[.66,0,.192]]:[[-.002,.405,0],[-.002,-.951,0]];
     if(result.state==='slash')local[1]=local[0].map((v,i)=>v+(local[1][i]-v)*1.1);
+    // hit-scale.js: the blade reaches further from the grip, the shield's edge is wider.
+    const reach=hitScale.playerStrike;
+    if(reach!==1){if(result.state==='shieldPush'){local[0][0]*=reach;local[1][0]*=reach;}else local[1]=local[0].map((v,i)=>v+(local[1][i]-v)*reach);}
     const blade=local.map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),node.getWorldMatrix()).asArray());
     const last=this.last?.actionId===result.actionId?this.last:null,from=last?.time??result.clipTime;
     const strikes=!multiHit&&result.state==='attack'?[{id:'thrust-cut',from:.55,to:1.65,damage:18,interruptsBoss:false}]:PLAYER_STRIKES[result.state];
@@ -32,10 +36,10 @@ export class PlayerStrikeSampler{
     const at=time=>last&&result.clipTime>from?blade.map((p,k)=>p.map((v,j)=>last.blade[k][j]+(v-last.blade[k][j])*Math.max(0,Math.min(1,(time-from)/(result.clipTime-from))))):blade;
     this.last={actionId:result.actionId,time:result.clipTime,blade};
     const contacts=windows.map(window=>({window,blade:at(Math.min(result.clipTime,window.to)),previous:at(Math.max(from,window.from)),
-      lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth*dimensions.ratio}:null}));
+      lateral:window.halfWidth?{axis:[Math.cos(heading),0,-Math.sin(heading)],halfWidth:window.halfWidth*dimensions.ratio*reach}:null}));
     return {actionId:result.actionId,elapsed:result.actionElapsed??result.clipTime,blade,previous:null,...contacts[0],contacts,
       // A 1 cm contact margin keeps near-edge hits consistent with the V6 grip.
-      bladeRadius:result.state==='shieldPush'?dimensions.shieldStrikeRadius*1.2:dimensions.bladeRadius};
+      bladeRadius:(result.state==='shieldPush'?dimensions.shieldStrikeRadius*1.2:dimensions.bladeRadius)*reach};
   }
 }
 

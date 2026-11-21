@@ -61,7 +61,7 @@ import { WarriorV2Controller, V2_LABELS } from './warrior-v2.js';
 import {CameraFollow,setupCameraFollowControls} from './camera-follow.js';
 import {CameraZoom,setupCameraZoomControls} from './camera-zoom.js';
 import {CameraPitch,setupCameraPitchControls} from './camera-pitch.js';
-import { ARENA_RADIUS } from './world-limits.js';
+import { ARENA_RADIUS, setEnemyTravelRule } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
 import { observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
@@ -161,6 +161,13 @@ const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.sea
 const uiRoute=uiTestRoute(versionRoute.url),uiTestEnabled=uiRoute.enabled;
 if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(versionRoute.edition)loadingView.enableEstimate(); // 0.3: the model stage moves the bar too (phase-share.js)
+// 0.3 (user, 2026-11-21): monsters may use the road out of the village, the strip the player walks
+// (map-travel.js), instead of stopping at the village circle.
+if(versionRoute.edition)setEnemyTravelRule({
+  limit:(position,normal)=>world?.mapId==='village'?villageTravelLimit(position,normal+.5)-.5:normal,
+  clamp:(position,previous)=>{if(world?.mapId==='village')clampVillageExit(position,previous);},
+  outside:(point,limit)=>world?.mapId==='village'&&limit>ARENA_RADIUS&&Math.hypot(point.x,point.z)>ARENA_RADIUS&&villageTravelLimit(point,0)===0,
+});
 if(releaseEnabled){document.title=versionRoute.label;document.documentElement.dataset.release=versionRoute.release;}
 if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.edition;if(simplifyEnabled())void simplifierReady();
 if(versionRoute.worldRevision)document.documentElement.dataset.world=versionRoute.worldRevision;

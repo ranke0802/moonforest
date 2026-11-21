@@ -396,3 +396,15 @@ PC
 - **슬로우·집중선 기본 꺼짐**(사용자: 집중선에서 프레임 저하가 심함, 최적화는 나중에): `slow-fx.js` 기본값 `on:false, lines:false`, 저장 키 v2(이전에 켜진 채 저장된 값은 읽지 않음). 설정에서 다시 켤 수 있다.
 - 왕복 누수 검사(`leak-probe.mjs 4`, 기본 경로): 지난 방문의 `prepared` 생존 없음, 힙 162↔308MB로 일정. 분할 올리기 경로(GL 필요)는 이 검사로 못 본다.
 - 사용자 원칙 재확인: 모든 변경은 최적화 대원칙(이 문서 상단 CLAUDE.md 규칙) 유지를 전제로 한다.
+
+## 2026-11-21 09:40 — 사용자 폰 검수 반영 2차 (배포 대상)
+
+- **팁 카드 위치 정정**: 1차에서 요청을 반대로 읽어 모든 팁 카드를 안내 줄 높이(화면 가운데)로 내렸다. 정정: 모바일은 항상 맨 위 가운데(안내 줄이 있으면 아래로 내려가던 규칙 삭제), 카드가 떠 있는 동안 안내 줄만 숨김. PC는 원래 오른쪽 위치.
+- **몬스터 전투 범위**(`monster-territory.js` `setMonsterCombatLeashScale(3)`, 0.3만): 전투가 시작되면 경계 반지름의 3배까지 유지. 그 밖이면 2.5초 멈춘 뒤 복귀. 복귀 중(도착 전)에 3배 안으로 들어오면 즉시 전투 재개. 도착하면 원래 경계 반지름으로.
+- **몬스터 이동 제한 해제**(`world-limits.js` `setEnemyTravelRule`, 0.3만): 몬스터는 맵 원(마을 47.5) 안에서만 움직였다. 마을에서는 플레이어가 걷는 출구 도로 띠(z 43~78, 도로 중심 ±22)까지 다닐 수 있게 했다. `VillageNavigation.free`가 넓은 원 안이라도 띠 밖이면 막는다. 규칙이 없으면(0.2) 기존과 동일.
+- **고블린 침입**(`chapter1.js` raid `summon.from:{x:-1.2,z:58}`): 마을 원 밖 출구 도로에서 소환되어 들어온다(`BossBattle.summon(…,{origin})` 추가, 기본 동작 불변). 실제 목책 사이 길찾기는 화면 미확인.
+- **판정 15%**(`hit-scale.js` `setHitScale`, 0.3만): 몬스터 피격 반지름, 플레이어 칼날(그립 기준 길이·굵기·베기 폭)·방패 밀치기, 플레이어 피격 반지름(일반 공격 사거리 판정·경고 원 포함, 곰·늑대·엘레나 접촉). 이동·분리·접근 거리는 그대로.
+- **로딩 값 뛰는 구간**: 타이틀 진행 값이 실제 값까지 초당 35%p 속도로 따라가게(`createDrawingProgress` `glide`). 배포본 측정(PC)에서 37→49, 49→66, 71→80, 86→95로 뛰던 구간.
+- 확인: 새 테스트(enemy-travel-rule 2, hit-scale 2, monster-territory 12, loading-estimate 6) 통과, 왕복 누수 검사 통과. 화면 미확인.
+- 이전부터 실패(HEAD에서도 같은 수): `goblin-contacts`, `wolf-v02-combat-r13-incoming`, `wolf-v02-ram-runtime` 6, `wolf-v02-integration` 3, `wolf-v02-orbit-navigation` 3, `map-travel-prefetch` 1, `startup-frame-failure` 22, `map-loading-art-flow` 1.
+- `?qa`를 주소에 붙이면 `window.moonforestQA`(engine, battle, world)가 열린다. 배포본 확인에 쓸 수 있다.

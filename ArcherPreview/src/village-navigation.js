@@ -1,5 +1,5 @@
 import { ArenaNavigation } from './navigation.js';
-import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
+import { ARENA_RADIUS, enemyLimitAt, offEnemyTravelShape } from './world-limits.js';
 import { obstacleClearance, sweepObstacle } from './village-collision.js';
 import {visitSegmentCells} from './navigation-segment-cells.js';
 import {NavigationSearchWorkspace} from './navigation-search-workspace.js';
@@ -112,7 +112,7 @@ export class VillageNavigation extends ArenaNavigation {
     }
     return best;
   }
-  path(from,goal,radius,limit=ENEMY_ARENA_RADIUS){
+  path(from,goal,radius,limit=enemyLimitAt(from)){
     this.pathsBuilt++;
     const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);
     if(this.segmentClear(start,target,radius+.025))return [target];
@@ -142,7 +142,7 @@ export class VillageNavigation extends ArenaNavigation {
     }finally{workspace.end();}
   }
   free(p,radius,limit=ARENA_RADIUS){
-    if(Math.hypot(p.x,p.z)>limit+1e-6)return false;
+    if(Math.hypot(p.x,p.z)>limit+1e-6||offEnemyTravelShape(p,limit))return false;
     // Wider actors used to test every solid at every grid node. Query the
     // same conservative spatial index; malformed legacy bounds retain fallback.
     const near=radius<=1.5?(this.cells.get(key(p.x,p.z))??[]):Number.isFinite(radius)&&this.segmentCellPruningSafe?this.nearby(p,p,radius):this.obstacles;

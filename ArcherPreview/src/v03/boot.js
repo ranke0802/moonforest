@@ -24,6 +24,8 @@ import {watchTranslations,translateLabels} from './live-translate.js';
 import {createRunTrail} from './run-trail.js';
 import {createDrawingProgress,drawStage} from './drawing-veil.js';
 import {expectedPhaseMs,rememberPhaseMs} from '../phase-share.js';
+import {setMonsterCombatLeashScale} from '../monster-territory.js';
+import {setHitScale} from '../hit-scale.js';
 import {LANGUAGES,readLanguage,writeLanguage,useLanguage,startLanguage,language,t,cloneChapter,localizeChapter,translateTree} from './i18n.js';
 
 // Map character → place. Saved records keep the Korean name as a fallback and
@@ -54,6 +56,10 @@ export function setupV03(api){
  const gate=createOrientationGate({doc});
  // Tekken-style health (recoverable part) for the player and monsters, in play only.
  const vitality=createVitalityHud({doc,battle});
+ // A fight that has begun holds out to three alert radii (user, 2026-11-21; monster-territory.js).
+ setMonsterCombatLeashScale(3);
+ // Hits land a little more generously: monster hurt volumes, the player's blade and the player's own body, 15 % each (user, 2026-11-21).
+ setHitScale({monsterHurt:1.15,playerStrike:1.15,playerHurt:1.15});
  // The foe being fought: what an attack or the guard turns to without a direction (combat-target.js).
  const combatTarget=createCombatTarget();
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
@@ -83,7 +89,7 @@ export function setupV03(api){
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
  // Progress shown on the black title while it is drawn (drawing-veil.js).
- const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT,expectedStart:expectedPhaseMs('title:start',4000)/1000,expectedPending:expectedPhaseMs('title:pending',5000)/1000});
+ const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT,expectedStart:expectedPhaseMs('title:start',4000)/1000,expectedPending:expectedPhaseMs('title:pending',5000)/1000,glide:.35});
  const state={screen:'boot',revealed:false,prepareTime:0,quietTime:0,attract:false,sceneShown:false,summoning:false,busy:false,disposed:false,playSeconds:save.meta().playSeconds??0,sinceSave:0,ambush:false,worldStarted:false,failed:false,langReady:false};
  // Each screen has its score: the title (and 'drawing the world') the saint's
  // theme with its demo fight silent, the prologue the quiet forest theme
@@ -330,7 +336,7 @@ export function setupV03(api){
  }
  // The loading card's progress (#loading-progress width, #loading-bytes
  // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
- let downloadWatch=null;
+ let downloadWatch=null,glideTimer=0;
  // Beside the percent: the megabytes while downloading, then what is being drawn (user, 2026-11-20).
  // Fed every frame while the title is black: one input object reused, the
  // stage's words looked up only when the stage changes (no per-frame strings).
@@ -351,6 +357,8 @@ export function setupV03(api){
    if(bytesText)title.veil.setFirst(true);
    drawing.download(value,bytesText);
    showProgress(drawing.update(drawIdle));
+   // The card writes only when its value changes; while the shown value is still running up to it, come back (one timer).
+   if(drawing.gliding&&!glideTimer)glideTimer=view.setTimeout(()=>{glideTimer=0;sync();},50);
   };
   if(!html.dataset.loading)return;
   if(Watch){downloadWatch=new Watch(sync);for(const node of [bar,bytes])if(node)downloadWatch.observe(node,{attributes:true,attributeFilter:['style'],childList:true,characterData:true,subtree:true});downloadWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}

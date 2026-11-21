@@ -167,7 +167,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     }
     if(disposed||log.step()!==step)return;
     const left=Math.max(1,step.summon.count-log.snapshot().count);
-    const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind);
+    // summon.from: the group appears there (outside the village for the raid) and comes at the player.
+    const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind,step.summon.from?{origin:step.summon.from}:undefined);
     if(ok!==false&&tune)tuneFoes(step.summon.kind,tune);
     if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
    }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}

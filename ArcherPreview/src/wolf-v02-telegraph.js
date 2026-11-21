@@ -3,6 +3,7 @@ import {WOLF_V02_ACTIONS} from './wolf-v02-spec.js';
 import {WolfEncounter} from './wolf-encounter.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 import {wolfContactShape} from './wolf-v02-contact-shapes.js';
+import {hitScale} from './hit-scale.js';
 
 const cache=new WeakMap(),amber=new Color3(1,.55,.08),red=new Color3(1,.08,.025),blue=new Color3(.18,.55,1);
 const delta=(to,from)=>Math.atan2(Math.sin(to-from),Math.cos(to-from));
@@ -55,7 +56,7 @@ export class WolfV02Telegraph{
    const x=(this.futureRoot[0]-this.root[0])*scale,z=(this.futureRoot[2]-this.root[2])*scale,angle=yaw+yawAt(clip,sample.time)-originYaw,c=Math.cos(angle),s=Math.sin(angle);
    const extra=phase.kind==='maul'?1-e.v02Ram.chaseProgress:0;
    point.x=e.actor.position.x+x*cos+z*sin+(sample.point[0]*c+sample.point[2]*s)*scale+e.v02Ram.chaseCorrectionX*extra;point.z=e.actor.position.z+z*cos-x*sin+(sample.point[2]*c-sample.point[0]*s)*scale+e.v02Ram.chaseCorrectionZ*extra;
-   point.radius=sample.radius+e.player.metadata?.playerDimensions?.moveRadius;
+   point.radius=sample.radius+e.player.metadata?.playerDimensions?.moveRadius*hitScale.playerHurt;
    if(!Number.isFinite(point.radius))point.radius=sample.radius+.2881;
   }
   e.ring.isVisible=true;e.ring.position.setAll(0);const material=e.ring.material;material.emissiveColor.copyFrom(this.stage==='windup'?amber:this.stage==='active'?red:blue);material.alpha=.88;

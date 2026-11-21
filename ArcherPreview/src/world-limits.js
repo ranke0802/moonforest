@@ -13,6 +13,18 @@ export function setWorldCharacter(character){
 }
 setWorldCharacter(new URLSearchParams(globalThis.location?.search??'').get('character'));
 
+// Where monsters may go beyond the map's circle. 0.3 (user, 2026-11-21) lets them use the
+// road out of the village, the same strip the player walks; with no rule set the circle is
+// the whole of it, as before (0.2).
+// rule: {limit(position,normal) -> radius for constrain/path from that position,
+//        clamp(position,previous) -> keeps a position inside the walkable shape,
+//        outside(point,limit) -> true for a point inside the wider circle but off the shape}
+let enemyTravelRule=null;
+export function setEnemyTravelRule(rule){enemyTravelRule=rule??null;}
+export function enemyLimitAt(position){return enemyTravelRule&&position?enemyTravelRule.limit(position,ENEMY_ARENA_RADIUS):ENEMY_ARENA_RADIUS;}
+export function clampEnemyTravel(position,previous){if(enemyTravelRule)enemyTravelRule.clamp(position,previous);}
+export function offEnemyTravelShape(point,limit){return enemyTravelRule?enemyTravelRule.outside(point,limit):false;}
+
 export function withinRenderRange(camera, position, padding = 0) {
   const distance = VIEW_DISTANCE + padding;
   return (camera.x-position.x)**2+(camera.y-position.y)**2+(camera.z-position.z)**2 <= distance*distance;

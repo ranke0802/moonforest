@@ -78,3 +78,14 @@ test('the title keeps moving between counts and remembers its own phases',()=>{
  assert.deepEqual([Math.round(p.measured.start*10),Math.round(p.measured.pending*10)],[60,120]);
  assert.equal(p.update({dt:.1,ready:true,pending:0,quietTime:1.2}).ratio,1);
 });
+
+test('a lump of finished work is run up to, not leapt to (glide)',()=>{
+ let clock=0;const p=createDrawingProgress({glide:.35,now:()=>clock});
+ p.download(.74,'');assert.equal(p.update({}).ratio,0,'the first call only starts the clock');
+ const seen=[];for(let i=0;i<40;i++){clock+=16;seen.push(p.update({}).ratio);}
+ for(let i=1;i<seen.length;i++)assert.ok(seen[i]-seen[i-1]<=.35*.016+1e-9);
+ assert.ok(seen.at(-1)>.2&&seen.at(-1)<.37);
+ p.download(.98,'');clock+=5000;const after=p.update({}).ratio;assert.ok(after-seen.at(-1)<=.035+1e-9,'a long stall does not turn into a leap');
+ for(let i=0;i<200;i++){clock+=16;p.update({});}assert.ok(Math.abs(p.ratio-.49)<1e-9,'and it arrives');
+ p.download(null);assert.equal(p.update({ready:true,pending:0,quietTime:1.2}).ratio,1,'the end is never held back');
+});

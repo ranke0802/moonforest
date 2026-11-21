@@ -15,7 +15,7 @@ import { shieldIntercepts } from './player-strikes.js';
 import { rearDamage, facingYaw } from './combat-damage.js';
 import { BossGrab } from './boss-grab.js';
 import { PlayerCombat } from './player-combat.js';
-import {playerDimensions} from './player-dimensions.js';
+import {playerDimensions,playerHurtBonus} from './player-dimensions.js';
 import { orderPoseNodes, refreshPoseMatrices, refreshPoseBranch } from './pose-matrices.js';
 import { isEnemySolid, dodgeSeparation } from './enemy-collision.js';
 import { armoredDamage } from './equipment-stats.js';
@@ -23,7 +23,7 @@ import { EnemyDeath,enableEnemyFade } from './enemy-death.js';
 import { createTerrainRing } from './terrain-mesh.js';
 import { prepareBossShaders } from './boss-shader-warmup.js';
 import { createBossPreparation,bossPreparationCancelled } from './boss-preparation.js';
-import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange } from './world-limits.js';
+import { ARENA_RADIUS, ENEMY_ARENA_RADIUS, withinRenderRange, enemyLimitAt, clampEnemyTravel } from './world-limits.js';
 import { bearEncounterSize,bearApproachDistances } from './bear-size.js';
 import {BearCombatContact} from './bear-combat-contact.js';
 import {BearLocomotion} from './bear-locomotion.js';
@@ -333,7 +333,7 @@ export class BossEncounter {
     if(this.knockVelocity.lengthSquared()>1e-6)this.actor.position.addInPlace(this.knockVelocity.scale(dt));
     this.bossReaction.update(dt,this.actor);
     this.knockVelocity.scaleInPlace(Math.exp(-6*dt));
-    if(navigation)navigation.constrain(this.actor.position,beforeMove,this.radius,ENEMY_ARENA_RADIUS);else capPosition(this.actor.position);
+    if(navigation){navigation.constrain(this.actor.position,beforeMove,this.radius,enemyLimitAt(beforeMove));clampEnemyTravel(this.actor.position,beforeMove);}else capPosition(this.actor.position);
     this.world.terrain?.place(this.actor.position);
     if(this.kind==='bear'&&this.bearSize)this.bearLocomotion?.synchronize(beforeMove);
     // Only the battle-owned update may certify this exact post-collision pose.
@@ -345,7 +345,7 @@ export class BossEncounter {
     }
     const spec=this.motionSpec(this.brain.state);
     this.ring.isVisible=this.kind!=='elena'&&this.brain.mode==='attack'&&!this.brain.impacted&&!this.brain.stagger;
-    this.warningRing.update(this.actor.position,this.attackRange(spec));
+    this.warningRing.update(this.actor.position,this.attackRange(spec)+playerHurtBonus(this.player));
     applyHitFlash(this.asset.meshes,this.brain.flash,this.brain.flashDuration);
     this.onChange(this);
   }
@@ -378,7 +378,7 @@ export class BossEncounter {
     else if(distance>=this.radius+playerDimensions(player).standingClearance)this.dodgeContactClearance=false;
     const separation=this.contactSeparation();
     let separated=false;
-    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,ENEMY_ARENA_RADIUS);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();separated=true;}
+    if(result.state!=='dodge'&&result.rollFrom==null&&!this.grab.active&&distance<separation&&distance>.001&&isEnemySolid(this)){const previous=this.actor.position.clone();this.actor.position.subtractInPlace(d.scale((separation-distance)/distance));this.movementNavigation?.constrain(this.actor.position,previous,this.radius,enemyLimitAt(previous));clampEnemyTravel(this.actor.position,previous);this.world.terrain?.place(this.actor.position);this.actor.computeWorldMatrix();separated=true;}
     // Wolf alignment already refreshes its imported root and every edited
     // support/attention branch. Repeat only when separation moved that pose.
     // Other aligners retain the existing full refresh unless they certify it.
@@ -447,7 +447,7 @@ export class BossEncounter {
     for(const event of this.pendingEvents){
       if(this.grab.active||this.brain.stagger||this.brain.hp<=0||['down','recover'].includes(this.brain.mode))continue;
       if(event.disabled)continue;
-      if(clearSight&&distance<=this.attackRange(event)){
+      if(clearSight&&distance<=this.attackRange(event)+playerHurtBonus(player)){
         const facing=distance<.01?1:(d.x*Math.sin(this.actor.rotation.y)+d.z*Math.cos(this.actor.rotation.y))/distance;
         if(this.bearCombatContact||event.kind==='spin'||event.kind==='grab'||facing>.2){
           const aim=player.position.add(new Vector3(0,playerDimensions(player).bodyAimHeight,0));
