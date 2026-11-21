@@ -502,3 +502,12 @@ PC 타이틀(몬스터 1마리, 60fps), `performance.memory` 증가분 5초 창 
 - 측정 주의: `performance.memory`는 같은 작업 안에서 50ms쯤 캐시된다. 동기 반복 측정은 70ms 쉬고 450ms 이상 돌려야 값이 나온다.
 
 NPC KTX2: 변환 완료(ktx v4.4.2, `.cache/actor-ktx2`). `scripts/apply-npc-ktx2.py uastc` 적용분(매니페스트 7개, cast-catalog.js, content의 ktx2 7개·gltf 7개)이 **스테이징만 된 상태**다(커밋·배포 전). 새 glTF는 Babylon 9.31에서 BC7 sRGB 2048·밉맵으로 불러와지는 것을 확인했다.
+
+## 2026-11-21 19:00 — NPC 텍스처 KTX2 배포(f06f000), 공유 에셋 KTX2는 0.1이 깨져 되돌림(85c1676)
+
+- ✅ 등장인물 7명 색상 텍스처 KTX2(UASTC): `scripts/convert-actor-ktx2.mjs`(Windows, `Convert-Actor-KTX2.cmd`) → `scripts/apply-npc-ktx2.py`. 배포본 마을에서 5명 모두 모델로 서고 텍스처가 2048 BC7 sRGB인 것, 옛 JPG가 안 올라가는 것을 확인. 다운로드는 장당 0.5MB → 3.4~3.9MB.
+- ❌ 풀·허수아비·곰(0.1·0.2와 같이 쓰는 에셋)을 같은 방식으로 바꿔 배포했다가(2360a27) **0.1이 로딩에서 멈춰** 바로 되돌렸다(revert 4개, 85c1676, 0.1 정상 확인).
+  - 0.1 콘솔: `Placement catalog/runtime asset version conflict`(0.1 JS에 구워진 카탈로그의 contentHash와 매니페스트가 달라짐), 그리고 KTX2 디코더를 `cdn.babylonjs.com`에서 받으려다 실패(그 로더 경로에는 로컬 디코더 설정이 없다).
+  - 결론: 0.1의 JS를 다시 빌드하지 않고는 공유 에셋의 텍스처 형식을 바꿀 수 없다. 0.1 재빌드는 vite가 필요해 Windows에서만 된다.
+  - 배포 파이프라인에서 배운 것: 배포 검사는 리소스 목록의 content가 매니페스트가 쓰는 것과 정확히 같기를 요구한다(옛 파일을 목록에 남기면 실패). 묶음(.mfp.gz)은 `gzipSync(level 6)`로 멤버를 이어 붙인 것이라 다시 만들 수 있다. 빌드는 시작 전에 세 인벤토리(0.1·0.2·0.3)가 배포본과 일치하는지 본다(`reviewedDeploymentUnion`). 되돌린 커밋에 이 작업을 하는 스크립트(`apply-shared-ktx2.py`, `repack-shared-ktx2.mjs`)가 들어 있다(3982c16, a01afd9 참고).
+- 남은 비압축 2048: 풀(대평원), 허수아비(마을, +1254 한 장), 곰. 0.3에서만 바꾸려면 0.3 전용 매니페스트 경로가 필요하다.
