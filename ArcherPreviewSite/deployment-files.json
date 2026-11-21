@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "resourceRevision": "a10ad88fda3ae2f003331c1985252023d7c24742d78357960e89e8e6ddff7fd1",
-  "bytes": 719067655,
+  "resourceRevision": "f138d77ff0c8c183e373945b7e43120b7dcaec62cdad0523acfa4dd512360aaf",
+  "bytes": 730687213,
   "files": [
     {
       "path": "app.webmanifest",
@@ -8170,8 +8170,8 @@
     },
     {
       "path": "assets/environment.json",
-      "bytes": 11690,
-      "sha256": "fcdaef1f8dbfa6bdcd5b68fe6ed2c5833e0d46e96a5547a5d97b3c5acf506928"
+      "bytes": 11692,
+      "sha256": "6bd7f42999ba7013726721ec661009946e7d893a940096e563d45e8b80944770"
     },
     {
       "path": "assets/envTextureLoader-D2GTFwE7.js",
@@ -8930,13 +8930,13 @@
     },
     {
       "path": "assets/great-plains.json",
-      "bytes": 102111,
-      "sha256": "412da48d98913a0fe9c86d7578f5479cf61e7d2da9ef96d577fc2b88568a37fc"
+      "bytes": 102115,
+      "sha256": "61f9f3744fe31fc090f5a4e6f3c83bf73bc36ec5d68c633fc3d13291fc88bdfc"
     },
     {
       "path": "assets/guardian-bear.json",
-      "bytes": 123187,
-      "sha256": "7e7e427c64d64b3e5b1e6649c3458ffadbeab1825be1f92ab83885c916c100e0"
+      "bytes": 123188,
+      "sha256": "f8bec3923c5b5b7647d723f5aa22fd402647498b233fb3958638187daddcf696"
     },
     {
       "path": "assets/harmonicsFunctions-B8cLWa7l.js",
@@ -9810,8 +9810,8 @@
     },
     {
       "path": "assets/resource-index.json",
-      "bytes": 194447,
-      "sha256": "52bd74fecf648b3821a253810e28a9d40e2a1300491025b7e230c35b20ecb043"
+      "bytes": 195074,
+      "sha256": "2e9074fb111ccb697269a51cc7dea3846657248c94123ca9aaf735c9f1f0b445"
     },
     {
       "path": "assets/resource-sizes.json",
@@ -10347,6 +10347,46 @@
       "path": "THIRD_PARTY_LICENSES.txt",
       "bytes": 127140,
       "sha256": "92130447817bc4854b81dffa8822f7c707e7efa6eed964de25acb9695f6ac481"
+    },
+    {
+      "path": "assets/content/26a157566a0fc08fba18d1e77641daa8f85eb3372e17000ec5dec816fb9e3ef0.ktx2",
+      "bytes": 4455186,
+      "sha256": "26a157566a0fc08fba18d1e77641daa8f85eb3372e17000ec5dec816fb9e3ef0"
+    },
+    {
+      "path": "assets/content/6bf3b8874526704f61c661bb37da04aed43808d1c5dfa34794aa456319c68b77.ktx2",
+      "bytes": 1379290,
+      "sha256": "6bf3b8874526704f61c661bb37da04aed43808d1c5dfa34794aa456319c68b77"
+    },
+    {
+      "path": "assets/content/6f2a572cd8aa0080d0f5eabe5e8fd6eda5a46b02912412693a366c0cd533e61f.gltf",
+      "bytes": 801323,
+      "sha256": "6f2a572cd8aa0080d0f5eabe5e8fd6eda5a46b02912412693a366c0cd533e61f"
+    },
+    {
+      "path": "assets/content/70f9ae66f93e69c60a90140704855080ba1390b8d967fbd42d847e764a045366.gltf",
+      "bytes": 2347,
+      "sha256": "70f9ae66f93e69c60a90140704855080ba1390b8d967fbd42d847e764a045366"
+    },
+    {
+      "path": "assets/content/86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88.gltf",
+      "bytes": 2347,
+      "sha256": "86ebcf5fd43e998689c96ff1f7f62386febf8ee03c8ef2608059997abe823d88"
+    },
+    {
+      "path": "assets/content/95775b6d9ec5f7e958c54d6060a2b455b2dd51b465ee879646522564e016b5dc.gltf",
+      "bytes": 2346,
+      "sha256": "95775b6d9ec5f7e958c54d6060a2b455b2dd51b465ee879646522564e016b5dc"
+    },
+    {
+      "path": "assets/content/c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2",
+      "bytes": 4974190,
+      "sha256": "c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130"
+    },
+    {
+      "path": "assets/content/d0f77247efdb2b97356522f9213bda8aeba5ae8359b168e81b8735c84e391d0c.gltf",
+      "bytes": 1895,
+      "sha256": "d0f77247efdb2b97356522f9213bda8aeba5ae8359b168e81b8735c84e391d0c"
     }
   ]
 }
