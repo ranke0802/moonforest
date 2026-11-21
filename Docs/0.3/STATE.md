@@ -489,3 +489,16 @@ PC
 - 확인용 폰 기록: 84bd80c에서 페이지를 새로 연 직후부터 5분 이상(발열과 GC를 가르기 위해).
 
 검증 방법 메모: 저장을 건드리는 확인은 localStorage 전체를 sessionStorage에 백업 → 확인 → `returnToTitle()` → 같은 출처의 다른 페이지(`assets/meshopt-decoder.json`)에서 복원. 오늘 두 번 이렇게 했고 복원 일치를 확인했다.
+
+## 2026-11-21 18:00 — 프레임당 할당 추가 측정 (개선 여부는 사용자 결정 대기)
+
+PC 타이틀(몬스터 1마리, 60fps), `performance.memory` 증가분 5초 창 기준.
+- 프레임 루프 전체 225~240KB/프레임. 루프를 멈추면 0 → 전부 프레임 안에서 나온다.
+- `scene.render`를 건너뛰면 88KB → 렌더 쪽 약 150KB, 게임 로직 쪽 약 90KB.
+- Babylon 기본 애니메이션 `Animatable.goToFrame`: 호출당 51B(위치)·70B(회전), 프레임당 493회 → 약 30KB(주인공).
+- 길찾기: `segmentClear` 32B, `move` 55B, `free` 5B(호출당).
+- 꺼도 차이가 없던 것(오차 ±30KB): 자체 재질 플러그인 bind, scene 관찰자, 그림자, 파티클, 골격, 보이는 물체 고르기 동결.
+- 못 찾은 것: 렌더 쪽 약 120KB, 게임 로직 쪽 약 60KB. 페이지 안에서는 더 좁히기 어렵다 → Chrome DevTools의 Allocation sampling 기록(.heapprofile)이 필요하다.
+- 측정 주의: `performance.memory`는 같은 작업 안에서 50ms쯤 캐시된다. 동기 반복 측정은 70ms 쉬고 450ms 이상 돌려야 값이 나온다.
+
+NPC KTX2: 변환 완료(ktx v4.4.2, `.cache/actor-ktx2`). `scripts/apply-npc-ktx2.py uastc` 적용분(매니페스트 7개, cast-catalog.js, content의 ktx2 7개·gltf 7개)이 **스테이징만 된 상태**다(커밋·배포 전). 새 glTF는 Babylon 9.31에서 BC7 sRGB 2048·밉맵으로 불러와지는 것을 확인했다.
