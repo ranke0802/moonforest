@@ -1,3 +1,4 @@
+import {initializeVillageKtx2} from './village-ktx2.js';
 import { Color3, SceneLoader, StandardMaterial, TransformNode, Vector3, VertexBuffer } from '@babylonjs/core';
 import { CharacterAnimator } from './animation.js';
 import { attachCharacterOutlines, attachCharacterOutlinesAsync, isRuntimeOutline } from './character-outlines.js';
@@ -90,6 +91,7 @@ export class BossEncounter {
       else{
         const url=new URL(`${import.meta.env.BASE_URL}assets/guardian-bear.json`,location.href),response=await fetch(url,{cache:'no-cache'});if(!response.ok)throw new Error('보스 설정을 불러오지 못했습니다.');
         this.config=await response.json();const model=new URL(this.config.model,url);
+        await initializeVillageKtx2();// the bear takes a KTX2 colour texture: our own decoder, never Babylon's external default
         this.asset=await SceneLoader.LoadAssetContainerAsync(new URL('.',model).href,model.pathname.split('/').pop(),this.world.scene,null,'.gltf');this.asset.addAllToScene();
       }
       // Adopt/disable in the same microtask, even if a completed model load
