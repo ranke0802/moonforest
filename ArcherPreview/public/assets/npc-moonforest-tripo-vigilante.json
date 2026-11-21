@@ -75,9 +75,9 @@
         "rootMotion": "in-place",
         "defaultClip": "Idle_Stand"
       },
-      "model": "./content/4a7aba22a3e12b6c33efde90f4387e9559ad4884300388472acd120dbef68770.gltf",
+      "model": "./content/93990ffa9d827cf675f2965a79aff62f0eb5a9aef0f4562df15fdaa138541577.gltf",
       "resources": [
-        "./content/b4dd69842c7cc0eff3fc332401088eced317876b55d91feeff1cff9a2baa6a54.jpg",
+        "./content/cb197a7a915dd47781d3e113795d67a8422b617b0e67798c5197e826a2adaa65.ktx2",
         "./content/63f86a1b8c1e6e24a6ae80614743ea8f2a2e26d9b18b21a824c804bb40c457c7.bin",
         "./content/bf1693c7b24aca23e7df63c0277f4af42b3e1701bd257bfdcf04a55eeb25ab67.bin",
         "./content/de70dcee4036c1f8d3d5139576e0cdacc9e2d973aae5da08dbe21af5fde6373b.bin",
@@ -87,7 +87,7 @@
         "./content/0cf634e78e82a5a48062291886cf4f89157bc6aadbfc5bcf73bc62402b1b6ded.bin",
         "./content/60d868201bc45ce5be3bc221f1e03615934359eb0b43a2914378decf3b41f3bf.bin",
         "./content/17021e52f2966277413e051b15de0646fb72616a92f1ac08541f47135b9de1e1.bin",
-        "./content/4a7aba22a3e12b6c33efde90f4387e9559ad4884300388472acd120dbef68770.gltf"
+        "./content/93990ffa9d827cf675f2965a79aff62f0eb5a9aef0f4562df15fdaa138541577.gltf"
       ],
       "visualReview": "APPROVED",
       "reviewScope": "User-supplied reviewed original; original geometry, rig, textures and all clips retained. Runtime pixel/device validation remains separate.",
