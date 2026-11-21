@@ -41,6 +41,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
  const hud=createPlayHud({doc,onInteract:()=>interact()});
  const cast=[];let mapId=null,near=null,started=false,talking=false,disposed=false;
+ // The cast of castMap, settled when every member's model is on stage (cast-models.js).
+ let castMap=null,castSettled=null;
  // Tutorial state: sequential fight coaching and one-time tips (saved per slot).
  const TIP_KEY='v03-tips-v1',TIP_SECONDS=7.5;
  const HINT_SECONDS=40,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
@@ -302,6 +304,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     cast.push({npc,visual,x:spot.x,z:spot.z});if(npc.id==='driver')driverMember=cast[cast.length-1];
    }catch(error){console.warn('[MoonForest 0.3] cast member unavailable',npc.id,error);}
   }
+  castMap=id;castSettled=Promise.allSettled(cast.map(member=>member.visual.settled).filter(Boolean));
  }
  function runEffects(lines){
   for(const line of lines)for(const effect of line.effects??[]){
@@ -1325,6 +1328,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   },
   // QA: a cast member's visual (gesture, position) by NPC id.
   castVisual:id=>cast.find(member=>member.npc.id===id)?.visual??null,
+  // The map's cast once it has been built (first frame there): a promise for all its models, else null.
+  castReady:id=>castMap===id?castSettled:null,
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
   dispose(){if(disposed)return;disposed=true;stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };

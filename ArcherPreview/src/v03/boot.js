@@ -497,6 +497,19 @@ export function setupV03(api){
   get previousRun(){return trail.previous;},
   // Title/prologue never write progress, quests or map position.
   get blocksProgress(){return state.screen!=='play';},
+  // A map trip waits here before it takes the loading picture away: the place's people load
+  // their models and upload their textures behind it and not in the first seconds of play
+  // (2026-11-21: five 2048 px textures, 55-88 ms each, one frame of 0.9 s on a laptop).
+  async arrival(maxMs=4000){
+   if(state.screen!=='play'||state.disposed)return false;
+   const started=performance.now(),left=()=>maxMs-(performance.now()-started);
+   while(left()>0&&!state.disposed){
+    const settled=story.castReady(gameState().mapId);
+    if(settled){await Promise.race([settled,wait(Math.max(0,left()))]);return left()>0;}
+    await wait(30);// the cast is built by the first frame on the new map
+   }
+   return false;
+  },
   // The prologue's black stage hides the world: main.js draws it only now and
   // then (uploads keep moving) so the ambush wolf's preparation and the
   // prologue's own animation get the frame time.

@@ -1313,7 +1313,7 @@ try {
       const modalOpen=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#summon-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open;
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen()||contextRecovery?.blocked===true);
       audio.setSuspended(document.hidden||modalOpen||contextRecovery?.blocked===true);
-      world.villageStreaming.active=true;await settleWorldBehindCover();
+      world.villageStreaming.active=true;await world.v03?.arrival?.();await settleWorldBehindCover();
       loadingView.reveal(mapLoadingGeneration);showMinimap();
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
