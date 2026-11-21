@@ -1,6 +1,6 @@
 import {Matrix,Quaternion,Vector3,VertexBuffer} from '@babylonjs/core';
 import {segmentDistanceSquared} from './melee-collision.js';
-import {playerDimensions,playerHurtRadius} from './player-dimensions.js';
+import {playerDimensions} from './player-dimensions.js';
 import {refreshPoseMatrices} from './pose-matrices.js';
 import {segmentBoxHit} from './player-strikes.js';
 
@@ -79,7 +79,7 @@ export class BearCombatContact{
   this.valid=true;
  }
  contact(event,player){
-  const parts=BEAR_ATTACK_PARTS[event.name];if(!parts||!this.valid)return false;const d=playerDimensions(player),p=player.position,r=playerHurtRadius(player);
+  const parts=BEAR_ATTACK_PARTS[event.name];if(!parts||!this.valid)return false;const d=playerDimensions(player),p=player.position,r=d.moveRadius;
   this.bodyA[0]=this.bodyB[0]=p.x;this.bodyA[2]=this.bodyB[2]=p.z;this.bodyA[1]=p.y+r;this.bodyB[1]=p.y+d.height-r;
   let best=Infinity;const at=this.e.brain.durations[event.name]*event.impact,span=this.currentTime-this.previousTime,t=span>1e-8?clamp((at-this.previousTime)/span,0,1):1;
   for(const a of this.points){if(!parts.includes(a.part))continue;const end=this.end;for(let k=0;k<3;k++)end[k]=a.old[k]+(a.now[k]-a.old[k])*t;const gap=segmentDistanceSquared(a.old,end,this.bodyA,this.bodyB);if(gap<best){best=gap;this.closest.copyFromFloats(...end);}}

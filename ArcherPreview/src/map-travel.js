@@ -11,8 +11,7 @@ export function exitRoadX(z){
 // the edges as part of the corridor; otherwise the next frame falls back to
 // the 48 m arena and findFree teleports the player back to its circular rim.
 function inVillageExitCorridor(position){return !!position&&position.z>=43-1e-6&&Math.abs(position.x-exitRoadX(position.z))<=22+1e-6;}
-export const VILLAGE_EXIT_LIMIT=80;
-export function villageTravelLimit(position,normal=48){return inVillageExitCorridor(position)?VILLAGE_EXIT_LIMIT:normal;}
+export function villageTravelLimit(position,normal=48){return inVillageExitCorridor(position)?80:normal;}
 export function clampVillageExit(position,previous){
   if(Math.hypot(position.x,position.z)<=48)return position;
   if(inVillageExitCorridor(previous)||inVillageExitCorridor(position)){

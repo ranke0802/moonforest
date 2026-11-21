@@ -1,5 +1,4 @@
 import {mapLoadAbortError} from './map-load-lifetime.js';
-import {splitTextureUpload,splitTextureUploadDone} from './split-texture-upload.js';
 
 // Weak ownership marks only: no texture/scene/worker is retained by this set.
 const abandoned=new WeakSet(),installed=new WeakSet(),releaseListeners=new WeakMap(),uploadObservers=new WeakMap();
@@ -29,25 +28,16 @@ export function releaseMapTexture(texture,scene){
   texture.dispose();
 }
 export function installMapTextureLifetimeGuard(Ktx){
-  if(installed.has(Ktx))return;installed.add(Ktx);const create=Ktx.prototype._createTexture,upload=Ktx.prototype._uploadAsync;
-  // A texture sent in strips is not loaded until its last strip is up: Babylon's loader waits here.
-  if(typeof upload==='function')Ktx.prototype._uploadAsync=function(data,internal,options){
-    return upload.call(this,data,internal,options).then(value=>{
-      const pending=splitTextureUploadDone(this._engine,internal);
-      return pending?pending.then(complete=>{if(!complete)throw mapLoadAbortError();return value;}):value;
-    });
-  };
+  if(installed.has(Ktx))return;installed.add(Ktx);const create=Ktx.prototype._createTexture;
   // Pinned Babylon 9.31 awaits a worker, then uploads even after its texture
   // was disposed. Stop only our abandoned final-owner allocation at that exact
   // boundary; normal and still-shared InternalTextures follow the native path.
   Ktx.prototype._createTexture=function(data,internal,...args){
     if(abandoned.has(internal))throw mapLoadAbortError();
-    // Large textures go up a strip at a time where that is enabled (split-texture-upload.js).
-    const run=()=>splitTextureUpload(this._engine,data,internal,args[0])?undefined:create.call(this,data,internal,...args);
     const observers=uploadObservers.get(this._engine);
-    if(!observers?.size)return run();
+    if(!observers?.size)return create.call(this,data,internal,...args);
     const start=performance.now();let success=false;
-    try{const result=run();success=true;return result;}
+    try{const result=create.call(this,data,internal,...args);success=true;return result;}
     finally{
       const end=performance.now(),first=data?.mipmaps?.[0];
       const sample={startedAtMs:start,completedAtMs:end,cpuMs:Math.max(0,end-start),width:first?.width??null,height:first?.height??null,mipCount:data?.mipmaps?.length??0,format:data?.transcodedFormat??null,success};

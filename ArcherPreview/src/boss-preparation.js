@@ -49,13 +49,13 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
       while(shared?.due())await this.nextFrame();
       sliceBlocks++;
     },
-    async step(name,fn){await this.pause();const start=now();let value;try{value=fn();}finally{shared?.charge(Math.max(0,now()-start),name);}stats.steps.push({name,ms:Math.max(0,now()-start)});check();return value;},
+    async step(name,fn){await this.pause();const start=now();let value;try{value=fn();}finally{shared?.charge(Math.max(0,now()-start));}stats.steps.push({name,ms:Math.max(0,now()-start)});check();return value;},
     async run(work){
       check();if(!incremental)return runPreparationSync(work);checkpoint();
       let next;
       do{
         check();if(firstFrame||sliceBlocks>=maxBlocks||now()-sliceStarted>=budgetMs||shared?.due())await this.nextFrame();while(shared?.due())await this.nextFrame();const start=now();let blocks=0;
-        do{const blockStarted=now();try{next=work.next();}finally{shared?.charge(Math.max(0,now()-blockStarted),'run');}blocks++;stats.blocks++;sliceBlocks++;}while(!next.done&&blocks<maxBlocks&&sliceBlocks<maxBlocks&&now()-sliceStarted<budgetMs&&!shared?.due());
+        do{const blockStarted=now();try{next=work.next();}finally{shared?.charge(Math.max(0,now()-blockStarted));}blocks++;stats.blocks++;sliceBlocks++;}while(!next.done&&blocks<maxBlocks&&sliceBlocks<maxBlocks&&now()-sliceStarted<budgetMs&&!shared?.due());
         stats.slices++;stats.maxSliceMs=Math.max(stats.maxSliceMs,Math.max(0,now()-start));
         if(!next.done)await this.nextFrame();
       }while(!next.done);

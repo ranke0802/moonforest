@@ -4,7 +4,7 @@ import { FOREST_OBSTACLES, TRAINING_OBSTACLES } from './forest-layout.js';
 import { SceneLighting } from './scene-lighting.js';
 import { TerrainHeightField } from './terrain.js';
 import { createTerrainGround } from './terrain-mesh.js';
-import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END,setWorldCharacter,enemyWarmLimits } from './world-limits.js';
+import { ENEMY_ARENA_RADIUS, SCENERY_VIEW_DISTANCE, SKYLINE_VIEW_DISTANCE, FOG_START, FOG_END,setWorldCharacter } from './world-limits.js';
 import { MovingSky, SKY_HORIZON } from './sky.js';
 import { createMountainBackdrop } from './mountain-backdrop.js';
 import {configureOutdoorVista} from './outdoor-vista.js';
@@ -147,7 +147,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   // combat frame when a bear or goblin needs to route around a tree.
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':village?'village':'training';
   // The plains also hold the large alpha wolf: warm its route grid at load.
-  warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS,{radii:mapId==='great-plains'?[.34,.7,1.7]:[.34,.7],limits:enemyWarmLimits()});
+  warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS,mapId==='great-plains'?{radii:[.34,.7,1.7]}:undefined);
   const world={ground,forest,cave,plains,mapId,sceneInputMode:'manual-game',environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
     tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);this.plainsDecor?.tick(time);}};
@@ -168,7 +168,7 @@ export function replaceWorldMap(world,character){
   configureOutdoorVista(world,{village:true,plains,villageNotch:!forest&&!cave&&!plains});
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);
-  warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS,{radii:mapId==='great-plains'?[.34,.7,1.7]:[.34,.7],limits:enemyWarmLimits()});
+  warmMapNavigation(world.scene.getEngine(),world.navigation,mapId,ENEMY_ARENA_RADIUS,mapId==='great-plains'?{radii:[.34,.7,1.7]}:undefined);
   world.ground=createTerrainGround(world.scene,world.terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE,borderHeight:!plains&&!forest&&!cave?villageOutskirtsSkirtHeight:null});
   world.floorMaterial=new StandardMaterial('forest-floor-material',world.scene);
   world.floorMaterial.specularColor=Color3.Black();world.ground.material=world.floorMaterial;

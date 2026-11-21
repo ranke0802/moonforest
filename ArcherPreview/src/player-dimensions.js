@@ -1,4 +1,3 @@
-import {hitScale} from './hit-scale.js';
 // Measured from the reviewed R6 runtime mesh, boots to hair top in its upright
 // bind pose. Equipment/outline shells are excluded; animation can bend/jump.
 export const WARRIOR_SOURCE_HEIGHT=.9793707037107424;
@@ -17,9 +16,6 @@ function dimensions(ratio,height){return Object.freeze({height,ratio,
 export const LEGACY_PLAYER_DIMENSIONS=dimensions(1,WARRIOR_SOURCE_HEIGHT*WARRIOR_LEGACY_SCALE);
 export const WARRIOR_DIMENSIONS=dimensions(WARRIOR_SIZE_RATIO,WARRIOR_HEIGHT);
 export function playerDimensions(player){return player?.metadata?.playerDimensions??LEGACY_PLAYER_DIMENSIONS;}
-// The player's body radius as monster attacks see it (hit-scale.js), and how much that adds to a reach measured to the player's centre.
-export function playerHurtRadius(player){return playerDimensions(player).moveRadius*hitScale.playerHurt;}
-export function playerHurtBonus(player){return playerDimensions(player).moveRadius*(hitScale.playerHurt-1);}
 export function configurePlayerSize(actor,config,{warrior=false}={}){
   const profile=warrior?WARRIOR_DIMENSIONS:LEGACY_PLAYER_DIMENSIONS;
   actor.metadata={...actor.metadata,playerDimensions:profile};

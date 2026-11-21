@@ -88,17 +88,3 @@ test('only retained slow effect calls inspect bounded define fingerprints, never
  for(const call of calls){assert.equal(call.variant.ALPHABLEND,true);assert.equal(call.variant.UNLIT,true);assert.equal(call.variant.FOG,false,'text after limit is not inspected');assert.equal(call.variant.NUM_BONE_INFLUENCERS,4);assert.equal(call.variant.NUM_MORPH_INFLUENCERS,1);assert.ok(JSON.stringify(call).length<500);}
  g.sampler.dispose();
 });
-
-test('a slow shader request is named after the mesh that asked for it, looked up once at the end of that render',()=>{
- const f=fixture(),effect={ready:false},other={};let scans=0;
- const sub=(e,material)=>({effect:e,getMaterial:()=>({name:material})});
- f.scene.getActiveMeshes=()=>{scans++;return {data:[{name:'tree-oak-12',subMeshes:[sub(other,'bark')]},{name:'goblin-raider-body',subMeshes:[sub(other,'x'),sub(effect,'goblin-skin')]},{name:'never',subMeshes:[sub(effect,'late')]}],length:2};};
- f.engine.createEffect=function(){f.setTime(40);return effect;};
- f.sampler.setActive(true);f.begin();f.engine.createEffect('pbr',{defines:'#define UNLIT\n'});f.end();
- const call=f.sampler.sample().latest.slowCalls.find(c=>c.method==='createEffect');
- assert.equal(call.mesh,'goblin-raider-body');assert.equal(call.material,'goblin-skin');assert.equal(scans,1);
- assert.equal(f.sampler.owed.length,0,'the effect is not kept');assert.equal(JSON.stringify(call).includes('ready'),false,'and never reaches the record');
- // A render without a slow request looks at nothing.
- f.engine.createEffect=function(){return effect;};f.setTime(20000);f.begin();f.engine.createEffect('pbr',{});f.end();assert.equal(scans,1);
- f.sampler.dispose();
-});

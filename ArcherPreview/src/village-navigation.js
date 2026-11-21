@@ -1,5 +1,5 @@
-import { ArenaNavigation, linksOf } from './navigation.js';
-import { ARENA_RADIUS, enemyLimitAt, offEnemyTravelShape } from './world-limits.js';
+import { ArenaNavigation } from './navigation.js';
+import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
 import { obstacleClearance, sweepObstacle } from './village-collision.js';
 import {visitSegmentCells} from './navigation-segment-cells.js';
 import {NavigationSearchWorkspace} from './navigation-search-workspace.js';
@@ -62,14 +62,14 @@ export class VillageNavigation extends ArenaNavigation {
     if(this.sharedRouteGrids!==false)radius=routeGridRadius(radius);
     const nodes=super.grid(radius,limit);
     if(!this.gridMetadata.has(nodes)){
-      const component=new Int32Array(nodes.length),{mask,offsets}=linksOf(nodes);component.fill(-1);
+      const component=new Int32Array(nodes.length);component.fill(-1);
       let count=0;
       for(let i=0;i<nodes.length;i++){
         if(!nodes[i].free||component[i]>=0)continue;
         const pending=[i];component[i]=count;
         while(pending.length){
           const at=pending.pop();
-          for(let bits=mask[at],d=0;d<8;d++)if(bits&(1<<d)){const next=at+offsets[d];if(component[next]<0){component[next]=count;pending.push(next);}}
+          for(const [next]of nodes[at].edges)if(component[next]<0){component[next]=count;pending.push(next);}
         }
         count++;
       }
@@ -112,13 +112,13 @@ export class VillageNavigation extends ArenaNavigation {
     }
     return best;
   }
-  path(from,goal,radius,limit=enemyLimitAt(from)){
+  path(from,goal,radius,limit=ENEMY_ARENA_RADIUS){
     this.pathsBuilt++;
     const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);
     if(this.segmentClear(start,target,radius+.025))return [target];
     const nodes=this.grid(radius,limit),s=this.nearestNode(start,nodes,radius),g=this.nearestNode(target,nodes,radius);
     if(s<0||g<0)return [];
-    const {component}=this.gridMetadata.get(nodes),{mask,offsets,costs}=linksOf(nodes);
+    const {component}=this.gridMetadata.get(nodes);
     if(component[s]!==component[g])return [];
     // Searches are synchronous; share scratch capacity across all grid radii.
     // A custom reentrant navigation callback receives an independent lease.
@@ -133,9 +133,8 @@ export class VillageNavigation extends ArenaNavigation {
         const route=[];for(let j=g;j>=0;j=parents[j])route.push(nodes[j]);
         route.reverse();route.push(target);return route;
       }
-      for(let bits=mask[i],d=0;d<8;d++){
-        if(!(bits&(1<<d)))continue;
-        const j=i+offsets[d],next=scores[i]+costs[d];if(scoreEpoch[j]===epoch&&next>=scores[j])continue;
+      for(const [j,cost]of nodes[i].edges){
+        const next=scores[i]+cost;if(scoreEpoch[j]===epoch&&next>=scores[j])continue;
         scores[j]=next;parents[j]=i;scoreEpoch[j]=epoch;open.push(j,next+distance(nodes[j],target));
       }
     }
@@ -143,7 +142,7 @@ export class VillageNavigation extends ArenaNavigation {
     }finally{workspace.end();}
   }
   free(p,radius,limit=ARENA_RADIUS){
-    if(Math.hypot(p.x,p.z)>limit+1e-6||offEnemyTravelShape(p,limit))return false;
+    if(Math.hypot(p.x,p.z)>limit+1e-6)return false;
     // Wider actors used to test every solid at every grid node. Query the
     // same conservative spatial index; malformed legacy bounds retain fallback.
     const near=radius<=1.5?(this.cells.get(key(p.x,p.z))??[]):Number.isFinite(radius)&&this.segmentCellPruningSafe?this.nearby(p,p,radius):this.obstacles;

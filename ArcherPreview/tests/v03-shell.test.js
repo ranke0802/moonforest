@@ -7,7 +7,7 @@ import {t,setPack,localizeChapter,cloneChapter,tr} from '../src/v03/i18n.js';
 import {createTitleScreen,slotSummary,formatPlayTime} from '../src/v03/title-screen.js';
 import {createOpening,dreamSeconds,DREAM_BEATS,INTRO} from '../src/v03/opening.js';
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
-import {createSaveSession,readIntent} from '../src/v03/save-slots.js';
+import {createSaveSession} from '../src/v03/save-slots.js';
 import {setTypewriterEnabled} from '../src/v03/typewriter.js';
 
 // These flows assert whole lines and one key per line; typing is covered by
@@ -104,7 +104,7 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
 });
 
-function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false}={}){
  const {document,window,root}=dom(),log=[];
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
@@ -121,11 +121,9 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
  const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait:instant,random:()=>.5,createVisual,createGuide:()=>guide,createMarkers:null,setMapMarkers:list=>marks.push(list),placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
   input:{setSuspended:v=>log.push('suspend:'+v)},actions:{attack:()=>log.push('attack'),dodge:()=>log.push('dodge'),guard:()=>log.push('guard'),move:()=>{}},
   toast:m=>log.push('toast:'+m),creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},getPlayer:()=>player,getController:()=>controller,getState:()=>state,
-  resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:travel?id=>travel(id,state,log):async id=>{log.push('travel:'+id);state.character=id;return true;},
+  resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:async id=>log.push('travel:'+id),
   startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  if(inPlace)api.restartProgress=()=>{log.push('restartProgress');return true;};
- if(stopWorld)api.stopWorld=()=>log.push('stopWorld');
- if(reloadProgress)api.reloadProgress=()=>{log.push('reloadProgress');return true;};
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
  return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
@@ -159,34 +157,6 @@ test('first run: logo → title → attract battle → new game without reload �
  h.battle.livingCount=0;for(let i=0;i<1000;i++)h.shell.update(.016);assert.ok(h.save.meta().playSeconds>=15);
  assert.equal(h.log.includes('startWorld'),false,'roaming monsters wait until the opening quest is done');
 });
-test('back to the title: only from play, and without the game\'s hooks the caller falls back to the reload',async()=>{
- const h=harness();h.finishSplash();await h.reveal();
- assert.equal(await h.shell.returnToTitle(),false,'not from the title itself');
- h.click('[data-action="new"]');await settle(40);assert.equal(h.shell.screen,'play');
- assert.equal(await h.shell.returnToTitle(),false,'a game without the stopWorld hook falls back to the reload');assert.equal(h.shell.screen,'play');
-});
-test('back to the title: with the game\'s hooks the same page shows the title again and the record goes on',async()=>{
- const h=harness({stopWorld:true});
- h.finishSplash();await h.reveal();h.click('[data-action="new"]');await settle(40);assert.equal(h.shell.screen,'play');
- h.battle.livingCount=0;for(let i=0;i<200;i++)h.shell.update(.016);
- const quest=h.shell.inspect().story.quest,made=h.made.length;assert.ok(quest);
- h.log.length=0;
- assert.equal(await h.shell.returnToTitle(),true);
- assert.equal(h.shell.screen,'title');assert.equal(h.document.documentElement.dataset.v03Screen,'title');
- assert.equal(h.document.querySelector('.v03-title').hidden,false);
- assert.ok(h.log.includes('stopWorld'));assert.ok(h.log.some(line=>line.startsWith('resetStage:')&&line!=='resetStage:spawn'),'the stage is cleared where the player stands');assert.ok(h.log.includes(`summon:${TITLE_FOE.kind}:${TITLE_FOE.count}`),'the title battle runs again');
- assert.equal(h.shell.inspect().story.started,false);assert.equal(h.shell.inspect().story.cast.length,0,'the cast is put away');
- assert.ok(h.made.filter(v=>v.disposed).length>0||made===0);
- assert.equal(h.shell.blocksProgress,true);assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
- for(let i=0;i<60;i++)h.shell.update(.016);assert.notEqual(h.shell.pilotMovement,null,'the showcase drives the player again');
- // Continue: the same record, on the same page.
- h.log.length=0;h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="'+h.save.slot+'"]');await settle(40);
- assert.equal(h.shell.screen,'play');assert.equal(h.shell.inspect().story.started,true);assert.equal(h.shell.inspect().story.quest,quest,'the same quest goes on');
- assert.ok(h.log.some(line=>line.startsWith('resetStage:')&&line!=='resetStage:spawn'),'back where the player left, not at the map spawn');
- assert.ok(h.shell.inspect().story.cast.length>=0);assert.equal(h.shell.blocksProgress,false);
- // And back once more: it works every time, not only the first.
- assert.equal(await h.shell.returnToTitle(),true);assert.equal(h.shell.screen,'title');
-});
 test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  const h=harness({ready:false});h.finishSplash();await settle();h.shell.update(.016);
  assert.equal(h.shell.pilotMovement,null);assert.equal(h.log.some(x=>x.startsWith('summon')),false);
@@ -198,40 +168,6 @@ test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  h.click('[data-action="gallery"]');await settle();assert.equal(h.document.querySelectorAll('.v03-gallery-row').length,3);h.click('.v03-panel-back');await settle();
  h.click('[data-action="quit"]');await settle();h.click('.v03-panel-accept');await settle();
  assert.ok(h.log.includes('exit'));assert.equal(h.shell.screen,'exit');assert.equal(h.shell.blocksGame,true);
-});
-test('loading another record on the same page: the slot is bound, the game reads it again, nothing reloads',async()=>{
- const local=memory(),session=memory();
- const seed=createSaveSession({local,session,edition:E,now:()=>10});seed.commit({title:'달빛 여관',chapter:1,character:'warrior-plains',place:'윈드몬 대평원',playSeconds:321});seed.journey.setItem('moonforest-gold-v1','77');
- const h=harness({local,session,reloadProgress:true,stopWorld:true});assert.equal(h.save.slot,2,'boots into the first empty slot');
- let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?character=warrior-plains',replace:url=>{replaced=url;}};
- h.finishSplash();await h.reveal();
- h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle(40);
- assert.equal(replaced,null,'no reload');assert.equal(readIntent(session,E),null,'no intent left for a next document');
- assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),'77','the page now reads record 1');
- assert.ok(h.log.includes('reloadProgress'));assert.equal(h.shell.screen,'play');assert.equal(h.shell.inspect().story.started,true);
- assert.ok(h.shell.inspect().playSeconds>=321,'the record\'s own play time');
- // And the record that was bound before is untouched.
- assert.equal(createSaveSession({local,session:memory(),edition:E}).index()[1].used,false);
-});
-test('a record on another map keeps its own place while the page is still on the way there; a failed trip reloads',async()=>{
- const seedRecord=local=>{const seed=createSaveSession({local,session:memory(),edition:E,now:()=>10});seed.commit({title:'달빛 여관',chapter:1,character:'warrior-v3',place:'숲의 경계 마을',placeKey:'warrior-v3',playSeconds:50});};
- // The trip takes a while; a save happens in the middle of it (the tab is hidden).
- let finish;const local=memory(),session=memory();seedRecord(local);
- const h=harness({local,session,reloadProgress:true,travel:(id,state,log)=>new Promise(resolve=>{log.push('travel:'+id);finish=()=>{state.character=id;resolve(true);};})});
- h.finishSplash();await h.reveal();assert.equal(h.state.character,'warrior-plains');
- h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle(20);
- assert.ok(h.log.includes('travel:warrior-v3'));
- h.window.dispatchEvent(new h.window.Event('pagehide'));for(let i=0;i<1100;i++)h.shell.update(.016);
- assert.equal(h.save.meta().character,'warrior-v3','the record still says where it was saved, not where the page stands');assert.equal(h.save.meta().place,'숲의 경계 마을');
- finish();await settle(20);for(let i=0;i<1100;i++)h.shell.update(.016);
- assert.equal(h.save.meta().character,'warrior-v3');assert.equal(h.shell.screen,'play');
- // The trip fails: the record is opened on its own map in a clean document instead.
- const local2=memory(),session2=memory();seedRecord(local2);let replaced=null;
- const g=harness({local:local2,session:session2,reloadProgress:true,travel:async(id,state,log)=>{log.push('travel:'+id);return false;}});
- g.window.location={href:'https://test.invalid/moonforest-0.3.html?character=warrior-plains',replace:url=>{replaced=url;}};
- g.finishSplash();await g.reveal();g.click('[data-action="load"]');await settle();g.click('.v03-slot[data-slot="1"]');await settle(40);
- assert.ok(replaced&&new URL(replaced).searchParams.get('character')==='warrior-v3','reloads on the record\'s map');
- assert.equal(g.save.meta().character,'warrior-v3');assert.deepEqual(readIntent(session2,E),{slot:1,mode:'load'});
 });
 test('existing saves: load another slot reloads with an intent; overwrite wipes first',async()=>{
  const local=memory(),session=memory();
@@ -354,10 +290,10 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // The chain has to reach its third hit: one swing, or the held heavy attack, is not enough.
  h.controller.state='slash';h.controller.attackIndex=1;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^연속 공격/,'one swing does not pass the combo lesson');
  h.controller.state='judgment';h.controller.attackIndex=0;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^연속 공격/,'the held heavy attack does not pass the combo lesson');
- h.controller.state='attack';h.controller.attackIndex=2;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방패 밀치기/,'two hits in a row pass it (the third hit is gone, user 2026-11-21)');
+ h.controller.state='judgment';h.controller.attackIndex=3;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^방패 밀치기/);
  h.controller.state='shieldPush';h.controller.attackIndex=0;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/);
  h.controller.state='slash';h.controller.attackIndex=1;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'a normal attack does not pass the heavy attack lesson');
- h.controller.state='attack';h.controller.attackIndex=2;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'nor does the chain\'s second hit');
+ h.controller.state='judgment';h.controller.attackIndex=3;h.shell.update(.016);assert.match(hud('.v03-hint').textContent,/^강공격/,'nor does the chain\'s finisher');
  h.controller.state='judgment';h.controller.attackIndex=0;h.shell.update(.016);h.controller.state='idle';
  // The lessons done: one line stays in the middle until the wolf is down.
  assert.equal(hud('.v03-hint').hidden,false);assert.equal(hud('.v03-hint-what').textContent,'늑대를 처치하세요');

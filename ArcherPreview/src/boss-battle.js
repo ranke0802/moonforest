@@ -14,7 +14,7 @@ import { ElenaEncounter } from './elena-encounter.js';
 import { MourningElenaEncounter } from './mourning-elena-encounter.js';
 import { ELENA_HOME, ELENA_SIZE, MOURNING_SIZE } from './elena-spec.js';
 import { isEnemySolid } from './enemy-collision.js';
-import { ENEMY_ARENA_RADIUS, enemyLimitAt, clampEnemyTravel } from './world-limits.js';
+import { ENEMY_ARENA_RADIUS } from './world-limits.js';
 import { createBossPreparation } from './boss-preparation.js';
 import { ArenaNavigation } from './navigation.js';
 import { VillageNavigation } from './village-navigation.js';
@@ -296,13 +296,12 @@ export class BossBattle {
     return [{x:player.position.x,z:player.position.z,radius:.8},...encounters.filter(b=>b.active&&b.brain?.hp>0).map(b=>({x:b.actor.position.x,z:b.actor.position.z,radius:b.radius}))];
   }
   canReuseAnimator(enemy){return Boolean(enemy.animator&&(typeof enemy.animator.resetForReuse==='function'||typeof enemy.animator.reset==='function'));}
-  // origin ({x,z}, optional): where the group appears instead of around the player.
-  summon(player,value=1,kind='bear',{origin=null}={}){
+  summon(player,value=1,kind='bear'){
     if(this.loading)return Promise.resolve(false);
-    const pending=this.summonGroup(player,value,kind,origin);this.summonPending=pending;
+    const pending=this.summonGroup(player,value,kind);this.summonPending=pending;
     const finished=()=>{if(this.summonPending===pending)this.summonPending=null;};pending.then(finished,finished);return pending;
   }
-  async summonGroup(player, value = 1, kind='bear', summonOrigin=null) {
+  async summonGroup(player, value = 1, kind='bear') {
     if (this.loading) return false;
     if(!['bear','goblin','wolf','elena','mourning-elena'].includes(kind)&&!(this.world.release==='moonforest-0.2'&&isRegularWolf(kind)))throw new RangeError('Unknown summon kind: '+kind);
     const regular=isRegularWolf(kind)?this.regularWolves[kind]:null;
@@ -333,13 +332,13 @@ export class BossBattle {
         const occupied=this.spawnOccupants(player,others),placements=[];
         for(let index=0;index<count;index++){
           const enemy=this.manualEncounter(kind,index),position=positions[index],navigation=enemy.movementNavigation??this.world.navigation;
-          if(navigation){await preparation.pause();const safe=await (enemy.findSummonPosition?enemy.findSummonPosition(position,radius,enemyLimitAt(position),occupied,preparation):navigation.findFree(position,radius,enemyLimitAt(position),occupied,preparation));preparation.check();position.x=safe.x;position.z=safe.z;}
+          if(navigation){await preparation.pause();const safe=await (enemy.findSummonPosition?enemy.findSummonPosition(position,radius,ENEMY_ARENA_RADIUS,occupied,preparation):navigation.findFree(position,radius,ENEMY_ARENA_RADIUS,occupied,preparation));preparation.check();position.x=safe.x;position.z=safe.z;}
           placements.push([...occupied]);occupied.push({x:position.x,z:position.z,radius});
         }
         return {positions,placements};
       };
       let planned;
-      try{planned=await plan(summonOrigin);timings.placementAttempts=1;}
+      try{planned=await plan();timings.placementAttempts=1;}
       catch(error){
         preparation.check();
         const packingOrigin=phase===2&&this.world.cave?pool[0]?.movementNavigation?.spawnPackingOrigin?.():null;
@@ -456,7 +455,7 @@ export class BossBattle {
       // unchanged pose. Unknown implementations, stale tokens, subclass
       // movement and separation all keep the original second reconciliation.
       const unchanged=proof?.token===updateToken&&proof.generation===generation&&proof.actor===boss.actor&&proof.scene===this.world.scene&&proof.mapId===this.world.mapId&&proof.navigation===navigation&&proof.obstacles===navigation?.obstacles&&proof.cells===navigation?.cells&&proof.terrain===terrain&&proof.heights===terrain?.heights&&proof.size===terrain?.size&&proof.subdivisions===terrain?.subdivisions&&proof.radius===boss.radius&&position.x===proof.x&&position.y===proof.y&&position.z===proof.z&&position.x===boss.separationFrom.x&&position.y===boss.separationFrom.y&&position.z===boss.separationFrom.z&&stableMapCollision(navigation,terrain);
-      if(!unchanged){navigation?.constrain(position,boss.separationFrom,boss.radius,enemyLimitAt(boss.separationFrom??position));if(boss.separationFrom)clampEnemyTravel(position,boss.separationFrom);terrain?.place(position);}
+      if(!unchanged){navigation?.constrain(position,boss.separationFrom,boss.radius,ENEMY_ARENA_RADIUS);terrain?.place(position);}
       boss.warningRing.update(position,boss.attackRange(boss.motionSpec(boss.brain.state)));
       if(proof){proof.token=proof.actor=proof.scene=proof.navigation=proof.obstacles=proof.cells=proof.terrain=proof.heights=null;}
     }

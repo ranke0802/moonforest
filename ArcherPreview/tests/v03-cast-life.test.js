@@ -44,13 +44,3 @@ test('the player close by stops the stroll; a conversation turns the body',async
  assert.ok(Math.abs(yaw-Math.PI/2)<.1,'faces the player (+x)');
  assert.match(h.samples.at(-1),/Talk_with_Hands_Open|Listening_Gesture/);
 });
-
-test('a cast visual says when its model is on stage; a failed load settles too',async()=>{
- const h=harness(),v=h.visuals(h.scene,'innkeeper',{id:'innkeeper'});
- let done=false;v.settled.then(()=>{done=true;});
- await settle();assert.equal(done,false,'it waits for its place');
- v.place(1,0,1,0);await v.settled;assert.equal(done,true);assert.equal(h.records.size,1);
- const scene=h.scene,broken=createCastVisuals({getWorld:()=>({scene}),loadRuntime:()=>({async add(){throw new Error('offline');},get(){},remove(){},setTransform(){}}),fallback:()=>({place(){},dispose(){}})});
- const warn=console.warn;console.warn=()=>{};
- try{const lost=broken(scene,'innkeeper',{id:'lost'});lost.place(0,0,0,0);await lost.settled;lost.dispose?.();}finally{console.warn=warn;}
-});

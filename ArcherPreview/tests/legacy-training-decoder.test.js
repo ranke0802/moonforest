@@ -29,8 +29,6 @@ test('fresh legacy archer, warrior and warrior v2 routes use the local decoder b
  t.mock.method(globalThis,'fetch',async value=>{
   const url=new URL(value);assert.equal(url.origin,'https://legacy.test');manifests.push(url.pathname);
   if(url.pathname.endsWith('/meshopt-decoder.json'))return new Response(JSON.stringify(decoder));
-  // The grass and the scarecrow take KTX2 colour textures: the route pins that decoder too.
-  if(url.pathname.endsWith('/ktx2-decoder.json'))return new Response(JSON.stringify(json('ktx2-decoder.json')));
   assert.ok(url.pathname.endsWith('/environment.json'));const environment=json('environment.json');delete environment.ground;return new Response(JSON.stringify(environment));
  });
  t.after(async()=>{if(MeshoptCompression._Default!==previous.default)MeshoptCompression._Default?.dispose();for(const node of nodes)await node.terminate();MeshoptCompression._Default=previous.default;MeshoptCompression.Configuration=previous.configuration;if(previous.location===undefined)delete globalThis.location;else globalThis.location=previous.location;if(previous.Worker===undefined)delete globalThis.Worker;else globalThis.Worker=previous.Worker;});

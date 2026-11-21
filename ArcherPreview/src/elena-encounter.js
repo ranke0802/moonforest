@@ -5,7 +5,6 @@ import {createElenaContact} from './elena-style.js';
 import {GroundSpellTelegraph,spellContains} from './elena-ground-magic.js';
 import {shieldIntercepts} from './player-strikes.js';
 import {applyHitFlash} from './hit-feedback.js';
-import {hitScale} from './hit-scale.js';
 import {ENEMY_ARENA_RADIUS} from './world-limits.js';
 import {chooseElenaReposition} from './elena-reposition.js';
 import {MourningLocomotion} from './mourning-locomotion.js';
@@ -90,7 +89,7 @@ export class ElenaEncounter extends BossEncounter {
       this.spell.show(Math.min(this.brain.time,MOURNING_MOVEMENT.chargeWarning),MOURNING_MOVEMENT.chargeWarning,{flash:this.brain.time>=MOURNING_MOVEMENT.chargeWarning});
       if(this.brain.time>=MOURNING_MOVEMENT.chargeWarning){
         const clear=!this.world.navigation||this.world.navigation.segmentClear(this.actor.position,player.position,0,true);
-        if(!this.chargeResolved&&clear&&chargeTouchesPlayer(this.spell.plan,this.chargePrevious??this.chargeOrigin,this.actor.position,player.position,{reach:this.radius,playerRadius:playerDimensions(player).spellRadius*hitScale.playerHurt})){
+        if(!this.chargeResolved&&clear&&chargeTouchesPlayer(this.spell.plan,this.chargePrevious??this.chargeOrigin,this.actor.position,player.position,{reach:this.radius,playerRadius:playerDimensions(player).spellRadius})){
           // Consume the one contact even on dodge/block/invulnerability, so an
           // avoided charge cannot hit again when that protection ends.
           this.chargeResolved=true;
@@ -108,7 +107,7 @@ export class ElenaEncounter extends BossEncounter {
     if(fire&&!this.spell.fired){
       this.spell.fired=true;
       const clear=!this.world.navigation||this.world.navigation.segmentClear(this.spell.plan.origin,player.position,0,true);
-      if(!this.reviewMode&&clear&&spellContains(this.spell.plan,player.position,{radius:playerDimensions(player).spellRadius*hitScale.playerHurt})){
+      if(!this.reviewMode&&clear&&spellContains(this.spell.plan,player.position,{radius:playerDimensions(player).spellRadius})){
         // The enlarged witch's hand can pass above or behind a nearby player.
         // Her floor spell approaches from the boss, at the player's guard height.
         const source=this.phase===2?origin.add(new Vector3(0,playerDimensions(player).guardHeight,0)):this.nodes['mixamorig:RightHand'].getAbsolutePosition();

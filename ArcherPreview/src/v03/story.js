@@ -20,7 +20,6 @@ import {createSitPose} from './sit-pose.js';
 import {createLiePose,createCrouchPose,createPushPose} from './story-poses.js';
 import {layOnBack} from './bone-pose.js';
 import {SLOW_FX_DEFAULT} from './slow-fx.js';
-import {pinScreenArea,unpinScreenArea} from './zoom-lod-pin.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -41,8 +40,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
  const hud=createPlayHud({doc,onInteract:()=>interact()});
  const cast=[];let mapId=null,near=null,started=false,talking=false,disposed=false;
- // The cast of castMap, settled when every member's model is on stage (cast-models.js).
- let castMap=null,castSettled=null;
  // Tutorial state: sequential fight coaching and one-time tips (saved per slot).
  const TIP_KEY='v03-tips-v1',TIP_SECONDS=7.5;
  const HINT_SECONDS=40,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
@@ -169,8 +166,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     }
     if(disposed||log.step()!==step)return;
     const left=Math.max(1,step.summon.count-log.snapshot().count);
-    // summon.from: the group appears there (outside the village for the raid) and comes at the player.
-    const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind,step.summon.from?{origin:step.summon.from}:undefined);
+    const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind);
     if(ok!==false&&tune)tuneFoes(step.summon.kind,tune);
     if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
    }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}
@@ -304,7 +300,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     cast.push({npc,visual,x:spot.x,z:spot.z});if(npc.id==='driver')driverMember=cast[cast.length-1];
    }catch(error){console.warn('[MoonForest 0.3] cast member unavailable',npc.id,error);}
   }
-  castMap=id;castSettled=Promise.allSettled(cast.map(member=>member.visual.settled).filter(Boolean));
  }
  function runEffects(lines){
   for(const line of lines)for(const effect of line.effects??[]){
@@ -1100,26 +1095,23 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function updateSlowZoom(){
   const camera=api.world?.camera;if(!camera||!Number.isFinite(camera.fov))return;
   const now=performance.now(),dt=zoom.last?Math.min(.1,(now-zoom.last)/1000):0;zoom.last=now;
-  if(zoom.camera!==camera){unpinScreenArea(zoom.camera);zoom.camera=camera;zoom.weight=0;zoom.base=null;}
+  if(zoom.camera!==camera){zoom.camera=camera;zoom.weight=0;zoom.base=null;}
   const target=slow.left>0?1:0;
   // Focus lines at the screen's edge for as long as the beat lasts (hud: one
   // small canvas, written only when the value changes).
   hud.setFocus(target===1&&slowSetting().lines);
   if(zoom.weight===0&&target===0){zoom.base=null;return;}
-  // Scenery detail keeps the un-zoomed view for the length of the push-in (zoom-lod-pin.js).
-  if(zoom.base===null){zoom.base=camera.fov;pinScreenArea(camera);}
+  zoom.base??=camera.fov;
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
   camera.fov=zoom.base*(1-slowSetting().zoom*eased);
-  if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;unpinScreenArea(camera);}
+  if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;}
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
- // Taps chain two hits (slash → thrust);
+ // Taps chain three hits (slash → thrust → judgment finisher at half stamina);
  // a shield raised within JUST_WINDOW before contact is a just guard: longer
  // enemy stagger, stamina back, a short slow-motion beat.
- // 2026-11-21 (user): taps chain two hits only. The third, the judgment finisher, comes back later as a skill;
- // holding the button still charges the strong attack.
- const COMBAT_COMBO=Object.freeze(['slash','attack']),COMBO_COST=Object.freeze({});
+ const COMBAT_COMBO=Object.freeze(['slash','attack','judgment']),COMBO_COST=Object.freeze({judgment:15});
  // Normal combo hits flinch smaller foes and push them back ~0.4 m; the
  // warrior steps forward into each swing (main.js reads lunge per state).
  const LIGHT_HIT=Object.freeze({push:2.5,skip:Object.freeze(['bear','elena','mourning-elena'])});
@@ -1270,25 +1262,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    refresh();
    const quest=log.quest();if(quest)save.touch({title:quest.title,titleKey:quest.id});
   },
-  // The reverse of start() (user, 2026-11-21: going back to the title reloaded the page and
-  // ran the whole loading again). The play is put away, cast, wagon, markers, guide light,
-  // tips, a scene or a talk in hand, so the title can stand on the same loaded world. The
-  // record is not touched: start({fresh:false}) picks it up again.
-  stop(){
-   if(!started)return false;
-   if(scene.active){try{endScene();}catch(error){console.warn('[MoonForest 0.3] scene left open',error);scene.active=false;showPlayer(true);api.input.setSuspended(false);}}
-   scene.pending=false;scene.pendingFor=0;
-   try{dialogue.cancel();}catch{/* nothing open */}talking=false;
-   clearCast();mapId=null;started=false;
-   guide.visual?.hide();guide.key=null;guide.shown=false;
-   try{api.setMapMarkers?.([]);}catch{/* optional */}
-   tips.queue.length=0;tips.showing=null;tips.step=null;
-   hud.setTip(null);hud.setCaption(null);hud.setPrompt(null);hud.setHint(null);hud.setRing(null);hud.setFocus(false);
-   slow.left=0;slow.calm=0;
-   if(zoom.base!==null&&zoom.camera){zoom.camera.fov=zoom.base;unpinScreenArea(zoom.camera);}zoom.weight=0;zoom.base=null;
-   staged.key=null;staged.busy=false;staged.next=0;
-   return true;
-  },
   defeat(event){if(started)emit({type:'defeat',kind:event?.kind,map:mapId});},
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
@@ -1328,8 +1301,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   },
   // QA: a cast member's visual (gesture, position) by NPC id.
   castVisual:id=>cast.find(member=>member.npc.id===id)?.visual??null,
-  // The map's cast once it has been built (first frame there): a promise for all its models, else null.
-  castReady:id=>castMap===id?castSettled:null,
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
   dispose(){if(disposed)return;disposed=true;stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };

@@ -37,8 +37,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  // Touching anywhere on the box advances too (thumb-friendly on phones); the
  // button keeps its own click, so one tap never advances twice.
  box.addEventListener('click',event=>{if(!next.contains(event.target))step();});
- // Anywhere else on the screen as well, the speaker's picture included (user, 2026-11-21).
- layer.addEventListener('click',event=>{if(!box.contains(event.target))step();});
+ layer.addEventListener('click',event=>{if(event.target===layer)step();});
  const onKey=event=>{
   if(!lines||event.repeat)return;
   // Stop every other listener too: the key that closes the last line must not

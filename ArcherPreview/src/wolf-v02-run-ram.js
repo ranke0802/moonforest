@@ -1,7 +1,7 @@
 import {Quaternion,Vector3} from '@babylonjs/core';
 import overlay from './wolf-v02-run-ram-overlay.json' with {type:'json'};
 import {WOLF_CLIPS} from './wolf-spec.js';
-import {playerDimensions,playerHurtRadius} from './player-dimensions.js';
+import {playerDimensions} from './player-dimensions.js';
 import {wolfContactShape} from './wolf-v02-contact-shapes.js';
 
 export const WOLF_V02_RUN_RAM_OVERLAY=overlay;
@@ -43,7 +43,7 @@ export class WolfV02RunRamLayer{
   const e=this.e,b=e.brain;if(!b.action?.momentumRam)return false;
   const phase=e.v02Ram.current,ram=b.ramStage==='charge',maul=b.ramStage==='maul';
   if(!e.active||b.hp<=0||b.stagger||!phase||phase.resolved||!ram&&!maul||maul&&(!e.v02Ram.proneValid||!b.ramPawBraced)){e.ring.isVisible=false;return true;}
-  const name=ram?'head':'jaw',shape=e.contactShape(name,phase.config.kind),offset=ram?this.foreheadOffset:shape.offset,radius=(ram?this.overlay.contactCenter.radiusWorld:shape.radius)+playerHurtRadius(e.player);
+  const name=ram?'head':'jaw',shape=e.contactShape(name,phase.config.kind),offset=ram?this.foreheadOffset:shape.offset,radius=(ram?this.overlay.contactCenter.radiusWorld:shape.radius)+playerDimensions(e.player).moveRadius;
   Vector3.TransformCoordinatesToRef(offset,e.nodes[name].getWorldMatrix(),this.warningPoint);const p=this.warningPoint,active=(b.ramContactTime??0)>=phase.config.contactStart;
   e.ring.isVisible=true;e.ring.position.setAll(0);e.ring.material.alpha=.88;e.ring.material.emissiveColor.set(1,active?.08:.55,active?.025:.08);
   if(this.warningX===p.x&&this.warningZ===p.z&&this.warningRadius===radius&&this.warningTerrain===e.world.terrain)return true;

@@ -1,23 +1,6 @@
-import { ARENA_RADIUS, enemyLimitAt } from './world-limits.js';
+import { ARENA_RADIUS, ENEMY_ARENA_RADIUS } from './world-limits.js';
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const EPS=.002;
-// Route grids are regular: a node's neighbours and edge costs follow from the
-// grid shape. One byte per node (bit d = an edge towards GRID_DIRECTIONS[d])
-// replaces a list of [index,cost] pairs per node, which was about two million
-// small objects on the plains.
-export const GRID_DIRECTIONS=Object.freeze([[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]);
-const gridLinkTable=new WeakMap();
-export function gridLinks(n,step){
-  return {n,step,mask:new Uint8Array(n*n),offsets:Int32Array.from(GRID_DIRECTIONS,([x,z])=>z*n+x),costs:Float64Array.from(GRID_DIRECTIONS,([x,z])=>step*Math.hypot(x,z))};
-}
-export const linksOf=nodes=>gridLinkTable.get(nodes);
-export const setLinks=(nodes,links)=>{gridLinkTable.set(nodes,links);return nodes;};
-// The same [index,cost] list a node used to carry, in the same order. For checks and tools, not for searches.
-export function gridEdges(nodes,i){
-  const {mask,offsets,costs}=gridLinkTable.get(nodes),edges=[];
-  for(let d=0;d<8;d++)if(mask[i]&(1<<d))edges.push([i+offsets[d],costs[d]]);
-  return edges;
-}
 function hitTime(a,delta,c,radius){
   const x=a.x-c.x,z=a.z-c.z,aa=delta.x*delta.x+delta.z*delta.z;
   if(aa<1e-14)return null;
@@ -78,21 +61,21 @@ export class ArenaNavigation {
     const key=`${radius}:${limit}`;if(this.grids.has(key))return this.grids.get(key);
     // Coarser waypoints bound route-search cost in the larger arena. Actual
     // collision and sliding still use the exact swept circles above.
-    const step=limit>12?.75:.5,n=Math.floor(limit*2/step)+1,nodes=[],links=gridLinks(n,step),mask=links.mask;
-    for(let z=0;z<n;z++)for(let x=0;x<n;x++){const p={x:x*step-limit,z:z*step-limit};nodes.push({...p,free:this.free(p,radius+.035,limit)});}
+    const step=limit>12?.75:.5,n=Math.floor(limit*2/step)+1,nodes=[];
+    for(let z=0;z<n;z++)for(let x=0;x<n;x++){const p={x:x*step-limit,z:z*step-limit};nodes.push({...p,free:this.free(p,radius+.035,limit),edges:[]});}
     for(let z=0;z<n;z++)for(let x=0;x<n;x++){
       const i=z*n+x;if(!nodes[i].free)continue;
-      for(let d=0;d<8;d++){
-        const xx=x+GRID_DIRECTIONS[d][0],zz=z+GRID_DIRECTIONS[d][1],j=zz*n+xx;if(xx<0||xx>=n||zz<0||zz>=n||!nodes[j].free)continue;
-        if(this.segmentClear(nodes[i],nodes[j],radius+.025))mask[i]|=1<<d;
+      for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]]){
+        const xx=x+dx,zz=z+dz,j=zz*n+xx;if(xx<0||xx>=n||zz<0||zz>=n||!nodes[j].free)continue;
+        if(this.segmentClear(nodes[i],nodes[j],radius+.025))nodes[i].edges.push([j,step*Math.hypot(dx,dz)]);
       }
     }
-    setLinks(nodes,links);this.grids.set(key,nodes);return nodes;
+    this.grids.set(key,nodes);return nodes;
   }
-  path(from,goal,radius,limit=enemyLimitAt(from)){
+  path(from,goal,radius,limit=ENEMY_ARENA_RADIUS){
     this.pathsBuilt++;const start=this.findFree(from,radius,limit),target=this.findFree(goal,radius,limit);
     if(this.segmentClear(start,target,radius+.025))return [target];
-    const nodes=this.grid(radius,limit),{mask,offsets,costs}=linksOf(nodes);
+    const nodes=this.grid(radius,limit);
     const nearest=p=>{let best=-1,cost=Infinity;for(let i=0;i<nodes.length;i++)if(nodes[i].free){const d=distance(p,nodes[i]);if(d<cost&&this.segmentClear(p,nodes[i],radius)){best=i;cost=d;}}return best;};
     const s=nearest(start),g=nearest(target);if(s<0||g<0)return [];
     const scores=new Float64Array(nodes.length);scores.fill(Infinity);scores[s]=0;
@@ -100,11 +83,11 @@ export class ArenaNavigation {
     while(open.length){
       open.sort((a,b)=>b.f-a.f);const {i}=open.pop();if(closed[i])continue;closed[i]=1;
       if(i===g){const route=[target];for(let j=g;j>=0;j=parents[j])route.unshift(nodes[j]);return route;}
-      for(let bits=mask[i],d=0;d<8;d++){if(!(bits&(1<<d)))continue;const j=i+offsets[d],next=scores[i]+costs[d];if(next>=scores[j])continue;scores[j]=next;parents[j]=i;open.push({i:j,f:next+distance(nodes[j],target)});}
+      for(const [j,cost] of nodes[i].edges){const next=scores[i]+cost;if(next>=scores[j])continue;scores[j]=next;parents[j]=i;open.push({i:j,f:next+distance(nodes[j],target)});}
     }
     return [];
   }
-  steer(from,goal,radius,cache,dt,limit=enemyLimitAt(from)){
+  steer(from,goal,radius,cache,dt,limit=ENEMY_ARENA_RADIUS){
     if(this.segmentClear(from,goal,radius+.03)){cache.route=null;return goal;}
     cache.age=(cache.age??0)+dt;
     if(!cache.route||cache.age>.65||distance(goal,cache.goal)>.8){cache.route=this.path(from,goal,radius,limit);cache.goal={x:goal.x,z:goal.z};cache.age=0;}

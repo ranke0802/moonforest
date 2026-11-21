@@ -1,4 +1,3 @@
-import {hitScale} from './hit-scale.js';
 const clamp=x=>Math.max(0,Math.min(1,x));
 export function segmentDistanceSquared(p1,q1,p2,q2){
   return segmentDistanceValues(p1[0],p1[1],p1[2],q1[0],q1[1],q1[2],p2[0],p2[1],p2[2],q2[0],q2[1],q2[2]);
@@ -77,7 +76,7 @@ export class MeleeContactGate{
   check({actionId,window,blade,previous,capsule,radius,capsules,bladeRadius=0,rangeContact=false,lateral=null}){
     if(this.actionId!==actionId){this.reset();this.actionId=actionId;}
     if(!window){this.previous=null;return false;}
-    const hit=!this.hits.has(window.id)&&(rangeContact||(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius*hitScale.monsterHurt+bladeRadius,lateral)));
+    const hit=!this.hits.has(window.id)&&(rangeContact||(capsules||[{points:capsule,radius}]).some(c=>bladeTouchesCapsule(previous||this.previous,blade,c.points,c.radius+bladeRadius,lateral)));
     this.previous=blade;
     if(hit)this.hits.add(window.id);
     return hit;

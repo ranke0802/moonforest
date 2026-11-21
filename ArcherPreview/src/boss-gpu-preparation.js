@@ -1,5 +1,4 @@
 import {LoadAssetContainerAsync,MorphTargetManager} from '@babylonjs/core';
-import {initializeVillageKtx2} from './village-ktx2.js';
 import {readMapContainer} from './map-container.js';
 import {prepareMourningDeathDepth} from './mourning-death-depth.js';
 
@@ -28,18 +27,16 @@ export function cloneBossMorphManager(source,scene){
 }
 
 export function loadBossModelContainer(scene,model,{lifetime}={}){
-  // Actor colour textures may be swapped for KTX2 (the bear): our own decoder first, in every world.
   if(lifetime)return lifetime.run(async()=>{
-    await lifetime.run(()=>initializeVillageKtx2());
     const response=await lifetime.run(()=>fetch(model,{cache:'force-cache',signal:lifetime.signal}));
     if(!response.ok)throw new Error(`배우 모델을 불러오지 못했습니다 (${response.status}).`);
     const json=await lifetime.run(()=>response.json());
     return readMapContainer(scene,json,new URL('.',model).href,{lifetime,fileName:model.pathname.split('/').pop(),onMeshLoaded:prepareBossMorphUpload});
   },{onLate:container=>container?.dispose()});
-  return initializeVillageKtx2().then(()=>LoadAssetContainerAsync(model.pathname.split('/').pop(),scene,{
+  return LoadAssetContainerAsync(model.pathname.split('/').pop(),scene,{
     rootUrl:new URL('.',model).href,pluginExtension:'.gltf',
     pluginOptions:{gltf:{onMeshLoaded:prepareBossMorphUpload}},
-  }));
+  });
 }
 
 // Babylon 9.31's default glTF loader pins these same morph slots immediately

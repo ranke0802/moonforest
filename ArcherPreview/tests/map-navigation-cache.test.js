@@ -6,17 +6,14 @@ import {createWorld,replaceWorldMap} from '../src/world.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {warmMapNavigation,inspectMapNavigationCache,MAP_NAVIGATION_CACHE_BYTES} from '../src/map-navigation-cache.js';
 import {ENEMY_ARENA_RADIUS} from '../src/world-limits.js';
-import {linksOf} from '../src/navigation.js';
 const hash=value=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
-// Nodes and the edge bytes kept beside them.
-const gridHash=nodes=>hash([nodes,Array.from(linksOf(nodes).mask)]),gridsHash=nav=>hash([...nav.grids].map(([key,nodes])=>[key,gridHash(nodes)]));
 const fakeEngine=()=>({onDisposeObservable:new Observable()});
 
 test('three authored map grids restore exact nodes, edges, components and paths in a fixed CPU budget',t=>{
  const engine=new NullEngine(),world=createWorld(engine,{village:true,touchDevice:true}),saved=new Map();t.after(()=>engine.dispose());
  for(const character of ['warrior-v3','warrior-v4','warrior-v5','warrior-v4','warrior-v3','warrior-v4','warrior-v5','warrior-v4','warrior-v3']){
   if(saved.size)replaceWorldMap(world,character);
-  const nav=world.navigation,snapshot={grids:[...nav.grids].map(([key,nodes])=>({key,hash:gridHash(nodes),component:hash(Array.from(nav.gridMetadata.get(nodes).component))}))};
+  const nav=world.navigation,snapshot={grids:[...nav.grids].map(([key,nodes])=>({key,hash:hash(nodes),component:hash(Array.from(nav.gridMetadata.get(nodes).component))}))};
   // Pick free endpoints from the full original graph; prove cached routing and
   // live analytic collision agree, not just a hand-written expected path.
   const radius=.7,nodes=nav.grid(radius,ENEMY_ARENA_RADIUS),free=nodes.filter(node=>node.free),a=free[Math.floor(free.length*.3)],b=free[Math.floor(free.length*.7)];
@@ -30,10 +27,10 @@ test('three authored map grids restore exact nodes, edges, components and paths 
 
 test('changed obstacle data or collision implementation invalidates a snapshot; grids are caller-owned',()=>{
  const engine=fakeEngine(),make=x=>new VillageNavigation([{id:'test',x,z:0,radius:.8,height:2}]);
- const a=make(0);warmMapNavigation(engine,a,'village',4);const original=gridsHash(a);
- a.grids.values().next().value[0].x=1000;linksOf(a.grids.values().next().value).mask[0]=255;
- const b=make(0);warmMapNavigation(engine,b,'village',4);assert.equal(gridsHash(b),original);assert.equal(inspectMapNavigationCache(engine).hits,1);
- const c=make(1);warmMapNavigation(engine,c,'village',4);assert.equal(inspectMapNavigationCache(engine).misses,2);assert.notEqual(gridsHash(c),original);
+ const a=make(0);warmMapNavigation(engine,a,'village',4);const original=hash([...a.grids]);
+ a.grids.values().next().value[0].x=1000;a.grids.values().next().value[0].edges.push([5,777]);
+ const b=make(0);warmMapNavigation(engine,b,'village',4);assert.equal(hash([...b.grids]),original);assert.equal(inspectMapNavigationCache(engine).hits,1);
+ const c=make(1);warmMapNavigation(engine,c,'village',4);assert.equal(inspectMapNavigationCache(engine).misses,2);assert.notEqual(hash([...c.grids]),original);
  const d=make(1);d.free=()=>false;warmMapNavigation(engine,d,'village',4);assert.equal(inspectMapNavigationCache(engine).misses,3);assert.ok([...d.grids.values()].every(nodes=>nodes.every(n=>!n.free)));assert.equal(inspectMapNavigationCache(engine).entries,0,'instance-bound callbacks cannot retain a map owner in the cache');
  engine.onDisposeObservable.notifyObservers(engine);assert.equal(inspectMapNavigationCache(engine),null);
 });
@@ -50,16 +47,4 @@ test('noncanonical edge layouts bypass the compact cache without changing the na
  nav.grid=function(...args){const result=grid.apply(this,args);result[0].x=123;return result;};
  warmMapNavigation(engine,nav,'village',4);assert.equal(inspectMapNavigationCache(engine).entries,0);assert.equal(nav.grid(.34,4)[0].x,123);
  engine.onDisposeObservable.notifyObservers(engine);
-});
-
-test('extra limits are warmed and restored with the map, and change nothing when there are none',()=>{
- const engine=fakeEngine(),make=()=>new VillageNavigation([{id:'post',x:0,z:0,radius:.8,height:2}]);
- const a=make();warmMapNavigation(engine,a,'village',4,{limits:[7.5,4]});
- assert.deepEqual([...a.grids.keys()],['0.34:4','0.7:4','0.34:7.5','0.7:7.5'],'the usual limit first, a repeated one once');
- const b=make();warmMapNavigation(engine,b,'village',4,{limits:[7.5]});
- assert.equal(inspectMapNavigationCache(engine).hits,1);assert.equal(gridsHash(b),gridsHash(a));
- const wide=b.grids.get('0.34:7.5'),route=b.path({x:-3,z:.1},{x:3,z:.1},.34,7.5);
- assert.equal(b.grids.get('0.34:7.5'),wide,'a search at the wide limit uses the warmed grid');assert.ok(route.length>1);
- const c=make();warmMapNavigation(engine,c,'village',4);
- assert.deepEqual([...c.grids.keys()],['0.34:4','0.7:4']);assert.equal(inspectMapNavigationCache(engine).misses,2,'a different set of limits is a different snapshot');
 });

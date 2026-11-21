@@ -1,4 +1,3 @@
-import {setTextureReplacementsReady} from './texture-replacements.js';
 import {KhronosTextureContainer2} from '@babylonjs/core/Misc/khronosTextureContainer2.js';
 import {_KTXTextureLoader} from '@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader.js';
 import {registerTextureLoader} from '@babylonjs/core/Materials/Textures/Loaders/textureLoaderManager.js';
@@ -32,6 +31,5 @@ export function initializeVillageKtx2(options){
     // Do not silently expand UASTC to RGBA on devices with BC1/3 support.
     KhronosTextureContainer2.DefaultDecoderOptions.useRGBAIfOnlyBC1BC3AvailableWhenUASTC=false;
     KhronosTextureContainer2.DefaultDecoderOptions.useRGBAIfASTCBC7NotAvailableWhenUASTC=false;
-    setTextureReplacementsReady(true);// from here the loader may swap a JPG/PNG colour texture for its KTX2
   })();initialized=pending;pending.catch(()=>{if(initialized===pending)initialized=undefined;});return pending;
 }
