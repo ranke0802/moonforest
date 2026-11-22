@@ -64,3 +64,11 @@ test('blows that do not flinch the wolf (0.2 ordinary hits) never start a counte
  for(let i=0;i<6;i++){brain.hit({damage:20});run(brain,.2);}
  assert.equal(brain.pressure,0);assert.equal(brain.retaliatePending,false);assert.equal(brain.retaliation,null);assert.equal(brain.unflinching,false);
 });
+
+test('the counter is a bite from close by and a charge only from far away',()=>{
+ for(const [distance,expected] of [[1.2,'quick-bite'],[3.0,'quick-bite'],[4.6,'quick-bite'],[5.2,'lunge'],[9,'lunge']]){
+  const brain=awake();brain.update(STEP,distance,true);brain.hit(blow);
+  for(let t=0;t<1.5&&!brain.retaliation;t+=STEP)brain.update(STEP,distance,true);
+  assert.equal(brain.plannedId??brain.actionId,expected,'at '+distance+' m');
+ }
+});

@@ -150,8 +150,10 @@ export class WolfV02Brain extends WolfBrain{
  // Skips the circle: the same straight-to-position path the evade counter uses.
  beginRetaliation(){
   this.cancelBout();this.retaliatePending=false;this.retreatPending=null;this.tacticalRetreatPending=false;this.retaliationArmored=this.retaliateArmored;this.retaliateArmored=false;if(this.retaliationArmored)this.pressure=0;
-  // A bite unless the player is far: the charge needs a run-up and misses from close by (seen in play: 2.8 m).
-  const near=this.lastDistance<6*this.spatialScale,id=near&&this.actions['quick-bite']?'quick-bite':this.actions.lunge?'lunge':this.chooseAction(this.lastDistance);
+  // A bite unless the player is far: the charge needs a run-up and misses from close by. Seen in play:
+  // a fox (reach scaled to 0.32) charged from 2.5 m and ran past. Within three quarters of the charge's
+  // longest start the wolf closes in and bites instead.
+  const lunge=this.actions.lunge,near=!lunge||this.lastDistance<lunge.maxDistance*.75,id=near&&this.actions['quick-bite']?'quick-bite':lunge?'lunge':this.chooseAction(this.lastDistance);
   this.retaliation='closing';this.retaliationClock=0;this.boutObserved=true;this.plannedId=this.stalkPlannedId=id;this.ramApproachVariant=id==='lunge'?'run-ram':null;this.ramEvaded=false;
   this.start(WOLF_CLIPS.watch,'idle');this.behavior='position';this.positionElapsed=0;
  }
