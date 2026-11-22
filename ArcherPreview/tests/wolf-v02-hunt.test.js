@@ -57,10 +57,16 @@ test('miss, block, escape and interrupts cancel aggressive followups; explicit c
  }
  const escaped=brain(450);escaped.startAction('chain-bite');assert.deepEqual(finishFirstBout(escaped,{moveAfterImpact:5}),['chain-bite']);
  const custom=brain(900);custom.configureAttacks({custom:true,sequence:['chain-bite'],speed:1});custom.startAction('chain-bite');assert.deepEqual(finishFirstBout(custom),['chain-bite','chain-bite']);
- for(const cancel of [b=>b.hit({heavy:true,damage:1}),b=>b.hit({stun:.25,damage:1}),b=>b.parry()]){
+ for(const cancel of [b=>b.hit({heavy:true,damage:1}),b=>b.parry()]){
   const b=brain(450);b.startAction('chain-bite');cancel(b);assert.equal(b.followupId,null);assert.equal(b.chainRemaining,0);
   for(let frame=0;frame<90;frame++)assert.equal(b.update(1/60,2.25).events.length,0);
  }
+ // A flinching blow still cancels the chain, but since 2026-11-22 the wolf answers it as soon as the
+ // flinch ends (wolf-retaliation.test.js) instead of staying quiet.
+ {const b=brain(450);b.startAction('chain-bite');b.hit({stun:.25,damage:1});assert.equal(b.followupId,null);assert.equal(b.chainRemaining,0);
+  for(let frame=0;frame<30;frame++)assert.equal(b.update(1/60,2.25).events.length,0,'nothing lands during the flinch');
+  let countered=false;for(let frame=0;frame<60&&!countered;frame++){b.update(1/60,2.25);countered=b.mode==='attack';}
+  assert.equal(countered,true);assert.notEqual(b.actionId,'chain-bite','a fresh counter, not the cancelled chain');}
 });
 
 test('long attacks never make space by fleeing and custom orders substitute only when too close',()=>{
