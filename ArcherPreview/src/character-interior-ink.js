@@ -166,11 +166,12 @@ export const INTERIOR_INK_KEY='moonforest-interior-ink-v2';
 // v2 (2026-11-18): one switch for all interior lines, off by default.
 let interiorInkEnabled=false;
 export function setInteriorInkEnabled(value){interiorInkEnabled=!!value;if(!interiorInkEnabled)for(const owner of managers)owner.releaseResources?.();}
-export function setupInteriorInkSettings({host,storage,onChange=()=>{},onToggle=()=>{}}){
+// key: 0.3 reads its own (v3), so the off default also reaches devices that had saved it on (user, 2026-11-22).
+export function setupInteriorInkSettings({host,storage,onChange=()=>{},onToggle=()=>{},key=INTERIOR_INK_KEY}){
  const doc=host.ownerDocument,label=doc.createElement('label'),input=doc.createElement('input'),note=doc.createElement('small');
  input.type='checkbox';input.id='interior-ink-toggle';label.append(input,' 내부선 (전체)');note.textContent='모든 캐릭터 몸 안쪽에 그리는 선입니다. 끄면 가벼워집니다. 바깥 외곽선과 원본 그림의 선은 그대로예요.';host.append(label,note);
- let enabled=false;try{const value=storage?.getItem(INTERIOR_INK_KEY);if(value==='0'||value==='1')enabled=value==='1';}catch{}input.checked=enabled;setInteriorInkEnabled(enabled);onToggle(enabled);
- const change=()=>{enabled=input.checked;try{storage?.setItem(INTERIOR_INK_KEY,enabled?'1':'0');}catch{}setInteriorInkEnabled(enabled);onToggle(enabled);onChange(enabled);};input.addEventListener('change',change);
+ let enabled=false;try{const value=storage?.getItem(key);if(value==='0'||value==='1')enabled=value==='1';}catch{}input.checked=enabled;setInteriorInkEnabled(enabled);onToggle(enabled);
+ const change=()=>{enabled=input.checked;try{storage?.setItem(key,enabled?'1':'0');}catch{}setInteriorInkEnabled(enabled);onToggle(enabled);onChange(enabled);};input.addEventListener('change',change);
  return {get enabled(){return enabled;},dispose(){input.removeEventListener('change',change);label.remove();note.remove();}};
 }
 export function inspectNpcInteriorInk(scene){return scenes.get(scene)?.inspect()??{registered:0,visible:0,renderTargets:0,postProcesses:0,attachedPostProcesses:0,idleRetained:false,normalFrames:0,resourceCycles:0,worldDepthRenders:0,rafOwned:false};}
