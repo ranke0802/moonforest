@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoonForest 0.3 구조 진단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+ /* layout: one reading column, wide tables scroll in their own box; state shown by chips */
+ --bg:#f4f5f2; --surface:#ffffff; --ink:#1d2421; --muted:#5d6762; --line:#d9ddd7;
+ --accent:#2f5d4f; --accent-soft:#e3ede8;
+ --dup:#a6461f; --dup-bg:#f7e6dd; --warn:#8a6a10; --warn-bg:#f6efd6; --ok:#2e6b3c; --ok-bg:#e2f0e4; --info:#3a5378; --info-bg:#e3e9f3;
+ --display:"Noto Serif KR","Nanum Myeongjo",Georgia,serif; --body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+ color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#141816; --surface:#1c2220; --ink:#e3e8e4; --muted:#9aa59f; --line:#33403b;
+ --accent:#8cc5ad; --accent-soft:#22332c;
+ --dup:#f0a07a; --dup-bg:#3a2419; --warn:#e3c46a; --warn-bg:#352d14; --ok:#8fd39c; --ok-bg:#1d3322; --info:#9fb8e0; --info-bg:#1f2938; color-scheme:dark;}}
+:root[data-theme="dark"]{
+ --bg:#141816; --surface:#1c2220; --ink:#e3e8e4; --muted:#9aa59f; --line:#33403b;
+ --accent:#8cc5ad; --accent-soft:#22332c;
+ --dup:#f0a07a; --dup-bg:#3a2419; --warn:#e3c46a; --warn-bg:#352d14; --ok:#8fd39c; --ok-bg:#1d3322; --info:#9fb8e0; --info-bg:#1f2938; color-scheme:dark;}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.65 var(--body);font-variant-numeric:tabular-nums}
+main{max-width:1060px;margin:0 auto;padding:28px 16px 64px;display:grid;gap:34px}
+header{display:grid;gap:8px;border-bottom:2px solid var(--accent);padding-bottom:18px}
+.kicker{color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.04em}
+h1{font:700 30px/1.25 var(--display);margin:0;text-wrap:balance}
+h2{font:700 21px/1.35 var(--display);margin:0 0 12px;text-wrap:balance}
+h3{font-size:16px;margin:18px 0 8px}
+p{margin:0 0 10px;max-width:68ch}
+.meta{color:var(--muted);font-size:13px}
+section{display:grid;gap:10px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.lead{border-left:4px solid var(--accent);background:var(--accent-soft)}
+ol.find{margin:0;padding-left:20px;display:grid;gap:8px}
+ol.find li{max-width:72ch}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:var(--accent-soft);font-weight:700;white-space:nowrap;position:sticky;top:0}
+tr.cat td{background:var(--bg);font-weight:700;color:var(--accent);border-top:2px solid var(--line)}
+td.n{text-align:right;white-space:nowrap}
+code{font:12.5px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--accent-soft);padding:1px 4px;border-radius:4px;word-break:break-all}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.dup{color:var(--dup);background:var(--dup-bg)}.warn{color:var(--warn);background:var(--warn-bg)}.ok{color:var(--ok);background:var(--ok-bg)}.info{color:var(--info);background:var(--info-bg)}
+.est{color:var(--muted);font-size:12px}
+.grid2{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.card h3{margin-top:0}
+ul{margin:0;padding-left:20px}
+li{margin:2px 0}
+.steps{counter-reset:s;display:grid;gap:10px}
+.step{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px}
+.step b{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:480px){h1{font-size:25px}body{font-size:14.5px}th,td{padding:7px 8px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+ <div class="kicker">MoonForest 0.3 · 성능 구조 진단 · 2026-11-22</div>
+ <h1>객체를 하나씩 다루는 구조가 폰의 주 스레드를 막고 있다</h1>
+ <p class="meta">근거: 배포본 <code>8a77f78</code>을 PC 브라우저에서 실행해 잰 장면 구조, 갤럭시 S23 성능 기록 <code>be7ac85e</code>(315초)·<code>b21cc518</code>(408초), 소스 <code>ArcherPreview/src</code>·<code>src/v03</code> 447개 모듈 전수 검색. 코드는 아직 바꾸지 않았다.</p>
+</header>
+
+<section>
+ <h2>결론</h2>
+ <div class="box lead">
+ <ol class="find">
+  <li><b>폰이 막히는 곳은 GPU가 아니라 JS 주 스레드다.</b> CPU가 느려진 상태의 평원(몬스터 19마리)에서 프레임 간격 24ms 중 계산이 20.1ms다. 해상도를 낮춰도 프레임이 오르지 않는 이유다.</li>
+  <li><b>원인은 기능 하나가 아니라 "객체 수 × 객체마다 하는 JS 처리"다.</b> 평원 풍경 1,364개가 각자 노드를 가진 InstancedMesh이고(장면 노드 3,848개), 재질 125개 중 얼려 둔 것은 6개(5%)뿐이며, 몬스터마다 골격·동작 22세트·외곽선 껍질을 따로 갖는다. 매 프레임 이 개수만큼 고르기·준비 확인·바인딩을 한다.</li>
+  <li><b>같은 일을 하는 장치가 겹쳐 쌓였다.</b> 그릴 대상을 정하는 장치 12종, 작업을 나누는 예산 장치 9종, 셰이더를 보관하는 장치 2종, 애니메이션 재생기 5종, 외곽선·잉크 3계통이 따로 돈다. 객체를 묶지 않고 개별로 둔 채 문제가 생길 때마다 거르는 장치를 덧댄 결과다.</li>
+  <li><b>일부 장치는 서로 효과를 지운다.</b> 프레임당 2ms 준비 예산이 있어도 한 번에 40~114ms가 걸리는 셰이더 생성은 막지 못한다. 프레임 가드의 단계 일부는 품질 복구 기본값이 꺼 버린다.</li>
+  <li><b>처방은 덧대기가 아니라 줄이기다.</b> 풍경을 thin instance 묶음으로 바꾸고, 재질을 얼리고 가벼운 툰 재질로 통일하고, 몬스터를 종 단위로 공유하면 겹친 장치 상당수가 필요 없어진다. 폰에서 프레임당 약 4~9ms를 줄일 것으로 추정한다(미검증).</li>
+ </ol>
+ </div>
+</section>
+
+<section>
+ <h2>1. 측정 근거</h2>
+ <h3>장면 구조 (PC, 배포본 8a77f78)</h3>
+ <div class="scroll"><table>
+  <thead><tr><th>항목</th><th>타이틀(평원 배경)</th><th>마을</th><th>평원·몬스터 19</th><th>뜻</th></tr></thead>
+  <tbody>
+  <tr><td>장면 메시</td><td class="n">2,997</td><td class="n">1,676</td><td class="n">2,886</td><td>그중 켜진 것 1,165 / 509 / 418</td></tr>
+  <tr><td>InstancedMesh</td><td class="n">1,464</td><td class="n">775</td><td class="n">1,364</td><td>원본은 25 / 24 / 20개뿐. 풀 덤불 하나가 694개</td></tr>
+  <tr><td>인스턴스마다 따로 있는 부모 노드</td><td class="n">1,438</td><td class="n">749</td><td class="n">1,338</td><td>배치 하나가 노드 묶음 하나</td></tr>
+  <tr><td>thin instance</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>CLAUDE.md 권장 사항이지만 쓰지 않음</td></tr>
+  <tr><td>TransformNode</td><td class="n">3,077</td><td class="n">2,053</td><td class="n">3,848</td><td></td></tr>
+  <tr><td>재질 (얼려 둔 것)</td><td class="n">87 (4)</td><td class="n">90 (6)</td><td class="n">125 (6)</td><td>평원: PBR 69, Standard 45, Shader 11</td></tr>
+  <tr><td>PBR 기본 부가 기능 플러그인</td><td colspan="3">재질마다 6종 (BRDF, 클리어코트, 이리데센스, 이방성, 광택, 표면하 산란) × 69</td><td>PBRMaterial이 항상 붙임. 몬스터 재질은 빛을 끈 unlit</td></tr>
+  <tr><td>컴파일된 셰이더 프로그램</td><td class="n">80</td><td class="n">88</td><td class="n">107</td><td></td></tr>
+  <tr><td>골격 / 뼈</td><td class="n">3 / 253</td><td class="n">8 / 583</td><td class="n">24 / 940</td><td>모두 뼈 텍스처 사용</td></tr>
+  <tr><td>AnimationGroup</td><td class="n">31</td><td class="n">66</td><td class="n">460</td><td>늑대류는 자체 샘플러를 쓰는데도 개체마다 22세트 복제</td></tr>
+  <tr><td>멈춘 Animatable</td><td class="n">3,672</td><td class="n">3,672</td><td class="n">4,194</td><td>주인공 바인딩 캐시. 순회 비용은 0.1ms 미만으로 측정</td></tr>
+  <tr><td>외곽선 껍질 메시</td><td class="n">10</td><td class="n">15</td><td class="n">40</td><td>캐릭터 메시마다 한 장 더 그림(스키닝 두 번)</td></tr>
+  <tr><td>그림자 맵 / 대상</td><td colspan="3">2048, PCF, 매 프레임 대상 75~97개 + 정지물용 두 번째 맵</td><td></td></tr>
+  </tbody></table></div>
+
+ <h3>프레임당 시간 (S23, CPU가 느려진 상태, 평원·몬스터 18~19)</h3>
+ <div class="scroll"><table>
+  <thead><tr><th>구간</th><th class="n">시간</th><th>세부</th></tr></thead>
+  <tbody>
+  <tr><td>전체 계산</td><td class="n">20.1ms</td><td>프레임 간격 24ms (41.6fps). 60fps에는 16.6ms 이하가 필요</td></tr>
+  <tr><td>화면 그리기</td><td class="n">15.3ms</td><td>그릴 대상 고르기 4.3 · 그리기 제출 6.5 · 그림자 1.5 · 기타 3.0</td></tr>
+  <tr><td>몬스터 갱신</td><td class="n">2.5ms</td><td>가까운 것 1.2 · 먼 것 1.05</td></tr>
+  <tr><td>접촉 판정</td><td class="n">0.85ms</td><td></td></tr>
+  <tr><td>주인공 애니메이션</td><td class="n">0.76ms</td><td></td></tr>
+  </tbody></table></div>
+ <p>그리기 제출을 GL 호출 단위로 쪼갠 표본(145프레임, 느린 프레임 위주)에서 GL 호출 합계는 약 2.7ms이고, 가장 큰 것은 인스턴스 위치 버퍼 다시 올리기(프레임당 138회, 1.24ms)였다. 같은 표본의 그리기 제출은 10.7ms라, <b>제출 시간의 대부분은 GL이 아니라 재질 준비 확인·바인딩 같은 JS 처리</b>다(표본이 느린 프레임 위주라 비율은 참고치).</p>
+ <p>PC에서 같은 장면의 화면 그리기는 3.97ms다. 그릴 대상 고르기 1.37(후보 362개 중 화면 안 41개), 그림자 0.72, 본 그리기 1.1, 애니메이션 적용 0.45ms. 몬스터 갱신은 0.95ms다.</p>
+</section>
+
+<section>
+ <h2>2. 적용된 기술 항목 전체</h2>
+ <p class="meta">상태: <span class="chip ok">유효</span> 측정으로 효과 확인 · <span class="chip info">적용</span> 들어가 있으나 효과 미측정 · <span class="chip warn">꺼짐</span> 기본값 꺼짐 · <span class="chip dup">문제</span> 구조상 비용을 만든다</p>
+ <div class="scroll"><table>
+ <thead><tr><th>항목</th><th>파일</th><th>하는 일</th><th>근거·효과</th><th>상태</th></tr></thead>
+ <tbody>
+ <tr class="cat"><td colspan="5">A. 그릴 대상 정하기 (가시성·LOD)</td></tr>
+ <tr><td>배치물 InstancedMesh + 행렬 동결</td><td><code>village-instancing</code> <code>static-map-instances</code></td><td>배치마다 인스턴스 하나와 부모 노드</td><td>평원 1,364개, 노드 1,338개</td><td><span class="chip dup">문제</span></td></tr>
+ <tr><td>빈 부모·꺼진 인스턴스를 후보에서 빼기</td><td><code>village-active-candidates</code></td><td>Babylon 후보 목록을 교체</td><td>PC 장면 −26%, 고르기 −45%</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>LOD 선택 8~15프레임 유지</td><td><code>village-active-candidates</code></td><td><code>customLODSelector</code></td><td>고르기 −7%</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>Babylon 메시 LOD</td><td><code>village-lod</code> <code>tree-lod</code></td><td>원본 20/25개에 LOD 2단계</td><td>LOD 판정 프레임당 213회(PC)</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>16m 칸 단위 CPU 거르기</td><td><code>village-visibility</code></td><td>칸 단위로 켜고 끄기</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>GPU 가림 쿼리</td><td><code>village-occlusion</code></td><td>깊이 버퍼에 상자를 질의해 가려진 것 빼기</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>카메라를 가리는 나무·건물 반투명</td><td><code>tree-occlusion</code> <code>village-streamed-environment</code></td><td>스크린도어 투명</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>몬스터 거리로 숨기기</td><td><code>boss-encounter</code> <code>updateRenderRange</code></td><td>범위 밖이면 <code>isVisible=false</code></td><td>스킨 메시는 절두체 검사를 우회해서 필요</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>스킨 메시 절두체 교체</td><td><code>mourning-camera-culling</code> 외</td><td><code>isInFrustum</code> 덮어쓰기</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>확대 연출 중 LOD 고정</td><td><code>v03/zoom-lod-pin</code></td><td></td><td>폰 기록 근거</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>풍경 수요·스트리밍</td><td><code>village-demand</code> <code>village-streamed-environment</code> <code>village-scenery-cache</code></td><td>거리별로 배치물을 만들고 지움</td><td>47KB 규모</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>원경 파생 LOD·인덱스 단순화</td><td><code>mesh-simplify</code></td><td><code>?detaillod=1</code> <code>?simplify=1</code></td><td>삼각형 절반, 프레임 효과 없음</td><td><span class="chip warn">꺼짐</span></td></tr>
+
+ <tr class="cat"><td colspan="5">B. 작업 나누기 (예산·순서)</td></tr>
+ <tr><td>공유 준비 예산 2ms</td><td><code>frame-work-coordinator</code></td><td>준비 작업이 프레임당 2ms를 나눠 씀</td><td>원자적 호출은 못 막음(셰이더 최대 114ms)</td><td><span class="chip dup">문제</span></td></tr>
+ <tr><td>몬스터 준비 1.5ms·4블록</td><td><code>boss-preparation</code></td><td>자체 예산 + 공유 예산</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>배치 작업 3ms</td><td><code>village-work-budget</code></td><td>자체 rAF 대기 + 공유 예산</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>몬스터 무리 순서(45m 먼저)</td><td><code>monster-group-scheduler</code></td><td>로딩 중 가까운 무리만, 나머지는 플레이 중</td><td>평원 로딩 32 → 10~16초. 대신 도착 직후 끊김</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>큰 텍스처 띠 나눠 올리기</td><td><code>split-texture-upload</code></td><td>프레임당 1MB</td><td>폰 미검수</td><td><span class="chip warn">꺼짐</span></td></tr>
+ <tr><td>KTX2·Meshopt 워커 감독</td><td><code>ktx-worker-supervisor</code> <code>meshopt-worker-supervisor</code></td><td>워커 1개, 대기열·시간 제한·재시작</td><td>45초 대기 후 실패 → 해결</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>수요 평가 나눠 하기</td><td><code>village-demand</code></td><td>1,000 기록 기준</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>콘텐츠·효과 예산</td><td><code>content-runtime-budget</code> <code>effect-budget</code></td><td>개수 상한</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+
+ <tr class="cat"><td colspan="5">C. 셰이더</td></tr>
+ <tr><td>배우 셰이더 미리 준비</td><td><code>boss-shader-warmup</code> <code>prepareModelShaders</code></td><td>몬스터·주인공·NPC 변형 컴파일</td><td>숨긴 채 준비, 일부는 플레이 중</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>맵 재질 준비·맵 넘어 보관</td><td><code>map-shader-cache</code></td><td><code>prepareMapMaterials</code> <code>retainMapEffect</code></td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>배우 프로그램 핀 + 96개 유지</td><td><code>prepared-effect-lifetime</code></td><td>주인이 사라져도 유지</td><td>재방문 시 다시 만들기 5 → 2회, 로딩 뒤 0회</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>처치 효과 셰이더 미리</td><td><code>gold-loot-view</code> 외</td><td>금화·표식</td><td>처치 프레임 새 셰이더 3~4 → 0</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>병렬 셰이더 컴파일</td><td>Babylon 기본</td><td><code>KHR_parallel_shader_compile</code></td><td>폰·PC 모두 지원. JS 전처리 비용은 남음</td><td><span class="chip info">적용</span></td></tr>
+
+ <tr class="cat"><td colspan="5">D. 애니메이션·캐릭터</td></tr>
+ <tr><td>CharacterAnimator (AnimationGroup + 바인딩 캐시)</td><td><code>animation.js</code></td><td>주인공·곰·고블린</td><td>주인공 멈춘 Animatable 3,672개</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>늑대 전용 샘플러</td><td><code>wolf-animation</code></td><td>키를 직접 보간</td><td>상수 채널 생략으로 0.76 → 0.52ms(PC)</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>엘레나 전용 샘플러</td><td><code>mourning-elena-animation</code></td><td>상수 채널 캐시</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>NPC 샘플러 + 거리 등급</td><td><code>npc-world</code> <code>v03/cast-models</code></td><td>12m 매 프레임, 30m 30Hz, 그 밖 15Hz</td><td>—</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>상수 채널 로더 압축</td><td><code>animation-compaction</code></td><td>glTF 로드 때 키 2개로</td><td>PC 힙 753 → 593MB(다른 수정 포함)</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>주인공 부품 병합</td><td><code>player-mesh-merge</code></td><td>같은 재질·뼈대 부품 합치기</td><td>그리기 −29%</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>복제 경계 상자 재사용</td><td><code>posed-bounds</code></td><td>종·자세가 같으면 복사</td><td>복제 최대 43 → 12~16ms(폰)</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>먼 몬스터 갱신 간격</td><td><code>boss-battle</code></td><td>안 보이고 먼 몬스터는 격프레임</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>몬스터 개체별 골격·동작 복제</td><td><code>boss-models</code> <code>instantiateBossModel</code></td><td>개체마다 골격·AnimationGroup 22세트·재질 참조</td><td>평원 AnimationGroup 460개</td><td><span class="chip dup">문제</span></td></tr>
+
+ <tr class="cat"><td colspan="5">E. 그림자</td></tr>
+ <tr><td>동적 그림자 2048 PCF</td><td>조명</td><td>매 프레임 대상 75~97개</td><td>폰 1.5ms</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>정지물 그림자 캐시</td><td><code>static-shadow-cache</code></td><td>두 번째 깊이 맵, 바뀔 때만</td><td>서 있을 때 다시 그리기 0회</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>그림자 대상 범위 밖 제외</td><td>조명</td><td>범위 밖·외곽선 껍질 제외</td><td>평원 약 45만 삼각형 제거</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>그림자 페이드·대상 예산</td><td><code>village-shadow-fade</code> <code>village-shadow-policy</code></td><td>나타나고 사라질 때 서서히</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>그림자 격프레임 갱신</td><td><code>adaptive-performance</code> <code>quality-restore-settings</code></td><td>0.3 기본: 프레임 모자랄 때만</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+
+ <tr class="cat"><td colspan="5">F. 외곽선·잉크·재질</td></tr>
+ <tr><td>캐릭터 외곽선 껍질</td><td><code>character-outlines</code></td><td>메시를 한 장 더 그림</td><td>평원 40장</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>풍경 잉크</td><td><code>village-outlines</code> <code>village-outline-policy</code></td><td>그려진 배치의 일부에 선</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>NPC 내부선 후처리</td><td><code>character-interior-ink</code></td><td>깊이·법선 렌더 타깃 + 후처리</td><td>0.3 기본 꺼짐</td><td><span class="chip warn">꺼짐</span></td></tr>
+ <tr><td>몬스터 unlit PBR 변환</td><td><code>monster-toon</code></td><td>원본 PBR을 빛 없는 PBR로</td><td>PBR 기본 플러그인 6종이 그대로 붙음</td><td><span class="chip dup">문제</span></td></tr>
+ <tr><td>툰·스타일 재질 플러그인</td><td>14개 파일</td><td>CharacterStyle 28, VillageToon 20, TreeCoverage 19 외</td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>material.freeze</td><td>13개 파일</td><td>코드 15곳</td><td>실제로 얼어 있는 재질 125개 중 6개</td><td><span class="chip dup">문제</span></td></tr>
+
+ <tr class="cat"><td colspan="5">G. 텍스처·지오메트리·메모리</td></tr>
+ <tr><td>KTX2 UASTC + 공유 텍스처 교체</td><td><code>village-ktx2</code> <code>texture-replacements</code></td><td>GPU 압축 텍스처</td><td>폰 텍스처 446 → 320MB</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>근거리 고해상도 스트리밍</td><td><code>village-texture-streaming</code> 외 2</td><td>가까운 자산만 높은 등급</td><td>플레이 중 텍스처 올리기 발생</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>기기별 텍스처 등급</td><td><code>mobile-texture-policy</code> <code>player-texture-profile</code></td><td></td><td>—</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>Meshopt + 해제 캐시</td><td><code>village-meshopt</code> <code>map-decode-cache</code></td><td>캐시 8,192칸</td><td>해제 1.5만 건 몰림 해결</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>누수 방지 규칙</td><td><code>map-container</code> <code>map-load-lifetime</code></td><td>WeakSet, 스택 없는 오류</td><td>방문당 280 → 5MB</td><td><span class="chip ok">유효</span></td></tr>
+
+ <tr class="cat"><td colspan="5">H. 길찾기</td></tr>
+ <tr><td>격자 A*, 연결 비트마스크, 3종 공유</td><td><code>navigation</code> <code>village-navigation</code></td><td></td><td>길찾기 최대 3.9ms/초(폰)</td><td><span class="chip ok">유효</span></td></tr>
+ <tr><td>격자 캐시 + 바뀐 칸만 재계산</td><td><code>map-navigation-cache</code> <code>deriveRouteGrids</code></td><td></td><td>전투 중 3.7초 멈춤 → 50ms</td><td><span class="chip ok">유효</span></td></tr>
+
+ <tr class="cat"><td colspan="5">I. 프레임 제어</td></tr>
+ <tr><td>프레임 가드 5단계</td><td><code>adaptive-performance</code></td><td>못 지킬 때 그림자·시야 순으로 낮춤</td><td>1단계(먼 그림자)는 품질 복구 기본값이 무시</td><td><span class="chip dup">문제</span></td></tr>
+ <tr><td>품질 복구 3스위치</td><td><code>quality-restore-settings</code></td><td>가드가 낮춘 것을 다시 켬</td><td>가드와 같은 대상을 반대로 조절</td><td><span class="chip dup">문제</span></td></tr>
+ <tr><td>숨겨진 화면에서 작업 정지</td><td><code>frame-loop</code></td><td></td><td>—</td><td><span class="chip ok">유효</span></td></tr>
+
+ <tr class="cat"><td colspan="5">J. 진단 (켜져 있을 때만 비용)</td></tr>
+ <tr><td>프레임 진단·기록</td><td><code>frame-diagnostics</code>(29KB) <code>long-frame-recording</code> <code>long-task-log</code></td><td>구간별 시간, 1초 합계</td><td>폰 기록의 근거</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>장면 계측</td><td><code>scene-diagnostics</code></td><td>Babylon <code>SceneInstrumentation</code> 켜기</td><td>측정 자체가 부하</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>그리기 CPU 표본</td><td><code>render-cpu-sampler</code></td><td>느린 프레임 뒤 엔진 메서드를 감싸 연속 측정</td><td>측정 자체가 부하</td><td><span class="chip info">적용</span></td></tr>
+ <tr><td>CPU 속도 표본</td><td><code>display-refresh</code></td><td>기록 중 매초 고정 계산</td><td>폰 6.5ms/초</td><td><span class="chip info">적용</span></td></tr>
+ </tbody></table></div>
+</section>
+
+<section>
+ <h2>3. 범주별 중복 판정</h2>
+ <div class="scroll"><table>
+ <thead><tr><th>범주</th><th class="n">장치 수</th><th>겹치는 점</th><th>판정</th></tr></thead>
+ <tbody>
+ <tr><td>그릴 대상 정하기</td><td class="n">12</td><td>"이것을 그릴까"를 칸 거르기 → 후보 교체 → LOD 유지 → Babylon 절두체 → GPU 가림 쿼리 → 거리 숨기기에서 각자 판단한다. 근본 원인은 배치물 1,400개를 개별 객체로 둔 것이다. 객체가 많으니 거르는 장치가 계속 늘었다.</td><td><span class="chip dup">중복 · 구조 교체</span></td></tr>
+ <tr><td>작업 나누기</td><td class="n">9</td><td>예산 단위가 제각각이다(1.5ms·2ms·3ms·1MB·2초 간격). 각자 rAF나 타이머로 기다린다. 그런데 끊김을 만드는 것은 나눌 수 없는 한 번 호출(셰이더 40~114ms, 동작 준비 57ms)이라 예산이 그것을 막지 못한다.</td><td><span class="chip dup">중복 · 효과 제한</span></td></tr>
+ <tr><td>셰이더 보관</td><td class="n">2</td><td><code>map-shader-cache</code>(맵 재질)와 오늘 넣은 <code>prepared-effect-lifetime</code> 유지(배우)가 같은 방식(참조 수 하나 더 잡기)으로 맵을 넘어 보관한다. 상한도 따로 있다.</td><td><span class="chip dup">중복 · 통합</span></td></tr>
+ <tr><td>애니메이션 재생</td><td class="n">5</td><td>Babylon AnimationGroup 방식 1종과 자체 샘플러 3종(늑대·엘레나·NPC)이 같은 일을 한다. 자체 샘플러를 쓰는 늑대도 개체마다 AnimationGroup 22세트를 복제해 들고 있다. 상수 채널 처리도 로더·늑대·엘레나에 세 번 따로 있다.</td><td><span class="chip dup">중복 · 통합</span></td></tr>
+ <tr><td>그림자</td><td class="n">5</td><td>정지물 캐시·범위 제외는 측정 근거가 있다. 격프레임·먼 그림자는 가드와 품질 복구가 같은 대상을 반대로 조절한다.</td><td><span class="chip warn">대체로 유지 · 설정 정리</span></td></tr>
+ <tr><td>외곽선·잉크</td><td class="n">3계통</td><td>캐릭터 껍질(스키닝 두 번), 풍경 잉크, NPC 내부선 후처리가 각자 준비·예산·셰이더를 갖는다. 내부선은 기본 꺼짐인데 코드 경로는 남아 있다.</td><td><span class="chip warn">부분 중복</span></td></tr>
+ <tr><td>재질</td><td class="n">—</td><td>툰 그림인데 가장 무거운 PBR을 바탕으로 쓰고 기본 부가 기능 6종을 끌고 다닌다. 반대로 Babylon이 가장 싸게 만들어 주는 재질 얼리기는 5%만 적용됐다.</td><td><span class="chip dup">과잉 + 누락</span></td></tr>
+ <tr><td>텍스처</td><td class="n">8</td><td>KTX2·등급은 근거가 있다. 근거리 고해상도 스트리밍은 플레이 중 업로드를 만들고, 분할 올리기는 꺼진 채 남아 있다.</td><td><span class="chip warn">정리 필요</span></td></tr>
+ <tr><td>지오메트리·메모리</td><td class="n">5</td><td>각각 다른 문제를 해결했고 측정 근거가 있다.</td><td><span class="chip ok">적정</span></td></tr>
+ <tr><td>길찾기</td><td class="n">5</td><td>오늘 기록에서 길찾기는 문제를 만들지 않는다.</td><td><span class="chip ok">적정</span></td></tr>
+ <tr><td>프레임 제어</td><td class="n">3</td><td>가드가 낮추고 품질 복구가 다시 켠다. 실제로 남는 효과는 그림자 격프레임과 평원 시야 축소뿐이다.</td><td><span class="chip dup">상충 · 정리</span></td></tr>
+ <tr><td>진단</td><td class="n">10+</td><td>폰 기록은 장면 계측과 엔진 메서드 감싸기가 켜진 상태에서 찍힌다. 기록 수치에 측정 부하가 섞여 있다(얼마인지 미측정).</td><td><span class="chip warn">과잉 · 분리</span></td></tr>
+ </tbody></table></div>
+ <p>이번 진단에서 제 작업의 문제도 드러났습니다. 오늘 추가한 셰이더 유지(<code>prepared-effect-lifetime</code>의 keep)는 이미 있던 <code>map-shader-cache</code>와 같은 일을 하는데 합치지 않았습니다. 앞으로 새 장치를 넣기 전에 같은 범주의 기존 장치부터 확인하는 것을 규칙으로 두겠습니다.</p>
+</section>
+
+<section>
+ <h2>4. 개선 여지와 Babylon 기능 대체</h2>
+ <p class="est">기대 효과는 PC 측정과 폰 기록 비율로 낸 추정치다. 적용 전후 폰 기록으로 확인해야 한다.</p>
+
+ <h3>4-1. Babylon 기능으로 바꾸면 더 잘 동작하는 것</h3>
+ <div class="grid2">
+  <div class="box card"><h3>풍경 → thin instance 묶음</h3>
+   <ul>
+    <li>지금: 배치 하나가 InstancedMesh 하나 + 부모 노드. 켜진 인스턴스마다 매 프레임 고르기·LOD·절두체 검사, 위치 버퍼 다시 올리기(폰 138회 1.24ms).</li>
+    <li>바꿀 것: 원본 × 16m 칸 × LOD 단계마다 메시 하나에 <code>thinInstanceSetBuffer('matrix', …, 16, true)</code>로 고정 버퍼. 칸 단위로 켜고 끄고 LOD를 바꾼다. 나무 반투명·그림자 페이드는 <code>thinInstanceRegisterAttribute</code>로 인스턴스 값.</li>
+    <li>없어지는 것: 후보 교체, LOD 유지, 칸 거르기의 개별 켜고 끄기, 부모 노드 1,300여 개, 프레임마다 버퍼 갱신.</li>
+    <li>기대: 폰 고르기 4.3ms의 대부분과 버퍼 갱신 1.2ms → 프레임당 −2~4ms <span class="est">(추정)</span></li>
+    <li>대가: LOD 전환이 칸 단위가 된다(칸 안의 먼 것과 가까운 것이 같은 단계). 칸을 작게 하거나 LOD 거리를 칸 기준으로 다시 맞춰야 한다. 관련 모듈(<code>village-streamed-environment</code> <code>village-demand</code> <code>village-outlines</code>)을 함께 고치는 큰 작업이다.</li>
+   </ul></div>
+  <div class="box card"><h3>재질 얼리기 <code>material.freeze()</code></h3>
+   <ul>
+    <li>Babylon은 얼린 재질의 준비 확인을 건너뛰고 재질 값 다시 바인딩도 생략한다(9.31 소스에서 확인).</li>
+    <li>지금 125개 중 6개만 얼어 있다. 풍경·몬스터 본체처럼 값이 안 바뀌는 재질은 얼리고, 맞은 번쩍임·페이드처럼 값이 바뀌는 순간에만 풀거나 인스턴스 값으로 옮긴다.</li>
+    <li>기대: 그리기 제출의 JS 부분 감소, 폰 −1.5~3ms <span class="est">(추정)</span></li>
+    <li>위험: 프레임마다 값을 바꾸는 플러그인(동굴 안개, 맞은 번쩍임)이 멈춰 보일 수 있어 재질별로 확인이 필요하다.</li>
+   </ul></div>
+  <div class="box card"><h3>툰 재질을 가벼운 바탕으로</h3>
+   <ul>
+    <li>지금: 빛을 끈 PBRMaterial + 기본 부가 기능 6종 + 우리 플러그인. PBR은 Babylon에서 셰이더가 가장 크다.</li>
+    <li>바꿀 것: <code>StandardMaterial</code>(빛 끔, 자체 발광 텍스처)에 지금의 <code>MaterialPluginBase</code> 플러그인을 그대로 옮기거나, 전용 <code>ShaderMaterial</code> 하나로 통일한다. 종마다 재질 설정을 맞추면 여러 종이 프로그램 하나를 같이 쓴다.</li>
+    <li>기대: 종끼리 프로그램을 같이 쓰면 플레이 중 셰이더 생성 횟수가 종 수만큼 준다. 생성 한 번의 무게 차이는 아직 모른다: PC에서 PBR 프로그램은 7~8ms, 기본 재질 프로그램도 4~12ms가 걸렸다 <span class="est">(바탕 재질을 바꾸는 이득은 재 봐야 한다)</span></li>
+    <li>위험: 그림이 달라질 수 있다. 바꾸기 전후 같은 장면을 화소 비교해야 한다.</li>
+   </ul></div>
+  <div class="box card"><h3>먼 몬스터는 VAT</h3>
+   <ul>
+    <li><code>VertexAnimationBaker</code> + <code>BakedVertexAnimationManager</code>: 종마다 동작을 텍스처 하나로 굽고 GPU가 재생한다. CLAUDE.md의 "많은 생물은 VAT" 규칙과 같다.</li>
+    <li>가까운 몬스터·싸우는 몬스터만 지금 골격을 쓰고, 먼 것은 VAT로 바꾼다. 먼 몬스터의 CPU 샘플링·골격 준비·뼈 텍스처 올리기가 없어진다.</li>
+    <li>기대: 몬스터 쪽 −1~2ms <span class="est">(추정)</span></li>
+    <li>대가: VAT는 동작 사이 섞기가 없다. 먼 거리에서만 쓰면 눈에 띄기 어렵지만 비교 화면으로 확인해야 한다. 외곽선 껍질도 같은 VAT를 써야 한다.</li>
+   </ul></div>
+  <div class="box card"><h3>몬스터 복제 가볍게</h3>
+   <ul>
+    <li>자체 샘플러를 쓰는 늑대류는 복제 때 AnimationGroup을 만들 필요가 없다. 키 표와 보간 위치표를 종 단위로 공유하고 개체는 시간·혼합 상태만 갖게 한다(평원 AnimationGroup 460 → 30 안팎).</li>
+    <li>기대: 복제·동작 준비 시간(폰 최대 16ms·57ms)과 메모리 감소 <span class="est">(추정)</span></li>
+   </ul></div>
+  <div class="box card"><h3>길게 볼 것: WebGPU + 스냅샷 렌더링</h3>
+   <ul>
+    <li>Babylon 9의 <code>WebGPUEngine</code>은 그리기 명령을 묶어 두고 다시 쓰는 스냅샷 렌더링(<code>snapshotRenderingMode</code>)을 지원한다. 폰에서 막히는 그리기 제출 JS를 크게 줄이는 방법이다. Android Chrome은 WebGPU를 지원하지만, S23에서 직접 확인하지는 않았다.</li>
+    <li>대가: 우리 GLSL 셰이더·플러그인·KTX2 경로를 모두 다시 검증해야 하는 전환이다. 위 작업 뒤에 따로 검토한다.</li>
+   </ul></div>
+ </div>
+
+ <h3>4-2. 우리 코드에서 합치거나 덜어낼 것</h3>
+ <div class="scroll"><table>
+ <thead><tr><th>대상</th><th>할 일</th><th>이유</th></tr></thead>
+ <tbody>
+ <tr><td>셰이더 보관 2종</td><td>하나의 보관소로 합치고 상한을 하나로</td><td>같은 방식의 중복. 앞으로 셰이더 문제를 볼 곳이 한 군데가 된다</td></tr>
+ <tr><td>작업 예산 9종</td><td>준비 작업을 한 대기열로 모으고, 나눌 수 없는 큰 호출(셰이더·동작 준비)은 로딩 그림 뒤로 보낸다</td><td>지금 예산은 작은 일만 나누고 큰 일은 못 막는다</td></tr>
+ <tr><td>그릴 대상 장치 12종</td><td>thin instance 전환과 함께 칸 단위 판단 하나 + Babylon 절두체로 줄인다. GPU 가림 쿼리는 효과를 재서 남길지 정한다</td><td>객체를 묶으면 개별 거르기가 필요 없다</td></tr>
+ <tr><td>애니메이션 재생기 5종</td><td>자체 샘플러 하나(종 단위 공유 표, 상수 채널 처리 포함)로 합치고, 주인공처럼 섞기가 많은 경우만 AnimationGroup</td><td>같은 일을 세 번 구현했다</td></tr>
+ <tr><td>프레임 가드 + 품질 복구</td><td>하나의 품질 단계표로 합친다(기기 등급별 시작값 + 못 지킬 때 낮출 순서)</td><td>같은 대상을 반대로 조절한다</td></tr>
+ <tr><td>진단</td><td>가벼운 상시 계수(초당 합계)와 무거운 측정(엔진 감싸기·장면 계측)을 나누고, 폰 기록은 가벼운 쪽만 기본으로</td><td>기록 수치에 측정 부하가 섞인다</td></tr>
+ <tr><td>꺼진 채 남은 것</td><td>분할 올리기·원경 단순화·내부선의 기본 경로 비용 확인 후 정리</td><td>코드 경로와 준비 작업이 남는다</td></tr>
+ </tbody></table></div>
+
+ <h3>4-3. 이미 잘 쓰고 있는 Babylon 기능</h3>
+ <p>KTX2(UASTC), Meshopt, 뼈 텍스처, 병렬 셰이더 컴파일, <code>skipPointerMovePicking</code>, 복제·재질 메시 맵(<code>useClonedMeshMap</code>, <code>useMaterialMeshMap</code>), 행렬 동결(1,447개), <code>instantiateModelsToScene</code>. <code>scene.performancePriority</code>는 중간 단계가 화면 지우기 생략 정도라 이득이 작고, <code>freezeActiveMeshes</code>·옥트리는 카메라가 계속 움직이고 스트리밍하는 지금 구조에 맞지 않는다.</p>
+</section>
+
+<section>
+ <h2>5. 권하는 순서</h2>
+ <div class="steps">
+  <div class="step"><b>1단계 · 위험 낮음</b> — 재질 얼리기(값이 바뀌는 재질만 예외), 셰이더 보관 통합, 진단 측정 부하 분리. 화면은 그대로여야 하므로 전후 화소 비교로 확인하고 폰 기록 한 번.</div>
+  <div class="step"><b>2단계 · 가장 큰 작업</b> — 풍경을 thin instance 묶음으로 전환하고 그릴 대상 장치를 정리. 평원·마을 전후 화소 비교, 폰에서 고르기·그리기 제출 시간 비교.</div>
+  <div class="step"><b>3단계 · 끊김</b> — 몬스터 종 단위 공유(복제 가볍게), 가벼운 툰 재질로 통일, 처음 만드는 셰이더와 동작 준비를 로딩 그림 뒤로. 폰 기록의 플레이 중 셰이더 생성 횟수로 확인.</div>
+  <div class="step"><b>4단계 · 평균 프레임 마무리</b> — 먼 몬스터 VAT, 애니메이션 재생기 통합, 프레임 가드와 품질 복구 통합. 먼 몬스터는 비교 화면을 먼저 보여 드린다.</div>
+ </div>
+ <p>각 단계가 끝날 때 CLAUDE.md의 "적용된 최적화 대장"에서 필요 없어진 장치를 지우고, 새 장치를 넣을 때는 같은 범주 표를 먼저 본다.</p>
+</section>
+
+<section>
+ <h2>6. 확인하지 못한 것</h2>
+ <div class="box"><ul>
+  <li>기대 효과 수치는 모두 추정이다. 폰에서 적용 전후를 재야 한다.</li>
+  <li>재질을 얼렸을 때와 툰 재질을 바꿨을 때 그림이 같은지는 아직 화소 비교하지 않았다.</li>
+  <li>폰 기록에 섞인 측정 부하의 크기.</li>
+  <li>폰 CPU가 2~3분 뒤 1.7배 느려지는 원인(발열·절전·충전 상태). 기록으로 가릴 수 없다.</li>
+  <li>GPU 가림 쿼리(<code>village-occlusion</code>)와 칸 거르기가 실제로 줄이는 양.</li>
+  <li>평원 도착 직후 주인공 애니메이션 200ms 한 프레임의 원인.</li>
+ </ul></div>
+</section>
+
+</main>
+</body>
+</html>
