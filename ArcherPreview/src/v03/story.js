@@ -277,7 +277,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // (measured 2026-11-20). Prepared again here, behind the prologue or cover.
  function warmLoot(){try{const job=api.world?.goldLootView?.prepare?.();job?.catch?.(()=>{});}catch{/* built on first use instead */}}
  let wagonHorse=null,wagonModel=null,hiddenWagon=null,driverMember=null;
- function clearCast(){clearCover();wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;hiddenWagon=null;wagonRig.dispose();endLift();resetDriver();stopRoute();clearBubble();thanks.done=false;driverMember=null;for(const member of cast)member.visual.dispose();cast.length=0;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
+ let wagonMap=null,wagonScene=null;
+ function clearWagon(){
+  wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;
+  wagonMap=null;wagonScene=null;hiddenWagon=null;wagonRig.dispose();
+ }
+ function clearCast(keepWagon=false){clearCover();if(!keepWagon)clearWagon();endLift();resetDriver();stopRoute();clearBubble();thanks.done=false;driverMember=null;for(const member of cast)member.visual.dispose();cast.length=0;castMap=null;castSettled=null;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
  function placeProps(id){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   // The wolf's hiding place: a bush clump on open ground with a clear run to
@@ -289,10 +294,24 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(hide)placeCover(hide);
   // The driver's wagon has its horse in the shafts.
   const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
-  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){wagonModel?.dispose();wagonModel=createWagonModel({scene,wagon,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});wagonHorse?.dispose();wagonHorse=createWagonHorse({scene,wagon,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0});}
+  if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){
+   if(wagonMap!==id||wagonScene!==scene)clearWagon();
+   wagonMap=id;wagonScene=scene;
+   const options={scene,wagon,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0};
+   if(!wagonModel){
+    const model=wagonModel=createWagonModel(options);
+    void model.ready.then(root=>{if(!root&&wagonModel===model){model.dispose();wagonModel=null;}});
+   }
+   if(!wagonHorse){
+    const horse=wagonHorse=createWagonHorse(options);
+    void horse.ready.then(root=>{if(!root&&wagonHorse===horse){horse.dispose();wagonHorse=null;}});
+   }
+  }
  }
  function buildCast(id){
-  clearCast();placeProps(id);
+  // The prologue may have imported both GLBs already, or still be importing
+  // them on a skip. Transfer ownership for this map visit in either case.
+  clearCast(wagonMap===id&&wagonScene===api.world?.scene);placeProps(id);
   const world=api.world,scene=world.scene;if(!scene||scene.isDisposed)return;
   for(const npc of content.NPCS){
    if(npc.map!==id)continue;

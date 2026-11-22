@@ -2,7 +2,7 @@
 // It owns no engine, scene, frame loop or timer loop: main.js calls update(dt)
 // from the existing game frame, and every stage change goes through `api`.
 import {createTitleScreen} from './title-screen.js';
-import {createOpening,warmPrologueArt} from './opening.js';
+import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
@@ -10,7 +10,7 @@ import {createSlowFx,mountSlowFxSettings} from './slow-fx.js';
 import {createLoadingLore} from './loading-lore.js';
 import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
-import {createOrientationGate} from './orientation-gate.js';
+import {createOrientationGate,isIos} from './orientation-gate.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createCombatTarget} from './combat-target.js';
 import {createCapeSpring} from './cape-spring.js';
@@ -46,8 +46,10 @@ export function setupV03(api){
  const {root,save,battle,input,actions}=api,doc=root.ownerDocument,view=doc.defaultView,html=doc.documentElement;
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
  const pilot=createAttractPilot({random:api.random});
- const opening=createOpening({doc,wait});
- try{warmPrologueArt(view);}catch{}
+ const appleTouch=isIos(view);
+ if(appleTouch)html.dataset.v03Ios='1';
+ const trail=createRunTrail({storage:(()=>{try{return view?.localStorage??null;}catch{return null;}})()});
+ const opening=createOpening({doc,wait,flat:appleTouch,onCut:cut=>trail.mark('opening:'+cut)});
  // 0.3's layers (dialogue, prompts, quest, tips, title) live on <body>, outside
  // #app: no right-click menu or text selection there either (inputs excepted).
  const selection=setupGameSelection(doc.body);
@@ -95,10 +97,6 @@ export function setupV03(api){
  // theme with its demo fight silent, the prologue the quiet forest theme
  // (swapped 2026-11-19, user choice); play returns to the map's own music.
  const SCREEN_SCORE=Object.freeze({boot:'elena_saint',title:'elena_saint',resume:'elena_saint',opening:'forest'});
- // Prologue scores start downloading during the logo too (cached afterwards).
- for(const key of new Set([SCREEN_SCORE.title,SCREEN_SCORE.opening]))try{void Promise.resolve(api.prefetchScore?.(key)).catch(()=>{});}catch{}
- // Where this run is, for the next run to read if the page is killed (run-trail.js).
- const trail=createRunTrail({storage:(()=>{try{return view?.localStorage??null;}catch{return null;}})()});
  const screen=value=>{state.screen=value;trail.mark(value);html.dataset.v03Screen=value;if(value!=='title')delete html.dataset.v03Veil;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
@@ -188,6 +186,20 @@ export function setupV03(api){
  // they are not, the stage stays covered for up to five seconds.
  async function sceneUp(){for(let left=5000;left>0&&!state.disposed&&story.scenePending&&!story.sceneActive;left-=50)await wait(50);}
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
+ async function stageAmbush(dream){
+  state.ambush=true;
+  trail.mark('opening:ambush-load');
+  const wolf=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(error=>{console.warn('[MoonForest 0.3] ambush unavailable',error);return false;});
+  const transition=Promise.resolve(dream).then(()=>Promise.race([wolf,wait(6000).then(()=>null)]));
+  // Import the horse and wagon after the wolf on Apple devices. Even a
+  // stalled summon may only hold a skipped dream for the usual six seconds.
+  if(appleTouch)await Promise.race([wolf,transition]);
+  if(state.screen!=='opening'||state.disposed)return false;
+  trail.mark('opening:wagon-load');story.prepare(gameState().mapId);
+  const ready=await transition;
+  if(ready===false)state.ambush=false;
+  return state.screen==='opening'&&!state.disposed;
+ }
  async function beginNewGame(){
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
@@ -208,14 +220,8 @@ export function setupV03(api){
    const moved=await travelling;
    if(!moved||gameState().mapId!==OPENING_STAGE.map){reloadInto(save.slot,'new',null);return;}
   }
-  api.resetStage(OPENING_STAGE);title.hide();story.prepare(gameState().mapId);
-  // Prepare the ambush behind the black stage; the simulation stays frozen
-  // (blocksGame) until the dream ends, so nothing can attack early.
-  state.ambush=true;
-  const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(error=>{console.warn('[MoonForest 0.3] ambush unavailable',error);return false;});
-  await dream;
-  const ready=await Promise.race([ambush,wait(6000).then(()=>null)]);
-  if(ready===false)state.ambush=false;
+  api.resetStage(OPENING_STAGE);title.hide();
+  if(!await stageAmbush(dream))return;
   save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
   await enterPlay();state.busy=false;await sceneUp();
   await opening.release();
@@ -381,7 +387,10 @@ export function setupV03(api){
   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();watchDownload();
   // The prologue score is decoded once the download and world loading are over
   // (as before the title became the download screen), not on top of them.
-  afterLoading(()=>{prepareWorld();try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}});
+  afterLoading(()=>{
+   if(appleTouch||state.disposed||state.screen!=='title')return;
+   prepareWorld();try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}
+  });
  }
  // The loading card's progress (#loading-progress width, #loading-bytes
  // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
@@ -432,11 +441,14 @@ export function setupV03(api){
   try{const policy=view?.navigator?.getAutoplayPolicy?.('audiocontext');if(policy)return policy==='allowed';}catch{}
   try{const Ctor=view?.AudioContext??view?.webkitAudioContext;if(!Ctor)return true;const probe=new Ctor();const running=probe.state==='running';probe.close?.().catch?.(()=>{});return running;}catch{return false;}
  }
+ let cancelTap=null;
  function tapToBegin(){
   return new Promise(resolve=>{
    const hint=doc.createElement('button');hint.type='button';hint.className='v03-tap-begin';hint.innerHTML='';const lead=doc.createElement('span');lead.className='v03-tap-lead';lead.textContent=t('opening.tapLead');const act=doc.createElement('span');act.className='v03-tap-act';act.textContent=t('opening.tapToBegin');hint.append(lead,act);hint.setAttribute('aria-label',t('opening.tapToBegin'));(doc.body??doc.documentElement).append(hint);
    const kinds=['pointerdown','keydown','touchend'];
-   const go=event=>{if(event.type==='keydown'&&event.repeat)return;for(const kind of kinds)view.removeEventListener(kind,go,true);hint.classList.add('is-gone');setTimeout(()=>hint.remove(),400);resolve();};
+   const finish=()=>{for(const kind of kinds)view.removeEventListener(kind,go,true);cancelTap=null;hint.remove();resolve();};
+   const go=event=>{if(event.type==='keydown'&&event.repeat)return;api.unlockAudio?.();finish();};
+   cancelTap=finish;
    for(const kind of kinds)view.addEventListener(kind,go,{capture:true});
   });
  }
@@ -457,11 +469,12 @@ export function setupV03(api){
   // A reloaded page has had no tap yet: browsers keep its sound off (no music,
   // no typing blips) until one. Unless the browser already allows audio, the
   // dream waits on its cover for one tap (2026-11-19, user: prologue silent).
-  void langReady.then(async()=>{
-   if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;
+  // The first ready frame joins this promise even if the audio tap is pending.
+  state.dream=langReady.then(async()=>{
+   if(state.disposed||state.failed||state.screen!=='opening')return;
    if(audioAllowed())api.unlockAudio?.();else await tapToBegin();
-   if(state.disposed||state.failed||state.screen!=='opening'||state.dream)return;
-   state.dream=opening.play();
+   if(state.disposed||state.failed||state.screen!=='opening')return;
+   return opening.play();
   });
  }
  if(save.intent){
@@ -479,7 +492,7 @@ export function setupV03(api){
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
   if(state.failed||state.disposed)return;
-  state.failed=true;endEarlyLine();stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
+  state.failed=true;cancelTap?.();endEarlyLine();stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
  }
  const loadingCard=doc.getElementById('loading'),Observer=view?.MutationObserver;
  const loadingWatch=loadingCard&&Observer?new Observer(()=>{if(loadingCard.classList.contains('error'))fail();}):null;
@@ -557,15 +570,15 @@ export function setupV03(api){
     // The opening is on the plains road; a document opened on another map goes there first.
     if(OPENING_STAGE.map&&s.mapId!==OPENING_STAGE.map&&!state.openingTravel){state.openingTravel=true;void Promise.resolve(api.travel?.('warrior-plains')).catch(report);return;}
     if(s.mapId!==OPENING_STAGE.map)return;
-    state.busy=true;api.resetStage(OPENING_STAGE);story.prepare(s.mapId);
+    state.busy=true;api.resetStage(OPENING_STAGE);
     void (async()=>{
-     save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.ambush=true;
-     const ambush=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(()=>false);
-     await (state.dream??opening.play());state.dream=null;const ok=await Promise.race([ambush,wait(6000).then(()=>null)]);if(ok===false)state.ambush=false;
+     save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));
+     if(!await stageAmbush(state.dream))return;
+     state.dream=null;
      save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await sceneUp();await opening.release();
     })().catch(report);
    }else if(state.screen==='resume'&&s.ready&&state.langReady){
-    prepareWorld();
+    if(!appleTouch)prepareWorld();
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
@@ -590,6 +603,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;},
+  dispose(){if(state.disposed)return;state.disposed=true;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

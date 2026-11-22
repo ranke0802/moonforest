@@ -98,7 +98,7 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-opening-plane{position:absolute;inset:0;opacity:0;transition:opacity 1.6s ease;will-change:opacity,transform}
 .v03-opening-plane.is-in{opacity:1}
 .v03-opening-art,.v03-opening-haze{position:absolute;inset:-6%;background:center/cover no-repeat}
-.v03-opening-art{filter:brightness(.52) saturate(.86) contrast(1.04)}
+.v03-opening-art{width:112%;height:112%;max-width:none;object-fit:cover;filter:brightness(.52) saturate(.86) contrast(1.04)}
 .v03-opening-haze{filter:blur(14px) brightness(.62);mix-blend-mode:screen;opacity:.42}
 .v03-opening-plane.is-in{animation:v03-drift-in var(--hold,6s) ease-out both}
 .v03-opening-plane.is-in[data-drift="in-up"]{animation-name:v03-drift-up}
@@ -433,6 +433,25 @@ html[data-edition="moonforest-0.3"] #loading::after{content:"";position:fixed;le
 @keyframes v03-lid-high{0%{transform:translateY(0)}30%{transform:translateY(-38%)}46%{transform:translateY(-14%)}100%{transform:translateY(-104%)}}
 @keyframes v03-lid-low{0%{transform:translateY(0)}30%{transform:translateY(38%)}46%{transform:translateY(14%)}100%{transform:translateY(104%)}}
 @media (prefers-reduced-motion:reduce){.v03-opening-plane.is-in[data-drift="reveal"],.v03-opening-plane.is-in[data-drift="fork"]{animation:none;opacity:1}.v03-opening[data-tone] .v03-opening-haze{animation:none}}
+
+/* On Apple touch devices zoom the source bitmap itself. Backdrop blur, masking
+   and filtering an enlarged group otherwise need screen-sized intermediates
+   while the map is resident. The veil, lights, captions and flash stay live. */
+html[data-v03-ios] .v03-opening-plane{will-change:auto}
+html[data-v03-ios] .v03-opening .v03-opening-art{filter:none;opacity:.72}
+html[data-v03-ios] .v03-opening[data-tone="cosmic"] .v03-opening-art{opacity:.80}
+html[data-v03-ios] .v03-opening[data-tone="wake"] .v03-opening-art{opacity:.88}
+html[data-v03-ios] .v03-opening-rim,html[data-v03-ios] .v03-opening-focus{-webkit-backdrop-filter:none;backdrop-filter:none;-webkit-mask-image:none;mask-image:none}
+html[data-v03-ios] .v03-opening-glow{mix-blend-mode:normal}
+html[data-v03-ios] .v03-opening-plane.is-in:is([data-drift="reveal"],[data-drift="fork"]){animation:none}
+@media (prefers-reduced-motion:no-preference){
+ html[data-v03-ios] .v03-opening-plane.is-in[data-drift="reveal"] img{animation:v03-apple-reveal var(--hold,8.6s) cubic-bezier(.45,0,.25,1) both}
+ html[data-v03-ios] .v03-opening-plane.is-in[data-drift="fork"] img{animation:v03-apple-fork .95s cubic-bezier(.6,0,.9,.4) both}
+}
+@keyframes v03-apple-reveal{0%{transform:scale(2.3) translate(23%,-26%)}22%{transform:scale(2.2) translate(22%,-25%)}100%{transform:scale(1.04) translate(0,9%)}}
+@keyframes v03-apple-fork{from{transform:scale(1.15)}to{transform:scale(2.9) translate(3%,-4%)}}
+html[data-v03-ios][data-edition="moonforest-0.3"] #loading::after{inset:0;height:auto;animation:none;will-change:auto}
+html[data-v03-ios][data-v03-screen="opening"] #loading:not(.error)::after,html[data-v03-ios][data-v03-veil] #loading:not(.error)::after{content:none}
 
 /* Typewriter text (2026-11-19): the untyped rest keeps its place invisibly so wraps never jump. */
 .v03-type-rest{visibility:hidden}

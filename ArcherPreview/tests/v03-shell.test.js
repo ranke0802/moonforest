@@ -104,8 +104,9 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
 });
 
-function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null,iphone=false}={}){
  const {document,window,root}=dom(),log=[];
+ if(iphone)Object.defineProperty(document,'defaultView',{value:new Proxy(window,{get(target,key){return key==='navigator'?{userAgent:'iPhone',maxTouchPoints:5}:target[key];}})});
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
  const save=createSaveSession({local,session,edition:E,now:()=>1000});
  const player={position:{x:0,z:0}},controller={captured:false,groggy:false,dead:false};
@@ -122,15 +123,70 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
   input:{setSuspended:v=>log.push('suspend:'+v)},actions:{attack:()=>log.push('attack'),dodge:()=>log.push('dodge'),guard:()=>log.push('guard'),move:()=>{}},
   toast:m=>log.push('toast:'+m),creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},getPlayer:()=>player,getController:()=>controller,getState:()=>state,
   resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:travel?id=>travel(id,state,log):async id=>{log.push('travel:'+id);state.character=id;return true;},
-  startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
+  prepareWorld:()=>log.push('prepareWorld'),prefetchScore:key=>log.push('prefetch:'+key),startWorld:()=>log.push('startWorld'),exit:()=>log.push('exit'),wake:()=>{}};
  if(inPlace)api.restartProgress=()=>{log.push('restartProgress');return true;};
  if(stopWorld)api.stopWorld=()=>log.push('stopWorld');
  if(reloadProgress)api.reloadProgress=()=>{log.push('reloadProgress');return true;};
  const shell=setupV03(api);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
- return {document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
+ return {api,document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
   reveal:async()=>{await settle();shell.update(.016);await settle();for(let i=0;i<90;i++)shell.update(.016);await settle();}};
 }
+
+test('iPhone starts the dream without priming the roaming population or decoding extra scores',async()=>{
+ const h=harness({iphone:true});
+ h.finishSplash();await h.reveal();
+ assert.equal(h.log.includes('prepareWorld'),false);
+ assert.deepEqual(h.log.filter(row=>row.startsWith('prefetch:')),[]);
+ assert.equal(h.document.querySelector('.v03-opening-haze'),null);
+ let releaseWolf;
+ const pending=new Promise(r=>{releaseWolf=r;});
+ const summon=h.battle.summon;
+ h.battle.summon=async(...args)=>{await pending;return summon(...args);};
+ // Keep the wolf pending through the ordinary new-game entry.
+ const hold=h.shell.story.prepare.bind(h.shell.story);let preparations=0;
+ h.shell.story.prepare=id=>{preparations++;return hold(id);};
+ h.click('[data-action="new"]');
+ await Promise.resolve();await Promise.resolve();await Promise.resolve();
+ assert.equal(h.shell.screen,'opening');assert.equal(preparations,0);
+ releaseWolf();await settle(40);
+ assert.equal(preparations,1);assert.equal(h.shell.screen,'play');
+ assert.ok(h.log.includes(`summon:${AMBUSH.kind}:1`));
+ h.shell.dispose();
+});
+
+test('dream retains at most two pictures and removes image references on release, cancel and disposal',async()=>{
+ const {document}=dom();const cuts=[];let peak=0;
+ const urls=()=>[...document.querySelectorAll('.v03-opening-art[src]')].map(el=>el.getAttribute('src'));
+ const opening=createOpening({doc:document,flat:true,onCut:cut=>cuts.push(cut),wait:async()=>{peak=Math.max(peak,new Set(urls()).size);}});
+ for(let cycle=0;cycle<4;cycle++){
+  assert.deepEqual(urls(),[]);await opening.play();await opening.release();assert.deepEqual(urls(),[]);
+  opening.cover({art:true});assert.equal(urls().length,1);opening.cancel();
+ }
+ assert.equal(peak,2);assert.deepEqual(cuts.slice(0,7),['intro','warm','day','alarm','void','voice','wake']);
+ opening.cover({art:true});opening.dispose();assert.deepEqual(urls(),[]);
+});
+
+test('a slow opening wagon and horse survive the handoff and are released on each map visit',async t=>{
+ const {NullEngine,Scene,SceneLoader}=await import('@babylonjs/core');
+ const engine=new NullEngine(),scene=new Scene(engine);const h=harness();
+ const pending=[],imports=[];
+ t.mock.method(SceneLoader,'ImportMeshAsync',(_filter,_url,file)=>new Promise(resolve=>{
+  imports.push(file);pending.push(()=>resolve({meshes:[],skeletons:[],animationGroups:[],transformNodes:[]}));
+ }));
+ const story=h.shell.story;h.api.world.scene=scene;h.api.world.navigation.obstacles=[];
+ const counts=()=>[scene.meshes.length,scene.materials.length,scene.textures.length,scene.geometries.length,scene.transformNodes.length,scene.onBeforeRenderObservable.observers.length,scene.onDisposeObservable.observers.length];
+ const baseline=counts();
+ try{
+  for(let cycle=0;cycle<4;cycle++){
+   story.prepare('great-plains');story.start({fresh:false});story.update(0,h.state);
+   assert.deepEqual(imports.splice(0).sort(),['covered-wagon-shafts.glb','wagon-horse-rig.glb']);
+   for(const finish of pending.splice(0))finish();await settle();
+   assert.ok(scene.getTransformNodeByName('v03-story-wagon'));assert.ok(scene.getTransformNodeByName('v03-wagon-horse'));
+   story.stop();await new Promise(resolve=>setTimeout(resolve,5));assert.deepEqual(counts(),baseline);
+  }
+ }finally{h.shell.dispose();scene.dispose();engine.dispose();}
+});
 
 test('first run: logo → title → attract battle → new game without reload → prologue → ambush → living world',async()=>{
  const h=harness();
