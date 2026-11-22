@@ -57,3 +57,19 @@ test('actual Babylon NullEngine effect survives draw-wrapper disposal until mesh
  mesh.subMeshes[0].resetDrawCache(undefined,true);assert.equal(effect.isDisposed,false);assert.equal(effect._refCount,before);
  mesh.dispose();assert.equal(inspectPreparedEffects(engine).refs,0);assert.equal(effect._refCount,before-1);scene.dispose();engine.dispose();
 });
+
+test('kept programs outlive their owners, the newest 96 stay, and an engine-wide release forgets them untouched',()=>{
+ const f=fixture(),mesh=f.mesh(),effect=f.effect(),plain=f.effect(),a=createPreparedEffectLease();
+ a.retain(mesh,effect);a.commit({keep:true});assert.equal(effect._refCount,3,'creation + owner + kept');
+ const b=createPreparedEffectLease();b.retain(mesh,plain);b.commit();assert.equal(plain._refCount,2,'not kept unless asked');
+ mesh.onDisposeObservable.notifyObservers(mesh);
+ assert.deepEqual([effect._refCount,effect._isDisposed,plain._refCount],[2,false,1],'the map left: the kept program is still referenced');
+ const again=f.mesh(),c=createPreparedEffectLease();c.retain(again,effect);c.commit({keep:true});assert.equal(effect._refCount,3,'preparing it again adds no second kept reference');
+ assert.equal(inspectPreparedEffects(f.engine).kept,1);
+ const many=Array.from({length:96},f.effect);for(const each of many){const lease=createPreparedEffectLease(),owner=f.mesh();lease.retain(owner,each);lease.commit({keep:true});owner.onDisposeObservable.notifyObservers(owner);}
+ assert.equal(inspectPreparedEffects(f.engine).kept,96);
+ again.onDisposeObservable.notifyObservers(again);assert.equal(effect._refCount,1,'the oldest kept program was let go');
+ assert.deepEqual([many[0]._refCount,many[95]._refCount],[2,2]);
+ f.engine.onReleaseEffectsObservable.notifyObservers(f.engine);
+ assert.equal(inspectPreparedEffects(f.engine).kept,0);assert.equal(many[0]._refCount,2,'already released by the engine: not decremented again');
+});

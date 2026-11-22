@@ -6,7 +6,8 @@ import {createPreparedEffectLease} from './prepared-effect-lifetime.js';
 
 // Common actor contract, independent of species or diagnostics. Keep the old
 // export as an alias for callers while player/NPC/cutscenes use the same path.
-export async function prepareModelShaders(asset,{preparation,frame,now,shadows,timeoutMs=45000,includeInstanceVariants=true}={}){
+// keepPrograms: the programs stay after this asset is disposed, for the next one like it (prepared-effect-lifetime.js).
+export async function prepareModelShaders(asset,{preparation,frame,now,shadows,timeoutMs=45000,includeInstanceVariants=true,keepPrograms=true}={}){
  const scene=asset.meshes[0]?.getScene?.(),job=preparation??createBossPreparation({frame,now,timeoutMs,scene,isCurrent:()=>!scene?.isDisposed&&!asset.meshes.some(mesh=>mesh.isDisposed?.())}),visibilityStates=new Map(),lease=createPreparedEffectLease();let committed=false;
  const waitReady=async(mesh,read)=>{for(;;){job.check();const result=read();job.checkpoint?.('shader:'+(mesh.name??''));if(result.ready){lease.retain(mesh,result.effect);return;}if(shaderVariantError(result.effect))throw new Error('화면 셰이더를 준비하지 못했습니다. 새로고침해 주세요.');await job.sleep(16);}};
  try{
@@ -34,7 +35,7 @@ export async function prepareModelShaders(asset,{preparation,frame,now,shadows,t
     }
    }
   }
-  job.check();lease.commit();committed=true;
+  job.check();lease.commit({keep:keepPrograms});committed=true;
  }finally{for(const [mesh,value]of visibilityStates)if(!mesh.isDisposed?.())mesh.visibility=value;if(!committed)lease.rollback();}
 }
 export const prepareBossShaders=prepareModelShaders;

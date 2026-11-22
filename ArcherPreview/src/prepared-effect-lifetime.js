@@ -3,6 +3,11 @@
 // never a scene/material/texture clone or an extra rendering pass.
 const engines=new WeakMap(),owners=new WeakMap();
 const OWNER_EFFECT_LIMIT=16,ENGINE_EFFECT_LIMIT=128;
+// Programs prepared for actors stay after their owners are gone: monsters and people are disposed
+// with their map and stand there again on the next visit, and building the same program again took
+// 40-77 ms a time in play on a phone (S23 2026-11-22, 48 builds in 7 minutes). The engine keeps the
+// most recently prepared KEEP_LIMIT programs with one reference each; an older one is let go.
+const KEEP_LIMIT=96;
 const disposed=value=>value?.isDisposed===true||value?._isDisposed===true;
 
 function releasePin(pin){
@@ -24,12 +29,22 @@ function releaseOwner(owner){
   owner.meshObservable.remove(owner.meshObserver);
   owner.sceneObservable?.remove(owner.sceneObserver);
 }
+function keep(state,effect){
+  if(state.kept.delete(effect)){state.kept.set(effect,true);return;}   // prepared again: newest
+  if(disposed(effect)||!Number.isFinite(effect._refCount)||effect._refCount<=0)return;
+  effect._refCount++;state.kept.set(effect,true);
+  while(state.kept.size>KEEP_LIMIT){
+    const oldest=state.kept.keys().next().value;state.kept.delete(oldest);
+    if(!disposed(oldest))oldest.dispose();
+  }
+}
 function stateFor(engine){
   let state=engines.get(engine);
   if(state)return state;
-  state={owners:new Set(),effects:new Map(),refs:0,rejected:0,rejectedOwnerLimit:0,rejectedEngineLimit:0,rejectedInvalid:0};
+  state={owners:new Set(),effects:new Map(),kept:new Map(),refs:0,rejected:0,rejectedOwnerLimit:0,rejectedEngineLimit:0,rejectedInvalid:0};
   engines.set(engine,state);
-  const clear=()=>{for(const owner of state.owners)releaseOwner(owner);};
+  // Engine.releaseEffects has already released every program: forget the kept ones without touching them.
+  const clear=()=>{for(const owner of state.owners)releaseOwner(owner);state.kept.clear();};
   state.releaseObserver=engine.onReleaseEffectsObservable?.add(clear);
   engine.onDisposeObservable?.addOnce(()=>{clear();engine.onReleaseEffectsObservable?.remove(state.releaseObserver);engines.delete(engine);});
   return state;
@@ -79,10 +94,11 @@ export function createPreparedEffectLease(){
       if(!effectPins){effectPins=new Set();state.effects.set(effect,effectPins);}effectPins.add(pin);state.refs++;
       pending.add(pin);return true;
     },
-    commit(){
+    // keep: the prepared programs also outlive these owners (see KEEP_LIMIT).
+    commit({keep:kept=false}={}){
       if(status!=='open')return;
       status='committed';
-      for(const pin of pending){pin.pending.delete(token);if(pin.live)pin.committed=true;}
+      for(const pin of pending){pin.pending.delete(token);if(pin.live){pin.committed=true;if(kept)keep(pin.owner.state,pin.effect);}}
       pending.clear();
     },
     rollback(){
@@ -98,8 +114,8 @@ export function createPreparedEffectLease(){
 }
 
 export function inspectPreparedEffects(engine){
-  const state=engines.get(engine);if(state)prune(state);
+  const state=engines.get(engine);if(state){prune(state);for(const effect of state.kept.keys())if(disposed(effect))state.kept.delete(effect);}
   return {liveOwners:state?.owners.size??0,liveEffects:state?.effects.size??0,refs:state?.refs??0,rejected:state?.rejected??0,
     rejectedOwnerLimit:state?.rejectedOwnerLimit??0,rejectedEngineLimit:state?.rejectedEngineLimit??0,rejectedInvalid:state?.rejectedInvalid??0,
-    ownerLimit:OWNER_EFFECT_LIMIT,engineEffectLimit:ENGINE_EFFECT_LIMIT,scope:'additional prepared-program references; not GPU bytes'};
+    kept:state?.kept.size??0,keepLimit:KEEP_LIMIT,ownerLimit:OWNER_EFFECT_LIMIT,engineEffectLimit:ENGINE_EFFECT_LIMIT,scope:'additional prepared-program references; not GPU bytes'};
 }

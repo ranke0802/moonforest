@@ -53,3 +53,23 @@ for(const id of ['alpha-wolf','guardian-bear'])test('shipped '+id+' keeps its na
  for(let i=0;i<meshes.length;i++){assert.equal(meshes[i].geometry,before[i].geometry);assert.equal(meshes[i].skeleton,before[i].skeleton);assert.deepEqual(Array.from(meshes[i].getIndices()),before[i].indices);assert.deepEqual(Array.from(meshes[i].getVerticesData(VertexBuffer.MatricesWeightsKind)??[]),before[i].weights);}if(id==='alpha-wolf')assert.ok(meshes.some(mesh=>mesh.morphTargetManager?.numTargets),'wolf sample exercises an actual morph manager');
  t.diagnostic(JSON.stringify({asset:id,meshes:meshes.length,bones:asset.skeletons.reduce((sum,s)=>sum+s.bones.length,0),morphTargets:meshes.reduce((sum,m)=>sum+(m.morphTargetManager?.numTargets??0),0),preparedPrograms:prepared.size,postPrepareNewPrograms:programs(f.engine).size-prepared.size}));
 });
+
+test('programs prepared for one actor are still there for the next one after it is disposed',async t=>{
+ const world=keepPrograms=>{
+  const f=fixture(t),model=MeshBuilder.CreateBox('species-model',{},f.scene),paint=new PBRMaterial('species-paint',f.scene);paint.unlit=true;model.material=paint;model.setEnabled(false);
+  const spawn=name=>{const mesh=model.clone(name);mesh.setEnabled(true);const own=paint.clone(name+'-paint');mesh.material=own;return {mesh,own};};
+  const ready=actor=>prepareModelShaders({meshes:[actor.mesh]},{preparation:createBossPreparation({incremental:false,timeoutMs:4000}),keepPrograms});
+  const gone=actor=>{actor.mesh.dispose();actor.own.dispose(true);};
+  const refs=()=>[...programs(f.engine)].map(effect=>effect._refCount).sort((a,b)=>a-b);
+  return {f,spawn,ready,gone,refs};
+ };
+ const kept=world(true),plain=world(false),a=kept.spawn('monster-1'),b=plain.spawn('monster-1');
+ await kept.ready(a);await plain.ready(b);const prepared=programs(kept.f.engine);assert.ok(prepared.size>=2);
+ assert.equal(inspectPreparedEffects(kept.f.engine).kept,prepared.size);assert.equal(inspectPreparedEffects(plain.f.engine).kept,0);
+ kept.gone(a);plain.gone(b);
+ assert.deepEqual(kept.refs(),plain.refs().map(count=>count+1),'one more reference each, held past the actor that prepared them');
+ assert.deepEqual(programs(kept.f.engine),prepared);
+ const next=kept.spawn('monster-2');await kept.ready(next);
+ assert.deepEqual(programs(kept.f.engine),prepared,'the next monster compiles nothing new');
+ assert.equal(inspectPreparedEffects(kept.f.engine).kept,prepared.size,'and adds no second kept reference');
+});

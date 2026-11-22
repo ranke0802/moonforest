@@ -1734,7 +1734,7 @@ try {
     bossHealthBars.decorate=(element,foe)=>world.v03?.decorateFoeBar?.(element,foe);
     // Development-only handle for QA from the console; never present in a build.
     // The same handle on a build when the address carries ?qa (inspection only).
-    if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get dayCycle(){return world.dayCycle;},get meadow(){return world.meadow;},get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;}};}
+    if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get dayCycle(){return world.dayCycle;},get meadow(){return world.meadow;},get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;},get preparedShaders(){return inspectPreparedEffects(engine);}};}
     if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());
   }
   loadCharacter();
