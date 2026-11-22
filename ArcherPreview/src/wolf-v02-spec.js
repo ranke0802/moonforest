@@ -37,7 +37,11 @@ export const WOLF_V02_ACTIONS=Object.freeze([
 ].map(a=>Object.freeze({...a,contactStart:a.contactStart??(a.sourceClip===WOLF_V02_SNAP?.29:a.sourceClip===WOLF_V02_SWIPE?.32:a.capture?a.impact:a.impact-.03),contactEnd:a.contactEnd??(a.sourceClip===WOLF_V02_SNAP?.40:a.sourceClip===WOLF_V02_SWIPE?26/60:a.impact+.12),contactParts:a.contactParts?Object.freeze(a.contactParts):undefined,whip:Object.freeze({source:Object.freeze(a.whip.source),seconds:Object.freeze(a.whip.seconds)})})));
 export const WOLF_V02_BY_ID=Object.freeze(Object.fromEntries(WOLF_V02_ACTIONS.map(a=>[a.id,a])));
 export const WOLF_V02_CLOSE_RAM_ACTION=WOLF_V02_BY_ID.lunge;
-export const WOLF_V02_TACTICS=Object.freeze({recentDamageFraction:.15,recentDamageSeconds:3,healthyHpFraction:.5,retreatCooldown:6,retreatDistance:4.8,maximumRetreatRange:8,evadeCooldown:2,evadePlaybackRate:2.5});
+export const WOLF_V02_TACTICS=Object.freeze({recentDamageFraction:.15,recentDamageSeconds:3,healthyHpFraction:.5,retreatCooldown:6,retreatDistance:4.8,maximumRetreatRange:8,evadeCooldown:2,evadePlaybackRate:2.5,
+ // Retaliation (user, 2026-11-22: a wolf that kept being hit never struck back - every hit restarted its
+ // flinch and the 2-3 s circle after it). Hit this many times within the window without having attacked,
+ // it goes straight for a counter and is not flinched out of it; a heavy blow still knocks it down.
+ retaliateHits:3,retaliateSeconds:5,retaliateGiveUp:3});
 export const WOLF_V02_RAM_CHASE=Object.freeze({source:Object.freeze([2.70-closeOffset,3.05-closeOffset,3.64-closeOffset,3.65-closeOffset,3.70-closeOffset,4.19-closeOffset,4.20-closeOffset,4.25-closeOffset,200/60]),seconds:Object.freeze([0,.24,.46,.48,.53,1.01,1.03,1.08,2.03]),earliestProne:.82,latestProne:1.10});
 const aliases={[WOLF_CLIPS.lunge]:'lunge',[WOLF_CLIPS.pin]:'pin'};
 const deck1=['quick-bite','paw-swipe'],deck2=['chain-bite','paw-swipe','quick-bite','paw-swipe'];
@@ -80,6 +84,7 @@ export class WolfV02Brain extends WolfBrain{
  constructor(durations,balance=WOLF_BALANCE,random=Math.random,profile={}){
   super(durations,balance);this.actions=profile.actions??WOLF_V02_BY_ID;this.gait=profile.gait??WOLF_V02_GAIT;this.tactics=profile.tactics??WOLF_V02_TACTICS;this.modelScale=profile.modelScale??WOLF_SCALE;this.spatialScale=profile.spatialScale??1;this.random=random;this.behavior='rest';this.phase=1;this.planIndex=0;this.flankSide=1;this.lastOutcome=null;this.recoveryRemaining=0;this.observation=0;this.positionElapsed=0;this.boutStrikes=0;this.lastDistance=Infinity;this.circleTarget=0;this.circleElapsed=0;this.boutObserved=false;this.retreatCooldown=0;this.retreatPending=null;
   this.combatClock=0;this.recentDamageTimes=new Float64Array(32);this.recentDamageValues=new Float64Array(32);this.recentDamageCursor=0;this.recentDamage=0;this.tacticalCooldown=0;this.evadeCooldown=0;
+  this.pressure=0;this.pressureClock=-Infinity;this.retaliatePending=false;this.retaliation=null;this.retaliationClock=0;
  }
  configureAttacks(value={}){
   const sequence=(Array.isArray(value.sequence)?value.sequence:[]).map(id=>aliases[id]??id).filter(id=>this.actions[id]).slice(0,12),custom=value.custom===true&&sequence.length>0,speed=Number(value.speed),old=this.attackSettings;
@@ -88,12 +93,13 @@ export class WolfV02Brain extends WolfBrain{
  }
  start(state,mode){
   super.start(state,mode);
-  if(mode!=='attack'){this.action=null;this.actionId=null;}
+  if(mode!=='attack'){this.action=null;this.actionId=null;if(this.retaliation==='striking')this.retaliation=null;}
  }
  startAction(id,{continuation=false,distance}={}){
   const action=this.actions[aliases[id]??id];if(!action)throw new Error('알 수 없는 늑대 공격: '+id);
   const carry=action.momentumRam&&this.state===WOLF_CLIPS.run&&this.mode==='move',gait=carry?this.time:this.gait.runSourceStart,runClock=carry?(this.gaitClock??gait-this.gait.runSourceStart):0,speed=carry?(this.approachSpeed??this.gait.runSpeed):this.gait.runSpeed;
   this.start(action.sourceClip,'attack');this.action=action;this.actionId=action.id;this.time=action.clipStart;this.actionElapsed=0;this.behavior='anticipation';this.attackCount++;this.lastOutcome=null;this.resolvedSerial=null;this.pinImpactPassed=false;
+  this.pressure=0;this.retaliatePending=false;if(this.retaliation==='closing')this.retaliation='striking';
   this.boutStrikes=continuation?this.boutStrikes+1:1;
   if(!continuation)this.boutObserved=false;
   if(action.ramPhases){this.ramAbortReason=null;this.ramRecoveryOrigin=null;this.ramAccepted=false;this.ramAcceptedClock=null;this.ramChaseClock=null;this.ramStartDistance=distance??this.lastDistance;this.time=action.clipStart;}
@@ -140,6 +146,13 @@ export class WolfV02Brain extends WolfBrain{
   if(this.lastDistance>=this.backRunTarget||!this.durations[WOLF_V02_BACK_RUN]){this.beginStalk();return;}
   this.start(WOLF_V02_BACK_RUN,'backRun');this.behavior='back-run';
  }
+ // Skips the circle: the same straight-to-position path the evade counter uses.
+ beginRetaliation(){
+  this.cancelBout();this.retaliatePending=false;this.retreatPending=null;this.tacticalRetreatPending=false;this.pressure=0;
+  const near=this.lastDistance<3.6*this.spatialScale,id=near&&this.actions['quick-bite']?'quick-bite':this.actions.lunge?'lunge':this.chooseAction(this.lastDistance);
+  this.retaliation='closing';this.retaliationClock=0;this.boutObserved=true;this.plannedId=this.stalkPlannedId=id;this.ramApproachVariant=id==='lunge'?'run-ram':null;this.ramEvaded=false;
+  this.start(WOLF_CLIPS.watch,'idle');this.behavior='position';this.positionElapsed=0;
+ }
  beginRamEvade(counter=false){
   if(counter)this.lastEvadedActionId=this.playerThreatActionId;
   this.evadeCooldown=this.tactics.evadeCooldown;this.ramEvaded=true;this.evadeCounterId=counter&&this.lastDistance<3.6*this.spatialScale?'quick-bite':'lunge';this.flankSide*=-1;
@@ -152,7 +165,23 @@ export class WolfV02Brain extends WolfBrain{
   if(this.hp<=0){this.stagger=0;const clip=options.heavy&&this.durations[WOLF_V02_AIR_REACTION]?WOLF_V02_AIR_REACTION:WOLF_V02_DEATH;if(this.durations[clip])this.start(clip,'down');this.cancelBout();this.behavior='dead';return true;}
   if(grounded)return true;
   if(options.heavy){
-   this.cancelBout();this.stagger=0;this.start(this.durations[WOLF_V02_AIR_REACTION]?WOLF_V02_AIR_REACTION:WOLF_V02_DEATH,'down');this.behavior='down';this.nonlethalDownHold=.30;this.retreatPending=null;this.retreatCooldown=8;return true;
+   this.cancelBout();this.stagger=0;this.start(this.durations[WOLF_V02_AIR_REACTION]?WOLF_V02_AIR_REACTION:WOLF_V02_DEATH,'down');this.behavior='down';this.nonlethalDownHold=.30;this.retreatPending=null;this.retreatCooldown=8;
+   this.pressure=0;this.retaliatePending=false;this.retaliation=null;return true;
+  }
+  // Only blows that flinch it count: where ordinary hits do not interrupt (0.2), nothing changes.
+  const flinch=options.stun>0||options.interruptsBoss,hits=this.tactics.retaliateHits??3;
+  if(flinch){
+   if(this.combatClock-this.pressureClock>(this.tactics.retaliateSeconds??5))this.pressure=0;
+   this.pressure++;this.pressureClock=this.combatClock;
+  }
+  // Committed to the counter: the blow still hurts, but does not turn it away.
+  if(this.retaliation){this.tacticalRetreatPending=false;return true;}
+  if(this.pressure>=hits){
+   this.tacticalRetreatPending=false;this.retreatPending=null;
+   if(this.mode==='attack'){this.retaliation='striking';this.pressure=0;return true;}   // already striking: finish it
+   this.retaliatePending=true;
+   if(this.mode!=='hit'){this.cancelBout();this.stagger=0;this.start(this.reactionClip(false),'hit');this.behavior='hit';this.reactionPlaybackRate=1.6;this.reactionRetreated=false;}
+   return true;
   }
   if(options.stun>0||options.interruptsBoss){
    this.cancelBout();this.stagger=0;this.start(this.reactionClip(options.heavy),'hit');this.behavior=options.heavy?'brace':'hit';this.reactionPlaybackRate=options.heavy?1:1.6;this.reactionRetreated=!!options.heavy;
@@ -254,8 +283,11 @@ export class WolfV02Brain extends WolfBrain{
    if(this.mode==='attack')this.start(WOLF_CLIPS.watch,'idle');
    this.behavior='observe';if(this.state===WOLF_CLIPS.watch)this.time=0;return {events,speed:0};
   }
-  if(this.tacticalRetreatPending&&this.mode!=='backRun'&&this.hp>=this.maxHp*.5){this.beginTacticalRetreat();return {events,speed:0};}
-  if(this.playerAttackThreat&&this.playerThreatActionId!==this.lastEvadedActionId&&distance<4.5*this.spatialScale&&!this.evadeCooldown&&!this.sightBlocked&&(this.mode==='backRun'||['observe','flank','position'].includes(this.behavior))){this.beginRamEvade(true);return {events,speed:0};}
+  // A counter that cannot reach its target in time is dropped; the wolf goes back to stalking.
+  if(this.retaliation==='closing'){this.retaliationClock+=dt;if(this.retaliationClock>(this.tactics.retaliateGiveUp??3)||this.mode==='backRun'){this.retaliation=null;if(this.mode!=='backRun')this.beginStalk();}}
+  if(this.retaliatePending&&this.mode!=='hit'){this.beginRetaliation();return {events,speed:0};}
+  if(this.tacticalRetreatPending&&!this.retaliation&&this.mode!=='backRun'&&this.hp>=this.maxHp*.5){this.beginTacticalRetreat();return {events,speed:0};}
+  if(this.playerAttackThreat&&!this.retaliation&&this.playerThreatActionId!==this.lastEvadedActionId&&distance<4.5*this.spatialScale&&!this.evadeCooldown&&!this.sightBlocked&&(this.mode==='backRun'||['observe','flank','position'].includes(this.behavior))){this.beginRamEvade(true);return {events,speed:0};}
   if(this.mode==='backRun'){
    if(this.backRunDone||this.backRunBlocked){this.backRunDone=this.backRunBlocked=false;this.beginStalk();return {events,speed:0};}
    const duration=this.durations[this.state]??.6,previousCycles=Math.floor(this.backRunElapsed/duration);this.backRunElapsed+=dt;this.backRunCycles=Math.floor(this.backRunElapsed/duration);this.time=this.backRunElapsed%duration;
@@ -276,7 +308,8 @@ export class WolfV02Brain extends WolfBrain{
   if(this.mode==='hit'){
    const duration=this.durations[this.state]??1;
    if(this.time>=duration){
-    if(this.retreatPending&&this.retreatCooldown<=0)this.beginRetreat();else this.beginStalk();
+    if(this.retaliatePending)this.beginRetaliation();
+    else if(this.retreatPending&&this.retreatCooldown<=0)this.beginRetreat();else this.beginStalk();
    }else this.time=Math.min(duration,this.time+dt*(this.reactionPlaybackRate??1.6));
    return {events,speed:0};
   }
@@ -369,5 +402,7 @@ export class WolfV02Brain extends WolfBrain{
   if(chosen.momentumRam)return this.updateMomentumRam(dt);
   return {events,speed:0};
  }
+ // True while it is committed to a counter: the encounter does not push it back either.
+ get unflinching(){return !!this.retaliation;}
  get label(){return this.hp<=0?'격파':this.stagger?'경직':this.behavior==='recovery'?'빈틈 · 반격 기회':this.action?.label??({flank:'측면 압박',position:'거리 조절',observe:'경계'}[this.behavior]??super.label);}
 }
