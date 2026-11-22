@@ -3,10 +3,13 @@ import {orderPoseNodes,refreshPoseMatrices} from './pose-matrices.js';
 import {WOLF_CLIPS} from './wolf-spec.js';
 // All R8 exported channels are LINEAR TRS or scalar Breath weights. Keep one
 // bounded sampler table for the actor life; no native bindings on transitions.
+// constant: every key holds the first key's value (two thirds of a wolf clip's channels: bone
+// positions and scales). Such a channel needs no key search or interpolation, only its value.
 function track(animation){
  const keys=animation.getKeys(),last=Math.max(0,keys.length-2),scalar=typeof keys[0].value==='number',quaternion=animation.targetProperty==='rotationQuaternion';let index=0;
- const out=scalar?null:keys[0].value.clone();
- return {sample(time){
+ const out=scalar?null:keys[0].value.clone(),first=keys[0].value;
+ let constant=true;for(let i=1;i<keys.length&&constant;i++)constant=scalar?keys[i].value===first:keys[i].value.equals(first);
+ return {constant,value:scalar?first:first.clone(),sample(time){
   const f=time*animation.framePerSecond;
   // Normal playback needs only neighbouring keys. A maul repeat, interrupted
   // action or seek can jump across hundreds: never restart a linear scan at0.
@@ -32,8 +35,12 @@ export class WolfAnimator{
   this.root=asset.transformNodes.find(n=>n.name==='root');if(!this.root)throw Error('늑대 루트 누락');this.rootPosition=new Vector3();this.rootRotation=Quaternion.Identity();this.transition(WOLF_CLIPS.rest,{clipTime:0,blendDuration:0});this.update(0);
  }
  transition(state,{clipTime=0,actionId=null,blendDuration=.16}={}){if(!this.clips.has(state))throw Error('늑대 동작 누락: '+state);if(state!==this.current||actionId!==this.actionId){this.current=state;this.actionId=actionId;this.blend=0;this.blendDuration=blendDuration;for(const c of this.clips.get(state)){const v=c.target[c.property];if(typeof v==='number')c.from=v;else c.from.copyFrom(v);}}this.time=clipTime;}
- update(dt){this.blend=this.blendDuration>0?Math.min(1,this.blend+Math.max(0,dt)/this.blendDuration):1;const mix=this.blend*this.blend*(3-2*this.blend);
-  for(const c of this.clips.get(this.current)){const v=c.track.sample(this.time);if(typeof v==='number')c.target[c.property]=c.from+(v-c.from)*mix;else if(c.property==='rotationQuaternion')Quaternion.SlerpToRef(c.from,v,mix,c.target[c.property]);else Vector3.LerpToRef(c.from,v,mix,c.target[c.property]);}
+ update(dt){this.blend=this.blendDuration>0?Math.min(1,this.blend+Math.max(0,dt)/this.blendDuration):1;const mix=this.blend*this.blend*(3-2*this.blend),rows=this.clips.get(this.current);
+  // Once the cross-fade is over the pose is the clip's own: write the sampled value, with no second
+  // interpolation from the previous pose, and a constant channel's value as it is. Measured 2026-11-22
+  // (PC, 19 plains monsters): this update was 0.76 ms a frame, more than half of all monster work.
+  if(mix>=1)for(let i=0;i<rows.length;i++){const c=rows[i],track=c.track,v=track.constant?track.value:track.sample(this.time);if(typeof v==='number')c.target[c.property]=v;else c.target[c.property].copyFrom(v);}
+  else for(let i=0;i<rows.length;i++){const c=rows[i],track=c.track,v=track.constant?track.value:track.sample(this.time);if(typeof v==='number')c.target[c.property]=c.from+(v-c.from)*mix;else if(c.property==='rotationQuaternion')Quaternion.SlerpToRef(c.from,v,mix,c.target[c.property]);else Vector3.LerpToRef(c.from,v,mix,c.target[c.property]);}
   this.rootPosition.copyFrom(this.root.position);this.rootRotation.copyFrom(this.root.rotationQuaternion);this.samples++;
  }
  ensurePoseCurrent(){refreshPoseMatrices(this.nodes);}
