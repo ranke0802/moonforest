@@ -192,6 +192,7 @@ NPC·등장인물
 - 장애물이 바뀌면 경로 격자는 바뀐 칸 근처만 다시 계산. 전투 중 3.7초 멈춤 → 50ms.
 - 처치 순간의 금화·길잡이 빛·퀘스트 표식 셰이더를 미리 준비. 처치 프레임 새 셰이더 3~4개 → 0개.
 - 슬로우 확대 동안 지형 세부 단계 고정(`zoom-lod-pin.js`), 무기 자세 맞춤의 넓은 탐색은 실패 뒤 0.6초 간격.
+- 로딩 중 몬스터 종 준비는 숨긴 실제 개체로 한다(`create.retain` → `prepareVisible`). 원본 재질에 `forceCompilationAsync`를 거는 방식은 실제로 그리는 변형(툰·외곽선·페이드·그림자)을 만들지 못한다. 새 배우 종도 이 경로로 준비한다.
 - 준비한 셰이더 프로그램은 주인이 사라져도 최근 96개까지 유지(`prepared-effect-lifetime.js`의 `keep`, `prepareModelShaders`의 `keepPrograms`). 맵을 다시 올 때 같은 프로그램을 또 만들지 않는다. 새 배우의 셰이더 준비는 `prepareModelShaders`를 거친다.
 - 몬스터 복제·외곽선 껍질의 경계 상자는 같은 지오메트리·같은 자세면 한 번만 계산(`posed-bounds.js`). 복제당 PC 7~11ms(폰 30~40ms)의 CPU 스키닝 제거. 새 배우 복제 경로도 `posedClone`을 쓴다.
 

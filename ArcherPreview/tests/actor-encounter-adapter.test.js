@@ -219,3 +219,29 @@ test('actual pooled encounters enter together, wait for all corpses, and respawn
  const [a,b]=f.battle.encounters;a.brain.hp=0;a.death.advance(10);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'active');b.brain.hp=0;b.death.advance(10);runtime.afterBattle(f.player);assert.equal(runtime.inspect().groups[0].state,'waiting');assert.equal(f.battle.encounters.length,0);
  runtime.beforeBattle(2,f.player);for(let i=0;i<80&&runtime.inspect().groups[0]?.state!=='active';i++)await new Promise(r=>setTimeout(r,2));assert.equal(runtime.inspect().groups[0].state,'active');assert.equal(f.battle.encounters.length,2);runtime.leaveMap();assert.equal(f.battle.encounters.length,0);
 });
+
+test('a held species compiles, behind loading, the programs its actors draw with; a later spawn compiles nothing new',async t=>{
+  const f=fixture(t),definition=getActorDefinition('hooded-goblin.standard');
+  const programs=()=>new Set(Object.keys(f.engine._compiledEffects??{}));
+  const counts=()=>[f.scene.meshes.length,f.scene.skeletons.length,f.scene.animationGroups.length];
+  const baseline=counts(),handle=f.factory.retain(definition);await handle.ready;
+  assert.deepEqual(counts(),baseline,'the warm-up actor is disposed again');
+  assert.deepEqual(f.battle.developmentPool??[],[],'and left no pooled encounter behind');
+  const warmed=programs();assert.ok(warmed.size>0,'programs were compiled while loading');
+  const actor=f.factory(definition);await actor.prepareVisible({preparation:prepare()});
+  assert.deepEqual(programs(),warmed,'the spawned actor reuses them: no compile in play');
+  await actor.dispose();handle.release();
+});
+
+test('species warm up one after another, and once per held library',async t=>{
+  const f=fixture(t),goblin=getActorDefinition('hooded-goblin.standard'),bear=Object.values(ACTOR_DEFINITIONS).find(d=>d.encounterType==='bear'&&d.category!=='npc');
+  assert.ok(bear,'a bear definition exists');
+  let active=0,overlap=false,warmed=0;
+  const proto=BossEncounter.prototype,hidden=proto.prepareHidden;
+  t.mock.method(proto,'prepareHidden',async function(...args){active++;warmed++;if(active>1)overlap=true;try{return await hidden.apply(this,args);}finally{active--;}});
+  const a=f.factory.retain(goblin),b=f.factory.retain(bear);await Promise.all([a.ready,b.ready]);
+  assert.equal(warmed,2,'both species warmed');assert.equal(overlap,false,'never two species preparing at once');
+  const before=Object.keys(f.engine._compiledEffects??{}).length,c=f.factory.retain(getActorDefinition('hooded-goblin.standard'));
+  await c.ready;assert.equal(Object.keys(f.engine._compiledEffects??{}).length,before,'a species already warm is not warmed again');assert.equal(warmed,2);
+  c.release();a.release();b.release();
+});

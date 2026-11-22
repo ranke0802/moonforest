@@ -247,19 +247,38 @@ export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.c
   // Hold a species' model library for the map (the loading screen waits on
   // it): download, decode and shader compile happen once, before play, so a
   // spawn later is only a clone. A held library survives its last actor.
+  //
+  // The compile runs one real hidden actor through the same preparation a
+  // spawn uses (painted material, outline shell, fade and shadow variants),
+  // then disposes it; prepareModelShaders keeps those programs past it
+  // (prepared-effect-lifetime.js). Until 2026-11-22 this compiled the source
+  // material of a raw clone, a program no actor ever draws with: every
+  // variant a monster really uses was compiled in play (S23: 35-48 builds a
+  // session, up to 115 ms each, the bear's body 12 times).
+  // Species warm one after another, never together (iPhone memory peaks,
+  // 48467237); their downloads and decodes still run in parallel.
+  let warmChain=Promise.resolve();
+  const warmSpecies=(definition,entry,current)=>{
+    const run=warmChain.then(async()=>{
+      if(!current())return;
+      const actor=create(definition,{});
+      try{
+        const preparation=createBossPreparation({scene,budgetMs:12,maxBlocks:64,isCurrent:current});
+        await actor.prepareVisible({preparation,isCurrent:current});
+      }finally{await actor.dispose();}
+    });
+    warmChain=run.catch(()=>{});
+    return run;
+  };
   create.retain=definition=>{
     if(disposed)throw bossPreparationCancelled();
     if(typeof definition==='string')definition=getActorDefinition(definition);
     const entry=entryFor(definition);entry.references++;let released=false;
+    const mapId=world.mapId,current=()=>!released&&!disposed&&!scene.isDisposed&&world.scene===scene&&world.mapId===mapId;
     const ready=(async()=>{
-      await entry.library.load();if(released||disposed||entry.warmed)return;entry.warmed=true;
-      let asset=null;
-      try{
-        asset=instantiateBossModel(entry.library.container);
-        const meshes=asset.meshes.filter(mesh=>mesh.material&&mesh.getTotalVertices?.()>0);
-        await Promise.all(meshes.map(mesh=>mesh.material.forceCompilationAsync?.(mesh)?.catch?.(()=>{})));
-      }catch{entry.warmed=false;}
-      finally{if(asset){for(const group of asset.animationGroups??[])group.dispose();for(const mesh of asset.meshes)if(!mesh.isDisposed())mesh.dispose(false,false);for(const node of asset.transformNodes)if(!node.isDisposed())node.dispose(false,false);for(const skeleton of asset.skeletons??[])if(!skeleton.isDisposed?.())skeleton.dispose();}}
+      await entry.library.load();if(!current()||entry.warmed)return;entry.warmed=true;
+      try{await warmSpecies(definition,entry,current);}
+      catch{entry.warmed=false;}
     })();
     return {ready,release(){if(released)return;released=true;entry.references--;return releaseEntry(entry);}};
   };
