@@ -228,17 +228,7 @@ async function settleWorldBehindCover(maxMs=2500){
   clean=pending?0:clean+1;if(rendered>=6&&clean>=3)break;
  }}finally{sc.onAfterRenderObservable.remove(o);}
 }
-async function preloadMapMonsters({resume=false}={}){
- if(world?.v03?.blocksProgress&&!resume)return;
- let timer;
- try{
-  const runtime=world?.authoredMonsters??await world?.authoredMonstersTask?.catch?.(()=>null);
-  if(!runtime?.preload)return;
-  const job=runtime.active&&runtime.prepareForLoading?runtime.prepareForLoading({deadlineMs:20000}):runtime.preload();
-  await Promise.race([job,new Promise(resolve=>{timer=setTimeout(resolve,22000);})]);
- }catch(error){console.error('[몬스터 준비]',error);}
- finally{clearTimeout(timer);}
-}
+async function preloadMapMonsters(){try{const runtime=world?.authoredMonsters??await world?.authoredMonstersTask?.catch?.(()=>null);if(!runtime?.preload)return;let timer;await Promise.race([runtime.active&&runtime.prepareForLoading?runtime.prepareForLoading({deadlineMs:20000}):runtime.preload(),new Promise(resolve=>{timer=setTimeout(resolve,22000);})]);clearTimeout(timer);}catch(error){console.error('[몬스터 준비]',error);}}
 let boss, combatResult, swordNode, shieldNode, damageNumbers, frameLoop, swordTrail,meleeAim,meleeAimDt=1/60;
 const meleeTargetPoint=new Vector3();
 const staminaFeedback=new StaminaFailureFeedback();
@@ -399,7 +389,7 @@ function buildChunks(){try{const names=new Set();for(const entry of performance.
 function recordingProbe(){
   const scene=world?.scene,counts=animator?.bindingCounts,previous=probePlayerBindings,memory=performance.memory,profile=boss?.profile;
   probePlayerBindings=counts?{...counts}:null;
-  return {map:world?.mapId??null,storyPhase:world?.v03?.diagnosticPhase??null,hz:refreshMeter.hz,calibrationMs:calibrationMs(),targetFps:engine?.maxFPS??null,
+  return {map:world?.mapId??null,hz:refreshMeter.hz,calibrationMs:calibrationMs(),targetFps:engine?.maxFPS??null,
     meshes:scene?.meshes.length??null,activeMeshes:scene?.getActiveMeshes().length??null,skeletons:scene?.skeletons.length??null,animationGroups:scene?.animationGroups.length??null,animatables:scene?._activeAnimatables?.length??null,
     jsHeapMB:memory?Math.round(memory.usedJSHeapSize/1048576):null,materials:scene?.materials.length??null,textures:scene?.textures.length??null,disposeObservers:scene?.onDisposeObservable.observers.length??null,foes:boss?.encounters?.filter(foe=>foe.active).length??null,engaged:profile?.engaged??null,nearFoes:profile?.near??null,farFoes:profile?.far??null,maxFoe:profile?.maxKind?`${profile.maxKind}:${profile.maxState}`:null,
     playerClipStarts:counts&&previous?counts.created-previous.created:null,playerClipReuses:counts&&previous?counts.reused-previous.reused:null};
@@ -417,7 +407,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equi
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
   metadata:()=>({...mapWorkDiagnostics(),splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({...mapWorkDiagnostics(),activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
-    storyPhase:world?.v03?.diagnosticPhase??null,position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
+    position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
     cameraZoom:cameraZoom?.snapshot()??null,
     viewportResize:world?.viewportResize?.snapshot?.()??null,cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
@@ -695,11 +685,6 @@ function resetCamera() {
   syncCameraFocus(0,{snap:true});
 }
 
-let resumeLoadingGeneration;
-function finishMapLoading(generation){
-  if(world.v03?.screen==='resume')resumeLoadingGeneration=generation;
-  else loadingView.reveal(generation);
-}
 async function loadCharacter() {
   if (loadingAsset) return;
   effectReviewGeneration++;world?.effectWorld?.clear();setFrameWorkContext(world?.scene,{active:false,frameId:engine?.frameId,generation:world?.toolGeneration});
@@ -870,7 +855,7 @@ async function loadCharacter() {
     loadDiagnostics.finish();
     mapResourceInspector.captureReady();
     if(world.villageStreaming)world.villageStreaming.active=true;await settleWorldBehindCover();
-    finishMapLoading(loadingGeneration);showMinimap();
+    loadingView.reveal(loadingGeneration);showMinimap();
     if (!motionSpeedControls.isOpen()) canvas.focus({ preventScroll: true });
     frameLoop?.invalidate();
   } catch (error) {
@@ -1329,7 +1314,7 @@ try {
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen()||contextRecovery?.blocked===true);
       audio.setSuspended(document.hidden||modalOpen||contextRecovery?.blocked===true);
       world.villageStreaming.active=true;await world.v03?.arrival?.();await settleWorldBehindCover();
-      finishMapLoading(mapLoadingGeneration);showMinimap();
+      loadingView.reveal(mapLoadingGeneration);showMinimap();
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
     onError:error=>{travelResume=false;loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
@@ -1694,22 +1679,7 @@ try {
   }
   if(versionRoute.edition){
     const {setupV03}=await import('./v03/index.js');
-    // The menu chooses the first asset manifest. A running load belongs to its map.
-    const prepareInitialMap=destination=>{
-      if(loadingAsset||ready)return destination===character;
-      if(destination!==character){
-        if(!world.village||!isWorldCharacter(destination))return false;
-        replaceWorldMap(world,destination);character=destination;
-        const url=new URL(location.href);url.searchParams.set('character',destination);
-        for(const key of ['arrival','from','waypoint'])url.searchParams.delete(key);
-        history.replaceState(null,'',url);
-        applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));
-        applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale,true);applyAdaptiveShadows();
-        training.relocate(world.trainingSpawn);bindMapPortal();world.dayCycle?.mapChanged();
-      }
-      void loadCharacter();return true;
-    };
-    world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,prepareInitialMap,
+    world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,
       getPlayer:()=>actor,getController:()=>controller,
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId,
         // Scenery still streaming in (models and higher-resolution textures).
@@ -1722,19 +1692,9 @@ try {
       // The reverse: the roaming monsters leave (back to the title on the same page). A runtime still loading is stopped once it arrives.
       stopWorld:()=>{if(world.authoredMonsters)world.authoredMonsters.deactivate?.();else void world.authoredMonstersTask?.then(runtime=>runtime.deactivate?.(),()=>{});},
       setScore:(key,fade)=>audio?.setScore?.(key,fade),
-      showResumeLoading:()=>{
-        const generation=resumeLoadingGeneration??loadingView.begin(character);
-        resumeLoadingGeneration=undefined;loadingView.preparing(undefined,generation);
-        return ()=>loadingView.reveal(generation);
-      },
+      prefetchScore:key=>audio?.prefetchScore?.(key),
       setSfxMuted:value=>audio?.setSfxMuted?.(value),
-      prepareResumePopulation:async()=>{await getAuthoredMonsters();await preloadMapMonsters({resume:true});},
-      settleFirstFight:settleWorldBehindCover,
-      restoreSlotPose:()=>{
-        resumePose=readMapResume(journeyStorage,character,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:false});
-        const spawn=mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
-        if(resumePose)restoreMapCamera();else syncCameraFocus(0,{snap:true});
-      },
+      prepareWorld:()=>{void getAuthoredMonsters({active:false}).then(runtime=>runtime.preload?.()).catch(error=>console.error('[몬스터 배치]',error));},
       // Adds story scenery through the map's placement runtime (streaming,
       // collision and outlines included). Already-present ids are skipped.
       placeProps:async props=>{
@@ -1777,7 +1737,7 @@ try {
     if(import.meta.env.DEV||new URLSearchParams(location.search).has('qa')){window.moonforestV03=world.v03;window.moonforestQA={get dayCycle(){return world.dayCycle;},get meadow(){return world.meadow;},get world(){return world;},get engine(){return engine;},get battle(){return boss;},get player(){return actor;},get preparedShaders(){return inspectPreparedEffects(engine);}};}
     if(import.meta.hot)import.meta.hot.dispose(()=>world.v03?.dispose());
   }
-  if(!world.v03)void loadCharacter();
+  loadCharacter();
 } catch (error) {
   loadingView.fail('3D 화면을 시작하지 못했습니다','진단을 복사해 전달한 뒤 페이지를 새로고침해 주세요.',{error,phase:'engine-initialization',retry:false});console.error(error);
 }

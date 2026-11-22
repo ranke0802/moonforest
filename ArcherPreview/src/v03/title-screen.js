@@ -87,7 +87,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   element:layer,
   get visible(){return !layer.hidden;},
   relabel:label,
-  show(){if(disposed)return;sub.removeAttribute('role');sub.textContent=t('title.sub');layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');if(!layer.classList.contains('scene-ready'))veil.start();focusFirst();},
+  show(){if(disposed)return;layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');if(!layer.classList.contains('scene-ready'))veil.start();focusFirst();},
   // The scene behind becomes visible only once it is really ready.
   setSceneReady(value){layer.classList.toggle('scene-ready',!!value);if(value){veil.setProgress(1,0);veil.stop();try{doc.defaultView?.localStorage?.setItem(WORLD_DRAWN_KEY,'1');}catch{/* told again next time */}}},
   // Preparation progress for the black title (ratio 0..1, things still being prepared).
@@ -99,8 +99,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   async leave(){
    if(disposed||layer.hidden)return;closePanel(null);layer.classList.add('is-leaving');await wait(700);
   },
-  hide(){layer.hidden=true;layer.classList.remove('is-shown','is-leaving','awaiting-choice');veil.stop();},
-  showError(message){sub.textContent=message;sub.setAttribute('role','status');},
+  hide(){layer.hidden=true;layer.classList.remove('is-shown','is-leaving');},
   // Returns the chosen slot number, or null.
   chooseSlot({mode,index,bootSlot}){
    return openPanel((box,close)=>{

@@ -133,66 +133,6 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
   reveal:async()=>{await settle();shell.update(.016);await settle();for(let i=0;i<90;i++)shell.update(.016);await settle();}};
 }
 
-test('a cold new game accepts one click and holds play until the actual wolf and its first draw settle',async()=>{
- const h=harness({ready:false});const requested=[];
- h.api.prepareInitialMap=id=>{requested.push(id);return true;};
- let finishWolf,finishDraw;
- const summon=h.battle.summon.bind(h.battle);
- h.battle.summon=(...args)=>new Promise(resolve=>{finishWolf=()=>resolve(summon(...args));});
- h.api.settleFirstFight=()=>new Promise(resolve=>{finishDraw=resolve;});
- h.finishSplash();await settle();
- assert.deepEqual(requested,[]);h.click('[data-action="new"]');await settle();
- assert.equal(h.shell.screen,'opening');assert.deepEqual(requested,['warrior-plains']);
- h.state.ready=true;h.shell.update(.016);await settle(30);
- assert.equal(h.shell.screen,'opening');assert.equal(typeof finishWolf,'function');
- finishWolf();await settle();assert.equal(h.shell.screen,'opening');
- assert.deepEqual(h.log.filter(row=>row.startsWith('summon:')),['summon:gray-wolf:1']);
- assert.ok(!h.log.includes('prepareWorld')&&!h.log.includes('startWorld'));
- finishDraw();await settle(30);assert.equal(h.shell.screen,'play');
- const imports=h.made.map(member=>member.id);h.shell.update(.016);
- assert.deepEqual(h.made.map(member=>member.id),imports);assert.ok(imports.includes('driver'));h.shell.dispose();
-});
-
-test('cold continue binds the selected village before requesting assets and holds input until the village is ready',async()=>{
- const local=memory(),session=memory(),seed=createSaveSession({local,session,edition:E});
- seed.commit({title:'달빛 여관',character:'warrior-v3',playSeconds:33});
- seed.journey.setItem('v03-story-v1','{"quest":1,"step":0,"count":0,"done":[]}');
- const h=harness({ready:false,local,session,reloadProgress:true}),requests=[];
- h.api.prepareInitialMap=id=>{requests.push([id,h.save.slot]);h.state.character=id;h.state.mapId='village';return true;};
- let populated;h.api.prepareResumePopulation=()=>new Promise(resolve=>{populated=resolve;});
- h.finishSplash();await settle();h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();
- assert.deepEqual(requests,[['warrior-v3',1]]);assert.equal(h.shell.screen,'resume');assert.equal(h.shell.blocksGame,true);
- h.state.ready=true;h.shell.update(.016);await settle();assert.equal(h.shell.screen,'resume');
- assert.ok(h.made.some(member=>member.id==='innkeeper'));assert.ok(h.made.every(member=>member.id!=='driver'));
- populated();await settle();assert.equal(h.shell.screen,'play');
- assert.equal(h.log.some(row=>row.startsWith('summon:')||row.startsWith('travel:')),false);h.shell.dispose();
-});
-
-test('starting during a pending showcase waits for its cancellation before summoning the combat wolf',async()=>{
- const h=harness(),summon=h.battle.summon.bind(h.battle);let cancelShowcase;
- h.battle.summon=(player,count,kind)=>{
-  if(kind===TITLE_FOE.kind){
-   const pending=new Promise(resolve=>{cancelShowcase=()=>resolve(false);});
-   h.battle.summonPending=pending.finally(()=>{h.battle.summonPending=null;});return h.battle.summonPending;
-  }
-  assert.equal(h.battle.summonPending,null);return summon(player,count,kind);
- };
- h.finishSplash();await settle();h.shell.update(.016);h.click('[data-action="new"]');await settle();
- assert.equal(h.shell.screen,'opening');assert.ok(!h.log.includes('summon:gray-wolf:1'));
- cancelShowcase();await settle(30);assert.equal(h.shell.screen,'play');
- assert.equal(h.battle.livingCount,1);assert.equal(h.shell.pilotMovement,null);h.shell.dispose();
-});
-
-test('unfinished opening save restores the wolf, and a failed summon leaves a usable title',async()=>{
- const h=harness({ready:false});h.finishSplash();await settle();h.battle.summon=async()=>false;
- h.click('[data-action="new"]');await settle();h.state.ready=true;h.shell.update(.016);await settle();
- assert.equal(h.shell.screen,'title');assert.equal(h.save.meta().used,false);h.shell.dispose();
- const local=memory(),session=memory(),seed=createSaveSession({local,session,edition:E});
- seed.commit({character:'warrior-plains'});seed.journey.setItem('v03-story-v1','{"quest":0,"step":0,"count":0,"done":[]}');seed.request(1,'load');
- const r=harness({local,session});await settle();r.shell.update(.016);await settle();
- assert.equal(r.shell.screen,'play');assert.deepEqual(r.log.filter(row=>row.startsWith('summon:')),['summon:gray-wolf:1']);r.shell.dispose();
-});
-
 test('iPhone starts the dream without priming the roaming population or decoding extra scores',async()=>{
  const h=harness({iphone:true});
  h.finishSplash();await h.reveal();
@@ -256,9 +196,9 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.equal(h.document.querySelector('[data-action="load"]').disabled,true);
  h.shell.update(.016);await settle();
  assert.ok(h.log.includes('suspend:true'));assert.ok(h.log.includes(`summon:${TITLE_FOE.kind}:${TITLE_FOE.count}`));
- // Navigation is available while only the backdrop waits for streaming.
+ // The menu waits, black, until the scene is drawn and streaming is quiet.
  h.state.pending=3;for(let i=0;i<120;i++)h.shell.update(.016);assert.equal(h.document.querySelector('.v03-title').classList.contains('scene-ready'),false);
- h.click('[data-action="gallery"]');await settle();assert.equal(h.document.querySelectorAll('.v03-gallery-row').length,3);h.click('.v03-panel-back');await settle();
+ h.click('[data-action="new"]');await settle();assert.equal(h.shell.screen,'title','menu clicks wait for the reveal');
  h.state.pending=0;for(let i=0;i<80;i++)h.shell.update(.016);
  assert.ok(h.document.querySelector('.v03-title').classList.contains('scene-ready'));
  assert.equal(h.shell.pilotMovement!==null,true);
@@ -303,10 +243,11 @@ test('back to the title: with the game\'s hooks the same page shows the title ag
  // And back once more: it works every time, not only the first.
  assert.equal(await h.shell.returnToTitle(),true);assert.equal(h.shell.screen,'title');
 });
-test('settings, gallery and quit are interactive before the first model is ready',async()=>{
+test('title actions: settings, gallery, quit, and not-ready new game',async()=>{
  const h=harness({ready:false});h.finishSplash();await settle();h.shell.update(.016);
  assert.equal(h.shell.pilotMovement,null);assert.equal(h.log.some(x=>x.startsWith('summon')),false);
- assert.equal(h.state.ready,false);
+ h.click('[data-action="new"]');await settle();assert.equal(h.shell.screen,'title','nothing happens before the scene is ready');
+ h.state.ready=true;await h.reveal();
  h.click('[data-action="settings"]');await settle();assert.equal(h.document.querySelectorAll('.v03-language').length,5,'five languages offered');
  assert.equal(h.document.querySelector('.v03-language.is-current')?.dataset.language,'ko');
  h.click('.v03-settings-game');await settle();assert.ok(h.log.includes('settings'));
@@ -530,7 +471,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.ok(h.log.includes('gold:v03-quest-M00:30'),'M00 pays its gold reward once');assert.equal(h.log.filter(x=>x.startsWith('gold:v03-quest-M00')).length,1);
  // A later document resumes the same quest step.
  const again=harness({local:h.local,session:(()=>{const s=memory();createSaveSession({local:h.local,session:s,edition:E}).request(1,'load');return s;})()});
- again.state.mapId='village';again.shell.update(.016);await settle();again.shell.update(.016);await settle();
+ again.state.mapId='village';again.shell.update(.016);await settle();again.shell.update(.016);
  assert.equal(again.document.querySelector('.v03-quest-title').textContent,'사람들이 기억하는 성녀');
 });
 
