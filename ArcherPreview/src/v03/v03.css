@@ -17,9 +17,11 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-title-shade{position:absolute;inset:0;background:#000;opacity:1;transition:opacity 1.8s ease}
 .v03-title.scene-ready .v03-title-shade{opacity:1;background:linear-gradient(90deg,#000000e0 0%,#000000a8 32%,#00000070 62%,#00000062 100%),linear-gradient(0deg,#00000090 0%,#00000000 42%)}
 .v03-title-inner{position:relative;display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,4.5vh,44px);height:100%;padding:max(24px,env(safe-area-inset-top)) max(28px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(clamp(28px,7vw,110px),env(safe-area-inset-left));opacity:0;transform:translateY(10px);transition:opacity 1.2s ease .2s,transform 1.2s ease .2s}
-.v03-title.is-shown.scene-ready .v03-title-inner{opacity:1;transform:none}
-/* Until its scene is fully drawn the title stays black, with a quiet note. */
+.v03-title.is-shown .v03-title-inner{opacity:1;transform:none}
 .v03-title:not(.scene-ready) .v03-title-inner{pointer-events:none}
+.v03-title:not(.scene-ready):not(.has-panel) .v03-menu-item{pointer-events:auto}
+.v03-title:not(.scene-ready) .v03-title-foot{visibility:hidden}
+.v03-title.awaiting-choice :is(.v03-veil-note,.v03-veil-bar,.v03-veil-memory){visibility:hidden}
 @keyframes v03-breathe{50%{opacity:.2}}
 /* "Drawing the world" (2026-11-20, user): no drifting lights; the prologue's
    cosmic cut under full black, seen only through the pointer's light, a burst

@@ -87,8 +87,7 @@ export function setupV03(api){
  let loadingLore=null;
  const slowFx=createSlowFx((()=>{try{return view.localStorage;}catch{return null;}})());
  const story=createStory({api,doc,save,content,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
- // The title is revealed only once its scene is fully drawn: the attract
- // battle is in place and scenery streaming has been quiet for a moment.
+ // Only the animated backdrop waits for the showcase and scenery.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
  // Progress shown on the black title while it is drawn (drawing-veil.js).
  const drawing=createDrawingProgress({quiet:REVEAL_QUIET,limit:REVEAL_LIMIT,expectedStart:expectedPhaseMs('title:start',4000)/1000,expectedPending:expectedPhaseMs('title:pending',5000)/1000,glide:.35});
@@ -97,7 +96,13 @@ export function setupV03(api){
  // theme with its demo fight silent, the prologue the quiet forest theme
  // (swapped 2026-11-19, user choice); play returns to the map's own music.
  const SCREEN_SCORE=Object.freeze({boot:'elena_saint',title:'elena_saint',resume:'elena_saint',opening:'forest'});
- const screen=value=>{state.screen=value;trail.mark(value);html.dataset.v03Screen=value;if(value!=='title')delete html.dataset.v03Veil;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
+ let showcaseTimer=0;
+ const screen=value=>{
+  state.screen=value;trail.mark(value);html.dataset.v03Screen=value;
+  if(value!=='title'){delete html.dataset.v03Veil;view.clearTimeout(showcaseTimer);showcaseTimer=0;}
+  if(value==='opening'||value==='resume')input.setSuspended(true);
+  try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}
+ };
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
  const describe=meta=>{
@@ -126,7 +131,7 @@ export function setupV03(api){
   try{
    input.setSuspended(true);
    const ok=await battle.summon(api.getPlayer(),TITLE_FOE.count,TITLE_FOE.kind);
-   if(state.screen!=='title'||state.disposed){if(ok)battle.resetBattle();return;}
+   if(state.screen!=='title'||state.disposed)return;
    if(ok){const camera=api.world.camera;state.savedCamera={alpha:camera.alpha,beta:camera.beta,radius:camera.radius};state.attract=true;}
   }catch(error){console.warn('[MoonForest 0.3] title battle unavailable',error);}
   finally{state.summoning=false;}
@@ -167,9 +172,35 @@ export function setupV03(api){
   return {...here,playSeconds:state.playSeconds,level:1,...extra};
  }
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
- // Behind the title / resume screen the map's monster species load ahead of
- // play (nothing is placed until startWorld).
- function prepareWorld(){if(state.worldPrepared||state.worldStarted)return;state.worldPrepared=true;api.prepareWorld?.();}
+ // Resume reads the bound record only after arriving at its map.
+ async function finishResume(){
+  const reveal=api.showResumeLoading?.();
+  try{await prepareResume();}
+  catch(error){report(error);if(state.screen==='resume'&&!state.disposed)retryFromTitle();}
+  finally{reveal?.();}
+ }
+ async function prepareResume(){
+  const s=gameState(),loaded=story.log.load();
+  const firstFight=s.mapId===OPENING_STAGE.map&&(!loaded||(story.log.quest()?.id==='M00'&&story.log.step()?.id==='fight'));
+  if(firstFight){
+   if(!await summonFirstWolf()){if(state.screen==='resume'&&!state.disposed)retryFromTitle();return;}
+  }
+  if(state.disposed||state.screen!=='resume')return;
+  const scenery=story.prepare(s.mapId);
+  const population=loaded&&story.log.quest()?.id!=='M00'?api.prepareResumePopulation?.():null;
+  await Promise.all([waitForCast(scenery),population]);
+  if(firstFight&&state.screen==='resume'&&!state.disposed)await api.settleFirstFight?.();
+  if(state.disposed||state.screen!=='resume')return;
+  await enterPlay({resume:true});
+ }
+ // Optional cast can finish streaming if a file is slow. The combat wolf has
+ // its own bounded summon pipeline and must be ready to begin the first fight.
+ async function waitForCast(task){
+  if(!task)return;
+  let timer;
+  try{await Promise.race([task,new Promise(resolve=>{timer=view.setTimeout(resolve,4000);})]);}
+  finally{view.clearTimeout(timer);}
+ }
  // Roaming monsters appear only after the opening quest: the first walk to
  // the village is safe.
  function maybeStartWorld(){if(!state.worldStarted&&story.started&&story.log.quest()?.id!=='M00')startWorld();}
@@ -186,19 +217,41 @@ export function setupV03(api){
  // they are not, the stage stays covered for up to five seconds.
  async function sceneUp(){for(let left=5000;left>0&&!state.disposed&&story.scenePending&&!story.sceneActive;left-=50)await wait(50);}
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
+ async function summonFirstWolf(){
+  const owner=state.screen;
+  // resetStage cancels a title summon. Its finally releases the battle's loading flag.
+  if(battle.summonPending)await battle.summonPending.catch(()=>{});
+  if(state.screen!==owner||state.disposed)return false;
+  return battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(error=>{console.warn('[MoonForest 0.3] ambush unavailable',error);return false;});
+ }
+ function retryFromTitle(){
+  state.ambush=false;state.busy=false;state.dream=null;state.sceneShown=false;
+  story.discardPrepared();opening.cancel();screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+  title.showError(t('toast.failed'));
+ }
  async function stageAmbush(dream){
   state.ambush=true;
   trail.mark('opening:ambush-load');
-  const wolf=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(error=>{console.warn('[MoonForest 0.3] ambush unavailable',error);return false;});
-  const transition=Promise.resolve(dream).then(()=>Promise.race([wolf,wait(6000).then(()=>null)]));
-  // Import the horse and wagon after the wolf on Apple devices. Even a
-  // stalled summon may only hold a skipped dream for the usual six seconds.
-  if(appleTouch)await Promise.race([wolf,transition]);
+  const wolf=summonFirstWolf();
+  if(appleTouch)await wolf;
   if(state.screen!=='opening'||state.disposed)return false;
-  trail.mark('opening:wagon-load');story.prepare(gameState().mapId);
-  const ready=await transition;
-  if(ready===false)state.ambush=false;
+  trail.mark('opening:wagon-load');
+  const cast=story.prepare(gameState().mapId);
+  const prepared=Promise.all([wolf,waitForCast(cast)]).then(async([ok])=>{
+   if(ok&&state.screen==='opening'&&!state.disposed){await api.settleFirstFight?.();trail.mark('opening:fight-ready');}
+   return ok;
+  });
+  const [ready]=await Promise.all([prepared,dream]);
+  if(!ready&&state.screen==='opening'&&!state.disposed){
+   retryFromTitle();return false;
+  }
   return state.screen==='opening'&&!state.disposed;
+ }
+ async function completeOpening(dream){
+  if(!await stageAmbush(dream))return;
+  state.dream=null;
+  save.commit(metaPatch({chapter:1,title:'늑대와 마차',titleKey:'M00'}));
+  await enterPlay();state.busy=false;await sceneUp();await opening.release();
  }
  async function beginNewGame(){
   // Seamless path: the title already runs on the opening map.
@@ -214,32 +267,31 @@ export function setupV03(api){
   const travelling=OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map
    ?Promise.resolve().then(()=>api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])).then(moved=>moved===true,error=>{console.warn('[MoonForest 0.3] opening travel failed',error);return false;})
    :null;
-  screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
+  screen('opening');state.playSeconds=0;
   const dream=opening.play();
   if(travelling){
    const moved=await travelling;
    if(!moved||gameState().mapId!==OPENING_STAGE.map){reloadInto(save.slot,'new',null);return;}
   }
   api.resetStage(OPENING_STAGE);title.hide();
-  if(!await stageAmbush(dream))return;
-  save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
-  await enterPlay();state.busy=false;await sceneUp();
-  await opening.release();
+  await completeOpening(dream);
  }
  async function continueHere(){
   const back=state.returnPose?.map===gameState().mapId?state.returnPose:undefined;state.returnPose=null;
-  state.busy=true;await title.leave();stopAttract();api.resetStage(back);opening.cover();title.hide();
+  state.busy=true;await title.leave();stopAttract();api.resetStage(back);screen('resume');title.hide();
   const meta=save.meta(),s=gameState(),elsewhere=!!(meta.character&&meta.character!==s.character&&PLACE_NAMES[meta.character]);
   state.arriving=elsewhere;
   try{
-   await enterPlay({resume:true});
    if(elsewhere){
     // If the trip does not get there, open the record on its own map in a clean document rather than play it on the wrong one.
     const moved=await Promise.resolve(api.travel(meta.character,{resume:true})).then(value=>value===true,error=>{console.warn('[MoonForest 0.3] could not travel to the record\'s map',error);return false;});
-    if(!moved||gameState().character!==meta.character){if(reloadInto(save.slot,'load',meta.character))return;}
-   }
-  }finally{state.arriving=false;}
-  state.busy=false;await opening.release();
+    if(!moved||gameState().character!==meta.character){
+     if(!reloadInto(save.slot,'load',meta.character)&&!state.failed){opening.cancel();screen('title');title.show();}
+     return;
+    }
+   }else if(!back)api.restoreSlotPose?.();
+   await finishResume();
+  }finally{state.arriving=false;state.busy=false;}
  }
  function reloadInto(slot,mode,character){
   if(!save.request(slot,mode)){api.toast?.(t('toast.noStorage'));return false;}
@@ -248,8 +300,8 @@ export function setupV03(api){
   void runBeforePageReload().finally(()=>view.location.replace(url.href));return true;
  }
  async function handle(action){
-  if(state.busy||state.screen!=='title'||!state.revealed)return;
-  const index=save.index(),ready=gameState().ready;
+  if(state.busy||state.screen!=='title')return;
+  const index=save.index();
   if(action==='new'){
    const anyUsed=index.some(meta=>meta.used);
    let slot=save.slot;
@@ -261,11 +313,15 @@ export function setupV03(api){
    // In place (2026-11-19, user): wipe and bind the slot on this page so the
    // click that started the game keeps its sound; reload only as a fallback.
    if(meta.used||slot!==save.slot){
-    if(!ready||!api.restartProgress){if(meta.used&&!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}reloadInto(slot,'new',null);return;}
+    if(!api.restartProgress){if(meta.used&&!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}reloadInto(slot,'new',null);return;}
     if(!save.restartIn(slot)){api.toast?.(t('toast.wipeFailed'));return;}
     api.restartProgress();
    }
-   if(!ready){api.toast?.(t('toast.preparing'));return;}
+   if(!gameState().ready){
+    const destination=MAP_CHARACTERS[OPENING_STAGE.map];
+    if(api.prepareInitialMap?.(destination)===false){reloadInto(slot,'new',destination);return;}
+    state.playSeconds=0;screen('opening');title.hide();startEarlyDream(true);return;
+   }
    await beginNewGame();
   }else if(action==='load'){
    const slot=await title.chooseSlot({mode:'load',index,bootSlot:save.slot});if(slot===null)return;
@@ -273,12 +329,16 @@ export function setupV03(api){
    if(slot!==save.slot){
     // In place when the game can read a record again on this page (user, 2026-11-21: no
     // reload, the loaded world stays); otherwise a clean document as before.
-    if(!ready||!api.reloadProgress||!save.bindTo||!save.bindTo(slot)){reloadInto(slot,'load',meta.character);return;}
+    if(!api.reloadProgress||!save.bindTo?.(slot)){reloadInto(slot,'load',meta.character);return;}
     api.reloadProgress();
     state.playSeconds=save.meta().playSeconds??0;state.sinceSave=0;state.returnPose=null;state.ambush=false;
     if(state.worldStarted){api.stopWorld?.();state.worldStarted=false;}
    }
-   if(!ready){api.toast?.(t('toast.preparing'));return;}
+   if(!gameState().ready){
+    const destination=PLACE_NAMES[meta.character]?meta.character:gameState().character;
+    if(api.prepareInitialMap?.(destination)===false){reloadInto(slot,'load',destination);return;}
+    screen('resume');title.hide();return;
+   }
    await continueHere();
   }else if(action==='gallery'){
    await title.showGallery({sections:GALLERY.map(section=>({...section,label:t('gallery.'+section.id),unlocked:0}))});
@@ -371,7 +431,7 @@ export function setupV03(api){
    api.resetStage(state.returnPose??undefined);
    state.ambush=false;state.sinceSave=0;state.trailScene=false;
    screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
-   await startAttract();
+   void startAttract();
    await opening.release();
    return true;
   }catch(error){console.warn('[MoonForest 0.3] could not return to the title on this page',error);return false;}
@@ -381,16 +441,10 @@ export function setupV03(api){
  function showTitle(){
   if(state.disposed||state.screen!=='boot')return;
   if(!state.langReady){void langReady.then(showTitle);return;}
-  // Since 2026-11-20 (user) the black title with its veil is the download
-  // screen too: it shows at once and follows the loading card underneath
-  // (that card stays for errors). The world is prepared once the card closes.
-  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();watchDownload();
-  // The prologue score is decoded once the download and world loading are over
-  // (as before the title became the download screen), not on top of them.
-  afterLoading(()=>{
-   if(appleTouch||state.disposed||state.screen!=='title')return;
-   prepareWorld();try{void Promise.resolve(api.prefetchScore?.(SCREEN_SCORE.opening)).catch(()=>{});}catch{/* music is optional */}
-  });
+  const awaitingChoice=!!api.prepareInitialMap&&!gameState().ready;
+  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));
+  title.element.classList.toggle('awaiting-choice',awaitingChoice);title.show();
+  if(awaitingChoice)scheduleShowcase();else watchDownload();
  }
  // The loading card's progress (#loading-progress width, #loading-bytes
  // "1.2 / 5.4 MB") mirrored onto the title veil while the card is up.
@@ -422,13 +476,16 @@ export function setupV03(api){
   if(Watch){downloadWatch=new Watch(sync);for(const node of [bar,bytes])if(node)downloadWatch.observe(node,{attributes:true,attributeFilter:['style'],childList:true,characterData:true,subtree:true});downloadWatch.observe(html,{attributes:true,attributeFilter:['data-loading']});}
   sync();
  }
- // Runs next() once the game's own download/loading card has closed.
- let loadingWait=null;
- function afterLoading(next){
-  const Watch=view?.MutationObserver;
-  if(!html.dataset.loading||!Watch){next();return;}
-  loadingWait=new Watch(()=>{if(html.dataset.loading)return;loadingWait.disconnect();loadingWait=null;next();});
-  loadingWait.observe(html,{attributes:true,attributeFilter:['data-loading']});
+ // Give the menu first choice of map. Reading a slot or settings panel never starts the demo.
+ function scheduleShowcase(){
+  if(showcaseTimer||!api.prepareInitialMap||gameState().ready)return;
+  showcaseTimer=view.setTimeout(()=>{
+   showcaseTimer=0;
+   if(state.disposed||state.screen!=='title'||state.busy)return;
+   if(doc.hidden||doc.querySelector('dialog[open]')||title.element.classList.contains('has-panel')){scheduleShowcase();return;}
+   title.element.classList.remove('awaiting-choice');
+   api.prepareInitialMap(gameState().character);watchDownload();
+  },8000);
  }
  // New game on a fresh document (2026-11-19, user): the dream needs only its
  // paintings, captions and score, so it starts as soon as the language is set
@@ -452,7 +509,8 @@ export function setupV03(api){
    for(const kind of kinds)view.addEventListener(kind,go,{capture:true});
   });
  }
- function startEarlyDream(){
+ function startEarlyDream(fromMenu=false){
+  if(fromMenu)api.unlockAudio?.();
   opening.cover({art:true});
   html.dataset.v03EarlyDream='1';
   const source=doc.getElementById('loading-progress'),Watch=view?.MutationObserver;
@@ -472,7 +530,7 @@ export function setupV03(api){
   // The first ready frame joins this promise even if the audio tap is pending.
   state.dream=langReady.then(async()=>{
    if(state.disposed||state.failed||state.screen!=='opening')return;
-   if(audioAllowed())api.unlockAudio?.();else await tapToBegin();
+   if(!fromMenu){if(audioAllowed())api.unlockAudio?.();else await tapToBegin();}
    if(state.disposed||state.failed||state.screen!=='opening')return;
    return opening.play();
   });
@@ -482,6 +540,7 @@ export function setupV03(api){
   splash?.remove?.();screen(save.intent.mode==='new'?'opening':'resume');
   // Between the loading card and the dream, never show the raw camera (it
   // can start inside a tree crown): keep the prologue cover up.
+  api.prepareInitialMap?.(save.intent.mode==='new'?MAP_CHARACTERS[OPENING_STAGE.map]:(PLACE_NAMES[save.meta().character]?save.meta().character:gameState().character));
   if(save.intent.mode==='new')startEarlyDream();
  }else{
   // Logo -> title: the loading card under the black title stays black (v03.css).
@@ -492,6 +551,7 @@ export function setupV03(api){
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
   if(state.failed||state.disposed)return;
+  state.retryTitle=['boot','title','opening','resume'].includes(state.screen);
   state.failed=true;cancelTap?.();endEarlyLine();stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
  }
  const loadingCard=doc.getElementById('loading'),Observer=view?.MutationObserver;
@@ -504,6 +564,11 @@ export function setupV03(api){
 
  return {
   get screen(){return state.screen;},
+  get diagnosticPhase(){
+   if(state.screen!=='play')return state.screen;
+   if(story.sceneActive)return 'opening-cutscene';
+   return story.log.quest()?.id==='M00'&&story.log.step()?.id==='fight'?'opening-combat':'play';
+  },
   // Back to the title on this page; false when it could not be done (the settings button then reloads).
   returnToTitle,
   // The run before this one (stage it last reached; ended=false and hidden=false: killed on screen).
@@ -531,7 +596,7 @@ export function setupV03(api){
   // Dialogue no longer stops the world (2026-11-20, user: the player and the NPC
   // froze mid-stride). Input is suspended while talking, so the player settles
   // into idle and the speaker keeps its talking motion.
-  get blocksGame(){return state.screen==='opening'||state.screen==='exit'||gate.active;},
+  get blocksGame(){return state.screen==='opening'||state.screen==='resume'||state.screen==='exit'||gate.active;},
   // Called by the game when an enemy is defeated.
   defeat(event){if(state.screen==='play')story.defeat(event);},
   decorateFoeBar(element,foe){if(state.screen==='play')vitality.decorate(element,foe);},
@@ -556,30 +621,34 @@ export function setupV03(api){
    if(state.screen!=='play')cursors.set('ui');
    const s=gameState();
    if(s.failed&&!state.failed){fail();return;}
+   if(state.screen==='failed'&&state.retryTitle&&s.ready&&!s.failed){
+    state.failed=false;state.retryTitle=false;state.dream=null;state.busy=false;state.sceneShown=false;
+    story.discardPrepared();screen('boot');showTitle();return;
+   }
    if(s.ready)bindCape();
    if(state.screen==='title'){
-    if(s.ready&&!state.sceneShown){state.sceneShown=true;void startAttract();}
+    if(s.ready&&!state.busy&&!state.sceneShown){state.sceneShown=true;void startAttract();}
     if(state.sceneShown&&!state.revealed){
      state.prepareTime+=dt;
      state.quietTime=!state.summoning&&!(s.pending>0)?state.quietTime+dt:0;
      if(state.quietTime>=REVEAL_QUIET||state.prepareTime>=REVEAL_LIMIT){state.revealed=true;title.setSceneReady(true);const took=drawing.measured;rememberPhaseMs('title:start',took.start*1000);rememberPhaseMs('title:pending',took.pending*1000);}
     }
-    if(!state.revealed){drawInput.dt=dt;drawInput.ready=state.sceneShown;drawInput.pending=s.pending??0;drawInput.summoning=state.summoning;drawInput.quietTime=state.quietTime;drawInput.prepareTime=state.prepareTime;showProgress(drawing.update(drawInput));}
+    if(!state.revealed&&!showcaseTimer){drawInput.dt=dt;drawInput.ready=state.sceneShown;drawInput.pending=s.pending??0;drawInput.summoning=state.summoning;drawInput.quietTime=state.quietTime;drawInput.prepareTime=state.prepareTime;showProgress(drawing.update(drawInput));}
     if(state.attract&&s.ready)try{driveAttract(dt);}catch(error){console.warn('[MoonForest 0.3] title battle stopped',error);stopAttract();}
-   }else if(state.screen==='opening'&&save.intent?.mode==='new'&&s.ready&&!state.busy&&state.langReady){
+   }else if(state.screen==='opening'&&state.dream&&s.ready&&!state.busy&&state.langReady){
     // The opening is on the plains road; a document opened on another map goes there first.
-    if(OPENING_STAGE.map&&s.mapId!==OPENING_STAGE.map&&!state.openingTravel){state.openingTravel=true;void Promise.resolve(api.travel?.('warrior-plains')).catch(report);return;}
+    if(s.mapId!==OPENING_STAGE.map&&!state.openingTravel){
+     state.openingTravel=true;
+     void Promise.resolve(api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])).then(ok=>{
+      if(state.screen==='opening'&&!state.disposed&&(!ok||gameState().mapId!==OPENING_STAGE.map))retryFromTitle();
+     }).catch(error=>{report(error);if(state.screen==='opening'&&!state.disposed)retryFromTitle();}).finally(()=>{state.openingTravel=false;});return;
+    }
     if(s.mapId!==OPENING_STAGE.map)return;
     state.busy=true;api.resetStage(OPENING_STAGE);
-    void (async()=>{
-     save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));
-     if(!await stageAmbush(state.dream))return;
-     state.dream=null;
-     save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await sceneUp();await opening.release();
-    })().catch(report);
-   }else if(state.screen==='resume'&&s.ready&&state.langReady){
-    if(!appleTouch)prepareWorld();
-    void enterPlay({resume:true});
+    void completeOpening(state.dream).catch(report);
+   }else if(state.screen==='resume'&&s.ready&&state.langReady&&!state.busy){
+    state.busy=true;api.restoreSlotPose?.();
+    void finishResume().catch(report).finally(()=>{state.busy=false;});
    }else if(state.screen==='play'&&s.ready){
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
     combatTarget.update(dt,api.getController()?.state,api.getPlayer()?.position,s.mapId);
@@ -603,6 +672,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();view.clearTimeout(showcaseTimer);view.clearTimeout(glideTimer);downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

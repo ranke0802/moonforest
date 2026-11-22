@@ -275,7 +275,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // The coin material was prepared at page load under the title's lights; the
  // variant used in play differed and was built in the frame of the first kill
  // (measured 2026-11-20). Prepared again here, behind the prologue or cover.
- function warmLoot(){try{const job=api.world?.goldLootView?.prepare?.();job?.catch?.(()=>{});}catch{/* built on first use instead */}}
+ function warmLoot(){try{return api.world?.goldLootView?.prepare?.()?.catch?.(()=>{});}catch{/* built on first use instead */}}
  let wagonHorse=null,wagonModel=null,hiddenWagon=null,driverMember=null;
  let wagonMap=null,wagonScene=null;
  function clearWagon(){
@@ -1284,7 +1284,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(fresh||!log.load())log.reset();
    // A new game opens on the wolf at the wagon (once the cast is placed).
    scene.pending=fresh===true&&log.quest()?.id==='M00';scene.pendingFor=0;
-   started=true;mapId=null;warmStoryVisuals();warmLoot();Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0});
+   started=true;mapId=null;
+   if(!castMap){warmStoryVisuals();warmLoot();}
+   Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0});
    tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
    const quest=log.quest();if(quest)save.touch({title:quest.title,titleKey:quest.id});
@@ -1312,13 +1314,16 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
   prepare(id){
-   placeProps(id);warmStoryVisuals();warmLoot();
+   if(castMap!==id)buildCast(id);
+   warmStoryVisuals();
    try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,GUIDE_PATH_RADIUS);}catch{/* warm-up only */}
+   return Promise.allSettled([castSettled,wagonModel?.ready,wagonHorse?.ready,warmLoot()]);
   },
+  discardPrepared(){if(!started)clearCast();},
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){
-    mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});
+    mapId=s.mapId;if(castMap!==mapId)buildCast(mapId);emit({type:'reach',map:mapId});
     // The place's name in the middle of the screen on arrival (2026-11-20,
     // user). Not over the opening scene.
     if(!scene.pending&&!scene.active){const key='place.'+s.character,name=t(key);if(name!==key)hud.showPlace(name);}
