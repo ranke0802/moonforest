@@ -30,13 +30,15 @@ const stepCost=(chars,i,pace=1)=>((isSpace(chars[i])?0:CHAR_MS)+(i>0?pauseAfter(
 // The first character shows at once; this is the time to the last one.
 export function typingMs(text,pace=1){const chars=Array.from(String(text??''));let ms=0;for(let i=1;i<chars.length;i++)ms+=stepCost(chars,i,pace);return ms;}
 
-// Global switch: null follows the page (?typewriter=0, reduced motion).
+// Global switch: null follows the page (?typewriter=0).
+// The OS "reduce motion" setting no longer turns typing off (user, 2026-11-22: a desktop with
+// Windows animation effects off showed every line at once). Typing is how the lines are read,
+// not decoration; a tap still completes the line.
 let forced=null;
 export function setTypewriterEnabled(on){forced=on==null?null:!!on;}
 export function typewriterEnabled(view=globalThis){
  if(forced!==null)return forced;
  try{if(new URLSearchParams(view?.location?.search??'').get('typewriter')==='0')return false;}catch{}
- try{if(view?.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches)return false;}catch{}
  return true;
 }
 

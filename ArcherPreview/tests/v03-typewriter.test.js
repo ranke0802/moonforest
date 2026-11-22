@@ -52,13 +52,13 @@ test('multilingual lines count one step per character',()=>{
  c.advance(CHAR_MS);assert.equal(visible(p),'한글');c.advance(CHAR_MS);assert.equal(visible(p),'한글😀','surrogate pairs stay whole');
 });
 
-test('reduced motion and ?typewriter=0 show text at once',()=>{
+test('?typewriter=0 shows text at once; the OS reduce-motion setting does not turn typing off',()=>{
  setTypewriterEnabled(null);
  assert.equal(typewriterEnabled({location:{search:''},matchMedia:()=>({matches:false})}),true);
- assert.equal(typewriterEnabled({location:{search:''},matchMedia:q=>({matches:q.includes('reduced-motion')})}),false);
+ assert.equal(typewriterEnabled({location:{search:''},matchMedia:q=>({matches:q.includes('reduced-motion')})}),true);
  assert.equal(typewriterEnabled({location:{search:'?typewriter=0'}}),false);
  const {document}=dom(),c=clock(),p=document.createElement('p');
- const tw=createTypewriter({doc:document,enabled:()=>typewriterEnabled({matchMedia:()=>({matches:true})}),...c});
+ const tw=createTypewriter({doc:document,enabled:()=>typewriterEnabled({location:{search:'?typewriter=0'},matchMedia:()=>({matches:true})}),...c});
  tw.start(p,'모두 한 번에');assert.equal(visible(p),'모두 한 번에');assert.equal(tw.typing,false);assert.equal(c.pending,0);
 });
 
