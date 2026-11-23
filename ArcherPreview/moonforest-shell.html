@@ -43,6 +43,27 @@
         frame.title='MoonForest';frame.setAttribute('allow','fullscreen; autoplay; gamepad; screen-wake-lock');frame.setAttribute('allowfullscreen','');
         frame.src=game+(search?'?'+search:'');
         frame.addEventListener('load',function(){try{frame.contentWindow.focus();}catch(error){}});
+        // Cache cleanup (resource-cache.js worker) waits until every open page
+        // in its scope has declared the files it needs. Only the game frame
+        // knows its release's files: it posts them here (resource-cache.js) and
+        // this page registers the same list under its own name, once per
+        // release and worker; a new worker or a new release is registered again.
+        var graph=null,sent=null,workers=navigator.serviceWorker;
+        function declare(){
+          if(!graph||!workers)return;
+          var active=workers.controller?Promise.resolve(workers.controller):workers.ready.then(function(registration){return registration.active;});
+          active.then(function(worker){
+            if(!worker||!graph||(sent&&sent.worker===worker&&sent.revision===graph.revision))return;
+            worker.postMessage({type:'RESOURCE_GRAPH_USE',revision:graph.revision,files:graph.files});sent={worker:worker,revision:graph.revision};
+          }).catch(function(){});
+        }
+        window.addEventListener('message',function(event){
+          var data=event.data;
+          if(event.origin!==location.origin||event.source!==frame.contentWindow||!data||data.type!=='MOONFOREST_RESOURCE_GRAPH')return;
+          if(!/^[a-f0-9]{64}$/.test(data.revision)||!Array.isArray(data.files)||!data.files.length)return;
+          graph={revision:data.revision,files:data.files.slice()};declare();
+        });
+        if(workers&&workers.addEventListener)workers.addEventListener('controllerchange',function(){sent=null;declare();});
         document.body.appendChild(frame);
       })();
     </script>

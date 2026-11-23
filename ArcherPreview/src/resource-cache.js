@@ -1,6 +1,21 @@
 let initialized;
 const releaseGraph = typeof __MOONFOREST_CACHE_GRAPH__ === 'undefined' ? null : __MOONFOREST_CACHE_GRAPH__;
-let registeredController, registeredRevision, declaration, listening = false;
+let registeredController, registeredRevision, declaration, listening = false, sharedRevision = null;
+
+// Phones run the game in a frame of moonforest-shell.html. The worker defers all
+// cleanup while any open page in its scope has not declared its files, and the
+// outer shell never loads game code, so hand it the same declaration to
+// register under its own name (same origin only; once per release and page).
+function shareWithShell() {
+  if (!declaration || sharedRevision === declaration.revision) return;
+  let parent = null;
+  try { parent = globalThis.parent && globalThis.parent !== globalThis ? globalThis.parent : null; } catch { parent = null; }
+  if (!parent || !globalThis.location?.origin) return;
+  try {
+    parent.postMessage({type:'MOONFOREST_RESOURCE_GRAPH', revision:declaration.revision, files:declaration.files}, globalThis.location.origin);
+    sharedRevision = declaration.revision;
+  } catch { /* A closed or foreign parent keeps the worker's deferral. */ }
+}
 
 function publishGraph(worker) {
   const controller = worker.controller;
@@ -29,6 +44,7 @@ export function registerResourceGraph(index, graph = releaseGraph) {
     worker.addEventListener('controllerchange', () => publishGraph(worker));
   }
   publishGraph(worker);
+  shareWithShell();
 }
 export function initializeResourceCache() {
   return initialized ||= (async () => {
