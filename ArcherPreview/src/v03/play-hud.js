@@ -1,5 +1,6 @@
 // In-game 0.3 HUD pieces: quest tracker, coaching hint, interaction prompt and
 import {t} from './i18n.js';
+import {createInteractButton} from './interact-button.js';
 // a short banner. Text nodes are written only when their value changes.
 // The focus-line picture: FOCUS_LINES wedges with their points toward the
 // middle, in a fixed pseudo-random order (the same picture every visit).
@@ -58,6 +59,8 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  place.addEventListener('animationend',event=>{if(event.target!==place)return;place.classList.remove('is-shown');place.hidden=true;});
  root.append(focus,quest,hint,banner,place,tip,prompt,ring,caption,bubble);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
+ // Touch: the attack button stands in for the prompt while one can be acted on (interact-button.js).
+ const interactButton=createInteractButton({doc,onInteract});
  const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
  return {
   element:root,
@@ -94,9 +97,11 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    if(px===last.bubbleX&&py===last.bubbleY)return;last.bubbleX=px;last.bubbleY=py;
    bubble.style.transform=`translate3d(${px}px,${py}px,0)`;
   },
-  // value: null | {key,name,action,label,mark:'?'|'!'|null}
+  // value: null | {key,name,action,label,mark:'?'|'!'|null,act:'talk'|'push'|null}
+  // act: what a press does now (null: shown only, like waiting for the driver).
   setPrompt(value){
-   const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}`:null;if(last.prompt===id)return;last.prompt=id;
+   const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}|${value.act??''}`:null;if(last.prompt===id)return;last.prompt=id;
+   interactButton.sync(value);
    if(!value){prompt.classList.remove('is-in');prompt.hidden=true;return;}
    promptKey.textContent=value.key??'';promptKey.hidden=!value.key;promptName.textContent=value.name;promptAction.textContent=value.action;
    promptMark.textContent=value.mark??'';promptMark.hidden=!value.mark;promptMark.dataset.mark=value.mark??'';
@@ -119,6 +124,6 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    const size=Math.max(box.width,box.height)+18;
    ring.style.width=ring.style.height=size+'px';ring.style.left=box.left+box.width/2-size/2+'px';ring.style.top=box.top+box.height/2-size/2+'px';ring.hidden=false;
   },
-  dispose(){root.remove();},
+  dispose(){interactButton.dispose();root.remove();},
  };
 }

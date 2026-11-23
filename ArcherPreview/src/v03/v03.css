@@ -553,3 +553,14 @@ html[data-v03-screen="opening"] #loading .v03-lore,html[data-v03-screen="opening
 html[data-v03-zoom] :is(.v03-quest,.v03-hint,.v03-banner,.v03-place,.v03-tip,.v03-prompt,.v03-caption,.v03-dialogue-box,.v03-title-inner,.v03-panel-box,.v03-opening-line,.v03-opening-skip,.hud-layout-panel),
 html[data-v03-zoom] #app>:is(.topbar,#gold-balance,#dot-minimap,.right-tools,.boss-hud,.keyboard-hint,.action-controls,#player-hud,#map-travel),
 html[data-v03-zoom] :is(.motion-speed-dialog,.help-dialog,.minimap-travel-dialog,.death-screen){zoom:var(--v03-ui,1)}
+/* Touch: the attack button as the interaction button while one is on offer (interact-button.js, 2026-11-23). */
+#attack-button .v03-interact-face{display:none}
+#attack-button.v03-interact{position:relative}
+#attack-button.v03-interact>:not(.v03-interact-face){visibility:hidden}
+#attack-button.v03-interact::after{display:none}
+html[data-v03-lock~=attack] #attack-button.v03-interact{opacity:1!important;filter:none;pointer-events:auto}
+#attack-button.v03-interact .v03-interact-face{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#3b3424f2,#15120cf2 72%);border:2px solid #e8c77a;box-shadow:0 0 14px #e8c77a66;color:#f6e7bf;font-family:var(--v03-font);pointer-events:none;animation:v03-interact-in .22s ease-out}
+#attack-button.v03-interact .v03-interact-face svg{width:42%;height:auto;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#attack-button.v03-interact .v03-interact-face b{max-width:84%;font-size:clamp(10px,1.7vmin,13px);font-weight:700;line-height:1.1;text-align:center;overflow-wrap:anywhere}
+@keyframes v03-interact-in{from{transform:scale(.86);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){#attack-button.v03-interact .v03-interact-face{animation:none}}

@@ -75,7 +75,7 @@ export default {
    M03:{title:'The Village’s Request',steps:{ask:'Visit the village chief',hunt:'Drive off the beasts of the Windmourn Plains',report:'Report to the chief'},arrivals:{hunt:'A pack of wolves blocks the way'}},
    M04:{title:'The Bear of the Windmourn Plains',steps:{bear:'Defeat the bear on the plains hill',report:'Report to the chief'},arrivals:{bear:'The bear of the Windmourn Plains appears'}},
    M05:{title:'Goblins Raid the Village',steps:{raid:'Hold the palisade against the goblins',report:'Talk to the young man'},arrivals:{raid:'Goblin raid!'}},
-   M06:{title:"The Alpha Wolf",steps:{driver:"Talk to the driver",alpha:"Defeat the alpha wolf in the middle of the plains",report:"Report to the chief"},arrivals:{alpha:"The alpha wolf howls"}},
+   M06:{title:"The Alpha Wolf",steps:{driver:"Talk to the driver",alpha:"Defeat the alpha wolf in the middle of the plains",report:"Report to the chief"},arrivals:{alpha:"The alpha wolf has started watching you"}},
    M07:{title:"The Forest of Fiends",steps:{forest:"Enter the Forest of Fiends at the plains’ eastern edge",goblins:"Clear the goblin camp in the forest",cave:"Enter the cave deep in the forest"},arrivals:{goblins:"A goblin camp!"}},
    M08:{title:"The Fallen Sanctuary",steps:{saint:"Face the saint in the depths of the cave"}},
    M09:{title:"The Room Left Behind",steps:{report:"Return to the innkeeper"}},

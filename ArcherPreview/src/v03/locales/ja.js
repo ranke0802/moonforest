@@ -75,7 +75,7 @@ export default {
    M03:{title:'村の頼みごと',steps:{ask:'村長を訪ねる',hunt:'ウィンドモーン大平原の獣を追い払う',report:'村長に知らせる'},arrivals:{hunt:'狼の群れが道をふさぐ'}},
    M04:{title:'ウィンドモーン大平原の熊',steps:{bear:'平原の丘の熊を倒す',report:'村長に知らせる'},arrivals:{bear:'ウィンドモーン大平原の熊が姿を現した'}},
    M05:{title:'村を襲うゴブリン',steps:{raid:'柵でゴブリンを食い止める',report:'青年と話す'},arrivals:{raid:'ゴブリンの襲撃！'}},
-   M06:{title:"群れの長",steps:{driver:"御者と話す",alpha:"平原の真ん中で群れの長の狼を倒す",report:"村長に知らせる"},arrivals:{alpha:"群れの長が遠吠えを上げた"}},
+   M06:{title:"群れの長",steps:{driver:"御者と話す",alpha:"平原の真ん中で群れの長の狼を倒す",report:"村長に知らせる"},arrivals:{alpha:"群れの長があなたを注視し始めた"}},
    M07:{title:"魔物の森",steps:{forest:"平原の東の端から魔物の森に入る",goblins:"森のゴブリン野営地を一掃する",cave:"森の奥の洞窟に入る"},arrivals:{goblins:"ゴブリンの野営地だ！"}},
    M08:{title:"堕ちた聖所",steps:{saint:"洞窟の奥で聖女と向き合う"}},
    M09:{title:"残された部屋",steps:{report:"宿の主人のもとへ戻る"}},

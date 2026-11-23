@@ -1076,7 +1076,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }
   if(lift.count<PUSHES&&!talking&&!dialogue.open){
    if(nearLift(player)&&(!placed||lift.called!==lift.count))hud.setPrompt({key:null,name:t('prompt.wagonName'),action:t('prompt.waitDriver'),mark:null,label:t('prompt.waitDriver')});
-   else if(nearLift(player))hud.setPrompt({key:touch?null:'E',name:t('prompt.wagonName'),action:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),mark:null,label:t('prompt.pushWagon',{n:lift.count,total:PUSHES})});
+   else if(nearLift(player))hud.setPrompt({key:touch?null:'E',name:t('prompt.wagonName'),action:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),mark:null,label:t('prompt.pushWagon',{n:lift.count,total:PUSHES}),act:'push'});
    else hud.setPrompt(null);
   }
   return false;
@@ -1341,7 +1341,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(near){
      const quest=log.isTarget(near.npc.id),name=speaker(near.npc.name);
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
-     hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name})});
+     hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name}),act:'talk'});
     }else hud.setPrompt(null);
    }
    updateBubble(dt);shieldTalk();coach(dt);updateSlow(dt);configureCombat();contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();

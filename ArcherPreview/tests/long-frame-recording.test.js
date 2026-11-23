@@ -46,3 +46,4 @@ test('ten minutes of ordinary frames stay compact while burst frames and KTX cal
  }
  r.stop('duration-limit');const report=r.snapshot();assert.equal(report.frames,36000);assert.equal(report.seconds.length,600);assert.equal(report.detailFrames.length,60);assert.equal(report.ktxUploads.length,1);assert.ok(JSON.stringify(report).length<200000);
 });
+test('a recording runs up to twenty minutes by default',()=>{const r=new LongFrameRecording();assert.equal(r.durationMs,20*60*1000);assert.equal(r.eventLimit,4096);assert.equal(r.criticalLimit,8192);});

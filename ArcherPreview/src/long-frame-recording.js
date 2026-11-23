@@ -4,7 +4,8 @@
 const renderFields=['drawCalls','submittedTriangles','sceneMs','activeMeshesMs','renderTargetsMs','drawSubmissionMs','gpu'];
 function copyFrame(frame){return {...frame,render:{...frame.render},sections:{...frame.sections}};}
 export class LongFrameRecording {
- constructor({now=()=>performance.now(),durationMs=600000,eventLimit=2048,criticalLimit=4096}={}){Object.assign(this,{now,durationMs,eventLimit,criticalLimit});this.state='idle';}
+ // Twenty minutes (2026-11-23, user): room for four map round trips and fights in one file.
+ constructor({now=()=>performance.now(),durationMs=1200000,eventLimit=4096,criticalLimit=8192}={}){Object.assign(this,{now,durationMs,eventLimit,criticalLimit});this.state='idle';}
  start(metadata={}){const at=this.now();this.state='recording';this.startMs=at;this.endMs=null;this.startedAt=new Date().toISOString();this.metadata=metadata;this.events=[];this.critical=[];this.seconds=[];this.detailFrames=[];this.ktxUploads=[];this.lastUpload=-Infinity;this.dropped={events:0,critical:0,detailFrames:0,ktxUploads:0};this.previous=null;this.bucket=null;this.frames=0;this.detailBursts=[];this.wallStartMs=Date.now();this.reloads=[];}
  stop(reason='manual'){if(this.state!=='recording')return;this.flush();this.endMs=this.now();this.reason=reason;this.state='complete';}
  break(){this.previous=null;}

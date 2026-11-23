@@ -116,7 +116,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
     burstUntil=at+duration;recording.detailBursts.push({triggerAtMs:at,startedAtMs:at,plannedEndMs:burstUntil,critical,reason});onContinuousDraw(true);return true;
   };
   const longStart=get('long-frame-start'),longStop=get('long-frame-stop'),longDownload=get('long-frame-download'),longStatus=get('long-frame-status');
-  const syncRecording=()=>{const active=recording.state==='recording';if(longStart)longStart.disabled=!enabled||active;if(longStop)longStop.disabled=!active;if(longDownload)longDownload.disabled=recording.state==='idle';if(longStatus)longStatus.textContent=active?'기록 중 · 최대 10분':recording.state==='complete'?'기록 종료 · 파일을 다운로드하세요.':'성능 진단을 켜고 기록을 시작하세요.';};
+  const syncRecording=()=>{const active=recording.state==='recording';if(longStart)longStart.disabled=!enabled||active;if(longStop)longStop.disabled=!active;if(longDownload)longDownload.disabled=recording.state==='idle';if(longStatus)longStatus.textContent=active?'기록 중 · 최대 20분':recording.state==='complete'?'기록 종료 · 파일을 다운로드하세요.':'성능 진단을 켜고 기록을 시작하세요.';};
   const stopRecording=reason=>{if(recording.state!=='recording')return;clearTimeout(recordingTimer);recordingTimer=null;finishBurst(now());recording.stop(reason);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();};
   longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(reportMetadata());burstUntil=0;burstBudget=new DiagnosticBurstBudget({durationMs:recording.durationMs});recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
   longStop?.addEventListener('click',()=>stopRecording('manual'));

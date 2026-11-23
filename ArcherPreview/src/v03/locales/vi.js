@@ -75,7 +75,7 @@ export default {
    M03:{title:'Lời nhờ của làng',steps:{ask:'Đến gặp trưởng làng',hunt:'Đuổi thú ở Đại Bình Nguyên Windmourn',report:'Báo cho trưởng làng'},arrivals:{hunt:'Một bầy sói chặn đường'}},
    M04:{title:'Con gấu của Đại Bình Nguyên Windmourn',steps:{bear:'Hạ con gấu trên đồi bình nguyên',report:'Báo cho trưởng làng'},arrivals:{bear:'Con gấu của Đại Bình Nguyên Windmourn xuất hiện'}},
    M05:{title:'Yêu tinh tấn công làng',steps:{raid:'Chặn yêu tinh tại hàng rào',report:'Nói chuyện với chàng trai'},arrivals:{raid:'Yêu tinh tấn công!'}},
-   M06:{title:"Sói đầu đàn",steps:{driver:"Nói chuyện với người đánh xe",alpha:"Hạ sói đầu đàn giữa đồng bằng",report:"Báo cho trưởng làng"},arrivals:{alpha:"Sói đầu đàn tru lên"}},
+   M06:{title:"Sói đầu đàn",steps:{driver:"Nói chuyện với người đánh xe",alpha:"Hạ sói đầu đàn giữa đồng bằng",report:"Báo cho trưởng làng"},arrivals:{alpha:"Sói đầu đàn bắt đầu dõi theo bạn"}},
    M07:{title:"Rừng Ma Vật",steps:{forest:"Vào Rừng Ma Vật ở rìa phía đông đồng bằng",goblins:"Quét sạch trại yêu tinh trong rừng",cave:"Vào hang động sâu trong rừng"},arrivals:{goblins:"Trại yêu tinh!"}},
    M08:{title:"Thánh đường sa ngã",steps:{saint:"Đối mặt thánh nữ nơi sâu nhất của hang"}},
    M09:{title:"Căn phòng bị bỏ lại",steps:{report:"Quay về gặp chủ quán trọ"}},

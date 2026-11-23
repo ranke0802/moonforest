@@ -75,7 +75,7 @@ export default {
    M03:{title:'村子的请求',steps:{ask:'拜访村长',hunt:'驱赶温德蒙大平原的野兽',report:'向村长报告'},arrivals:{hunt:'狼群挡住了去路'}},
    M04:{title:'温德蒙大平原之熊',steps:{bear:'打倒平原山丘上的熊',report:'向村长报告'},arrivals:{bear:'温德蒙大平原之熊现身了'}},
    M05:{title:'袭击村子的哥布林',steps:{raid:'在栅栏前挡住哥布林',report:'与青年交谈'},arrivals:{raid:'哥布林来袭！'}},
-   M06:{title:"头狼",steps:{driver:"与车夫交谈",alpha:"在平原中央打倒头狼",report:"向村长报告"},arrivals:{alpha:"头狼发出了嚎叫"}},
+   M06:{title:"头狼",steps:{driver:"与车夫交谈",alpha:"在平原中央打倒头狼",report:"向村长报告"},arrivals:{alpha:"头狼开始注视着你"}},
    M07:{title:"魔物之森",steps:{forest:"从平原东端进入魔物之森",goblins:"扫荡森林里的哥布林营地",cave:"进入森林深处的洞窟"},arrivals:{goblins:"是哥布林营地！"}},
    M08:{title:"堕落的圣所",steps:{saint:"在洞窟深处面对圣女"}},
    M09:{title:"被留下的房间",steps:{report:"回到旅店老板身边"}},

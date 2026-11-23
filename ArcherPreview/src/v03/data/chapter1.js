@@ -174,7 +174,7 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M06',reward:{gold:250},title:'우두머리 늑대',steps:[
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-alpha'}},
-  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28},intro:'alpha-start',arrival:'우두머리 늑대가 울부짖는다'},
+  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28},intro:'alpha-start',arrival:'우두머리 늑대가 당신을 주시하기 시작했다'},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-alpha'}},
  ]},
  {id:'M07',reward:{gold:200,potions:1},title:'마물의 숲',steps:[

@@ -351,6 +351,13 @@ test('a loading failure hands the screen back to the game error card',async()=>{
  assert.equal(h.shell.screen,'failed');assert.equal(h.shell.blocksProgress,true);assert.equal(h.document.querySelector('.v03-title').hidden,true);assert.equal(h.shell.pilotMovement,null);assert.ok(h.log.includes('suspend:false'));
  h.window.dispatchEvent(new h.window.Event('pagehide'));assert.equal(h.save.meta().used,false,'a failed start never creates a save');
 });
+test('the loading cover never scrolls; only the error card may',()=>{
+ // The drifting light layer is larger than the screen on purpose and scale:1 makes the cover its
+ // containing block, so overflow:auto offered it as scroll on PC and phones (2026-11-23, user).
+ const html=readFileSync(new URL('../moonforest-0.3.html',import.meta.url),'utf8'),rule=html.match(/#app>#loading\{[^}]*\}/)?.[0]??'';
+ assert.match(rule,/overflow:hidden;overflow:clip/);assert.doesNotMatch(rule,/overflow:auto/);
+ assert.match(html,/#app>#loading\.error\{overflow:auto\}/);assert.match(html,/#app>#loading\.error::after\{content:none\}/);
+});
 test('0.3 entry and runtime hooks are wired',()=>{
  const html=readFileSync(new URL('../moonforest-0.3.html',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  assert.match(html,/<div id="v03-splash" aria-hidden="true"><span>HYProduct<\/span><\/div>/);assert.match(html,/<title>MoonForest 0\.3<\/title>/);
