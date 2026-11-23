@@ -116,7 +116,7 @@ import {createFrameDiagnostics} from './frame-diagnostics.js';
 import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
 import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
-import {estimateTextureMemory,textureMemoryTotals} from './texture-memory.js';import {setTextureTier,MONSTER_2K_TEXTURES} from './texture-replacements.js';import {createActorMaterialFreeze} from './v03/actor-material-freeze.js';
+import {estimateTextureMemory,textureMemoryTotals} from './texture-memory.js';import {setTextureTier,MONSTER_2K_TEXTURES} from './texture-replacements.js';import {createActorMaterialFreeze} from './v03/actor-material-freeze.js';import {castsPlayerShadow} from './v03/actor-shadow-casters.js';
 import {inspectMapDecodeCache} from './map-decode-cache.js';
 import {inspectKtxWorkerPool} from './ktx-worker-supervisor.js';
 import {inspectMeshoptWorkerPool} from './meshopt-worker-supervisor.js';
@@ -172,6 +172,9 @@ if(versionRoute.edition)loadingView.enableEstimate(); // 0.3: the model stage mo
 // 0.3: regular monsters load their 2048 level (texture-replacements.js). Deployed-build check 2026-11-23:
 // pixel-identical at play distance, max 14/255 with the wolf filling the screen. ?monstertex=4k keeps 4K.
 if(versionRoute.edition&&new URLSearchParams(location.search).get('monstertex')!=='4k')setTextureTier(MONSTER_2K_TEXTURES);
+// 0.3: ?actorshadow=lean keeps the player's outline shells and small parts out of the shadow pass
+// (v03/actor-shadow-casters.js). On trial until the comparison is approved and measured on a phone.
+const leanPlayerShadows=!!versionRoute.edition&&new URLSearchParams(location.search).get('actorshadow')==='lean';
 if(versionRoute.edition)setEnemyTravelRule({
   // VILLAGE_MAP and not world.mapId: the route grids are built while a map loads, before the world says where it is.
   limit:(position,normal)=>VILLAGE_MAP?villageTravelLimit(position,normal+.5)-.5:normal,
@@ -793,7 +796,7 @@ async function loadCharacter() {
         mesh.computeBonesUsingShaders = true;
         mesh.alwaysSelectAsActiveMesh = true;
       }
-      world.shadows.addShadowCaster(mesh, false);
+      if(!leanPlayerShadows||castsPlayerShadow(mesh))world.shadows.addShadowCaster(mesh, false);
     }
     world.lighting.registerMeshes(container.meshes);
     applyPlayerDetail(container,world.camera);
