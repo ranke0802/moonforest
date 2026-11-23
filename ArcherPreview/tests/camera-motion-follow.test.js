@@ -9,7 +9,7 @@ import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
 import {CameraFollow,STABLE_PLAYER_FOCUS_HEIGHT,setupCameraFollowControls,playerHeadTarget,combatFocus} from '../src/camera-follow.js';
 import {CameraPitch} from '../src/camera-pitch.js';
 import {CameraZoom} from '../src/camera-zoom.js';
-import {CaveCameraGuard,caveCameraBlocked} from '../src/witch-cave-camera.js';
+import {CaveCameraGuard,caveCameraBlocked,prepareCaveCameraField} from '../src/witch-cave-camera.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 import {carryPortalPose} from '../src/map-transition.js';
@@ -18,6 +18,8 @@ import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
 import {setupSettingsPanel} from '../src/settings-panel.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {projectBossHealth} from '../src/boss-health-bar.js';
+// The cave camera field loads with the cave map (startup-resources.js).
+await prepareCaveCameraField();
 
 const near=(a,b,eps=1e-6)=>assert.ok(Math.abs(a-b)<eps,`${a} != ${b}`);
 const storage=()=>{const data=new Map();return {getItem:k=>data.get(k),setItem:(k,v)=>data.set(k,v)};};
