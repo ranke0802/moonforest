@@ -55,9 +55,11 @@ function assetEstimate(asset,fallback){
   return {estimatedBytes:Math.max(fallback??0,geometryBytes+poseBytes),sharedGeometryBytes:geometryBytes,poseMatrixBytes:poseBytes,baseTriangles,outlineTriangles,shadowTriangles:baseTriangles,totalPassTriangles:baseTriangles*2+outlineTriangles,skeletons:skeletons.size,morphManagers:managers.size,measurement:'indexed GPU triangles; pass sum is a conservative submission estimate, not measured GPU time'};
 }
 
-// A factory owns only the libraries it creates. Every actor is a normal cloned
-// encounter; resident Elena adoption is deliberately never used for this pool.
-export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.currentPlayer,libraryFactory=(scene,id)=>new BossModelLibrary(scene,isRegularWolf(id)?regularWolfManifest(id):id,{scoped:true}),onDefeat=()=>{},rewardsEnabled=false,interactNpc=()=>false,interaction=interactNpc,onActorHide=()=>{},getActivity=()=>({})}){
+// A factory owns only the libraries it creates; a model the battle keeps for
+// the page (BossBattle.sharedModelLibrary) is borrowed and never disposed here.
+// Every actor is a normal cloned encounter; resident Elena adoption is
+// deliberately never used for this pool.
+export function createActorEncounterFactory({world,battle,getPlayer=()=>battle.currentPlayer,libraryFactory=(scene,id)=>{const manifest=isRegularWolf(id)?regularWolfManifest(id):id,shared=battle?.sharedModelLibrary?.(manifest);return shared&&shared.scene===scene&&!shared.disposed?{library:shared,owned:false}:new BossModelLibrary(scene,manifest,{scoped:true});},onDefeat=()=>{},rewardsEnabled=false,interactNpc=()=>false,interaction=interactNpc,onActorHide=()=>{},getActivity=()=>({})}){
   const scene=world.scene,entries=new Map(),adapters=new Set();let disposed=false,serial=0;
   function entryFor(definition){
     const key=definition.assetId+'@'+definition.assetVersion;
