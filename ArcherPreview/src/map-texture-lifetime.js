@@ -43,14 +43,22 @@ export function installMapTextureLifetimeGuard(Ktx){
   Ktx.prototype._createTexture=function(data,internal,...args){
     if(abandoned.has(internal))throw mapLoadAbortError();
     // Large textures go up a strip at a time where that is enabled (split-texture-upload.js).
-    const run=()=>splitTextureUpload(this._engine,data,internal,args[0])?undefined:create.call(this,data,internal,...args);
+    let split=false;
+    const run=()=>{
+      split=splitTextureUpload(this._engine,data,internal,args[0]);
+      if(!split)return create.call(this,data,internal,...args);
+    };
     const observers=uploadObservers.get(this._engine);
     if(!observers?.size)return run();
     const start=performance.now();let success=false;
     try{const result=run();success=true;return result;}
     finally{
       const end=performance.now(),first=data?.mipmaps?.[0];
-      const sample={startedAtMs:start,completedAtMs:end,cpuMs:Math.max(0,end-start),width:first?.width??null,height:first?.height??null,mipCount:data?.mipmaps?.length??0,format:data?.transcodedFormat??null,success};
+      // Babylon also uses synthetic data: URLs for external glTF images.
+      // Keep only a content filename, never a URL or embedded payload.
+      const tail=typeof internal?.url==='string'?internal.url.slice(-180):'';
+      const assetFile=tail.match(/([a-f0-9]{64}(?:\.ktx2|\.(?:glb|gltf)#image\d+))(?:[?#].*)?$/i)?.[1]??null;
+      const sample={startedAtMs:start,completedAtMs:end,cpuMs:Math.max(0,end-start),width:first?.width??null,height:first?.height??null,mipCount:data?.mipmaps?.length??0,format:data?.transcodedFormat??null,assetFile,split,success};
       for(const callback of observers)try{callback(sample);}catch{/* Diagnostic observers must never alter texture loading. */}
     }
   };

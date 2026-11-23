@@ -2,6 +2,7 @@ import { AbstractMesh, Frustum, MeshBuilder, Plane, Vector3 } from '@babylonjs/c
 import '@babylonjs/core/Engines/Extensions/engine.query.js';
 import '@babylonjs/core/Rendering/boundingBoxRenderer.js';
 import {caveFogRootEnabled} from './cave-fog-of-war.js';
+import {sceneryProjection} from './village-scenery-cache.js';
 
 export function stableOcclusion(hiddenSamples,visibleResult){return visibleResult?0:hiddenSamples+1;}
 export function safeQueryBounds(min,max,camera,nearPlane){
@@ -70,8 +71,12 @@ export class VillageOcclusion {
   afterRender(){
     if(this.disabled||this.stableFrames<3||!this.groups.length)return;
     const now=performance.now(),engine=this.engine,renderer=this.world.scene.getBoundingBoxRenderer(),camera=this.world.camera;
-    Frustum.GetNearPlaneToRef(camera.getTransformationMatrix(),this.near);
-    const safe=g=>safeQueryBounds(g.min,g.max,camera.globalPosition,this.near);
+    const scene=this.world.scene;
+    const screenOnly=this.world.mapId==='village'&&this.world.edition==='moonforest-0.3'&&scene.activeCamera===camera&&!scene.frameGraph&&!(scene.activeCameras?.length>1);
+    const planes=screenOnly?sceneryProjection(camera).planes:null;
+    if(!planes)Frustum.GetNearPlaneToRef(camera.getTransformationMatrix(),this.near);
+    const near=planes?planes[0]:this.near;
+    const safe=g=>safeQueryBounds(g.min,g.max,camera.globalPosition,near);
     try{
       for(const g of this.groups){
         if(!safe(g)){this.reveal(g);g.epoch=-1;continue;}
@@ -88,6 +93,12 @@ export class VillageOcclusion {
         const g=this.groups[this.cursor++%this.groups.length];
         if(!safe(g)){this.reveal(g);continue;}
         if(g.pending||now-g.lastQuery<300||!g.items.some(r=>r.cellActive!==false&&r.fogVisible!==false))continue;
+        // An entirely off-screen box cannot save a camera draw. This only
+        // skips issuing a query; it never hides an object or a shadow caster.
+        if(planes){
+          if(g.testPlanes!==planes){g.onScreen=g.proxy.isInFrustum(planes);g.testPlanes=planes;}
+          if(!g.onScreen)continue;
+        }
         // Only a cold query pass needs an outside-query initialization call.
         // Once ready, the SDK binds everything for the one draw inside the
         // query; repeating that draw beforehand contributes no query samples.

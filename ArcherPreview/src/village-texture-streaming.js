@@ -1,5 +1,6 @@
 import {Texture} from '@babylonjs/core';
 import {releaseMapTexture} from './map-texture-lifetime.js';
+import {markSceneryPromotion} from './split-texture-upload.js';
 import {VILLAGE_LOD_COVERAGE} from './village-lod.js';
 import {sceneryProjection,projectedSceneryCoverage} from './village-scenery-cache.js';
 import {VILLAGE_TEXTURE_BUDGET,highTextureBytes} from './village-texture-budget.js';
@@ -207,7 +208,12 @@ export class VillageTextureStreaming {
       // can dispose it as well. updateURL preserves these sampling/colour options.
       try{item=new Texture(null,scene,{...highTextureOptions(role,old),
         onLoad:()=>queueMicrotask(()=>{if(this.disposed)cancel();else finish();}),
-        onError:(message,error)=>queueMicrotask(()=>finish(error??new Error(message||'High texture load failed')))});item.updateURL(url);
+        onError:(message,error)=>queueMicrotask(()=>finish(error??new Error(message||'High texture load failed')))});
+        item.updateURL(url);
+        // The current material stays bound while this optional replacement loads.
+        if(this.world.edition==='moonforest-0.3'&&this.world.mapId==='village'&&this.world.touchDevice&&old?.getInternalTexture?.()?.isReady){
+          markSceneryPromotion(item.getInternalTexture());
+        }
       }catch(error){finish(error);}
     });
     for(const key of ['coordinatesIndex','coordinatesMode','wrapU','wrapV','uScale','vScale','uOffset','vOffset','uAng','vAng','wAng','level','hasAlpha']){

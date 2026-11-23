@@ -89,7 +89,11 @@ export class SceneDiagnostics {
     if(!this.drawCpuEnabled){this.cpu?.dispose();this.cpu=null;this.stopTextureUploads?.();this.stopTextureUploads=null;this.textureUploads=[];}
     else if(this.scene&&!this.cpu){
       this.cpu=new RenderCpuSampler(this.scene,{now:this.options.now});this.cpu.setContinuous(this.continuous);this.cpu.setActive(this.active);
-      this.stopTextureUploads=observeMapTextureUploads(this.scene.getEngine(),sample=>{if(!this.active)return;this.textureUploads.push(sample);if(this.textureUploads.length>8)this.textureUploads.shift();});
+      this.stopTextureUploads=observeMapTextureUploads(this.scene.getEngine(),sample=>{
+        if(!this.active)return;
+        this.textureUploads.push({...sample,...this.options.uploadContext?.()});
+        if(this.textureUploads.length>8)this.textureUploads.shift();
+      });
     }
   }
   setEnabled(enabled,scene){

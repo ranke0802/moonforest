@@ -124,7 +124,7 @@ import {inspectMapTerrainCache} from './map-terrain-cache.js';
 import {inspectMapNavigationCache} from './map-navigation-cache.js';
 import { renderPixelRatio, RenderActivity } from './render-policy.js';
 import {setupFrameRateControl} from './frame-rate-settings.js';
-import {enableSplitTextureUpload,splitTextureUploadStats,splitUploadRequested} from './split-texture-upload.js';
+import {enableSplitTextureUpload,splitTextureUploadStats,splitUploadPreference,villageArrivalUpload} from './split-texture-upload.js';
 import {animationCompaction,setAnimationCompaction} from './animation-compaction.js';
 import {createLongTaskLog} from './long-task-log.js';
 import {setupRenderScaleControl,renderResolutionSnapshot} from './render-scale-settings.js';
@@ -160,7 +160,7 @@ const loadingView=createLoadingView();
 const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
 const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabled;
-const splitUploadOn=splitUploadRequested(location.search); // read before the route below rewrites the address
+const splitUploadOverride=splitUploadPreference(location.search); // before the route rewrites the address
 const fullAnimationKeys=/[?&]animkeys=full(?:&|$)/.test(location.search); // comparison switch: keep every exported key
 const longTaskLog=versionRoute.edition?createLongTaskLog():null;
 const cinematicAuthoringPreview=releaseEnabled&&new URLSearchParams(location.search).get('cinematicPreview')==='1';
@@ -343,7 +343,7 @@ const renderScaleControl=setupRenderScaleControl({host:$('.settings-display-opti
 if(import.meta.hot)import.meta.hot.dispose(()=>renderScaleControl.dispose());
 const renderResolution=()=>renderResolutionSnapshot({engine,canvas,deviceRatio:window.devicePixelRatio,quality:qualityMode,touchDevice,percent:renderScaleControl.value});
 const loadDiagnostics=new LoadDiagnostics();
-const sceneDiagnostics=new SceneDiagnostics();
+const sceneDiagnostics=new SceneDiagnostics({uploadContext:()=>({map:world?.mapId??null,covered:document.documentElement.dataset.loading!==undefined})});
 const mapResourceInspector=createMapResourceInspector({getWorld:()=>world,getLoad:()=>loadDiagnostics.snapshot()});
 if(import.meta.hot)import.meta.hot.dispose(()=>mapResourceInspector.dispose());
 let playerTextureSelection=null;
@@ -1174,9 +1174,15 @@ try {
   engine.onContextRestoredObservable.add(updateGraphicsDevice);
   if(combatTrail)engine.onContextLostObservable.add(()=>gameplayTrail()?.fault(world.mapId,'webgl-context-lost',boss?.playerHp));
   engine.maxFPS=renderActivity.limit();
-  // 0.3, opt-in while under review (?splitupload=1): large KTX2 textures reach the GPU in strips over several frames.
   setAnimationCompaction(!!versionRoute.edition&&!fullAnimationKeys);
-  if(versionRoute.edition&&splitUploadOn)enableSplitTextureUpload(engine,{bytesPerFrame:()=>loadingAsset?16<<20:touchDevice?1<<20:4<<20});
+  if(versionRoute.edition&&splitUploadOverride===true){
+    enableSplitTextureUpload(engine,{bytesPerFrame:()=>loadingAsset?16<<20:touchDevice?1<<20:4<<20});
+  }else if(versionRoute.edition==='moonforest-0.3'&&touchDevice&&splitUploadOverride===null){
+    enableSplitTextureUpload(engine,{
+      accept:(data,internal)=>villageArrivalUpload(world?.mapId,document.documentElement.dataset.loading!==undefined,data,internal),
+      idleBytes:1<<20
+    });
+  }
   // The Studio controls live outside the preview iframe. Moving focus to
   // those controls blurs its window even while the document stays visible.
   // Actual hidden/modal suspension is still owned by syncPlayback below.

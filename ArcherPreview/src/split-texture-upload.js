@@ -16,23 +16,35 @@
 // The render loop is paused during map travel and behind modal screens. A timer keeps the
 // queue moving then, with a larger budget since there is no frame to protect.
 const states=new WeakMap();
+const sceneryPromotions=new WeakSet();
 const UNCOMPRESSED=new Set([0x8058,0x8229,0x822b]);
 export const SPLIT_UPLOAD_DEFAULTS=Object.freeze({minBytes:1<<20,syncLevelBytes:1<<18,bandBytes:1<<20,bytesPerFrame:1<<20,idleBytes:16<<20,idleAfterMs:100,timerMs:50,idleTimerMs:4});
 const blocks=(width,height)=>Math.ceil(width/4)*Math.ceil(height/4);
 const bytesOf=data=>data instanceof Uint8Array?data:ArrayBuffer.isView(data)?new Uint8Array(data.buffer,data.byteOffset,data.byteLength):new Uint8Array(data);
 const alive=internal=>!!internal?._hardwareTexture?.underlyingResource;
 
-// Under review it is opt-in, apart from the existing upload: ?splitupload=1 turns it on for
-// this tab and stays on across the game's page reloads (map travel); ?splitupload=0 turns it off.
+// Explicit A/B choices survive a page reload. With no override the entry point
+// can enable just the measured village case.
 const SWITCH_KEY='moonforest:splitupload';
-export function splitUploadRequested(search,storage){
+export function splitUploadPreference(search,storage){
   let value=null;
   try{value=new URLSearchParams(search??'').get('splitupload');}catch{}
   try{
     storage??=globalThis.sessionStorage;
-    if(value==='1')storage?.setItem(SWITCH_KEY,'1');else if(value==='0')storage?.removeItem(SWITCH_KEY);
-    return value==='1'||(value!=='0'&&storage?.getItem(SWITCH_KEY)==='1');
-  }catch{return value==='1';}
+    if(value==='1'||value==='0')storage?.setItem(SWITCH_KEY,value);
+    else if(value==='auto')storage?.removeItem(SWITCH_KEY);
+    else value=storage?.getItem(SWITCH_KEY);
+  }catch{/* The address still applies when storage is unavailable. */}
+  return value==='1'?true:value==='0'?false:null;
+}
+export function splitUploadRequested(search,storage){return splitUploadPreference(search,storage)===true;}
+
+export function markSceneryPromotion(internal){
+  if(internal)sceneryPromotions.add(internal);
+}
+export function villageArrivalUpload(mapId,covered,data,internal){
+  const top=data?.mipmaps?.[0];
+  return mapId==='village'&&!covered&&sceneryPromotions.has(internal)&&data?.transcodedFormat===0x93b0&&top?.width===4096&&top.height===4096;
 }
 
 export function enableSplitTextureUpload(engine,options={}){
@@ -49,9 +61,13 @@ export function enableSplitTextureUpload(engine,options={}){
     if(state.now()-state.lastFrameAt>state.options.idleAfterMs){state.stats.idlePumps++;pump(state,state.options.idleBytes,true);}
     arm(state);
   };
-  state.begin=engine.onBeginFrameObservable?.add(()=>{state.lastFrameAt=state.now();if(state.jobs.length)pump(state,frameBudget(state));})??null;
+  state.begin=engine.onBeginFrameObservable?.add(()=>{if(state.jobs.length){state.lastFrameAt=state.now();pump(state,frameBudget(state));}})??null;
   // A lost context takes every GL texture with it; Babylon rebuilds them through its normal path.
-  state.lost=engine.onContextLostObservable?.add(()=>{for(const job of state.jobs)job.settle(true);state.jobs.length=0;state.support.clear();})??null;
+  state.lost=engine.onContextLostObservable?.add(()=>{for(const job of state.jobs)job.settle(true);state.jobs.length=0;state.formats.clear();state.support.clear();})??null;
+  state.disposed=engine.onDisposeObservable?.addOnce(()=>{
+    for(const job of state.jobs){state.stats.dropped++;job.settle(false);}
+    state.jobs.length=0;disableSplitTextureUpload(engine);
+  });
   states.set(engine,state);return state;
 }
 export function disableSplitTextureUpload(engine){
@@ -59,6 +75,7 @@ export function disableSplitTextureUpload(engine){
   if(state.jobs.length)pump(state,Infinity,true);
   if(state.begin)engine.onBeginFrameObservable?.remove(state.begin);
   if(state.lost)engine.onContextLostObservable?.remove(state.lost);
+  if(state.disposed)engine.onDisposeObservable?.remove(state.disposed);
   if(state.timer!==null){state.clearTimer(state.timer);state.timer=null;}
   states.delete(engine);return true;
 }
@@ -118,6 +135,7 @@ function supported(state,format,blockBytes){
 // Called in place of KhronosTextureContainer2._createTexture. True: handled here.
 export function splitTextureUpload(engine,data,internal,options){
   const state=states.get(engine);if(!state||!internal||internal.isCube)return false;
+  if(state.options.accept&&!state.options.accept(data,internal))return false;
   const mips=data?.mipmaps,first=mips?.[0];
   if(!first?.data||data.errors||(data.layerCount??1)>1||UNCOMPRESSED.has(data.transcodedFormat))return false;
   if(first.data.byteLength<state.options.minBytes)return false;
@@ -143,6 +161,7 @@ export function splitTextureUpload(engine,data,internal,options){
   state.stats.textures++;
   if(!levels.length){internal.isReady=true;return true;}
   let settle;const done=new Promise(resolve=>{settle=resolve;});
+  if(!state.jobs.length)state.lastFrameAt=state.now();
   state.jobs.push({internal,format,blockBytes,levels,settle});state.waiting.set(internal,done);arm(state);
   return true;
 }

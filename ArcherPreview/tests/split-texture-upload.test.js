@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {enableSplitTextureUpload,disableSplitTextureUpload,splitTextureUpload,splitTextureUploadStats,splitTextureUploadDone,splitUploadRequested} from '../src/split-texture-upload.js';
+import {enableSplitTextureUpload,disableSplitTextureUpload,splitTextureUpload,splitTextureUploadStats,splitTextureUploadDone,splitUploadRequested,splitUploadPreference,markSceneryPromotion,villageArrivalUpload} from '../src/split-texture-upload.js';
 
 const ASTC=37808;
 function rig({error=0,version=2}={}){
@@ -149,4 +149,42 @@ test('it is off unless the address asks for it, and the choice stays with the ta
   const broken={getItem(){throw new Error('denied');},setItem(){throw new Error('denied');},removeItem(){}};
   assert.equal(splitUploadRequested('?splitupload=1',broken),true,'storage refused: the address still decides');
   assert.equal(splitUploadRequested('',broken),false);
+  assert.equal(splitUploadPreference('',storage),false);
+  assert.equal(splitUploadPreference('?splitupload=auto',storage),null);
+  assert.equal(splitUploadPreference('',storage),null);
+});
+
+test('only a replacement for an already visible village material can spread its 4K ASTC upload',async()=>{
+  const {engine,calls,options,frame}=rig();
+  let map='village',covered=true,dispose;
+  engine.onDisposeObservable={addOnce(fn){dispose=fn;return fn;},remove(){dispose=null;}};
+  enableSplitTextureUpload(engine,{...options,accept:(data,item)=>villageArrivalUpload(map,covered,data,item),idleBytes:1<<20});
+  const full=texture(4096),replacement=internalTexture();
+  markSceneryPromotion(replacement);
+  assert.equal(splitTextureUpload(engine,full,replacement,{}),false);
+  covered=false;map='great-plains';
+  assert.equal(splitTextureUpload(engine,full,replacement,{}),false);
+  map='village';
+  assert.equal(splitTextureUpload(engine,full,internalTexture(),{}),false,'combat and initial assets');
+  assert.equal(splitTextureUpload(engine,{...full,transcodedFormat:37492},replacement,{}),false,'ETC2');
+  assert.equal(splitTextureUpload(engine,texture(2048),replacement,{}),false);
+  assert.equal(calls.length,0,'rejected candidates never probe the driver');
+  assert.equal(splitTextureUpload(engine,full,replacement,{}),true);
+  const done=splitTextureUploadDone(engine,replacement);
+  for(let i=0;i<21;i++){
+    assert.equal(replacement.isReady,false);
+    const before=calls.length;frame();
+    assert.equal(calls.slice(before).filter(c=>c.op==='sub').reduce((sum,c)=>sum+c.bytes,0),1<<20);
+  }
+  assert.equal(await done,true);
+  full.mipmaps.forEach((level,i)=>{
+    const rows=calls.filter(c=>c.bound===replacement&&c.op==='sub'&&c.level===i);
+    let y=0;
+    for(const row of rows){assert.equal(row.y,y);y+=row.height;}
+    assert.equal(y,level.height);assert.equal(rows.reduce((sum,c)=>sum+c.bytes,0),level.data.length);
+  });
+  const pending=internalTexture();markSceneryPromotion(pending);
+  assert.equal(splitTextureUpload(engine,full,pending,{}),true);
+  const interrupted=splitTextureUploadDone(engine,pending);dispose();
+  assert.equal(await interrupted,false);assert.equal(splitTextureUploadStats(engine),null);
 });

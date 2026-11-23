@@ -66,6 +66,23 @@ test('ready native occlusion queries draw once instead of twice with identical q
   report.push({case:'native-ready-query-draws',queries:count,oldDraws:old.draws.length,currentDraws:current.draws.length,visibilityCadenceTimeoutAndEpochEqual:true,drawReductionPercent:50});
 });
 
+test('the 0.3 village skips offscreen proxy draws and resumes querying when the camera turns back',async t=>{
+  const clock={now:0};t.mock.method(performance,'now',()=>clock.now);
+  const baseline=fixture(t,{clock}),current=fixture(t,{clock});
+  current.world.edition='moonforest-0.3';current.world.mapId='village';
+  function position(f,x){
+    f.camera.position.x=x;f.camera.setTarget(new Vector3(x,1,0));
+    f.scene.setTransformMatrix(f.camera.getViewMatrix(true),f.camera.getProjectionMatrix());
+  }
+  for(const f of [baseline,current]){position(f,150);await f.warm();f.step(0);}
+  assert.equal(baseline.stats.occlusionQueries,2);assert.equal(current.stats.occlusionQueries,0);
+  assert.ok(current.records.every(r=>r.root.isEnabled()&&!r.occluded));
+  position(current,13);
+  for(let i=0;i<4;i++)current.step((i+1)*50,{visible:true});
+  assert.equal(current.stats.occlusionQueries,2);
+  assert.ok(current.records.every(r=>r.root.isEnabled()&&!r.occluded));
+});
+
 test('a cold dedicated query pass cannot be approved by a ready ordinary scene pass',async t=>{
   const clock={now:0};t.mock.method(performance,'now',()=>clock.now);const f=fixture(t,{clock});await f.warm();
   const shader=f.renderer._colorShaderForOcclusionQuery,native=shader.isReady.bind(shader),pass=f.renderer._renderPassIdForOcclusionQuery,scenePass=f.engine.currentRenderPassId,checked=[];
