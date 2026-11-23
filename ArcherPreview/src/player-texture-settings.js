@@ -9,7 +9,8 @@ export function readPlayerTexturePreference(storage){
 /** Settings only: never fetch/reload, change a live texture, or retry a failed
  * graph. The owner applies the preference at the next explicit player load.
  */
-export function setupPlayerTextureSettings({host,storage,release,navigator=globalThis.navigator,onChange=()=>{},onApply}={}){
+export function setupPlayerTextureSettings({host,storage,release,compressedSize=8192,navigator=globalThis.navigator,onChange=()=>{},onApply}={}){
+ const small=compressedSize===4096;
  const enabled=release==='moonforest-0.2',mobile=isMobilePlayerTextureDevice(navigator);
  let value=enabled?readPlayerTexturePreference(storage):'original',disposed=false,failure=null,active=null,applying=false;
  const doc=host?.ownerDocument,root=enabled&&!mobile&&doc?doc.createElement('div'):null;
@@ -20,7 +21,7 @@ export function setupPlayerTextureSettings({host,storage,release,navigator=globa
   select.disabled=applying;recover.hidden=!failure;recover.disabled=applying;if(applyButton)applyButton.disabled=applying;
   note.textContent=applying?'선택한 텍스처로 다시 불러오는 중입니다.':failure?'압축 모드에서 불러오기가 실패했습니다. 원본으로 변경해 다시 불러올 수 있습니다.':
    profile?.selectionReason==='compression-unavailable-original'?'이 환경에서는 원본 이미지를 사용합니다. 휴대기기의 자동 선택은 유지됩니다.':
-   '두 모드 모두 원본 해상도입니다. 압축은 미세한 색상 차이가 있을 수 있습니다. 변경 후 다시 접속하면 적용됩니다.';
+   small?'압축은 4K로, 게임 화면에서는 원본과 차이가 거의 없고 메모리를 적게 씁니다. 원본은 8K입니다. 변경 후 다시 접속하면 적용됩니다.':'두 모드 모두 원본 해상도입니다. 압축은 미세한 색상 차이가 있을 수 있습니다. 변경 후 다시 접속하면 적용됩니다.';
  }
  function setValue(next,{notify=true}={}){
   if(!enabled||disposed)return value;const normalized=normalizePlayerTexturePreference(next),changed=normalized!==value;value=normalized;failure=null;
@@ -39,7 +40,7 @@ export function setupPlayerTextureSettings({host,storage,release,navigator=globa
  if(root){
   root.className='player-texture-settings';const label=doc.createElement('label');label.textContent='플레이어 텍스처 · PC ';
   select=doc.createElement('select');select.id='player-texture-pc-select';select.setAttribute('aria-label','PC 플레이어 텍스처');
-  for(const [id,title]of [['compressed','8K GPU 압축 · 권장'],['original','8K 원본 이미지']]){const option=doc.createElement('option');option.value=id;option.textContent=title;select.append(option);}
+  for(const [id,title]of [['compressed',small?'4K GPU 압축 · 권장':'8K GPU 압축 · 권장'],['original','8K 원본 이미지']]){const option=doc.createElement('option');option.value=id;option.textContent=title;select.append(option);}
   label.append(select);note=doc.createElement('small');note.setAttribute('role','status');recover=doc.createElement('button');recover.type='button';recover.textContent=typeof onApply==='function'?'원본으로 바꾸고 다시 불러오기':'원본으로 변경';recover.hidden=true;
   root.append(label,note,recover);
   if(typeof onApply==='function'){applyButton=doc.createElement('button');applyButton.type='button';applyButton.textContent='적용하고 다시 불러오기';applyButton.addEventListener('click',applyClick);root.append(applyButton);}

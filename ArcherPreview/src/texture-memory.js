@@ -15,6 +15,14 @@ export function textureBytes(texture){
  return width*height*perPixel*(texture.isCube?6:1)*(texture.depth>1?texture.depth:1)*(texture.generateMipMaps?4/3:1);
 }
 
+// Per-second totals for the recorder: the same sum without the per-texture rows.
+export function textureMemoryTotals(engine){
+ const cache=engine?.getLoadedTexturesCache?.();if(!cache)return null;
+ let bytes=0,plain=0,count=0;
+ for(const texture of cache){const size=textureBytes(texture);if(!size)continue;count++;bytes+=size;if(!(ONE.has(texture.format)||HALF.has(texture.format)))plain+=size;}
+ return {count,megabytes:Math.round(bytes/1048576),uncompressedMegabytes:Math.round(plain/1048576)};
+}
+
 export function estimateTextureMemory(engine,{largest=8}={}){
  const cache=engine?.getLoadedTexturesCache?.();if(!cache)return null;
  let bytes=0,plain=0;const rows=[];

@@ -31,7 +31,10 @@ export function isMobilePlayerTextureDevice(navigator=globalThis.navigator){
   return ios||/Android/i.test(navigator?.userAgent??'');
 }
 
-export function selectPlayerTextureProfile(character,caps,navigator=globalThis.navigator,{release,desktopPreference='compressed'}={}){
+// desktopCompressedSize: 0.3 asks for the 4K KTX2 set on PC (2026-11-23, user: free texture memory
+// without hurting the picture). At the player's on-screen size 4K holds every visible texel; the
+// 8K set cost 57MB to download and about 218MB of GPU memory. 0.2 keeps 8K.
+export function selectPlayerTextureProfile(character,caps,navigator=globalThis.navigator,{release,desktopPreference='compressed',desktopCompressedSize=8192}={}){
   const capabilities=playerTextureCapabilities(caps);
   if(!playerAliases.has(character))return {manifest:character==='archer'?'character':character,mobile:false,capabilities};
   const mobile=isMobilePlayerTextureDevice(navigator);
@@ -40,12 +43,12 @@ export function selectPlayerTextureProfile(character,caps,navigator=globalThis.n
     // its complete graph before prefetch; no decode-time fallback/retry starts
     // a second original-image download behind the user's back.
     const enabled=release==='moonforest-0.2',requested=desktopPreference==='original'?'original':'compressed';
-    const available=capabilities.maxTextureSize>=8192&&Object.values(capabilities.formats).some(Boolean);
-    const compressed=enabled&&requested==='compressed'&&available;
-    return {manifest:compressed?'warrior-v3-ios':'warrior-v3',mobile:false,maxSize:8192,preserveSourceResolution:true,
+    const size=desktopCompressedSize===4096?4096:8192,available=capabilities.maxTextureSize>=size&&Object.values(capabilities.formats).some(Boolean);
+    const compressed=enabled&&requested==='compressed'&&available,small=compressed&&size===4096;
+    return {manifest:compressed?(small?'warrior-v3-mobile4k':'warrior-v3-ios'):'warrior-v3',mobile:false,maxSize:small?4096:8192,preserveSourceResolution:!small,
       encoding:compressed?'ktx2-uastc':'original',gpuCompressed:compressed,
-      ...(compressed?estimates.compressed8k:estimates.original),estimateScope,capabilities,
-      desktopPreference:enabled?requested:'original',selectionReason:!enabled?'legacy-original':requested==='original'?'user-original':available?'supported-8k-compression':'compression-unavailable-original'};
+      ...(compressed?(small?estimates.compressed4k:estimates.compressed8k):estimates.original),estimateScope,capabilities,
+      desktopPreference:enabled?requested:'original',selectionReason:!enabled?'legacy-original':requested==='original'?'user-original':available?(small?'supported-4k-compression':'supported-8k-compression'):'compression-unavailable-original'};
   }
   const max=capabilities.maxTextureSize;
   if(max===null||max<2048){

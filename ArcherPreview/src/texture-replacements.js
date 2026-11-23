@@ -12,19 +12,35 @@ export const TEXTURE_REPLACEMENTS=Object.freeze({
  '1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e.png':'26a157566a0fc08fba18d1e77641daa8f85eb3372e17000ec5dec816fb9e3ef0.ktx2',// guardian bear
 });
 
+// 0.3: regular (non-boss) monsters load their 2048 level instead of the 4096 one (2026-11-23, user:
+// free texture memory, keep 4K for bosses). Each file is the original KTX2 with its top mip level
+// removed (scripts/trim-ktx2-top-level.mjs): the 2048 picture the encoder made, byte for byte.
+// Download, cache read and GPU memory drop to about a quarter (S23: 21.3MB -> 5.3MB a species).
+export const MONSTER_2K_TEXTURES=Object.freeze({
+ '2b2172d65ea23af3cb0b76ad61ea08487152af482f88eb4768124c62d53c9af0.ktx2':'fb1780ac8c0334fd6d3e5b39eec6063b401b69d3eb0d6c7975b967d6be8f4aeb.ktx2',// gray wolf
+ 'a66589bb6da2396be286420dc247eba7eb7f544d953ed3380248c0e7dae28254.ktx2':'2aeddc81143df21a87594b80be7bab4ed8bc4a7249ac0d793bd792ef9f8deb9d.ktx2',// wolf 2 (stylized)
+ 'a328c19df0c9d6ab224c03052df3552db00fc7e604a171d4ca6ec3fbe178ca2a.ktx2':'253dfcd76b5be0bb3cccc8e3c3eadd0266932123947bf056d4a2a69d8365e4a3.ktx2',// wolf 3
+ '0687ad19cadfb59cff676af8a8c681a62359761adf8d8bf96cbb8d62ace21e7a.ktx2':'94f4ef62245cfd185d7e1d30b7252a502455eacad91ca229ae325067c7ff96e4.ktx2',// fox
+ '577c85721044a7d3e6b58201094e1311ce0b8bc7a782bafadec473dc2df796e2.ktx2':'a95c49e4f5ef086012dc74bbed5a809e89bb82cd6f02a270a7eca5abb40f9b0f.ktx2',// boar
+});
+let tier=null;
+export function setTextureTier(map){tier=map&&typeof map==='object'?map:null;}
+
 // The swap waits for our own decoder (village-ktx2.js): without it Babylon would fetch one from its CDN.
 let decoderReady=false;
 export function setTextureReplacementsReady(ready){decoderReady=ready===true;}
 
 const name='MOONFOREST_texture_replacements';
-export function replacementExtension(loader,{replacements=TEXTURE_REPLACEMENTS,ready=()=>decoderReady}={}){
+export function replacementExtension(loader,{replacements=TEXTURE_REPLACEMENTS,tiers=()=>tier,ready=()=>decoderReady}={}){
   const standIns=new Map();
-  return {name,enabled:true,
+  // order: ahead of KHR_texture_basisu, so a KTX2 image can be swapped for another KTX2 too.
+  return {name,enabled:true,order:1,
     _loadTextureAsync(context,texture,assign){
-      if(!ready()||texture.source===undefined)return null;
-      const image=loader.gltf.images?.[texture.source],uri=image?.uri;
+      const source=texture.source??texture.extensions?.KHR_texture_basisu?.source;
+      if(!ready()||source===undefined)return null;
+      const image=loader.gltf.images?.[source],uri=image?.uri;
       if(typeof uri!=='string')return null;
-      const slash=uri.lastIndexOf('/'),packed=replacements[uri.slice(slash+1)];
+      const slash=uri.lastIndexOf('/'),file=uri.slice(slash+1),packed=replacements[file]??tiers()?.[file];
       if(!packed)return null;
       // One stand-in per image: the loader keeps the downloaded bytes on it, as it does for its own images.
       let standIn=standIns.get(image);

@@ -138,3 +138,16 @@ test('desktop 8K and historical iOS 8K files remain byte exact against the conve
   const fallback=selectPlayerTextureProfile('warrior-v3',{maxTextureSize:8192},mobileAgents[0]);
   assert.equal(fallback.estimatedGpuBytes,rgba.uniqueImageRgbaBytesWithMips);
 });
+
+test('0.3 PC asks for the 4K KTX2 set; 0.2 PC keeps 8K and the original choice stays 8K',()=>{
+  const pc={userAgent:'Windows Chrome'},caps={maxTextureSize:16384,bptc:true};
+  const v03=selectPlayerTextureProfile('warrior-v3',caps,pc,{release:'moonforest-0.2',desktopPreference:'compressed',desktopCompressedSize:4096});
+  assert.equal(v03.manifest,'warrior-v3-mobile4k');assert.equal(v03.maxSize,4096);assert.equal(v03.gpuCompressed,true);assert.equal(v03.selectionReason,'supported-4k-compression');
+  assert.ok(v03.estimatedGpuBytes<100*1048576,'about 84MB instead of about 218MB');
+  const v02=selectPlayerTextureProfile('warrior-v3',caps,pc,{release:'moonforest-0.2',desktopPreference:'compressed'});
+  assert.equal(v02.manifest,'warrior-v3-ios');assert.equal(v02.maxSize,8192);
+  const original=selectPlayerTextureProfile('warrior-v3',caps,pc,{release:'moonforest-0.2',desktopPreference:'original',desktopCompressedSize:4096});
+  assert.equal(original.manifest,'warrior-v3');assert.equal(original.selectionReason,'user-original');
+  const small=selectPlayerTextureProfile('warrior-v3',{maxTextureSize:4096,bptc:true},pc,{release:'moonforest-0.2',desktopPreference:'compressed',desktopCompressedSize:4096});
+  assert.equal(small.manifest,'warrior-v3-mobile4k','a 4K-limit PC GPU can now take the compressed set');
+});

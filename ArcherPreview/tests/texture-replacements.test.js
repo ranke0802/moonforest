@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {TEXTURE_REPLACEMENTS,replacementExtension} from '../src/texture-replacements.js';
+import {TEXTURE_REPLACEMENTS,MONSTER_2K_TEXTURES,replacementExtension,setTextureTier} from '../src/texture-replacements.js';
+import {trimTopLevel} from '../scripts/trim-ktx2-top-level.mjs';
 
 const assets=new URL('../public/assets/',import.meta.url);
 
@@ -34,4 +35,36 @@ test('the loader hook swaps only a listed picture, only once the decoder is read
  assert.equal(extension._loadTextureAsync('/textures/2',{source:2,_textureInfo:{}},()=>{}),null,'other pictures load as before');
  assert.equal(extension._loadTextureAsync('/textures/4',{_textureInfo:{}},()=>{}),null);
  assert.equal(calls.length,3);
+});
+
+test('0.3 regular monsters: each 2K file is its 4K original without the top level, byte for byte, and published',()=>{
+ const manifest=JSON.parse(readFileSync(new URL('texture-replacements.json',assets),'utf8'));
+ assert.deepEqual(manifest.tiers['monster-2k'],Object.fromEntries(Object.entries(MONSTER_2K_TEXTURES).map(([from,to])=>[from,'./content/'+to])));
+ const named=['gray-wolf-r2.json','stylized-wolf-r2.json','wolf-3-r2.json','fox-r2.json','boar-r3.json'].map(name=>readFileSync(new URL(name,assets),'utf8')).join('');
+ const bosses=['alpha-wolf.json','elena.json','mourning-elena.json'].map(name=>JSON.parse(readFileSync(new URL(name,assets),'utf8')).model);
+ for(const [from,to] of Object.entries(MONSTER_2K_TEXTURES)){
+  assert.ok(named.includes(from.slice(0,64)),from+' is a regular monster texture');
+  for(const model of bosses)assert.ok(!readFileSync(new URL(model,assets),'utf8').includes(from),'bosses keep 4K');
+  const original=readFileSync(new URL('content/'+from,assets)),small=readFileSync(new URL('content/'+to,assets));
+  assert.equal(createHash('sha256').update(small).digest('hex'),to.slice(0,64));
+  assert.ok(trimTopLevel(original).bytes.equals(small),'the published file is exactly the trimmed original');
+  assert.equal(small.readUInt32LE(20),2048);assert.equal(small.readUInt32LE(24),2048);assert.equal(small.readUInt32LE(40),original.readUInt32LE(40)-1);
+  // Level n of the small file is level n+1 of the original.
+  for(let level=0;level<small.readUInt32LE(40);level++){
+   const at=(file,l)=>[Number(file.readBigUInt64LE(80+l*24)),Number(file.readBigUInt64LE(88+l*24))];
+   const [a,al]=at(small,level),[b,bl]=at(original,level+1);assert.equal(al,bl);assert.ok(small.subarray(a,a+al).equals(original.subarray(b,b+bl)));
+  }
+ }
+});
+
+test('a tier swaps a KTX2 image named through KHR_texture_basisu, only while the edition turns it on',async()=>{
+ const calls=[],loader={gltf:{images:[{uri:'4k.ktx2',index:0}],samplers:[{}]},
+  _createTextureAsync(context,sampler,image,assign){calls.push(image.uri);const made={};assign(made);return Promise.resolve(made);}};
+ let tier=null;const extension=replacementExtension(loader,{replacements:{},tiers:()=>tier,ready:()=>true});
+ assert.equal(extension.order,1,'runs before KHR_texture_basisu');
+ const texture={sampler:0,extensions:{KHR_texture_basisu:{source:0}},_textureInfo:{}};
+ assert.equal(extension._loadTextureAsync('/textures/0',texture,()=>{}),null,'no tier: the original 4K');
+ tier={'4k.ktx2':'2k.ktx2'};await extension._loadTextureAsync('/textures/0',texture,()=>{});
+ assert.deepEqual(calls,['2k.ktx2']);
+ setTextureTier(null);
 });

@@ -423,7 +423,10 @@ export class BossBattle {
     return target;
   }
   update(dt, player) {
-    if (!this.active) return;
+    // Inactive (no foes on this map): the recorder must not read the last
+    // active frame's cost as this frame's (2026-11-23: village seconds showed
+    // the plains' near/far timings and foe counts).
+    if (!this.active) {const p=this.profile;if(p){p.nearMs=p.farMs=p.separationMs=p.postMs=p.maxMs=0;p.near=p.far=p.engaged=0;p.maxKind=p.maxState=p.maxFrom='';p.navGridMs=p.navPathMs=0;}return;}
     this.currentPlayer=player;
     this.resumeManualTransforms();
     this.combat.update(dt, player, this.onDamage);
