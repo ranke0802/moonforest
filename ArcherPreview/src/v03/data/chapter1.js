@@ -219,7 +219,7 @@ export const TIPS=Object.freeze([
  {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 중에도 움직일 수 있습니다.'},
  {id:'boss',when:'step:M04/bear',title:'큰 짐승',keys:'젖히면 강공격! Space로 피하거나 F를 길게 눌러 막으세요.',touch:'젖히면 강공격! 장화로 피하거나 방패를 길게 눌러 막으세요.',text:'끝나면 반격하세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
- {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 목표와 지도를 따라가세요.'},
+ {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 목표·지도를 따라가세요.'},
  {id:'stamina',when:'low-stamina',title:'스태미나',keys:'노란 막대가 스태미나입니다.',touch:'노란 막대가 스태미나입니다.',text:'공격·회피·방패·질주에 쓰고, 멈추면 차오릅니다.'},
  {id:'rest',when:'effect:rest',title:'휴식과 기록',keys:'여관 주인에게 말을 걸면 쉴 수 있습니다.',touch:'여관 주인에게 말을 걸면 쉴 수 있습니다.',text:'체력·회복약이 차고 여정이 기록됩니다.'},
  {id:'witness',when:'step:M02/witness',title:'증언 모으기',keys:'세 사람에게 순서 상관없이 물어보세요.',touch:'세 사람에게 순서 상관없이 물어보세요.',text:'들은 사람은 목표에 표시됩니다.'},
