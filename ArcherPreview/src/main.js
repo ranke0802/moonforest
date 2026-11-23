@@ -116,7 +116,7 @@ import {createFrameDiagnostics} from './frame-diagnostics.js';
 import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
 import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
-import {estimateTextureMemory,textureMemoryTotals} from './texture-memory.js';import {setTextureTier,MONSTER_2K_TEXTURES} from './texture-replacements.js';
+import {estimateTextureMemory,textureMemoryTotals} from './texture-memory.js';import {setTextureTier,MONSTER_2K_TEXTURES} from './texture-replacements.js';import {createActorMaterialFreeze} from './v03/actor-material-freeze.js';
 import {inspectMapDecodeCache} from './map-decode-cache.js';
 import {inspectKtxWorkerPool} from './ktx-worker-supervisor.js';
 import {inspectMeshoptWorkerPool} from './meshopt-worker-supervisor.js';
@@ -406,7 +406,7 @@ function recordingProbe(){
     jsHeapMB:memory?Math.round(memory.usedJSHeapSize/1048576):null,materials:scene?.materials.length??null,textures:scene?.textures.length??null,disposeObservers:scene?.onDisposeObservable.observers.length??null,foes:boss?.encounters?.filter(foe=>foe.active).length??null,engaged:profile?.engaged??null,nearFoes:profile?.near??null,farFoes:profile?.far??null,maxFoe:profile?.maxKind?`${profile.maxKind}:${profile.maxState}`:null,
     playerClipStarts:counts&&previous?counts.created-previous.created:null,playerClipReuses:counts&&previous?counts.reused-previous.reused:null,
     // Engine-held textures (all maps, retained species included) and the frame guard's level, each second (2026-11-23).
-    engineTextures:gpuTextures?.count??null,textureMB:gpuTextures?.megabytes??null,uncompressedTextureMB:gpuTextures?.uncompressedMegabytes??null,adaptiveLevel:adaptivePerformance.level};
+    engineTextures:gpuTextures?.count??null,textureMB:gpuTextures?.megabytes??null,uncompressedTextureMB:gpuTextures?.uncompressedMegabytes??null,adaptiveLevel:adaptivePerformance.level,frozenActorMaterials:world?.actorMaterialFreeze?world.actorMaterialFreeze.frozenNow:null,materialThaws:world?.actorMaterialFreeze?world.actorMaterialFreeze.thaws:null};
 }
 const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equipmentStorage,loads:loadDiagnostics,
   contentRuntime:()=>inspectContentRuntimeBudget({world,battle:boss,audio,playerTextureProfile:playerTextureSelection,decodeCache:inspectMapDecodeCache(engine)}),
@@ -1182,6 +1182,8 @@ try {
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.weather=weatherSettings;weatherSettings.mapChanged();world.dayCycle?.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
+  // 0.3: freeze drawn character materials (v03/actor-material-freeze.js); on trial with ?matfreeze=1.
+  if(versionRoute.edition&&new URLSearchParams(location.search).get('matfreeze')==='1')world.actorMaterialFreeze=createActorMaterialFreeze(world.scene);
   if(new URLSearchParams(location.search).get('posetrace')==='1')void import('./pose-trace.js').then(({installPoseTrace})=>installPoseTrace({scene:world.scene,getEncounters:()=>boss?.encounters,getPlayer:()=>actor,getShield:()=>shieldNode})).catch(error=>console.warn('[pose trace]',error));
   if(releaseEnabled){
     world.loadAuthoredMap=async()=>{
