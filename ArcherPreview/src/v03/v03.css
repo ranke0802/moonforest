@@ -205,12 +205,13 @@ html[data-loading] .v03-hud{display:none}
  .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
 }
 
-.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:0;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 12%);mask-image:linear-gradient(to top,transparent 0,#000 12%);height:84vh;width:auto;max-width:44vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
+.v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:0;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 12%);mask-image:linear-gradient(to top,transparent 0,#000 12%);height:86vh;width:auto;max-width:60vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
 .v03-dialogue-portrait.is-in{opacity:1;transform:none;transition:opacity .35s ease,transform .35s ease}
 .v03-dialogue-box{z-index:1}
 /* The speaker stands behind the dialogue box: about 90% of the screen height
-   on phones (2026-11-23, user), a little less on wide PC windows. */
-@media (pointer:coarse),(max-height:520px){.v03-dialogue-portrait{height:90vh;max-width:42vw}}
+   on phones (2026-11-23, user), a little less on PC. The width cap leaves room
+   for the nearly square upper-body art, so the height sets its size. */
+@media (pointer:coarse),(max-height:520px){.v03-dialogue-portrait{height:90vh;max-width:48vw}}
 
 /* Languages: the pixel UI font covers Korean and Latin; other scripts fall
    back per glyph to the platform's CJK/Vietnamese faces. */
@@ -547,5 +548,5 @@ html[data-v03-screen="opening"] #loading .v03-lore,html[data-v03-screen="opening
    and writes its offsets divided by the zoom, so a saved layout and the
    editor's size slider apply on top of this scale. */
 html[data-v03-zoom] :is(.v03-quest,.v03-hint,.v03-banner,.v03-place,.v03-tip,.v03-prompt,.v03-caption,.v03-dialogue-box,.v03-title-inner,.v03-panel-box,.v03-opening-line,.v03-opening-skip,.hud-layout-panel),
-html[data-v03-zoom] #app>:is(.topbar,#gold-balance,#dot-minimap,.right-tools,#boss-hud,.keyboard-hint,.action-controls,#player-hud,#map-travel),
+html[data-v03-zoom] #app>:is(.topbar,#gold-balance,#dot-minimap,.right-tools,.boss-hud,.keyboard-hint,.action-controls,#player-hud,#map-travel),
 html[data-v03-zoom] :is(.motion-speed-dialog,.help-dialog,.minimap-travel-dialog,.death-screen){zoom:var(--v03-ui,1)}

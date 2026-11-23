@@ -54,10 +54,13 @@ test('zoomed rules divide their viewport units by the UI scale',()=>{
    if(!ZOOMED.some(name=>selector.includes(name))||FIXED.some(name=>selector.includes(name)))continue;
    for(const [unit] of body.matchAll(/\b\d*\.?\d+(?:vw|vh|vmin|vmax|dvh|svh|lvh|dvw)\b(?! \/ var\(--v03-ui,1\))/g))raw.push(`${sheet}: ${selector.trim().slice(0,60)} → ${unit}`);
   }
+  // Custom properties are substituted where they are used, so a size variable
+  // set on #app and read by a zoomed panel needs the same division.
+  for(const [declaration] of text.matchAll(/--[\w-]+:[^;{}]*/g))for(const [unit] of declaration.matchAll(/\b\d*\.?\d+(?:vw|vh|vmin|vmax|dvh|svh)\b(?! \/ var\(--v03-ui,1\))/g))raw.push(`${sheet}: ${declaration.slice(0,40)} → ${unit}`);
  }
  assert.deepEqual(raw,[]);
  const zoom=[...css.matchAll(/html\[data-v03-zoom\][^{]*\{zoom:var\(--v03-ui,1\)\}/g)].map(m=>m[0]).join('\n');
- for(const name of ['v03-dialogue-box','v03-tip','v03-quest','player-hud','dot-minimap','action-controls','hud-layout-panel','.help-dialog','.motion-speed-dialog','.minimap-travel-dialog','.death-screen'])assert.ok(zoom.includes(name),`${name} is zoomed`);
+ for(const name of ['v03-dialogue-box','v03-tip','v03-quest','player-hud','dot-minimap','action-controls','.boss-hud','hud-layout-panel','.help-dialog','.motion-speed-dialog','.minimap-travel-dialog','.death-screen'])assert.ok(zoom.includes(name),`${name} is zoomed`);
  for(const name of ['portrait','v03-bubble','v03-ring','#toast'])assert.ok(!zoom.includes(name),`${name} stays at its anchored pixel size`);
 });
 

@@ -1,5 +1,5 @@
 /* Two original atlases; all numbers, maps, input and layout edits stay live. */
-#app[data-raster-hud]{--hud-v1-combat:url('./hud-v1-art/combat-press-4x4.png');--hud-v1-menu:url('./hud-v1-art/menu-press-4x4.png');--hud-v1-edge:max(18px,3vw);--hud-v1-top:clamp(20px,4vh,44px);font-family:MoonforestUI,'Malgun Gothic',sans-serif}
+#app[data-raster-hud]{--hud-v1-combat:url('./hud-v1-art/combat-press-4x4.png');--hud-v1-menu:url('./hud-v1-art/menu-press-4x4.png');--hud-v1-edge:max(18px,calc(3vw / var(--v03-ui,1)));--hud-v1-top:clamp(20px,calc(4vh / var(--v03-ui,1)),44px);font-family:MoonforestUI,'Malgun Gothic',sans-serif}
 #app[data-raster-hud]>.topbar>.brand{visibility:hidden;pointer-events:none}
 #app[data-raster-hud] [data-hud-sprite]{position:relative;isolation:isolate}
 #app[data-raster-hud] .hud-v1-sprite{position:absolute;inset:0;display:block;width:100%;height:100%;background-size:400% 400%;background-position:var(--hud-sprite-column,0%) var(--hud-sprite-row);background-repeat:no-repeat;pointer-events:none;z-index:0}
@@ -57,7 +57,7 @@
 #app[data-raster-hud][data-hud-input=pc] .keyboard-hint{display:flex;left:auto;right:280px;bottom:calc(env(safe-area-inset-bottom) + 20px);gap:8px;transform:none;scale:1;font:10px MoonforestUI,sans-serif}
 #app[data-raster-hud][data-hud-input=pc] .keyboard-hint small{display:none}
 #app[data-raster-hud][data-hud-input=pc] .keyboard-hint strong{font-size:10px}
-#app[data-raster-hud][data-hud-input=touch]{--hud-v1-attack:clamp(76px,10vw,112px);--hud-v1-small:clamp(60px,7.2vw,80px);--hud-v1-potion:clamp(60px,6.4vw,72px)}
+#app[data-raster-hud][data-hud-input=touch]{--hud-v1-attack:clamp(76px,calc(10vw / var(--v03-ui,1)),112px);--hud-v1-small:clamp(60px,calc(7.2vw / var(--v03-ui,1)),80px);--hud-v1-potion:clamp(60px,calc(6.4vw / var(--v03-ui,1)),72px)}
 #app[data-raster-hud][data-hud-input=touch] .keyboard-hint{display:none}
 #app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #attack-button,#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #guard-button,#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #dodge-button,#app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #potion-button{position:absolute;right:auto;bottom:auto;display:block;aspect-ratio:1;height:auto;transform:translate(-50%,-50%)!important}
 #app[data-raster-hud][data-hud-input=touch] .action-controls[data-character] #attack-button{left:89%;top:79%;width:var(--hud-v1-attack)}
