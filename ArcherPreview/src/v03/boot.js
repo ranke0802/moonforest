@@ -44,6 +44,9 @@ const TITLE_CAMERA=Object.freeze({radius:10.5,beta:1.24,orbit:.075});
 const castPreview=()=>{try{return new URLSearchParams(globalThis.location?.search??'').get('cast')!=='0';}catch{return true;}};
 export function setupV03(api){
  const {root,save,battle,input,actions}=api,doc=root.ownerDocument,view=doc.defaultView,html=doc.documentElement;
+ // The title wolf and the ambush wolf live in the battle for the whole page;
+ // roaming placement actors of the same model reuse that one source model.
+ battle?.shareModelKinds?.(TITLE_FOE.kind,AMBUSH.kind);
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
  const pilot=createAttractPilot({random:api.random});
  const appleTouch=isIos(view);

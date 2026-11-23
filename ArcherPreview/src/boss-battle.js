@@ -379,6 +379,17 @@ export class BossBattle {
     } catch (error) {timings.status=error.name==='AbortError'?'cancelled':'error';timings.error=String(error.message??error);if(request===this.revision){for(const enemy of pool)enemy.hide();this.encounters=others;this.active=others.some(e=>e.active);}if(error.name==='AbortError')return false;throw error; }
     finally {timings.totalMs=performance.now()-started;timings.preparation={yields:preparation.stats.yields,blocks:preparation.stats.blocks,placementBlocks:preparation.stats.placementBlocks??0,maxSliceMs:preparation.stats.maxSliceMs,frameWaitMs:preparation.stats.frameWaitMs??null,coalescedPauses:preparation.stats.coalescedPauses??null,stepCount:preparation.stats.steps.length,steps:preparation.stats.steps.slice(0,512).map(s=>({...s}))};if(this.summonPreparation===preparation)this.summonPreparation=null;this.loading = false; this.onChange(this); }
   }
+  // Kinds whose source model this battle keeps for the page (0.3: the title
+  // fight and the story ambush, set by v03/boot.js). Placement actors of the
+  // same model borrow this library (actor-encounter-adapter.js) instead of
+  // opening a second source container of the same file (2026-11-23).
+  shareModelKinds(...kinds){this.sharedModelKinds??=new Set();for(const kind of kinds)if(kind==='wolf'||isRegularWolf(kind))this.sharedModelKinds.add(kind);}
+  sharedModelLibrary(manifest){
+    const kinds=this.sharedModelKinds;if(!kinds?.size)return null;
+    if(kinds.has('wolf')&&this.wolfModels?.manifest===manifest)return this.wolfModels;
+    for(const kind of kinds){const models=this.regularWolves[kind]?.models;if(models?.manifest===manifest)return models;}
+    return null;
+  }
   hide() {
     this.developmentLifecycle?.();
     this.residentRevision++;
