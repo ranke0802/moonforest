@@ -181,6 +181,7 @@ export function loadStreamedVillage(world,{
       setup.stage='ground';await setup.run(()=>ground(world,{lifetime:setup}));checkMapLoadSnapshot(world,snapshot,setup);
     }catch(error){setup.abort(error);error.stage??=setup.stage;throw error;}finally{setup.close();snapshot.scene.onDisposeObservable.remove(setupObserver);}
     const {url,manifest,assets,records,plan}=prepared,recordsByAsset=prepared.recordsByAsset??groupVillageRecords(records),containers=[];
+    const instanceOptions={transformGltfRoot:world.mapId==='village'&&world.edition==='moonforest-0.3'};
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats),candidates=new VillageActiveCandidates(world.scene,{holdLod:true});stats.activeMeshCandidates=candidates.stats;
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
@@ -231,7 +232,7 @@ export function loadStreamedVillage(world,{
       for(const record of instances)if(!record.meshes.length){
         if(work.due('instance:'+id))await lifetime.run(()=>work.yield());lifetime.check();
         since=performance.now();
-        const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name);
+        const instance=instantiateStaticMap(asset.source,name=>record.root.name+'-'+name,instanceOptions);
         for(const node of instance.rootNodes)node.parent=record.facing;
         const children=record.root.getChildMeshes();
         record.meshes=children.filter(m=>m.getTotalVertices()>0);

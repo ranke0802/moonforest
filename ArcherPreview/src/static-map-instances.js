@@ -18,13 +18,22 @@ function plan(container){
  for(const root of roots)visit(root);
  const result=valid&&nodes.length?nodes:null;plans.set(container,result);return result;
 }
-export function instantiateStaticMap(container,name){
+export function instantiateStaticMap(container,name,{transformGltfRoot=false}={}){
  const nodes=plan(container);
  if(!nodes)return container.instantiateModelsToScene(name,false,{doNotInstantiate:false});
  const scene=container.scene,created=new Map(),rootNodes=[];
  for(const source of nodes){
   const geometry=source.getTotalVertices?.()>0;
-  const node=geometry?source.createInstance(name(source.name)):source.getClassName()==='Mesh'?new Mesh(name(source.name),scene):new TransformNode(name(source.name),scene);
+  const isMesh=source.getClassName()==='Mesh';
+  // The loader's empty glTF wrapper only carries the coordinate transform.
+  // A TransformNode keeps it out of Babylon's mesh list throughout the visit.
+  const wrapper=transformGltfRoot&&!geometry&&isMesh&&source.name==='__root__'&&!source.parent&&
+   Object.getPrototypeOf(source)===Mesh.prototype&&!source.geometry&&!source.actionManager&&source.visibility===1;
+  const nodeName=name(source.name);
+  let node;
+  if(geometry)node=source.createInstance(nodeName);
+  else if(isMesh&&!wrapper)node=new Mesh(nodeName,scene);
+  else node=new TransformNode(nodeName,scene);
   // Static props: the bounding-sphere test alone decides visibility (the
   // extra box test per instance per frame is measurable on phones).
   if(geometry)node.cullingStrategy=1;
@@ -32,7 +41,12 @@ export function instantiateStaticMap(container,name){
   node.position.copyFrom(source.position);node.scaling.copyFrom(source.scaling);
   if(source.rotationQuaternion)node.rotationQuaternion=source.rotationQuaternion.clone();else node.rotation.copyFrom(source.rotation);
   node.parent=created.get(source.parent)??null;
-  if(!geometry){node.metadata=source.metadata?{...source.metadata}:null;if('isVisible'in source){node.isVisible=source.isVisible;node.visibility=source.visibility;}node.setEnabled(source.isEnabled(false));}
+  if(!geometry){
+   node.metadata=source.metadata?{...source.metadata}:null;
+   node.isVisible=source.isVisible;
+   if(isMesh&&!wrapper)node.visibility=source.visibility;
+   node.setEnabled(source.isEnabled(false));
+  }
   if(source.material&&!scene.materials.includes(source.material))scene.addMaterial(source.material);
   if(!node.parent)rootNodes.push(node);
  }

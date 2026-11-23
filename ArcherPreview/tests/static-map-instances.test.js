@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,writeFileSync,mkdirSync} from 'node:fs';
-import {NullEngine,Scene,TransformNode,MeshBuilder,AssetContainer,AnimationGroup,PBRMaterial,Quaternion} from '@babylonjs/core';
+import {NullEngine,Scene,TransformNode,Mesh,MeshBuilder,AssetContainer,AnimationGroup,PBRMaterial,Quaternion} from '@babylonjs/core';
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import '@babylonjs/loaders/glTF/2.0/Extensions/index.js';
@@ -25,17 +25,51 @@ test('every shipped static map LOD preserves geometry, transforms, material, bou
   const parent=new TransformNode('placement',scene);parent.position.set(21,3,-9);parent.rotationQuaternion=Quaternion.FromEulerAngles(.1,2.1,-.05);parent.scaling.set(1.4,.8,1.1);
   let time=performance.now();const a=c.instantiateModelsToScene(n=>n,false,{doNotInstantiate:false});regularMs+=performance.now()-time;
   time=performance.now();const b=instantiateStaticMap(c,n=>n);optimizedMs+=performance.now()-time;
-  for(const instance of [a,b])for(const r of instance.rootNodes)r.parent=parent;
-  const nodes=i=>i.rootNodes.flatMap(r=>[r,...r.getDescendants(false)]),aa=nodes(a),bb=nodes(b);assert.equal(aa.length,bb.length,path);
+  const village=instantiateStaticMap(c,n=>n,{transformGltfRoot:true});
+  for(const instance of [a,b,village])for(const r of instance.rootNodes)r.parent=parent;
+  const nodes=i=>i.rootNodes.flatMap(r=>[r,...r.getDescendants(false)]),aa=nodes(a),bb=nodes(b),vv=nodes(village);
+  assert.equal(aa.length,bb.length,path);assert.equal(aa.length,vv.length,path);
   for(let i=0;i<aa.length;i++){
    const x=aa[i],y=bb[i];assert.equal(x.name,y.name,path);assert.equal(x.getClassName(),y.getClassName());
    const xx=x.computeWorldMatrix(true).asArray(),yy=y.computeWorldMatrix(true).asArray();for(let k=0;k<16;k++)assert.ok(Math.abs(xx[k]-yy[k])<1e-6,path);
+   const v=vv[i];assert.equal(v.name,x.name,path);assert.deepEqual(v.computeWorldMatrix(true).asArray(),yy,path);
+   assert.equal(v.isEnabled(),x.isEnabled(),path);
+   if(x.getTotalVertices?.()){
+    assert.equal(v.sourceMesh,x.sourceMesh,path);assert.equal(v.material,x.material,path);
+    assert.deepEqual(v.getBoundingInfo().boundingBox.maximumWorld.asArray(),x.getBoundingInfo().boundingBox.maximumWorld.asArray(),path);
+   }
    assert.equal(x.isEnabled(),y.isEnabled());assert.equal(x.visibility,y.visibility);assert.equal(x.isVisible,y.isVisible);
    if(x.getTotalVertices?.()){meshes++;assert.equal(x.sourceMesh,y.sourceMesh);assert.equal(x.material,y.material);assert.equal(x.getTotalVertices(),y.getTotalVertices());assert.deepEqual(x.getBoundingInfo().boundingBox.minimumWorld.asArray(),y.getBoundingInfo().boundingBox.minimumWorld.asArray());assert.deepEqual(x.subMeshes.map(s=>[s.indexStart,s.indexCount,s.materialIndex]),y.subMeshes.map(s=>[s.indexStart,s.indexCount,s.materialIndex]));}
   }
-  for(const i of [a,b])for(const r of i.rootNodes)r.dispose();parent.dispose();c.dispose();m.dispose();loader.dispose();
+  for(const i of [a,b,village])for(const r of i.rootNodes)r.dispose();parent.dispose();c.dispose();m.dispose();loader.dispose();
  }
  assert.ok(paths.size>=90);const out=new URL('../reports/map-material-size-2026-11-02/',import.meta.url);mkdirSync(out,{recursive:true});writeFileSync(new URL('static-instance-validation.json',out),JSON.stringify({models:paths.size,meshes,regularMs,optimizedMs,scope:'Node NullEngine CPU instantiation only, same geometry and material identity; no GPU/device timing'},null,2));
+});
+test('village glTF wrappers preserve visible instances, mirrored coordinates and owner lifetime',t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);
+ t.after(()=>engine.dispose());
+ const source=new Mesh('__root__',scene);
+ source.scaling.z=-1;source.rotationQuaternion=Quaternion.FromEulerAngles(0,.7,0);
+ source.metadata={asset:'town'};source.setEnabled(false);
+ const trunk=MeshBuilder.CreateBox('tree',{},scene);
+ trunk.material=new PBRMaterial('bark',scene);trunk.parent=source;
+ const container=new AssetContainer(scene);container.rootNodes.push(source);container.meshes.push(source,trunk);
+ const placement=new TransformNode('placement',scene);placement.position.set(-2,3,77);
+ const baseline=instantiateStaticMap(container,n=>n).rootNodes[0];
+ const optimized=instantiateStaticMap(container,n=>n,{transformGltfRoot:true}).rootNodes[0];
+ assert.ok(baseline instanceof Mesh);assert.equal(optimized.getClassName(),'TransformNode');
+ assert.equal(scene.meshes.includes(optimized),false);
+ assert.deepEqual(optimized.metadata,source.metadata);
+ for(const node of [baseline,optimized])node.parent=placement;
+ const [a]=baseline.getChildMeshes(),[b]=optimized.getChildMeshes();
+ assert.equal(b.isEnabled(),false);
+ baseline.setEnabled(true);optimized.setEnabled(true);
+ assert.equal(b.isEnabled(),true);assert.equal(b.sourceMesh,a.sourceMesh);assert.equal(b.material,a.material);
+ assert.deepEqual(b.computeWorldMatrix(true).asArray(),a.computeWorldMatrix(true).asArray());
+ assert.deepEqual(b.getBoundingInfo().boundingBox.maximumWorld.asArray(),a.getBoundingInfo().boundingBox.maximumWorld.asArray());
+ optimized.dispose();assert.ok(b.isDisposed());assert.ok(!a.isDisposed()&&!trunk.isDisposed());
+ source.name='editor-mesh';
+ assert.ok(instantiateStaticMap(container,n=>n,{transformGltfRoot:true}).rootNodes[0] instanceof Mesh);
 });
 test('animated and non-identity-pivot containers retain the generic instantiation path',()=>{
  const engine=new NullEngine(),scene=new Scene(engine);
