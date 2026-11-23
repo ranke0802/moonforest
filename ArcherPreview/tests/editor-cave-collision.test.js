@@ -10,11 +10,13 @@ import {fillCaveRuns,fillCaveCamera,caveDistanceField,sampleCaveDistance,rasteri
 import {prepareEditedCaveClearance} from '../src/editor-cave-collision.js';
 import {createWorld} from '../src/world.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
-import {caveCameraBlocked} from '../src/witch-cave-camera.js';
+import {caveCameraBlocked,prepareCaveCameraField} from '../src/witch-cave-camera.js';
 import {AuthoredPlacementRuntime} from '../src/authored-placement-runtime.js';
 import {ASSET_CATALOG} from '../src/asset-catalog.js';
 import {createEmptyPlacementDocument} from '../src/placement-document.js';
 import {caveFogFallback} from '../src/cave-fog-binding.js';
+// The cave camera field loads with the cave map (startup-resources.js).
+await prepareCaveCameraField();
 
 const bodyUnion=(omit=new Set())=>{const cells=new Uint8Array(data.size**2);for(const [id,runs]of Object.entries(data.owners))if(!omit.has(id))fillCaveRuns(cells,runs);return cells;};
 const typed=(text,Type)=>{const bytes=Buffer.from(text,'base64');return new Type(bytes.buffer,bytes.byteOffset,bytes.length/Type.BYTES_PER_ELEMENT);};

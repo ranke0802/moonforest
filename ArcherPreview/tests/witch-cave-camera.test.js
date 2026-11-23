@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {NullEngine,Scene,ArcRotateCamera,Vector3} from '@babylonjs/core';
-import {CaveCameraGuard,caveSafeCameraRadius,caveCameraBlocked,caveCameraRockBlocked} from '../src/witch-cave-camera.js';
+import {CaveCameraGuard,caveSafeCameraRadius,caveCameraBlocked,caveCameraRockBlocked,prepareCaveCameraField} from '../src/witch-cave-camera.js';
 import {CAVE_CAMERA_DATA} from '../src/witch-cave-camera-data.js';
 import {CAVE_PLACEMENTS,CAVE_ROUTES,caveSurface} from '../src/witch-cave-layout.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
@@ -15,6 +15,8 @@ import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {createVillageTransform} from '../src/village-environment.js';
 import {caveSourceFingerprint} from '../scripts/cave-source-fingerprint.mjs';
 import {caveCollisionManifest} from '../scripts/cave-collision-source.mjs';
+// The cave camera field loads with the cave map (startup-resources.js).
+await prepareCaveCameraField();
 
 test('camera field matches the preserved collision source layout and retains arched clearance by height',()=>{
  const hash=createHash('sha256');for(const file of ['witch-cave-layout.js','witch-cave-terrain.js'])hash.update(readFileSync(new URL('../src/'+file,import.meta.url),'utf8').replace(/\r\n?/g,'\n'));

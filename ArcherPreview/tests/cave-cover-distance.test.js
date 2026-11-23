@@ -6,8 +6,10 @@ import {CaveFogRuntime,distantCoverHidden,CAVE_COVER_HIDE_DISTANCE,CAVE_COVER_SH
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
 import {createTerrainGround} from '../src/terrain-mesh.js';
 import {partitionCaveGround} from '../src/witch-cave-surfaces.js';
-import {CaveCameraGuard} from '../src/witch-cave-camera.js';
+import {CaveCameraGuard,prepareCaveCameraField} from '../src/witch-cave-camera.js';
 import {CAVE_FOG_GLSL,CAVE_FOG_COVER_FRAGMENT} from '../src/cave-fog-cover.js';
+// The cave camera field loads with the cave map (startup-resources.js).
+await prepareCaveCameraField();
 
 function fixture(t){
  const engine=new NullEngine(),scene=new Scene(engine),camera=new FreeCamera('cover-distance-eye',new Vector3(0,20,0),scene),terrain=createWitchCaveTerrain(),ground=createTerrainGround(scene,terrain);ground.material=new StandardMaterial('ground',scene);ground.freezeWorldMatrix();partitionCaveGround(ground,terrain);

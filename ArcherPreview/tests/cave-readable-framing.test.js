@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {NullEngine,Scene,ArcRotateCamera,Vector3} from '@babylonjs/core';
-import {caveReadableCamera,caveSafeCameraRadius,caveCameraBlocked,CaveCameraGuard,cavePlayerMarkerClear} from '../src/witch-cave-camera.js';
+import {caveReadableCamera,caveSafeCameraRadius,caveCameraBlocked,CaveCameraGuard,cavePlayerMarkerClear,prepareCaveCameraField} from '../src/witch-cave-camera.js';
 import {createWitchCaveTerrain} from '../src/witch-cave-terrain.js';
+// The cave camera field loads with the cave map (startup-resources.js).
+await prepareCaveCameraField();
 
 test('obstructed default orbit gains readable distance without changing yaw or crossing rock',()=>{
  const terrain=createWitchCaveTerrain(),base={x:-19,z:-26,y:terrain.heightAt(-19,-26)+1.05},alpha=16*Math.PI/12;
