@@ -42,7 +42,8 @@ export function createInteractButton({doc,onInteract=()=>{},isTouch=null,buttonI
  doc.addEventListener('pointercancel',cancel,true);doc.addEventListener('click',click,true);doc.addEventListener('contextmenu',menu,true);
 
  function build(target){
-  face=doc.createElement('span');face.className='v03-interact-face';face.setAttribute('aria-hidden','true');
+  // An <i>, not a <span>: the HUD skins hide every span inside the action buttons.
+  face=doc.createElement('i');face.className='v03-interact-face';face.setAttribute('aria-hidden','true');
   const svg=doc.createElementNS(svgNs,'svg');svg.setAttribute('viewBox','0 0 32 32');
   path=doc.createElementNS(svgNs,'path');svg.append(path);
   label=doc.createElement('b');face.append(svg,label);target.append(face);
