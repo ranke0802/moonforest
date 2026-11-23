@@ -3,6 +3,13 @@
 import {particle} from '../korean.js';
 export default {
  ui:{
+  'gpu.detail':'GPU · {name} / 렌더링 · {mode} ({api})',
+  'gpu.hardware':'하드웨어 GPU',
+  'gpu.software':'소프트웨어 (CPU)',
+  'gpu.unknown':'확인 불가',
+  'gpu.notice':'현재 소프트웨어 렌더링으로 실행 중입니다',
+  'gpu.desktopHelp':'주소창에 {settings}을 입력하고 ‘가능한 경우 그래픽 가속 사용’을 켠 뒤 브라우저를 다시 시작해 주세요.',
+  'gpu.generalHelp':'브라우저 설정에서 그래픽 가속 옵션을 제공하면 켜고 다시 시작해 주세요. 옵션이 보이지 않으면 브라우저 업데이트를 확인해 주세요.',
   'bench.trip':'왕복 성능 측정 중 (약 5분, {step}/5). 화면을 건드리지 마세요.',
   'bench.running':'성능 측정 중 (약 50초). 화면을 건드리지 마세요.','bench.done':'성능 측정 완료','bench.copy':'복사','bench.save':'파일 저장','bench.close':'닫기',
   'title.aria':'MoonForest 시작 화면','title.kicker':'비탄의 마녀','title.sub':'인연의 식탁 · 제1막','title.menu':'시작 메뉴','title.drawing':'세계를 그리는 중','title.drawingLeft':'남은 것 {n}개','title.drawingFirst':'처음으로 세계를 그리는 중…','title.drawingAgain':'그려 둔 세계를 펼치는 중','title.drawingMemory':'한 번 그린 세계는 기억에 남습니다.','title.stage.ground':'바닥을 그리고 있어요','title.stage.trees':'나무를 그리고 있어요','title.stage.people':'세계에 살아가는 사람들을 그리고 있어요','title.stage.critters':'귀여운 동물들을 그리고 있어요','title.stage.beasts':'사나운 동물들을 그리고 있어요','title.stage.monsters':'무서운 몬스터를 그리고 있어요',

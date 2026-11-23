@@ -1,6 +1,13 @@
 // English. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'gpu.detail':'GPU · {name} / Rendering · {mode} ({api})',
+  'gpu.hardware':'Hardware GPU',
+  'gpu.software':'Software (CPU)',
+  'gpu.unknown':'Unknown',
+  'gpu.notice':'The game is using software rendering',
+  'gpu.desktopHelp':'Enter {settings} in the address bar, turn on graphics acceleration when available, then restart the browser.',
+  'gpu.generalHelp':'If your browser offers a graphics acceleration setting, turn it on and restart. If the option is missing, check for a browser update.',
   'bench.trip':'Measuring round trips (about 5 min, {step}/5). Please do not touch the screen.',
   'bench.running':'Measuring performance (about 50 s). Please do not touch the screen.','bench.done':'Measurement finished','bench.copy':'Copy','bench.save':'Save file','bench.close':'Close',
   'title.aria':'MoonForest title screen','title.kicker':'The Witch of Sorrow','title.sub':'A Table of Bonds · Act I','title.menu':'Main menu','title.drawing':'Drawing the world','title.drawingLeft':'{n} left','title.drawingFirst':'Drawing the world for the first time…','title.drawingAgain':'Unfolding the world you drew','title.drawingMemory':'A world once drawn stays remembered.','title.stage.ground':'Drawing the ground','title.stage.trees':'Drawing the trees','title.stage.people':'Drawing the people who live here','title.stage.critters':'Drawing the cute animals','title.stage.beasts':'Drawing the fierce beasts','title.stage.monsters':'Drawing the fearsome monsters',

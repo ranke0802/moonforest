@@ -3,6 +3,7 @@ import {LongFrameRecording} from './long-frame-recording.js';
 import {DiagnosticBurstBudget} from './diagnostic-burst-budget.js';
 import {onBeforePageReload} from './page-reload-hooks.js';
 import {storeCarriedRecording,takeCarriedRecording} from './recording-carry.js';
+import {readRendererInfo,rendererDetail} from './renderer-diagnostics.js';
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {
@@ -77,6 +78,8 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
   const monitor=new FrameDiagnostics(),key='moonforest-frame-diagnostics-v1';let enabled=false,paused=true,collecting=false,next=0;
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
   const detailDialog=get('diagnostic-detail-dialog'),expand=get('diagnostic-expand');
+  let graphicsDevice=readRendererInfo(null);
+  const reportMetadata=()=>({...metadata(),graphicsDevice});
   const drawCpuToggle=get('draw-cpu-diagnostics-toggle');
   const compactView=()=>{
     if(panel.dataset){if(panel.dataset.expanded!=='false')panel.dataset.expanded='false';if(panel.dataset.presentation!=='compact')panel.dataset.presentation='compact';}
@@ -86,6 +89,12 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
     if(body)for(const node of [comparison,panel.querySelector?.('.diagnostic-general'),get('diagnostic-render'),get('diagnostic-gpu'),get('diagnostic-detail-frame')])if(node&&panel.contains?.(node))body.append(node);
   };
   compactView();
+  const gpuLine=get('diagnostic-gpu');
+  if(gpuLine?.after){
+    const deviceLine=doc.createElement('span');
+    deviceLine.id='diagnostic-graphics-device';
+    gpuLine.after(deviceLine);
+  }
   expand?.setAttribute?.('aria-expanded','false');
   expand?.addEventListener('click',()=>{compactView();if(detailDialog&&!detailDialog.open){const box=get('diagnostic-detail-export'),note=get('diagnostic-detail-status');if(box)box.hidden=true;if(note)note.textContent='';paint({details:true});detailDialog.showModal();expand.setAttribute('aria-expanded','true');}});
   for(const id of ['close-diagnostic-detail','diagnostic-detail-done'])get(id)?.addEventListener('click',()=>detailDialog?.close());
@@ -108,7 +117,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
   const longStart=get('long-frame-start'),longStop=get('long-frame-stop'),longDownload=get('long-frame-download'),longStatus=get('long-frame-status');
   const syncRecording=()=>{const active=recording.state==='recording';if(longStart)longStart.disabled=!enabled||active;if(longStop)longStop.disabled=!active;if(longDownload)longDownload.disabled=recording.state==='idle';if(longStatus)longStatus.textContent=active?'기록 중 · 최대 10분':recording.state==='complete'?'기록 종료 · 파일을 다운로드하세요.':'성능 진단을 켜고 기록을 시작하세요.';};
   const stopRecording=reason=>{if(recording.state!=='recording')return;clearTimeout(recordingTimer);recordingTimer=null;finishBurst(now());recording.stop(reason);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();};
-  longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(metadata());burstUntil=0;burstBudget=new DiagnosticBurstBudget({durationMs:recording.durationMs});recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
+  longStart?.addEventListener('click',()=>{if(!enabled||recording.state==='recording')return;recording.start(reportMetadata());burstUntil=0;burstBudget=new DiagnosticBurstBudget({durationMs:recording.durationMs});recordingTimer=setTimeout(()=>stopRecording('duration-limit'),recording.durationMs);syncRecording();});
   longStop?.addEventListener('click',()=>stopRecording('manual'));
   // Continue a recording across the game's own reloads (new game, load, language,
   // back to title): saved before the navigation, resumed on the next document.
@@ -154,6 +163,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
     setText('diagnostic-detail-frame',`최근 10초 · 최대 ${ms(s.maxMs)} ms · p95 ${ms(s.p95Ms)} ms${paused?' · 정지 전 기록':''}`);
     setText('diagnostic-render',`드로콜 ${Number.isFinite(metrics.drawCalls)?metrics.drawCalls:'—'} · 화면 CPU ${Number.isFinite(metrics.sceneMs)?metrics.sceneMs.toFixed(1):'—'} ms · 제출 삼각형 ${Number.isFinite(metrics.submittedTriangles)?metrics.submittedTriangles.toLocaleString():'—'}`);
     setText('diagnostic-gpu',gpuDiagnosticLine(metrics.gpu));
+    setText('diagnostic-graphics-device',rendererDetail(graphicsDevice));
     const comparisonSnapshot=bosses.snapshot(),lines=bossComparisonLines(comparisonSnapshot);
     for(const [key,value] of Object.entries(lines))setText('diagnostic-boss-'+key,value);
     setText('diagnostic-boss-live',`현재 보스 ${sections.bossUpdateMs.toFixed(1)} · 판정 ${sections.contactsMs.toFixed(1)} · 애니메이션 ${Number.isFinite(metrics.animationMs)?metrics.animationMs.toFixed(1):'—'} ms${bosses.backgroundLoads.some(r=>r.status==='loading')?' · 변신 준비 중':''}`);
@@ -176,7 +186,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
   reset.addEventListener('click',()=>{monitor.reset();resetDiagnosticCpu();bosses.reset();onReset();metrics={};next=0;status.textContent='기록을 초기화했습니다.';fallback.hidden=true;paint();});
   const snapshot=()=>{
     if(enabled)refreshGpu();
-    const report={version:2,createdAt:new Date().toISOString(),...metadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
+    const report={version:2,createdAt:new Date().toISOString(),...reportMetadata(),measurement:'Frame intervals exclude initial loading, paused and hidden intervals. Load stages are elapsed wall time: download includes manifest/cache lookup and prefetch; model includes decode/setup and remaining I/O; screen includes shader readiness and first frames. Total also includes setup/release. JS heap is approximate, not total device/browser/GPU RAM. Background high texture estimate excludes player, base LOD, framebuffers and other GPU allocations.',summary:monitor.summary(),recentDelays:monitor.events.slice(),loading:loads?.snapshot()??null,loadHistory:loads?.history.slice()??[],memory:sampleMemory()};
     report.version=4;report.cameraZoom=zoom();report.renderMetrics={...metrics};report.bossComparison=bosses.snapshot();report.bossComparisonHistory=bosses.history.slice();report.bossBackgroundLoads=bosses.backgroundLoads.slice();
     // Owner/resource accounting is collected only for explicit exports, never
     // endFrame, periodic paint or the long recording's per-frame sampler.
@@ -209,6 +219,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
   sync();
   return {
     snapshot,
+    setGraphicsDevice(info){graphicsDevice=info;},
     refresh:paint,
     get enabled(){return enabled;},
     get collecting(){return collecting;},

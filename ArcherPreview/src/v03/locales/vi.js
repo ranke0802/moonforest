@@ -1,6 +1,13 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'gpu.detail':'GPU · {name} / Kết xuất · {mode} ({api})',
+  'gpu.hardware':'GPU phần cứng',
+  'gpu.software':'Phần mềm (CPU)',
+  'gpu.unknown':'Chưa xác định',
+  'gpu.notice':'Trò chơi đang kết xuất bằng phần mềm',
+  'gpu.desktopHelp':'Nhập {settings} vào thanh địa chỉ, bật tùy chọn tăng tốc đồ họa khi có thể, rồi khởi động lại trình duyệt.',
+  'gpu.generalHelp':'Nếu trình duyệt có tùy chọn tăng tốc đồ họa, hãy bật tùy chọn đó và khởi động lại. Nếu không thấy, hãy kiểm tra bản cập nhật trình duyệt.',
   'bench.trip':'Đang đo khứ hồi (khoảng 5 phút, {step}/5). Vui lòng không chạm vào màn hình.',
   'bench.running':'Đang đo hiệu năng (khoảng 50 giây). Vui lòng không chạm vào màn hình.','bench.done':'Đã đo xong','bench.copy':'Sao chép','bench.save':'Lưu tệp','bench.close':'Đóng',
   'title.aria':'Màn hình tiêu đề MoonForest','title.kicker':'Phù thủy Bi thương','title.sub':'Bàn tiệc Duyên phận · Hồi I','title.menu':'Menu chính','title.drawing':'Đang vẽ thế giới','title.drawingLeft':'còn {n}','title.drawingFirst':'Đang vẽ thế giới lần đầu…','title.drawingAgain':'Đang mở ra thế giới đã vẽ','title.drawingMemory':'Thế giới đã vẽ một lần sẽ được ghi nhớ.','title.stage.ground':'Đang vẽ mặt đất','title.stage.trees':'Đang vẽ cây cối','title.stage.people':'Đang vẽ những người sống trong thế giới này','title.stage.critters':'Đang vẽ những con vật dễ thương','title.stage.beasts':'Đang vẽ những con thú hung dữ','title.stage.monsters':'Đang vẽ những con quái vật đáng sợ',

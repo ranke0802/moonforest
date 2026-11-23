@@ -1,6 +1,13 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'gpu.detail':'GPU · {name} / 渲染方式 · {mode}（{api}）',
+  'gpu.hardware':'硬件 GPU',
+  'gpu.software':'软件（CPU）',
+  'gpu.unknown':'无法确定',
+  'gpu.notice':'游戏正在使用软件渲染',
+  'gpu.desktopHelp':'在地址栏输入 {settings}，开启“在可用时使用图形加速”，然后重启浏览器。',
+  'gpu.generalHelp':'如果浏览器提供图形加速选项，请将其开启并重启浏览器。如果找不到该选项，请检查浏览器更新。',
   'bench.trip':'正在测量往返（约5分钟，{step}/5），请勿触碰屏幕。',
   'bench.running':'正在测量性能（约50秒），请勿触碰屏幕。','bench.done':'测量完成','bench.copy':'复制','bench.save':'保存文件','bench.close':'关闭',
   'title.aria':'MoonForest 标题画面','title.kicker':'悲叹的魔女','title.sub':'缘分的餐桌 · 第一幕','title.menu':'主菜单','title.drawing':'正在描绘世界','title.drawingLeft':'剩余 {n}','title.drawingFirst':'正在初次描绘世界…','title.drawingAgain':'正在展开已绘制的世界','title.drawingMemory':'描绘过一次的世界会被记住。','title.stage.ground':'正在绘制大地','title.stage.trees':'正在绘制树木','title.stage.people':'正在绘制生活在这个世界的人们','title.stage.critters':'正在绘制可爱的动物','title.stage.beasts':'正在绘制凶猛的野兽','title.stage.monsters':'正在绘制可怕的怪物',

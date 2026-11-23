@@ -112,6 +112,7 @@ import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
 import {createFrameDiagnostics} from './frame-diagnostics.js';
+import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
 import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
 import {estimateTextureMemory} from './texture-memory.js';
@@ -1139,6 +1140,19 @@ function travelFromMinimap(href){
 try {
   if (!Engine.isSupported()) throw new Error('이 브라우저에서 WebGL을 사용할 수 없습니다.');
   engine = new Engine(canvas, true, { preserveDrawingBuffer: false, stencil: true, powerPreference: 'high-performance',loseContextOnDispose:true });
+  const updateGraphicsDevice=()=>{
+    const info=readRendererInfo(engine);
+    frameDiagnostics.setGraphicsDevice(info);
+    if(info.mode==='software'&&!cinematicAuthoringPreview){
+      const splash=window.__moonforestSplash;
+      void Promise.allSettled(splash?[splash.done,startLanguage()]:[]).then(()=>{
+        if(!engine.isDisposed && readRendererInfo(engine).mode==='software' && !$('#loading')?.classList.contains('error'))
+          showSoftwareRendererNotice(info,{doc:document,view:window,onChange:()=>reconcilePlayback()});
+      }).catch(error=>console.warn('[renderer notice]',error));
+    }
+  };
+  updateGraphicsDevice();
+  engine.onContextRestoredObservable.add(updateGraphicsDevice);
   engine.maxFPS=renderActivity.limit();
   // 0.3, opt-in while under review (?splitupload=1): large KTX2 textures reach the GPU in strips over several frames.
   setAnimationCompaction(!!versionRoute.edition&&!fullAnimationKeys);
@@ -1337,7 +1351,7 @@ try {
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;
-    const summonOpen=$('#summon-dialog').open,otherSettings=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true;
+    const summonOpen=$('#summon-dialog').open,otherSettings=hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open||$('#software-renderer-notice')?.open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true;
     world.toolLease?.setPaused(paused);
     if(paused){input.reset();cancelAttackInput();world.hudRaster?.clear();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){text('#live-fps',frameLoop.failed?'실행 오류':'일시정지');frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
