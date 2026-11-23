@@ -1,10 +1,9 @@
 import {Animation,AnimationGroup,Quaternion,Vector3} from '@babylonjs/core';
-import feral from './wolf-v02-feral-clips.json' with {type:'json'};
+import feral from './wolf-v02-feral-live-clips.json' with {type:'json'};
 import predator from './wolf-v02-predator-clips.json' with {type:'json'};
 import combatR13 from './wolf-v02-combat-r13-clips.json' with {type:'json'};
 import momentumR14 from './wolf-v02-momentum-r14-clips.json' with {type:'json'};
 
-export const WOLF_V02_FERAL_CLIPS=feral.clips;
 export const WOLF_V02_PREDATOR_CLIPS=predator.clips;
 export const WOLF_V02_COMBAT_R13_CLIPS=combatR13.clips;
 export const WOLF_V02_MOMENTUM_R14_CLIPS=momentumR14.clips;
@@ -12,7 +11,10 @@ export const WOLF_V02_MOMENTUM_R14_CLIPS=momentumR14.clips;
 // imports out of this live module avoids loading them in the published game.
 // Historical R9/R10 attacks stay in their source data and review exports. Live
 // actors only prepare the current bites, support reactions and lateral gaits.
-export const WOLF_V02_ACTIVE_CLIPS=[...feral.clips.filter(c=>c.name==='Wolf_Orbit_Step_V02'||c.name==='Wolf_Orbit_Step_Left_V02'),...predator.clips,...combatR13.clips,...momentumR14.clips];
+// R10 ships only its two live orbit steps (wolf-v02-feral-live-clips.json, made by
+// scripts/wolf-v02-live-clips.mjs); all four R10 clips stay in the source file
+// and in wolf-v02-authored-history.js for review.
+export const WOLF_V02_ACTIVE_CLIPS=[...feral.clips,...predator.clips,...combatR13.clips,...momentumR14.clips];
 export const WOLF_V02_AUTHORED_CLIPS=WOLF_V02_ACTIVE_CLIPS;
 export const WOLF_V02_AUTHORED_SOURCE=feral.sourceSha256;
 if(predator.sourceSha256!==feral.sourceSha256)throw Error('R11 motions require the same approved R8 rig');
