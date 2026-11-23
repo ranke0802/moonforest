@@ -325,6 +325,26 @@ test('a document opened with an intent skips logo and title',async()=>{
  const r=harness({local:local2,session:session2});assert.equal(r.shell.screen,'resume');await settle();r.shell.update(.016);await settle();
  assert.equal(r.shell.screen,'play');assert.ok(r.log.includes('startWorld'));assert.equal(r.log.some(x=>x.startsWith('summon')),false);
 });
+test('a map trip builds the next place\'s cast behind the loading picture',async()=>{
+ // main.js reports ready only after the trip ends, so the story's frame update cannot
+ // build the cast while the picture covers the stage; arrival() builds it (2026-11-23).
+ const local=memory(),session=memory();const s=createSaveSession({local,session,edition:E});s.commit({title:'x',character:'warrior-plains'});s.journey.setItem('v03-story-v1','{"quest":1,"step":0,"count":0,"done":[]}');s.request(1,'load');
+ const r=harness({local,session});await settle();r.shell.update(.016);await settle();r.shell.update(.016);
+ assert.equal(r.shell.screen,'play');const before=r.made.length;
+ r.state.ready=false;r.state.mapId='village';r.state.character='warrior-v3';r.shell.update(.016);
+ assert.equal(r.made.length,before,'nothing is built from the frame update during the trip');
+ assert.equal(await r.shell.arrival(50),true,'the cast settles behind the cover');
+ const folk=r.made.slice(before);assert.deepEqual(folk.map(v=>v.id),['innkeeper','elder','herbalist','chief','youth']);assert.ok(folk.every(v=>v.placed&&!v.disposed));
+ r.state.ready=true;r.shell.update(.016);r.shell.update(.016);
+ assert.equal(r.made.length,before+5,'the first frame in play does not build it again');assert.ok(folk.every(v=>!v.disposed));
+ assert.equal(r.document.querySelector('.v03-place-name').textContent,'몬트하임 마을','the place name still comes with the first frame');
+ assert.equal(await r.shell.arrival(50),true,'a second call keeps the same cast');assert.equal(r.made.length,before+5);
+ // With frames to watch, the cover stays until a run of smooth frames (or the cap).
+ let clock=0,calls=0;const step=()=>calls<10?100:16;r.window.requestAnimationFrame=callback=>{calls++;clock+=step();setImmediate(()=>callback(clock));return calls;};
+ assert.equal(await r.shell.arrival(4000),true);assert.equal(calls,9+12,`nine slow frames, then a run of twelve smooth ones (${calls})`);
+ calls=-1e9;const started=performance.now();assert.equal(await r.shell.arrival(60),true,'the cast is there, the cap ends the wait');assert.ok(performance.now()-started<1000);
+ delete r.window.requestAnimationFrame;
+});
 test('a loading failure hands the screen back to the game error card',async()=>{
  const h=harness();h.finishSplash();await settle();h.shell.update(.016);await settle();
  h.state.failed=true;h.shell.update(.016);

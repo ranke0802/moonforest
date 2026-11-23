@@ -69,17 +69,20 @@ test('a guide card shows its whole text: the copy fits, nothing is clipped',()=>
  assert.ok(body,'one body paragraph under the title');assert.doesNotMatch(body,/line-clamp|overflow:hidden|text-overflow/);
 });
 
-// Coarse width budget for the two body lines (lead + text). The real check is a
-// font measurement in the browser (2026-11-23: every tip fits two lines at the
-// 300px PC card and the 256px phone card); this keeps new copy near that size.
+// The control line (keys/touch) and the explanation each hold one line under the title (2026-11-23,
+// user: a bright line running straight into the dim one looked uneven; three lines at most). The real
+// check is a font measurement in the browser: every line fit at the 380px PC card and the 320px phone
+// card in all five languages, widest 94% of a line. This coarse width keeps new copy near that size.
 const wide=/[ᄀ-ᇿ　-ヿ㄰-㆏㐀-鿿가-힯＀-￯]/u;
 const units=text=>[...text].reduce((sum,ch)=>sum+(wide.test(ch)?1:ch===' '?.45:.6),0);
-const BUDGET={ko:39.5,ja:39.5,zh:39.5,en:41,vi:45};
-test('guide card copy fits the two-line budget in every language',async()=>{
+const LINE={ko:21.5,ja:21.5,zh:21.5,en:22.5,vi:23.5};
+test('each guide card line (controls, explanation) fits one line in every language',async()=>{
  const over=[];
  for(const {id} of LANGUAGES){
   const tips=id==='ko'?null:(await import(`../src/v03/locales/${id}.js`)).default.story.tips;
-  for(const tip of chapter1.TIPS){const row=tips?.[tip.id]??tip;for(const key of ['keys','touch']){const size=units(`${row[key]} ${row.text}`);if(size>BUDGET[id])over.push(`${id}.${tip.id}.${key} ${size.toFixed(1)}`);}}
+  for(const tip of chapter1.TIPS){const row=tips?.[tip.id]??tip;for(const key of ['keys','touch','text']){const size=units(row[key]);if(size>LINE[id])over.push(`${id}.${tip.id}.${key} ${size.toFixed(1)}`);}}
  }
  assert.deepEqual(over,[]);
+ assert.match(css,/\.v03-tip-lead\{display:block;/,'the control line is a line of its own');
+ assert.match(css,/\.v03-tip-text\{display:block;/,'and so is the explanation');
 });

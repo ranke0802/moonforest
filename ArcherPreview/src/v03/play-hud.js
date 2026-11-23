@@ -36,8 +36,10 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  // Cutscene subtitle: speaker + line, bottom centre.
  const caption=make('div','v03-caption'),captionWho=make('strong','v03-caption-who'),captionText=make('p','v03-caption-text');caption.append(captionWho,captionText);caption.hidden=true;
  // Title plus one body paragraph clamped to two lines (v03.css): a guide card stays within three lines.
- const tip=make('aside','v03-tip'),tipTitle=make('strong','v03-tip-title'),tipBody=make('p','v03-tip-body'),tipLead=make('span','v03-tip-lead'),tipGap=doc.createTextNode(' '),tipText=make('span','v03-tip-text');
- tipBody.append(tipLead,tipGap,tipText);tip.append(tipTitle,tipBody);tip.hidden=true;
+ const tip=make('aside','v03-tip'),tipTitle=make('strong','v03-tip-title'),tipBody=make('p','v03-tip-body'),tipLead=make('span','v03-tip-lead'),tipText=make('span','v03-tip-text');
+ // The control line and the explanation each hold one line (2026-11-23, user: a bright line running
+ // straight into the dim one looked uneven). Copy is written to fit one line each.
+ tipBody.append(tipLead,tipText);tip.append(tipTitle,tipBody);tip.hidden=true;
  // Its one-shot animation over, the card is gone (the lesson line it stood in for comes back, v03.css).
  tip.addEventListener('animationend',event=>{if(event.target!==tip)return;tip.classList.remove('is-shown');tip.hidden=true;});
  // A pulsing ring over the real game button a lesson is about (touch play).

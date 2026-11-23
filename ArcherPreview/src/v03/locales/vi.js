@@ -93,7 +93,7 @@ export default {
   tips:{
    guide:{title:'Ánh sáng dẫn đường',keys:'Đốm sáng bay trước đến nơi cần đến.',touch:'Đốm sáng bay trước đến nơi cần đến.',text:'Lạc đường thì đi theo ánh sáng.'},
    potion:{title:'Thuốc hồi phục',keys:'Nhấn phím 1 để uống thuốc.',touch:'Chạm nút thuốc để uống.',text:'Vẫn di chuyển được khi uống.'},
-   boss:{title:'Mãnh thú',keys:'Nó ngả người là đòn mạnh: né bằng Space hoặc giữ F để đỡ.',touch:'Nó ngả người là đòn mạnh: né bằng giày hoặc giữ khiên.',text:'Đánh trả ngay sau đó.'},
+   boss:{title:'Mãnh thú',keys:'Né bằng Space hoặc giữ F để đỡ.',touch:'Né bằng giày hoặc giữ khiên để đỡ.',text:'Ngả người là đòn mạnh. Đỡ xong đánh trả.'},
    talk:{title:'Trò chuyện',keys:'Nhấn E khi ở gần để bắt chuyện.',touch:'Lại gần rồi chạm nút hiện ra.',text:'Không thể nói chuyện khi giao chiến.'},
    sprint:{title:'Chạy nhanh',keys:'Giữ Space để chạy.',touch:'Giữ nút né để chạy.',text:'Tốn thể lực. Hãy theo mục tiêu và bản đồ.'},
    stamina:{title:'Thể lực',keys:'Thanh vàng dưới máu là thể lực.',touch:'Thanh vàng dưới máu là thể lực.',text:'Mọi hành động đều tốn, dừng lại sẽ hồi.'},

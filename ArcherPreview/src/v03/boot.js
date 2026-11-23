@@ -49,6 +49,16 @@ export function setupV03(api){
  // roaming placement actors of the same model reuse that one source model.
  battle?.shareModelKinds?.(TITLE_FOE.kind,AMBUSH.kind);
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
+ // A run of frames each under 40 ms, or the deadline (a hidden page draws nothing: it waits out the time).
+ async function smoothFrames(until,run=12,slowMs=40){
+  const raf=view?.requestAnimationFrame?.bind(view);if(!raf||doc.hidden)return;
+  let last=null,smooth=0;
+  while(smooth<run&&performance.now()<until&&!state.disposed){
+   const at=await new Promise(resolve=>{const timer=setTimeout(()=>resolve(null),slowMs*2);raf(time=>{clearTimeout(timer);resolve(time);});});
+   if(at===null){last=null;smooth=0;continue;}
+   smooth=last!==null&&at-last<=slowMs?smooth+1:last===null?smooth:0;last=at;
+  }
+ }
  const pilot=createAttractPilot({random:api.random});
  const appleTouch=isIos(view);
  if(appleTouch)html.dataset.v03Ios='1';
@@ -520,13 +530,18 @@ export function setupV03(api){
   // (2026-11-21: five 2048 px textures, 55-88 ms each, one frame of 0.9 s on a laptop).
   async arrival(maxMs=4000){
    if(state.screen!=='play'||state.disposed)return false;
-   const started=performance.now(),left=()=>maxMs-(performance.now()-started);
-   while(left()>0&&!state.disposed){
-    const settled=story.castReady(gameState().mapId);
-    if(settled){await Promise.race([settled,wait(Math.max(0,left()))]);return left()>0;}
-    await wait(30);// the cast is built by the first frame on the new map
-   }
-   return false;
+   const until=performance.now()+maxMs;
+   // The story builds the cast here, not on its first frame: that frame only comes
+   // after the trip (2026-11-23: the old wait here could never see the cast, so the
+   // cover always stayed the full 4 s and the folk then loaded in play).
+   const settled=story.arrive?.(gameState().mapId)??null;
+   let done=!settled;
+   if(settled){void settled.then(()=>{done=true;});await Promise.race([settled,wait(maxMs)]);}
+   // Then, within the same cap, until the world draws smoothly: the first seconds
+   // after a trip ran 85-120 ms a frame on the plains (phone, 2026-11-23), which
+   // that full wait had been hiding by accident. The cover never stays longer than before.
+   if(done)await smoothFrames(until);
+   return done;
   },
   // The prologue's black stage hides the world: main.js draws it only now and
   // then (uploads keep moving) so the ambush wolf's preparation and the

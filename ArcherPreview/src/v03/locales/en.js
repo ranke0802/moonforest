@@ -93,12 +93,12 @@ export default {
   tips:{
    guide:{title:'Guiding light',keys:'The wisp flies ahead to your goal.',touch:'The wisp flies ahead to your goal.',text:'Lost? Follow the light.'},
    potion:{title:'Potion',keys:'Press 1 to drink a potion.',touch:'Tap the potion button to drink.',text:'You can move while drinking.'},
-   boss:{title:'A great beast',keys:'When it rears back, dodge (Space) or guard (hold F).',touch:'When it rears back, dodge or hold the shield.',text:'Then strike back.'},
-   talk:{title:'Talk',keys:'Press E nearby to talk.',touch:'Tap the button that appears up close.',text:'You can’t talk in combat.'},
+   boss:{title:'A great beast',keys:'Dodge (Space) or guard (hold F).',touch:'Dodge, or hold the shield to guard.',text:'It rears back to hit hard. Then strike.'},
+   talk:{title:'Talk',keys:'Press E nearby to talk.',touch:'Get close and tap the button.',text:'You can’t talk in combat.'},
    sprint:{title:'Sprint',keys:'Hold Space to run.',touch:'Hold the dodge button to run.',text:'Uses stamina. Follow the goal and map.'},
    stamina:{title:'Stamina',keys:'The yellow bar is stamina.',touch:'The yellow bar is stamina.',text:'Every action uses it. Stop to refill.'},
    rest:{title:'Rest and record',keys:'Talk to the innkeeper to rest.',touch:'Talk to the innkeeper to rest.',text:'Refills health and potions, and saves.'},
-   witness:{title:'Gathering testimony',keys:'Ask the three in any order.',touch:'Ask the three in any order.',text:'The objective shows whom you’ve heard.'},
+   witness:{title:'Gathering testimony',keys:'Ask the three in any order.',touch:'Ask the three in any order.',text:'The goal lists who you’ve heard.'},
   },
  },
  legacy:{

@@ -409,7 +409,9 @@ function recordingProbe(){
     jsHeapMB:memory?Math.round(memory.usedJSHeapSize/1048576):null,materials:scene?.materials.length??null,textures:scene?.textures.length??null,disposeObservers:scene?.onDisposeObservable.observers.length??null,foes:boss?.encounters?.filter(foe=>foe.active).length??null,engaged:profile?.engaged??null,nearFoes:profile?.near??null,farFoes:profile?.far??null,maxFoe:profile?.maxKind?`${profile.maxKind}:${profile.maxState}`:null,
     playerClipStarts:counts&&previous?counts.created-previous.created:null,playerClipReuses:counts&&previous?counts.reused-previous.reused:null,
     // Engine-held textures (all maps, retained species included) and the frame guard's level, each second (2026-11-23).
-    engineTextures:gpuTextures?.count??null,textureMB:gpuTextures?.megabytes??null,uncompressedTextureMB:gpuTextures?.uncompressedMegabytes??null,adaptiveLevel:adaptivePerformance.level,frozenActorMaterials:world?.actorMaterialFreeze?world.actorMaterialFreeze.frozenNow:null,materialThaws:world?.actorMaterialFreeze?world.actorMaterialFreeze.thaws:null};
+    engineTextures:gpuTextures?.count??null,textureMB:gpuTextures?.megabytes??null,uncompressedTextureMB:gpuTextures?.uncompressedMegabytes??null,adaptiveLevel:adaptivePerformance.level,frozenActorMaterials:world?.actorMaterialFreeze?world.actorMaterialFreeze.frozenNow:null,materialThaws:world?.actorMaterialFreeze?world.actorMaterialFreeze.thaws:null,
+    // Whether the loading picture still covers the stage at this second: frames behind it are counted too (2026-11-23).
+    covered:document.documentElement.dataset.loading!==undefined};
 }
 const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equipmentStorage,loads:loadDiagnostics,
   contentRuntime:()=>inspectContentRuntimeBudget({world,battle:boss,audio,playerTextureProfile:playerTextureSelection,decodeCache:inspectMapDecodeCache(engine)}),

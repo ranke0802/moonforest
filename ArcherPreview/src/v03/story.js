@@ -1318,7 +1318,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){
-    mapId=s.mapId;buildCast(mapId);emit({type:'reach',map:mapId});
+    // arrive() may have built this place's cast behind the loading picture already.
+    mapId=s.mapId;if(castMap!==mapId)buildCast(mapId);emit({type:'reach',map:mapId});
     // The place's name in the middle of the screen on arrival (2026-11-20,
     // user). Not over the opening scene.
     if(!scene.pending&&!scene.active){const key='place.'+s.character,name=t(key);if(name!==key)hud.showPlace(name);}
@@ -1349,6 +1350,13 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   castVisual:id=>cast.find(member=>member.npc.id===id)?.visual??null,
   // The map's cast once it has been built (first frame there): a promise for all its models, else null.
   castReady:id=>castMap===id?castSettled:null,
+  // A map trip, behind its loading picture: build the place's cast now, so its
+  // models load and upload while the picture still covers the stage. update()
+  // cannot do it then (the game is not ready until the trip ends), and waiting
+  // for it only ran out the wait: the cover stayed 4 s longer and the five
+  // village folk still loaded in play (2026-11-23 record: a 235 ms task and
+  // five 2048 px uploads at +5.5 s). A promise for the models, else null.
+  arrive(id){if(!started||disposed||!id)return null;if(castMap!==id)buildCast(id);return castMap===id?castSettled:null;},
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
   dispose(){if(disposed)return;disposed=true;stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
