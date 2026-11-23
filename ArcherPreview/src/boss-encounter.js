@@ -366,7 +366,10 @@ export class BossEncounter {
     const sampleTime=['move','approach'].includes(this.brain.mode)&&clip.duration>0?this.brain.time%clip.duration:this.brain.time;
     const f=Math.min((ground?.length||1)-1,sampleTime*(clip.fps??30)),i=Math.floor(f);
     const level=ground?ground[i]+(ground[Math.min(i+1,ground.length-1)]-ground[i])*(f-i):.075;
-    this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*(1-Math.exp(-18*this.dt));
+    // dt is set by update(); a story hold or a pose pass can align a fresh actor before its first update
+    // (2026-11-23: a goblin summoned into the wagon lesson got NaN height and vanished).
+    const settle=this.dt>0?1-Math.exp(-18*this.dt):0;
+    this.groundHeight=level>this.groundHeight?level:this.groundHeight+(level-this.groundHeight)*settle;
     this.carrier.position.set(-relative.x,this.groundHeight,-relative.z);this.carrier.computeWorldMatrix(true);
   }
   prepareContactPose(player,result){

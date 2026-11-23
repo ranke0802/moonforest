@@ -48,6 +48,7 @@ Babylon.js 9.31 기반 웹 3D 액션 RPG. 지금 만드는 것은 **MoonForest 0
 - 표현 등급: 교전·근거리는 매 프레임, 비교전은 1/30초, 화면 밖·원거리는 1/15초 또는 동결. 판정·AI 상태는 항상 매 프레임.
 - 셰이더·텍스처·버퍼의 최초 준비는 로딩/숨김 상태에서 끝낸다(`prepareModelShaders`, 공유 2ms 준비 예산).
 - KTX2(UASTC)·Meshopt 유지. 새 텍스처도 KTX2로 준비하고 밉맵을 둔다.
+  보스가 아닌 몬스터 색상은 2K(4K KTX2의 맨 위 단계만 뺀 파일, `scripts/trim-ktx2-top-level.mjs`)를 `texture-replacements.js` tier로 불러온다. 모델 파일은 바꾸지 않는다.
 - 프레임 핫패스에서 `new Vector3`, `clone()`, `filter/map`, 객체 펼치기를 쓰지 않는다. 모듈 수준 작업 변수를 재사용한다.
 - DOM UI는 프레임마다 레이아웃을 읽지 않는다. `transform`/`opacity`만 바꾸고, 값이 바뀔 때만 쓴다.
 - 새 Engine·Scene·프레임 루프를 만들지 않는다. 캐릭터 창·타이틀·컷씬도 기존 scene과 카메라를 쓴다.

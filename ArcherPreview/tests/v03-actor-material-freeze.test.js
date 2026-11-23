@@ -52,3 +52,16 @@ test('turning it off thaws what it froze; disposing the scene removes its observ
  const before=scene.onAfterRenderObservable.observers.length;scene.dispose();
  assert.ok(before>=1);engine.dispose();
 });
+
+test('the scan is sliced across frames and a cycle that sees the mesh list change is dropped',async()=>{
+ const {engine,scene,skinned}=fixture(),freeze=createActorMaterialFreeze(scene,{slice:1});
+ await drawn(scene);
+ // Engine delta time is 0 in a NullEngine render; drive one cycle by its own clock.
+ const cycle=async()=>{for(let i=0;i<20&&freeze.scans===0;i++){scene.getEngine().getDeltaTime=()=>1000;scene.render();}};
+ await cycle();assert.equal(skinned.material.isFrozen,true);assert.ok(freeze.lastCycleFrames>=4,'two passes over two meshes, one mesh a frame');
+ skinned.material.markAsDirty(Material.TextureDirtyFlag);assert.equal(skinned.material.isFrozen,false);
+ const scans=freeze.scans;scene.getEngine().getDeltaTime=()=>1000;scene.render();// starts a cycle
+ MeshBuilder.CreateBox('late',{},scene);scene.getEngine().getDeltaTime=()=>0;scene.render();
+ assert.equal(freeze.dropped,1);assert.equal(freeze.scans,scans);assert.equal(skinned.material.isFrozen,false);
+ engine.dispose();
+});
