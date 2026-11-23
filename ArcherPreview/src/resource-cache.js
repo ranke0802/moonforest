@@ -1,15 +1,34 @@
 let initialized;
-let registeredRevision,registeredController,currentGraph,listening=false;
-export function registerResourceGraph(index){
-  currentGraph=index;const worker=globalThis.navigator?.serviceWorker;
-  if(!worker)return;
-  if(!listening&&worker.addEventListener){listening=true;worker.addEventListener('controllerchange',()=>{if(currentGraph)registerResourceGraph(currentGraph);});}
-  const controller=worker.controller;
-  if(!controller||(registeredController===controller&&registeredRevision===index.revision))return;
-  try{
-    controller.postMessage({type:'RESOURCE_GRAPH_USE',revision:index.revision,files:Object.keys(index.files)});
-    registeredRevision=index.revision;registeredController=controller;
+const releaseGraph = typeof __MOONFOREST_CACHE_GRAPH__ === 'undefined' ? null : __MOONFOREST_CACHE_GRAPH__;
+let registeredController, registeredRevision, declaration, listening = false;
+
+function publishGraph(worker) {
+  const controller = worker.controller;
+  if (!declaration || !controller || (registeredController === controller && registeredRevision === declaration.revision)) return;
+  try {
+    controller.postMessage(declaration);
+    registeredController = controller;
+    registeredRevision = declaration.revision;
   }catch{ /* A worker replaced during startup will receive the next declaration. */ }
+}
+
+export function registerResourceGraph(index, graph = releaseGraph) {
+  const worker = globalThis.navigator?.serviceWorker;
+  if (!worker) return;
+  // Without a matching release inventory an incomplete declaration could
+  // evict valid bytes. Undeclared clients already defer cleanup in the worker.
+  if (!graph || graph.baseRevision !== index.revision) {
+    declaration = null;
+    return;
+  }
+  if (declaration?.revision !== graph.revision) {
+    declaration = {type:'RESOURCE_GRAPH_USE', revision:graph.revision, files:[...Object.keys(index.files), ...graph.extraFiles]};
+  }
+  if (!listening && worker.addEventListener) {
+    listening = true;
+    worker.addEventListener('controllerchange', () => publishGraph(worker));
+  }
+  publishGraph(worker);
 }
 export function initializeResourceCache() {
   return initialized ||= (async () => {

@@ -6,7 +6,7 @@ import {collectVillageSiteFiles} from './build-village-site.mjs';
 import {verifyResourceBundles} from './resource-bundles.mjs';
 import {verifyRuntimeModuleGraph} from './runtime-module-graph.mjs';
 import {captureSourceProvenance,verifySourceProvenance,sourceCommitInfo} from './source-provenance.mjs';
-import {RELEASE_V3,RELEASE_V3_MANIFEST,sha256,publishedBytes,deploymentPath,optionalBytes,assertDescriptor,assertDeploymentContentGraph} from './release-deployment.mjs';
+import {RELEASE_V3,RELEASE_V3_MANIFEST,sha256,publishedBytes,deploymentPath,optionalBytes,assertDescriptor,assertDeploymentContentGraph,releaseCacheGraph} from './release-deployment.mjs';
 
 const project=resolve(import.meta.dirname,'..');
 export async function buildMoonforestV3(){
@@ -43,7 +43,9 @@ export async function buildMoonforestV3(){
   pending.push({item,bytes});
  }
  let runtimeGraph;
- await build({root:project,publicDir:publicRoot,plugins:[{name:'verify-moonforest-0.3-runtime',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false,rolldownOptions:{input:{moonforestV3:resolve(project,'moonforest-0.3.html'),moonforestV4:resolve(project,'moonforest-0.4.html'),moonforestShell:resolve(project,'moonforest-shell.html')}}}});
+ const cacheGraph=releaseCacheGraph(resourceIndex,files.keys());
+ const define={__MOONFOREST_CACHE_GRAPH__:JSON.stringify(cacheGraph)};
+ await build({root:project,publicDir:publicRoot,define,plugins:[{name:'verify-moonforest-0.3-runtime',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false,rolldownOptions:{input:{moonforestV3:resolve(project,'moonforest-0.3.html'),moonforestV4:resolve(project,'moonforest-0.4.html'),moonforestShell:resolve(project,'moonforest-shell.html')}}}});
  for(const {item,bytes}of pending){const target=deploymentPath(outDir,item.path);await mkdir(dirname(target),{recursive:true});await writeFile(target,bytes);}
  const deploymentFiles=[...reused];let stagedBytes=0;
  async function inventory(directory){
@@ -61,8 +63,7 @@ export async function buildMoonforestV3(){
  const unique=new Map();for(const item of deploymentFiles){const old=unique.get(item.path);if(old&&(old.bytes!==item.bytes||old.sha256!==item.sha256))throw new Error('Conflicting release file: '+item.path);unique.set(item.path,item);}
  const reviewedFiles=[...unique.values()].sort((a,b)=>a.path.localeCompare(b.path)),bytes=reviewedFiles.reduce((sum,item)=>sum+item.bytes,0);
  if(bytes>=1_000_000_000)throw new Error('MoonForest 0.3 exceeds the 1 GB budget');
- const sharedContent=new Set(Object.keys(resourceIndex.files).map(name=>'assets/content/'+name));
- const additiveContent=reviewedFiles.filter(item=>item.path.startsWith('assets/content/')&&!sharedContent.has(item.path));
+ const additiveContent=cacheGraph.extraFiles.map(name=>unique.get('assets/content/'+name));
  await verifySourceProvenance(repository,sourceProvenance);
  const manifest={version:2,release:RELEASE_V3,baseDeploymentSha256:sha256(primaryBytes),resourceRevision:resourceIndex.revision,sourceProvenance,bytes,files:reviewedFiles,...(additiveContent.length?{additiveContent}:{})};
  assertDeploymentContentGraph(manifest,resourceIndex);

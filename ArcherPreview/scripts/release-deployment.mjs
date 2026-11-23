@@ -10,6 +10,20 @@ export const RELEASE_V3_MANIFEST='deployment-files-moonforest-0.3.json';
 // Releases after 0.1 that may append content-addressed resources.
 const ADDITIVE_RELEASES=new Set([RELEASE_V2,RELEASE_V3]);
 export const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
+
+// The frozen bundle index covers 0.1. Later releases also own loose hashed
+// files. Derive both the client declaration and the manifest from this list.
+export function releaseCacheGraph(index, paths) {
+ const prefix = 'assets/content/';
+ const extraFiles = [];
+ for (const path of paths) {
+  if (!path.startsWith(prefix)) continue;
+  const name = path.slice(prefix.length);
+  if (!Object.hasOwn(index.files, name)) extraFiles.push(name);
+ }
+ extraFiles.sort();
+ return {baseRevision:index.revision, revision:sha256(JSON.stringify([index.revision, extraFiles])), extraFiles};
+}
 // Match the existing village publisher's platform-independent text bytes.
 // Content-addressed files encode their exact source bytes and stay untouched.
 export function publishedBytes(path,bytes){

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import {registerResourceGraph} from '../src/resource-cache.js';
+import {releaseCacheGraph} from '../scripts/release-deployment.mjs';
 const scope='https://example.test/ArcherPreviewSite/',a='a'.repeat(64)+'.bin',b='b'.repeat(64)+'.bin',c='c'.repeat(64)+'.bin';
 function fixture(){
  const stores=new Map(),f={clients:[]};
@@ -15,6 +16,7 @@ function fixture(){
   const listeners={};vm.runInNewContext(readFileSync(new URL('../public/resource-cache.js',import.meta.url),'utf8'),{URL,Map,Set,Response,console,setTimeout,caches,self:{registration:{scope},clients:{matchAll:async()=>f.clients,claim(){}},skipWaiting(){},addEventListener(type,fn){listeners[type]=fn;}}});
   f.register=async(id,files,revision='1'.repeat(64))=>{let waiting;listeners.message({source:{id,url:scope+'?character=warrior-v3'},data:{type:'RESOURCE_GRAPH_USE',files,revision},waitUntil(p){waiting=p;}});await waiting;};
   f.stats=()=>{let result;listeners.message({data:{type:'RESOURCE_CACHE_STATS'},ports:[{postMessage(v){result=v;}}]});return result;};
+  f.read=name=>{let response;listeners.fetch({request:new Request(scope+'assets/content/'+name),respondWith(p){response=p;}});return response;};
  };
  f.seed=async names=>{const cache=await caches.open('moonforest-resources-v1');for(const name of names)await cache.put(scope+'assets/content/'+name,new Response('bytes'));};
  f.names=()=>[...(stores.get('moonforest-resources-v1')?.keys()??[])].map(u=>u.split('/').at(-1)).sort();
@@ -45,13 +47,31 @@ test('invalid or empty graph declarations cannot purge cached resources',async()
  assert.deepEqual(f.names(),[a,b]);assert.equal(f.stats().prunedFiles,0);
 });
 
-test('an updated service worker receives the graph even when the previous worker had already controlled startup',t=>{
+test('release additions survive repeat visits and worker replacement; incomplete graphs cannot trigger cleanup',async t=>{
  const descriptor=Object.getOwnPropertyDescriptor(navigator,'serviceWorker'),messages=[],listeners={};
  const first={postMessage:data=>messages.push({worker:1,data})},second={postMessage:data=>messages.push({worker:2,data})};
  const worker={controller:first,addEventListener:(event,fn)=>listeners[event]=fn};
  Object.defineProperty(navigator,'serviceWorker',{value:worker,configurable:true});
  t.after(()=>{if(descriptor)Object.defineProperty(navigator,'serviceWorker',descriptor);else delete navigator.serviceWorker;});
  const index={revision:'3'.repeat(64),files:{[a]:8}};
- registerResourceGraph(index);registerResourceGraph(index);assert.equal(messages.length,1);
- worker.controller=second;listeners.controllerchange();assert.equal(messages.length,2);assert.equal(messages[1].worker,2);assert.deepEqual(messages[1].data.files,[a]);
+ const paths=['assets/content/'+b,'assets/actor.json','assets/content/'+a];
+ const graph=releaseCacheGraph(index,paths);
+ assert.deepEqual(graph.extraFiles,[b]);
+ assert.deepEqual(releaseCacheGraph(index,paths.toReversed()),graph);
+ assert.notEqual(releaseCacheGraph(index,paths.slice(1)).revision,graph.revision);
+ registerResourceGraph(index,null);
+ registerResourceGraph({...index,revision:'0'.repeat(64)},graph);
+ assert.equal(messages.length,0);
+ registerResourceGraph(index,graph);registerResourceGraph(index,graph);assert.equal(messages.length,1);
+ worker.controller=second;listeners.controllerchange();assert.equal(messages.length,2);assert.equal(messages[1].worker,2);
+ const expected={type:'RESOURCE_GRAPH_USE',revision:graph.revision,files:[a,b]};
+ const f=fixture();await f.seed([a,b,c]);
+ for(const [visit,{data}] of messages.entries()){
+  assert.deepEqual(data,expected);
+  f.restart();const id='visit-'+visit;f.clients=[{id,url:scope}];
+  await f.register(id,data.files,data.revision);
+  assert.deepEqual(f.names(),[a,b]);assert.equal(f.stats().prunedFiles,visit===0?1:0);
+  assert.equal(await (await f.read(b)).text(),'bytes');
+  assert.equal(f.stats().hits,1);assert.equal(f.stats().downloads,0);
+ }
 });
