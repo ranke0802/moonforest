@@ -3,13 +3,23 @@ import {upwardFocusLift} from './camera-pitch.js';
 import {playerDimensions} from './player-dimensions.js';
 import {caveRoofHeight} from './witch-cave-layout.js';
 import {laboratoryVaultHeight} from './cave-laboratory-vault.js';
-import {CAVE_CAMERA_DATA as DATA} from './witch-cave-camera-data.js';
 
 // Sparse occupancy: a 16-bit cell lookup plus one 256-bit profile per run.
 // Empty air allocates no vertical profile, and repeated neighbouring columns
 // share the same immutable bits.
 const decode=text=>{const raw=atob(text),bytes=new Uint8Array(raw.length);for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);return bytes.buffer;};
-const lookup=new Uint16Array(decode(DATA.lookup)),profiles=new Uint32Array(decode(DATA.profiles));
+// The field is used only inside the cave (camera rock test, boss-occlusion
+// marker). Its 1.7 MB source and 1.3 MB of arrays load with the cave map
+// (startup-resources.js waits for it behind the loading cover), not with every
+// page that opens on the plains or in the village (2026-11-23).
+let DATA=null,lookup=null,profiles=null,fieldLoad=null;
+export function prepareCaveCameraField(){
+ return fieldLoad??=import('./witch-cave-camera-data.js').then(({CAVE_CAMERA_DATA})=>{
+  const nextLookup=new Uint16Array(decode(CAVE_CAMERA_DATA.lookup)),nextProfiles=new Uint32Array(decode(CAVE_CAMERA_DATA.profiles));
+  DATA=CAVE_CAMERA_DATA;lookup=nextLookup;profiles=nextProfiles;return true;
+ }).catch(error=>{fieldLoad=null;throw error;});
+}
+export const caveCameraFieldReady=()=>lookup!==null;
 // Match caveCeiling's actual 64-sector / 12-ring triangles. The analytic dome
 // lies above its chords near the rim, so the formula alone can miss a ceiling.
 const roofVertices=new Float64Array(13*65*3);
@@ -28,6 +38,9 @@ export function caveCameraCeilingHeight(x,z){
 // Conservative near-LOD voxels, not body navigation: an arch can block a
 // raised camera while remaining open to a player underneath it.
 export function caveCameraRockBlocked(x,y,z,padding=.3){
+ // Only a path that skipped the cave loading can get here first: start the
+ // load and treat rock as open until it lands (terrain/ceiling still apply).
+ if(lookup===null){void prepareCaveCameraField().catch(()=>{});return false;}
  const x0=Math.floor((x-padding-DATA.min)/DATA.step),x1=Math.floor((x+padding-DATA.min)/DATA.step),z0=Math.floor((z-padding-DATA.min)/DATA.step),z1=Math.floor((z+padding-DATA.min)/DATA.step);
  const from=Math.max(0,Math.floor((y-padding-DATA.bottom)/DATA.unit)),to=Math.min(255,Math.floor((y+padding-DATA.bottom)/DATA.unit));
  for(let zz=Math.max(0,z0);zz<=Math.min(DATA.size-1,z1);zz++)for(let xx=Math.max(0,x0);xx<=Math.min(DATA.size-1,x1);xx++){
@@ -147,6 +160,6 @@ export class CaveCameraGuard {
   // Keep the rendered matrices/global position until the next beginFrame so
   // deferred HUD work sees the image that was drawn, never the requested eye.
  }
- inspect(){return {requestedRadius:this.savedRadius??this.world.camera.radius,effectiveRadius:this.effectiveRadius,requestedBeta:this.savedBeta??this.world.camera.beta,effectiveBeta:(this.savedBeta??this.world.camera.beta)+this.pitchCorrection,pitchCorrection:this.pitchCorrection,reason:this.framing?.reason??'inactive',baselineRadius:this.framing?.baselineRadius??null,applied:this.applied,fieldBytes:lookup.byteLength+profiles.byteLength};}
+ inspect(){return {requestedRadius:this.savedRadius??this.world.camera.radius,effectiveRadius:this.effectiveRadius,requestedBeta:this.savedBeta??this.world.camera.beta,effectiveBeta:(this.savedBeta??this.world.camera.beta)+this.pitchCorrection,pitchCorrection:this.pitchCorrection,reason:this.framing?.reason??'inactive',baselineRadius:this.framing?.baselineRadius??null,applied:this.applied,fieldBytes:(lookup?.byteLength??0)+(profiles?.byteLength??0)};}
  dispose(){if(this.disposed)return;this.endFrame();this.disposed=true;this.world.scene.onDisposeObservable.remove(this.sceneDispose);}
 }

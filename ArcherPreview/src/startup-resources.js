@@ -4,6 +4,7 @@ import {readMapManifest} from './map-manifests.js';
 import {registerResourceGraph} from './resource-cache.js';
 import {MapLoadLifetime,mapLoadAbortError,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 import {loadingArtResources} from './loading-art.js';
+import {prepareCaveCameraField} from './witch-cave-camera.js';
 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream,context){
   const {lifetime,check}=context;check();const scene=world.scene;
@@ -52,7 +53,7 @@ export async function prepareMapResources(world,base,onProgress,onStream,options
   return resourceSetup(world,async context=>{
   const {lifetime,check,timeoutMs,timers}=context;
   const read=name=>readMapManifest(new URL(name+'.json',base),{timeoutMs,timers});
-  const [village,sizes,ground,resident]=await lifetime.run(()=>Promise.all([prepareVillageStart(world,{lifetime,timeoutMs,timers}).then(value=>{context.prepared=value;return value;}),read('resource-index'),read(world.groundManifest),world.cave?read('elena'):null]));check();
+  const [village,sizes,ground,resident]=await lifetime.run(()=>Promise.all([prepareVillageStart(world,{lifetime,timeoutMs,timers}).then(value=>{context.prepared=value;return value;}),read('resource-index'),read(world.groundManifest),world.cave?read('elena'):null,world.cave?prepareCaveCameraField():null]));check();
   // The manifest/setup wait is bounded. Do not impose a total 45s ceiling on
   // a healthy large 8K download that continues making byte progress.
   lifetime.finishDeadline();
@@ -67,7 +68,7 @@ export async function prepareStartupResources(world,playerUrl,onProgress,onStrea
   const {lifetime,check,timeoutMs,timers}=context,base=new URL('./',playerUrl),read=name=>readMapManifest(new URL(name+'.json',base),{timeoutMs,timers});
   const player=await lifetime.run(()=>read(playerUrl.pathname.split('/').at(-1).replace('.json','')));check();
   const [village,sizes,ground,sky,environment,ktx,meshopt,resident]=await lifetime.run(()=>Promise.all([
-    prepareVillageStart(world,{lifetime,timeoutMs,timers}).then(value=>{context.prepared=value;return value;}),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder'),world.cave?read('elena'):null]));check();lifetime.finishDeadline();
+    prepareVillageStart(world,{lifetime,timeoutMs,timers}).then(value=>{context.prepared=value;return value;}),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder'),world.cave?read('elena'):null,world.cave?prepareCaveCameraField():null]));check();lifetime.finishDeadline();
   const resources=[...loadingArtResources,...player.resources,...village.resources,...ground.resources,...(resident?.resources??[]),...(world.cave?[]:[sky.texture]),...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
   await prepareDownloads(world,base,sizes,resources,village.plan,onProgress,onStream,context);
   return player;
