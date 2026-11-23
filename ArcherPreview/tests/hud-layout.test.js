@@ -123,3 +123,12 @@ test('unavailable storage keeps usable session settings and reports lack of pers
 test('native close and Escape cancellation discard drafts and release pause',()=>{
  for(const mode of ['cancel','close']){const f=fixture();f.ui.open();f.choose('map');f.set('x',10);if(mode==='cancel')f.event(f.dialog,'cancel');else f.dialog.close();assert.equal(f.ui.isOpen(),false);assert.equal(f.ui.inspect().items.map.x,0);assert.equal(f.stats().paused,2);f.ui.dispose();}
 });
+test('a CSS-zoomed panel keeps the editor in step: offsets divided by its zoom, no second responsive scale',()=>{
+ // 0.3 on a 1920x1080 window zooms the HUD panels 1.5x (v03/ui-scale.js).
+ const f=fixture();f.frame.width=1920;f.frame.height=1080;const hud=f.root.querySelector('#player-hud'),plain=f.root.querySelector('#frame-diagnostics');
+ Object.defineProperty(hud,'currentCSSZoom',{configurable:true,value:1.5});f.resize();f.flush();
+ assert.equal(hud.style.scale,'','the zoom already enlarges it; the responsive scale sees a 1280x720 window');assert.equal(Number(plain.style.scale),1.2,'an unzoomed group keeps its responsive scale');
+ f.ui.open();f.choose('health');f.set('x',10);f.set('scale',120);f.command('save');
+ assert.equal(hud.style.translate.split(' ')[0],'128px','10% of 1920px on screen is 128px inside a 1.5x zoom');assert.equal(Number(hud.style.scale),1.2);
+ assert.equal(f.ui.inspect().items.health.x,.1);f.ui.dispose();
+});

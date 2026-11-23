@@ -11,6 +11,7 @@ import {createLoadingLore} from './loading-lore.js';
 import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
 import {createOrientationGate,isIos} from './orientation-gate.js';
+import {setupUiScale} from './ui-scale.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createCombatTarget} from './combat-target.js';
 import {createCapeSpring} from './cape-spring.js';
@@ -59,6 +60,7 @@ export function setupV03(api){
  const cursors=createCursors(doc);
  // Phones play in landscape only, from the moment the language is chosen.
  const gate=createOrientationGate({doc});
+ const uiScale=view?.addEventListener?setupUiScale({view,doc}):null;
  // Tekken-style health (recoverable part) for the player and monsters, in play only.
  const vitality=createVitalityHud({doc,battle});
  // A fight that has begun holds out to three alert radii (user, 2026-11-21; monster-territory.js).
@@ -606,6 +608,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

@@ -22,7 +22,7 @@
 #app[data-raster-hud] .top-actions{gap:5px}
 #app[data-raster-hud] .chapter-story [data-hud-sprite=story]{background:none;border:0;min-height:40px;min-width:110px;padding:4px 16px;overflow:visible}
 #app[data-raster-hud] [data-hud-sprite=story]>.hud-v1-sprite{z-index:-1;width:130%;height:200%;left:-15%;top:-50%}
-#app[data-raster-hud] #player-hud[data-hud=fixed]{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top));width:clamp(210px,26vw,330px);padding-left:38px;display:grid;grid-template-columns:minmax(85px,1fr) auto;column-gap:8px;row-gap:4px;transform:none;text-align:left;color:#eee2c3;font:clamp(10px,1vw,13px)/1.3 MoonforestUI,sans-serif}
+#app[data-raster-hud] #player-hud[data-hud=fixed]{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top));width:clamp(210px,calc(26vw / var(--v03-ui,1)),330px);padding-left:38px;display:grid;grid-template-columns:minmax(85px,1fr) auto;column-gap:8px;row-gap:4px;transform:none;text-align:left;color:#eee2c3;font:clamp(10px,calc(1vw / var(--v03-ui,1)),13px)/1.3 MoonforestUI,sans-serif}
 #app[data-raster-hud] #player-hud[data-hud=fixed][hidden]{display:none}
 #app[data-raster-hud] #player-hud:before{content:'';position:absolute;left:2px;top:-4px;width:27px;height:29px;border-radius:50%;box-shadow:inset 7px 0 #dfd1a2;transform:rotate(-22deg);pointer-events:none}
 #app[data-raster-hud] #player-hud>progress:first-child{grid-column:1;grid-row:1;align-self:center;height:12px;border-radius:0;border:1px solid #c4bd8a99;background:#13241a;box-shadow:none}
@@ -35,7 +35,7 @@
 #app[data-raster-hud] #gold-balance{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top) + 40px);padding:0;border:0;background:none;color:#e3cc95;font:12px MoonforestUI,sans-serif}
 #app[data-raster-hud] .chapter-stack{left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));top:calc(env(safe-area-inset-top) + var(--hud-v1-top) + 78px);width:clamp(180px,25vw,300px);gap:6px}
 #app[data-raster-hud] .chapter-stack .uit-track{border:0;border-left:2px solid #cbb77f;background:linear-gradient(90deg,#19271dd9,#19271c80,transparent);padding:5px 10px;font-family:MoonforestUI,'Malgun Gothic',sans-serif;line-height:1.8}
-#app[data-raster-hud] #dot-minimap{top:calc(env(safe-area-inset-top) + 83px);right:calc(env(safe-area-inset-right) + var(--hud-v1-edge));width:clamp(96px,11vw,140px);padding:0!important;border:0!important;border-radius:0;background:none!important;box-shadow:none;contain:none}
+#app[data-raster-hud] #dot-minimap{top:calc(env(safe-area-inset-top) + 83px);right:calc(env(safe-area-inset-right) + var(--hud-v1-edge));width:clamp(96px,calc(11vw / var(--v03-ui,1)),140px);padding:0!important;border:0!important;border-radius:0;background:none!important;box-shadow:none;contain:none}
 #app[data-raster-hud] #dot-minimap canvas{border-radius:50%;border:1px solid #c1ae7c;box-shadow:0 2px 7px #0006;overflow:hidden}
 #app[data-raster-hud] #dot-minimap>strong{margin-bottom:5px}
 #app[data-raster-hud] #dot-minimap>small{display:none}
@@ -69,7 +69,7 @@
 #app[data-raster-hud][data-hud-input=touch] .joystick-hint{left:7%;bottom:10%;transform:none;scale:1}
 @media(orientation:portrait){
  #app[data-raster-hud][data-hud-input=touch]{--hud-v1-edge:18px;--hud-v1-top:60px}
- #app[data-raster-hud][data-hud-input=touch] #player-hud[data-hud=fixed]{width:clamp(190px,61vw,260px);font-size:10px}
+ #app[data-raster-hud][data-hud-input=touch] #player-hud[data-hud=fixed]{width:clamp(190px,calc(61vw / var(--v03-ui,1)),260px);font-size:10px}
  #app[data-raster-hud][data-hud-input=touch] .chapter-stack{top:136px;width:190px;font-size:10px}
  #app[data-raster-hud][data-hud-input=touch] #dot-minimap{top:65px;width:92px;right:12px}
  #app[data-raster-hud][data-hud-input=touch] .top-actions{gap:1px}

@@ -48,6 +48,11 @@ export const HUD_GROUPS=Object.freeze([
   ['streamLoading','#stream-loading','추가 로딩 표시',false,.6,2],
 ].map(([id,selector,label,locked,min])=>Object.freeze({id,selector,label,locked,min,max:5})));
 const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+// 0.3 enlarges HUD panels with CSS zoom on large PC windows (v03/ui-scale.js).
+// Boxes and pointer moves are measured on screen, but a zoomed node multiplies
+// its own translate lengths, so written offsets are divided by its zoom, and
+// the responsive scale is taken on the window as the zoomed panels see it.
+const cssZoom=node=>{const zoom=node?.currentCSSZoom;return zoom>0&&Number.isFinite(zoom)?zoom:1;};
 const combatControls=new Set(['shield','potion','dodge','attack']);
 // Nested elements inherit their parent's responsive scale. The saved scale is
 // still an independent multiplier so an edited HUD follows later resizes.
@@ -136,7 +141,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   }
   function restore(g){const o=original.get(g.id);g.node.style.translate=o.translate;g.node.style.scale=o.scale;g.node.style.transformOrigin=o.origin;}
   function restoreComponents(){for(const [node,style] of componentOriginal){node.style.translate=style.translate;node.style.scale=style.scale;node.style.transformOrigin=style.origin;}componentOriginal.clear();}
-  function applyComponent(node,value){if(!node)return;if(!componentOriginal.has(node))componentOriginal.set(node,{translate:node.style.translate||'',scale:node.style.scale||'',origin:node.style.transformOrigin||''});node.style.translate=`${value.x*view.width}px ${value.y*view.height}px`;node.style.scale=String(value.scale);node.style.transformOrigin='50% 50%';}
+  function applyComponent(node,value){if(!node)return;if(!componentOriginal.has(node))componentOriginal.set(node,{translate:node.style.translate||'',scale:node.style.scale||'',origin:node.style.transformOrigin||''});const zoom=cssZoom(node);node.style.translate=`${value.x*view.width/zoom}px ${value.y*view.height/zoom}px`;node.style.scale=String(value.scale);node.style.transformOrigin='50% 50%';}
   function draw(){
     if(disposed)return;
     const viewport=root.getBoundingClientRect();if(!viewport.width||!viewport.height)return;
@@ -150,8 +155,7 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
     if(previewNode){previewNode.style.translate='';previewNode.style.scale='';}
     for(const g of groups){const r=displayNode(g).getBoundingClientRect();boxes[g.id]={x:r.left-view.left,y:r.top-view.top,width:r.width,height:r.height};}
     const items=draft??committed;
-    const baseScale=responsiveHudScale(view);
-    for(const g of groups){const value=resolveHudBox(g,items[g.id],boxes[g.id],view,responsiveGroups.has(g.id)?baseScale:1);for(const node of new Set([g.node,displayNode(g)])){if(value.x||value.y||value.scale!==1){node.style.translate=`${value.x*view.width}px ${value.y*view.height}px`;node.style.scale=String(value.scale);node.style.transformOrigin='50% 50%';}node.toggleAttribute('data-hud-selected',editing&&g.id===selected);}}
+    for(const g of groups){const zoom=cssZoom(g.node),value=resolveHudBox(g,items[g.id],boxes[g.id],view,responsiveGroups.has(g.id)?responsiveHudScale({width:view.width/zoom,height:view.height/zoom}):1);for(const node of new Set([g.node,displayNode(g)])){if(value.x||value.y||value.scale!==1){const own=cssZoom(node);node.style.translate=`${value.x*view.width/own}px ${value.y*view.height/own}px`;node.style.scale=String(value.scale);node.style.transformOrigin='50% 50%';}node.toggleAttribute('data-hud-selected',editing&&g.id===selected);}}
     previewNode?.querySelectorAll('[data-hud-component-selected]').forEach(node=>node.removeAttribute('data-hud-component-selected'));
     for(const [key,value] of Object.entries(items)){const parts=componentParts(key);if(!parts)continue;const owner=groups.find(g=>g.id===parts.group);if(!owner)continue;applyComponent(componentNode(owner.node,parts),value);if(previewNode&&owner.id===selected){const node=componentNode(previewNode,parts);applyComponent(node,value);if(editing&&key===selectedComponent)node?.setAttribute('data-hud-component-selected','');}}
     if(editing)controls();
