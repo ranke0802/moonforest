@@ -111,6 +111,7 @@ import { AdaptivePerformance } from './adaptive-performance.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
+import {createCombatTrail} from './v03/combat-trail.js';
 import {createFrameDiagnostics} from './frame-diagnostics.js';
 import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
@@ -274,6 +275,13 @@ const bossPatternPanel=setupBossPatternPanel({storage:equipmentStorage,release:v
 const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onChange:value=>{if(world)setSceneCharacterStyles(world.scene,value);renderActivity.wake();frameLoop?.invalidate();}});
 let travelStorage;
 try { travelStorage=sessionStorage; } catch { /* Travel also works without state storage. */ }
+const combatTrail = versionRoute.edition && !versionRoute.worldRevision && !cinematicAuthoringPreview
+  ? createCombatTrail({local: v03RawStorage, session: travelStorage,
+      build: () => document.querySelector('script[type="module"][src]')?.getAttribute('src') ?? null})
+  : null;
+function gameplayTrail() {
+  return world?.v03?.playing && !world.toolLease?.active ? combatTrail : null;
+}
 const v03Save=versionRoute.edition?createSaveSession({local:v03RawStorage,session:travelStorage,edition:versionRoute.edition}):null;
 travelStorage=releaseStorage(travelStorage,versionRoute.release,{inherit:false});
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
@@ -406,7 +414,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equi
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({...mapWorkDiagnostics(),splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({...mapWorkDiagnostics(),splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,...(combatTrail?{previousCombat:combatTrail.previous,currentCombat:combatTrail.current}:{}),textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({...mapWorkDiagnostics(),activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
@@ -1080,6 +1088,7 @@ function render(dt) {
     frameDiagnostics.measure('actionAudioMs',actionAudioStart);
     world.developmentActors?.beforeBattle(dt,actor);world.authoredMonsters?.beforeBattle(dt,actor);
     frameDiagnostics.measure('framePreludeMs',framePreludeStart);
+    if(boss)gameplayTrail()?.sample(dt,world.mapId,boss.encounters,boss.playerHp);
     if(boss)boss.profile=frameDiagnostics.collecting?(boss.profile??{}):null;const bossUpdateStart=frameDiagnostics.mark();boss?.update(dt,actor);frameDiagnostics.measure('bossUpdateMs',bossUpdateStart);if(boss?.profile){const p=boss.profile;frameDiagnostics.set('bossNearMs',p.nearMs);frameDiagnostics.set('bossFarMs',p.farMs);frameDiagnostics.set('bossSeparationMs',p.separationMs);frameDiagnostics.set('bossPostMs',p.postMs);frameDiagnostics.set('bossMaxOneMs',p.maxMs);frameDiagnostics.set('navGridMs',p.navGridMs);frameDiagnostics.set('navPathMs',p.navPathMs);}actionAudio.boss(boss,dt);
     world.developmentActors?.afterBattle(actor);world.authoredMonsters?.afterBattle(actor);
     boss?.combat?.recover?.(dt,actor,boss.onDamage,!controller.dead&&boss.playerHp>0);
@@ -1153,6 +1162,7 @@ try {
   };
   updateGraphicsDevice();
   engine.onContextRestoredObservable.add(updateGraphicsDevice);
+  if(combatTrail)engine.onContextLostObservable.add(()=>gameplayTrail()?.fault(world.mapId,'webgl-context-lost',boss?.playerHp));
   engine.maxFPS=renderActivity.limit();
   // 0.3, opt-in while under review (?splitupload=1): large KTX2 textures reach the GPU in strips over several frames.
   setAnimationCompaction(!!versionRoute.edition&&!fullAnimationKeys);
@@ -1206,7 +1216,14 @@ try {
   resizeScreenProjection();
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   goldLootView=world.goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
-  const damageFeedback=(...args)=>{world?.v03?.combatEvent?.(args[3],args[6]??args[7]);damageNumbers.show(...args);if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});else actionAudio.damage(...args);};
+  const damageFeedback=(...args)=>{
+    const target=args[6]??args[7];
+    gameplayTrail()?.hit(world.mapId,args[3],target,boss?.playerHp);
+    world?.v03?.combatEvent?.(args[3],target);
+    damageNumbers.show(...args);
+    if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});
+    else actionAudio.damage(...args);
+  };
   bossHealthBars=new BossHealthBars($('#boss-hud'),{showNumbers:!versionRoute.edition});
   playerHealthBar=new PlayerHealthBar($('#player-health'));
   boss=new BossBattle(world,encounter=>{
@@ -1342,6 +1359,7 @@ try {
     frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     if(adaptivePerformance.sample(dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/Math.min(engine.maxFPS||60,60)}))applyAdaptivePerformance();
     try{render(dt);}catch(error){
+      gameplayTrail()?.fault(world.mapId,'frame-error',boss?.playerHp,error?.message);
       world.toolLease?.cancel('error',{restore:false});
       frameFailure={name:error.name??'Error',message:String(error.message??error).slice(0,240),stack:String(error.stack??'').slice(0,4000),at:new Date().toISOString()};ready=false;
       loadDiagnostics.finish(frameFailure.message);
@@ -1371,7 +1389,7 @@ try {
   // preview frame; combat remains frozen during both settings dialogs.
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
-  window.addEventListener('pagehide',()=>{staminaNoticeAnchor.reset();frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
+  window.addEventListener('pagehide',()=>{combatTrail?.flush();staminaNoticeAnchor.reset();frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
   const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!minimapTravel?.isOpen()&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
@@ -1394,6 +1412,7 @@ try {
     sceneDiagnostics.requestDrawCpuCapture('viewport-commit');
   },window,{onPending:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)input.reset();},onLayout:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)resizeScreenProjection();}});
   world.requestDrawCpuCapture=reason=>sceneDiagnostics.requestDrawCpuCapture(reason);
+  if(combatTrail)world.noteCombatDefeat=(foe,completed)=>gameplayTrail()?.defeat(world.mapId,foe,boss?.playerHp,completed);
   world.requestDeathDiagnostic=reason=>{try{sceneDiagnostics.requestDrawCpuCapture(reason);frameDiagnostics.captureEvent(reason);}catch{/* Optional diagnostic only. */}};
   world.scene.onDisposeObservable.addOnce(viewportResize);
   $('#quality-select').addEventListener('change', event => {

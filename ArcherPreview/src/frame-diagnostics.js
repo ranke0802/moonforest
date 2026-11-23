@@ -1,4 +1,5 @@
 import {BossDiagnostics,bossComparisonLines} from './boss-diagnostics.js';
+import {tr} from './v03/i18n.js';
 import {LongFrameRecording} from './long-frame-recording.js';
 import {DiagnosticBurstBudget} from './diagnostic-burst-budget.js';
 import {onBeforePageReload} from './page-reload-hooks.js';
@@ -174,7 +175,7 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
     const detail=last?`최근 지연 ${Math.round(last.frameMs)} ms · ${last.activity??'플레이'}`:'회전·이동하며 확인하세요';
     setText('diagnostic-detail',paused?'측정 대기 · 설정/초기 로딩 중 제외':detail);
   };
-  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled;reset.disabled=!enabled;if(drawCpuToggle){drawCpuToggle.checked=drawCpuEnabled;drawCpuToggle.disabled=!enabled;}onEnabled(enabled);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();paint();};
+  const sync=()=>{toggle.checked=enabled;panel.hidden=!enabled;copy.disabled=!enabled&&!get('download-frame-diagnostics');reset.disabled=!enabled;if(drawCpuToggle){drawCpuToggle.checked=drawCpuEnabled;drawCpuToggle.disabled=!enabled;}onEnabled(enabled);onDrawCpuEnabled(enabled&&drawCpuEnabled);syncRecording();paint();};
   drawCpuToggle?.addEventListener('change',()=>{
     drawCpuEnabled=drawCpuToggle.checked===true;try{storage?.setItem(DRAW_CPU_DIAGNOSTICS_KEY,drawCpuEnabled?'1':'0');}catch{/* Keep session preference. */}
     if(!drawCpuEnabled)finishBurst(now());onDrawCpuEnabled(enabled&&drawCpuEnabled);if(enabled)refreshGpu();paint();
@@ -215,6 +216,19 @@ export function createFrameDiagnostics({probe=null,doc=document,storage,now=()=>
     try{if(!clipboard?.writeText)throw new Error('Clipboard unavailable');await clipboard.writeText(value);exportBox.hidden=true;exportStatus.textContent='진단 기록을 복사했습니다.';}
     catch{exportBox.value=value;exportBox.hidden=false;exportBox.focus();exportBox.select();exportStatus.textContent='아래 기록을 길게 눌러 복사해 주세요.';}
   };
+  const downloadSnapshot=()=>{
+    const note=detailDialog?.open?(get('diagnostic-detail-status')??status):status;
+    try {
+      const report=snapshot(),link=doc.createElement('a');
+      const url=URL.createObjectURL(new Blob([JSON.stringify(report)+'\n'],{type:'application/json'}));
+      link.href=url;link.download='moonforest-diagnostic-'+report.createdAt.replace(/[:.]/g,'-')+'.json';
+      link.hidden=true;doc.body.append(link);
+      try{link.click();}finally{link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+      note.textContent=tr('진단 JSON 다운로드를 요청했습니다.');
+    } catch {note.textContent=tr('파일 저장을 열지 못했습니다. 기록 복사를 눌러 주세요.');}
+  };
+  get('download-frame-diagnostics')?.addEventListener('click',downloadSnapshot);
+  get('diagnostic-detail-download')?.addEventListener('click',downloadSnapshot);
   copy.addEventListener('click',copyReport);get('diagnostic-detail-copy')?.addEventListener('click',copyReport);
   sync();
   return {

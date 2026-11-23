@@ -101,7 +101,8 @@ export default {
    witness:{title:'Thu thập lời kể',keys:'Hỏi ba người theo thứ tự tùy ý.',touch:'Hỏi ba người theo thứ tự tùy ý.',text:'Mục tiêu sẽ cho biết bạn đã nghe ai.'},
   },
  },
- legacy:{'몬트하임 마을':'Làng Mondheim','윈드몬 대평원':'Đại Bình Nguyên Windmourn',
+ legacy:{
+  "진단 JSON 다운로드":"Tải JSON chẩn đoán","진단 JSON 다운로드를 요청했습니다.":"Đã yêu cầu tải JSON chẩn đoán.","파일 저장을 열지 못했습니다. 기록 복사를 눌러 주세요.":"Không thể mở tệp tải xuống. Hãy chọn sao chép bản ghi.",'몬트하임 마을':'Làng Mondheim','윈드몬 대평원':'Đại Bình Nguyên Windmourn',
   '이동':'Đi','설정':'Cài đặt','마을':'Làng','대평원':'Đại Bình Nguyên Windmourn','마물의 숲':'Rừng Ma Vật','마녀의 동굴':'Hang Phù Thủy','숲의 경계 마을':'Làng Mondheim',
   '고화질':'Cao','균형':'Cân bằng','절전':'Tiết kiệm pin','지역 이동':'Di chuyển vùng','검 공격':'Kiếm','방패 밀치기':'Đẩy khiên','회피':'Né','물약':'Thuốc','달리기':'Chạy','달리기 이동':'Chạy','피격':'Trúng đòn',
   '사망':'Gục ngã','화면을 터치하여 다시 시작':'Chạm màn hình để chơi lại','불러오는 중':'Đang tải','불러오는 중…':'Đang tải…','다시 불러오기':'Tải lại','오류 상세':'Chi tiết lỗi','진단 복사':'Sao chép chẩn đoán','전체화면':'Toàn màn hình',
