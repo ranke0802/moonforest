@@ -64,9 +64,9 @@ test('zoomed rules divide their viewport units by the UI scale',()=>{
  for(const name of ['portrait','v03-bubble','v03-ring','#toast'])assert.ok(!zoom.includes(name),`${name} stays at its anchored pixel size`);
 });
 
-test('a guide card is a title plus one body clamped to two lines',()=>{
+test('a guide card shows its whole text: the copy fits, nothing is clipped',()=>{
  const body=css.match(/\.v03-tip-body\{[^}]*\}/)?.[0]??'';
- assert.match(body,/-webkit-line-clamp:2/);assert.match(body,/overflow:hidden/);
+ assert.ok(body,'one body paragraph under the title');assert.doesNotMatch(body,/line-clamp|overflow:hidden|text-overflow/);
 });
 
 // Coarse width budget for the two body lines (lead + text). The real check is a
