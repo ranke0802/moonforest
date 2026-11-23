@@ -14,8 +14,8 @@ import {WolfAnimator} from '../src/wolf-animation.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {WOLF_CLIPS} from '../src/wolf-spec.js';
 import {WOLF_V02_ACTIONS,WOLF_V02_BY_ID,WOLF_V02_BRACE,WOLF_V02_DEATH,WOLF_V02_GET_UP} from '../src/wolf-v02-spec.js';
-import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_PREDATOR_CLIPS,WOLF_V02_COMBAT_R13_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
-import {WOLF_V02_R9_CLIPS,WOLF_V02_RAM_CLIPS,WOLF_V02_ALL_AUTHORED_CLIPS} from '../src/wolf-v02-authored-history.js';
+import {WOLF_V02_AUTHORED_CLIPS,WOLF_V02_PREDATOR_CLIPS,WOLF_V02_COMBAT_R13_CLIPS,WOLF_V02_AUTHORED_SOURCE,installWolfV02AttackClips} from '../src/wolf-v02-authored-clips.js';
+import {WOLF_V02_R9_CLIPS,WOLF_V02_FERAL_CLIPS,WOLF_V02_RAM_CLIPS,WOLF_V02_ALL_AUTHORED_CLIPS} from '../src/wolf-v02-authored-history.js';
 import {createActorEncounterFactory} from '../src/actor-encounter-adapter.js';
 import {sourcePath} from '../../Sources/resolve-source.mjs';
 
