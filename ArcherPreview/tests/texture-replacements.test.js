@@ -10,7 +10,7 @@ const assets=new URL('../public/assets/',import.meta.url);
 test('every replacement is a published KTX2 named by its own hash, for a picture some model still names',()=>{
  const manifest=JSON.parse(readFileSync(new URL('texture-replacements.json',assets),'utf8'));
  assert.deepEqual(manifest.textures,Object.fromEntries(Object.entries(TEXTURE_REPLACEMENTS).map(([from,to])=>[from,'./content/'+to])),'the published list and the loader table agree');
- const named=['environment.json','great-plains.json','guardian-bear.json'].map(name=>readFileSync(new URL(name,assets),'utf8')).join('');
+ const named=['environment.json','great-plains.json','guardian-bear.json','hooded-goblin.json'].map(name=>readFileSync(new URL(name,assets),'utf8')).join('');
  for(const [from,to] of Object.entries(TEXTURE_REPLACEMENTS)){
   assert.match(to,/^[a-f0-9]{64}\.ktx2$/);assert.ok(named.includes(from),from+' is still a model resource');
   const file=new URL('content/'+to,assets);assert.ok(existsSync(file));

@@ -169,9 +169,9 @@ if(uiRoute.url.href!==location.href)history.replaceState(null,'',uiRoute.url);
 if(versionRoute.edition)loadingView.enableEstimate(); // 0.3: the model stage moves the bar too (phase-share.js)
 // 0.3 (user, 2026-11-21): monsters may use the road out of the village, the strip the player walks
 // (map-travel.js), instead of stopping at the village circle.
-// 0.3: regular monsters load their 2048 level (texture-replacements.js). While it is checked on the
-// deployed build it is on only with ?monstertex=2k.
-if(versionRoute.edition&&new URLSearchParams(location.search).get('monstertex')==='2k')setTextureTier(MONSTER_2K_TEXTURES);
+// 0.3: regular monsters load their 2048 level (texture-replacements.js). Deployed-build check 2026-11-23:
+// pixel-identical at play distance, max 14/255 with the wolf filling the screen. ?monstertex=4k keeps 4K.
+if(versionRoute.edition&&new URLSearchParams(location.search).get('monstertex')!=='4k')setTextureTier(MONSTER_2K_TEXTURES);
 if(versionRoute.edition)setEnemyTravelRule({
   // VILLAGE_MAP and not world.mapId: the route grids are built while a map loads, before the world says where it is.
   limit:(position,normal)=>VILLAGE_MAP?villageTravelLimit(position,normal+.5)-.5:normal,

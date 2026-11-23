@@ -10,6 +10,7 @@ export const TEXTURE_REPLACEMENTS=Object.freeze({
  'a22ee8b1e9ac7a3b09f9a356fdfcb755107aa1e5b4f8be54d752d76915244fdd.jpg':'c41ddc1ca993a20422d4dad7a67f3be9e358d12af81932a54585c3edd198b130.ktx2',// grass tuft
  'a7a6bc98a461f098e5d680c24a6bfb580f706dc1662e14c27998778376e7282d.jpg':'6bf3b8874526704f61c661bb37da04aed43808d1c5dfa34794aa456319c68b77.ktx2',// scarecrow
  '1b34cc211da0bfaebe7ad511e076c4bef79b823446458fbd4de8c9331dfae32e.png':'26a157566a0fc08fba18d1e77641daa8f85eb3372e17000ec5dec816fb9e3ef0.ktx2',// guardian bear
+ 'd25537cd4b2c0360a9305944cc48c05f21fee8fb44755b6fe59712cd3d7a95c0.png':'10595a08679a7891fe87df62f6ba6486d4eb719d33fec415408ce6f8b720d2ed.ktx2',// hooded goblin (2026-11-23)
 });
 
 // 0.3: regular (non-boss) monsters load their 2048 level instead of the 4096 one (2026-11-23, user:
