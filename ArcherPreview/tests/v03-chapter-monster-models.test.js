@@ -24,6 +24,24 @@ for(const [kind,entry] of Object.entries(CHAPTER_MONSTER_MODELS)){
       for(let c=0;c<4;c++){sum+=bin.readFloatLE(off+(i*4+c)*4);assert.ok(bin[joff+i*4+c]<21);}
       assert.ok(Math.abs(sum-1)<.00001);
     }
+    // In these two bind meshes the chin and tusks used to follow the shoulders
+    // when attacking. Their shape should follow the skull through every clip.
+    const jawLandmarks = {
+      'goblin-warrior': [3228, 2831, 3373, 3086],
+      'goblin-shaman': [1251, 3513, 3304, 3619],
+    }[kind];
+    if (jawLandmarks) {
+      const head = skin.joints.findIndex(node => doc.nodes[node].name === 'Head');
+      assert.ok(head >= 0);
+      for (const vertex of jawLandmarks) {
+        let headWeight = 0;
+        for (let slot = 0; slot < 4; slot++) {
+          const index = vertex * 4 + slot;
+          if (bin[joff + index] === head) headWeight += bin.readFloatLE(off + index * 4);
+        }
+        assert.ok(headWeight > 0.9999, `${kind} jaw vertex ${vertex} follows the skull`);
+      }
+    }
     assert.ok(doc.extensionsRequired.includes('KHR_texture_basisu'));
     const image=doc.images[0],texture=doc.bufferViews[image.bufferView].byteOffset;
     assert.equal(image.mimeType,'image/ktx2');assert.equal(bin.readUInt32LE(texture+20),2048);

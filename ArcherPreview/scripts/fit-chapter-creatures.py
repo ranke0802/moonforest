@@ -10,6 +10,7 @@ from PIL import Image
 from scipy.spatial.transform import Rotation
 from scipy.sparse import coo_matrix,diags
 from chapter_creature_gltf import GLB, Pack, SourcePose, aligned
+from chapter_creature_jaw import bind_chapter_jaw
 
 PROJECT,REDUCED,OUT=map(lambda v:Path(v).resolve(),sys.argv[1:4])
 HEIGHT={'goblin-warrior':1.36,'goblin-shaman':1.39,'goblin-archer':1.31,'hobgoblin-boss':1.98,
@@ -224,9 +225,12 @@ def fit(kind,cache):
     mesh_id=len(names);d['nodes'].append({'name':kind+'-body','mesh':0,'skin':0})
     d['scenes'][0]['nodes']=[0,mesh_id]
     d['skins']=[{'name':kind+'-rig','skeleton':0,'joints':list(range(len(names))),'inverseBindMatrices':out.array(inverse,'MAT4')}]
+    # The adjustment is confined to skin attributes. Motion fitting and authored foot contact
+    # continue to use their original sample weights, preserving the existing action tracks.
+    skin_ids,skin_weights=bind_chapter_jaw(kind,raw,names,ids,weights)
     attr={'POSITION':out.array(q*h,target=34962,bounds=True),'NORMAL':out.array(normal,target=34962),
           'TEXCOORD_0':out.array(m.array(a['TEXCOORD_0']),'VEC2',target=34962),
-          'JOINTS_0':out.array(ids,'VEC4',5121,34962),'WEIGHTS_0':out.array(weights,'VEC4',target=34962)}
+          'JOINTS_0':out.array(skin_ids,'VEC4',5121,34962),'WEIGHTS_0':out.array(skin_weights,'VEC4',target=34962)}
     index=out.array(m.array(prim['indices']),'SCALAR',5123,34963)
     d['meshes']=[{'name':kind,'primitives':[{'attributes':attr,'indices':index,'material':0}]}]
     img=out.view(ktx_image(m,cache,kind))
