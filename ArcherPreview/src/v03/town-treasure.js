@@ -6,12 +6,13 @@ import {TOWN_ITEMS,monsterRewards,treasureRewards} from './town-items.js';
 
 const modelFor=id=>TOWN_ITEMS[id].quick?'contaminated-vial':id==='moon-herb'?'moon-dew-herb':TOWN_ITEMS[id].slot==='sword'?'goblin-club':'clue-satchel';
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
-export function createTownTreasure({root,world,economy,canInteract,player,notify,sound}){
- const props=createQuestProps(world);let drops=null,map=null,points=[],nearest=null,nearDrops=[],stamp=-1,clock=0,nextScan=0,loaded=false,hadVisibleDrops=false;
+export function createTownTreasure({root,world,economy,canInteract,player,notify,sound,props=createQuestProps(world)}){
+ let drops=null,map=null,points=[],nearest=null,nearDrops=[],stamp=-1,clock=0,nextScan=0,loaded=false,hadVisibleDrops=false;
+ let loading=false,retryAt=0,seenFailures=props.stats.modelFailures;
  const doc=root.ownerDocument,button=doc.createElement('button');
  button.type='button';button.className='mf-treasure-prompt';button.hidden=true;root.append(button);
  const visual=()=>drops??=createItemDropView(world,{onError:e=>console.warn('[Town items]',e)});
- const clear=()=>{props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;button.hidden=true;};
+ const clear=()=>{props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;loading=false;retryAt=0;seenFailures=props.stats.modelFailures;hadVisibleDrops=false;button.hidden=true;};
  const ground=(point)=>world.terrain?.heightAt?.(point.x,point.z)??0;
  const reach=(from,to)=>!world.navigation||world.navigation.segmentClear(from,to,.06,true);
  function scatter(id,position,rewards,tier){
@@ -63,8 +64,23 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
      stamp=world.placementRevision??0;
      for(const [id,r] of authored)if(r.chestOpening&&authoredOpened(id))world.authoredPlacements.openChest(id,{immediate:true});
     }
-    if(!loaded&&points.some(p=>dist(me,p)<30)){
-     loaded=true;void props.load(points).then(()=>{if(!world.scene.isDisposed)nextScan=0;}).catch(e=>console.warn('[Field chests]',e));
+    if(loaded&&props.stats.modelFailures!==seenFailures){
+     seenFailures=props.stats.modelFailures;
+     props.release();loaded=false;retryAt=clock+8;
+    }
+    if(!loaded&&!loading&&clock>=retryAt&&points.some(p=>dist(me,p)<30)){
+     const visit=points;
+     loading=true;
+     void props.load(visit).then(ready=>{
+      if(visit!==points)return;
+      loaded=ready;
+      if(ready)nextScan=0;
+     }).catch(error=>{
+      if(visit===points)console.warn('[Field chests]',error);
+     }).finally(()=>{
+      if(visit!==points)return;
+      loading=false;if(!loaded)retryAt=clock+8;
+     });
     }
     if(loaded)props.update(points,me,()=>true);
     nearest=canInteract()&&!world.v03?.story?.near?points.find(p=>!p.opened&&dist(me,p)<2.8&&props.isReady(p)&&reach(me,p)):null;
