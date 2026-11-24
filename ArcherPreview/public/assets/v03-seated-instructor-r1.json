@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "complete": true,
+  "assets": {
+    "sword-instructor": {
+      "model": "./content/bb389373f6de13e2cc730d63fda628461e28d5cf1de15bca68e26581d8e66e42.gltf",
+      "resources": [
+        "./content/0118347ece7618be7c37434b77ca7d167994d4f33d74bb97cece9587d57af894.bin",
+        "./content/de8883c4126022c16479fc864c230a9ee35e7cdec522baa47528bae985d67607.ktx2"
+      ]
+    }
+  }
+}

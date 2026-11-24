@@ -22,6 +22,7 @@ export const ROUTES=Object.freeze({
  'witch-cave':{'monster-forest':{x:-46,z:47},'great-plains':{x:-46,z:47},village:{x:-46,z:47}},
 });
 export const NPCS=Object.freeze([
+ {id:'foster-father',name:'양아버지',visual:'sword-instructor',map:'village',x:7.3,z:-7.5,yaw:-.92,roam:false,idle:'instructor-home'},
  {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-72.87,z:-30.14,yaw:.42,idle:'driver-idle'},
  {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle'},
@@ -33,6 +34,11 @@ export const NPCS=Object.freeze([
 
 // who: speaker label. '나' lines are the warrior's own short thoughts.
 export const DIALOGUES=Object.freeze({
+ 'instructor-home':[
+  {who:'양아버지',text:'문밖에서 네 발소리가 들리더구나. 아직도 오른발을 조금 끄는구나.'},
+  {who:'나',text:'그걸 듣고 저인 줄 아셨어요?'},
+  {who:'양아버지',text:'그 발걸음을 누가 가르쳤는데. 이리 와 앉아라. 오늘은 검 내려놓고.'},
+ ],
  // After the fight: the driver asks for a hand with the wagon (the effect lifts it),
  // then thanks the warrior and gives what he has (M00 reward).
  'driver-wagon':[

@@ -58,6 +58,18 @@
   },
   "inputs": [
     {
+      "id": "instructor-merchant-source",
+      "path": "Sources/actors/tripo-cast/2026-11-18-v1/npc-pack/merchant.zip",
+      "bytes": 2955541,
+      "sha256": "46bbd90092addc1ac9798da38b1af4f4ec64cc6db9e8d8b222c8614f8bb5eee9"
+    },
+    {
+      "id": "seated-instructor-author",
+      "path": "Sources/actors/seated-instructor/2026-11-24/seated-instructor.glb",
+      "bytes": 1100740,
+      "sha256": "df4af25306dd8b7d3bde47a18018b53bd09e7669de1d43c81e6e4022762703d9"
+    },
+    {
       "id": "file:Sources/environment/plains/authored-maps/2026-11-05-user-work.moonmap",
       "path": "Sources/environment/plains/authored-maps/2026-11-05-user-work.moonmap",
       "bytes": 12804,

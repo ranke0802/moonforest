@@ -11,6 +11,8 @@ import {Quaternion,Vector3} from '@babylonjs/core/Maths/math.vector.js';
 import {ACTOR_VISUALS,createActorVisual} from './placeholder-actor.js';
 import {CAST_ENTRIES} from './cast-catalog.js';
 import {AmbientView} from '../ambient-view.js';
+import {createSeatedInstructor} from './seated-instructor.js';
+import {withResidentFaceRig} from './resident-face-models.js';
 
 export const CAST_MODELS=Object.freeze({
  driver:'moonforest-tripo-blacksmith',
@@ -76,7 +78,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
  const load=loadRuntime??(async world=>{
   const [{createNpcWorld},{ASSET_CATALOG}]=await Promise.all([import('../npc-world.js'),import('../asset-catalog.js')]);
   const own=new Set(CAST_ENTRIES.map(entry=>entry.assetId));
-  const catalog={...ASSET_CATALOG,entries:[...ASSET_CATALOG.entries.filter(entry=>!own.has(entry.assetId)),...CAST_ENTRIES]};
+  const catalog={...ASSET_CATALOG,entries:[...ASSET_CATALOG.entries.filter(entry=>!own.has(entry.assetId)),...CAST_ENTRIES.map(withResidentFaceRig)]};
   const npc=createNpcWorld({world,catalog,getCatalog:()=>catalog,hydrate:async()=>[],storage:null,onError:error=>{if(error?.name!=='AbortError')console.warn('[MoonForest 0.3] cast model',error);}});
   npc.setPaused(true);// this module samples the clips itself
   return npc;
@@ -92,6 +94,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   return runtime;
  }
  function create(scene,key,{id=key}={}){
+  if(key==='sword-instructor')return createSeatedInstructor(scene);
   const assetId=CAST_MODELS[key];
   if(!assetId)return fallback(scene,key,{id});
   const spec=ACTOR_VISUALS[key]??{label:key,height:1.7},scale=(spec.height??1.7)/MODEL_HEIGHT;

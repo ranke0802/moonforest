@@ -41,8 +41,9 @@ export default {
   'prompt.talkQuest':'Talk to {name}','prompt.talkIdle':'Speak to {name}',
  },
  story:{
-  speakers:{'나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
+  speakers:{'양아버지':'Father','나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
+   'instructor-home':['I heard your step outside. You still scuff that right heel.','You knew it was me just from that?','Who taught you that footwork? Come, sit beside me. Put the sword down for today.'],
    'driver-wagon':['Whew… made it out alive. If it weren’t for you, friend, me an’ my horse’d be wolf chow for sure.','Ain’t proud to ask, but could you help me set the wagon upright? Won’t budge an inch with just me.','Sure. Get in place and we’ll push together.'],
    'driver-thanks':['Well, look at that, she’s up! …Oh, dear. That wheel’s smashed to bits.','Still, could be worse. Village is just yonder, so it’s only a short walk from here.','You saved my life—least I can do is give you somethin’. Nearly left my only girl without a pa… Thank you, truly.','Ain’t much, but you take it. When you get to the village, look for the Moonlight Inn first. Innkeeper’s a gruff one, but the rooms are clean.'],
    'ambush-scene':['Aaagh!','(…Wh-what?)','W-wolf! Whoa, whoa there!','Oh no, m-my horse…!','(Protect the driver first.)'],
