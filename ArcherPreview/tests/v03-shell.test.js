@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {createStory} from '../src/v03/story.js';
 import {NPCS,DIALOGUES} from '../src/v03/data/chapter1.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -103,6 +104,39 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  await opening.release();assert.equal(opening.active,false);
  let waits=0;const quick=createOpening({doc:document,wait:async()=>{if(++waits===3)document.querySelectorAll('.v03-opening-skip')[1].dispatchEvent(new document.defaultView.Event('click'));}});
  assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
+});
+
+test('village quest markers sample only visible heads; talk range drops out immediately in combat',async t=>{
+ const {document}=dom(),heights=[],pins=[],events=[],shown=new Map();
+ let combatReads=0,fighting=false,groundLift=0;
+ const battle={encounters:[],get combatCount(){combatReads++;return Number(fighting);}};
+ const player={position:{x:45,z:45}},world={scene:{isDisposed:false},mapId:'village',terrain:{heightAt(x,z){heights.push({x,z});return x*.3+z*.2+groundLift;}}};
+ const api={world,battle,input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null,setMapMarkers:rows=>pins.push(rows)};
+ const quest={id:'marker-qa',title:'Visit',steps:[{id:'speak',type:'talk',text:'Visit',targets:['elder']}]};
+ const content={QUESTS:[quest],NPCS,DIALOGUES:{'inn-idle':[{text:'Welcome'}]}};
+ const markers={
+  set(id,glyph,x,y,z){events.push({id,glyph});if(glyph)shown.set(id,{glyph,x,y,z});else shown.delete(id);},
+  update(){},clear(){shown.clear();},dispose(){}
+ };
+ const story=createStory({api,doc:document,save:{journey:memory(),touch(){}},content,createMarkers:()=>markers,
+  createVisual:()=>({place(x,y,z){this.position={x,y,z};},dispose(){}})});
+ t.after(()=>story.dispose());story.start();
+ const frame=()=>story.update(1/60,{ready:true,mapId:'village',character:'warrior-v3'});
+ frame();heights.length=0;events.length=0;combatReads=0;
+ const count=60;
+ for(let i=0;i<count;i++)frame();
+ t.diagnostic('60 distant village frames: terrain height samples '+heights.length+', marker set calls '+events.length+', story combat-count reads '+combatReads);
+ assert.equal(heights.length,count);assert.equal(events.length,count);assert.equal(combatReads,count,'the slow-motion system still checks combat each frame');
+ assert.deepEqual([...shown.keys()],['elder']);assert.equal(pins.length,1);
+ const elder=story.castVisual('elder');elder.position.x+=1;groundLift=2;frame();
+ const at=elder.position;assert.deepEqual(shown.get('elder'),{glyph:'?',x:at.x,y:at.x*.3+at.z*.2+groundLift+2.55,z:at.z});
+ const inn=story.castVisual('innkeeper');player.position={...inn.position};
+ frame();assert.equal(story.near,true);fighting=true;frame();assert.equal(story.near,false);fighting=false;frame();assert.equal(story.near,true);
+ document.querySelector('.v03-prompt').click();assert.equal(story.dialogueOpen,true);
+ events.length=0;heights.length=0;frame();frame();
+ assert.equal(shown.size,0);assert.deepEqual(events,[{id:'elder',glyph:null}]);assert.equal(heights.length,0);assert.deepEqual(pins.at(-1),[]);
+ document.querySelector('.v03-dialogue-next').click();await settle(2);
+ assert.equal(story.dialogueOpen,false);frame();assert.deepEqual([...shown.keys()],['elder']);assert.equal(pins.at(-1)[0].x,at.x);
 });
 
 function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null,iphone=false}={}){

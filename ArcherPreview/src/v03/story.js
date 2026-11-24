@@ -320,8 +320,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   for(const member of cast){
    // No quest mark over a head that has a speech bubble on it.
    const glyph=dialogue.open||bubble.member===member?null:markFor(member.npc.id);
-   markers?.set(member.npc.id,glyph,member.x,(api.world.terrain?.heightAt?.(member.x,member.z)??0)+2.55,member.z);
-   if(glyph){mapMarks.push({x:member.x,z:member.z,glyph});key+=`|${member.npc.id}${glyph}`;}
+   if(glyph){
+    markers?.set(member.npc.id,glyph,member.x,(api.world.terrain?.heightAt?.(member.x,member.z)??0)+2.55,member.z);
+    member.showingQuestMark=true;mapMarks.push({x:member.x,z:member.z,glyph});key+=`|${member.npc.id}${glyph}`;
+   }else if(member.showingQuestMark){
+    markers?.set(member.npc.id,null);member.showingQuestMark=false;
+   }
   }
   // Goals on another map: mark the way out instead.
   const step=log.step(),away=step&&(step.type==='reach'?step.map:step.type==='defeat'?step.map:step.type==='talk'?step.targets.map(id=>log.isTarget(id)&&!cast.some(row=>row.npc.id===id)?content.NPCS.find(npc=>npc.id===id)?.map:null).find(Boolean):null);
@@ -1429,7 +1433,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(player&&!talking&&!dialogue.open&&!lift.active){
     let best=null,bestSq=TALK_RANGE_SQ;
     for(const member of cast){if(member===fallen.member)continue;const dx=member.x-player.x,dz=member.z-player.z,sq=dx*dx+dz*dz;if(sq<bestSq){best=member;bestSq=sq;}}
-    near=api.battle.combatCount>0?null:best;
+    near=best;
+    if(near&&api.battle.combatCount>0)near=null;
     if(near){
      const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name);
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
