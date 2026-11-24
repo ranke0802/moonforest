@@ -2,6 +2,7 @@
 // keep a 5K mesh merely because the camera happens to pass nearby.
 import {sceneryDistanceScale as cinematicSceneryScale} from './scenery-distance-state.js';
 import {MOONFOREST_WORLD_V4_ENTRY} from './release-route.js';
+import mobileExterior from '../public/assets/v03-mobile-village-exterior.json' with {type:'json'};
 // Share of the screen a placement's bounding sphere must cover to be drawn at
 // the near tier (above mid) or the middle tier (above far). The tiers differ
 // mostly in texture size (trees 2048/1024/512, rocks and shrubs 512/256) and
@@ -21,9 +22,14 @@ export function projectedCoverage(camera,sphere,world){
 export function villageLodTier(coverage){
   return coverage>VILLAGE_LOD_COVERAGE.mid?0:coverage>VILLAGE_LOD_COVERAGE.far?1:2;
 }
-export function villageLodSources(config,touch){
+export function villageLodSources(config,touch,gameplayV03=false){
   if(!config.geometryLod)return config.lods.filter(l=>!touch||l.level>0);
-  return [touch?config.mobileNear:config.lods[0],config.lods[1],config.lods[2]];
+  const levels=[touch?config.mobileNear:config.lods[0],config.lods[1],config.lods[2]];
+  if(touch&&gameplayV03&&config.approvedVillageExterior?.assetId==='village-approach'){
+    // Change both model dependencies and prefetch together, only for the reviewed shell.
+    return levels.map(level=>level.model===mobileExterior.sourceModel?{...level,...mobileExterior.level}:level);
+  }
+  return levels;
 }
 
 // Some distant prefabs intentionally use the same content-addressed model at

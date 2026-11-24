@@ -64,7 +64,7 @@ async function loadVillageEager(world,{onProgress=()=>{}}={}){
     for(const [id,config]of Object.entries(manifest.assets)){
       // Mobile starts with its light texture tier but original near geometry.
       // Up to 4K color is streamed when visible and within the texture budget.
-      const levels=villageLodSources(config,touch);
+      const levels=villageLodSources(config,touch,world.gameplayV03);
       const source=await load(levels[0]),full=geometry(source);
       prepareVillageInstancing(full);applyVillageToon(full,world.lighting);
       for(const mesh of full)mesh.metadata={...mesh.metadata,villageLodLevel:0};

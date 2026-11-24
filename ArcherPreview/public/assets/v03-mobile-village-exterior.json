@@ -1,0 +1,17 @@
+{
+  "sourceModel": "./content/bc70ff9e9c809de821a746d2d364643ff29043ebbe236a20d5e520c81af94aa6.gltf",
+  "level": {
+    "model": "./content/38466a26087ef8f5d66e3c0de7d06942641e0dad0164baae9fa6f0934cec3139.gltf",
+    "resources": [
+      "./content/b5f6705d826a55deb39ac591fcfe81814057d4d3d163ac136b8421946ad7953f.bin",
+      "./content/adf3a4976250fa4c86023ffeb40768a3bb5c44899f3057efd8ca87bbf1ed80de.ktx2",
+      "./content/38466a26087ef8f5d66e3c0de7d06942641e0dad0164baae9fa6f0934cec3139.gltf"
+    ],
+    "bytes": 5861853,
+    "textureSize": 2048
+  },
+  "extraFileSizes": {
+    "38466a26087ef8f5d66e3c0de7d06942641e0dad0164baae9fa6f0934cec3139.gltf": 2390,
+    "adf3a4976250fa4c86023ffeb40768a3bb5c44899f3057efd8ca87bbf1ed80de.ktx2": 4221881
+  }
+}

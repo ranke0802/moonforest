@@ -5,11 +5,13 @@ import {registerResourceGraph} from './resource-cache.js';
 import {MapLoadLifetime,mapLoadAbortError,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 import {loadingArtResources} from './loading-art.js';
 import {prepareCaveCameraField} from './witch-cave-camera.js';
+import mobileExterior from '../public/assets/v03-mobile-village-exterior.json' with {type:'json'};
 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream,context){
   const {lifetime,check}=context;check();const scene=world.scene;
   world.releaseResourceDownloads?.();
-  const downloads=new ResourceDownloads(sizes.files,base,{index:sizes});let released=false;const preparedUrls=new Set();
+  const fileSizes=world.gameplayV03&&world.touchDevice?{...sizes.files,...mobileExterior.extraFileSizes}:sizes.files;
+  const downloads=new ResourceDownloads(fileSizes,base,{index:sizes});let released=false;const preparedUrls=new Set();
   const cancel=()=>{downloads.cancel();lifetime.abort(mapLoadAbortError());};
   const abort=()=>downloads.cancel();lifetime.signal.addEventListener('abort',abort,{once:true});
   const release=()=>{if(released)return;released=true;preparedUrls.clear();cancel();lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);if(world.releaseResourceDownloads===release)Object.assign(world,{prefetchResources:null,releaseResourceDownloads:null,cancelResourceDownloads:null,resourceLoadLedger:null});};

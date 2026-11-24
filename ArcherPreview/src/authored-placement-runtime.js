@@ -171,7 +171,7 @@ export class AuthoredPlacementRuntime {
      entry.url=new URL(catalog.runtime.manifest,this.baseUrl);const manifest=await lifetime.wait(this.readManifest(entry.url));this._check(generation);
      const config=manifest.assets?.[catalog.runtime.assetKey];if(!config)throw new Error('Placement asset missing from runtime manifest');
      if(new URL(config.lods?.[0]?.model??config.model,entry.url).href!==new URL(catalog.runtime.model,this.baseUrl).href)throw new Error('Placement catalog/runtime asset version conflict');
-     entry.config=config;entry.levels=config.geometryLod?villageLodSources(config,this.world.touchDevice):config.lods?.length?config.lods:[{...config,level:0}];
+     entry.config=config;entry.levels=config.geometryLod?villageLodSources(config,this.world.touchDevice,this.world.gameplayV03):config.lods?.length?config.lods:[{...config,level:0}];
      await this._loadTier(entry,0);this._check(generation);return entry;
     }finally{lifetime.close();this.lifetimes.delete(lifetime);}
    })();entry.pending.catch(()=>{});
