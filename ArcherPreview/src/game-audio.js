@@ -164,7 +164,7 @@ export class GameAudio {
   get musicBuffer(){return this.music?.source.buffer??this.beds.cache.get('music:boss')??null;}
   get musicLoading(){return this.beds.pending;}
   duckMusic(now){this.beds.duck(now);}
-  play(name,{position,volume=1,rate=1}={}){
+  play(name,{position,volume=1,rate=1,duck=true}={}){
     const variants=this.variants.get(name)||[name],index=this.variantIndex.get(name)||0;
     const context=this.context,buffer=this.buffers.get(variants[index%variants.length])||this.buffers.get(name);
     if(this.suspended||this.sfxMuted||context?.state!=='running'||!buffer){this.dropped++;return false;}
@@ -183,7 +183,7 @@ export class GameAudio {
     gain.gain.value=Math.min(1,settings.volume*volume*attenuation);source.connect(gain);gain.connect(this.master);
     const voice={source,priority:settings.priority,started:now,cleaned:false,cleanup:()=>{if(voice.cleaned)return;voice.cleaned=true;source.onended=null;source.disconnect();gain.disconnect();source.buffer=null;this.voices.delete(voice);}};
     source.onended=voice.cleanup;this.voices.add(voice);this.lastPlayed.set(name,now);source.start();this.played++;
-    if(['boss_hit','player_hit','land','block','parry'].includes(name))this.duckMusic(now);
+    if(duck&&['boss_hit','player_hit','land','block','parry'].includes(name))this.duckMusic(now);
     this.peakVoices=Math.max(this.peakVoices,this.voices.size);return true;
   }
   inspect(){const unique=new Set(this.buffers.values());let decodedSfxBytes=0;for(const buffer of unique){const bytes=(buffer.length??Math.round((buffer.duration??0)*(buffer.sampleRate??32000)))*(buffer.numberOfChannels??2)*4;if(Number.isFinite(bytes))decodedSfxBytes+=bytes;}return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,decodedSfxBuffers:unique.size,decodedSfxBytes,pendingSfxDecodes:this.sfxDecodeJobs.size,failedSfxSources:[...this.sfxSources.values()].filter(source=>source.status==='failed').length,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,bossThemeRequested:this.bossTheme,bossThemeAvailable:!!this.beds.definitions.music[this.bossTheme]?.url,...this.beds.inspect()};}

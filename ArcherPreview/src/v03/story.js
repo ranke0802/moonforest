@@ -33,7 +33,7 @@ export function findFreeSpot(navigation,point,radius=.42){
  return {x:point.x,z:point.z};
 }
 export {particle} from './korean.js';
-export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null}){
+export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
  const log=createQuestLog({quests:content.QUESTS,storage:save.journey});
  const dialogue=createDialogue({doc,portraitFor});
@@ -102,7 +102,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   return den;
  }
  function guideTarget(player){
-  const step=log.step();if(!step||api.battle.combatCount>0&&step.type!=='defeat')return null;
+  const step=log.step();if(!step)return null;
   if(step.type==='defeat'){
    if(step.map&&step.map!==mapId){const exit=content.ROUTES?.[mapId]?.[step.map];if(!exit)return null;guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};}
    if(step.at&&!livingFoe(step.kind)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
@@ -195,7 +195,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // driver's talk), and not while a fight is on: it would only add glare and
   // overdraw around the player where the combat effects already are.
   const opening=log.quest()?.id==='M00'&&log.step()?.id==='fight';
-  if(!createGuide||guide.failed||talking||dialogue.open||!player||!log.step()||opening||api.battle?.combatCount>0){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
+  if(!createGuide||guide.failed||talking||dialogue.open||!player||!log.step()||opening||combatLocksTravel()){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
   try{guide.visual??=createGuide(api.world.scene);}catch(error){guide.failed=true;console.warn('[MoonForest 0.3] guide light unavailable',error);return;}
   // Its explanation card comes with the light's first appearance (once per record).
   trigger('guide-shown');

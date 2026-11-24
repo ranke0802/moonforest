@@ -23,6 +23,7 @@ import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js
 import {villageOutskirtsSkirtHeight} from './village-outskirts-skirt.js';
 import {createGreatPlainsTerrain} from './great-plains-terrain.js';
 import {configurePlainsDecor} from './great-plains-decor.js';
+import {fitOutdoorRockBodies} from './scenery-rock-bodies.js';
 import {retainMapEffect} from './map-shader-cache.js';
 import {CAVE_PLACEMENTS,caveObstacles} from './witch-cave-layout.js';
 import {createWitchCaveTerrain} from './witch-cave-terrain.js';
@@ -52,15 +53,16 @@ function outdoorFogColor({village,forest,plains,cave}){
   // without replacing the sky's independently bound horizon colour.
   return village&&!plains&&!cave?VILLAGE_FOG_COLOR.clone():SKY_HORIZON.clone();
 }
-export function mapNavigation({cave,forest,plains,village}){
+export function mapNavigation({cave,forest,plains,village,placements,gameplayV03=false}){
   const boundaryTrees=village&&!plains&&!forest&&!cave?villagePlacements().filter(p=>isVillageBoundaryTree(p)&&Math.hypot(p.x,p.z)>=50&&p.z>=43&&Math.abs(p.x)<26).flatMap(p=>villageObstacles([{...p,x:0,z:0}]).map(o=>({...o,x:o.x+p.x,z:o.z+p.z}))):[];
   const obstacles=plains?[...plainsObstacles(plainsPlacements()),...plainsCliffObstacles()]:cave?caveObstacles():forest?forestObstacles():village?[...villageObstacles(villagePlacements()),...boundaryTrees]:FOREST_OBSTACLES;
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
+  if(gameplayV03&&placements&&!cave)fitOutdoorRockBodies(obstacles,placements);
   const Navigation=cave?CaveNavigation:village?VillageNavigation:ArenaNavigation;
   return new Navigation([...obstacles,...training]);
 }
 
-export function createWorld(engine, {village=false,forest=false,cave=false,plains=false,warrior=village||forest||cave||plains,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
+export function createWorld(engine, {village=false,forest=false,cave=false,plains=false,gameplayV03=false,warrior=village||forest||cave||plains,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {
   village=village||forest||cave||plains;
   setWorldCharacter(plains?'warrior-plains':cave?'warrior-v5':forest?'warrior-v4':village?'warrior-v3':'archer');
   const scene = new Scene(engine);
@@ -150,15 +152,14 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
     motes.push({ mesh: mote, y: mote.position.y, phase: i * .8 });
   }
   for(const mat of [ringMaterial,moteMaterial])mat.freeze();
-  const navigation=mapNavigation({cave,forest,plains,village});
-  // Build immutable obstacle grids during initial loading, not on the first
-  // combat frame when a bear or goblin needs to route around a tree.
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':village?'village':'training';
-  // The plains also hold the large alpha wolf: warm its route grid at load.
-  warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS,{radii:mapId==='great-plains'?[.34,.7,1.7]:[.34,.7],limits:enemyWarmLimits()});
-  const world={ground,forest,cave,plains,mapId,sceneInputMode:'manual-game',environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?plainsPlacements():cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts():undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
+  const world={ground,forest,cave,plains,mapId,sceneInputMode:'manual-game',environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?plainsPlacements():cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts():undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
     tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);this.plainsDecor?.tick(time);}};
+  world.gameplayV03=gameplayV03;
+  world.navigation=mapNavigation(world);
+  // Warm the route grids with the final collision footprints before play.
+  warmMapNavigation(engine,world.navigation,mapId,ENEMY_ARENA_RADIUS,{radii:mapId==='great-plains'?[.34,.7,1.7]:[.34,.7],limits:enemyWarmLimits()});
   world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);configurePlainsDecor(world);return world;
 }
 

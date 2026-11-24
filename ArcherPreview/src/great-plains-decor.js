@@ -26,7 +26,10 @@ export function configurePlainsDecor(world){
  for(const mesh of meshes){mesh.isPickable=false;if(!mesh.billboardMode)mesh.freezeWorldMatrix();}
  let leaves=null,disposed=false;const observer=scene.onDisposeObservable.addOnce(()=>dispose());
  const dispose=()=>{if(disposed)return;disposed=true;scene.onDisposeObservable.remove(observer);leaves?.dispose();river.dispose();for(const m of meshes)if(m!==river.mesh)m.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();};
- world.plainsDecor={dispose,meshes,river,tick:seconds=>river.tick(seconds),updateLeaves(dt,player,allowed){
+ world.plainsDecor={dispose,meshes,river,tick:seconds=>river.tick(seconds),strikeLeaves(record,point){
+   if(disposed)return;
+   leaves??=createPlainsLeafDrift(world);leaves.strike(record,point);
+ },updateLeaves(dt,player,allowed){
    if(!leaves&&allowed)leaves=createPlainsLeafDrift(world);
    leaves?.update(dt,player,allowed);
  }};

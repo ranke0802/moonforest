@@ -56,28 +56,42 @@ function leafBatch(scene,count) {
 export function createPlainsLeafDrift(world,{random=Math.random}={}) {
   const pool=Array.from({length:world.touchDevice?8:10},()=>({life:0,age:0}));
   let batch=null, tree=null, poll=0, untilNext=0, burstLeft=0, wind=0, disposed=false;
+  let struckLeaves=0, strikeAngle=0, cooldown=0;
   function hide() {
     if (tree) { tree=null;for (const leaf of pool) leaf.life=0; }
+    struckLeaves=0;
     if (batch?.mesh.isEnabled()) batch.mesh.setEnabled(false);
   }
-  function spawn(leaf) {
-    const p=tree.root.position, height=world.villagePrepared.assets.get(tree.placement.asset).config.height*tree.placement.scale;
-    const phase=random()*tau, radius=Math.min(2.3,height*.22), travel=1.4+random()*2.2;
+  function spawn(leaf, struck=false) {
+    const p=tree.root.position, config=tree.entry?.config??world.villagePrepared.assets.get(tree.placement.asset).config;
+    const height=config.height*tree.placement.scale;
+    const phase=struck?strikeAngle+(random()-.5)*.85:random()*tau, radius=Math.min(2.3,height*.22), travel=1.4+random()*2.2;
     leaf.x=Math.cos(phase)*radius;leaf.z=Math.sin(phase)*radius;
     leaf.dx=Math.cos(wind)*travel;leaf.dz=Math.sin(wind)*travel;
     leaf.top=height*(.48+random()*.26);
     leaf.bottom=world.terrain.heightAt(p.x+leaf.x+leaf.dx,p.z+leaf.z+leaf.dz)-p.y+.1;
     leaf.life=2.9+random()*1.6;leaf.age=0;leaf.phase=phase;
     leaf.size=.085+random()*.04;
+    leaf.width=(tree.instance?.assetId??tree.placement.asset)==='tree-02-slender-pine'?.16:.48;
   }
   return {
-    update(dt,player,allowed) {
+    get active(){return tree!==null||cooldown>0;},
+    strike(record,point) {
+      const id=record.instance?.assetId??record.placement.asset;
+      if(disposed||cooldown>0||(!deciduous.includes(id)&&id!=='tree-02-slender-pine')||!visibleCrown(record))return;
+      if(tree!==record)hide();
+      tree=record;batch??=leafBatch(world.scene,pool.length);batch.mesh.position.copyFrom(tree.root.position);
+      strikeAngle=Math.atan2(point.z-tree.root.position.z,point.x-tree.root.position.x);
+      wind=strikeAngle;struckLeaves=3;untilNext=.065;burstLeft=0;cooldown=.38;
+    },
+    update(dt,player,allowed,ambient=true) {
       if (disposed) return;
+      cooldown=Math.max(0,cooldown-dt);
       if (!allowed||!player) { hide();poll=0;return; }
       if (dt<=0) return;
       poll-=dt;
       if (tree && (!visibleCrown(tree)||(player.x-tree.root.position.x)**2+(player.z-tree.root.position.z)**2>17**2)) { hide();poll=0; }
-      if (!tree && poll<=0) {
+      if (!tree && ambient && poll<=0) {
         poll=.6;tree=closestCrown(world,player);
         if (tree) {
           batch??=leafBatch(world.scene,pool.length);
@@ -87,7 +101,11 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
       }
       if (!tree) return;
       untilNext-=dt;
-      if (untilNext<=0) {
+      if (untilNext<=0 && struckLeaves>0) {
+        const slot=pool.find(leaf=>!leaf.life)??pool.reduce((a,b)=>a.age/a.life>b.age/b.life?a:b);
+        spawn(slot,true);
+        struckLeaves--;untilNext=struckLeaves>0 ? .065 : 1.8;
+      } else if (untilNext<=0 && ambient && deciduous.includes(tree.instance?.assetId??tree.placement.asset)) {
         if (!burstLeft) { burstLeft=3+Math.floor(random()*4);wind=.45+(random()-.5)*.65; }
         const free=pool.find(leaf=>!leaf.life);
         if (free) spawn(free);
@@ -106,13 +124,14 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
         const cos=Math.cos(yaw)*size,sin=Math.sin(yaw)*size;
         for (let j=0;j<4;j++) {
           const [u,v]=corners[j], k=offset+j*3;
-          batch.positions[k]=x+u*cos*.48-v*sin*flutter;
+          batch.positions[k]=x+u*cos*leaf.width-v*sin*flutter;
           batch.positions[k+1]=y+v*size*Math.cos(a);
-          batch.positions[k+2]=z+u*sin*.48+v*cos*flutter;
+          batch.positions[k+2]=z+u*sin*leaf.width+v*cos*flutter;
         }
       }
       batch.mesh.setEnabled(alive>0);
       if (alive) batch.mesh.updateVerticesData(VertexBuffer.PositionKind,batch.positions,false,false);
+      else if (!struckLeaves && (!ambient||!deciduous.includes(tree.instance?.assetId??tree.placement.asset))) hide();
     },
     dispose(){disposed=true;batch?.dispose();tree=null;batch=null;}
   };

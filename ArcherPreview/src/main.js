@@ -90,6 +90,7 @@ import { createVillageReview } from './village-review.js';
 import { loadVillageTrainingTarget } from './village-training.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
+import {createSceneryStrikes} from './scenery-strikes.js';
 import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
 import {createSwordTrail,setupSwordTrailSettings} from './sword-trail.js';
 import {configurePlayerSize,playerDimensions,WARRIOR_DIMENSIONS} from './player-dimensions.js';
@@ -714,7 +715,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
-  effectReviewGeneration++;world?.effectWorld?.clear();setFrameWorkContext(world?.scene,{active:false,frameId:engine?.frameId,generation:world?.toolGeneration});
+  effectReviewGeneration++;world?.effectWorld?.clear();world?.sceneryStrikes?.leave();setFrameWorkContext(world?.scene,{active:false,frameId:engine?.frameId,generation:world?.toolGeneration});
   originalTextureRetry.hidden=true;
   mapResourceInspector.begin();
   world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
@@ -959,7 +960,7 @@ function render(dt) {
     world.authoringReadyGeneration=world.toolGeneration??0;world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();void world.restoreNpcActors?.();
   }
   if(world.toolLease?.active){
-    world.plainsDecor?.updateLeaves(0,null,false);
+    world.plainsDecor?.updateLeaves(0,null,false);world.sceneryStrikes?.clear();
     simulateFrame=false;boss?.combat?.passiveRecovery?.reset();world.toolLease.update(dt);
     if(!world.toolLease?.active)return;
     world.camera.update();world.camera.getViewMatrix();world.camera.getProjectionMatrix();
@@ -968,12 +969,12 @@ function render(dt) {
     world.lighting.follow(toolFocus);world.scene.render(false);return;
   }
   if(cinematicAuthoringPreview){
-    world.plainsDecor?.updateLeaves(0,null,false);
+    world.plainsDecor?.updateLeaves(0,null,false);world.sceneryStrikes?.clear();
     simulateFrame=false;boss?.combat?.passiveRecovery?.reset();const focus=world.camera.getTarget();
     world.villageVisibility?.update(world.camera.globalPosition,focus,dt);world.treeOcclusion?.update(world.camera.globalPosition,focus,dt,playerDimensions(actor));world.lighting.follow(focus);world.scene.render(false);return;
   }
   simulateFrame=dt>0&&!world.storyboardOpening?.blocksGame&&!world.storyboardExitPending&&!world.v03?.blocksGame;
-  if(!simulateFrame)world.plainsDecor?.updateLeaves(0,null,false);
+  if(!simulateFrame){world.plainsDecor?.updateLeaves(0,null,false);world.sceneryStrikes?.clear();}
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
   if(!simulateFrame&&world.v03?.stageHidden&&(coveredFrames=(coveredFrames+1)%12)!==0)return;
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateStaminaNotice();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
@@ -982,6 +983,10 @@ function render(dt) {
   world.tick(elapsed);
   if(world.dayCycle&&world.v03?.playing!==false)world.dayCycle.update(dt);
   world.effectWorld?.update(dt);
+  if(world.sceneryStrikes){
+    if(world.v03?.playing&&ready&&!loadingAsset&&!mapTransition?.busy&&!world.v03.story?.sceneActive)world.sceneryStrikes.update(dt,actor.position,boss);
+    else world.sceneryStrikes.clear();
+  }
   training.update(dt);
   projectiles.update(dt);
   if (ready) {
@@ -1151,17 +1156,21 @@ function render(dt) {
   frameDiagnostics.measure('hudUpdateMs',projectedHudStart);
 }
 
+function travelCombatCount(){
+  return world?.gameplayV03&&world.v03?.playing ? Number(world.v03.combatLocksTravel) : boss.combatCount;
+}
+
 function bindMapPortal(disarmRoadDestination=null){
   mapPortal?.dispose();
   mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,disarmRoadDestination,
-    getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount,hp:boss.playerHp,potions:boss.potions.remaining}),
+    getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount(),hp:boss.playerHp,potions:boss.potions.remaining}),
     onTravel:(url,portal)=>{const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,boundary?{boundary}:undefined);}});
 }
 
 function travelFromMinimap(href){
   const waypoint=travelWaypoint(href);
   if(waypoint&&character===waypoint.character&&world.mapId===waypoint.map){
-    if(!ready||loadingAsset||mapTransition?.busy||mapTransition?.failed||controller.dead||controller.captured||controller.groggy||boss.playerHp<=0||boss.loading||boss.potions.active||boss.combatCount>0){toast('현재는 이동할 수 없습니다.');return false;}
+    if(!ready||loadingAsset||mapTransition?.busy||mapTransition?.failed||controller.dead||controller.captured||controller.groggy||boss.playerHp<=0||boss.loading||boss.potions.active||travelCombatCount()>0){toast('현재는 이동할 수 없습니다.');return false;}
     if(!world.navigation.free(waypoint.position,playerDimensions(actor).moveRadius,movementLimit(waypoint.position))){toast('이동할 위치를 사용할 수 없습니다.');return false;}
     input.reset();cancelAttackInput();boss.combat?.passiveRecovery?.reset();
     actor.position.set(waypoint.position.x,0,waypoint.position.z);world.terrain.place(actor.position);
@@ -1204,7 +1213,7 @@ try {
   engine.renderEvenInBackground=cinematicAuthoringPreview;
   applyRenderQuality();
   await startupLayouts;
-  world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
+  world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice,gameplayV03:!!versionRoute.edition&&!versionRoute.worldRevision});
   world.release=versionRoute.release;world.edition=versionRoute.edition??null;
   world.buildingTextureSettings=buildingTextures;
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
@@ -1251,10 +1260,11 @@ try {
   resizeScreenProjection();
   damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   goldLootView=world.goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
+  if(world.gameplayV03)world.sceneryStrikes=createSceneryStrikes(world,audio);
   const damageFeedback=(...args)=>{
     const target=args[6]??args[7];
     gameplayTrail()?.hit(world.mapId,args[3],target,boss?.playerHp);
-    world?.v03?.combatEvent?.(args[3],target);
+    world?.v03?.combatEvent?.(args[3],target,args[1]);
     damageNumbers.show(...args);
     if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});
     else actionAudio.damage(...args);
@@ -1290,9 +1300,16 @@ try {
     const meleeAimStart=frameDiagnostics.mark();
     meleeAim?.apply(combatResult,actor,meleeAimDt);
     frameDiagnostics.measure('playerMeleeAimMs',meleeAimStart);
-    const sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
+    let sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
     try{swordTrail?.update(sample,combatResult.state,elapsed,equipmentChoices.sword);}catch(error){swordTrail?.setEnabled(false);console.warn('[검격 잔상]',error);}
     const contactsStart=frameDiagnostics.mark();
+    if(sample?.contacts.length && world.sceneryStrikes && world.v03?.playing && !world.v03.story?.sceneActive &&
+       !loadingAsset && !mapTransition?.busy && boss.playerAlive && !controller.captured && !controller.staggerRemaining){
+      const surface=world.sceneryStrikes.hit(sample,combatResult.state,actor.position,!boss.combatCount);
+      if(surface==='stone'&&controller.deflectSword(sample.actionId)){
+        sample=null;strikeSampler.reset();swordTrail?.clear();
+      }else if(surface)controller.pauseOnImpact(.025);
+    }
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     frameDiagnostics.measure('contactsMs',contactsStart);
     const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
@@ -1327,7 +1344,7 @@ try {
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
       if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
-      frameDiagnostics.mapChanged();mapResourceInspector.begin();effectReviewGeneration++;world.effectWorld?.clear();setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});loadDiagnostics.begin('지역 이동');
+      frameDiagnostics.mapChanged();mapResourceInspector.begin();effectReviewGeneration++;world.effectWorld?.clear();world.sceneryStrikes?.leave();setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});loadDiagnostics.begin('지역 이동');
       ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
@@ -1388,7 +1405,7 @@ try {
     onError:error=>{travelResume=false;loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
   });
   minimapTravel=setupMinimapTravel({element:$('#dot-minimap'),root:$('#app'),
-    getState:()=>({character,ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:boss.loading,busy:mapTransition?.failed||frameLoop?.failed||frameLoop?.loadingFailed,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:boss.combatCount}),
+    getState:()=>({character,ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:boss.loading,busy:mapTransition?.failed||frameLoop?.failed||frameLoop?.loadingFailed,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount()}),
     onTravel:url=>travelFromMinimap(url),resetInput:()=>{input.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback()});
   world.scene.onDisposeObservable.addOnce(()=>minimapTravel?.dispose());
   bindMapPortal();

@@ -89,6 +89,13 @@ export class WarriorV2Controller {
     return false;
   }
   pauseOnImpact(duration){if(this.action)this.action.hitStop=Math.max(this.action.hitStop,duration);}
+  deflectSword(actionId){
+    if(!this.action||this.action.id!==actionId||!V2_ATTACKS.includes(this.action.state))return false;
+    const duration=.16;
+    if(!this.hit(duration,{force:true}))return false;
+    this.hitPose.deflectFrom=this.hitPose.clipTime;
+    return true;
+  }
   get groggy(){return this.staggerLocked&&this.staggerRemaining>0;}
   hit(duration=.2,{force=false,reason}={}){
     if(this.captured||this.knockedDown)return false;
@@ -230,7 +237,13 @@ export class WarriorV2Controller {
     if(this.staggerRemaining>0){
       const consumed=Math.min(dt,this.staggerRemaining);this.staggerRemaining-=consumed;dt-=consumed;
       if(alive&&!spentAtStart)this.restoreStamina(consumed);
-      if(this.staggerRemaining>1e-8)return {...this.hitPose,moving:false,speed:0,loop:false,actionId:null,staggered:true,groggy:this.groggy,chargeProgress:this.chargeProgress,events:[]};
+      if(this.staggerRemaining>1e-8){
+        if(this.hitPose?.deflectFrom!=null){
+          const t=Math.min(1,(.16-this.staggerRemaining)/.12);
+          this.hitPose.clipTime=Math.max(0,this.hitPose.deflectFrom-.19*t*(2-t));
+        }
+        return {...this.hitPose,moving:false,speed:0,loop:false,actionId:null,staggered:true,groggy:this.groggy,chargeProgress:this.chargeProgress,events:[]};
+      }
       this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;
     }
     let idleDt=dt,recoveredBeforeAttack=0;

@@ -6,6 +6,7 @@ import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
+import {createPlayerCombatLock} from './player-combat-lock.js';
 import {createSlowFx,mountSlowFxSettings} from './slow-fx.js';
 import {createLoadingLore} from './loading-lore.js';
 import {createQuestMarkers} from './quest-markers.js';
@@ -79,6 +80,8 @@ export function setupV03(api){
  setHitScale({monsterHurt:1.15,playerStrike:1.15,playerHurt:1.15});
  // The foe being fought: what an attack or the guard turns to without a direction (combat-target.js).
  const combatTarget=createCombatTarget();
+ const playerCombatLock=createPlayerCombatLock();
+ const combatLocksTravel=()=>api.world?.gameplayV03 ? playerCombatLock.active(api.world.mapId,battle) : battle.combatCount>0;
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
  // A model without the cloth grid, or a world without a scene (tests), leaves a stub so it is not tried every frame.
  // Until it has been judged on screen it runs on the development server and with ?cape=1 only (2026-11-20).
@@ -101,7 +104,7 @@ export function setupV03(api){
  const languageStore=api.languageStorage??view?.localStorage??null,source=api.content??chapter1,content=cloneChapter(source);
  let loadingLore=null;
  const slowFx=createSlowFx((()=>{try{return view.localStorage;}catch{return null;}})());
- const story=createStory({api,doc,save,content,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
+ const story=createStory({api,doc,save,content,combatLocksTravel,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
@@ -382,7 +385,7 @@ export function setupV03(api){
    opening.cover();
    // Where the player stood: the title's showcase fight wanders, continuing puts them back here.
    const at=api.getPlayer()?.position;state.returnPose=at&&Number.isFinite(at.x)&&Number.isFinite(at.z)?{x:at.x,z:at.z,map:gameState().mapId}:null;
-   story.stop();api.stopWorld();state.worldStarted=false;
+   playerCombatLock.reset();story.stop();api.stopWorld();state.worldStarted=false;
    api.resetStage(state.returnPose??undefined);
    state.ambush=false;state.sinceSave=0;state.trailScene=false;
    screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
@@ -556,7 +559,8 @@ export function setupV03(api){
   defeat(event){if(state.screen==='play')story.defeat(event);},
   decorateFoeBar(element,foe){if(state.screen==='play')vitality.decorate(element,foe);},
   // main.js: a hit landed (kind 'enemy': on that foe; 'player'/'block': by that foe), and which foe a starting action faces.
-  combatEvent(kind,foe){if(state.screen==='play'&&!story.sceneActive)combatTarget.note(kind,foe);},
+  combatEvent(kind,foe,damage){if(state.screen==='play'&&!story.sceneActive){combatTarget.note(kind,foe);playerCombatLock.note(kind,foe,damage,api.world.mapId);}},
+  get combatLocksTravel(){return combatLocksTravel();},
   aimTarget(position,nearest,starts=true){return state.screen==='play'?combatTarget.aim(position,nearest,starts):nearest;},
   get aimReach(){return state.screen==='play'?combatTarget.reach:0;},
   get chainFoe(){return state.screen==='play'?combatTarget.chainFoe:null;},
@@ -601,6 +605,7 @@ export function setupV03(api){
     if(!appleTouch)prepareWorld();
     void enterPlay({resume:true});
    }else if(state.screen==='play'&&s.ready){
+    if(battle.playerAlive===false)playerCombatLock.reset();
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
     combatTarget.update(dt,api.getController()?.state,api.getPlayer()?.position,s.mapId);
     if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;trail.mark(state.trailScene?'play:opening-scene':'play');}
