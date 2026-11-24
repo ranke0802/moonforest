@@ -94,8 +94,9 @@ function trophyBladeGeometry(base,profile){
 
 export class WarriorEquipment {
   // loadModel(url, scene) resolves an asset container holding one mesh (tests pass their own).
-  constructor(container, choices = {}, { loadModel = (url, scene) => SceneLoader.LoadAssetContainerAsync(url.href ?? String(url), '', scene, undefined, '.glb') } = {}) {
-    this.slots = {}; this.loadModel = loadModel; this.shapes = new Map(); this.blades = new Map(); this.shapeTicket = 0; this.disposed = false;
+  constructor(container, choices = {}, { loadModel = (url, scene) => SceneLoader.LoadAssetContainerAsync(url.href ?? String(url), '', scene, undefined, '.glb'),
+    loadTrophy = (scene,id)=>import('./v03/foe-weapons.js').then(({acquireFoeWeapon})=>acquireFoeWeapon(scene,id)) } = {}) {
+    this.slots = {}; this.loadModel = loadModel; this.loadTrophy=loadTrophy; this.shapes = new Map(); this.blades = new Map(); this.shapeTicket = 0; this.disposed = false;
     for (const [slot, name] of Object.entries(MESH_NAMES)) {
       const mesh = container.meshes.find(candidate => candidate.name === name);
       if (!mesh?.material?.emissiveTexture) throw new Error(`${name}: 장비 재질을 찾지 못했습니다.`);
@@ -129,12 +130,23 @@ export class WarriorEquipment {
     if (!entry || ((entry.model ?? null) === (model ?? null) && (entry.profile ?? '') === profile)) return;
     entry.profile = profile;
     entry.model = model ?? null; const ticket = ++this.shapeTicket;
-    if (!model) { this.wear(null); return; }
-    const url = SWORD_MODEL_URLS[model]; if (!url) return;
+    if (!model) { this.wear(null); this.releaseTrophies(null); return; }
+    const trophy=model.startsWith('trophy:'),url=SWORD_MODEL_URLS[model];
+    if (!url&&!trophy) return;
     let pending = this.shapes.get(model);
-    if (!pending) { pending = Promise.resolve(this.loadModel(url, entry.mesh.getScene())); this.shapes.set(model, pending); }
-    pending.then(container => { if (this.disposed) { container.dispose(); return; } if (ticket === this.shapeTicket) this.wear(container); })
+    if (!pending) {
+      pending=trophy
+        ? Promise.resolve(this.loadTrophy(entry.mesh.getScene(),model.slice(7)))
+        : Promise.resolve(this.loadModel(url,entry.mesh.getScene()));
+      this.shapes.set(model,pending);
+    }
+    pending.then(container => { if (this.disposed) { container.dispose(); return; } if (ticket === this.shapeTicket){this.wear(container);this.releaseTrophies(model);} })
       .catch(error => { this.shapes.delete(model); console.warn('[Equipment] sword model unavailable', model, error); });
+  }
+  releaseTrophies(equipped){
+    for(const [id,pending] of this.shapes)if(id.startsWith('trophy:')&&id!==equipped){
+      this.shapes.delete(id);pending.then(asset=>asset.dispose()).catch(()=>{});
+    }
   }
   // Trophy blades keep the authored grip, tip reach, UVs and rig mount.
   // One derived geometry is shared by the blade and its existing outline.
@@ -142,7 +154,8 @@ export class WarriorEquipment {
     const entry=this.slots.sword;if(!entry)return;
     const style=equipmentStyle('sword',finish);
     entry.palette.variant=style.value;entry.style=style.id;
-    this.shape(style.model??null,profile);
+    if(profile?.startsWith('trophy:'))this.shape(profile);
+    else this.shape(style.model??null,profile);
   }
   wear(container) {
     const entry = this.slots.sword, standard = entry.geometry ??= entry.mesh.geometry;

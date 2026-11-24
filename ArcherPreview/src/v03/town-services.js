@@ -27,7 +27,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
     worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
    if(it.slot==='sword'){
     const w=economy.gear(id);row.stat='Strike bonus';row.value=w.attack;row.delta=row.value-economy.attack;
-    row.name+=w.level?' +'+w.level:'';row.note='Durability '+w.hp+' / '+w.max;
+    row.name+=w.level?' +'+w.level:'';row.note='Durability '+w.hp+' / '+w.max+(it.usage?' · '+it.usage:'');
    }else if(it.slot){const w=economy.gear(id);row.stat='Defense';row.value=w.defense;row.delta=w.defense-(economy.gear(s.equipped[it.slot])?.defense??0);row.name+=w.level?' +'+w.level:'';row.note='Durability '+w.hp+' / '+w.max;}
    else row.note=POTION_NOTES[id]??'A trade material. Sell or craft with it in the village.';
    equipment.push(row);

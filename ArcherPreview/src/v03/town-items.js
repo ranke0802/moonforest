@@ -14,7 +14,13 @@ export const TOWN_ITEMS=Object.freeze({
  'ritual-blade':blade('Shaman’s Ritual Blade',12,82,'violet-silver','ritual'),
  'war-blade':blade('Hobgoblin Warblade',14,86,'teal-bronze','great'),
  'rust-blade':blade('Rusted Falchion',8,82,'soldier-sword','cleaver'),
- 'ghoul-blade':blade('Ghoul Greatsword',16,80,'violet-silver','great'),
+ 'ghoul-blade':blade('Ghoul Cleaver',16,80,'original','trophy:ghoul-cleaver'),
+ 'raider-dagger':blade('Raider’s Dagger',8,94,'original','trophy:goblin-warrior-dagger'),
+ 'field-bow':{...blade('Scout’s Field Bow',7,98,'original','trophy:goblin-archer-bow'),usage:'The warrior uses the reinforced bow as a close-range striking weapon.'},
+ 'crooked-staff':{...blade('Rune Staff',12,88,'original','trophy:goblin-shaman-staff'),usage:'The warrior grips this carved staff for melee strikes.'},
+ 'spiked-club':blade('Hobgoblin War Club',14,103,'original','trophy:hobgoblin-club'),
+ 'cave-claw':blade('Black Bear Clawblade',14,101,'teal-bronze','cleaver'),
+ 'cave-fang':blade('Black Wolf Fangblade',13,91,'violet-silver','fang'),
  'field-shield':shield('Field Shield',2,'original'),
  'oak-shield':shield('Oaken Shield',4,'teal-bronze'),
  'silver-shield':shield('Silver Shield',6,'violet-silver'),
@@ -26,21 +32,24 @@ export const TOWN_ITEMS=Object.freeze({
  'wolf-pelt':mat('Wolf Pelt',5),'wolf-bone':mat('Wolf Bone',4),'wolf-fang':mat('Wolf Fang',7),
  'fox-pelt':mat('Fox Pelt',5),'iron-scrap':mat('Iron Scrap',4),'grave-dust':mat('Grave Dust',6),
  'rune-shard':mat('Rune Shard',9),'tainted-fang':mat('Tainted Fang',11),
+ 'arrow-fletching':mat('Scout Fletching',5),'ward-cord':mat('Shaman’s Ward Cord',8),
+ 'iron-stud':mat('Black Iron Stud',9),'burial-clasp':mat('Burial Clasp',6),'ghoul-mail':mat('Ghoul Mail Link',12),
 });
 const wolf=[['wolf-pelt',.6],['wolf-bone',.45],['wolf-fang',.28]];
 const bear=[['bear-meat',.85],['bear-hide',.55],['bear-fur',.48],['bear-bile',.27]];
 export const LOOT_TABLES={
  fox:[['fox-pelt',.72]],boar:[['boar-meat',.80],['boar-tusk',.40]],bear,
  wolf:[...wolf,['wolf-blade',.22]],'gray-wolf':wolf,'stylized-wolf':wolf,'wolf-2':wolf,'wolf-3':wolf,
- goblin:[['iron-scrap',.7],['goblin-cleaver',.15]],'goblin-warrior':[['iron-scrap',.7],['goblin-cleaver',.18]],
- 'goblin-archer':[['iron-scrap',.45],['hunter-knife',.20]],'goblin-shaman':[['rune-shard',.7],['ritual-blade',.18]],
- hobgoblin:[['iron-scrap',.9],['war-blade',.23],['oak-shield',.17]],
- zombie:[['grave-dust',.67],['rust-blade',.14]],'ghoul-warrior':[['grave-dust',.8],['ghoul-blade',.22]],
- 'black-bear':[...bear,['tainted-fang',.65]],'black-wolf':[...wolf,['tainted-fang',.5]],
+ goblin:[['iron-scrap',.7],['goblin-cleaver',.15]],'goblin-warrior':[['iron-scrap',.7],['raider-dagger',.18]],
+ 'goblin-archer':[['arrow-fletching',.70],['field-bow',.20]],'goblin-shaman':[['ward-cord',.55],['rune-shard',.7],['crooked-staff',.18]],
+ hobgoblin:[['iron-stud',.72],['spiked-club',.23],['oak-shield',.17]],
+ 'hobgoblin-boss':[['iron-stud',.72],['spiked-club',.23],['oak-shield',.17]],
+ zombie:[['grave-dust',.67],['burial-clasp',.42],['rust-blade',.14]],'ghoul-warrior':[['grave-dust',.8],['ghoul-mail',.58],['ghoul-blade',.22]],
+ 'black-bear':[...bear,['tainted-fang',.65],['cave-claw',.13]],'black-wolf':[...wolf,['tainted-fang',.5],['cave-fang',.15]],
  elena:[['rune-shard',1],['ritual-blade',.36]],
 };
 export function monsterRewards(kind,random=Math.random){
- const table=LOOT_TABLES[kind]??(/ghoul/.test(kind)?LOOT_TABLES['ghoul-warrior']:/bear/.test(kind)?LOOT_TABLES['black-bear']:/wolf/.test(kind)?LOOT_TABLES['black-wolf']:[]);
+ const table=LOOT_TABLES[kind==='hobgoblin-boss'?'hobgoblin':kind]??(/ghoul/.test(kind)?LOOT_TABLES['ghoul-warrior']:/bear/.test(kind)?LOOT_TABLES['black-bear']:/wolf/.test(kind)?LOOT_TABLES['black-wolf']:[]);
  return Object.fromEntries(table.filter(([,chance])=>random()<chance).map(([id])=>[id,1]));
 }
 const gradePool=[['field-sword','field-shield','leather-coat','potion'],['hunter-knife','oak-shield','hunter-coat','potion'],['wolf-blade','silver-shield','hunter-coat','stamina-tonic'],['ritual-blade','war-blade','silver-shield','guard-armor'],['ghoul-blade','war-blade','guard-armor','silver-shield']];
