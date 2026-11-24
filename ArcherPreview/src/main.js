@@ -724,6 +724,7 @@ async function loadCharacter() {
   originalTextureRetry.hidden=true;
   mapResourceInspector.begin();
   world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('reload',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+  world.chapterResidents?.leave();world.riding?.leave();
   world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
   frameFailure=null;if(frameLoop){frameLoop.failed=false;frameLoop.loadingFailed=false;}
   loadDiagnostics.begin(isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':isVillage()?'마을':'캐릭터');
@@ -961,6 +962,7 @@ function render(dt) {
   setFrameWorkContext(world.scene,{active:ready&&!loadingAsset&&!mapTransition?.busy,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.v03?.update(dt);
   world.riding?.updateAvailability();
+  if(world.chapterResidents&&!mapTransition?.busy)world.chapterResidents.update(dt,world.v03?.playing,world.v03?.story?.sceneActive||input?.suspended||document.hidden||!boss?.playerAlive);
   // 0.3 slow motion (short, story-driven): the rest of the frame runs scaled.
   dt*=world.v03?.timeScale??1;
   world.storyboardOpening?.update();
@@ -1358,6 +1360,7 @@ try {
   mapTransition=createMapTransition({
     prepare:href=>{
       world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+      world.chapterResidents?.leave();world.riding?.leave();
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
       if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
@@ -1794,6 +1797,12 @@ try {
       world.scene.onDisposeObservable.addOnce(()=>{townServices?.dispose();townServices=null;});
     }
     if(world.gameplayV03){
+      const {createChapterResidentVisits}=await import('./v03/chapter-resident-visits.js');
+      world.chapterResidents=createChapterResidentVisits({world,battle:boss,getPlayer:()=>actor,onDefeat:event=>{
+        townServices?.defeat(event);world.v03?.defeat(event);
+        goldLoot.drop(event.kind,event.position,{canLand:(_from,to)=>world.navigation.free(to,.09),heightAt:(x,z)=>world.terrain.heightAt(x,z)});
+      }});
+      world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
       world.riding=createRidingHorse({world,root:$('#app'),storage:v03Save.journey,player:()=>actor,
         forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:()=>!!(ready&&!loadingAsset&&!mapTransition?.busy&&

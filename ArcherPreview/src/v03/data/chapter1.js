@@ -188,7 +188,7 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M07',reward:{gold:200,potions:1},title:'마물의 숲',steps:[
   {id:'forest',text:'평원 동쪽 끝에서 마물의 숲으로 들어가기',type:'reach',map:'monster-forest'},
-  {id:'goblins',text:'숲의 고블린 야영지 쓸어내기',type:'defeat',kind:'goblin',count:5,map:'monster-forest',at:{x:14,z:2,radius:10},summon:{kind:'goblin',count:5},intro:'forest-camp',arrival:'고블린 야영지다!'},
+  {id:'goblins',text:'숲의 두 야영지에서 고블린 물리치기',type:'defeat',kind:'goblin',count:5,map:'monster-forest',at:{x:0,z:1,radius:10},intro:'forest-camp',arrival:'고블린 야영지다!'},
   {id:'cave',text:'숲 깊은 곳의 동굴로 들어가기',type:'reach',map:'witch-cave'},
  ]},
  {id:'M08',reward:{gold:300},title:'타락의 성소',steps:[

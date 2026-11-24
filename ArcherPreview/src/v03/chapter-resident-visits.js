@@ -1,0 +1,39 @@
+const supported=new Set(['monster-forest','witch-cave','village']);
+
+// Each import and its scene objects belong to exactly one visit. Starting a
+// new game, returning to title or changing map invalidates outstanding work.
+export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
+  loadVillage=()=>import('./village-pets.js'),
+  loadCamp=()=>Promise.all([import('./chapter-wildlife.js'),import('./chapter-enemy-encounter.js')]),
+  loadBeasts=()=>import('./corrupted-beasts.js'),onError=console.warn}) {
+  let map=null, generation=0, actors=null, preparing=null, disposed=false;
+  function leave(){
+    generation++;map=null;preparing=null;actors?.dispose();actors=null;
+  }
+  function enter(next){
+    if(!supported.has(next)||disposed){if(map)leave();return;}
+    if(map===next)return preparing;
+    leave();map=next;
+    const token=generation;
+    const current=()=>!disposed&&generation===token&&world.mapId===next&&!world.scene.isDisposed;
+    preparing=(async()=>{
+      if(next==='village'){
+        const {createVillagePets}=await loadVillage();
+        if(current())actors=createVillagePets(world);
+      }else{
+        const [camp,enemies]=await loadCamp();
+        const beasts=next==='witch-cave'?await loadBeasts():null;
+        if(current())actors=camp.createChapterWildlife({world,battle,getPlayer,onDefeat,makeEnemies:enemies.createChapterEnemyFactory,
+          makeBeasts:beasts?.createCorruptedBeastFactory,onError});
+      }
+      if(current()&&getPlayer())await actors?.update(0,getPlayer().position);
+    })().catch(error=>{if(current())onError('[MoonForest] residents of '+next,error);});
+    return preparing;
+  }
+  return {enter,leave,update(dt,playing,paused=false){
+    if(!playing){if(map)leave();return;}
+    if(paused)return;
+    if(world.mapId!==map){if(map||supported.has(world.mapId))enter(world.mapId);return;}
+    const player=getPlayer();if(actors&&player)actors.update(dt,player.position);
+  },dispose(){disposed=true;leave();}};
+}

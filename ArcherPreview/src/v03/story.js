@@ -108,7 +108,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(step.at&&!livingFoe(step.kind)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
    // Lead toward the nearest living foe, stopping short of it.
    let best=null,bestSq=Infinity;
-   for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
+   for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind&&foe.questFamily!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
    if(best&&bestSq<16)return null;
    if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};}
    // No beast awake nearby: lead to the nearest plains den instead of vanishing.
@@ -135,7 +135,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  // A foe counts until its defeat has been reported (the event fires one frame
  // after the killing blow): otherwise the last kill of a wave summons one more.
- const livingFoe=kind=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain&&(foe.brain.hp>0||foe.death&&!foe.death.started)&&(!kind||(foe.summonKind??foe.kind)===kind));
+ const livingFoe=kind=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain&&(foe.brain.hp>0||foe.death&&!foe.death.started)&&(!kind||(foe.summonKind??foe.kind)===kind||foe.questFamily===kind));
  // Story fights: a defeat step with {at,summon} calls its foes once the player
  // is inside the spot, and again after a retreat or death left none alive.
  const staged={key:null,busy:false,next:0,introduced:new Set()};
@@ -1310,7 +1310,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    staged.key=null;staged.busy=false;staged.next=0;
    return true;
   },
-  defeat(event){if(started)emit({type:'defeat',kind:event?.kind,map:mapId});},
+  defeat(event){if(started&&event)emit({type:'defeat',kind:event.family&&log.step()?.kind===event.family?event.family:event.kind,map:mapId});},
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
   prepare(id){

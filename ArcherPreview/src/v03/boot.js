@@ -537,7 +537,9 @@ export function setupV03(api){
    // The story builds the cast here, not on its first frame: that frame only comes
    // after the trip (2026-11-23: the old wait here could never see the cast, so the
    // cover always stayed the full 4 s and the folk then loaded in play).
-   const settled=story.arrive?.(gameState().mapId)??null;
+   const area=gameState().mapId;
+   const preparations=[story.arrive?.(area),api.world.chapterResidents?.enter(area)].filter(Boolean);
+   const settled=preparations.length?Promise.allSettled(preparations):null;
    let done=!settled;
    if(settled){void settled.then(()=>{done=true;});await Promise.race([settled,wait(maxMs)]);}
    // Then, within the same cap, until the world draws smoothly: the first seconds
