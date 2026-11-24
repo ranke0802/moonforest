@@ -105,7 +105,7 @@ export class WolfV02Encounter extends WolfEncounter{
   }
 
   update(dt,player){
-    this.v02Pose?.capturePreviousFeet();
+    if(!this._ambientLogicalOnly)this.v02Pose?.capturePreviousFeet();
     this.v02Pose?.restore();
     this.v02HeldYaw=this.actor?.rotation.y;
     // A stationary watch keeps its support feet fixed. During the freely

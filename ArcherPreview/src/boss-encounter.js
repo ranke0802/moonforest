@@ -327,8 +327,10 @@ export class BossEncounter {
       if(t>=1)this.knockTurn=null;
     }
     if(result.speed&&travelDistance>motion.stopDistance&&travel.lengthSquared()>.0001)this.actor.position.addInPlace(travel.normalize().scale(Math.min(result.speed*dt,travelDistance-motion.stopDistance)));
-    this.animator.transition(this.brain.state,{clipTime:this.brain.time,castVariant:this.brain.spell?.motion,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
-    this.animator.update(dt);
+    if(!this._ambientLogicalOnly){
+      this.animator.transition(this.brain.state,{clipTime:this.brain.time,castVariant:this.brain.spell?.motion,actionId:this.brain.serial,staggerRemaining:this.brain.stagger,loop:['move','approach'].includes(this.brain.mode),blendDuration:['down','recover'].includes(this.brain.mode)?.10:.16});
+      this.animator.update(this._ambientWake?Math.max(dt,.2):dt);
+    }
     const root=rootSample(this.config,this.brain.state,this.brain.time);
     this.applyMotionRoot(root);
     this.lastRoot=root;this.lastSerial=this.brain.serial;
