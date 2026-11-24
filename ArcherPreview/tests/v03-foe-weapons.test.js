@@ -53,5 +53,9 @@ test('five equipped trophies use the actual enemy paint and shape, and release t
   }
   assert.equal(unique.size,5);assert.match(TOWN_ITEMS['field-bow'].usage,/close-range/);
   for(const id of ['black-bear','black-wolf','zombie'])assert.ok(Object.keys(monsterRewards(id,()=>0)).some(k=>TOWN_ITEMS[k].slot==='sword'));
+  assert.equal(monsterRewards('corrupted-wolf',()=>0)['cave-fang'],1);
+  assert.equal(monsterRewards('corrupted-bear',()=>0)['cave-claw'],1);
+  assert.equal(monsterRewards('alpha-wolf',()=>0)['cave-fang'],undefined);
+  assert.equal(monsterRewards('guardian-bear',()=>0)['cave-claw'],undefined);
  }finally{equip.dispose();scene.dispose();engine.dispose();}
 });
