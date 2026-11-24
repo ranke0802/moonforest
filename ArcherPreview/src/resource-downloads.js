@@ -11,11 +11,17 @@ export function downloadText({loaded,total}){return `${(loaded/1e6).toFixed(1)} 
 
 // A fixed plan counts only missing files. Stored bytes are never reported as a
 // new download, and file count is never substituted for byte progress.
+// The last few visits' counters (plain numbers; no map objects), for records.
+const recentStats=[];
+export const recentResourceDownloadStats=()=>recentStats.map(stats=>({...stats}));
 export class ResourceDownloads {
   constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null,idleTimeoutMs=30000,timers,ledgerMaxEntries=4096,ledgerTiming=null}={}){
     this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.now=now;this.tail=Promise.resolve();this.storageUnavailable=false;
     this.index=index?validateResourceIndex(index):null;
-    this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0};
+    // Cache Storage reads are counted apart from transfers (2026-11-24): how many
+    // times a visit listed the cache's keys or matched one file, and how long.
+    this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0,jobs:0,cacheKeyLists:0,cacheKeyListMs:0,cacheKeyListMaxMs:0,cacheEntries:null,cacheMatches:0,cacheMatchMs:0};
+    recentStats.push(this.stats);if(recentStats.length>8)recentStats.shift();
     this.abort=new AbortController();
     this.idleTimeoutMs=idleTimeoutMs;this.timers=timers;
     this.ledger=new ResourceLoadLedger({base,sizes,now,maxEntries:ledgerMaxEntries,timing:ledgerTiming});
@@ -24,6 +30,15 @@ export class ResourceDownloads {
   markReady(){this.ledger.markReady();}
   snapshot(){return this.ledger.snapshot();}
   noteReuse(paths,options){this.ledger.reuse(paths,options);}
+  async timedRead(kind,task){
+    const started=this.now();
+    try{return await task();}
+    finally{
+      const ms=Math.max(0,this.now()-started),stats=this.stats;
+      if(kind==='list'){stats.cacheKeyLists++;stats.cacheKeyListMs=Math.round((stats.cacheKeyListMs+ms)*10)/10;stats.cacheKeyListMaxMs=Math.round(Math.max(stats.cacheKeyListMaxMs,ms)*10)/10;}
+      else{stats.cacheMatches++;stats.cacheMatchMs=Math.round((stats.cacheMatchMs+ms)*10)/10;}
+    }
+  }
   prepare(paths,onProgress=()=>{}){
     const job=this.tail.then(()=>this.run(paths,onProgress));this.tail=job.catch(()=>{});return job;
   }
@@ -42,14 +57,17 @@ export class ResourceDownloads {
     let cache;try{if(!this.storageUnavailable)cache=await step('resource-cache-open',()=>this.storage?.open('moonforest-resources-v1'));}catch(error){signal.throwIfAborted();}
     // Enumerate keys once instead of creating a Response/body handle for every
     // cached file. Refresh on every job so eviction/deletion remains visible.
-    const cachedUrls=cache?.keys&&urls.length>=16?new Set((await step('resource-cache-keys',()=>cache.keys())).map(request=>request.url)):null;
+    this.stats.jobs++;
+    const listed=cache?.keys&&urls.length>=16?await this.timedRead('list',()=>step('resource-cache-keys',()=>cache.keys())):null;
+    const cachedUrls=listed?new Set(listed.map(request=>request.url)):null;
+    if(cachedUrls)this.stats.cacheEntries=cachedUrls.size;
     const missing=[];let cached=0;
     for(const url of urls){
       signal.throwIfAborted();
       const size=this.sizes[new URL(url).pathname.split('/').at(-1)];
       if(!Number.isSafeInteger(size)||size<0)throw new Error('리소스 용량 목록이 일치하지 않습니다. 새로고침해 주세요.');
       const row=this.ledger.request(url,phase);rows.set(url,row);
-      if(cachedUrls?cachedUrls.has(url):await step('resource-cache-match',()=>cache?.match(url,{ignoreVary:true}))){cached+=size;this.ledger.cached(row,phase);continue;}
+      if(cachedUrls?cachedUrls.has(url):await this.timedRead('match',()=>step('resource-cache-match',()=>cache?.match(url,{ignoreVary:true})))){cached+=size;this.ledger.cached(row,phase);continue;}
       missing.push({url,size});
     }
     const plan=planResourceTransfers(missing,canExtractResourceBundles()?this.index:null);

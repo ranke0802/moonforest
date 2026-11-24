@@ -9,6 +9,15 @@
 - 남은 시작 시 생성기(같은 측정): `monster-forest-terrain.js` 약 80ms, `plains-forest-edge.js` 약 20ms, `witch-cave-layout.js` 약 16ms. 다음 후보.
 - 기록 확인: 성능 기록 `metadata.fixedLayouts.lastWait.ms`가 지역 데이터를 실제로 기다린 시간이다(로딩 덮개 안).
 
+## 2026-11-24 · 성능 전수조사 후속 2~5: 계측 추가, 대조 결과 (warrior, 미배포)
+
+- **보관 원본(작업 2)**: Babylon은 컨텍스트 손실 복구용으로 버퍼로 만든 텍스처의 원본(KTX2·PNG 파일 바이트, 디코드된 그림)과 raw 텍스처의 픽셀을 JS 메모리에 GPU 사본과 별도로 둔다(`abstractEngine.createTexture`의 `_buffer`, `engine.rawTexture`의 `_bufferView`, `doNotHandleContextLost`가 꺼져 있을 때). glTF 텍스처는 모두 이 경로다. 0.3은 이 제자리 복구에 기대고 있다(0.2만 복구 안내창이 있다). 아이폰 진단의 184MiB는 GPU 추정치뿐이라 이 양이 빠져 있었다. 기록 초별 `retainedTextureSourceMB`, `metadata.textureMemory.retainedSourceMegabytes`·상위 행별 값을 추가했다. 크기는 아이폰 실측 전에는 원인으로 쓰지 않는다.
+  다음 최소 실험: 같은 아이폰·같은 경로(마을→평원→곰 첫 타격→곰 전투→마을)로 기록 1회 → 값이 크면 `doNotHandleContextLost`를 켠 비교 빌드(컨텍스트 손실 시 새로 불러오기 안내가 필요하다: 사용자 결정).
+- **경로 자산 추적(작업 2, 코드)**: 평원 `village-approach`(마을 외경)는 모든 LOD가 같은 4096 KTX2(10.2MB 파일)를 쓰고 터치에서도 보호 대상이라 평원 내내 4K다(`mobile-texture-policy.js`). 우두머리 늑대(4096, 10.8MB 파일)와 곰(2048 KTX2 교체)·고블린·주민은 장면 수명 라이브러리(`BossModelLibrary`)가 원본을 들고, 0.3에서는 맵 이동에서 해제하지 않는다(휴면 풀 정리 `trimDormantModels`는 0.2 전용, 그나마 복제만 정리). 곰 원본의 쓰이지 않는 이미지 2장(2048 PNG 5.4MB, 4096 PNG 8.4MB)은 glTF 재질이 참조하지 않아 런타임은 받지 않는다(매니페스트 목록에만 있음). 중복 할당·취소 후 잔여 작업은 코드에서 확인되지 않았다.
+- **재방문 준비(작업 4)**: 큰 준비 작업마다 Cache Storage 키 전체를 다시 읽는 것은 삭제 감지를 위한 기존 정책이라(`map-travel-prefetch.test.js`) 바꾸지 않았다. 방문별 키 목록 횟수·시간·항목 수, 단건 확인 횟수·시간(`metadata.resourceDownloadVisits`, 최근 8회), 매니페스트 no-cache 재확인 횟수·시간(`metadata.manifestReads`)을 기록한다. 네트워크 전송(`downloadBytes`)과 분리된다.
+- **대조(작업 3)**: 서비스 워커 보존 목록(`1cc8859e`·`0fc37bea`), 동굴 격자 지연(`10682d8f`), 늑대 클립·원본 공유(`81e7d57c`·`1a5c2dc6`), 주민 도착 준비(`6bdd4ecd`), 분할 업로드(`4f2fedeb`·`2ed157eb`), 고블린 KTX2·일반 몬스터 2K(`4fe627ec`)가 모두 공개 `0ef25f2c`의 조상이다. 관련 테스트 13개 파일: 기준 커밋과 실패가 같음(VM 자산 차이). CI 밖의 오래된 기대값: `wolf-v02-authored-attacks`(클립 9 vs 10, 그룹 21 vs 22) — 기준 커밋에서도 실패, 확인 필요.
+- **보류·분담(작업 5)**: 우두머리 늑대 원본·클립 해제 경로 없음(0.3) → 확인 필요. 고블린 색 텍스처 KTX2 → 완료(`4fe627ec`). 배회 종 휴면 풀 총량 제한(12)은 0.2만 → 0.3 확인 필요. 일괄 2K·셰이더 강제 정리·지역 전체 캐싱 → 사용자 결정 전 미적용. CI·구버전 배포·과거 빌드 저장소 비용은 플레이 성능과 따로 다룬다.
+
 ## 2026-11-23 23:40 · 23:13 기록 판독, 터치 상호작용 버튼, 기록 20분, 로딩 스크롤
 
 - 기록 `2026-11-23T14-13-26`(배포 6bdd4ecd, 같은 기기): 주민 2048 텍스처 5장이 모두 덮개 안(`covered`)에서 올라갔다. 도착 +5.5초 끊김 없음. 마을 덮개 약 2~3초(이전 약 5초).

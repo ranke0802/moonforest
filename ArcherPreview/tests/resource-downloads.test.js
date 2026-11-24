@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
-import {ResourceDownloads,resourceUrl} from '../src/resource-downloads.js';
+import {ResourceDownloads,resourceUrl,recentResourceDownloadStats} from '../src/resource-downloads.js';
 import {createLoadingView} from '../src/loading-view.js';
 const base='https://example.test/ArcherPreviewSite/assets/',a='content/'+'a'.repeat(64)+'.bin',b='content/'+'b'.repeat(64)+'.ktx2';
 function setup(){
@@ -104,4 +104,18 @@ test('initial loading curtain stays up after all download bytes until the first 
  view.download({loaded:25e6,total:100e6,ratio:.25});assert.equal(get('loading-text').textContent,'불러오는 중 (25.0/100.0MB)');assert.equal(get('loading-progress').style.width,'17.5%');assert.equal(doc.querySelector('[role="progressbar"]').getAttribute('aria-valuenow'),'18');
  view.download({loaded:100e6,total:100e6,ratio:1,complete:true});view.preparing();assert.equal(get('loading').hidden,false);assert.equal(doc.documentElement.dataset.loading,'true');
  assert.equal(get('loading-progress').style.width,'70%');view.reveal();assert.equal(get('loading-progress').style.width,'100%');assert.equal(get('loading').hidden,true);assert.equal(doc.documentElement.dataset.loading,undefined);
+});
+
+test('Cache Storage reads are counted apart from transfers: key lists, matches and their time',async()=>{
+ const names=Array.from({length:20},(_,i)=>'content/'+String(i).padStart(2,'0').repeat(32)+'.bin'),sizes=Object.fromEntries(names.map(n=>[n.split('/').at(-1),4]));
+ let clock=0,keyLists=0;const stored=new Set(names.map(n=>resourceUrl(n,base)));
+ const cache={async keys(){keyLists++;clock+=7;return [...stored].map(url=>({url}));},async match(url){clock+=2;return stored.has(url)?new Response(new Uint8Array(4)):undefined;},async put(){},async delete(){}};
+ const downloads=new ResourceDownloads(sizes,base,{cacheStorage:{async open(){return cache;}},now:()=>clock,fetcher:async()=>{throw new Error('no transfer expected');}});
+ await downloads.prepare(names);await downloads.prepare(names);await downloads.prepare(names.slice(0,3));
+ const stats=downloads.stats;
+ assert.equal(stats.jobs,3);assert.equal(stats.cacheKeyLists,2);assert.equal(keyLists,2,'each large job lists the keys again (the current policy)');
+ assert.equal(stats.cacheKeyListMs,14);assert.equal(stats.cacheKeyListMaxMs,7);assert.equal(stats.cacheEntries,20);
+ assert.equal(stats.cacheMatches,3);assert.equal(stats.cacheMatchMs,6);assert.equal(stats.downloadBytes,0);assert.equal(stats.cacheHits,43);
+ const recent=recentResourceDownloadStats();assert.deepEqual(recent.at(-1),{...stats});assert.notEqual(recent.at(-1),stats,'records get copies');
+ assert.ok(recent.length<=8);
 });
