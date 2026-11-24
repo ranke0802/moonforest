@@ -5,6 +5,7 @@ const supported=new Set(['monster-forest','witch-cave','village']);
 export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
   petsEnabled=new URLSearchParams(globalThis.location?.search).get('pets')!=='0',
   loadVillage=()=>import('./village-pets.js'),
+  campsEnabled=new URLSearchParams(globalThis.location?.search).get('chapterCamps')!=='0',
   loadCamp=()=>Promise.all([import('./chapter-wildlife.js'),import('./chapter-enemy-encounter.js')]),
   loadBeasts=()=>import('./corrupted-beasts.js'),onError=console.warn}) {
   let map=null, generation=0, actors=null, preparing=null, disposed=false;
@@ -23,12 +24,15 @@ export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
         const {createVillagePets}=await loadVillage();
         if(current())actors=createVillagePets(world);
       }else{
+        if(!campsEnabled)return;
         const [camp,enemies]=await loadCamp();
+        if(!current())return;
         const beasts=next==='witch-cave'?await loadBeasts():null;
         if(current())actors=camp.createChapterWildlife({world,battle,getPlayer,onDefeat,makeEnemies:enemies.createChapterEnemyFactory,
           makeBeasts:beasts?.createCorruptedBeastFactory,onError});
       }
-      if(current()&&getPlayer())await actors?.update(0,getPlayer().position);
+      const player=current()&&actors&&getPlayer();
+      if(player)await actors.update(0,player.position);
     })().catch(error=>{if(current())onError('[MoonForest] residents of '+next,error);});
     return preparing;
   }
@@ -36,6 +40,6 @@ export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
     if(!playing){if(map)leave();return;}
     if(paused)return;
     if(world.mapId!==map){if(map||supported.has(world.mapId))enter(world.mapId);return;}
-    const player=getPlayer();if(actors&&player)actors.update(dt,player.position);
+    if(actors){const player=getPlayer();if(player)actors.update(dt,player.position);}
   },dispose(){disposed=true;leave();}};
 }
