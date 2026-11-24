@@ -5,12 +5,12 @@ import {Matrix} from '@babylonjs/core/Maths/math.vector.js';
 // project its shadow into view. Unknown or multiple cameras use normal updates.
 export class AmbientView {
   planes = Frustum.GetPlanes(Matrix.Identity());
-  prepare(world) {
+  prepare(world, castsShadow = true) {
     const scene = world.scene, camera = scene?.activeCamera;
     this.valid = false;
     if (!camera?.getTransformationMatrix || scene.activeCameras?.length || camera.cameraRigMode) return;
     const lighting = world.lighting;
-    this.sun = scene.shadowsEnabled === false || lighting?.shadowsActive === false ? null : lighting?.key?.direction;
+    this.sun = !castsShadow || scene.shadowsEnabled === false || lighting?.shadowsActive === false ? null : lighting?.key?.direction;
     if (this.sun === undefined) return;
     const view = camera.getViewMatrix(), projection = camera.getProjectionMatrix();
     if (this.camera !== camera || this.viewId !== view.updateFlag || this.projId !== projection.updateFlag) {

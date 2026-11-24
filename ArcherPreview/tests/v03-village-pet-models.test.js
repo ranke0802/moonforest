@@ -2,10 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {setTimeout as delay} from 'node:timers/promises';
-import {NullEngine,Scene} from '@babylonjs/core';
+import {FreeCamera,NullEngine,Scene,Vector3} from '@babylonjs/core';
 import '@babylonjs/loaders/glTF/index.js';
 import {PET_MODELS} from '../src/v03/village-pet-assets.js';
 import {VILLAGE_PETS,createVillagePets} from '../src/v03/village-pets.js';
+import {AmbientView} from '../src/ambient-view.js';
 
 function nodeFixture(url){
   const bytes=readFileSync(url);
@@ -17,6 +18,7 @@ function nodeFixture(url){
   const p=doc.meshes[0].primitives[0],j=doc.skins[0].joints;
   assert.equal(doc.materials.length,1);assert.equal(doc.meshes.length,1);assert.ok(doc.accessors[p.indices].count/3<=6500);
   assert.deepEqual(doc.animations.map(a=>a.name),['Idle','Walk']);
+  assert.ok(!(doc.extensionsUsed??[]).some(name=>/audio/i.test(name)));
   assert.ok(j.length===12||j.length===24);assert.ok(doc.extensionsRequired.includes('KHR_texture_basisu'));
   const image=doc.bufferViews[doc.images[0].bufferView],base=image.byteOffset;
   assert.equal(payload.readUint32LE(base+20),2048);assert.equal(payload.readUint32LE(base+40),12);
@@ -60,5 +62,43 @@ for(const config of VILLAGE_PETS)test(config.id+' uses its toy-sized rig, shared
     assert.equal(scene.skeletons.length,1);
     pets.dispose();assert.equal(scene.skeletons.length,0);assert.equal(scene.animationGroups.length,0);
     assert.ok(body.isDisposed()&&shell.isDisposed());
+  }finally{pets.dispose();scene.dispose();engine.dispose();}
+});
+
+test('an actual dog behind the camera stops its skin tracks; camera orbit restores the walking dog on that draw',async t=>{
+  const engine=new NullEngine(),scene=new Scene(engine);
+  scene.useRightHandedSystem=true;
+  const cfg=VILLAGE_PETS[0],url=PET_MODELS[cfg.id],bytes=nodeFixture(url),[x,z]=cfg.origin;
+  const player={x,z},nav={free:()=>true,segmentClear:()=>true};
+  const camera=new FreeCamera('eye',new Vector3(x,.65,z-7),scene),front=new Vector3(x,.65,z),behind=new Vector3(x,.65,z-16);
+  camera.minZ=.1;camera.setTarget(front);
+  const world={scene,lighting:{key:{direction:new Vector3(0,-.05,-1)}},navigation:nav,terrain:{heightAt:()=>0}};
+  let imports=0;t.mock.method(globalThis,'fetch',async()=>{imports++;return new Response(bytes);});
+  const pets=createVillagePets(world,{models:{[cfg.id]:url}});
+  try{
+    pets.update(0,player);
+    for(let i=0;i<200&&!scene.getMeshByName(cfg.id+'-painted / silhouette');i++)await delay(5);
+    const body=scene.getMeshByName(cfg.id+'-painted'),shell=scene.getMeshByName(cfg.id+'-painted / silhouette');
+    const gait=scene.animationGroups.find(g=>g.name==='Walk');
+    const idle=scene.animationGroups.find(g=>g.name==='Idle');
+    assert.ok(gait.targetedAnimations.length>0);
+    assert.ok(gait.targetedAnimations.every(t=>t.animation.getEvents().length===0));
+    assert.ok(idle.targetedAnimations.every(t=>t.animation.getEvents().length===0));
+    for(let i=0;i<150;i++)pets.update(1/60,player);
+    assert.equal(gait.isPlaying,true);
+    const moving=body.parent.parent.position.clone();
+    camera.setTarget(behind);
+    const shadowView=new AmbientView();shadowView.prepare(world);
+    assert.equal(shadowView.hidden(x,.5,z,1.3),false,'a real caster could still project its shadow into view');
+    for(let i=0;i<30;i++)pets.update(1/60,player);
+    assert.equal(gait.isPlaying,false);assert.equal(idle.isPlaying,false);assert.equal(body.isEnabled(),false);assert.equal(shell.isEnabled(),false);
+    camera.setTarget(front);scene.render();
+    assert.equal(gait.isPlaying,true);assert.equal(body.isEnabled(),true);assert.equal(shell.isEnabled(),true);
+    const root=scene.getTransformNodeByName('v03-pet-'+cfg.id);
+    const travelled=Vector3.Distance(root.position,moving);
+    assert.ok(travelled>.05&&travelled<=cfg.speed*.5+.001,'reappears at the simulated location: '+travelled);
+    assert.ok(gait.getCurrentFrame()>gait.from);
+    assert.equal(imports,1);
+    pets.dispose();assert.equal(scene.skeletons.length,0);assert.equal(scene.animationGroups.length,0);
   }finally{pets.dispose();scene.dispose();engine.dispose();}
 });

@@ -58,14 +58,22 @@ async function loadVisual(scene,url,id,signal){
     attachCharacterOutlines(owner,'wolf',{skipBoneProof:true});
     const clips=new Map(owner.animationGroups.map(g=>[g.name,g]));
     for(const group of clips.values())group.stop();
-    let current;
+    let current,sleepClip=null,sleepFrame=0,sleepTime=0;
     return {
-      pose(x,y,z,yaw,walking,speed,visible){
+      pose(x,y,z,yaw,walking,speed,visible,clock=0){
         root.setEnabled(visible);
         const desired=visible?clips.get(walking?'Walk':'Idle'):null;
         if(current!==desired){
+          if(!visible&&current){sleepClip=current;sleepFrame=current.getCurrentFrame();sleepTime=clock;}
           current?.stop();current=desired;
-          current?.start(true,walking?speed:1);
+          if(current){
+            const rate=walking?speed:1;
+            current.start(true,rate);
+            const span=current.to-current.from,fps=current.targetedAnimations[0].animation.framePerSecond;
+            const phase=current===sleepClip&&span>0?(sleepFrame-current.from+(clock-sleepTime)*fps*rate)%span:0;
+            current.goToFrame(current.from+phase);
+            sleepClip=null;
+          }
         }
         if(visible){root.position.set(x,y,z);root.rotation.y=yaw;}
       },
@@ -77,12 +85,12 @@ async function loadVisual(scene,url,id,signal){
 // Created per playable village visit, disposed on title / travel. The pending
 // import owns late disposal, even when it finishes in another scene.
 export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=new AmbientView()}={}){
-  let disposed=false,pending=false,clock=0;
+  let disposed=false,pending=false,clock=0,nearSleepers=false,playerX=0,playerZ=0;
   const visit=new AbortController();
   const residents=VILLAGE_PETS.filter(s=>models[s.id]).map((config,i)=>{
     const home={x:config.origin[0],z:config.origin[1]};
     return {config,home,x:home.x,z:home.z,y:0,yaw:i*1.4,wait:1.2+i*.85,serial:i,
-      target:null,visual:null,nextCheck:0,lastUpdate:0,hidden:true,retryAt:0,anchored:false};
+      target:null,visual:null,nextCheck:0,lastUpdate:0,hidden:true,walking:false,retryAt:0,anchored:false};
   });
   function tickPet(p,elapsed){
     if(!p.target){
@@ -105,14 +113,43 @@ export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=
     }
     return walking;
   }
+  function advance(p,hidden){
+    const elapsed=Math.max(0,clock-p.lastUpdate),wasHidden=p.hidden,previousYaw=p.yaw;
+    p.lastUpdate=clock;p.nextCheck=clock+1;p.hidden=hidden;
+    const walking=elapsed>0?tickPet(p,elapsed):p.walking;
+    if(walking&&elapsed>0)p.y=world.terrain?.heightAt?.(p.x,p.z)??0;
+    if(hidden){
+      if(!wasHidden)p.visual.pose(p.x,p.y,p.z,p.yaw,false,1,false,clock);
+    }else if(wasHidden||walking||p.walking||previousYaw!==p.yaw){
+      p.visual.pose(p.x,p.y,p.z,p.yaw,walking,1,true,clock);
+    }
+    p.walking=walking;
+  }
+  // Camera input/follow can rotate the actual camera after the gameplay tick.
+  // Wake a newly revealed pet before mesh selection, even on a fast turn.
+  const draw=world.scene?.onBeforeRenderObservable;
+  const observer=draw?.add(()=>{
+    if(!nearSleepers||disposed)return;
+    const camera=view.camera,viewId=view.viewId,projId=view.projId,valid=view.valid;
+    view.prepare(world,false);
+    if(valid&&view.valid&&camera===view.camera&&viewId===view.viewId&&projId===view.projId)return;
+    for(const p of residents){
+      if(p.hidden&&p.visual&&(p.x-playerX)**2+(p.z-playerZ)**2<=HIDE_RADIUS**2&&!view.hidden(p.x,p.y+.5,p.z,1.3))advance(p,false);
+    }
+  });
   return {
     update(dt,player){
       if(disposed||!player||!residents.length||!world.navigation)return;
       clock+=Math.max(0,Math.min(.25,dt));
-      view.prepare(world);
+      nearSleepers=false;playerX=player.x;playerZ=player.z;
+      let viewReady=false;
       let candidate=null,best=LOAD_RADIUS**2;
       for(const p of residents){
         const d2=distance2(p,player);
+        // Pets only receive shadows. No offscreen pet can cast one into view.
+        if(!viewReady && (p.visual ? d2<=HIDE_RADIUS**2 : !pending&&d2<best&&clock>=p.retryAt)){
+          view.prepare(world,false);viewReady=true;
+        }
         if(!p.visual){
           if(d2<best&&!pending&&clock>=p.retryAt&&(d2<NEAR_PREP_RADIUS**2||!view.hidden(p.x,p.y+.5,p.z,1.3))){
             candidate=p;best=d2;
@@ -120,14 +157,11 @@ export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=
           continue;
         }
         const hidden=d2>HIDE_RADIUS**2||view.hidden(p.x,p.y+.5,p.z,1.3);
+        if(hidden&&d2<=HIDE_RADIUS**2)nearSleepers=true;
         if(hidden&&p.hidden&&clock<p.nextCheck)continue;
         // One-second offscreen steps preserve activity. On a turn, the same
         // clock advances the actor before its first visible pose is presented.
-        const elapsed=Math.max(0,clock-p.lastUpdate);
-        p.lastUpdate=clock;p.nextCheck=clock+1;p.hidden=hidden;
-        const walking=tickPet(p,elapsed);
-        if(walking)p.y=world.terrain?.heightAt?.(p.x,p.z)??0;
-        p.visual.pose(p.x,p.y,p.z,p.yaw,walking,1,!hidden);
+        advance(p,hidden);
       }
       if(candidate){
         const p=candidate;
@@ -151,7 +185,7 @@ export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=
     },
     dispose(){
       if(disposed)return;
-      disposed=true;visit.abort();
+      disposed=true;visit.abort();if(observer)draw.remove(observer);
       for(const p of residents){p.visual?.dispose();p.visual=null;}
     }
   };

@@ -28,7 +28,13 @@ for(const [strand,spread] of [['L',.12],['C',0],['R',-.12]]){
     [bone(3),bone(4),[-.15,-1,spread]]);
 }
 
-export function createRidingHorse({ world, root, storage, player, ridingAllowed, tell, forwardYaw, makeHorse = createWagonHorse, pose = createBonePose }) {
+export function createRidingHorse({ world, root, storage, player, ridingAllowed, tell, forwardYaw, makeHorse = createWagonHorse, pose = createBonePose,
+  enabled = new URLSearchParams(globalThis.location?.search).get('riding') !== '0' }) {
+  // A URL-only comparison: no horse load, listeners or reads/writes to the player's save.
+  if(!enabled){
+    const noop=()=>{};
+    return {offer:()=>false,reload:noop,leave:noop,updateAvailability:noop,afterMove:noop,active:false,dispose:noop};
+  }
   const doc = root.ownerDocument;
   const button = doc.createElement('button');
   button.type = 'button';
@@ -40,6 +46,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null, saddle = null;
   const contact = new Vector3(), correction = new Vector3(), local = new Vector3(), inverse = new Matrix();
   let labels = ridingLabels(doc), riderContact = null;
+  let checkedMap=null, nextOfferCheck=0;
   const display = () => {
     labels = ridingLabels(doc);
     button.hidden = !owned || !available;
@@ -48,6 +55,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   };
   function leave() {
     ++generation;
+    checkedMap=null;
     if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
     poseObserver=null;
     if (lift && !lift.isDisposed()) {lift.position.set(0,0,0);lift.rotation.z=0;}
@@ -101,9 +109,17 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       display();tell(labels.mounted);
     } catch { if (token === generation) { leave(); tell(ridingLabels(doc).loadError); } }
   }
-  function updateAvailability() {
+  function updateAvailability(now) {
     if (!owned) return;
+    now??=performance.now();
     if (horse && world.mapId !== mountMap) leave();
+    // On foot only the button depends on this check, which scans all enemies.
+    // Clicks, pending mounts and active rides still test eligibility immediately.
+    if(!horse && checkedMap===world.mapId && now<nextOfferCheck){
+      if(labels!==ridingLabels(doc))display();
+      return;
+    }
+    checkedMap=world.mapId;nextOfferCheck=now+150;
     const value = OUTDOORS.has(world.mapId) && ridingAllowed();
     if (value !== available) { available = value; if (!value && horse) leave(); else display(); }
     else if (labels !== ridingLabels(doc)) display();

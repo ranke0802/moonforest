@@ -13,15 +13,15 @@ function harness({delay=false}={}) {
   const world = {mapId:'great-plains',terrain:{heightAt:()=>0}};
   const saddle = {position:new Vector3(),rotation:new Vector3(),parent:{computeWorldMatrix:()=>Matrix.IdentityReadOnly},isDisposed:()=>false};
   const actor = {position:{x:1,z:2},rotation:{y:0},metadata:{saddleOffset:saddle},getChildMeshes:()=>[]};
-  let wallet = true, disposeCount=0, loads=0, finish;
+  let wallet = true, disposeCount=0, loads=0, scans=0, finish;
   const clips=[],notices=[];
   const stable=createRidingHorse({root:{ownerDocument:doc,querySelector:()=>({append(){}})},world,player:()=>actor,
-    storage,ridingAllowed:()=>wallet,forwardYaw:()=>0,tell:text=>notices.push(text),
+    storage,ridingAllowed:()=>{scans++;return wallet;},forwardYaw:()=>0,tell:text=>notices.push(text),
     pose:()=>({ready:true,hips:{computeWorldMatrix(){},get absolutePosition(){return new Vector3(0,1+saddle.position.y,0);}},apply(){}}),
     makeHorse:()=>{loads++;return {ready:delay?new Promise(r=>{finish=r;}):Promise.resolve({}),play:c=>clips.push(c),
       saddleContactToRef(v){v.set(0,1.48,0);return true;},speed(){},place(){},dispose(){disposeCount++;}};}});
   return {stable,button,doc,clips,notices,world,slot,saddle,click:()=>handlers.get('click')(),finish:()=>finish({}),
-    combat:()=>{wallet=false;},loads:()=>loads,disposed:()=>disposeCount};
+    combat:()=>{wallet=false;},scans:()=>scans,loads:()=>loads,disposed:()=>disposeCount};
 }
 test('the driver grants the horse to the current save; only mounting loads the model',async()=>{
   const h=harness();h.stable.updateAvailability();assert.equal(h.button.hidden,true);
@@ -46,4 +46,20 @@ test('late horse imports cannot survive a map departure or reattach a rider',asy
   const loading=h.click();h.world.mapId='village';h.stable.updateAvailability();h.finish();await loading;
   assert.equal(h.stable.active,false);assert.equal(h.disposed(),1);assert.deepEqual(h.clips,[]);
   h.world.mapId='witch-cave';h.stable.updateAvailability();assert.equal(h.button.hidden,true);
+});
+test('on foot the mount hint samples combat without per-frame scans and clicks still check immediately',async()=>{
+  const h=harness();
+  for(let i=0;i<600;i++)h.stable.updateAvailability(100+i*1000/60);
+  assert.equal(h.scans(),0);h.stable.offer();
+  for(let i=0;i<600;i++)h.stable.updateAvailability(10100+i*1000/60);
+  assert.ok(h.scans()>=60&&h.scans()<=67);
+  assert.equal(h.loads(),0);assert.equal(h.button.hidden,false);
+  h.combat();await h.click();assert.equal(h.loads(),0);assert.equal(h.stable.active,false);
+});
+test('the riding URL switch skips the horse UI and does not read or write ownership',t=>{
+  t.mock.method(URLSearchParams.prototype,'get',key=>key==='riding'?'0':null);
+  const stable=createRidingHorse({});
+  stable.reload();assert.equal(stable.offer(),false);
+  stable.updateAvailability();stable.afterMove({},0);stable.leave();stable.dispose();
+  assert.equal(stable.active,false);
 });

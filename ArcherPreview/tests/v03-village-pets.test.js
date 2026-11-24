@@ -4,6 +4,7 @@ import {setImmediate as untilLoaded} from 'node:timers/promises';
 import {villageObstacles} from '../src/village-layout.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {createVillagePets,pickPetStep,VILLAGE_PETS} from '../src/v03/village-pets.js';
+import {createChapterResidentVisits} from '../src/v03/chapter-resident-visits.js';
 
 const nav=new VillageNavigation(villageObstacles());
 const dog=VILLAGE_PETS[0],here={x:dog.origin[0],z:dog.origin[1]};
@@ -65,9 +66,21 @@ test('offscreen animals suspend their pose then restore their current location o
   assert.ok(poses.some(p=>p[4]&&p[6]));
   hide=true;pets.update(1/60,here);const start=poses.length;
   for(let i=0;i<120;i++)pets.update(1/60,here);
-  assert.ok(poses.length-start<=2);
+  assert.equal(poses.length,start);
   const [x,,z]=poses.at(-1);
   hide=false;pets.update(1/60,here);
-  assert.ok(poses.at(-1)[6]);assert.ok(Math.hypot(poses.at(-1)[0]-x,poses.at(-1)[2]-z)<=dog.speed*1.02);
+  const travelled=Math.hypot(poses.at(-1)[0]-x,poses.at(-1)[2]-z);
+  assert.ok(poses.at(-1)[6]);assert.ok(travelled>0&&travelled<=dog.speed*(121/60)+1e-6);
   pets.dispose();
+});
+
+test('the pets URL switch skips the village module and a distant visitor needs no camera work',async t=>{
+  t.mock.method(URLSearchParams.prototype,'get',key=>key==='pets'?'0':null);
+  const visits=createChapterResidentVisits({world:{mapId:'village',scene:{}},getPlayer:()=>({position:here}),
+    loadVillage:()=>assert.fail('disabled village pets still imported')});
+  await visits.enter('village');visits.update(1/60,true);visits.dispose();
+  const distant=createVillagePets(world,{view:{prepare(){assert.fail('no nearby resident');}},
+    load:()=>assert.fail('no nearby resident')});
+  for(let i=0;i<600;i++)distant.update(1/60,{x:90,z:90});
+  distant.dispose();
 });
