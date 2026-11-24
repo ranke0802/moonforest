@@ -36,6 +36,7 @@ import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {selectPlayerTextureProfile,playerTextureCapabilities} from './player-texture-profile.js';
 import {setupPlayerTextureSettings} from './player-texture-settings.js';
+import {setupBuildingTextureSettings} from './building-texture-settings.js';
 import {setFrameWorkContext,frameWorkSnapshot} from './frame-work-coordinator.js';
 import {prepareModelShaders} from './boss-shader-warmup.js';
 import {createBossPreparation} from './boss-preparation.js';
@@ -267,6 +268,9 @@ const v03RawStorage=equipmentStorage;
 equipmentStorage=releaseStorage(equipmentStorage,versionRoute.release);
 // 0.3 keeps its own preferences; progress lives in a save slot (journeyStorage).
 if(versionRoute.edition)equipmentStorage=editionStorage(v03RawStorage,equipmentStorage,versionRoute.edition);
+const buildingTextures=versionRoute.edition&&!versionRoute.worldRevision
+  ?setupBuildingTextureSettings({host:$('.settings-display-options'),storage:equipmentStorage}):null;
+if(import.meta.hot)import.meta.hot.dispose(()=>buildingTextures?.dispose());
 const movementSpeedSettings=setupMovementSpeedSettings({host:$('#common-speed-settings .settings-section-body'),storage:equipmentStorage,onChange:value=>controller?.setMovementSpeed?.(value)});
 const swordTrailSettings=setupSwordTrailSettings({host:$('.settings-display-options'),storage:equipmentStorage,onChange:value=>{swordTrail?.setEnabled(value);renderActivity.wake();frameLoop?.invalidate();}});
 const interiorInkSettings=setupInteriorInkSettings({...(versionRoute.edition?{key:'moonforest-interior-ink-v3'}:null),host:$('.settings-display-options'),storage:equipmentStorage,onToggle:setInteriorLinesEnabled,onChange:()=>{renderActivity.wake();frameLoop?.invalidate();}});
@@ -1124,6 +1128,10 @@ function render(dt) {
   statusTime += dt;
   if (statusTime > .5) { const fps=Math.round(engine.getFps());text('#live-fps',refreshMeter.hz?`${fps} FPS · ${refreshMeter.hz}Hz`:`${fps} FPS`);$('#render-status').textContent = `${fps} FPS · ${engine.getRenderWidth()}×${engine.getRenderHeight()} · 최대 ${engine.maxFPS} FPS · ${ready ? 'LIVE' : 'LOADING'}`; statusTime = 0; }
   const sceneCallStart=frameDiagnostics.mark();
+  if(world.plainsDecor && versionRoute.edition && !versionRoute.worldRevision){
+    const exploring=simulateFrame&&ready&&!loadingAsset&&!mapTransition?.busy&&world.v03?.playing&&!world.v03.story?.sceneActive&&boss?.playerAlive&&!boss.combatCount;
+    world.plainsDecor.updateLeaves(dt,actor?.position,exploring);
+  }
   world.scene.render(!world.caveCamera?.applied);
   frameDiagnostics.measure('sceneCallMs',sceneCallStart);
   const projectedHudStart=frameDiagnostics.mark();
@@ -1190,6 +1198,7 @@ try {
   applyRenderQuality();
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
   world.release=versionRoute.release;world.edition=versionRoute.edition??null;
+  world.buildingTextureSettings=buildingTextures;
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.weather=weatherSettings;weatherSettings.mapChanged();world.dayCycle?.mapChanged();
   world.frameDiagnostics=frameDiagnostics;
