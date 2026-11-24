@@ -1,5 +1,6 @@
 // The editor ships both prebuilt layouts in its own lazy chunk and shares them with the game.
 import villageLayout from './generated/village-placements.js';
+import {settlementBase} from './v03/settlement-scenery.js';
 import plainsLayout from './generated/great-plains-placements.js';
 import {installFixedLayout} from './fixed-layouts.js';
 import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js';
@@ -48,6 +49,7 @@ export function basePlacementEditability(mapId,source,asset){
 }
 
 export function createBasePlacementManifest(mapId,{catalog,placements=layouts[mapId]}={}){
+ placements=settlementBase(placements);
  if(!PLACEMENT_MAPS.includes(mapId)||!Array.isArray(placements))fail('mapId','unsupported map');
  const seen=new Set(),instances=placements.map(source=>{
   if(seen.has(source.id))fail('base.instanceId','duplicate authored ID: '+source.id);seen.add(source.id);

@@ -2,6 +2,7 @@ import {instantiateStaticMap} from './static-map-instances.js';
 import {loadMapContainer} from './map-container.js';
 import {readMapManifest} from './map-manifests.js';
 import {villagePlacements} from './fixed-layouts.js';
+import {plainsGateAssets} from './v03/settlement-scenery.js';
 import outskirtsManifest from '../public/assets/village-plains-outskirts.json' with {type:'json'};
 import {applyVillagePlainsOutskirtsGround} from './village-plains-outskirts-ground.js';
 import {createVillageTransform} from './village-environment.js';
@@ -66,7 +67,8 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
   const original=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));checkMapLoadSnapshot(world,snapshot,lifetime);
   // The village's approved 25-asset graph stays intact. A bounded reciprocal
   // vista reuses its sources and this same streaming/lifetime path, town only.
-  const manifest=world.mapId==='village'?{...original,assets:{...original.assets,...outskirtsManifest.assets}}:original;
+  const manifest=world.mapId==='village'?{...original,assets:{...original.assets,...outskirtsManifest.assets}}:
+    world.gameplayV03&&world.plains?{...original,assets:{...original.assets,...plainsGateAssets}}:original;
   if(world.villagePrepared)return world.villagePrepared;
   if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice,world.gameplayV03),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));

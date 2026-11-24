@@ -1,0 +1,52 @@
+{
+  "watchtower": {
+    "height": 8,
+    "bounds": [
+      3.0102648735046387,
+      8,
+      3.823409080505371
+    ],
+    "frontYawOffset": 0,
+    "far": {
+      "level": 2,
+      "model": "./content/eecd66be347ebac7c84b69a638d1522029496766437aec92dacf520404fee5c9.gltf",
+      "resources": [
+        "./content/ab13fb1a07b109678565b60fa2da94ca5e021122c0ad0230806ff58430cb50a4.bin",
+        "./content/dcb57e6d6dfcd69c5afe662d3cf2c703fc9169c951802dc94a975b12ccef7de1.bin",
+        "./content/8c8d965b8125ea04481e85cdd07ea4fc38a9c671625c29a3be376a414957fe8c.bin",
+        "./content/bf7d6bb6360c31adb2fe9abd36f9a5d10e998ff51e27f11358218ee2d4aa4cf0.bin",
+        "./content/f4f17a2369d8f4b6aab4395f5bdc56e7eea4b48ca638f1dd949e071a43719d89.ktx2",
+        "./content/eecd66be347ebac7c84b69a638d1522029496766437aec92dacf520404fee5c9.gltf"
+      ],
+      "triangles": 2393,
+      "textureSize": 256,
+      "normalMap": false,
+      "bytes": 172339
+    }
+  },
+  "wood-01-palisade": {
+    "height": 2.6,
+    "bounds": [
+      2.2280797958374023,
+      2,
+      0.4653310179710388
+    ],
+    "frontYawOffset": 0,
+    "far": {
+      "level": 2,
+      "model": "./content/267e3b48cfd9b461ed9d21b568a872c5bbb5893988b8a744dac50e1e2c680c48.gltf",
+      "resources": [
+        "./content/48a80aab0f128b6b6423a583dab7479a0a4873d3237768899441ef331e3631e0.bin",
+        "./content/5fd7d831367a5dcbfbcf716efeef90b99ac959eab03f420433eded3ab2b45159.bin",
+        "./content/5cee0140b86ff246cc0d3ce510ec7e63b8a9d53c1acad85f68eaf7d6356937be.bin",
+        "./content/fb25073f7b8287bd0868a8f9b16052dc5477b9c81498551222eaa46c75b8148a.bin",
+        "./content/e7049e71324e12deba9f137f22be54245804eda8be3cfc06946eeebc0f286681.ktx2",
+        "./content/267e3b48cfd9b461ed9d21b568a872c5bbb5893988b8a744dac50e1e2c680c48.gltf"
+      ],
+      "triangles": 1647,
+      "textureSize": 256,
+      "normalMap": false,
+      "bytes": 118032
+    }
+  }
+}
