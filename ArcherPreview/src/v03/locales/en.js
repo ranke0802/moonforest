@@ -102,6 +102,7 @@ export default {
   },
  },
  legacy:{
+  '건물 텍스처':'Building textures','일반 · 2K':'Standard · 2K','고화질 · 4K':'High · 4K',
   "진단 JSON 다운로드":"Download diagnostic JSON","진단 JSON 다운로드를 요청했습니다.":"The diagnostic JSON download was requested.","파일 저장을 열지 못했습니다. 기록 복사를 눌러 주세요.":"Could not open the download. Select Copy record.",'몬트하임 마을':'Mondheim Village','윈드몬 대평원':'Windmourn Plains',
   '이동':'Move','설정':'Settings','마을':'Village','대평원':'Windmourn Plains','마물의 숲':'Forest of Fiends','마녀의 동굴':"Witch's Cave",'숲의 경계 마을':"Mondheim Village",
   '고화질':'High','균형':'Balanced','절전':'Battery saver','지역 이동':'Travel','검 공격':'Sword','방패 밀치기':'Shield bash','회피':'Dodge','물약':'Potion','달리기':'Run','달리기 이동':'Run','피격':'Hit',

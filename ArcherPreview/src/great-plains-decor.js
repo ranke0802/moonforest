@@ -1,6 +1,7 @@
 import {Color3,DynamicTexture,Mesh,MeshBuilder,StandardMaterial} from '@babylonjs/core';
 import {plainsPlacements} from './fixed-layouts.js';
 import {createPlainsRiver} from './plains-river.js';
+import {createPlainsLeafDrift} from './plains-leaf-drift.js';
 
 // Authored route signage and a single-pass flowing river. This owns every
 // resource it creates and is disposed before a new map is made visible.
@@ -23,7 +24,10 @@ export function configurePlainsDecor(world){
  for(const p of placements.filter(p=>p.boundaryMarker))label('church-marker-'+p.id,['✥','숲길 경계'],p.x,p.z+.25,.7,.48,.45);
  for(const p of placements.filter(p=>p.lootTier))label('chest-tier-'+p.id,[p.lootTier===2?'II':'I','보급함'],p.x,p.z+.5,.62,.42,.21);
  for(const mesh of meshes){mesh.isPickable=false;if(!mesh.billboardMode)mesh.freezeWorldMatrix();}
- let disposed=false;const observer=scene.onDisposeObservable.addOnce(()=>dispose());
- const dispose=()=>{if(disposed)return;disposed=true;scene.onDisposeObservable.remove(observer);river.dispose();for(const m of meshes)if(m!==river.mesh)m.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();};
- world.plainsDecor={dispose,meshes,river,tick:seconds=>river.tick(seconds)};
+ let leaves=null,disposed=false;const observer=scene.onDisposeObservable.addOnce(()=>dispose());
+ const dispose=()=>{if(disposed)return;disposed=true;scene.onDisposeObservable.remove(observer);leaves?.dispose();river.dispose();for(const m of meshes)if(m!==river.mesh)m.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();};
+ world.plainsDecor={dispose,meshes,river,tick:seconds=>river.tick(seconds),updateLeaves(dt,player,allowed){
+   if(!leaves&&allowed)leaves=createPlainsLeafDrift(world);
+   leaves?.update(dt,player,allowed);
+ }};
 }
