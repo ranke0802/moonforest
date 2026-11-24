@@ -9,6 +9,7 @@ import {Color3} from '@babylonjs/core/Maths/math.color.js';
 import {TransformNode} from '@babylonjs/core/Meshes/transformNode.js';
 
 export const ACTOR_VISUALS=Object.freeze({
+ smith:{label:'대장장이',color:'#8c5743',height:1.75},
  driver:{label:'마부',color:'#8a6a45',height:1.7},
  innkeeper:{label:'여관 주인',color:'#c98a3a',height:1.72},
  elder:{label:'노년 여성',color:'#9bb37a',height:1.5},

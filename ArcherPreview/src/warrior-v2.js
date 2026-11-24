@@ -45,7 +45,7 @@ export class WarriorV2Controller {
     if(this.staminaEnabled&&cost){this.stamina=Math.max(0,this.stamina-cost);this.staminaSpent=true;}
     return true;
   }
-  restoreStamina(seconds){if(this.staminaEnabled&&seconds>0)this.stamina=Math.min(this.maxStamina,this.stamina+V2_STAMINA_REGEN*seconds);}
+  restoreStamina(seconds){if(this.staminaEnabled&&seconds>0)this.stamina=Math.min(this.maxStamina,this.stamina+V2_STAMINA_REGEN*(this.staminaRecoveryScale??1)*seconds);}
   restoreJudgmentRecovery(from,to,rate){if(rate>0)this.restoreStamina(Math.max(0,to-Math.max(from,V2_JUDGMENT_RECOVERY_START))/rate);}
   resetStamina(){this.cancelShieldInput();this.stamina=this.maxStamina;this.staminaSpent=false;this.setSprintHeld(false);}
   setSprintHeld(held,initialFrameSeconds){

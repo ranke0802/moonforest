@@ -348,6 +348,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     // Setting the wagon up: the step completes when it stands again (updateLift).
     const heave=played.some(line=>line.effects?.includes('right-wagon'));
     if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
+    if(!disposed&&(member.npc.id==='smith'||member.npc.id==='herbalist'))await api.openTownShop?.(member.npc.id);
    }
   }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
   return true;

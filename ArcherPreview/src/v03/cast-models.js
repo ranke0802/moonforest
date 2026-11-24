@@ -14,6 +14,7 @@ import {AmbientView} from '../ambient-view.js';
 
 export const CAST_MODELS=Object.freeze({
  driver:'moonforest-tripo-blacksmith',
+ smith:'moonforest-resident2-blacksmith',
  innkeeper:'moonforest-tripo-farmer',
  elder:'moonforest-tripo-elder-woman',
  herbalist:'moonforest-tripo-herbalist',

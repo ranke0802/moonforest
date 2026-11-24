@@ -25,6 +25,7 @@ export const NPCS=Object.freeze([
  {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-72.87,z:-30.14,yaw:.42,idle:'driver-idle'},
  {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle'},
+ {id:'smith',name:'대장장이',visual:'smith',map:'village',x:7.4,z:3.5,yaw:-1.4,idle:'smith-idle'},
  {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle'},
  {id:'chief',name:'촌장',visual:'chief',map:'village',x:7.2,z:9.4,yaw:-2.2,idle:'chief-idle'},
  {id:'youth',name:'청년',visual:'youth',map:'village',x:-5.2,z:5.6,yaw:1.6,idle:'youth-idle'},
@@ -129,6 +130,7 @@ export const DIALOGUES=Object.freeze({
   {who:'나',text:'(받은 건 또렷이 기억하는데, 준 건 기억을 못 하네.)'},
  ],
  'elder-idle':[{who:'노년 여성',text:'그 아이가 돌아오면… 이번엔 내가 밥이라도 해 먹여야지.'}],
+ 'smith-idle':[{who:'대장장이',text:'손잡이 감은 매듭을 보니 네 검이구나. 어릴 적엔 저 모루에도 손이 안 닿더니. 자, 어디 한번 보자.'}],
  'herbalist-witness':[
   {who:'약초사',text:'성녀님은 제 약통을 자주 빌려 가셨어요. 늘 꽉 채워서 돌려주셨고요.'},
   {who:'약초사',text:'마지막 통은 돌아오지 않았어요. 그 무렵에 요아힘 씨가… 그렇게 됐으니까요.'},

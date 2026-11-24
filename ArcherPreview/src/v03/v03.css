@@ -572,3 +572,4 @@ html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch]
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face svg{stroke-width:1.35}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face b{display:none}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #live-fps{font-variant-numeric:tabular-nums;font-size:clamp(10px,1.55vmin,13px);white-space:nowrap}
+.mf-treasure-prompt{position:absolute;z-index:9;left:50%;bottom:18%;transform:translateX(-50%);pointer-events:auto;background:#201e26e3;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;font:inherit;min-height:2.65rem;padding:.35rem .65rem;cursor:pointer}.mf-treasure-prompt[hidden]{display:none}

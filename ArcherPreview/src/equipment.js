@@ -1,4 +1,4 @@
-import { MaterialPluginBase, SceneLoader } from '@babylonjs/core';
+import { MaterialPluginBase, SceneLoader, VertexData } from '@babylonjs/core';
 import { equipmentStyle } from './equipment-stats.js';
 export { EQUIPMENT_STYLES, equipmentStyles } from './equipment-stats.js';
 // Swords with their own shape (equipment-stats.js SWORD_MODELS), fitted to the standard sword's local frame.
@@ -73,10 +73,29 @@ class EquipmentPalette extends MaterialPluginBase {
   }
 }
 
+function trophyBladeGeometry(base,profile){
+  const result=base.copy('trophy-'+profile),positions=base.getVerticesData('position');
+  if(!positions)return result;
+  const vertices=Float32Array.from(positions);
+  for(let i=0;i<vertices.length;i+=3){
+    const t=Math.max(0,Math.min(1,(.52-vertices[i+1])/1.47)),bend=Math.sin(Math.PI*t);
+    if(!t)continue;
+    if(profile==='knife')vertices[i]*=1-.34*bend;
+    if(profile==='great')vertices[i]*=1+.60*bend;
+    if(profile==='ritual')vertices[i]+=.048*Math.sin(Math.PI*t*3)*bend;
+    if(profile==='fang')vertices[i]+=.080*bend*t;
+    if(profile==='cleaver'){vertices[i]*=1+.8*bend*t;vertices[i]+=.056*t;}
+  }
+  result.setVerticesData('position',vertices);
+  const indices=result.getIndices();
+  if(indices){const normals=new Float32Array(vertices.length);VertexData.ComputeNormals(vertices,indices,normals);result.setVerticesData('normal',normals);}
+  return result;
+}
+
 export class WarriorEquipment {
   // loadModel(url, scene) resolves an asset container holding one mesh (tests pass their own).
   constructor(container, choices = {}, { loadModel = (url, scene) => SceneLoader.LoadAssetContainerAsync(url.href ?? String(url), '', scene, undefined, '.glb') } = {}) {
-    this.slots = {}; this.loadModel = loadModel; this.shapes = new Map(); this.shapeTicket = 0; this.disposed = false;
+    this.slots = {}; this.loadModel = loadModel; this.shapes = new Map(); this.blades = new Map(); this.shapeTicket = 0; this.disposed = false;
     for (const [slot, name] of Object.entries(MESH_NAMES)) {
       const mesh = container.meshes.find(candidate => candidate.name === name);
       if (!mesh?.material?.emissiveTexture) throw new Error(`${name}: 장비 재질을 찾지 못했습니다.`);
@@ -105,8 +124,10 @@ export class WarriorEquipment {
   }
   // The sword's shape: null is the standard sword. A model is loaded once (a small file, on first use) and its
   // geometry and painting are put on the standard sword's mesh and on its outline shell, which share one geometry.
-  shape(model) {
-    const entry = this.slots.sword; if (!entry || (entry.model ?? null) === (model ?? null)) return;
+  shape(model, profile = '') {
+    const entry = this.slots.sword;
+    if (!entry || ((entry.model ?? null) === (model ?? null) && (entry.profile ?? '') === profile)) return;
+    entry.profile = profile;
     entry.model = model ?? null; const ticket = ++this.shapeTicket;
     if (!model) { this.wear(null); return; }
     const url = SWORD_MODEL_URLS[model]; if (!url) return;
@@ -115,9 +136,23 @@ export class WarriorEquipment {
     pending.then(container => { if (this.disposed) { container.dispose(); return; } if (ticket === this.shapeTicket) this.wear(container); })
       .catch(error => { this.shapes.delete(model); console.warn('[Equipment] sword model unavailable', model, error); });
   }
+  // Trophy blades keep the authored grip, tip reach, UVs and rig mount.
+  // One derived geometry is shared by the blade and its existing outline.
+  selectTrophy(finish,profile='') {
+    const entry=this.slots.sword;if(!entry)return;
+    const style=equipmentStyle('sword',finish);
+    entry.palette.variant=style.value;entry.style=style.id;
+    this.shape(style.model??null,profile);
+  }
   wear(container) {
     const entry = this.slots.sword, standard = entry.geometry ??= entry.mesh.geometry;
-    const source = container?.meshes.find(mesh => mesh.getTotalVertices?.() > 0), next = source?.geometry ?? standard;
+    const source = container?.meshes.find(mesh => mesh.getTotalVertices?.() > 0), base = source?.geometry ?? standard;
+    let next=base;
+    if(entry.profile){
+      const key=base.uniqueId+'/'+entry.profile;
+      if(!this.blades.has(key))this.blades.set(key,trophyBladeGeometry(base,entry.profile));
+      next=this.blades.get(key);
+    }
     for (const mesh of [entry.mesh, ...entry.mesh.getChildMeshes(true)]) if (mesh.geometry && mesh.geometry !== next && (mesh === entry.mesh || mesh.geometry === entry.worn || mesh.geometry === standard)) next.applyToMesh(mesh);
     entry.worn = next;
     const painting = source?.material?.albedoTexture ?? source?.material?.diffuseTexture ?? source?.material?.emissiveTexture;
@@ -126,9 +161,9 @@ export class WarriorEquipment {
   inspect() { return Object.fromEntries(Object.entries(this.slots).map(([slot, entry]) => [slot, entry.style])); }
   dispose() {
     this.disposed = true; this.shapeTicket++;
-    if (this.slots.sword?.geometry) this.wear(null);
+    if (this.slots.sword?.geometry) {this.slots.sword.profile='';this.wear(null);}
     for (const pending of this.shapes.values()) pending.then(container => container.dispose()).catch(() => {});
-    this.shapes.clear();
+    this.shapes.clear();for(const geometry of this.blades.values())geometry.dispose();this.blades.clear();
     for (const entry of Object.values(this.slots)) {
       entry.mesh.material = entry.original;
       // Both variants share the original map; the asset container owns that texture.

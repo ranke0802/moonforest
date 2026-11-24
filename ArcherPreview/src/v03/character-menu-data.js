@@ -14,6 +14,7 @@ function gearName(slot,style){
 }
 
 export function characterItems(state){
+  if(Array.isArray(state.tradeBag))return state.tradeBag;
   const items=[];
   const equipped=equipmentStats(state.equipment);
   for(const slot of ['sword','shield']){

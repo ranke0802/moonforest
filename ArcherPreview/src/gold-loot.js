@@ -7,12 +7,12 @@ export class GoldLoot {
     this.storage=storage;this.onBalance=onBalance;this.drops=[];this.serial=0;this.balance=0;this.credits={};this.saveState='new';this.volatile=false;this._expectedLedger=null;this._blocked=false;
     if(!storage||storage.available===false){this.saveState='unavailable';this.volatile=true;}
     try{const value=Number(storage?.getItem(STORAGE_KEY));if(Number.isSafeInteger(value)&&value>=0)this.balance=value;}catch{this.saveState='failed';this.volatile=true;}
-    try{const raw=storage?.getItem(LEDGER_KEY)??null;this._expectedLedger=raw;const ledger=JSON.parse(raw);if(raw!==null){if(ledger?.version!==1||!Number.isSafeInteger(ledger.balance)||ledger.balance<0)throw new Error('잘못된 골드 저장');this.balance=ledger.balance;for(const [k,v]of Object.entries(ledger.credits??{}))if(/^[a-zA-Z0-9:_-]{1,90}$/.test(k)&&Number.isSafeInteger(v)&&v>=0)this.credits[k]=v;this.saveState='saved';}}catch{this._blocked=true;this.saveState='corrupt';this.volatile=true;}
+    try{const raw=storage?.getItem(LEDGER_KEY)??null;this._expectedLedger=raw;const ledger=JSON.parse(raw);if(raw!==null){if(ledger?.version!==1||!Number.isSafeInteger(ledger.balance)||ledger.balance<0)throw new Error('잘못된 골드 저장');this.balance=ledger.balance;if(ledger.town&&typeof ledger.town==='object')this.town=ledger.town;for(const [k,v]of Object.entries(ledger.credits??{}))if(/^[a-zA-Z0-9:_-]{1,90}$/.test(k)&&Number.isSafeInteger(v)&&v>=0)this.credits[k]=v;this.saveState='saved';}}catch{this._blocked=true;this.saveState='corrupt';this.volatile=true;}
     this.onBalance(this.balance);
   }
   // Re-reads the balance from storage (0.3: a new game in another slot without a reload).
-  reload(){const fresh=new GoldLoot({storage:this.storage});for(const key of ['balance','credits','saveState','volatile','_expectedLedger','_blocked'])this[key]=fresh[key];this.drops.length=0;this.onBalance(this.balance);}
-  snapshot(){return {version:1,balance:this.balance,credits:{...this.credits}};}
+  reload(){const fresh=new GoldLoot({storage:this.storage});for(const key of ['balance','credits','town','saveState','volatile','_expectedLedger','_blocked'])this[key]=fresh[key];this.drops.length=0;this.onBalance(this.balance);}
+  snapshot(){return {version:1,balance:this.balance,credits:{...this.credits},...(this.town?{town:this.town}:{})};}
   persist(){if(!this.storage||this.storage.available===false){this.saveState='unavailable';this.volatile=true;return false;}if(this._blocked)return false;try{if((this.storage.getItem(LEDGER_KEY)??null)!==this._expectedLedger){this.saveState='conflict';this.volatile=true;return false;}const raw=JSON.stringify(this.snapshot());this.storage.setItem(LEDGER_KEY,raw);if(this.storage.getItem(LEDGER_KEY)!==raw)throw new Error('골드 저장 확인 실패');this._expectedLedger=raw;this.saveState='saved';this.volatile=false;try{this.storage.setItem(STORAGE_KEY,String(this.balance));}catch{/* The atomic ledger is authoritative; the legacy key is only a mirror. */}return true;}catch{this.saveState='failed';this.volatile=true;return false;}}
   creditCumulative(source,total){if(!/^[a-zA-Z0-9:_-]{1,90}$/.test(source)||!Number.isSafeInteger(total)||total<0)return 0;const delta=Math.max(0,total-(this.credits[source]??0));if(!delta)return 0;const granted=Math.min(delta,Number.MAX_SAFE_INTEGER-this.balance);this.credits[source]=total;this.balance+=granted;this.persist();this.onBalance(this.balance);return granted;}
   drop(kind,position,{canLand=()=>true,heightAt=null}={}) {
@@ -35,6 +35,17 @@ export class GoldLoot {
     }
     if(collected.length){this.persist();this.onBalance(this.balance);}
     return collected;
+  }
+  // Purchases, ground pickups and chest markers commit in the same ledger entry as the gold debit.
+  tradeTown(delta, town){
+    if(!Number.isSafeInteger(delta)||!Number.isSafeInteger(this.balance+delta)||this.balance+delta<0)return false;
+    const before=this.town,balance=this.balance;
+    this.town=town;this.balance+=delta;
+    if(this.storage?.available!==false&&this.storage&&!this.persist()){
+      this.town=before;this.balance=balance;return false;
+    }
+    if(delta)this.onBalance(this.balance);
+    return true;
   }
   clearDrops(){this.drops.length=0;}
 }

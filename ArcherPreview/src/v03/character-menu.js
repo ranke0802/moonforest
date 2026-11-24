@@ -1,7 +1,7 @@
 import {bagContents,characterItems,combatSkills,SLOTS} from './character-menu-data.js';
 import {drawCharacterPose} from './character-menu-camera.js';
 
-export function createCharacterMenu({root,read,equip,usePotion,subject,onPause}){
+export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,onPause}){
   const doc=root.ownerDocument,win=doc.defaultView;
   const make=(tag,cls='',text='')=>{
     const node=doc.createElement(tag);
@@ -94,7 +94,7 @@ export function createCharacterMenu({root,read,equip,usePotion,subject,onPause})
   }
   function inventory(state,items){
     const bag=make('section','mf-menu-card mf-menu-bag'),tools=make('div','mf-menu-filters');
-    for(const type of ['All','Gear','Supplies']){
+    for(const type of ['All','Gear','Supplies',...(state.tradeBag?['Materials']:[])]){
       const item=button(type,()=>{filter=type;show('Inventory');});
       item.setAttribute('aria-pressed',String(type===filter));tools.append(item);
     }
@@ -118,6 +118,14 @@ export function createCharacterMenu({root,read,equip,usePotion,subject,onPause})
       }
       if(row.note)detail.append(make('p','',row.note));
       if(row.worn){detail.append(make('span','mf-menu-equipped','Equipped'));return;}
+      if(row.tradeId&&row.slot){detail.append(button('Equip',()=>{equipItem?.(row.tradeId);show('Inventory');}));return;}
+      if(row.quick){
+        if(row.registered){
+          detail.append(make('small','mf-menu-equipped','In quick slot'));
+          const use=button('Use',()=>{if(read().canUsePotion){dialog.close();usePotion();}});use.disabled=!state.canUsePotion;detail.append(use);
+        }else detail.append(button('Assign to quick slot',()=>{registerItem?.(row.tradeId);show('Inventory');}));
+        return;
+      }
       if(row.style){detail.append(button('Equip',()=>{equip(row.slot,row.style);show('Inventory');}));return;}
       if(row.id==='potion'){
         const use=button('Use potion',()=>{if(!read().canUsePotion)return;dialog.close();usePotion();});
