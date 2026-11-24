@@ -26,7 +26,7 @@ test('the driver grants the horse to the current save; only mounting loads the m
   h.stable.offer();h.stable.updateAvailability();assert.equal(h.button.hidden,false);assert.equal(h.loads(),0);
   await h.click();assert.equal(h.stable.active,true);assert.equal(h.loads(),1);
   h.stable.afterMove({state:'run'},5);assert.deepEqual(h.clips,['Horse_Idle','Horse_Gallop']);
-  assert.ok(Math.abs(h.saddle.position.y-.42)<1e-6);
+  assert.ok(Math.abs(h.saddle.position.y-.608)<1e-6);
   h.combat();h.stable.updateAvailability();assert.equal(h.stable.active,false);assert.equal(h.saddle.position.y,0);
   h.slot.clear();h.stable.reload();assert.equal(h.button.hidden,true);assert.equal(h.disposed(),1);
 });

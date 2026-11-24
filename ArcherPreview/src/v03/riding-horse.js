@@ -24,15 +24,16 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   button.hidden = true;
   root.querySelector('.top-actions').append(button);
   let owned = false, horse = null, active = false, generation = 0, rig = null, lift = null, rider = null;
-  let hiddenArms = [], clip = '', available = false, mountMap = '';
+  let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null;
   const display = () => {
     button.hidden = !owned || !available;
-    button.disabled = !!horse && !active;
-    button.textContent = active ? 'Dismount' : 'Ride';
-    button.setAttribute('aria-label', active ? 'Dismount (H)' : 'Ride (H)');
+    button.textContent = active ? 'Dismount' : horse ? 'Cancel' : 'Ride';
+    button.setAttribute('aria-label', button.textContent+' (H)');
   };
   function leave() {
     ++generation;
+    if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
+    poseObserver=null;
     if (lift && !lift.isDisposed()) lift.position.y = 0;
     for (const mesh of hiddenArms) if (!mesh.isDisposed()) mesh.setEnabled(true);
     hiddenArms = []; rig = lift = rider = null;
@@ -59,7 +60,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     if (!owned || !available || !actor || !ridingAllowed()) return;
     const token = ++generation;
     mountMap = world.mapId;
-    const instance = makeHorse({scene:world.scene,shadows:world.shadows,wagon:actor.position,heightAt:(x,z)=>world.terrain.heightAt(x,z)});
+    const instance = makeHorse({scene:world.scene,shadows:world.shadows,wagon:actor.position,heightAt:(x,z)=>world.terrain.heightAt(x,z),mounted:true});
     horse = instance; display();
     try {
       const model = await instance.ready;
@@ -76,6 +77,9 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
         }
       }
       afterMove({moving:false},0);
+      // Weighted walk/run tracks write their values during scene.render().
+      // Apply the seated pose after that blend, before the skeleton is drawn.
+      if(world.scene)poseObserver=world.scene.onBeforeRenderObservable.add(fitSaddle);
       display();
     } catch { if (token === generation) { leave(); tell('Horse unavailable. Please try again.'); } }
   }
@@ -94,9 +98,15 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     const next = speed < .04 ? 'Horse_Idle' : speed > 3 ? 'Horse_Gallop' : 'Horse_Walk';
     if (clip !== next) { horse.play(next); clip = next; }
     horse.speed(clip === 'Horse_Idle' ? 1 : Math.max(.55,Math.min(1.7,speed/(clip === 'Horse_Walk'?1.7:5))));
+    if(!poseObserver)fitSaddle();
+  }
+  function fitSaddle() {
+    if(!active)return;
     rig.apply(1);
     const scale = rider.absoluteScaling?.y || 1;
-    lift.position.y += (1.42 - rig.hipsAbove())/scale;
+    const contact=horse.saddleY?.();
+    const goal=contact==null ? 1.608 : contact-rider.absolutePosition.y+.13;
+    lift.position.y += (goal-rig.hipsAbove())/scale;
   }
   function hotkey(e) {
     if (e.code !== 'KeyH' || e.repeat || e.ctrlKey || e.altKey || e.metaKey || button.hidden || doc.querySelector('dialog[open]')) return;

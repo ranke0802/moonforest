@@ -30,9 +30,18 @@ function nudge(bone,child,dx,dy,dz){
  bone.parent.absoluteRotationQuaternion.conjugateToRef(parentWorld);turn.multiplyToRef(bone.absoluteRotationQuaternion,world);parentWorld.multiplyToRef(world,bone.rotationQuaternion);
 }
 
-export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
+// Barycentric seat on the shipped back triangle 4456/4457/4458 at x=z=0.
+// Each row is that triangle's weighted bind-local contact point for one joint.
+const saddleJoints=[
+ ['chest',.7104791,-.00478,3.60453,-4.30153],
+ ['spine',.2525823,.02670,19.97983,-4.73213],
+ ['scap.R',.0175231,4.54028,-5.63419,7.32146],
+ ['scap.L',.0194156,-4.78952,-5.74710,7.47608]
+];
+export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounted=false}){
  let disposed=false,container=null,root=null,observer=null,chest=null,stirTime=0,breathing=false;const casters=[],stirBones=[];
  const groups=new Map();let current=null,previous=null,fade=0,wanted='Horse_Idle';
+ const loadController=mounted?new AbortController():null,saddle=[];
  function start(name,{loop=true}={}){
   const group=groups.get(name);wanted=name;if(!group||group===current)return;
   if(previous&&previous!==current)previous.stop();
@@ -41,7 +50,7 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   if(!previous)fade=1;
  }
  const ready=(async()=>{
-  container=await loadOwnedModel(scene,MODEL);
+  container=await loadOwnedModel(scene,MODEL,{signal:loadController?.signal});
   if(disposed){container.dispose();container=null;return null;}
   root=new TransformNode('v03-wagon-horse',scene);
   const s=WAGON_HORSE.height/87;
@@ -50,6 +59,7 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   body.scaling.setAll(s);body.rotation.y=WAGON_HORSE.turn;
   for(const group of container.animationGroups){group.stop();groups.set(group.name,group);}
   const node=name=>container.transformNodes.find(row=>row.name===name)??null;
+  if(mounted)for(const [name,weight,x,y,z] of saddleJoints){const bone=node(name);if(bone)saddle.push({bone,weight,x,y,z});}
   chest=node('chest');for(const row of STIR.bones){const bone=node(row[0]),child=node(row[1]);if(bone&&child)stirBones.push({bone,child,lift:row[2],kick:row[3]});}
   for(const mesh of container.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
   // Painted like the other actors (2026-11-19, user: it had no cartoon shading
@@ -78,11 +88,17 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
    }else if(breathing){breathing=false;chest?.scaling.setAll(1);}
   });
   return root;
- })().catch(error=>{console.warn('[MoonForest 0.3] wagon horse unavailable',error);return null;});
+ })().catch(error=>{if(!disposed)console.warn('[MoonForest 0.3] wagon horse unavailable',error);return null;});
  return {
   ready,
   get root(){return root;},
   get clip(){return wanted;},
+  saddleY(){
+   if(saddle.length!==saddleJoints.length)return null;
+   let y=0;
+   for(const s of saddle){const m=s.bone.computeWorldMatrix(true).m;y+=s.weight*(s.x*m[1]+s.y*m[5]+s.z*m[9]+m[13]);}
+   return y;
+  },
   // Cross-fades to a clip (Horse_Rear plays once and holds its last frame).
   play(name){if(name===wanted&&current)return;if(!groups.size){wanted=name;return;}start(name,{loop:!ONCE.has(name)});},
   // Playback rate of the current clip (the walk follows the wagon's speed).
@@ -90,7 +106,7 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null}){
   // Moves the horse (story ride); y follows the ground.
   place(x,z,yaw){if(!root)return;root.position.set(x,heightAt(x,z),z);root.rotation.y=yaw;},
   dispose(){
-   disposed=true;for(const mesh of casters.splice(0))try{shadows?.removeShadowCaster(mesh,false);}catch{}
+   disposed=true;loadController?.abort();saddle.length=0;for(const mesh of casters.splice(0))try{shadows?.removeShadowCaster(mesh,false);}catch{}
    if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}
    for(const group of groups.values())group.stop();groups.clear();current=previous=null;chest=null;stirBones.length=0;
    // Meshes, outline shells, clips, loader materials and the toon copies all go with the model.

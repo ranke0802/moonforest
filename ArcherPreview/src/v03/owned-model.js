@@ -8,9 +8,16 @@
 // (meshes, skeletons, animationGroups) and disposes everything it loaded.
 import {SceneLoader} from '@babylonjs/core';
 
-export async function loadOwnedModel(scene,url){
+export async function loadOwnedModel(scene,url,{signal}={}){
  const href=url.href,base=href.slice(0,href.lastIndexOf('/')+1),file=href.slice(href.lastIndexOf('/')+1);
- const result=await SceneLoader.ImportMeshAsync(null,base,file,scene);
+ let source=file,extension;
+ if(signal){
+  const response=await fetch(url,{signal});if(!response.ok)throw Error('Model fetch failed: '+response.status);
+  source=new Uint8Array(await response.arrayBuffer());
+  if(signal.aborted)throw new DOMException('Model load cancelled','AbortError');
+  extension='.glb';
+ }
+ const result=await SceneLoader.ImportMeshAsync(null,base,source,scene,null,extension);
  const meshes=result.meshes.slice(),transformNodes=result.transformNodes.slice(),skeletons=result.skeletons.slice(),animationGroups=result.animationGroups.slice();
  const nodes=new Set([...meshes,...transformNodes]),rootNodes=[...nodes].filter(node=>!node.parent||!nodes.has(node.parent));
  const materials=new Set(),textures=new Set();
