@@ -3,6 +3,7 @@ const supported=new Set(['monster-forest','witch-cave','village']);
 // Each import and its scene objects belong to exactly one visit. Starting a
 // new game, returning to title or changing map invalidates outstanding work.
 export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
+  petsEnabled=new URLSearchParams(globalThis.location?.search).get('pets')!=='0',
   loadVillage=()=>import('./village-pets.js'),
   loadCamp=()=>Promise.all([import('./chapter-wildlife.js'),import('./chapter-enemy-encounter.js')]),
   loadBeasts=()=>import('./corrupted-beasts.js'),onError=console.warn}) {
@@ -18,6 +19,7 @@ export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
     const current=()=>!disposed&&generation===token&&world.mapId===next&&!world.scene.isDisposed;
     preparing=(async()=>{
       if(next==='village'){
+        if(!petsEnabled)return;
         const {createVillagePets}=await loadVillage();
         if(current())actors=createVillagePets(world);
       }else{
