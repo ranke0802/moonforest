@@ -139,6 +139,82 @@ test('a placed chest uses the shipped opening geometry and preserves its opened 
 });
 
 
+function authoredLootFixture(t,map,positions){
+ const f=fixture(t),entry=ASSET_CATALOG.entries.find(v=>v.assetId==='chest-common');
+ configureMap(f,map);t.after(()=>setWorldCharacter('warrior'));
+ f.world.gameplayV03=true;f.world.placements=[];f.world.villageRenderRecords=[];
+ const originalNavigation=f.world.navigation;
+ const profile={level:0,model:entry.runtime.model.replace(/^assets\//,''),resources:[]};
+ const data={assets:{'chest-common':{...config,geometryLod:false,lods:[profile]}}};
+ const runtime=new AuthoredPlacementRuntime(f.world,{catalog:ASSET_CATALOG,baseUrl:'https://qa.test/',initialize:async()=>{},readManifest:async()=>data,loadContainer:f.load});
+ t.after(()=>runtime.dispose());
+ const instances=positions.map(([x,z],i)=>({
+  instanceId:'player-chest-'+i,assetId:'chest-common',assetVersion:entry.version,
+  transform:{position:[x,f.world.terrain.heightAt(x,z),z],rotation:[0,0,0,1],scale:1},
+  attachment:{surface:'ground',normal:[0,1,0],offset:0,supportId:'terrain'},collision:'solid',chest:{tier:3,item:'apple'}
+ }));
+ return {runtime,world:f.world,originalNavigation,doc:{...createEmptyPlacementDocument(runtime.baseManifest),revision:1,instances}};
+}
+
+test('0.3 looted authored chests release their own visual, outline, streaming and collider and restore them for another save',async t=>{
+ const {runtime,world,doc}=authoredLootFixture(t,'great-plains',[[3,0],[7,0]]),ids=doc.instances.map(row=>row.instanceId);
+ doc.instances[0].transform.scale=3;
+ world.navigation=runtime.baseNavigation=new VillageNavigation([{id:'intervening-wall',x:1,z:0,radius:.2,height:2}]);
+ await runtime.apply(doc);const [one,two]=ids.map(id=>runtime.records.get(id));
+ const saved=JSON.stringify(runtime.document),loads=runtime.stats.sourceLoads,commits=runtime.stats.commits;
+ const freeAt=x=>world.navigation.free({x,z:0},.1);
+ assert.equal(freeAt(3),false);assert.equal(freeAt(7),false);assert.equal(one.entry,two.entry);
+ const approach={x:5.5,z:0},blocked={x:0,z:0},face=runtime.chestInteractionPoint(ids[0],approach);
+ assert.equal(world.navigation.segmentClear(approach,one.root.position,.06,true),false);
+ assert.equal(world.navigation.segmentClear(approach,face,.06,true),true,'the chest does not occlude its own front surface');
+ assert.equal(world.navigation.segmentClear(blocked,runtime.chestInteractionPoint(ids[0],blocked),.06,true),false,'a different wall still blocks the approach');
+ assert.equal(runtime.openChest(ids[0],{immediate:true}),true);
+ assert.equal(one.chestOpening.state.progress,1);assert.equal(runtime.openingChests.size,0);
+ const revision=world.placementRevision;
+ assert.equal(runtime.setLootedChests([ids[0]]),true);
+ assert.equal(one.root.isEnabled(),false);assert.equal(runtime.openChest(ids[0]),false);
+ assert.equal(freeAt(3),true);assert.equal(freeAt(7),false);
+ assert.deepEqual(world.authoredPlacementRecords,[two]);assert.deepEqual(runtime.renderRecords,[two]);
+ for(const mesh of one.meshes){
+  assert.equal(runtime.outlines.selectedMeshes.has(mesh),false);assert.equal(mesh.instancedBuffers.villageInk.x,0);
+ }
+ for(let i=0;i<16;i++)runtime.update(.2,{position:new Vector3(3,0,0)});
+ assert.equal(runtime.visibility.shadowCandidates({x:3,z:0}).includes(one),false);
+ assert.equal(one.root.isEnabled(),false);assert.equal(runtime.setLootedChests([ids[0]]),false);assert.equal(world.placementRevision,revision+1);
+ runtime.openChest(ids[1]);assert.equal(two.chestOpening.state.active,true);
+ assert.equal(runtime.setLootedChests([],{resetOpenState:true}),true);
+ assert.equal(freeAt(3),false);assert.equal(freeAt(7),false);assert.equal(one.root.isEnabled(),true);
+ assert.equal(one.chestOpening.state.opened,false);assert.equal(two.chestOpening.state.opened,false);assert.equal(runtime.openingChests.size,0);
+ assert.equal(JSON.stringify(runtime.document),saved);assert.equal(runtime.stats.commits,commits);assert.equal(runtime.stats.sourceLoads,loads);
+ assert.equal(runtime.records.get(ids[0]),one);assert.deepEqual(runtime.renderRecords,[one,two]);
+ world.gameplayV03=false;assert.equal(runtime.setLootedChests(ids),false);assert.equal(freeAt(3),false);
+});
+
+test('a saved open overlay arriving ahead of its mesh loads suppresses it on attach without mutating the map',async t=>{
+ const {runtime,world,doc,originalNavigation}=authoredLootFixture(t,'great-plains',[[3,0]]);
+ doc.instances[0].collision='none';const id=doc.instances[0].instanceId;
+ runtime.setLootedChests([id]);await runtime.apply(doc);const record=runtime.records.get(id);
+ assert.equal(record.root.isEnabled(),false);assert.equal(record.chestOpening.state.opened,true);
+ assert.equal(world.authoredPlacementRecords.length,0);assert.equal(world.navigation,originalNavigation);
+ assert.equal(runtime.setLootedChests([]),true);assert.equal(record.root.isEnabled(),true);
+ assert.equal(world.navigation,originalNavigation);assert.equal(record.chestOpening.state.opened,false);
+ runtime.leaveMap();assert.equal(runtime.setLootedChests([id]),false);
+});
+
+test('looting a solid cave placement restores the native body, sight and camera providers; switching saves restores the placed geometry',async t=>{
+ const {runtime,world,doc,originalNavigation}=authoredLootFixture(t,'witch-cave',[[0,0]]);
+ await runtime.apply(doc);const id=doc.instances[0].instanceId,clearance=world.terrain.authoredCaveCollision;
+ assert.ok(clearance);assert.equal(world.navigation.clearanceAt,clearance.clearanceAt);
+ assert.equal(typeof clearance.cameraBlocked,'function');assert.equal(typeof clearance.sightBlocked,'function');
+ const bakes=runtime.stats.caveCollisionBakes,loads=runtime.stats.sourceLoads;
+ assert.equal(runtime.setLootedChests([id]),true);assert.equal(world.navigation,originalNavigation);
+ assert.equal(world.terrain.authoredCaveCollision,undefined);
+ for(let i=0;i<12;i++)runtime.update(.25,{position:Vector3.Zero()});
+ assert.equal(runtime.setLootedChests([id]),false);assert.equal(runtime.stats.caveCollisionBakes,bakes);
+ assert.equal(runtime.setLootedChests([]),true);assert.equal(world.terrain.authoredCaveCollision,clearance);
+ assert.equal(runtime.stats.caveCollisionBakes,bakes);assert.equal(runtime.stats.sourceLoads,loads);
+});
+
 test('all four maps keep grade, ink, closed editor rewards and one-shot cycles through re-entry',async t=>{
  const f=fixture(t,{withUi:true,collectDrops:false});t.after(()=>setWorldCharacter('warrior'));let time=1;
  for(const map of maps){

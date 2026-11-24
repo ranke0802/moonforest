@@ -105,7 +105,7 @@ export class AuthoredPlacementRuntime {
   this.publish=publish;this.baseUrl=new URL(baseUrl??import.meta.env?.BASE_URL??'/',globalThis.location?.href??'http://localhost/');
   this.baseManifest=createBasePlacementManifest(this.mapId,{catalog,placements:world.placements});this.document=createEmptyPlacementDocument(this.baseManifest);this.applied=false;
   this.limits={instances:Math.min(128,limits.instances??128),assets:Math.min(8,limits.assets??8)};
-  this.records=new Map();this.assets=new Map();this.renderRecords=[];this.openingChests=new Set();this.previewRecord=null;this.existingPreview=null;this.baseNavigation=world.navigation;this.navigation=null;this.suppressedBase=new Map();this.baseObstacleOwnership=new Map();
+  this.records=new Map();this.assets=new Map();this.renderRecords=[];this.openingChests=new Set();this.lootedChests=new Set();this.previewRecord=null;this.existingPreview=null;this.baseNavigation=world.navigation;this.navigation=null;this.suppressedBase=new Map();this.baseObstacleOwnership=new Map();
   this.controller=new AbortController();this.generation=0;this.request=0;this.previewRequest=0;this.disposed=false;this.lifetimes=new Set();this.pending=new Set();this.stats={commits:0,previews:0,sourceLoads:0,sourceReleases:0,instancesCreated:0,instancesDisposed:0,geometryPending:0};
   this.proxy=Object.create(world);this.proxy.environment=this.stats;
   this.streaming=new VillageGeometryStreaming(this.proxy,this.renderRecords,request=>this._loadTier(this.assets.get(request.id),request.level),request=>{const entry=this.assets.get(request.id);return !entry||!entry.levels.some(level=>level.level===request.level)||hasVillageGeometry(entry,request.level);},this.stats);this.proxy.villageStreaming=this.streaming;this.streaming.active=true;
@@ -248,7 +248,7 @@ export class AuthoredPlacementRuntime {
    for(const mesh of meshes){mesh.isPickable=true;mesh.metadata={...mesh.metadata,placementInstanceId:instance.instanceId,authoredPlacement:true};}
    root.metadata={placementInstanceId:instance.instanceId,authoredPlacement:true};
    const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale,...(instance.assetId==='chest-common'?{lootTier:instance.chest?.tier??1}:{})},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)||TALL_PROPS.has(instance.assetId)};if(entry.catalog.placement.sourceKind==='tree')root.metadata={...root.metadata,viewCrown:true};
-   this._setTransform(record,instance,terrain);if(instance.assetId==='chest-common')record.chestOpening=createChestOpening(root,{opened:this.world.isAuthoredChestOpened?.(instance.instanceId)===true});this.stats.instancesCreated++;return record;
+   this._setTransform(record,instance,terrain);if(instance.assetId==='chest-common')record.chestOpening=createChestOpening(root,{opened:this.lootedChests.has(instance.instanceId)||this.world.isAuthoredChestOpened?.(instance.instanceId)===true});this.stats.instancesCreated++;return record;
   }catch(error){root.dispose();this._release(entry);throw error;}
  }
  _setTransform(record,instance,terrain=this.world.terrain){
@@ -279,7 +279,7 @@ export class AuthoredPlacementRuntime {
   record.obstacles=instance.collision!=='solid'?[]:instance.sourceInstanceId?this._baseCollisionParts(record,instance):this.world.cave?[]:body?.shape==='trunk-capsule'?[this._trunkObstacle(record,body)]:[{id:'authored-'+instance.instanceId,instanceId:instance.instanceId,shape:'box',x:center.x,z:center.z,yaw:0,halfWidth:Math.max(.0001,(max.x-min.x)/2),halfDepth:Math.max(.0001,(max.z-min.z)/2),radius:Math.hypot(max.x-min.x,max.z-min.z)/2,height:Math.max(0,max.y-this.world.terrain.heightAt(center.x,center.z)),source:'transformed-mesh-conservative-XZ-bounds'}];record.obstacle=record.obstacles[0]??null;
  }
  _disposeRecord(record){if(!record||record.disposed)return;record.disposed=true;if(record.chestOpening)this.openingChests.delete(record.chestOpening);for(const mesh of record.meshes)this.world.shadows?.removeShadowCaster(mesh,false);record.root.dispose(false,false);this._release(record.entry);this.stats.instancesDisposed++;}
- _refreshRecords(){this.renderRecords.splice(0,this.renderRecords.length,...this.records.values(),...(this.previewRecord?[this.previewRecord]:[]));this.streaming.demand.invalidate();this.textureStreaming.nextCheck=0;}
+ _refreshRecords(){this.renderRecords.splice(0,this.renderRecords.length,...[...this.records.values()].filter(record=>!record.authoredSuppressed),...(this.previewRecord?[this.previewRecord]:[]));this.streaming.demand.invalidate();this.textureStreaming.nextCheck=0;}
  _rebuildVisibility(){this.visibility?.dispose();this.visibility=new VillageVisibility(this.proxy,[...this.records.values()],{touch:this.world.touchDevice});for(const record of this.records.values())record.visibilityKey=cellKey(record.placement.x,record.placement.z);this.world.caveFog?.updateRecords([...this.records.values()]);this.treeOcclusion=this.publish?new TreeOcclusion([...this.records.values()].filter(record=>record.blocksPlayerView).map(record=>record.root)):null;}
  _relocateVisibility(record){
   const visibility=this.visibility;if(!visibility)return;
@@ -369,18 +369,23 @@ export class AuthoredPlacementRuntime {
     const record=this._makeRecord(instance,entry,terrain);created.push(record);staged.set(instance.instanceId,record);
    }
    preparedOutlines=await this._prepareOutlines([...staged.values()]);
-   if(this.world.cave&&this.publish&&(next.removedBaseIds?.length||next.instances.some(instance=>instance.sourceInstanceId||instance.collision==='solid'))){const {prepareEditedCaveClearance}=await import('./editor-cave-collision.js');this._check(generation);if(request!==this.request)throw mapLoadAbortError();editedCaveClearance=prepareEditedCaveClearance(this,next,staged);}
+   if(this.world.cave&&this.publish&&(next.removedBaseIds?.length||next.instances.some(instance=>instance.sourceInstanceId||instance.collision==='solid'))){const {prepareEditedCaveClearance}=await import('./editor-cave-collision.js');this._check(generation);if(request!==this.request)throw mapLoadAbortError();this.prepareCaveClearance=prepareEditedCaveClearance;editedCaveClearance=this._chestAwareCaveClearance(next,staged,this.lootedChests);}
    for(const instance of next.instances)this.validateSurface(instance,terrain);
    this._check(generation);if(request!==this.request)throw mapLoadAbortError();
   }catch(error){preparedOutlines?.dispose();for(const record of created)this._disposeRecord(record);throw error;}
   if(terrainChanged)try{publishEditedTerrain(this.world,terrain);this.terrainEdited=!!next.terrainPatches?.length;}catch(error){preparedOutlines?.dispose();for(const record of created)this._disposeRecord(record);throw error;}
   this.outlines?.dispose();this.outlines=null;this.visibility?.dispose();this.visibility=null;
-  for(const instance of next.instances){const record=staged.get(instance.instanceId);this._setTransform(record,instance);record.root.setEnabled(true);}
+  for(const instance of next.instances){const record=staged.get(instance.instanceId);this._setTransform(record,instance);
+   record.authoredSuppressed=!!(record.chestOpening&&this.lootedChests.has(instance.instanceId));record.root.setEnabled(!record.authoredSuppressed);}
   for(const [id,record]of this.records)if(staged.get(id)!==record)this._disposeRecord(record);
   this._disposeRecord(this.previewRecord);this.previewRecord=null;this.previewRequest=(this.previewRequest??0)+1;
   this.records=staged;this.document=next;this.applied=true;this._refreshRecords();
-  const obstacles=[...this.records.values()].flatMap(record=>record.obstacles??(record.obstacle?[record.obstacle]:[])),revision=(this.world.placementRevision??0)+1;
-  if(this.publish){const replacements=[...next.instances.map(instance=>instance.sourceInstanceId).filter(Boolean),...(next.removedBaseIds??[])],removedIds=replacements.flatMap(id=>this._originalObstacles(id).map(obstacle=>obstacle.id));this.navigation=createAuthoredPlacementNavigation(this.baseNavigation,obstacles,revision,{removedIds,force:!!editedCaveClearance});if(editedCaveClearance)this.navigation.clearanceAt=editedCaveClearance.clearanceAt;this._suppressBase(replacements);this.world.navigation=this.navigation;this.world.placementRevision=revision;this.world.authoredPlacementRecords=[...this.records.values()];this.world.placementOverlay=clone(next);if(this.world.cave)this._publishCaveCollision(editedCaveClearance);}
+  const visible=[...this.records.values()].filter(record=>!record.authoredSuppressed);
+  const obstacles=visible.flatMap(record=>record.obstacles??[]),revision=(this.world.placementRevision??0)+1;
+  if(this.publish){
+   const replaced=this._publishNavigation(obstacles,revision,editedCaveClearance);this._suppressBase(replaced);
+   this.world.placementRevision=revision;this.world.authoredPlacementRecords=visible;this.world.placementOverlay=clone(next);
+  }
   this.stats.commits++;
   this.outlines=preparedOutlines;for(const entry of this.outlines.entries){const tier=entry.record.instance.assetId==='chest-common'?entry.record.instance.chest?.tier??1:0;if(tier){entry.record.placement.lootTier=tier;entry.inkWidth=.028;entry.mesh.instancedBuffers.villageInkTint=Color3.FromHexString(lootRarity(tier).color);}}this.outlines.drawing=false;this.outlines.next=0;this.outlines.observer=this.scene.onBeforeRenderObservable.add(()=>this.outlines?.update(performance.now()));this._rebuildVisibility();
   this.update(0,this.lastPlayer);await this.onCommit({document:clone(next),records:this.records,obstacles,revision});return clone(next);
@@ -393,7 +398,81 @@ export class AuthoredPlacementRuntime {
   if(this.treeOcclusion){if(this.world.toolLease?.active){for(const tree of this.treeOcclusion.trees){tree.coverage=tree.target=1;for(const mesh of tree.meshes)if(mesh.instancedBuffers)mesh.instancedBuffers.treeCoverage=1;}}else this.treeOcclusion.update(this.world.camera.globalPosition,position,Math.max(0,Number.isFinite(dt)?dt:0));}
   if(this.existingPreview)this.existingPreview.record.root.setEnabled(true);
  }
- openChest(instanceId){const record=this.records.get(instanceId),opening=record?.chestOpening;if(!opening)return false;if(opening.open())this.openingChests.add(opening);return true;}
+ _publishNavigation(obstacles,revision,clearance){
+  const replaced=[...this.document.instances.map(row=>row.sourceInstanceId).filter(Boolean),...(this.document.removedBaseIds??[])];
+  const removedIds=replaced.flatMap(id=>this._originalObstacles(id).map(obstacle=>obstacle.id));
+  this.navigation=createAuthoredPlacementNavigation(this.baseNavigation,obstacles,revision,{removedIds,force:!!clearance});
+  if(clearance)this.navigation.clearanceAt=clearance.clearanceAt;
+  this.world.navigation=this.navigation;
+  if(this.world.cave)this._publishCaveCollision(clearance);
+  return replaced;
+ }
+ _chestAwareCaveClearance(document,records,hidden){
+  if(!this.prepareCaveClearance)return null;
+  if(!hidden.size)return this.prepareCaveClearance(this,document,records);
+  // A looted replacement must not resurrect the native obstacle it replaced.
+  const instances=[],removedBaseIds=[...(document.removedBaseIds??[])];
+  for(const row of document.instances){
+   if(row.assetId==='chest-common'&&hidden.has(row.instanceId)){
+    if(row.sourceInstanceId)removedBaseIds.push(row.sourceInstanceId);
+   }else instances.push(row);
+  }
+  return this.prepareCaveClearance(this,{...document,instances,removedBaseIds},records);
+ }
+ setLootedChests(ids,{resetOpenState=false}={}){
+  if(!this.publish||!this._current()||!this.world.gameplayV03)return false;
+  const hidden=new Set(ids);
+  if(!resetOpenState&&hidden.size===this.lootedChests.size&&[...hidden].every(id=>this.lootedChests.has(id)))return false;
+  const changed=[];
+  for(const [id,record] of this.records)if(record.chestOpening){
+   if(hidden.has(id)!==!!record.authoredSuppressed)changed.push(record);
+   else if(resetOpenState&&!hidden.has(id)&&record.chestOpening.state.opened){
+    this.openingChests.delete(record.chestOpening);record.chestOpening.setOpened(false);
+   }
+  }
+  const collision=changed.some(record=>record.instance.collision==='solid');
+  const clearance=collision&&this.world.cave?this._chestAwareCaveClearance(this.document,this.records,hidden):null;
+  this.lootedChests=hidden;
+  if(!changed.length)return false;
+  for(const record of changed){
+   const id=record.instance.instanceId,hide=hidden.has(id),opening=record.chestOpening;
+   record.authoredSuppressed=hide;
+   this.openingChests.delete(opening);opening.setOpened(hide);
+   record.root.setEnabled(caveFogRootEnabled(record));
+   if(hide){
+    this.visibility?.shadowFade.active.delete(record);this.visibility?.shadowFade.desired.delete(record);
+    this.visibility?.castRecords.delete(record);record.shadowCaster=false;
+    for(const mesh of record.meshes){
+     this.visibility?.cast.delete(mesh);this.world.shadows?.removeShadowCaster(mesh,false);
+     mesh.instancedBuffers?.villageInk?.set(0,0);
+     this.outlines?.selectedMeshes?.delete(mesh);
+    }
+   }
+  }
+  this._refreshRecords();
+  const visible=[...this.records.values()].filter(record=>!record.authoredSuppressed);
+  const revision=(this.world.placementRevision??0)+1;
+  if(collision)this._publishNavigation(visible.flatMap(record=>record.obstacles??[]),revision,clearance);
+  this.world.authoredPlacementRecords=visible;this.world.placementRevision=revision;
+  if(this.visibility){this.visibility.shadowTimer=0;this.visibility.timer=0;this.visibility.shadowStateReady=false;}
+  if(this.outlines)this.outlines.next=0;
+  return true;
+ }
+ chestInteractionPoint(instanceId,from){
+  const record=this.records.get(instanceId);
+  if(!record?.chestOpening||record.authoredSuppressed)return null;
+  const center=record.root.position;
+  if(record.instance.collision!=='solid')return center;
+  // Test the approach up to the solid's near face. A center-line query ends
+  // inside this very obstacle. Cave clearance is quantized on a 0.4 m grid.
+  const {min,max}=record;
+  const x=Math.max(min.x,Math.min(max.x,from.x)),z=Math.max(min.z,Math.min(max.z,from.z));
+  const dx=from.x-x,dz=from.z-z,distance=Math.hypot(dx,dz);
+  if(distance===0)return from;
+  const backoff=Math.min(distance,this.world.cave?0.55:0.1)/distance;
+  return {x:x+dx*backoff,z:z+dz*backoff};
+ }
+ openChest(instanceId,options){const record=this.records.get(instanceId),opening=record?.chestOpening;if(!opening||record.authoredSuppressed)return false;if(opening.open(options)&&opening.state.active)this.openingChests.add(opening);return true;}
  _publishCaveCollision(value){
   if(!value&&!this.caveCollisionOwned)return;const terrain=this.world.terrain;if(!this.caveCollisionOwned){this.previousCaveCollision=terrain.authoredCaveCollision;this.caveCollisionTerrain=terrain;this.caveCollisionOwned=true;}
   terrain.authoredCaveCollision=value??this.previousCaveCollision;this.caveCollision=value??this.previousCaveCollision;
