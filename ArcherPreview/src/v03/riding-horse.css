@@ -1,0 +1,12 @@
+.top-actions .v03-ride-toggle {
+  min-height: 42px;
+  padding: 0 10px;
+  border: 1px solid #d1b885;
+  border-radius: 6px;
+  background: rgba(26, 28, 27, .76);
+  color: #fff0cc;
+  font: inherit;
+  cursor: pointer;
+}
+.top-actions .v03-ride-toggle[hidden] { display: none; }
+.top-actions .v03-ride-toggle:disabled { opacity: .55; }

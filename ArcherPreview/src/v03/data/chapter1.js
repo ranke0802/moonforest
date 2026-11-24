@@ -44,7 +44,8 @@ export const DIALOGUES=Object.freeze({
   {who:'마부',text:'어이쿠, 섰다 섰어! …아이고, 바퀴가 아주 박살이 났구먼.'},
   {who:'마부',text:'그래도 다행이우. 마을이 바로 저기니까 여기서부턴 조금만 걸으면 되오.'},
   {who:'마부',text:'목숨을 구해 줬으니 내가 뭐라도 드려야 할 판이우. 하나밖에 없는 딸을 부모 없는 자식 만들 뻔했는데… 정말 고맙소.'},
-  {who:'마부',text:'얼마 안 되지만 받아 두시우. 마을에 가거든 달빛 여관부터 찾아가고. 주인장이 무뚝뚝해도 방은 깨끗하다오.'},
+  {who:'마부',text:'마굿간에 네가 타곤 하던 말이 아직 있단다. 오늘부터 네 말이야. 길에선 불러 타거라.'},
+  {who:'마부',text:'마을에 가거든 달빛 여관부터 찾아가고. 주인장이 무뚝뚝해도 방은 깨끗하다오.'},
  ],
  // Prologue → first fight: the wagon ride and the wolf (played by story.beginAmbushScene).
  'ambush-scene':[

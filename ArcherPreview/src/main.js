@@ -794,6 +794,11 @@ async function loadCharacter() {
       carrier.parent=actor;actor.metadata={...actor.metadata,moonforestV02ImpactCarrier:carrier};
       playerModelParent=carrier;
     }
+    if(world.gameplayV03){
+      const saddle=new TransformNode('rider-saddle-offset',world.scene);
+      saddle.parent=playerModelParent;playerModelParent=saddle;
+      actor.metadata={...actor.metadata,saddleOffset:saddle};
+    }
     for (const node of new Set([...container.meshes, ...container.transformNodes])) if (!node.parent) node.parent = playerModelParent;
     const dimensions=configurePlayerSize(actor,config,{warrior:isV2()});
     cameraPitch.setBodyScale(dimensions.ratio);
@@ -913,7 +918,8 @@ async function retryLoading(){
 }
 
 function constrainPlayerPosition(previous){
-  world.navigation.constrain(actor.position,previous,playerDimensions(actor).moveRadius,movementLimit(previous));
+  const radius=playerDimensions(actor).moveRadius;
+  world.navigation.constrain(actor.position,previous,world.riding?.active?Math.max(.64,radius):radius,movementLimit(previous));
   if(world.mapId==='village')clampVillageExit(actor.position,previous);
 }
 
@@ -954,6 +960,7 @@ function render(dt) {
   if(mapDeparture?.departing)return;
   setFrameWorkContext(world.scene,{active:ready&&!loadingAsset&&!mapTransition?.busy,frameId:engine.frameId,generation:world.toolGeneration??0});
   world.v03?.update(dt);
+  world.riding?.updateAvailability();
   // 0.3 slow motion (short, story-driven): the rest of the frame runs scaled.
   dt*=world.v03?.timeScale??1;
   world.storyboardOpening?.update();
@@ -1095,15 +1102,17 @@ function render(dt) {
       const forward = new Vector3(-Math.cos(alpha), 0, -Math.sin(alpha));
       const right = new Vector3(-forward.z, 0, forward.x);
       const direction = forward.scale(movement.y).add(right.scale(movement.x)).normalize();
-      actor.position.addInPlace(direction.scale(result.speed * (result.movementDt??dt)));
+      const travelSpeed=result.speed*(world.riding?.active ? 1.7 : 1);
+      actor.position.addInPlace(direction.scale(travelSpeed * (result.movementDt??dt)));
       constrainPlayerPosition(beforeMove);
-      sprintRequested=result.speed*(result.movementDt??dt);sprintActual=Math.hypot(actor.position.x-beforeMove.x,actor.position.z-beforeMove.z);
+      sprintRequested=travelSpeed*(result.movementDt??dt);sprintActual=Math.hypot(actor.position.x-beforeMove.x,actor.position.z-beforeMove.z);
       if (!attacking || !shotTarget) faceHeading(Math.atan2(direction.x, direction.z) + (config.forwardYaw || 0), dt);
     }
     controller.commitSprintMovement?.(sprintRequested,sprintActual);
     // Authored jump/roll poses remain local to the actor. Only its ground anchor
     // follows terrain; a boss holding or throwing the actor owns its altitude.
     if(!result.captured&&!boss.grab.active&&!world.v03?.holdsPlayer)world.terrain.place(actor.position);
+    world.riding?.afterMove(result,dt>0?sprintActual/dt:0);
     if (attacking && shotTarget && !isWarrior()) {
       const direction = shotTarget.aimPoint.subtract(actor.position);
       faceHeading(Math.atan2(direction.x, direction.z) - (config.attackYaw?.[result.state] || 0), dt);
@@ -1784,7 +1793,15 @@ try {
         onPause:()=>reconcilePlayback(),notify:message=>toast(message),sound:cue=>audio.play(cue)});
       world.scene.onDisposeObservable.addOnce(()=>{townServices?.dispose();townServices=null;});
     }
+    if(world.gameplayV03){
+      const {createRidingHorse}=await import('./v03/riding-horse.js');
+      world.riding=createRidingHorse({world,root:$('#app'),storage:v03Save.journey,player:()=>actor,
+        forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:()=>!!(ready&&!loadingAsset&&!mapTransition?.busy&&
+          world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.dead&&boss.playerAlive&&!boss.combatCount)});
+      world.scene.onDisposeObservable.addOnce(()=>world.riding.dispose());
+    }
     world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,
+      offerMount:()=>world.riding?.offer(),
       getPlayer:()=>actor,getController:()=>controller,openTownShop:id=>townServices?.openShop(id),
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId,
         // Scenery still streaming in (models and higher-resolution textures).
