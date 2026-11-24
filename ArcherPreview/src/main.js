@@ -1846,6 +1846,10 @@ try {
       setMapMarkers:list=>minimap.setMarkers(list),
       creditGold:(source,amount)=>goldLoot.creditCumulative(source,amount),
       addPotions:count=>{if(townServices)return townServices.addPotions(count);if(!boss)return 0;const before=boss.potions.remaining;boss.potions.remaining=Math.min(POTION.uses,before+count);updateButtons();return boss.potions.remaining-before;},
+      // Errands (v03/errands.js): bag items, village service events.
+      grantItem:(id,count)=>{if(!townServices?.economy.grant(id,count))return false;townServices.apply();return true;},
+      spendItem:(id,count)=>!!townServices?.economy.spend(id,count),itemCount:id=>townServices?.economy.state.bag[id]??0,
+      onTownEvent:fn=>{if(townServices)townServices.economy.onEvent=fn;},
       grantArmor:id=>{if(townServices)return townServices.grantArmor(id);if(!V03_ARMOR_DEFENSE[id])return false;try{if(journeyStorage?.getItem(V03_ARMOR_KEY)===id)return false;journeyStorage?.setItem(V03_ARMOR_KEY,id);}catch{return false;}if(boss)boss.combat.defense=playerDefense();audio.play('equip');return true;},
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},
       // Starts sound without a tap where the browser already allows it (a reloaded new game).

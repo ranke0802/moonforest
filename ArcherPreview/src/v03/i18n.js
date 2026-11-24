@@ -95,6 +95,11 @@ export function localizeChapter(target,source){
    if(step.arrival)copy.steps[si].arrival=out?.arrivals?.[step.id]??step.arrival;
   });
  });
+ source.ERRANDS?.forEach((errand,ei)=>{
+  const out=story.errands?.[errand.id],copy=target.ERRANDS[ei];
+  copy.title=out?.title??errand.title;
+  errand.steps.forEach((step,si)=>{copy.steps[si].text=out?.steps?.[step.id]??step.text;});
+ });
  if('CHAPTER_END_NOTE' in source)target.CHAPTER_END_NOTE=story.endNote??source.CHAPTER_END_NOTE;
  source.COMBAT_HINTS?.forEach((hint,index)=>{const out=story.hints?.[hint.id];for(const key of ['text','keys','touch'])target.COMBAT_HINTS[index][key]=out?.[key]??hint[key];});
  source.TIPS?.forEach((tip,index)=>{const out=story.tips?.[tip.id];for(const key of ['title','keys','touch','text'])target.TIPS[index][key]=out?.[key]??tip[key];});

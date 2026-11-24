@@ -68,5 +68,7 @@ export default {
   'shop.made':({name})=>particle(name,'을','를')+' 만들었습니다.','shop.sell':'판매','shop.sellFor':'판매 · {price} G','shop.sold':({name})=>particle(name,'을','를')+' 팔았습니다.',
   'shop.temperTitle':'{name} 단련','shop.forgeHelp':'표시가 가운데 선을 지날 때 내리치세요. 아깝게 빗나가면 단계가 유지됩니다. 실패하면 이 장비의 현재 내구도가 최대 {failureWear} 감소합니다.','shop.gauge':'가운데 목표가 있는 타이밍 막대','shop.strike':'내리치기',
   'shop.grade.perfect':'완벽','shop.grade.success':'성공','shop.grade.near':'아깝게 빗나감','shop.grade.failed':'실패','treasure.open':'열기 · {tier}등급',
+  // Optional errands (2026-11-24).
+  'hud.errand':'선택 의뢰','errand.accepted':'선택 의뢰 · {title}','errand.done':'의뢰 완료','errand.received':'받음 · {items}',
  },
 };

@@ -49,11 +49,12 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
  return true;
 }
 // Quest glyphs as 3×5 pixel bitmaps (row-major, top to bottom).
-const GLYPHS=Object.freeze({'?':['111','001','011','000','010'],'!':['010','010','010','000','010'],'>':['100','110','111','110','100']});
-const GLYPH_COLORS=Object.freeze({'?':'#f2dc9c','!':'#bff0dc','>':'#f2dc9c'});
+// '+': an optional errand is offered here (0.3 errands).
+const GLYPHS=Object.freeze({'?':['111','001','011','000','010'],'!':['010','010','010','000','010'],'>':['100','110','111','110','100'],'+':['000','010','111','010','000']});
+const GLYPH_COLORS=Object.freeze({'?':'#f2dc9c','!':'#bff0dc','>':'#f2dc9c','+':'#d9d2f2'});
 export class DotMinimap{
  constructor(element,{document=globalThis.document,translucent=()=>false}={}){this.translucent=translucent;this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;this.markers=[];this.markerRevision=0;}
- // Story markers [{x,z,glyph:'?'|'!'|'>'}] drawn over the map; off-map ones stick to the edge.
+ // Story markers [{x,z,glyph:'?'|'!'|'>'|'+'}] drawn over the map; off-map ones stick to the edge.
  setMarkers(list){this.markers=Array.isArray(list)?list:[];this.markerRevision++;this.last='';}
  async setWorld(world){
   const id=world.mapId,generation=++this.generation;this.mapId=id;if(!this.element)return;this.element.hidden=true;if(!this.ctx||!MINIMAP_MAPS[id])return;

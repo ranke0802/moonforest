@@ -16,6 +16,7 @@ for(const id of others)test(`locale ${id} is complete`,async()=>{
   const out=pack.story.quests[quest.id];if(!out?.title)missing.push('quest:'+quest.id);
   for(const step of quest.steps){if(!out?.steps?.[step.id])missing.push(`step:${quest.id}/${step.id}`);if(step.arrival&&!out?.arrivals?.[step.id])missing.push(`arrival:${quest.id}/${step.id}`);}
  }
+ for(const errand of chapter1.ERRANDS){const out=pack.story.errands?.[errand.id];if(!out?.title)missing.push('errand:'+errand.id);for(const step of errand.steps)if(!out?.steps?.[step.id])missing.push(`errand step:${errand.id}/${step.id}`);}
  for(const hint of chapter1.COMBAT_HINTS)for(const key of ['text','keys','touch'])if(!pack.story.hints[hint.id]?.[key])missing.push(`hint:${hint.id}.${key}`);
  for(const tip of chapter1.TIPS)for(const key of ['title','keys','touch','text'])if(!pack.story.tips[tip.id]?.[key])missing.push(`tip:${tip.id}.${key}`);
  const speakers=new Set(Object.values(chapter1.DIALOGUES).flat().map(line=>line.who));
@@ -37,6 +38,7 @@ test('a language pack translates story, ui and shared-game text in place',async(
  assert.equal(content.QUESTS[0].title,'The Wolf and the Wagon');assert.equal(content.DIALOGUES['driver-idle'][0].who,'마부','speaker keys stay Korean (portraits)');
  assert.equal(speaker('마부'),'Driver');assert.equal(t('prompt.talkQuest',{name:'Driver'}),'Talk to Driver');
  assert.equal(tr('검 공격'),'Sword');assert.equal(tr('회복 2/4'),'Healing 2/4');assert.equal(tr('처음 보는 문장'),'처음 보는 문장');
+ assert.equal(content.ERRANDS[1].title,'One Potion');assert.equal(content.ERRANDS[1].steps[0].text,'Brew a healing potion at the herbalist’s');assert.equal(content.DIALOGUES['herbalist-errand'][1].effects[0],'give:moon-herb:2','effects survive translation');
  assert.equal(chapter1.QUESTS[0].title,'늑대와 마차','the Korean source is untouched');
  setPack('ko',ko);localizeChapter(content,chapter1);assert.equal(content.QUESTS[0].title,'늑대와 마차','switching back restores Korean');
 });

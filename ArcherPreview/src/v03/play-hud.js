@@ -24,6 +24,9 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const root=make('div','v03-hud');root.dataset.v03Hud='';
  const quest=make('section','v03-quest'),kicker=make('small','v03-quest-kicker'),title=make('strong','v03-quest-title'),objective=make('p','v03-quest-objective');
  kicker.textContent=t('hud.main');quest.append(kicker,title,objective);quest.hidden=true;
+ // One optional errand under the main line (2026-11-24): kicker · title, then its step.
+ const errand=make('div','v03-quest-errand'),errandKicker=make('small','v03-quest-kicker'),errandTitle=make('strong','v03-errand-title'),errandStep=make('p','v03-errand-step');
+ errand.append(errandKicker,errandTitle,errandStep);errand.hidden=true;quest.append(errand);
  // Two lines at most: what to do, then how (keys or touch control), each on one line.
  const hint=make('div','v03-hint'),hintWhat=make('strong','v03-hint-what'),hintHow=make('span','v03-hint-how');hint.append(hintWhat,hintHow);hint.hidden=true;
  // Interaction plate: key cap · name · action. The whole plate is the touch target.
@@ -61,7 +64,7 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
  // Touch: the attack button stands in for the prompt while one can be acted on (interact-button.js).
  const interactButton=createInteractButton({doc,onInteract});
- const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
+ const last={title:null,objective:null,errandTitle:null,errandStep:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
  return {
   element:root,
   setQuest(nextTitle,nextObjective){
@@ -69,6 +72,14 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    const changedStep=last.objective!==null&&last.objective!==nextObjective;
    last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;kicker.textContent=t('hud.main');title.textContent=nextTitle??'';objective.textContent=nextObjective??'';
    if(changedStep){quest.classList.remove('is-updated');void quest.offsetWidth;quest.classList.add('is-updated');}
+  },
+  // The errand shown under the main quest (null hides it). DOM written only when it changes.
+  setErrand(nextTitle,nextStep){
+   if(last.errandTitle===nextTitle&&last.errandStep===nextStep)return;
+   const changedStep=last.errandStep!==null&&last.errandStep!==nextStep&&last.errandTitle===nextTitle;
+   last.errandTitle=nextTitle;last.errandStep=nextStep;errand.hidden=!nextTitle;
+   errandKicker.textContent=t('hud.errand');errandTitle.textContent=nextTitle??'';errandStep.textContent=nextStep??'';
+   if(changedStep){errand.classList.remove('is-updated');void errand.offsetWidth;errand.classList.add('is-updated');}
   },
   setCaption(value){
    // The prompt moves up out of a caption's way (v03.css).

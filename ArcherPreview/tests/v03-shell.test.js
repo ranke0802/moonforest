@@ -600,3 +600,51 @@ test('guide track keeps a lead, waits for the player and survives a path rebuild
  track.clear();track.setPath([{x:0,z:0},{x:0,z:5},{x:5,z:5}]);for(let i=0;i<300;i++)track.update(1/60,{x:0,z:4.6});
  assert.ok(Math.abs(track.position.z-5)<.01&&track.position.x>4.9);
 });
+test('errands: a first greeting once, an errand offered after its main quest, the service event and the hand-in pay once',async()=>{
+ const h=harness(),bag=new Map();let townEvent=null;
+ Object.assign(h.api,{itemCount:id=>bag.get(id)??0,
+  grantItem:(id,n)=>{bag.set(id,(bag.get(id)??0)+n);h.log.push(`grant:${id}:${n}`);return true;},
+  spendItem:(id,n)=>{if((bag.get(id)??0)<n)return false;bag.set(id,bag.get(id)-n);h.log.push(`spend:${id}:${n}`);return true;},
+  onTownEvent:fn=>{townEvent=fn;},addPotions:n=>{h.log.push('potions:'+n);return n;}});
+ h.finishSplash();await h.reveal();h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);
+ const story=h.shell.story,hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
+ assert.equal(typeof townEvent,'function','the story listens to village services while it plays');
+ // Up to M02's report by events (the talks themselves are covered by the story test above).
+ for(const event of [{type:'defeat',kind:'wolf'},{type:'talk',npc:'driver'},{type:'talk',npc:'driver'},{type:'reach',map:'village'},{type:'talk',npc:'innkeeper'},
+  {type:'talk',npc:'elder'},{type:'talk',npc:'herbalist'},{type:'talk',npc:'youth'}])story.log.notify(event);
+ h.state.mapId='village';h.state.character='warrior-v3';for(let i=0;i<3;i++)h.shell.update(.016);await settle();
+ const talk=async(id,lines)=>{
+  const member=h.shell.inspect().story.cast.find(row=>row.id===id);h.player.position={x:member.x,z:member.z};h.shell.update(.016);
+  key('KeyE');await settle();const said=[];
+  for(let i=0;i<lines;i++){said.push(hud('.v03-dialogue-text').textContent);key('KeyE');await settle(2);}
+  await settle();h.shell.update(.016);return said;
+ };
+ assert.equal(hud('.v03-quest-errand').hidden,true,'no errand before M02 is reported');
+ assert.deepEqual(await talk('innkeeper',DIALOGUES['inn-report'].length),DIALOGUES['inn-report'].map(line=>line.text));
+ assert.equal(hud('.v03-quest-title').textContent,'마을의 부탁');assert.equal(hud('.v03-quest-errand').hidden,true,'no errand yet');
+ // The minimap's mark nearest a villager (they stroll a little around their spot).
+ const glyphAt=(run,id)=>{const npc=run.shell.inspect().story.cast.find(row=>row.id===id);let best=null,bestSq=9;for(const mark of run.marks.at(-1)){const sq=(mark.x-npc.x)**2+(mark.z-npc.z)**2;if(sq<bestSq){best=mark.glyph;bestSq=sq;}}return best;};
+ assert.equal(glyphAt(h,'herbalist'),'+');assert.equal(glyphAt(h,'youth'),'+');assert.equal(glyphAt(h,'chief'),'?','the main quest keeps its own mark');assert.equal(glyphAt(h,'smith'),null,'the smith’s errand waits for the bear');
+ // The smith greets once, then has his short line.
+ assert.deepEqual(await talk('smith',1),[DIALOGUES['smith-greet'][0].text]);
+ assert.deepEqual(await talk('smith',1),[DIALOGUES['smith-idle'][0].text]);
+ // The herbalist offers her errand and hands over the herbs for it.
+ assert.deepEqual(await talk('herbalist',3),DIALOGUES['herbalist-errand'].map(line=>line.text));
+ assert.ok(h.log.includes('grant:moon-herb:2'));assert.equal(hud('.v03-quest-errand').hidden,false);
+ assert.equal(hud('.v03-errand-title').textContent,'물약 한 병');assert.equal(hud('.v03-errand-step').textContent,'약초사에게서 회복약 한 병 조제하기');
+ assert.equal(hud('.v03-quest-title').textContent,'마을의 부탁','the main line stays on top');
+ townEvent({type:'town',action:'repair',item:'oathblade'});h.shell.update(.016);assert.equal(hud('.v03-errand-step').textContent,'약초사에게서 회복약 한 병 조제하기');
+ townEvent({type:'town',action:'craft',item:'potion'});h.shell.update(.016);assert.equal(hud('.v03-errand-step').textContent,'약초사에게 알리기');
+ assert.equal(glyphAt(h,'herbalist'),'!');
+ assert.deepEqual(await talk('herbalist',3),DIALOGUES['herbalist-errand-done'].map(line=>line.text));
+ assert.ok(h.log.includes('gold:v03-errand-S02:10'));assert.ok(h.log.includes('potions:1'));assert.equal(hud('.v03-quest-errand').hidden,true);
+ assert.deepEqual(await talk('herbalist',1),[DIALOGUES['herbalist-idle'][0].text],'done errands are not offered again; her greeting was the errand talk');
+ assert.equal(h.log.filter(row=>row.startsWith('gold:v03-errand-S02')).length,1);
+ // A later document keeps the errand finished and the greetings given.
+ const again=harness({local:h.local,session:(()=>{const s=memory();createSaveSession({local:h.local,session:s,edition:E}).request(1,'load');return s;})()});
+ again.state.mapId='village';again.shell.update(.016);await settle();again.shell.update(.016);
+ assert.equal(again.shell.story.log.quest().id,'M03');
+ // Its cast and minimap marks come with the first frames on the map.
+ for(let i=0;i<60&&!again.marks.at(-1)?.length;i++){again.shell.update(.016);await settle(2);}
+ assert.equal(glyphAt(again,'herbalist'),null);assert.equal(glyphAt(again,'youth'),'+');
+});

@@ -53,7 +53,12 @@ export function createTownEconomy(wallet,legacy={}){
   if(!item||!status)return null;
   return {...status,max:baseDur(id,status.level),attack:status.hp&&item.attack?item.attack+status.level*FORGE_RULES.attackGain:0,defense:status.hp&&item.defense?item.defense+status.level*FORGE_RULES.defenseGain:0};
  }
+ // Village service events for the story's errands ({type:'town',action,item}).
+ // One listener at a time; the story sets it on start and clears it on stop.
+ let listener=null;
+ const told=(ok,action,item)=>{if(ok)try{listener?.({type:'town',action,item});}catch(error){console.warn('[MoonForest 0.3] town event',error);}return ok;};
  const api={
+  set onEvent(fn){listener=typeof fn==='function'?fn:null;},
   get state(){return state;},get gold(){return wallet.balance;},
   get attack(){const id=state.equipped.sword,w=state.condition[id];return w.hp?TOWN_ITEMS[id].attack+w.level*FORGE_RULES.attackGain:0;},
   get defense(){let total=0;for(const slot of ['shield','armor']){const id=state.equipped[slot],w=state.condition[id];if(w?.hp)total+=TOWN_ITEMS[id].defense+w.level*FORGE_RULES.defenseGain;}return total;},
@@ -66,27 +71,29 @@ export function createTownEconomy(wallet,legacy={}){
    w.hp--;dirty=true;return true;
   },
   wearDefense(blocked){const w=state.condition[state.equipped[blocked?'shield':'armor']];if(!w?.hp)return false;w.hp--;dirty=true;return true;},
-  buy(shop,id){const price=STOCK[shop]?.[id];return !!price&&transact(-price,s=>give(s,id,1));},
+  buy(shop,id){const price=STOCK[shop]?.[id];return told(!!price&&transact(-price,s=>give(s,id,1)),'buy',id);},
   sell(shop,id){
    const item=TOWN_ITEMS[id];return !!item?.sell&&!!STOCK[shop]&&own(state,id)&&transact(item.sell,s=>take(s,id,1));
   },
-  craft(shop,id){const recipe=RECIPES[shop]?.[id];return !!recipe&&Object.entries(recipe.inputs).every(([k,n])=>(state.bag[k]??0)>=n)&&transact(-recipe.gold,s=>{
+  craft(shop,id){const recipe=RECIPES[shop]?.[id];return told(!!recipe&&Object.entries(recipe.inputs).every(([k,n])=>(state.bag[k]??0)>=n)&&transact(-recipe.gold,s=>{
    for(const [key,n] of Object.entries(recipe.inputs))take(s,key,n);give(s,id,1);
-  });},
+  }),'craft',id);},
   repairCost(id){const w=gear(id);return w?Math.ceil((w.max-w.hp)/7):0;},
-  repair(id=state.equipped.sword){const cost=api.repairCost(id);return cost>0&&transact(-cost,s=>{s.condition[id].hp=gear(id).max;});},
+  repair(id=state.equipped.sword){const cost=api.repairCost(id);return told(cost>0&&transact(-cost,s=>{s.condition[id].hp=gear(id).max;}),'repair',id);},
   forgeCost(id){return 12+4*(gear(id)?.level??0);},
   canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&['wolf-fang','boar-tusk','iron-scrap','tainted-fang','grave-dust','rune-shard'].some(id=>own(state,id));},
   forge(position,id=state.equipped.sword){if(!Number.isFinite(position)||!api.canForge(id))return null;
    const grade=gradeStrike(position);
    const material=['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard'].find(id=>own(state,id));
-   return transact(-api.forgeCost(id),s=>{
+   return told(transact(-api.forgeCost(id),s=>{
     take(s,material,1);const w=s.condition[id];
     if(grade==='Perfect'||grade==='Success'){w.level=Math.min(FORGE_RULES.maxLevel,w.level+(grade==='Perfect'?FORGE_RULES.perfectGain:1));w.hp=baseDur(id,w.level);}
     if(grade==='Failed')w.hp=Math.max(0,w.hp-FORGE_RULES.failureWear);
-   })?grade:null;
+   }),'forge',id)?grade:null;
   },
   grant(id,count=1){return !!TOWN_ITEMS[id]&&qty(count)>0&&transact(0,s=>give(s,id,count));},
+  // Hands bag items over (an errand delivery). All or nothing.
+  spend(id,count=1){return !!TOWN_ITEMS[id]&&qty(count)>0&&(state.bag[id]??0)>=count&&transact(0,s=>take(s,id,count));},
   equip(id){const item=TOWN_ITEMS[id];return Boolean(item?.slot&&own(state,id))&&transact(0,s=>{s.equipped[item.slot]=id;});},
   register(id){return !!TOWN_ITEMS[id]?.quick&&own(state,id)&&transact(0,s=>{s.quick=id;});},
   drink(){const id=state.quick;if(!own(state,id)||!TOWN_ITEMS[id]?.quick)return false;

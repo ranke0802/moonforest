@@ -11,15 +11,18 @@ import {Color3} from '@babylonjs/core/Maths/math.color.js';
 // pale moon teal "!" (report back). Blocky 5×7 shapes drawn at 8 px per dot
 // with a thin ink outline (the cast's outline colour) and a one-step bevel:
 // light top edge, dark bottom edge. No per-row stripes.
-export const MARKER_COLORS=Object.freeze({'?':{fill:'#e6c97e',light:'#fbeab4',dark:'#a8833f'},'!':{fill:'#9fd9c4',light:'#d8f6ea',dark:'#5f9e8a'}});
+// "+" in pale lilac: an optional errand (선택 의뢰) is offered here (2026-11-24).
+export const MARKER_COLORS=Object.freeze({'?':{fill:'#e6c97e',light:'#fbeab4',dark:'#a8833f'},'!':{fill:'#9fd9c4',light:'#d8f6ea',dark:'#5f9e8a'},'+':{fill:'#cfc6ee',light:'#f0ecff',dark:'#8d82b8'}});
+const GLYPH_NAMES=Object.freeze({'?':'q','!':'x','+':'p'});
 const OUTLINE='#0b080c',DOT=8,EDGE=2,PAD=3;
 const GLYPHS=Object.freeze({
  '?':['.###.','#...#','....#','...#.','..#..','.....','..#..'],
  '!':['..#..','..#..','..#..','..#..','..#..','.....','..#..'],
+ '+':['.....','..#..','..#..','#####','..#..','..#..','.....'],
 });
 export const MARKER_TEXELS=Object.freeze({width:5*DOT+PAD*2,height:7*DOT+PAD*2});
 function glyphMaterial(scene,glyph){
- const {width,height}=MARKER_TEXELS,name=`v03-marker-${glyph==='?'?'q':'x'}`,rows=GLYPHS[glyph],tone=MARKER_COLORS[glyph];
+ const {width,height}=MARKER_TEXELS,name=`v03-marker-${GLYPH_NAMES[glyph]}`,rows=GLYPHS[glyph],tone=MARKER_COLORS[glyph];
  const texture=new DynamicTexture(name,{width,height},scene,true),ctx=texture.getContext();
  const lit=(c,r)=>rows[r]?.[c]==='#',x=c=>PAD+c*DOT,y=r=>PAD+r*DOT;
  ctx.clearRect(0,0,width,height);
@@ -60,10 +63,10 @@ export function createQuestMarkers(scene){
   // The probe planes stay (disabled) until dispose: Babylon 9.31 counts an
   // effect's users and drops it with its last mesh, so a probe that is
   // disposed after compiling leaves nothing prepared (measured 2026-11-20).
-  warm(glyphs=['?','!']){
+  warm(glyphs=['?','!','+']){
    for(const glyph of glyphs)try{
     if(probes.has(glyph))continue;
-    const probe=MeshBuilder.CreatePlane('v03-marker-warm-'+(glyph==='?'?'q':'x'),{width:.4,height:.4},scene);probe.isPickable=false;probe.setEnabled(false);probe.renderingGroupId=1;probe.billboardMode=7;
+    const probe=MeshBuilder.CreatePlane('v03-marker-warm-'+GLYPH_NAMES[glyph],{width:.4,height:.4},scene);probe.isPickable=false;probe.setEnabled(false);probe.renderingGroupId=1;probe.billboardMode=7;
     probes.set(glyph,probe);probe.material=material(glyph);void material(glyph).forceCompilationAsync(probe).catch(()=>{});
    }catch{/* compiled on first use instead */}
   },

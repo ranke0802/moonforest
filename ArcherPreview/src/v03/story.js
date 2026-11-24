@@ -4,6 +4,8 @@
 import {TransformNode} from '@babylonjs/core/Meshes/transformNode.js';
 import {Quaternion,Vector3} from '@babylonjs/core/Maths/math.vector.js';
 import {createQuestLog} from './quests.js';
+import {createErrandLog} from './errands.js';
+import {itemName} from './town-items.js';
 import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
 import {createGuideTrack} from './guide-track.js';
@@ -36,6 +38,9 @@ export {particle} from './korean.js';
 export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
  let log=createQuestLog({quests:content.QUESTS,storage:save.journey}),replaying=false,onChapterEnd=null;
+ // Optional errands (errands.js) and who has been greeted once (NPCS greet), per slot.
+ let errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey});
+ const GREET_KEY='v03-greeted-v1',greeted=new Set(),errandMarks=new Map();let greetKey=GREET_KEY,errandFocus=null,errandPoll=0;
  const dialogue=createDialogue({doc,portraitFor});
  // Warm the art cache so the first line never shows an empty frame.
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
@@ -74,8 +79,70 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function refresh(){
   const quest=log.quest();
   if(quest)hud.setQuest(quest.title,log.objective());else hud.setQuest(t('hud.chapterNext'),content.CHAPTER_END_NOTE);
+  refreshErrands();
  }
+ // ----- optional errands (선택 의뢰, errands.js) -----
+ // The HUD shows one errand under the main line: the one last accepted or
+ // advanced while it is active, else the first active one. Marks over heads
+ // (+ offered, ! ready to hand in) are worked out here, on changes, not per frame.
+ const mainDone=id=>log.isDone(id);
+ function deliverReady(errand){const step=errands.step(errand.id);return step?.type==='deliver'&&(api.itemCount?.(step.item)??0)>=step.count;}
+ function refreshErrands(){
+  if(!errands.isActive(errandFocus))errandFocus=errands.active()[0]?.id??null;
+  const focus=errandFocus?errands.errand(errandFocus):null,step=focus?errands.step(focus.id):null;
+  hud.setErrand(focus?.title??null,focus?errands.objective(focus.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null):null);
+  errandMarks.clear();
+  for(const npc of content.NPCS??[]){
+   const waiting=errands.waitingOn(npc.id);
+   if(waiting&&(errands.step(waiting.id).type==='talk'||deliverReady(waiting)))errandMarks.set(npc.id,'!');
+   else if(errands.offerFor(npc.id,mainDone))errandMarks.set(npc.id,'+');
+  }
+ }
+ function errandDone(errand){
+  if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
+  tips.queue.unshift({title:t('errand.done'),keys:errand.title,touch:errand.title,text:''});
+  const reward=errand.reward;if(!reward||replaying)return;
+  const parts=[];
+  try{if(reward.gold&&api.creditGold?.('v03-errand-'+errand.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
+  try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] errand potions',error);}
+  if(!parts.length)return;
+  api.playSound?.('gold_pickup',{volume:.9});
+  setTimeout(()=>{if(!disposed)api.toast?.(t('reward.got',{items:parts.join(' · ')}));},1400);
+ }
+ function errandResults(results){
+  let changed=false;
+  for(const row of results){if(!row)continue;changed=true;if(errands.isActive(row.id))errandFocus=row.id;if(row.errandDone)errandDone(errands.errand(row.id));}
+  if(changed)refreshErrands();
+ }
+ function errandEvent(event){if(started&&event)errandResults(errands.notify(event));}
+ // What an NPC says for an errand now, or null: hand-in first, then a new
+ // offer, then a reminder from the giver.
+ function errandTalk(npc){
+  const waiting=errands.waitingOn(npc);
+  if(waiting){
+   const step=errands.step(waiting.id);
+   if(step.type==='deliver')return deliverReady(waiting)?{kind:'deliver',errand:waiting,dialogue:waiting.done}:{kind:'wait',errand:waiting,dialogue:waiting.wait};
+   return {kind:'turnIn',errand:waiting,dialogue:waiting.steps.indexOf(step)===waiting.steps.length-1?waiting.done:waiting.wait};
+  }
+  const offer=errands.offerFor(npc,mainDone);if(offer)return {kind:'offer',errand:offer,dialogue:offer.offer};
+  const given=errands.givenBy(npc);return given?{kind:'wait',errand:given,dialogue:given.wait}:null;
+ }
+ function afterErrandTalk(talk,npc){
+  if(!talk)return;
+  if(talk.kind==='offer'){
+   if(!errands.accept(talk.errand.id))return;
+   errandFocus=talk.errand.id;
+   if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
+   tips.queue.unshift({title:t('errand.accepted',{title:talk.errand.title}),keys:errands.objective(talk.errand.id),touch:errands.objective(talk.errand.id),text:''});
+   refreshErrands();return;
+  }
+  if(talk.kind==='deliver'){const step=errands.step(talk.errand.id);if(!api.spendItem?.(step.item,step.count))return;}
+  if(talk.kind==='deliver'||talk.kind==='turnIn')errandResults([errands.complete(talk.errand.id,npc)]);
+ }
+ function loadGreeted(){greeted.clear();try{const value=JSON.parse(save.journey.getItem(greetKey)??'[]');if(Array.isArray(value))for(const id of value)if(typeof id==='string')greeted.add(id);}catch{/* start fresh */}}
+ function markGreeted(npc){if(greeted.has(npc))return;greeted.add(npc);try{save.journey.setItem(greetKey,JSON.stringify([...greeted]));}catch{/* greeted again next time */}}
  function emit(event){
+  errandEvent(event);
   const result=log.notify(event);if(!result.changed)return result;
   refresh();
   if(result.questDone){
@@ -246,7 +313,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  // ----- quest markers: ? = quest waiting, ! = report back -----
  let markers=null,markerKey='';const mapMarks=[];
- function markFor(id){const step=log.step();return step?.type==='talk'&&log.isTarget(id)?(step.turnIn?'!':'?'):null;}
+ function markFor(id){const step=log.step();return step?.type==='talk'&&log.isTarget(id)?(step.turnIn?'!':'?'):errandMarks.get(id)??null;}
  function updateMarkers(){
   if(createMarkers&&!markers&&cast.length){try{markers=createMarkers(api.world.scene);}catch(error){console.warn('[MoonForest 0.3] quest markers unavailable',error);createMarkers=null;}}
   mapMarks.length=0;let key=mapId??'';
@@ -330,6 +397,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   for(const line of lines)for(const effect of line.effects??[]){
    if(effect==='right-wagon')continue;// handled by interact (needs the member)
    if(effect==='rest'){api.rest?.();save.touch({});hud.flash(t('hud.rested'));trigger('effect:rest');}
+   // give:<item>:<count> — the speaker hands bag items over (errand materials).
+   if(effect.startsWith('give:')){const [,item,count]=effect.split(':'),n=Number(count)||1;if(!replaying&&api.grantItem?.(item,n)){hud.flash(t('errand.received',{items:itemName(item)+' ×'+n}));refreshErrands();}}
   }
  }
  async function interact(){
@@ -337,7 +406,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // While the wagon waits, E means push (at the roof side next to the driver).
   if(lift.active)return nearLift(api.getPlayer?.()?.position)?push():false;
   if(!near)return false;
-  const member=near,questLine=log.dialogueFor(member.npc.id),lines=content.DIALOGUES[questLine??member.npc.idle];
+  const member=near,npc=member.npc.id,questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc);
+  const greeting=!questLine&&!errand&&!greeted.has(npc)?member.npc.greet:null;
+  const lines=content.DIALOGUES[questLine??errand?.dialogue??greeting??member.npc.idle];
   if(!lines)return false;
   if(member===driverMember){thanks.done=true;if(route.member===member)stopRoute();}
   talking=true;hud.setPrompt(null);api.input.setSuspended(true);
@@ -349,6 +420,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     // Setting the wagon up: the step completes when it stands again (updateLift).
     const heave=played.some(line=>line.effects?.includes('right-wagon'));
     if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
+    markGreeted(npc);afterErrandTalk(errand,npc);
     if(member.npc.id==='driver'&&(questLine==='driver-thanks'||log.quest()?.id!=='M00'||log.step()?.id==='road'))api.offerMount?.();
     if(!disposed&&(member.npc.id==='smith'||member.npc.id==='herbalist'))await api.openTownShop?.(member.npc.id);
    }
@@ -1286,6 +1358,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   start({fresh=false,key,replay=false,onComplete=null}={}){
    replaying=replay;onChapterEnd=onComplete;log=createQuestLog({quests:content.QUESTS,storage:save.journey,key});
    if(fresh||!log.load())log.reset();
+   // Errands and greetings follow the same record (a replay keeps its own under its key).
+   errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey,key:key?key+':errands':undefined});
+   if(fresh||!errands.load())errands.reset();
+   errandFocus=null;errandPoll=0;greetKey=key?key+':greeted':GREET_KEY;loadGreeted();
+   if(fresh){greeted.clear();try{save.journey.removeItem(greetKey);}catch{/* optional */}}
+   api.onTownEvent?.(event=>errandEvent(event));
    // A new game opens on the wolf at the wagon (once the cast is placed).
    scene.pending=fresh===true&&log.quest()?.id==='M00';scene.pendingFor=0;
    started=true;mapId=null;warmStoryVisuals();warmLoot();Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0});
@@ -1303,6 +1381,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    scene.pending=false;scene.pendingFor=0;
    try{dialogue.cancel();}catch{/* nothing open */}talking=false;
    clearCast();mapId=null;started=false;
+   api.onTownEvent?.(null);hud.setErrand(null,null);errandMarks.clear();
    guide.visual?.hide();guide.key=null;guide.shown=false;
    try{api.setMapMarkers?.([]);}catch{/* optional */}
    tips.queue.length=0;tips.showing=null;tips.step=null;
@@ -1312,7 +1391,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    staged.key=null;staged.busy=false;staged.next=0;
    return true;
   },
-  defeat(event){if(started&&event&&(!log.step()?.phase||event.phase===log.step().phase))emit({type:'defeat',kind:event.family&&log.step()?.kind===event.family?event.family:event.kind,map:mapId});},
+  defeat(event){
+   if(!started||!event)return;
+   const step=log.step(),row={type:'defeat',kind:event.family&&step?.kind===event.family?event.family:event.kind,family:event.family??null,source:event.kind,map:mapId};
+   if(!step?.phase||event.phase===step.phase)emit(row);else errandEvent(row);
+  },
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
   prepare(id){
@@ -1348,11 +1431,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     for(const member of cast){if(member===fallen.member)continue;const dx=member.x-player.x,dz=member.z-player.z,sq=dx*dx+dz*dz;if(sq<bestSq){best=member;bestSq=sq;}}
     near=api.battle.combatCount>0?null:best;
     if(near){
-     const quest=log.isTarget(near.npc.id),name=speaker(near.npc.name);
+     const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name);
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
      hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name}),act:'talk'});
     }else hud.setPrompt(null);
    }
+   if((errandPoll-=dt)<=0){errandPoll=1;if(errands.active().some(errand=>errands.step(errand.id)?.type==='deliver'))refreshErrands();}
    updateBubble(dt);shieldTalk();coach(dt);updateSlow(dt);configureCombat();contextTips();runTips(dt);stageFight(player);updateGuide(dt,player);updateMarkers();
   },
   // QA: a cast member's visual (gesture, position) by NPC id.
@@ -1367,6 +1451,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // five 2048 px uploads at +5.5 s). A promise for the models, else null.
   arrive(id){if(!started||disposed||!id)return null;if(castMap!==id)buildCast(id);return castMap===id?castSettled:null;},
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
-  dispose(){if(disposed)return;disposed=true;stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
+  dispose(){if(disposed)return;disposed=true;api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }

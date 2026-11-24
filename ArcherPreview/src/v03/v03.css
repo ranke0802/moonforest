@@ -154,6 +154,12 @@ html[data-loading] .v03-hud{display:none}
 .v03-quest-title{display:block;margin-top:1px;font-size:clamp(14px,calc(2.3vmin / var(--v03-ui,1)),17px);color:#f4ead0;text-shadow:0 1px 4px #000}
 .v03-quest-objective{margin:3px 0 0;font-size:clamp(13px,calc(2vmin / var(--v03-ui,1)),15px);line-height:1.45;text-shadow:0 1px 4px #000}
 .v03-quest.is-updated .v03-quest-objective{animation:v03-pulse .9s ease}
+/* An optional errand under the main line (2026-11-24): smaller, lilac rule, wraps. */
+.v03-quest-errand{margin-top:7px;padding-top:6px;border-top:1px solid #cfc6ee55}
+.v03-quest-errand .v03-quest-kicker{color:#cfc6ee}
+.v03-errand-title{display:block;font-size:clamp(12px,calc(1.9vmin / var(--v03-ui,1)),14px);color:#ece6ff;text-shadow:0 1px 4px #000}
+.v03-errand-step{margin:2px 0 0;font-size:clamp(12px,calc(1.8vmin / var(--v03-ui,1)),13px);line-height:1.4;text-shadow:0 1px 4px #000}
+.v03-quest-errand.is-updated .v03-errand-step{animation:v03-pulse .9s ease}
 @keyframes v03-pulse{0%{color:#fff4b8;transform:translateX(6px)}100%{color:inherit;transform:none}}
 /* Tutorial steps (2026-11-20, user): big gold words in the middle like the stamina notice, not a small box at the bottom. */
 .v03-hint{position:absolute;left:50%;top:30%;transform:translateX(-50%);width:max-content;max-width:calc(94vw / var(--v03-ui,1));padding:0 12px;display:flex;flex-direction:column;align-items:center;gap:.15em;font-weight:700;line-height:1.3;letter-spacing:.04em;text-align:center;color:#ffe8ad;background:none;border:0;text-shadow:0 1px 2px #000,0 0 14px #000c,0 0 2px #000;pointer-events:none}

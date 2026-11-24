@@ -27,6 +27,8 @@ export function createQuestLog({quests,storage=null,key=STORE_KEY}){
   reset(){Object.assign(state,{quest:0,step:0,count:0,done:[]});save();},
   get finished(){return state.quest>=quests.length;},
   quest,step,
+  // Whether the main quest with this id has been completed.
+  isDone(id){const index=quests.findIndex(quest=>quest.id===id);return index>=0&&(state.quest>index);},
   snapshot:()=>({...state,done:[...state.done]}),
   // Text for the tracker, e.g. "늑대를 물리치기 (1/2)".
   objective(){
