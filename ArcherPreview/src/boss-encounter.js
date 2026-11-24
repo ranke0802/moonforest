@@ -143,8 +143,8 @@ export class BossEncounter {
     // idle pose before compiling; do not warm an artificial all-zero morph rig.
     if(this.assetPreparationStep<5){await preparation.step('animator',()=>{this.animator?.dispose();this.animator=this.prepareAnimator();});this.assetPreparationStep=5;}
     if(this.assetPreparationStep<6){
-      this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation,shadows:this.world.shadows});
-      if(this.kind!=='elena')await prepareBossShaders({meshes:[this.ring]},{preparation});
+      this.preparationPhase('screen');await prepareBossShaders(this.asset,{preparation,shadows:this.world.shadows,keepPrograms:this.keepPreparedPrograms});
+      if(this.kind!=='elena')await prepareBossShaders({meshes:[this.ring]},{preparation,keepPrograms:this.keepPreparedPrograms});
       preparation.check();this.assetPreparationStep=6;
     }
     await this.prepareAuxiliary(preparation);if(this.kind==='elena'&&this.phase===2)await prepareNpcInteriorInk(this.asset,preparation);preparation.check();

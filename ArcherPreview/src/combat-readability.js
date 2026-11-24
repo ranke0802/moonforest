@@ -9,7 +9,7 @@ export function encounterInCombat(encounter){
 export function primaryHealthBoss(encounters,position,previousId){
   let closest=null,distance=Infinity,previous=null,previousDistance=Infinity;
   for(const boss of encounters){
-    if(!boss.active||boss.corpseGone||!encounterInCombat(boss)||boss.kind==='goblin'||boss.regularWolfId||boss.fogVisible===false||boss.renderVisible===false)continue;
+    if(!boss.active||boss.corpseGone||!encounterInCombat(boss)||boss.minorEnemy||boss.kind==='goblin'||boss.regularWolfId||boss.fogVisible===false||boss.renderVisible===false)continue;
     const p=boss.actor?.position;if(!p)continue;
     const d=Math.hypot(p.x-(position?.x??0),p.z-(position?.z??0));
     if(d<distance){closest=boss;distance=d;}
