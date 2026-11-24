@@ -1,5 +1,5 @@
 // Record only known render comparison switches; a shared URL may have unrelated fields.
-const switches=['pets','riding','chapterCamps','leaves','vista','itemIcons'];
+const switches=['pets','riding','chapterCamps','leaves','vista','itemIcons','fieldChests'];
 
 export function disabledComparisonFeatures(search=''){
   const params=new URLSearchParams(search);

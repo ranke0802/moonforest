@@ -25,7 +25,9 @@ export function normalizeTown(raw,legacy={}){
   const source=raw.condition?.[id]??raw.weapons?.[id],level=Math.min(FORGE_RULES.maxLevel,qty(source?.level)),max=baseDur(id,level);
   condition[id]={level,hp:Number.isSafeInteger(source?.hp)?Math.max(0,Math.min(max,source.hp)):max};
  }
- const opened=Array.isArray(raw.opened)?[...new Set(raw.opened.filter(v=>typeof v==='string'&&v.length<120))].slice(0,128):[];
+ // The ground-drop budget applies to live pickups. Opened chests are permanent per-slot history.
+ const opened=Array.isArray(raw.opened)?[...new Set(raw.opened.filter(id=>typeof id==='string'&&
+   (id.length<120||/^placed:(?:village|great-plains|monster-forest|witch-cave):[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(id))))]:[];
  const drops=Array.isArray(raw.drops)?raw.drops.filter(d=>validateItemDrop(d)&&Object.keys(d.rewards).every(id=>TOWN_ITEMS[id])).slice(0,128):[];
  return {version:1,bag,equipped,condition,opened,drops,quick:TOWN_ITEMS[raw.quick]?.quick?raw.quick:'potion',
    boost:Math.max(0,Math.min(90,Number(raw.boost)||0)),boostRate:raw.boostRate===1.75?1.75:1.5};

@@ -1,6 +1,7 @@
 export const ITEM_DROP_MODELS=Object.freeze({apple:'apple',pie:'apple-pie',feed:'pet-food',herb:'moon-dew-herb',bandage:'clue-bandage',locket:'memory-locket',cargo:'clue-satchel','goblin-iron':'goblin-club',potion:'contaminated-vial','travel-tonic':'contaminated-vial','concentrated-tonic':'contaminated-vial','refined-tonic':'contaminated-vial','greater-tonic':'contaminated-vial','restoration-water':'contaminated-vial'});
 export const DROP_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
-const validId=/^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/;
+// An authored instance can itself use all 120 characters before the map and reward index are added.
+const validId=/^(?:[A-Za-z0-9][A-Za-z0-9._:-]{0,119}|chest:placed:(?:village|great-plains|monster-forest|witch-cave):[A-Za-z0-9][A-Za-z0-9._:-]{0,119}:\d{1,2})$/;
 export function validateItemDrop(value){
  if(!value||typeof value!=='object'||!validId.test(value.id??'')||!DROP_MAPS.includes(value.mapId)||!Object.values(ITEM_DROP_MODELS).includes(value.model)||!value.origin||!value.position||!['x','y','z'].every(k=>Number.isFinite(value.origin[k])&&Number.isFinite(value.position[k])&&Math.abs(value.origin[k])<10000&&Math.abs(value.position[k])<10000)||(value.effectEnabled!==undefined&&typeof value.effectEnabled!=='boolean')||!value.rewards||typeof value.rewards!=='object'||Array.isArray(value.rewards))return false;
  const entries=Object.entries(value.rewards);return entries.length>0&&entries.length<=16&&entries.every(([id,count])=>/^[a-zA-Z0-9:_-]{1,90}$/.test(id)&&Number.isSafeInteger(count)&&count>0&&count<=100000);

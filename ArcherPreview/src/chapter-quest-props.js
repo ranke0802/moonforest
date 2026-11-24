@@ -22,22 +22,25 @@ function markerSource(scene,material){
  scene.removeMesh(mesh);return mesh;
 }
 
-export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,timeoutMs,timers}={}){
+// vanishOpenedAfter (0.3, 2026-11-24 user request): an opened chest disappears that many
+// seconds after it opens, and a chest already looted before this visit is never shown or
+// loaded again (its point is `gone`). 0 keeps the 0.2 behaviour: opened chests stay open.
+export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,timeoutMs,timers,vanishOpenedAfter=0}={}){
  const scene=world.scene;
  let version=0,disposed=false,scope=null,manifest=null,mapPoints=[],owned=[],containers=[],records=[],outlines=null,marker=null,markerMaterial=null,worker=null;
  let models=new Map(),demand=new Set();
- let animationTime=null;const opening=new Set();
+ let animationTime=null;const opening=new Set(),vanishing=new Set();
  const stats={modelLoads:0,modelFailures:0,instances:0,markerTriangles:48,markerInstances:0,outlineDraws:0,lastError:null};
  const current=revision=>!disposed&&revision===version&&!scene.isDisposed;
  const release=()=>{
-  version++;scope?.abort();scope=null;manifest=null;demand.clear();models=new Map();worker=null;opening.clear();animationTime=null;
+  version++;scope?.abort();scope=null;manifest=null;demand.clear();models=new Map();worker=null;opening.clear();vanishing.clear();animationTime=null;
   outlines?.dispose();outlines=null;for(const root of owned)root.dispose();for(const c of containers)c.dispose();
   for(const p of mapPoints){delete p.marker;delete p.visual;}
   marker?.dispose();markerMaterial?.dispose();marker=null;markerMaterial=null;
   owned=[];containers=[];records=[];mapPoints=[];
   Object.assign(stats,{instances:0,markerInstances:0,outlineInstances:0,outlineTriangles:0,lastError:null});
  };
- const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p)&&!p.opened&&!p.wasLooted);p.visual?.setEnabled(demand.has(p));}for(const record of records)if(record.point.opened&&record.opening&&!record.opening.state.opened)record.opening.open({immediate:true});};
+ const sync=()=>{for(const p of mapPoints){p.marker?.setEnabled(demand.has(p)&&!p.opened&&!p.wasLooted);p.visual?.setEnabled(demand.has(p)&&p.gone!==true);}for(const record of records)if(record.point.opened&&record.opening&&!record.opening.state.opened)record.opening.open({immediate:true});};
  async function install(id,revision,signal){
   const config=manifest?.assets[id],profile=config?.lods?.[1]??config?.lods?.[0];if(!profile){models.set(id,'unavailable');return;}
   const base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href),url=new URL(profile.model,base);
@@ -51,7 +54,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    prepareVillageInstancing(sources);applyVillageToon(sources,world.lighting);world.lighting?.registerMeshes?.(sources);
    for(const mesh of sources){mesh.isPickable=false;world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
    await lifetime.run(()=>prepareMapMaterials(sources,{cancelled}));lifetime.check();
-   for(const point of mapPoints.filter(p=>p.model===id)){
+   for(const point of mapPoints.filter(p=>p.model===id&&p.gone!==true)){
     const root=new TransformNode('quest-prop-'+point.id,scene),height=point.height??config.height;
     root.position.set(point.x,world.terrain.heightAt(point.x,point.z),point.z);root.rotation.y=point.yaw??0;
     root.scaling.setAll((height/config.bounds[1])*(point.scale??1));root.setEnabled(false);localRoots.push(root);
@@ -91,6 +94,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
   async load(points){
    release();if(disposed||scene.isDisposed)return false;
    const revision=version;scope=new AbortController();mapPoints=points;
+   if(vanishOpenedAfter>0)for(const point of points)if(point.model==='chest-common'&&point.wasLooted)point.gone=true;
    const lifetime=new MapLoadLifetime({signal:scope.signal,timeoutMs,timers,stage:'quest-props'});
    try{
     const base=baseUrl??new URL(`${import.meta.env?.BASE_URL??'./'}assets/quest-props.json`,location.href);
@@ -103,17 +107,27 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    }catch(error){if(!current(revision))return false;release();throw error;}finally{lifetime.close();}
   },
   update(points,position,visible){
-   demand.clear();for(const p of points)if(position&&Math.hypot(position.x-p.x,position.z-p.z)<30&&visible(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z})))demand.add(p);
+   demand.clear();for(const p of points)if(p.gone!==true&&position&&Math.hypot(position.x-p.x,position.z-p.z)<30&&visible(p)&&(!world.caveFog||world.caveFog.allowsPoint({x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z})))demand.add(p);
    sync();pump();
   },
-  openChest(point,{immediate=false}={}){
+  openChest(point,{immediate=false,time=animationTime}={}){
    if(disposed||point.model!=='chest-common')return false;point.wasLooted=true;point.opened=true;point.visualOpened=null;
    const controller=records.find(record=>record.point===point)?.opening;
    if(controller?.open({immediate})&&controller.state.active)opening.add(controller);
+   if(vanishOpenedAfter>0&&!point.gone&&!vanishing.has(point)){point.vanishAt=Number.isFinite(time)?time+vanishOpenedAfter:null;vanishing.add(point);}
    sync();return !!controller;
   },
   animate(time){
    if(!Number.isFinite(time)||disposed)return;const dt=animationTime===null?0:Math.max(0,time-animationTime);animationTime=time;
+   if(vanishing.size){
+    let changed=false;
+    for(const point of vanishing){
+     point.vanishAt??=time+vanishOpenedAfter;
+     if(time<point.vanishAt)continue;
+     point.gone=true;vanishing.delete(point);changed=true;
+    }
+    if(changed)sync();
+   }
    if(!opening.size)return;
    for(const controller of opening)if(!controller.advance(dt))opening.delete(controller);
   },

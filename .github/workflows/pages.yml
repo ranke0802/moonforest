@@ -39,6 +39,8 @@ jobs:
           ArcherPreview/tests/v03-town-item-icons.test.js
           ArcherPreview/tests/v03-scenery-diagnostics.test.js
           ArcherPreview/tests/v03-field-chest-retry.test.js
+          ArcherPreview/tests/v03-chest-vanish.test.js
+          ArcherPreview/tests/chest-opening-lifecycle.test.js
           ArcherPreview/tests/v03-character-menu.test.js
           ArcherPreview/tests/v03-menu-language.test.js
           ArcherPreview/tests/v03-riding-horse.test.js

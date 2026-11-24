@@ -7,14 +7,19 @@ import {language,t} from './i18n.js';
 
 const modelFor=id=>TOWN_ITEMS[id].quick?'contaminated-vial':id==='moon-herb'?'moon-dew-herb':TOWN_ITEMS[id].slot==='sword'?'goblin-club':'clue-satchel';
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
-export function createTownTreasure({root,world,economy,canInteract,player,notify,sound,props=createQuestProps(world)}){
+// An opened chest disappears after this many seconds; a looted one never comes back
+// (user, 2026-11-24). The record is economy.state.opened, saved per slot.
+export const CHEST_VANISH_SECONDS=5;
+export function createTownTreasure({root,world,economy,canInteract,player,notify,sound,props=createQuestProps(world,{vanishOpenedAfter:CHEST_VANISH_SECONDS}),makeDrops=createItemDropView,fieldChestsEnabled=new URLSearchParams(globalThis.location?.search).get('fieldChests')!=='0'}){
  let drops=null,map=null,points=[],nearest=null,nearDrops=[],stamp=-1,clock=0,nextScan=0,loaded=false,hadVisibleDrops=false;
  let loading=false,retryAt=0,seenFailures=props.stats.modelFailures;
  let labelTier=0,labelLang='';
+ const vanishingAuthored=new Map();
+ let lastAuthoredRuntime=null;
  const doc=root.ownerDocument,button=doc.createElement('button');
  button.type='button';button.className='mf-treasure-prompt';button.hidden=true;root.append(button);
- const visual=()=>drops??=createItemDropView(world,{onError:e=>console.warn('[Town items]',e)});
- const clear=()=>{props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;loading=false;retryAt=0;seenFailures=props.stats.modelFailures;hadVisibleDrops=false;button.hidden=true;};
+ const visual=()=>drops??=makeDrops(world,{onError:e=>console.warn('[Town items]',e)});
+ const clear=()=>{props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;loading=false;retryAt=0;seenFailures=props.stats.modelFailures;hadVisibleDrops=false;button.hidden=true;vanishingAuthored.clear();lastAuthoredRuntime=null;};
  const ground=(point)=>world.terrain?.heightAt?.(point.x,point.z)??0;
  const reach=(from,to)=>!world.navigation||world.navigation.segmentClear(from,to,.06,true);
  function scatter(id,position,rewards,tier){
@@ -27,28 +32,48 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
   const ok=economy.scatter(rows,tier?id:null);if(ok)nextScan=0;return ok;
  }
  function open(point){
-  const pos=player();if(!point||!pos||!canInteract()||dist(pos,point)>3||!reach(pos,point)||economy.state.opened.includes(point.id))return false;
+  const pos=player();if(!point||!pos||!canInteract()||dist(pos,point)>3||economy.state.opened.includes(point.id))return false;
+  const contact=point.authored?world.authoredPlacements?.chestInteractionPoint?.(point.authored,pos)??point:point;
+  if(!reach(pos,contact))return false;
   if(!scatter(point.id,{x:point.x,z:point.z,y:ground(point)},treasureRewards(point.tier),point.tier))return false;
-  if(point.authored)world.authoredPlacements?.openChest(point.authored);else props.openChest(point);
+  if(point.authored){
+   world.authoredPlacements?.openChest(point.authored);
+   vanishingAuthored.set(point.authored,clock+CHEST_VANISH_SECONDS);
+  }else props.openChest(point,{time:clock});
   visual().openChest?.({x:point.x,z:point.z,y:ground(point)},point.tier);
   sound('gold_pickup');nearest=null;button.hidden=true;return true;
  }
  const openAuthored=id=>{
+  if(map!==world.mapId)enter();
+  if(world.authoredPlacements!==lastAuthoredRuntime)syncAuthored();
   const record=world.authoredPlacements?.records?.get(id);
   if(record?.instance?.assetId!=='chest-common'||!record.chestOpening||record.root?.isEnabled()===false)return false;
   const p=record.root.getAbsolutePosition();
   return open({id:'placed:'+world.mapId+':'+id,authored:id,x:p.x,z:p.z,tier:record.instance.chest?.tier??1});
  };
  const authoredOpened=id=>economy.state.opened.includes('placed:'+world.mapId+':'+id);
+ function syncAuthored(){
+  const runtime=world.authoredPlacements;
+  if(!runtime?.setLootedChests)return;
+  const prefix='placed:'+world.mapId+':',hidden=[];
+  for(const key of economy.state.opened){
+   if(!key.startsWith(prefix))continue;
+   const id=key.slice(prefix.length);
+   if(!vanishingAuthored.has(id))hidden.push(id);
+  }
+  runtime.setLootedChests(hidden,{resetOpenState:lastAuthoredRuntime!==runtime});
+  lastAuthoredRuntime=runtime;stamp=world.placementRevision??0;
+ }
  world.openAuthoredChest=openAuthored;world.isAuthoredChestOpened=authoredOpened;
  button.onclick=()=>open(nearest);
  function onKey(e){if(e.code==='KeyE'&&!e.repeat&&!e.defaultPrevented&&nearest&&!world.v03?.story?.near&&open(nearest)){e.preventDefault();e.stopImmediatePropagation();}}
  doc.defaultView.addEventListener('keydown',onKey,true);
  function enter(){
   clear();map=world.mapId;
-  points=CHAPTER_POINTS.filter(p=>p.treasure&&p.map===map).map(p=>{
+  if(!fieldChestsEnabled)return;
+  points=CHAPTER_POINTS.filter(p=>p.treasure&&p.map===map&&!economy.state.opened.includes(p.id)).map(p=>{
    const free=world.navigation?.findFree?.(p,.62,world.plains?105:world.cave?64:world.forest?55:48)??p;
-   return {...p,x:free.x,z:free.z,opened:economy.state.opened.includes(p.id),wasLooted:economy.state.opened.includes(p.id)};
+   return {...p,x:free.x,z:free.z,opened:false,wasLooted:false};
   });
  }
  return {clear,
@@ -59,13 +84,14 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
    if(!world.v03?.playing){if(map)clear();return;}
    const me=player();if(!me)return;if(map!==world.mapId)enter();
    clock+=dt;
+   if(vanishingAuthored.size){
+    let expired=false;
+    for(const [id,at] of vanishingAuthored)if(clock>=at){vanishingAuthored.delete(id);expired=true;}
+    if(expired)syncAuthored();
+   }
    if(clock>=nextScan){
     nextScan=clock+.22;
-    const authored=world.authoredPlacements?.records;
-    if(authored&&stamp!==(world.placementRevision??0)){
-     stamp=world.placementRevision??0;
-     for(const [id,r] of authored)if(r.chestOpening&&authoredOpened(id))world.authoredPlacements.openChest(id,{immediate:true});
-    }
+    if(world.authoredPlacements&&(world.authoredPlacements!==lastAuthoredRuntime||stamp!==(world.placementRevision??0)))syncAuthored();
     if(loaded&&props.stats.modelFailures!==seenFailures){
      seenFailures=props.stats.modelFailures;
      props.release();loaded=false;retryAt=clock+8;
@@ -85,7 +111,12 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
      });
     }
     if(loaded)props.update(points,me,()=>true);
-    nearest=canInteract()&&!world.v03?.story?.near?points.find(p=>!p.opened&&dist(me,p)<2.8&&props.isReady(p)&&reach(me,p)):null;
+    let interactionAllowed;
+    nearest=loaded&&!world.v03?.story?.near?points.find(p=>{
+     if(p.opened||dist(me,p)>=2.8)return false;
+     interactionAllowed??=canInteract();
+     return interactionAllowed&&props.isReady(p)&&reach(me,p);
+    })??null:null;
     button.hidden=!nearest;
     if(nearest&&(nearest.tier!==labelTier||language()!==labelLang)){
      labelTier=nearest.tier;labelLang=language();button.textContent=t('treasure.open',{tier:labelTier});
