@@ -80,6 +80,44 @@ test('real chapter GLB clones share a source and release bones, materials and gr
     assert.equal(f.battle.active,false);assert.equal(f.scene.meshes.length,0);
   }finally{f.dispose();}
 });
+test('a stationary sentry reuses its sight until either endpoint or the map obstacles change', async () => {
+  const f = fixture();
+  try {
+    const {encounter: sentry} = await f.factory.create(f.params('goblin-warrior', 'watch'));
+    f.player.position.z = 10;
+    let checks = 0, clear = true;
+    const navigation = {segmentClear() { checks++; return clear; }};
+    f.world.navigation = navigation;
+    const frames = count => { for (let i = 0; i < count; i++) sentry.update(1/60, f.player); };
+
+    frames(600);
+    assert.equal(checks, 1, 'unchanged sentry and player in the watch area');
+    assert.equal(sentry.brain.hasSight, true);
+    f.player.position.x += .01;
+    frames(7);
+    assert.equal(checks, 2, 'sub-step movement is visible at the original sample cadence');
+    sentry.actor.position.x += .01;
+    frames(7);
+    assert.equal(checks, 3);
+    clear = false;
+    f.world.placementRevision = 1;
+    frames(7);
+    assert.equal(sentry.brain.hasSight, false);
+    assert.equal(checks, 4);
+    f.world.navigation = {...navigation};
+    clear = true;
+    frames(7);
+    assert.equal(checks, 5);
+    f.player.position.z = 16;
+    frames(7);
+    assert.equal(sentry.brain.hasSight, false);
+    f.player.position.z = 10;
+    frames(7);
+    assert.equal(sentry.brain.hasSight, true);
+    assert.equal(checks, 6);
+  } finally { f.dispose(); }
+});
+
 test('archer arrow misses a moving target and hits a stationary target; caster uses its marked ground point',async()=>{
   const f=fixture();
   try{

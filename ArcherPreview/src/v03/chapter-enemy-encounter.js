@@ -86,10 +86,22 @@ class ChapterEncounter extends BossEncounter {
       if(b.engaged&&toHome>this.home.radius){b.engaged=false;b.returning=true;}
       if(b.returning&&distance(p,this.spawn)<.2)b.returning=false;
       this.sightTimer-=dt;
-      if(toHome>this.home.radius)b.hasSight=false;
-      else if(this.sightTimer<=0||Math.abs(this.sightPlayerX-player.position.x)+Math.abs(this.sightPlayerZ-player.position.z)>.55){
-        b.hasSight=sight(this.world,p,player.position);this.sightTimer=.1;
-        this.sightPlayerX=player.position.x;this.sightPlayerZ=player.position.z;
+      const target=player.position;
+      if(toHome>this.home.radius){
+        b.hasSight=false;this.sightPlayerX=Infinity;
+      }else if(this.sightTimer<=0||Math.abs(this.sightPlayerX-target.x)+Math.abs(this.sightPlayerZ-target.z)>.55){
+        // These maps test static XZ obstacles. While watching from rest the
+        // ray is identical until an endpoint or the map's obstacle set moves.
+        const movingOrFighting=b.engaged||b.returning||b.stagger||b.mode!=='idle';
+        if(movingOrFighting||this.sightPlayerX!==target.x||this.sightPlayerZ!==target.z||
+            this.sightActorX!==p.x||this.sightActorZ!==p.z||
+            this.sightNavigation!==this.world.navigation||this.sightRevision!==this.world.placementRevision){
+          b.hasSight=sight(this.world,p,target);
+          this.sightPlayerX=target.x;this.sightPlayerZ=target.z;
+          this.sightActorX=p.x;this.sightActorZ=p.z;
+          this.sightNavigation=this.world.navigation;this.sightRevision=this.world.placementRevision;
+        }
+        this.sightTimer=.1;
       }
       if(!b.engaged&&!b.returning&&b.hasSight&&toPlayer<=this.home.combatRadius)b.engaged=true;
     }
