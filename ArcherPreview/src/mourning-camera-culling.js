@@ -1,5 +1,5 @@
 import {Frustum,Matrix,VertexBuffer} from '@babylonjs/core';
-import {characterStyleFor} from './character-style.js';
+import {characterStyleFor,exteriorInkPixels} from './character-style.js';
 import {runPreparationSync} from './boss-preparation.js';
 
 const installed=new WeakMap(),meshGroups=new WeakMap(),empty=()=>[Infinity,Infinity,Infinity,-Infinity,-Infinity,-Infinity];
@@ -102,7 +102,7 @@ export class MourningCameraBounds{
       if(!Number.isFinite(width))return null;
       // Retaining a pixel margin for every ink mesh is conservative. Native
       // bear/goblin hulls also move in world space before projection.
-      pixels=Math.max(pixels,Math.abs(width),Math.abs(metadata.outlinePixels??0));
+      pixels=Math.max(pixels,Math.abs(exteriorInkPixels(mesh,width)),Math.abs(metadata.outlinePixels??0));
       if(metadata.moonforestOutline&&metadata.outlinePixels===undefined){
         const boss=['boss','mourning'].includes(metadata.characterStyleGroup),radius=Math.abs((metadata.outlineWidth??0)*(boss?width/.5:1));
         if(!Number.isFinite(radius))return null;world=Math.max(world,radius);

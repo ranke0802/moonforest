@@ -1,5 +1,6 @@
 import { MaterialPluginBase, SceneLoader, VertexData } from '@babylonjs/core';
 import { equipmentStyle } from './equipment-stats.js';
+import { simplifySharedShell } from './mesh-simplify.js';
 export { EQUIPMENT_STYLES, equipmentStyles } from './equipment-stats.js';
 // Swords with their own shape (equipment-stats.js SWORD_MODELS), fitted to the standard sword's local frame.
 const SWORD_MODEL_URLS = { 'soldier-sword': new URL('./v03/models/soldier-sword.glb', import.meta.url) };
@@ -166,7 +167,22 @@ export class WarriorEquipment {
       if(!this.blades.has(key))this.blades.set(key,trophyBladeGeometry(base,entry.profile));
       next=this.blades.get(key);
     }
-    for (const mesh of [entry.mesh, ...entry.mesh.getChildMeshes(true)]) if (mesh.geometry && mesh.geometry !== next && (mesh === entry.mesh || mesh.geometry === entry.worn || mesh.geometry === standard)) next.applyToMesh(mesh);
+    for (const mesh of [entry.mesh, ...entry.mesh.getChildMeshes(true)]) {
+      const previous = mesh.geometry;
+      if (!previous || previous === next) continue;
+      const reducedOutline = mesh.metadata?.moonforestOutline && mesh.metadata.simplifiedTriangles;
+      if (mesh !== entry.mesh && previous !== entry.worn && previous !== standard && !reducedOutline) continue;
+      if (reducedOutline && next === entry.worn) continue;
+
+      // All weapon models have one painted primitive. Babylon otherwise retains a
+      // smaller, still-valid submesh range when switching back to a larger blade.
+      mesh.releaseSubMeshes();
+      next.applyToMesh(mesh);
+      if (reducedOutline) {
+        if (previous !== standard && previous !== entry.worn && !previous.meshes.length) previous.dispose();
+        simplifySharedShell(mesh, {ratio: .5, error: .01});
+      }
+    }
     entry.worn = next;
     const painting = source?.material?.albedoTexture ?? source?.material?.diffuseTexture ?? source?.material?.emissiveTexture;
     entry.material.emissiveTexture = painting ?? entry.original.emissiveTexture;

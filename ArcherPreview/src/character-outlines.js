@@ -3,7 +3,7 @@ import { Color3, Matrix, Mesh, Quaternion, ShaderMaterial, VertexBuffer } from '
 import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
-import {characterStyleFor,registerCharacterInk} from './character-style.js';
+import {characterStyleFor,exteriorInkPixels,registerCharacterInk} from './character-style.js';
 import {configureCharacterExteriorStencil} from './character-ink-stencil.js';
 import {orderCharacterInkAfterSurfaces,trimEmptyBoneSlots,trimEmptyBoneSlotsAsync} from './character-render-cost.js';
 import {prepareMourningCameraCulling,prepareMourningCameraCullingAsync} from './mourning-camera-culling.js';
@@ -113,7 +113,8 @@ function outlineMaterial(scene,exterior=false) {
     const pixelOutline=mesh.metadata.outlinePixels!==undefined;
     const boss=group==='boss'||group==='mourning';
     effect?.setFloat('outlineWidth',pixelOutline?0:mesh.metadata.outlineWidth*(boss?style.outlineWidth/.5:1));
-    effect?.setFloat('outlinePixels',group==='player'||(boss&&pixelOutline)?style.outlineWidth:mesh.metadata.outlinePixels??0);
+    const cssPixels=group==='player'||(boss&&pixelOutline)?style.outlineWidth:mesh.metadata.outlinePixels??0;
+    effect?.setFloat('outlinePixels',exteriorInkPixels(mesh,cssPixels));
     const engine=scene.getEngine(),canvas=engine.getRenderingCanvas();
     effect?.setFloat2('outlineViewport',canvas?.clientWidth||engine.getRenderWidth(),canvas?.clientHeight||engine.getRenderHeight());
     effect?.setFloat('outlineOpacity', mesh.visibility);

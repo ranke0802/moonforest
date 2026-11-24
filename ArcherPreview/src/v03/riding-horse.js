@@ -3,6 +3,7 @@ import { createBonePose } from './bone-pose.js';
 import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { ridingLabels } from './riding-locale.js';
 import { createRidingSaddle, SADDLE_PAD_HEIGHT } from './riding-saddle.js';
+import { createRidingReins } from './riding-reins.js';
 import { createRiderContact } from './riding-seat-contact.js';
 
 const OWNED = 'v03:stable:horse';
@@ -46,7 +47,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null, saddle = null;
   const contact = new Vector3(), correction = new Vector3(), local = new Vector3(), inverse = new Matrix();
   let labels = ridingLabels(doc), riderContact = null;
-  let seatedBones=[];
+  let seatedBones=[],updateReins=null;
   let checkedMap=null, nextOfferCheck=0;
   const display = () => {
     labels = ridingLabels(doc);
@@ -61,7 +62,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     poseObserver=null;
     if (lift && !lift.isDisposed()) {lift.position.set(0,0,0);lift.rotation.z=0;}
     for (const mesh of hiddenArms) if (!mesh.isDisposed()) mesh.setEnabled(true);
-    hiddenArms = []; seatedBones=[]; rig = lift = rider = riderContact = null;
+    hiddenArms = []; seatedBones=[]; rig = lift = rider = riderContact = null;updateReins=null;
     const old = horse; horse = null; saddle = null; active = false; clip = '';
     old?.dispose(); display();
   }
@@ -105,7 +106,10 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
         const node=bone.getTransformNode(), rotation=node?.rotationQuaternion?.clone();
         if(rotation){bone.getRestMatrix().decompose(undefined,rotation);seatedBones.push({node,rotation});}
       }
-      if(instance.root) saddle=createRidingSaddle(instance.root);
+      if(instance.root){
+        saddle=createRidingSaddle(instance.root);
+        updateReins=createRidingReins(instance.root,actor,saddle.material);
+      }
       for (const mesh of actor.getChildMeshes(false)) {
         if (/^(Golden_Oathblade|Bunnyguard_Shield|Shield_(Forearm_Strap|MountPad|Rivet))/.test(mesh.name) && mesh.isEnabled(false)) {
           mesh.setEnabled(false); hiddenArms.push(mesh);
@@ -175,6 +179,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     lift.parent.computeWorldMatrix(true).invertToRef(inverse);
     Vector3.TransformNormalToRef(correction,inverse,local);
     lift.position.addInPlace(local);
+    updateReins?.();
   }
   function hotkey(e) {
     if (e.code !== 'KeyH' || e.repeat || e.ctrlKey || e.altKey || e.metaKey || button.hidden || doc.querySelector('dialog[open]')) return;

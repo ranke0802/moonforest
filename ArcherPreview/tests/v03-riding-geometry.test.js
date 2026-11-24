@@ -33,6 +33,12 @@ function seatGap(mesh,worldPoint){
  }
  return nearest-1;
 }
+// Each side has eight diamond sections of leather and one twenty-vertex bit ring.
+function reinSection(reins,positions,side,section){
+ const offset=(52*side+4*section)*3;
+ const local=new Vector3((positions[offset]+positions[offset+6])*.5,positions[offset+1],positions[offset+2]);
+ return Vector3.TransformCoordinates(local,reins.getWorldMatrix());
+}
 // Lower surface of the clothing above the cushion, in saddle-local space.
 function underside(points,indices,x,z){
  let lowest=Infinity;
@@ -65,6 +71,7 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
  const animator=new CharacterAnimator(asset.animationGroups,cfg.animations,{bindingCacheSize:9,prewarmBindings:true});
  const body=scene.getMeshByName('Warrior_Body_primitive0');
  const ankles=['Left','Right'].map(s=>scene.getTransformNodeByName('mixamorig:'+s+'Foot'));
+ const grips=['Left','Right'].map(s=>scene.getTransformNodeByName('mixamorig:'+s+'HandMiddle1'));
  const originalFetch=globalThis.fetch,horse=horseForNullEngine(),baseMeshes=scene.meshes.length;
  let abort=false,hold=true,click;
  globalThis.fetch=(_url,{signal})=>{
@@ -74,7 +81,8 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
  const doc={documentElement:{lang:'en'},addEventListener(){},removeEventListener(){},querySelector(){return null;},createElement:()=>button};
  const button={dataset:{},setAttribute(){},addEventListener(name,fn){click=fn;},remove(){}};
  const heightAt=(x,z)=>.16*x-.07*z;
- const stable=createRidingHorse({world:{mapId:'village',scene,terrain:{heightAt}},
+ const world={mapId:'village',scene,terrain:{heightAt}};
+ const stable=createRidingHorse({world,
   root:{ownerDocument:doc,querySelector:()=>({append(){}})},storage:{getItem:()=> '1',setItem(){}},player:()=>root,
   ridingAllowed:()=>true,tell(){},forwardYaw:()=>cfg.forwardYaw});
  try{
@@ -84,6 +92,10 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
   hold=false;await click();assert.ok(stable.active);assert.equal(button.textContent,'Dismount');
   const skin=scene.meshes.find(m=>m.name==='wagon_horse');assert.ok(skin?.skeleton);
   const saddle=scene.getMeshByName('v03-riding-saddle');assert.ok(saddle);assert.equal(scene.getMeshByName('harness').isEnabled(),false);
+  const reins=scene.getMeshByName('v03-riding-reins');assert.ok(reins);
+  assert.equal(reins.material,saddle.material);assert.equal(reins.isPickable,false);
+  assert.equal(reins.getTotalVertices(),104);assert.equal(reins.getTotalIndices(),456);
+  const reinBuffer=reins.getVertexBuffer(VertexBuffer.PositionKind),reinPositions=reins.getVerticesData(VertexBuffer.PositionKind);
   for(const [state,speed] of [['idle',0],['walk',1.5],['run',5]]){
    for(let i=0;i<8;i++){
    root.rotation.y=i*Math.PI/4;root.position.set(.16*i,heightAt(.16*i,-.18*i),-.18*i);
@@ -93,6 +105,20 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
    // Sample the actual CPU-skinned source triangle under the rider. The game
    // uses four precomputed bind-local weights and never reads a mesh on a frame.
    const points=skin.getPositionData(true);
+   assert.ok(reins.isEnabled());
+   assert.equal(reins.getVertexBuffer(VertexBuffer.PositionKind),reinBuffer);
+   assert.equal(reins.getVerticesData(VertexBuffer.PositionKind),reinPositions);
+   for(const [side,grip] of grips.entries()){
+     const hand=reinSection(reins,reinPositions,side,0),mouth=reinSection(reins,reinPositions,side,7);
+     const surface=Vector3.TransformCoordinates(Vector3.FromArray(points,3*(side===0?8357:8168)),skin.getWorldMatrix());
+     assert.ok(Vector3.Distance(hand,grip.absolutePosition)<.001,'rein missed hand during '+state);
+     assert.ok(Vector3.Distance(mouth,surface)<.035,'bit missed the mouth corner during '+state);
+     let length=0,last=hand;
+     for(let index=1;index<=7;index++){
+       const next=reinSection(reins,reinPositions,side,index);length+=Vector3.Distance(last,next);last=next;
+     }
+     assert.ok(length>.75&&length<1.2&&length>Vector3.Distance(hand,mouth)+.01,'rein lost its slack during '+state);
+   }
    const weights=[.41430354,.54627857,.03941788];
    const at=[4456,4457,4458].reduce((y,id,k)=>y+weights[k]*Vector3.TransformCoordinates(Vector3.FromArray(points,id*3),skin.getWorldMatrix()).y,0);
    const garment=body.getPositionData(true),seat=Vector3.Zero();
@@ -118,5 +144,9 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
    }
   }
   await click();assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);assert.equal(scene.animationGroups.length,asset.animationGroups.length);
+  assert.ok(reins.isDisposed());
+  await click();const remountedReins=scene.getMeshByName('v03-riding-reins');assert.ok(stable.active&&remountedReins);
+  world.mapId='witch-cave';stable.updateAvailability();
+  assert.equal(stable.active,false);assert.ok(remountedReins.isDisposed());assert.equal(scene.meshes.length,baseMeshes);
  }finally{stable.dispose();animator.dispose();asset.dispose();scene.dispose();engine.dispose();globalThis.fetch=originalFetch;}
 });

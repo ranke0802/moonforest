@@ -13,6 +13,15 @@ export function characterStyleFor(mesh){
   const group=mesh?.metadata?.characterStyleOverrideGroup??mesh?.metadata?.characterStyleGroup;
   return mesh?.getScene().metadata?.characterStyleSettings?.[group]??CHARACTER_STYLE_DEFAULTS[group]??neutral;
 }
+// The hull shader measures CSS pixels. At a reduced 3D resolution the Witch's
+// half-pixel default can fall between samples, especially against dark cave walls.
+// Keep deliberately thinner settings, and the same width when already resolved.
+export function exteriorInkPixels(mesh,cssPixels){
+  if(mesh.metadata?.characterStyleGroup!=='mourning'||cssPixels<CHARACTER_STYLE_DEFAULTS.mourning.outlineWidth)return cssPixels;
+  const scene=mesh.getScene();
+  if(scene.metadata?.caveFogRuntime?.world?.edition!=='moonforest-0.3')return cssPixels;
+  return Math.max(cssPixels,scene.getEngine().getHardwareScalingLevel());
+}
 export function setSceneCharacterStyles(scene,value){
   scene.metadata={...scene.metadata,characterStyleSettings:value};
   for(const mesh of scenes.get(scene)??[])applyInkEnabled(mesh);
