@@ -52,7 +52,7 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
 const GLYPHS=Object.freeze({'?':['111','001','011','000','010'],'!':['010','010','010','000','010'],'>':['100','110','111','110','100']});
 const GLYPH_COLORS=Object.freeze({'?':'#f2dc9c','!':'#bff0dc','>':'#f2dc9c'});
 export class DotMinimap{
- constructor(element,{document=globalThis.document}={}){this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;this.markers=[];this.markerRevision=0;}
+ constructor(element,{document=globalThis.document,translucent=()=>false}={}){this.translucent=translucent;this.element=element;this.document=document;this.canvas=element?.querySelector('canvas');this.ctx=this.canvas?.getContext?.('2d');this.cache=new Map();this.cacheRevisions=new Map();this.next=0;this.last='';this.generation=0;this.markers=[];this.markerRevision=0;}
  // Story markers [{x,z,glyph:'?'|'!'|'>'}] drawn over the map; off-map ones stick to the edge.
  setMarkers(list){this.markers=Array.isArray(list)?list:[];this.markerRevision++;this.last='';}
  async setWorld(world){
@@ -70,8 +70,14 @@ export class DotMinimap{
  update(actor,time){
   if(!actor||!this.static||this.element.hidden||time<this.next)return;this.next=time+.1;
   const {rect,halfTurn}=MINIMAP_MAPS[this.mapId],p=minimapPoint(rect,actor.position.x,actor.position.z,MINIMAP_SIZE,halfTurn),heading=minimapHeading(rect,actor.rotation.y,halfTurn),angle=Math.atan2(heading.y,heading.x);
-  const x=Math.max(2,Math.min(93,Math.round(p.x))),y=Math.max(2,Math.min(93,Math.round(p.y))),direction=Math.round(angle/(Math.PI/8)),key=`${x},${y},${direction},${this.markerRevision},${Math.floor(time*2)%2}`;
-  if(key===this.last)return;this.last=key;const ctx=this.ctx;ctx.imageSmoothingEnabled=false;ctx.drawImage(this.static,0,0);
+  const x=Math.max(2,Math.min(93,Math.round(p.x))),y=Math.max(2,Math.min(93,Math.round(p.y))),direction=Math.round(angle/(Math.PI/8)),key=`${x},${y},${direction},${this.markerRevision},${this.markers.length ? Math.floor(time*2)%2 : 0}`;
+  const translucent=this.translucent();
+  if(key===this.last && translucent===this.lastTranslucent)return;
+  this.last=key;this.lastTranslucent=translucent;
+  const ctx=this.ctx;ctx.imageSmoothingEnabled=false;
+  if(translucent){ctx.clearRect(0,0,this.canvas.width,this.canvas.height);ctx.globalAlpha=.58;}
+  ctx.drawImage(this.static,0,0);
+  if(translucent)ctx.globalAlpha=1;
   ctx.fillStyle='#07191d';ctx.fillRect(x-3,y-3,7,7);ctx.fillStyle='#84f6df';ctx.fillRect(x-1,y-1,3,3);
   const dx=Math.cos(direction*Math.PI/8),dy=Math.sin(direction*Math.PI/8);ctx.fillStyle='#effffa';ctx.fillRect(Math.round(x+dx*4)-1,Math.round(y+dy*4)-1,2,2);
   const blink=Math.floor(time*2)%2===0;

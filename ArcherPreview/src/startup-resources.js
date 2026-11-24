@@ -5,12 +5,16 @@ import {registerResourceGraph} from './resource-cache.js';
 import {MapLoadLifetime,mapLoadAbortError,mapLoadSnapshot,checkMapLoadSnapshot} from './map-load-lifetime.js';
 import {loadingArtResources} from './loading-art.js';
 import {prepareCaveCameraField} from './witch-cave-camera.js';
+import {initializeVillageKtx2} from './village-ktx2.js';
+import {sceneryPrefetchPaths} from './texture-replacements.js';
 import mobileExterior from '../public/assets/v03-mobile-village-exterior.json' with {type:'json'};
 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream,context){
   const {lifetime,check}=context;check();const scene=world.scene;
   world.releaseResourceDownloads?.();
   const fileSizes=world.gameplayV03&&world.touchDevice?{...sizes.files,...mobileExterior.extraFileSizes}:sizes.files;
+  const selectedPaths=paths=>world.gameplayV03?sceneryPrefetchPaths(paths):paths;
+  resources=selectedPaths(resources);
   const downloads=new ResourceDownloads(fileSizes,base,{index:sizes});let released=false;const preparedUrls=new Set();
   const cancel=()=>{downloads.cancel();lifetime.abort(mapLoadAbortError());};
   const abort=()=>downloads.cancel();lifetime.signal.addEventListener('abort',abort,{once:true});
@@ -27,8 +31,9 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
   let state;try{state=await lifetime.run(()=>downloads.prepare(resources,progress(onProgress)));check();}catch(error){release();throw error;}
   if(state.complete&&state.storageAvailable)for(const path of resources)preparedUrls.add(resourceUrl(path,base));
   downloads.stats.initialPrefetchReusedFiles=0;
-  world.prefetchResources=(paths,{initial=false}={})=>lifetime.run(()=>{
+  world.prefetchResources=(requested,{initial=false}={})=>lifetime.run(()=>{
     check();
+    const paths=selectedPaths(requested);
     // The foreground plan was just checked/downloaded as one batch. Do not
     // reopen CacheStorage and match those same files once per model. This proof
     // is only for that initial plan; streaming/revisits still check eviction.
@@ -71,6 +76,14 @@ export async function prepareStartupResources(world,playerUrl,onProgress,onStrea
   const player=await lifetime.run(()=>read(playerUrl.pathname.split('/').at(-1).replace('.json','')));check();
   const [village,sizes,ground,sky,environment,ktx,meshopt,resident]=await lifetime.run(()=>Promise.all([
     prepareVillageStart(world,{lifetime,timeoutMs,timers}).then(value=>{context.prepared=value;return value;}),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder'),world.cave?read('elena'):null,world.cave?prepareCaveCameraField():null]));check();lifetime.finishDeadline();
+  // Configure the same decoder the GLTF loader uses before choosing which colour to
+  // cache. The manifest is already in this document's cache. Workers are still lazy.
+  if(world.gameplayV03){
+    await lifetime.run(()=>initializeVillageKtx2({manifestUrl:new URL('ktx2-decoder.json',base),timeoutMs,timers}).catch(()=>{
+      // Keep the original JPG plan if setup fails. Map loading owns the normal retry.
+    }));
+    check();
+  }
   const resources=[...loadingArtResources,...player.resources,...village.resources,...ground.resources,...(resident?.resources??[]),...(world.cave?[]:[sky.texture]),...environment.assets.scarecrow.resources,...Object.values(ktx.urls),meshopt.url];
   await prepareDownloads(world,base,sizes,resources,village.plan,onProgress,onStream,context);
   return player;

@@ -160,6 +160,7 @@ export function createFrameDiagnostics({probe=null,cameraYaw=null,doc=document,s
     setText('diagnostic-load',load?`${load.label} · ${seconds(load.totalMs)}${load.phase==='error'?' · 실패':load.phase==='complete'?'':' · 준비 중'}`:'최근 로딩 기록 없음');
     setText('diagnostic-load-phases',load?`다운로드 ${seconds(load.downloadMs)} · 모델 ${seconds(load.modelMs)} · 화면 ${seconds(load.screenMs)}`:'다운로드 — · 모델 — · 화면 —');
     setText('diagnostic-memory',`JS 메모리 ${mib(mem.jsUsedBytes)} / ${mib(mem.jsLimitBytes)} MiB${mem.jsUsedBytes==null?' (미지원)':''}`);
+    if (mem.engineTextureMiB != null) setText('diagnostic-engine-textures', `GPU textures (estimated) · Current ${mem.engineTextureMiB} MiB / Session peak ${mem.peakEngineTextureMiB} MiB`);
     setText('diagnostic-textures',`배경 고해상도 텍스처 추정 ${mib(mem.backgroundHighTextureEstimateBytes)} / ${mib(mem.backgroundHighTextureBudgetBytes)} MiB`);
     setText('diagnostic-detail-frame',`최근 10초 · 최대 ${ms(s.maxMs)} ms · p95 ${ms(s.p95Ms)} ms${paused?' · 정지 전 기록':''}`);
     setText('diagnostic-render',`드로콜 ${Number.isFinite(metrics.drawCalls)?metrics.drawCalls:'—'} · 화면 CPU ${Number.isFinite(metrics.sceneMs)?metrics.sceneMs.toFixed(1):'—'} ms · 제출 삼각형 ${Number.isFinite(metrics.submittedTriangles)?metrics.submittedTriangles.toLocaleString():'—'}`);

@@ -13,6 +13,7 @@ export function readDiagnosticMemory(perf=globalThis.performance,resources={}){
   const heap=perf?.memory;
   const positive=value=>Number.isFinite(value)&&value>=0?value:null;
   return {jsUsedBytes:positive(heap?.usedJSHeapSize),jsAllocatedBytes:positive(heap?.totalJSHeapSize),jsLimitBytes:positive(heap?.jsHeapSizeLimit),
+    ...(resources.textureSample?{engineTextureMiB:resources.textureSample.megabytes,peakEngineTextureMiB:resources.textureSample.peakMiB}:{}),
     backgroundHighTextureEstimateBytes:positive(resources.highTextureBytes),backgroundHighTextureBudgetBytes:positive(resources.highTextureBudget),
     textures:positive(resources.textures),meshes:positive(resources.meshes),geometries:positive(resources.geometries)};
 }

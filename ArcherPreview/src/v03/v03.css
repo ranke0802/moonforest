@@ -564,3 +564,11 @@ html[data-v03-lock~=attack] #attack-button.v03-interact{opacity:1!important;filt
 #app #attack-button.v03-interact .v03-interact-face b{max-width:84%;font-size:clamp(10px,1.7vmin,13px);font-weight:700;line-height:1.1;text-align:center;overflow-wrap:anywhere}
 @keyframes v03-interact-in{from{transform:scale(.86);opacity:.4}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#app #attack-button.v03-interact .v03-interact-face{animation:none}}
+
+/* Dim the artwork, leaving hit areas, potion counts and map markers intact. */
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] .action-controls :is(#attack-button,#guard-button,#dodge-button,#run-button,#potion-button)>.hud-v1-sprite{opacity:.58}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] .action-controls :is(#attack-button,#guard-button,#dodge-button,#run-button,#potion-button):is([data-hud-sprite-state=press],[data-hud-sprite-state=held])>.hud-v1-sprite{opacity:.84}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face{border:1px solid #cdb687ba;background:radial-gradient(circle at 50% 38%,#3b342487,#15120c91 72%);box-shadow:0 1px 3px #0003}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face svg{stroke-width:1.35}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face b{display:none}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #live-fps{font-variant-numeric:tabular-nums;font-size:clamp(10px,1.55vmin,13px);white-space:nowrap}

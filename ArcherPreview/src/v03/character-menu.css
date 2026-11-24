@@ -1,0 +1,60 @@
+/* Same in-game canvas behind the clear model column. The rest of the HUD is
+   hidden only while this native modal is open. */
+#app[data-character-menu] > :not(#viewport):not(.mf-character-menu):not(#loading){visibility:hidden}
+html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
+.mf-character-menu{
+  --line:#8e7954;--gold:#e2c994;--ink:#f2ebd8;--panel:#17211fed;
+  position:fixed;inset:0;box-sizing:border-box;width:min(96vw,167.11dvh,1080px);height:min(54vw,94dvh,607.5px);
+  max-width:100vw;max-height:100dvh;margin:auto;padding:0;
+  color:var(--ink);background:transparent;border:1px solid var(--line);
+  box-shadow:0 12px 44px #0008;font:14px/1.4 MoonforestUI,Georgia,serif;
+}
+.mf-character-menu[open]{display:grid;grid-template-rows:auto minmax(0,1fr)}
+.mf-character-menu::backdrop{background:#080e1045}
+.mf-character-menu nav,.mf-menu-card,.mf-character-menu button,.mf-character-menu select{color:inherit;font:inherit}
+.mf-character-menu nav{display:flex;align-items:center;gap:3px;padding:4px 10px;border-bottom:1px solid var(--line);background:#18231ff7}
+.mf-character-menu nav button,.mf-menu-filters button,.mf-character-menu select,.mf-menu-item button{min-height:42px;padding:5px 12px;border:1px solid transparent;background:transparent;cursor:pointer}
+.mf-character-menu button:focus-visible,.mf-character-menu select:focus-visible,.mf-menu-pose:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.mf-character-menu button[aria-pressed=true],.mf-menu-filters button[aria-pressed=true]{color:var(--gold);border-color:var(--line);background:#78644338}
+.mf-menu-gold{margin-left:auto;color:var(--gold);white-space:nowrap}
+.mf-character-menu nav button:last-child{min-width:44px;font:26px/1 Georgia,serif}
+.mf-menu-body{display:grid;min-height:0;overflow:hidden;background:#161e1c}
+.mf-character-menu[data-page=Status] .mf-menu-body{grid-template-columns:minmax(175px,32%) 1fr;background:transparent}
+.mf-menu-card{padding:clamp(10px,2.3vmin,23px);min-width:0;min-height:0;overflow:auto;background:var(--panel);overscroll-behavior:contain}
+.mf-character-menu h2{font:400 clamp(16px,2.7vmin,24px)/1.2 Georgia,serif;color:var(--gold);margin:0 0 12px}
+.mf-character-menu dl{margin:0}
+.mf-menu-stats dl>div,.mf-menu-item dl>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 8px;border-bottom:1px solid #b8ab822a;padding:9px 0}
+.mf-character-menu dd{margin:0;color:var(--gold)}
+.mf-menu-pose{touch-action:none;cursor:grab}
+.mf-menu-pose:active{cursor:grabbing}
+.mf-menu-model{min-width:0;min-height:0;display:grid;grid-template-columns:minmax(50px,16%) 1fr minmax(50px,16%);gap:6px;padding:clamp(4px,1.7vmin,16px)}
+.mf-menu-slots{display:grid;align-content:center;gap:6px;min-width:0;overflow:auto}
+.mf-menu-slots>*{display:grid;align-content:center;min-height:44px;padding:4px;text-align:center;border:1px solid #9b88567d;background:#141b18d9;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
+.mf-menu-slots button{cursor:pointer}
+.mf-menu-slots small,.mf-menu-item>small{color:#c9bb99;font-size:12px}
+.mf-menu-stats .mf-menu-gear-title{margin-top:18px}
+.mf-menu-gear{display:grid}
+.mf-menu-gear button{min-height:44px;text-align:left;border:0;border-bottom:1px solid #b8ab822a;background:transparent}
+.mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1.5fr 1fr}
+.mf-menu-filters{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin-bottom:9px}
+.mf-menu-filters button,.mf-character-menu select{padding:2px 6px}
+.mf-character-menu select{margin-left:auto;color:var(--ink);background:#202c25}
+.mf-menu-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
+.mf-menu-grid>*{aspect-ratio:1;min-width:0;border:1px solid #a692664d;background:#101916}
+.mf-menu-grid button{display:grid;place-items:center;position:relative;cursor:pointer}
+.mf-menu-grid button .commercial-icon{width:80%;height:80%}
+.mf-menu-count{position:absolute;bottom:2px;right:4px;font:600 12px/1 system-ui;color:#f5e4b7;text-shadow:0 1px 3px #000}
+.mf-menu-item{border-left:1px solid var(--line)}
+.mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:72px;height:72px;margin:8px 0;display:grid;place-items:center}
+.mf-menu-item button,.mf-menu-equipped{display:inline-block;margin-top:10px;border:1px solid var(--line);color:var(--gold);padding:6px 12px}
+.mf-menu-item button:disabled{opacity:.45}
+.mf-menu-skills dl>div{display:grid;grid-template-columns:minmax(90px,26%) 1fr;gap:4px 16px;padding:12px 0;border-bottom:1px solid #b8ab822a}
+.mf-menu-skills small{grid-column:2;color:#c8beb0}
+@media (max-height:570px){.mf-menu-card{padding:10px}.mf-menu-slots{gap:3px}.mf-menu-grid{max-width:420px}}
+@media (max-width:580px) and (orientation:portrait){
+  .mf-character-menu{width:96vw;height:90dvh}.mf-character-menu nav{gap:0;padding:2px}.mf-character-menu nav button{padding:5px 7px}
+  .mf-character-menu[data-page=Status] .mf-menu-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1.3fr) minmax(0,1fr)}
+  .mf-menu-model{grid-row:1}.mf-menu-stats{grid-row:2}
+  .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1.35fr) minmax(0,1fr)}
+  .mf-menu-item{border:0;border-top:1px solid var(--line)}
+}

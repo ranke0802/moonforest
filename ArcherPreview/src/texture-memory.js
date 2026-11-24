@@ -1,7 +1,7 @@
 // How much texture memory the engine holds, worked out from the textures'
 // own sizes and formats (2026-11-20). Phones report no memory figures (iOS)
 // or frozen ones (Android Chrome), so the diagnostic record carries this
-// instead. Called when a record is written, never per frame.
+// instead. The compact HUD and recorder share a one-second sample.
 // GL compressed formats at 8 bits per pixel: BC7, BC3, ETC2 RGBA8, ASTC 4x4, BC6H.
 const ONE=new Set([36492,36493,33779,33778,37496,37497,37808,37840,36494,36495]);
 // At 4 bits per pixel: BC1, ETC1, ETC2 RGB8, PVRTC 4bpp.
@@ -62,4 +62,27 @@ export function estimateTextureMemory(engine,{largest=8}={}){
  }
  rows.sort((a,b)=>b.megabytes-a.megabytes);
  return {count:rows.length,megabytes:Math.round(bytes/1048576),uncompressedMegabytes:Math.round(plain/1048576),retainedSourceMegabytes:Math.round(retainedBytes/1048576),largest:rows.slice(0,largest)};
+}
+
+// Share one traversal between the HUD, detail panel and recording. The peak is
+// the largest sampled estimate on this page, across travel and context recovery.
+export function createTextureMemoryMeter(now = () => performance.now()) {
+  let previousEngine, nextSample = 0, latest = null, peak = 0;
+  return engine => {
+    const time = now();
+    if (engine === previousEngine && time < nextSample) return latest;
+    previousEngine = engine;
+    nextSample = time + 1000;
+    const totals = textureMemoryTotals(engine);
+    if (totals) peak = Math.max(peak, totals.megabytes);
+    latest = totals ? { ...totals, peakMiB: peak } : null;
+    return latest;
+  };
+}
+
+export function compactPerformanceText(fps, hz, sample) {
+  const parts = [`${fps} fps`];
+  if (hz > 0) parts.push(`${hz}Hz`);
+  if (sample) parts.push(`${sample.megabytes}/${sample.peakMiB}MiB`);
+  return parts.join(' ');
 }

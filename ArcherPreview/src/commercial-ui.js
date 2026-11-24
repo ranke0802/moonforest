@@ -40,7 +40,9 @@ export function setupCommercialUi({root,onDiagnostics=()=>root.querySelector('#d
     const fps=root.querySelector('#live-fps');
     if(fps&&!fps.dataset.commercialFps){
       const before=Object.fromEntries(['role','tabindex','title','aria-label'].map(key=>[key,fps.getAttribute(key)]));
-      fps.dataset.commercialFps='true';fps.classList.add('commercial-fps');fps.setAttribute('role','button');fps.tabIndex=0;fps.title='성능 진단 열기';fps.setAttribute('aria-label','현재 FPS · 성능 진단 열기');
+      fps.dataset.commercialFps='true';fps.classList.add('commercial-fps');fps.setAttribute('role','button');fps.tabIndex=0;const compact=doc.documentElement?.dataset?.edition==='moonforest-0.3'&&!doc.documentElement.dataset.world;
+      fps.title=compact?'Performance · Estimated texture memory (current / session peak)':'성능 진단 열기';
+      fps.setAttribute('aria-label',compact?'Open performance diagnostics':'현재 FPS · 성능 진단 열기');
       const open=()=>{if(!doc.querySelector('dialog[open]'))onDiagnostics();},keydown=event=>{if(['Enter',' '].includes(event.key)){event.preventDefault();event.stopPropagation();if(!event.repeat)open();}};
       fps.addEventListener('click',open);fps.addEventListener('keydown',keydown);owned.push({dispose(){fps.removeEventListener('click',open);fps.removeEventListener('keydown',keydown);fps.classList.remove('commercial-fps');delete fps.dataset.commercialFps;for(const [key,value]of Object.entries(before))if(value===null)fps.removeAttribute(key);else fps.setAttribute(key,value);}});
     }

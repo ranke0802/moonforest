@@ -43,8 +43,11 @@ export const ACTOR_SHADOW_RANGE=32;
 const isOutlineCaster=mesh=>mesh.metadata?.moonforestOutline===true||/_Outline$/.test(mesh.name);
 export function installShadowCasterCulling(shadows,lighting){
   const map=shadows.getShadowMap(),casters=[],statics=[],dynamics=[],lists={all:casters,statics,dynamics},forward=new Vector3(),right=new Vector3(),up=new Vector3(),offset=new Vector3();let frame=-1;
+  let partitionFrame=-1;
   const collect=()=>{
-    const id=lighting.scene.getFrameId();if(id===frame)return lists;frame=id;casters.length=0;statics.length=0;dynamics.length=0;
+    const id=lighting.scene.getFrameId();if(id===frame)return casters;
+    if(partitionFrame===frame){statics.length=0;dynamics.length=0;}
+    frame=id;casters.length=0;
     const list=map.renderList??[],length=list.length;
     const key=lighting.key;key.direction.normalizeToRef(forward);Vector3.CrossToRef(Vector3.UpReadOnly,forward,right);
     if(right.lengthSquared()<1e-8)right.set(1,0,0);right.normalize();Vector3.CrossToRef(forward,right,up);
@@ -58,15 +61,23 @@ export function installShadowCasterCulling(shadows,lighting){
         if(mesh.skeleton&&offset.length()-radius>(lighting.actorShadowRange??ACTOR_SHADOW_RANGE))continue;
       }
       casters.push(mesh);
-      // Static casters only count while drawable and fully faded in, so a
-      // fading shadow is drawn live and only the settled set refreshes the cache.
+    }
+    return casters;
+  };
+  // The live shadow map consumes the ordered caster list directly. Only the
+  // optional static cache needs readiness checks and two separate lists.
+  const partition=()=>{
+    collect();
+    if(partitionFrame===frame)return lists;
+    partitionFrame=frame;
+    for(const mesh of casters){
       if(staticShadowCasters.has(mesh)&&(mesh.instancedBuffers?.[shadowFadeAttribute]??1)>=.999&&(lighting.staticShadows?.readyFor?.(mesh)??true)){if(mesh.isEnabled()&&mesh.isVisible)statics.push(mesh);}
       else dynamics.push(mesh);
     }
     return lists;
   };
-  lighting.shadowCasterLists=collect;
-  map.getCustomRenderList=()=>{collect();return lighting.staticShadows?.active?dynamics:casters;};
+  lighting.shadowCasterLists=partition;
+  map.getCustomRenderList=()=>lighting.staticShadows?.active?partition().dynamics:collect();
 }
 
 export class SceneLighting {

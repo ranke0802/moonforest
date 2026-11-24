@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { NullEngine, Scene, DirectionalLight, HemisphericLight, ShadowGenerator, Vector3, MeshBuilder, PBRMaterial, Color3 } from '@babylonjs/core';
 import { SceneLighting } from '../src/scene-lighting.js';
+import { markStaticShadowCaster } from '../src/static-shadow-cache.js';
+import { shadowFadeAttribute } from '../src/village-shadow-fade.js';
 
 function setup(touchDevice,village=false) {
   const engine=new NullEngine(),scene=new Scene(engine);
@@ -12,6 +14,35 @@ function setup(touchDevice,village=false) {
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
   return {scene,engine,ambient,key,rim,shadows,lighting};
 }
+
+test('live shadows preserve caster order and only partition for a requested static cache',t=>{
+  const {scene,engine,shadows,lighting}=setup(true,true);
+  t.after(()=>{scene.dispose();engine.dispose();});
+  const map=shadows.getShadowMap();
+  const [actor,tree,rock,outline]=['actor','tree','rock','actor_Outline'].map(name=>MeshBuilder.CreateBox(name,{},scene));
+  let frame=1,fadeReads=0;
+  scene.getFrameId=()=>frame;
+  for(const [mesh,fade] of [[tree,1],[rock,.5]]){
+    markStaticShadowCaster(mesh);
+    mesh.registerInstancedBuffer(shadowFadeAttribute,1);
+    Object.defineProperty(mesh.instancedBuffers,shadowFadeAttribute,{configurable:true,get(){fadeReads++;return fade;}});
+  }
+  map.renderList=[actor,tree,outline,rock];
+  const names=list=>list.map(mesh=>mesh.name);
+  assert.deepEqual(names(map.getCustomRenderList()),['actor','tree','rock']);
+  assert.equal(fadeReads,0);
+
+  lighting.staticShadows={active:true,readyFor:()=>true};
+  assert.deepEqual(names(map.getCustomRenderList()),['actor','rock']);
+  const lists=lighting.shadowCasterLists();
+  assert.deepEqual(names(lists.statics),['tree']);
+  assert.equal(fadeReads,2,'one partition across both maps in the same frame');
+
+  frame++;lighting.staticShadows.active=false;map.renderList=[tree,actor];
+  assert.deepEqual(names(map.getCustomRenderList()),['tree','actor']);
+  assert.equal(fadeReads,2);
+  assert.equal(lists.dynamics.length,0,'a later live-only frame releases the old split lists');
+});
 
 test('streaming a new LOD leaves existing warm materials alone and repeated registration is idle',()=>{
  const {scene,engine,lighting}=setup(true,true);
