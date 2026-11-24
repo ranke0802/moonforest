@@ -7,7 +7,7 @@ import ko from '../src/v03/locales/ko.js';
 import {t,setPack,cloneChapter,localizeChapter} from '../src/v03/i18n.js';
 import {COMBAT_HINTS,TIPS} from '../src/v03/data/chapter1.js';
 import {equipmentStats} from '../src/equipment-stats.js';
-import {characterItems,bagContents,combatSkills} from '../src/v03/character-menu-data.js';
+import {characterItems,bagContents,combatSkills,SKILL_BRANCHES,SKILL_COLUMNS,SKILL_OPEN,SKILL_TREE} from '../src/v03/character-menu-data.js';
 import {createCharacterPortrait} from '../src/v03/character-menu-camera.js';
 import {createCharacterMenu} from '../src/v03/character-menu.js';
 
@@ -29,7 +29,7 @@ test('all three menu pages use the same modal, and picking an item changes the a
   root.querySelector(`[aria-label="${t('char.gear.sword.soldier-sword')}"]`).click();named(root,t('char.equip')).click();
   assert.equal(state.equipment.sword,'soldier-sword');
   menu.show('Skills');
-  assert.equal(root.querySelectorAll('.mf-menu-skills dt').length,7);
+  assert.equal(root.querySelectorAll('.mf-skill-node:not(.is-open)').length,7);
   menu.show('Inventory');named(root,t('char.type.Supplies')).click();named(root,t('char.usePotion')).click();
   assert.equal(uses,1);assert.equal(updates,2);assert.equal(menu.open,false);
   menu.dispose();assert.equal(root.querySelector('dialog'),null);
@@ -56,7 +56,9 @@ test('skills use current input mode, actual tutorial locks and the chosen langua
   assert.equal(touch.find(row=>row.id==='heavy').control,en.story.hints.heavy.touch);
   const desktop=combatSkills(lessons(),false,()=>true);
   assert.equal(desktop.find(row=>row.id==='sprint').control,en.story.tips.sprint.keys);
-  assert.ok(desktop.every(row=>row.available&&!/[가-힣]/.test(row.name+row.control)));
+  assert.equal(desktop.find(row=>row.id==='justGuard').control,en.ui['char.skill.justGuardKeys']);
+  assert.equal(touch.find(row=>row.id==='justGuard').control,en.ui['char.skill.justGuardTouch']);
+  assert.ok(desktop.every(row=>row.available&&row.text&&!/[가-힣]/.test(row.name+row.control+row.text+row.touch)));
   setPack('ko',ko);
   const korean=combatSkills(lessons(),true,()=>true);
   assert.equal(korean.find(row=>row.id==='heavy').control,COMBAT_HINTS.find(row=>row.id==='heavy').touch);
@@ -91,4 +93,55 @@ test('the equipment portrait submits only the owned warrior and never advances s
   assert.deepEqual([camera.alpha,camera.beta,camera.radius],[.6,1.1,11]);
   portrait.dispose();assert.equal(portrait.draw(options),false);
  }finally{scene.dispose();engine.dispose();}
+});
+
+test('the skill page is a left-to-right tree: three branches, a line per prerequisite, the picked skill in detail',()=>{
+ // The layout itself: every skill and open slot in its own cell, inside the grid, and
+ // each skill to the right of (or under) the one it builds on, on its own branch.
+ const rows=SKILL_BRANCHES.length*2,cells=new Set(),byId=new Map(SKILL_TREE.map(node=>[node.id,node]));
+ for(const [row,col] of [...SKILL_TREE.map(node=>[node.row,node.col]),...SKILL_OPEN]){
+  assert.ok(row>=1&&row<=rows&&col>=1&&col<=SKILL_COLUMNS,`${row}/${col} inside the grid`);
+  assert.ok(!cells.has(row+'/'+col),`${row}/${col} used once`);cells.add(row+'/'+col);
+ }
+ for(const node of SKILL_TREE){
+  assert.equal(SKILL_BRANCHES.indexOf(node.branch),Math.floor((node.row-1)/2),node.id+' sits in its branch rows');
+  for(const id of node.need){
+   const from=byId.get(id);assert.ok(from,id+' exists');assert.equal(from.branch,node.branch);
+   assert.ok(from.col<node.col||(from.col===node.col&&from.row<node.row),node.id+' grows right or down from '+id);
+  }
+ }
+ const {document,window}=parseHTML('<html><body><main id="app"></main></body></html>');
+ const root=document.getElementById('app');
+ window.ResizeObserver=class{observe(){}disconnect(){}};
+ window.requestAnimationFrame=()=>1;window.cancelAnimationFrame=()=>{};
+ const state={equipment:{sword:'original',shield:'original'},hp:1,maxHp:1,stamina:1,maxStamina:1,attackBonus:0,defense:0,armorDefense:0,potions:0,gold:0,
+  canUsePotion:false,touch:true,allows:kind=>kind!=='attack'};
+ const menu=createCharacterMenu({root,read:()=>state,subject:()=>null,onPause(){},usePotion(){},equip(){}});
+ const dialog=root.querySelector('dialog');dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;};
+ try{
+  menu.show('Skills');
+  assert.deepEqual([...dialog.querySelectorAll('.mf-skill-branches span')].map(n=>n.textContent),SKILL_BRANCHES.map(id=>t('char.branch.'+id)));
+  const nodes=[...dialog.querySelectorAll('.mf-skill-node:not(.is-open)')];
+  assert.deepEqual(nodes.map(n=>n.querySelector('b').textContent),SKILL_TREE.map(node=>t('char.skill.'+node.id)));
+  assert.deepEqual(nodes.filter(n=>n.classList.contains('is-locked')).map(n=>n.querySelector('b').textContent),[t('char.skill.combo'),t('char.skill.heavy')]);
+  assert.equal(dialog.querySelectorAll('.mf-skill-node.is-open').length,SKILL_OPEN.length);
+  const lines=[...dialog.querySelectorAll('.mf-skill-nodes>svg path')];
+  assert.equal(lines.length,SKILL_TREE.reduce((sum,node)=>sum+node.need.length,0),'one line per prerequisite');
+  assert.equal(lines.filter(line=>line.getAttribute('class')==='on').length,3,'only lines between usable skills are lit (guard, dodge branches)');
+  // The first skill is picked; picking another shows its controls, touch first.
+  assert.equal(nodes[0].getAttribute('aria-pressed'),'true');
+  const heavy=COMBAT_HINTS.find(row=>row.id==='heavy');
+  nodes[1].click();
+  assert.equal(dialog.querySelector('.mf-skill-detail h2').textContent,t('char.skill.heavy'));
+  assert.deepEqual([...dialog.querySelectorAll('.mf-skill-keys dd')].map(n=>n.textContent),[heavy.touch,heavy.keys]);
+  const needs=[...dialog.querySelectorAll('.mf-skill-needs li')];
+  assert.deepEqual(needs.map(n=>[n.textContent,n.className]),[[t('char.skill.needs',{name:t('char.skill.combo')}),''],[t('char.locked'),'']]);
+  // A usable skill whose prerequisite is usable: the line is met, no lock line; the pick survives a re-open.
+  nodes[3].click();
+  assert.deepEqual([...dialog.querySelectorAll('.mf-skill-needs li')].map(n=>n.className),['is-met']);
+  assert.equal(dialog.querySelector('.mf-skill-detail .mf-menu-equipped').textContent,t('char.skill.ready'));
+  state.touch=false;menu.show('Inventory');menu.show('Skills');
+  assert.equal(dialog.querySelector('.mf-skill-detail h2').textContent,t('char.skill.justGuard'));
+  assert.equal(dialog.querySelector('.mf-skill-keys dd').textContent,t('char.skill.justGuardKeys'),'keyboard first on a desktop');
+ }finally{menu.dispose();}
 });

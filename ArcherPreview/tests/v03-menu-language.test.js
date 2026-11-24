@@ -23,6 +23,8 @@ import {TOWN_ITEMS,BOOSTS,FORGE_RULES,itemName,itemNote,gradeLabel,gradeStrike} 
 const PACKS={ko,en,ja,vi,zh};
 const byText=(parent,selector,label)=>{const node=[...parent.querySelectorAll(selector)].find(el=>el.textContent===label);assert.ok(node,'control: '+label);return node;};
 const latinWord=/[A-Za-z]{3,}/,hangul=/[가-힣]/;
+// Key caps are printed as on the keyboard in every language (the Korean lessons say Space too).
+const keyCaps=/\bSpace\b/g;
 // Everything a player can read or hear: text, labels and tooltips.
 function readable(node){
  const parts=[node.textContent];
@@ -38,7 +40,7 @@ function page(){
 function modal(dialog,window){dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};}
 function expectLanguage(id,text,where){
  assert.doesNotMatch(text,/\{\w+\}|\b(?:char|shop|item)\.[\w-]+|\b(?:undefined|NaN)\b/,where+' contains a raw key or value');
- if(id==='ko')assert.ok(!latinWord.test(text),`${where}: English left in Korean: ${text.match(latinWord)?.[0]}`);
+ if(id==='ko'){const words=text.replace(keyCaps,'');assert.ok(!latinWord.test(words),`${where}: English left in Korean: ${words.match(latinWord)?.[0]}`);}
  else assert.ok(!hangul.test(text),`${where}: Korean left in ${id}: ${text.match(/[가-힣][^\n]{0,20}/)?.[0]}`);
 }
 const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};};
@@ -81,8 +83,9 @@ for(const id of Object.keys(PACKS))test(`character menu status, inventory and sk
    menu.show('Inventory');[...dialog.querySelectorAll('.mf-menu-filters button')].find(b=>b.textContent===t(filter)).click();
    for(const tile of [...dialog.querySelectorAll('.mf-menu-grid button')]){tile.click();expectLanguage(id,readable(dialog),`${filter} ${tile.title}`);}
   }
-  menu.show('Skills');assert.equal(dialog.querySelectorAll('.mf-menu-skills dt').length,7);
-  assert.ok(dialog.querySelector('.mf-menu-skills small'),'locked lessons are marked');
+  menu.show('Skills');const skills=[...dialog.querySelectorAll('.mf-skill-node:not(.is-open)')];assert.equal(skills.length,7);
+  assert.ok(dialog.querySelector('.mf-skill-node.is-locked'),'locked lessons are marked');
+  for(const node of skills){node.click();expectLanguage(id,readable(dialog),'skill '+node.querySelector('b').textContent);}
   menu.dispose();
  }finally{setPack('ko',ko);}
 });
@@ -159,14 +162,14 @@ for(const [id,pack] of Object.entries(PACKS))test(`owned equipment, quick-bar re
   byText(dialog,'.mf-menu-filters button',pack.ui['char.type.Materials']).click();tile('wolf-fang');
   assert.equal(dialog.querySelector('.mf-menu-item p').textContent,pack.ui['char.materialNote']);
   for(touch of [true,false]){
-   tab('Skills');const rows=[...dialog.querySelectorAll('.mf-menu-skills dl > div')];
+   tab('Skills');const nodes=[...dialog.querySelectorAll('.mf-skill-node:not(.is-open)')];
    const mode=touch?'touch':'keys';
    const hints=id==='ko'?Object.fromEntries(COMBAT_HINTS.map(h=>[h.id,h])):pack.story.hints;
    const sprint=id==='ko'?TIPS.find(x=>x.id==='sprint'):pack.story.tips.sprint;
-   const controls=[hints.attack[mode],hints.heavy[mode],hints.guard[mode],hints.push[mode],pack.ui['guide.justGuardText'],hints.dodge[mode],sprint[mode]];
-   assert.deepEqual(rows.map(row=>row.querySelector('dd').textContent),controls);
-   assert.deepEqual(rows.map(row=>row.querySelector('dt').textContent),['combo','heavy','guard','push','justGuard','dodge','sprint'].map(k=>pack.ui['char.skill.'+k]));
-   assert.deepEqual(rows.flatMap(row=>row.querySelector('small')?.textContent??[]),[pack.ui['char.locked'],pack.ui['char.locked']]);
+   const controls=[hints.attack[mode],hints.heavy[mode],hints.guard[mode],pack.ui['char.skill.justGuard'+(touch?'Touch':'Keys')],hints.push[mode],hints.dodge[mode],sprint[mode]];
+   assert.deepEqual(nodes.map(node=>{node.click();return dialog.querySelector('.mf-skill-keys dd').textContent;}),controls);
+   assert.deepEqual(nodes.map(node=>node.querySelector('b').textContent),['combo','heavy','guard','justGuard','push','dodge','sprint'].map(k=>pack.ui['char.skill.'+k]));
+   assert.deepEqual(nodes.filter(node=>node.classList.contains('is-locked')).map(node=>node.querySelector('em').textContent),[pack.ui['char.skill.lockedShort'],pack.ui['char.skill.lockedShort']]);
   }
  }finally{menu.dispose();services.dispose();setPack('ko',ko);}
 });

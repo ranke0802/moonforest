@@ -1,4 +1,4 @@
-import {bagContents,characterItems,combatSkills,SLOTS} from './character-menu-data.js';
+import {bagContents,characterItems,combatSkills,SKILL_BRANCHES,SKILL_COLUMNS,SKILL_OPEN,SLOTS} from './character-menu-data.js';
 import {createCharacterPortrait} from './character-menu-camera.js';
 import {townItemIcon} from './town-item-art.js';
 import {t,language,cloneChapter,localizeChapter} from './i18n.js';
@@ -7,6 +7,13 @@ import {COMBAT_HINTS,TIPS} from './data/chapter1.js';
 // Page, filter and sort values are stable ids; the words come from t() at
 // every show(), so a language change at the title applies on the next open.
 const LESSONS=Object.freeze({COMBAT_HINTS,TIPS});
+const SVG='http://www.w3.org/2000/svg';
+// Line art for the three skill branches (the mockup's sword, shield and boot).
+const BRANCH_ART=Object.freeze({
+  sword:['M19 3l-9.5 9.5M9 11l4 4M5 19l3.5-3.5M19 3v3l-8 8-3-3 8-8z'],
+  shield:['M12 3l7 2.5v5.5c0 4.5-3 7.8-7 9.5-4-1.7-7-5-7-9.5V5.5z','M12 7v9M8.5 11h7'],
+  footwork:['M9 4h5v9l5 3v4H9z','M9 16h10']
+});
 
 export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,onPause}){
   const doc=root.ownerDocument,win=doc.defaultView;
@@ -32,7 +39,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   }
   nav.append(...tabButtons,gold,exit);dialog.append(nav,body);root.append(dialog);
   let page='Status',filter='All',sort='Type',selected='',poseFrame=null,turn=0,zoom=1;
-  let pendingDraw=0,disposed=false,portrait=null,portraitScene=null,retryDraw=0,lessons=null,lessonLang='';
+  let pendingDraw=0,disposed=false,portrait=null,portraitScene=null,retryDraw=0,lessons=null,lessonLang='',skillPick='';
   const lang=()=>doc.documentElement.lang||'ko';
   function invalidate(){
     if(pendingDraw||!dialog.open||!poseFrame||page!=='Status')return;
@@ -148,16 +155,71 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     for(let i=list.length;i<Math.ceil(list.length/6)*6;i++){const blank=make('i','mf-menu-empty');blank.setAttribute('aria-hidden','true');grid.append(blank);}
     inspect(list.find(row=>row.id===selected)??list[0]);
   }
+  function vector(tag,attributes){
+    const node=doc.createElementNS(SVG,tag);
+    for(const key in attributes)node.setAttribute(key,attributes[key]);
+    return node;
+  }
+  function branchIcon(branch){
+    const box=make('span','mf-skill-icon'),art=vector('svg',{viewBox:'0 0 24 24','aria-hidden':'true'});
+    for(const d of BRANCH_ART[branch])art.append(vector('path',{d}));
+    box.append(art);return box;
+  }
+  // A tree that grows left to right: branch labels on the left, one grid cell
+  // per skill, a line from each skill to the one it builds on, and the picked
+  // skill's controls and description on the right.
   function skills(state){
     // The lesson hints in the chosen language: localized once per language.
     if(!lessons||lessonLang!==language()){lessons=localizeChapter(cloneChapter(LESSONS),LESSONS);lessonLang=language();}
-    const card=make('section','mf-menu-card mf-menu-skills'),rows=make('dl');
-    card.append(make('h2','',t('char.skills')),rows);body.append(card);
-    for(const skill of combatSkills(lessons,state.touch,state.allows)){
-      const row=make('div');row.append(make('dt','',skill.name),make('dd','',skill.control));
-      if(!skill.available)row.append(make('small','',t('char.locked')));
-      rows.append(row);
+    const list=combatSkills(lessons,state.touch,state.allows),byId=new Map(list.map(skill=>[skill.id,skill]));
+    const rows=SKILL_BRANCHES.length*2;
+    const tree=make('section','mf-menu-card mf-skill-tree'),detail=make('section','mf-menu-card mf-skill-detail');
+    tree.setAttribute('aria-label',t('char.skill.tree'));
+    const branches=make('div','mf-skill-branches');
+    for(const branch of SKILL_BRANCHES)branches.append(make('span','',t('char.branch.'+branch)));
+    const grid=make('div','mf-skill-nodes'),lines=vector('svg',{viewBox:'0 0 100 100',preserveAspectRatio:'none','aria-hidden':'true'});
+    grid.style.setProperty('--mf-skill-cols',String(SKILL_COLUMNS));grid.style.setProperty('--mf-skill-rows',String(rows));
+    const x=col=>(col-.5)/SKILL_COLUMNS*100,y=row=>(row-.5)/rows*100;
+    for(const skill of list)for(const id of skill.need){
+      const from=byId.get(id);
+      const d=from.col===skill.col?`M${x(from.col)} ${y(from.row)}V${y(skill.row)}`
+        :`M${x(from.col)} ${y(from.row)}H${from.col/SKILL_COLUMNS*100}V${y(skill.row)}H${x(skill.col)}`;
+      lines.append(vector('path',from.available&&skill.available?{d,class:'on'}:{d}));
     }
+    grid.append(lines);
+    const nodes=new Map();
+    function inspect(skill){
+      skillPick=skill.id;detail.replaceChildren();
+      for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===skillPick));
+      const head=make('div','mf-skill-head'),title=make('div'),tags=make('div','mf-skill-tags');
+      for(const tag of [t('char.branch.'+skill.branch),t('char.skill.basic')])tags.append(make('i','',tag));
+      title.append(make('h2','',skill.name),tags);head.append(branchIcon(skill.branch),title);
+      // The current input mode first, the other one under it.
+      const controls=make('dl','mf-skill-keys');
+      for(const mode of state.touch?['touch','keys']:['keys','touch']){
+        const pair=make('div');pair.append(make('dt','',t('guide.'+mode)),make('dd','',skill[mode]));controls.append(pair);
+      }
+      detail.append(head,controls,make('p','',skill.text));
+      const needs=make('ul','mf-skill-needs');
+      for(const id of skill.need){const from=byId.get(id);needs.append(make('li',from.available?'is-met':'',t('char.skill.needs',{name:from.name})));}
+      if(!skill.available)needs.append(make('li','',t('char.locked')));
+      if(needs.childElementCount)detail.append(needs);
+      detail.append(make('span','mf-menu-equipped',t(skill.available?'char.skill.ready':'char.skill.lockedShort')));
+    }
+    for(const skill of list){
+      const state=t(skill.available?'char.skill.ready':'char.skill.lockedShort');
+      const node=button('',()=>inspect(skill)),label=make('span');
+      node.className='mf-skill-node '+(skill.available?'is-ready':'is-locked');node.style.gridArea=skill.row+' / '+skill.col;
+      node.setAttribute('aria-label',skill.name+', '+state);
+      label.append(make('b','',skill.name),make('em','',state));node.append(branchIcon(skill.branch),label);
+      nodes.set(skill.id,node);grid.append(node);
+    }
+    for(const [row,col] of SKILL_OPEN){
+      const slot=make('i','mf-skill-node is-open',t('char.skill.later'));slot.style.gridArea=row+' / '+col;
+      slot.setAttribute('aria-hidden','true');grid.append(slot);
+    }
+    tree.append(branches,grid);body.append(tree,detail);
+    inspect(byId.get(skillPick)??list[0]);
   }
   function show(name){
     if(disposed)return;

@@ -50,8 +50,47 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:72px;height:72px;margin:8px 0;display:grid;place-items:center}
 .mf-menu-item button,.mf-menu-equipped{display:inline-block;margin-top:10px;border:1px solid var(--line);color:var(--gold);padding:6px 12px}
 .mf-menu-item button:disabled{opacity:.45}
-.mf-menu-skills dl>div{display:grid;grid-template-columns:minmax(90px,26%) 1fr;gap:4px 16px;padding:12px 0;border-bottom:1px solid #b8ab822a}
-.mf-menu-skills small{grid-column:2;color:#c8beb0}
+/* Skills: a tree that grows left to right (the approved mockup). Branch
+   labels on the left, two rows per branch, a line to each skill from the one
+   it builds on; the picked skill's controls on the right. */
+.mf-character-menu[data-page=Skills] .mf-menu-body{grid-template-columns:minmax(0,1fr) minmax(180px,30%)}
+.mf-skill-tree{display:grid;grid-template-columns:auto minmax(0,1fr);overflow:hidden}
+.mf-skill-branches{display:grid;grid-template-rows:repeat(3,1fr);border-right:1px solid #8e795466}
+.mf-skill-branches span{display:grid;place-items:center;padding:0 5px;writing-mode:vertical-rl;letter-spacing:.2em;color:var(--gold);border-bottom:1px solid #8e795433}
+.mf-skill-branches span:last-child{border-bottom:0}
+.mf-skill-nodes{position:relative;display:grid;min-height:0;
+  grid-template-columns:repeat(var(--mf-skill-cols,4),minmax(0,1fr));grid-template-rows:repeat(var(--mf-skill-rows,6),minmax(0,1fr));
+  background:linear-gradient(#0000 calc(100%/3 - .5px),#8e795433 0 calc(100%/3 + .5px),#0000 0 calc(200%/3 - .5px),#8e795433 0 calc(200%/3 + .5px),#0000 0)}
+.mf-skill-nodes>svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mf-skill-nodes>svg path{fill:none;stroke:#8e795466;stroke-width:2;vector-effect:non-scaling-stroke}
+.mf-skill-nodes>svg path.on{stroke:var(--gold)}
+.mf-character-menu .mf-skill-node{position:relative;z-index:1;box-sizing:border-box;align-self:center;justify-self:center;width:92%;min-width:0;
+  display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px;align-items:center;padding:4px 6px;text-align:left;
+  background:#0d1410;border:1px solid #8e795466;border-radius:4px;color:#a8946a;cursor:pointer}
+.mf-skill-node b{display:block;font-weight:400;font-size:13px;line-height:1.2;color:#f2ebd8b3;overflow-wrap:anywhere}
+.mf-skill-node em{display:block;margin-top:1px;font-style:normal;font-size:11px;line-height:1.2;color:#f2ebd880}
+.mf-character-menu .mf-skill-node.is-ready{background:#1c2a20;border-color:var(--gold);color:var(--gold)}
+.mf-skill-node.is-ready b{color:var(--ink)}.mf-skill-node.is-ready em{color:var(--gold)}
+.mf-character-menu .mf-skill-node.is-open{grid-template-columns:1fr;place-items:center;min-height:30px;font-style:normal;font-size:11px;text-align:center;
+  letter-spacing:.06em;background:none;border-style:dashed;color:#f2ebd866;cursor:default}
+.mf-character-menu .mf-skill-node[aria-pressed=true]{background:#18231c;border-color:#f5d897;box-shadow:0 0 0 1px #f5d897,0 0 12px #cfb77b55}
+.mf-character-menu .mf-skill-node.is-ready[aria-pressed=true]{background:#22331f}
+.mf-skill-icon{display:grid;place-items:center;box-sizing:border-box;width:26px;aspect-ratio:1;border:1px solid currentColor;border-radius:4px;background:#0b0f0d}
+.mf-skill-icon svg{width:64%;height:64%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round}
+.mf-skill-detail{border-left:1px solid var(--line)}
+.mf-skill-head{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:center;color:var(--gold)}
+.mf-skill-head .mf-skill-icon{width:40px}
+.mf-character-menu .mf-skill-head h2{margin:0}
+.mf-skill-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.mf-skill-tags i{font-style:normal;font-size:11px;padding:1px 7px;border:1px solid #8e795499;border-radius:3px;color:#f2ebd8cc}
+.mf-character-menu .mf-skill-keys{margin:12px 0 0;padding:8px 10px;background:#0b0f0d;border:1px solid #8e795455;border-radius:4px}
+.mf-skill-keys>div+div{margin-top:6px}
+.mf-skill-keys dt{font-size:11px;color:#c9bb99}
+.mf-skill-keys>div+div dd{color:#f2ebd8cc}
+.mf-skill-detail p{margin:10px 0 0;line-height:1.5}
+.mf-skill-needs{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:3px}
+.mf-skill-needs li::before{content:"\2715  ";color:#f38d8d}
+.mf-skill-needs li.is-met::before{content:"\2713  ";color:#8df3b1}
 @media (max-height:570px){.mf-menu-card{padding:10px}.mf-menu-slots{gap:3px}.mf-menu-grid{max-width:420px}}
 @media (max-height:500px) and (orientation:landscape){
   .mf-character-menu{width:min(98vw,980px);height:min(96dvh,540px)}
@@ -60,12 +99,16 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   .mf-character-menu h2{margin-bottom:5px}
   .mf-menu-stats dl>div,.mf-menu-item dl>div{padding:4px 0}
   .mf-menu-filters{margin-bottom:3px}
-  .mf-menu-grid{grid-auto-rows:clamp(40px,10.8dvh,52px)}
-  .mf-menu-grid>*{aspect-ratio:auto}
+  .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:min-content minmax(0,1fr)}
+  .mf-menu-grid{--mf-cell:clamp(44px,13dvh,60px);grid-template-columns:repeat(6,var(--mf-cell));grid-auto-rows:var(--mf-cell)}
   .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:44px;height:44px;margin:2px 0}
   .mf-menu-item p{margin:5px 0}
-  .mf-menu-skills dl{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;align-items:start}
-  .mf-menu-skills dl>div{grid-template-columns:minmax(70px,35%) 1fr;gap:2px 6px;padding:5px 0}
+    .mf-character-menu[data-page=Skills] .mf-menu-body{grid-template-columns:minmax(0,1fr) minmax(150px,28%)}
+  .mf-character-menu .mf-skill-node{gap:4px;padding:2px 4px}
+  .mf-skill-node b{font-size:12px}.mf-skill-node em{font-size:10px}
+  .mf-skill-icon{width:22px}.mf-skill-head .mf-skill-icon{width:30px}
+  .mf-character-menu .mf-skill-keys{margin-top:6px;padding:5px 8px}
+  .mf-skill-detail p,.mf-skill-needs{margin-top:6px}
 }
 @media (max-width:580px) and (orientation:portrait){
   .mf-character-menu{width:96vw;height:90dvh}.mf-character-menu nav{gap:0;padding:2px}.mf-character-menu nav button{padding:5px 7px}
@@ -73,6 +116,8 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   .mf-menu-model{grid-row:1}.mf-menu-stats{grid-row:2}
   .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1.35fr) minmax(0,1fr)}
   .mf-menu-item{border:0;border-top:1px solid var(--line)}
+  .mf-character-menu[data-page=Skills] .mf-menu-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1.5fr) minmax(0,1fr)}
+  .mf-skill-detail{border:0;border-top:1px solid var(--line)}
 }
 /* 2026-11-24: the words follow the chosen language, so the glyphs do too (v03.css html[lang]).
    English keeps the serif titles; Korean breaks lines between words. */
