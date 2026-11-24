@@ -41,10 +41,11 @@ export default {
   'prompt.talkQuest':'Talk to {name}','prompt.talkIdle':'Speak to {name}',
  },
  story:{
-  speakers:{'나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
+  speakers:{'대장장이':'Blacksmith','나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
+   'smith-idle':['I’d know that knot on your sword grip anywhere. You could barely reach my anvil when you were little. Let’s have a look.'],
    'driver-wagon':['Whew… made it out alive. If it weren’t for you, friend, me an’ my horse’d be wolf chow for sure.','Ain’t proud to ask, but could you help me set the wagon upright? Won’t budge an inch with just me.','Sure. Get in place and we’ll push together.'],
-   'driver-thanks':['Well, look at that, she’s up! …Oh, dear. That wheel’s smashed to bits.','Still, could be worse. Village is just yonder, so it’s only a short walk from here.','You saved my life—least I can do is give you somethin’. Nearly left my only girl without a pa… Thank you, truly.','Ain’t much, but you take it. When you get to the village, look for the Moonlight Inn first. Innkeeper’s a gruff one, but the rooms are clean.'],
+   'driver-thanks':['Well, look at that, she’s up! …Oh, dear. That wheel’s smashed to bits.','Still, could be worse. Village is just yonder, so it’s only a short walk from here.','You saved my life—least I can do is give you somethin’. Nearly left my only girl without a pa… Thank you, truly.','The horse you used to ride is still in my stable. She’s yours now. Call her when you reach the open road.','Ain’t much, but you take it. When you get to the village, look for the Moonlight Inn first. Innkeeper’s a gruff one, but the rooms are clean.'],
    'ambush-scene':['Aaagh!','(…Wh-what?)','W-wolf! Whoa, whoa there!','Oh no, m-my horse…!','(Protect the driver first.)'],
    'driver-idle':['Soon as I fix this wheel, I’ll be right behind you. Watch yourself on the road.'],
    'inn-arrive':['Haven’t seen your face before. Not many make it out to this village this time of year.','I’m here on a request from the Church. Novice saint Elena hasn’t been heard from in six months.','…Haven’t heard that name in a while. She was a good girl. Used to sit up all night with the injured.','I don’t know much. Ask the old woman by the well, the herbalist, and the young man fixing the palisade. Each of them remembers it a little differently.','Take the room upstairs. Talk to me whenever you want to rest. I’ll write today down in the ledger.'],

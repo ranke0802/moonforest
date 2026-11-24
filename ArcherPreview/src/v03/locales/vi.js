@@ -41,10 +41,11 @@ export default {
   'prompt.talkQuest':'Nói chuyện với {name}','prompt.talkIdle':'Bắt chuyện với {name}',
  },
  story:{
-  speakers:{'나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
+  speakers:{'대장장이':'Thợ rèn','나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
   dialogues:{
+   'smith-idle':['Nhìn nút thắt trên chuôi là ta nhận ra kiếm của cháu. Hồi nhỏ cháu còn chẳng với tới cái đe này. Nào, đưa ta xem.'],
    'driver-wagon':['Phù… sống rồi. Hổng có cậu thì tui với con ngựa thành mồi cho sói rồi.','Ngại thiệt, mà cậu phụ tui dựng cái xe lên được hông? Một mình tui đẩy hoài hổng nhúc nhích.','Được. Bác vào chỗ rồi mình cùng đẩy.'],
-   'driver-thanks':['Ối, dựng lên rồi, lên rồi! …Trời đất, cái bánh xe nát bét luôn rồi.','Mà cũng may. Làng ở ngay đằng kia, từ đây đi bộ chút xíu là tới.','Cậu cứu mạng tui, tui phải biếu cậu cái gì chớ. Suýt nữa con gái một của tui mất cha rồi… Cảm ơn cậu nhiều lắm.','Hổng bao nhiêu, cậu cầm lấy nghen. Vô làng thì tìm quán trọ Ánh Trăng trước. Ông chủ hơi cộc, mà phòng sạch sẽ lắm.'],
+   'driver-thanks':['Ối, dựng lên rồi, lên rồi! …Trời đất, cái bánh xe nát bét luôn rồi.','Mà cũng may. Làng ở ngay đằng kia, từ đây đi bộ chút xíu là tới.','Cậu cứu mạng tui, tui phải biếu cậu cái gì chớ. Suýt nữa con gái một của tui mất cha rồi… Cảm ơn cậu nhiều lắm.','Con ngựa cháu từng cưỡi vẫn ở trong chuồng nhà ta. Từ nay nó thuộc về cháu. Ra đường lớn thì gọi nó nhé.','Hổng bao nhiêu, cậu cầm lấy nghen. Vô làng thì tìm quán trọ Ánh Trăng trước. Ông chủ hơi cộc, mà phòng sạch sẽ lắm.'],
    'ambush-scene':['Áaaa!','(…Gì, gì vậy?)','S-sói! Hí, hí!','Trời ơi, c-con ngựa…!','(Trước hết phải bảo vệ bác đánh xe.)'],
    'driver-idle':['Sửa xong cái bánh là tui theo sau liền. Đi đường cẩn thận nghen.'],
    'inn-arrive':['Mặt lạ đây. Mùa này ít ai chịu lặn lội tới tận làng này.','Tôi đến theo ủy thác của Giáo hội. Thánh nữ tập sự Elena đã bặt tin sáu tháng rồi.','…Lâu lắm mới nghe lại cái tên đó. Một đứa tốt bụng. Nó từng thức trắng đêm bên người bị thương.','Ta không biết nhiều. Hỏi bà cụ bên giếng, thầy thuốc, và cậu trai đang sửa hàng rào đi. Mỗi người sẽ nhớ hơi khác nhau.','Cứ dùng phòng trên lầu. Muốn nghỉ thì cứ gọi ta. Chuyện hôm nay ta sẽ ghi vào sổ.'],
