@@ -1,5 +1,6 @@
 // Title screen DOM. Opacity/transform transitions only; no per-frame work.
 import {t} from './i18n.js';
+import {chapterPanel,chapterWords} from './chapter-select.js';
 import {createDrawingVeil} from './drawing-veil.js';
 const MENU=['new','load','gallery','settings','quit'];
 // Set once the title's world has been fully drawn on this browser.
@@ -39,7 +40,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  function label(){
   layer.setAttribute('aria-label',t('title.aria'));layer.dataset.drawing=t('title.drawing');veil?.relabel();menu.setAttribute('aria-label',t('title.menu'));
   kicker.textContent=t('title.kicker');sub.textContent=t('title.sub');
-  for(const [id,button] of buttons)button.textContent=t('menu.'+id);
+  for(const [id,button] of buttons)button.textContent=id==='new'?chapterWords().menu:id==='load'?chapterWords().resume:t('menu.'+id);
  }
  label();
  let disposed=false,panelClose=null,lastFocus=null;
@@ -100,11 +101,12 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
    if(disposed||layer.hidden)return;closePanel(null);layer.classList.add('is-leaving');await wait(700);
   },
   hide(){layer.hidden=true;layer.classList.remove('is-shown','is-leaving');},
+  chooseChapter(options){return openPanel((box,close)=>chapterPanel({doc,box,close,...options}));},
   // Returns the chosen slot number, or null.
   chooseSlot({mode,index,bootSlot}){
    return openPanel((box,close)=>{
-    box.append(el(doc,'h2','v03-panel-title',t(mode==='new'?'menu.new':'menu.load')));
-    box.append(el(doc,'p','v03-panel-note',t(mode==='new'?'panel.newNote':'panel.loadNote')));
+    box.append(el(doc,'h2','v03-panel-title',mode==='chapters'?chapterWords().menu:t(mode==='new'?'menu.new':'menu.load')));
+    if(mode!=='chapters')box.append(el(doc,'p','v03-panel-note',t(mode==='new'?'panel.newNote':'panel.loadNote')));
     const list=el(doc,'div','v03-slots');
     for(const meta of index){
      const summary=slotSummary(meta,describe),button=el(doc,'button','v03-slot');button.type='button';button.dataset.slot=String(meta.slot);

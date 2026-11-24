@@ -32,7 +32,7 @@ function cleanMeta(slot,value){
  if(!value||typeof value!=='object'||value.used!==true)return emptyMeta(slot);
  const text=(v,max)=>typeof v==='string'?v.slice(0,max):'';
  const number=(v,min,max)=>Number.isFinite(v)?Math.max(min,Math.min(max,v)):min;
- return {slot,used:true,chapter:number(value.chapter,1,9),title:text(value.title,60),place:text(value.place,40),character:text(value.character,24),
+ return {slot,used:true,chapter:number(value.chapter,1,9),title:text(value.title,60),titleKey:text(value.titleKey,60)||undefined,place:text(value.place,40),placeKey:text(value.placeKey,40)||undefined,character:text(value.character,24),
   level:number(value.level,1,99),playSeconds:Math.floor(number(value.playSeconds,0,3.6e7)),createdAt:number(value.createdAt,0,8.64e15),savedAt:number(value.savedAt,0,8.64e15)};
 }
 export function readSlotIndex(raw,edition){
@@ -100,6 +100,7 @@ export function createSaveSession({local,session,edition,now=()=>Date.now()}){
   },
   get available(){return usable(local);},
   index:()=>readSlotIndex(local,edition),
+  inspectSlot:target=>validSlot(target)?slotStorage(local,edition,target):null,
   meta:()=>readSlotIndex(local,edition)[slot-1],
   // Marks the bound slot as a real save. Called when a game actually starts.
   commit(patch={}){const at=now();try{local?.setItem(editionPrefix(edition)+LAST_KEY,String(slot));}catch{/* optional */}return writeSlotMeta(local,edition,slot,{...patch,savedAt:at,createdAt:at});},

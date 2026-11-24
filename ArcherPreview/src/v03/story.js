@@ -35,7 +35,7 @@ export function findFreeSpot(navigation,point,radius=.42){
 export {particle} from './korean.js';
 export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
- const log=createQuestLog({quests:content.QUESTS,storage:save.journey});
+ let log=createQuestLog({quests:content.QUESTS,storage:save.journey}),replaying=false,onChapterEnd=null;
  const dialogue=createDialogue({doc,portraitFor});
  // Warm the art cache so the first line never shows an empty frame.
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
@@ -62,7 +62,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Quest rewards. Gold is credited per quest id (idempotent across reloads);
  // potions refill toward the carry limit; armor is a persistent flag in main.
  function grantReward(quest){
-  const reward=quest?.reward;if(!reward)return;
+  const reward=quest?.reward;if(!reward||replaying)return;
   const parts=[];
   try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
@@ -87,6 +87,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    tips.queue.unshift({title:t('hud.questDone'),keys:done.title,touch:done.title,text:next?t('hud.questNext',{next:next.title}):''});
    grantReward(done);
    save.touch({title:next?.title??done.title,titleKey:(next??done).id});
+   if(log.finished)onChapterEnd?.();
   }
   return result;
  }
@@ -287,7 +288,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   // The wolf's hiding place: a bush clump on open ground with a clear run to
   // the horse (2026-11-19: it used to start between trees and shake against them).
-  const hide=ambushHide(id);
+  const hide=props.some(prop=>prop.id==='v03-opening-wagon')?ambushHide(id):null;
   // The wagon first; then the wolf's cover: copies of the map's own bushes
   // (the placement runtime cannot load a new asset type: its cache is full).
   if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
@@ -1281,13 +1282,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    return null;
   },
   get started(){return started;},
-  log,
-  start({fresh=false}={}){
+  get log(){return log;},
+  start({fresh=false,key,replay=false,onComplete=null}={}){
+   replaying=replay;onChapterEnd=onComplete;log=createQuestLog({quests:content.QUESTS,storage:save.journey,key});
    if(fresh||!log.load())log.reset();
    // A new game opens on the wolf at the wagon (once the cast is placed).
    scene.pending=fresh===true&&log.quest()?.id==='M00';scene.pendingFor=0;
    started=true;mapId=null;warmStoryVisuals();warmLoot();Object.assign(coachState,{index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0});
-   tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
+   tips.queue.length=0;tips.showing=null;tips.step=null;hud.setTip(null);loadTips();if(fresh&&!replay){tips.seen.clear();try{save.journey.removeItem(TIP_KEY);}catch{/* optional */}}
    refresh();
    const quest=log.quest();if(quest)save.touch({title:quest.title,titleKey:quest.id});
   },
@@ -1310,7 +1312,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    staged.key=null;staged.busy=false;staged.next=0;
    return true;
   },
-  defeat(event){if(started&&event)emit({type:'defeat',kind:event.family&&log.step()?.kind===event.family?event.family:event.kind,map:mapId});},
+  defeat(event){if(started&&event&&(!log.step()?.phase||event.phase===log.step().phase))emit({type:'defeat',kind:event.family&&log.step()?.kind===event.family?event.family:event.kind,map:mapId});},
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
   prepare(id){
@@ -1321,13 +1323,18 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){
     // arrive() may have built this place's cast behind the loading picture already.
-    mapId=s.mapId;if(castMap!==mapId)buildCast(mapId);emit({type:'reach',map:mapId});
+    mapId=s.mapId;if(castMap!==mapId)buildCast(mapId);if(!log.step()?.reading)emit({type:'reach',map:mapId});
     // The place's name in the middle of the screen on arrival (2026-11-20,
     // user). Not over the opening scene.
     if(!scene.pending&&!scene.active){const key='place.'+s.character,name=t(key);if(name!==key)hud.showPlace(name);}
    }
    // It waits for the wolf and the driver to be there (a few seconds at most): the stage stays covered meanwhile (boot.js).
    if(scene.pending){scene.pendingFor=(scene.pendingFor??0)+dt;try{if(beginAmbushScene()||scene.pendingFor>4){scene.pending=false;scene.pendingFor=0;}}catch(error){scene.pending=false;scene.pendingFor=0;console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
+   const reading=log.step();
+   if(reading?.reading&&reading.type==='reach'&&reading.map===mapId&&!talking&&!dialogue.open&&api.battle.combatCount===0){
+    talking=true;api.input.setSuspended(true);
+    void dialogue.play(content.DIALOGUES[reading.reading]).then(played=>{if(played&&started&&log.step()===reading)emit({type:'reach',map:mapId});}).finally(()=>{talking=false;if(started&&!disposed)api.input.setSuspended(false);});
+   }
    hidePlacedWagon();updateCover(dt);
    if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);updateBubble(dt);return;}
    // Strolling actors: talk range and markers follow where they stand now.

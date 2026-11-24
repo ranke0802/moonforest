@@ -23,7 +23,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  function show(){
   const line=lines[index];who.textContent=line.who?speaker(line.who):'';who.hidden=!line.who;said.textContent=line.text;typewriter.start(text,line.text,{who:line.who??null});
   box.classList.toggle('is-self',line.who==='나');
-  const art=portraitFor(line.who);
+  const art=line.illustration??portraitFor(line.who);portrait.classList.toggle('is-journal',!!line.illustration);
   if(art!==shownArt){shownArt=art;portrait.hidden=!art;if(art){portrait.src=art;portrait.classList.remove('is-in');void portrait.offsetWidth;portrait.classList.add('is-in');}}next.textContent=t(index===lines.length-1?'dialogue.close':'dialogue.next');
   box.classList.remove('is-in');void box.offsetWidth;box.classList.add('is-in');
  }
@@ -31,7 +31,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
   if(!lines)return;
   if(typewriter.complete())return;
   if(++index<lines.length){show();return;}
-  typewriter.stop();const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;talking(false);shownArt=null;portrait.hidden=true;portrait.classList.remove('is-in');done?.(played);
+  typewriter.stop();const done=finish,played=lines;lines=null;finish=null;layer.hidden=true;talking(false);shownArt=null;portrait.hidden=true;portrait.removeAttribute('src');portrait.classList.remove('is-in');done?.(played);
  }
  next.addEventListener('click',step);
  // Touching anywhere on the box advances too (thumb-friendly on phones); the
@@ -55,7 +55,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
    lines=script;index=0;layer.hidden=false;talking(true);show();next.focus?.({preventScroll:true});
    return new Promise(resolve=>{finish=resolve;});
   },
-  cancel(){if(!lines)return;typewriter.stop();const done=finish;lines=null;finish=null;layer.hidden=true;talking(false);done?.(null);},
+  cancel(){if(!lines)return;typewriter.stop();const done=finish;lines=null;finish=null;layer.hidden=true;talking(false);shownArt=null;portrait.hidden=true;portrait.removeAttribute('src');done?.(null);},
   dispose(){this.cancel();doc.removeEventListener('keydown',onKey,true);layer.remove();},
  };
 }

@@ -22,6 +22,9 @@ import {setupGameSelection} from '../game-selection.js';
 import {createGuideWisp} from './guide-wisp.js';
 import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
+
+import {CHAPTERS,chapterProgress,questKey} from './chapter-progress.js';
+import {chapterWords} from './chapter-select.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
 import {createRunTrail} from './run-trail.js';
 import {createDrawingProgress,drawStage} from './drawing-veil.js';
@@ -103,8 +106,17 @@ export function setupV03(api){
  // appears before that (title and play wait for langReady).
  const languageStore=api.languageStorage??view?.localStorage??null,source=api.content??chapter1,content=cloneChapter(source);
  let loadingLore=null;
+ const sharedStory={...content};
+ const questSets=Object.fromEntries(CHAPTERS.map(row=>[row.id,row.id===1?source.QUESTS:row.questIds]));
+ const chapterContent=new Map();
+ const chaptersFor=storage=>chapterProgress(storage,questSets);
+ function setStoryChapter(id){
+  const chapter=chapterContent.get(id);
+  if(chapter)Object.assign(sharedStory,content,chapter,{DIALOGUES:{...content.DIALOGUES,...chapter.DIALOGUES}});
+  else Object.assign(sharedStory,content);
+ }
  const slowFx=createSlowFx((()=>{try{return view.localStorage;}catch{return null;}})());
- const story=createStory({api,doc,save,content,combatLocksTravel,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
+ const story=createStory({api,doc,save,content:sharedStory,combatLocksTravel,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
@@ -119,6 +131,7 @@ export function setupV03(api){
  const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
  // Records written before keys were saved carry Korean text only: map it back.
  const describe=meta=>{
+  if(meta.chapter>1)return {title:chapterContent.get(meta.chapter)?.QUESTS.find(q=>q.id===meta.titleKey)?.title??chapterWords().chapters[meta.chapter-1],place:PLACE_NAMES[meta.character]?t('place.'+meta.character):undefined};
   const titleKey=meta.titleKey??(meta.title==='꿈'?'dream':source.QUESTS?.find(quest=>quest.title===meta.title)?.id);
   const placeKey=meta.placeKey||Object.keys(PLACE_NAMES).find(key=>PLACE_NAMES[key]===meta.place);
   return {title:titleKey==='dream'?t('meta.dream'):titleKey?questTitle(titleKey):undefined,place:placeKey?t('place.'+placeKey):undefined};
@@ -192,7 +205,14 @@ export function setupV03(api){
  // the village is safe.
  function maybeStartWorld(){if(!state.worldStarted&&story.started&&story.log.quest()?.id!=='M00')startWorld();}
  async function enterPlay({resume=false}={}){
-  screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume});
+  const chapter=chaptersFor(save.journey);
+  const entry=CHAPTERS.find(row=>row.id===chapter.id);
+  if(entry.load&&!chapterContent.has(entry.id)){
+   try{const episode=await entry.load(language());if(state.disposed)return;chapterContent.set(entry.id,episode);}
+   catch(error){if(!state.disposed){screen('title');title.show();title.setEnabled('load',true);state.sceneShown=false;await opening.release();}throw error;}
+  }
+  setStoryChapter(chapter.id);
+  screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume,key:questKey(chapter.id,chapter.replay),replay:chapter.replay,onComplete:()=>chapter.markComplete()});
   maybeStartWorld();
   // ?bench: one fixed measurement after entering play (structure plan, phase 0).
   if(!state.bench&&new URLSearchParams(view?.location?.search??'').has('bench')){state.bench={dispose(){}};void import('./bench.js').then(({createBench})=>{if(state.disposed)return;const mode=new URLSearchParams(view?.location?.search??'').get('bench')==='roundtrip'?'roundtrip':'orbit';state.bench=createBench({doc,mode,travel:id=>api.travel(id),isReady:()=>api.getState?.().ready!==false,getWorld:()=>api.world,info:()=>({foes:(battle.encounters??[]).filter(foe=>foe.active).length})});return state.bench.run();}).catch(error=>console.error('[bench]',error));}
@@ -218,7 +238,7 @@ export function setupV03(api){
   if(ready===false)state.ambush=false;
   return state.screen==='opening'&&!state.disposed;
  }
- async function beginNewGame(){
+ async function beginNewGame({replay=false}={}){
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
   stopAttract();
@@ -232,11 +252,11 @@ export function setupV03(api){
   const travelling=OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map
    ?Promise.resolve().then(()=>api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])).then(moved=>moved===true,error=>{console.warn('[MoonForest 0.3] opening travel failed',error);return false;})
    :null;
-  screen('opening');save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));state.playSeconds=0;
+  screen('opening');if(!replay)state.playSeconds=0;save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream'}));
   const dream=opening.play();
   if(travelling){
    const moved=await travelling;
-   if(!moved||gameState().mapId!==OPENING_STAGE.map){reloadInto(save.slot,'new',null);return;}
+   if(!moved||gameState().mapId!==OPENING_STAGE.map){reloadInto(save.slot,replay?'load':'new',replay?'warrior-plains':null);return;}
   }
   api.resetStage(OPENING_STAGE);title.hide();
   if(!await stageAmbush(dream))return;
@@ -271,8 +291,26 @@ export function setupV03(api){
   if(action==='new'){
    const anyUsed=index.some(meta=>meta.used);
    let slot=save.slot;
-   if(anyUsed){slot=await title.chooseSlot({mode:'new',index,bootSlot:save.slot});if(slot===null)return;}
+   if(anyUsed){slot=await title.chooseSlot({mode:'chapters',index,bootSlot:save.slot});if(slot===null)return;}
    const meta=index[slot-1];
+   const preview=chaptersFor(save.inspectSlot?.(slot)??save.journey);
+   const choice=await title.chooseChapter({progress:preview,used:meta.used});
+   if(!choice)return;
+   if(!ready){api.toast?.(t('toast.preparing'));return;}
+   if(meta.used&&!choice.reset){
+    const changed=slot!==save.slot;
+    if(changed&&!save.bindTo?.(slot)){api.toast?.(t('toast.noStorage'));return;}
+    if(changed){api.reloadProgress?.();state.playSeconds=meta.playSeconds??0;state.sinceSave=0;state.returnPose=null;}
+    if(choice.id!==preview.id||choice.replay||preview.replay){
+     const destination=preview.select(choice.id,{again:choice.replay===true,current:meta});
+     if(!destination){api.toast?.(t('toast.noStorage'));return;}
+     state.returnPose=null;
+     save.touch({chapter:choice.id,character:destination.character,place:destination.place??PLACE_NAMES[destination.character],placeKey:destination.character,titleKey:destination.titleKey??'',title:destination.title??chapterWords().chapters[choice.id-1]});
+    }
+    if(changed&&!api.reloadProgress){reloadInto(slot,'load',save.meta().character);return;}
+    if(choice.replay&&choice.id===1){await beginNewGame({replay:true});return;}
+    await continueHere();return;
+   }
    if(meta.used){
     const ok=await title.confirm({title:t('confirm.overwriteTitle'),message:t('confirm.overwrite',{slot}),accept:t('confirm.overwriteAccept')});if(!ok)return;
    }
@@ -603,9 +641,9 @@ export function setupV03(api){
      state.dream=null;
      save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await sceneUp();await opening.release();
     })().catch(report);
-   }else if(state.screen==='resume'&&s.ready&&state.langReady){
+   }else if(state.screen==='resume'&&s.ready&&state.langReady&&!state.busy){
     if(!appleTouch)prepareWorld();
-    void enterPlay({resume:true});
+    state.busy=true;void enterPlay({resume:true}).catch(report).finally(()=>{state.busy=false;});
    }else if(state.screen==='play'&&s.ready){
     if(battle.playerAlive===false)playerCombatLock.reset();
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);

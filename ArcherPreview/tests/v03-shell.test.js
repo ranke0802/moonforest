@@ -68,7 +68,7 @@ test('title screen: five menu entries, keyboard order, slot panel and confirm',a
  const title=createTitleScreen({doc:document,wait:instant,onAction:a=>actions.push(a)});
  assert.equal(title.visible,false);title.show();assert.equal(title.visible,true);
  const labels=[...title.element.querySelectorAll('.v03-menu-item')].map(b=>b.textContent);
- assert.deepEqual(labels,['새로하기','불러오기','갤러리','설정','끝내기']);
+ assert.deepEqual(labels,['장 선택','이어하기','갤러리','설정','끝내기']);
  // No entry is boxed until the menu is moved with the keys (arrows or W/S); the pointer takes it away again.
  const press=(key,code)=>{const event=new document.defaultView.Event('keydown',{bubbles:true,cancelable:true});event.key=key;event.code=code;title.element.dispatchEvent(event);return event.defaultPrevented;};
  assert.equal(title.element.classList.contains('is-keyed'),false);assert.equal(title.element.tabIndex,-1);
@@ -134,6 +134,87 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
   reveal:async()=>{await settle();shell.update(.016);await settle();for(let i=0;i<90;i++)shell.update(.016);await settle();}};
 }
 
+test('chapters: a returning warrior finishes the original slot, reads Elena’s journal, faces phase two and keeps both clears',async()=>{
+ const local=memory(),session=memory(),seed=createSaveSession({local,session,edition:E,now:()=>50});
+ const {QUESTS}=await import('../src/v03/data/chapter1.js');
+ const {questKey,chapterProgress}=await import('../src/v03/chapter-progress.js');
+ const {elenaJournal}=await import('../src/v03/data/chapter2.js');
+ seed.commit({chapter:1,character:'warrior-v3',title:'남겨진 방',playSeconds:37});
+ seed.journey.setItem(questKey(1),JSON.stringify({quest:QUESTS.length-1,step:0,count:0,done:[]}));
+ const h=harness({local,session,stopWorld:true,reloadProgress:true,travel:async(character,state)=>{
+  state.character=character;state.mapId=({'warrior-v3':'village','warrior-v5':'witch-cave','warrior-plains':'great-plains'})[character];return true;
+ }});
+ const tick=()=>h.shell.update(.02);
+ async function panel(){
+  h.click('[data-action="new"]');await settle();h.click('[data-slot="1"]');await settle();
+ }
+ async function talk(id){
+  const npc=NPCS.find(row=>row.id===id);Object.assign(h.player.position,{x:npc.x,z:npc.z});tick();
+  assert.equal(h.shell.inspect().story.near,id);h.click('.v03-prompt');assert.equal(h.shell.story.dialogueOpen,true);
+ }
+ async function finishDialogue(){
+  for(let i=0;i<22&&h.shell.story.dialogueOpen;i++)h.click('.v03-dialogue-next');
+  await settle();assert.equal(h.shell.story.dialogueOpen,false);
+ }
+ async function back(){assert.equal(await h.shell.returnToTitle(),true);await settle();}
+ try{
+  h.finishSplash();await h.reveal();await panel();assert.equal(h.document.querySelector('[data-chapter="2"]').disabled,true);
+  h.click('[data-chapter="1"]');await settle(40);tick();assert.equal(h.shell.story.log.quest().id,'M09');
+  await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.finished,true);
+  assert.equal(h.log.filter(e=>e.startsWith('gold:v03-quest-M09')).length,1);
+  await back();await panel();
+  assert.equal(h.document.querySelector('[data-chapter="2"]').disabled,false);
+  assert.equal(h.document.querySelector('[data-chapter="3"]').disabled,true);
+  h.click('[data-chapter="2"]');await settle(40);tick();assert.equal(h.save.meta().chapter,2);
+  await talk('innkeeper');assert.match(h.document.querySelector('.v03-dialogue-portrait').getAttribute('src'),/01\.webp/);await finishDialogue();
+  assert.equal(h.document.querySelector('.v03-dialogue-portrait').hasAttribute('src'),false);
+  await back();h.click('[data-action="load"]');await settle();h.click('[data-slot="1"]');await settle(40);tick();
+  assert.equal(h.shell.story.log.step().id,'palisade');await talk('youth');await finishDialogue();
+  await h.api.travel('warrior-v5');tick();assert.equal(h.shell.story.dialogueOpen,true);await finishDialogue();assert.equal(h.shell.story.log.step().id,'sanctuary');
+  h.shell.defeat({kind:'elena',phase:1});assert.equal(h.shell.story.log.step().id,'sanctuary');
+  h.shell.defeat({kind:'elena',phase:2});assert.equal(h.shell.story.log.step().id,'last-page');
+  await h.api.travel('warrior-v3');tick();await talk('innkeeper');await finishDialogue();
+  const completed=h.save.journey.getItem(questKey(2));
+  const status=()=>chapterProgress(h.save.journey,{1:QUESTS,2:elenaJournal('ko').QUESTS});
+  assert.deepEqual([...status().done].sort(),[1,2]);assert.equal(status().available(3),false);
+  await back();await panel();h.click('[data-replay="2"]');await settle(40);tick();assert.equal(h.shell.story.log.step().id,'inn');
+  await talk('innkeeper');await finishDialogue();assert.equal(h.save.journey.getItem(questKey(2)),completed);
+  await back();await panel();h.click('[data-chapter="1"]');await settle(40);assert.equal(h.shell.story.log.finished,true);
+  assert.equal(h.log.filter(e=>e.startsWith('gold:v03-quest-M09')).length,1);assert.equal(h.save.index()[1].used,false);
+  // Restore a player part way through a replay of a potion-paying chapter-one quest.
+  await back();await panel();h.click('[data-replay="1"]');await settle(40);assert.equal(h.shell.story.log.quest().id,'M00');
+  await back();h.save.journey.setItem(questKey(1,true),JSON.stringify({quest:1,step:0,count:0,done:[]}));
+  let potions=0;h.api.addPotions=count=>{potions+=count;return count;};
+  h.click('[data-action="load"]');await settle();h.click('[data-slot="1"]');await settle(40);await h.api.travel('warrior-v3');tick();
+  await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.quest().id,'M02');assert.equal(potions,0);
+  assert.equal(JSON.parse(h.save.journey.getItem(questKey(1))).quest,QUESTS.length);
+ }finally{h.shell.dispose();}
+});
+test('chapters: all five localized journals have matching objectives, controls and CG, and an old terminal save opens its sequel',async()=>{
+ const {chapterWords}=await import('../src/v03/chapter-select.js');
+ const {elenaJournal}=await import('../src/v03/data/chapter2.js');
+ const {CHAPTERS,chapterProgress,questKey}=await import('../src/v03/chapter-progress.js');
+ const {QUESTS}=await import('../src/v03/data/chapter1.js');
+ const sets={1:QUESTS,2:CHAPTERS[1].questIds};
+ const storage=memory(),langNames=new Set();
+ for(const lang of ['ko','en','ja','zh','vi']){
+  const words=chapterWords(lang),episode=elenaJournal(lang);langNames.add(words.menu);
+  assert.equal(words.chapters.length,7);assert.ok(words.again&&words.complete&&words.reset);
+  assert.deepEqual(episode.QUESTS.map(q=>q.id),sets[2]);
+  for(const quest of episode.QUESTS)for(const step of quest.steps){
+   assert.ok(step.text);for(const line of [...Object.values(step.dialogues??{}),step.reading].filter(Boolean))assert.ok(episode.DIALOGUES[line].length);
+  }
+  for(const rows of Object.values(episode.DIALOGUES))for(const line of rows){
+   assert.ok(line.text);if(line.illustration)assert.ok(readFileSync(new URL(line.illustration)).length);
+   if(lang!=='ko')assert.doesNotMatch(line.text,/[가-힣]/u);
+  }
+ }
+ assert.equal(langNames.size,5);
+ storage.setItem(questKey(1),JSON.stringify({quest:10,step:1,done:[]}));
+ assert.equal(chapterProgress(storage,sets).available(2),false);
+ storage.setItem(questKey(1),JSON.stringify({quest:QUESTS.length,step:0,done:[],count:0}));
+ const progress=chapterProgress(storage,sets);assert.equal(progress.available(2),true);assert.equal(progress.select(3),null);
+});
 test('iPhone starts the dream without priming the roaming population or decoding extra scores',async()=>{
  const h=harness({iphone:true});
  h.finishSplash();await h.reveal();
@@ -148,7 +229,8 @@ test('iPhone starts the dream without priming the roaming population or decoding
  const hold=h.shell.story.prepare.bind(h.shell.story);let preparations=0;
  h.shell.story.prepare=id=>{preparations++;return hold(id);};
  h.click('[data-action="new"]');
- await Promise.resolve();await Promise.resolve();await Promise.resolve();
+ h.click('[data-chapter="1"]');
+ for(let turn=0;turn<4;turn++)await Promise.resolve();
  assert.equal(h.shell.screen,'opening');assert.equal(preparations,0);
  releaseWolf();await settle(40);
  assert.equal(preparations,1);assert.equal(h.shell.screen,'play');
@@ -207,7 +289,7 @@ test('first run: logo → title → attract battle → new game without reload �
  const alpha=h.camera.alpha;for(let i=0;i<120;i++)h.shell.update(.016);
  assert.equal(h.battle.combat.hp,500);assert.equal(h.battle.encounters[0].brain.hp,900*TITLE_FOE.hpFloor);assert.ok(h.camera.alpha>alpha);assert.ok(h.camera.radius<17);
  assert.equal(h.save.meta().used,false,'title writes nothing');
- h.click('[data-action="new"]');await settle(40);
+ h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);
  assert.equal(h.shell.screen,'play');assert.equal(h.shell.blocksProgress,false);assert.equal(h.shell.blocksGame,false);assert.equal(h.shell.pilotMovement,null);
  assert.ok(h.log.includes(`resetStage:${OPENING_STAGE.x},${OPENING_STAGE.z}`));assert.ok(h.log.includes(`summon:${AMBUSH.kind}:${AMBUSH.count}`));assert.ok(h.log.includes('suspend:false'));
  assert.deepEqual([h.camera.alpha,h.camera.beta,h.camera.radius],[1,.9,17],'title camera is restored before the stage reset');
@@ -219,12 +301,12 @@ test('first run: logo → title → attract battle → new game without reload �
 test('back to the title: only from play, and without the game\'s hooks the caller falls back to the reload',async()=>{
  const h=harness();h.finishSplash();await h.reveal();
  assert.equal(await h.shell.returnToTitle(),false,'not from the title itself');
- h.click('[data-action="new"]');await settle(40);assert.equal(h.shell.screen,'play');
+ h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);assert.equal(h.shell.screen,'play');
  assert.equal(await h.shell.returnToTitle(),false,'a game without the stopWorld hook falls back to the reload');assert.equal(h.shell.screen,'play');
 });
 test('back to the title: with the game\'s hooks the same page shows the title again and the record goes on',async()=>{
  const h=harness({stopWorld:true});
- h.finishSplash();await h.reveal();h.click('[data-action="new"]');await settle(40);assert.equal(h.shell.screen,'play');
+ h.finishSplash();await h.reveal();h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);assert.equal(h.shell.screen,'play');
  h.battle.livingCount=0;for(let i=0;i<200;i++)h.shell.update(.016);
  const quest=h.shell.inspect().story.quest,made=h.made.length;assert.ok(quest);
  h.log.length=0;
@@ -300,7 +382,7 @@ test('existing saves: load another slot reloads with an intent; overwrite wipes 
  assert.match(replaced,/character=warrior-v3/);assert.doesNotMatch(replaced,/arrival/);
  const next=createSaveSession({local,session,edition:E});assert.deepEqual(next.intent,{slot:1,mode:'load'});assert.equal(next.slot,1);assert.equal(next.journey.getItem('moonforest-gold-v1'),'77');
  replaced=null;h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();
- assert.equal(replaced,null,'overwrite asks first');h.click('.v03-panel-accept');await settle();
+ h.click('[data-reset-slot]');await settle();assert.equal(replaced,null,'overwrite asks first');h.click('.v03-panel-accept');await settle();
  assert.match(replaced,/moonforest-0\.3\.html/);assert.doesNotMatch(replaced,/character=/);
  const fresh=createSaveSession({local,session,edition:E});assert.deepEqual(fresh.intent,{slot:1,mode:'new'});assert.equal(fresh.meta().used,false);assert.equal(fresh.journey.getItem('moonforest-gold-v1'),null);
 });
@@ -310,7 +392,7 @@ test('new game over a used slot restarts in place: no reload, the slot is wiped 
  const h=harness({local,session,inPlace:true});assert.equal(h.save.slot,2);
  let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?release=moonforest-0.2&character=warrior-plains',replace:url=>{replaced=url;}};
  h.finishSplash();await h.reveal();
- h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('.v03-panel-accept');await settle(20);
+ h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('[data-reset-slot]');await settle();h.click('.v03-panel-accept');await settle(20);
  assert.equal(replaced,null,'no page reload: the click that started the game keeps its sound');
  assert.ok(h.log.includes('restartProgress'));assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),null,'the old record is gone');
  assert.ok(['opening','play'].includes(h.shell.screen));assert.equal(h.save.meta().used,true,'the slot is a save again once the game starts');
@@ -403,7 +485,7 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  store.setItem('v03-story-v1','{"quest":99,"step":0,"done":[]}');assert.equal(createQuestLog({quests:QUESTS,storage:store}).load(),false);
 });
 test('story: first fight coaching, driver talk, village cast, rest effect and save title',async()=>{
- const h=harness();h.finishSplash();await h.reveal();h.click('[data-action="new"]');await settle(40);
+ const h=harness();h.finishSplash();await h.reveal();h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);
  h.battle.combat.hp=500;
  const hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
  h.shell.update(.016);

@@ -212,6 +212,7 @@ html[data-loading] .v03-hud{display:none}
 }
 
 .v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:0;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 12%);mask-image:linear-gradient(to top,transparent 0,#000 12%);height:86vh;width:auto;max-width:60vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}
+.v03-dialogue-portrait.is-journal{inset:0;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center;mask-image:none;-webkit-mask-image:none;filter:brightness(.8)}
 .v03-dialogue-portrait.is-in{opacity:1;transform:none;transition:opacity .35s ease,transform .35s ease}
 .v03-dialogue-box{z-index:1}
 /* The speaker stands behind the dialogue box: about 90% of the screen height
