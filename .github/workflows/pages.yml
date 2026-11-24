@@ -39,6 +39,7 @@ jobs:
           ArcherPreview/tests/v03-character-menu.test.js
           ArcherPreview/tests/v03-menu-language.test.js
           ArcherPreview/tests/v03-riding-horse.test.js
+          ArcherPreview/tests/v03-riding-geometry.test.js
           ArcherPreview/tests/v03-village-pets.test.js
           ArcherPreview/tests/v03-village-pet-models.test.js
           ArcherPreview/tests/v03-settlement-scenery.test.js
