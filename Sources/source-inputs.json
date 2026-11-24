@@ -54,7 +54,8 @@
     "regular-quadruped-textures-r1": "Sources/actors/tripo-monsters/regular-quadruped-textures-r1",
     "tripo-monsters-2026-11-11-v2": "Sources/actors/tripo-monsters/2026-11-11-v2",
     "hud-ui-sprites-2026-11-13-v1": "Sources/ui/moonforest-hud/2026-11-13-v1",
-    "creature-audio-r1": "Sources/audio/creatures-2026-11-17"
+    "creature-audio-r1": "Sources/audio/creatures-2026-11-17",
+    "town-item-icons-2026-11-24": "Sources/ui/town-item-icons/2026-11-24"
   },
   "inputs": [
     {
@@ -47957,11 +47958,605 @@
         "creature-audio-authoring"
       ],
       "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment-provenance.json",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment-provenance.json",
+      "bytes": 14226,
+      "sha256": "eb72b91048635ad6c9db3c65bca6cd4cb406da5b983805418cf2650972921be1",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/bronze-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/bronze-blade.png",
+      "bytes": 12859,
+      "sha256": "64038a1e6f691963f6cc900b635cf6d186403af347565518c9774d84af32c467",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/cave-claw.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/cave-claw.png",
+      "bytes": 14419,
+      "sha256": "71ec797a5feaa944fac2c4fb1a52b0270562ac255ab154905b93197ff0f2cdb2",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/cave-fang.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/cave-fang.png",
+      "bytes": 13030,
+      "sha256": "3617e072a84875e4fb0cb37848044f22eb6d2d091be6212d6e5eef031a66f3ce",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/crooked-staff.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/crooked-staff.png",
+      "bytes": 16172,
+      "sha256": "db1ea9fdbb45f2f57f1a0473856bcf7b602a47085c6f7117b3132758d8f5ddf5",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/field-bow.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/field-bow.png",
+      "bytes": 17776,
+      "sha256": "4433d8e4ab3fc4abf60cbc3f5ec85236c3c9dd5bfe776c0ad012f4c4db37e0ca",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/field-shield.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/field-shield.png",
+      "bytes": 36872,
+      "sha256": "50f52e7d2c76f62bee41f8258b88d511dcd35611e4371ca7770e0f50557c86f0",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/field-sword.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/field-sword.png",
+      "bytes": 12890,
+      "sha256": "4b07e14618b2b4e4a1eed84e3c2a0c8248cc5dcbf55c75ab22062876956aa9a9",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/ghoul-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/ghoul-blade.png",
+      "bytes": 22268,
+      "sha256": "6dce1d6851cb65d28deb5852f544d24c7f6f35f0e3d067cf1bbebe39ca21f811",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/goblin-cleaver.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/goblin-cleaver.png",
+      "bytes": 14419,
+      "sha256": "71ec797a5feaa944fac2c4fb1a52b0270562ac255ab154905b93197ff0f2cdb2",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/guard-armor.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/guard-armor.png",
+      "bytes": 41946,
+      "sha256": "fb9b23d25aeb499284554568e6576fdaa53e3e504f834ac940b64cef14240b1b",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/hunter-coat.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/hunter-coat.png",
+      "bytes": 41946,
+      "sha256": "fb9b23d25aeb499284554568e6576fdaa53e3e504f834ac940b64cef14240b1b",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/hunter-knife.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/hunter-knife.png",
+      "bytes": 12109,
+      "sha256": "08dec0a73186e4e595bf76eb1e2d69a6917a242d58de9724cadd2c2945cf8a3d",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/leather-coat.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/leather-coat.png",
+      "bytes": 41946,
+      "sha256": "fb9b23d25aeb499284554568e6576fdaa53e3e504f834ac940b64cef14240b1b",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/oak-shield.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/oak-shield.png",
+      "bytes": 36255,
+      "sha256": "8f09a7185ecfe76a6a110ee80985bde75e3203628cf8972023ef5607528fd4ad",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/oathblade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/oathblade.png",
+      "bytes": 12939,
+      "sha256": "a9145fd123f926b5a6066154cf0bdfc7db5d9b830804fd0d8be2c5bcc80c1bf9",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/raider-dagger.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/raider-dagger.png",
+      "bytes": 22295,
+      "sha256": "244b4a8c92e168f39e4cea6872cf7f71ec457df15f93d7a1796910880143e1f6",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/ritual-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/ritual-blade.png",
+      "bytes": 12930,
+      "sha256": "781df53e9fbe6bc99e9f4c68348cbf371f76a5b0b54c6cb187d9ed37db112c87",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/rust-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/rust-blade.png",
+      "bytes": 14425,
+      "sha256": "0d1ccbde84a1db52c5e1af16665ad9fde5f375714082ca362c63cec42a19887b",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/silver-shield.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/silver-shield.png",
+      "bytes": 36887,
+      "sha256": "ade2c8c11af37c263ac946c1477c162cd93525a388a8c6fe9e7f5ff1881316d3",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/spiked-club.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/spiked-club.png",
+      "bytes": 20532,
+      "sha256": "19ef8862b6e4b285142b2c244ca203a679560250d1d8886409308242550ebe16",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/violet-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/violet-blade.png",
+      "bytes": 12964,
+      "sha256": "0a87bf1dcb36c2bea76e6be76ca8585c0b208d885e07e52a47ee043ca818c4bf",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/war-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/war-blade.png",
+      "bytes": 14491,
+      "sha256": "2a79dbbaa92212bcbde3538b55367e60b68606b2c4b5652cd3ccfd11c72fd6e4",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/equipment/wolf-blade.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/equipment/wolf-blade.png",
+      "bytes": 13030,
+      "sha256": "3617e072a84875e4fb0cb37848044f22eb6d2d091be6212d6e5eef031a66f3ce",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/originals/alchemist-hunt.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/originals/alchemist-hunt.png",
+      "bytes": 1076110,
+      "sha256": "c4f240f0e683199e5a57f408d057f81d5786ef4845dfd6354fa8e758985a62fd",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/originals/bone-and-hide.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/originals/bone-and-hide.png",
+      "bytes": 2002799,
+      "sha256": "7305f18cfee9d6912ba2aa1ba65c30b784080258fca079c1a7e8f5ac5f2abaed",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/originals/moon-herb-runtime-render.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/originals/moon-herb-runtime-render.png",
+      "bytes": 124191,
+      "sha256": "a92f05b092478dac48ef9c405468b01546088104a9e9dd2998832fb4f9962c4e",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/originals/potion-hud-cutout.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/originals/potion-hud-cutout.png",
+      "bytes": 21640,
+      "sha256": "1e05312ac94152101f73801e81d6605dd1160dd453da0caa4f0a6c54d361416f",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/originals/salvaged-metal.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/originals/salvaged-metal.png",
+      "bytes": 1033138,
+      "sha256": "a36eeeddd297ad81c54c7becd855079c5b38c1436faf82f40d36af7936f2d57c",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/originals/woodland-and-ritual.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/originals/woodland-and-ritual.png",
+      "bytes": 2341563,
+      "sha256": "8ae741031b6d75ddb87686adaff61911487d1be6dd866fd65139162ac80642b0",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies-contact-sheet.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies-contact-sheet.png",
+      "bytes": 254813,
+      "sha256": "559809cc966f93c4ac35ef84d736d68fede8202e29008e1f6c39620fd89de567",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies-mapping.json",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies-mapping.json",
+      "bytes": 9691,
+      "sha256": "17e9a58f4b1da3811a16aea9387eee806f8ea2a312103e50e7e23df9c8a5ded3",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/arrow-fletching.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/arrow-fletching.png",
+      "bytes": 41457,
+      "sha256": "2c70390a8a13e7c62a1037ebc71fb413b804a10d4ade178ca6d9d1498e8baaa8",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/bear-bile.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/bear-bile.png",
+      "bytes": 28909,
+      "sha256": "b156175959a74f269829bfe1cfe8528d3bec4ebeda89143f91987c7a8a558ebe",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/bear-fur.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/bear-fur.png",
+      "bytes": 37488,
+      "sha256": "d0770058854063a287cea29cd29ba3c6e3eb79ad6e8e9500005f729b80b2b398",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/bear-hide.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/bear-hide.png",
+      "bytes": 36355,
+      "sha256": "95276518dda42145cfdd846e5bb5edc308c0d92272245f02044d7e327b0f222f",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/bear-meat.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/bear-meat.png",
+      "bytes": 42374,
+      "sha256": "6c4b1ff5122e760b200b27efd3b728dc8ab7631a15c3d35f356b4070bebc2be1",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/boar-meat.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/boar-meat.png",
+      "bytes": 38163,
+      "sha256": "bea55ff632b78e4c61c73493e406e89fdcab95cb5c7c4da988ef9224b42e06fd",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/boar-tusk.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/boar-tusk.png",
+      "bytes": 37467,
+      "sha256": "e4182621ce2c6d5123905983b15fb88ac0aa8d1613eb956ae7d146b65233f743",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/burial-clasp.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/burial-clasp.png",
+      "bytes": 33971,
+      "sha256": "50e9a5b7c8ab8e394da2ffd4b70052427b8654a9606f7d54aee7ed48d6781ab7",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/fox-pelt.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/fox-pelt.png",
+      "bytes": 45682,
+      "sha256": "f44b7b137746196dc8f07690ac8bf9822de36df955455224e70ed87a8ced58cc",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/ghoul-mail.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/ghoul-mail.png",
+      "bytes": 33693,
+      "sha256": "8691a563feefe801ef1126802334468eac3b93918ea58020a329a412f4fa47d2",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/grave-dust.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/grave-dust.png",
+      "bytes": 43097,
+      "sha256": "34a4278e1f4d8f06ce1e81fe87bbc295db3f34347d3f319e6fd21eb44d2c675f",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/iron-scrap.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/iron-scrap.png",
+      "bytes": 28693,
+      "sha256": "880f80dd5eeb789f3fb465529c8fd8aead908eab54fc5d201ac6d375614dadac",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/iron-stud.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/iron-stud.png",
+      "bytes": 31699,
+      "sha256": "d0070ff12ce52f44745dd5ab03ca51eff77827fb98419c6d00cf0fa875975515",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/moon-herb.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/moon-herb.png",
+      "bytes": 23600,
+      "sha256": "64832a0ce701de0139dc5c39b6bf309a4db06afdeef1ad1fe827320f1046050d",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/potion.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/potion.png",
+      "bytes": 25741,
+      "sha256": "e01acb777a914ae4eec1669e6bb4effd2029ae6ee8c730d1342605ff4aeffaf5",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/rune-shard.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/rune-shard.png",
+      "bytes": 36060,
+      "sha256": "e7ece197da417a7e01ffcb69245dae274a4e29ac2c9440d45ea8a72466670a35",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/stamina-tonic.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/stamina-tonic.png",
+      "bytes": 25017,
+      "sha256": "538510a6862c985940f54806ee3d049e7d5914a2e1ffa13b5a47897dfb241928",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/tainted-fang.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/tainted-fang.png",
+      "bytes": 23159,
+      "sha256": "19dde13ee468f32ab3d30b88ee235fc598e18bf430af902e81ef21f3433d9319",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/ward-cord.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/ward-cord.png",
+      "bytes": 33148,
+      "sha256": "5fce2feb2e813f27729ff5c6188be813ddf64b3339fc4c35a2c44739872a5739",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/wolf-bone.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/wolf-bone.png",
+      "bytes": 25274,
+      "sha256": "16de0fb35b0679df489db436e51233d6d858bcfe30e76a7e25fecc3a6ea2e2d6",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/wolf-fang.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/wolf-fang.png",
+      "bytes": 23253,
+      "sha256": "f8407d27149e9efab8c35941868ff5b9a286c1b66034d0a3208841b16b77aef1",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/town-item-icons/2026-11-24/supplies/wolf-pelt.png",
+      "path": "Sources/ui/town-item-icons/2026-11-24/supplies/wolf-pelt.png",
+      "bytes": 51596,
+      "sha256": "cfeda2386963fde13cd9013a1bd9932b16c3423cfd0d3a62e274f5efd529a599",
+      "origins": [],
+      "requiredBy": [
+        "town-item-icons-2026-11-24"
+      ],
+      "status": "bundled"
     }
   ],
   "summary": {
-    "files": 3676,
-    "bytes": 14005750701,
+    "files": 3732,
+    "bytes": 14017926449,
     "missing": [],
     "layoutDuplicates": 44
   },

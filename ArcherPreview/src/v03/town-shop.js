@@ -1,5 +1,6 @@
 import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,forgeCursor,itemName,itemNote,gradeLabel} from './town-items.js';
 import {t} from './i18n.js';
+import {townItemIcon} from './town-item-art.js';
 
 export function createTownShop({root,economy,onChange,onPause}){
  const doc=root.ownerDocument,win=doc.defaultView,dialog=doc.createElement('dialog');
@@ -19,7 +20,8 @@ export function createTownShop({root,economy,onChange,onPause}){
   const head=element('header'),title=element('h2',t(current==='smith'?'shop.smith':'shop.herbalist'));
   head.append(title,element('strong',economy.gold.toLocaleString(lang)+' G'));addButton(head,t('dialogue.close'),()=>dialog.close());dialog.append(head);
   const scroll=element('section');scroll.className='mf-shop-scroll';dialog.append(scroll,receipt);
-  const row=(parent,name,detail)=>{const line=element('div'),meta=element('span');meta.append(element('strong',name),element('small',detail));
+  const row=(parent,name,detail,id)=>{const line=element('div'),meta=element('span');meta.append(element('strong',name),element('small',detail));
+   if(id)line.append(townItemIcon(doc,id));
    line.className='mf-shop-row';line.append(meta);parent.append(line);return line;};
   if(current==='smith'){
    scroll.append(element('h3',t('shop.workbench')));
@@ -27,7 +29,7 @@ export function createTownShop({root,economy,onChange,onPause}){
    const select=element('select');select.setAttribute('aria-label',t('shop.target'));
    for(const key of Object.keys(state.bag).filter(k=>!!TOWN_ITEMS[k].slot)){const option=element('option',itemName(key));option.value=key;option.selected=key===id;select.append(option);}
    select.onchange=()=>{smithTarget=select.value;render();};scroll.append(select);
-   const box=row(scroll,name+' +'+w.level,(item.slot==='sword'?t('shop.attack',{n:w.attack}):t('shop.defense',{n:w.defense}))+' · '+t('char.durability',{hp:w.hp,max:w.max}));
+   const box=row(scroll,name+' +'+w.level,(item.slot==='sword'?t('shop.attack',{n:w.attack}):t('shop.defense',{n:w.defense}))+' · '+t('char.durability',{hp:w.hp,max:w.max}),id);
    const cost=economy.repairCost(id);
    addButton(box,t('shop.repair',{cost}),()=>trade(()=>economy.repair(id),t('shop.repaired')),!cost||economy.gold<cost);
    const bonus=item.slot==='sword'?t('shop.attack',{n:FORGE_RULES.attackGain}):t('shop.defense',{n:FORGE_RULES.defenseGain});
@@ -36,18 +38,18 @@ export function createTownShop({root,economy,onChange,onPause}){
   }
   scroll.append(element('h3',t('shop.buy')));
   for(const [id,price] of Object.entries(stock)){
-   const name=itemName(id),line=row(scroll,name,itemNote(id)??t('shop.inBag',{n:state.bag[id]??0}));
+   const name=itemName(id),line=row(scroll,name,itemNote(id)??t('shop.inBag',{n:state.bag[id]??0}),id);
    addButton(line,price+' G',()=>trade(()=>economy.buy(current,id),t('shop.bought',{name})),economy.gold<price);
   }
   scroll.append(element('h3',t(current==='smith'?'shop.makeGear':'shop.brew')));
   for(const [id,recipe] of Object.entries(RECIPES[current])){
    const inputs=Object.entries(recipe.inputs),name=itemName(id);
-   const line=row(scroll,name,inputs.map(([k,n])=>itemName(k)+' '+(state.bag[k]??0)+'/'+n).join(' · '));
+   const line=row(scroll,name,inputs.map(([k,n])=>itemName(k)+' '+(state.bag[k]??0)+'/'+n).join(' · '),id);
    addButton(line,t('shop.make',{cost:recipe.gold}),()=>trade(()=>economy.craft(current,id),t('shop.made',{name})),economy.gold<recipe.gold||inputs.some(([k,n])=>(state.bag[k]??0)<n));
   }
   const materials=Object.entries(state.bag).filter(([id,n])=>n&&TOWN_ITEMS[id]?.sell);
   if(materials.length)scroll.append(element('h3',t('shop.sell')));
-  for(const [id,n] of materials){const it=TOWN_ITEMS[id],name=itemName(id);addButton(row(scroll,name,t('shop.inBag',{n})),t('shop.sellFor',{price:it.sell}),()=>trade(()=>economy.sell(current,id),t('shop.sold',{name})));}
+  for(const [id,n] of materials){const it=TOWN_ITEMS[id],name=itemName(id);addButton(row(scroll,name,t('shop.inBag',{n}),id),t('shop.sellFor',{price:it.sell}),()=>trade(()=>economy.sell(current,id),t('shop.sold',{name})));}
  }
  function beginForge(id){
   if(!economy.canForge(id))return;

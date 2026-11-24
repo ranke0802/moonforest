@@ -4,7 +4,12 @@ import {readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {build} from 'vite';
-import {TOWN_ITEMS} from '../src/v03/town-items.js';
+import {parseHTML} from 'linkedom';
+import {createCharacterMenu} from '../src/v03/character-menu.js';
+import {createTownShop} from '../src/v03/town-shop.js';
+import {setupTownServices} from '../src/v03/town-services.js';
+import {GoldLoot} from '../src/gold-loot.js';
+import {TOWN_ITEMS,STOCK} from '../src/v03/town-items.js';
 
 const project=fileURLToPath(new URL('../',import.meta.url));
 const ids=Object.keys(TOWN_ITEMS);
@@ -58,4 +63,40 @@ test('the shipped 0.3 entry emits the atlas once and has no initial image or sty
   const entry=Object.keys(manifest).find(key=>manifest[key].file===chunk.fileName);assert.ok(entry,chunk.fileName);
   initial(entry);
  }
+});
+
+test('all owned items open the matching detail and equipped and shop icons use the same catalog',async()=>{
+ const {document,window}=parseHTML('<html lang="ko"><body><main></main></body></html>');
+ window.ResizeObserver=class{observe(){}disconnect(){}};
+ window.requestAnimationFrame=()=>1;
+ window.cancelAnimationFrame=()=>{};
+ const root=document.querySelector('main'),saved=new Map();
+ const wallet=new GoldLoot({storage:{getItem:k=>saved.get(k)??null,setItem:(k,v)=>saved.set(k,v)}});
+ const noop=()=>{};
+ const services=setupTownServices({root,world:{},wallet,legacy:()=>({}),player:noop,battle:noop,controls:noop,appearance:noop,canInteract:noop,onPause:noop,notify:noop,sound:noop});
+ for(const id of ids)assert.ok(services.economy.grant(id),id);
+ for(const id of ['field-bow','silver-shield','guard-armor'])assert.ok(services.equip(id));
+ const state={equipment:{sword:'original',shield:'original'},hp:500,maxHp:500,stamina:100,maxStamina:100,attackBonus:5,defense:2,armorDefense:2,potions:1,gold:30,canUsePotion:true,touch:true,allows:()=>true,tradeBag:services.bag()};
+ const menu=createCharacterMenu({root,read:()=>state,subject:()=>null,onPause:noop});
+ const dialog=root.querySelector('dialog');
+ function modal(el){el.showModal=()=>{el.open=true;};el.close=()=>{el.open=false;el.dispatchEvent(new window.Event('close'));};}
+ modal(dialog);
+ const drawn=el=>[...el.querySelectorAll('.mf-town-item-icon[data-item-icon]')].map(n=>n.getAttribute('data-item-icon'));
+ menu.show('Status');
+ assert.deepEqual(drawn(dialog).sort(),['field-bow','silver-shield','guard-armor'].sort());
+ menu.show('Inventory');
+ assert.deepEqual(drawn(dialog.querySelector('.mf-menu-grid')).sort(),ids.toSorted());
+ for(const tile of dialog.querySelectorAll('.mf-menu-grid button')){
+  const id=drawn(tile)[0];assert.ok(tile.getAttribute('aria-label'));tile.click();
+  assert.deepEqual(drawn(dialog.querySelector('.mf-menu-item')),[id]);
+ }
+ menu.show('Skills');assert.deepEqual(drawn(dialog),[]);menu.dispose();
+ const shop=createTownShop({root,economy:services.economy,onPause:noop,onChange:noop});
+ const shopDialog=root.querySelector('dialog');modal(shopDialog);
+ for(const name of ['smith','herbalist']){
+  const openShop=shop.show(name),icons=new Set(drawn(shopDialog));
+  for(const id of Object.keys(STOCK[name]))assert.ok(icons.has(id),name+' '+id);
+  shop.close();await openShop;
+ }
+ shop.dispose();services.dispose();
 });

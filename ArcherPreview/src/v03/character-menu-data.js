@@ -1,7 +1,7 @@
 import {equipmentStats,equipmentStyles} from '../equipment-stats.js';
 import {POTION} from '../healing-potion.js';
 import {t} from './i18n.js';
-import {itemName} from './town-items.js';
+import {TOWN_ITEMS,itemName} from './town-items.js';
 
 // Slot ids; the label is t('char.slot.<id>').
 export const SLOTS = ['sword','shield','helmet','armor','gloves','boots','charm1','charm2'];
@@ -16,13 +16,14 @@ export function characterItems(state){
     const attack=slot==='sword',stat=attack?'attack':'defense';
     for(const style of equipmentStyles(slot)){
       const value=attack?style.attackBonus:style.defense;
-      items.push({id:slot+'/'+style.id,name:t('char.gear.'+slot+'.'+style.id),type:'Gear',icon:slot,
+      const icon=Object.keys(TOWN_ITEMS).find(id=>TOWN_ITEMS[id].slot===slot&&TOWN_ITEMS[id].finish===style.id&&!TOWN_ITEMS[id].profile);
+      items.push({id:slot+'/'+style.id,name:t('char.gear.'+slot+'.'+style.id),type:'Gear',icon,
         slot,style:style.id,worn:state.equipment[slot]===style.id,
         stat,value,delta:value-(attack?equipped.attackBonus:equipped.defense)});
     }
   }
   if(state.armorDefense>0)items.push({id:'armor/leather',name:itemName('leather-coat'),type:'Gear',slot:'armor',
-    icon:'',worn:true,stat:'defense',value:state.armorDefense,delta:0});
+    icon:'leather-coat',worn:true,stat:'defense',value:state.armorDefense,delta:0});
   if(state.potions>0)items.push({id:'potion',name:itemName('potion'),type:'Supplies',icon:'potion',quantity:state.potions,
     note:t('char.potionNote',{amount:POTION.amount,seconds:POTION.pulses})});
   return items;

@@ -24,7 +24,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   const s=items(),equipment=[];
   for(const [id,count] of Object.entries(s.bag)){
    const it=TOWN_ITEMS[id];if(!it||!count)continue;
-   const row={id,name:itemName(id),type:it.type,icon:it.slot==='sword'?'sword':it.slot==='shield'?'shield':it.quick?'potion':'',quantity:count,
+   const row={id,name:itemName(id),type:it.type,icon:id,quantity:count,
     worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
    if(it.slot==='sword'){
     const w=economy.gear(id);row.stat='attack';row.value=w.attack;row.delta=row.value-economy.attack;

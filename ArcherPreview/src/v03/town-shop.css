@@ -11,4 +11,5 @@
 .mf-forge-gauge:before,.mf-forge-gauge i{position:absolute;top:-.25rem;bottom:-.25rem;left:50%;width:2px;background:#fff}.mf-forge-gauge:before{content:'';opacity:.7}.mf-forge-gauge i{width:4px;box-shadow:0 0 0 1px #17151d}
 /* 2026-11-24: shop words follow the chosen language (v03.css html[lang]). */
 .mf-town-shop{font-family:var(--v03-font)}
+.mf-shop-row>.mf-town-item-icon{--mf-item-icon-size:clamp(28px,6vmin,42px);flex:none}
 html[lang=ko] .mf-town-shop{word-break:keep-all}

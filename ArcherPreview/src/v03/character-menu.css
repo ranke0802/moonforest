@@ -33,6 +33,9 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-slots{display:grid;align-content:center;gap:6px;min-width:0;overflow:auto}
 .mf-menu-slots>*{display:grid;align-content:center;min-height:44px;padding:4px;text-align:center;border:1px solid #9b88567d;background:#141b18d9;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
 .mf-menu-slots button{cursor:pointer}
+.mf-menu-slots .mf-town-item-icon{--mf-item-icon-size:clamp(20px,4vmin,36px);justify-self:center}
+.mf-menu-grid button .mf-town-item-icon{inline-size:86%;block-size:86%;align-self:center}
+.mf-menu-item>.mf-town-item-icon{--mf-item-icon-size:clamp(42px,10vmin,72px);display:block;margin:4px 0}
 .mf-menu-slots small,.mf-menu-item>small{color:#c9bb99;font-size:12px}
 .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1.5fr 1fr}
 .mf-menu-filters{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin-bottom:9px}

@@ -1,5 +1,6 @@
 import {bagContents,characterItems,combatSkills,SLOTS} from './character-menu-data.js';
 import {createCharacterPortrait} from './character-menu-camera.js';
+import {townItemIcon} from './town-item-art.js';
 import {t,language,cloneChapter,localizeChapter} from './i18n.js';
 import {COMBAT_HINTS,TIPS} from './data/chapter1.js';
 
@@ -45,10 +46,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     });
   }
   function zoomBy(factor){zoom=Math.min(2.8,Math.max(1,zoom*factor));invalidate();}
-  const icon=kind=>{
-    const node=make('i',kind?'commercial-icon commercial-icon-'+kind:'mf-menu-blank',kind?'':'◇');
-    node.setAttribute('aria-hidden','true');return node;
-  };
+  const icon=row=>townItemIcon(doc,row.tradeId??row.icon);
   function stat(list,label,value){
     const pair=make('div');pair.append(make('dt','',label),make('dd','',String(value)));list.append(pair);
   }
@@ -91,7 +89,9 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       const label=t('char.slot.'+slot);
       const worn=items.find(row=>row.slot===slot&&row.worn);
       const entry=worn?button('',()=>{filter='Gear';selected=worn.id;show('Inventory');}):make('div');
-      entry.append(make('small','',label),make('span','',worn?.name??'—'));
+      entry.append(make('small','',label));
+      if(worn)entry.append(icon(worn));
+      entry.append(make('span','',worn?.name??'—'));
       entry.title=worn?.name??label;
       (index%2===0?left:right).append(entry);
     }
@@ -117,7 +117,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       selected=row?.id??'';detail.replaceChildren();
       for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===selected));
       if(!row){detail.append(make('p','',t('char.empty')));return;}
-      detail.append(make('small','',t('char.type.'+row.type)),icon(row.icon),make('h2','',row.name));
+      detail.append(make('small','',t('char.type.'+row.type)),icon(row),make('h2','',row.name));
       if(row.stat){
         const stats=make('dl');stat(stats,t('char.'+row.stat),'+'+row.value);
         if(!row.worn)stat(stats,t('char.change'),row.delta>0?'+'+row.delta:String(row.delta));detail.append(stats);
@@ -140,7 +140,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     }
     for(const row of list){
       const tile=button('',()=>inspect(row));tile.title=row.name;tile.setAttribute('aria-label',row.name);
-      tile.append(icon(row.icon));
+      tile.append(icon(row));
       if(row.worn)tile.append(make('small','mf-menu-count','✓'));
       else if(row.quantity)tile.append(make('small','mf-menu-count',String(row.quantity)));
       nodes.set(row.id,tile);grid.append(tile);
