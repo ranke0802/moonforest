@@ -1,5 +1,6 @@
 import {SceneInstrumentation} from '@babylonjs/core';
 import {t} from './i18n.js';
+import {disabledComparisonFeatures} from '../performance-comparison.js';
 
 // ?bench — one fixed, input-free measurement on the phone (structure plan,
 // phase 0). The camera turns once around the player, then the render
@@ -84,7 +85,7 @@ export function createBench({doc,getWorld,info=()=>({}),travel=null,isReady=()=>
   show(t(mode==='roundtrip'&&travel?'bench.trip':'bench.running',{step:0}));await wait(SETTLE_SECONDS*1000);if(disposed)return null;
   if(mode==='roundtrip'&&travel){
    const engine0=scene.getEngine(),trip=await roundtrip();if(!trip)return null;
-   const result={version:1,mode,at:new Date().toISOString(),...info(),device:{ua:doc.defaultView?.navigator?.userAgent,dpr:doc.defaultView?.devicePixelRatio,hardwareScaling:engine0.getHardwareScalingLevel(),render:[engine0.getRenderWidth(),engine0.getRenderHeight()]},...trip};
+   const result={version:1,mode,at:new Date().toISOString(),...info(),disabledFeatures:disabledComparisonFeatures(doc.defaultView?.location?.search),device:{ua:doc.defaultView?.navigator?.userAgent,dpr:doc.defaultView?.devicePixelRatio,hardwareScaling:engine0.getHardwareScalingLevel(),render:[engine0.getRenderWidth(),engine0.getRenderHeight()]},...trip};
    show(t('bench.done'),result);return result;
   }
   const alpha=camera.alpha,mem=()=>doc.defaultView?.performance?.memory?Math.round(doc.defaultView.performance.memory.usedJSHeapSize/1048576):null;
@@ -93,7 +94,7 @@ export function createBench({doc,getWorld,info=()=>({}),travel=null,isReady=()=>
   const baseLevel=engine.getHardwareScalingLevel(),sweep=[];
   try{for(const scale of SWEEP){engine.setHardwareScalingLevel(baseLevel*scale);await wait(1000);const r=await phase(scene,SWEEP_SECONDS);sweep.push({scale,width:engine.getRenderWidth(),height:engine.getRenderHeight(),fpsAvg:r.fpsAvg,frameMsMedian:r.frameMsMedian,sceneMs:r.cpuMedian.sceneMs});if(disposed)return null;}}
   finally{engine.setHardwareScalingLevel(baseLevel);}
-  const result={version:1,at:new Date().toISOString(),map:world.mapId,...info(),
+  const result={version:1,at:new Date().toISOString(),map:world.mapId,...info(),disabledFeatures:disabledComparisonFeatures(doc.defaultView?.location?.search),
    device:{ua:doc.defaultView?.navigator?.userAgent,dpr:doc.defaultView?.devicePixelRatio,hardwareScaling:baseLevel,render:[engine.getRenderWidth(),engine.getRenderHeight()]},
    scene:{meshes:scene.meshes.length,materials:scene.materials.length,textures:scene.textures.length,animationGroups:scene.animationGroups.length,skeletons:scene.skeletons.length},
    jsHeapMB:mem(),orbit,sweep,limit:verdict(sweep)};

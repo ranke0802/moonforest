@@ -37,6 +37,7 @@ jobs:
           ArcherPreview/tests/v03-town-economy.test.js
           ArcherPreview/tests/v03-errands.test.js
           ArcherPreview/tests/v03-town-item-icons.test.js
+          ArcherPreview/tests/v03-scenery-diagnostics.test.js
           ArcherPreview/tests/v03-field-chest-retry.test.js
           ArcherPreview/tests/v03-character-menu.test.js
           ArcherPreview/tests/v03-menu-language.test.js

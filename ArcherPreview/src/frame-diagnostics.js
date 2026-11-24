@@ -5,6 +5,7 @@ import {DiagnosticBurstBudget} from './diagnostic-burst-budget.js';
 import {onBeforePageReload} from './page-reload-hooks.js';
 import {storeCarriedRecording,takeCarriedRecording} from './recording-carry.js';
 import {readRendererInfo,rendererDetail} from './renderer-diagnostics.js';
+import {disabledComparisonFeatures} from './performance-comparison.js';
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {
@@ -80,7 +81,7 @@ export function createFrameDiagnostics({probe=null,cameraYaw=null,doc=document,s
   const bosses=new BossDiagnostics(),comparison=get('diagnostic-boss-comparison');
   const detailDialog=get('diagnostic-detail-dialog'),expand=get('diagnostic-expand');
   let graphicsDevice=readRendererInfo(null);
-  const reportMetadata=()=>({...metadata(),graphicsDevice});
+  const reportMetadata=()=>({...metadata(),graphicsDevice,disabledFeatures:disabledComparisonFeatures(doc.defaultView?.location?.search)});
   const drawCpuToggle=get('draw-cpu-diagnostics-toggle');
   const compactView=()=>{
     if(panel.dataset){if(panel.dataset.expanded!=='false')panel.dataset.expanded='false';if(panel.dataset.presentation!=='compact')panel.dataset.presentation='compact';}
