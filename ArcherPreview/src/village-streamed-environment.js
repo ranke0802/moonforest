@@ -3,6 +3,7 @@ import {loadMapContainer} from './map-container.js';
 import {readMapManifest} from './map-manifests.js';
 import {villagePlacements} from './fixed-layouts.js';
 import {plainsGateAssets} from './v03/settlement-scenery.js';
+import {vistaRenderPlacements} from './v03/scenery-diagnostics.js';
 import outskirtsManifest from '../public/assets/village-plains-outskirts.json' with {type:'json'};
 import {applyVillagePlainsOutskirtsGround} from './village-plains-outskirts-ground.js';
 import {createVillageTransform} from './village-environment.js';
@@ -72,7 +73,7 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
   if(world.villagePrepared)return world.villagePrepared;
   if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice,world.gameplayV03),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));
-  const records=(world.placements??villagePlacements()).map(placement=>{
+  const records=vistaRenderPlacements(world,world.placements??villagePlacements()).map(placement=>{
     const asset=assets.get(placement.asset);if(!asset)throw new Error('Missing village asset '+placement.asset);
     const {root,facing}=createVillageTransform(world,placement,asset.config),bounds=placementBounds(world,placement,asset.config);
     const essentialStructural=world.cave&&asset.config.essentialStructural===true;

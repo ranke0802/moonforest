@@ -9,9 +9,8 @@ function closestCrown(world, player) {
   let best = null, bestDistance = 14 ** 2;
   for (const id of deciduous) {
     for (const record of world.villagePrepared?.recordsByAsset.get(id) ?? []) {
-      if (!visibleCrown(record)) continue;
       const p = record.root.position, distance = (player.x-p.x)**2 + (player.z-p.z)**2;
-      if (distance < bestDistance) { best = record; bestDistance = distance; }
+      if (distance < bestDistance && visibleCrown(record)) { best = record; bestDistance = distance; }
     }
   }
   return best;
@@ -57,6 +56,23 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
   const pool=Array.from({length:world.touchDevice?8:10},()=>({life:0,age:0}));
   let batch=null, tree=null, poll=0, untilNext=0, burstLeft=0, wind=0, disposed=false;
   let struckLeaves=0, strikeAngle=0, cooldown=0;
+  let checkedCamera=null, viewVersion, projectionVersion, inView=true;
+  function placeBatch(){
+    batch??=leafBatch(world.scene,pool.length);
+    batch.mesh.position.copyFrom(tree.root.position);
+    batch.mesh.computeWorldMatrix(true);
+    checkedCamera=null;
+  }
+  function batchInView(){
+    const camera=world.scene.activeCamera;
+    if(!camera||world.scene.activeCameras?.length||camera.rigCameras?.length)return true;
+    const view=camera.getViewMatrix().updateFlag, projection=camera.getProjectionMatrix().updateFlag;
+    if(camera!==checkedCamera||view!==viewVersion||projection!==projectionVersion){
+      inView=camera.isInFrustum(batch.mesh);
+      checkedCamera=camera;viewVersion=view;projectionVersion=projection;
+    }
+    return inView;
+  }
   function hide() {
     if (tree) { tree=null;for (const leaf of pool) leaf.life=0; }
     struckLeaves=0;
@@ -80,7 +96,7 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
       const id=record.instance?.assetId??record.placement.asset;
       if(disposed||cooldown>0||(!deciduous.includes(id)&&id!=='tree-02-slender-pine')||!visibleCrown(record))return;
       if(tree!==record)hide();
-      tree=record;batch??=leafBatch(world.scene,pool.length);batch.mesh.position.copyFrom(tree.root.position);
+      tree=record;placeBatch();
       strikeAngle=Math.atan2(point.z-tree.root.position.z,point.x-tree.root.position.x);
       wind=strikeAngle;struckLeaves=3;untilNext=.065;burstLeft=0;cooldown=.38;
     },
@@ -94,8 +110,7 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
       if (!tree && ambient && poll<=0) {
         poll=.6;tree=closestCrown(world,player);
         if (tree) {
-          batch??=leafBatch(world.scene,pool.length);
-          batch.mesh.position.copyFrom(tree.root.position);
+          placeBatch();
           burstLeft=0;untilNext=.12;
         }
       }
@@ -111,12 +126,16 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
         if (free) spawn(free);
         untilNext=--burstLeft ? .23+random()*.32 : 1.8+random()*1.8;
       }
+      // Ages, gust timing and terrain contacts advance identically outside the
+      // camera. Rebuild the current vertices on the very first visible frame.
+      const writeVertices=batchInView();
       let alive=0;
       for (let i=0;i<pool.length;i++) {
         const leaf=pool[i],offset=i*12;
         leaf.age+=dt;
-        if (!leaf.life||leaf.age>=leaf.life) { leaf.life=0;batch.positions.fill(0,offset,offset+12);continue; }
+        if (!leaf.life||leaf.age>=leaf.life) { leaf.life=0;if(writeVertices)batch.positions.fill(0,offset,offset+12);continue; }
         alive++;
+        if(!writeVertices)continue;
         const t=leaf.age/leaf.life, a=leaf.phase+leaf.age*3.1, flutter=Math.sin(a);
         const x=leaf.x+leaf.dx*t+.26*flutter, z=leaf.z+leaf.dz*t+.19*Math.cos(a);
         const y=leaf.top+(leaf.bottom-leaf.top)*t+.11*Math.sin(a*1.7);
@@ -130,7 +149,9 @@ export function createPlainsLeafDrift(world,{random=Math.random}={}) {
         }
       }
       batch.mesh.setEnabled(alive>0);
-      if (alive) batch.mesh.updateVerticesData(VertexBuffer.PositionKind,batch.positions,false,false);
+      if (alive) {
+        if (writeVertices) batch.mesh.updateVerticesData(VertexBuffer.PositionKind,batch.positions,false,false);
+      }
       else if (!struckLeaves && (!ambient||!deciduous.includes(tree.instance?.assetId??tree.placement.asset))) hide();
     },
     dispose(){disposed=true;batch?.dispose();tree=null;batch=null;}
