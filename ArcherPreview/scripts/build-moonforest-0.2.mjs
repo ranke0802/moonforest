@@ -5,6 +5,7 @@ import {build} from 'vite';
 import {collectVillageSiteFiles} from './build-village-site.mjs';
 import {verifyResourceBundles} from './resource-bundles.mjs';
 import {verifyRuntimeModuleGraph} from './runtime-module-graph.mjs';
+import {assertFixedLayoutsCurrent} from './build-fixed-layouts.mjs';
 import {captureSourceProvenance,verifySourceProvenance,sourceCommitInfo} from './source-provenance.mjs';
 import {RELEASE_V2,RELEASE_V2_MANIFEST,sha256,publishedBytes,deploymentPath,optionalBytes,assertDescriptor,assertDeploymentContentGraph,releaseCacheGraph} from './release-deployment.mjs';
 
@@ -45,6 +46,8 @@ export async function buildMoonforestV2(){
  let runtimeGraph;
  const cacheGraph=releaseCacheGraph(resourceIndex,files.keys());
  const define={__MOONFOREST_CACHE_GRAPH__:JSON.stringify(cacheGraph)};
+ // The game ships the prebuilt layouts in src/generated/; never package stale ones.
+ await assertFixedLayoutsCurrent();
  await build({root:project,publicDir:publicRoot,define,plugins:[{name:'verify-moonforest-0.2-runtime',generateBundle(_options,bundle){runtimeGraph=verifyRuntimeModuleGraph(bundle);}}],build:{outDir,emptyOutDir:true,copyPublicDir:false,rolldownOptions:{input:{moonforestV2:resolve(project,'moonforest-0.2.html')}}}});
  for(const {item,bytes}of pending){const target=deploymentPath(outDir,item.path);await mkdir(dirname(target),{recursive:true});await writeFile(target,bytes);}
  const deploymentFiles=[...reused];let stagedBytes=0;

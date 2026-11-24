@@ -1,5 +1,5 @@
 import {TerrainHeightField} from './terrain.js';
-import {PLAINS_SPAN,PLAINS_CLEARINGS,PLAINS_LOOKOUT,plainsStreamDistance} from './great-plains-layout.js';
+import {PLAINS_SPAN,PLAINS_CLEARINGS,PLAINS_LOOKOUT,plainsStreamDistance} from './great-plains-layout-base.js';
 import {plainsToVillage,VILLAGE_PLAINS_BOUNDARY as boundary} from './village-plains-boundary.js';
 import {villageHeight} from './village-terrain.js';
 import {forestEdgeWeight,forestEdgeHeight} from './plains-forest-edge.js';

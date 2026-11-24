@@ -24,20 +24,32 @@ const distance=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 const pointSegment=(p,a,b)=>{const x=b[0]-a[0],z=b[1]-a[1],t=Math.max(0,Math.min(1,((p.x-a[0])*x+(p.z-a[1])*z)/(x*x+z*z)));return Math.hypot(p.x-a[0]-x*t,p.z-a[1]-z*t);};
 const lineDistance=(p,line)=>Math.min(...line.slice(1).map((b,i)=>pointSegment(p,line[i],b)));
 
-test('the town layout, terrain, original road and ground resources remain byte-identical to70c88cf',()=>{
+test('the town layout, terrain, original road and ground resources remain byte-identical to70c88cf',async()=>{
  const expected={
-  'src/village-layout.js':'ab5f0a3692299dfeebc9b51cdc5fe73116ea0d8951570f8d9730fabad46d4ed2',
   'src/village-terrain.js':'eeef1bf87c896769c4d1dc8e124114f64634e662b95fae28b331ae6a783392c3',
   'src/village-ground-layout.js':'e28ea551f0915955d0e6836ce8c5a88987292a16471463fb9ae0a320054e99ed',
   'public/assets/village-ground.json':'7e765a99fa11aadcd94714843fc484da21d1c9e70637589eecefa7410c066c7c',
  };
- for(const [file,hash]of Object.entries(expected))assert.equal(createHash('sha256').update(readFileSync(new URL('../'+file,import.meta.url),'utf8').replaceAll('\r\n','\n')).digest('hex'),hash,'town must keep the approved baseline: '+file);
+ // 2026-11-24: village-layout.js became the build-time generator and its runtime
+ // constants moved to village-layout-base.js; terrain and ground only changed
+ // that import, so their text is compared with it restored to the 70c88cf name.
+ const approvedText=file=>readFileSync(new URL('../'+file,import.meta.url),'utf8').replaceAll('\r\n','\n').replaceAll("'./village-layout-base.js'","'./village-layout.js'");
+ for(const [file,hash]of Object.entries(expected))assert.equal(createHash('sha256').update(approvedText(file)).digest('hex'),hash,'town must keep the approved baseline: '+file);
+ // The generator text (ab5f0a36...) is no longer pinned; what 70c88cf produced is:
+ // placements in order, pads/homes/roads/spawn, and collision, all as data.
+ const canon=value=>JSON.stringify(value,(key,v)=>typeof v==='number'?Math.round(v*1e9)/1e9:v),digest=value=>createHash('sha256').update(canon(value)).digest('hex');
+ const [{default:placements},base,{VILLAGE_PLACEMENTS}]=await Promise.all([import('../src/generated/village-placements.js'),import('../src/village-layout-base.js'),import('../src/village-layout.js')]);
+ const approvedData={placements:'5db229b92e171a27a504a331b041d09e0796e5931cb3baf49f051f9734ea0cc8',constants:'5fb129e2244f9fdef32e568a2b78e4fa563fa42a2f3e78bf93b04aca45538d2a',obstacles:'6a0fce9c790529e21c3689d504975232eda04c709ceb3a053ea5eff398ffa3a6'};
+ assert.equal(digest(placements),approvedData.placements,'shipped town placements must keep the approved baseline');
+ assert.equal(digest(VILLAGE_PLACEMENTS),approvedData.placements,'town generator must keep the approved baseline');
+ assert.equal(digest({pads:base.VILLAGE_PADS,homes:base.VILLAGE_HOMES,ring:base.VILLAGE_RING_ROAD,spawn:base.VILLAGE_SPAWN,radius:base.VILLAGE_RADIUS,assets:base.VILLAGE_ASSET_IDS}),approvedData.constants,'town pads, homes and roads must keep the approved baseline');
+ assert.equal(digest(base.villageObstacles(placements)),approvedData.obstacles,'town collision must keep the approved baseline');
  const ground=JSON.parse(readFileSync(new URL('../public/assets/village-ground.json',import.meta.url)));
  for(const resource of [ground.color,ground.detail]){
   const url=new URL(resource.url,new URL('../public/assets/',import.meta.url)),hash=url.pathname.split('/').at(-1).split('.')[0];
   assert.equal(createHash('sha256').update(readFileSync(url)).digest('hex'),hash,'original town ground texture bytes changed');
  }
- results.push({case:'original-town-preserved',baseline:'70c88cf',normalizedSourceHashes:expected,originalGroundImageHashesVerified:true});
+ results.push({case:'original-town-preserved',baseline:'70c88cf',normalizedSourceHashes:expected,approvedData,originalGroundImageHashesVerified:true});
 });
 
 test('both actual portals, original curved approach paint and full walking shoulders share a rigid metre-scale seam',()=>{

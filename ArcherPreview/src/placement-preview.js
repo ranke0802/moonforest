@@ -4,7 +4,7 @@ import {CreateLineSystem} from '@babylonjs/core/Meshes/Builders/linesBuilder.js'
 import {obstacleClearance} from './village-collision.js';
 import {villageTravelLimit,clampVillageExit} from './map-travel.js';
 import {FOREST_RADIUS,CAVE_RADIUS} from './map-route.js';
-import {PLAINS_RADIUS} from './great-plains-layout.js';
+import {PLAINS_RADIUS} from './great-plains-layout-base.js';
 
 const axis=(box)=>{const c=Math.cos(box.yaw??0),s=Math.sin(box.yaw??0);return [{x:c,z:-s},{x:s,z:c}];};
 function boxesOverlap(a,b){

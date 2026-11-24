@@ -1,6 +1,8 @@
-import {VILLAGE_PLACEMENTS} from './village-layout.js';
+// The editor ships both prebuilt layouts in its own lazy chunk and shares them with the game.
+import villageLayout from './generated/village-placements.js';
+import plainsLayout from './generated/great-plains-placements.js';
+import {installFixedLayout} from './fixed-layouts.js';
 import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js';
-import {PLAINS_PLACEMENTS} from './great-plains-layout.js';
 import {FOREST_PLACEMENTS} from './monster-forest-layout.js';
 import {CAVE_PLACEMENTS} from './witch-cave-layout.js';
 import {CHAPTER_POINTS} from './chapter-quest-points.js';
@@ -11,6 +13,7 @@ import {normalizeChestItems} from './chest-reward-data.js';
 
 export const PLACEMENT_COORDINATE_SYSTEM='RH_Y_UP_METRES';
 export const PLACEMENT_MAPS=Object.freeze(['village','great-plains','monster-forest','witch-cave']);
+const VILLAGE_PLACEMENTS=installFixedLayout('village',villageLayout),PLAINS_PLACEMENTS=installFixedLayout('great-plains',plainsLayout);
 const layouts={village:[...VILLAGE_PLACEMENTS,...VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS],'great-plains':PLAINS_PLACEMENTS,'monster-forest':FOREST_PLACEMENTS,'witch-cave':CAVE_PLACEMENTS};
 const copy=value=>structuredClone(value);
 const idPattern=/^[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/;

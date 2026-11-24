@@ -1,5 +1,5 @@
 import {Vector3} from '@babylonjs/core';
-import {PLAINS_ROUTES} from './great-plains-layout.js';
+import {PLAINS_ROUTES} from './great-plains-layout-base.js';
 import {MonsterWatchLook} from './monster-watch-look.js';
 import {monsterSceneryRadius,monsterScenerySpace,monsterSceneryWaypoint} from './monster-scenery-space.js';
 

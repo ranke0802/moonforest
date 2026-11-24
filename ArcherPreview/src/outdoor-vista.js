@@ -1,5 +1,5 @@
 import {VILLAGE_PLAINS_BOUNDARY as boundary} from './village-plains-boundary.js';
-import {PLAINS_RADIUS} from './great-plains-layout.js';
+import {PLAINS_RADIUS} from './great-plains-layout-base.js';
 import {greatPlainsHeight} from './great-plains-terrain.js';
 import {MOUNTAIN_RIDGE_LAYOUT} from './mountain-backdrop.js';
 

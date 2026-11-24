@@ -1,5 +1,5 @@
 import { TerrainHeightField } from './terrain.js';
-import { VILLAGE_PADS, villageRoadDistance } from './village-layout.js';
+import { VILLAGE_PADS, villageRoadDistance } from './village-layout-base.js';
 
 const smooth=t=>{t=Math.max(0,Math.min(1,t));return t*t*(3-2*t);};
 function naturalHeight(x,z){

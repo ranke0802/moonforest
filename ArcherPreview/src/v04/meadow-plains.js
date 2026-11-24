@@ -2,7 +2,7 @@
 // Grass gathers in drifting patches, grows lush and tall along the stream,
 // thins out beside the worn roads and keeps off the roads, the cleared
 // camps and the water itself.
-import {PLAINS_RADIUS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_STREAM} from '../great-plains-layout.js';
+import {PLAINS_RADIUS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_STREAM} from '../great-plains-layout-base.js';
 import {valueNoise,smooth} from './meadow-scatter.js';
 
 const FAR=99,MARGIN=15;

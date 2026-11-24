@@ -1,4 +1,4 @@
-import {VILLAGE_HOMES,homeRoadEnd} from './village-layout.js';
+import {VILLAGE_HOMES,homeRoadEnd} from './village-layout-base.js';
 
 export function sampleGroundCurve(points,{closed=false,step=.22}={}){
   const result=[],n=points.length,get=i=>points[closed?(i+n)%n:Math.max(0,Math.min(n-1,i))];

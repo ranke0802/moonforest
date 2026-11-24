@@ -1,4 +1,4 @@
-import {PLAINS_LOOKOUT} from './great-plains-layout.js';
+import {PLAINS_LOOKOUT} from './great-plains-layout-base.js';
 
 // Static, invisible solids over the entire steep annular band. They reuse the
 // existing swept-circle/OBB navigation and spatial index; no terrain sampling,

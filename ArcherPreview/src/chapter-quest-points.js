@@ -1,7 +1,7 @@
-import {VILLAGE_PLACEMENTS} from './village-layout.js';
-import {PLAINS_PLACEMENTS,PLAINS_TREASURE_ANCHORS} from './great-plains-layout.js';
+import {PLAINS_TREASURE_ANCHORS} from './great-plains-layout-base.js';
+// Built with the fixed layouts, so chapter points need no region data at start.
+import {QUEST_APPLE_TREE_PLACEMENT as tree,PLAINS_POINT_POSITIONS} from './generated/fixed-layout-anchors.js';
 import {lootRarity} from './loot-rarity.js';
-const tree=VILLAGE_PLACEMENTS.filter(p=>p.kind==='tree').sort((a,b)=>Math.hypot(a.x,a.z)-Math.hypot(b.x,b.z))[0];
 const points=[];
 const p=(map,id,label,x,z,{key='inspect:'+id,model='clue-journal',item=null,count=1,text='',requires=null,tier=0}={})=>points.push({map,id,label,x,z,key,model,item,count,text,requires,tier});
 export const QUEST_APPLE_TREE={x:tree?.x??-6,z:tree?.z??-8,id:tree?.id};
@@ -39,7 +39,7 @@ for(const [id,label,x,z,text]of [
  ['joachim','보존실의 요아힘과 일지',28,-37,'움직이는 것만으로는 돌아왔다고 할 수 없다.'],
  ['valve','실험실 배출 장치',26,-34,'배출 장치를 정지하고 남아 있는 기록을 보존한다.'],
  ['church-seal','교회 인장과 연구 기록',28,-35,'결론을 지어 버리기 전에 이 기록을 가져가야 한다.']])p('witch-cave',id,label,x,z,{text,requires:id==='pressure'?'kill:ghoul':id==='lever'?'inspect:pressure':id==='joachim'?'kill:mourning-elena':['valve','church-seal'].includes(id)?'M08':null});
-for(const point of points.filter(p=>p.map==='great-plains')){const placement=PLAINS_PLACEMENTS.find(p=>p.id===(point.id==='bandage'?'saint-bandage':point.id));if(placement)Object.assign(point,{x:placement.x,z:placement.z});}
+for(const point of points.filter(p=>p.map==='great-plains')){const placement=PLAINS_POINT_POSITIONS[point.id];if(placement)Object.assign(point,{x:placement.x,z:placement.z});}
 // Every cache belongs to a house, cart, tree canopy or solid cavern wall.
 // The chest fronts face a clear approach; IDs and five reward grades stay stable.
 const treasures={

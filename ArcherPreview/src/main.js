@@ -53,6 +53,7 @@ import {waitForSceneReady} from './scene-ready.js';
 import {worldSpawn,mapForCharacter,isWorldCharacter,travelUrl} from './map-route.js';
 import {createMapPortal,consumeTravel,villageTravelLimit,clampVillageExit,safeRoadArrival,VILLAGE_EXIT_LIMIT} from './map-travel.js';
 import { createWorld,replaceWorldMap } from './world.js';
+import {prepareFixedLayouts,fixedLayoutsForCharacter,fixedLayoutStats} from './fixed-layouts.js';
 import { PlaygroundInput } from './input.js';
 import { CharacterController, STATE_LABELS, normalizeAttackSpeed } from './controller.js';
 import { CharacterAnimator } from './animation.js';
@@ -82,7 +83,7 @@ import { BossSelection, bossSelectionHelp, summonSelectedBoss } from './boss-sel
 import {MonsterSelection,MONSTER_NAMES,monsterSelectionHelp,summonSelectedMonster} from './monster-selection.js';
 import { loadTrainingGround } from './environment.js';
 import { loadVillage } from './village-environment.js';
-import { VILLAGE_SPAWN } from './village-layout.js';
+import { VILLAGE_SPAWN } from './village-layout-base.js';
 import { createVillageReview } from './village-review.js';
 import { loadVillageTrainingTarget } from './village-training.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
@@ -187,6 +188,8 @@ if(versionRoute.edition)document.documentElement.dataset.edition=versionRoute.ed
 if(versionRoute.worldRevision)document.documentElement.dataset.world=versionRoute.worldRevision;
 {const query=new URLSearchParams(location.search);if(import.meta.env.DEV||query.has('dev')||query.has('qa'))document.documentElement.dataset.dev='';}
 let character = uiRoute.character;
+// The starting region's prebuilt layout downloads while the engine starts (createWorld awaits it).
+const startupLayouts=prepareFixedLayouts(fixedLayoutsForCharacter(character));startupLayouts.catch(()=>{});
 let uiTest=null;
 let commercialUi, hudLayout, developerTools;
 // Explicit review URLs use the same map, camera, rig and input system as play.
@@ -424,7 +427,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equi
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({...mapWorkDiagnostics(),speeds:{...movementSpeedSettings.value,attack:attackSpeed},splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,...(combatTrail?{previousCombat:combatTrail.previous,currentCombat:combatTrail.current}:{}),textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({...mapWorkDiagnostics(),fixedLayouts:structuredClone(fixedLayoutStats),speeds:{...movementSpeedSettings.value,attack:attackSpeed},splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,...(combatTrail?{previousCombat:combatTrail.previous,currentCombat:combatTrail.current}:{}),textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({...mapWorkDiagnostics(),activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
     camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
@@ -1188,6 +1191,7 @@ try {
   // Actual hidden/modal suspension is still owned by syncPlayback below.
   engine.renderEvenInBackground=cinematicAuthoringPreview;
   applyRenderQuality();
+  await startupLayouts;
   world = createWorld(engine,{village:isVillage(),forest:isForest(),cave:isCave(),plains:isPlains(),warrior:isWarrior(),touchDevice});
   world.release=versionRoute.release;world.edition=versionRoute.edition??null;
   setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});
@@ -1318,12 +1322,14 @@ try {
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;meleeAim?.reset();strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();
+      prepareFixedLayouts(fixedLayoutsForCharacter(new URL(href,location.href).searchParams.get('character'))).catch(()=>{});
     },
     release:async()=>{await boss.trimDormantModels();await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
     load:async (href,context)=>{
       const url=new URL(href),destination=url.searchParams.get('character'),sourceCharacter=character,waypoint=travelWaypoint(url),loadingGeneration=mapLoadingGeneration;
       url.searchParams.delete('elenaReview');
       url.searchParams.delete('waypoint');
+      await prepareFixedLayouts(fixedLayoutsForCharacter(destination));
       replaceWorldMap(world,destination);applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale,true);applyAdaptiveShadows();character=destination;history.replaceState(null,'',url);
       const handoff=context?.boundary?.to===destination?context.boundary:null;
       if(travelResume){travelResume=false;resumePose=readMapResume(journeyStorage,destination,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:false});}

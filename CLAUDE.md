@@ -244,6 +244,7 @@ NPC·등장인물
 - 0.3 전용 코드는 전부 `ArcherPreview/src/v03/`에 둔다. `main.js`에는 연결 지점만 추가한다(이미 136KB다).
 - 콘텐츠는 코드가 아니라 데이터로 쓴다: `src/v03/data/`의 퀘스트·대화·아이템·컷씬·스폰 정의.
 - 테스트: `ArcherPreview/tests/v03-*.test.js` (node:test, DOM은 linkedom).
+- 마을·대평원 고정 배치는 빌드 때 만든다: 생성기 `village-layout.js`·`great-plains-layout.js`는 편집 원본이고, 게임은 `src/generated/`를 지역별로 받는다(`fixed-layouts.js`). 생성기를 고치면 `node scripts/build-fixed-layouts.mjs`(npm run dev가 자동 실행). 오래된 생성 파일은 빌드가 막는다. 런타임 상수는 `*-layout-base.js`에서 읽는다.
 
 ## 실행 환경 (중요)
 

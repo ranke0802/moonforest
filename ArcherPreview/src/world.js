@@ -9,14 +9,15 @@ import { MovingSky, SKY_HORIZON } from './sky.js';
 import { createMountainBackdrop } from './mountain-backdrop.js';
 import {configureOutdoorVista} from './outdoor-vista.js';
 import { createVillageTerrain } from './village-terrain.js';
-import { VILLAGE_PLACEMENTS,villageObstacles } from './village-layout.js';
+import { villageObstacles } from './village-layout-base.js';
+import {villagePlacements,plainsPlacements} from './fixed-layouts.js';
 import {isVillageBoundaryTree} from './village-plains-boundary.js';
 import { VillageNavigation } from './village-navigation.js';
 import { villageRenderRange } from './village-policy.js';
 
 import {FOREST_PLACEMENTS,forestObstacles} from './monster-forest-layout.js';
 import {createMonsterForestTerrain} from './monster-forest-terrain.js';
-import {PLAINS_PLACEMENTS,plainsObstacles} from './great-plains-layout.js';
+import {plainsObstacles} from './great-plains-layout-base.js';
 import {plainsCliffObstacles} from './plains-cliff-collision.js';
 import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js';
 import {villageOutskirtsSkirtHeight} from './village-outskirts-skirt.js';
@@ -31,7 +32,14 @@ import {cachedMapTerrain} from './map-terrain-cache.js';
 import {warmMapNavigation} from './map-navigation-cache.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
-const villageWithOutskirts=Object.freeze([...VILLAGE_PLACEMENTS,...VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS]);
+// The village and its prebuilt plains outskirts, one frozen list per page (the
+// village layout is prepared before the village loads: fixed-layouts.js).
+let villageLayout=null,villageLayoutSource=null;
+function villageWithOutskirts(){
+  const placements=villagePlacements();
+  if(villageLayoutSource!==placements){villageLayoutSource=placements;villageLayout=Object.freeze([...placements,...VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS]);}
+  return villageLayout;
+}
 const caveTrainingSpawn={x:-39,z:39};
 // Cover the 240% desktop fog end from the playable rim plus the normal maximum
 // camera radius. Only stretch the non-playable outer ring; add no triangles.
@@ -45,8 +53,8 @@ function outdoorFogColor({village,forest,plains,cave}){
   return village&&!plains&&!cave?VILLAGE_FOG_COLOR.clone():SKY_HORIZON.clone();
 }
 export function mapNavigation({cave,forest,plains,village}){
-  const boundaryTrees=village&&!plains&&!forest&&!cave?VILLAGE_PLACEMENTS.filter(p=>isVillageBoundaryTree(p)&&Math.hypot(p.x,p.z)>=50&&p.z>=43&&Math.abs(p.x)<26).flatMap(p=>villageObstacles([{...p,x:0,z:0}]).map(o=>({...o,x:o.x+p.x,z:o.z+p.z}))):[];
-  const obstacles=plains?[...plainsObstacles(),...plainsCliffObstacles()]:cave?caveObstacles():forest?forestObstacles():village?[...villageObstacles(),...boundaryTrees]:FOREST_OBSTACLES;
+  const boundaryTrees=village&&!plains&&!forest&&!cave?villagePlacements().filter(p=>isVillageBoundaryTree(p)&&Math.hypot(p.x,p.z)>=50&&p.z>=43&&Math.abs(p.x)<26).flatMap(p=>villageObstacles([{...p,x:0,z:0}]).map(o=>({...o,x:o.x+p.x,z:o.z+p.z}))):[];
+  const obstacles=plains?[...plainsObstacles(plainsPlacements()),...plainsCliffObstacles()]:cave?caveObstacles():forest?forestObstacles():village?[...villageObstacles(villagePlacements()),...boundaryTrees]:FOREST_OBSTACLES;
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
   const Navigation=cave?CaveNavigation:village?VillageNavigation:ArenaNavigation;
   return new Navigation([...obstacles,...training]);
@@ -148,7 +156,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':village?'village':'training';
   // The plains also hold the large alpha wolf: warm its route grid at load.
   warmMapNavigation(engine,navigation,mapId,ENEMY_ARENA_RADIUS,{radii:mapId==='great-plains'?[.34,.7,1.7]:[.34,.7],limits:enemyWarmLimits()});
-  const world={ground,forest,cave,plains,mapId,sceneInputMode:'manual-game',environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts:undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
+  const world={ground,forest,cave,plains,mapId,sceneInputMode:'manual-game',environmentManifest:mapId==='training'?'village':mapId,groundManifest:(mapId==='training'?'village':mapId)+'-ground',placements:plains?plainsPlacements():cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:village?villageWithOutskirts():undefined,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,scene,camera,shadows,lighting,navigation,terrain,sky,mountains,village,villagePolicy,touchDevice,floorMaterial:material,
     setMotesVisible(visible){if(motesVisible===visible)return;motesVisible=visible;for(const mote of motes)mote.mesh.setEnabled(visible);},
     tick(time){if(!this.cave){sky.tick(time);for(const mote of motes)mote.mesh.position.y=mote.y+Math.sin(time*.3+mote.phase)*.12;}this.caveAtmosphere?.tick(time);this.plainsDecor?.tick(time);}};
   world.setMotesVisible(!cave);configureCaveAtmosphere(world);configureCaveFog(world);configurePlainsDecor(world);return world;
@@ -164,7 +172,7 @@ export function replaceWorldMap(world,character){
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
-  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?PLAINS_PLACEMENTS:cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:villageWithOutskirts,trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
+  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?plainsPlacements():cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:villageWithOutskirts(),trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
   configureOutdoorVista(world,{village:true,plains,villageNotch:!forest&&!cave&&!plains});
   world.setMotesVisible(!cave);
   world.navigation=mapNavigation(world);

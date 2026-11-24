@@ -16,7 +16,7 @@ import {VillageOutlines} from './village-outlines.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
-import {villageObstacles} from './village-layout.js';
+import {villageObstacles} from './village-layout-base.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {GRID_DIRECTIONS,linksOf,setLinks} from './navigation.js';
 import {caveFogRootEnabled} from './cave-fog-of-war.js';

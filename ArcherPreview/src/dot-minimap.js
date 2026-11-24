@@ -1,7 +1,7 @@
 import {mapPortals} from './map-route.js';
 import {VILLAGE_GROUND_ROUTES,sampleGroundCurve} from './village-ground-layout.js';
 import {FOREST_ROUTES,FOREST_CLEARINGS} from './monster-forest-layout.js';
-import {PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_RADIUS} from './great-plains-layout.js';
+import {PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_RADIUS} from './great-plains-layout-base.js';
 import {CAVE_ROUTES,CAVE_ROOMS,caveSurface} from './witch-cave-layout.js';
 
 import {tr} from './v03/i18n.js';

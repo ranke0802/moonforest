@@ -1,5 +1,5 @@
 import { Color3, MeshBuilder, SceneLoader, StandardMaterial, TransformNode, Vector3 } from '@babylonjs/core';
-import { VILLAGE_PLACEMENTS } from './village-layout.js';
+import { villagePlacements } from './fixed-layouts.js';
 import { VillageVisibility } from './village-visibility.js';
 import { applyVillageGround } from './village-ground.js';
 import { prepareTreeOcclusion, TreeOcclusion } from './tree-occlusion.js';
@@ -103,7 +103,7 @@ async function loadVillageEager(world,{onProgress=()=>{}}={}){
       fixtureMaterial.emissiveColor=new Color3(.75,.58,.25);fixtureMaterial.disableLighting=true;fixtureMaterial.wireframe=true;
       fixtureMaterial.freeze();
     }
-    for(const placement of VILLAGE_PLACEMENTS){
+    for(const placement of villagePlacements()){
       const asset=assets.get(placement.asset);
       if(!asset){
         if(!fixture)throw new Error(`마을에 필요한 에셋이 없습니다: ${placement.asset}`);

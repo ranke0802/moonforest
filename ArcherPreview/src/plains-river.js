@@ -1,5 +1,5 @@
 import {Color3,Material,Mesh,RawTexture,ShaderMaterial,Texture,Vector3,Vector4,VertexBuffer} from '@babylonjs/core';
-import {PLAINS_STREAM} from './great-plains-layout.js';
+import {PLAINS_STREAM} from './great-plains-layout-base.js';
 
 export const PLAINS_RIVER_NOISE_SIZE=64;
 export const PLAINS_RIVER_HALF_WIDTH=2;

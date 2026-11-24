@@ -18,6 +18,14 @@ export function verifyRuntimeModuleGraph(output){
     visit(entry);return [...seen].map(name=>chunks.get(name)).filter(Boolean);
   };
   const contains=(chunk,suffix)=>Object.keys(chunk.modules??{}).some(id=>id.replaceAll('\\','/').endsWith(suffix));
+  // Fixed map layouts ship prebuilt (src/generated/, per-region lazy chunks);
+  // their generators are editing sources and must not run in a shipped page.
+  const generator=/(?:^|\/)src\/(?:village-layout|great-plains-layout|fixed-layout-fallback)\.js$/;
+  for(const [name,chunk]of chunks)for(const id of Object.keys(chunk.modules??{})){
+    if(generator.test(id.replaceAll('\\','/')))throw new Error(`Layout generator entered the shipped game (${name}): ${id}`);
+  }
+  const anyChunk=suffix=>[...chunks.values()].some(chunk=>contains(chunk,suffix));
+  if(anyChunk('/src/fixed-layouts.js')&&!anyChunk('/src/fixed-layout-fallback.browser.js'))throw new Error('Fixed layouts were built without their browser fallback');
   let checked=0;
   for(const [name,chunk]of chunks){
     if(!chunk.isEntry)continue;

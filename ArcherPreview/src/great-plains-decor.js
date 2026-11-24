@@ -1,5 +1,5 @@
 import {Color3,DynamicTexture,Mesh,MeshBuilder,StandardMaterial} from '@babylonjs/core';
-import {PLAINS_PLACEMENTS} from './great-plains-layout.js';
+import {plainsPlacements} from './fixed-layouts.js';
 import {createPlainsRiver} from './plains-river.js';
 
 // Authored route signage and a single-pass flowing river. This owns every
@@ -19,8 +19,9 @@ export function configurePlainsDecor(world){
  };
  label('plains-junction-names',['← 몬트하임 마을','마물의 숲 ↗','왕국 가도 ↓'],-1,18.3,1.6,1.1,.55);
  label('plains-village-name',['몬트하임 마을','← 귀환'], -85,-35.7,1.6,1,.5);
- for(const p of PLAINS_PLACEMENTS.filter(p=>p.boundaryMarker))label('church-marker-'+p.id,['✥','숲길 경계'],p.x,p.z+.25,.7,.48,.45);
- for(const p of PLAINS_PLACEMENTS.filter(p=>p.lootTier))label('chest-tier-'+p.id,[p.lootTier===2?'II':'I','보급함'],p.x,p.z+.5,.62,.42,.21);
+ const placements=plainsPlacements();
+ for(const p of placements.filter(p=>p.boundaryMarker))label('church-marker-'+p.id,['✥','숲길 경계'],p.x,p.z+.25,.7,.48,.45);
+ for(const p of placements.filter(p=>p.lootTier))label('chest-tier-'+p.id,[p.lootTier===2?'II':'I','보급함'],p.x,p.z+.5,.62,.42,.21);
  for(const mesh of meshes){mesh.isPickable=false;if(!mesh.billboardMode)mesh.freezeWorldMatrix();}
  let disposed=false;const observer=scene.onDisposeObservable.addOnce(()=>dispose());
  const dispose=()=>{if(disposed)return;disposed=true;scene.onDisposeObservable.remove(observer);river.dispose();for(const m of meshes)if(m!==river.mesh)m.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();};

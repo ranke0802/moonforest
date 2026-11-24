@@ -1,6 +1,6 @@
-import {VILLAGE_RADIUS} from './village-layout.js';
+import {VILLAGE_RADIUS} from './village-layout-base.js';
 import {FOREST_RADIUS,CAVE_RADIUS,isWorldCharacter} from './map-route.js';
-import {PLAINS_RADIUS} from './great-plains-layout.js';
+import {PLAINS_RADIUS} from './great-plains-layout-base.js';
 // Live bindings keep every movement/combat module on the current map without
 // replacing the document (which would release fullscreen and orientation lock).
 export let ARENA_RADIUS,ENEMY_ARENA_RADIUS,VILLAGE_MAP,VIEW_DISTANCE,SCENERY_VIEW_DISTANCE,SKYLINE_VIEW_DISTANCE,FOG_START,FOG_END;

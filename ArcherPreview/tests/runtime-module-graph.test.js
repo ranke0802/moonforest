@@ -35,3 +35,16 @@ test('development actors and editors remain lazy while the normal game keeps its
   assert.throws(()=>verifyRuntimeModuleGraph(leaked),/Development module entered the initial game graph/);
  }
 });
+
+test('fixed map layouts ship prebuilt: no generator in any chunk, browser fallback with the registry',()=>{
+ const graph=good();graph[0].modules['/project/src/main.js']={};
+ graph[0].modules['/project/src/fixed-layouts.js']={};graph[0].modules['/project/src/fixed-layout-fallback.browser.js']={};
+ graph[2].modules['/project/src/generated/great-plains-placements.js']={};
+ assert.deepEqual(verifyRuntimeModuleGraph(graph),{chunks:3,entriesChecked:1});
+ for(const file of ['village-layout','great-plains-layout','fixed-layout-fallback']){
+  const leaked=good();leaked[2].modules[`/project/src/${file}.js`]={};
+  assert.throws(()=>verifyRuntimeModuleGraph(leaked),/Layout generator entered the shipped game/);
+ }
+ const nodeResolved=good();nodeResolved[0].modules['/project/src/fixed-layouts.js']={};
+ assert.throws(()=>verifyRuntimeModuleGraph(nodeResolved),/without their browser fallback/);
+});
