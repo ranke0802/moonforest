@@ -40,7 +40,8 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  function label(){
   layer.setAttribute('aria-label',t('title.aria'));layer.dataset.drawing=t('title.drawing');veil?.relabel();menu.setAttribute('aria-label',t('title.menu'));
   kicker.textContent=t('title.kicker');sub.textContent=t('title.sub');
-  for(const [id,button] of buttons)button.textContent=id==='new'?chapterWords().menu:id==='load'?chapterWords().resume:t('menu.'+id);
+  // 새로하기 / 불러오기 (user, 2026-11-24 21:07): both go slot → chapter.
+  for(const [id,button] of buttons)button.textContent=t('menu.'+id);
  }
  label();
  let disposed=false,panelClose=null,lastFocus=null;

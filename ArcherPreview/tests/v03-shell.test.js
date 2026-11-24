@@ -19,6 +19,9 @@ const E='moonforest-0.3';
 const instant=()=>Promise.resolve();
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function settle(times=12){for(let i=0;i<times;i++)await tick();}
+// 새로하기 → a slot → chapter one; 불러오기 → a slot → a chapter (user, 2026-11-24 21:07).
+async function newGame(h,slot=1){h.click('[data-action="new"]');await settle();h.click(`.v03-slot[data-slot="${slot}"]`);await settle();h.click('[data-chapter="1"]');}
+async function loadGame(h,slot,chapter=1){h.click('[data-action="load"]');await settle();h.click(`.v03-slot[data-slot="${slot}"]`);await settle();h.click(`[data-chapter="${chapter}"]`);}
 function memory(seed={}){
  const map=new Map(Object.entries(seed));
  return {get length(){return map.size;},key:i=>[...map.keys()][i]??null,getItem:k=>map.has(k)?map.get(k):null,setItem:(k,v)=>{map.set(k,String(v));},removeItem:k=>{map.delete(k);},dump:()=>Object.fromEntries(map)};
@@ -68,7 +71,7 @@ test('title screen: five menu entries, keyboard order, slot panel and confirm',a
  const title=createTitleScreen({doc:document,wait:instant,onAction:a=>actions.push(a)});
  assert.equal(title.visible,false);title.show();assert.equal(title.visible,true);
  const labels=[...title.element.querySelectorAll('.v03-menu-item')].map(b=>b.textContent);
- assert.deepEqual(labels,['장 선택','이어하기','갤러리','설정','끝내기']);
+ assert.deepEqual(labels,['새로하기','불러오기','갤러리','설정','끝내기']);
  // No entry is boxed until the menu is moved with the keys (arrows or W/S); the pointer takes it away again.
  const press=(key,code)=>{const event=new document.defaultView.Event('keydown',{bubbles:true,cancelable:true});event.key=key;event.code=code;title.element.dispatchEvent(event);return event.defaultPrevented;};
  assert.equal(title.element.classList.contains('is-keyed'),false);assert.equal(title.element.tabIndex,-1);
@@ -146,7 +149,7 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
  }});
  const tick=()=>h.shell.update(.02);
  async function panel(){
-  h.click('[data-action="new"]');await settle();h.click('[data-slot="1"]');await settle();
+  h.click('[data-action="load"]');await settle();h.click('[data-slot="1"]');await settle();
  }
  async function talk(id){
   const npc=NPCS.find(row=>row.id===id);Object.assign(h.player.position,{x:npc.x,z:npc.z});tick();
@@ -168,7 +171,7 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   h.click('[data-chapter="2"]');await settle(40);tick();assert.equal(h.save.meta().chapter,2);
   await talk('innkeeper');assert.match(h.document.querySelector('.v03-dialogue-portrait').getAttribute('src'),/01\.webp/);await finishDialogue();
   assert.equal(h.document.querySelector('.v03-dialogue-portrait').hasAttribute('src'),false);
-  await back();h.click('[data-action="load"]');await settle();h.click('[data-slot="1"]');await settle(40);tick();
+  await back();await loadGame(h,1,2);await settle(40);tick();
   assert.equal(h.shell.story.log.step().id,'palisade');await talk('youth');await finishDialogue();
   await h.api.travel('warrior-v5');tick();assert.equal(h.shell.story.dialogueOpen,true);await finishDialogue();assert.equal(h.shell.story.log.step().id,'sanctuary');
   h.shell.defeat({kind:'elena',phase:1});assert.equal(h.shell.story.log.step().id,'sanctuary');
@@ -185,7 +188,7 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   await back();await panel();h.click('[data-replay="1"]');await settle(40);assert.equal(h.shell.story.log.quest().id,'M00');
   await back();h.save.journey.setItem(questKey(1,true),JSON.stringify({quest:1,step:0,count:0,done:[]}));
   let potions=0;h.api.addPotions=count=>{potions+=count;return count;};
-  h.click('[data-action="load"]');await settle();h.click('[data-slot="1"]');await settle(40);await h.api.travel('warrior-v3');tick();
+  await loadGame(h,1,1);await settle(40);await h.api.travel('warrior-v3');tick();
   await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.quest().id,'M02');assert.equal(potions,0);
   assert.equal(JSON.parse(h.save.journey.getItem(questKey(1))).quest,QUESTS.length);
  }finally{h.shell.dispose();}
@@ -228,8 +231,7 @@ test('iPhone starts the dream without priming the roaming population or decoding
  // Keep the wolf pending through the ordinary new-game entry.
  const hold=h.shell.story.prepare.bind(h.shell.story);let preparations=0;
  h.shell.story.prepare=id=>{preparations++;return hold(id);};
- h.click('[data-action="new"]');
- h.click('[data-chapter="1"]');
+ await newGame(h);
  for(let turn=0;turn<4;turn++)await Promise.resolve();
  assert.equal(h.shell.screen,'opening');assert.equal(preparations,0);
  releaseWolf();await settle(40);
@@ -289,7 +291,7 @@ test('first run: logo → title → attract battle → new game without reload �
  const alpha=h.camera.alpha;for(let i=0;i<120;i++)h.shell.update(.016);
  assert.equal(h.battle.combat.hp,500);assert.equal(h.battle.encounters[0].brain.hp,900*TITLE_FOE.hpFloor);assert.ok(h.camera.alpha>alpha);assert.ok(h.camera.radius<17);
  assert.equal(h.save.meta().used,false,'title writes nothing');
- h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);
+ await newGame(h);await settle(40);
  assert.equal(h.shell.screen,'play');assert.equal(h.shell.blocksProgress,false);assert.equal(h.shell.blocksGame,false);assert.equal(h.shell.pilotMovement,null);
  assert.ok(h.log.includes(`resetStage:${OPENING_STAGE.x},${OPENING_STAGE.z}`));assert.ok(h.log.includes(`summon:${AMBUSH.kind}:${AMBUSH.count}`));assert.ok(h.log.includes('suspend:false'));
  assert.deepEqual([h.camera.alpha,h.camera.beta,h.camera.radius],[1,.9,17],'title camera is restored before the stage reset');
@@ -301,12 +303,12 @@ test('first run: logo → title → attract battle → new game without reload �
 test('back to the title: only from play, and without the game\'s hooks the caller falls back to the reload',async()=>{
  const h=harness();h.finishSplash();await h.reveal();
  assert.equal(await h.shell.returnToTitle(),false,'not from the title itself');
- h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);assert.equal(h.shell.screen,'play');
+ await newGame(h);await settle(40);assert.equal(h.shell.screen,'play');
  assert.equal(await h.shell.returnToTitle(),false,'a game without the stopWorld hook falls back to the reload');assert.equal(h.shell.screen,'play');
 });
 test('back to the title: with the game\'s hooks the same page shows the title again and the record goes on',async()=>{
  const h=harness({stopWorld:true});
- h.finishSplash();await h.reveal();h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);assert.equal(h.shell.screen,'play');
+ h.finishSplash();await h.reveal();await newGame(h);await settle(40);assert.equal(h.shell.screen,'play');
  h.battle.livingCount=0;for(let i=0;i<200;i++)h.shell.update(.016);
  const quest=h.shell.inspect().story.quest,made=h.made.length;assert.ok(quest);
  h.log.length=0;
@@ -319,7 +321,7 @@ test('back to the title: with the game\'s hooks the same page shows the title ag
  assert.equal(h.shell.blocksProgress,true);assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
  for(let i=0;i<60;i++)h.shell.update(.016);assert.notEqual(h.shell.pilotMovement,null,'the showcase drives the player again');
  // Continue: the same record, on the same page.
- h.log.length=0;h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="'+h.save.slot+'"]');await settle(40);
+ h.log.length=0;await loadGame(h,h.save.slot);await settle(40);
  assert.equal(h.shell.screen,'play');assert.equal(h.shell.inspect().story.started,true);assert.equal(h.shell.inspect().story.quest,quest,'the same quest goes on');
  assert.ok(h.log.some(line=>line.startsWith('resetStage:')&&line!=='resetStage:spawn'),'back where the player left, not at the map spawn');
  assert.ok(h.shell.inspect().story.cast.length>=0);assert.equal(h.shell.blocksProgress,false);
@@ -344,7 +346,7 @@ test('loading another record on the same page: the slot is bound, the game reads
  const h=harness({local,session,reloadProgress:true,stopWorld:true});assert.equal(h.save.slot,2,'boots into the first empty slot');
  let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?character=warrior-plains',replace:url=>{replaced=url;}};
  h.finishSplash();await h.reveal();
- h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle(40);
+ await loadGame(h,1);await settle(40);
  assert.equal(replaced,null,'no reload');assert.equal(readIntent(session,E),null,'no intent left for a next document');
  assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),'77','the page now reads record 1');
  assert.ok(h.log.includes('reloadProgress'));assert.equal(h.shell.screen,'play');assert.equal(h.shell.inspect().story.started,true);
@@ -358,7 +360,7 @@ test('a record on another map keeps its own place while the page is still on the
  let finish;const local=memory(),session=memory();seedRecord(local);
  const h=harness({local,session,reloadProgress:true,travel:(id,state,log)=>new Promise(resolve=>{log.push('travel:'+id);finish=()=>{state.character=id;resolve(true);};})});
  h.finishSplash();await h.reveal();assert.equal(h.state.character,'warrior-plains');
- h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle(20);
+ await loadGame(h,1);await settle(20);
  assert.ok(h.log.includes('travel:warrior-v3'));
  h.window.dispatchEvent(new h.window.Event('pagehide'));for(let i=0;i<1100;i++)h.shell.update(.016);
  assert.equal(h.save.meta().character,'warrior-v3','the record still says where it was saved, not where the page stands');assert.equal(h.save.meta().place,'숲의 경계 마을');
@@ -368,7 +370,7 @@ test('a record on another map keeps its own place while the page is still on the
  const local2=memory(),session2=memory();seedRecord(local2);let replaced=null;
  const g=harness({local:local2,session:session2,reloadProgress:true,travel:async(id,state,log)=>{log.push('travel:'+id);return false;}});
  g.window.location={href:'https://test.invalid/moonforest-0.3.html?character=warrior-plains',replace:url=>{replaced=url;}};
- g.finishSplash();await g.reveal();g.click('[data-action="load"]');await settle();g.click('.v03-slot[data-slot="1"]');await settle(40);
+ g.finishSplash();await g.reveal();await loadGame(g,1);await settle(40);
  assert.ok(replaced&&new URL(replaced).searchParams.get('character')==='warrior-v3','reloads on the record\'s map');
  assert.equal(g.save.meta().character,'warrior-v3');assert.deepEqual(readIntent(session2,E),{slot:1,mode:'load'});
 });
@@ -378,11 +380,11 @@ test('existing saves: load another slot reloads with an intent; overwrite wipes 
  const h=harness({local,session});assert.equal(h.save.slot,2,'boots into the first empty slot');
  let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?release=moonforest-0.2&character=warrior-plains&arrival=portal',replace:url=>{replaced=url;}};
  h.finishSplash();await h.reveal();assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
- h.click('[data-action="load"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();
+ await loadGame(h,1);await settle();
  assert.match(replaced,/character=warrior-v3/);assert.doesNotMatch(replaced,/arrival/);
  const next=createSaveSession({local,session,edition:E});assert.deepEqual(next.intent,{slot:1,mode:'load'});assert.equal(next.slot,1);assert.equal(next.journey.getItem('moonforest-gold-v1'),'77');
  replaced=null;h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();
- h.click('[data-reset-slot]');await settle();assert.equal(replaced,null,'overwrite asks first');h.click('.v03-panel-accept');await settle();
+ assert.equal(replaced,null,'overwrite asks first');h.click('.v03-panel-accept');await settle();h.click('[data-chapter="1"]');await settle();
  assert.match(replaced,/moonforest-0\.3\.html/);assert.doesNotMatch(replaced,/character=/);
  const fresh=createSaveSession({local,session,edition:E});assert.deepEqual(fresh.intent,{slot:1,mode:'new'});assert.equal(fresh.meta().used,false);assert.equal(fresh.journey.getItem('moonforest-gold-v1'),null);
 });
@@ -392,7 +394,7 @@ test('new game over a used slot restarts in place: no reload, the slot is wiped 
  const h=harness({local,session,inPlace:true});assert.equal(h.save.slot,2);
  let replaced=null;h.window.location={href:'https://test.invalid/moonforest-0.3.html?release=moonforest-0.2&character=warrior-plains',replace:url=>{replaced=url;}};
  h.finishSplash();await h.reveal();
- h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('[data-reset-slot]');await settle();h.click('.v03-panel-accept');await settle(20);
+ h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('.v03-panel-accept');await settle();h.click('[data-chapter="1"]');await settle(20);
  assert.equal(replaced,null,'no page reload: the click that started the game keeps its sound');
  assert.ok(h.log.includes('restartProgress'));assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),null,'the old record is gone');
  assert.ok(['opening','play'].includes(h.shell.screen));assert.equal(h.save.meta().used,true,'the slot is a save again once the game starts');
@@ -485,7 +487,7 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  store.setItem('v03-story-v1','{"quest":99,"step":0,"done":[]}');assert.equal(createQuestLog({quests:QUESTS,storage:store}).load(),false);
 });
 test('story: first fight coaching, driver talk, village cast, rest effect and save title',async()=>{
- const h=harness();h.finishSplash();await h.reveal();h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);
+ const h=harness();h.finishSplash();await h.reveal();await newGame(h);await settle(40);
  h.battle.combat.hp=500;
  const hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
  h.shell.update(.016);
@@ -606,7 +608,7 @@ test('errands: a first greeting once, an errand offered after its main quest, th
   grantItem:(id,n)=>{bag.set(id,(bag.get(id)??0)+n);h.log.push(`grant:${id}:${n}`);return true;},
   spendItem:(id,n)=>{if((bag.get(id)??0)<n)return false;bag.set(id,bag.get(id)-n);h.log.push(`spend:${id}:${n}`);return true;},
   onTownEvent:fn=>{townEvent=fn;},addPotions:n=>{h.log.push('potions:'+n);return n;}});
- h.finishSplash();await h.reveal();h.click('[data-action="new"]');h.click('[data-chapter="1"]');await settle(40);
+ h.finishSplash();await h.reveal();await newGame(h);await settle(40);
  const story=h.shell.story,hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
  assert.equal(typeof townEvent,'function','the story listens to village services while it plays');
  // Up to M02's report by events (the talks themselves are covered by the story test above).
@@ -647,4 +649,52 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  // Its cast and minimap marks come with the first frames on the map.
  for(let i=0;i<60&&!again.marks.at(-1)?.length;i++){again.shell.update(.016);await settle(2);}
  assert.equal(glyphAt(again,'herbalist'),null);assert.equal(glyphAt(again,'youth'),'+');
+});
+test('title: 새로하기 → slot (overwrite confirmed) → chapter wipes only once a chapter is chosen; 불러오기 → used slot → its chapters',async()=>{
+ const {questKey}=await import('../src/v03/chapter-progress.js'),{QUESTS}=await import('../src/v03/data/chapter1.js');
+ const local=memory(),session=memory(),seed=createSaveSession({local,session,edition:E,now:()=>10});
+ seed.commit({title:'남겨진 방',chapter:1,character:'warrior-v3',place:'몬트하임 마을',playSeconds:90});seed.journey.setItem('moonforest-gold-v1','77');
+ seed.journey.setItem(questKey(1),JSON.stringify({quest:QUESTS.length,step:0,count:0,done:[]}));// chapter one cleared: chapter two is open
+ const h=harness({local,session,inPlace:true,reloadProgress:true,stopWorld:true});
+ const q=selector=>h.document.querySelector(selector),all=selector=>[...h.document.querySelectorAll(selector)];
+ const press=button=>button.dispatchEvent(new h.window.Event('click',{bubbles:true})),back=()=>press(all('.v03-panel-back').at(-1));
+ const recordKept=()=>{const index=createSaveSession({local,session:memory(),edition:E}).index();return index[0].used===true;};
+ h.finishSplash();await h.reveal();
+ assert.deepEqual(all('.v03-menu-item').slice(0,2).map(b=>b.textContent),['새로하기','불러오기']);
+ // 새로하기: any slot, empty or used.
+ h.click('[data-action="new"]');await settle();
+ assert.equal(q('.v03-panel-title').textContent,'새로하기');assert.deepEqual(all('.v03-slot').map(b=>b.disabled),[false,false,false]);
+ // A used slot asks first; cancelling goes back and keeps the record.
+ h.click('.v03-slot[data-slot="1"]');await settle();assert.match(q('.v03-panel-note').textContent,/1번 기록/);
+ back();await settle();assert.equal(q('.v03-panel').hidden,true);assert.ok(recordKept());
+ // Accepted, the chapter list is a new game's: chapter one only, nothing to continue, replay or reset.
+ h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('.v03-panel-accept');await settle();
+ assert.equal(q('[data-chapter="1"]').disabled,false);assert.equal(q('[data-chapter="2"]').disabled,true,'the old record’s clears do not carry over');
+ assert.equal(q('[data-replay]'),null);assert.equal(q('[data-reset-slot]'),null);
+ // Backing out of the chapter list still keeps the record.
+ back();await settle();assert.equal(q('.v03-panel').hidden,true);assert.ok(recordKept());assert.equal(h.shell.screen,'title');
+ // 불러오기: only used slots, then that record's chapters (its clears, replay, no start-over).
+ h.click('[data-action="load"]');await settle();
+ assert.equal(q('.v03-panel-title').textContent,'불러오기');assert.deepEqual(all('.v03-slot').map(b=>b.disabled),[false,true,true]);
+ h.click('.v03-slot[data-slot="1"]');await settle();
+ assert.equal(q('[data-chapter="2"]').disabled,false,'its own clears');assert.ok(q('[data-replay="1"]'));assert.equal(q('[data-reset-slot]'),null,'no start-over in the load path');
+ back();await settle();assert.equal(h.shell.screen,'title');assert.ok(recordKept());
+ // 새로하기 for real: the slot is wiped and the new game starts in place.
+ h.click('[data-action="new"]');await settle();h.click('.v03-slot[data-slot="1"]');await settle();h.click('.v03-panel-accept');await settle();h.click('[data-chapter="1"]');await settle(20);
+ assert.ok(h.log.includes('restartProgress'));assert.equal(h.save.slot,1);assert.equal(h.save.journey.getItem('moonforest-gold-v1'),null,'the old record is gone');
+ assert.ok(['opening','play'].includes(h.shell.screen));
+});
+test('title: the two entries read in all five languages',async()=>{
+ const {document}=dom();
+ try{
+  for(const id of ['ko','en','ja','vi','zh']){
+   const pack=(await import(`../src/v03/locales/${id}.js`)).default;setPack(id,pack);
+   const title=createTitleScreen({doc:document,wait:instant});
+   const labels=[...title.element.querySelectorAll('.v03-menu-item')].map(b=>b.textContent);
+   assert.deepEqual(labels.slice(0,2),[pack.ui['menu.new'],pack.ui['menu.load']],id);
+   const pick=title.chooseSlot({mode:'new',index:[{slot:1,used:false},{slot:2,used:false},{slot:3,used:false}],bootSlot:1});
+   assert.equal(title.element.querySelector('.v03-panel-title').textContent,pack.ui['menu.new']);title.closePanel();await pick;
+   title.dispose();
+  }
+ }finally{setPack('ko',(await import('../src/v03/locales/ko.js')).default);}
 });

@@ -110,6 +110,8 @@ export function setupV03(api){
  const questSets=Object.fromEntries(CHAPTERS.map(row=>[row.id,row.id===1?source.QUESTS:row.questIds]));
  const chapterContent=new Map();
  const chaptersFor=storage=>chapterProgress(storage,questSets);
+ // A record that has cleared nothing (the chapter choice of a new game).
+ const FRESH_RECORD=Object.freeze({getItem:()=>null,setItem(){},removeItem(){}});
  function setStoryChapter(id){
   const chapter=chapterContent.get(id);
   if(chapter)Object.assign(sharedStory,content,chapter,{DIALOGUES:{...content.DIALOGUES,...chapter.DIALOGUES}});
@@ -288,53 +290,58 @@ export function setupV03(api){
  async function handle(action){
   if(state.busy||state.screen!=='title'||!state.revealed)return;
   const index=save.index(),ready=gameState().ready;
+  // 2026-11-24 21:07 (user): 새로하기 → slot (overwrite confirmed) → chapter → a new game;
+  // 불러오기 → slot → chapter → that record (its current chapter continues where it was).
   if(action==='new'){
-   const anyUsed=index.some(meta=>meta.used);
-   let slot=save.slot;
-   if(anyUsed){slot=await title.chooseSlot({mode:'chapters',index,bootSlot:save.slot});if(slot===null)return;}
+   const slot=await title.chooseSlot({mode:'new',index,bootSlot:save.slot});if(slot===null)return;
    const meta=index[slot-1];
-   const preview=chaptersFor(save.inspectSlot?.(slot)??save.journey);
-   const choice=await title.chooseChapter({progress:preview,used:meta.used});
-   if(!choice)return;
-   if(!ready){api.toast?.(t('toast.preparing'));return;}
-   if(meta.used&&!choice.reset){
-    const changed=slot!==save.slot;
-    if(changed&&!save.bindTo?.(slot)){api.toast?.(t('toast.noStorage'));return;}
-    if(changed){api.reloadProgress?.();state.playSeconds=meta.playSeconds??0;state.sinceSave=0;state.returnPose=null;}
-    if(choice.id!==preview.id||choice.replay||preview.replay){
-     const destination=preview.select(choice.id,{again:choice.replay===true,current:meta});
-     if(!destination){api.toast?.(t('toast.noStorage'));return;}
-     state.returnPose=null;
-     save.touch({chapter:choice.id,character:destination.character,place:destination.place??PLACE_NAMES[destination.character],placeKey:destination.character,titleKey:destination.titleKey??'',title:destination.title??chapterWords().chapters[choice.id-1]});
-    }
-    if(changed&&!api.reloadProgress){reloadInto(slot,'load',save.meta().character);return;}
-    if(choice.replay&&choice.id===1){await beginNewGame({replay:true});return;}
-    await continueHere();return;
-   }
    if(meta.used){
     const ok=await title.confirm({title:t('confirm.overwriteTitle'),message:t('confirm.overwrite',{slot}),accept:t('confirm.overwriteAccept')});if(!ok)return;
    }
+   // A new record has cleared nothing: the chapters open as it plays. Nothing is
+   // wiped until a chapter is chosen, so backing out keeps the old record.
+   const choice=await title.chooseChapter({progress:chaptersFor(FRESH_RECORD),used:false});
+   if(!choice)return;
+   if(!ready){api.toast?.(t('toast.preparing'));return;}
    // In place (2026-11-19, user): wipe and bind the slot on this page so the
    // click that started the game keeps its sound; reload only as a fallback.
    if(meta.used||slot!==save.slot){
-    if(!ready||!api.restartProgress){if(meta.used&&!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}reloadInto(slot,'new',null);return;}
+    if(!api.restartProgress){if(meta.used&&!save.wipe(slot)){api.toast?.(t('toast.wipeFailed'));return;}reloadInto(slot,'new',null);return;}
     if(!save.restartIn(slot)){api.toast?.(t('toast.wipeFailed'));return;}
     api.restartProgress();
    }
-   if(!ready){api.toast?.(t('toast.preparing'));return;}
    await beginNewGame();
   }else if(action==='load'){
    const slot=await title.chooseSlot({mode:'load',index,bootSlot:save.slot});if(slot===null)return;
    const meta=index[slot-1];if(!meta.used)return;
-   if(slot!==save.slot){
+   const preview=chaptersFor(save.inspectSlot?.(slot)??save.journey);
+   const choice=await title.chooseChapter({progress:preview,used:true,reset:false});
+   if(!choice)return;
+   if(!ready){api.toast?.(t('toast.preparing'));return;}
+   // The chapter the record is on (no replay asked) continues exactly where it was.
+   const resume=choice.id===preview.id&&!choice.replay,changed=slot!==save.slot;
+   if(changed){
     // In place when the game can read a record again on this page (user, 2026-11-21: no
     // reload, the loaded world stays); otherwise a clean document as before.
-    if(!ready||!api.reloadProgress||!save.bindTo||!save.bindTo(slot)){reloadInto(slot,'load',meta.character);return;}
-    api.reloadProgress();
-    state.playSeconds=save.meta().playSeconds??0;state.sinceSave=0;state.returnPose=null;state.ambush=false;
-    if(state.worldStarted){api.stopWorld?.();state.worldStarted=false;}
+    if(resume&&!api.reloadProgress){reloadInto(slot,'load',meta.character);return;}
+    if(!save.bindTo?.(slot)){
+     if(resume){reloadInto(slot,'load',meta.character);return;}
+     api.toast?.(t('toast.noStorage'));return;
+    }
+    if(api.reloadProgress){
+     api.reloadProgress();
+     state.playSeconds=save.meta().playSeconds??0;state.sinceSave=0;state.returnPose=null;state.ambush=false;
+     if(state.worldStarted){api.stopWorld?.();state.worldStarted=false;}
+    }
    }
-   if(!ready){api.toast?.(t('toast.preparing'));return;}
+   if(!resume){
+    const destination=preview.select(choice.id,{again:choice.replay===true,current:save.meta()});
+    if(!destination){api.toast?.(t('toast.noStorage'));return;}
+    state.returnPose=null;
+    save.touch({chapter:choice.id,character:destination.character,place:destination.place??PLACE_NAMES[destination.character],placeKey:destination.character,titleKey:destination.titleKey??'',title:destination.title??chapterWords().chapters[choice.id-1]});
+   }
+   if(changed&&!api.reloadProgress){reloadInto(slot,'load',save.meta().character);return;}
+   if(choice.replay&&choice.id===1){await beginNewGame({replay:true});return;}
    await continueHere();
   }else if(action==='gallery'){
    await title.showGallery({sections:GALLERY.map(section=>({...section,label:t('gallery.'+section.id),unlocked:0}))});

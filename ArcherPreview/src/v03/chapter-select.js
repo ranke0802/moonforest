@@ -9,7 +9,9 @@ const WORDS={
  vi:{menu:'Chọn chương',resume:'Tiếp tục',newSlot:'Bắt đầu',complete:'Đã xong · Khám phá',locked:'Hoàn thành chương trước',later:'Sắp ra mắt',reset:'Chơi lại từ đầu ở ô này',again:'Chơi lại',chapters:['Nữ chiến binh','Elena','Lâu đài Ma Vương','Vivian','Lựa chọn được tua lại','Bàn tiệc duyên phận','Vĩ thanh']},
 };
 export const chapterWords=(lang=language())=>WORDS[lang]??WORDS.en;
-export function chapterPanel({doc,box,close,progress,used}){
+// used: the slot already holds a record (the chapter it is on reads "continue").
+// reset: offer "start over in this slot" (off in the load path: 새로하기 overwrites).
+export function chapterPanel({doc,box,close,progress,used,reset=used}){
  const words=chapterWords();
  const node=(tag,cls,text)=>{const el=doc.createElement(tag);el.className=cls;el.textContent=text;return el;};
  box.append(node('h2','v03-panel-title',words.menu));
@@ -25,6 +27,6 @@ export function chapterPanel({doc,box,close,progress,used}){
   }
  }
  box.append(list);
- if(used){const reset=node('button','v03-panel-back',words.reset);reset.type='button';reset.dataset.resetSlot='1';reset.addEventListener('click',()=>close({reset:true,id:1}));box.append(reset);}
+ if(used&&reset){const button=node('button','v03-panel-back',words.reset);button.type='button';button.dataset.resetSlot='1';button.addEventListener('click',()=>close({reset:true,id:1}));box.append(button);}
  const back=node('button','v03-panel-back',t('panel.back'));back.type='button';back.addEventListener('click',()=>close(null));box.append(back);
 }
