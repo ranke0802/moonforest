@@ -39,6 +39,8 @@ jobs:
           ArcherPreview/tests/v03-character-menu.test.js
           ArcherPreview/tests/v03-riding-horse.test.js
           ArcherPreview/tests/v03-village-pets.test.js
+          ArcherPreview/tests/v03-village-pet-models.test.js
+          ArcherPreview/tests/v03-settlement-scenery.test.js
       - uses: actions/configure-pages@v5
       - name: Verify and stage the published resource graph
         run: node ArcherPreview/scripts/stage-pages.mjs _site
