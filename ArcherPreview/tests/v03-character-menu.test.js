@@ -1,11 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
-import {ArcRotateCamera,NullEngine,Scene,Vector3} from '@babylonjs/core';
+import {ArcRotateCamera,Color3,MeshBuilder,NullEngine,Scene,StandardMaterial,TransformNode,Vector3} from '@babylonjs/core';
 import en from '../src/v03/locales/en.js';
 import {equipmentStats} from '../src/equipment-stats.js';
 import {characterItems,bagContents,combatSkills} from '../src/v03/character-menu-data.js';
-import {drawCharacterPose} from '../src/v03/character-menu-camera.js';
+import {createCharacterPortrait} from '../src/v03/character-menu-camera.js';
 import {createCharacterMenu} from '../src/v03/character-menu.js';
 
 test('all three menu pages use the same modal, and picking an item changes the actual loadout',async()=>{
@@ -20,7 +20,8 @@ test('all three menu pages use the same modal, and picking an item changes the a
   const dialog=root.querySelector('dialog');
   dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
   menu.show('Status');assert.equal(updates,1);assert.equal(root.querySelectorAll('.mf-menu-slots>*').length,8);
-  menu.show('Inventory');assert.equal(root.querySelectorAll('.mf-menu-grid>*').length,30);
+  assert.equal(root.querySelector('.mf-menu-gear'),null);
+  menu.show('Inventory');assert.ok(root.querySelectorAll('.mf-menu-empty').length<6);
   const named=(host,text)=>[...host.querySelectorAll('button')].find(n=>n.textContent===text);
   root.querySelector('[aria-label="Soldier’s Sword"]').click();named(root,'Equip').click();
   assert.equal(state.equipment.sword,'soldier-sword');
@@ -51,21 +52,32 @@ test('skills use current input mode and actual tutorial locks',()=>{
  assert.equal(desktop.find(row=>row.name==='Sprint').control,en.story.tips.sprint.keys);
  assert.ok(desktop.every(row=>row.available&&!/[가-힣]/.test(row.name+row.control)));
 });
-test('inspection renders one view and restores the live camera even if drawing fails',()=>{
+test('the equipment portrait submits only the owned warrior and never advances scene observers, including on a failed draw',async()=>{
  const engine=new NullEngine(),scene=new Scene(engine);
  try{
-  const target=new Vector3(2,1,5),camera=new ArcRotateCamera('play',.6,1.1,11,target,scene);
-  const actor={position:new Vector3(5,0,9),rotation:{y:.4}};
+  const camera=new ArcRotateCamera('play',.6,1.1,11,new Vector3(2,1,5),scene);
+  const actor=new TransformNode('warrior',scene);actor.position.set(5,0,9);actor.rotation.y=.4;
+  const body=MeshBuilder.CreateBox('equipped body',{},scene);body.parent=actor;
+  body.material=new StandardMaterial('skin',scene);body.material.diffuseColor=Color3.White();
+  const enemy=MeshBuilder.CreateSphere('wolf',{},scene);
+  const effect=MeshBuilder.CreateBox('spell effect',{},scene);effect.parent=actor;
+  const rendered=[];let ticks=0,clears=0,clip=null;
+  // NullEngine has no GL context; instrument the actual Babylon render path.
+  engine.enableScissor=(...args)=>{clip=args;};engine.disableScissor=()=>{};
+  engine.clear=(color,back,depth,stencil)=>{if(back&&color?.r===0&&color?.g===0&&color?.b===0&&color.a===1&&depth&&stencil)clears++;};
+  for(const mesh of [body,enemy,effect])mesh.onBeforeDrawObservable.add(()=>rendered.push(mesh.name));
+  scene.onBeforeRenderObservable.add(()=>ticks++);
+  scene.render();await scene.whenReadyAsync();rendered.length=0;ticks=0;
   camera.targetScreenOffset.set(.2,-.1);
-  const rect={left:0,top:0,width:800,height:500};
-  let draws=0;
-  const original=scene.render.bind(scene);
-  scene.render=(update,ignore)=>{draws++;assert.equal(update,false);assert.equal(ignore,true);assert.notEqual(camera.radius,11);original(update,ignore);};
-  const options={scene,camera,actor,height:1.6,canvasRect:rect,frameRect:rect};
-  drawCharacterPose(options);
-  assert.equal(draws,1);assert.deepEqual(camera.target.asArray(),[2,1,5]);assert.deepEqual(camera.targetScreenOffset.asArray(),[.2,-.1]);
-  scene.render=()=>{throw Error('context lost');};
-  assert.throws(()=>drawCharacterPose(options),/context lost/);
+  const portrait=createCharacterPortrait(scene),rect={left:0,top:0,width:800,height:500};
+  const options={camera,actor,meshes:[body],height:1.6,canvasRect:rect,frameRect:{left:250,top:40,width:300,height:400}};
+  let drawn=false;
+  for(let i=0;i<12&&!drawn;i++){drawn=portrait.draw(options);if(!drawn)await new Promise(r=>setTimeout(r,16));}
+  assert.equal(drawn,true);assert.deepEqual(rendered,['equipped body']);assert.equal(ticks,0);assert.ok(clears>0);assert.ok(clip[2]>0);
+  assert.deepEqual(camera.target.asArray(),[2,1,5]);assert.deepEqual(camera.targetScreenOffset.asArray(),[.2,-.1]);
+  body.onBeforeDrawObservable.add(()=>{throw Error('context lost');});
+  assert.throws(()=>portrait.draw(options),/context lost/);
   assert.deepEqual([camera.alpha,camera.beta,camera.radius],[.6,1.1,11]);
+  portrait.dispose();assert.equal(portrait.draw(options),false);
  }finally{scene.dispose();engine.dispose();}
 });

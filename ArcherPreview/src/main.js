@@ -194,7 +194,7 @@ let character = uiRoute.character;
 // The starting region's prebuilt layout downloads while the engine starts (createWorld awaits it).
 const startupLayouts=prepareFixedLayouts(fixedLayoutsForCharacter(character));startupLayouts.catch(()=>{});
 let uiTest=null;
-let commercialUi, hudLayout, developerTools, characterMenu;
+let commercialUi, hudLayout, developerTools, characterMenu, characterMenuOpening=false;
 // Explicit review URLs use the same map, camera, rig and input system as play.
 let elenaReviewMode=new URLSearchParams(location.search).get('elenaReview');
 let elenaReview=null;
@@ -1430,6 +1430,8 @@ try {
   world.scene.onDisposeObservable.addOnce(()=>minimapTravel?.dispose());
   bindMapPortal();
   frameLoop=new FrameLoop(engine,dt=>{
+    // Resize/context callbacks can request an isolated frame while the gameplay loop is paused.
+    if(characterMenuOpening||characterMenu?.open)return;
     frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     if(adaptivePerformance.sample(dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/Math.min(engine.maxFPS||60,60)}))applyAdaptivePerformance();
     try{render(dt);}catch(error){
@@ -1443,10 +1445,10 @@ try {
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;
-    const summonOpen=$('#summon-dialog').open,otherSettings=townServices?.open||characterMenu?.open||hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open||$('#software-renderer-notice')?.open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true;
+    const summonOpen=$('#summon-dialog').open,otherSettings=townServices?.open||characterMenuOpening||characterMenu?.open||hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open||$('#software-renderer-notice')?.open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true;
     world.toolLease?.setPaused(paused);
     if(paused){input.reset();cancelAttackInput();world.hudRaster?.clear();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
-    if(paused){text('#live-fps',compactMeterEnabled?(frameLoop.failed?'Error':'Paused'):(frameLoop.failed?'실행 오류':'일시정지'));frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
+    if(paused){if((!characterMenuOpening&&!characterMenu?.open)||frameLoop.failed)text('#live-fps',compactMeterEnabled?(frameLoop.failed?'Error':'Paused'):(frameLoop.failed?'실행 오류':'일시정지'));frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
     world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();world.developmentToolSettings?.refresh();
   };
@@ -1862,12 +1864,14 @@ try {
       const canOpen=()=>!scene.isDisposed&&ready&&world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!world.v03.story?.scenePending&&!world.v03.story?.dialogueOpen&&
         !loadingAsset&&!mapTransition?.busy&&!frameLoop.failed&&!world.gameExited&&!contextRecovery?.blocked&&!world.toolLease?.active&&!controller?.dead&&!controller?.captured&&!document.hidden&&!document.querySelector('dialog[open]');
       const open=async page=>{
-        if(!canOpen())return;
+        if(characterMenuOpening||!canOpen())return;
+        const startingMap=world.mapId,startingActor=actor,startingGeneration=world.toolGeneration;
+        characterMenuOpening=true;root.dataset.characterMenuOpening='';reconcilePlayback();
         try{
           const [{createCharacterMenu}]=await Promise.all([import('./v03/character-menu.js'),import('./v03/character-menu.css')]);
-          if(!canOpen()||!launch.isConnected)return;
-          characterMenu??=createCharacterMenu({root,onPause:reconcilePlayback,
-            subject:()=>actor&&({camera:world.camera,scene,actor,height:playerDimensions(actor).height,canvasRect:canvas.getBoundingClientRect()}),
+          if(!canOpen()||!launch.isConnected||startingMap!==world.mapId||actor!==startingActor||startingGeneration!==world.toolGeneration)return;
+          characterMenu??=createCharacterMenu({root,onPause:()=>{input.reset();cancelAttackInput();reconcilePlayback();},
+            subject:()=>actor&&({camera:world.camera,scene,actor,meshes:container?.meshes,height:playerDimensions(actor).height,canvasRect:canvas.getBoundingClientRect()}),
             read:()=>{
               const stats=equipmentStats(equipmentChoices),defense=playerDefense();
               return {equipment:townServices?.equippedFinishes??{...equipmentChoices},tradeBag:townServices?.bag(),attackBonus:townServices?.economy.attack??stats.attackBonus,defense,armorDefense:townServices?.armorDefense??defense-stats.defense,
@@ -1880,6 +1884,7 @@ try {
           });
           characterMenu.show(page);
         }catch(error){console.error('[Character menu]',error);toast('Could not open the character menu.');}
+        finally{characterMenuOpening=false;delete root.dataset.characterMenuOpening;if(!scene.isDisposed)reconcilePlayback();}
       };
       launch.addEventListener('click',()=>open('Inventory'));
       const hotkeys={KeyI:'Inventory',KeyC:'Status',KeyU:'Skills'};

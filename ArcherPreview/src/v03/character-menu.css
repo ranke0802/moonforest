@@ -10,7 +10,9 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   box-shadow:0 12px 44px #0008;font:14px/1.4 MoonforestUI,Georgia,serif;
 }
 .mf-character-menu[open]{display:grid;grid-template-rows:auto minmax(0,1fr)}
-.mf-character-menu::backdrop{background:#080e1045}
+.mf-character-menu::backdrop{background:transparent}
+#app[data-character-menu]{background:#000}
+#app[data-character-menu]:not([data-character-portrait]) #viewport{visibility:hidden}
 .mf-character-menu nav,.mf-menu-card,.mf-character-menu button,.mf-character-menu select{color:inherit;font:inherit}
 .mf-character-menu nav{display:flex;align-items:center;gap:3px;padding:4px 10px;border-bottom:1px solid var(--line);background:#18231ff7}
 .mf-character-menu nav button,.mf-menu-filters button,.mf-character-menu select,.mf-menu-item button{min-height:42px;padding:5px 12px;border:1px solid transparent;background:transparent;cursor:pointer}
@@ -32,9 +34,6 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-slots>*{display:grid;align-content:center;min-height:44px;padding:4px;text-align:center;border:1px solid #9b88567d;background:#141b18d9;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
 .mf-menu-slots button{cursor:pointer}
 .mf-menu-slots small,.mf-menu-item>small{color:#c9bb99;font-size:12px}
-.mf-menu-stats .mf-menu-gear-title{margin-top:18px}
-.mf-menu-gear{display:grid}
-.mf-menu-gear button{min-height:44px;text-align:left;border:0;border-bottom:1px solid #b8ab822a;background:transparent}
 .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1.5fr 1fr}
 .mf-menu-filters{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin-bottom:9px}
 .mf-menu-filters button,.mf-character-menu select{padding:2px 6px}
@@ -51,6 +50,20 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-skills dl>div{display:grid;grid-template-columns:minmax(90px,26%) 1fr;gap:4px 16px;padding:12px 0;border-bottom:1px solid #b8ab822a}
 .mf-menu-skills small{grid-column:2;color:#c8beb0}
 @media (max-height:570px){.mf-menu-card{padding:10px}.mf-menu-slots{gap:3px}.mf-menu-grid{max-width:420px}}
+@media (max-height:500px) and (orientation:landscape){
+  .mf-character-menu{width:min(98vw,980px);height:min(96dvh,540px)}
+  .mf-character-menu nav{padding:1px 7px}
+  .mf-menu-card{padding:6px 10px}
+  .mf-character-menu h2{margin-bottom:5px}
+  .mf-menu-stats dl>div,.mf-menu-item dl>div{padding:4px 0}
+  .mf-menu-filters{margin-bottom:3px}
+  .mf-menu-grid{grid-auto-rows:clamp(40px,10.8dvh,52px)}
+  .mf-menu-grid>*{aspect-ratio:auto}
+  .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:44px;height:44px;margin:2px 0}
+  .mf-menu-item p{margin:5px 0}
+  .mf-menu-skills dl{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;align-items:start}
+  .mf-menu-skills dl>div{grid-template-columns:minmax(70px,35%) 1fr;gap:2px 6px;padding:5px 0}
+}
 @media (max-width:580px) and (orientation:portrait){
   .mf-character-menu{width:96vw;height:90dvh}.mf-character-menu nav{gap:0;padding:2px}.mf-character-menu nav button{padding:5px 7px}
   .mf-character-menu[data-page=Status] .mf-menu-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1.3fr) minmax(0,1fr)}

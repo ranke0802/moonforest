@@ -1,5 +1,5 @@
 import {bagContents,characterItems,combatSkills,SLOTS} from './character-menu-data.js';
-import {drawCharacterPose} from './character-menu-camera.js';
+import {createCharacterPortrait} from './character-menu-camera.js';
 
 export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,onPause}){
   const doc=root.ownerDocument,win=doc.defaultView;
@@ -23,14 +23,16 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   exit.setAttribute('aria-label','Close');exit.title='Close';
   nav.append(...tabButtons,gold,exit);dialog.append(nav,body);root.append(dialog);
   let page='Status',filter='All',sort='Type',selected='',poseFrame=null,turn=0,zoom=1;
-  let pendingDraw=0,disposed=false,presentation=0;
+  let pendingDraw=0,disposed=false,presentation=0,portrait=null,portraitScene=null,retryDraw=0;
   function invalidate(){
     if(pendingDraw||!dialog.open||!poseFrame||page!=='Status')return;
     pendingDraw=win.requestAnimationFrame(()=>{
       pendingDraw=0;
       const live=subject();
       if(!live||!dialog.open||!poseFrame||doc.hidden)return;
-      drawCharacterPose({...live,frameRect:poseFrame.getBoundingClientRect(),turn,zoom});
+      if(portraitScene!==live.scene){portrait?.dispose();portrait=createCharacterPortrait(live.scene);portraitScene=live.scene;}
+      if(portrait.draw({...live,frameRect:poseFrame.getBoundingClientRect(),turn,zoom}))root.dataset.characterPortrait='';
+      else if(!retryDraw)retryDraw=win.setTimeout(()=>{retryDraw=0;invalidate();},100);
     });
   }
   function zoomBy(factor){zoom=Math.min(2.8,Math.max(1,zoom*factor));invalidate();}
@@ -74,12 +76,6 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     poseFrame=make('div','mf-menu-pose');poseFrame.tabIndex=0;poseFrame.setAttribute('role','group');
     poseFrame.setAttribute('aria-label','Warrior view. Drag to rotate, pinch or scroll to zoom. Keyboard: arrows and plus or minus.');
     attachGestures(poseFrame);
-    const gear=make('div','mf-menu-gear');
-    stats.append(make('h2','mf-menu-gear-title','Available gear'),gear);
-    for(const row of items.filter(row=>row.type==='Gear')){
-      const pick=button(row.name,()=>{filter='Gear';selected=row.id;show('Inventory');});
-      gear.append(pick);
-    }
     const model=make('section','mf-menu-model'),left=make('div','mf-menu-slots'),right=make('div','mf-menu-slots');
     model.setAttribute('aria-label','Equipped gear');
     for(const [index,[slot,label]] of SLOTS.entries()){
@@ -139,7 +135,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       else if(row.quantity)tile.append(make('small','mf-menu-count',String(row.quantity)));
       nodes.set(row.id,tile);grid.append(tile);
     }
-    for(let i=list.length;i<30;i++){const blank=make('i','mf-menu-empty');blank.setAttribute('aria-hidden','true');grid.append(blank);}
+    for(let i=list.length;i<Math.ceil(list.length/6)*6;i++){const blank=make('i','mf-menu-empty');blank.setAttribute('aria-hidden','true');grid.append(blank);}
     inspect(list.find(row=>row.id===selected)??list[0]);
   }
   async function skills(state,id){
@@ -160,7 +156,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   }
   function show(name){
     if(disposed)return;
-    const id=++presentation;page=name;poseFrame=null;
+    const id=++presentation;page=name;poseFrame=null;delete root.dataset.characterPortrait;
     if(!dialog.open){turn=0;zoom=1;dialog.showModal();root.dataset.characterMenu='';onPause();}
     const state=read();
     gold.textContent=state.gold.toLocaleString('en')+' G';dialog.dataset.page=name;
@@ -171,9 +167,12 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     else inventory(state,characterItems(state));
   }
   const dismiss=()=>{
+    if(dialog.open)return;
     poseFrame=null;++presentation;
     if(pendingDraw)win.cancelAnimationFrame(pendingDraw);pendingDraw=0;
-    delete root.dataset.characterMenu;
+    if(retryDraw)win.clearTimeout(retryDraw);retryDraw=0;
+    delete root.dataset.characterMenu;delete root.dataset.characterPortrait;
+    portrait?.dispose();portrait=portraitScene=null;
     if(!disposed)onPause();
   };
   dialog.addEventListener('close',dismiss);
