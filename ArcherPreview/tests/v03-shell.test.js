@@ -337,9 +337,9 @@ test('a map trip builds the next place\'s cast behind the loading picture',async
  assert.equal(await r.shell.arrival(50),true,'the cast settles behind the cover');
  const folk=r.made.slice(before);assert.deepEqual(folk.map(v=>v.id),NPCS.filter(npc=>npc.map==='village').map(npc=>npc.id));assert.ok(folk.every(v=>v.placed&&!v.disposed));
  r.state.ready=true;r.shell.update(.016);r.shell.update(.016);
- assert.equal(r.made.length,before+5,'the first frame in play does not build it again');assert.ok(folk.every(v=>!v.disposed));
+ assert.equal(r.made.length,before+folk.length,'the first frame in play does not build it again');assert.ok(folk.every(v=>!v.disposed));
  assert.equal(r.document.querySelector('.v03-place-name').textContent,'몬트하임 마을','the place name still comes with the first frame');
- assert.equal(await r.shell.arrival(50),true,'a second call keeps the same cast');assert.equal(r.made.length,before+5);
+ assert.equal(await r.shell.arrival(50),true,'a second call keeps the same cast');assert.equal(r.made.length,before+folk.length);
  // With frames to watch, the cover stays until a run of smooth frames (or the cap).
  let clock=0,calls=0;const step=()=>calls<10?100:16;r.window.requestAnimationFrame=callback=>{calls++;clock+=step();setImmediate(()=>callback(clock));return calls;};
  assert.equal(await r.shell.arrival(4000),true);assert.equal(calls,9+12,`nine slow frames, then a run of twelve smooth ones (${calls})`);
