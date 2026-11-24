@@ -68,16 +68,22 @@ export function summarizeRecord(record,{minFrames=30}={}){
   row.turnWorstFrameMs=turns.length?Math.max(...turns.map(t=>t.worstFrameMs)):null;
   row.turnFramesOver33=Array.isArray(record.cameraTurns)?turns.reduce((n,t)=>n+(t.framesOver33??0),0):null;
  }
- // Stalls: critical frames (>=200 ms) by map.
- for(const frame of record.critical??[]){const map=bySecond.get(Math.floor(((frame.startMs??0)-start)/1000));if(maps[map])maps[map].stalls200=(maps[map].stalls200??0)+1;}
- for(const row of Object.values(maps))row.stalls200??=0;
+ // A critical row can also be triggered by CPU work or a retained SDK counter.
+ // The interval ends at startMs. Only count observed wall-clock gaps once.
+ const ends=new Set();
+ for(const row of Object.values(maps))row.stalls200=Array.isArray(record.critical)?0:null;
+ for(const frame of record.critical??[]){
+  if(!Number.isFinite(frame.intervalMs)||frame.intervalMs<200||!Number.isFinite(frame.startMs)||ends.has(frame.startMs))continue;
+  const map=bySecond.get(Math.floor((frame.startMs-start)/1000));
+  if(maps[map]){ends.add(frame.startMs);maps[map].stalls200++;}
+ }
  return {build:record.metadata?.build??null,userAgent:record.metadata?.userAgent??null,startedAt:record.startedAt??null,maps};
 }
 
 const ROWS=[
  ['fullSeconds','기록된 초(30프레임 이상)',0],
  ['fpsMedian','FPS 중앙값',0],['fpsLow','FPS 하위 10%',0],['slowSecondsShare','55FPS 미만인 초 비율','%'],
- ['frameMsMean','평균 프레임 ms',2],['worstFrameMsMedian','초당 최악 프레임 ms (중앙값)',1],['worstFrameMs','최악 프레임 ms',1],['stalls200','200ms 이상 멈춤 (회)',0],
+ ['frameMsMean','평균 프레임 ms',2],['worstFrameMsMedian','초당 최악 프레임 ms (중앙값)',1],['worstFrameMs','최악 프레임 ms',1],['stalls200','관측된 프레임 간격 200ms 이상 (회)',0],
  ['turns','큰 카메라 회전 (회)',0],['turnWorstFrameMsMedian','회전 직후 최악 프레임 ms (중앙값)',1],['turnWorstFrameMs','회전 직후 최악 프레임 ms (최대)',1],['turnFramesOver33','회전 직후 33ms 넘은 프레임 (합)',0],
  ['sceneCallMs','장면 처리 ms',2],['activeMeshesMs','고르기 ms',2],['drawSubmissionMs','그리기 제출 ms',2],['renderTargetsMs','그림자·RTT ms',2],['sceneRestMs','장면 나머지 ms',2],['drawCalls','그리기 호출 수',0],
  ['bossUpdateMs','몬스터 갱신 ms',2],['playerAnimationMs','주인공 애니메이션 ms',2],['framePreludeMs','프레임 앞부분 ms',2],['worldUpdateMs','풍경 갱신 ms',2],['hudUpdateMs','HUD ms',2],

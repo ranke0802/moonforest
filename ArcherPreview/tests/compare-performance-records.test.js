@@ -14,7 +14,7 @@ function record({map = 'great-plains', boss = .1, turns} = {}) {
  seconds.push(second(20, map, {frames: 12}));
  return {startedAt: 'x', startMs: 0, metadata: {build: ['main.js'], userAgent: 'S23'}, seconds,
   detailFrames: [{startMs: 15500, render: {drawCpu: {groups: {bufferUpdate: {calls: 130, ms: .6}, candidateSelection: {calls: 1, ms: .4}}}}}],
-  events: [], critical: [{startMs: 12100}], ...(turns ? {cameraTurns: turns} : {})};
+  events: [], critical: [{startMs: 12100,intervalMs:200}], ...(turns ? {cameraTurns: turns} : {})};
 }
 
 test('seconds inherit the last probed map and short seconds do not drive the medians', () => {
@@ -30,6 +30,16 @@ test('seconds inherit the last probed map and short seconds do not drive the med
  assert.equal(plains.candidateSelectionMs, .4);
  assert.equal(plains.stalls200, 1);
  assert.equal(plains.turns, null, 'an old record has no turn data, not zero turns');
+});
+
+test('counts each observed long interval once even when adjacent frames report slow CPU or stale draws', () => {
+ const sample=record();
+ sample.critical.push({startMs:12100,intervalMs:200},{startMs:12117,intervalMs:17,workMs:230},
+  {startMs:12347,intervalMs:230},{startMs:12364,intervalMs:17,render:{drawSubmissionMs:1258.8}},
+  {startMs:12381,workMs:450});
+ assert.equal(summarizeRecord(sample).maps['great-plains'].stalls200,2);
+ delete sample.critical;
+ assert.equal(summarizeRecord(sample).maps['great-plains'].stalls200,null);
 });
 
 test('the comparison lists both records per map with the difference', () => {
