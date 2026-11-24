@@ -16,6 +16,66 @@ import {MONSTER_DISENGAGE_SECONDS,setMonsterCombatLeashScale} from '../src/monst
 import {PLAINS_MONSTER_SPAWNS} from '../src/plains-monster-spawns.js';
 
 const prepare=()=>createBossPreparation({incremental:false});
+test('offscreen territory cadence wakes on the draw frame and preserves combat timing',async t=>{
+ const rows=[];
+ for(const optimized of [false,true]){
+  const {world,battle,player,factory}=await fixture(t);
+  world.mapId='village';world.scene.shadowsEnabled=false;
+  const camera=world.scene.activeCamera;
+  const look=visible=>camera.setTarget(new Vector3(0,1,visible?0:-40));
+  look(true);player.position.set(0,0,22);
+  const adapter=factory('alpha-wolf.r8');
+  await adapter.activate({position:Vector3.Zero(),row:{territory:{x:0,z:0,radius:14,combatRadius:6,wanderRadius:0}}},{preparation:prepare()});
+  const e=adapter.encounter;let updates=0,samples=0;
+  const step=e.brain.update.bind(e.brain),pose=e.animator.update.bind(e.animator);
+  e.brain.update=(...args)=>{updates++;return step(...args);};
+  e.animator.update=dt=>{samples++;return pose(dt);};
+  battle.farUpdateInterval=3;if(optimized)battle.enableAmbientUpdates();
+  const data=[];
+  for(let second=0;second<10;second++){
+   let tick0=updates,sample0=samples;
+   for(let i=0;i<60;i++){
+    look(second<2||second===7);
+    if(second===8)player.position.set(0,0,4);
+    battle.update(1/60,player);
+    if(second===6&&i===59){
+     // Final camera input occurs AFTER simulation and BEFORE the actual draw.
+     look(true);const before=samples;
+     world.scene.onBeforeRenderObservable.notifyObservers(world.scene);
+     if(optimized){assert.ok(samples>before);assert.equal(e._ambientSleeping,false);assert.ok(Math.abs(e.animator.time-e.brain.time)<1e-6);}
+    }
+   }
+   data.push({logic:updates-tick0,pose:samples-sample0});
+   if(second===8)assert.equal(e.territoryState.phase,'combat');
+  }
+  assert.ok(data[9].logic>=60);rows.push(data);await adapter.dispose();
+ }
+ assert.equal(rows[0][3].logic,60);assert.equal(rows[1][3].logic,1);assert.equal(rows[1][3].pose,0);
+ assert.equal(rows[1][9].logic,rows[0][9].logic);
+ t.diagnostic('ambientAB '+JSON.stringify(rows));
+});
+
+test('a roaming wolf travels on its existing route at two hidden updates per second',async t=>{
+ const {world,battle,player,factory}=await fixture(t);
+ world.mapId='village';world.scene.shadowsEnabled=false;
+ const camera=world.scene.activeCamera;camera.setTarget(Vector3.Zero());
+ player.position.set(0,0,25);
+ const adapter=factory('gray-wolf.r1');
+ await adapter.activate({position:Vector3.Zero(),row:{territory:{x:0,z:0,radius:16,combatRadius:4,wanderRadius:8}}},{preparation:prepare()});
+ const e=adapter.encounter;e.brain.random=()=>.5;battle.enableAmbientUpdates();
+ for(let i=0;i<900&&e.actor.position.z>-.1;i++)battle.update(1/60,player);
+ assert.equal(e.brain.mode,'move');const start=e.actor.position.clone();
+ const step=e.brain.update.bind(e.brain);let updates=0;e.brain.update=(...args)=>{updates++;return step(...args);};
+ camera.setTarget(new Vector3(0,1,-40));
+ for(let i=0;i<120;i++)battle.update(1/60,player);
+ assert.equal(updates,4);assert.equal(e._ambientSleeping,true);assert.ok(e.actor.position.z<start.z-.5);
+ camera.setTarget(Vector3.Zero());world.scene.onBeforeRenderObservable.notifyObservers(world.scene);
+ assert.equal(e._ambientSleeping,false);assert.ok(Math.abs(e.animator.time-e.brain.time)<1e-6);
+ camera.setTarget(new Vector3(0,1,-40));battle.update(1/60,player);
+ player.position.set(0,0,14);battle.update(1/60,player);
+ assert.equal(e.territoryState.phase,'watch');assert.equal(e._ambientSleeping,false);
+ await adapter.dispose();
+});
 async function fixture(t){
  setWorldCharacter('warrior');const engine=new NullEngine(),scene=new Scene(engine);Object.assign(engine.getCaps(),{maxVertexUniformVectors:256,maxVertexTextureImageUnits:16,textureFloat:true});scene.useRightHandedSystem=true;new FreeCamera('camera',new Vector3(0,6,-16),scene);
  const player=new TransformNode('player',scene);player.position.set(0,0,6);const foot=new TransformNode('test-player-foot',scene),head=new TransformNode('test-player-head',scene);foot.parent=head.parent=player;head.position.y=1.6;const playerNodes={'mixamorig:RightFoot':foot,'mixamorig:Head':head};

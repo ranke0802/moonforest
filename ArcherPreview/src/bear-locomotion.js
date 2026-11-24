@@ -28,6 +28,6 @@ export class BearLocomotion{
   b.time=this.gaitTime%b.durations[b.state];
   // The ordinary update already advanced its native blend once. Only replace
   // this controlled source sample after collision chose the real displacement.
-  e.animator.transition(b.state,{clipTime:b.time,actionId:b.serial,loop:true});e.animator.update(0);return true;
+  if(!e._ambientLogicalOnly){e.animator.transition(b.state,{clipTime:b.time,actionId:b.serial,loop:true});e.animator.update(0);}return true;
  }
 }

@@ -29,6 +29,17 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
   let watchLook;
   const restsAtHome=encounter.kind==='wolf'&&!encounter.regularWolfId;
   const protectedReaction=b=>b.hp<=0||b.stagger>0||reactions.has(b.mode);
+  // Keep checking the actual actor and the authored alert circle every frame.
+  // Returning, alert, hit, rising and combat actors keep their normal clocks.
+  encounter.ambientUpdatePeriod=player=>{
+    const b=encounter.brain,p=player?.position,a=encounter.actor?.position;
+    if(!state.enabled||!ready||state.phase!=='ambient'||!p||!a||!b||protectedReaction(b)||
+       rising||settling||encounter.grab?.active||encounter.knockTurn||encounter.knockVelocity?.lengthSquared()>1e-6||
+       (b.mode!=='idle'&&b.mode!=='move'))return 0;
+    if((a.x-p.x)**2+(a.z-p.z)**2<144||(p.x-center.x)**2+(p.z-center.z)**2<=(radius+1)**2||
+       (a.x-center.x)**2+(a.z-center.z)**2>radius*radius)return 0;
+    return ambientMoving ? .5 : 1;
+  };
   const lying=b=>b.state===restState||b.state===alertState;
   const sceneryRadius=()=>monsterSceneryRadius(encounter.regularWolfId??(encounter.kind==='wolf'?'alpha-wolf':null));
   const random=()=>{const value=Number(encounter.brain?.random?.()??Math.random());return Number.isFinite(value)?Math.max(0,Math.min(1,value)):.5;};
@@ -160,6 +171,7 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
   const controller={
     get returning(){return state.enabled&&state.phase==='return';},
     configure(value){
+      encounter._ambientSleeping=false;encounter._ambientPending=0;
       state.enabled=state.engaged=ready=arrived=fought=false;state.phase='ambient';reason=null;innerTime=disengageRemaining=travelWait=0;ambientMoving=rising=settling=stood=false;lastPlayer=null;if(!value)return;
       const {x,z}=value;radius=value.radius;combatRadius=value.combatRadius??radius*.55;wanderRadius=value.wanderRadius??Math.min(2,radius*.2);
       if(![x,z,radius,combatRadius,wanderRadius].every(Number.isFinite)||radius<=0||combatRadius<=0||combatRadius>radius||wanderRadius<0||wanderRadius>radius)throw new Error('Invalid monster territory');
@@ -248,12 +260,12 @@ export function installMonsterTerritory(encounter,territory,{walkSpeed=1,getPlay
         const moved=Math.hypot(this.actor.position.x-beforeX,this.actor.position.z-beforeZ),b=this.brain;
         if(moved<1e-5&&beforeMode==='move'&&beforeState===walkState){
           if(state.phase==='ambient'){ambientMoving=false;ambientTime=2+random()*2;}else travelWait=.5;
-          noncombatPose();this.animator.transition(b.state,{clipTime:b.time,actionId:b.serial,blendDuration:.12});this.animator.update(0);
+          noncombatPose();if(!this._ambientLogicalOnly){this.animator.transition(b.state,{clipTime:b.time,actionId:b.serial,blendDuration:.12});this.animator.update(0);}
         }else if(moved>=1e-5&&this.kind==='wolf'){
           // The imported walk is in-place. Its source phase follows accepted
           // world travel, so obstruction cannot keep advancing the feet.
           const source=beforeState===b.state&&beforeSerial===b.serial?beforeTime:0,duration=b.durations[b.state],rate=this.balance?.locomotionPlaybackRate??1,time=(source+moved/walkSpeed*rate)%Math.max(.001,duration??1);
-          if(Math.abs(time-b.time)>1e-6){b.time=time;this.animator.transition(b.state,{clipTime:time,actionId:b.serial});this.animator.update(0);}
+          if(Math.abs(time-b.time)>1e-6){b.time=time;if(!this._ambientLogicalOnly){this.animator.transition(b.state,{clipTime:time,actionId:b.serial});this.animator.update(0);}}
         }
       }
       // The native encounter faces an idle actor toward the player. Restore

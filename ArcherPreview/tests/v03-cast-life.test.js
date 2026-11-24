@@ -3,6 +3,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createCastVisuals} from '../src/v03/cast-models.js';
+import {NullEngine,Scene,FreeCamera,Vector3} from '@babylonjs/core';
+import {AmbientView} from '../src/ambient-view.js';
 
 function harness(){
  const observers=[];let clock=0;
@@ -20,6 +22,52 @@ function harness(){
  return {scene,visuals,step,samples,records};
 }
 const settle=()=>new Promise(resolve=>setTimeout(resolve,0));
+
+test('off-camera village walk keeps time and renders the current foot phase on the first frame back',async t=>{
+ const engine=new NullEngine(),scene=new Scene(engine),cam=new FreeCamera('test',new Vector3(0,1,-18),scene);
+ t.after(()=>{scene.dispose();engine.dispose();});
+ const random=Math.random;Math.random=()=>.1;t.after(()=>{Math.random=random;});
+ const look=front=>cam.setTarget(new Vector3(0,1,front?0:-40)),rows=[];
+ for(const optimized of [false,true]){
+  const h=harness();h.scene.activeCamera=cam;
+  // Missing light information takes the old, conservative distance-only path.
+  h.scene.shadowsEnabled=optimized?false:true;
+  const v=h.visuals(h.scene,'innkeeper');v.place(0,0,0,0);await v.settled;
+  let moves=0;v.roam({radius:40,free:()=>true,heightAt:()=>{moves++;return 0;}});
+  const frame=()=>{cam.getViewMatrix();cam.getProjectionMatrix();h.step(.016667,.016667);};
+  look(true);for(let i=0;i<1000&&v.position.z<.7;i++)frame();
+  assert.ok(v.position.z>=.7);
+  const start={...v.position},data=[];
+  for(let second=0;second<10;second++){
+   look(second<2||second>=7);
+   const prev=moves,samples=h.samples.length;
+   for(let i=0;i<60;i++){
+    frame();
+    if(second===7&&i===0&&optimized){
+     assert.ok(h.samples.length>samples);assert.match(h.samples.at(-1),/Casual_Walk/);
+     const root=[...h.records.values()][0].encounter.actor;
+     assert.equal(root.position.z,v.position.z);
+    }
+   }
+   data.push({logic:moves-prev,pose:h.samples.length-samples});
+  }
+  assert.ok(Math.abs(Math.hypot(v.position.x-start.x,v.position.z-start.z)-.95*10)<.06);
+  rows.push(data);v.dispose();
+ }
+ assert.equal(rows[1][3].logic,2);assert.equal(rows[1][3].pose,0);
+ assert.ok(rows[0][3].logic>15);t.diagnostic('castAB '+JSON.stringify(rows));
+});
+
+test('keep the moving pose when only its projected shadow could reach the view',()=>{
+ const engine=new NullEngine(),scene=new Scene(engine),cam=new FreeCamera('test',new Vector3(0,2,0),scene);
+ try{
+  cam.setTarget(new Vector3(0,2,10));
+  const world={scene,lighting:{key:{direction:new Vector3(0,-1,0)}}},view=new AmbientView();
+  view.prepare(world);assert.equal(view.hidden(15,2,5,2),true);
+  world.lighting.key.direction.set(-1,-.05,0);view.prepare(world);
+  assert.equal(view.hidden(15,2,5,2),false);
+ }finally{scene.dispose();engine.dispose();}
+});
 
 test('a roaming actor strolls within its radius and plays the walk',async t=>{
  // Seeded: walks and fidgets are random draws, and an unlucky minute had no fidget (CI 2026-11-20).

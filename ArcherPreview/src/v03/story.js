@@ -1151,7 +1151,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const combat=api.battle?.combat;
   if(combat&&combat!==combatState.combat){combat.justGuard={window:JUST_WINDOW,stagger:JUST_STAGGER};combat.lightHit=LIGHT_HIT;
    // Foes that are neither drawn nor near the player update every third frame.
-   api.battle.farUpdateInterval=3;combat.onJustGuard=justGuard;combatState.combat=combat;}
+   api.battle.farUpdateInterval=3;api.battle.enableAmbientUpdates?.();combat.onJustGuard=justGuard;combatState.combat=combat;}
  }
  function justGuard(){
   combatState.justCount++;if(slowSetting().on)slow.left=Math.max(slow.left,JUST_SLOW);

@@ -25,6 +25,7 @@ import {MAX_SUMMON_PER_KIND,normalizeSummonCount} from './summon-limits.js';
 import {EnemySeparationWorkspace,separateEnemies} from './enemy-separation.js';
 import {trimDormantEncounterPools} from './dormant-encounter-pool.js';
 import {encounterInCombat} from './combat-readability.js';
+import {AmbientMonsterUpdates} from './ambient-monster-updates.js';
 
 function stableMapCollision(navigation,terrain){
   const type=navigation?.constructor;
@@ -71,6 +72,7 @@ export function bossSpawnPositions(player, value, {radius=.7,separationRadius=.8
 export function separateBosses(encounters,grabOwner,workspace){return separateEnemies(encounters,grabOwner,workspace);}
 
 const FAR_UPDATE_DISTANCE=45;
+const activeTravelModes=new Set(['attack','move','evade','approach','chase','retreat','ramRecover','down','recover','hit']);
 export class BossBattle {
   constructor(world, onChange, onDamage = () => {}, onPlayerHit = () => {}, { models, goblinModels, wolfModels, regularWolfModels={}, elenaModels, mourningModels, onDefeat=()=>{},onDiagnosticEvent=()=>{} } = {}) {
     this.world = world; this.onChange = onChange; this.onDamage = onDamage; this.onPlayerHit = onPlayerHit;
@@ -422,12 +424,18 @@ export class BossBattle {
     }
     return target;
   }
+  enableAmbientUpdates(){
+    if(this.ambientUpdates)return;
+    this.ambientUpdates=new AmbientMonsterUpdates(this.world);
+    this.world.scene.onBeforeRenderObservable.add(()=>this.ambientUpdates.beforeDraw(this));
+  }
   update(dt, player) {
     // Inactive (no foes on this map): the recorder must not read the last
     // active frame's cost as this frame's (2026-11-23: village seconds showed
     // the plains' near/far timings and foe counts).
     if (!this.active) {const p=this.profile;if(p){p.nearMs=p.farMs=p.separationMs=p.postMs=p.maxMs=0;p.near=p.far=p.engaged=0;p.maxKind=p.maxState=p.maxFrom='';p.navGridMs=p.navPathMs=0;}return;}
     this.currentPlayer=player;
+    if(this.ambientUpdates){this.ambientUpdates.hasSleepers=false;this.ambientUpdates.view.prepare(this.world);}
     this.resumeManualTransforms();
     this.combat.update(dt, player, this.onDamage);
     this.updating = true;
@@ -445,8 +453,14 @@ export class BossBattle {
       let step=dt;slot++;
       // A story shot owns this actor (position, facing and clip): its own AI
       // must not also turn/move/re-clip it, or the two alternate frame by frame.
-      if(boss.storyHold&&boss.active){try{boss.storyHold(step);}catch(error){boss.storyHold=null;console.warn('[story hold]',error);}continue;}
-      const far=boss._far=interval>1&&boss.active&&boss.renderVisible===false&&boss.brain?.hp>0&&!boss.grab?.active&&boss.actor&&(boss.actor.position.x-player.position.x)**2+(boss.actor.position.z-player.position.z)**2>FAR_UPDATE_DISTANCE**2;
+      if(boss.storyHold&&boss.active){boss._ambientSleeping=false;boss._ambientPending=0;try{boss.storyHold(step);}catch(error){boss.storyHold=null;console.warn('[story hold]',error);}continue;}
+      const managed=!!(this.ambientUpdates&&boss.territoryState?.enabled&&boss.ambientUpdatePeriod);
+      const keepCombatRate=this.ambientUpdates&&(boss.engaged===true||activeTravelModes.has(boss.brain?.mode));
+      const far=boss._far=!managed&&!keepCombatRate&&interval>1&&boss.active&&boss.renderVisible===false&&boss.brain?.hp>0&&!boss.grab?.active&&boss.actor&&(boss.actor.position.x-player.position.x)**2+(boss.actor.position.z-player.position.z)**2>FAR_UPDATE_DISTANCE**2;
+      if(managed){
+        step=this.ambientUpdates.step(boss,player,dt,slot);
+        if(step===null){boss._farSkipped=true;continue;}
+      }
       if(far){
         boss._farDt=(boss._farDt??0)+dt;
         if((frame+slot)%interval){boss._farSkipped=true;continue;}
@@ -454,8 +468,9 @@ export class BossBattle {
       }
       boss._farDt=0;boss._farSkipped=false;
       const began=profile?clock():0,stateBefore=profile?boss.brain?.state:null;
-      boss._battleUpdateToken=updateToken;try{boss.update(step, player);}finally{boss._battleUpdateToken=null;}
-      if(profile){const spent=clock()-began;if(far){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxFrom=stateBefore??'';profile.maxState=boss.brain?.state??'';}}
+      boss._battleUpdateToken=updateToken;boss._ambientLogicalOnly=!!(managed&&boss._ambientSleeping);
+      try{boss.update(step, player);}finally{boss._battleUpdateToken=null;boss._ambientLogicalOnly=false;boss._ambientWake=false;}
+      if(profile){const spent=clock()-began;if(far||boss._ambientSleeping){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxFrom=stateBefore??'';profile.maxState=boss.brain?.state??'';}}
     }
     if(this.world.prefetchResources&&this.encounters.some(b=>b.kind==='elena'&&b.phase===1&&b.engaged))this.preloadMourning({modelsOnly:this.encounters.some(b=>b.kind==='elena'&&b.manualSummon)});
     const running=this.frameEncounters;running.length=0;
@@ -483,7 +498,7 @@ export class BossBattle {
     const version = this.actionVersion;
     for (const boss of this.encounters) {
       // Far, undrawn foes (see update) have no contact with the player.
-      if(!boss.active||boss.corpseGone||boss._far)continue;
+      if(!boss.active||boss.corpseGone||boss._far||(boss._ambientSleeping&&boss.ambientUpdatePeriod(player)>0))continue;
       const canceled = version !== this.actionVersion || this.grab.active;
       // A mauling owner needs the real frozen knockdown pose for its own bite
       // contact. Captured input never supplies a player weapon sample.
