@@ -1,39 +1,44 @@
 // Slot-local gear IDs are independent of legacy equipment-preview presets.
-const mat=(name,sell)=>({name,type:'Materials',sell});
-const blade=(name,attack,max,finish,profile)=>({name,type:'Gear',slot:'sword',attack,max,finish,profile});
-const shield=(name,defense,finish)=>({name,type:'Gear',slot:'shield',defense,max:145,finish});
-const armor=(name,defense)=>({name,type:'Gear',slot:'armor',defense,max:120});
+// Player-facing names and notes are ui keys (item.<id>, item.usage.<id>,
+// item.note.*) in locales/*.js; read them with itemName/itemNote/itemUsage.
+import {t} from './i18n.js';
+import {POTION} from '../healing-potion.js';
+
+const mat=sell=>({type:'Materials',sell});
+const blade=(attack,max,finish,profile)=>({type:'Gear',slot:'sword',attack,max,finish,profile});
+const shield=(defense,finish)=>({type:'Gear',slot:'shield',defense,max:145,finish});
+const armor=defense=>({type:'Gear',slot:'armor',defense,max:120});
 export const TOWN_ITEMS=Object.freeze({
- 'field-sword':blade('Field Longsword',3,180,'soldier-sword',''),
- 'oathblade':blade('Oathblade',5,120,'original',''),
- 'violet-blade':blade('Silver Oathblade',7,108,'violet-silver',''),
- 'bronze-blade':blade('Bronze Oathblade',9,96,'teal-bronze',''),
- 'wolf-blade':blade('Wolf-Fang Blade',10,100,'violet-silver','fang'),
- 'goblin-cleaver':blade('Goblin Cleaver',8,96,'teal-bronze','cleaver'),
- 'hunter-knife':blade('Tracker’s Longknife',8,94,'soldier-sword','knife'),
- 'ritual-blade':blade('Shaman’s Ritual Blade',12,82,'violet-silver','ritual'),
- 'war-blade':blade('Hobgoblin Warblade',14,86,'teal-bronze','great'),
- 'rust-blade':blade('Rusted Falchion',8,82,'soldier-sword','cleaver'),
- 'ghoul-blade':blade('Ghoul Cleaver',16,80,'original','trophy:ghoul-cleaver'),
- 'raider-dagger':blade('Raider’s Dagger',8,94,'original','trophy:goblin-warrior-dagger'),
- 'field-bow':{...blade('Scout’s Field Bow',7,98,'original','trophy:goblin-archer-bow'),usage:'The warrior uses the reinforced bow as a close-range striking weapon.'},
- 'crooked-staff':{...blade('Rune Staff',12,88,'original','trophy:goblin-shaman-staff'),usage:'The warrior grips this carved staff for melee strikes.'},
- 'spiked-club':blade('Hobgoblin War Club',14,103,'original','trophy:hobgoblin-club'),
- 'cave-claw':blade('Black Bear Clawblade',14,101,'teal-bronze','cleaver'),
- 'cave-fang':blade('Black Wolf Fangblade',13,91,'violet-silver','fang'),
- 'field-shield':shield('Field Shield',2,'original'),
- 'oak-shield':shield('Oaken Shield',4,'teal-bronze'),
- 'silver-shield':shield('Silver Shield',6,'violet-silver'),
- 'leather-coat':armor('Leather Coat',2),'hunter-coat':armor('Hunter’s Coat',4),'guard-armor':armor('Guard Armor',6),
- 'potion':{name:'Healing Potion',type:'Supplies',quick:true},'stamina-tonic':{name:'Stamina Tonic',type:'Supplies',quick:true},
- 'bear-bile':{name:'Bear Bile',type:'Supplies',quick:true,sell:18},
- 'moon-herb':mat('Moondew Herb',2),'boar-meat':mat('Boar Meat',4),'boar-tusk':mat('Boar Tusk',8),
- 'bear-meat':mat('Bear Meat',7),'bear-hide':mat('Bear Hide',12),'bear-fur':mat('Bear Fur',10),
- 'wolf-pelt':mat('Wolf Pelt',5),'wolf-bone':mat('Wolf Bone',4),'wolf-fang':mat('Wolf Fang',7),
- 'fox-pelt':mat('Fox Pelt',5),'iron-scrap':mat('Iron Scrap',4),'grave-dust':mat('Grave Dust',6),
- 'rune-shard':mat('Rune Shard',9),'tainted-fang':mat('Tainted Fang',11),
- 'arrow-fletching':mat('Scout Fletching',5),'ward-cord':mat('Shaman’s Ward Cord',8),
- 'iron-stud':mat('Black Iron Stud',9),'burial-clasp':mat('Burial Clasp',6),'ghoul-mail':mat('Ghoul Mail Link',12),
+ 'field-sword':blade(3,180,'soldier-sword',''),
+ 'oathblade':blade(5,120,'original',''),
+ 'violet-blade':blade(7,108,'violet-silver',''),
+ 'bronze-blade':blade(9,96,'teal-bronze',''),
+ 'wolf-blade':blade(10,100,'violet-silver','fang'),
+ 'goblin-cleaver':blade(8,96,'teal-bronze','cleaver'),
+ 'hunter-knife':blade(8,94,'soldier-sword','knife'),
+ 'ritual-blade':blade(12,82,'violet-silver','ritual'),
+ 'war-blade':blade(14,86,'teal-bronze','great'),
+ 'rust-blade':blade(8,82,'soldier-sword','cleaver'),
+ 'ghoul-blade':blade(16,80,'original','trophy:ghoul-cleaver'),
+ 'raider-dagger':blade(8,94,'original','trophy:goblin-warrior-dagger'),
+ 'field-bow':{...blade(7,98,'original','trophy:goblin-archer-bow'),usage:true},
+ 'crooked-staff':{...blade(12,88,'original','trophy:goblin-shaman-staff'),usage:true},
+ 'spiked-club':blade(14,103,'original','trophy:hobgoblin-club'),
+ 'cave-claw':blade(14,101,'teal-bronze','cleaver'),
+ 'cave-fang':blade(13,91,'violet-silver','fang'),
+ 'field-shield':shield(2,'original'),
+ 'oak-shield':shield(4,'teal-bronze'),
+ 'silver-shield':shield(6,'violet-silver'),
+ 'leather-coat':armor(2),'hunter-coat':armor(4),'guard-armor':armor(6),
+ 'potion':{type:'Supplies',quick:true},'stamina-tonic':{type:'Supplies',quick:true},
+ 'bear-bile':{type:'Supplies',quick:true,sell:18},
+ 'moon-herb':mat(2),'boar-meat':mat(4),'boar-tusk':mat(8),
+ 'bear-meat':mat(7),'bear-hide':mat(12),'bear-fur':mat(10),
+ 'wolf-pelt':mat(5),'wolf-bone':mat(4),'wolf-fang':mat(7),
+ 'fox-pelt':mat(5),'iron-scrap':mat(4),'grave-dust':mat(6),
+ 'rune-shard':mat(9),'tainted-fang':mat(11),
+ 'arrow-fletching':mat(5),'ward-cord':mat(8),
+ 'iron-stud':mat(9),'burial-clasp':mat(6),'ghoul-mail':mat(12),
 });
 const wolf=[['wolf-pelt',.6],['wolf-bone',.45],['wolf-fang',.28]];
 const bear=[['bear-meat',.85],['bear-hide',.55],['bear-fur',.48],['bear-bile',.27]];
@@ -69,9 +74,21 @@ export const RECIPES={
  smith:{'wolf-blade':{gold:22,inputs:{'wolf-fang':2,'iron-scrap':2}},'hunter-knife':{gold:12,inputs:{'boar-tusk':1,'iron-scrap':1}},'hunter-coat':{gold:12,inputs:{'wolf-pelt':2,'fox-pelt':1}}},
  herbalist:{potion:{gold:2,inputs:{'moon-herb':2}},'stamina-tonic':{gold:4,inputs:{'moon-herb':1,'boar-meat':1}}}
 };
-export const POTION_NOTES={potion:'Restores up to 160 HP over four seconds.','stamina-tonic':'Raises stamina recovery by 50% for 45 seconds.','bear-bile':'Raises stamina recovery by 75% for 90 seconds.'};
+// Stamina boosts: how long and how much faster stamina recovers (town-economy drink()).
+export const BOOSTS=Object.freeze({'stamina-tonic':Object.freeze({seconds:45,rate:1.5}),'bear-bile':Object.freeze({seconds:90,rate:1.75})});
+export const itemName=id=>t('item.'+id);
+export const itemUsage=id=>TOWN_ITEMS[id]?.usage?t('item.usage.'+id):'';
+export const boostText=(key,id)=>{const b=BOOSTS[id];return t(key,{seconds:b.seconds,pct:Math.round((b.rate-1)*100)});};
+// What a supply does, or null for gear and materials.
+export function itemNote(id){
+ if(id==='potion')return t('item.note.potion',{amount:POTION.amount*POTION.pulses,seconds:POTION.pulses*POTION.interval});
+ return BOOSTS[id]?boostText('item.note.boost',id):null;
+}
 export function gradeStrike(position){
  const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2;
  return error<=.12?'Perfect':error<=.39?'Success':error<=.69?'Near miss':'Failed';
 }
+// gradeStrike returns stable ids (saved and tested); this is what the player reads.
+const GRADE_KEYS={Perfect:'perfect',Success:'success','Near miss':'near',Failed:'failed'};
+export const gradeLabel=grade=>t('shop.grade.'+GRADE_KEYS[grade]);
 export function forgeCursor(elapsed){const phase=((elapsed%1800)+1800)%1800/900;return phase<=1?phase:2-phase;}

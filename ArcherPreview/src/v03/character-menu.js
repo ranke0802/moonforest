@@ -1,5 +1,11 @@
 import {bagContents,characterItems,combatSkills,SLOTS} from './character-menu-data.js';
 import {createCharacterPortrait} from './character-menu-camera.js';
+import {t,language,cloneChapter,localizeChapter} from './i18n.js';
+import {COMBAT_HINTS,TIPS} from './data/chapter1.js';
+
+// Page, filter and sort values are stable ids; the words come from t() at
+// every show(), so a language change at the title applies on the next open.
+const LESSONS=Object.freeze({COMBAT_HINTS,TIPS});
 
 export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,onPause}){
   const doc=root.ownerDocument,win=doc.defaultView;
@@ -15,15 +21,18 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     return node;
   }
   const dialog=make('dialog','mf-character-menu'),nav=make('nav'),body=make('div','mf-menu-body');
-  dialog.lang='en';dialog.setAttribute('aria-label','Character menu');
-  nav.setAttribute('aria-label','Character pages');
   const tabs=['Status','Inventory','Skills'];
-  const tabButtons=tabs.map(name=>button(name,()=>show(name)));
+  const tabButtons=tabs.map(name=>button('',()=>show(name)));
   const gold=make('output','mf-menu-gold'),exit=button('×',()=>dialog.close());
-  exit.setAttribute('aria-label','Close');exit.title='Close';
+  function relabel(){
+    dialog.setAttribute('aria-label',t('char.aria'));nav.setAttribute('aria-label',t('char.pages'));
+    tabs.forEach((name,i)=>{tabButtons[i].textContent=t('char.tab.'+name);});
+    exit.setAttribute('aria-label',t('dialogue.close'));exit.title=t('dialogue.close');
+  }
   nav.append(...tabButtons,gold,exit);dialog.append(nav,body);root.append(dialog);
   let page='Status',filter='All',sort='Type',selected='',poseFrame=null,turn=0,zoom=1;
-  let pendingDraw=0,disposed=false,presentation=0,portrait=null,portraitScene=null,retryDraw=0;
+  let pendingDraw=0,disposed=false,portrait=null,portraitScene=null,retryDraw=0,lessons=null,lessonLang='';
+  const lang=()=>doc.documentElement.lang||'ko';
   function invalidate(){
     if(pendingDraw||!dialog.open||!poseFrame||page!=='Status')return;
     pendingDraw=win.requestAnimationFrame(()=>{
@@ -68,17 +77,18 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   }
   function status(state,items){
     const stats=make('section','mf-menu-card mf-menu-stats'),details=make('dl');
-    stats.append(make('h2','','Warrior'),details);
-    stat(details,'Health',Math.ceil(state.hp)+' / '+state.maxHp);
-    stat(details,'Stamina',Math.ceil(state.stamina)+' / '+state.maxStamina);
-    stat(details,'Strike bonus','+'+state.attackBonus);stat(details,'Defense',state.defense);
-    stat(details,'Critical hit','Rear strike');
+    stats.append(make('h2','',t('char.warrior')),details);
+    stat(details,t('char.health'),Math.ceil(state.hp)+' / '+state.maxHp);
+    stat(details,t('char.stamina'),Math.ceil(state.stamina)+' / '+state.maxStamina);
+    stat(details,t('char.attack'),'+'+state.attackBonus);stat(details,t('char.defense'),state.defense);
+    stat(details,t('char.critical'),t('char.criticalRule'));
     poseFrame=make('div','mf-menu-pose');poseFrame.tabIndex=0;poseFrame.setAttribute('role','group');
-    poseFrame.setAttribute('aria-label','Warrior view. Drag to rotate, pinch or scroll to zoom. Keyboard: arrows and plus or minus.');
+    poseFrame.setAttribute('aria-label',t('char.view'));
     attachGestures(poseFrame);
     const model=make('section','mf-menu-model'),left=make('div','mf-menu-slots'),right=make('div','mf-menu-slots');
-    model.setAttribute('aria-label','Equipped gear');
-    for(const [index,[slot,label]] of SLOTS.entries()){
+    model.setAttribute('aria-label',t('char.worn'));
+    for(const [index,slot] of SLOTS.entries()){
+      const label=t('char.slot.'+slot);
       const worn=items.find(row=>row.slot===slot&&row.worn);
       const entry=worn?button('',()=>{filter='Gear';selected=worn.id;show('Inventory');}):make('div');
       entry.append(make('small','',label),make('span','',worn?.name??'—'));
@@ -91,40 +101,40 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   function inventory(state,items){
     const bag=make('section','mf-menu-card mf-menu-bag'),tools=make('div','mf-menu-filters');
     for(const type of ['All','Gear','Supplies',...(state.tradeBag?['Materials']:[])]){
-      const item=button(type,()=>{filter=type;show('Inventory');});
+      const item=button(t(type==='All'?'char.filter.All':'char.type.'+type),()=>{filter=type;show('Inventory');});
       item.setAttribute('aria-pressed',String(type===filter));tools.append(item);
     }
-    const sorter=make('select');sorter.setAttribute('aria-label','Sort inventory');
+    const sorter=make('select');sorter.setAttribute('aria-label',t('char.sort'));
     for(const value of ['Type','Name']){
-      const option=make('option','','By '+value.toLowerCase());option.value=value;option.selected=value===sort;sorter.append(option);
+      const option=make('option','',t('char.sort.'+value));option.value=value;option.selected=value===sort;sorter.append(option);
     }
     sorter.onchange=()=>{sort=sorter.value;show('Inventory');};tools.append(sorter);
     const grid=make('div','mf-menu-grid');bag.append(tools,grid);
-    const list=bagContents(items,filter,sort),detail=make('section','mf-menu-card mf-menu-item');
+    const list=bagContents(items,filter,sort,lang()),detail=make('section','mf-menu-card mf-menu-item');
     body.append(bag,detail);
     const nodes=new Map();
     function inspect(row){
       selected=row?.id??'';detail.replaceChildren();
       for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===selected));
-      if(!row){detail.append(make('p','','No items'));return;}
-      detail.append(make('small','',row.type),icon(row.icon),make('h2','',row.name));
+      if(!row){detail.append(make('p','',t('char.empty')));return;}
+      detail.append(make('small','',t('char.type.'+row.type)),icon(row.icon),make('h2','',row.name));
       if(row.stat){
-        const stats=make('dl');stat(stats,row.stat,'+'+row.value);
-        if(!row.worn)stat(stats,'Change',row.delta>0?'+'+row.delta:String(row.delta));detail.append(stats);
+        const stats=make('dl');stat(stats,t('char.'+row.stat),'+'+row.value);
+        if(!row.worn)stat(stats,t('char.change'),row.delta>0?'+'+row.delta:String(row.delta));detail.append(stats);
       }
       if(row.note)detail.append(make('p','',row.note));
-      if(row.worn){detail.append(make('span','mf-menu-equipped','Equipped'));return;}
-      if(row.tradeId&&row.slot){detail.append(button('Equip',()=>{equipItem?.(row.tradeId);show('Inventory');}));return;}
+      if(row.worn){detail.append(make('span','mf-menu-equipped',t('char.equipped')));return;}
+      if(row.tradeId&&row.slot){detail.append(button(t('char.equip'),()=>{equipItem?.(row.tradeId);show('Inventory');}));return;}
       if(row.quick){
         if(row.registered){
-          detail.append(make('small','mf-menu-equipped','In quick slot'));
-          const use=button('Use',()=>{if(read().canUsePotion){dialog.close();usePotion();}});use.disabled=!state.canUsePotion;detail.append(use);
-        }else detail.append(button('Assign to quick slot',()=>{registerItem?.(row.tradeId);show('Inventory');}));
+          detail.append(make('small','mf-menu-equipped',t('char.quickSet')));
+          const use=button(t('char.use'),()=>{if(read().canUsePotion){dialog.close();usePotion();}});use.disabled=!state.canUsePotion;detail.append(use);
+        }else detail.append(button(t('char.quickAssign'),()=>{registerItem?.(row.tradeId);show('Inventory');}));
         return;
       }
-      if(row.style){detail.append(button('Equip',()=>{equip(row.slot,row.style);show('Inventory');}));return;}
+      if(row.style){detail.append(button(t('char.equip'),()=>{equip(row.slot,row.style);show('Inventory');}));return;}
       if(row.id==='potion'){
-        const use=button('Use potion',()=>{if(!read().canUsePotion)return;dialog.close();usePotion();});
+        const use=button(t('char.usePotion'),()=>{if(!read().canUsePotion)return;dialog.close();usePotion();});
         use.disabled=!state.canUsePotion;detail.append(use);
       }
     }
@@ -138,37 +148,32 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     for(let i=list.length;i<Math.ceil(list.length/6)*6;i++){const blank=make('i','mf-menu-empty');blank.setAttribute('aria-hidden','true');grid.append(blank);}
     inspect(list.find(row=>row.id===selected)??list[0]);
   }
-  async function skills(state,id){
-    const card=make('section','mf-menu-card mf-menu-skills');
-    body.append(card);
-    try{
-      const {default:en}=await import('./locales/en.js');
-      if(disposed||!dialog.open||id!==presentation)return;
-      const rows=make('dl');card.append(make('h2','','Combat skills'),rows);
-      for(const skill of combatSkills(en,state.touch,state.allows)){
-        const row=make('div');row.append(make('dt','',skill.name),make('dd','',skill.control));
-        if(!skill.available)row.append(make('small','','Unavailable during this lesson'));
-        rows.append(row);
-      }
-    }catch{
-      if(!disposed&&dialog.open&&id===presentation)card.replaceChildren(button('Retry',()=>show('Skills')));
+  function skills(state){
+    // The lesson hints in the chosen language: localized once per language.
+    if(!lessons||lessonLang!==language()){lessons=localizeChapter(cloneChapter(LESSONS),LESSONS);lessonLang=language();}
+    const card=make('section','mf-menu-card mf-menu-skills'),rows=make('dl');
+    card.append(make('h2','',t('char.skills')),rows);body.append(card);
+    for(const skill of combatSkills(lessons,state.touch,state.allows)){
+      const row=make('div');row.append(make('dt','',skill.name),make('dd','',skill.control));
+      if(!skill.available)row.append(make('small','',t('char.locked')));
+      rows.append(row);
     }
   }
   function show(name){
     if(disposed)return;
-    const id=++presentation;page=name;poseFrame=null;delete root.dataset.characterPortrait;
+    page=name;poseFrame=null;delete root.dataset.characterPortrait;relabel();
     if(!dialog.open){turn=0;zoom=1;dialog.showModal();root.dataset.characterMenu='';onPause();}
     const state=read();
-    gold.textContent=state.gold.toLocaleString('en')+' G';dialog.dataset.page=name;
+    gold.textContent=state.gold.toLocaleString(lang())+' G';dialog.dataset.page=name;
     for(let i=0;i<tabs.length;i++)tabButtons[i].setAttribute('aria-pressed',String(tabs[i]===name));
     body.replaceChildren();
-    if(name==='Skills')void skills(state,id);
+    if(name==='Skills')skills(state);
     else if(name==='Status')status(state,characterItems(state));
     else inventory(state,characterItems(state));
   }
   const dismiss=()=>{
     if(dialog.open)return;
-    poseFrame=null;++presentation;
+    poseFrame=null;
     if(pendingDraw)win.cancelAnimationFrame(pendingDraw);pendingDraw=0;
     if(retryDraw)win.clearTimeout(retryDraw);retryDraw=0;
     delete root.dataset.characterMenu;delete root.dataset.characterPortrait;

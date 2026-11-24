@@ -5,6 +5,7 @@ import {setImmediate as tick} from 'node:timers/promises';
 import {Mesh,MeshBuilder,NullEngine,PBRMaterial,Scene,Texture,TransformNode,VertexData} from '@babylonjs/core';
 import {FOE_WEAPON_MODELS,FOE_WEAPONS,mountEnemyWeapon,acquireFoeWeapon} from '../src/v03/foe-weapons.js';
 import {TOWN_ITEMS,monsterRewards} from '../src/v03/town-items.js';
+import en from '../src/v03/locales/en.js';
 import {WarriorEquipment} from '../src/equipment.js';
 
 // Read actual shipped position/index buffers; NullEngine cannot show GPU colors,
@@ -51,7 +52,7 @@ test('five equipped trophies use the actual enemy paint and shape, and release t
     foe.dispose();assert.equal(released.get(path),undefined);
     equip.selectTrophy('original','');await tick();assert.equal(released.get(path),1);assert.equal(sword.geometry,original);hand.dispose();
   }
-  assert.equal(unique.size,5);assert.match(TOWN_ITEMS['field-bow'].usage,/close-range/);
+  assert.equal(unique.size,5);assert.equal(TOWN_ITEMS['field-bow'].usage,true);assert.match(en.ui['item.usage.field-bow'],/close-range/);
   for(const id of ['black-bear','black-wolf','zombie'])assert.ok(Object.keys(monsterRewards(id,()=>0)).some(k=>TOWN_ITEMS[k].slot==='sword'));
   assert.equal(monsterRewards('corrupted-wolf',()=>0)['cave-fang'],1);
   assert.equal(monsterRewards('corrupted-bear',()=>0)['cave-claw'],1);

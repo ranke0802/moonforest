@@ -1,8 +1,9 @@
-import {TOWN_ITEMS,STOCK,RECIPES,forgeCursor,POTION_NOTES} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,forgeCursor,itemName,itemNote,gradeLabel} from './town-items.js';
+import {t} from './i18n.js';
 
 export function createTownShop({root,economy,onChange,onPause}){
  const doc=root.ownerDocument,win=doc.defaultView,dialog=doc.createElement('dialog');
- dialog.className='mf-town-shop';dialog.lang='en';dialog.setAttribute('aria-label','Village services');root.append(dialog);
+ dialog.className='mf-town-shop';root.append(dialog);
  let current=null,resolveClose=null,frame=0,started=0,hammer=null,smithTarget=null;
  const element=(tag,text)=>{const node=doc.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
  function addButton(parent,label,action,disabled=false){
@@ -12,52 +13,52 @@ export function createTownShop({root,economy,onChange,onPause}){
  const receipt=element('p');receipt.className='mf-shop-receipt';receipt.setAttribute('role','status');
  function finish(){stop();current=null;onPause();resolveClose?.();resolveClose=null;}
  dialog.addEventListener('close',finish);
- function trade(act,success){const ok=act();receipt.textContent=ok?success:'Could not complete the transaction.';if(ok)onChange();render();}
+ function trade(act,success){const ok=act();receipt.textContent=ok?success:t('shop.failed');if(ok)onChange();render();}
  function render(){
-  stop();dialog.replaceChildren();const state=economy.state,stock=STOCK[current];
-  const head=element('header'),title=element('h2',current==='smith'?'Blacksmith':'Herbalist');
-  head.append(title,element('strong',economy.gold.toLocaleString('en')+' G'));addButton(head,'Close',()=>dialog.close());dialog.append(head);
+  stop();dialog.replaceChildren();dialog.setAttribute('aria-label',t('shop.aria'));const state=economy.state,stock=STOCK[current],lang=doc.documentElement.lang||'ko';
+  const head=element('header'),title=element('h2',t(current==='smith'?'shop.smith':'shop.herbalist'));
+  head.append(title,element('strong',economy.gold.toLocaleString(lang)+' G'));addButton(head,t('dialogue.close'),()=>dialog.close());dialog.append(head);
   const scroll=element('section');scroll.className='mf-shop-scroll';dialog.append(scroll,receipt);
   const row=(parent,name,detail)=>{const line=element('div'),meta=element('span');meta.append(element('strong',name),element('small',detail));
    line.className='mf-shop-row';line.append(meta);parent.append(line);return line;};
   if(current==='smith'){
-   scroll.append(element('h3','Workbench'));
-   const id=smithTarget??state.equipped.sword,w=economy.gear(id),item=TOWN_ITEMS[id],name=item.name;
-   const select=element('select');select.setAttribute('aria-label','Equipment to work on');
-   for(const key of Object.keys(state.bag).filter(k=>!!TOWN_ITEMS[k].slot)){const option=element('option',TOWN_ITEMS[key].name);option.value=key;option.selected=key===id;select.append(option);}
+   scroll.append(element('h3',t('shop.workbench')));
+   const id=smithTarget??state.equipped.sword,w=economy.gear(id),item=TOWN_ITEMS[id],name=itemName(id);
+   const select=element('select');select.setAttribute('aria-label',t('shop.target'));
+   for(const key of Object.keys(state.bag).filter(k=>!!TOWN_ITEMS[k].slot)){const option=element('option',itemName(key));option.value=key;option.selected=key===id;select.append(option);}
    select.onchange=()=>{smithTarget=select.value;render();};scroll.append(select);
-   const box=row(scroll,name+' +'+w.level,(item.slot==='sword'?'Strike +'+w.attack:'Defense +'+w.defense)+' · Durability '+w.hp+'/'+w.max);
+   const box=row(scroll,name+' +'+w.level,(item.slot==='sword'?t('shop.attack',{n:w.attack}):t('shop.defense',{n:w.defense}))+' · '+t('char.durability',{hp:w.hp,max:w.max}));
    const cost=economy.repairCost(id);
-   addButton(box,'Repair · '+cost+' G',()=>trade(()=>economy.repair(id),'Equipment repaired.'),!cost||economy.gold<cost);
-   const forge=row(scroll,'Temper equipment','One trophy or iron scrap. Each level adds 2 strike or 1 defense and costs 7 maximum durability. Perfect raises two levels.');
-   addButton(forge,'Forge · '+economy.forgeCost(id)+' G',()=>beginForge(id),!economy.canForge(id));
+   addButton(box,t('shop.repair',{cost}),()=>trade(()=>economy.repair(id),t('shop.repaired')),!cost||economy.gold<cost);
+   const forge=row(scroll,t('shop.temper'),t('shop.temperNote'));
+   addButton(forge,t('shop.forge',{cost:economy.forgeCost(id)}),()=>beginForge(id),!economy.canForge(id));
   }
-  scroll.append(element('h3','Buy'));
+  scroll.append(element('h3',t('shop.buy')));
   for(const [id,price] of Object.entries(stock)){
-   const item=TOWN_ITEMS[id],line=row(scroll,item.name,POTION_NOTES[id]??('In bag · '+(state.bag[id]??0)));
-   addButton(line,price+' G',()=>trade(()=>economy.buy(current,id),'Purchased '+item.name+'.'),economy.gold<price);
+   const name=itemName(id),line=row(scroll,name,itemNote(id)??t('shop.inBag',{n:state.bag[id]??0}));
+   addButton(line,price+' G',()=>trade(()=>economy.buy(current,id),t('shop.bought',{name})),economy.gold<price);
   }
-  scroll.append(element('h3',current==='smith'?'Make equipment':'Brew'));
+  scroll.append(element('h3',t(current==='smith'?'shop.makeGear':'shop.brew')));
   for(const [id,recipe] of Object.entries(RECIPES[current])){
-   const inputs=Object.entries(recipe.inputs),name=TOWN_ITEMS[id].name;
-   const line=row(scroll,name,inputs.map(([k,n])=>TOWN_ITEMS[k].name+' '+(state.bag[k]??0)+'/'+n).join(' · '));
-   addButton(line,'Make · '+recipe.gold+' G',()=>trade(()=>economy.craft(current,id),'Made '+name+'.'),economy.gold<recipe.gold||inputs.some(([k,n])=>(state.bag[k]??0)<n));
+   const inputs=Object.entries(recipe.inputs),name=itemName(id);
+   const line=row(scroll,name,inputs.map(([k,n])=>itemName(k)+' '+(state.bag[k]??0)+'/'+n).join(' · '));
+   addButton(line,t('shop.make',{cost:recipe.gold}),()=>trade(()=>economy.craft(current,id),t('shop.made',{name})),economy.gold<recipe.gold||inputs.some(([k,n])=>(state.bag[k]??0)<n));
   }
   const materials=Object.entries(state.bag).filter(([id,n])=>n&&TOWN_ITEMS[id]?.sell);
-  if(materials.length)scroll.append(element('h3','Sell'));
-  for(const [id,n] of materials){const it=TOWN_ITEMS[id];addButton(row(scroll,it.name,'In bag · '+n),'Sell · '+it.sell+' G',()=>trade(()=>economy.sell(current,id),'Sold '+it.name+'.'));}
+  if(materials.length)scroll.append(element('h3',t('shop.sell')));
+  for(const [id,n] of materials){const it=TOWN_ITEMS[id],name=itemName(id);addButton(row(scroll,name,t('shop.inBag',{n})),t('shop.sellFor',{price:it.sell}),()=>trade(()=>economy.sell(current,id),t('shop.sold',{name})));}
  }
  function beginForge(id){
   if(!economy.canForge(id))return;
   dialog.replaceChildren();receipt.textContent='';
-  const head=element('header');head.append(element('h2','Temper '+TOWN_ITEMS[id].name));addButton(head,'Back',render);dialog.append(head);
-  dialog.append(element('p','Strike when the marker crosses the center line. A near miss keeps the level. A failed strike wears the edge.'));
-  const gauge=element('div');gauge.className='mf-forge-gauge';gauge.setAttribute('role','img');gauge.setAttribute('aria-label','Timing meter with center target');
+  const head=element('header');head.append(element('h2',t('shop.temperTitle',{name:itemName(id)})));addButton(head,t('panel.back'),render);dialog.append(head);
+  dialog.append(element('p',t('shop.forgeHelp')));
+  const gauge=element('div');gauge.className='mf-forge-gauge';gauge.setAttribute('role','img');gauge.setAttribute('aria-label',t('shop.gauge'));
   const mark=element('i');gauge.append(mark);dialog.append(gauge);
-  started=win.performance.now();hammer=addButton(dialog,'Strike',()=>{
+  started=win.performance.now();hammer=addButton(dialog,t('shop.strike'),()=>{
    if(!hammer)return;
    const grade=economy.forge(forgeCursor(win.performance.now()-started),id);stop();
-   receipt.textContent=grade?grade+' · '+TOWN_ITEMS[id].name+' +'+economy.gear(id).level:'Could not complete the transaction.';
+   receipt.textContent=grade?gradeLabel(grade)+' · '+itemName(id)+' +'+economy.gear(id).level:t('shop.failed');
    onChange();render();
   });hammer.focus();
   function draw(now){mark.style.left=100*forgeCursor(now-started)+'%';frame=win.requestAnimationFrame(draw);}

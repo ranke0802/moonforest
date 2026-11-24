@@ -321,7 +321,7 @@ for (const slot of ['sword', 'shield']) {
   select.value = equipmentChoices[slot];
   select.addEventListener('change', () => {
     if (!ready || !equipment) return;
-    if(townServices&&world?.v03?.playing){select.value=townServices.equippedFinishes[slot];toast('Equip owned gear in Inventory.');return;}
+    if(townServices&&world?.v03?.playing){select.value=townServices.equippedFinishes[slot];toast('가방에서 가진 장비를 착용하세요.');return;}
     equipmentChoices[slot] = equipment.select(slot, select.value);
     if(boss)boss.combat.defense=playerDefense();
     audio.play('equip');
@@ -1883,7 +1883,7 @@ try {
             equipItem:id=>townServices?.equip(id),registerItem:id=>townServices?.register(id),usePotion:()=>actions.potion(),
           });
           characterMenu.show(page);
-        }catch(error){console.error('[Character menu]',error);toast('Could not open the character menu.');}
+        }catch(error){console.error('[Character menu]',error);toast('캐릭터 메뉴를 열지 못했습니다.');}
         finally{characterMenuOpening=false;delete root.dataset.characterMenuOpening;if(!scene.isDisposed)reconcilePlayback();}
       };
       launch.addEventListener('click',()=>open('Inventory'));

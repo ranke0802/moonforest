@@ -1,5 +1,6 @@
 import {createTownEconomy} from './town-economy.js';
-import {TOWN_ITEMS,POTION_NOTES} from './town-items.js';
+import {TOWN_ITEMS,itemName,itemNote,itemUsage,boostText} from './town-items.js';
+import {t} from './i18n.js';
 import {createTownTreasure} from './town-treasure.js';
 
 export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound}){
@@ -23,13 +24,13 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   const s=items(),equipment=[];
   for(const [id,count] of Object.entries(s.bag)){
    const it=TOWN_ITEMS[id];if(!it||!count)continue;
-   const row={id,name:it.name,type:it.type,icon:it.slot==='sword'?'sword':it.slot==='shield'?'shield':it.quick?'potion':'',quantity:count,
+   const row={id,name:itemName(id),type:it.type,icon:it.slot==='sword'?'sword':it.slot==='shield'?'shield':it.quick?'potion':'',quantity:count,
     worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
    if(it.slot==='sword'){
-    const w=economy.gear(id);row.stat='Strike bonus';row.value=w.attack;row.delta=row.value-economy.attack;
-    row.name+=w.level?' +'+w.level:'';row.note='Durability '+w.hp+' / '+w.max+(it.usage?' · '+it.usage:'');
-   }else if(it.slot){const w=economy.gear(id);row.stat='Defense';row.value=w.defense;row.delta=w.defense-(economy.gear(s.equipped[it.slot])?.defense??0);row.name+=w.level?' +'+w.level:'';row.note='Durability '+w.hp+' / '+w.max;}
-   else row.note=POTION_NOTES[id]??'A trade material. Sell or craft with it in the village.';
+    const w=economy.gear(id);row.stat='attack';row.value=w.attack;row.delta=row.value-economy.attack;
+    row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max})+(it.usage?' · '+itemUsage(id):'');
+   }else if(it.slot){const w=economy.gear(id);row.stat='defense';row.value=w.defense;row.delta=w.defense-(economy.gear(s.equipped[it.slot])?.defense??0);row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max});}
+   else row.note=itemNote(id)??t('char.materialNote');
    equipment.push(row);
   }
   return equipment;
@@ -40,14 +41,14 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
  function reset(keepOld){generation++;shop?.close();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
  function getTreasure(){return treasure??=createTownTreasure({root,world,economy,player,canInteract,notify,sound});}
  return {economy,bag,canDrink,apply,
-  get quick(){return items().quick;},get quickName(){return TOWN_ITEMS[items().quick].name;},get remaining(){return items().bag[items().quick]??0;},
+  get quick(){return items().quick;},get quickName(){return itemName(items().quick);},get remaining(){return items().bag[items().quick]??0;},
   get open(){return !!shop?.open;},get armorDefense(){return economy.gear(items().equipped.armor)?.defense??0;},
   get equippedFinishes(){const e=items().equipped;return {sword:TOWN_ITEMS[e.sword].finish,shield:TOWN_ITEMS[e.shield].finish};},
   drink(){
    if(!canDrink())return false;
    const b=battle(),id=items().quick;if(!economy.drink())return false;
    if(id==='potion'){b.potions.remaining=(items().bag.potion??0)+1;b.potions.use(b.playerHp,b.playerMaxHp);}
-   else{notify(id==='bear-bile'?'Stamina recovery +75% · 90s':'Stamina recovery +50% · 45s');apply();}
+   else{notify(boostText('item.boosted',id));apply();}
    return true;
   },
   equip(id){if(!economy.equip(id))return false;apply();sound('equip');return true;},
@@ -56,7 +57,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    if(!economy.grant('leather-coat'))return false;if(!items().equipped.armor)economy.equip('leather-coat');apply();return true;},
   addPotions(count){return economy.grant('potion',count)?count:0;},
   rest(){const n=3-(items().bag.potion??0);if(n>0)economy.grant('potion',n);},
-  get equippedSwordName(){return TOWN_ITEMS[items().equipped.sword].name;},
+  get equippedSwordName(){return itemName(items().equipped.sword);},
   reset,clear(){generation++;shop?.close();treasure?.clear();flush();},
   async openShop(id){
    if(!['smith','herbalist'].includes(id)||!world.v03?.playing||world.mapId!=='village')return;

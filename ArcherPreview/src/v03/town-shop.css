@@ -9,3 +9,6 @@
 .mf-town-shop button:disabled{opacity:.45}.mf-shop-receipt{min-height:1.2em;margin:.5rem 0 0;color:#eed493}
 .mf-forge-gauge{position:relative;margin:1.5rem .25rem;height:2.1rem;border:1px solid #a28c64;border-radius:.2rem;background:linear-gradient(to right,#4e3740 0% 15.5%,#8e6c4a 15.5% 30.5%,#6c8668 30.5% 44%,#c6ad62 44% 56%,#6c8668 56% 69.5%,#8e6c4a 69.5% 84.5%,#4e3740 84.5% 100%)}
 .mf-forge-gauge:before,.mf-forge-gauge i{position:absolute;top:-.25rem;bottom:-.25rem;left:50%;width:2px;background:#fff}.mf-forge-gauge:before{content:'';opacity:.7}.mf-forge-gauge i{width:4px;box-shadow:0 0 0 1px #17151d}
+/* 2026-11-24: shop words follow the chosen language (v03.css html[lang]). */
+.mf-town-shop{font-family:var(--v03-font)}
+html[lang=ko] .mf-town-shop{word-break:keep-all}

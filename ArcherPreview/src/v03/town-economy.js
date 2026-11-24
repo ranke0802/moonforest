@@ -1,4 +1,4 @@
-import {TOWN_ITEMS,STOCK,RECIPES,gradeStrike} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,gradeStrike} from './town-items.js';
 import {validateItemDrop} from '../item-drop-data.js';
 const slots=['sword','shield','armor'];
 const qty=n=>Number.isSafeInteger(n)&&n>0&&n<=99999?n:0;
@@ -90,7 +90,7 @@ export function createTownEconomy(wallet,legacy={}){
   equip(id){const item=TOWN_ITEMS[id];return Boolean(item?.slot&&own(state,id))&&transact(0,s=>{s.equipped[item.slot]=id;});},
   register(id){return !!TOWN_ITEMS[id]?.quick&&own(state,id)&&transact(0,s=>{s.quick=id;});},
   drink(){const id=state.quick;if(!own(state,id)||!TOWN_ITEMS[id]?.quick)return false;
-   return transact(0,s=>{take(s,id,1);if(id!=='potion'){s.boost=id==='bear-bile'?90:45;s.boostRate=id==='bear-bile'?1.75:1.5;}});
+   return transact(0,s=>{take(s,id,1);if(BOOSTS[id]){s.boost=BOOSTS[id].seconds;s.boostRate=BOOSTS[id].rate;}});
   },
   // A chest and its on-ground items must either both exist or neither be committed.
   scatter(drops,chestId=null){

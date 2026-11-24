@@ -3,6 +3,9 @@ import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
 import {ArcRotateCamera,Color3,MeshBuilder,NullEngine,Scene,StandardMaterial,TransformNode,Vector3} from '@babylonjs/core';
 import en from '../src/v03/locales/en.js';
+import ko from '../src/v03/locales/ko.js';
+import {t,setPack,cloneChapter,localizeChapter} from '../src/v03/i18n.js';
+import {COMBAT_HINTS,TIPS} from '../src/v03/data/chapter1.js';
 import {equipmentStats} from '../src/equipment-stats.js';
 import {characterItems,bagContents,combatSkills} from '../src/v03/character-menu-data.js';
 import {createCharacterPortrait} from '../src/v03/character-menu-camera.js';
@@ -23,11 +26,11 @@ test('all three menu pages use the same modal, and picking an item changes the a
   assert.equal(root.querySelector('.mf-menu-gear'),null);
   menu.show('Inventory');assert.ok(root.querySelectorAll('.mf-menu-empty').length<6);
   const named=(host,text)=>[...host.querySelectorAll('button')].find(n=>n.textContent===text);
-  root.querySelector('[aria-label="Soldier’s Sword"]').click();named(root,'Equip').click();
+  root.querySelector(`[aria-label="${t('char.gear.sword.soldier-sword')}"]`).click();named(root,t('char.equip')).click();
   assert.equal(state.equipment.sword,'soldier-sword');
-  menu.show('Skills');await import('../src/v03/locales/en.js');await new Promise(resolve=>setImmediate(resolve));
+  menu.show('Skills');
   assert.equal(root.querySelectorAll('.mf-menu-skills dt').length,7);
-  menu.show('Inventory');named(root,'Supplies').click();named(root,'Use potion').click();
+  menu.show('Inventory');named(root,t('char.type.Supplies')).click();named(root,t('char.usePotion')).click();
   assert.equal(uses,1);assert.equal(updates,2);assert.equal(menu.open,false);
   menu.dispose();assert.equal(root.querySelector('dialog'),null);
 });
@@ -39,18 +42,26 @@ test('bag and equipment reflect the active loadout, quest armor and potion charg
  const compare=rows.find(row=>row.id==='sword/violet-silver');
  assert.equal(compare.delta,compare.value-equipmentStats(state.equipment).attackBonus);
  assert.equal(bagContents(rows,'Supplies','Name')[0].quantity,2);
- assert.deepEqual(bagContents(rows,'Gear','Name').map(row=>row.name),rows.filter(row=>row.type==='Gear').map(row=>row.name).sort((a,b)=>a.localeCompare(b,'en')));
+ assert.deepEqual(bagContents(rows,'Gear','Name','ko').map(row=>row.name),rows.filter(row=>row.type==='Gear').map(row=>row.name).sort((a,b)=>a.localeCompare(b,'ko')));
  const fresh=characterItems({...state,armorDefense:0,potions:0});
  assert.ok(!fresh.some(row=>row.id==='armor/leather'||row.id==='potion'));
 });
-test('skills use current input mode and actual tutorial locks',()=>{
- const touch=combatSkills(en,true,kind=>kind==='guard');
- assert.equal(touch.find(row=>row.name==='Shield shove').available,true);
- assert.equal(touch.find(row=>row.name==='Heavy attack').available,false);
- assert.equal(touch.find(row=>row.name==='Heavy attack').control,en.story.hints.heavy.touch);
- const desktop=combatSkills(en,false,()=>true);
- assert.equal(desktop.find(row=>row.name==='Sprint').control,en.story.tips.sprint.keys);
- assert.ok(desktop.every(row=>row.available&&!/[가-힣]/.test(row.name+row.control)));
+test('skills use current input mode, actual tutorial locks and the chosen language',()=>{
+ const source={COMBAT_HINTS,TIPS},lessons=()=>localizeChapter(cloneChapter(source),source);
+ try{
+  setPack('en',en);
+  const touch=combatSkills(lessons(),true,kind=>kind==='guard');
+  assert.equal(touch.find(row=>row.id==='push').name,'Shield shove');assert.equal(touch.find(row=>row.id==='push').available,true);
+  assert.equal(touch.find(row=>row.id==='heavy').available,false);
+  assert.equal(touch.find(row=>row.id==='heavy').control,en.story.hints.heavy.touch);
+  const desktop=combatSkills(lessons(),false,()=>true);
+  assert.equal(desktop.find(row=>row.id==='sprint').control,en.story.tips.sprint.keys);
+  assert.ok(desktop.every(row=>row.available&&!/[가-힣]/.test(row.name+row.control)));
+  setPack('ko',ko);
+  const korean=combatSkills(lessons(),true,()=>true);
+  assert.equal(korean.find(row=>row.id==='heavy').control,COMBAT_HINTS.find(row=>row.id==='heavy').touch);
+  assert.ok(korean.every(row=>/[가-힣]/.test(row.name)&&!/[A-Za-z]{3,}/.test(row.name)));
+ }finally{setPack('ko',ko);}
 });
 test('the equipment portrait submits only the owned warrior and never advances scene observers, including on a failed draw',async()=>{
  const engine=new NullEngine(),scene=new Scene(engine);

@@ -2,13 +2,15 @@ import {CHAPTER_POINTS} from '../chapter-quest-points.js';
 import {createQuestProps} from '../chapter-quest-props.js';
 import {createItemDropView} from '../item-drop-view.js';
 import {scatterChestLoot,lootSeed} from '../chest-loot-motion.js';
-import {TOWN_ITEMS,monsterRewards,treasureRewards} from './town-items.js';
+import {TOWN_ITEMS,itemName,monsterRewards,treasureRewards} from './town-items.js';
+import {language,t} from './i18n.js';
 
 const modelFor=id=>TOWN_ITEMS[id].quick?'contaminated-vial':id==='moon-herb'?'moon-dew-herb':TOWN_ITEMS[id].slot==='sword'?'goblin-club':'clue-satchel';
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 export function createTownTreasure({root,world,economy,canInteract,player,notify,sound,props=createQuestProps(world)}){
  let drops=null,map=null,points=[],nearest=null,nearDrops=[],stamp=-1,clock=0,nextScan=0,loaded=false,hadVisibleDrops=false;
  let loading=false,retryAt=0,seenFailures=props.stats.modelFailures;
+ let labelTier=0,labelLang='';
  const doc=root.ownerDocument,button=doc.createElement('button');
  button.type='button';button.className='mf-treasure-prompt';button.hidden=true;root.append(button);
  const visual=()=>drops??=createItemDropView(world,{onError:e=>console.warn('[Town items]',e)});
@@ -84,11 +86,14 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
     }
     if(loaded)props.update(points,me,()=>true);
     nearest=canInteract()&&!world.v03?.story?.near?points.find(p=>!p.opened&&dist(me,p)<2.8&&props.isReady(p)&&reach(me,p)):null;
-    button.hidden=!nearest;if(nearest){const label='Open · Tier '+nearest.tier;if(button.textContent!==label)button.textContent=label;}
+    button.hidden=!nearest;
+    if(nearest&&(nearest.tier!==labelTier||language()!==labelLang)){
+     labelTier=nearest.tier;labelLang=language();button.textContent=t('treasure.open',{tier:labelTier});
+    }
     nearDrops=economy.state.drops.filter(d=>d.mapId===map&&dist(me,d.position)<24);
     const take=nearDrops.filter(d=>dist(me,d.position)<=1.3&&drops?.ready(d.id)&&reach(me,d.position)).map(d=>d.id);
     if(take.length){const gains=economy.collect(take);
-     if(gains){nearDrops=nearDrops.filter(d=>!take.includes(d.id));sound('gold_pickup');notify(Object.entries(gains).map(([id,n])=>TOWN_ITEMS[id].name+' ×'+n).join(' · '));}
+     if(gains){nearDrops=nearDrops.filter(d=>!take.includes(d.id));sound('gold_pickup');notify(Object.entries(gains).map(([id,n])=>itemName(id)+' ×'+n).join(' · '));}
     }
    }
    if(loaded)props.animate(clock);

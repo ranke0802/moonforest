@@ -71,3 +71,8 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1.35fr) minmax(0,1fr)}
   .mf-menu-item{border:0;border-top:1px solid var(--line)}
 }
+/* 2026-11-24: the words follow the chosen language, so the glyphs do too (v03.css html[lang]).
+   English keeps the serif titles; Korean breaks lines between words. */
+.mf-character-menu{font-family:var(--v03-font)}
+html:not([lang=en]) .mf-character-menu h2{font-family:var(--v03-font)}
+html[lang=ko] .mf-character-menu{word-break:keep-all}
