@@ -41,6 +41,16 @@ test('bear respawn, fighting shelf and chest do not have a buried rock collider;
   assert.equal(settlementPlacements('great-plains',plains),plains03);
 });
 
+test('the 0.3 town omits the buried vista rock, keeping its terrain and every visible hill buttress',()=>{
+  const copies=town.filter(p=>p.villagePlainsOutskirts&&p.sourcePlacementId?.startsWith('lookout-rock-'));
+  assert.equal(copies.length,7);
+  const hidden=copies.find(p=>p.sourcePlacementId==='lookout-rock-5');
+  assert.equal(hidden.colliderRadius,0);
+  assert.ok(!town03.includes(hidden));
+  for(const visible of copies.filter(p=>p!==hidden))assert.ok(town03.includes(visible),visible.id);
+  assert.ok(town03.includes(town.find(p=>p.asset==='village-plains-outskirts-ground')));
+});
+
 test('both gate towers, stockades and the connected inn wing are solid while the entrance road and innkeeper remain accessible',()=>{
   const nav=navigation(town03,false);
   const approach=VILLAGE_PLAINS_BOUNDARY.villageSamples.filter(([,z])=>z>=44&&z<=76);

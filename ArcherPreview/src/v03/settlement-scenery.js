@@ -7,7 +7,11 @@ import {COLLIDER_SHAPES} from '../village-layout-base.js';
 // the bear's fighting shelf or place an invisible solid underneath its path.
 // The three outlying buttresses and the independent cliff-edge guard remain.
 const summitRocks = new Set(['lookout-rock-0','lookout-rock-1','lookout-rock-2','lookout-rock-5']);
-const innPlot = new Set(['tree-01-round-oak-129','rail-fence-533','handcart-553']);
+const excludedVillagePlacements = new Set([
+  'tree-01-round-oak-129','rail-fence-533','handcart-553', // Footprint of the inn addition.
+  // All four shipped meshes of this vista copy are at least 2.57m below the outskirts terrain.
+  'village-plains-outskirts-lookout-rock-5',
+]);
 const extensions = new WeakMap();
 const immutableBases = new WeakMap();
 
@@ -57,7 +61,7 @@ export function settlementPlacements(mapId,base) {
   let result=extensions.get(base);
   if(!result) {
     result=mapId==='village'
-      ? [...base.filter(p=>!innPlot.has(p.id)),inn,...villageGate]
+      ? [...base.filter(p=>!excludedVillagePlacements.has(p.id)),inn,...villageGate]
       : [...base.filter(p=>!summitRocks.has(p.id)),...farGate];
     extensions.set(base,result);
     immutableBases.set(result,base);
