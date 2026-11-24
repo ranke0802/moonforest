@@ -1,8 +1,8 @@
-import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,gradeStrike} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,gradeStrike} from './town-items.js';
 import {validateItemDrop} from '../item-drop-data.js';
 const slots=['sword','shield','armor'];
 const qty=n=>Number.isSafeInteger(n)&&n>0&&n<=99999?n:0;
-const baseDur=(id,level)=>Math.max(32,TOWN_ITEMS[id].max-level*7);
+const baseDur=(id,level)=>Math.max(FORGE_RULES.minDurability,TOWN_ITEMS[id].max-level*FORGE_RULES.durabilityCost);
 const defaultGear={sword:'field-sword',shield:'field-shield',armor:null};
 const own=(state,id)=>!!state.bag[id];
 export function normalizeTown(raw,legacy={}){
@@ -22,7 +22,7 @@ export function normalizeTown(raw,legacy={}){
  for(const slot of slots){const id=raw.equipped?.[slot];if(bag[id]&&TOWN_ITEMS[id]?.slot===slot)equipped[slot]=id;}
  for(const id of Object.keys(bag)){
   if(!TOWN_ITEMS[id].slot)continue;
-  const source=raw.condition?.[id]??raw.weapons?.[id],level=Math.min(12,qty(source?.level)),max=baseDur(id,level);
+  const source=raw.condition?.[id]??raw.weapons?.[id],level=Math.min(FORGE_RULES.maxLevel,qty(source?.level)),max=baseDur(id,level);
   condition[id]={level,hp:Number.isSafeInteger(source?.hp)?Math.max(0,Math.min(max,source.hp)):max};
  }
  const opened=Array.isArray(raw.opened)?[...new Set(raw.opened.filter(v=>typeof v==='string'&&v.length<120))].slice(0,128):[];
@@ -51,12 +51,12 @@ export function createTownEconomy(wallet,legacy={}){
  function gear(id=state.equipped.sword){
   const item=TOWN_ITEMS[id],status=state.condition[id];
   if(!item||!status)return null;
-  return {...status,max:baseDur(id,status.level),attack:status.hp&&item.attack?item.attack+status.level*2:0,defense:status.hp&&item.defense?item.defense+status.level:0};
+  return {...status,max:baseDur(id,status.level),attack:status.hp&&item.attack?item.attack+status.level*FORGE_RULES.attackGain:0,defense:status.hp&&item.defense?item.defense+status.level*FORGE_RULES.defenseGain:0};
  }
  const api={
   get state(){return state;},get gold(){return wallet.balance;},
-  get attack(){const id=state.equipped.sword,w=state.condition[id];return w.hp?TOWN_ITEMS[id].attack+w.level*2:0;},
-  get defense(){let total=0;for(const slot of ['shield','armor']){const id=state.equipped[slot],w=state.condition[id];if(w?.hp)total+=TOWN_ITEMS[id].defense+w.level;}return total;},
+  get attack(){const id=state.equipped.sword,w=state.condition[id];return w.hp?TOWN_ITEMS[id].attack+w.level*FORGE_RULES.attackGain:0;},
+  get defense(){let total=0;for(const slot of ['shield','armor']){const id=state.equipped[slot],w=state.condition[id];if(w?.hp)total+=TOWN_ITEMS[id].defense+w.level*FORGE_RULES.defenseGain;}return total;},
   get regen(){return state.boost>0?state.boostRate:1;},gear,flush,
   reset(legacy={}){state=normalizeTown(wallet.town,legacy);dirty=false;unsavedSeconds=0;lastAction=null;},
   tick(dt){if(state.boost>0&&dt>0){state.boost=Math.max(0,state.boost-dt);dirty=true;}if(dirty&&(unsavedSeconds+=dt)>=12){unsavedSeconds=0;flush();}},
@@ -76,14 +76,14 @@ export function createTownEconomy(wallet,legacy={}){
   repairCost(id){const w=gear(id);return w?Math.ceil((w.max-w.hp)/7):0;},
   repair(id=state.equipped.sword){const cost=api.repairCost(id);return cost>0&&transact(-cost,s=>{s.condition[id].hp=gear(id).max;});},
   forgeCost(id){return 12+4*(gear(id)?.level??0);},
-  canForge(id){const w=gear(id);return !!w&&w.level<12&&wallet.balance>=api.forgeCost(id)&&['wolf-fang','boar-tusk','iron-scrap','tainted-fang','grave-dust','rune-shard'].some(id=>own(state,id));},
+  canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&['wolf-fang','boar-tusk','iron-scrap','tainted-fang','grave-dust','rune-shard'].some(id=>own(state,id));},
   forge(position,id=state.equipped.sword){if(!Number.isFinite(position)||!api.canForge(id))return null;
    const grade=gradeStrike(position);
    const material=['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard'].find(id=>own(state,id));
    return transact(-api.forgeCost(id),s=>{
     take(s,material,1);const w=s.condition[id];
-    if(grade==='Perfect'||grade==='Success'){w.level=Math.min(12,w.level+(grade==='Perfect'?2:1));w.hp=baseDur(id,w.level);}
-    if(grade==='Failed')w.hp=Math.max(0,w.hp-5);
+    if(grade==='Perfect'||grade==='Success'){w.level=Math.min(FORGE_RULES.maxLevel,w.level+(grade==='Perfect'?FORGE_RULES.perfectGain:1));w.hp=baseDur(id,w.level);}
+    if(grade==='Failed')w.hp=Math.max(0,w.hp-FORGE_RULES.failureWear);
    })?grade:null;
   },
   grant(id,count=1){return !!TOWN_ITEMS[id]&&qty(count)>0&&transact(0,s=>give(s,id,count));},

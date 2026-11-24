@@ -84,6 +84,9 @@ export function itemNote(id){
  if(id==='potion')return t('item.note.potion',{amount:POTION.amount*POTION.pulses,seconds:POTION.pulses*POTION.interval});
  return BOOSTS[id]?boostText('item.note.boost',id):null;
 }
+export const FORGE_RULES=Object.freeze({
+ maxLevel:12,minDurability:32,durabilityCost:7,perfectGain:2,failureWear:5,attackGain:2,defenseGain:1,
+});
 export function gradeStrike(position){
  const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2;
  return error<=.12?'Perfect':error<=.39?'Success':error<=.69?'Near miss':'Failed';

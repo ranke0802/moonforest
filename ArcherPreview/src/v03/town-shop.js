@@ -1,4 +1,4 @@
-import {TOWN_ITEMS,STOCK,RECIPES,forgeCursor,itemName,itemNote,gradeLabel} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,forgeCursor,itemName,itemNote,gradeLabel} from './town-items.js';
 import {t} from './i18n.js';
 
 export function createTownShop({root,economy,onChange,onPause}){
@@ -30,7 +30,8 @@ export function createTownShop({root,economy,onChange,onPause}){
    const box=row(scroll,name+' +'+w.level,(item.slot==='sword'?t('shop.attack',{n:w.attack}):t('shop.defense',{n:w.defense}))+' · '+t('char.durability',{hp:w.hp,max:w.max}));
    const cost=economy.repairCost(id);
    addButton(box,t('shop.repair',{cost}),()=>trade(()=>economy.repair(id),t('shop.repaired')),!cost||economy.gold<cost);
-   const forge=row(scroll,t('shop.temper'),t('shop.temperNote'));
+   const bonus=item.slot==='sword'?t('shop.attack',{n:FORGE_RULES.attackGain}):t('shop.defense',{n:FORGE_RULES.defenseGain});
+   const forge=row(scroll,t('shop.temper'),t('shop.temperNote',{...FORGE_RULES,bonus}));
    addButton(forge,t('shop.forge',{cost:economy.forgeCost(id)}),()=>beginForge(id),!economy.canForge(id));
   }
   scroll.append(element('h3',t('shop.buy')));
@@ -52,7 +53,7 @@ export function createTownShop({root,economy,onChange,onPause}){
   if(!economy.canForge(id))return;
   dialog.replaceChildren();receipt.textContent='';
   const head=element('header');head.append(element('h2',t('shop.temperTitle',{name:itemName(id)})));addButton(head,t('panel.back'),render);dialog.append(head);
-  dialog.append(element('p',t('shop.forgeHelp')));
+  dialog.append(element('p',t('shop.forgeHelp',FORGE_RULES)));
   const gauge=element('div');gauge.className='mf-forge-gauge';gauge.setAttribute('role','img');gauge.setAttribute('aria-label',t('shop.gauge'));
   const mark=element('i');gauge.append(mark);dialog.append(gauge);
   started=win.performance.now();hammer=addButton(dialog,t('shop.strike'),()=>{

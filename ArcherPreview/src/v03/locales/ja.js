@@ -60,9 +60,9 @@ export default {
   'item.usage.crooked-staff':'戦士はこの彫刻入りの杖を握り、近接攻撃に使います。','item.note.potion':'{seconds}秒かけて体力を最大{amount}回復します。','item.note.boost':'{seconds}秒間、スタミナの回復が{pct}%速くなります。',
   'item.boosted':'スタミナ回復 +{pct}% · {seconds}秒','shop.aria':'村の店','shop.smith':'鍛冶屋','shop.herbalist':'薬草師','shop.failed':'取引できませんでした。','shop.workbench':'作業台','shop.target':'手入れする装備',
   'shop.attack':'攻撃力 +{n}','shop.defense':'防御力 +{n}','shop.repair':'修理 · {cost} G','shop.repaired':'装備を修理しました。','shop.temper':'装備の鍛錬',
-  'shop.temperNote':'戦利品か鉄くずを1つ使います。1段階ごとに攻撃力+2か防御力+1、最大耐久が7減ります。パーフェクトなら2段階上がります。','shop.forge':'鍛える · {cost} G','shop.buy':'購入','shop.inBag':'所持 {n}',
+  'shop.temperNote':'素材を1個消費します。1段階ごとに{bonus}、最大耐久値は{durabilityCost}減少します（下限{minDurability}）。大成功で最大{perfectGain}段階上昇し、強化上限は+{maxLevel}です。','shop.forge':'鍛える · {cost} G','shop.buy':'購入','shop.inBag':'所持 {n}',
   'shop.bought':'{name}を購入しました。','shop.makeGear':'装備の製作','shop.brew':'調合','shop.make':'製作 · {cost} G','shop.made':'{name}を作りました。','shop.sell':'売却','shop.sellFor':'売る · {price} G',
-  'shop.sold':'{name}を売りました。','shop.temperTitle':'{name}を鍛える','shop.forgeHelp':'目印が中央の線を通るときに打ちましょう。惜しければ段階はそのまま、失敗すると刃が傷みます。','shop.gauge':'中央に目標のあるタイミングメーター','shop.strike':'打つ',
+  'shop.sold':'{name}を売りました。','shop.temperTitle':'{name}を鍛える','shop.forgeHelp':'目印が中央の線を通るときに打ちましょう。惜しければ段階は変わりません。失敗すると、この装備の現在の耐久値が最大{failureWear}減ります。','shop.gauge':'中央に目標のあるタイミングメーター','shop.strike':'打つ',
   'shop.grade.perfect':'パーフェクト','shop.grade.success':'成功','shop.grade.near':'惜しい','shop.grade.failed':'失敗','treasure.open':'開ける · ランク{tier}',
  },
  story:{
