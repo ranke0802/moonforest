@@ -7,7 +7,7 @@ import {releaseMapTexture} from './map-texture-lifetime.js';
 // Babylon 9.31's AssetContainer.dispose leaves its scene-disposal closure
 // registered. Its constructor runs synchronously between _getLoader and the
 // importMeshAsync call; capture precisely that hook and release it with the map.
-export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,fileName='',signal,lifetime,timeoutMs,timers,onMeshLoaded}={}){
+export async function readMapContainer(scene,json,rootUrl,{bin,skipMaterials=false,fileName='',signal,lifetime,timeoutMs,timers,onMeshLoaded}={}){
   const minimum=json?.asset?.minVersion;
   if(json?.asset?.version!=='2.0'||(minimum!==undefined&&(!/^\d+\.\d+$/.test(minimum)||Number(minimum)>2)))throw new Error('지원하지 않는 맵 모델 버전입니다.');
   const ownLifetime=!lifetime; lifetime??=new MapLoadLifetime({signal,timeoutMs,timers});
@@ -70,11 +70,20 @@ export async function readMapContainer(scene,json,rootUrl,{skipMaterials=false,f
   const abort=()=>disposePartial();lifetime.signal.addEventListener('abort',abort,{once:true});
   const sceneObserver=scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError()));
   try{
-    const container=await lifetime.run(()=>loader.loadAssetContainerAsync(scene,{json},rootUrl,undefined,fileName),{onLate:container=>container.dispose()});
+    const container=await lifetime.run(()=>loader.loadAssetContainerAsync(scene,{json,bin},rootUrl,undefined,fileName),{onLate:container=>container.dispose()});
     return container;
   }catch(error){
     lifetime.abort(error);disposePartial();throw error;
   }finally{lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(sceneObserver);for(const values of Object.values(loaded))values.clear();if(ownLifetime)lifetime.close();}
+}
+// Packaged GLBs use the same cancellation and disposal ownership as external
+// glTF maps. Babylon unpacks views of the supplied bytes without a base64 copy.
+export async function readBinaryMapContainer(scene,bytes,rootUrl,options={}){
+  const reader=new GLTFFileLoader(),fileName=options.fileName??'';
+  try{
+    const {json,bin}=await new Promise((resolve,reject)=>reader.loadFile(scene,bytes,rootUrl,resolve,undefined,true,(_,error)=>reject(error),fileName));
+    return await readMapContainer(scene,json,rootUrl,{...options,bin});
+  }finally{reader.dispose();}
 }
 export async function loadMapContainer(model,scene,{signal,lifetime,timeoutMs,timers}={}){
   const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers});

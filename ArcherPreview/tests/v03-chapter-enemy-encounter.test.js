@@ -1,9 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {FreeCamera,LoadAssetContainerAsync,NullEngine,Scene,TransformNode,Vector3} from '@babylonjs/core';
+import {FreeCamera,NullEngine,Scene,TransformNode,Vector3} from '@babylonjs/core';
 import '@babylonjs/loaders/glTF/index.js';
 import {PlayerCombat} from '../src/player-combat.js';
+import {readBinaryMapContainer} from '../src/map-container.js';
 import {acquireFoeWeapon,mountEnemyWeapon} from '../src/v03/foe-weapons.js';
 import {CHAPTER_MONSTER_MODELS} from '../src/v03/chapter-monster-models.js';
 import {CHAPTER_COMBAT,ChapterEnemyBrain} from '../src/v03/chapter-enemy-brain.js';
@@ -34,8 +35,17 @@ async function readRig(scene,url){
   const bytes=Buffer.alloc(20+padded+raw.length-20-jsonLength,32);
   raw.copy(bytes,0,0,20);bytes.writeUInt32LE(bytes.length,8);bytes.writeUInt32LE(padded,12);
   json.copy(bytes,20);raw.copy(bytes,20+padded,20+jsonLength);
-  return LoadAssetContainerAsync(new Uint8Array(bytes),scene,{pluginExtension:'.glb'});
+  return readBinaryMapContainer(scene,new Uint8Array(bytes),new URL('.',url).href,{fileName:url.pathname.split('/').pop()});
 }
+test('repeated GLB disposal releases the scene hook owned by every enemy container',async()=>{
+  const engine=new NullEngine(),scene=new Scene(engine),url=CHAPTER_MONSTER_MODELS.zombie.url;
+  const count=()=>scene.onDisposeObservable.observers.filter(o=>!o._willBeUnregistered).length;
+  try{
+    const prepare=async()=>{const source=await readRig(scene,url);source.dispose();await new Promise(r=>setTimeout(r,0));};
+    await prepare();const settled=count();await prepare();await prepare();
+    assert.equal(count(),settled);assert.equal(scene.meshes.length,0);
+  }finally{scene.dispose();engine.dispose();}
+});
 function fixture(extra={}){
   const engine=new NullEngine(),scene=new Scene(engine);
   scene.activeCamera=new FreeCamera('camera',new Vector3(0,2,3),scene);

@@ -1,5 +1,6 @@
-import {Color3, LoadAssetContainerAsync, MeshBuilder, Vector3} from '@babylonjs/core';
+import {Color3, MeshBuilder, Vector3} from '@babylonjs/core';
 import {BossEncounter} from '../boss-encounter.js';
+import {readBinaryMapContainer} from '../map-container.js';
 import {instantiateBossModel} from '../boss-models.js';
 import {enableEnemyFade} from '../enemy-death.js';
 import {createBossPreparation,bossPreparationCancelled} from '../boss-preparation.js';
@@ -20,8 +21,8 @@ async function loadChapterModel(scene,url,signal){
   const response=await fetch(url,{signal,cache:'force-cache'});
   if(!response.ok)throw new Error('몬스터 모델을 열 수 없습니다. '+response.status);
   const bytes=new Uint8Array(await response.arrayBuffer());
-  signal.throwIfAborted();
-  return LoadAssetContainerAsync(bytes,scene,{pluginExtension:'.glb',name:url.pathname.split('/').pop()});
+  if(signal.aborted)throw bossPreparationCancelled();
+  return readBinaryMapContainer(scene,bytes,new URL('.',url).href,{signal,fileName:url.pathname.split('/').pop()});
 }
 
 class ChapterEncounter extends BossEncounter {
