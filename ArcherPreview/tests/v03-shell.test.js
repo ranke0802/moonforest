@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {NPCS,DIALOGUES} from '../src/v03/data/chapter1.js';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
@@ -334,11 +335,11 @@ test('a map trip builds the next place\'s cast behind the loading picture',async
  r.state.ready=false;r.state.mapId='village';r.state.character='warrior-v3';r.shell.update(.016);
  assert.equal(r.made.length,before,'nothing is built from the frame update during the trip');
  assert.equal(await r.shell.arrival(50),true,'the cast settles behind the cover');
- const folk=r.made.slice(before);assert.deepEqual(folk.map(v=>v.id),['innkeeper','elder','herbalist','chief','youth']);assert.ok(folk.every(v=>v.placed&&!v.disposed));
+ const folk=r.made.slice(before);assert.deepEqual(folk.map(v=>v.id),NPCS.filter(npc=>npc.map==='village').map(npc=>npc.id));assert.ok(folk.every(v=>v.placed&&!v.disposed));
  r.state.ready=true;r.shell.update(.016);r.shell.update(.016);
- assert.equal(r.made.length,before+5,'the first frame in play does not build it again');assert.ok(folk.every(v=>!v.disposed));
+ assert.equal(r.made.length,before+folk.length,'the first frame in play does not build it again');assert.ok(folk.every(v=>!v.disposed));
  assert.equal(r.document.querySelector('.v03-place-name').textContent,'몬트하임 마을','the place name still comes with the first frame');
- assert.equal(await r.shell.arrival(50),true,'a second call keeps the same cast');assert.equal(r.made.length,before+5);
+ assert.equal(await r.shell.arrival(50),true,'a second call keeps the same cast');assert.equal(r.made.length,before+folk.length);
  // With frames to watch, the cover stays until a run of smooth frames (or the cap).
  let clock=0,calls=0;const step=()=>calls<10?100:16;r.window.requestAnimationFrame=callback=>{calls++;clock+=step();setImmediate(()=>callback(clock));return calls;};
  assert.equal(await r.shell.arrival(4000),true);assert.equal(calls,9+12,`nine slow frames, then a run of twelve smooth ones (${calls})`);
@@ -477,7 +478,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  for(let push=1;push<=3;push++){for(let i=0;i<130;i++)h.shell.update(.016);assert.match(hud('.v03-bubble-body').textContent,[/하나/,/둘/,/셋/][push-1],'his count is a bubble over his head');assert.equal(hud('.v03-caption').hidden,true);assert.match(hud('.v03-prompt').getAttribute('aria-label'),new RegExp(`밀기 \\(${push-1}/3\\)`));key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}
  assert.equal(h.log.filter(x=>x==='guard').length,0,'a heave is a push now, not a shield shove');assert.equal(hud('.v03-bubble').hidden,true,'the count goes with the last heave');
  assert.equal(hud('.v03-dialogue').hidden,false,'the thanks start by themselves once it stands');
- for(let i=0;i<4;i++){key('KeyE');await settle(2);}await settle();
+ for(let i=0;i<DIALOGUES['driver-thanks'].length;i++){key('KeyE');await settle(2);}await settle();
  assert.equal(hud('.v03-dialogue').hidden,true,'E closes the conversation');
  assert.equal(h.shell.blocksGame,false);assert.equal(hud('.v03-quest-objective').textContent,'길을 따라 몬트하임 마을로 가기');assert.equal(h.log.at(-1),'suspend:false');
  // Walking away: the light follows the navigation path toward the village gate, ahead of the player.
@@ -485,7 +486,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.shell.inspect().story.guide,'exit:village');assert.ok(Math.hypot(h.guide.shown.x+66,h.guide.shown.z+24)>4,'the light is ahead of the player');
  assert.equal(h.log.includes('startWorld'),false);
  h.state.mapId='village';h.state.character='warrior-v3';h.shell.update(.016);
- assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),['innkeeper','elder','herbalist','chief','youth']);
+ assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),NPCS.filter(npc=>npc.map==='village').map(npc=>npc.id));
  assert.deepEqual(h.marks.at(-1),[{x:-3.4,z:10.6,glyph:'?'}],'the innkeeper carries a ? on the minimap');
  assert.equal(h.save.meta().title,'달빛 여관');
  // The quest's end is a guide card (not the banner in the middle): title, the quest, what comes next.
