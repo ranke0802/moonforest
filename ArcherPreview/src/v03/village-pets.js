@@ -1,15 +1,17 @@
 import {TransformNode} from '@babylonjs/core/Meshes/transformNode.js';
 import {AmbientView} from '../ambient-view.js';
+import {applyMonsterToon} from '../monster-toon.js';
+import {attachCharacterOutlines} from '../character-outlines.js';
 import {loadOwnedModel} from './owned-model.js';
 import {PET_MODELS} from './village-pet-assets.js';
 
 export const VILLAGE_PETS = Object.freeze([
-  {id:'adventurer-dog', origin:[-4.1,13.9], stride:.64, speed:1.2, roam:4.2, radius:.22},
-  {id:'scarf-cat', origin:[4,6.6], stride:.48, speed:.8, roam:3.3, radius:.15},
-  {id:'courier-bird', origin:[1.5,-3.8], stride:.26, speed:.53, roam:2.1, radius:.09},
-  {id:'map-mouse', origin:[-4.2,-.2], stride:.21, speed:.48, roam:2.3, radius:.08},
+  {id:'adventurer-dog', origin:[-4.1,13.9], speed:.59, roam:4.2, radius:.22},
+  {id:'scarf-cat', origin:[4,6.6], speed:.38, roam:3.3, radius:.15},
+  {id:'courier-bird', origin:[1.5,-3.8], speed:.34, roam:2.1, radius:.09},
+  {id:'map-mouse', origin:[-4.2,-.2], speed:.22, roam:2.3, radius:.08},
 ]);
-const LOAD_RADIUS=20, HIDE_RADIUS=29;
+const LOAD_RADIUS=14, HIDE_RADIUS=23, NEAR_PREP_RADIUS=4.5;
 const distance2=(a,b)=>(a.x-b.x)**2+(a.z-b.z)**2;
 const wrap=a=>Math.atan2(Math.sin(a),Math.cos(a));
 
@@ -40,13 +42,20 @@ export function pickPetStep(nav,origin,at,config,seed) {
   return null;
 }
 
-async function loadVisual(scene,url,id){
-  const owner=await loadOwnedModel(scene,url);
+async function loadVisual(scene,url,id,signal){
+  const owner=await loadOwnedModel(scene,url,{signal});
   let root;
   try{
-    root=new TransformNode('v03-pet-'+id,scene);
+    signal?.throwIfAborted();
+    root=new TransformNode('v03-pet-'+id,scene);root.setEnabled(false);
     for(const node of owner.rootNodes)node.parent=root;
     for(const mesh of owner.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
+    applyMonsterToon(owner);
+    for(const mesh of owner.meshes){
+      mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};
+      if(mesh.material?.metadata?.moonforestMonsterToon)owner.own(mesh.material);
+    }
+    attachCharacterOutlines(owner,'wolf',{skipBoneProof:true});
     const clips=new Map(owner.animationGroups.map(g=>[g.name,g]));
     for(const group of clips.values())group.stop();
     let current;
@@ -69,6 +78,7 @@ async function loadVisual(scene,url,id){
 // import owns late disposal, even when it finishes in another scene.
 export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=new AmbientView()}={}){
   let disposed=false,pending=false,clock=0;
+  const visit=new AbortController();
   const residents=VILLAGE_PETS.filter(s=>models[s.id]).map((config,i)=>{
     const home={x:config.origin[0],z:config.origin[1]};
     return {config,home,x:home.x,z:home.z,y:0,yaw:i*1.4,wait:1.2+i*.85,serial:i,
@@ -104,7 +114,9 @@ export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=
       for(const p of residents){
         const d2=distance2(p,player);
         if(!p.visual){
-          if(d2<best&&!pending&&clock>=p.retryAt){candidate=p;best=d2;}
+          if(d2<best&&!pending&&clock>=p.retryAt&&(d2<NEAR_PREP_RADIUS**2||!view.hidden(p.x,p.y+.5,p.z,1.3))){
+            candidate=p;best=d2;
+          }
           continue;
         }
         const hidden=d2>HIDE_RADIUS**2||view.hidden(p.x,p.y+.5,p.z,1.3);
@@ -125,7 +137,7 @@ export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=
           p.home={x:free.x,z:free.z};p.x=free.x;p.z=free.z;p.anchored=true;
         }
         pending=true;
-        Promise.resolve().then(()=>disposed?null:load(world.scene,models[p.config.id],p.config.id)).then(visual=>{
+        Promise.resolve().then(()=>disposed?null:load(world.scene,models[p.config.id],p.config.id,visit.signal)).then(visual=>{
           if(!visual)return;
           if(disposed){visual.dispose();return;}
           p.visual=visual;p.lastUpdate=clock;p.nextCheck=0;
@@ -139,7 +151,7 @@ export function createVillagePets(world,{models=PET_MODELS,load=loadVisual,view=
     },
     dispose(){
       if(disposed)return;
-      disposed=true;
+      disposed=true;visit.abort();
       for(const p of residents){p.visual?.dispose();p.visual=null;}
     }
   };

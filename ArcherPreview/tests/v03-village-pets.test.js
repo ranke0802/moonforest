@@ -45,6 +45,15 @@ test('a yard filled by new scenery postpones its pet without blocking other resi
   assert.equal(checked,previous);pets.dispose();
 });
 
+test('an unseen pet across the village consumes no upload until the camera turns toward it',async()=>{
+  let hidden=true,loads=0;
+  const pets=createVillagePets(world,{models:{[dog.id]:'dog'},view:{prepare(){},hidden:()=>hidden},
+    load:async()=>{loads++;return {pose(){},dispose(){}};}});
+  const player={x:here.x+9,z:here.z};
+  pets.update(.016,player);await untilLoaded();assert.equal(loads,0);
+  hidden=false;pets.update(.016,player);await untilLoaded();assert.equal(loads,1);pets.dispose();
+});
+
 test('offscreen animals suspend their pose then restore their current location on camera turn',async()=>{
   let hide=false;const poses=[];
   const pets=createVillagePets(world,{
