@@ -15,9 +15,9 @@ const REINS = [
 for (const [side, sign] of [['Left', 1], ['Right', -1]]) {
   const limb = name => 'mixamorig:' + side + name;
   REINS.push(
-    [limb('UpLeg'), limb('Leg'), [-.53, .46, .92 * sign]],
-    [limb('Leg'), limb('Foot'), [-1, -.26, .34 * sign]],
-    [limb('Foot'), limb('ToeBase'), [-.27, 1, .12 * sign]],
+    [limb('UpLeg'), limb('Leg'), [-.88, .42, .77 * sign]],
+    [limb('Leg'), limb('Foot'), [-1, -.12, .38 * sign]],
+    [limb('Foot'), limb('ToeBase'), [-.24, 1, .03 * sign]],
     [limb('Arm'), limb('ForeArm'), [-.82, .45, .16 * sign]],
     [limb('ForeArm'), limb('Hand'), [.14, 1, -.25 * sign]]
   );
@@ -46,6 +46,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null, saddle = null;
   const contact = new Vector3(), correction = new Vector3(), local = new Vector3(), inverse = new Matrix();
   let labels = ridingLabels(doc), riderContact = null;
+  let seatedBones=[];
   let checkedMap=null, nextOfferCheck=0;
   const display = () => {
     labels = ridingLabels(doc);
@@ -60,7 +61,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     poseObserver=null;
     if (lift && !lift.isDisposed()) {lift.position.set(0,0,0);lift.rotation.z=0;}
     for (const mesh of hiddenArms) if (!mesh.isDisposed()) mesh.setEnabled(true);
-    hiddenArms = []; rig = lift = rider = riderContact = null;
+    hiddenArms = []; seatedBones=[]; rig = lift = rider = riderContact = null;
     const old = horse; horse = null; saddle = null; active = false; clip = '';
     old?.dispose(); display();
   }
@@ -96,6 +97,14 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       if (!rig.ready || !rig.hips) { leave(); tell(ridingLabels(doc).poseError); return; }
       active = true;
       riderContact=createRiderContact(actor);
+      // The ground gait twists the pelvis and ankles differently on each
+      // stride. The horse carries the pelvis; the rider balances with the torso.
+      const body=actor.getChildMeshes(false).find(mesh=>mesh.name==='Warrior_Body_primitive0');
+      for(const bone of body?.skeleton?.bones??[]){
+        if(!/^mixamorig:(Hips|(Right|Left)(UpLeg|Leg|Foot))$/.test(bone.name))continue;
+        const node=bone.getTransformNode(), rotation=node?.rotationQuaternion?.clone();
+        if(rotation){bone.getRestMatrix().decompose(undefined,rotation);seatedBones.push({node,rotation});}
+      }
       if(instance.root) saddle=createRidingSaddle(instance.root);
       for (const mesh of actor.getChildMeshes(false)) {
         if (/^(Golden_Oathblade|Bunnyguard_Shield|Shield_(Forearm_Strap|MountPad|Rivet))/.test(mesh.name) && mesh.isEnabled(false)) {
@@ -138,9 +147,14 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   function fitSaddle() {
     if(!active)return;
     lift.rotation.z=0;
+    for(const {node,rotation} of seatedBones)node.rotationQuaternion.copyFrom(rotation);
     rig.apply(1);
     if(!horse.saddleContactToRef(contact))return;
     if(saddle){
+      // Place the seat behind the withers, following the orientation of the mount.
+      contact.x-=.09*Math.sin(horse.root.rotation.y);
+      contact.z-=.09*Math.cos(horse.root.rotation.y);
+      contact.y-=.003;
       horse.root.computeWorldMatrix(true).invertToRef(inverse);
       Vector3.TransformCoordinatesToRef(contact,inverse,saddle.position);
     }

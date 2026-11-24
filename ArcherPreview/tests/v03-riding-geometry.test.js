@@ -6,6 +6,7 @@ import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {readMapContainer} from '../src/map-container.js';
 import {createRidingHorse} from '../src/v03/riding-horse.js';
+import {SADDLE_PAD_HEIGHT} from '../src/v03/riding-saddle.js';
 import {configurePlayerSize} from '../src/player-dimensions.js';
 import {CharacterAnimator} from '../src/animation.js';
 
@@ -31,6 +32,18 @@ function seatGap(mesh,worldPoint){
    if(hit&&hit.distance>=0)nearest=Math.min(nearest,hit.distance);
  }
  return nearest-1;
+}
+// Lower surface of the clothing above the cushion, in saddle-local space.
+function underside(points,indices,x,z){
+ let lowest=Infinity;
+ for(let i=0;i<indices.length;i+=3){
+   const a=3*indices[i],b=3*indices[i+1],c=3*indices[i+2];
+   const ux=points[b]-points[a],uz=points[b+2]-points[a+2],vx=points[c]-points[a],vz=points[c+2]-points[a+2];
+   const det=ux*vz-uz*vx;if(Math.abs(det)<1e-10)continue;
+   const dx=x-points[a],dz=z-points[a+2],u=(dx*vz-dz*vx)/det,v=(dz*ux-dx*uz)/det;
+   if(u>=0&&v>=0&&u+v<=1)lowest=Math.min(lowest,points[a+1]+u*(points[b+1]-points[a+1])+v*(points[c+1]-points[a+1]));
+ }
+ return lowest;
 }
 test('shipped mobile warrior seats the skinned breeches on the back throughout locomotion, slope and turns; loading cancellation releases the mount',async()=>{
  const confUrl=new URL('../public/assets/warrior-v3-mobile4k.json',import.meta.url);
@@ -89,10 +102,19 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
      assert.ok(Math.abs(gap)<.004,`seat side ${id} gap ${gap} during ${state}`);
      seat.addInPlace(fitted.scale(.5));
    }
-   assert.ok(Math.abs(seat.y-at-.128)<.001,'armour lost saddle contact during '+state);
+   assert.ok(Math.abs(seat.y-at-(SADDLE_PAD_HEIGHT-.003))<.001,'armour lost saddle contact during '+state);
+   const local=body.getWorldMatrix().multiply(Matrix.Invert(saddle.getWorldMatrix())),point=Vector3.Zero();
+   const localCloth=new Float32Array(garment.length);
+   for(let v=0;v<garment.length;v+=3){Vector3.FromArrayToRef(garment,v,point);Vector3.TransformCoordinatesToRef(point,local,point);point.toArray(localCloth,v);}
+   // The old twin tabs touched while the actual seated area floated above them.
+   for(const [x,z] of [[-.055,0],[.055,0],[-.055,-.022],[.055,-.022],[0,-.024],[0,.005],[0,.024]]){
+     const y=underside(localCloth,body.getIndices(),x,z);
+     const gap=seatGap(saddle,Vector3.TransformCoordinates(new Vector3(x,y,z),saddle.getWorldMatrix()));
+     assert.ok(gap>=-.001&&gap<=.014,`cushion gap ${gap} at ${x},${z} in ${state}`);
+   }
    const side=new Vector3(Math.cos(root.rotation.y),0,-Math.sin(root.rotation.y));
    for(const [j,ankle] of ankles.entries()){ankle.computeWorldMatrix(true);const d=Vector3.Dot(ankle.absolutePosition.subtract(saddle.absolutePosition),side);
-    assert.ok((j===0?d:-d)>.38,'boot fell inside the flank during '+state);}
+    const lateral=j===0?d:-d;assert.ok(lateral>.38&&lateral<.44,'boot lost its place on the flank during '+state);}
    }
   }
   await click();assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);assert.equal(scene.animationGroups.length,asset.animationGroups.length);
