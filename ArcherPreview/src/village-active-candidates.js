@@ -3,14 +3,33 @@ import {InstancedMesh,Mesh,Node} from '@babylonjs/core';
 const LOD_HOLD_FRAMES=8;
 const emptyRoot=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&mesh.isReady===Mesh.prototype.isReady&&mesh.getTotalVertices===Mesh.prototype.getTotalVertices&&
  !mesh.geometry&&!mesh.material&&!mesh.subMeshes?.length&&!mesh.skeleton&&!mesh.morphTargetManager&&!mesh.hasThinInstances&&!mesh.actionManager;
+const disabledInstance=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&!mesh.isEnabled()&&mesh.isReady===InstancedMesh.prototype.isReady;
+// Guard modes for the per-query re-check of owned records (2026-11-24).
+// 'full' (default): every disabled instance and every empty root is checked
+// on every query (S23 plains: ~2,500 checks, 0.4-0.5 ms a frame).
+// 'events' (?candidates=events): enable/disable notifications keep the omit
+// flags; a sweep re-checks 1/SWEEP_FRAMES of the records each query, so an
+// overridden method or a root that gains geometry (no game code does either
+// today) is still picked up within SWEEP_FRAMES frames.
+// 'verify' (?candidates=verify): 'events' plus the full check, counting every
+// record the events path had wrong in stats.mismatches (and fixing it).
+const SWEEP_FRAMES=32;
+const GUARDS=new Set(['full','events','verify']);
+export function candidateGuardFromLocation(){
+ const value=new URLSearchParams(globalThis.location?.search??'').get('candidates');
+ return GUARDS.has(value)?value:'full';
+}
 
 // Only native frozen map instances are registered. Dynamic actors, quest
 // props, source meshes and any custom candidate provider retain their order.
 export class VillageActiveCandidates {
- constructor(scene,{holdLod=false}={}){
+ constructor(scene,{holdLod=false,guard=candidateGuardFromLocation()}={}){
   this.scene=scene;this.previous=scene.getActiveMeshCandidates;this.tracked=new WeakMap();this.disposed=false;
   this.records=new Set();this.disabled=[];this.roots=[];this.dirty=true;this.meshes=null;this.meshCount=-1;
   this.result={data:[],length:0};this.stats={scanned:0,submitted:0,skipped:0,owned:0,registryChecks:0,sceneScans:0,cacheHits:0};
+  this.guard=GUARDS.has(guard)?guard:'full';this.sweepDisabled=0;this.sweepRoots=0;
+  // The default stats shape is unchanged; only the trial modes add fields.
+  if(this.guard!=='full'){this.stats.guard=this.guard;this.stats.mismatches=0;}
   this.meshAdded=scene.onNewMeshAddedObservable.add(()=>this.invalidate());
   this.meshRemoved=scene.onMeshRemovedObservable.add(()=>this.invalidate());
   this.provider=()=>{
@@ -21,6 +40,10 @@ export class VillageActiveCandidates {
    if(this.disposed)return list;
    this.stats.registryChecks=0;this.stats.sceneScans=0;
    if(list.data!==scene.meshes||list.length!==scene.meshes.length||scene.frameGraph||scene.activeCameras?.length>1){this.stats.scanned=list.length;this.stats.submitted=list.length;this.stats.skipped=0;return list;}
+   if(this.guard!=='full'){
+    this.sweep();
+    if(this.guard==='verify')this.verifyAll();
+   }else{
    // Effective-enabled events include ancestor changes and reparenting. Only
    // disabled registered nodes need mutable-behavior guards on a stable frame;
    // enabled nodes and every unregistered source/LOD are always submitted.
@@ -39,6 +62,7 @@ export class VillageActiveCandidates {
    // skeleton or an overridden method is submitted again at once.
    const roots=this.roots;this.stats.registryChecks+=roots.length;
    for(let i=0;i<roots.length;i++){const record=roots[i],omit=emptyRoot(record.mesh);if(record.omit!==omit){record.omit=omit;this.dirty=true;}}
+   }
    if(this.meshes!==list.data||this.meshCount!==list.length)this.dirty=true;
    if(this.dirty){
     const data=this.result.data;let count=0;
@@ -81,12 +105,41 @@ export class VillageActiveCandidates {
    if(Node.prototype.isEnabled.call(mesh)){
     this.unwatch(record);
     if(record.omit){record.omit=false;this.invalidate();}
-   }else if(record.disabledIndex<0){record.disabledIndex=this.disabled.length;this.disabled.push(record);}
+   }else{
+    if(record.disabledIndex<0){record.disabledIndex=this.disabled.length;this.disabled.push(record);}
+    // The full guard sets the flag on its next query; the event modes have no
+    // per-query pass over every record, so the notification decides now.
+    if(this.guard!=='full'){const omit=disabledInstance(mesh);if(record.omit!==omit){record.omit=omit;this.invalidate();}}
+   }
   };
   record.enabledObserver=mesh.onEffectiveEnabledStateChangedObservable.add(changed);
   record.disposeObserver=mesh.onDisposeObservable.add(()=>this.unregister(record));
   if(kind===2){record.omit=emptyRoot(mesh);this.roots.push(record);}
   changed();this.invalidate();
+ }
+ // Event modes: a bounded slice of each list per query, round robin.
+ sweep(){
+  const disabled=this.disabled,roots=this.roots;
+  let count=Math.ceil(disabled.length/SWEEP_FRAMES),checks=count;
+  for(let k=0;k<count;k++){
+   if(this.sweepDisabled>=disabled.length)this.sweepDisabled=0;
+   const record=disabled[this.sweepDisabled++],omit=disabledInstance(record.mesh);
+   if(record.omit!==omit){record.omit=omit;this.dirty=true;}
+  }
+  count=Math.ceil(roots.length/SWEEP_FRAMES);checks+=count;
+  for(let k=0;k<count;k++){
+   if(this.sweepRoots>=roots.length)this.sweepRoots=0;
+   const record=roots[this.sweepRoots++],omit=emptyRoot(record.mesh);
+   if(record.omit!==omit){record.omit=omit;this.dirty=true;}
+  }
+  this.stats.registryChecks=checks;
+ }
+ // 'verify': the full per-query check, counting what the event path missed.
+ verifyAll(){
+  const disabled=this.disabled,roots=this.roots;
+  for(let i=0;i<disabled.length;i++){const record=disabled[i],omit=disabledInstance(record.mesh);if(record.omit!==omit){record.omit=omit;this.dirty=true;this.stats.mismatches++;}}
+  for(let i=0;i<roots.length;i++){const record=roots[i],omit=emptyRoot(record.mesh);if(record.omit!==omit){record.omit=omit;this.dirty=true;this.stats.mismatches++;}}
+  this.stats.registryChecks+=disabled.length+roots.length;
  }
  unregister(record){
   const {mesh}=record;

@@ -422,7 +422,7 @@ function recordingProbe(){
     // Whether the loading picture still covers the stage at this second: frames behind it are counted too (2026-11-23).
     covered:document.documentElement.dataset.loading!==undefined};
 }
-const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,storage:equipmentStorage,loads:loadDiagnostics,
+const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()=>world?.camera?.alpha,storage:equipmentStorage,loads:loadDiagnostics,
   contentRuntime:()=>inspectContentRuntimeBudget({world,battle:boss,audio,playerTextureProfile:playerTextureSelection,decodeCache:inspectMapDecodeCache(engine)}),
   onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
   onDrawCpuEnabled:enabled=>sceneDiagnostics.setDrawCpuEnabled(enabled),
@@ -1466,6 +1466,8 @@ try {
     sceneDiagnostics.requestDrawCpuCapture('viewport-commit');
   },window,{onPending:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)input.reset();},onLayout:()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)resizeScreenProjection();}});
   world.requestDrawCpuCapture=reason=>sceneDiagnostics.requestDrawCpuCapture(reason);
+  // Frame recorder sections other systems may fill (e.g. ambientWakes: actors restored from an off-screen pause this frame).
+  world.setFrameDiagnostic=(name,value)=>frameDiagnostics.set(name,value);
   if(combatTrail)world.noteCombatDefeat=(foe,completed)=>gameplayTrail()?.defeat(world.mapId,foe,boss?.playerHp,completed);
   world.requestDeathDiagnostic=reason=>{try{sceneDiagnostics.requestDrawCpuCapture(reason);frameDiagnostics.captureEvent(reason);}catch{/* Optional diagnostic only. */}};
   world.scene.onDisposeObservable.addOnce(viewportResize);

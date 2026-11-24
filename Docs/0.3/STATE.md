@@ -1,5 +1,11 @@
 # 0.3 현재 상태
 
+## 2026-11-24 · 반복 계산 줄이기 ④와 측정 도구 (오퍼스)
+
+- 대평원의 꺼진 풍경 재검사(S23 프레임당 0.4~0.5ms, 약 2,500건)를 알림 기반으로 바꾸는 경로를 넣었다. 기본값은 그대로이고 `?candidates=events`로 켠다. `?candidates=verify`는 기존 전체 검사도 함께 돌려 놓친 건수를 `activeMeshCandidates.mismatches`에 남긴다. 덮어쓴 메서드나 나중에 지오메트리가 생긴 빈 루트는 32프레임 안에 순환 검사로 잡는다. PC Node 대평원 규모 측정: 질의당 0.05~0.06ms → 0.002~0.003ms. 폰 미측정.
+- 성능 기록에 큰 카메라 회전 표지(`cameraTurns[]`)와 기록 비교 스크립트(`scripts/compare-performance-records.mjs`)를 추가했다. `world.setFrameDiagnostic(name, value)`로 다른 시스템이 프레임 섹션(`ambientWakes` 등)을 채울 수 있다.
+- 다음: S23에서 같은 동선을 `?candidates=events` 끔/켬으로 기록해 비교한다. 아스트라의 화면 밖 갱신(1단계)이 커밋되면 그 위에서 몬스터 고정 경계 상자를 작업한다. 체크리스트: https://claude.ai/artifact/P2vrq6YCR7Q9vLv5Pih5qc
+
 ## 2026-11-24 · 대평원에서 보이는 마을 외경
 
 - 0.3 모바일은 대평원의 `village-approach`에 전 거리 2K, PC는 4K를 사용한다. 모델 선택과 선다운로드가 같은 LOD 목록을 쓴다. 파생 모델은 원본 지오메트리 버퍼를 공유한다. 반대 방향의 마을 밖 풍경과 주택·예배당의 화질 옵션은 독립적이다.

@@ -24,6 +24,8 @@
 4. 끊김: `events`/`critical`/`detailFrames`에서 `intervalMs` ≥ 50. `workMs`가 간격의 60% 미만이면 프레임 밖 작업(로딩·업로드·GC 등)이다. `endSnapshot.longTasks.recent`, 최상위 `ktxUploads`(크기·형식·CPU)와 시각을 맞춘다.
 5. `probe.calibrationMs`는 기록 조건으로만 적는다. 고정 산술이 느려졌다는 사실만 보이고 원인(열·절전·게임 자신의 스레드 경합)은 가리지 못한다. **원인 설명에 쓰지 않는다.**
 6. 원인은 재현 → 제거 시 사라짐 → 배포본 재측정까지 한 뒤에만 쓴다(CLAUDE.md).
+7. 두 기록 비교(같은 기기·같은 동선, 플래그 끔/켬): `node scripts/compare-performance-records.mjs <A.json> <B.json> [--map great-plains]`. 맵별로 초 단위 요약의 중앙값을 나란히 보여 준다.
+8. 2026-11-24 이후 기록의 `cameraTurns[]`: 0.4초 안에 120° 이상 돈 카메라 회전마다 다음 0.5초의 최악 프레임(`worstFrameMs`), 33ms를 넘은 프레임 수, 다시 보인 개체 수(`wakes`, 섹션 `ambientWakes`)를 남긴다. 화면 밖 갱신을 줄이는 변경은 이 값으로 먼저 판정한다.
 
 ## 유지할 최적화 로직(기준점에 들어 있는 것)
 
