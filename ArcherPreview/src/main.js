@@ -959,6 +959,7 @@ function render(dt) {
     world.authoringReadyGeneration=world.toolGeneration??0;world.developmentEditor?.notifyReady?.();world.developmentCinema?.notifyReady();world.authoringNavigation?.notifyReady();void world.restoreNpcActors?.();
   }
   if(world.toolLease?.active){
+    world.plainsDecor?.updateLeaves(0,null,false);
     simulateFrame=false;boss?.combat?.passiveRecovery?.reset();world.toolLease.update(dt);
     if(!world.toolLease?.active)return;
     world.camera.update();world.camera.getViewMatrix();world.camera.getProjectionMatrix();
@@ -967,10 +968,12 @@ function render(dt) {
     world.lighting.follow(toolFocus);world.scene.render(false);return;
   }
   if(cinematicAuthoringPreview){
+    world.plainsDecor?.updateLeaves(0,null,false);
     simulateFrame=false;boss?.combat?.passiveRecovery?.reset();const focus=world.camera.getTarget();
     world.villageVisibility?.update(world.camera.globalPosition,focus,dt);world.treeOcclusion?.update(world.camera.globalPosition,focus,dt,playerDimensions(actor));world.lighting.follow(focus);world.scene.render(false);return;
   }
   simulateFrame=dt>0&&!world.storyboardOpening?.blocksGame&&!world.storyboardExitPending&&!world.v03?.blocksGame;
+  if(!simulateFrame)world.plainsDecor?.updateLeaves(0,null,false);
   if(!simulateFrame||!ready||loadingAsset||mapTransition?.busy)boss?.combat?.passiveRecovery?.reset();
   if(!simulateFrame&&world.v03?.stageHidden&&(coveredFrames=(coveredFrames+1)%12)!==0)return;
   if(!simulateFrame){syncCameraFocus(0);world.caveCamera?.beginFrame();syncCaveFog();world.scene.render(!world.caveCamera?.applied);screenProjection.beginFrame();updateStaminaNotice();updateHealthBars();goldLootView.project(screenProjection);world.caveCamera?.endFrame();return;}
