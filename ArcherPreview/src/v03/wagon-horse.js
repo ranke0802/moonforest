@@ -66,8 +66,11 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   // and no shadow): the monsters' unlit toon material and character bands.
   try{applyMonsterToon(container);for(const mesh of container.meshes){mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};if(mesh.material?.metadata?.moonforestMonsterToon)container.own(mesh.material);}}catch(error){console.warn('[MoonForest 0.3] horse toon skipped',error);}
   try{attachCharacterOutlines(container,'wolf',{skipBoneProof:true});}catch(error){console.warn('[MoonForest 0.3] horse outline skipped',error);}
+  if(mounted)for(const mesh of container.meshes){
+   if(mesh.name==='harness'||mesh.name.startsWith('harness /'))mesh.setEnabled(false);
+  }
   // Casts on the ground like the wolf (outline hulls excluded); removed on dispose.
-  if(shadows)for(const mesh of container.meshes)if(mesh.getTotalVertices?.()>0&&!mesh.metadata?.moonforestOutline&&!/outline/i.test(mesh.name)){shadows.addShadowCaster(mesh,false);casters.push(mesh);}
+  if(shadows)for(const mesh of container.meshes)if(mesh.isEnabled(false)&&mesh.getTotalVertices?.()>0&&!mesh.metadata?.moonforestOutline&&!/outline/i.test(mesh.name)){shadows.addShadowCaster(mesh,false);casters.push(mesh);}
   const yaw=wagon.yaw??0,fx=Math.sin(yaw),fz=Math.cos(yaw);
   const x=wagon.x+fx*WAGON_HORSE.ahead,z=wagon.z+fz*WAGON_HORSE.ahead;
   root.position=new Vector3(x,heightAt(x,z),z);root.rotation.y=yaw;
@@ -93,11 +96,16 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   ready,
   get root(){return root;},
   get clip(){return wanted;},
-  saddleY(){
-   if(saddle.length!==saddleJoints.length)return null;
-   let y=0;
-   for(const s of saddle){const m=s.bone.computeWorldMatrix(true).m;y+=s.weight*(s.x*m[1]+s.y*m[5]+s.z*m[9]+m[13]);}
-   return y;
+  saddleContactToRef(out){
+   if(saddle.length!==saddleJoints.length)return false;
+   out.set(0,0,0);
+   for(const s of saddle){
+    const m=s.bone.computeWorldMatrix(true).m;
+    out.x+=s.weight*(s.x*m[0]+s.y*m[4]+s.z*m[8]+m[12]);
+    out.y+=s.weight*(s.x*m[1]+s.y*m[5]+s.z*m[9]+m[13]);
+    out.z+=s.weight*(s.x*m[2]+s.y*m[6]+s.z*m[10]+m[14]);
+   }
+   return true;
   },
   // Cross-fades to a clip (Horse_Rear plays once and holds its last frame).
   play(name){if(name===wanted&&current)return;if(!groups.size){wanted=name;return;}start(name,{loop:!ONCE.has(name)});},

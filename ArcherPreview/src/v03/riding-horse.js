@@ -1,18 +1,31 @@
 import { createWagonHorse } from './wagon-horse.js';
 import { createBonePose } from './bone-pose.js';
-
+import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector.js';
+import { ridingLabels } from './riding-locale.js';
+import { createRidingSaddle, SADDLE_PAD_HEIGHT } from './riding-saddle.js';
+import { createRiderContact } from './riding-seat-contact.js';
 
 const OWNED = 'v03:stable:horse';
 const OUTDOORS = new Set(['village', 'great-plains', 'monster-forest']);
-const REINS = [];
+const REINS = [
+  {twist:'mixamorig:Hips', a:'mixamorig:RightUpLeg', b:'mixamorig:LeftUpLeg'},
+  ['mixamorig:Spine', 'mixamorig:Spine1', [1,.08,0]],
+  ['mixamorig:Spine1', 'mixamorig:Spine2', [1,.1,0]]
+];
 for (const [side, sign] of [['Left', 1], ['Right', -1]]) {
   const limb = name => 'mixamorig:' + side + name;
   REINS.push(
-    [limb('UpLeg'), limb('Leg'), [-.54, .64, .5 * sign]],
-    [limb('Leg'), limb('Foot'), [-1, -.19, -.08 * sign]],
-    [limb('Arm'), limb('ForeArm'), [-.88, .28, .18 * sign]],
-    [limb('ForeArm'), limb('Hand'), [.12, 1, -.30 * sign]]
+    [limb('UpLeg'), limb('Leg'), [-.53, .46, .92 * sign]],
+    [limb('Leg'), limb('Foot'), [-1, -.26, .34 * sign]],
+    [limb('Foot'), limb('ToeBase'), [-.27, 1, .12 * sign]],
+    [limb('Arm'), limb('ForeArm'), [-.82, .45, .16 * sign]],
+    [limb('ForeArm'), limb('Hand'), [.14, 1, -.25 * sign]]
   );
+}
+for(const [strand,spread] of [['L',.12],['C',0],['R',-.12]]){
+  const bone = n => 'DEF-Cape.0'+n+'.'+strand;
+  REINS.push([bone(1),bone(2),[-.89,-.46,spread]], [bone(2),bone(3),[-.43,-.90,spread]],
+    [bone(3),bone(4),[-.15,-1,spread]]);
 }
 
 export function createRidingHorse({ world, root, storage, player, ridingAllowed, tell, forwardYaw, makeHorse = createWagonHorse, pose = createBonePose }) {
@@ -24,20 +37,23 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   button.hidden = true;
   root.querySelector('.top-actions').append(button);
   let owned = false, horse = null, active = false, generation = 0, rig = null, lift = null, rider = null;
-  let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null;
+  let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null, saddle = null;
+  const contact = new Vector3(), correction = new Vector3(), local = new Vector3(), inverse = new Matrix();
+  let labels = ridingLabels(doc), riderContact = null;
   const display = () => {
+    labels = ridingLabels(doc);
     button.hidden = !owned || !available;
-    button.textContent = active ? 'Dismount' : horse ? 'Cancel' : 'Ride';
+    button.textContent = active ? labels.dismount : horse ? labels.cancel : labels.mount;
     button.setAttribute('aria-label', button.textContent+' (H)');
   };
   function leave() {
     ++generation;
     if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
     poseObserver=null;
-    if (lift && !lift.isDisposed()) lift.position.y = 0;
+    if (lift && !lift.isDisposed()) {lift.position.set(0,0,0);lift.rotation.z=0;}
     for (const mesh of hiddenArms) if (!mesh.isDisposed()) mesh.setEnabled(true);
-    hiddenArms = []; rig = lift = rider = null;
-    const old = horse; horse = null; active = false; clip = '';
+    hiddenArms = []; rig = lift = rider = riderContact = null;
+    const old = horse; horse = null; saddle = null; active = false; clip = '';
     old?.dispose(); display();
   }
   function reload() {
@@ -47,15 +63,15 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   function offer() {
     if (!owned) {
-      try { storage.setItem(OWNED, '1'); } catch { tell('The horse could not be saved.'); return false; }
+      try { storage.setItem(OWNED, '1'); } catch { tell(ridingLabels(doc).saveError); return false; }
       owned = true;
-      tell('Horse acquired · Ride (H)');
-    } else tell('Your horse is ready · Ride (H)');
+      tell(ridingLabels(doc).acquired);
+    } else tell(ridingLabels(doc).ready);
     display();
     return true;
   }
   async function toggle() {
-    if (horse) { leave(); return; }
+    if (horse) { const wasMounted=active; leave(); if(wasMounted)tell(labels.dismounted); return; }
     const actor = player();
     if (!owned || !available || !actor || !ridingAllowed()) return;
     const token = ++generation;
@@ -69,10 +85,12 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       rider = actor; lift = actor.metadata?.saddleOffset;
       if (!lift) { leave(); return; }
       rig = pose(actor, REINS);
-      if (!rig.ready || !rig.hips) { leave(); tell('Rider unavailable. Please try again.'); return; }
+      if (!rig.ready || !rig.hips) { leave(); tell(ridingLabels(doc).poseError); return; }
       active = true;
+      riderContact=createRiderContact(actor);
+      if(instance.root) saddle=createRidingSaddle(instance.root);
       for (const mesh of actor.getChildMeshes(false)) {
-        if (/^(Golden_Oathblade|Bunnyguard_Shield)( \/|$)/.test(mesh.name) && mesh.isEnabled(false)) {
+        if (/^(Golden_Oathblade|Bunnyguard_Shield|Shield_(Forearm_Strap|MountPad|Rivet))/.test(mesh.name) && mesh.isEnabled(false)) {
           mesh.setEnabled(false); hiddenArms.push(mesh);
         }
       }
@@ -80,14 +98,15 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       // Weighted walk/run tracks write their values during scene.render().
       // Apply the seated pose after that blend, before the skeleton is drawn.
       if(world.scene)poseObserver=world.scene.onBeforeRenderObservable.add(fitSaddle);
-      display();
-    } catch { if (token === generation) { leave(); tell('Horse unavailable. Please try again.'); } }
+      display();tell(labels.mounted);
+    } catch { if (token === generation) { leave(); tell(ridingLabels(doc).loadError); } }
   }
   function updateAvailability() {
     if (!owned) return;
     if (horse && world.mapId !== mountMap) leave();
     const value = OUTDOORS.has(world.mapId) && ridingAllowed();
     if (value !== available) { available = value; if (!value && horse) leave(); else display(); }
+    else if (labels !== ridingLabels(doc)) display();
   }
   function afterMove(result, speed) {
     if (!active) return;
@@ -102,11 +121,30 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   function fitSaddle() {
     if(!active)return;
+    lift.rotation.z=0;
     rig.apply(1);
-    const scale = rider.absoluteScaling?.y || 1;
-    const contact=horse.saddleY?.();
-    const goal=contact==null ? 1.608 : contact-rider.absolutePosition.y+.13;
-    lift.position.y += (goal-rig.hipsAbove())/scale;
+    if(!horse.saddleContactToRef(contact))return;
+    if(saddle){
+      horse.root.computeWorldMatrix(true).invertToRef(inverse);
+      Vector3.TransformCoordinatesToRef(contact,inverse,saddle.position);
+    }
+    // The run clip translates the hips forward and sideways. Place the actual
+    // pelvis in the moving three-dimensional seat after the locomotion blend.
+    if(riderContact){
+      // Neutralise the alternating hip roll from the biped run. Both seat
+      // bones then carry weight on their pads, including the gait changeover.
+      lift.rotation.z=Math.max(-.15,Math.min(.15,riderContact(local)));
+      riderContact(local);
+      contact.y+=SADDLE_PAD_HEIGHT;
+      contact.subtractToRef(local,correction);
+    }else{
+      rig.hips.computeWorldMatrix(true);
+      contact.y+=.28;
+      contact.subtractToRef(rig.hips.absolutePosition,correction);
+    }
+    lift.parent.computeWorldMatrix(true).invertToRef(inverse);
+    Vector3.TransformNormalToRef(correction,inverse,local);
+    lift.position.addInPlace(local);
   }
   function hotkey(e) {
     if (e.code !== 'KeyH' || e.repeat || e.ctrlKey || e.altKey || e.metaKey || button.hidden || doc.querySelector('dialog[open]')) return;

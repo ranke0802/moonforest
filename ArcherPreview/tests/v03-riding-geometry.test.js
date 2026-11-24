@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {FreeCamera,NullEngine,Scene,TransformNode,Vector3} from '@babylonjs/core';
+import {FreeCamera,Matrix,NullEngine,Ray,Scene,TransformNode,Vector3,VertexBuffer} from '@babylonjs/core';
 import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {readMapContainer} from '../src/map-container.js';
@@ -21,8 +21,19 @@ function horseForNullEngine(){
  head.writeUInt32LE(20+json.length+pad.length+raw.length,8);head.writeUInt32LE(json.length+pad.length,12);
  return Buffer.concat([head,json,pad,raw]);
 }
-test('shipped iOS warrior and horse keep saddle contact after the weighted run blend; mobile cancellation aborts the GLB and releases the mesh',async t=>{
- const confUrl=new URL('../public/assets/warrior-v3-ios.json',import.meta.url);
+function seatGap(mesh,worldPoint){
+ const p=Vector3.TransformCoordinates(worldPoint,Matrix.Invert(mesh.getWorldMatrix()));
+ const ray=new Ray(new Vector3(p.x,p.y+1,p.z),Vector3.Down());
+ const vertices=mesh.getVerticesData('position'),indices=mesh.getIndices();let nearest=Infinity;
+ for(let i=0;i<indices.length;i+=3){
+   const [a,b,c]=[indices[i],indices[i+1],indices[i+2]].map(j=>Vector3.FromArray(vertices,j*3));
+   const hit=ray.intersectsTriangle(a,b,c);
+   if(hit&&hit.distance>=0)nearest=Math.min(nearest,hit.distance);
+ }
+ return nearest-1;
+}
+test('shipped mobile warrior seats the skinned breeches on the back throughout locomotion, slope and turns; loading cancellation releases the mount',async()=>{
+ const confUrl=new URL('../public/assets/warrior-v3-mobile4k.json',import.meta.url);
  const cfg=JSON.parse(readFileSync(confUrl)),rt=await readRuntimeGltf(new URL(cfg.model,confUrl)),g=rt.gltf;
  skipPaint(g);
  for(const b of g.buffers)b.uri='data:application/octet-stream;base64,'+rt.files.get(b.uri).data.toString('base64');
@@ -34,17 +45,23 @@ test('shipped iOS warrior and horse keep saddle contact after the weighted run b
  lift.parent=root;root.metadata={saddleOffset:lift};
  for(const node of new Set([...asset.meshes,...asset.transformNodes]))if(!node.parent)node.parent=lift;
  configurePlayerSize(root,cfg,{warrior:true});
+ for(const mesh of asset.meshes)if(mesh.skeleton){
+   if(mesh.isVerticesDataPresent(VertexBuffer.MatricesWeightsExtraKind))mesh.numBoneInfluencers=8;
+   mesh.skeleton.useTextureToStoreBoneMatrices=true;mesh.alwaysSelectAsActiveMesh=true;
+ }
  const animator=new CharacterAnimator(asset.animationGroups,cfg.animations,{bindingCacheSize:9,prewarmBindings:true});
- const hip=scene.getTransformNodeByName('mixamorig:Hips'),leg=scene.getTransformNodeByName('mixamorig:LeftUpLeg'),knee=scene.getTransformNodeByName('mixamorig:LeftLeg');
+ const body=scene.getMeshByName('Warrior_Body_primitive0');
+ const ankles=['Left','Right'].map(s=>scene.getTransformNodeByName('mixamorig:'+s+'Foot'));
  const originalFetch=globalThis.fetch,horse=horseForNullEngine(),baseMeshes=scene.meshes.length;
  let abort=false,hold=true,click;
  globalThis.fetch=(_url,{signal})=>{
   if(!hold)return Promise.resolve(new Response(horse));
   return new Promise((_resolve,reject)=>signal.addEventListener('abort',()=>{abort=true;reject(signal.reason);},{once:true}));
  };
- const doc={addEventListener(){},removeEventListener(){},querySelector(){return null;},createElement:()=>button};
+ const doc={documentElement:{lang:'en'},addEventListener(){},removeEventListener(){},querySelector(){return null;},createElement:()=>button};
  const button={dataset:{},setAttribute(){},addEventListener(name,fn){click=fn;},remove(){}};
- const stable=createRidingHorse({world:{mapId:'village',scene,terrain:{heightAt:()=>0}},
+ const heightAt=(x,z)=>.16*x-.07*z;
+ const stable=createRidingHorse({world:{mapId:'village',scene,terrain:{heightAt}},
   root:{ownerDocument:doc,querySelector:()=>({append(){}})},storage:{getItem:()=> '1',setItem(){}},player:()=>root,
   ridingAllowed:()=>true,tell(){},forwardYaw:()=>cfg.forwardYaw});
  try{
@@ -53,21 +70,30 @@ test('shipped iOS warrior and horse keep saddle contact after the weighted run b
   await click();await loading;assert.ok(abort);assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);
   hold=false;await click();assert.ok(stable.active);assert.equal(button.textContent,'Dismount');
   const skin=scene.meshes.find(m=>m.name==='wagon_horse');assert.ok(skin?.skeleton);
-  for(let i=0;i<12;i++){
-   root.rotation.y=i*.18;root.position.set(.16*i,.2,-.18*i);
-   animator.transition('run',{clipTime:.083*i,loop:true});animator.update(1/60);
-   stable.afterMove({state:'run'},5);
+  const saddle=scene.getMeshByName('v03-riding-saddle');assert.ok(saddle);assert.equal(scene.getMeshByName('harness').isEnabled(),false);
+  for(const [state,speed] of [['idle',0],['walk',1.5],['run',5]]){
+   for(let i=0;i<8;i++){
+   root.rotation.y=i*Math.PI/4;root.position.set(.16*i,heightAt(.16*i,-.18*i),-.18*i);
+   animator.transition(state==='idle'?'idle':'run',{clipTime:.083*i,loop:true});animator.update(1/60);
+   stable.afterMove({state},speed);
    scene.render();
-   for(const node of [leg,knee,hip])node.computeWorldMatrix(true);
-   const dir=knee.absolutePosition.subtract(leg.absolutePosition).normalize();
-   const expected=Vector3.TransformNormal(new Vector3(.5,-.54,.64).normalize(),root.getWorldMatrix()).normalize();
-   assert.ok(Vector3.Dot(dir,expected)>.9999,'run animation overrode seated leg at frame '+i);
    // Sample the actual CPU-skinned source triangle under the rider. The game
    // uses four precomputed bind-local weights and never reads a mesh on a frame.
    const points=skin.getPositionData(true);
    const weights=[.41430354,.54627857,.03941788];
    const at=[4456,4457,4458].reduce((y,id,k)=>y+weights[k]*Vector3.TransformCoordinates(Vector3.FromArray(points,id*3),skin.getWorldMatrix()).y,0);
-   assert.ok(Math.abs(hip.absolutePosition.y-at-.13)<.004,'hips '+hip.absolutePosition.y+' vs back '+at);
+   const garment=body.getPositionData(true),seat=Vector3.Zero();
+   for(const id of [16262,16108]){
+     const fitted=Vector3.TransformCoordinates(Vector3.FromArray(garment,id*3),body.getWorldMatrix());
+     const gap=seatGap(saddle,fitted);
+     assert.ok(Math.abs(gap)<.004,`seat side ${id} gap ${gap} during ${state}`);
+     seat.addInPlace(fitted.scale(.5));
+   }
+   assert.ok(Math.abs(seat.y-at-.128)<.001,'armour lost saddle contact during '+state);
+   const side=new Vector3(Math.cos(root.rotation.y),0,-Math.sin(root.rotation.y));
+   for(const [j,ankle] of ankles.entries()){ankle.computeWorldMatrix(true);const d=Vector3.Dot(ankle.absolutePosition.subtract(saddle.absolutePosition),side);
+    assert.ok((j===0?d:-d)>.38,'boot fell inside the flank during '+state);}
+   }
   }
   await click();assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);assert.equal(scene.animationGroups.length,asset.animationGroups.length);
  }finally{stable.dispose();animator.dispose();asset.dispose();scene.dispose();engine.dispose();globalThis.fetch=originalFetch;}
