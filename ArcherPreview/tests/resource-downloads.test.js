@@ -119,3 +119,60 @@ test('Cache Storage reads are counted apart from transfers: key lists, matches a
  const recent=recentResourceDownloadStats();assert.deepEqual(recent.at(-1),{...stats});assert.notEqual(recent.at(-1),stats,'records get copies');
  assert.ok(recent.length<=8);
 });
+
+test('a competing successful writer keeps its bytes when another tab receives a truncated response',async()=>{
+ const s=setup(),url=resourceUrl(a,base);
+ s.downloads.fetcher=async()=>{
+  s.stored.set(url,new Response(new Uint8Array(8).fill(42)));
+  return new Response(new Uint8Array(3));
+ };
+ await assert.rejects(s.downloads.prepare([a]),/불완전/);
+ assert.deepEqual(new Uint8Array(await (await s.cache.match(url)).arrayBuffer()),new Uint8Array(8).fill(42));
+ assert.equal((await s.downloads.prepare([a])).cached,8);
+});
+test('storage permission revoked during either cache read falls back to the real loader once',async()=>{
+ for(const method of ['keys','match']){
+  const s=setup();let refusals=0;
+  const paths=Array.from({length:method==='keys'?18:3},(_,i)=>'content/'+i.toString(16).padStart(64,'0')+'.bin');
+  for(const path of paths)s.downloads.sizes[path.slice(8)]=4;
+  s.cache[method]=async()=>{refusals++;throw new DOMException('Read permission revoked','SecurityError');};
+  for(let i=0;i<2;i++){
+   const result=await s.downloads.prepare(paths,e=>s.events.push(e));
+   assert.equal(result.storageAvailable,false);assert.equal(result.complete,false);
+  }
+  assert.equal(refusals,1);assert.equal(s.calls.length,0);
+  assert.equal(s.events.at(-1).unavailable,true);
+  assert.ok(s.downloads.snapshot().files.every(row=>row.status==='loader-fallback'));
+ }
+});
+
+test('targeted cache comparison checks current keys with bounded concurrency across revisits',async()=>{
+ const paths=Array.from({length:19},(_,i)=>'content/'+i.toString(16).padStart(64,'0')+'.bin');
+ const sizes=Object.fromEntries(paths.map(p=>[p.slice(8),4]));
+ const resident=new Set(paths.map(p=>resourceUrl(p,base)));
+ let active=0,peak=0,queries=0,writes=0;
+ const cache={async keys(url,options){
+   assert.ok(url);assert.equal(options.ignoreVary,true);queries++;peak=Math.max(peak,++active);
+   await Promise.resolve();active--;return resident.has(url)?[{url}]:[];
+ },async put(url,response){assert.equal((await response.arrayBuffer()).byteLength,4);resident.add(url);writes++;}};
+ const dl=new ResourceDownloads(sizes,base,{probeCacheKeys:true,cacheStorage:{open:async()=>cache},
+   fetcher:async()=>new Response(new Uint8Array(4))});
+ assert.equal((await dl.prepare(paths)).cached,76);assert.equal(writes,0);
+ resident.delete(resourceUrl(paths[3],base));
+ const revisit=await dl.prepare(paths);assert.equal(revisit.loaded,4);assert.equal(revisit.cached,72);
+ assert.equal(queries,38);assert.equal(peak,4);assert.equal(writes,1);
+ assert.equal(dl.stats.cacheKeyLists,0);assert.equal(dl.stats.cacheMatches,0);assert.equal(dl.stats.cacheProbeBatches,10);
+ cache.keys=async()=>{throw new DOMException('Denied','NotAllowedError');};
+ assert.equal((await dl.prepare(paths)).storageAvailable,false);assert.equal(writes,1);
+});
+
+test('blocked CacheStorage getter still lets the normal loader fetch once',async()=>{
+ const previous=Object.getOwnPropertyDescriptor(globalThis,'caches');
+ Object.defineProperty(globalThis,'caches',{configurable:true,get(){throw new DOMException('Storage blocked','SecurityError');}});
+ try{
+  const downloads=new ResourceDownloads({[a.split('/').at(-1)]:8},base,{fetcher:()=>assert.fail('unexpected prefetch')});
+  const state=await downloads.prepare([a]);assert.equal(state.storageAvailable,false);
+  const {repairCachedResource}=await import('../src/resource-repair.js');
+  assert.equal((await repairCachedResource(resourceUrl(a,base))).status,'unavailable');
+ }finally{if(previous)Object.defineProperty(globalThis,'caches',previous);else delete globalThis.caches;}
+});

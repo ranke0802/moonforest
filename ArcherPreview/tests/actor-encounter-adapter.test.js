@@ -115,6 +115,29 @@ test('independent pooled encounters reuse shared geometry/materials and retain a
   const update=t.mock.method(e,'update',()=>{throw new Error('adapter duplicated battle update');});a.update(.1,{});assert.equal(update.mock.calls.length,0);
 });
 
+test('population budgets count decoded vertex bytes without unpacking compressed attributes',async t=>{
+  const f=fixture(t),definition=getActorDefinition('hooded-goblin.standard'),actor=f.factory(definition);
+  const source=f.libraries.get(definition.assetId).container.meshes[0],vertices=source.getTotalVertices();
+  const packed=new VertexBuffer(f.engine,new Uint8Array(vertices*4),'packed-test-attribute',{
+    size:2,type:VertexBuffer.UNSIGNED_BYTE,normalized:true,stride:4,useBytes:true,
+  });
+  source.setVerticesBuffer(packed);
+  const reads=t.mock.method(packed,'getFloatData',packed.getFloatData);
+  await actor.warm({preparation:prepare()});
+  assert.equal(reads.mock.calls.length,0,'a memory estimate never expands the interleaved byte attribute');
+  const geometries=new Set(actor.encounter.asset.meshes.map(mesh=>mesh.geometry).filter(Boolean));
+  let decodedBytes=0;
+  for(const geometry of geometries){
+    for(const kind of geometry.getVerticesDataKinds()){
+      const data=geometry.getVerticesData(kind);
+      decodedBytes+=data?.byteLength??(data?.length??0)*4;
+    }
+    const indices=geometry.getIndices();
+    decodedBytes+=indices?.byteLength??(indices?.length??0)*4;
+  }
+  assert.equal(actor.estimate().sharedGeometryBytes,decodedBytes);
+});
+
 test('ten goblin actors repeatedly created, killed and removed release owned scene resources',async t=>{
  const f=fixture(t),definition=getActorDefinition('hooded-goblin.standard');
  const observers=o=>o.observers.filter(row=>!row._willBeUnregistered).length;

@@ -1,3 +1,8 @@
+// Access itself may throw in a storage-restricted document.
+export function getResourceCacheStorage(){
+  try{return globalThis.caches;}catch{return null;}
+}
+
 export const CONTENT_NAME=/^[a-f0-9]{64}\.(bin|gltf|png|jpg|jpeg|webp|ktx2|js|wasm|wav|mp3)$/;
 export const PACK_NAME=/^bundles\/[a-f0-9]{64}\.mfp\.gz$/;
 export const RESOURCE_PACK_LIMITS=Object.freeze({member:1048576,unpacked:4194304,packed:4259840});

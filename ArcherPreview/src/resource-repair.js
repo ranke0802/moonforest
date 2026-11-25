@@ -1,4 +1,4 @@
-import {CONTENT_NAME} from './resource-index.js';
+import {CONTENT_NAME,getResourceCacheStorage} from './resource-index.js';
 import {MapLoadLifetime} from './map-load-lifetime.js';
 
 const repairs=new WeakMap();
@@ -7,7 +7,7 @@ const repairError=(message,code,url)=>Object.assign(new Error(message),{code,res
 
 // Used only after a resource fails to load. Never scan or hash the full cache:
 // keep healthy bytes, and replace only a proven bad entry with one verified fetch.
-export async function repairCachedResource(input,{signal,expectedSize,check=()=>{},cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),timeoutMs=15000,timers,maxBytes=64*1048576}={}){
+export async function repairCachedResource(input,{signal,expectedSize,check=()=>{},cacheStorage=getResourceCacheStorage(),fetcher=(...args)=>fetch(...args),timeoutMs=15000,timers,maxBytes=64*1048576}={}){
   const url=new URL(input);url.search='';url.hash='';const name=url.pathname.split('/').at(-1);
   if(!CONTENT_NAME.test(name))throw new Error('Invalid content resource');
   if(expectedSize!==undefined&&(!Number.isSafeInteger(expectedSize)||expectedSize<=0))throw new RangeError('Invalid repair resource size');

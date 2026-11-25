@@ -45,7 +45,12 @@ function assetEstimate(asset,fallback){
     if(isRuntimeOutline(mesh))outlineTriangles+=triangles;else baseTriangles+=triangles;
     if(mesh.geometry&&!geometries.has(mesh.geometry)){
       geometries.add(mesh.geometry);
-      for(const kind of mesh.getVerticesDataKinds()){const data=mesh.getVerticesData(kind);geometryBytes+=data?.byteLength??(data?.length??0)*4;}
+      // The population budget counts decoded floats. Asking Babylon for their
+      // values also expands packed bone indices into a new array for each actor.
+      const vertices=mesh.geometry.getTotalVertices();
+      for(const buffer of Object.values(mesh.geometry.getVertexBuffers()??{})){
+        if(buffer.getData())geometryBytes+=vertices*buffer.getSize()*Float32Array.BYTES_PER_ELEMENT;
+      }
       const indices=mesh.getIndices();geometryBytes+=indices?.byteLength??(indices?.length??0)*4;
     }
     if(mesh.skeleton)skeletons.add(mesh.skeleton);

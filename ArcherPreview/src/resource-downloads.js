@@ -1,4 +1,4 @@
-import {CONTENT_NAME as CONTENT,validateResourceIndex,planResourceTransfers} from './resource-index.js';
+import {CONTENT_NAME as CONTENT,validateResourceIndex,planResourceTransfers,getResourceCacheStorage} from './resource-index.js';
 import {canExtractResourceBundles,extractResourceBundle} from './resource-bundles.js';
 import {MapLoadLifetime,stacklessError} from './map-load-lifetime.js';
 import {ResourceLoadLedger} from './resource-load-ledger.js';
@@ -12,15 +12,17 @@ export function downloadText({loaded,total}){return `${(loaded/1e6).toFixed(1)} 
 // A fixed plan counts only missing files. Stored bytes are never reported as a
 // new download, and file count is never substituted for byte progress.
 // The last few visits' counters (plain numbers; no map objects), for records.
+const storageDenied=error=>['QuotaExceededError','NotAllowedError','SecurityError'].includes(error?.name);
 const recentStats=[];
 export const recentResourceDownloadStats=()=>recentStats.map(stats=>({...stats}));
 export class ResourceDownloads {
-  constructor(sizes,base,{cacheStorage=globalThis.caches,fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null,idleTimeoutMs=30000,timers,ledgerMaxEntries=4096,ledgerTiming=null}={}){
+  constructor(sizes,base,{cacheStorage=getResourceCacheStorage(),fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null,idleTimeoutMs=30000,timers,ledgerMaxEntries=4096,ledgerTiming=null,probeCacheKeys=false}={}){
     this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.now=now;this.tail=Promise.resolve();this.storageUnavailable=false;
+    this.probeCacheKeys=probeCacheKeys;
     this.index=index?validateResourceIndex(index):null;
     // Cache Storage reads are counted apart from transfers (2026-11-24): how many
     // times a visit listed the cache's keys or matched one file, and how long.
-    this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0,jobs:0,cacheKeyLists:0,cacheKeyListMs:0,cacheKeyListMaxMs:0,cacheEntries:null,cacheMatches:0,cacheMatchMs:0};
+    this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0,jobs:0,cacheKeyLists:0,cacheKeyListMs:0,cacheKeyListMaxMs:0,cacheEntries:null,cacheMatches:0,cacheMatchMs:0,cacheProbeMode:probeCacheKeys,cacheProbeUrls:0,cacheProbeBatches:0,cacheProbeMs:0};
     recentStats.push(this.stats);if(recentStats.length>8)recentStats.shift();
     this.abort=new AbortController();
     this.idleTimeoutMs=idleTimeoutMs;this.timers=timers;
@@ -36,6 +38,7 @@ export class ResourceDownloads {
     finally{
       const ms=Math.max(0,this.now()-started),stats=this.stats;
       if(kind==='list'){stats.cacheKeyLists++;stats.cacheKeyListMs=Math.round((stats.cacheKeyListMs+ms)*10)/10;stats.cacheKeyListMaxMs=Math.round(Math.max(stats.cacheKeyListMaxMs,ms)*10)/10;}
+      else if(kind==='probe'){stats.cacheProbeBatches++;stats.cacheProbeMs=Math.round((stats.cacheProbeMs+ms)*10)/10;}
       else{stats.cacheMatches++;stats.cacheMatchMs=Math.round((stats.cacheMatchMs+ms)*10)/10;}
     }
   }
@@ -54,20 +57,42 @@ export class ResourceDownloads {
     const step=async(stage,task,onLate)=>{lifetime.check();lifetime.stage=stage;this.stats.waitStage=stage;const value=await lifetime.run(task,{onLate});lifetime.renew(stage);return value;};
     const urls=[...new Set(paths.map(p=>resourceUrl(p,this.base)))];
     const phase=job.phase,rows=new Map();
-    let cache;try{if(!this.storageUnavailable)cache=await step('resource-cache-open',()=>this.storage?.open('moonforest-resources-v1'));}catch(error){signal.throwIfAborted();}
+    let cache;try{if(!this.storageUnavailable)cache=await step('resource-cache-open',()=>this.storage?.open('moonforest-resources-v1'));}catch(error){signal.throwIfAborted();if(storageDenied(error))this.storageUnavailable=true;}
+    const readCache=async(kind,stage,read)=>{
+      try{return await this.timedRead(kind,()=>step(stage,read));}
+      catch(error){
+        signal.throwIfAborted();
+        if(!storageDenied(error))throw error;
+        this.storageUnavailable=true;cache=null;
+      }
+    };
     // Enumerate keys once instead of creating a Response/body handle for every
     // cached file. Refresh on every job so eviction/deletion remains visible.
     this.stats.jobs++;
-    const listed=cache?.keys&&urls.length>=16?await this.timedRead('list',()=>step('resource-cache-keys',()=>cache.keys())):null;
-    const cachedUrls=listed?new Set(listed.map(request=>request.url)):null;
-    if(cachedUrls)this.stats.cacheEntries=cachedUrls.size;
+    let cachedUrls=null;
+    if(cache?.keys&&this.probeCacheKeys){
+      // Compare exact metadata-only lookups with listing the whole cache. Four
+      // at a time bounds work and leaves the actual resource bodies unopened.
+      cachedUrls=new Set();
+      for(let start=0;start<urls.length&&cache;start+=4){
+        const batch=urls.slice(start,start+4);
+        this.stats.cacheProbeUrls+=batch.length;
+        const hits=await readCache('probe','resource-cache-probe',()=>Promise.all(
+          batch.map(url=>cache.keys(url,{ignoreVary:true}).then(keys=>keys.some(key=>key.url===url)))
+        ));
+        if(hits)batch.forEach((url,i)=>{if(hits[i])cachedUrls.add(url);});
+      }
+    }else if(cache?.keys&&urls.length>=16){
+      const listed=await readCache('list','resource-cache-keys',()=>cache.keys());
+      if(listed){cachedUrls=new Set(listed.map(request=>request.url));this.stats.cacheEntries=cachedUrls.size;}
+    }
     const missing=[];let cached=0;
     for(const url of urls){
       signal.throwIfAborted();
       const size=this.sizes[new URL(url).pathname.split('/').at(-1)];
       if(!Number.isSafeInteger(size)||size<0)throw new Error('리소스 용량 목록이 일치하지 않습니다. 새로고침해 주세요.');
       const row=this.ledger.request(url,phase);rows.set(url,row);
-      if(cachedUrls?cachedUrls.has(url):await this.timedRead('match',()=>step('resource-cache-match',()=>cache?.match(url,{ignoreVary:true})))){cached+=size;this.ledger.cached(row,phase);continue;}
+      if(cachedUrls?cachedUrls.has(url):cache&&await readCache('match','resource-cache-match',()=>cache.match(url,{ignoreVary:true}))){cached+=size;this.ledger.cached(row,phase);continue;}
       missing.push({url,size});
     }
     const plan=planResourceTransfers(missing,canExtractResourceBundles()?this.index:null);
@@ -86,7 +111,7 @@ export class ResourceDownloads {
         await step('resource-bundle',()=>extractResourceBundle({pack,index:this.index,base:this.base,fetcher:this.fetcher,cache,signal,count,onFile:name=>{lifetime.renew('resource-bundle-cache');this.stats.extractedFiles++;this.ledger.extracted(rows.get(new URL('content/'+name,this.base).href),phase,bundle);}}));
         this.ledger.finishBundle(bundle,phase,url,startedAtMs);
       }catch(error){
-        if(['QuotaExceededError','NotAllowedError','SecurityError'].includes(error.name)){
+        if(storageDenied(error)){
           this.ledger.fail(bundle,phase,error);job.failureRecorded=true;
           this.storageUnavailable=true;state.storageAvailable=false;onProgress({...state,ratio:0,unavailable:true});return state;
         }
@@ -143,8 +168,7 @@ export class ResourceDownloads {
         // A late failed write must not delete a successful same-hash retry.
         // CacheStorage commits complete bodies atomically; aborted writes need
         // no global cleanup or cache deletion while a new owner may be active.
-        if(!signal.aborted)await step('resource-cache-delete',()=>cache.delete?.(url));
-        if(['QuotaExceededError','NotAllowedError','SecurityError'].includes(error.name)){
+        if(storageDenied(error)){
           this.ledger.fail(row,phase,error);job.failureRecorded=true;
           this.storageUnavailable=true;state.storageAvailable=false;
           onProgress({...state,ratio:0,unavailable:true});return state;
