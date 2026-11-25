@@ -68,3 +68,39 @@ test('one manual consumer cancelling its wait does not abort another consumer or
  await until(()=>!!finish);consumer.abort();consumer.close();await rejected;assert.equal(modelSignal.aborted,false);assert.equal(requests,1);
  finish({ok:true,json:async()=>triangle()});await other;assert.equal(library.loads,1);assert.equal(timers.size,0);library.dispose();
 });
+
+test('only an exclusively speculative source stops on departure and the next caller can retry immediately',async t=>{
+ const {scene}=fixture(t),library=new BossModelLibrary(scene,'cancel-warning-source'),warning=new AbortController();
+ let finishManifest,modelRequests=0;
+ globalThis.fetch=async url=>{
+  if(String(url).endsWith('.gltf')){modelRequests++;return Response.json(triangle());}
+  return new Promise(resolve=>{finishManifest=()=>resolve(Response.json({model:'./cancel-warning.gltf'}));});
+ };
+ const cancelled=assert.rejects(library.load({preloadSignal:warning.signal}),{name:'AbortError'});
+ await until(()=>!!finishManifest);warning.abort();await cancelled;
+ assert.equal(library.pending,null);assert.equal(library.loads,0);assert.equal(modelRequests,0);
+ // A new summon can attach to the shared manifest even while its old read is
+ // outstanding. The old warning cannot fetch or install a second model.
+ const summon=library.load();finishManifest();await summon;
+ assert.equal(modelRequests,1);assert.equal(library.loads,1);library.dispose();
+});
+
+test('joining summon, second preview and completed source survive release of the warning',async t=>{
+ for(const claimant of ['later-summon','earlier-summon','other-warning','ready']){
+  await t.test(claimant,async t=>{
+   const {scene}=fixture(t),library=new BossModelLibrary(scene,'owned-'+claimant),warning=new AbortController(),other=new AbortController();
+   let finish,transport,requests=0;
+   globalThis.fetch=async(url,options)=>{
+    if(!String(url).endsWith('.gltf'))return Response.json({model:'./shared.gltf'});
+    requests++;transport=options.signal;return new Promise(resolve=>{finish=()=>resolve(Response.json(triangle()));});
+   };
+   const earlier=claimant==='earlier-summon'?library.load():null;
+   const preload=library.load({preloadSignal:warning.signal});await until(()=>!!finish);
+   const joined=claimant==='later-summon'?library.load():claimant==='other-warning'?library.load({preloadSignal:other.signal}):null;
+   if(claimant==='ready'){finish();await preload;}
+   warning.abort();assert.equal(transport.aborted,false);
+   finish();await Promise.all([earlier,preload,joined]);other.abort();
+   assert.equal(requests,1);assert.equal(library.loads,1);assert.ok(library.container);library.dispose();
+  });
+ }
+});

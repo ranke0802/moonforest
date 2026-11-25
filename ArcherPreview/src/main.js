@@ -444,14 +444,15 @@ function recordingProbe(){
     // Whether the loading picture still covers the stage at this second: frames behind it are counted too (2026-11-23).
     covered:document.documentElement.dataset.loading!==undefined};
 }
+const shaderBirths=createShaderBirthWatch(()=>engine);
 const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()=>world?.camera?.alpha,storage:equipmentStorage,loads:loadDiagnostics,
   contentRuntime:()=>inspectContentRuntimeBudget({world,battle:boss,audio,playerTextureProfile:playerTextureSelection,decodeCache:inspectMapDecodeCache(engine)}),
   onEnabled:enabled=>sceneDiagnostics.setEnabled(enabled,world?.scene),
   onDrawCpuEnabled:enabled=>sceneDiagnostics.setDrawCpuEnabled(enabled),
   onContinuousDraw:enabled=>sceneDiagnostics.setContinuous(enabled),
-  onCollecting:active=>sceneDiagnostics.setActive(active),
+  onCollecting:active=>{sceneDiagnostics.setActive(active);if(!active)shaderBirths.pause();},
   onMapChanged:()=>sceneDiagnostics.resetGpu('map'),
-  onReset:()=>sceneDiagnostics.resetGpu('reset'),
+  onReset:()=>{shaderBirths.pause();sceneDiagnostics.resetGpu('reset');},
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{textureSample:compactMeterEnabled?sampleTextureMemory(engine):null,highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
@@ -461,10 +462,9 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()
     cameraZoom:cameraZoom?.snapshot()??null,
     viewportResize:world?.viewportResize?.snapshot?.()??null,cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
-    newShaders:shaderBirths.recent(),
+    recentShaderEffects:shaderBirths.recentEffects(),
     character,slowFoe:boss?.profile?.maxMs>=8?{kind:boss.profile.maxKind,from:boss.profile.maxFrom,state:boss.profile.maxState,ms:Math.round(boss.profile.maxMs),navMs:Math.round(boss.profile.maxNavMs??0),animatablesAdded:boss.profile.maxAnimatables??0,woke:boss.profile.maxWoke===true,far:boss.profile.maxFar===true,modeFrom:boss.profile.maxModeFrom??'',mode:boss.profile.maxMode??''}:null,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
-const shaderBirths=createShaderBirthWatch(()=>engine);
 loadingView.setDiagnostics(()=>frameDiagnostics.snapshot());
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
@@ -1421,6 +1421,7 @@ try {
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
     prepare:(href,context)=>{
+      world.v03?.story?.cancelRaidWarning?.();
       townServices?.clear();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.chapterResidents?.leave();
       if(context?.playerTravel&&world.v03?.playing&&!world.v03.story?.sceneActive){
@@ -1501,7 +1502,8 @@ try {
   frameLoop=new FrameLoop(engine,dt=>{
     // Resize/context callbacks can request an isolated frame while the gameplay loop is paused.
     if(characterMenuOpening||characterMenu?.open)return;
-    frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
+    const firstCollectedFrame=frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
+    if(frameDiagnostics.collecting)shaderBirths.beginFrame(firstCollectedFrame);
     if(adaptivePerformance.sample(dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/Math.min(engine.maxFPS||60,60)}))applyAdaptivePerformance();
     try{render(dt);}catch(error){
       gameplayTrail()?.fault(world.mapId,'frame-error',boss?.playerHp,error?.message);
@@ -1510,7 +1512,15 @@ try {
       loadDiagnostics.finish(frameFailure.message);
       frameLoop.failed=true;frameLoop.setPaused(true);input.reset();cancelAttackInput();audio.setSuspended(true);updateButtons();
       console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message,{error,phase:'frame'});
-    }finally{world.caveCamera?.endFrame();if(frameDiagnostics.collecting)frameDiagnostics.set('newShaders',shaderBirths.frame());else shaderBirths.pause();frameDiagnostics.endFrame();}
+    }finally{
+      world.caveCamera?.endFrame();
+      if(frameDiagnostics.collecting){
+        shaderBirths.endFrame();
+        frameDiagnostics.set('shaderCompileAttempts',shaderBirths.frameAttempts);
+        frameDiagnostics.set('shaderCompileAttemptsBetweenFrames',shaderBirths.betweenAttempts);
+      }
+      frameDiagnostics.endFrame();
+    }
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;

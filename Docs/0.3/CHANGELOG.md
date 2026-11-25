@@ -10,8 +10,8 @@
 ## 2026-11-25 · 성능 기록이 멈춘 부분의 이름을 남긴다 (S23 17:04 기록 판독)
 
 - S23 기록에서 세계 갱신 226ms·98ms, 그리기 제출 64~143ms 프레임이 있었지만 어느 부분인지, 새 셰이더가 만들어졌는지 기록에 없었다. 원인은 아직 미확정이다.
-- 기록 항목 추가(진단을 켜고 수집 중일 때만): `worldCameraMs`·`worldRangeMs`(몬스터 표시 범위·동굴 안개)·`worldOcclusionMs`(나무 가림)·`worldVisibilityMs`(마을 가시성·풀밭), 처치 보상 처리 `defeatMs`, 프레임별 새 셰이더 프로그램 수 `newShaders`와 최근 12개의 이름(`context.newShaders`). 그 프레임에서 가장 느린 몬스터에는 길찾기 시간·새로 시작한 애니메이션 수·화면 밖 휴면에서 깨어났는지·원거리 여부·모드 전환을 함께 남긴다(`slowFoe.navMs/animatablesAdded/woke/far/modeFrom/mode`).
-- 비용: 프레임당 시계 읽기 5회와 프로그램 표 개수 세기(할당 없음). 수집하지 않을 때는 표를 읽지 않는다. 수명: `shader-birth-watch.js`는 페이지 단위이고 키 문자열만 보관한다(Effect 객체를 잡지 않음, 상한 4,096).
+- 기록 항목 추가(진단을 켜고 수집 중일 때만): `worldCameraMs`·`worldRangeMs`(몬스터 표시 범위·동굴 안개)·`worldOcclusionMs`(나무 가림)·`worldVisibilityMs`(마을 가시성·풀밭), 처치 보상 처리 `defeatMs`, 게임 프레임 안의 WebGL 셰이더 컴파일 요청 횟수 `shaderCompileAttempts`와 직전 프레임이 끝난 뒤의 횟수 `shaderCompileAttemptsBetweenFrames`. 그 프레임에서 가장 느린 몬스터에는 길찾기 시간·새로 시작한 애니메이션 수·화면 밖 휴면에서 깨어났는지·원거리 여부·모드 전환을 함께 남긴다(`slowFoe.navMs/animatablesAdded/woke/far/modeFrom/mode`).
+- 셰이더 횟수는 수집 중 Babylon WebGL 컴파일 이벤트를 받으면 증가한다. 일시정지·지역 전환·엔진 교체 시 구독과 관측 이력을 정리한다. 컴파일 요청이 있었던 프레임에는 캐시에서 새로 관측된 Effect 이름을 `context.recentShaderEffects`에 최대 12개 남긴다. 관측한 Effect는 약한 참조로만 추적한다. 이벤트가 이름을 제공하지 않으므로, 이 목록만으로 특정 셰이더의 컴파일·링크 성공이나 GPU 시간을 판정할 수 없다. `drawCpu`의 호출 수에는 같은 요청이 포함될 수 있다.
 
 ## 2026-11-25 · 말 부르기와 승하차
 

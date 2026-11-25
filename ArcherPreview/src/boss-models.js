@@ -35,9 +35,10 @@ export function instantiateBossModel(container, timings) {
 
 export class BossModelLibrary {
   constructor(scene,manifest='guardian-bear',options={}) { this.scene = scene; this.loads = 0; this.manifest=manifest;this.options=options;this.generation=0; }
-  async load() {
-    if(this.disposed||this.scene.isDisposed)throw mapLoadAbortError();
+  async load({preloadSignal}={}) {
+    if(this.disposed||this.scene.isDisposed||preloadSignal?.aborted)throw mapLoadAbortError();
     if(!this.pending){
+      this.preloadOwners=preloadSignal?new Set():null;
       const {timeoutMs,timers}=this.options,lifetime=new MapLoadLifetime({timeoutMs,timers,stage:'actor-asset'});
       const generation=++this.generation;this.lifetime=lifetime;
       // The library, rather than one waiting actor, owns the shared request.
@@ -61,7 +62,22 @@ export class BossModelLibrary {
       });
       this.pending=pending;
     }
-    await this.pending;
+    // Once a summon (or any normal caller) joins, the source belongs to the
+    // library. Optional warning loads may cancel only their own unfinished work.
+    if(!preloadSignal)this.preloadOwners=null;
+    const owners=this.preloadOwners,pending=this.pending;
+    if(!owners||this.container)return pending;
+    const cancel=()=>{
+      owners.delete(cancel);
+      if(!owners.size&&this.preloadOwners===owners&&this.pending===pending&&!this.container){
+        this.pending=null;this.preloadOwners=null;this.lifetime?.abort(mapLoadAbortError());
+      }
+    };
+    owners.add(cancel);preloadSignal.addEventListener('abort',cancel,{once:true});
+    try{await pending;}finally{
+      preloadSignal.removeEventListener('abort',cancel);owners.delete(cancel);
+      if(!owners.size&&this.preloadOwners===owners)this.preloadOwners=null;
+    }
   }
   // Kept for existing explicit scoped consumers; all source loads now use it.
   loadScoped(){return this.load();}

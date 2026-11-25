@@ -225,10 +225,11 @@ test('the world update parts, defeat time and the new shader count are recorded 
  const visibility=f.diagnostic.mark();f.setTime(113);f.diagnostic.measure('worldVisibilityMs',visibility);
  f.diagnostic.measure('worldUpdateMs',world);
  const defeat=f.diagnostic.mark();f.setTime(119);f.diagnostic.measure('defeatMs',defeat);
- f.diagnostic.set('newShaders',3);
+ f.diagnostic.set('shaderCompileAttempts',3);
+ f.diagnostic.set('shaderCompileAttemptsBetweenFrames',2);
  f.setTime(170);f.diagnostic.endFrame();
  let e=f.diagnostic.snapshot().recentDelays.at(-1);
- assert.deepEqual([e.worldCameraMs,e.worldRangeMs,e.worldOcclusionMs,e.worldVisibilityMs,e.worldUpdateMs,e.defeatMs,e.newShaders],[1,7,2,3,13,6,3]);
+ assert.deepEqual([e.worldCameraMs,e.worldRangeMs,e.worldOcclusionMs,e.worldVisibilityMs,e.worldUpdateMs,e.defeatMs,e.shaderCompileAttempts,e.shaderCompileAttemptsBetweenFrames],[1,7,2,3,13,6,3,2]);
  f.setTime(200);f.diagnostic.beginFrame(true,60);f.setTime(202);f.diagnostic.endFrame();
- e=f.diagnostic.snapshot().recentDelays.at(-1);assert.deepEqual([e.worldRangeMs,e.defeatMs,e.newShaders],[0,0,0]);
+ e=f.diagnostic.snapshot().recentDelays.at(-1);assert.deepEqual([e.worldRangeMs,e.defeatMs,e.shaderCompileAttempts,e.shaderCompileAttemptsBetweenFrames],[0,0,0,0]);
 });

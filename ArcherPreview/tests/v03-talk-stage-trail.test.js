@@ -31,24 +31,28 @@ function village(stageMark,metaSaved=true,step=1){
 }
 
 test('the raid overlaps the shared goblin source with its warning and only spawns after dismissal',async t=>{
- for(const exit of ['dismiss','stop','travel','source-error']){
+ for(const exit of ['dismiss','stop','travel','map-data-changed','dispose','source-error']){
   await t.test(exit,async t=>{
    const {api,story,player,document,frame}=village(null,true,0);
    t.after(()=>story.dispose());
    const calls=[];
-   let complete;
+   let complete,preloadSignal;
    const pending=new Promise(resolve=>{complete=resolve;});
-   api.battle.goblinModels={load(){calls.push('source');return exit==='source-error'?Promise.reject(new Error('unavailable')):pending;}};
-   api.battle.summon=async(_player,count,kind)=>{calls.push([kind,count]);return true;};
+   api.battle.goblinModels={load(options){preloadSignal=options.preloadSignal;calls.push('source');return exit==='source-error'?Promise.reject(new Error('unavailable')):pending;}};
+   api.battle.summon=async(_player,count,kind)=>{assert.equal(preloadSignal.aborted,false);calls.push([kind,count]);return true;};
    Object.assign(player.position,{x:0,z:-30});frame();
    assert.deepEqual(calls,[]);
    Object.assign(player.position,{x:0,z:28});frame();frame();
    assert.equal(story.dialogueOpen,true);assert.deepEqual(calls,['source']);
    if(exit==='stop')story.stop();
-   if(exit==='travel')api.world.mapId='great-plains';
+   if(exit==='travel')story.cancelRaidWarning(); // travel starts before the world switches map IDs
+   if(exit==='map-data-changed')api.world.mapId='great-plains';
+   if(exit==='dispose')story.dispose();
+   if(['stop','travel','dispose'].includes(exit)){assert.equal(preloadSignal.aborted,true);assert.equal(story.dialogueOpen,false);}
    for(let i=0;i<12&&story.dialogueOpen;i++)document.querySelector('.v03-dialogue-next').click();
    await settle();
    assert.deepEqual(calls,exit==='dismiss'||exit==='source-error'?['source',['goblin',4]]:['source']);
+   assert.equal(preloadSignal.aborted,true);
    complete();
   });
  }

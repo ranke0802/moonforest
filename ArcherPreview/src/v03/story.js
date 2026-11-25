@@ -227,6 +227,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Story fights: a defeat step with {at,summon} calls its foes once the player
  // is inside the spot, and again after a retreat or death left none alive.
  const staged={key:null,busy:false,next:0,introduced:new Set()};
+ let raidWarning=null;
+ function cancelRaidWarning(){
+  if(!raidWarning)return;
+  raidWarning.abort();dialogue.cancel();
+ }
  function stageFight(player){
   const step=log.step(),quest=log.quest();
   if(step?.type!=='defeat'||!step.at||step.map!==mapId||!player||staged.busy||talking||dialogue.open)return;
@@ -250,6 +255,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(step.summon.after){staged.since??=guide.time;if(guide.time-staged.since<step.summon.after)return;}
   staged.busy=true;
   void (async()=>{
+   let warning;
    try{
     if(step.intro&&!staged.introduced.has(key)&&content.DIALOGUES[step.intro]){
      staged.introduced.add(key);talking=true;api.input.setSuspended(true);
@@ -258,10 +264,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
       // This wave is now due. Start only its shared source while the warning
       // is on screen. summon() joins the same load and owns all four actors.
       if(step.intro==='raid-start'&&step.summon.kind==='goblin'&&dialogue.open){
-       void api.battle.goblinModels?.load().catch(()=>{}); // summon retries a failed source load
+       warning=raidWarning=new AbortController();
+       void api.battle.goblinModels?.load({preloadSignal:warning.signal}).catch(()=>{});
       }
-      if(!await lines){staged.introduced.delete(key);return;}
-     }finally{talking=false;if(started&&!disposed)api.input.setSuspended(false);}
+      if(!await lines||warning?.signal.aborted){staged.introduced.delete(key);return;}
+     }finally{if(raidWarning===warning)raidWarning=null;talking=false;if(started&&!disposed)api.input.setSuspended(false);}
     }
     if(!started||disposed||(api.world.mapId??mapId)!==step.map||log.step()!==step)return;
     const left=Math.max(1,step.summon.count-log.snapshot().count);
@@ -270,7 +277,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(ok!==false&&tune)tuneFoes(step.summon.kind,tune);
     if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
    }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}
-   finally{staged.busy=false;staged.key=key;staged.next=guide.time+4;}
+   finally{warning?.abort();staged.busy=false;staged.key=key;staged.next=guide.time+4;}
   })();
  }
  // 0.3 balance for an early story fight: lower HP and hit damage of the
@@ -1421,8 +1428,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // ran the whole loading again). The play is put away, cast, wagon, markers, guide light,
   // tips, a scene or a talk in hand, so the title can stand on the same loaded world. The
   // record is not touched: start({fresh:false}) picks it up again.
+  cancelRaidWarning,
   stop(){
    if(!started)return false;
+   cancelRaidWarning();
    if(scene.active){try{endScene();}catch(error){console.warn('[MoonForest 0.3] scene left open',error);scene.active=false;showPlayer(true);api.input.setSuspended(false);}}
    scene.pending=false;scene.pendingFor=0;
    try{dialogue.cancel();}catch{/* nothing open */}talking=false;
@@ -1500,6 +1509,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // five 2048 px uploads at +5.5 s). A promise for the models, else null.
   arrive(id){if(!started||disposed||!id)return null;if(castMap!==id)buildCast(id);return castMap===id?castSettled:null;},
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
-  dispose(){if(disposed)return;disposed=true;api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
+  dispose(){if(disposed)return;disposed=true;cancelRaidWarning();api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }

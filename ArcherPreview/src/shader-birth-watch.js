@@ -1,44 +1,77 @@
-// Counts shader programs that came into being since the previous frame, for the
-// frame recorder (2026-11-25 S23 reading: draw submission jumped to 64-143 ms the
-// first time a wolf faded, the horse was mounted and the raid goblins appeared;
-// the recording could not say whether a new program was built in that frame).
-// Diagnostics only: the caller runs frame() while the recorder is collecting.
-// The count walks the engine's program table without allocating; names are read
-// only in a frame where the table grew. Holds key strings, never Effect objects.
-const RECENT=12,SEEN_LIMIT=4096;
-const short=(value,limit)=>typeof value==='string'?(value.length>limit?value.slice(0,limit)+'…':value):null;
-function nameOf(effect){
- const name=effect?.name;
- if(typeof name==='string')return short(name,80);
- return short([name?.vertex??name?.vertexElement,name?.fragment??name?.fragmentElement].filter(Boolean).join(' / ')||'effect',80);
+// Babylon's WebGL compile notification identifies the engine, not the Effect.
+const RECENT_EFFECTS = 12;
+
+function short(value, limit) {
+  if (typeof value !== 'string') return null;
+  return value.length > limit ? value.slice(0, limit) + '…' : value;
 }
-export function createShaderBirthWatch(getEngine,now=()=>performance.now()){
- let count=-1,table=null;const seen=new Set(),recent=[];
- const size=effects=>{let n=0;for(const key in effects)n++;return n;};
- return {
-  // New programs since the last call; 0 on the first call for an engine.
-  frame(){
-   const effects=getEngine()?._compiledEffects;
-   if(!effects){count=-1;table=null;return 0;}
-   const n=size(effects);
-   if(table!==effects||count<0){
-    table=effects;count=n;seen.clear();for(const key in effects)seen.add(key);return 0;
-   }
-   if(n===count)return 0;
-   let born=0;const at=Math.round(now());
-   for(const key in effects){
-    if(seen.has(key))continue;
-    born++;if(seen.size<SEEN_LIMIT)seen.add(key);
-    if(recent.length>=RECENT)recent.shift();
-    recent.push({atMs:at,shader:nameOf(effects[key]),defines:short(effects[key]?.defines,160)});
-   }
-   // Programs released since the last call leave the table; forget them when it shrinks.
-   if(n<count+born)for(const key of seen)if(!(key in effects))seen.delete(key);
-   count=n;return born;
-  },
-  recent(){return recent.map(entry=>({...entry}));},
-  // Not recording this frame: programs built meanwhile (loading) are not this watch's births.
-  pause(){count=-1;},
-  reset(){count=-1;table=null;seen.clear();recent.length=0;}
- };
+
+function effectName(effect) {
+  const name = effect.name;
+  if (typeof name === 'string') return short(name, 80);
+  const vertex = short(name?.vertex ?? name?.vertexElement, 80);
+  const fragment = short(name?.fragment ?? name?.fragmentElement, 80);
+  return short(vertex && fragment ? vertex + ' / ' + fragment : vertex || fragment, 80);
+}
+
+export function createShaderBirthWatch(getEngine, now = () => performance.now()) {
+  let engine = null, observer = null, disposeObserver = null, seen = null;
+  let inFrame = false, frameAttempts = 0, betweenAttempts = 0, pendingBetween = 0;
+  const recent = [];
+
+  function pause() {
+    engine?.onBeforeShaderCompilationObservable?.remove(observer);
+    engine?.onDisposeObservable?.remove(disposeObserver);
+    engine = observer = disposeObserver = seen = null;
+    inFrame = false;
+    frameAttempts = betweenAttempts = pendingBetween = 0;
+    recent.length = 0;
+  }
+
+  function onAttempt() {
+    if (inFrame) frameAttempts++;
+    else pendingBetween++;
+  }
+
+  function observeEffects(baseline) {
+    const effects = engine?._compiledEffects;
+    if (!effects) return;
+    let observedAtMs;
+    for (const key in effects) {
+      const effect = effects[key];
+      if (!effect || typeof effect !== 'object' || seen.has(effect)) continue;
+      seen.add(effect);
+      if (baseline) continue;
+      observedAtMs ??= Math.round(now());
+      if (recent.length === RECENT_EFFECTS) recent.shift();
+      recent.push({observedAtMs, shader: effectName(effect), defines: short(effect.defines, 160)});
+    }
+  }
+
+  return {
+    beginFrame(firstCollectedFrame = false) {
+      const next = getEngine();
+      if (next !== engine || firstCollectedFrame) {
+        pause();
+        if (!next?.onBeforeShaderCompilationObservable) return;
+        engine = next;
+        seen = new WeakSet();
+        observeEffects(true);
+        observer = engine.onBeforeShaderCompilationObservable.add(onAttempt);
+        disposeObserver = engine.onDisposeObservable?.add(pause);
+      }
+      frameAttempts = 0;
+      betweenAttempts = pendingBetween;
+      pendingBetween = 0;
+      inFrame = true;
+    },
+    endFrame() {
+      inFrame = false;
+      if (frameAttempts || betweenAttempts) observeEffects(false);
+    },
+    get frameAttempts() { return frameAttempts; },
+    get betweenAttempts() { return betweenAttempts; },
+    recentEffects() { return recent.map(entry => ({...entry})); },
+    pause,
+  };
 }
