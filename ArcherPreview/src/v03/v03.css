@@ -195,7 +195,8 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-text{margin:0;font-size:clamp(15px,calc(2.3vmin / var(--v03-ui,1)),30px);line-height:1.75;white-space:pre-line}
 .v03-dialogue-box.is-self .v03-dialogue-text{color:#c9d4e6;font-style:italic}
 .v03-dialogue-box.is-self .v03-dialogue-who{color:#9fb4d6}
-.v03-dialogue-next{display:inline-flex;align-items:center;gap:.55em;position:absolute!important;right:clamp(14px,calc(1.4vmin / var(--v03-ui,1)),24px);bottom:clamp(10px,calc(1vmin / var(--v03-ui,1)),18px);min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
+.v03-dialogue-actions{position:absolute;right:clamp(14px,calc(1.4vmin / var(--v03-ui,1)),24px);bottom:clamp(10px,calc(1vmin / var(--v03-ui,1)),18px);display:flex;align-items:center;gap:10px}
+.v03-dialogue-next{min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 .v03-dialogue-next:hover{background:#cfb77b22!important}
 .v03-dialogue-key{font-family:inherit;letter-spacing:normal}
 @media (pointer:coarse){.v03-dialogue-key{display:none}}

@@ -587,10 +587,11 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // Three lines; then the driver goes to the wagon and the warrior pushes it
  // up with him (E three times at the roof side); his thanks follow.
  const next=hud('.v03-dialogue-next');
- assert.equal(next.querySelector('kbd').textContent,'E');
- assert.equal(next.firstElementChild.textContent,'다음');
+ const shortcut=next.previousElementSibling;
+ assert.equal(shortcut.tagName,'KBD');assert.equal(shortcut.textContent,'E');
+ assert.equal(next.textContent,'다음');
  for(let i=0;i<3;i++){
-  if(i===2)assert.equal(next.firstElementChild.textContent,'닫기');
+  if(i===2){assert.equal(next.textContent,'닫기');assert.equal(next.previousElementSibling,shortcut);}
   key('KeyE');await settle(2);
  }await settle();
  assert.equal(hud('.v03-dialogue').hidden,true);assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기','the step completes when the wagon stands');

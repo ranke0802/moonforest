@@ -12,10 +12,10 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  // Screen readers get the whole line once, not every typed character.
  const said=doc.createElement('span');said.className='v03-sr-only';
  const next=doc.createElement('button');next.type='button';next.className='v03-dialogue-next';
- const label=doc.createElement('span');
+ const actions=doc.createElement('div');actions.className='v03-dialogue-actions';
  const key=doc.createElement('kbd');key.className='v03-dialogue-key';key.textContent='E';key.setAttribute('aria-hidden','true');
- next.setAttribute('aria-keyshortcuts','E Enter Space');next.append(label,key);
- box.append(who,text,said,next);
+ next.setAttribute('aria-keyshortcuts','E Enter Space');
+ actions.append(key,next);box.append(who,text,said,actions);
  // Speaker art on the left, behind the box. Swapped only when the speaker changes.
  const portrait=doc.createElement('img');portrait.className='v03-dialogue-portrait';portrait.alt='';portrait.decoding='async';portrait.draggable=false;portrait.hidden=true;
  layer.append(portrait,box);mount.append(layer);
@@ -32,7 +32,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
    shownArt=art;portrait.hidden=!art;
    if(art){portrait.src=art;portrait.classList.remove('is-in');void portrait.offsetWidth;portrait.classList.add('is-in');}
   }
-  label.textContent=t(index===lines.length-1?'dialogue.close':'dialogue.next');
+  next.textContent=t(index===lines.length-1?'dialogue.close':'dialogue.next');
   box.classList.remove('is-in');void box.offsetWidth;box.classList.add('is-in');
  }
  function step(){
