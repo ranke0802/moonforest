@@ -829,6 +829,7 @@ async function loadCharacter() {
     animator = new CharacterAnimator(container.animationGroups, config.animations,{bindingCacheSize:isV2()?(versionRoute.edition?Object.keys(config.animations).length:4):0,prewarmBindings:isV2()&&!!versionRoute.edition});
     const speeds=isV2()?Object.fromEntries(Object.entries(config.speeds??{}).map(([key,value])=>[key,value*dimensions.ratio])):config.speeds;
     controller = new (isV2() ? WarriorV2Controller : isWarrior() ? NativeWarriorController : CharacterController)({ durations: animator.durations, speeds, ...(isV2()?{holdNow:()=>performance.now()}:{}) });
+    townServices?.economy.resetWeaponAction();
     movementSpeedSettings.apply(controller);
     applyAttackSpeed(readAttackSpeed());
     if(isV2())motionSpeedControls.apply(controller);
@@ -1280,7 +1281,6 @@ try {
   if(world.gameplayV03)world.sceneryStrikes=createSceneryStrikes(world,audio);
   const damageFeedback=(...args)=>{
     const target=args[6]??args[7];
-    if(world.v03?.playing&&args[3]==='enemy'&&typeof args[1]==='number'&&args[1]>0&&combatResult?.actionId!=null&&!/shield|push/i.test(combatResult.state))townServices?.weaponHit(combatResult.actionId);
     if(world.v03?.playing&&townServices&&(args[3]==='block'||args[3]==='player')&&townServices.economy.wearDefense(args[3]==='block'))boss.combat.defense=townServices.economy.defense;
     gameplayTrail()?.hit(world.mapId,args[3],target,boss?.playerHp,frameDiagnostics.enabled&&args[3]==='enemy'?{damage:args[1],weapon:townServices?.weaponMark()??null}:null);
     world?.v03?.combatEvent?.(args[3],target,args[1]);
@@ -1311,6 +1311,7 @@ try {
   },{onDefeat:event=>{try{townServices?.defeat(event);world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
+  if(world.gameplayV03)boss.combat.onBladeContact=actionId=>{if(world.v03?.playing)townServices?.weaponHit(actionId);};
   boss.combat.defense=playerDefense();
   try{swordTrail=createSwordTrail(world.scene,{enabled:swordTrailSettings.enabled,onError:error=>console.warn('[검격 잔상]',error)});}catch(error){console.warn('[검격 잔상]',error);}
   world.scene.onAfterAnimationsObservable.add(()=>{
@@ -1325,13 +1326,14 @@ try {
     if(sample?.contacts.length && world.sceneryStrikes && world.v03?.playing && !world.v03.story?.sceneActive &&
        !loadingAsset && !mapTransition?.busy && boss.playerAlive && !controller.captured && !controller.staggerRemaining){
       const surface=world.sceneryStrikes.hit(sample,combatResult.state,actor.position,!boss.combatCount);
+      if(surface)boss.combat.onBladeContact?.(sample.actionId);
       if(surface==='stone'&&controller.deflectSword(sample.actionId)){
         sample=null;strikeSampler.reset();swordTrail?.clear();
       }else if(surface)controller.pauseOnImpact(.025);
     }
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     frameDiagnostics.measure('contactsMs',contactsStart);
-    const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample):0;
+    const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample,boss.combat.onBladeContact):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
   training = createTrainingTargets(world.scene, world.shadows,damageFeedback,world.terrain);
@@ -1844,6 +1846,8 @@ try {
       },
       rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();townServices?.rest();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);world.dayCycle?.restUntilMorning();return true;},
       setMapMarkers:list=>minimap.setMarkers(list),
+      playerLevel:()=>townServices?.economy.progression.level??1,
+      creditQuestExperience:(ids,quiet)=>townServices?.creditQuestExperience(ids,quiet)??0,
       creditGold:(source,amount)=>goldLoot.creditCumulative(source,amount),
       addPotions:count=>{if(townServices)return townServices.addPotions(count);if(!boss)return 0;const before=boss.potions.remaining;boss.potions.remaining=Math.min(POTION.uses,before+count);updateButtons();return boss.potions.remaining-before;},
       // Errands (v03/errands.js): bag items, village service events.
@@ -1879,12 +1883,21 @@ try {
             read:()=>{
               const stats=equipmentStats(equipmentChoices),defense=playerDefense();
               return {equipment:townServices?.equippedFinishes??{...equipmentChoices},tradeBag:townServices?.bag(),attackBonus:townServices?.economy.attack??stats.attackBonus,defense,armorDefense:townServices?.armorDefense??defense-stats.defense,
+                progression:townServices?.economy.progression,
                 hp:boss.playerHp,maxHp:boss.playerMaxHp,stamina:controller.stamina,maxStamina:controller.maxStamina,
                 gold:goldLoot.balance,potions:townServices?.remaining??boss.potions.remaining,canUsePotion:allowed('potion')&&!controller.captured&&!controller.groggy&&(townServices?townServices.canDrink():boss.canUsePotion),
                 touch:root.dataset.hudInput==='touch',allows:allowed};
             },
             equip:(slot,id)=>{const select=$('#'+slot+'-select');select.value=id;select.dispatchEvent(new Event('change'));},
             equipItem:id=>townServices?.equip(id),registerItem:id=>townServices?.register(id),usePotion:()=>actions.potion(),
+            learnSkill:id=>{
+              if(!townServices?.economy.learnSkill(id))return false;
+              townServices.apply();return true;
+            },
+            refundSkills:()=>{
+              if(!townServices?.economy.refundSkills())return false;
+              townServices.apply();return true;
+            },
           });
           characterMenu.show(page);
         }catch(error){console.error('[Character menu]',error);toast('캐릭터 메뉴를 열지 못했습니다.');}

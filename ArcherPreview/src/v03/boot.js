@@ -23,6 +23,7 @@ import {createGuideWisp} from './guide-wisp.js';
 import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
 
+import {recordedQuestIds} from './character-progression.js';
 import {CHAPTERS,chapterProgress,questKey} from './chapter-progress.js';
 import {chapterWords} from './chapter-select.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
@@ -197,7 +198,7 @@ export function setupV03(api){
  // in that gap wrote the wrong map into the record.)
  function metaPatch(extra={}){
   const s=gameState(),here=state.arriving?{}:{character:s.character,place:PLACE_NAMES[s.character]??'',placeKey:PLACE_NAMES[s.character]?s.character:''};
-  return {...here,playSeconds:state.playSeconds,level:1,...extra};
+  return {...here,playSeconds:state.playSeconds,level:api.playerLevel?.()??1,...extra};
  }
  function startWorld(){if(state.worldStarted)return;state.worldStarted=true;api.startWorld?.();}
  // Behind the title / resume screen the map's monster species load ahead of
@@ -214,6 +215,7 @@ export function setupV03(api){
    catch(error){if(!state.disposed){screen('title');title.show();title.setEnabled('load',true);state.sceneShown=false;await opening.release();}throw error;}
   }
   setStoryChapter(chapter.id);
+  if(!chapter.replay)api.creditQuestExperience?.(recordedQuestIds(save.journey,questSets),true);
   screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume,key:questKey(chapter.id,chapter.replay),replay:chapter.replay,onComplete:()=>chapter.markComplete()});
   maybeStartWorld();
   // ?bench: one fixed measurement after entering play (structure plan, phase 0).

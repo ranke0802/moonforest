@@ -22,14 +22,14 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
  const clear=()=>{props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;loading=false;retryAt=0;seenFailures=props.stats.modelFailures;hadVisibleDrops=false;button.hidden=true;vanishingAuthored.clear();lastAuthoredRuntime=null;};
  const ground=(point)=>world.terrain?.heightAt?.(point.x,point.z)??0;
  const reach=(from,to)=>!world.navigation||world.navigation.segmentClear(from,to,.06,true);
- function scatter(id,position,rewards,tier){
+ function scatter(id,position,rewards,tier,experience=0){
   const entries=Object.entries(rewards);if(!entries.length)return false;
   // The existing monster drop is one pickup for the kill; chest prizes scatter separately.
   const piles=tier?entries.map(([item,count])=>({[item]:count})):[rewards];
   const poses=scatterChestLoot(world,position,piles.length,lootSeed(id));
   const rows=piles.map((prize,i)=>({id:(tier?'chest:':'foe:')+id+':'+i,mapId:world.mapId,model:modelFor(Object.keys(prize)[0]),...poses[i],
    rewards:prize,tier:tier||1,effectEnabled:!!tier}));
-  const ok=economy.scatter(rows,tier?id:null);if(ok)nextScan=0;return ok;
+  const ok=economy.scatter(rows,tier?id:null,experience);if(ok)nextScan=0;return ok;
  }
  function open(point){
   const pos=player();if(!point||!pos||!canInteract()||dist(pos,point)>3||economy.state.opened.includes(point.id))return false;
@@ -77,8 +77,8 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
   });
  }
  return {clear,
-  defeat(event){if(!world.v03?.playing||!event?.position)return;const rewards=monsterRewards(event.kind);
-   scatter(globalThis.crypto?.randomUUID?.()??Date.now().toString(36)+Math.random().toString(36).slice(2),event.position,rewards,0);
+  defeat(event,experience=0){if(!world.v03?.playing||!event?.position)return false;const rewards=monsterRewards(event.kind);
+   return scatter(globalThis.crypto?.randomUUID?.()??Date.now().toString(36)+Math.random().toString(36).slice(2),event.position,rewards,0,experience);
   },
   tick(dt){
    if(!world.v03?.playing){if(map)clear();return;}

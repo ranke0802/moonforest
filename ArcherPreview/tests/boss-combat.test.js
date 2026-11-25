@@ -184,11 +184,14 @@ test('downed boss: real low blade contact deals normal and three heavy hits with
 test('boss defense: roll says 회피, guard says BLOCK; prevented bursts cannot damage later',()=>{
  for(const [mode,label] of [['evade','Dodge'],['guard','BLOCK']]){
   const {b,player,sample,feedback,close}=collisionEncounter(mode);
+  const bladeContacts=[];b.combat.onBladeContact=id=>bladeContacts.push(id);
   const burst={...sample,window:{id:'jump-cut',damage:64,heavy:true,burst:[20,20,24],interval:.055}};
   for(const elapsed of [0,.055,.11])b.poseAndContacts(player,{}, {...burst,elapsed},null);
   assert.equal(b.brain.hp,900);assert.equal(feedback.length,1);assert.equal(feedback[0][1],label);assert.equal(b.gate.pending.length,0);
+  assert.deepEqual(bladeContacts,mode==='guard'?[1]:[]);
   b.brain.mode='idle';b.poseAndContacts(player,{}, {...burst,elapsed:.2},null);assert.equal(b.brain.hp,900);
-  b.poseAndContacts(player,{}, {...sample,actionId:2},null);assert.equal(b.brain.hp,880);close();
+  b.poseAndContacts(player,{}, {...sample,actionId:2},null);assert.equal(b.brain.hp,880);
+  assert.equal(bladeContacts.at(-1),2);close();
  }
 });
 

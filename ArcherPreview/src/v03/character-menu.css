@@ -46,6 +46,8 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-grid button{display:grid;place-items:center;position:relative;cursor:pointer}
 .mf-menu-grid button .commercial-icon{width:80%;height:80%}
 .mf-menu-count{position:absolute;bottom:2px;right:4px;font:600 12px/1 system-ui;color:#f5e4b7;text-shadow:0 1px 3px #000}
+.mf-menu-grid button[data-broken]::after{content:'!';position:absolute;top:2px;left:2px;min-width:1.1em;text-align:center;border-radius:2px;background:#802e24;color:#fff3dc;font:700 12px/1.15 system-ui,sans-serif}
+.mf-menu-break-note{color:#ffc2a4}
 .mf-menu-item{border-left:1px solid var(--line)}
 .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:72px;height:72px;margin:8px 0;display:grid;place-items:center}
 .mf-menu-item button,.mf-menu-equipped{display:inline-block;margin-top:10px;border:1px solid var(--line);color:var(--gold);padding:6px 12px}
@@ -88,6 +90,15 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-skill-keys dt{font-size:11px;color:#c9bb99}
 .mf-skill-keys>div+div dd{color:#f2ebd8cc}
 .mf-skill-detail p{margin:10px 0 0;line-height:1.5}
+.mf-skill-tree.has-training{grid-template-rows:auto minmax(0,1fr);overflow:auto}
+.mf-skill-training{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:3px 8px;
+  padding-bottom:4px;border-bottom:1px solid #8e795466;color:var(--gold)}
+.mf-skill-training output{margin-right:auto}
+.mf-skill-training button,.mf-skill-invest{min-height:36px;padding:4px 9px;background:#1c2a20;border:1px solid var(--line);border-radius:3px;cursor:pointer}
+.mf-character-menu .mf-skill-node.is-trainable{border-color:#a99c6a;color:var(--gold)}
+.mf-skill-node.is-trainable b,.mf-skill-rank{color:var(--gold)}
+.mf-skill-invest{margin-top:8px}
+.mf-skill-training button:disabled,.mf-skill-invest:disabled{opacity:.5;cursor:default}
 .mf-skill-needs{margin:10px 0 0;padding:0;list-style:none;display:grid;gap:3px}
 .mf-skill-needs li::before{content:"\2715  ";color:#f38d8d}
 .mf-skill-needs li.is-met::before{content:"\2713  ";color:#8df3b1}

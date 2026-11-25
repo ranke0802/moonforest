@@ -420,7 +420,9 @@ export class BossEncounter {
         this.gate.pending=[];
         const all=sample.contacts??[sample],breaking=all.filter(contact=>contact.window?.id==='shield-push');
         for(const contact of all)if(!breaking.includes(contact)&&this.gate.check({...sample,...contact,capsules:contactCapsules})){
-          if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block')this.playerBlocked();
+          if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block'){
+            this.combat.onBladeContact?.(sample.actionId);this.playerBlocked();
+          }
         }
         contacts=breaking.length?this.gate.collect({...sample,contacts:breaking,capsules:contactCapsules,rangeContact}):{hits:[],hitStop:0};
       }else contacts=this.gate.collect({...sample,capsules:contactCapsules,rangeContact});
@@ -433,6 +435,7 @@ export class BossEncounter {
         // hits make smaller foes flinch and slide back a little.
         const light=this.combat.lightHit,flinch=!!light&&!hit.heavy&&!shieldPush&&!light.skip?.includes(this.kind);
         if(!this.brain.hit(shieldPush?{...hit,heavy:true,ignoreDefense:true}:flinch?{...hit,interruptsBoss:true}:hit))continue;
+        if(!shieldPush)this.combat.onBladeContact?.(sample.actionId);
         if(flinch&&this.brain.hp>0&&this.brain.mode!=='down'&&!this.brain.unflinching){const away=this.actor.position.subtract(player.position);away.y=0;if(away.lengthSquared()>1e-8)this.knockVelocity.copyFrom(away.normalize().scale(light.push));}
         if(this.brain.hp>0)this.animator?.reactToHit?.();
         hitStop=Math.max(hitStop,contacts.hitStop);this.hitCount++;

@@ -52,6 +52,14 @@ export const SKILL_TREE=Object.freeze([
 export const SKILL_OPEN=Object.freeze([[1,2],[2,3],[3,3],[4,2],[5,2],[6,2]]);
 export const SKILL_COLUMNS=4;
 
+// Optional training occupies the existing empty cells. Unlike the seven
+// tutorial controls, players may train these immediately and refund them.
+export const PASSIVE_CELLS=Object.freeze([
+  {id:'weaponCare',branch:'sword',row:1,col:2},
+  {id:'guardTraining',branch:'shield',row:4,col:2},
+  {id:'endurance',branch:'footwork',row:5,col:2}
+]);
+
 // The controls come from the lessons the same combat runtime already teaches.
 // content: the chapter's COMBAT_HINTS and TIPS, already in the player's language
 // (cloneChapter + localizeChapter). control is the current input mode's line.

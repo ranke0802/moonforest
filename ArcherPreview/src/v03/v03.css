@@ -342,6 +342,13 @@ html[data-edition] #app[data-commercial-ui] .commercial-top-fullscreen:before{ba
 html[data-edition] #app[data-commercial-ui] .commercial-top-fullscreen[aria-pressed=true]:before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5'/%3E%3C/svg%3E")}
 html[data-v03-vital] #app #gold-balance:before{content:'';display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fbeab4,#e6c97e 45%,#a8833f);box-shadow:0 0 0 1px #0b080c,0 1px 2px #000a;vertical-align:-1px}
 
+/* Keep the weapon beside the purse line, anchored to movable player vitals. */
+.mf-weapon-condition{position:absolute;right:0;top:calc(100% + 3px);display:inline-flex;align-items:center;gap:3px;pointer-events:none;color:#eee3c6;white-space:nowrap;font:600 11px/1 var(--v03-font,sans-serif);font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000,0 0 3px #000}
+.mf-weapon-condition .mf-town-item-icon,.mf-weapon-condition .commercial-icon{width:19px;height:19px}
+.mf-weapon-condition[data-broken]{color:#ffc0a2}
+.mf-weapon-condition[data-broken]::after{content:'!';font-weight:800}
+.mf-weapon-condition[hidden],html:not([data-v03-screen=play]) .mf-weapon-condition{display:none}
+
 /* ----- Title on short landscape screens: all five entries fit above the
    edge, and the version line moves to the right corner. ----- */
 @media (max-height:420px) and (orientation:landscape){

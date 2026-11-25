@@ -19,7 +19,7 @@ import {parseHTML} from 'linkedom';
 const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};};
 const strike=bonus=>PLAYER_STRIKES.attack.map(window=>boostSwordStrike(window,bonus).damage);
 
-test('a +10 blade (durability 32) breaks after 32 striking actions and then hits below an unforged +14 club',()=>{
+test('a +10 blade (32 durability) survives 319 distinct blade contacts, then breaks on contact 320',()=>{
  const storage=store(),gold=new GoldLoot({storage});gold.creditCumulative('forge-test',5000);
  const town=createTownEconomy(gold);
  assert.ok(town.grant('goblin-cleaver'));assert.ok(town.grant('spiked-club'));assert.ok(town.grant('iron-scrap',20));
@@ -35,11 +35,13 @@ test('a +10 blade (durability 32) breaks after 32 striking actions and then hits
  assert.deepEqual(forged,[46,48]);assert.deepEqual(club,[32,34]);
  // The bag's comparison while the club is worn: +28, change +14.
  assert.equal(town.gear('goblin-cleaver').attack-town.attack,14);
- // Back to the +10 blade; every damaging action costs one durability (one per action id).
+ // Contact events from multiple windows and targets share the same action id.
  assert.ok(town.equip('goblin-cleaver'));
- for(let action=1;action<=31;action++){assert.equal(town.damageWeapon(action),true);assert.equal(town.damageWeapon(action),false,'once per action');}
+ for(let action=1;action<320;action++){
+  assert.equal(town.damageWeapon(action),action%10===0);assert.equal(town.damageWeapon(action),false,'once per action');
+ }
  assert.equal(town.gear().hp,1);assert.equal(town.attack,28,'still +28 with 1 durability left');
- assert.equal(town.damageWeapon(32),true);
+ assert.equal(town.damageWeapon(320),true);
  assert.deepEqual(town.gear(),{level:10,hp:0,max:32,attack:0,defense:0});
  assert.equal(town.attack,0,'a broken blade adds nothing, not even its own +8');
  const broken=strike(town.attack);
@@ -60,14 +62,52 @@ test('a +10 blade (durability 32) breaks after 32 striking actions and then hits
 });
 
 test('how many striking actions each blade lasts at its reinforcement levels',()=>{
- // Durability after forging: max(32, base max - 7 * level); one point per damaging action.
+ // Default rank costs one point for each ten blade contacts.
  const rows=Object.entries(TOWN_ITEMS).filter(([,item])=>item.slot==='sword').map(([id,item])=>{
-  const at=level=>Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost);
+  const at=level=>10*Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost);
   return {id,attack:item.attack,actionsAt0:at(0),actionsAt10:at(10),attackAt10:item.attack+10*FORGE_RULES.attackGain};
  });
  const cleaver=rows.find(row=>row.id==='goblin-cleaver');
- assert.deepEqual(cleaver,{id:'goblin-cleaver',attack:8,actionsAt0:96,actionsAt10:32,attackAt10:28});
+ assert.deepEqual(cleaver,{id:'goblin-cleaver',attack:8,actionsAt0:960,actionsAt10:320,attackAt10:28});
  assert.ok(rows.every(row=>row.actionsAt10<=row.actionsAt0));
+});
+
+test('each blade keeps its fractional wear through swaps and resume, then repairs or retires cleanly',()=>{
+ const storage=store(),gold=new GoldLoot({storage});gold.creditCumulative('wear-test',1000);
+ let town=createTownEconomy(gold);const sword='goblin-cleaver',club='spiked-club';
+ for(const id of [sword,club])town.grant(id);
+ let serial=0;
+ const hit=n=>{for(let i=0;i<n;i++){const id=++serial;town.damageWeapon(id);town.damageWeapon(id);}};
+ town.equip(sword);hit(9);town.equip(club);hit(4);town.flush();
+ town=createTownEconomy(new GoldLoot({storage}));
+ assert.equal(town.gear(sword).hp,96);assert.equal(town.gear(club).hp,103);
+ town.equip(sword);hit(1);assert.equal(town.gear().hp,95);
+ hit(9);town.repair(sword);hit(1);assert.equal(town.gear().hp,96);
+ town.equip(club);hit(5);assert.equal(town.gear().hp,103);hit(1);assert.equal(town.gear().hp,102);
+ assert.ok(town.spend(sword));assert.ok(town.grant(sword));town.equip(sword);hit(9);
+ assert.equal(town.gear().hp,96,'a newly acquired sword has a fresh contact count');
+});
+
+test('skill rank changes preserve fractional wear, including the fraction carried past the first full point',()=>{
+ const gold=new GoldLoot({storage:store()});gold.creditCumulative('test-reset-cost',100);
+ const town=createTownEconomy(gold);
+ const start=town.gear().hp;let id=0;
+ const hit=n=>{for(let i=0;i<n;i++)town.damageWeapon(++id);};
+ hit(9);assert.ok(town.learnSkill('weaponCare'));
+ hit(1);assert.equal(town.gear().hp,start,'9/10 + 1/15 is still below one');
+ hit(1);assert.equal(town.gear().hp,start-1);
+ assert.equal(town.state.condition['field-sword'].wearUnits,70,'1/30 remains');
+ hit(14);assert.equal(town.gear().hp,start-1);
+ hit(1);assert.equal(town.gear().hp,start-2);
+ assert.ok(town.refundSkills());
+ hit(9);assert.equal(town.gear().hp,start-2);hit(1);assert.equal(town.gear().hp,start-3);
+ for(const [rank,interval] of [[2,20],[3,25],[4,30],[5,35]]){
+  const fresh=createTownEconomy(new GoldLoot({storage:store()}));fresh.gainExperience(1000);
+  for(let step=0;step<rank;step++)assert.ok(fresh.learnSkill('weaponCare'));
+  const max=fresh.gear().hp;
+  for(let i=1;i<interval;i++)fresh.damageWeapon(i);
+  assert.equal(fresh.gear().hp,max);fresh.damageWeapon(interval);assert.equal(fresh.gear().hp,max-1);
+ }
 });
 
 test('the breaking hit still lands at +28, the next one at base, and the break is told once (not again on swaps)',()=>{
@@ -82,21 +122,21 @@ test('the breaking hit still lands at +28, the next one at base, and the break i
   for(let i=0;i<5;i++)town.forge(forgeCursor(450));
   // main.js order: the strike reads economy.attack, the enemy takes it, then the blade wears.
   const land=action=>{const damage=strike(town.attack)[0];services.weaponHit(action);return damage;};
-  for(let action=1;action<=31;action++)land(action);
+  for(let action=1;action<320;action++)land(action);
   assert.deepEqual(services.weaponMark(),{id:'goblin-cleaver',level:10,hp:1,max:32,attack:28});
   assert.equal(notes.length,0);
-  assert.equal(land(32),46,'the hit that breaks it still carries +28');
+  assert.equal(land(320),46,'the hit that breaks it still carries +28');
   assert.deepEqual(notes,[t('shop.weaponBroken',{name:itemName('goblin-cleaver')})]);
   assert.deepEqual(services.weaponMark(),{id:'goblin-cleaver',level:10,hp:0,max:32,attack:0});
-  assert.equal(land(33),18,'the next hit has no bonus at all');
-  assert.equal(services.weaponHit(34),false,'a broken blade does not wear further');
+  assert.equal(land(321),18,'the next hit has no bonus at all');
+  assert.equal(services.weaponHit(322),false,'a broken blade does not wear further');
   // Swapping to the +14 club and back: the club hits higher; no repeated notice.
-  assert.ok(services.equip('spiked-club'));assert.equal(land(35),32);
-  assert.ok(services.equip('goblin-cleaver'));assert.equal(land(36),18);
+  assert.ok(services.equip('spiked-club'));assert.equal(land(323),32);
+  assert.ok(services.equip('goblin-cleaver'));assert.equal(land(324),18);
   assert.equal(notes.length,1,'told once per break');
-  // Repaired, it breaks again only after another 32 actions, and is told again.
+  // Repaired, it breaks again only after another 320 actions, and is told again.
   assert.ok(town.repair());assert.equal(strike(town.attack)[0],46);
-  for(let action=100;action<132;action++)land(action);
+  for(let action=400;action<720;action++)land(action);
   assert.equal(notes.length,2);
  }finally{services.dispose();}
 });

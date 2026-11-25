@@ -154,7 +154,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
       onDamage(target.aimPoint.add(new Vector3(0,.65,0)),damage,heavy,'enemy',burstIndex);
       return true;
     },
-    melee(sample){
+    melee(sample,onBladeContact){
       if(!sample||disposed)return;
       let hitStop=0;
       for(const record of records){
@@ -163,7 +163,10 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
           [[-.75,1.065,0],[.75,1.065,0],.13]].map(([a,b,radius])=>({
             points:[a,b].map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),matrix).asArray()),radius:radius*Math.max(Math.abs(record.root.absoluteScaling.x),Math.abs(record.root.absoluteScaling.y),Math.abs(record.root.absoluteScaling.z))}));
         const contacts=record.gate.collect({...sample,capsules});
-        for(const hit of contacts.hits){this.hit(record.target,hit);hitStop=Math.max(hitStop,contacts.hitStop);}
+        for(const hit of contacts.hits){
+          if(hit.id!=='shield-push')onBladeContact?.(sample.actionId);
+          this.hit(record.target,hit);hitStop=Math.max(hitStop,contacts.hitStop);
+        }
       }
       return hitStop;
     },

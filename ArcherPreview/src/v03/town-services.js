@@ -1,12 +1,18 @@
 import {createTownEconomy} from './town-economy.js';
 import {TOWN_ITEMS,itemName,itemNote,itemUsage,boostText} from './town-items.js';
 import {t} from './i18n.js';
+import {monsterExperience} from './character-progression.js';
 import {createTownTreasure} from './town-treasure.js';
+import {createWeaponConditionHud} from './weapon-condition-hud.js';
 
 export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound}){
  const economy=createTownEconomy(wallet,legacy()),win=root.ownerDocument.defaultView;
+ const healthHud=root.querySelector('#player-hud'),durabilityHud=healthHud?createWeaponConditionHud(healthHud):null;
  let shop=null,generation=0,disposed=false,wasPlaying=false,lastGear=null,appliedTo=null,treasure=null;
  const items=()=>economy.state;
+ function syncDurability(){
+  if(durabilityHud){const id=items().equipped.sword;durabilityHud.update(id,economy.gear(id));}
+ }
  function apply(){
   const e=appearance(),s=items(),sword=TOWN_ITEMS[s.equipped.sword],shield=TOWN_ITEMS[s.equipped.shield];
   if(e&&(lastGear!==s.equipped.sword+'/'+s.equipped.shield||appliedTo!==e)){
@@ -15,6 +21,11 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   }
   const b=battle();if(b)b.combat.defense=economy.defense;
   const c=controls();if(c)c.staminaRecoveryScale=economy.regen;
+  syncDurability();
+ }
+ function announceLevel(previous){
+  const level=economy.progression.level;
+  if(level>previous)notify(t('reward.levelUp',{level}));
  }
  function canDrink(){
   const b=battle(),s=items(),id=s.quick;if(!b||b.loading||b.grab?.active||!b.playerAlive||!s.bag[id])return false;
@@ -27,9 +38,9 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    const row={id,name:itemName(id),type:it.type,icon:id,quantity:count,
     worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
    if(it.slot==='sword'){
-    const w=economy.gear(id);row.stat='attack';row.value=w.attack;row.delta=row.value-economy.attack;
+    const w=economy.gear(id);row.broken=w.hp===0;row.stat='attack';row.value=w.attack;row.delta=row.value-economy.attack;
     row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max})+(it.usage?' · '+itemUsage(id):'');
-   }else if(it.slot){const w=economy.gear(id);row.stat='defense';row.value=w.defense;row.delta=w.defense-(economy.gear(s.equipped[it.slot])?.defense??0);row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max});}
+   }else if(it.slot){const w=economy.gear(id);row.broken=w.hp===0;row.stat='defense';row.value=w.defense;row.delta=w.defense-(economy.gear(s.equipped[it.slot])?.defense??0);row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max});}
    else row.note=itemNote(id)??t('char.materialNote');
    equipment.push(row);
   }
@@ -52,13 +63,12 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    return true;
   },
   equip(id){if(!economy.equip(id))return false;apply();sound('equip');return true;},
-  // main.js: a damaging action of the worn blade (one durability point per
-  // action id, town-economy). The moment it breaks, its attack (item + forge)
-  // drops to 0 until the smith repairs it; say so once, with the usual toast
-  // (2026-11-25: a +10 blade broke silently in the forest and hit below a +14).
+  // Only completed durability points need feedback. Repeated contacts of the
+  // same swing and the fractional wear between points stay in the economy.
   weaponHit(actionId){
    const id=items().equipped.sword;
    if(!economy.damageWeapon(actionId))return false;
+   syncDurability();
    if(economy.gear(id)?.hp===0)notify(t('shop.weaponBroken',{name:itemName(id)}));
    return true;
   },
@@ -77,13 +87,26 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    if(disposed||generation!==token||!world.v03?.playing||world.mapId!=='village')return;
    shop??=createTownShop({root,economy,onPause,onChange:apply});await shop.show(id);
   },
-  defeat(event){if(world.v03?.playing)getTreasure().defeat(event);},
+  creditQuestExperience(ids,quiet=false){
+   const previous=economy.progression.level,gain=economy.creditQuests(ids);
+   if(gain&&!quiet)announceLevel(previous);
+   return gain;
+  },
+  defeat(event){
+   if(!world.v03?.playing||!event?.position)return;
+   const xp=world.v03.story?.replaying?0:monsterExperience(event.kind);
+   const previous=xp?economy.progression.level:0;
+   // Keep the kill and its random loot in one ledger write. A kill still
+   // earns XP when no item rolls or the field has reached its pickup cap.
+   if(!getTreasure().defeat(event,xp)&&xp)economy.gainExperience(xp);
+   if(xp)announceLevel(previous);
+  },
   tick(dt){
    if(!world.v03?.playing){if(wasPlaying){treasure?.clear();flush();}wasPlaying=false;return;}
    if(!wasPlaying||appearance()!==appliedTo){wasPlaying=true;apply();}
    economy.tick(dt);const c=controls();if(c&&c.staminaRecoveryScale!==economy.regen)c.staminaRecoveryScale=economy.regen;
    getTreasure().tick(dt);
   },
-  dispose(){disposed=true;generation++;flush();shop?.dispose();treasure?.dispose();win.removeEventListener('pagehide',flush);root.ownerDocument.removeEventListener('visibilitychange',onVisibility);}
+  dispose(){disposed=true;generation++;flush();shop?.dispose();treasure?.dispose();durabilityHud?.dispose();win.removeEventListener('pagehide',flush);root.ownerDocument.removeEventListener('visibilitychange',onVisibility);}
  };
 }

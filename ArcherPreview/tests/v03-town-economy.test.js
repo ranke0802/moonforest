@@ -20,7 +20,8 @@ test('smith trades are atomic with gold and all four grades have distinct conseq
  assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:166,max:166,level:2,attack:7,defense:0});
  for(const grade of ['Success','Near miss','Failed']){town.grant('wolf-fang');assert.equal(town.forge({Success:.36,'Near miss':.24,Failed:0}[grade]),grade);}
  assert.equal(town.gear().level,3);assert.equal(town.gear().hp,town.gear().max-5);
- town.damageWeapon(9);town.damageWeapon(9);assert.equal(town.gear().hp,town.gear().max-6);
+ for(let action=0;action<10;action++){town.damageWeapon(action);town.damageWeapon(action);}
+ assert.equal(town.gear().hp,town.gear().max-6);
  assert.equal(town.repair(),true);assert.equal(town.gear().hp,town.gear().max);
  assert.equal(createTownEconomy(new GoldLoot({storage})).attack,9);
  const rival=new GoldLoot({storage}),other=createTownEconomy(rival);assert.ok(town.buy('herbalist','potion'));

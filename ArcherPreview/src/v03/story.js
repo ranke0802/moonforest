@@ -67,8 +67,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Quest rewards. Gold is credited per quest id (idempotent across reloads);
  // potions refill toward the carry limit; armor is a persistent flag in main.
  function grantReward(quest){
-  const reward=quest?.reward;if(!reward||replaying)return;
-  const parts=[];
+  if(!quest||replaying)return;
+  const reward=quest.reward??{},parts=[];
+  const xp=api.creditQuestExperience?.([quest.id]);if(xp>0)parts.push(t('reward.xp',{n:xp}));
   try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
   try{if(reward.armor&&api.grantArmor?.(reward.armor))parts.push(t('reward.armor.'+reward.armor));}catch(error){console.warn('[MoonForest 0.3] armor reward',error);}
@@ -101,8 +102,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function errandDone(errand){
   if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
   tips.queue.unshift({title:t('errand.done'),keys:errand.title,touch:errand.title,text:''});
-  const reward=errand.reward;if(!reward||replaying)return;
-  const parts=[];
+  if(replaying)return;
+  const reward=errand.reward??{},parts=[];
+  const xp=api.creditQuestExperience?.([errand.id]);if(xp>0)parts.push(t('reward.xp',{n:xp}));
   try{if(reward.gold&&api.creditGold?.('v03-errand-'+errand.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] errand potions',error);}
   if(!parts.length)return;
@@ -1358,6 +1360,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    return null;
   },
   get started(){return started;},
+  get replaying(){return replaying;},
   get log(){return log;},
   start({fresh=false,key,replay=false,onComplete=null}={}){
    replaying=replay;onChapterEnd=onComplete;log=createQuestLog({quests:content.QUESTS,storage:save.journey,key});

@@ -1,4 +1,5 @@
-import {bagContents,characterItems,combatSkills,SKILL_BRANCHES,SKILL_COLUMNS,SKILL_OPEN,SLOTS} from './character-menu-data.js';
+import {bagContents,characterItems,combatSkills,PASSIVE_CELLS,SKILL_BRANCHES,SKILL_COLUMNS,SKILL_OPEN,SLOTS} from './character-menu-data.js';
+import {PASSIVE_LIMITS,SKILL_REFUND_GOLD} from './character-progression.js';
 import {createCharacterPortrait} from './character-menu-camera.js';
 import {townItemIcon} from './town-item-art.js';
 import {t,language,cloneChapter,localizeChapter} from './i18n.js';
@@ -15,7 +16,7 @@ const BRANCH_ART=Object.freeze({
   footwork:['M9 4h5v9l5 3v4H9z','M9 16h10']
 });
 
-export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,onPause}){
+export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,onPause,learnSkill,refundSkills}){
   const doc=root.ownerDocument,win=doc.defaultView;
   const make=(tag,cls='',text='')=>{
     const node=doc.createElement(tag);
@@ -83,6 +84,11 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   function status(state,items){
     const stats=make('section','mf-menu-card mf-menu-stats'),details=make('dl');
     stats.append(make('h2','',t('char.warrior')),details);
+    const progress=state.progression;
+    if(progress){
+      stat(details,t('char.progressLevel'),progress.level>=progress.cap?progress.level+' (MAX)':progress.level);
+      stat(details,t('char.progressXp'),progress.level>=progress.cap?'MAX':progress.xp+' / '+progress.nextXp);
+    }
     stat(details,t('char.health'),Math.ceil(state.hp)+' / '+state.maxHp);
     stat(details,t('char.stamina'),Math.ceil(state.stamina)+' / '+state.maxStamina);
     stat(details,t('char.attack'),'+'+state.attackBonus);stat(details,t('char.defense'),state.defense);
@@ -125,6 +131,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===selected));
       if(!row){detail.append(make('p','',t('char.empty')));return;}
       detail.append(make('small','',t('char.type.'+row.type)),icon(row),make('h2','',row.name));
+      if(row.broken)detail.append(make('p','mf-menu-break-note',t('char.repairAtSmith')));
       if(row.stat){
         const stats=make('dl');stat(stats,t('char.'+row.stat),'+'+row.value);
         if(!row.worn)stat(stats,t('char.change'),row.delta>0?'+'+row.delta:String(row.delta));detail.append(stats);
@@ -146,7 +153,10 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       }
     }
     for(const row of list){
-      const tile=button('',()=>inspect(row));tile.title=row.name;tile.setAttribute('aria-label',row.name);
+      const tile=button('',()=>inspect(row));
+      const label=row.broken?row.name+' · '+t('char.gearBroken'):row.name;
+      tile.title=label;tile.setAttribute('aria-label',label);
+      if(row.broken)tile.dataset.broken='';
       tile.append(icon(row));
       if(row.worn)tile.append(make('small','mf-menu-count','✓'));
       else if(row.quantity)tile.append(make('small','mf-menu-count',String(row.quantity)));
@@ -171,12 +181,43 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   function skills(state){
     // The lesson hints in the chosen language: localized once per language.
     if(!lessons||lessonLang!==language()){lessons=localizeChapter(cloneChapter(LESSONS),LESSONS);lessonLang=language();}
-    const list=combatSkills(lessons,state.touch,state.allows),byId=new Map(list.map(skill=>[skill.id,skill]));
+    const list=combatSkills(lessons,state.touch,state.allows),progress=state.progression;
+    if(progress)for(const passive of PASSIVE_CELLS){
+      const rank=progress.skills[passive.id],limit=PASSIVE_LIMITS[passive.id];
+      list.push({...passive,name:t('char.skill.'+passive.id),rank,limit,need:[],available:rank>0});
+    }
+    const byId=new Map(list.map(skill=>[skill.id,skill]));
     const rows=SKILL_BRANCHES.length*2;
     const tree=make('section','mf-menu-card mf-skill-tree'),detail=make('section','mf-menu-card mf-skill-detail');
     tree.setAttribute('aria-label',t('char.skill.tree'));
     const branches=make('div','mf-skill-branches');
     for(const branch of SKILL_BRANCHES)branches.append(make('span','',t('char.branch.'+branch)));
+    if(progress){
+      const bar=make('div','mf-skill-training');
+      const points=make('output','',t('char.skill.points',{n:progress.points}));
+      const reset=button(t('char.skill.reset',{gold:SKILL_REFUND_GOLD}),()=>{
+        if(!bar.isConnected||reset.disabled)return;
+        const confirm=button(t('confirm.ok'),()=>{
+          if(!confirm.isConnected||confirm.disabled||!dialog.open)return;
+          confirm.disabled=true;
+          const saved=refundSkills();
+          show('Skills');
+          if(!saved)trainingMessage(t('toast.failed'));
+          treeFocus();
+        });
+        const cancel=button(t('confirm.cancel'),()=>{bar.replaceChildren(points,reset);reset.focus();});
+        bar.replaceChildren(make('span','',t('char.skill.refundConfirm',{n:progress.spent,gold:SKILL_REFUND_GOLD})),confirm,cancel);
+        cancel.focus();
+      });
+      reset.disabled=!refundSkills||progress.spent===0||state.gold<SKILL_REFUND_GOLD;
+      bar.append(points,reset);tree.classList.add('has-training');tree.append(bar);
+    }
+    function treeFocus(){
+      body.querySelector('.mf-skill-node[aria-pressed=true]')?.focus();
+    }
+    function trainingMessage(message){
+      const notice=make('p','',message);notice.setAttribute('role','status');body.querySelector('.mf-skill-detail')?.append(notice);
+    }
     const grid=make('div','mf-skill-nodes'),lines=vector('svg',{viewBox:'0 0 100 100',preserveAspectRatio:'none','aria-hidden':'true'});
     grid.style.setProperty('--mf-skill-cols',String(SKILL_COLUMNS));grid.style.setProperty('--mf-skill-rows',String(rows));
     const x=col=>(col-.5)/SKILL_COLUMNS*100,y=row=>(row-.5)/rows*100;
@@ -192,8 +233,26 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       skillPick=skill.id;detail.replaceChildren();
       for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===skillPick));
       const head=make('div','mf-skill-head'),title=make('div'),tags=make('div','mf-skill-tags');
-      for(const tag of [t('char.branch.'+skill.branch),t('char.skill.basic')])tags.append(make('i','',tag));
+      const passive=skill.rank!==undefined;
+      for(const tag of [t('char.branch.'+skill.branch),t(passive?'char.skill.passive':'char.skill.basic')])tags.append(make('i','',tag));
       title.append(make('h2','',skill.name),tags);head.append(branchIcon(skill.branch),title);
+      if(passive){
+        const rank=make('p','mf-skill-rank',t('char.skill.rank',{rank:skill.rank,max:skill.limit}));
+        const effect=make('p','',t('char.skillText.'+skill.id));
+        const learn=button(t(skill.rank>=skill.limit?'char.skill.mastered':'char.skill.invest'),()=>{
+          if(!learn.isConnected||learn.disabled||!dialog.open)return;
+          learn.disabled=true;
+          const saved=learnSkill(skill.id);
+          show('Skills');
+          if(!saved)trainingMessage(t('toast.failed'));
+          const next=body.querySelector('.mf-skill-invest');
+          if(next&&!next.disabled)next.focus();else treeFocus();
+        });
+        learn.className='mf-skill-invest';
+        learn.disabled=!learnSkill||skill.rank>=skill.limit||progress.points<1;
+        detail.append(head,rank,effect,learn);
+        return;
+      }
       // The current input mode first, the other one under it.
       const controls=make('dl','mf-skill-keys');
       for(const mode of state.touch?['touch','keys']:['keys','touch']){
@@ -207,19 +266,20 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       detail.append(make('span','mf-menu-equipped',t(skill.available?'char.skill.ready':'char.skill.lockedShort')));
     }
     for(const skill of list){
-      const state=t(skill.available?'char.skill.ready':'char.skill.lockedShort');
+      const state=skill.rank!==undefined?t('char.skill.rank',{rank:skill.rank,max:skill.limit}):t(skill.available?'char.skill.ready':'char.skill.lockedShort');
       const node=button('',()=>inspect(skill)),label=make('span');
-      node.className='mf-skill-node '+(skill.available?'is-ready':'is-locked');node.style.gridArea=skill.row+' / '+skill.col;
+      node.className='mf-skill-node '+(skill.available?'is-ready':skill.rank!==undefined?'is-trainable':'is-locked');node.style.gridArea=skill.row+' / '+skill.col;
       node.setAttribute('aria-label',skill.name+', '+state);
       label.append(make('b','',skill.name),make('em','',state));node.append(branchIcon(skill.branch),label);
       nodes.set(skill.id,node);grid.append(node);
     }
     for(const [row,col] of SKILL_OPEN){
+      if(progress&&PASSIVE_CELLS.some(skill=>skill.row===row&&skill.col===col))continue;
       const slot=make('i','mf-skill-node is-open',t('char.skill.later'));slot.style.gridArea=row+' / '+col;
       slot.setAttribute('aria-hidden','true');grid.append(slot);
     }
     tree.append(branches,grid);body.append(tree,detail);
-    inspect(byId.get(skillPick)??list[0]);
+    inspect(byId.get(skillPick)??byId.get('weaponCare')??list[0]);
   }
   function show(name){
     if(disposed)return;
