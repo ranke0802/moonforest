@@ -48574,11 +48574,99 @@
         "moonforest-0.3-riding-hud"
       ],
       "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/driver.webp",
+      "path": "ArcherPreview/src/v03/portraits/driver.webp",
+      "bytes": 44474,
+      "sha256": "fac96f2893bf5be2ec39efb18e31be209e224fcf01cca296fac42cae60d138f9",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/elder.webp",
+      "path": "ArcherPreview/src/v03/portraits/elder.webp",
+      "bytes": 38536,
+      "sha256": "aaa7c381d7719028eb0cd5113d8c5a64d50ed0baaeb83ee07885da49007a02e9",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/farmer.webp",
+      "path": "ArcherPreview/src/v03/portraits/farmer.webp",
+      "bytes": 38246,
+      "sha256": "0dde82809e60ee08876dcdf867d10bc9f87645532b7f0fcdfc868091d6bfd00e",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/herbalist.webp",
+      "path": "ArcherPreview/src/v03/portraits/herbalist.webp",
+      "bytes": 39452,
+      "sha256": "f8ea90ff4bf5401b8f124f85797137e64ec7f2797cda0a17dcb4c14d39bc9073",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/innkeeper.webp",
+      "path": "ArcherPreview/src/v03/portraits/innkeeper.webp",
+      "bytes": 41554,
+      "sha256": "629adfba5e3d9a9929e5dc4e1f3a87c40e768f8fa0ebfbc165ee1f17b76be27c",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/joachim.webp",
+      "path": "ArcherPreview/src/v03/portraits/joachim.webp",
+      "bytes": 45708,
+      "sha256": "5ffc38cd00aa1910d57a491e1981b798f2dd813ea7345842902185dfa93ee2e7",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/vivian.webp",
+      "path": "ArcherPreview/src/v03/portraits/vivian.webp",
+      "bytes": 52446,
+      "sha256": "7f350c5992675191fb484c7cddb60c5f6f589835f5750b813e8821db000f863f",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/portraits/youth.webp",
+      "path": "ArcherPreview/src/v03/portraits/youth.webp",
+      "bytes": 40548,
+      "sha256": "5b96137104d5cf2c3e1548857c63ca4917e978fce9591c620f0a28df0fd8630b",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-dialogue-portraits"
+      ],
+      "status": "bundled"
     }
   ],
   "summary": {
-    "files": 3734,
-    "bytes": 14017928025,
+    "files": 3742,
+    "bytes": 14018268989,
     "missing": [],
     "layoutDuplicates": 44
   },
