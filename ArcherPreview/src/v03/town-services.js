@@ -90,10 +90,14 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    if(disposed||generation!==token||!world.v03?.playing||world.mapId!=='village')return;
    shop??=createTownShop({root,economy,onPause,onChange:apply});await shop.show(id);
   },
-  creditQuestExperience(ids,quiet=false){
-   const previous=economy.progression.level,gain=economy.creditQuests(ids);
+  creditQuestExperience(ids,quiet=false,chapter=null){
+   const previous=economy.progression.level,gain=economy.creditQuests(ids,quiet,chapter);
    if(gain&&!quiet)announceLevel(previous);
    return gain;
+  },
+  settleQuest(quest,step){
+   const previous=economy.progression.level,paid=economy.settleQuest(quest,step);
+   if(paid?.armor)apply();if(paid?.xp)announceLevel(previous);return paid;
   },
   defeat(event){
    if(!world.v03?.playing||!event?.position)return;

@@ -51,7 +51,8 @@
         // knows its release's files: it posts them here (resource-cache.js) and
         // this page registers the same list under its own name, once per
         // release and worker; a new worker or a new release is registered again.
-        var graph=null,sent=null,workers=navigator.serviceWorker;
+        var graph=null,sent=null,workers;
+        try{workers=navigator.serviceWorker;}catch(error){/* Storage is optional for fullscreen. */}
         function declare(){
           if(!graph||!workers)return;
           var active=workers.controller?Promise.resolve(workers.controller):workers.ready.then(function(registration){return registration.active;});

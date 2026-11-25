@@ -114,7 +114,7 @@ export class VillageActiveCandidates {
   };
   record.enabledObserver=mesh.onEffectiveEnabledStateChangedObservable.add(changed);
   record.disposeObserver=mesh.onDisposeObservable.add(()=>this.unregister(record));
-  if(kind===2){record.omit=emptyRoot(mesh);this.roots.push(record);}
+  if(kind===2){record.omit=emptyRoot(mesh);record.rootIndex=this.roots.length;this.roots.push(record);}
   changed();this.invalidate();
  }
  // Event modes: a bounded slice of each list per query, round robin.
@@ -146,7 +146,11 @@ export class VillageActiveCandidates {
   mesh.onEffectiveEnabledStateChangedObservable.remove(record.enabledObserver);mesh.onDisposeObservable.remove(record.disposeObserver);
   this.records.delete(record);this.unwatch(record);this.tracked.delete(mesh);
   if(record.kind===1){mesh._villageLodOwned=false;mesh._villageLod=null;}
-  if(record.kind===2){const at=this.roots.indexOf(record);if(at>=0){this.roots[at]=this.roots[this.roots.length-1];this.roots.pop();}}
+  if(record.kind===2&&record.rootIndex>=0){
+   const last=this.roots.pop();
+   if(last!==record){last.rootIndex=record.rootIndex;this.roots[record.rootIndex]=last;}
+   record.rootIndex=-1;
+  }
   this.invalidate();
  }
  unwatch(record){

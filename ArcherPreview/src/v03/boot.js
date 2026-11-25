@@ -2,6 +2,7 @@
 // It owns no engine, scene, frame loop or timer loop: main.js calls update(dt)
 // from the existing game frame, and every stage change goes through `api`.
 import {createTitleScreen} from './title-screen.js';
+import {createGallery} from './gallery.js';
 import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {crownBoxes,clearView} from './title-camera.js';
@@ -42,7 +43,6 @@ export const SKIP_LOGO_KEY='moonforest-0.3:skip-logo';
 export const TITLE_FOE=Object.freeze({kind:'wolf',count:1,hpFloor:.45});
 // The first fight is one wolf: enough to learn every basic without pressure.
 export const AMBUSH=Object.freeze({kind:'gray-wolf',count:1});
-const GALLERY=Object.freeze([{id:'scenes',total:12},{id:'bestiary',total:14},{id:'titles',total:10}]);
 export const OPENING_STAGE=chapter1.OPENING_STAGE;
 const TITLE_CAMERA=Object.freeze({radius:10.5,beta:1.24,orbit:.075});
 
@@ -68,7 +68,11 @@ export function setupV03(api){
  const appleTouch=isIos(view);
  if(appleTouch)html.dataset.v03Ios='1';
  const trail=createRunTrail({storage:(()=>{try{return view?.localStorage??null;}catch{return null;}})()});
- const opening=createOpening({doc,wait,flat:appleTouch,onCut:cut=>trail.mark('opening:'+cut)});
+ const gallery=createGallery(save);
+ const opening=createOpening({doc,wait,flat:appleTouch,onCut:cut=>{
+  trail.mark('opening:'+cut);
+  if(!doc.hidden)gallery.scene(cut==='wake'?'intro':cut);
+ }});
  // 0.3's layers (dialogue, prompts, quest, tips, title) live on <body>, outside
  // #app: no right-click menu or text selection there either (inputs excepted).
  const selection=setupGameSelection(doc.body);
@@ -119,7 +123,9 @@ export function setupV03(api){
   else Object.assign(sharedStory,content);
  }
  const slowFx=createSlowFx((()=>{try{return view.localStorage;}catch{return null;}})());
- const story=createStory({api,doc,save,content:sharedStory,combatLocksTravel,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx});
+ const story=createStory({api,doc,save,content:sharedStory,combatLocksTravel,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx,
+  // Quest talk/reward/save stages into the run trail, only while frame diagnostics are on (Astra #211).
+  stageMark:stage=>{if(api.world?.frameDiagnostics?.enabled===true)trail.mark(stage);},onScene:gallery.scene});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
@@ -215,7 +221,7 @@ export function setupV03(api){
    catch(error){if(!state.disposed){screen('title');title.show();title.setEnabled('load',true);state.sceneShown=false;await opening.release();}throw error;}
   }
   setStoryChapter(chapter.id);
-  if(!chapter.replay)api.creditQuestExperience?.(recordedQuestIds(save.journey,questSets),true);
+  if(!chapter.replay)api.creditQuestExperience?.(recordedQuestIds(save.journey,questSets),true,source);
   screen('play');input.setSuspended(false);api.wake?.();story.start({fresh:!resume,key:questKey(chapter.id,chapter.replay),replay:chapter.replay,onComplete:()=>chapter.markComplete()});
   maybeStartWorld();
   // ?bench: one fixed measurement after entering play (structure plan, phase 0).
@@ -243,6 +249,7 @@ export function setupV03(api){
   return state.screen==='opening'&&!state.disposed;
  }
  async function beginNewGame({replay=false}={}){
+  gallery.reset();
   // Seamless path: the title already runs on the opening map.
   state.busy=true;await title.leave();
   stopAttract();
@@ -346,7 +353,11 @@ export function setupV03(api){
    if(choice.replay&&choice.id===1){await beginNewGame({replay:true});return;}
    await continueHere();
   }else if(action==='gallery'){
-   await title.showGallery({sections:GALLERY.map(section=>({...section,label:t('gallery.'+section.id),unlocked:0}))});
+   state.busy=true;
+   try{
+    const journal=chapterContent.get(2)??await CHAPTERS.find(chapter=>chapter.id===2).load(language());
+    if(!state.disposed&&state.screen==='title')await title.showGallery({sections:gallery.sections(content,journal)});
+   }finally{state.busy=false;}
   }else if(action==='settings'){
    const choice=await title.showSettings({languages:LANGUAGES,current:language()});
    if(choice?.game)api.openSettings();
@@ -402,6 +413,8 @@ export function setupV03(api){
  function tidySettings(dialog){
   const host=dialog.querySelector('.settings-sections');if(!host)return;
   mountSlowFxSettings({doc,host,fx:slowFx,t});
+  const credits=dialog.querySelector('#v03-audio-credits');
+  if(credits)host.append(credits);
   // Back to the title: saved first; a second tap within three seconds confirms.
   const leave=doc.createElement('button');leave.type='button';leave.className='v03-settings-leave';leave.dataset.ui='';leave.textContent=t('settings.toTitle');
   let armed=0;
@@ -605,10 +618,16 @@ export function setupV03(api){
   // into idle and the speaker keeps its talking motion.
   get blocksGame(){return state.screen==='opening'||state.screen==='exit'||gate.active;},
   // Called by the game when an enemy is defeated.
-  defeat(event){if(state.screen==='play')story.defeat(event);},
-  decorateFoeBar(element,foe){if(state.screen==='play')vitality.decorate(element,foe);},
+  defeat(event){if(state.screen==='play'){gallery.encounter(event);story.defeat(event);}},
+  decorateFoeBar(element,foe){if(state.screen==='play'){
+   if(!element.hidden&&foe?.brain?.hp>0&&foe.renderVisible!==false&&foe.fogVisible!==false)gallery.encounter(foe);
+   vitality.decorate(element,foe);
+  }},
   // main.js: a hit landed (kind 'enemy': on that foe; 'player'/'block': by that foe), and which foe a starting action faces.
-  combatEvent(kind,foe,damage){if(state.screen==='play'&&!story.sceneActive){combatTarget.note(kind,foe);playerCombatLock.note(kind,foe,damage,api.world.mapId);}},
+  combatEvent(kind,foe,damage){if(state.screen==='play'&&!story.sceneActive){
+   if(foe?.brain&&(kind==='enemy'||kind==='player'||kind==='block'))gallery.encounter(foe);
+   combatTarget.note(kind,foe);playerCombatLock.note(kind,foe,damage,api.world.mapId);
+  }},
   get combatLocksTravel(){return combatLocksTravel();},
   aimTarget(position,nearest,starts=true){return state.screen==='play'?combatTarget.aim(position,nearest,starts):nearest;},
   get aimReach(){return state.screen==='play'?combatTarget.reach:0;},
@@ -657,7 +676,8 @@ export function setupV03(api){
     if(battle.playerAlive===false)playerCombatLock.reset();
     state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
     combatTarget.update(dt,api.getController()?.state,api.getPlayer()?.position,s.mapId);
-    if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;trail.mark(state.trailScene?'play:opening-scene':'play');}
+    if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;state.wagonShown=false;trail.mark(state.trailScene?'play:opening-scene':'play');}
+    if(story.sceneActive&&!state.wagonShown&&!opening.covering&&!doc.hidden){gallery.scene('wagon');state.wagonShown=true;}
     if(story.sceneActive)vitality.present();else vitality.update(dt);
     cursors.set(story.dialogueOpen||story.sceneActive?'ui':battle.combatCount>0?'combat':story.near?'talk':'play');
     maybeStartWorld();

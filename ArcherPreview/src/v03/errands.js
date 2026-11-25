@@ -8,7 +8,7 @@
 // and town {action,item?}: a village service event (craft, forge, repair, buy).
 // Any number of errands can be active; events advance every active errand.
 const STORE_KEY='v03-errands-v1';
-export function createErrandLog({errands=[],storage=null,key=STORE_KEY}){
+export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=null}){
  const byId=new Map(errands.map(errand=>[errand.id,errand]));
  // active: id -> {step,count}; finished: ids in completion order.
  let state={active:{},finished:[]};
@@ -29,13 +29,21 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY}){
  const stepOf=id=>{const row=state.active[id];return row?byId.get(id).steps[row.step]:null;};
  const isActive=id=>!!state.active[id],isFinished=id=>state.finished.includes(id);
  function advance(id){
-  const row=state.active[id];row.step++;row.count=0;
+  const row=state.active[id],errand=byId.get(id);
+  if(settle&&row.step===errand.steps.length-1&&!settle(errand,stepOf(id)))return null;
+  row.step++;row.count=0;
   if(row.step<byId.get(id).steps.length){save();return false;}
   delete state.active[id];state.finished.push(id);save();return true;
  }
  const pendingTalk=(step,npc)=>(step?.type==='talk'||step?.type==='deliver')&&step.targets?.includes(npc);
  return {
   load,save,
+  recoverSettled(hasReceipt){
+   const owed=errands.filter(errand=>!isFinished(errand.id)&&hasReceipt(errand.id));
+   if(!owed.length)return false;
+   for(const {id} of owed){delete state.active[id];state.finished.push(id);}
+   save();return true;
+  },
   reset(){state={active:{},finished:[]};save();},
   snapshot:()=>({active:Object.fromEntries(Object.entries(state.active).map(([id,row])=>[id,{...row}])),finished:[...state.finished]}),
   errand:id=>byId.get(id)??null,
@@ -67,11 +75,15 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY}){
      const row=state.active[errand.id];row.count++;done=row.count>=step.count;if(!done){save();results.push({id:errand.id,stepDone:false,errandDone:false});continue;}
     }else if(step.type==='reach'&&event.type==='reach'&&event.map===step.map)done=true;
     else if(step.type==='town'&&event.type==='town'&&event.action===step.action&&(!step.item||event.item===step.item))done=true;
-    if(done)results.push({id:errand.id,stepDone:true,errandDone:advance(errand.id)});
+    if(done){
+     const errandDone=advance(errand.id);
+     if(errandDone!==null)results.push({id:errand.id,stepDone:true,errandDone});
+     else if(step.type==='defeat')state.active[errand.id].count--;
+    }
    }
    return results;
   },
   // The talk or deliver step of an errand that waits on this NPC is done.
-  complete(id,npc){const step=stepOf(id);if(!pendingTalk(step,npc))return null;return {id,stepDone:true,errandDone:advance(id)};},
+  complete(id,npc){const step=stepOf(id);if(!pendingTalk(step,npc))return null;const errandDone=advance(id);return errandDone===null?null:{id,stepDone:true,errandDone};},
  };
 }

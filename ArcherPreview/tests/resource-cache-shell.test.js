@@ -27,16 +27,17 @@ function workerFixture(){
 }
 
 // The inline script of moonforest-shell.html with a browser-shaped stand-in.
-function shellFixture(){
+function shellFixture(navigatorOverride){
  const html=readFileSync(new URL('../moonforest-shell.html',import.meta.url),'utf8'),code=html.match(/<script id="moonforest-shell">([\s\S]*?)<\/script>/)[1];
  const posted=[],windowListeners={},workerListeners={},frame={contentWindow:{focus(){}},setAttribute(){},addEventListener(){}};
  const activeWorker={postMessage:data=>posted.push(data)},workers={controller:null,ready:Promise.resolve({active:activeWorker}),addEventListener:(type,fn)=>{workerListeners[type]=fn;}};
+ let mountedFrame;
  const window={addEventListener:(type,fn)=>{windowListeners[type]=fn;}};
  const context={window,location:{origin:'https://example.test',search:'?character=warrior-plains'},URLSearchParams,Promise,
-  navigator:{serviceWorker:workers},screen:{},document:{documentElement:{},body:{appendChild(){}},createElement:()=>frame}};
+  navigator:navigatorOverride??{serviceWorker:workers},screen:{},document:{documentElement:{},body:{appendChild(value){mountedFrame=value;}},createElement:()=>frame}};
  vm.runInNewContext(code,context);
  const settle=()=>new Promise(resolve=>setTimeout(resolve,0));
- return {posted,frame,workers,activeWorker,shell:window.__moonforestShell,
+ return {posted,frame,mountedFrame,workers,activeWorker,shell:window.__moonforestShell,
   send:async(data,{source=frame.contentWindow,origin='https://example.test'}={})=>{windowListeners.message({data,source,origin});await settle();},
   controllerChange:async()=>{workerListeners.controllerchange();await settle();}};
 }
@@ -87,4 +88,15 @@ test('fullscreen shell + game: used wolf files stay, an obsolete file is pruned,
  await w.message(old,{type:'RESOURCE_GRAPH_USE',revision:'7'.repeat(64),files:[...wolf,oldOnly]});
  await w.message(shell,s.posted[0]);
  assert.ok(w.names().includes(oldOnly));assert.ok(wolf.every(name=>w.names().includes(name)));
+});
+
+test('a denied service worker still opens the game in its normal fullscreen frame',t=>{
+ const blocked={get serviceWorker(){throw new DOMException('Blocked','SecurityError');}};
+ const s=shellFixture(blocked);
+ assert.equal(s.mountedFrame,s.frame);
+ assert.equal(s.frame.src,'moonforest-0.3.html?character=warrior-plains');
+ const descriptor=Object.getOwnPropertyDescriptor(navigator,'serviceWorker');
+ Object.defineProperty(navigator,'serviceWorker',{...Object.getOwnPropertyDescriptor(blocked,'serviceWorker'),configurable:true});
+ t.after(()=>{if(descriptor)Object.defineProperty(navigator,'serviceWorker',descriptor);else delete navigator.serviceWorker;});
+ assert.doesNotThrow(()=>registerResourceGraph({revision:'3'.repeat(64),files:{}}));
 });

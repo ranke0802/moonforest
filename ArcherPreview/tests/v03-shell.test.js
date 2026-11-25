@@ -204,6 +204,7 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   assert.equal(h.document.querySelector('[data-chapter="3"]').disabled,true);
   h.click('[data-chapter="2"]');await settle(40);tick();assert.equal(h.save.meta().chapter,2);
   await talk('innkeeper');assert.match(h.document.querySelector('.v03-dialogue-portrait').getAttribute('src'),/01\.webp/);await finishDialogue();
+  assert.equal(h.save.journey.getItem('v03-gallery-v1:scene:journal-heal'),'1');
   assert.equal(h.document.querySelector('.v03-dialogue-portrait').hasAttribute('src'),false);
   await back();await loadGame(h,1,2);await settle(40);tick();
   assert.equal(h.shell.story.log.step().id,'palisade');await talk('youth');await finishDialogue();
@@ -226,6 +227,26 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.quest().id,'M02');assert.equal(potions,0);
   assert.equal(JSON.parse(h.save.journey.getItem(questKey(1))).quest,QUESTS.length);
  }finally{h.shell.dispose();}
+});
+test('the actual title gallery ignores the attract fight and lists discoveries after an in-place return',async t=>{
+ const h=harness({stopWorld:true});t.after(()=>h.shell.dispose());
+ h.finishSplash();await h.reveal();
+ const browse=async()=>{
+  h.click('[data-action="gallery"]');await settle(30);
+  return h.document.querySelector('.v03-gallery');
+ };
+ h.shell.defeat({kind:'wolf'});h.shell.combatEvent('enemy',h.battle.encounters[0],10);
+ const empty=await browse();assert.equal(empty.querySelectorAll('li').length,0);
+ h.click('.v03-panel-back');await settle();
+ await newGame(h);await settle(40);
+ assert.equal(h.shell.screen,'play');
+ h.shell.defeat({kind:'hobgoblin-boss'});
+ assert.equal(await h.shell.returnToTitle(),true);
+ const filled=await browse();
+ assert.equal(filled.querySelectorAll('[data-category=scenes] img').length,6);
+ assert.equal(filled.querySelector('[data-category=bestiary] li').textContent,'홉고블린');
+ assert.equal(filled.querySelectorAll('[data-category=bestiary] li').length,1);
+ h.click('.v03-panel-back');await settle();
 });
 test('chapters: all five localized journals have matching objectives, controls and CG, and an old terminal save opens its sequel',async()=>{
  const {chapterWords}=await import('../src/v03/chapter-select.js');
@@ -332,6 +353,7 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.equal(h.save.meta().used,true);assert.equal(h.save.meta().title,'늑대와 마차');assert.equal(h.document.querySelector('.v03-title').hidden,true);
  assert.ok(h.log.includes('props:v03-opening-wagon'),'story scenery is placed behind the prologue');
  h.battle.livingCount=0;for(let i=0;i<1000;i++)h.shell.update(.016);assert.ok(h.save.meta().playSeconds>=15);
+ assert.equal(h.save.journey.getItem('v03-gallery-v1:scene:wagon'),'1','the visible wagon sequence is recorded');
  assert.equal(h.log.includes('startWorld'),false,'roaming monsters wait until the opening quest is done');
 });
 test('back to the title: only from play, and without the game\'s hooks the caller falls back to the reload',async()=>{

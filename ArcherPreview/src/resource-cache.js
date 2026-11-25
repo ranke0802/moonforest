@@ -28,7 +28,8 @@ function publishGraph(worker) {
 }
 
 export function registerResourceGraph(index, graph = releaseGraph) {
-  const worker = globalThis.navigator?.serviceWorker;
+  let worker;
+  try { worker = globalThis.navigator?.serviceWorker; } catch { return; }
   if (!worker) return;
   // Without a matching release inventory an incomplete declaration could
   // evict valid bytes. Undeclared clients already defer cleanup in the worker.

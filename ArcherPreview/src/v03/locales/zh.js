@@ -1,6 +1,7 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'gallery.noTitles':'目前没有可获得的称号。',
   'hud.tip.bag':'打开背包，查看装备和物品（I）。',
   'hud.tip.journal':'打开手记，查看任务进度。',
   'hud.tip.summon':'打开怪物召唤面板。',
@@ -41,7 +42,7 @@ export default {
   'confirm.ok':'确定','confirm.cancel':'取消',
   'confirm.overwriteTitle':'覆盖记录','confirm.overwrite':'将清除记录{slot}并重新开始。此操作无法撤销。','confirm.overwriteAccept':'重新开始',
   'confirm.quitTitle':'退出','confirm.quit':'要退出游戏吗？','confirm.quitAccept':'退出',
-  'gallery.title':'画廊','gallery.note':'旅途中见过的场景与遇到的存在都会记录在这里。','gallery.scenes':'场景','gallery.bestiary':'图鉴','gallery.titles':'称号',
+  'gallery.title':'画廊','gallery.note':'汇总显示各存档中已记录的场景和怪物。','gallery.scenes':'场景','gallery.bestiary':'图鉴','gallery.titles':'称号',
   'slot.none':'没有记录','load.tipLabel':'提示','load.storyLabel':'故事','load.next':'查看下一条提示','load.place.village':'蒙特海姆村','load.about.village':'森林与平原之间，一座围着栅栏的小村子。来客稀少，月光旅店的灯却总亮到深夜。','load.place.great-plains':'温德蒙大平原','load.about.great-plains':'连接村子与森林的辽阔草原。近来野兽下到了路边，连马车也不敢安心通行。','load.place.monster-forest':'魔物之森','load.about.monster-forest':'树木间升起炊烟的幽深森林。哥布林在这里扎了营，森林附近的草药正渐渐枯黑。','load.place.witch-cave':'魔女洞窟','load.about.witch-cave':'森林最深处的洞窟。进去的人的故事很多，回来的人的故事却很少。','load.tip.combo':'连续按攻击，可以连斩两下。','load.tip.justGuard':'在攻击命中前一刻举盾，敌人会大幅失去平衡。','load.tip.sprint':'长按闪避可以奔跑。奔跑时会消耗体力。','load.tip.stamina':'体力用尽后需要稍等。停下动作，体力就会恢复。','load.tip.potion':'喝恢复药的时候也可以移动。','load.tip.guide':'不知道该去哪里时，跟着引路的光走。','load.tip.rest':'和旅店老板说话可以休息，生命和恢复药都会补满。','load.tip.beast':'大型野兽身体大幅后仰时，强力攻击就要来了。闪开，或长按举盾防御。','load.tip.heavy':'重击缓慢但威力大。看到破绽时再用。','load.tip.dodge':'敌人扑来时翻滚躲开。翻滚之后正是反击的时机。','load.story.elena':'教会正在寻找已经半年没有音讯的见习圣女艾莲娜。','load.story.remember':'村民们清楚地记得圣女给过他们什么。自己给过她什么，却很难想起来。','load.story.joachim':'人们说约阿希姆是被熊害死的。可谁也没有真的见过那头熊。','load.story.eyes':'曾有人说野兽的眼神不对劲。那时候没有人相信。','load.story.water':'草药师说森林那边的水变得不对劲了。在森林附近不要喝水。','load.story.ledger':'月光旅店的老板会把当天发生的事记在账本上。','load.story.trust':'想让人们开口，先帮村子做点事吧。','load.story.fence':'修栅栏的青年说，那天约阿希姆并不是一个人出去的。','hint.finishWolf':'击倒那头狼','settings.combatFx':'战斗演出','settings.slow':'慢动作演出','settings.slowEverywhere':'教程之外的战斗也适用','settings.slowLines':'集中线效果','settings.slowZoom':'拉近','settings.slowSeconds':'时长','settings.slowNote':'放慢并拉近攻击开始的瞬间。','settings.display':'画面','settings.performance':'性能诊断','settings.controls':'操作说明','settings.version':'版本 · 更新','settings.toTitle':'返回标题','settings.toTitleConfirm':'再按一次即可保存并返回','guide.touch':'触屏','guide.keys':'键盘 · 鼠标','guide.combo':'连击','guide.comboText':'连续按攻击，可以连斩两下。','guide.dodge':'闪避','guide.guard':'盾牌','guide.justGuard':'精准格挡','guide.justGuardText':'在攻击命中前一瞬举盾，敌人会大幅失衡。','settings.title':'设置','settings.language':'语言','settings.game':'游戏设置','settings.languageNote':'更改语言后将重新载入画面。',
   'toast.failed':'无法继续，请重试。','toast.noStorage':'无法使用存储，因此无法打开记录。','toast.wipeFailed':'无法清除记录。','toast.preparing':'世界正在准备中，请稍候。',
   'meta.dream':'梦',
@@ -180,6 +181,10 @@ export default {
   },
  },
  legacy:{
+  '고블린 전사':'哥布林战士','고블린 궁수':'哥布林弓手','고블린 주술사':'哥布林萨满','홉고블린':'大哥布林','구울 전사':'食尸鬼战士','좀비':'僵尸','검은 늑대':'黑狼','마물화된 검은곰':'魔化黑熊',
+  '최대 확대에서 1인칭으로 전환':'放大至上限后切换为第一人称',
+  '전투 루프와 짧은 전환음으로 편집했습니다.':'已剪辑为战斗循环配乐和短转场音效。',
+  '음악 · 효과음 크레딧':'音乐与音效鸣谢','전체 출처와 라이선스':'全部来源与许可协议',
   '건물 텍스처':'建筑纹理','일반 · 2K':'标准 · 2K','고화질 · 4K':'高清 · 4K',
   "진단 JSON 다운로드":"下载诊断 JSON","진단 JSON 다운로드를 요청했습니다.":"已请求下载诊断 JSON。","파일 저장을 열지 못했습니다. 기록 복사를 눌러 주세요.":"无法打开下载。请选择复制记录。",'몬트하임 마을':'蒙特海姆村','윈드몬 대평원':'温德蒙大平原',
   '이동':'移动','설정':'设置','마을':'村子','대평원':'温德蒙大平原','마물의 숲':'魔物之森','마녀의 동굴':'魔女洞窟','숲의 경계 마을':'蒙特海姆村',

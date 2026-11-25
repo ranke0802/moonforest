@@ -132,8 +132,22 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
     box.append(el(doc,'h2','v03-panel-title',t('gallery.title')));
     const list=el(doc,'div','v03-gallery');
     for(const section of sections){
-     const row=el(doc,'div','v03-gallery-row');row.append(el(doc,'strong','',section.label),el(doc,'small','',`${section.unlocked} / ${section.total}`));
-     if(!section.unlocked)row.classList.add('is-locked');list.append(row);
+     const row=el(doc,'section','v03-gallery-row');row.dataset.category=section.id;
+     row.append(el(doc,'strong','',section.label));
+     if(section.note)row.append(el(doc,'small','',section.note));
+     else{
+      row.append(el(doc,'small','',`${section.entries.length} / ${section.total}`));
+      if(section.entries.length){
+       const entries=el(doc,'ul','v03-gallery-entries');
+       for(const entry of section.entries){
+        const item=el(doc,'li');
+        if(entry.image){const image=el(doc,'img');image.alt='';image.loading='lazy';image.src=entry.image;item.append(image);}
+        item.append(el(doc,'span','',entry.label));entries.append(item);
+       }
+       row.append(entries);
+      }else row.classList.add('is-locked');
+     }
+     list.append(row);
     }
     box.append(list,el(doc,'p','v03-panel-note',t('gallery.note')));
     const back=el(doc,'button','v03-panel-back',t('panel.back'));back.type='button';back.addEventListener('click',()=>close(null));box.append(back);

@@ -1,7 +1,7 @@
 // Quest progress for 0.3. Pure logic over a storage-like object: no DOM, no
 // engine. One linear main line; each step listens for one kind of event.
 const STORE_KEY='v03-story-v1';
-export function createQuestLog({quests,storage=null,key=STORE_KEY}){
+export function createQuestLog({quests,storage=null,key=STORE_KEY,settle=null}){
  const state={quest:0,step:0,count:0,done:[]};
  const valid=value=>value&&Number.isInteger(value.quest)&&Number.isInteger(value.step)&&value.quest>=0&&value.quest<=quests.length&&value.step>=0&&Array.isArray(value.done);
  function load(){
@@ -24,6 +24,12 @@ export function createQuestLog({quests,storage=null,key=STORE_KEY}){
  }
  return {
   load,save,
+  recoverSettled(hasReceipt){
+   let changed=false;
+   while(quest()&&hasReceipt(quest().id)){state.quest++;changed=true;}
+   if(changed){state.step=0;state.count=0;state.done=[];save();}
+   return changed;
+  },
   reset(){Object.assign(state,{quest:0,step:0,count:0,done:[]});save();},
   get finished(){return state.quest>=quests.length;},
   quest,step,
@@ -49,7 +55,14 @@ export function createQuestLog({quests,storage=null,key=STORE_KEY}){
    }else if(current.type==='talk'&&event.type==='talk'&&current.targets.includes(event.npc)&&!state.done.includes(event.npc)){
     state.done.push(event.npc);result.changed=true;if(state.done.length>=current.targets.length)result.stepDone=true;else save();
    }else if(current.type==='reach'&&event.type==='reach'&&event.map===current.map){result.changed=true;result.stepDone=true;}
-   if(result.stepDone)result.questDone=advance();
+   if(result.stepDone){
+    if(settle&&state.step===quest().steps.length-1&&!settle(quest(),current)){
+     if(current.type==='defeat')state.count--;
+     if(current.type==='talk')state.done.pop();
+     return {changed:false,stepDone:false,questDone:null};
+    }
+    result.questDone=advance();
+   }
    return result;
   },
  };

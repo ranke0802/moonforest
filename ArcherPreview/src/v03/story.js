@@ -36,7 +36,7 @@ export function findFreeSpot(navigation,point,radius=.42){
  return {x:point.x,z:point.z};
 }
 export {particle} from './korean.js';
-export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0}){
+export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0,stageMark=null,onScene=null}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
  let log=createQuestLog({quests:content.QUESTS,storage:save.journey}),replaying=false,onChapterEnd=null;
  // Optional errands (errands.js) and who has been greeted once (NPCS greet), per slot.
@@ -65,18 +65,32 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(!tips.queue.length||dialogue.open)return;
   const tip=tips.queue.shift();tips.showing=tip;tips.left=TIP_SECONDS;hud.setTip({title:tip.title,lead:touch?tip.touch:tip.keys,text:tip.text});if(touch&&tip.target)hud.setRing(tip.target);
  }
- // Quest rewards. Gold is credited per quest id (idempotent across reloads);
- // potions refill toward the carry limit; armor is a persistent flag in main.
+ // Commit the 0.3 reward (and any final delivery) before advancing the log.
+ // If the log write is interrupted its wallet receipt restores the completion.
+ function settleQuest(quest,step){
+  if(!quest.giver)stageMark?.('reward:'+quest.id);
+  const paid=api.settleQuest(quest,step);
+  if(!paid){api.toast?.(t('toast.failed'));return false;}
+  const parts=[];
+  if(paid.xp)parts.push(t('reward.xp',{n:paid.xp}));
+  if(paid.gold)parts.push(t('reward.gold',{n:paid.gold}));
+  if(paid.potions)parts.push(t('reward.potions',{n:paid.potions}));
+  if(paid.armor)parts.push(t('reward.armor.'+paid.armor));
+  announceReward(parts);return true;
+ }
+ function announceReward(parts){
+  if(!parts.length)return;
+  api.playSound?.('gold_pickup',{volume:.9});
+  setTimeout(()=>{if(!disposed)api.toast?.(t('reward.got',{items:parts.join(' · ')}));},1400);
+ }
  function grantReward(quest){
-  if(!quest||replaying)return;
+  if(!quest||replaying||api.settleQuest)return;
   const reward=quest.reward??{},parts=[];
   const xp=api.creditQuestExperience?.([quest.id]);if(xp>0)parts.push(t('reward.xp',{n:xp}));
   try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
   try{if(reward.armor&&api.grantArmor?.(reward.armor))parts.push(t('reward.armor.'+reward.armor));}catch(error){console.warn('[MoonForest 0.3] armor reward',error);}
-  if(!parts.length)return;
-  api.playSound?.('gold_pickup',{volume:.9});
-  setTimeout(()=>{if(!disposed)api.toast?.(t('reward.got',{items:parts.join(' · ')}));},1400);
+  announceReward(parts);
  }
  function refresh(){
   const quest=log.quest();
@@ -103,14 +117,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function errandDone(errand){
   if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
   tips.queue.unshift({title:t('errand.done'),keys:errand.title,touch:errand.title,text:''});
-  if(replaying)return;
+  if(replaying||api.settleQuest)return;
   const reward=errand.reward??{},parts=[];
   const xp=api.creditQuestExperience?.([errand.id]);if(xp>0)parts.push(t('reward.xp',{n:xp}));
   try{if(reward.gold&&api.creditGold?.('v03-errand-'+errand.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] errand potions',error);}
-  if(!parts.length)return;
-  api.playSound?.('gold_pickup',{volume:.9});
-  setTimeout(()=>{if(!disposed)api.toast?.(t('reward.got',{items:parts.join(' · ')}));},1400);
+  announceReward(parts);
  }
  function errandResults(results){
   let changed=false;
@@ -139,7 +151,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    tips.queue.unshift({title:t('errand.accepted',{title:talk.errand.title}),keys:errands.objective(talk.errand.id),touch:errands.objective(talk.errand.id),text:''});
    refreshErrands();return;
   }
-  if(talk.kind==='deliver'){const step=errands.step(talk.errand.id);if(!api.spendItem?.(step.item,step.count))return;}
+  if(talk.kind==='deliver'&&!replaying){
+   const step=errands.step(talk.errand.id),final=step===talk.errand.steps.at(-1);
+   if((!final||!api.settleQuest)&&!api.spendItem?.(step.item,step.count))return;
+  }
   if(talk.kind==='deliver'||talk.kind==='turnIn')errandResults([errands.complete(talk.errand.id,npc)]);
  }
  function loadGreeted(){greeted.clear();try{const value=JSON.parse(save.journey.getItem(greetKey)??'[]');if(Array.isArray(value))for(const id of value)if(typeof id==='string')greeted.add(id);}catch{/* start fresh */}}
@@ -155,8 +170,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // first; a card it cuts short is shown again after it.
    if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
    tips.queue.unshift({title:t('hud.questDone'),keys:done.title,touch:done.title,text:next?t('hud.questNext',{next:next.title}):''});
+   if(!api.settleQuest)stageMark?.('reward:'+done.id);
    grantReward(done);
-   save.touch({title:next?.title??done.title,titleKey:(next??done).id});
+   const metaSaved=save.touch({title:next?.title??done.title,titleKey:(next??done).id});
+   stageMark?.((metaSaved?'slot-meta-saved:':'slot-meta-unavailable:')+done.id);
    if(log.finished)onChapterEnd?.();
   }
   return result;
@@ -419,10 +436,17 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const lines=content.DIALOGUES[questLine??errand?.dialogue??greeting??member.npc.idle];
   if(!lines)return false;
   if(member===driverMember){thanks.done=true;if(route.member===member)stopRoute();}
+  // Quest conversations leave their stages in the run trail (boot: only while
+  // frame diagnostics are on; Astra #211, an iPhone page died after the M05
+  // youth): asked, first line shown, closed, then reward/saved from emit().
+  const stage=questLine&&stageMark?'talk:'+log.quest()?.id+'/'+log.step()?.id:null;
+  if(stage)stageMark(stage);
   talking=true;hud.setPrompt(null);api.input.setSuspended(true);
   member.visual.talk?.(true,()=>api.getPlayer?.()?.position??null);
   try{
-   const played=await dialogue.play(lines);
+   const playing=dialogue.play(lines);if(stage&&dialogue.open)stageMark(stage+':line1');
+   if(questLine?.startsWith('journal-')&&dialogue.open)onScene?.(questLine);
+   const played=await playing;if(stage)stageMark(stage+(played?':end':':cancel'));
    if(played&&!disposed){
     runEffects(played);
     // Setting the wagon up: the step completes when it stands again (updateLift).
@@ -433,6 +457,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(!disposed&&(member.npc.id==='smith'||member.npc.id==='herbalist'))await api.openTownShop?.(member.npc.id);
    }
   }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
+  if(stage&&!disposed)stageMark('play');
   return true;
  }
  // ----- opening scene (2026-11-19 second rework, user storyboard) -----
@@ -1364,11 +1389,16 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get replaying(){return replaying;},
   get log(){return log;},
   start({fresh=false,key,replay=false,onComplete=null}={}){
-   replaying=replay;onChapterEnd=onComplete;log=createQuestLog({quests:content.QUESTS,storage:save.journey,key});
+   replaying=replay;onChapterEnd=onComplete;const settle=!replay&&api.settleQuest?settleQuest:null;
+   log=createQuestLog({quests:content.QUESTS,storage:save.journey,key,settle});
    if(fresh||!log.load())log.reset();
    // Errands and greetings follow the same record (a replay keeps its own under its key).
-   errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey,key:key?key+':errands':undefined});
+   errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey,key:key?key+':errands':undefined,settle});
    if(fresh||!errands.load())errands.reset();
+   if(!fresh&&!replay&&api.hasSettledQuest){
+    if(log.recoverSettled(api.hasSettledQuest)&&log.finished)onChapterEnd?.();
+    errands.recoverSettled(api.hasSettledQuest);
+   }
    errandFocus=null;errandPoll=0;greetKey=key?key+':greeted':GREET_KEY;loadGreeted();
    if(fresh){greeted.clear();try{save.journey.removeItem(greetKey);}catch{/* optional */}}
    api.onTownEvent?.(event=>errandEvent(event));
@@ -1424,7 +1454,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    const reading=log.step();
    if(reading?.reading&&reading.type==='reach'&&reading.map===mapId&&!talking&&!dialogue.open&&api.battle.combatCount===0){
     talking=true;api.input.setSuspended(true);
-    void dialogue.play(content.DIALOGUES[reading.reading]).then(played=>{if(played&&started&&log.step()===reading)emit({type:'reach',map:mapId});}).finally(()=>{talking=false;if(started&&!disposed)api.input.setSuspended(false);});
+    const playing=dialogue.play(content.DIALOGUES[reading.reading]);
+    if(dialogue.open)onScene?.(reading.reading);
+    void playing.then(played=>{if(played&&started&&log.step()===reading)emit({type:'reach',map:mapId});}).finally(()=>{talking=false;if(started&&!disposed)api.input.setSuspended(false);});
    }
    hidePlacedWagon();updateCover(dt);
    if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);updateBubble(dt);return;}

@@ -117,6 +117,7 @@ import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
 import {createCombatTrail} from './v03/combat-trail.js';
+import {createFirstPersonView} from './v03/first-person-view.js';
 import {createFrameDiagnostics} from './frame-diagnostics.js';
 import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
@@ -308,7 +309,7 @@ const goldLoot=new GoldLoot({storage:journeyStorage,coinDrops:versionRoute.editi
 const minimap=new DotMinimap($('#dot-minimap'), {translucent:()=>!!versionRoute.edition&&!versionRoute.worldRevision&&$('#app').dataset.hudInput==='touch'});
 let minimapTravel;
 const resumeStore=new MapResumeStore(journeyStorage);
-function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor||world.v03?.blocksProgress)return;resumeStore.save({character,world,actor,camera:world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
+function saveMapPosition(force=false){if(elenaReview||villageReviewEnabled||plainsReviewEnabled||!world||!actor||world.v03?.blocksProgress)return;resumeStore.save({character,world,actor,camera:world.firstPerson?.cameraForSave??world.camera,ready:ready&&!loadingAsset&&(!mapTransition?.busy||force),alive:!controller?.dead&&boss?.playerAlive!==false,radius:playerDimensions(actor).moveRadius},performance.now(),{force});}
 function restoreMapCamera(){if(!resumePose)return;actor.rotation.y=resumePose.yaw;const c=resumePose.camera;if(c){world.camera.alpha=c.alpha;world.camera.beta=Math.max(world.camera.lowerBetaLimit??.01,Math.min(world.camera.upperBetaLimit??3.13,c.beta));world.camera.radius=c.radius;cameraZoom.apply();}syncCameraFocus(0,{snap:true});resumePose=null;}
 // 0.3 quest armor (leather, from M04) adds flat defense on top of the shield.
 const V03_ARMOR_KEY='moonforest-v03-armor-v1',V03_ARMOR_DEFENSE={leather:2};
@@ -626,6 +627,8 @@ const actions = {
   // Accept direction intent during locks; the controller still prevents displacement.
   canMove() { return ready && !controller.dead && (!boss?.active || boss.playerAlive); },
   canTurn() { return allowed('camera'); },
+  // 0.3: past the closest zoom the view moves into the warrior's eyes, and back.
+  zoomStep(factor) { return world?.firstPerson?.zoom(factor) ?? false; },
 };
 
 function startDefense(kind){
@@ -739,6 +742,7 @@ function resetCamera() {
 
 async function loadCharacter() {
   if (loadingAsset) return;
+  world?.firstPerson?.exit();
   effectReviewGeneration++;world?.effectWorld?.clear();world?.sceneryStrikes?.leave();setFrameWorkContext(world?.scene,{active:false,frameId:engine?.frameId,generation:world?.toolGeneration});
   originalTextureRetry.hidden=true;
   mapResourceInspector.begin();
@@ -961,13 +965,23 @@ function updateHealthBars() {
   bossHealthBars.update(world.scene,world.v03?.story?.sceneActive?[]:boss.encounters,screenProjection,{playerPosition:actor?.position});
   const nearGiant=ready&&isV2()&&world.cave&&boss.playerHp>0&&boss.encounters.some(enemy=>enemy.active&&enemy.phase===2&&enemy.brain.hp>0&&enemy.renderVisible!==false&&enemy.fogVisible!==false&&Vector3.DistanceSquared(actor.position,enemy.actor.position)<=6.5*6.5);
   const markerClear=nearGiant&&cavePlayerMarkerClear(world.terrain,world.camera.globalPosition,actor.position);
-  playerHealthBar.update(world.scene,{visible:ready&&isV2(),actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp,stamina:controller?.stamina??100,maxStamina:controller?.maxStamina??100,marker:{enabled:nearGiant,clearToPlayer:markerClear,groundY:actor?world.terrain.heightAt(actor.position.x,actor.position.z):0}},screenProjection);
+  playerHealthBar.update(world.scene,{visible:ready&&isV2()&&!world.firstPerson?.active,actor,head:playerHead,hp:boss.playerHp,maxHp:boss.playerMaxHp,stamina:controller?.stamina??100,maxStamina:controller?.maxStamina??100,marker:{enabled:nearGiant,clearToPlayer:markerClear,groundY:actor?world.terrain.heightAt(actor.position.x,actor.position.z):0}},screenProjection);
 }
 
 function syncCaveFog(force=false){if(actor&&!actor.isDisposed())world.caveFog?.update(actor,elapsed,{force,encounters:boss?.encounters??[]});}
 
+// 0.3 first person only in free play on foot outside the cave; anything that frames
+// the camera itself (cutscene, dialogue, riding, menu, map change, death) returns to third person.
+function firstPersonAllowed(){
+  const v=world?.v03;
+  return !!(ready&&isV2()&&v?.playing&&!v.blocksGame&&!v.cameraFocus&&!v.story?.sceneActive&&!v.story?.scenePending&&!v.story?.dialogueOpen&&
+    !world.riding?.active&&!world.cave&&!controller?.dead&&!controller?.captured&&!characterMenu?.open&&!characterMenuOpening&&
+    !loadingAsset&&!mapTransition?.busy&&!world.toolLease?.active&&!elenaReview&&!villageOverview&&!boss?.grab?.active);
+}
 function syncCameraFocus(dt,{snap=false}={}){
   if(!actor||actor.isDisposed()||!cameraPitch)return;
+  const eye=world.firstPerson?.update(dt);
+  if(eye){cameraPitch.follow(eye,dt,{snap:true,exact:true});world.firstPerson.limitPitch();return;}
   // 0.3 cutscenes may frame another point (a snarling wolf, the driver).
   const scripted=world.v03?.cameraFocus??null;
   const focus=scripted?new Vector3(scripted.x,scripted.y,scripted.z):elenaReview?elenaReview.actor.position.add(new Vector3(0,elenaReview.reviewFocusHeight??1.45,0)):cameraFollow.focus(actor,playerHead,boss?.nearestTarget(actor.position)?.actor.position,world.camera.radius),pan=input?.panOffset??{x:0,y:0,z:0};
@@ -1131,6 +1145,9 @@ function render(dt) {
       const direction = shotTarget.aimPoint.subtract(actor.position);
       faceHeading(Math.atan2(direction.x, direction.z) - (config.attackYaw?.[result.state] || 0), dt);
     }
+    // A strike, shield or roll retains its combat heading, including its chain target.
+    if(world.firstPerson?.active&&!world.riding?.active&&!attacking&&!result.guarding&&!result.groggy&&!result.staggered&&!result.captured&&result.rollFrom==null)
+      actor.rotation.y=world.firstPerson.heading()+(config.forwardYaw||0);
     for (const event of result.events || []) if (event.type === 'release') {
       shootAtTarget(); hiddenArrowForAction = event.actionId;
     } else if (event.type === 'strike' && shotTarget && Vector3.Distance(actor.position, shotTarget.position) <= 1.65) {
@@ -1193,7 +1210,7 @@ function bindMapPortal(disarmRoadDestination=null){
   mapPortal?.dispose();
   mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,disarmRoadDestination,
     getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount(),hp:boss.playerHp,potions:boss.potions.remaining}),
-    onTravel:(url,portal)=>{const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,{boundary,playerTravel:true});}});
+    onTravel:(url,portal)=>{world.firstPerson?.exit();const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,{boundary,playerTravel:true});}});
 }
 
 function travelFromMinimap(href){
@@ -1202,7 +1219,7 @@ function travelFromMinimap(href){
     if(!ready||loadingAsset||mapTransition?.busy||mapTransition?.failed||controller.dead||controller.captured||controller.groggy||boss.playerHp<=0||boss.loading||boss.potions.active||travelCombatCount()>0){toast('현재는 이동할 수 없습니다.');return false;}
     const radius=playerDimensions(actor).moveRadius;
     if(!world.navigation.free(waypoint.position,world.riding?.active?Math.max(.64,radius):radius,movementLimit(waypoint.position))){toast('이동할 위치를 사용할 수 없습니다.');return false;}
-    input.reset();cancelAttackInput();boss.combat?.passiveRecovery?.reset();
+    world.firstPerson?.exit();input.reset();cancelAttackInput();boss.combat?.passiveRecovery?.reset();
     actor.position.set(waypoint.position.x,0,waypoint.position.z);world.terrain.place(actor.position);
     applyMinimapArrivalPose(actor,world.camera,input.panOffset,{destination:character,position:waypoint.position,waypoint});
     syncCameraFocus(0,{snap:true});syncCaveFog(true);world.lighting.follow(actor.position,true);saveMapPosition(true);return true;
@@ -1273,6 +1290,15 @@ try {
     // 0.3 (2026-11-20, user): the furthest view is 2x by default (was 1.2x).
     ...(versionRoute.edition?{minZoom:2,defaultsVersion:3}:{})});
   cameraPitch=new CameraPitch(world.camera,{warrior:isWarrior(),storage:equipmentStorage});
+  world.firstPerson?.dispose();
+  world.firstPerson=world.gameplayV03?createFirstPersonView({camera:world.camera,zoom:cameraZoom,storage:equipmentStorage,
+    getHead:()=>playerHead,getMeshes:()=>container?.meshes??[],allowed:firstPersonAllowed}):null;
+  if(world.firstPerson){
+    const mode=world.firstPerson,label=document.createElement('label'),toggle=document.createElement('input');
+    toggle.type='checkbox';toggle.checked=mode.enabled;toggle.addEventListener('change',()=>mode.setEnabled(toggle.checked));
+    label.append(toggle,' ',tr('최대 확대에서 1인칭으로 전환'));$('#camera-zoom-options').append(label);
+    world.scene.onDisposeObservable.addOnce(()=>{label.remove();mode.dispose();});
+  }
   cameraFollow=new CameraFollow({storage:equipmentStorage});
   const cameraSettingChanged=()=>{syncCameraFocus(0,{snap:true});frameDiagnostics.refresh();renderActivity.wake();frameLoop?.invalidate();};
   $('#map-polygon-estimate')?.addEventListener('click',async event=>{
@@ -1371,7 +1397,7 @@ try {
   window.addEventListener('pagehide',leaveFullscreenPage);
   world.scene.onDisposeObservable.addOnce(releaseFullscreen);
   mapDeparture=createMapDeparture({
-    prepare:href=>{townServices?.clear();characterMenu?.close();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
+    prepare:href=>{townServices?.clear();characterMenu?.close();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{staminaNoticeAnchor.dispose();input.dispose();audio.dispose();engine.dispose();},
     navigate:url=>{void runBeforePageReload().finally(()=>location.replace(url));},
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
@@ -1379,7 +1405,7 @@ try {
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
     prepare:(href,context)=>{
-      townServices?.clear();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+      townServices?.clear();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.chapterResidents?.leave();
       if(context?.playerTravel&&world.v03?.playing&&!world.v03.story?.sceneActive){
         world.riding?.beginTravel(mapForCharacter(new URL(href,location.href).searchParams.get('character')));
@@ -1474,6 +1500,7 @@ try {
     if(mapDeparture?.departing||mapTransition?.busy)return;
     const summonOpen=$('#summon-dialog').open,otherSettings=townServices?.open||characterMenuOpening||characterMenu?.open||hudLayout?.isOpen()||minimapTravel?.isOpen()||uiTest?.isOpen()||world.authoredInteractions?.isOpen()||motionSpeedControls.isOpen()||$('#help-dialog').open||$('#boss-pattern-dialog').open||$('#character-style-dialog').open||$('#diagnostic-detail-dialog').open||$('#software-renderer-notice')?.open,settingsOpen=summonOpen||otherSettings,paused=document.hidden||settingsOpen||deathScreen.isOpen()||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true;
     world.toolLease?.setPaused(paused);
+    if(paused)world.firstPerson?.exit();
     if(paused){input.reset();cancelAttackInput();world.hudRaster?.clear();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){if((!characterMenuOpening&&!characterMenu?.open)||frameLoop.failed)text('#live-fps',compactMeterEnabled?(frameLoop.failed?'Error':'Paused'):(frameLoop.failed?'실행 오류':'일시정지'));frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
     audio.setSuspended(document.hidden||settingsOpen||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
@@ -1854,7 +1881,7 @@ try {
       travel:(id,options)=>{travelResume=options?.resume===true;return mapTransition.travel(travelUrl(location.href,id));},
       startWorld:()=>{void getAuthoredMonsters().catch(error=>console.error('[몬스터 배치]',error));},
       // The reverse: the roaming monsters leave (back to the title on the same page). A runtime still loading is stopped once it arrives.
-      stopWorld:()=>{if(world.authoredMonsters)world.authoredMonsters.deactivate?.();else void world.authoredMonstersTask?.then(runtime=>runtime.deactivate?.(),()=>{});},
+      stopWorld:()=>{world.firstPerson?.exit();if(world.authoredMonsters)world.authoredMonsters.deactivate?.();else void world.authoredMonstersTask?.then(runtime=>runtime.deactivate?.(),()=>{});},
       setScore:(key,fade)=>audio?.setScore?.(key,fade),
       prefetchScore:key=>audio?.prefetchScore?.(key),
       setSfxMuted:value=>audio?.setSfxMuted?.(value),
@@ -1876,7 +1903,8 @@ try {
       rest:()=>{if(!ready||!boss||boss.playerHp<=0)return false;boss.combat.hp=boss.playerMaxHp;boss.potions.reset?.();townServices?.rest();controller?.resetStamina?.();updateHealthBars();boss.onChange(boss);saveMapPosition(true);world.dayCycle?.restUntilMorning();return true;},
       setMapMarkers:list=>minimap.setMarkers(list),
       playerLevel:()=>townServices?.economy.progression.level??1,
-      creditQuestExperience:(ids,quiet)=>townServices?.creditQuestExperience(ids,quiet)??0,
+      ...(townServices?{settleQuest:(quest,step)=>townServices.settleQuest(quest,step),hasSettledQuest:id=>townServices.economy.hasSettledQuest(id)}:{}),
+      creditQuestExperience:(ids,quiet,chapter)=>townServices?.creditQuestExperience(ids,quiet,chapter)??0,
       creditGold:(source,amount)=>goldLoot.creditCumulative(source,amount),
       addPotions:count=>{if(townServices)return townServices.addPotions(count);if(!boss)return 0;const before=boss.potions.remaining;boss.potions.remaining=Math.min(POTION.uses,before+count);updateButtons();return boss.potions.remaining-before;},
       // Errands (v03/errands.js): bag items, village service events.
@@ -1903,6 +1931,8 @@ try {
         !loadingAsset&&!mapTransition?.busy&&!frameLoop.failed&&!world.gameExited&&!contextRecovery?.blocked&&!world.toolLease?.active&&!controller?.dead&&!controller?.captured&&!document.hidden&&!document.querySelector('dialog[open]');
       const open=async page=>{
         if(characterMenuOpening||!canOpen())return;
+        // The portrait draws the real head; leave first person before it opens.
+        world.firstPerson?.exit();
         const startingMap=world.mapId,startingActor=actor,startingGeneration=world.toolGeneration;
         characterMenuOpening=true;root.dataset.characterMenuOpening='';reconcilePlayback();
         try{

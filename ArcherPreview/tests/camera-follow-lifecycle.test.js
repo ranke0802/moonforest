@@ -16,7 +16,10 @@ import {createWorld,replaceWorldMap} from '../src/world.js';
 import {createMapTransition,carryPortalPose} from '../src/map-transition.js';
 import {isWorldCharacter,worldSpawn} from '../src/map-route.js';
 import {VILLAGE_SPAWN} from '../src/village-layout.js';
-import {applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
+import {applyAdaptiveRange,applyPlainsViewDistance,plainsRenderRange} from '../src/plains-view-distance.js';
+import {setFrameWorkContext} from '../src/frame-work-coordinator.js';
+import {releaseNpcInteriorInkResources} from '../src/character-interior-ink.js';
+import {fixedLayoutsForCharacter,prepareFixedLayouts} from '../src/fixed-layouts.js';
 import {setupMinimapTravel} from '../src/minimap-travel.js';
 import {travelWaypoint} from '../src/map-waypoints.js';
 
@@ -44,7 +47,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  t.after(()=>{globalThis.document=priorDocument;});setupSettingsPanel();doc.hidden=false;
  // Other panels are dynamically created by their own modules; only their
  // open/closed DOM boundary participates in the production map callback.
- for(const id of ['summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
+ for(const id of ['summon-dialog','boss-pattern-dialog','character-style-dialog','diagnostic-detail-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
  for(const dialog of doc.querySelectorAll('dialog')){
   dialog.showModal=function(){this.open=true;this.setAttribute('open','');};dialog.close=function(){this.open=false;this.removeAttribute('open');};
  }
@@ -64,9 +67,13 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
  const location={href:'https://example.test/?character='+character,search:'?character='+character},history={replaceState(_state,_title,url){location.href=String(url);location.search=new URL(location.href).search;}};
  class TrackedCameraFollow extends CameraFollow{constructor(options){super(options);counters.constructors++;}}
  const input={panOffset:{x:0,y:0,z:0},reset(){counters.inputResets++;}},audio={stopAll:noop,setEnvironment:noop,setSuspended:noop,play:noop};
- const boss={allPooled:[],hide:noop,nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
+ const boss={allPooled:[],hide:noop,trimDormantModels:async()=>{},nearestTarget:()=>null,resetBattle(){counters.restarts++;},activateResident:async()=>true};
  const originalRevive=controller.revive?.bind(controller);if(originalRevive)controller.revive=()=>{counters.revivals++;return originalRevive();};
  const boundary={releaseSelectionValue,releaseEnabled:false,setupMinimapTravel,travelWaypoint,hudLayout:null,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop,advance:noop},applyPlayerFlash:noop,attackPointerTypes:new Map(),saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},CameraFollow:TrackedCameraFollow,setupCameraFollowControls,setupCameraZoomControls,setupCameraPitchControls,setupDeathScreen,Vector3,world,actor,playerHead:head,controller,cameraPitch:pitch,cameraZoom:zoom,cameraPitchControls:pitchControls,equipmentStorage:storage,input,boss,
+  engine,setFrameWorkContext,releaseNpcInteriorInkResources,prepareFixedLayouts,fixedLayoutsForCharacter,applyAdaptiveRange,
+  adaptivePerformance:{settings:{rangeScale:1}},effectivePlainsView:value=>value,applyAdaptiveShadows:noop,
+  mapResourceInspector:{begin:noop,captureReady:noop},preloadMapMonsters:async()=>{},settleWorldBehindCover:async()=>{},
+  townServices:null,characterMenu:null,contextRecovery:null,meleeAim:null,lungeState:{},swordTrail:null,
   staminaNoticeAnchor:{reset:noop,dispose:noop,setOffset:noop},
   assertFrameHealthy:noop,initialCharacter:character,isWorldCharacter,worldSpawn,VILLAGE_SPAWN,replaceWorldMap,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:2},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),
@@ -78,7 +85,7 @@ function fixture(t,{storage=saved(),character='warrior-v3'}={}){
   motionSpeedControls:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),document:doc,location,history,innerWidth:852,console,
   $:selector=>doc.querySelector(selector),syncCaveFog:()=>{},loading:{classList:{add:noop}},counters};
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition,minimapTravel;const uiTest=null,uiTestEnabled=false,chapterQuests=null;
+  let resumePose=null,travelResume=false,effectReviewGeneration=0,mapLoadingGeneration;let character=initialCharacter,ready=true,loadingAsset=false,cameraFollow,mapTransition,minimapTravel;const uiTest=null,uiTestEnabled=false,chapterQuests=null;
   let combatResult=null,shotActionId=null,elenaReview=null,mapPortal=null,frameFailure=null;const attackSources=new Set(),mapDeparture=null;
   const villageOverview=false,villageHorizon=false;
   const isWarrior=()=>character!=='archer',isV2=()=>character==='warrior-v2'||isWorldCharacter(character),isVillage=()=>isWorldCharacter(character),isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';

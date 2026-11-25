@@ -1,6 +1,7 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'gallery.noTitles':'現在、獲得できる称号はありません。',
   'hud.tip.bag':'バッグを開いて装備や持ち物を確認します（I）。',
   'hud.tip.journal':'手帳を開いて依頼の進行状況を確認します。',
   'hud.tip.summon':'モンスター召喚画面を開きます。',
@@ -41,7 +42,7 @@ export default {
   'confirm.ok':'OK','confirm.cancel':'キャンセル',
   'confirm.overwriteTitle':'記録の上書き','confirm.overwrite':'記録{slot}を消して最初から始めます。元に戻せません。','confirm.overwriteAccept':'はじめから',
   'confirm.quitTitle':'終了','confirm.quit':'ゲームを終了しますか？','confirm.quitAccept':'終了',
-  'gallery.title':'ギャラリー','gallery.note':'旅で見た場面と出会った存在がここに記録されます。','gallery.scenes':'場面','gallery.bestiary':'図鑑','gallery.titles':'称号',
+  'gallery.title':'ギャラリー','gallery.note':'すべてのセーブスロットに記録された場面とモンスターを表示します。','gallery.scenes':'場面','gallery.bestiary':'図鑑','gallery.titles':'称号',
   'slot.none':'記録がありません','load.tipLabel':'ヒント','load.storyLabel':'物語','load.next':'次のヒントを見る','load.place.village':'モントハイム村','load.about.village':'森と平原のあいだ、柵に囲まれた小さな村。訪れる者は少ないが、月明かりの宿の灯は夜更けまでともっている。','load.place.great-plains':'ウィンドモーン大平原','load.about.great-plains':'村と森をつなぐ広い草原。近ごろは獣が道ばたまで下りてきて、馬車も安心して通れない。','load.place.monster-forest':'魔物の森','load.about.monster-forest':'木々のあいだから煙がのぼる深い森。ゴブリンの群れが野営地をかまえ、森の近くの薬草は黒く枯れていく。','load.place.witch-cave':'魔女の洞窟','load.about.witch-cave':'森のいちばん奥にある洞窟。入った者の話は多いが、戻った者の話は少ない。','load.tip.combo':'攻撃を続けて押すと、二連撃になります。','load.tip.justGuard':'攻撃が当たる直前に盾を構えると、敵が大きくよろめきます。','load.tip.sprint':'回避を長押しすると走ります。走っているあいだスタミナが減ります。','load.tip.stamina':'スタミナを使い切ると少し待つ必要があります。動きを止めると回復します。','load.tip.potion':'回復薬は飲みながらでも動けます。','load.tip.guide':'行き先に迷ったら、導きの光についていきましょう。','load.tip.rest':'宿の主人に話しかけると休めます。体力と回復薬が補充されます。','load.tip.beast':'大きな獣が体を大きく反らしたら強い攻撃が来ます。避けるか、盾を長押しして防ぎましょう。','load.tip.heavy':'強攻撃は遅いが強力です。隙が見えたときに使いましょう。','load.tip.dodge':'飛びかかってくる敵は転がって避けましょう。転がった直後が反撃の好機です。','load.story.elena':'教会は、半年も音沙汰のない見習い聖女エレナを探しています。','load.story.remember':'村人たちは聖女から受けたものをはっきり覚えています。与えたものは、なかなか思い出せません。','load.story.joachim':'ヨアヒムは熊にやられたと言われています。その熊を見た者はいません。','load.story.eyes':'獣たちの目つきがおかしいと言った人がいました。そのときは誰も信じませんでした。','load.story.water':'薬草師は森のほうの水がおかしくなったと言います。森の近くでは水を飲まないでください。','load.story.ledger':'月明かりの宿の主人は、その日の出来事を帳簿に書きとめます。','load.story.trust':'人々の口を開かせたいなら、まず村の仕事を手伝いましょう。','load.story.fence':'柵を直す若者は、あの日ヨアヒムは一人で出たのではなかったと言います。','hint.finishWolf':'狼を倒しましょう','settings.combatFx':'戦闘演出','settings.slow':'スロー演出','settings.slowEverywhere':'チュートリアル以外の戦闘にも適用','settings.slowLines':'集中線エフェクト','settings.slowZoom':'ズーム','settings.slowSeconds':'長さ','settings.slowNote':'攻撃が始まる瞬間をゆっくり、近くで見せます。','settings.display':'画面','settings.performance':'パフォーマンス診断','settings.controls':'操作案内','settings.version':'バージョン・更新','settings.toTitle':'タイトルへ戻る','settings.toTitleConfirm':'もう一度押すと保存して戻ります','guide.touch':'タッチ','guide.keys':'キーボード・マウス','guide.combo':'連続攻撃','guide.comboText':'攻撃を続けて押すと、二連撃になります。','guide.dodge':'回避','guide.guard':'盾','guide.justGuard':'ジャストガード','guide.justGuardText':'攻撃が当たる直前に盾を構えると、敵が大きくよろめきます。','settings.title':'設定','settings.language':'言語','settings.game':'ゲーム設定','settings.languageNote':'言語を変えると画面を読み込み直します。',
   'toast.failed':'進められませんでした。もう一度お試しください。','toast.noStorage':'ストレージが使えないため、記録を開けません。','toast.wipeFailed':'記録を消せませんでした。','toast.preparing':'世界を準備しています。少々お待ちください。',
   'meta.dream':'夢',
@@ -181,6 +182,10 @@ export default {
   },
  },
  legacy:{
+  '고블린 전사':'ゴブリン戦士','고블린 궁수':'ゴブリン弓兵','고블린 주술사':'ゴブリン呪術師','홉고블린':'ホブゴブリン','구울 전사':'グール戦士','좀비':'ゾンビ','검은 늑대':'黒狼','마물화된 검은곰':'魔物化した黒熊',
+  '최대 확대에서 1인칭으로 전환':'最大ズームを超えると一人称に切り替える',
+  '전투 루프와 짧은 전환음으로 편집했습니다.':'戦闘ループと短い転換音に編集しています。',
+  '음악 · 효과음 크레딧':'音楽・効果音のクレジット','전체 출처와 라이선스':'すべての出典とライセンス',
   '건물 텍스처':'建物のテクスチャ','일반 · 2K':'標準 · 2K','고화질 · 4K':'高画質 · 4K',
   "진단 JSON 다운로드":"診断JSONをダウンロード","진단 JSON 다운로드를 요청했습니다.":"診断JSONのダウンロードを要求しました。","파일 저장을 열지 못했습니다. 기록 복사를 눌러 주세요.":"ファイルを保存できません。「記録をコピー」を選んでください。",'몬트하임 마을':'モントハイム村','윈드몬 대평원':'ウィンドモーン大平原',
   '이동':'移動','설정':'設定','마을':'村','대평원':'ウィンドモーン大平原','마물의 숲':'魔物の森','마녀의 동굴':'魔女の洞窟','숲의 경계 마을':'モントハイム村',

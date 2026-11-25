@@ -6,6 +6,8 @@ const slots=['sword','shield','armor'];
 const qty=n=>Number.isSafeInteger(n)&&n>0&&n<=99999?n:0;
 const defaultGear={sword:'field-sword',shield:'field-shield',armor:null};
 const own=(state,id)=>!!state.bag[id];
+const goldSource=quest=>(quest.giver?'v03-errand-':'v03-quest-')+quest.id;
+const validQuestId=id=>typeof id==='string'&&/^[A-Za-z0-9:_-]{1,80}$/.test(id);
 // One point in units divisible by 10, 15, 20, 25, 30 and 35 contacts.
 // A skill change alters future contacts without rounding away existing wear.
 const WEAR_UNITS=2100;
@@ -38,7 +40,8 @@ export function normalizeTown(raw,legacy={}){
  const opened=Array.isArray(raw.opened)?[...new Set(raw.opened.filter(id=>typeof id==='string'&&
    (id.length<120||/^placed:(?:village|great-plains|monster-forest|witch-cave):[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(id))))]:[];
  const drops=Array.isArray(raw.drops)?raw.drops.filter(d=>validateItemDrop(d)&&Object.keys(d.rewards).every(id=>TOWN_ITEMS[id])).slice(0,MAX_GROUND_DROPS):[];
- return {version:1,bag,equipped,condition,opened,drops,progression:normalizeProgression(raw.progression),quick:TOWN_ITEMS[raw.quick]?.quick?raw.quick:'potion',
+ const settledQuests=[...new Set(Array.isArray(raw.settledQuests)?raw.settledQuests.filter(validQuestId):[])];
+ return {version:1,bag,equipped,condition,opened,drops,settledQuests,progression:normalizeProgression(raw.progression),quick:TOWN_ITEMS[raw.quick]?.quick?raw.quick:'potion',
    boost:Math.max(0,Math.min(90,Number(raw.boost)||0)),boostRate:raw.boostRate===1.75?1.75:1.5};
 }
 function give(state,id,count){
@@ -58,9 +61,9 @@ function addKillExperience(state,amount){
 }
 export function createTownEconomy(wallet,legacy={}){
  let state=normalizeTown(wallet.town,legacy),dirty=false,unsavedSeconds=0,lastAction=null;
- function transact(delta,change){
+ function transact(delta,change,creditTotals=null){
   const next=structuredClone(state);
-  if(change(next)===false||!wallet.tradeTown(delta,next))return false;
+  if(change(next)===false||!wallet.tradeTown(delta,next,creditTotals))return false;
   state=next;dirty=false;unsavedSeconds=0;return true;
  }
  function flush(){
@@ -89,11 +92,49 @@ export function createTownEconomy(wallet,legacy={}){
    const gain=Math.min(amount,MAX_TOTAL_XP-state.progression.totalXp);
    return gain>0&&transact(0,s=>{s.progression.totalXp+=gain;})?gain:0;
   },
-  creditQuests(ids){
-   const pending=[...new Set(ids)].filter(id=>questExperience(id)>0&&!state.progression.quests.includes(id));
-   if(!pending.length)return 0;
+  // Shipped saves only recorded completed quests and XP. Carry those completions
+  // forward without reissuing consumables the player may already have used.
+  creditQuests(ids,adoptCompleted=false,chapter=null){
+   const known=[...new Set(ids)].filter(id=>questExperience(id)>0);
+   const pending=known.filter(id=>!state.progression.quests.includes(id));
+   const settled=adoptCompleted?known.filter(id=>!state.settledQuests.includes(id)):[];
+   if(!pending.length&&!settled.length)return 0;
    const gain=Math.min(MAX_TOTAL_XP-state.progression.totalXp,pending.reduce((sum,id)=>sum+questExperience(id),0));
-   return transact(0,s=>{s.progression.totalXp+=gain;s.progression.quests.push(...pending);})?gain:0;
+   // The old ledger already marked each quest gold payment. A bare, nonzero
+   // legacy balance has no provenance, so leave that balance intact.
+   let gold=0;const credits={};
+   if(settled.length&&chapter&&(wallet.saveState==='saved'||wallet.balance===0)){
+    for(const q of [...(chapter.QUESTS??[]),...(chapter.ERRANDS??[])]){
+     if(!q.reward?.gold||!settled.includes(q.id))continue;
+     const source=goldSource(q),due=q.reward.gold-(wallet.credits?.[source]??0);
+     if(due>0){gold+=due;credits[source]=q.reward.gold;}
+    }
+   }
+   gold=Math.min(gold,Number.MAX_SAFE_INTEGER-wallet.balance);
+   return transact(gold,s=>{s.progression.totalXp+=gain;s.progression.quests.push(...pending);s.settledQuests.push(...settled);},gold?credits:null)?gain:0;
+  },
+  hasSettledQuest(id){return state.settledQuests.includes(id);},
+  settleQuest(quest,step){
+   const id=quest.id;if(!validQuestId(id))return null;
+   if(api.hasSettledQuest(id))return {};
+   const legacyPaid=state.progression.quests.includes(id);
+   const cost=step?.type==='deliver'&&!legacyPaid?step:null;
+   if(cost&&(!TOWN_ITEMS[cost.item]||!qty(cost.count)||(state.bag[cost.item]??0)<cost.count))return null;
+   const reward=quest.reward??{},source=goldSource(quest);
+   const gold=Math.min(Number.MAX_SAFE_INTEGER-wallet.balance,Math.max(0,(reward.gold??0)-(wallet.credits?.[source]??0)));
+   const xp=legacyPaid?0:Math.min(MAX_TOTAL_XP-state.progression.totalXp,questExperience(id));
+   const potions=legacyPaid?0:Math.min(reward.potions??0,99999-(state.bag.potion??0));
+   const armor=!legacyPaid&&reward.armor==='leather'&&!own(state,'leather-coat')?'leather':null;
+   // The receipt, delivery debit and all rewards share the same wallet write.
+   const ok=transact(gold,s=>{
+    if(cost)take(s,cost.item,cost.count);
+    if(potions)give(s,'potion',potions);
+    if(armor){give(s,'leather-coat',1);s.equipped.armor??='leather-coat';}
+    s.progression.totalXp+=xp;
+    if(questExperience(id)>0&&!s.progression.quests.includes(id))s.progression.quests.push(id);
+    s.settledQuests.push(id);
+   },reward.gold&&(wallet.credits?.[source]??0)<reward.gold?{[source]:reward.gold}:null);
+   return ok?{gold,xp,potions,armor}:null;
   },
   learnSkill(id){
    if(!Object.hasOwn(PASSIVE_LIMITS,id)||state.progression.skills[id]>=PASSIVE_LIMITS[id]||!api.progression.points)return false;

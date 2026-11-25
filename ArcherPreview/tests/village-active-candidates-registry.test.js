@@ -157,3 +157,20 @@ test('cached candidates preserve native LOD preparation and all main/shadow inst
  }
  scene.getActiveMeshCandidates = filtered;
 });
+
+test('unloading scenery roots in mixed order requires no whole-registry searches', t => {
+ const f=fixture(t);
+ const roots=Array.from({length:550},(_,i)=>new Mesh('map-root-'+i,f.scene));
+ for(const root of roots)f.candidates.addEmptyRoot(root);
+ let scans=0;
+ f.candidates.roots.indexOf=function(...args){scans++;return Array.prototype.indexOf.apply(this,args);};
+ for(let i=1;i<roots.length;i+=2)roots[i].dispose();
+ const visible=roots[18];
+ f.source.geometry.applyToMesh(visible);
+ assert.ok(selected(f).includes(visible.name));
+ assert.equal(f.candidates.roots.length,275);
+ f.candidates.dispose();
+ assert.equal(f.candidates.records.size,0);
+ assert.equal(f.candidates.roots.length,0);
+ assert.equal(scans,0);
+});

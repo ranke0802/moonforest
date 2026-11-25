@@ -74,12 +74,16 @@ export class GoldLoot {
     return collected;
   }
   // Purchases, ground pickups and chest markers commit in the same ledger entry as the gold debit.
-  tradeTown(delta, town){
+  tradeTown(delta,town,creditTotals=null){
     if(!Number.isSafeInteger(delta)||!Number.isSafeInteger(this.balance+delta)||this.balance+delta<0)return false;
-    const before=this.town,balance=this.balance;
+    const before=this.town,balance=this.balance,credits=this.credits;
+    if(creditTotals){
+      for(const [source,total] of Object.entries(creditTotals))if(!/^[a-zA-Z0-9:_-]{1,90}$/.test(source)||!Number.isSafeInteger(total)||total<(credits[source]??0))return false;
+      this.credits={...credits,...creditTotals};
+    }
     this.town=town;this.balance+=delta;
     if(this.storage?.available!==false&&this.storage&&!this.persist()){
-      this.town=before;this.balance=balance;return false;
+      this.town=before;this.balance=balance;this.credits=credits;return false;
     }
     if(delta)this.onBalance(this.balance);
     return true;
