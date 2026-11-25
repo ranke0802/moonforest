@@ -91,29 +91,42 @@ test('the cave Witch keeps a sampled exterior edge at reduced resolution with th
  const css={clientWidth:797,clientHeight:384},originalCanvas=f.engine.getRenderingCanvas;
  f.engine.getRenderingCanvas=()=>css;
  const effects=new Set(shells.map(mesh=>mesh.subMeshes[0].effect));
- const widths=[];
+ const widths=[],inkFlash=[],stencils=[],depthGaps=[];
  for(const effect of effects){
-  const original=effect.setFloat.bind(effect);
-  effect.setFloat=(name,value)=>{if(name==='outlinePixels')widths.push(value);return original(name,value);};
+  assert.match(effect.vertexSourceCode,/gl_Position\.z\s*\+=\s*mourningDepthBias/);
+  const original=effect.setFloat.bind(effect),original2=effect.setFloat2.bind(effect);
+  effect.setFloat=(name,value)=>{if(name==='outlinePixels')widths.push(value);if(name==='hitFlash')inkFlash.push(value);return original(name,value);};
+  effect.setFloat2=(name,x,y)=>{if(name==='mourningDepthBias')depthGaps.push(x);return original2(name,x,y);};
  }
  const drawn=new Set();
- for(const shell of shells)shell.onBeforeDrawObservable.add(()=>drawn.add(shell));
+ for(const shell of shells)shell.onBeforeDrawObservable.add(()=>{drawn.add(shell);stencils.push([shell.material.stencil.func,shell.material.stencil.backFunc,shell.material.stencil.mask]);});
  const render=(scale,expected)=>{
   f.engine.getHardwareScalingLevel=()=>scale;
-  drawn.clear();widths.length=0;f.scene.render();
+  drawn.clear();widths.length=0;inkFlash.length=0;stencils.length=0;depthGaps.length=0;f.scene.render();
   assert.equal(drawn.size,expected===0?0:3);
   assert.deepEqual(widths,expected===0?[]:[expected,expected,expected]);
   if(expected)assert.ok(bounds.outlinePadding().pixels>=expected);
  };
  // S23 cave capture: high at 85%, CSS 797×384 with a 1354×652 framebuffer.
- render(1/1.7,1/1.7);
- assert.ok(Math.abs(widths[0]*f.engine.getRenderHeight()/css.clientHeight-1)<.002);
- render(1/.85,1/.85);
- render(1/2,.5);
+ const body=a.asset.meshes.find(mesh=>mesh.name==='Elina_Chimera_Skin'),bodyEffect=body.subMeshes[0].effect;
+ const surfaceFlash=[],set1=bodyEffect.setFloat.bind(bodyEffect);
+ bodyEffect.setFloat=(name,value)=>{if(name==='paintHitFlash')surfaceFlash.push(value);return set1(name,value);};
+ render(1/1.7,1);
+ const open=()=>assert.deepEqual(stencils,Array.from({length:3},()=>[Constants.ALWAYS,Constants.ALWAYS,0]));
+ open();assert.ok(depthGaps.includes(.035));
+ applyHitFlash(a.asset.meshes,.22);render(1/1.7,1);open();
+ assert.ok(surfaceFlash.includes(.72));assert.ok(inkFlash.length&&inkFlash.every(v=>v===0));
+ assert.ok(Math.abs(widths[0]*f.engine.getRenderHeight()/css.clientHeight-1.7)<.003);
+ for(const m of a.asset.meshes)m.visibility=.6;
+ render(1/1.7,1);assert.ok(stencils.length&&stencils.every(([func,back])=>func===Constants.NOTEQUAL&&back===func));
+ for(const m of a.asset.meshes)m.visibility=1;
+ render(1/.85,1.5/.85);open();
+ render(1/2,1);
  set({outlineWidth:.25});render(1/.85,.25);
  set({outlineWidth:0});render(1/.85,0);
  set({outline:true,outlineWidth:.5});set({outline:false});render(1/.85,0);
  set({outline:true});world.edition='moonforest-0.2';render(1/.85,.5);
+ assert.ok(stencils.every(([func])=>func===Constants.NOTEQUAL));assert.ok(inkFlash.includes(.72));
  world.edition='moonforest-0.3';fog.update(new Vector3(50,0,50),2,{force:true,encounters:[encounter]});render(1/.85,0);
  fog.dispose();render(1/.85,.5);
  f.engine.getRenderingCanvas=originalCanvas;

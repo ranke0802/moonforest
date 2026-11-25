@@ -1,5 +1,5 @@
 import {simplifierAvailable,simplifySharedShell} from './mesh-simplify.js';
-import { Color3, Matrix, Mesh, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
+import { Color3, Constants, Matrix, Mesh, Quaternion, ShaderMaterial, VertexBuffer } from '@babylonjs/core';
 import { BindBonesParameters } from '@babylonjs/core/Materials/materialHelper.functions.js';
 import { CAVE_FOG_GLSL } from './cave-fog-cover.js';
 import { bindCaveFogMaterial,readyShaderEffect } from './cave-fog-binding.js';
@@ -27,6 +27,9 @@ uniform mat4 viewProjection;
 uniform float outlineWidth;
 uniform float outlinePixels;
 uniform vec2 outlineViewport;
+#ifdef MOURNING_HULL
+uniform vec2 mourningDepthBias;
+#endif
 varying vec3 caveInkPosition;
 #include<bonesDeclaration>
 #include<morphTargetsVertexGlobalDeclaration>
@@ -50,6 +53,13 @@ void main(void) {
   } else {
     gl_Position = viewProjection * worldPosition;
   }
+  #ifdef MOURNING_HULL
+  // Compare with the opaque scene 3.5 cm behind this hull, at the same XY.
+  // For perspective clip.z = A*w + B, the correction below evaluates z/w
+  // at w + gap. Projection term -B already carries the reverse-Z sign.
+  if (mourningDepthBias.x>0.0 && gl_Position.w>0.0)
+    gl_Position.z += mourningDepthBias.y*mourningDepthBias.x/(gl_Position.w+mourningDepthBias.x);
+  #endif
 }`;
 const fragmentSource = `
 precision mediump float;
@@ -82,8 +92,8 @@ function outlineMaterial(scene,exterior=false) {
   const material = new ShaderMaterial('moonforest-character-outline'+(exterior==='enemy'?'-enemy-exterior':exterior?'-mourning-exterior':''), scene,
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
-      defines: ['#define NORMAL'],
-      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash', 'caveFogRect', 'caveFogActive','caveFogOrigin'],
+      defines: exterior===true?['#define NORMAL','#define MOURNING_HULL']:['#define NORMAL'],
+      uniforms: ['world', 'viewProjection', 'outlineWidth', 'outlinePixels', 'outlineViewport', 'outlineColor', 'outlineOpacity', 'hitFlash', 'caveFogRect', 'caveFogActive','caveFogOrigin',...(exterior===true?['mourningDepthBias']:[])],
       samplers: ['caveFogMap'],
     });
   material.backFaceCulling = true;
@@ -119,7 +129,21 @@ function outlineMaterial(scene,exterior=false) {
     effect?.setFloat2('outlineViewport',canvas?.clientWidth||engine.getRenderWidth(),canvas?.clientHeight||engine.getRenderHeight());
     effect?.setFloat('outlineOpacity', mesh.visibility);
     const source = mesh.parent;
-    effect?.setFloat('hitFlash', source&&(source.renderOverlay||source.metadata?.elenaInlineFlash) ? source.overlayAlpha : 0);
+    // This witch's pale body supplies the damage flash. Whitening its outline
+    // at the same time erases the contrast exactly when the attack connects.
+    const caveWitch=group==='mourning'&&scene.metadata?.caveFogRuntime?.world?.edition==='moonforest-0.3';
+    if(exterior===true){
+      // Whole-body stencil would also mask a foreground hand against another
+      // limb. Opaque skin already writes depth: reject the hand's own surface
+      // with a small gap, while the farther limb still receives its silhouette.
+      // The translucent death fade and non-cave appearances retain stencil.
+      const projection=scene.getProjectionMatrix().m;
+      const opaque=caveWitch&&mesh.visibility===1&&source?.visibility===1&&source.material?.alpha===1
+        &&!source.material.disableDepthWrite&&!source.material.needAlphaBlendingForMesh(source)&&projection[15]===0;
+      material.stencil.func=material.stencil.backFunc=opaque?Constants.ALWAYS:Constants.NOTEQUAL;
+      effect.setFloat2('mourningDepthBias',opaque ? .035 : 0,-projection[14]);
+    }
+    effect?.setFloat('hitFlash', !caveWitch&&source&&(source.renderOverlay||source.metadata?.elenaInlineFlash) ? source.overlayAlpha : 0);
   });
   cache.set(exterior, material);
   return material;

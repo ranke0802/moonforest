@@ -20,7 +20,8 @@ export function createGuideWisp(scene){
  material.disableLighting=true;material.emissiveTexture=texture;material.opacityTexture=texture;material.emissiveColor=new Color3(.82,.93,1);material.diffuseColor=Color3.Black();material.specularColor=Color3.Black();
  material.alphaMode=Constants.ALPHA_ADD;material.backFaceCulling=false;material.fogEnabled=false;material.disableDepthWrite=true;
  const core=MeshBuilder.CreatePlane('v03-guide-core',{size:1},scene);
- core.material=material;core.billboardMode=7;core.isPickable=false;core.doNotSyncBoundingInfo=true;core.alwaysSelectAsActiveMesh=true;core.setEnabled(false);core.metadata={moonforestGuide:true};
+ // Cave fog tests the moving core's world bounds even when it bypasses frustum culling.
+ core.material=material;core.billboardMode=7;core.isPickable=false;core.alwaysSelectAsActiveMesh=true;core.setEnabled(false);core.metadata={moonforestGuide:true};
  const emitter=new Vector3(0,-1000,0);
  const dust=new ParticleSystem('v03-guide-dust',180,scene);
  dust.particleTexture=texture;dust.emitter=emitter;dust.blendMode=ParticleSystem.BLENDMODE_ADD;
