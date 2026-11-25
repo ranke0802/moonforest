@@ -88,7 +88,13 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
  const stable=createRidingHorse({world,diagnostics,
   root:doc.getElementById('app'),storage:{getItem:()=> '1',setItem(){}},player:()=>root,
   ridingAllowed:()=>true,tell(){},forwardYaw:()=>cfg.forwardYaw});
- const button=doc.querySelector('.v03-ride-toggle'),click=()=>button.onclick();
+ const button=doc.querySelector('.v03-ride-toggle');
+ const click=async()=>{
+   await button.onclick();
+   for(let frames=0;frames<130&&['approaching','mounting','dismounting','departing'].includes(stable.inspect().state);frames++){
+     stable.afterMove({state:'idle'},0,.08);scene.render();engine.endFrame();
+   }
+ };
  try{
   const inventory=()=>Object.fromEntries(['meshes','transformNodes','geometries','materials','textures','skeletons','animationGroups','animatables']
     .map(k=>[k,scene[k].length]).concat([
@@ -119,6 +125,13 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
   assert.deepEqual(stable.inspect(),{state:'mounted',mounts:1,gait:'Horse_Idle'});
   const skin=scene.meshes.find(m=>m.name==='wagon_horse');assert.ok(skin?.skeleton);
   assert.ok(shadows.getShadowMap().renderList.includes(skin));assert.ok(skin.material.albedoTexture);
+  const paint=skin.material.pluginManager.getPlugin('MoonforestHorseCoat');
+  assert.ok(paint);const originalAtlas=skin.material.albedoTexture,meshCount=scene.meshes.length;
+  const subject=await stable.wardrobe.preview();
+  assert.ok(subject.meshes.includes(skin));assert.ok(!subject.meshes.some(m=>m.name==='v03-riding-reins'));
+  subject.setCoat('#eeeeee');assert.equal(paint.strength,1);subject.dispose();assert.equal(paint.strength,0);
+  assert.ok(stable.wardrobe.setCoat('#8b6c51'));assert.equal(paint.strength,1);
+  assert.equal(skin.material.albedoTexture,originalAtlas);assert.equal(scene.meshes.length,meshCount);
   for(const node of [...scene.meshes,...scene.transformNodes])node.onAfterWorldMatrixUpdateObservable.add(()=>{if(collectingPose)compositions++;});
   scene.render();assert.equal(measuredFrames,0);
   const mountedScene=inventory(),horse=scene.getTransformNodeByName('v03-wagon-horse');
@@ -183,6 +196,9 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
   }
   diagnostics.collecting=false;
   const firstPrograms=await drawnPrograms();
+  assert.match(firstPrograms[1].fragmentSourceCode,/if\s*\(horseCoat\.w\s*>\s*\.5\)/);
+  assert.ok(stable.wardrobe.setCoat('#ffffff'));
+  assert.equal((await drawnPrograms())[1],firstPrograms[1],'changing the coat reuses the same shader');
   await click();assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);assert.equal(scene.animationGroups.length,asset.animationGroups.length);
   assert.ok(reins.isDisposed());
   assert.equal(measuredFrames,24);

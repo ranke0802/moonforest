@@ -1,9 +1,21 @@
-import { Color3, Mesh, StandardMaterial, VertexData } from '@babylonjs/core';
+import { Color3, Mesh, StandardMaterial, Vector3, VertexData } from '@babylonjs/core';
 export const SADDLE_PAD_HEIGHT=.078;
 
 // A riding saddle replaces the cart collar on the personal mount. Its profile
 // follows cross-sections of the shipped horse. All leather, binding and irons
 // share one vertex-coloured mesh and one draw without a texture or bones.
+export function placeRidingSaddle(horse,saddle,contact,inverse){
+  if(!horse.saddleContactToRef(contact))return false;
+  if(saddle){
+    contact.x-=.09*Math.sin(horse.root.rotation.y);
+    contact.z-=.09*Math.cos(horse.root.rotation.y);
+    contact.y-=.003;
+    horse.root.getWorldMatrix().invertToRef(inverse);
+    Vector3.TransformCoordinatesToRef(contact,inverse,saddle.position);
+  }
+  return true;
+}
+
 export function createRidingSaddle(root) {
   const scene=root.getScene(), mesh=new Mesh('v03-riding-saddle',scene);
   const points=[], indices=[], colors=[], normals=[];

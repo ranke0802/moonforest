@@ -23,14 +23,19 @@ function harness({delay=false}={}) {
     makeHorse:()=>{loads++;return {ready:delay?new Promise(r=>{finish=r;}):Promise.resolve({}),play:c=>clips.push(c),
       saddleContactToRef(v){v.set(0,1.48,0);return true;},speed(){},place(){},dispose(){disposeCount++;}};}});
   const button=root.querySelector('.v03-ride-toggle');
-  return {stable,button,root,attack,doc,clips,notices,world,slot,saddle,click:()=>button.onclick(),finish:()=>finish({}),
+  const advance=()=>{
+    for(let frames=0;frames<250&&['approaching','mounting','dismounting','departing'].includes(stable.inspect().state);frames++)
+      stable.afterMove({state:'idle'},0,1/30);
+  };
+  const click=async()=>{await button.onclick();advance();};
+  return {stable,button,root,attack,doc,clips,notices,world,slot,saddle,click,advance,finish:()=>finish({}),
     combat:()=>{wallet=false;},scans:()=>scans,loads:()=>loads,disposed:()=>disposeCount};
 }
 test('the driver grants the horse to the current save; only mounting loads the model',async()=>{
   const h=harness();h.stable.updateAvailability();assert.equal(h.button.hidden,true);
   h.stable.offer();h.stable.updateAvailability();assert.equal(h.button.hidden,false);assert.equal(h.loads(),0);
   await h.click();assert.equal(h.stable.active,true);assert.equal(h.loads(),1);
-  h.stable.afterMove({state:'run'},5);assert.deepEqual(h.clips,['Horse_Idle','Horse_Gallop']);
+  h.stable.afterMove({state:'run'},5);assert.deepEqual(h.clips.slice(-2),['Horse_Idle','Horse_Gallop']);
   assert.deepEqual(h.stable.inspect(),{state:'mounted',mounts:1,gait:'Horse_Gallop'});
   assert.ok(Math.abs(h.saddle.position.y-.76)<1e-6);
   h.combat();h.stable.updateAvailability();assert.equal(h.stable.active,false);assert.equal(h.saddle.position.y,0);
@@ -98,9 +103,9 @@ test('touch interaction and a late bag button survive mounting, cancellation and
     assert.equal(h.root.dataset.v03Riding,'loading');assert.equal(h.button.getAttribute('aria-label'),'Cancel horse loading');
     h.button.click();h.finish();await pending;
     assert.equal(h.root.dataset.v03Riding,'on-foot');assert.equal(h.attack.getAttribute('aria-label'),'Talk to driver');
-    h.button.click();h.finish();await Promise.resolve();
+    h.button.click();h.finish();await Promise.resolve();h.advance();
     assert.equal(h.stable.active,true);assert.equal(interact.active,false);assert.equal(h.attack.getAttribute('aria-label'),'Gallop');
-    h.button.click();
+    h.button.click();h.advance();
     assert.equal(h.stable.active,false);assert.equal(interact.active,true);assert.equal(h.attack.getAttribute('aria-label'),'Talk to driver');
     interact.sync(null);assert.equal(h.attack.getAttribute('aria-label'),'Attack');
   }finally{interact.dispose();h.stable.dispose();}
@@ -144,4 +149,21 @@ test('a gallop launches from rest along the horse heading, steers, and returns t
   ride.startGallop();h.combat();ride.updateAvailability();
   assert.equal(ride.active,false);assert.equal(ride.startGallop(),false);
   assert.equal(ride.travelSpeed(2),3.4);
+});
+
+test('the rider is released on landing while the departing horse still owns its scene resources',async()=>{
+  const h=harness();const ride=h.stable;ride.offer();ride.updateAvailability();
+  await h.button.onclick();assert.equal(ride.inspect().state,'approaching');assert.ok(ride.locksRider);
+  await h.button.onclick();assert.equal(ride.inspect().state,'on-foot');assert.equal(h.disposed(),1);
+  await h.button.onclick();
+  const reach=state=>{
+    for(let i=0;i<180&&ride.inspect().state!==state;i++)ride.afterMove({state:'idle'},0,1/30);
+    assert.equal(ride.inspect().state,state);
+  };
+  reach('mounting');assert.equal(ride.active,false);assert.ok(h.button.disabled&&ride.blocksFirstPerson);
+  await h.button.onclick();assert.equal(ride.inspect().state,'mounting');
+  reach('mounted');assert.equal(ride.active,true);
+  await h.button.onclick();assert.equal(ride.inspect().state,'dismounting');assert.ok(ride.locksRider);
+  reach('departing');assert.equal(ride.active,false);assert.ok(!ride.locksRider&&!ride.blocksFirstPerson);
+  assert.equal(h.disposed(),1);reach('on-foot');assert.equal(h.disposed(),2);assert.ok(!h.button.disabled);
 });

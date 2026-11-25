@@ -123,7 +123,15 @@ export class GameAudio {
     // A rejected resume is retried by the next pointer/key gesture.
     else {this.beds.retryFailed();this.selectBed();this.resumeContext();}
   }
-  stopVoices(){for(const voice of [...this.voices]){try{voice.source.stop();}catch{}voice.cleanup();}this.lastPlayed.clear();}
+  onEffectsStopped(callback){
+    (this.effectStopListeners??=new Set()).add(callback);
+    return ()=>this.effectStopListeners.delete(callback);
+  }
+  stopVoices(){
+    for(const callback of this.effectStopListeners??[])callback();
+    for(const voice of this.voices)voice.stop();
+    this.lastPlayed.clear();
+  }
   stopAll(){this.stopVoices();this.environment=null;this.combatMode=null;this.bossTheme=null;this.musicWanted=false;this.beds.stop();}
   setEnvironment(character){
     const map=character==='warrior-v5'?'cave':character==='warrior-v4'?'forest':'village';
@@ -173,18 +181,32 @@ export class GameAudio {
     const distance=position?Math.hypot(position.x-this.listener.x,position.z-this.listener.z):0;
     if(distance>18)return false;
     const attenuation=1/(1+Math.max(0,distance-1.5)*.18);
-    if(this.voices.size>=this.maxVoices){
-      const victim=[...this.voices].filter(v=>v.priority<settings.priority).sort((a,b)=>a.priority-b.priority||a.started-b.started)[0];
-      if(!victim){this.dropped++;return false;}try{victim.source.stop();}catch{}victim.cleanup();
-    }
-    const source=context.createBufferSource(),gain=context.createGain();source.buffer=buffer;this.variantIndex.set(name,index+1);
-    this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;
-    source.playbackRate.value=rate*(.975+this.seed/4294967296*.05);
-    gain.gain.value=Math.min(1,settings.volume*volume*attenuation);source.connect(gain);gain.connect(this.master);
-    const voice={source,priority:settings.priority,started:now,cleaned:false,cleanup:()=>{if(voice.cleaned)return;voice.cleaned=true;source.onended=null;source.disconnect();gain.disconnect();source.buffer=null;this.voices.delete(voice);}};
-    source.onended=voice.cleanup;this.voices.add(voice);this.lastPlayed.set(name,now);source.start();this.played++;
+    const voice=this.startEffectVoice(buffer,{rate,jitter:true,volume:settings.volume*volume*attenuation,priority:settings.priority});
+    if(!voice)return false;
+    this.variantIndex.set(name,index+1);this.lastPlayed.set(name,now);
     if(duck&&['boss_hit','player_hit','land','block','parry'].includes(name))this.duckMusic(now);
-    this.peakVoices=Math.max(this.peakVoices,this.voices.size);return true;
+    return true;
+  }
+  startEffectVoice(buffer,{rate=1,volume=1,priority=2,jitter=false,when=0,loop=false,loopStart=0,loopEnd=0}={}){
+    const context=this.context;
+    if(this.disposed||this.suspended||this.sfxMuted||context?.state!=='running'||!buffer)return null;
+    if(this.voices.size>=this.maxVoices){
+      let victim=null;
+      for(const voice of this.voices)if(voice.priority<priority&&(!victim||voice.priority<victim.priority||voice.priority===victim.priority&&voice.started<victim.started))victim=voice;
+      if(!victim){this.dropped++;return null;}victim.stop();
+    }
+    const source=context.createBufferSource(),gain=context.createGain();
+    source.buffer=buffer;
+    if(jitter){this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;rate*=.975+this.seed/4294967296*.05;}
+    source.playbackRate.value=rate;gain.gain.value=Math.min(1,volume);
+    if(loop){source.loop=true;source.loopStart=loopStart;source.loopEnd=loopEnd;}
+    source.connect(gain);gain.connect(this.master);
+    const voice={source,gain,priority,started:context.currentTime,cleaned:false,
+      stop(){if(voice.cleaned)return;try{source.stop();}catch{}voice.cleanup();},
+      cleanup:()=>{if(voice.cleaned)return;voice.cleaned=true;source.onended=null;source.disconnect();gain.disconnect();source.buffer=null;this.voices.delete(voice);}};
+    source.onended=voice.cleanup;this.voices.add(voice);
+    try{source.start(when);}catch{voice.cleanup();this.failed++;return null;}
+    this.played++;this.peakVoices=Math.max(this.peakVoices,this.voices.size);return voice;
   }
   inspect(){const unique=new Set(this.buffers.values());let decodedSfxBytes=0;for(const buffer of unique){const bytes=(buffer.length??Math.round((buffer.duration??0)*(buffer.sampleRate??32000)))*(buffer.numberOfChannels??2)*4;if(Number.isFinite(bytes))decodedSfxBytes+=bytes;}return {state:this.context?.state??'locked',sampleRate:this.context?.sampleRate??null,loaded:this.buffers.size,decodedSfxBuffers:unique.size,decodedSfxBytes,pendingSfxDecodes:this.sfxDecodeJobs.size,failedSfxSources:[...this.sfxSources.values()].filter(source=>source.status==='failed').length,active:this.voices.size,peak:this.peakVoices,played:this.played,dropped:this.dropped,failed:this.failed,resumeAttempts:this.resumeAttempts,audioSession:this.audioSession?.type??null,music:this.music&&!this.music.ending?(this.suspended||this.context?.state!=='running'?'paused':'playing'):'stopped',musicLoaded:!!this.musicBuffer,bossThemeRequested:this.bossTheme,bossThemeAvailable:!!this.beds.definitions.music[this.bossTheme]?.url,...this.beds.inspect()};}
   dispose(){this.disposed=true;this.audioGeneration++;for(const lifetime of this.audioLifetimes)lifetime.abort(mapLoadAbortError());this.gestureCleanup?.();this.stopAll();this.buffers.clear();this.sfxSources.clear();this.beds.dispose();this.context?.removeEventListener?.('statechange',this.contextStateChanged);if(this.primer){this.primer.onended=null;try{this.primer.stop();}catch{}this.primer.disconnect();this.primer.buffer=null;this.primer=null;}this.context?.close().catch(()=>{});try{if(this.audioSession?.type==='playback'&&this.previousSessionType!=null)this.audioSession.type=this.previousSessionType;}catch{}}

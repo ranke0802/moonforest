@@ -12,11 +12,12 @@ const feedback={
   zh:['已上马。','已下马。','全速疾驰','坐骑会在洞外等候，离开洞穴后将重新骑乘。'],
   vi:['Đã lên ngựa.','Đã xuống ngựa.','Phi nước đại','Ngựa sẽ đợi ngoài hang. Khi ra ngoài, bạn sẽ lại cưỡi ngựa.']
 };
+const space={ko:'말 옆에 설 공간이 필요합니다. 조금 더 탁 트인 곳으로 이동하세요.',en:'Move to a clear space beside the horse.',ja:'馬の横に立てる広い場所に移動してください。',zh:'请移到马身旁有足够空间的开阔处。',vi:'Hãy đến chỗ thoáng để có thể đứng bên cạnh ngựa.'};
 const labels={};
 for(const [lang,values] of Object.entries(strings)){
  const [mount,dismount,cancel,acquired,ready,saveError,poseError,loadError]=values;
  const [mounted,dismounted,gallop,parked]=feedback[lang];
- labels[lang]={mount,dismount,cancel,acquired,ready,saveError,poseError,loadError,mounted,dismounted,gallop,parked};
+ labels[lang]={space:space[lang],mount,dismount,cancel,acquired,ready,saveError,poseError,loadError,mounted,dismounted,gallop,parked};
 }
 export function ridingLabels(doc) {
   const lang = doc.documentElement?.dataset?.lang ?? doc.documentElement?.lang ?? 'ko';

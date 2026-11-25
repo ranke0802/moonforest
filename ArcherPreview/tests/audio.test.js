@@ -68,3 +68,11 @@ test('archer moving/standing transitions do not retrigger bow draw; canceled act
  r.reset();options.character='warrior-v2';r.player({state:'judgment',actionId:2,clipTime:.1},.1,options);r.player({state:'idle',actionId:null,clipTime:1},.1,options);
  assert.deepEqual(calls,['bow_draw','charge_ready']);
 });
+
+test('riding suppresses human footsteps and starts a fresh walking stride after dismount',()=>{
+ const played=[],sound=new ActionAudio({play:name=>played.push(name)});
+ const actor={state:'walk',moving:true,speed:1},params={character:'warrior-v4',position:{x:0,z:0}};
+ sound.player(actor,.7,params);sound.player(actor,1,{...params,mounted:true});
+ sound.player(actor,.2,params);assert.deepEqual(played,[]);
+ sound.player(actor,.7,params);assert.deepEqual(played,['foot_forest_0']);
+});

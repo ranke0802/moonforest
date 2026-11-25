@@ -1,0 +1,21 @@
+MOONFOREST 0.3 — HORSE AUDIO CREDITS
+Approved November 25, 2026.
+
+Short call whistles.wav — SpliceSound
+Source: https://freesound.org/people/SpliceSound/sounds/188221/
+Changes: Joined 0.14–0.68 s and 2.15–2.55 s, loudnorm I=-22:TP=-3:LRA=7, encoded as MP3.
+
+Horse neigh — felix.blume
+Source: https://freesound.org/people/felix.blume/sounds/385947/
+Changes: Excerpt at 4.91 s for 2.27 s, mixed to mono, faded, gain-adjusted and encoded as MP3.
+
+horse snort.wav — bruno.auzet
+Source: https://freesound.org/people/bruno.auzet/sounds/538697/
+Changes: Excerpt at 0.08 s for 0.84 s, mixed to mono, faded, gain-adjusted and encoded as MP3.
+
+Horse Galloping.wav — Max_Headroom
+Source: https://freesound.org/people/Max_Headroom/sounds/175356/
+Changes: Excerpt at 0.36 s for 2.42 s, mixed to mono, faded, gain-adjusted, high-pass filtered at 28 Hz and encoded as MP3.
+
+All four original recordings were published on Freesound under CC0 1.0 Universal.
+License: https://creativecommons.org/publicdomain/zero/1.0/

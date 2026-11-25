@@ -4,8 +4,8 @@ import {ObjectRenderer} from '@babylonjs/core/Rendering/objectRenderer.js';
 const black=new Color4(0,0,0,1);
 export const PORTRAIT_PITCH=Math.PI*.475;
 
-// Portraits draw just the already loaded warrior to the game framebuffer.
-// No second scene, model, render texture, shadow pass or scene render callbacks.
+// Draw the selected portrait meshes to the paused game's framebuffer without
+// advancing the world, its shadows or scene render observers.
 export function createCharacterPortrait(scene){
   const engine=scene.getEngine(),renderer=new ObjectRenderer('equipment-portrait',scene);
   renderer.renderParticles=false;renderer.renderSprites=false;
@@ -15,12 +15,17 @@ export function createCharacterPortrait(scene){
     if(disposed)return;disposed=true;
     scene.onDisposeObservable.remove(observer);renderer.freeRenderingGroups();renderer.dispose();
   }
-  function draw({camera,actor,meshes,height,canvasRect,frameRect,turn=0,pitch=PORTRAIT_PITCH,zoom=1}){
-    if(disposed||scene.isDisposed||!camera||!actor||!frameRect.height||!canvasRect.width||!canvasRect.height)return false;
+  function draw({camera,actor,meshes,height,width:breadth=0,canvasRect,frameRect,turn=0,pitch=PORTRAIT_PITCH,zoom=1}){
+    if(disposed||scene.isDisposed||!camera||!actor||!frameRect.height||!frameRect.width||!canvasRect.width||!canvasRect.height)return false;
     const target=camera.target,offset=camera.targetScreenOffset,oldX=offset.x,oldY=offset.y;
     const {alpha,beta,radius}=camera;
     const aim=actor.position.clone();aim.y+=height*(.5+.26*(1-1/zoom));
-    const halfFov=Math.tan(camera.fov/2),distance=height/(2*halfFov*.88*(frameRect.height/canvasRect.height)*zoom);
+    const halfFov=Math.tan(camera.fov/2);
+    // At 1× let a long mount turn broadside inside even a portrait viewport.
+    // The near end of the horse can be half its length nearer than its centre.
+    const projectedHeight=breadth?height*Math.abs(Math.sin(pitch))+breadth*Math.abs(Math.cos(pitch)):height;
+    const fit=Math.max(projectedHeight/frameRect.height,breadth/frameRect.width)*canvasRect.height/(2*halfFov*.88);
+    const distance=(fit+breadth/2)/zoom;
     const cx=frameRect.left+frameRect.width/2-canvasRect.left-canvasRect.width/2;
     const cy=canvasRect.top+canvasRect.height/2-frameRect.top-frameRect.height/2;
     const width=engine.getRenderWidth(),pixelHeight=engine.getRenderHeight();
@@ -35,13 +40,14 @@ export function createCharacterPortrait(scene){
       camera.radius=Math.max(camera.lowerRadiusLimit??.2,distance);
       const metersPerPixel=2*camera.radius*halfFov/canvasRect.height;
       offset.set(cx*metersPerPixel,cy*metersPerPixel);camera.getViewMatrix(true);
-      // A mounted horse, a damage number or an effect may also be parented
-      // under the player. Only the actual equipped model's meshes are eligible.
+      // Use the supplied model's mesh list. A rider, effect or world prop may
+      // share its hierarchy but belongs outside this portrait.
       renderer.renderList=(meshes??[]).filter(m=>m.getTotalVertices?.()>0&&m.isEnabled()&&m.isVisible);
       if(!renderer.renderList.length)return false;
       renderer.activeCamera=camera;
-      engine.restoreDefaultFramebuffer();engine.clear(black,true,true,true);
+      engine.restoreDefaultFramebuffer();
       if(!renderer.isReadyForRendering(width,pixelHeight))return false;
+      engine.clear(black,true,true,true);
       renderer.initRender(width,pixelHeight);init=true;
       engine.enableScissor(scissorX,scissorY,Math.ceil(frameRect.width*width/canvasRect.width),Math.ceil(frameRect.height*pixelHeight/canvasRect.height));scissor=true;
       renderer.render();

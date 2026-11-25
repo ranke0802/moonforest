@@ -63,6 +63,13 @@ jobs:
           ArcherPreview/tests/v03-menu-language.test.js
           ArcherPreview/tests/v03-riding-horse.test.js
           ArcherPreview/tests/v03-riding-geometry.test.js
+          ArcherPreview/tests/v03-riding-horse-path.test.js
+          ArcherPreview/tests/v03-riding-audio.test.js
+          ArcherPreview/tests/audio.test.js
+          ArcherPreview/tests/ios-audio.test.js
+          ArcherPreview/tests/v03-riding-wardrobe.test.js
+          ArcherPreview/tests/v03-riding-transfer-pose.test.js
+          ArcherPreview/tests/v03-riding-landing-cape.test.js
           ArcherPreview/tests/v03-game-viewport.test.js
           ArcherPreview/tests/viewport-resize.test.js
           ArcherPreview/tests/camera-zoom.test.js

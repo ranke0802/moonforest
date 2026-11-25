@@ -7,7 +7,9 @@
 import {Quaternion,TransformNode,Vector3} from '@babylonjs/core';
 import {loadOwnedModel} from './owned-model.js';
 import {attachCharacterOutlines} from '../character-outlines.js';
+import {HorseCoat} from './horse-coat.js';
 import {applyMonsterToon} from '../monster-toon.js';
+import {prepareShadowFade,shadowFadeAttribute} from '../village-shadow-fade.js';
 
 const MODEL=new URL('./models/wagon-horse-rig.glb',import.meta.url);
 // Model units: 87 tall (ear tips), 98 long, feet at y=0, head toward +z.
@@ -48,10 +50,20 @@ function forgetMountNodes(list,owned){
   else list.data[i]=null;
  }
 }
-export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounted=false}){
+export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounted=false,initialOpacity=1}){
  let disposed=false,container=null,root=null,observer=null,chest=null,stirTime=0,breathing=false;const casters=[],stirBones=[];
  const groups=new Map();let current=null,previous=null,fade=0,wanted='Horse_Idle';
  const loadController=mounted?new AbortController():null,saddle=[];
+ const fadingMeshes=[],fadingCasters=[];
+ let coatPaint=null;
+ let opacity=Math.min(1,Math.max(0,initialOpacity));
+ function setOpacity(value){
+  value=Math.min(1,Math.max(0,value));
+  if(value===opacity)return;
+  opacity=value;
+  for(const mesh of fadingMeshes)mesh.visibility=value;
+  for(const mesh of fadingCasters)mesh.instancedBuffers[shadowFadeAttribute]=value;
+ }
  function start(name,{loop=true}={}){
   const group=groups.get(name);wanted=name;if(!group||group===current)return;
   if(previous&&previous!==current)previous.stop();
@@ -72,12 +84,31 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   if(mounted)for(const [name,weight,x,y,z] of saddleJoints){const bone=node(name);if(bone)saddle.push({bone,weight,x,y,z});}
   chest=node('chest');for(const row of STIR.bones){const bone=node(row[0]),child=node(row[1]);if(bone&&child)stirBones.push({bone,child,lift:row[2],kick:row[3]});}
   for(const mesh of container.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
+  // The outdoor shadow map already has ordered coverage for a fractional
+  // shadow. Keep its depth pass on the source material's opaque queue even
+  // while the camera draws the translucent paint, using the same skinned mesh.
+  if(mounted&&shadows?.customShaderOptions?.shaderName==='moonforestShadowFade'){
+   for(const mesh of container.meshes){
+    if(!mesh.getTotalVertices()||mesh.name==='harness'||!mesh.material)continue;
+    prepareShadowFade(mesh);mesh.instancedBuffers[shadowFadeAttribute]=opacity;
+    shadows.getShadowMap().setMaterialForRendering(mesh,mesh.material);fadingCasters.push(mesh);
+   }
+  }
   // Painted like the other actors (2026-11-19, user: it had no cartoon shading
   // and no shadow): the monsters' unlit toon material and character bands.
   try{applyMonsterToon(container);for(const mesh of container.meshes){mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};if(mesh.material?.metadata?.moonforestMonsterToon)container.own(mesh.material);}}catch(error){console.warn('[MoonForest 0.3] horse toon skipped',error);}
   try{attachCharacterOutlines(container,'wolf',{skipBoneProof:true});}catch(error){console.warn('[MoonForest 0.3] horse outline skipped',error);}
   if(mounted)for(const mesh of container.meshes){
-   if(mesh.name==='harness'||mesh.name.startsWith('harness /'))mesh.setEnabled(false);
+   if(mesh.name==='harness'||mesh.name.startsWith('harness /')){mesh.setEnabled(false);continue;}
+   if(!mesh.getTotalVertices())continue;
+   // The imported glTF OPAQUE flag takes precedence over mesh.visibility.
+   // The personal horse owns this painted material. Its original opaque draw
+   // returns at visibility 1; the outline already binds its own visibility.
+   if(mesh.material?.metadata?.moonforestMonsterToon&&mesh.material.transparencyMode===0){
+    mesh.material.transparencyMode=null;mesh.material.forceDepthWrite=true;
+   }
+   if(mesh.name==='wagon_horse'&&mesh.material?.metadata?.moonforestMonsterToon)coatPaint=new HorseCoat(mesh.material);
+   fadingMeshes.push(mesh);mesh.visibility=opacity;
   }
   // Casts on the ground like the wolf (outline hulls excluded); removed on dispose.
   if(shadows)for(const mesh of container.meshes)if(mesh.isEnabled(false)&&mesh.getTotalVertices?.()>0&&!mesh.metadata?.moonforestOutline&&!/outline/i.test(mesh.name)){shadows.addShadowCaster(mesh,false);casters.push(mesh);}
@@ -106,6 +137,8 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   ready,
   get root(){return root;},
   get clip(){return wanted;},
+  setOpacity,
+  setCoat(value){coatPaint?.setCoat(value);},
   saddleContactToRef(out){
    if(saddle.length!==saddleJoints.length)return false;
    root.markAsDirty();
@@ -125,7 +158,7 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   // Moves the horse (story ride); y follows the ground.
   place(x,z,yaw){if(!root)return;root.position.set(x,heightAt(x,z),z);root.rotation.y=yaw;},
   dispose(){
-   disposed=true;loadController?.abort();saddle.length=0;
+   disposed=true;coatPaint=null;loadController?.abort();saddle.length=fadingMeshes.length=fadingCasters.length=0;
    for(const mesh of casters)try{shadows?.removeShadowCaster(mesh,false);}catch{}
    casters.length=0;
    if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}

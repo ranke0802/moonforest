@@ -55,7 +55,8 @@
     "tripo-monsters-2026-11-11-v2": "Sources/actors/tripo-monsters/2026-11-11-v2",
     "hud-ui-sprites-2026-11-13-v1": "Sources/ui/moonforest-hud/2026-11-13-v1",
     "creature-audio-r1": "Sources/audio/creatures-2026-11-17",
-    "town-item-icons-2026-11-24": "Sources/ui/town-item-icons/2026-11-24"
+    "town-item-icons-2026-11-24": "Sources/ui/town-item-icons/2026-11-24",
+    "v03-horse-audio": "Sources/audio/horse-call-2026-11-25"
   },
   "inputs": [
     {
@@ -48662,11 +48663,128 @@
         "moonforest-0.3-dialogue-portraits"
       ],
       "status": "bundled"
+    },
+    {
+      "id": "file:Sources/audio/horse-call-2026-11-25/188221-short-call-whistles.mp3",
+      "path": "Sources/audio/horse-call-2026-11-25/188221-short-call-whistles.mp3",
+      "bytes": 246960,
+      "sha256": "ecae421eb9307235153baa4ee4d915be7b872d713103ca60aacd5f582bbd1131",
+      "origins": [
+        "https://freesound.org/people/SpliceSound/sounds/188221/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/audio/horse/call.mp3",
+      "path": "ArcherPreview/src/v03/audio/horse/call.mp3",
+      "bytes": 10815,
+      "sha256": "0ab0a6dc44958a4c7cb33b3a08aa71bd9ee6a9f2eb67288aa3edcbe4dd55cb77",
+      "origins": [
+        "https://freesound.org/people/SpliceSound/sounds/188221/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/audio/horse-call-2026-11-25/385947-horse-neigh.mp3",
+      "path": "Sources/audio/horse-call-2026-11-25/385947-horse-neigh.mp3",
+      "bytes": 296040,
+      "sha256": "3c9c66dd92d9ecb02db4bc65553fa41c669dd8a63e17f06148a2f61dc8723c6c",
+      "origins": [
+        "https://freesound.org/people/felix.blume/sounds/385947/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/audio/horse/whinny.mp3",
+      "path": "ArcherPreview/src/v03/audio/horse/whinny.mp3",
+      "bytes": 37242,
+      "sha256": "20ea8f1a16df9d43f607a5b83622fab6f1138833d60f66ff1ed790e65e6744a9",
+      "origins": [
+        "https://freesound.org/people/felix.blume/sounds/385947/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/audio/horse-call-2026-11-25/538697-horse-snort.mp3",
+      "path": "Sources/audio/horse-call-2026-11-25/538697-horse-snort.mp3",
+      "bytes": 256224,
+      "sha256": "19512ba41f174fdb9d4ac2febf78bbcee9cfbdace99a186a06b39180c3694407",
+      "origins": [
+        "https://freesound.org/people/bruno.auzet/sounds/538697/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/audio/horse/snort.mp3",
+      "path": "ArcherPreview/src/v03/audio/horse/snort.mp3",
+      "bytes": 14672,
+      "sha256": "104d9305a79075b0d72ddf3ca967a8844cc23af6a975892a7237cb603a225d3f",
+      "origins": [
+        "https://freesound.org/people/bruno.auzet/sounds/538697/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/audio/horse-call-2026-11-25/175356-horse-galloping.mp3",
+      "path": "Sources/audio/horse-call-2026-11-25/175356-horse-galloping.mp3",
+      "bytes": 135614,
+      "sha256": "ed8c2339488feca16a050f22101b7921034d646e8f479c577966d67d1b345c94",
+      "origins": [
+        "https://freesound.org/people/Max_Headroom/sounds/175356/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/audio/horse/gallop.mp3",
+      "path": "ArcherPreview/src/v03/audio/horse/gallop.mp3",
+      "bytes": 39750,
+      "sha256": "e26f1a444f3574b618b192d02db2a159dce72738d695c63e2d39f44c90d7523e",
+      "origins": [
+        "https://freesound.org/people/Max_Headroom/sounds/175356/"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/audio/horse-call-2026-11-25/manifest.json",
+      "path": "Sources/audio/horse-call-2026-11-25/manifest.json",
+      "bytes": 3596,
+      "sha256": "0a53be8ebc9235860e678852f25aeac5e328814bc75f251f297579c8d5b62aae",
+      "origins": [
+        "MoonForest 0.3 approved audio, 2026-11-25"
+      ],
+      "requiredBy": [
+        "moonforest-0.3-horse-audio"
+      ],
+      "status": "bundled"
     }
   ],
   "summary": {
-    "files": 3742,
-    "bytes": 14018268989,
+    "files": 3751,
+    "bytes": 14019309902,
     "missing": [],
     "layoutDuplicates": 44
   },

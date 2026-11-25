@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {GLTFLoader} from '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
+import {mountMenuLabels} from '../src/v03/character-mount-locale.js';
+import {createRidingWardrobe} from '../src/v03/riding-wardrobe.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {createWagonHorse} from '../src/v03/wagon-horse.js';
 import {parseHTML} from 'linkedom';
-import {ArcRotateCamera,Color3,MeshBuilder,NullEngine,Scene,StandardMaterial,TransformNode,Vector3} from '@babylonjs/core';
+import {ArcRotateCamera,Color3,MeshBuilder,NullEngine,RawTexture,Scene,StandardMaterial,TransformNode,Vector3} from '@babylonjs/core';
 import en from '../src/v03/locales/en.js';
 import ko from '../src/v03/locales/ko.js';
 import {t,setPack,cloneChapter,localizeChapter} from '../src/v03/i18n.js';
@@ -202,4 +208,116 @@ test('the skill page is a left-to-right tree: three branches, a line per prerequ
   assert.equal(dialog.querySelector('.mf-skill-detail h2').textContent,t('char.skill.justGuard'));
   assert.equal(dialog.querySelector('.mf-skill-keys dd').textContent,t('char.skill.justGuardKeys'),'keyboard first on a desktop');
  }finally{menu.dispose();}
+});
+
+function mountMenuHarness({wardrobe,subject=()=>null}){
+ const {document,window}=parseHTML('<html lang="en"><body><main></main></body></html>'),root=document.querySelector('main');
+ window.ResizeObserver=class{observe(){}disconnect(){}};
+ let frame=null;
+ window.requestAnimationFrame=fn=>{frame=fn;return 1;};window.cancelAnimationFrame=()=>{frame=null;};
+ const originalCreate=document.createElement.bind(document);
+ document.createElement=(name,...options)=>{
+  const el=originalCreate(name,...options);
+  if(name==='dialog'){
+   el.showModal=()=>{el.open=true;};el.close=()=>{el.open=false;el.dispatchEvent(new window.Event('close'));};
+  }
+  return el;
+ };
+ const menu=createCharacterMenu({root,onPause(){},read:()=>({equipment:{},gold:0}),mount:()=>wardrobe,subject});
+ return {root,document,window,menu,flush(){const callback=frame;frame=null;callback?.();}};
+}
+
+test('mount ownership, cancelled loads, disposal and timeouts follow the selected tab',async t=>{
+ const labels=mountMenuLabels('en'),world={owned:false,stats:{speedMultiplier:1.7,gallopSpeed:14,gallopSeconds:2.4},coat:'original'};
+ const loads=[],closed=[];let released=0;
+ world.preview=()=>new Promise(resolve=>loads.push(resolve));world.closePreview=()=>closed.push(loads.length);
+ const {root,window,menu}=mountMenuHarness({wardrobe:world});
+ const fakeTimers=new Map();let timerCount=0;
+ t.mock.method(window,'setTimeout',(fn,delay)=>{const id=++timerCount;fakeTimers.set(id,{fn,delay});return id;});
+ t.mock.method(window,'clearTimeout',id=>fakeTimers.delete(id));setPack('en',en);
+ try{
+  menu.show('Status');root.querySelectorAll('nav button')[3].click();
+  assert.equal(root.querySelector('dialog').dataset.page,'Mount');assert.ok(root.textContent.includes(labels.locked));assert.equal(loads.length,0);
+  world.owned=true;menu.show('Mount');assert.equal(loads.length,1);
+  assert.deepEqual([...root.querySelectorAll('.mf-mount-details dd')].map(n=>n.textContent),['1.7 ×','14 m/s','2.4 s']);
+  menu.show('Inventory');assert.equal(closed.length,1);menu.show('Mount');assert.equal(loads.length,2);
+  loads[0]({dispose(){released++;}});await Promise.resolve();assert.equal(released,1);assert.equal(closed.length,1);
+  [...fakeTimers.values()].find(row=>row.delay===12000).fn();
+  assert.ok(root.textContent.includes(labels.failed));assert.equal(closed.length,2);
+  root.querySelector('.mf-mount-notice button').click();assert.equal(loads.length,3);
+  loads[1]({dispose(){released++;}});await Promise.resolve();assert.equal(released,2);assert.equal(closed.length,2);
+  loads[2](null);await Promise.resolve();assert.equal(closed.length,3);assert.ok(root.textContent.includes(labels.failed));
+  root.querySelector('.mf-mount-notice button').click();menu.close();assert.equal(closed.length,4);
+  loads[3]({dispose(){released++;}});await Promise.resolve();assert.equal(released,3);assert.ok(!root.hasAttribute('data-character-portrait'));
+  for(const iso of ['ko','en','ja','zh-Hans','vi']){
+   const terms=mountMenuLabels(iso);assert.equal(Object.values(terms).filter(Boolean).length,28);
+   assert.ok(terms.locked&&terms.tab&&terms.change&&terms.saveError&&terms.white);
+  }
+ }finally{menu.dispose();setPack('ko',ko);}
+});
+
+test('the live horse portrait orbits, fits a narrow frame and previews or commits a coat independently',async t=>{
+ const engine=new NullEngine({renderWidth:800,renderHeight:500}),scene=new Scene(engine);scene.useRightHandedSystem=true;
+ engine.enableScissor=engine.disableScissor=()=>{};
+ const camera=new ArcRotateCamera('world',.46,1.2,9,Vector3.Zero(),scene);camera.lowerBetaLimit=.45;camera.upperBetaLimit=1.65;
+ // NullEngine does not complete GPU uploads for the outline's 1×1 inactive fog sampler.
+ caveFogFallback(scene).getInternalTexture().isReady=true;
+ const body=MeshBuilder.CreateBox('warrior',{},scene),canvasRect={left:0,top:0,width:800,height:500};
+ const viewRect={left:82,top:40,width:195,height:325};
+ t.mock.method(globalThis,'fetch',async()=>new Response(readFileSync(new URL('../src/v03/models/wagon-horse-rig.glb',import.meta.url))));
+ t.mock.method(GLTFLoader.prototype,'_loadTextureAsync',function(_context,_texture,assign){
+  const image=RawTexture.CreateRGBATexture(new Uint8Array([118,77,43,255]),1,1,this.babylonScene,false,false);
+  image.getInternalTexture().isReady=true;assign(image);return Promise.resolve(image);
+ });
+ let failSave=false,horse=null,sample=null;const writes=[],paints=[];
+ const wardrobe=createRidingWardrobe({world:{scene},owned:()=>true,storage:{getItem:()=>null,setItem(_key,value){if(failSave)throw Error('quota');writes.push(value);}},
+  fieldHorse:()=>null,makeHorse(args){horse=createWagonHorse(args);const paint=horse.setCoat.bind(horse);horse.setCoat=v=>{paints.push(v);paint(v);};return horse;}});
+ const {root,menu,flush,window}=mountMenuHarness({wardrobe,subject:()=>({scene,camera,actor:body,meshes:[body],height:1.6,canvasRect})});
+ const labels=mountMenuLabels('en'),named=(host,label)=>[...host.querySelectorAll('button')].find(b=>b.textContent===label);
+ setPack('en',en);
+ try{
+  menu.show('Mount');const view=root.querySelector('.mf-menu-pose');
+  view.getBoundingClientRect=()=>viewRect;view.setPointerCapture=()=>{};
+  const model=await wardrobe.preview(),horseSkin=model.meshes.find(m=>m.name==='wagon_horse');assert.ok(horseSkin?.skeleton);
+  await scene.whenReadyAsync();
+  horseSkin.onBeforeDrawObservable.add(()=>{
+   const verts=horseSkin.getPositionData(true),toScreen=scene.getTransformMatrix(),vp=camera.viewport.toGlobal(800,500);
+   let xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;
+   for(let k=0;k<verts.length;k+=3){
+    const p=Vector3.Project(Vector3.FromArray(verts,k),horseSkin.getWorldMatrix(),toScreen,vp);
+    xmin=Math.min(xmin,p.x);xmax=Math.max(xmax,p.x);ymin=Math.min(ymin,p.y);ymax=Math.max(ymax,p.y);
+   }
+   sample={alpha:camera.alpha,beta:camera.beta,radius:camera.radius,xmin,xmax,ymin,ymax};
+  });
+  for(let i=0;i<10&&!sample;i++){flush();if(!sample)await new Promise(done=>setTimeout(done,110));}
+  assert.ok(sample,'real posed horse draw');const fitted=()=>assert.ok(sample.xmin>=viewRect.left&&sample.xmax<=viewRect.left+viewRect.width&&sample.ymin>=viewRect.top&&sample.ymax<=viewRect.top+viewRect.height,
+   'horse nose, tail, ears and hooves stay inside portrait '+JSON.stringify(sample));fitted();
+  const event=(type,data,target=view)=>{target.dispatchEvent(Object.assign(new window.Event(type),data));flush();};
+  const before={...sample,lowerBetaLimit:camera.lowerBetaLimit,upperBetaLimit:camera.upperBetaLimit};
+  event('pointerdown',{pointerId:1,pointerType:'touch',button:0,clientX:30,clientY:25});
+  event('pointermove',{pointerId:1,pointerType:'touch',button:-1,clientX:145,clientY:65});
+  PlaygroundInput.prototype.drag.call({camera:before,callbacks:{}},115,40,false);
+  assert.ok(Math.abs(sample.alpha-before.alpha)<1e-8&&Math.abs(sample.beta-before.beta)<1e-8 ,'horse and gameplay camera turn in the same direction');fitted();
+  for(let i=1;i<=8;i++){
+   event('pointermove',{pointerId:1,pointerType:'touch',button:-1,clientX:145+i*157,clientY:i<5?150:-25});fitted();
+  }
+  const radius=sample.radius;event('wheel',{deltaY:-100});assert.ok(sample.radius<radius);
+  const closeRadius=sample.radius;root.querySelector('[aria-label="Zoom out"]').click();flush();assert.ok(sample.radius>closeRadius);
+  assert.deepEqual([camera.alpha,camera.beta,camera.radius],[.46,1.2,9]);
+  const change=root.querySelector('.mf-mount-action');assert.equal(change.disabled,false);
+  const panel=()=>root.querySelector('.mf-mount-palette');
+  change.click();named(panel(),labels.white).click();assert.equal(paints.at(-1),'#ffffff');assert.deepEqual(writes,[]);
+  event('keydown',{key:'Escape'},panel());assert.equal(panel(),null);assert.equal(paints.at(-1),'original');assert.ok(menu.open);
+  change.click();const color=panel().querySelector('input');color.value='#537489';event('input',{},color);
+  assert.equal(paints.at(-1),'#537489');named(panel(),labels.cancel).click();assert.equal(paints.at(-1),'original');
+  change.click();named(panel(),labels.white).click();failSave=true;named(panel(),labels.apply).click();
+  assert.equal(panel().querySelector('[role=status]').textContent,labels.saveError);assert.equal(wardrobe.coat,'original');
+  failSave=false;named(panel(),labels.apply).click();assert.equal(panel(),null);assert.equal(wardrobe.coat,'#ffffff');
+  assert.equal(root.querySelector('.mf-mount-colour').textContent,labels.white);
+  change.click();named(panel(),labels.original).click();named(panel(),labels.apply).click();assert.equal(wardrobe.coat,'original');
+  assert.deepEqual(writes,['#ffffff','original']);
+  change.click();named(panel(),labels.chestnut).click();menu.close();
+  assert.equal(panel(),null);assert.equal(wardrobe.coat,'original');assert.equal(scene.getMeshByName('wagon_horse'),null);
+  menu.show('Mount');await wardrobe.preview();scene.dispose();assert.equal(menu.open,false,'scene teardown releases the modal immediately');
+ }finally{menu.dispose();wardrobe.closePreview();scene.dispose();engine.dispose();setPack('ko',ko);}
 });

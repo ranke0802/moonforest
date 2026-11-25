@@ -27,7 +27,7 @@ export async function buildMoonforestV3(){
  assertDescriptor(indexBytes,baseline.get('assets/resource-index.json'));
  const bundleAudit=await verifyResourceBundles(publicRoot,resourceIndex);
  const {files,manifestCount}=await collectVillageSiteFiles(publicRoot);
- for(const path of ['assets/resource-index.json',...resourceIndex.bundles.map(pack=>'assets/'+pack.url),'moonforest-0.3.webmanifest']){
+ for(const path of ['assets/resource-index.json',...resourceIndex.bundles.map(pack=>'assets/'+pack.url),'moonforest-0.3.webmanifest','v03/horse-audio-r1/AUDIO_CREDITS.txt']){
   const absolute=deploymentPath(publicRoot,path);files.set(path,{absolute,bytes:(await readFile(absolute)).length});
  }
  const reused=[],pending=[];

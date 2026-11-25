@@ -29,8 +29,9 @@ export function createRidingControls(root, toggle) {
   function show(next, available, labels) {
     const mounted = next === 'mounted';
     const wasMounted = state === 'mounted';
-    const caption = mounted ? labels.dismount : next === 'loading' ? labels.cancel : labels.mount;
+    const caption = mounted ? labels.dismount : (next === 'loading' || next === 'approaching') ? labels.cancel : labels.mount;
     button.hidden = !available;
+    button.disabled = next === 'mounting' || next === 'dismounting' || next === 'departing';
     button.textContent = caption;
     button.setAttribute('aria-label', caption);
     button.title = caption + ' (H)';

@@ -596,7 +596,7 @@ function updateButtons() {
 // attack, dodge, guard, potion). Always true outside the tutorial and in 0.2.
 // Movement while the tutorial locks it: a fresh zero intent (the frame adds fields to it).
 const noMovement=()=>({x:0,y:0,run:false});
-const allowed=kind=>world?.v03?.allows?.(kind)!==false;
+const allowed=kind=>(kind==='camera'||!world?.riding?.locksRider)&&world?.v03?.allows?.(kind)!==false;
 const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
   guard() { if (ready && allowed('guard') && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
@@ -975,7 +975,7 @@ function syncCaveFog(force=false){if(actor&&!actor.isDisposed())world.caveFog?.u
 function firstPersonAllowed(){
   const v=world?.v03;
   return !!(ready&&isV2()&&v?.playing&&!v.blocksGame&&!v.cameraFocus&&!v.story?.sceneActive&&!v.story?.scenePending&&!v.story?.dialogueOpen&&
-    !world.riding?.active&&!world.cave&&!controller?.dead&&!controller?.captured&&!characterMenu?.open&&!characterMenuOpening&&
+    !world.riding?.blocksFirstPerson&&!world.cave&&!controller?.dead&&!controller?.captured&&!characterMenu?.open&&!characterMenuOpening&&
     !loadingAsset&&!mapTransition?.busy&&!world.toolLease?.active&&!elenaReview&&!villageOverview&&!boss?.grab?.active);
 }
 function syncCameraFocus(dt,{snap=false}={}){
@@ -1155,7 +1155,7 @@ function render(dt) {
     }
     if (arrowMesh) arrowMesh.visibility = attacking && hiddenArrowForAction === result.actionId ? 0 : 1;
     const actionAudioStart=frameDiagnostics.mark();
-    actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime,strideScale:playerDimensions(actor).ratio});
+    actionAudio.player(result,dt,{character,position:actor.position,duration:animator.durations[result.state],clipTime:animator.active.get(result.state)?.clipTime,strideScale:playerDimensions(actor).ratio,mounted:world.riding?.active});
     frameDiagnostics.measure('actionAudioMs',actionAudioStart);
     world.developmentActors?.beforeBattle(dt,actor);world.authoredMonsters?.beforeBattle(dt,actor);
     frameDiagnostics.measure('framePreludeMs',framePreludeStart);
@@ -1864,7 +1864,7 @@ try {
       }});
       world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
-      world.riding=createRidingHorse({world,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
+      world.riding=createRidingHorse({world,audio,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
         forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:(onArrival=false)=>!!(ready&&!loadingAsset&&(onArrival||!mapTransition?.busy)&&
           world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.dead&&boss.playerAlive&&!boss.combatCount)});
       world.scene.onDisposeObservable.addOnce(()=>world.riding.dispose());
@@ -1938,7 +1938,7 @@ try {
         try{
           const [{createCharacterMenu}]=await Promise.all([import('./v03/character-menu.js'),import('./v03/character-menu.css')]);
           if(!canOpen()||!launch.isConnected||startingMap!==world.mapId||actor!==startingActor||startingGeneration!==world.toolGeneration)return;
-          characterMenu??=createCharacterMenu({root,onPause:()=>{input.reset();cancelAttackInput();reconcilePlayback();},
+          characterMenu??=createCharacterMenu({root,mount:()=>world.riding?.wardrobe,onPause:()=>{input.reset();cancelAttackInput();reconcilePlayback();},
             subject:()=>actor&&({camera:world.camera,scene,actor,meshes:container?.meshes,height:playerDimensions(actor).height,canvasRect:canvas.getBoundingClientRect()}),
             read:()=>{
               const stats=equipmentStats(equipmentChoices),defense=playerDefense();
