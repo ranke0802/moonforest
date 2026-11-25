@@ -15,6 +15,15 @@ const tracks={
  LeftHand:[[.15,.70,-.33,.22],[.31,.35,-.045,.195],[.48,.28,.075,.17],[.60,.25,.12,.17],[.75,.19,.18,.26]],
  RightHand:[[.15,.65,-.36,-.15],[.31,.35,-.045,-.16],[.48,.30,.085,-.155],[.61,.27,.13,-.15],[.77,.035,.18,.055],[.88,-.12,.27,.20]]
 };
+// Mount only. Hip-relative azimuth sweeps round the back of the saddle;
+// elevation and knee flexion keep the boot travelling past the croup until
+// the thigh reaches the opposite side. All three angles are in degrees.
+const swingArc=[
+ [.56,27,-52,1.9],[.61,34,-31,16],[.665,48,-15,21],[.715,68,-10,16],
+ [.77,100,-10,14],[.815,132,-15,19],[.855,151,-24,30],
+ [.90,165,-42,42],[.965,185,-60,40]
+];
+const radians=Math.PI/180;
 // On the way down the near ankle first lifts out of the iron. Both boots
 // drop together; the pelvis settles into bent knees after ground contact.
 const landing={
@@ -49,6 +58,7 @@ export function createRiderTransferPose(actor){
   initial.set(n,n.rotationQuaternion.clone());seated.set(n,Quaternion.Identity());
  }
  for(const side of sides)bones[side+'Fingers']=byName.get('mixamorig:'+side+'HandMiddle1');
+ const sweep=new Vector3(),sweptFoot=new Vector3(),sweptPole=new Vector3();
  const armEnd=new Vector3(),up=new Vector3(),wristLine=new Vector3();
  const seatInv=new Matrix(),actorInv=new Matrix(),p=new Vector3(),goal=new Vector3(),pole=new Vector3(),
   delta=new Vector3(),local=new Vector3(),axis=new Vector3(),axis2=new Vector3(),mid=new Vector3(),unit=new Vector3(),bend=new Vector3(),
@@ -165,10 +175,39 @@ export function createRiderTransferPose(actor){
     local.set(1.02-1.77*cross,-.25+.99*over,.28-.46*over);
    }
    Vector3.TransformCoordinatesToRef(local,seat,pole);
+   const swing=near||dismounting?0:smooth((t-.56)/.07)*(1-smooth((t-.87)/.095));
+   if(swing){
+    const hip=bones.RightUpLeg;hip.computeWorldMatrix();bones.RightLeg.computeWorldMatrix();bones.RightFoot.computeWorldMatrix();
+    const thigh=Vector3.Distance(hip.absolutePosition,bones.RightLeg.absolutePosition),shin=Vector3.Distance(bones.RightLeg.absolutePosition,bones.RightFoot.absolutePosition);
+    curve(swingArc,t,sweep);
+    const arcReach=Math.sqrt(thigh*thigh+shin*shin+2*thigh*shin*Math.cos(sweep.z*radians));
+    const azimuth=sweep.x*radians,elevation=sweep.y*radians,horizontal=Math.cos(elevation)*arcReach;
+    local.set(horizontal*Math.cos(azimuth),Math.sin(elevation)*arcReach,-horizontal*Math.sin(azimuth));
+    Vector3.TransformNormalToRef(local,seat,sweptFoot);sweptFoot.addInPlace(hip.absolutePosition);
+    const spanWeight=smooth((t-.56)/.018)*(1-smooth((t-.87)/.095));
+    const baseSpan=Math.min(thigh+shin,Vector3.Distance(goal,hip.absolutePosition));
+    const legReach=baseSpan+(arcReach-baseSpan)*spanWeight;
+    Vector3.LerpToRef(goal,sweptFoot,swing,goal);goal.subtractInPlace(hip.absolutePosition).normalize().scaleInPlace(legReach).addInPlace(hip.absolutePosition);
+    // Follow the travelling femur, giving the knee a little outward rotation
+    // while it is on the near side, then letting it drop on the far flank.
+    const flank=smooth((t-.815)/.065);
+    local.set(.45*Math.cos(azimuth)-.88*flank,-.95+.92*flank,.28+.22*flank);
+    Vector3.TransformNormalToRef(local,seat,sweptPole);sweptPole.addInPlace(hip.absolutePosition);
+    Vector3.LerpToRef(pole,sweptPole,swing,pole);
+   }
    if(fromStand){standingPoint(side+'Leg',standing,startPole);Vector3.LerpToRef(pole,startPole,fromStand,pole);}
    ik(bones[side+'UpLeg'],bones[side+'Leg'],bones[side+'Foot'],goal,pole);
    const ankle=bones[side+'Foot'];ankle.computeWorldMatrix();
    local.set(near?.02:.17*(1-smooth((t-.62)/.16)),-.22,.94);
+   if(swing){
+    // Turn the toes *around* the outside, through backward into the off-side
+    // stirrup. Interpolating opposed direction vectors flips the sole halfway.
+    const out=smooth((t-.56)/.16),down=smooth((t-.79)/.175);
+    const restYaw=Math.atan2(local.x,local.z),restPitch=Math.atan2(local.y,Math.hypot(local.x,local.z));
+    const around=Math.PI/2+sweep.x*radians,yaw=restYaw+(around-restYaw)*out+(2*Math.PI+restYaw-around)*down;
+    const pitch=restPitch+(-.70-restPitch)*out*(1-down);
+    local.set(Math.sin(yaw)*Math.cos(pitch),Math.sin(pitch),Math.cos(yaw)*Math.cos(pitch));
+   }
    Vector3.TransformNormalToRef(local,seat,p);
    if(fromStand){ground[side+'ToeBase'].subtractToRef(ground[side+'Foot'],startToe);Vector3.TransformNormalToRef(startToe,actor.getWorldMatrix(),startToe);Vector3.LerpToRef(p,startToe.normalize(),fromStand,p);}
    p.addInPlace(ankle.absolutePosition);rotateTo(ankle,bones[side+'ToeBase'],p);
