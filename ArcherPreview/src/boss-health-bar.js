@@ -9,22 +9,43 @@ export function projectBossHealth(scene,position,width,height){
   return {x:p.x*width/renderWidth,y:p.y*height/renderHeight,visible:p.z>=0&&p.z<=1&&p.x>=0&&p.x<=renderWidth&&p.y>=0&&p.y<=renderHeight};
 }
 
-export function updateBossHealthPosition(scene,encounter,element,projection,{fixed=false}={}){
+const PAWS=['fore.L.paw','fore.R.paw','hind.L.paw','hind.R.paw'];
+const FEET=['Foot.L','Foot.R'];
+const MIXAMO_FEET=['mixamorig:LeftFoot','mixamorig:RightFoot'];
+
+export function updateBossHealthPosition(scene,encounter,element,projection,{fixed=false,underFeet=false}={}){
   if(!encounter?.active||encounter.corpseGone||!encounterInCombat(encounter)||encounter.renderVisible===false||encounter.fogVisible===false){element.hidden=true;return;}
   if(element.dataset)element.dataset.hud=fixed?'fixed':'world';
   if(fixed){element.hidden=false;element.style.left='';element.style.top='';element.style.transform='translateX(-50%)';return;}
   element.style.left='0';element.style.top='0';
   const canvas=projection?null:scene.getEngine().getRenderingCanvas();
-  const position=encounter.healthBarPosition?.()??encounter.actor.position;
+  const position=underFeet?encounter.actor.position:(encounter.healthBarPosition?.()??encounter.actor.position);
   const p=projection?projection.project(position):projectBossHealth(scene,position,canvas.clientWidth,canvas.clientHeight);
-  element.hidden=!p.visible;
-  const transform=`translate3d(${p.x}px,${p.y+8}px,0) translateX(-50%)`;
+  let {x,y,visible}=p;
+  // Use only the rendered joints of this combatant. No mesh traversal or extra pose update.
+  if(underFeet&&projection&&encounter.nodes){
+    const nodes=encounter.nodes;
+    const feet=nodes[PAWS[0]]?PAWS:nodes[FEET[0]]?FEET:MIXAMO_FEET;
+    let left=Infinity,right=-Infinity,bottom=-Infinity;
+    for(const name of feet){
+      const foot=nodes[name];if(!foot)continue;
+      const point=projection.project(foot.getAbsolutePosition());
+      if(!point.visible)continue;
+      left=Math.min(left,point.x);right=Math.max(right,point.x);bottom=Math.max(bottom,point.y);
+    }
+    if(right>=left){x=(left+right)/2;y=bottom;visible=true;}
+  }
+  element.hidden=!visible;
+  if(!visible)return;
+  const transform=underFeet
+    ?`translate3d(${x}px,${y+4}px,0) translateX(-50%) scale(var(--v03-ui,1))`
+    :`translate3d(${x}px,${y+8}px,0) translateX(-50%)`;
   if(element.style.transform!==transform)element.style.transform=transform;
 }
 
 export class BossHealthBars {
   // showNumbers:false (0.3) hides the "hp / max" figures; the bar alone shows health.
-  constructor(template,{showNumbers=true}={}) { this.template = template; this.items = new Map(); this.showNumbers = showNumbers; }
+  constructor(template,{showNumbers=true,underFeet=false}={}) { this.template = template; this.items = new Map(); this.showNumbers = showNumbers; this.underFeet=underFeet; }
   update(scene, encounters, projection, {playerPosition}={}) {
     const primary=primaryHealthBoss(encounters,playerPosition??scene.activeCamera?.target,this.primaryId);this.primaryId=primary?.id;
     const visible = new Set();
@@ -56,7 +77,7 @@ export class BossHealthBars {
         item.element.dataset.state = boss.brain.stagger > 0 ? 'stagger' : boss.brain.mode;
       }
       this.decorate?.(item.element,boss);
-      updateBossHealthPosition(scene, boss, item.element, projection,{fixed:boss===primary});
+      updateBossHealthPosition(scene, boss, item.element, projection,{fixed:boss===primary,underFeet:this.underFeet});
     }
     for (const [id, item] of this.items) if (!visible.has(id)) {
       item.element.hidden = true;

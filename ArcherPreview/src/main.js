@@ -1308,7 +1308,7 @@ try {
     if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});
     else actionAudio.damage(...args);
   };
-  bossHealthBars=new BossHealthBars($('#boss-hud'),{showNumbers:!versionRoute.edition});
+  bossHealthBars=new BossHealthBars($('#boss-hud'),{showNumbers:!versionRoute.edition,underFeet:!!versionRoute.edition&&!versionRoute.worldRevision});
   playerHealthBar=new PlayerHealthBar($('#player-health'));
   boss=new BossBattle(world,encounter=>{
     const snapshot=[encounter.loading,encounter.active,encounter.encounters.length,encounter.livingCount,encounter.playerHp,encounter.lastHit].join('|');

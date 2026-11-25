@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
+import postcss from 'postcss';
 import {GoldLoot} from '../src/gold-loot.js';
 import {createTownEconomy} from '../src/v03/town-economy.js';
 import {createTownShop} from '../src/v03/town-shop.js';
@@ -12,9 +14,9 @@ import {t} from '../src/v03/i18n.js';
 const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};};
 function forge({id='goblin-cleaver',level=0,hp=null,materials={'wolf-fang':2,'iron-scrap':1}}={}){
  const {document,window}=parseHTML('<html lang="ko"><body><main id="app"></main></body></html>');
- let clock=1000,frames=0,cancelled=0;const timers=[];
+ let clock=1000,frames=0,cancelled=0,draw=null;const timers=[];
  Object.defineProperty(window,'performance',{value:{now:()=>clock},configurable:true});
- window.requestAnimationFrame=()=>++frames;window.cancelAnimationFrame=()=>{cancelled++;};
+ window.requestAnimationFrame=fn=>{draw=fn;return ++frames;};window.cancelAnimationFrame=()=>{draw=null;cancelled++;};
  window.setTimeout=(fn,ms)=>{timers.push({fn,ms});return timers.length;};window.clearTimeout=id=>{if(timers[id-1])timers[id-1].fn=null;};
  const gold=new GoldLoot({storage:store()});gold.creditCumulative('forge-view',5000);
  const economy=createTownEconomy(gold);economy.grant(id);economy.equip(id);
@@ -26,8 +28,34 @@ function forge({id='goblin-cleaver',level=0,hp=null,materials={'wolf-fang':2,'ir
  const button=label=>[...dialog.querySelectorAll('button')].find(node=>node.textContent===label);
  button(t('shop.forge',{cost:economy.forgeCost(id)})).click();
  return {document,window,dialog,economy,shop,button,timers,get changes(){return changes;},get frames(){return frames;},get cancelled(){return cancelled;},
-  at(ms){clock=1000+ms;},tap(target=dialog.querySelector('.mf-forge')){target.dispatchEvent(new window.Event('pointerdown',{bubbles:true}));}};
+  at(ms){clock=1000+ms;},frameAt(ms){clock=1000+ms;draw(clock);},
+  tap(target=dialog.querySelector('.mf-forge')){target.dispatchEvent(new window.Event('pointerdown',{bubbles:true}));}};
 }
+
+test('the hammer travels between both gauge edges without adding its track width to the scrolling dialog',()=>{
+ const css=postcss.parse(readFileSync(new URL('../src/v03/town-shop.css',import.meta.url),'utf8'));
+ function property(selector,name){
+  let value;
+  css.walkRules(selector,rule=>rule.walkDecls(name,decl=>{value=decl.value;}));
+  return value;
+ }
+ const h=forge();
+ try{
+  const rail=h.dialog.querySelector('.mf-forge-track > .mf-forge-gauge > .mf-forge-rail');
+  assert.equal(property('.mf-forge-rail','width'),'0');
+  assert.equal(property('.mf-forge-gauge','container-type'),'inline-size');
+  assert.equal(property('.mf-forge-track','overflow'),'hidden');
+  assert.equal(property('.mf-town-shop.is-forging','overflow-x'),'hidden');
+  assert.equal(property('.mf-town-shop.is-forging','overflow-y'),'auto');
+  for(const [ms,position] of [[0,0],[450,50],[900,100],[1800,0]]) {
+   h.frameAt(ms);assert.equal(rail.style.transform,`translateX(${position.toFixed(2)}cqw)`);
+  }
+  h.at(2700);h.tap();
+  assert.equal(rail.style.transform,'translateX(100.00cqw)');
+  assert.equal(h.dialog.querySelector('.mf-forge').dataset.grade,'failed');
+  assert.equal(h.dialog.querySelector('.mf-forge-result').hidden,false);
+ }finally{h.shop.dispose();}
+});
 
 test('the zones narrow 3% per level and the economy grades with the level before the strike; the hammer keeps its speed',()=>{
  assert.deepEqual(['.5','.35','.24','0'].map(Number).map(p=>gradeStrike(p)),['Perfect','Success','Near miss','Failed'],'+0 unchanged');

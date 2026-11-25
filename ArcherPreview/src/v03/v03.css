@@ -579,8 +579,12 @@ html[data-v03-screen="opening"] #loading .v03-lore,html[data-v03-screen="opening
    and writes its offsets divided by the zoom, so a saved layout and the
    editor's size slider apply on top of this scale. */
 html[data-v03-zoom] :is(.v03-quest,.v03-hint,.v03-banner,.v03-place,.v03-tip,.v03-prompt,.v03-caption,.v03-dialogue-box,.v03-title-inner,.v03-panel-box,.v03-opening-line,.v03-opening-skip,.hud-layout-panel),
-html[data-v03-zoom] #app>:is(.topbar,#gold-balance,#dot-minimap,.right-tools,.boss-hud,.keyboard-hint,.action-controls,#player-hud,#map-travel),
+html[data-v03-zoom] #app>:is(.topbar,#gold-balance,#dot-minimap,.right-tools,.boss-hud[data-hud="fixed"],.keyboard-hint,.action-controls,#player-hud,#map-travel),
+html[data-v03-zoom][data-world] #app>.boss-hud[data-hud="world"],
 html[data-v03-zoom] :is(.motion-speed-dialog,.help-dialog,.minimap-travel-dialog,.death-screen){zoom:var(--v03-ui,1)}
+/* The HUD editor can set inline offsets on the boss template, which is also
+   cloned for ordinary enemies. World labels already have canvas coordinates. */
+html[data-edition="moonforest-0.3"]:not([data-world]) #app>.boss-hud[data-hud="world"]{translate:none!important;scale:none!important;transform-origin:50% 0!important}
 /* Touch: the attack button as the interaction button while one is on offer (interact-button.js, 2026-11-23). */
 #attack-button .v03-interact-face{display:none}
 #attack-button.v03-interact{position:relative}

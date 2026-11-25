@@ -16,11 +16,13 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
    at +0 perfect 44-56%, success 30.5-69.5%, near miss 15.5-84.5%. Only the
    hammer rail moves (transform), the centre glow pulses (opacity); both stop with
    the view. Sparks are a few dots removed after 0.7 s. */
-.mf-town-shop.is-forging{width:min(38rem,94vw)}
+.mf-town-shop.is-forging{width:min(38rem,94vw);overflow-x:hidden;overflow-y:auto;overflow-wrap:anywhere}
+.mf-town-shop.is-forging header{flex-wrap:wrap}
+.mf-town-shop.is-forging button{max-width:100%;box-sizing:border-box;white-space:normal;overflow-wrap:anywhere}
 .mf-forge{--zone-perfect:#f5c842;--zone-success:#5b9a3a;--zone-near:#24401b;--zone-failed:#000;
-  display:grid;gap:.7rem;margin-top:.6rem;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none}
+  display:grid;grid-template-columns:minmax(0,1fr);gap:.7rem;margin-top:.6rem;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none}
 .mf-forge:focus-visible{box-shadow:0 0 0 2px #e0bd77;border-radius:.4rem}
-.mf-forge-side,.mf-forge-play{display:grid;gap:.6rem;min-width:0}
+.mf-forge-side,.mf-forge-play{display:grid;grid-template-columns:minmax(0,1fr);gap:.6rem;min-width:0}
 .mf-forge-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:center;padding:.65rem .75rem;border:1px solid #6d5d43;border-radius:.45rem;background:linear-gradient(160deg,#2f2a36,#221f29)}
 .mf-forge-icon{position:relative;display:grid;place-items:center;width:3.8rem;aspect-ratio:1;border:1px solid #a28c64;border-radius:.45rem;background:radial-gradient(circle at 50% 62%,#6b4128,#2a2129 58%,#1b1920)}
 .mf-forge-icon>.mf-town-item-icon{--mf-item-icon-size:2.9rem}
@@ -37,12 +39,14 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
 .mf-forge-legend li[data-zone=perfect]{border-color:var(--zone-perfect)}.mf-forge-legend li[data-zone=success]{border-color:var(--zone-success)}
 .mf-forge-legend li[data-zone=near]{border-color:var(--zone-near)}
 .mf-forge-legend b{display:block;color:#f6e9d0}.mf-forge-legend span{color:#c3b8ae}
-.mf-forge-gauge{position:relative;height:3rem;margin:1.6rem .4rem .2rem;border:1px solid #a28c64;border-radius:.35rem;background:var(--mf-forge-art,#000);
+.mf-forge-track{overflow:hidden}
+.mf-forge-gauge{position:relative;container-type:inline-size;height:3rem;margin:2.1rem 1.5rem .65rem;border:1px solid #a28c64;border-radius:.35rem;background:var(--mf-forge-art,#000);
   box-shadow:inset 0 2px 6px #0008}
 .mf-forge-glow{position:absolute;top:-.2rem;bottom:-.2rem;left:44%;width:12%;border-radius:.3rem;background:radial-gradient(ellipse at center,#fff6c8aa,#ffe07a33 60%,transparent 75%);animation:mf-forge-pulse 1.1s ease-in-out infinite alternate}
 .mf-forge.is-struck .mf-forge-glow{animation:none;opacity:.5}
 @keyframes mf-forge-pulse{from{opacity:.3}to{opacity:.9}}
-.mf-forge-rail{position:absolute;top:-.45rem;bottom:-.45rem;left:0;width:100%;pointer-events:none}
+/* The moving origin has no width. Its cqw translation follows the gauge as it resizes. */
+.mf-forge-rail{position:absolute;top:-.45rem;bottom:-.45rem;left:0;width:0;pointer-events:none}
 .mf-forge-mark{position:absolute;left:-3px;top:0;bottom:0;width:6px;border-radius:3px;background:#fff;box-shadow:0 0 8px #ffe7a6,0 0 0 1px #17151d}
 .mf-forge-hammer{position:absolute;left:-.55rem;top:-1.45rem;width:1.1rem;height:1.2rem;transform-origin:50% 100%;transform:rotate(-28deg);transition:transform .12s ease-in}
 .mf-forge-hammer:before{content:'';position:absolute;left:.1rem;top:0;width:.9rem;height:.42rem;border-radius:.1rem;background:linear-gradient(#d9d2c4,#8d8577);box-shadow:0 0 0 1px #17151d}
@@ -53,14 +57,15 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
 .mf-forge[data-grade=failed] .mf-forge-gauge{animation:mf-forge-shake .28s linear 1}
 @keyframes mf-forge-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .mf-forge-hint{margin:0;text-align:center;color:#eed493;font-size:.92rem}
-.mf-forge-result{display:grid;justify-items:center;gap:.35rem;text-align:center}
+.mf-forge-result{display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;gap:.35rem;text-align:center}
+.mf-forge-result[hidden]{display:none}
 .mf-forge-result>strong{font-size:1.45rem;letter-spacing:.06em;color:#f6e9d0}
 .mf-forge-result>span{color:#c3b8ae}
 .mf-forge[data-grade=perfect] .mf-forge-result>strong{color:#ffe08a;text-shadow:0 0 12px #ffcc5a}
 .mf-forge[data-grade=success] .mf-forge-result>strong{color:#a6e39a}
 .mf-forge[data-grade=near] .mf-forge-result>strong{color:#d9b484}
 .mf-forge[data-grade=failed] .mf-forge-result>strong{color:#f39a9a}
-.mf-forge-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem}
+.mf-forge-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;max-width:100%}
 /* Short landscape screens (phones): the item and zones beside the gauge. */
 @media (max-height:500px) and (orientation:landscape){
   .mf-town-shop.is-forging{width:min(46rem,94vw);padding:.6rem .8rem}
@@ -68,6 +73,6 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
   .mf-forge{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:.8rem;margin-top:.4rem}
   .mf-forge-item{padding:.45rem .55rem;gap:.6rem}.mf-forge-icon{width:3rem}.mf-forge-icon>.mf-town-item-icon{--mf-item-icon-size:2.3rem}
   .mf-forge-legend li{font-size:.74rem;padding:.12rem .35rem}
-  .mf-forge-gauge{height:2.6rem;margin-top:1.5rem}
+  .mf-forge-gauge{height:2.6rem}
   .mf-forge-result>strong{font-size:1.2rem}
 }

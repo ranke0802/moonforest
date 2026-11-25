@@ -61,6 +61,29 @@ test('real camera changes cannot move fixed battle/player HP into head anchors; 
  enemy.fogVisible=true;enemy.brain.hp=0;bars.update(f.scene,[enemy],f.projection,{playerPosition:f.actor.position});assert.match(bars.items.get(1).text.textContent,/격파/);assert.equal(enemy.brain.hp,0);player.dispose();
 });
 
+test('0.3 world bars follow the projected feet while the camera turns, the model moves and the viewport resizes',t=>{
+ const f=fixture(t),bars=new BossHealthBars(f.doc.getElementById('boss-hud'),{underFeet:true});
+ const wolf=f.enemy(2,0,0,'wolf'),goblin=f.enemy(3,.5,0,'goblin');wolf.regularWolfId='gray-wolf';
+ for(const [enemy,names] of [[wolf,['fore.L.paw','fore.R.paw','hind.L.paw','hind.R.paw']],[goblin,['Foot.L','Foot.R']]]){
+  enemy.nodes={};
+  for(const [i,name] of names.entries()){
+   const joint=new TransformNode(name,f.scene);joint.parent=enemy.actor;
+   joint.position.set(i%2?.21:-.27,.035,i<2?.6:-.67);enemy.nodes[name]=joint;
+  }
+ }
+ for(const [width,height,yaw] of [[780,360,0],[1920,1080,1.2],[3840,2160,2.3]]){
+  f.camera.alpha=yaw;wolf.actor.position.x+=.15;goblin.actor.rotation.y+=.4;
+  f.projection.resize(width,height);f.render();bars.update(f.scene,[wolf,goblin],f.projection);
+  for(const enemy of [wolf,goblin]){
+   const points=Object.values(enemy.nodes).map(node=>({...f.projection.project(node.getAbsolutePosition())}));
+   const xs=points.map(p=>p.x),expectedX=(Math.min(...xs)+Math.max(...xs))/2,expectedY=Math.max(...points.map(p=>p.y))+4;
+   const element=bars.items.get(enemy.id).element;
+   assert.equal(element.hidden,false);
+   assert.equal(element.style.transform,`translate3d(${expectedX}px,${expectedY}px,0) translateX(-50%) scale(var(--v03-ui,1))`);
+  }
+ }
+});
+
 test('repeated pooled summon/replacement has one fixed primary and does not accumulate cloned HP DOM',t=>{
  const f=fixture(t),bars=new BossHealthBars(f.doc.getElementById('boss-hud'));
  for(let i=0;i<60;i++){

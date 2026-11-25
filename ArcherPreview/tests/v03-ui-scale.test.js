@@ -64,6 +64,16 @@ test('zoomed rules divide their viewport units by the UI scale',()=>{
  for(const name of ['portrait','v03-bubble','v03-ring','#toast'])assert.ok(!zoom.includes(name),`${name} stays at its anchored pixel size`);
 });
 
+test('large-screen panel zoom applies to fixed boss HP only, never to world coordinates in 0.3',()=>{
+ const {document}=parseHTML('<html data-v03-zoom data-edition="moonforest-0.3"><body><div id="app"><section class="boss-hud"></section></div></body></html>');
+ const bar=document.querySelector('section');
+ const zoomRule=css.match(/(html\[data-v03-zoom\][^{]+)\{zoom:var\(--v03-ui,1\)\}/)[1];
+ bar.dataset.hud='fixed';assert.equal(bar.matches(zoomRule),true);
+ bar.dataset.hud='world';assert.equal(bar.matches(zoomRule),false);
+ const [,selector]=css.match(/([^{}]+)\{translate:none!important;scale:none!important;transform-origin:50% 0!important\}/);
+ assert.ok(bar.matches(selector.replace(/\/\*[\s\S]*?\*\//g,'')),'saved boss-panel offsets do not move a cloned world bar');
+});
+
 test('a guide card shows its whole text: the copy fits, nothing is clipped',()=>{
  const body=css.match(/\.v03-tip-body\{[^}]*\}/)?.[0]??'';
  assert.ok(body,'one body paragraph under the title');assert.doesNotMatch(body,/line-clamp|overflow:hidden|text-overflow/);

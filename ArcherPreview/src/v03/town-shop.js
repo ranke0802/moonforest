@@ -125,13 +125,15 @@ export function createTownShop({root,economy,onChange,onPause}){
   const hint=element('p',t('shop.forgeTap')+' · '+t('shop.forgeZone',{n:Math.round(zone.scale*100)}));hint.className='mf-forge-hint';
   const result=element('div');result.className='mf-forge-result';result.hidden=true;result.setAttribute('role','status');
   const side=element('div');side.className='mf-forge-side';side.append(forgeCard(id),forgeLegend(id));
-  const play=element('div');play.className='mf-forge-play';play.append(gauge,hint,result);
+  const track=element('div');track.className='mf-forge-track';track.append(gauge);
+  const play=element('div');play.className='mf-forge-play';play.append(track,hint,result);
   area.append(side,play);dialog.append(area);
   forging={id,level,area,rail,mark,hint,result,side,struck:false};
   started=win.performance.now();
-  const draw=time=>{rail.style.transform='translateX('+(100*forgeCursor(time-started)).toFixed(2)+'%)';frame=win.requestAnimationFrame(draw);};
+  const draw=time=>{moveHammer(rail,forgeCursor(time-started));frame=win.requestAnimationFrame(draw);};
   draw(started);area.focus?.({preventScroll:true});
  }
+ function moveHammer(rail,position){rail.style.transform='translateX('+(100*position).toFixed(2)+'cqw)';}
  function sparks(mark,grade){
   const count={Perfect:10,Success:6,'Near miss':3}[grade]??0;
   for(let i=0;i<count;i++){
@@ -147,7 +149,7 @@ export function createTownShop({root,economy,onChange,onPause}){
   f.struck=true;
   const position=forgeCursor(win.performance.now()-started);
   if(frame)win.cancelAnimationFrame(frame);frame=0;
-  f.rail.style.transform='translateX('+(100*position).toFixed(2)+'%)';
+  moveHammer(f.rail,position);
   const before=economy.gear(f.id),grade=economy.forge(position,f.id);
   if(grade)onChange();
   const w=economy.gear(f.id),key=grade?ZONES.find(([value])=>value===grade)[1]:'failed';
