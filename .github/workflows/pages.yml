@@ -35,6 +35,7 @@ jobs:
           ArcherPreview/tests/v03-chapter-monster-models.test.js
           ArcherPreview/tests/v03-foe-weapons.test.js
           ArcherPreview/tests/v03-town-economy.test.js
+          ArcherPreview/tests/v03-weapon-durability-strikes.test.js
           ArcherPreview/tests/v03-errands.test.js
           ArcherPreview/tests/v03-town-item-icons.test.js
           ArcherPreview/tests/v03-scenery-diagnostics.test.js

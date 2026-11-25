@@ -62,7 +62,7 @@ export default {
   'item.ward-cord':'주술사의 결계끈','item.iron-stud':'흑철 징','item.burial-clasp':'장례 걸쇠','item.ghoul-mail':'구울 사슬 고리','item.usage.field-bow':'전사는 이 보강된 활을 근접 타격 무기로 씁니다.',
   'item.usage.crooked-staff':'전사는 이 조각된 지팡이를 쥐고 근접 공격에 씁니다.','item.note.potion':'{seconds}초 동안 체력을 최대 {amount} 회복합니다.','item.note.boost':'{seconds}초 동안 스태미나 회복이 {pct}% 빨라집니다.',
   'item.boosted':'스태미나 회복 +{pct}% · {seconds}초','shop.aria':'마을 상점','shop.smith':'대장장이','shop.herbalist':'약초사','shop.failed':'거래하지 못했습니다.','shop.workbench':'작업대',
-  'shop.target':'손볼 장비','shop.attack':'공격력 +{n}','shop.defense':'방어력 +{n}','shop.repair':'수리 · {cost} G','shop.repaired':'장비를 수리했습니다.','shop.temper':'장비 단련',
+  'shop.target':'손볼 장비','shop.attack':'공격력 +{n}','shop.defense':'방어력 +{n}','shop.repair':'수리 · {cost} G','shop.repaired':'장비를 수리했습니다.','shop.weaponBroken':'{name} 파손: 마을 대장장이에게 수리할 때까지 공격력 보너스가 없습니다.','shop.temper':'장비 단련',
   'shop.temperNote':'재료 1개 소모. 한 단계마다 {bonus}, 최대 내구도는 {durabilityCost} 감소합니다(최소 {minDurability}). 대성공은 최대 {perfectGain}단계 상승하며 강화 상한은 +{maxLevel}입니다.','shop.forge':'단련 · {cost} G','shop.buy':'구매','shop.inBag':'가방에 {n}개',
   'shop.bought':({name})=>particle(name,'을','를')+' 샀습니다.','shop.makeGear':'장비 제작','shop.brew':'조제','shop.make':'제작 · {cost} G',
   'shop.made':({name})=>particle(name,'을','를')+' 만들었습니다.','shop.sell':'판매','shop.sellFor':'판매 · {price} G','shop.sold':({name})=>particle(name,'을','를')+' 팔았습니다.',

@@ -1,0 +1,114 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {GoldLoot} from '../src/gold-loot.js';
+import {createTownEconomy} from '../src/v03/town-economy.js';
+import {forgeCursor,FORGE_RULES,TOWN_ITEMS} from '../src/v03/town-items.js';
+import {PLAYER_STRIKES} from '../src/player-strikes.js';
+import {boostSwordStrike} from '../src/equipment-stats.js';
+import {ChapterEnemyBrain,CHAPTER_COMBAT} from '../src/v03/chapter-enemy-brain.js';
+import {setupTownServices} from '../src/v03/town-services.js';
+import {createCombatTrail} from '../src/v03/combat-trail.js';
+import {itemName} from '../src/v03/town-items.js';
+import {t} from '../src/v03/i18n.js';
+import {parseHTML} from 'linkedom';
+
+// Astra #210 / user 09:58: a +10 blade showing attack +28 struck lower than a +14
+// one in the forest and the cave. The strike adds economy.attack to each window
+// (main.js strikeSampler.sample, equipment-stats boostSwordStrike); the economy's
+// attack is the item's attack + 2 per level while the blade has durability, else 0.
+const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};};
+const strike=bonus=>PLAYER_STRIKES.attack.map(window=>boostSwordStrike(window,bonus).damage);
+
+test('a +10 blade (durability 32) breaks after 32 striking actions and then hits below an unforged +14 club',()=>{
+ const storage=store(),gold=new GoldLoot({storage});gold.creditCumulative('forge-test',5000);
+ const town=createTownEconomy(gold);
+ assert.ok(town.grant('goblin-cleaver'));assert.ok(town.grant('spiked-club'));assert.ok(town.grant('iron-scrap',20));
+ assert.ok(town.equip('goblin-cleaver'));
+ // Five perfect strikes: +2 each. Each level costs 7 durability (96 -> 32 floor).
+ for(let i=0;i<5;i++)assert.equal(town.forge(forgeCursor(450)),'Perfect');
+ assert.deepEqual(town.gear(),{level:10,hp:32,max:32,attack:28,defense:0});
+ assert.equal(town.attack,28);
+ const forged=strike(town.attack);
+ assert.ok(town.equip('spiked-club'));
+ assert.deepEqual(town.gear('spiked-club'),{level:0,hp:103,max:103,attack:14,defense:0});
+ const club=strike(town.attack);
+ assert.deepEqual(forged,[46,48]);assert.deepEqual(club,[32,34]);
+ // The bag's comparison while the club is worn: +28, change +14.
+ assert.equal(town.gear('goblin-cleaver').attack-town.attack,14);
+ // Back to the +10 blade; every damaging action costs one durability (one per action id).
+ assert.ok(town.equip('goblin-cleaver'));
+ for(let action=1;action<=31;action++){assert.equal(town.damageWeapon(action),true);assert.equal(town.damageWeapon(action),false,'once per action');}
+ assert.equal(town.gear().hp,1);assert.equal(town.attack,28,'still +28 with 1 durability left');
+ assert.equal(town.damageWeapon(32),true);
+ assert.deepEqual(town.gear(),{level:10,hp:0,max:32,attack:0,defense:0});
+ assert.equal(town.attack,0,'a broken blade adds nothing, not even its own +8');
+ const broken=strike(town.attack);
+ assert.deepEqual(broken,[18,20]);
+ assert.ok(broken.every((damage,i)=>damage<club[i]),'the broken +10 now hits below the +14 club');
+ // The enemy loses exactly the window damage (no map, resistance or level scaling in brain.hit).
+ for(const [label,damage] of [['forged',forged[0]],['club',club[0]],['broken',broken[0]]]){
+  const foe=new ChapterEnemyBrain(CHAPTER_COMBAT['goblin-archer'],{});foe.hit({damage});
+  assert.equal(CHAPTER_COMBAT['goblin-archer'].hp-foe.hp,damage,label);
+ }
+ // The state is the saved one: a resumed game (same slot) keeps the level and the break.
+ assert.ok(town.flush());
+ const resumed=createTownEconomy(new GoldLoot({storage}));
+ assert.deepEqual(resumed.gear('goblin-cleaver'),{level:10,hp:0,max:32,attack:0,defense:0});
+ assert.equal(resumed.attack,0);
+ // Repair restores the full +28.
+ assert.ok(resumed.repair());assert.equal(resumed.attack,28);assert.equal(resumed.gear().hp,32);
+});
+
+test('how many striking actions each blade lasts at its reinforcement levels',()=>{
+ // Durability after forging: max(32, base max - 7 * level); one point per damaging action.
+ const rows=Object.entries(TOWN_ITEMS).filter(([,item])=>item.slot==='sword').map(([id,item])=>{
+  const at=level=>Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost);
+  return {id,attack:item.attack,actionsAt0:at(0),actionsAt10:at(10),attackAt10:item.attack+10*FORGE_RULES.attackGain};
+ });
+ const cleaver=rows.find(row=>row.id==='goblin-cleaver');
+ assert.deepEqual(cleaver,{id:'goblin-cleaver',attack:8,actionsAt0:96,actionsAt10:32,attackAt10:28});
+ assert.ok(rows.every(row=>row.actionsAt10<=row.actionsAt0));
+});
+
+test('the breaking hit still lands at +28, the next one at base, and the break is told once (not again on swaps)',()=>{
+ const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
+ const storage=store(),gold=new GoldLoot({storage});gold.creditCumulative('forge-test',5000);
+ const notes=[];
+ const services=setupTownServices({root:document.getElementById('app'),world:{v03:{playing:true},mapId:'monster-forest'},wallet:gold,legacy:()=>({}),
+  player:()=>null,battle:()=>null,controls:()=>null,appearance:()=>null,canInteract:()=>false,onPause(){},notify:message=>notes.push(message),sound(){}});
+ const town=services.economy;
+ try{
+  town.grant('goblin-cleaver');town.grant('spiked-club');town.grant('iron-scrap',20);town.equip('goblin-cleaver');
+  for(let i=0;i<5;i++)town.forge(forgeCursor(450));
+  // main.js order: the strike reads economy.attack, the enemy takes it, then the blade wears.
+  const land=action=>{const damage=strike(town.attack)[0];services.weaponHit(action);return damage;};
+  for(let action=1;action<=31;action++)land(action);
+  assert.deepEqual(services.weaponMark(),{id:'goblin-cleaver',level:10,hp:1,max:32,attack:28});
+  assert.equal(notes.length,0);
+  assert.equal(land(32),46,'the hit that breaks it still carries +28');
+  assert.deepEqual(notes,[t('shop.weaponBroken',{name:itemName('goblin-cleaver')})]);
+  assert.deepEqual(services.weaponMark(),{id:'goblin-cleaver',level:10,hp:0,max:32,attack:0});
+  assert.equal(land(33),18,'the next hit has no bonus at all');
+  assert.equal(services.weaponHit(34),false,'a broken blade does not wear further');
+  // Swapping to the +14 club and back: the club hits higher; no repeated notice.
+  assert.ok(services.equip('spiked-club'));assert.equal(land(35),32);
+  assert.ok(services.equip('goblin-cleaver'));assert.equal(land(36),18);
+  assert.equal(notes.length,1,'told once per break');
+  // Repaired, it breaks again only after another 32 actions, and is told again.
+  assert.ok(town.repair());assert.equal(strike(town.attack)[0],46);
+  for(let action=100;action<132;action++)land(action);
+  assert.equal(notes.length,2);
+ }finally{services.dispose();}
+});
+
+test('with diagnostics on, the combat trail keeps the damage and the worn blade on each enemy hit',()=>{
+ const local=store(),session=store();let clock=1000;
+ const trail=createCombatTrail({local,session,now:()=>clock});
+ const foe={kind:'goblin-archer',id:'camp-east-1',brain:{hp:58,mode:'hit',state:'hit'}};
+ trail.hit('witch-cave','enemy',foe,420,{damage:34,weapon:{id:'spiked-club',level:0,hp:96,max:103,attack:14}});
+ clock+=10;trail.hit('witch-cave','enemy',foe,420);
+ const [marked,plain]=trail.current.events;
+ assert.deepEqual(marked.detail,{damage:34,weapon:{id:'spiked-club',level:0,hp:96,max:103,attack:14}});
+ assert.equal(marked.opponent.hp,58);assert.equal(marked.event,'hit-enemy');
+ assert.equal('detail' in plain,false,'diagnostics off: the event is unchanged');
+});

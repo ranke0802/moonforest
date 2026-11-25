@@ -66,7 +66,7 @@ export default {
   'item.usage.crooked-staff':'The warrior grips this carved staff for melee strikes.','item.note.potion':'Restores up to {amount} HP over {seconds} seconds.',
   'item.note.boost':'Raises stamina recovery by {pct}% for {seconds} seconds.','item.boosted':'Stamina recovery +{pct}% · {seconds}s','shop.aria':'Village services',
   'shop.smith':'Blacksmith','shop.herbalist':'Herbalist','shop.failed':'Could not complete the transaction.','shop.workbench':'Workbench','shop.target':'Equipment to work on',
-  'shop.attack':'Strike +{n}','shop.defense':'Defense +{n}','shop.repair':'Repair · {cost} G','shop.repaired':'Equipment repaired.','shop.temper':'Temper equipment',
+  'shop.attack':'Strike +{n}','shop.defense':'Defense +{n}','shop.repair':'Repair · {cost} G','shop.repaired':'Equipment repaired.','shop.weaponBroken':'{name} broke: no strike bonus until the village blacksmith repairs it.','shop.temper':'Temper equipment',
   'shop.temperNote':'Costs one material. Each level grants {bonus} and reduces maximum durability by {durabilityCost}, down to {minDurability}. A perfect strike adds up to {perfectGain} levels, capped at +{maxLevel}.','shop.forge':'Forge · {cost} G',
   'shop.buy':'Buy','shop.inBag':'In bag · {n}','shop.bought':'Purchased {name}.','shop.makeGear':'Make equipment','shop.brew':'Brew','shop.make':'Make · {cost} G',
   'shop.made':'Made {name}.','shop.sell':'Sell','shop.sellFor':'Sell · {price} G','shop.sold':'Sold {name}.','shop.temperTitle':'Temper {name}',

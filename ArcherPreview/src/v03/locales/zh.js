@@ -58,7 +58,7 @@ export default {
   'item.ward-cord':'萨满结界绳','item.iron-stud':'黑铁铆钉','item.burial-clasp':'陪葬搭扣','item.ghoul-mail':'食尸鬼链甲环','item.usage.field-bow':'战士把这把加固的弓当作近身打击武器使用。',
   'item.usage.crooked-staff':'战士握着这根雕纹法杖进行近战攻击。','item.note.potion':'{seconds}秒内恢复最多{amount}点生命。','item.note.boost':'{seconds}秒内体力恢复加快{pct}%。',
   'item.boosted':'体力恢复 +{pct}% · {seconds}秒','shop.aria':'村庄商店','shop.smith':'铁匠','shop.herbalist':'草药师','shop.failed':'交易未能完成。','shop.workbench':'工作台','shop.target':'要处理的装备',
-  'shop.attack':'攻击力 +{n}','shop.defense':'防御力 +{n}','shop.repair':'修理 · {cost} G','shop.repaired':'装备已修好。','shop.temper':'锻造装备',
+  'shop.attack':'攻击力 +{n}','shop.defense':'防御力 +{n}','shop.repair':'修理 · {cost} G','shop.repaired':'装备已修好。','shop.weaponBroken':'{name}已损坏：在村里的铁匠修好之前没有攻击力加成。','shop.temper':'锻造装备',
   'shop.temperNote':'消耗1份材料。每升一级，{bonus}，耐久上限减少{durabilityCost}点，最低为{minDurability}点。完美敲击最多提升{perfectGain}级，强化上限为+{maxLevel}。','shop.forge':'锻造 · {cost} G','shop.buy':'购买','shop.inBag':'背包中 {n}','shop.bought':'已购买{name}。',
   'shop.makeGear':'制作装备','shop.brew':'调配','shop.make':'制作 · {cost} G','shop.made':'已制作{name}。','shop.sell':'出售','shop.sellFor':'出售 · {price} G','shop.sold':'已出售{name}。',
   'shop.temperTitle':'锻造{name}','shop.forgeHelp':'标记经过中线时敲击。差一点则等级不变；失败会使所选装备的当前耐久最多减少{failureWear}点。','shop.gauge':'中间有目标的时机条','shop.strike':'敲击','shop.grade.perfect':'完美','shop.grade.success':'成功',

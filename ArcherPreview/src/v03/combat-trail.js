@@ -76,10 +76,11 @@ export function createCombatTrail({local, session, now = Date.now, build = () =>
       engaged = count > 0;
       if (dirty && now() - lastWrite >= WRITE_MS) flush();
     },
-    hit(map, kind, foe, playerHp) {
+    // detail (main.js, frame diagnostics on only): the damage and the worn blade after the hit.
+    hit(map, kind, foe, playerHp, detail = null) {
       if (!foe?.kind && !foe?.summonKind) return;
       append(map, kind === 'enemy' ? 'hit-enemy' : kind === 'player' ? 'hit-player' : kind,
-        foe, playerHp, null, foe.brain?.hp <= 0 || playerHp <= 0);
+        foe, playerHp, detail, foe.brain?.hp <= 0 || playerHp <= 0);
     },
     defeat(map, foe, playerHp, completed = false) {
       const id = foe.id ?? foe.kind;

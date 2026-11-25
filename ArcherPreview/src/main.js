@@ -1280,9 +1280,9 @@ try {
   if(world.gameplayV03)world.sceneryStrikes=createSceneryStrikes(world,audio);
   const damageFeedback=(...args)=>{
     const target=args[6]??args[7];
-    if(world.v03?.playing&&args[3]==='enemy'&&typeof args[1]==='number'&&args[1]>0&&combatResult?.actionId!=null&&!/shield|push/i.test(combatResult.state))townServices?.economy.damageWeapon(combatResult.actionId);
+    if(world.v03?.playing&&args[3]==='enemy'&&typeof args[1]==='number'&&args[1]>0&&combatResult?.actionId!=null&&!/shield|push/i.test(combatResult.state))townServices?.weaponHit(combatResult.actionId);
     if(world.v03?.playing&&townServices&&(args[3]==='block'||args[3]==='player')&&townServices.economy.wearDefense(args[3]==='block'))boss.combat.defense=townServices.economy.defense;
-    gameplayTrail()?.hit(world.mapId,args[3],target,boss?.playerHp);
+    gameplayTrail()?.hit(world.mapId,args[3],target,boss?.playerHp,frameDiagnostics.enabled&&args[3]==='enemy'?{damage:args[1],weapon:townServices?.weaponMark()??null}:null);
     world?.v03?.combatEvent?.(args[3],target,args[1]);
     damageNumbers.show(...args);
     if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});

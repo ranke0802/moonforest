@@ -66,7 +66,7 @@ export default {
   'item.usage.crooked-staff':'Chiến binh nắm cây gậy chạm khắc này để đánh cận chiến.','item.note.potion':'Hồi tối đa {amount} máu trong {seconds} giây.',
   'item.note.boost':'Tăng tốc hồi thể lực thêm {pct}% trong {seconds} giây.','item.boosted':'Hồi thể lực +{pct}% · {seconds} giây','shop.aria':'Cửa hàng trong làng',
   'shop.smith':'Thợ rèn','shop.herbalist':'Thầy thuốc','shop.failed':'Không thể hoàn tất giao dịch.','shop.workbench':'Bàn làm việc','shop.target':'Trang bị cần xử lý',
-  'shop.attack':'Tấn công +{n}','shop.defense':'Phòng thủ +{n}','shop.repair':'Sửa · {cost} G','shop.repaired':'Đã sửa trang bị.','shop.temper':'Rèn trang bị',
+  'shop.attack':'Tấn công +{n}','shop.defense':'Phòng thủ +{n}','shop.repair':'Sửa · {cost} G','shop.repaired':'Đã sửa trang bị.','shop.weaponBroken':'{name} đã hỏng: không có điểm cộng tấn công cho đến khi thợ rèn trong làng sửa.','shop.temper':'Rèn trang bị',
   'shop.temperNote':'Tốn một nguyên liệu. Mỗi cấp được {bonus} và giảm {durabilityCost} điểm độ bền tối đa, thấp nhất là {minDurability}. Đập hoàn hảo tăng tối đa {perfectGain} cấp, giới hạn cường hóa là +{maxLevel}.','shop.forge':'Rèn · {cost} G',
   'shop.buy':'Mua','shop.inBag':'Trong túi · {n}','shop.bought':'Đã mua {name}.','shop.makeGear':'Chế tạo trang bị','shop.brew':'Pha chế','shop.make':'Chế tạo · {cost} G',
   'shop.made':'Đã làm {name}.','shop.sell':'Bán','shop.sellFor':'Bán · {price} G','shop.sold':'Đã bán {name}.','shop.temperTitle':'Rèn {name}',

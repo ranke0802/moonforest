@@ -52,6 +52,18 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    return true;
   },
   equip(id){if(!economy.equip(id))return false;apply();sound('equip');return true;},
+  // main.js: a damaging action of the worn blade (one durability point per
+  // action id, town-economy). The moment it breaks, its attack (item + forge)
+  // drops to 0 until the smith repairs it; say so once, with the usual toast
+  // (2026-11-25: a +10 blade broke silently in the forest and hit below a +14).
+  weaponHit(actionId){
+   const id=items().equipped.sword;
+   if(!economy.damageWeapon(actionId))return false;
+   if(economy.gear(id)?.hp===0)notify(t('shop.weaponBroken',{name:itemName(id)}));
+   return true;
+  },
+  // Diagnostics only: the worn blade after a hit (plain values).
+  weaponMark(){const id=items().equipped.sword,w=economy.gear(id);return w?{id,level:w.level,hp:w.hp,max:w.max,attack:w.attack}:null;},
   register:id=>economy.register(id),
   grantArmor(id){if(id!=='leather'||items().bag['leather-coat'])return false;
    if(!economy.grant('leather-coat'))return false;if(!items().equipped.armor)economy.equip('leather-coat');apply();return true;},
