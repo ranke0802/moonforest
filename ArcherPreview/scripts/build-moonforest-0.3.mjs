@@ -8,6 +8,7 @@ import {verifyRuntimeModuleGraph} from './runtime-module-graph.mjs';
 import {assertFixedLayoutsCurrent} from './build-fixed-layouts.mjs';
 import {captureSourceProvenance,verifySourceProvenance,sourceCommitInfo} from './source-provenance.mjs';
 import {RELEASE_V3,RELEASE_V3_MANIFEST,sha256,publishedBytes,deploymentPath,optionalBytes,assertDescriptor,assertDeploymentContentGraph,releaseCacheGraph} from './release-deployment.mjs';
+import {SMITH_COLOR_KTX2} from '../src/v03/smith-texture.js';
 
 const project=resolve(import.meta.dirname,'..');
 export async function buildMoonforestV3(){
@@ -27,7 +28,7 @@ export async function buildMoonforestV3(){
  assertDescriptor(indexBytes,baseline.get('assets/resource-index.json'));
  const bundleAudit=await verifyResourceBundles(publicRoot,resourceIndex);
  const {files,manifestCount}=await collectVillageSiteFiles(publicRoot);
- for(const path of ['assets/resource-index.json',...resourceIndex.bundles.map(pack=>'assets/'+pack.url),'moonforest-0.3.webmanifest','v03/horse-audio-r1/AUDIO_CREDITS.txt']){
+ for(const path of ['assets/resource-index.json',...resourceIndex.bundles.map(pack=>'assets/'+pack.url),'assets/content/'+SMITH_COLOR_KTX2,'moonforest-0.3.webmanifest','v03/horse-audio-r1/AUDIO_CREDITS.txt']){
   const absolute=deploymentPath(publicRoot,path);files.set(path,{absolute,bytes:(await readFile(absolute)).length});
  }
  const reused=[],pending=[];

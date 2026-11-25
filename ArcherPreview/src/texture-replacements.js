@@ -19,7 +19,11 @@ export const TEXTURE_REPLACEMENTS=Object.freeze({
 export function sceneryPrefetchPaths(paths){
   if(!decoderReady)return paths;
   // The KTX2 is requested and cached by the model loader when this LOD is used.
-  return paths.filter(path=>!path.endsWith('.jpg')||!Object.hasOwn(SCENERY_COLORS,path.slice(path.lastIndexOf('/')+1)));
+  return paths.filter(path=>{
+    if(!path.endsWith('.jpg'))return true;
+    const file=path.slice(path.lastIndexOf('/')+1);
+    return !Object.hasOwn(SCENERY_COLORS,file)&&!tier?.[file];
+  });
 }
 
 // 0.3: regular (non-boss) monsters load their 2048 level instead of the 4096 one (2026-11-23, user:
