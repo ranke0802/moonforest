@@ -45,7 +45,7 @@ async function bakeMap(canvas,mapId,navigation,current=()=>true){
   if(!navigation.free({x:wx,z:wz},.29,mapId==='great-plains'?PLAINS_RADIUS:80)){const i=(y*size+x)*4;image.data[i]=12;image.data[i+1]=16;image.data[i+2]=24;}
  }}
  ctx.putImageData(image,0,0);
- for(const portal of mapPortals(mapId)){const p=project(portal.x,portal.z),x=Math.round(p.x),y=Math.round(p.y);ctx.fillStyle='#17101e';ctx.fillRect(x-3,y-3,7,7);ctx.fillStyle='#cf9fff';ctx.fillRect(x-1,y-2,3,5);ctx.fillRect(x-2,y-1,5,3);}
+ for(const portal of mapPortals(mapId)){const p=project(portal.x,portal.z),x=Math.round(p.x),y=Math.round(p.y);ctx.fillStyle='#cf9fff';ctx.fillRect(x-1,y-2,3,5);ctx.fillRect(x-2,y-1,5,3);}
  return true;
 }
 // Quest glyphs as 3×5 pixel bitmaps (row-major, top to bottom).
@@ -79,14 +79,12 @@ export class DotMinimap{
   if(translucent){ctx.clearRect(0,0,this.canvas.width,this.canvas.height);ctx.globalAlpha=.58;}
   ctx.drawImage(this.static,0,0);
   if(translucent)ctx.globalAlpha=1;
-  ctx.fillStyle='#07191d';ctx.fillRect(x-3,y-3,7,7);ctx.fillStyle='#84f6df';ctx.fillRect(x-1,y-1,3,3);
+  ctx.fillStyle='#84f6df';ctx.fillRect(x-1,y-1,3,3);
   const dx=Math.cos(direction*Math.PI/8),dy=Math.sin(direction*Math.PI/8);ctx.fillStyle='#effffa';ctx.fillRect(Math.round(x+dx*4)-1,Math.round(y+dy*4)-1,2,2);
   const blink=Math.floor(time*2)%2===0;
   for(const mark of this.markers){
    const bits=GLYPHS[mark.glyph];if(!bits)continue;
    const m=minimapPoint(rect,mark.x,mark.z,MINIMAP_SIZE,halfTurn),gx=Math.max(1,Math.min(MINIMAP_SIZE-8,Math.round(m.x)-3)),gy=Math.max(1,Math.min(MINIMAP_SIZE-12,Math.round(m.y)-11));
-   // 2× pixels with a dark outline so the glyph reads on any terrain colour.
-   ctx.fillStyle='#0b080c';ctx.fillRect(gx-1,gy-1,8,12);
    ctx.fillStyle=blink||mark.glyph==='>'?GLYPH_COLORS[mark.glyph]:'#fff8e6';
    for(let r=0;r<5;r++)for(let c=0;c<3;c++)if(bits[r][c]==='1')ctx.fillRect(gx+c*2,gy+r*2,2,2);
   }

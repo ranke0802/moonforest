@@ -66,6 +66,22 @@ test('baked paths, rooms, portals, collision mask and live player all share rota
  }
  f.map.dispose();
 });
+test('map markers paint only their coloured pixels over the terrain',async()=>{
+ const f=fixture();
+ await f.map.setWorld({mapId:'village',navigation:{free:()=>true}});
+ assert.ok(!f.map.static.calls.fills.some(({args})=>args[2]===7&&args[3]===7));
+ f.map.setMarkers(['!','?','+'].map((glyph,i)=>({glyph,x:i*10,z:0})));
+ for(const time of [0,.5]){
+  f.target.calls.fills.length=0;
+  f.map.update({position:{x:0,z:10},rotation:{y:0}},time);
+  const fills=f.target.calls.fills;
+  // Player dot and heading, followed by 4, 7 and 5 lit cells in the three glyphs.
+  assert.deepEqual(fills[0].args.slice(2),[3,3]);
+  assert.equal(fills.length,2+4+7+5);
+  assert.ok(fills.slice(1).every(({args})=>args[2]===2&&args[3]===2));
+ }
+ f.map.dispose();
+});
 test('maps build once, update at most 10Hz only when marker changes, and allocate no 3D resources',async()=>{
  const f=fixture(),navigation={free:()=>true},actor={position:{x:0,z:0},rotation:{y:0}};
  for(const id of Object.keys(MINIMAP_MAPS)){await f.map.setWorld({mapId:id,navigation});assert.equal(f.element.hidden,false);assert.equal(f.label.textContent,MINIMAP_MAPS[id].label);f.map.update(actor,0);}

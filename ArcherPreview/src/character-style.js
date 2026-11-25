@@ -50,7 +50,8 @@ export class CharacterSurfaceStyle extends MaterialPluginBase{
     const boss=mesh.metadata?.characterStyleGroup==='boss'&&!mesh.metadata?.elenaInlineFlash;
     // Other monsters predate Elena's painted bands. The common default must be
     // neutral on their approved surface; only adjustments add extra crease ink.
-    buffer.updateFloat2('characterPaint',style.brightness/(boss?1.35:1),interiorLines&&style.internal?Math.max(0,style.internalStrength-(boss ? .2 : 0)):0);
+    const drawInterior=interiorLines&&style.internal&&!mesh.metadata?.exteriorInkOnly;
+    buffer.updateFloat2('characterPaint',style.brightness/(boss?1.35:1),drawInterior?Math.max(0,style.internalStrength-(boss ? .2 : 0)):0);
   }
   getCustomCode(type){if(type!=='fragment')return null;return {CUSTOM_FRAGMENT_BEFORE_FINALCOLORCOMPOSITION:`
     float characterPaintFactor = characterPaint.x;

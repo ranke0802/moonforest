@@ -73,6 +73,8 @@ void main(void) {
   gl_FragColor = vec4(mix(outlineColor, vec3(1.0), hitFlash), outlineOpacity);
 }`;
 const materials = new WeakMap();
+// Stencil bits 1, 2 and 4 belong to Mourning, fading enemies and scenery.
+const PET_STENCIL_BIT = 8;
 const widths = { sword: .0025, shield: .0035, wolf: .003, bear: .006, goblin: .004, elena: .003, scarecrow: .0035 };
 export const isRuntimeOutline = mesh => mesh.metadata?.moonforestOutline === true;
 
@@ -89,7 +91,8 @@ function cloneOutlineMesh(source,name){
 function outlineMaterial(scene,exterior=false) {
   let cache=materials.get(scene);if(!cache){cache=new Map();materials.set(scene,cache);}
   if(cache.has(exterior))return cache.get(exterior);
-  const material = new ShaderMaterial('moonforest-character-outline'+(exterior==='enemy'?'-enemy-exterior':exterior?'-mourning-exterior':''), scene,
+  const suffix = exterior===true ? '-mourning-exterior' : exterior ? `-${exterior}-exterior` : '';
+  const material = new ShaderMaterial('moonforest-character-outline'+suffix, scene,
     { vertexSource, fragmentSource }, {
       attributes: ['position', 'normal'],
       defines: exterior===true?['#define NORMAL','#define MOURNING_HULL']:['#define NORMAL'],
@@ -105,7 +108,7 @@ function outlineMaterial(scene,exterior=false) {
   if(!exterior){material.zOffset=2;material.zOffsetUnits=4;}
   const srgb=x=>x<=.0031308?x*12.92:1.055*Math.pow(x,1/2.4)-.055;
   material.setColor3('outlineColor', exterior===true?new Color3(...[.028,.022,.030].map(srgb)):new Color3(.035,.025,.035));
-  if(exterior)configureCharacterExteriorStencil(null,material,exterior==='enemy'?2:1);
+  if(exterior)configureCharacterExteriorStencil(null,material,exterior==='pet'?PET_STENCIL_BIT:exterior==='enemy'?2:1);
   material.setFloat('outlineWidth', .004);
   material.setFloat('outlineOpacity', 1);
   material.setFloat('hitFlash', 0);
@@ -194,7 +197,9 @@ export function attachCharacterOutlines(asset, kind, {skipBoneProof=false,deferC
     shell.computeBonesUsingShaders = source.computeBonesUsingShaders;
     shell.metadata = { moonforestOutline: true, outlineWidth: widths[profile], ...(['elena','wolf'].includes(profile)?{outlinePixels:.5}:{}),...(source.metadata?.characterStyleOverrideGroup?{characterStyleOverrideGroup:source.metadata.characterStyleOverrideGroup}:{}) };
     const mourning=source.metadata?.mourningReferenceLook===true;
-    shell.material = outlineMaterial(source.getScene(),mourning);
+    const exteriorOnly = source.metadata?.exteriorInkOnly === true;
+    if(exteriorOnly)configureCharacterExteriorStencil(source.material,null,PET_STENCIL_BIT);
+    shell.material = outlineMaterial(source.getScene(),exteriorOnly?'pet':mourning);
     shell.isPickable = false; shell.checkCollisions = false; shell.receiveShadows = false;
     shell.renderOutline = false; shell.renderOverlay = false;
     shell.alwaysSelectAsActiveMesh = source.alwaysSelectAsActiveMesh;

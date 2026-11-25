@@ -52,7 +52,7 @@ async function loadVisual(scene,url,id,signal){
     for(const mesh of owner.meshes){mesh.isPickable=false;mesh.receiveShadows=true;}
     applyMonsterToon(owner);
     for(const mesh of owner.meshes){
-      mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf'};
+      mesh.metadata={...mesh.metadata,characterStyleOverrideGroup:'wolf',exteriorInkOnly:true};
       if(mesh.material?.metadata?.moonforestMonsterToon)owner.own(mesh.material);
     }
     attachCharacterOutlines(owner,'wolf',{skipBoneProof:true});
