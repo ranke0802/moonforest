@@ -97,12 +97,13 @@ export function createTownShop({root,economy,onChange,onPause}){
   }
   return legend;
  }
- // The gauge's picture for this level, set once per view: black where a strike
- // fails, then bronze, green and gold blending toward the centre.
+ // The gauge's picture for this level, set once per view (10:49, user): yellow at
+ // the centre through green into black, blending with no hard edge; black from
+ // the near-miss edge outward, where a strike fails.
  function gaugeArt(level){
   const zone=forgeZones(level),pct=edge=>(50-edge*50).toFixed(2)+'%',far=edge=>(50+edge*50).toFixed(2)+'%';
-  return 'linear-gradient(to right,#000 0 '+pct(zone.near)+',#4b3424 '+pct(zone.near)+',#7d8d58 '+pct(zone.success)+',#d8b24c '+pct(zone.perfect)+
-   ',#fff0b5 50%,#d8b24c '+far(zone.perfect)+',#7d8d58 '+far(zone.success)+',#4b3424 '+far(zone.near)+',#000 '+far(zone.near)+' 100%)';
+  return 'linear-gradient(to right,#000 0 '+pct(zone.near)+',#5b9a3a '+pct(zone.success)+',#f5c842 '+pct(zone.perfect)+
+   ',#ffe873 50%,#f5c842 '+far(zone.perfect)+',#5b9a3a '+far(zone.success)+',#000 '+far(zone.near)+' 100%)';
  }
  function beginForge(id){
   if(!economy.canForge(id))return;
