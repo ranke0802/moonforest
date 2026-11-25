@@ -90,7 +90,8 @@ export class VillageVisibility {
     // instance attribute again. Inspect mutable mesh lists/attributes so live
     // placement edits and a late geometry installation are observed immediately.
     const states=this.shadowState;let changed=!this.shadowStateReady||states.size!==active.size;
-    for(const [record,fade]of active){
+    for(const [record,distanceFade]of active){
+      const fade=distanceFade*(record.chestOpening?.state?.coverage??1);
       let state=states.get(record);
       if(!state){state={meshes:[],fade:NaN,fogVisible:null,kind:null};states.set(record,state);changed=true;}
       const visible=record.fogVisible!==false,meshes=record.meshes;
@@ -110,7 +111,8 @@ export class VillageVisibility {
     for(const r of this.castRecords)if(!active.has(r)){
       r.shadowCaster=false;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.delete(r);
     }
-    for(const [r,fade] of active){
+    for(const r of active.keys()){
+      const fade=states.get(r).fade;
       if(r.fogVisible===false)continue;
       if(!this.castRecords.has(r)){r.shadowCaster=true;r.root.setEnabled(caveFogRootEnabled(r));this.castRecords.add(r);}
       if(['building','tree','tower','landmark'].includes(r.placement.kind))major++;

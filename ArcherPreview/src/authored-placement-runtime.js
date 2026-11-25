@@ -248,7 +248,7 @@ export class AuthoredPlacementRuntime {
    for(const mesh of meshes){mesh.isPickable=true;mesh.metadata={...mesh.metadata,placementInstanceId:instance.instanceId,authoredPlacement:true};}
    root.metadata={placementInstanceId:instance.instanceId,authoredPlacement:true};
    const record={root,facing,meshes,entry,instance:clone(instance),placement:{id:instance.instanceId,asset:entry.key,kind:entry.catalog.placement.sourceKind??'prop',scale:instance.transform.scale,...(instance.assetId==='chest-common'?{lootTier:instance.chest?.tier??1}:{})},blocksPlayerView:['tree','rock'].includes(entry.catalog.placement.sourceKind)||TALL_PROPS.has(instance.assetId)};if(entry.catalog.placement.sourceKind==='tree')root.metadata={...root.metadata,viewCrown:true};
-   this._setTransform(record,instance,terrain);if(instance.assetId==='chest-common')record.chestOpening=createChestOpening(root,{opened:this.lootedChests.has(instance.instanceId)||this.world.isAuthoredChestOpened?.(instance.instanceId)===true});this.stats.instancesCreated++;return record;
+   this._setTransform(record,instance,terrain);if(instance.assetId==='chest-common')record.chestOpening=createChestOpening(root,{opened:this.lootedChests.has(instance.instanceId)||this.world.isAuthoredChestOpened?.(instance.instanceId)===true,meshes});this.stats.instancesCreated++;return record;
   }catch(error){root.dispose();this._release(entry);throw error;}
  }
  _setTransform(record,instance,terrain=this.world.terrain){

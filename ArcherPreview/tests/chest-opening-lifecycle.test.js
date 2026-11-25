@@ -171,6 +171,14 @@ test('0.3 looted authored chests release their own visual, outline, streaming an
  assert.equal(runtime.openChest(ids[0],{immediate:true}),true);
  assert.equal(one.chestOpening.state.progress,1);assert.equal(runtime.openingChests.size,0);
  const revision=world.placementRevision;
+ one.chestOpening.setCoverage(.5);
+ assert.ok(one.meshes.every(mesh=>mesh.instancedBuffers.treeCoverage===.5));
+ assert.ok(two.meshes.every(mesh=>mesh.instancedBuffers.treeCoverage===1));
+ world.lighting.shadowsActive=true;world.shadows={addShadowCaster(){},removeShadowCaster(){}};
+ for(let i=0;i<16;i++)runtime.update(.1,{position:new Vector3(3,0,0)});
+ assert.ok(one.meshes.every(mesh=>mesh.instancedBuffers.villageShadowFade===.5));
+ assert.ok(two.meshes.every(mesh=>mesh.instancedBuffers.villageShadowFade===1));
+ assert.equal(freeAt(3),false,'a fading chest keeps its collider until the timer expires');
  assert.equal(runtime.setLootedChests([ids[0]]),true);
  assert.equal(one.root.isEnabled(),false);assert.equal(runtime.openChest(ids[0]),false);
  assert.equal(freeAt(3),true);assert.equal(freeAt(7),false);
@@ -185,6 +193,7 @@ test('0.3 looted authored chests release their own visual, outline, streaming an
  assert.equal(runtime.setLootedChests([],{resetOpenState:true}),true);
  assert.equal(freeAt(3),false);assert.equal(freeAt(7),false);assert.equal(one.root.isEnabled(),true);
  assert.equal(one.chestOpening.state.opened,false);assert.equal(two.chestOpening.state.opened,false);assert.equal(runtime.openingChests.size,0);
+ assert.ok(one.meshes.every(mesh=>mesh.instancedBuffers.treeCoverage===1),'the new slot restores the full chest');
  assert.equal(JSON.stringify(runtime.document),saved);assert.equal(runtime.stats.commits,commits);assert.equal(runtime.stats.sourceLoads,loads);
  assert.equal(runtime.records.get(ids[0]),one);assert.deepEqual(runtime.renderRecords,[one,two]);
  world.gameplayV03=false;assert.equal(runtime.setLootedChests(ids),false);assert.equal(freeAt(3),false);

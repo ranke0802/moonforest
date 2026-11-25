@@ -7,7 +7,8 @@ import {MapLoadLifetime} from './map-load-lifetime.js';
 import {loadMapContainer} from './map-container.js';
 import {instantiateStaticMap} from './static-map-instances.js';
 import {prepareMapMaterials} from './map-shader-cache.js';
-import {prepareChestOpening,createChestOpening} from './chest-opening.js';
+import {prepareChestOpening,createChestOpening,chestVanishCoverage} from './chest-opening.js';
+import {prepareTreeOcclusion} from './tree-occlusion.js';
 import {lootRarity} from './loot-rarity.js';
 import {normalizeChestItems} from './chest-reward-data.js';
 
@@ -35,7 +36,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
  const release=()=>{
   version++;scope?.abort();scope=null;manifest=null;demand.clear();models=new Map();worker=null;opening.clear();vanishing.clear();animationTime=null;
   outlines?.dispose();outlines=null;for(const root of owned)root.dispose();for(const c of containers)c.dispose();
-  for(const p of mapPoints){delete p.marker;delete p.visual;}
+  for(const p of mapPoints){delete p.marker;delete p.visual;delete p.chestOpening;}
   marker?.dispose();markerMaterial?.dispose();marker=null;markerMaterial=null;
   owned=[];containers=[];records=[];mapPoints=[];
   Object.assign(stats,{instances:0,markerInstances:0,outlineInstances:0,outlineTriangles:0,lastError:null});
@@ -51,7 +52,9 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    container=await lifetime.run(()=>loadContainer(url,scene,{signal:lifetime.signal,lifetime}),{onLate:value=>value?.dispose()});lifetime.check();
    if(id==='chest-common')Object.assign(stats,{chestGeometry:prepareChestOpening(container)});
    const sources=container.meshes.filter(m=>m.getTotalVertices?.()>0);
-   prepareVillageInstancing(sources);applyVillageToon(sources,world.lighting);world.lighting?.registerMeshes?.(sources);
+   prepareVillageInstancing(sources);applyVillageToon(sources,world.lighting);
+   if(id==='chest-common'&&vanishOpenedAfter>0)prepareTreeOcclusion(sources);
+   world.lighting?.registerMeshes?.(sources);
    for(const mesh of sources){mesh.isPickable=false;world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
    await lifetime.run(()=>prepareMapMaterials(sources,{cancelled}));lifetime.check();
    for(const point of mapPoints.filter(p=>p.model===id&&p.gone!==true)){
@@ -59,7 +62,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
     root.position.set(point.x,world.terrain.heightAt(point.x,point.z),point.z);root.rotation.y=point.yaw??0;
     root.scaling.setAll((height/config.bounds[1])*(point.scale??1));root.setEnabled(false);localRoots.push(root);
     const instance=instantiateStaticMap(container,name=>'quest-'+point.id+'-'+name);for(const node of instance.rootNodes)node.parent=root;
-    root.computeWorldMatrix(true);const meshes=root.getChildMeshes().filter(m=>m.getTotalVertices?.()>0),chest=id==='chest-common'?createChestOpening(root,{opened:point.opened===true}):null;
+    root.computeWorldMatrix(true);const meshes=root.getChildMeshes().filter(m=>m.getTotalVertices?.()>0),chest=id==='chest-common'?createChestOpening(root,{opened:point.opened===true,meshes}):null;
     for(const mesh of meshes){mesh.isPickable=false;mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();}
     for(const node of root.getChildTransformNodes())node.freezeWorldMatrix();root.freezeWorldMatrix();
     localRecords.push({point,root,meshes,opening:chest,placement:{...point,kind:'ground-detail',scale:point.scale??1},config,center:new Vector3(point.x,root.position.y+height*.5,point.z),radius:Math.max(...config.bounds)*root.scaling.x});
@@ -72,6 +75,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
    containers.push(container);container=null;owned.push(...localRoots);records.push(...localRecords);localRoots=[];
    for(const record of localRecords){
     record.point.visual=record.root;
+    if(record.opening)record.point.chestOpening=record.opening;
     if(record.point.model==='chest-common')record.editableEncounter={actor:record.root,active:true,kind:'quest-chest',displayName:record.point.label??'보물 상자',get chestTier(){return record.point.tier;},set chestTier(value){if(!Number.isInteger(value)||value<1||value>5)return;record.point.tier=record.placement.tier=value;record.placement.lootTier=value;const tint=Color3.FromHexString(lootRarity(value).color);for(const mesh of record.meshes)mesh.instancedBuffers.villageInkTint.copyFrom(tint);},get chestItems(){return normalizeChestItems(record.point.chestItems);},set chestItems(value){record.point.chestItems=normalizeChestItems(value);},get chestRewardConfig(){return {id:record.point.id,tier:record.point.tier,dropAssetId:record.point.dropAssetId,chestItems:record.point.chestItems};},get dropAssetId(){return record.point.dropAssetId??'';},set dropAssetId(value){record.point.dropAssetId=value;},get dropEffectEnabled(){return record.point.dropEffectEnabled===true;},set dropEffectEnabled(value){record.point.dropEffectEnabled=!!value;},get chestVisualState(){return record.point.visualOpened===true?'open':record.point.visualOpened===false?'closed':'auto';},set chestVisualState(value){record.point.visualOpened=value==='open'?true:value==='closed'?false:null;record.point.opened=record.point.visualOpened??record.point.wasLooted??false;opening.delete(record.opening);record.opening?.setOpened(record.point.opened);sync();},onEditApplied(){world.saveQuestChestSettings?.(record.point.id,{assetId:record.point.dropAssetId??'',effectEnabled:record.point.dropEffectEnabled===true,visualOpened:record.point.visualOpened,tier:record.point.tier,items:record.point.chestItems});sync();},onEdited(){
      if(record.root.isDisposed())return;const position=record.root.getAbsolutePosition();record.point.x=position.x;record.point.z=position.z;
      record.placement.x=position.x;record.placement.z=position.z;record.center.set(position.x,position.y+(record.point.height??record.config.height)*.5,position.z);
@@ -112,7 +116,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
   },
   openChest(point,{immediate=false,time=animationTime}={}){
    if(disposed||point.model!=='chest-common')return false;point.wasLooted=true;point.opened=true;point.visualOpened=null;
-   const controller=records.find(record=>record.point===point)?.opening;
+   const controller=point.chestOpening;
    if(controller?.open({immediate})&&controller.state.active)opening.add(controller);
    if(vanishOpenedAfter>0&&!point.gone&&!vanishing.has(point)){point.vanishAt=Number.isFinite(time)?time+vanishOpenedAfter:null;vanishing.add(point);}
    sync();return !!controller;
@@ -123,6 +127,7 @@ export function createQuestProps(world,{baseUrl,readManifest=readMapManifest,loa
     let changed=false;
     for(const point of vanishing){
      point.vanishAt??=time+vanishOpenedAfter;
+     point.chestOpening?.setCoverage(chestVanishCoverage(point.vanishAt-time));
      if(time<point.vanishAt)continue;
      point.gone=true;vanishing.delete(point);changed=true;
     }

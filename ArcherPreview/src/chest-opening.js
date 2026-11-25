@@ -2,6 +2,11 @@ import {Mesh,TransformNode,VertexBuffer,VertexData,Vector3} from '@babylonjs/cor
 
 export const CHEST_OPEN_ANGLE=-Math.PI*105/180;
 export const CHEST_OPEN_SECONDS=.85;
+// Ordered pixel coverage for the final second before an opened chest is removed.
+export function chestVanishCoverage(secondsLeft){
+  const t=Math.min(1,Math.max(0,secondsLeft));
+  return t*t*(3-2*t);
+}
 const prepared=new WeakMap();
 
 // The shipped chest is a single static mesh made from separate wooden/metal
@@ -66,18 +71,23 @@ export function prepareChestOpening(container){
   const result={bodyTriangles:bodyData.indices.length/3,lidTriangles:lidIndices.length/3,totalTriangles:(bodyData.indices.length+lidIndices.length)/3,originalTriangles:indices.length/3,recessedFloorTriangles:capIndices.length/3,addedTriangles:capIndices.length?8:0,vertices:source.getTotalVertices()+lid.getTotalVertices(),hinge:pivot.asArray()};prepared.set(container,result);return result;
 }
 
-export function createChestOpening(root,{opened=false}={}){
+export function createChestOpening(root,{opened=false,meshes=root.getChildMeshes().filter(mesh=>mesh.getTotalVertices()>0)}={}){
   const hinge=root.getChildTransformNodes().find(node=>node.metadata?.chestLidHinge);
   if(!hinge)throw new Error('Missing instanced chest hinge');
-  const moving=[hinge,...hinge.getDescendants()],state={opened:false,active:false,progress:0,angle:0};
+  const moving=[hinge,...hinge.getDescendants()],state={opened:false,active:false,progress:0,angle:0,coverage:1};
   const apply=(angle,freeze)=>{
     for(const node of moving)node.unfreezeWorldMatrix();hinge.rotation.x=angle;
     for(const node of moving){node.computeWorldMatrix(true);if(freeze)node.freezeWorldMatrix();}
     state.angle=angle;
   };
   const api={state,hinge,
+    setCoverage(value){
+      if(value===state.coverage)return;
+      state.coverage=value;
+      for(const mesh of meshes)mesh.instancedBuffers.treeCoverage=value;
+    },
     open({immediate=false}={}){if(state.opened)return false;state.opened=true;state.active=!immediate;state.progress=immediate?1:0;if(immediate)apply(CHEST_OPEN_ANGLE,true);return true;},
-    setOpened(opened){state.opened=opened===true;state.active=false;state.progress=state.opened?1:0;apply(state.opened?CHEST_OPEN_ANGLE:0,true);},
+    setOpened(opened){state.opened=opened===true;state.active=false;state.progress=state.opened?1:0;if(!state.opened)api.setCoverage(1);apply(state.opened?CHEST_OPEN_ANGLE:0,true);},
     advance(dt){if(!state.active)return false;state.progress=Math.min(1,state.progress+Math.max(0,Math.min(.05,dt))/CHEST_OPEN_SECONDS);state.active=state.progress<1;apply(CHEST_OPEN_ANGLE*(1-(1-state.progress)**3),!state.active);return state.active;}
   };
   if(opened)api.open({immediate:true});return api;

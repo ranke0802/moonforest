@@ -1,5 +1,6 @@
 import {CHAPTER_POINTS} from '../chapter-quest-points.js';
 import {createQuestProps} from '../chapter-quest-props.js';
+import {chestVanishCoverage} from '../chest-opening.js';
 import {createItemDropView} from '../item-drop-view.js';
 import {scatterChestLoot,lootSeed} from '../chest-loot-motion.js';
 import {TOWN_ITEMS,monsterRewards,treasureRewards} from './town-items.js';
@@ -96,7 +97,11 @@ export function createTownTreasure({root,world,economy,canInteract,player,sound,
    clock+=dt;
    if(vanishingAuthored.size){
     let expired=false;
-    for(const [id,at] of vanishingAuthored)if(clock>=at){vanishingAuthored.delete(id);expired=true;}
+    for(const [id,at] of vanishingAuthored){
+     const remaining=at-clock;
+     world.authoredPlacements?.records?.get(id)?.chestOpening?.setCoverage?.(chestVanishCoverage(remaining));
+     if(remaining<=0){vanishingAuthored.delete(id);expired=true;}
+    }
     if(expired)syncAuthored();
    }
    if(clock>=nextScan){

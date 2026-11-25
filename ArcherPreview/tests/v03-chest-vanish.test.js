@@ -27,9 +27,9 @@ const village=(looted=[])=>CHAPTER_POINTS.filter(p=>p.map==='village'&&p.treasur
 test('an authored chest shares the five-second rule and keeps uncollected drops across visits and separate saves',()=>{
  const {document}=parseHTML('<main></main>');
  const position={x:0,y:0,z:0},id='a'.repeat(120);
- let hidden=new Set(),opened=0,interactions=0;
+ let hidden=new Set(),opened=0,interactions=0,coverage=1;
  const placements={
-  records:new Map([[id,{instance:{assetId:'chest-common',chest:{tier:1}},chestOpening:{},root:{isEnabled:()=>!hidden.has(id),getAbsolutePosition:()=>position}}]]),
+  records:new Map([[id,{instance:{assetId:'chest-common',chest:{tier:1}},chestOpening:{setCoverage(value){coverage=value;}},root:{isEnabled:()=>!hidden.has(id),getAbsolutePosition:()=>position}}]]),
   setLootedChests(ids){hidden=new Set(ids);},openChest(){opened++;},
  };
  const world={v03:{playing:true},mapId:'village',authoredPlacements:placements,terrain:{heightAt:()=>0}};
@@ -50,7 +50,9 @@ test('an authored chest shares the five-second rule and keeps uncollected drops 
  visit.view.tick(.1);assert.equal(interactions,0,'no interaction check without a nearby unopened field chest');
  assert.ok(world.openAuthoredChest(id));assert.equal(opened,1);
  const prizes=structuredClone(visit.economy.state.drops);assert.ok(prizes.length);
- visit.view.tick(4.99);assert.ok(!hidden.has(id));
+ visit.view.tick(4);assert.equal(coverage,1);
+ visit.view.tick(.5);assert.ok(Math.abs(coverage-.5)<1e-8);assert.equal(world.openAuthoredChest(id),false);
+ visit.view.tick(.49);assert.ok(coverage<.01);assert.ok(!hidden.has(id));
  visit.view.tick(.02);assert.ok(hidden.has(id));
  assert.equal(world.openAuthoredChest(id),false);
  assert.deepEqual(visit.economy.state.drops,prizes);
@@ -68,6 +70,25 @@ test('an authored chest shares the five-second rule and keeps uncollected drops 
  visit.view.dispose();
 });
 async function show(props,points,near){await props.load(points);props.update(points,near,()=>true);await props.whenIdle();props.update(points,near,()=>true);}
+
+test('only the opened chest body, lid and their rarity outlines fade during the last second',async t=>{
+ const {props,scene}=await chests(t,{vanishOpenedAfter:5});
+ const points=[-.5,.5].map((x,i)=>({...village()[0],id:'fade-'+i,x,z:0}));
+ await show(props,points,points[0]);
+ const parts=point=>point.visual.getChildMeshes().filter(mesh=>mesh.getTotalVertices()>0);
+ const [first,other]=points.map(parts);
+ assert.equal(first.length,2);assert.equal(other.length,2);
+ assert.equal(first[0].material,other[0].material);
+ assert.ok(first.every(mesh=>mesh.material.pluginManager.getPlugin('MoonforestTreeCoverage')));
+ props.animate(0);props.openChest(points[0]);
+ for(const [time,expected] of [[3.9,1],[4,1],[4.25,.84375],[4.5,.5],[4.75,.15625]]){
+  props.animate(time);scene.render();
+  for(const mesh of first){assert.equal(mesh.instancedBuffers.treeCoverage,expected);assert.equal(mesh.instancedBuffers.villageInk.x,expected);}
+  for(const mesh of other){assert.equal(mesh.instancedBuffers.treeCoverage,1);assert.equal(mesh.instancedBuffers.villageInk.x,1);}
+  assert.equal(first[0].material.alpha,1);
+ }
+ props.animate(5);assert.equal(points[0].visual.isEnabled(),false);assert.equal(points[1].visual.isEnabled(),true);
+});
 
 test('0.3: an opened chest disappears five seconds after opening and a looted one is never shown or loaded again',async t=>{
  assert.equal(CHEST_VANISH_SECONDS,5);
