@@ -1,3 +1,4 @@
+import {createRidingHorse} from '../src/v03/riding-horse.js';
 import {releaseSelectionValue} from '../src/release-route.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -27,7 +28,7 @@ const mapSource=between('mapTransition=createMapTransition({','\n  bindMapPortal
 const leaveSource=between('function leaveElenaReview()','\nfunction updateButtons()');
 const reviewSource=between('async function prepareElenaReview()','\nfunction updateHealthBars()');
 const minimapSource=between('function travelFromMinimap(href)','\ntry {');
-const portalSource=between('function bindMapPortal(','\nfunction travelFromMinimap(');
+const portalSource=between('function travelCombatCount(','\nfunction travelFromMinimap(');
 const pair=['warrior-v4','warrior-v5'];
 
 function corridors(from,to){
@@ -87,15 +88,18 @@ test('normal travel URLs remove Elena review presets without changing the direct
 // transforms, orbit camera, CameraFollow, CameraPitch and real route data.
 function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
  const dom=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),doc=dom.document;doc.hidden=false;
- for(const id of ['motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
+ for(const id of ['diagnostic-detail-dialog','motion-speed-dialog','help-dialog','summon-dialog','boss-pattern-dialog','character-style-dialog'])if(!doc.getElementById(id)){const dialog=doc.createElement('dialog');dialog.id=id;doc.body.append(dialog);}
  doc.fullscreenElement=doc.documentElement;let fullscreenExits=0;doc.exitFullscreen=()=>{fullscreenExits++;};
  const engine=new NullEngine(),scene=new Scene(engine),actor=new TransformNode('player',scene),residentActor=new TransformNode('elena',scene),camera=new ArcRotateCamera('camera',-.8,1.07,17,Vector3.Zero(),scene);t.after(()=>engine.dispose());
  const initialMap=mapForCharacter(character),world={scene,camera,mapId:initialMap,cave:initialMap==='witch-cave',environment:{},villageStreaming:{active:true},trainingSpawn:Vector3.Zero(),terrain:{place:position=>{position.y=2;},heightAt:()=>2},navigation:{free:()=>true},sky:{load:async()=>{}},lighting:{follow:noop},releaseEnvironment:async()=>{}};
  const cameraPitch=new CameraPitch(camera,{warrior:true}),cameraFollow=new CameraFollow(),pan={x:.9,y:.3,z:-1.7},location={href:`https://example.test/?character=${character}&elenaReview=${reviewMode}`,search:`?character=${character}&elenaReview=${reviewMode}`};
  const history={replaceState(_state,_title,url){location.href=String(url);location.search=new URL(location.href).search;}},modelFaults=[];
- const resident={kind:'elena',actor:residentActor,reviewMode:true,reviewMovement:{x:1,z:1,run:true}},boss={allPooled:[resident],encounters:[resident],playerHp:317,potions:{remaining:1},combat:{passiveRecovery:{reset:noop}},combatCount:0,hide(){boss.hides++;},hides:0,activateResident:async()=>{boss.activations++;},activations:0};
+ const resident={kind:'elena',actor:residentActor,reviewMode:true,reviewMovement:{x:1,z:1,run:true}},boss={allPooled:[resident],encounters:[resident],playerHp:317,potions:{remaining:1},combat:{passiveRecovery:{reset:noop}},combatCount:0,trimDormantModels:async()=>{},hide(){boss.hides++;},hides:0,activateResident:async()=>{boss.activations++;},activations:0};
  const equipment=Object.freeze({sword:'existing-sword',shield:'existing-shield'}),orientation={type:'landscape-primary'},calls=[];
  const boundary={releaseSelectionValue,releaseEnabled:false,setupMinimapTravel,travelWaypoint,applyMinimapArrivalPose,safeRoadArrival,hudLayout:null,updatePlainsBoundaryAtmosphere:noop,staminaFeedback:{reset:noop},applyPlayerFlash:noop,container:{meshes:[]},chapterQuests:null,saveMapPosition:noop,showMinimap:noop,minimap:{hide:noop},initialCharacter:character,initialReviewMode:reviewMode,Vector3,actor,world,cameraPitch,cameraFollow,boss,equipment,orientation,worldSpawn,mapForCharacter,carryPortalPose,applyPlainsViewDistance,plainsViewDistanceControl:{value:1.2},
+  mapResourceInspector:{begin:noop,captureReady:noop},engine,setFrameWorkContext:noop,releaseNpcInteriorInkResources:noop,
+  prepareFixedLayouts:async()=>{},fixedLayoutsForCharacter:()=>[],effectivePlainsView:n=>n,applyAdaptiveRange:noop,adaptivePerformance:{settings:{}},applyAdaptiveShadows:noop,
+  settleWorldBehindCover:async()=>{},preloadMapMonsters:async()=>{},townServices:null,characterMenu:null,contextRecovery:null,meleeAim:null,swordTrail:null,
   staminaNoticeAnchor:{reset:noop,dispose:noop,setOffset:noop},
   createMapTransition:options=>createMapTransition({...options,frame:async()=>{}}),replaceWorldMap:(w,destination)=>{w.mapId=mapForCharacter(destination);w.cave=w.mapId==='witch-cave';w.environment={};},
   document:doc,location,history,$:selector=>doc.querySelector(selector),text:(selector,value)=>{doc.querySelector(selector).textContent=value;},toast:message=>calls.push(message),input:{panOffset:pan,reset:noop},
@@ -106,9 +110,10 @@ function mainFixture(t,{character='warrior-v4',reviewMode='battle'}={}){
   motionSpeedControls:{isOpen:()=>false},deathScreen:{isOpen:()=>false},requestAnimationFrame:callback=>callback(),canvas:{focus:noop},console,
  };
  const runtime=Function(...Object.keys(boundary),`
-  let resumePose=null;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,mapLoadingGeneration,minimapTravel,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
+  let resumePose=null,travelResume=false,effectReviewGeneration=0;let character=initialCharacter,elenaReviewMode=initialReviewMode,elenaReview=boss.encounters[0],mapTransition,mapLoadingGeneration,minimapTravel,mapPortal=null,ready=true,loadingAsset=false,combatResult=null,frameFailure=null,playerHead=null;
   const uiTest=null,uiTestEnabled=false;const mapSpawn=()=>worldSpawn(character,location.search,{x:0,z:0});
   const isCave=()=>character==='warrior-v5',isForest=()=>character==='warrior-v4',isPlains=()=>character==='warrior-plains';
+  const travelCombatCount=()=>boss.combatCount;
   ${leaveSource}\n${reviewSource}\n${minimapSource}\n${mapSource}
   return {get transition(){return mapTransition;},prepareElenaReview,travelFromMinimap,snapshot(){return {character,elenaReviewMode,reviewActive:!!elenaReview,ready,loadingAsset,equipment,orientation};}};
  `)(...Object.values(boundary));
@@ -172,13 +177,38 @@ test('actual main road handoff preserves transformed position and pose across re
  near(f.actor.position.x,initial.x);near(f.actor.position.z,initial.z);near(f.actor.rotation.y,yaw);near(f.camera.alpha,alpha);near(f.pan.x,pan.x);near(f.pan.z,pan.z);
 });
 
-test('real road portal activation invokes the production main callback and transfers the captured position',async t=>{
+test('actual road and minimap travel carry the mount through retries, park it in the cave and resume outside',async t=>{
  const f=mainFixture(t,{character:'warrior-v3',reviewMode:null}),oldDocument=globalThis.document,oldLocation=globalThis.location;globalThis.document=f.doc;globalThis.location=f.location;
+ const root=f.doc.getElementById('app'),lift=new TransformNode('rider-offset',f.world.scene);lift.parent=f.actor;f.actor.metadata={saddleOffset:lift};
+ let loads=0,releases=0;const places=[];
+ f.world.v03={playing:true,story:{sceneActive:false}};
+ const ride=f.world.riding=createRidingHorse({root,world:f.world,storage:{getItem:()=> '1'},player:()=>f.actor,
+  ridingAllowed:arrival=>f.world.v03.playing&&!f.world.v03.story.sceneActive&&f.runtime.snapshot().ready&&(arrival||!f.runtime.transition.busy),
+  tell:noop,forwardYaw:()=>0,pose:()=>({ready:true,hips:lift,apply:noop}),makeHorse:()=>{loads++;return {
+   ready:Promise.resolve(true),saddleContactToRef:()=>false,place:(x,z)=>places.push({x,z}),speed:noop,play:noop,dispose(){releases++;},
+  };}});
+ const mount=root.querySelector('.v03-ride-toggle');ride.updateAvailability();await mount.onclick();assert.ok(ride.startGallop());
  f.actor.position.set(.75,0,75.4);f.actor.rotation.y=.7;f.camera.alpha=-1.3;const expected=villageToPlains(f.actor.position),requests=[];
  const transition={busy:false,travel(url,context){const promise=f.runtime.transition.travel(url,context);requests.push({url,context,promise});return promise;}};
  const create=new Function('world','actor','boss','controller','input','mapTransition','captureVillagePlainsHandoff','createMapPortal','$',`let character='warrior-v3',mapPortal=null,ready=true,loadingAsset=false;${portalSource};bindMapPortal();return mapPortal;`);
  const portal=create(f.world,f.actor,{loading:false,playerHp:317,potions:{active:false,remaining:1},combatCount:0},{}, {panOffset:f.pan},transition,captureVillagePlainsHandoff,createMapPortal,selector=>f.doc.querySelector(selector));
- try{portal.update();assert.equal(requests.length,1);assert.equal(await requests[0].promise,true);near(f.actor.position.x,expected.x);near(f.actor.position.z,expected.z);assert.equal(requests[0].context.boundary.from,'warrior-v3');}finally{portal.dispose();globalThis.document=oldDocument;globalThis.location=oldLocation;}
+ try{
+  f.failNextModel();portal.update();assert.equal(requests.length,1);assert.equal(await requests[0].promise,false);
+  assert.equal(ride.active,false);assert.equal(ride.startGallop(),false);assert.equal(loads,1);assert.equal(releases,0);
+  assert.equal(await f.runtime.transition.retry(),true);assert.ok(ride.active);assert.equal(ride.inspect().galloping,undefined);
+  near(f.actor.position.x,expected.x);near(f.actor.position.z,expected.z);assert.equal(requests[0].context.boundary.from,'warrior-v3');
+  const travel=to=>f.runtime.travelFromMinimap(travelUrl(f.location.href,to));
+  // Force a small horse-only obstruction at the minimap arrival and a changed ground height.
+  const blocked=worldSpawn('warrior-v4','?arrival=portal&from=warrior-plains');
+  f.world.navigation.free=(p,r)=>r<.64||Math.hypot(p.x-blocked.x,p.z-blocked.z)>.4;
+  f.world.terrain.heightAt=()=>3.5;
+  assert.equal(await travel('warrior-v4'),true);assert.ok(ride.active);assert.equal(loads,1);assert.equal(releases,0);
+  assert.ok(f.world.navigation.free(f.actor.position,.64));assert.equal(f.actor.position.y,3.5);
+  assert.deepEqual(places.at(-1),{x:f.actor.position.x,z:f.actor.position.z});
+  assert.equal(await travel('warrior-v5'),true);assert.equal(ride.active,false);assert.equal(releases,1);
+  assert.equal(await travel('warrior-v4'),true);assert.ok(ride.active);assert.equal(loads,2);
+  await mount.onclick();assert.equal(await travel('warrior-v3'),true);assert.equal(ride.active,false);assert.equal(loads,2);
+ }finally{portal.dispose();ride.dispose();globalThis.document=oldDocument;globalThis.location=oldLocation;}
 });
 
 test('actual forest road trigger uses main handoff and retry preserves exact pose without a second rotation',async t=>{

@@ -1,6 +1,11 @@
 import { normalizedStick } from './controller.js';
 import { zoomCamera } from './camera-zoom.js';
 
+export function orbitCamera(camera, dx, dy) {
+  camera.alpha += dx * .005;
+  camera.beta = Math.max(camera.lowerBetaLimit ?? .25, Math.min(camera.upperBetaLimit ?? Math.PI - .035, camera.beta - dy * .005));
+}
+
 export class PlaygroundInput {
   constructor(canvas, camera, callbacks) {
     this.canvas = canvas;
@@ -198,10 +203,9 @@ export class PlaygroundInput {
     }
   }
   drag(dx, dy, pan) {
-    if(this.suspended||this.callbacks.canTurn?.()===false)return;
+    if(this.suspended||this.callbacks?.canTurn?.()===false)return;
     if (!pan) {
-      this.camera.alpha += dx * .005;
-      this.camera.beta = Math.max(this.camera.lowerBetaLimit??.25, Math.min(this.camera.upperBetaLimit??Math.PI-.035, this.camera.beta - dy * .005));
+      orbitCamera(this.camera, dx, dy);
     } else {
       const scale = this.camera.radius * .0013;
       const rightX = Math.sin(this.camera.alpha), rightZ = -Math.cos(this.camera.alpha);

@@ -7,6 +7,7 @@ import ko from '../src/v03/locales/ko.js';
 import {t,setPack,cloneChapter,localizeChapter} from '../src/v03/i18n.js';
 import {COMBAT_HINTS,TIPS} from '../src/v03/data/chapter1.js';
 import {equipmentStats} from '../src/equipment-stats.js';
+import {PlaygroundInput} from '../src/input.js';
 import {characterItems,bagContents,combatSkills,SKILL_BRANCHES,SKILL_COLUMNS,SKILL_OPEN,SKILL_TREE} from '../src/v03/character-menu-data.js';
 import {createCharacterPortrait} from '../src/v03/character-menu-camera.js';
 import {createCharacterMenu} from '../src/v03/character-menu.js';
@@ -93,6 +94,63 @@ test('the equipment portrait submits only the owned warrior and never advances s
   assert.deepEqual([camera.alpha,camera.beta,camera.radius],[.6,1.1,11]);
   portrait.dispose();assert.equal(portrait.draw(options),false);
  }finally{scene.dispose();engine.dispose();}
+});
+
+test('status mouse and touch orbit match the gameplay camera in the rendered portrait',async()=>{
+ const engine=new NullEngine(),scene=new Scene(engine);
+ scene.useRightHandedSystem=true;
+ const {document,window}=parseHTML('<html><body><main id="app"></main></body></html>');
+ const root=document.querySelector('main'),rect={left:0,top:0,width:800,height:500};
+ let frame=null,sample=null,menu;
+ window.ResizeObserver=class{observe(){}disconnect(){}};
+ window.requestAnimationFrame=callback=>{frame=callback;return 1;};
+ window.cancelAnimationFrame=()=>{frame=null;};
+ engine.enableScissor=engine.disableScissor=()=>{};
+ function flush(){const callback=frame;frame=null;callback?.();}
+ try{
+  const camera=new ArcRotateCamera('world',.6,1.1,11,Vector3.Zero(),scene);
+  camera.lowerBetaLimit=.4;camera.upperBetaLimit=1.75;
+  const actor=new TransformNode('warrior',scene);actor.rotation.y=.35;
+  const body=MeshBuilder.CreateBox('equipped body',{},scene);body.parent=actor;
+  body.material=new StandardMaterial('skin',scene);
+  scene.render();await scene.whenReadyAsync();
+  body.onBeforeDrawObservable.add(()=>{sample={alpha:camera.alpha,beta:camera.beta,radius:camera.radius};});
+  menu=createCharacterMenu({root,onPause(){},read:()=>({equipment:{},gold:0,potions:0}),
+   subject:()=>({camera,scene,actor,meshes:[body],height:1.6,canvasRect:rect})});
+  const dialog=root.querySelector('dialog');
+  dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;};
+  menu.show('Status');
+  const view=root.querySelector('.mf-menu-pose');
+  view.getBoundingClientRect=()=>rect;view.setPointerCapture=()=>{};
+  for(let i=0;i<8&&!sample;i++){flush();if(!sample)await new Promise(done=>setTimeout(done,105));}
+  assert.ok(sample,'the initial front view renders');
+  const expected={...sample,lowerBetaLimit:camera.lowerBetaLimit,upperBetaLimit:camera.upperBetaLimit};
+  const drag=(dx,dy)=>PlaygroundInput.prototype.drag.call({camera:expected,callbacks:{}},dx,dy,false);
+  const check=()=>{
+   assert.ok(Math.abs(sample.alpha-expected.alpha)<1e-10);assert.ok(Math.abs(sample.beta-expected.beta)<1e-10);
+   assert.deepEqual([camera.alpha,camera.beta,camera.radius],[.6,1.1,11]);
+  };
+  const pointer=(name,pointerId,pointerType,button,clientX,clientY)=>{
+   view.dispatchEvent(Object.assign(new window.Event(name),{pointerId,pointerType,button,clientX,clientY}));
+   flush();
+  };
+  pointer('pointerdown',1,'mouse',2,100,100);
+  pointer('pointermove',1,'mouse',-1,180,145);drag(80,45);check();
+  pointer('pointerup',1,'mouse',2,180,145);
+  pointer('pointerdown',2,'touch',0,200,100);
+  pointer('pointermove',2,'touch',-1,180,-300);drag(-20,-400);check();
+  const radius=sample.radius;
+  pointer('pointerdown',3,'touch',0,210,-300);
+  pointer('pointermove',3,'touch',-1,240,-300);check();assert.ok(sample.radius<radius);
+  pointer('pointercancel',3,'touch',-1,240,-300);
+  pointer('pointermove',2,'touch',-1,180,200);drag(0,500);check();
+  pointer('lostpointercapture',2,'touch',-1,180,200);
+  pointer('pointermove',2,'touch',-1,300,0);check();
+  pointer('pointerdown',1,'mouse',0,100,100);
+  pointer('pointermove',1,'mouse',-1,120,90);drag(20,-10);check();
+  pointer('pointerup',1,'mouse',0,120,90);
+  view.dispatchEvent(Object.assign(new window.Event('keydown'),{key:'ArrowRight'}));flush();drag(36,0);check();
+ }finally{menu?.dispose();scene.dispose();engine.dispose();}
 });
 
 test('the skill page is a left-to-right tree: three branches, a line per prerequisite, the picked skill in detail',()=>{

@@ -1,6 +1,15 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'hud.tip.bag':'バッグを開いて装備や持ち物を確認します（I）。',
+  'hud.tip.journal':'手帳を開いて依頼の進行状況を確認します。',
+  'hud.tip.summon':'モンスター召喚画面を開きます。',
+  'hud.tip.fullscreen':'全画面表示にします。',
+  'hud.tip.exitFullscreen':'全画面表示を終了します。',
+  'hud.tip.settings':'ゲーム設定を開きます。',
+  'hud.tip.fps':'パフォーマンス診断を開きます。メモリの数値は現在とピーク時のテクスチャ使用量です。',
+  'hud.tip.help':'操作方法を確認します。',
+  'pickup.received':'{item}を入手しました。',
   'char.progressLevel':'レベル','char.progressXp':'経験値','char.gearBroken':'破損','char.repairAtSmith':'破損 · 村の鍛冶屋で修理できます。',
   'char.skill.weaponCare':'武器の手入れ',
   'char.skill.guardTraining':'盾の鍛錬',

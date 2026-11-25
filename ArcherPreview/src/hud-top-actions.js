@@ -6,8 +6,8 @@ export function arrangeTopActions(root){
   const menu=top.querySelector('[data-uit-action="menu"]');if(menu)menu.hidden=true;
   for(const [key,selector]of [
     ['fps','#live-fps'],
-    ['bag','[data-chapter="bag"],[data-uit-action="inventory"]'],
     ['riding','.v03-ride-toggle'],
+    ['bag','[data-chapter="bag"],[data-uit-action="inventory"]'],
     ['journal','[data-chapter="journal"],[data-uit-action="journal"]'],
     ['summon','#open-summon'],
     ['fullscreen','#fullscreen-button'],

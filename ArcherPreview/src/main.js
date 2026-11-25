@@ -65,7 +65,7 @@ import {CameraFollow,setupCameraFollowControls} from './camera-follow.js';
 import {CameraZoom,setupCameraZoomControls} from './camera-zoom.js';
 import {CameraPitch,setupCameraPitchControls} from './camera-pitch.js';
 import { ARENA_RADIUS, VILLAGE_MAP, setEnemyTravelRule } from './world-limits.js';
-import { setupFullscreen } from './fullscreen.js';
+import { fullscreenOwnerDocument,setupFullscreen } from './fullscreen.js';
 import { observePageZoom, observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
@@ -143,7 +143,7 @@ import {setupQualityRestoreSettings,QUALITY_RESTORE_V03} from './quality-restore
 import {runBeforePageReload} from './page-reload-hooks.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
 // Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
-import {tr,startLanguage} from './v03/i18n.js';
+import {t,tr,startLanguage} from './v03/i18n.js';
 import hudLandscapeV03 from './v03/data/hud-landscape.json' with {type:'json'};
 // 0.3 only (its splash defines __moonforestSplash): load the language before the loading card.
 if(globalThis.__moonforestSplash)void startLanguage();
@@ -302,8 +302,8 @@ travelStorage=releaseStorage(travelStorage,versionRoute.release,{inherit:false})
 let equipmentChoices = readEquipmentChoices(equipmentStorage);
 const journeyStorage=uiTestEnabled?uiTestStorage(equipmentStorage):v03Save?v03Save.journey:equipmentStorage;
 if(uiTestEnabled)travelStorage=uiTestStorage(travelStorage);
-const goldLoot=new GoldLoot({storage:journeyStorage,onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 let goldLootView, townServices;
+const goldLoot=new GoldLoot({storage:journeyStorage,onPickup:amount=>townServices?.collectGold(amount),onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 const minimap=new DotMinimap($('#dot-minimap'), {translucent:()=>!!versionRoute.edition&&!versionRoute.worldRevision&&$('#app').dataset.hudInput==='touch'});
 let minimapTravel;
 const resumeStore=new MapResumeStore(journeyStorage);
@@ -700,6 +700,7 @@ function shootAtTarget() {
 // 0.3 stage reset: same state clearing as resetBeforeBoss, without its sound,
 // and optionally at an authored stage point when that point is walkable.
 function v03ResetStage(stage){
+  world.riding?.leave();
   goldLoot.clearDrops();goldLootView.clear();actionAudio.reset();
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;controller.resetStamina?.();controller.cancelAttack?.();
   staminaNoticeAnchor.reset();staminaFeedback.reset(controller);
@@ -1200,20 +1201,21 @@ function bindMapPortal(disarmRoadDestination=null){
   mapPortal?.dispose();
   mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,disarmRoadDestination,
     getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount(),hp:boss.playerHp,potions:boss.potions.remaining}),
-    onTravel:(url,portal)=>{const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,boundary?{boundary}:undefined);}});
+    onTravel:(url,portal)=>{const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,{boundary,playerTravel:true});}});
 }
 
 function travelFromMinimap(href){
   const waypoint=travelWaypoint(href);
   if(waypoint&&character===waypoint.character&&world.mapId===waypoint.map){
     if(!ready||loadingAsset||mapTransition?.busy||mapTransition?.failed||controller.dead||controller.captured||controller.groggy||boss.playerHp<=0||boss.loading||boss.potions.active||travelCombatCount()>0){toast('현재는 이동할 수 없습니다.');return false;}
-    if(!world.navigation.free(waypoint.position,playerDimensions(actor).moveRadius,movementLimit(waypoint.position))){toast('이동할 위치를 사용할 수 없습니다.');return false;}
+    const radius=playerDimensions(actor).moveRadius;
+    if(!world.navigation.free(waypoint.position,world.riding?.active?Math.max(.64,radius):radius,movementLimit(waypoint.position))){toast('이동할 위치를 사용할 수 없습니다.');return false;}
     input.reset();cancelAttackInput();boss.combat?.passiveRecovery?.reset();
     actor.position.set(waypoint.position.x,0,waypoint.position.z);world.terrain.place(actor.position);
     applyMinimapArrivalPose(actor,world.camera,input.panOffset,{destination:character,position:waypoint.position,waypoint});
     syncCameraFocus(0,{snap:true});syncCaveFog(true);world.lighting.follow(actor.position,true);saveMapPosition(true);return true;
   }
-  return mapTransition.travel(href,{minimap:true});
+  return mapTransition.travel(href,{minimap:true,playerTravel:true});
 }
 
 try {
@@ -1364,12 +1366,18 @@ try {
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});if(frameLoop&&!frameLoop.running)reconcilePlayback();frameLoop?.recover();};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
-  setupFullscreen($('#fullscreen-button'), toast, {autoEnter:false});
   const diagnosticFullscreen=$('#diagnostic-fullscreen'),primaryFullscreen=$('#fullscreen-button');
-  diagnosticFullscreen.addEventListener('click',()=>primaryFullscreen.click());
-  const syncDiagnosticFullscreen=()=>{diagnosticFullscreen.textContent=primaryFullscreen.textContent;diagnosticFullscreen.setAttribute('aria-label',primaryFullscreen.getAttribute('aria-label'));diagnosticFullscreen.setAttribute('aria-pressed',primaryFullscreen.getAttribute('aria-pressed'));};
-  for(const name of ['fullscreenchange','webkitfullscreenchange'])document.addEventListener(name,syncDiagnosticFullscreen);
-  syncDiagnosticFullscreen();
+  const toggleFullscreen=()=>primaryFullscreen?.click();
+  diagnosticFullscreen?.addEventListener('click',toggleFullscreen);
+  const stopFullscreen=setupFullscreen(primaryFullscreen,toast,{
+    owner:world.gameplayV03?fullscreenOwnerDocument(document):document,
+    labels:world.gameplayV03?active=>({name:tr('전체화면'),title:t(active?'hud.tip.exitFullscreen':'hud.tip.fullscreen')}):undefined,
+    onSync:button=>{if(diagnosticFullscreen){diagnosticFullscreen.textContent=button.textContent;diagnosticFullscreen.setAttribute('aria-label',button.getAttribute('aria-label'));diagnosticFullscreen.setAttribute('aria-pressed',button.getAttribute('aria-pressed'));}},
+  });
+  const releaseFullscreen=()=>{stopFullscreen();diagnosticFullscreen?.removeEventListener('click',toggleFullscreen);window.removeEventListener('pagehide',leaveFullscreenPage);};
+  const leaveFullscreenPage=event=>{if(!event.persisted)releaseFullscreen();};
+  window.addEventListener('pagehide',leaveFullscreenPage);
+  world.scene.onDisposeObservable.addOnce(releaseFullscreen);
   mapDeparture=createMapDeparture({
     prepare:href=>{townServices?.clear();characterMenu?.close();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{staminaNoticeAnchor.dispose();input.dispose();audio.dispose();engine.dispose();},
@@ -1378,9 +1386,12 @@ try {
   });
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
-    prepare:href=>{
-      world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
-      world.chapterResidents?.leave();world.riding?.leave();
+    prepare:(href,context)=>{
+      townServices?.clear();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+      world.chapterResidents?.leave();
+      if(context?.playerTravel&&world.v03?.playing&&!world.v03.story?.sceneActive){
+        world.riding?.beginTravel(mapForCharacter(new URL(href,location.href).searchParams.get('character')));
+      }else world.riding?.leave();
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
       if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
@@ -1439,6 +1450,10 @@ try {
       frameLoop.setPaused(document.hidden||modalOpen||deathScreen.isOpen()||contextRecovery?.blocked===true);
       audio.setSuspended(document.hidden||modalOpen||contextRecovery?.blocked===true);
       world.villageStreaming.active=true;await world.v03?.arrival?.();await settleWorldBehindCover();
+      if(await world.riding?.finishTravel(position=>{
+        const safe=safeRoadArrival(world,position,Math.max(.64,playerDimensions(actor).moveRadius),movementLimit);
+        return {...safe,y:world.terrain.heightAt(safe.x,safe.z)};
+      }))syncCameraFocus(0,{snap:true});
       loadingView.reveal(mapLoadingGeneration);showMinimap();
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
@@ -1580,7 +1595,7 @@ try {
     }
     const next=validCharacters.includes(event.target.value) ? event.target.value : 'archer';
     const url = new URL(location.href); url.searchParams.set('character', next);
-    if(next!==character&&isWorldCharacter(character)&&isWorldCharacter(next)){url.searchParams.set('arrival','portal');mapTransition.travel(url.href);return;}
+    if(next!==character&&isWorldCharacter(character)&&isWorldCharacter(next)){url.searchParams.set('arrival','portal');mapTransition.travel(url.href,{playerTravel:true});return;}
     if(mapForCharacter(next)!==mapForCharacter(character)){mapDeparture.leave(url.href);return;}
     character=next;history.replaceState(null, '', url);
     loadCharacter();
@@ -1813,7 +1828,7 @@ try {
     }
   }
   if(versionRoute.edition){
-    const {setupV03}=await import('./v03/index.js');
+    const {setupV03,setupHudTooltips}=await import('./v03/index.js');
     if(!versionRoute.worldRevision){
       const {setupTownServices}=await import('./v03/town-services.js');
       townServices=setupTownServices({world,root:$('#app'),wallet:goldLoot,player:()=>actor?.position,battle:()=>boss,controls:()=>controller,appearance:()=>equipment,
@@ -1831,7 +1846,7 @@ try {
       world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
       world.riding=createRidingHorse({world,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
-        forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:()=>!!(ready&&!loadingAsset&&!mapTransition?.busy&&
+        forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:(onArrival=false)=>!!(ready&&!loadingAsset&&(onArrival||!mapTransition?.busy)&&
           world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.dead&&boss.playerAlive&&!boss.combatCount)});
       world.scene.onDisposeObservable.addOnce(()=>world.riding.dispose());
     }
@@ -1889,8 +1904,9 @@ try {
     if(!versionRoute.worldRevision){
       const root=$('#app'),scene=world.scene,launch=document.createElement('button');
       launch.type='button';launch.dataset.chapter='bag';launch.id='character-menu-toggle';
-      launch.title='Character & inventory (I)';launch.setAttribute('aria-label',launch.title);launch.setAttribute('aria-haspopup','dialog');
-      root.querySelector('.top-actions').append(launch);commercialUi?.refresh();world.hudRaster?.refresh();launch.dataset.commercialLabel='Inventory';
+      launch.setAttribute('aria-label',tr('가방'));launch.setAttribute('aria-keyshortcuts','I');launch.setAttribute('aria-haspopup','dialog');
+      root.querySelector('.top-actions').append(launch);commercialUi?.refresh();world.hudRaster?.refresh();
+      const hudTooltips=setupHudTooltips(root);
       const canOpen=()=>!scene.isDisposed&&ready&&world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!world.v03.story?.scenePending&&!world.v03.story?.dialogueOpen&&
         !loadingAsset&&!mapTransition?.busy&&!frameLoop.failed&&!world.gameExited&&!contextRecovery?.blocked&&!world.toolLease?.active&&!controller?.dead&&!controller?.captured&&!document.hidden&&!document.querySelector('dialog[open]');
       const open=async page=>{
@@ -1932,7 +1948,7 @@ try {
         if(hotkeys[event.code]&&canOpen()){event.preventDefault();void open(hotkeys[event.code]);}
       };
       window.addEventListener('keydown',shortcut);
-      const dispose=()=>{window.removeEventListener('keydown',shortcut);launch.remove();characterMenu?.dispose();characterMenu=null;};
+      const dispose=()=>{window.removeEventListener('keydown',shortcut);hudTooltips.dispose();launch.remove();characterMenu?.dispose();characterMenu=null;};
       scene.onDisposeObservable.addOnce(dispose);
       if(import.meta.hot)import.meta.hot.dispose(dispose);
     }

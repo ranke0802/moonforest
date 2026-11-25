@@ -2,6 +2,7 @@ import {Color4} from '@babylonjs/core/Maths/math.color.js';
 import {ObjectRenderer} from '@babylonjs/core/Rendering/objectRenderer.js';
 
 const black=new Color4(0,0,0,1);
+export const PORTRAIT_PITCH=Math.PI*.475;
 
 // Portraits draw just the already loaded warrior to the game framebuffer.
 // No second scene, model, render texture, shadow pass or scene render callbacks.
@@ -14,7 +15,7 @@ export function createCharacterPortrait(scene){
     if(disposed)return;disposed=true;
     scene.onDisposeObservable.remove(observer);renderer.freeRenderingGroups();renderer.dispose();
   }
-  function draw({camera,actor,meshes,height,canvasRect,frameRect,turn=0,zoom=1}){
+  function draw({camera,actor,meshes,height,canvasRect,frameRect,turn=0,pitch=PORTRAIT_PITCH,zoom=1}){
     if(disposed||scene.isDisposed||!camera||!actor||!frameRect.height||!canvasRect.width||!canvasRect.height)return false;
     const target=camera.target,offset=camera.targetScreenOffset,oldX=offset.x,oldY=offset.y;
     const {alpha,beta,radius}=camera;
@@ -30,7 +31,7 @@ export function createCharacterPortrait(scene){
     engine.beginFrame();
     try{
       camera.setTarget(aim,false,true,true);
-      camera.alpha=Math.PI/2-actor.rotation.y+turn;camera.beta=Math.PI*.475;
+      camera.alpha=Math.PI/2-actor.rotation.y+turn;camera.beta=pitch;
       camera.radius=Math.max(camera.lowerRadiusLimit??.2,distance);
       const metersPerPixel=2*camera.radius*halfFov/canvasRect.height;
       offset.set(cx*metersPerPixel,cy*metersPerPixel);camera.getViewMatrix(true);

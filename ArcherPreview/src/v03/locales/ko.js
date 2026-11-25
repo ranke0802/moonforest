@@ -3,6 +3,15 @@
 import {particle} from '../korean.js';
 export default {
  ui:{
+  'hud.tip.bag':'가방을 열어 장비와 소지품을 확인합니다 (I).',
+  'hud.tip.journal':'수첩을 열어 의뢰 진행 상황을 확인합니다.',
+  'hud.tip.summon':'몬스터 소환 창을 엽니다.',
+  'hud.tip.fullscreen':'전체화면으로 전환합니다.',
+  'hud.tip.exitFullscreen':'전체화면을 종료합니다.',
+  'hud.tip.settings':'게임 설정을 엽니다.',
+  'hud.tip.fps':'성능 진단을 엽니다. 메모리 수치는 현재와 최고 텍스처 사용량입니다.',
+  'hud.tip.help':'조작 방법을 확인합니다.',
+  'pickup.received':'{item} 획득하였습니다.',
   'char.progressLevel':'레벨','char.progressXp':'경험치','char.gearBroken':'파손','char.repairAtSmith':'파손 · 마을 대장장이에게 수리하세요.',
   'char.skill.weaponCare':'무기 손질',
   'char.skill.guardTraining':'방패 수련',
@@ -53,7 +62,7 @@ export default {
   'scene.protect':'마부를 지켜라',
   'sky.clear':'맑음','sky.cloudy':'흐림','sky.rain':'비','sky.storm':'폭풍','rotate.install':'앱으로 설치 (항상 가로 화면)','rotate.title':'화면을 가로로 돌려 주세요','rotate.tap':'화면을 누르면 가로 전체 화면으로 전환합니다.','rotate.ios':'가로로 돌려야 플레이할 수 있습니다. 홈 화면에 추가하면 주소창 없이 전체 화면으로 즐길 수 있습니다.','ios.add':'홈 화면에 추가하기','ios.step1':'Safari 아래쪽의 공유 버튼(□↑)을 누릅니다.','ios.step2':"목록에서 '홈 화면에 추가'를 고릅니다.",'ios.step3':'홈 화면의 MoonForest 아이콘으로 실행하고 가로로 돌려 플레이합니다.',
   'hud.main':'메인','hud.chapterNext':'이야기의 다음 장','reward.got':'보상 · {items}','reward.gold':'{n} G','reward.potions':'회복 물약 {n}개','reward.armor.leather':'가죽 갑옷 (방어력 +2)','combat.justGuard':'저스트 가드!','hud.complete':'완료 · {done}','hud.completeNext':'완료 · {done}  →  {next}','hud.questDone':'퀘스트 완료','hud.questNext':'다음 · {next}','hud.rested':'쉬었습니다 · 여정을 기록했습니다',
-  'prompt.actionQuest':'이야기하기','prompt.actionIdle':'말 걸기','prompt.wagonName':'마차','prompt.pushWagon':'밀기 ({n}/{total})','prompt.waitDriver':'마부를 기다리는 중','lift.ready':'자, 구령에 맞춰 같이 밉시다!','lift.one':'하나!','lift.two':'둘!','lift.three':'셋!',
+  'prompt.actionQuest':'이야기하기','prompt.actionIdle':'말 걸기','prompt.wagonName':'마차','prompt.pushWagon':'밀기 ({n}/{total})','prompt.waitDriver':'마부를 기다리는 중','lift.ready':'자, 내가 구령을 넣을 테니 같이 밀자꾸나!','lift.one':'하나!','lift.two':'둘!','lift.three':'셋!',
   'prompt.talkQuest':({name})=>particle(name,'과','와')+' 이야기하기',
   'prompt.talkIdle':({name})=>name+'에게 말 걸기',
   // Character menu, village shops and items (2026-11-24).

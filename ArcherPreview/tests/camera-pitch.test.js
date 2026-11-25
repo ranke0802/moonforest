@@ -13,6 +13,7 @@ import {CharacterAnimator} from '../src/animation.js';
 import {projectBossHealth} from '../src/boss-health-bar.js';
 import {setupSettingsPanel} from '../src/settings-panel.js';
 import {createWorld,replaceWorldMap} from '../src/world.js';
+import {setFrameWorkContext} from '../src/frame-work-coordinator.js';
 import {carryPortalPose} from '../src/map-transition.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 
@@ -69,13 +70,14 @@ test('real settings checkbox is on by default, persists, handles invalid storage
 });
 
 test('the actual main paused-render and settings callbacks correct the eye before the scene draw',t=>{
- const {scene,camera,pitch,input}=fixture(t),actor=new TransformNode('paused-player',scene),source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
+ const {engine,scene,camera,pitch,input}=fixture(t),actor=new TransformNode('paused-player',scene),source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  const start=source.indexOf('function syncCameraFocus('),renderStart=source.indexOf('function render(dt)',start),renderEnd=source.indexOf('  elapsed += dt;',renderStart);
  const focusFunction=source.slice(start,renderStart),pausedRender=source.slice(renderStart,renderEnd)+'}';let fogCalls=0,hudCalls=0,lootCalls=0;
  const follow=new CameraFollow();follow.update({followMotion:true});
- const main=new Function('actor','cameraPitch','cameraFollow','boss','elenaReview','input','world','isVillage','villageOverview','Vector3','mapDeparture','screenProjection','updateHealthBars','goldLootView','syncCaveFog','updateStaminaNotice',
+ const main=new Function('actor','cameraPitch','cameraFollow','boss','elenaReview','input','world','isVillage','villageOverview','Vector3','mapDeparture','screenProjection','updateHealthBars','goldLootView','syncCaveFog','updateStaminaNotice','contextRecovery','setFrameWorkContext','engine',
   'let simulateFrame=false,playerHead=null,ready=false,loadingAsset=false,mapTransition=null,cinematicAuthoringPreview=false;'+focusFunction+pausedRender+';return {render,syncCameraFocus};')(
-  actor,pitch,follow,{nearestTarget:()=>null},null,input,{camera,scene},()=>false,false,Vector3,null,{beginFrame(){}},()=>hudCalls++,{project:()=>lootCalls++},()=>fogCalls++,()=>{});
+  actor,pitch,follow,{nearestTarget:()=>null},null,input,{camera,scene},()=>false,false,Vector3,null,{beginFrame(){}},()=>hudCalls++,{project:()=>lootCalls++},()=>fogCalls++,()=>{},
+  {blocked:false},setFrameWorkContext,engine);
  pitch.update({upwardLimited:false});camera.beta=2.8;camera.radius=17;main.render(0);assert.ok(camera.position.y>=1.5-.35-1e-5);assert.equal(fogCalls,1);assert.equal(hudCalls,1);assert.equal(lootCalls,1);
  const settingStart=source.indexOf('const cameraSettingChanged=')+'const cameraSettingChanged='.length,settingEnd=source.indexOf('\n',settingStart),lambda=source.slice(settingStart,settingEnd).trim().replace(/;$/,'');let refresh=0,wake=0,invalidations=0;
  const changed=new Function('syncCameraFocus','frameDiagnostics','renderActivity','frameLoop','return '+lambda)(main.syncCameraFocus,{refresh:()=>refresh++},{wake:()=>wake++},{invalidate:()=>invalidations++});

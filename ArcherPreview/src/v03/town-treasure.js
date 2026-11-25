@@ -2,24 +2,25 @@ import {CHAPTER_POINTS} from '../chapter-quest-points.js';
 import {createQuestProps} from '../chapter-quest-props.js';
 import {createItemDropView} from '../item-drop-view.js';
 import {scatterChestLoot,lootSeed} from '../chest-loot-motion.js';
-import {TOWN_ITEMS,itemName,monsterRewards,treasureRewards} from './town-items.js';
+import {TOWN_ITEMS,monsterRewards,treasureRewards} from './town-items.js';
 import {language,t} from './i18n.js';
+import {createPickupNotice} from './pickup-notice.js';
 
 const modelFor=id=>TOWN_ITEMS[id].quick?'contaminated-vial':id==='moon-herb'?'moon-dew-herb':TOWN_ITEMS[id].slot==='sword'?'goblin-club':'clue-satchel';
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
 // An opened chest disappears after this many seconds; a looted one never comes back
 // (user, 2026-11-24). The record is economy.state.opened, saved per slot.
 export const CHEST_VANISH_SECONDS=5;
-export function createTownTreasure({root,world,economy,canInteract,player,notify,sound,props=createQuestProps(world,{vanishOpenedAfter:CHEST_VANISH_SECONDS}),makeDrops=createItemDropView,fieldChestsEnabled=new URLSearchParams(globalThis.location?.search).get('fieldChests')!=='0'}){
+export function createTownTreasure({root,world,economy,canInteract,player,sound,props=createQuestProps(world,{vanishOpenedAfter:CHEST_VANISH_SECONDS}),makeDrops=createItemDropView,fieldChestsEnabled=new URLSearchParams(globalThis.location?.search).get('fieldChests')!=='0'}){
  let drops=null,map=null,points=[],nearest=null,nearDrops=[],stamp=-1,clock=0,nextScan=0,loaded=false,hadVisibleDrops=false;
  let loading=false,retryAt=0,seenFailures=props.stats.modelFailures;
  let labelTier=0,labelLang='';
  const vanishingAuthored=new Map();
  let lastAuthoredRuntime=null;
- const doc=root.ownerDocument,button=doc.createElement('button');
+ const doc=root.ownerDocument,button=doc.createElement('button'),pickup=createPickupNotice(root);
  button.type='button';button.className='mf-treasure-prompt';button.hidden=true;root.append(button);
  const visual=()=>drops??=makeDrops(world,{onError:e=>console.warn('[Town items]',e)});
- const clear=()=>{props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;loading=false;retryAt=0;seenFailures=props.stats.modelFailures;hadVisibleDrops=false;button.hidden=true;vanishingAuthored.clear();lastAuthoredRuntime=null;};
+ const clear=()=>{pickup.clear();props.release();drops?.clear();map=null;points=[];nearest=null;nearDrops=[];clock=0;nextScan=0;stamp=-1;loaded=false;loading=false;retryAt=0;seenFailures=props.stats.modelFailures;hadVisibleDrops=false;button.hidden=true;vanishingAuthored.clear();lastAuthoredRuntime=null;};
  const ground=(point)=>world.terrain?.heightAt?.(point.x,point.z)??0;
  const reach=(from,to)=>!world.navigation||world.navigation.segmentClear(from,to,.06,true);
  function scatter(id,position,rewards,tier,experience=0){
@@ -77,6 +78,7 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
   });
  }
  return {clear,
+  collectGold(amount){if(world.v03?.playing&&amount>0)pickup.show({gold:amount});},
   defeat(event,experience=0){if(!world.v03?.playing||!event?.position)return false;const rewards=monsterRewards(event.kind);
    return scatter(globalThis.crypto?.randomUUID?.()??Date.now().toString(36)+Math.random().toString(36).slice(2),event.position,rewards,0,experience);
   },
@@ -123,14 +125,20 @@ export function createTownTreasure({root,world,economy,canInteract,player,notify
     }
     nearDrops=economy.state.drops.filter(d=>d.mapId===map&&dist(me,d.position)<24);
     const take=nearDrops.filter(d=>dist(me,d.position)<=1.3&&drops?.ready(d.id)&&reach(me,d.position)).map(d=>d.id);
-    if(take.length){const gains=economy.collect(take);
-     if(gains){nearDrops=nearDrops.filter(d=>!take.includes(d.id));sound('gold_pickup');notify(Object.entries(gains).map(([id,n])=>itemName(id)+' ×'+n).join(' · '));}
+    if(take.length){
+     const before=economy.state.bag,gains=economy.collect(take);
+     if(gains){
+      nearDrops=nearDrops.filter(d=>!take.includes(d.id));sound('gold_pickup');
+      // The bag caps each item stack. Report only what actually entered it.
+      for(const id of Object.keys(gains))gains[id]=(economy.state.bag[id]??0)-(before[id]??0);
+      pickup.show(gains);
+     }
     }
    }
    if(loaded)props.animate(clock);
    if(nearDrops.length){visual().sync(nearDrops,dt);hadVisibleDrops=true;}else if(hadVisibleDrops){drops?.sync([],dt);hadVisibleDrops=false;}
   },
-  dispose(){clear();props.dispose();drops?.dispose();button.remove();doc.defaultView.removeEventListener('keydown',onKey,true);
+  dispose(){clear();pickup.dispose();props.dispose();drops?.dispose();button.remove();doc.defaultView.removeEventListener('keydown',onKey,true);
    if(world.openAuthoredChest===openAuthored)delete world.openAuthoredChest;if(world.isAuthoredChestOpened===authoredOpened)delete world.isAuthoredChestOpened;
   }};
 }

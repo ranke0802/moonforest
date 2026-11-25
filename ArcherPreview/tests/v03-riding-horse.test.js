@@ -38,7 +38,7 @@ test('the driver grants the horse to the current save; only mounting loads the m
 });
 test('mount controls and acquisition/save/load messages follow all five game languages',async()=>{
   const h=harness();h.stable.offer();h.stable.updateAvailability();
-  assert.equal(h.button.previousElementSibling.dataset.chapter,'bag');
+  assert.equal(h.button.nextElementSibling.dataset.chapter,'bag');
   for(const [lang,mount,dismount] of [['ko','말 타기','말에서 내리기'],['ja','乗馬','下馬'],['zh-Hans','上马','下马'],['vi','Lên ngựa','Xuống ngựa'],['en','Mount','Dismount']]){
     h.doc.documentElement.lang=lang;h.stable.updateAvailability();assert.equal(h.button.textContent,mount);
     const words=ridingLabels(h.doc);assert.ok(Object.values(words).every(Boolean));
@@ -56,12 +56,40 @@ test('late horse imports cannot survive a map departure or reattach a rider',asy
   assert.equal(h.stable.active,false);assert.equal(h.disposed(),1);assert.deepEqual(h.clips,[]);
   h.world.mapId='witch-cave';h.stable.updateAvailability();assert.equal(h.button.hidden,true);
 });
+test('a staged reset, another slot or unsafe landing cancels a carried ride',async()=>{
+  const landing=()=>({x:1,y:0,z:2});
+  for(const reason of ['stage','slot','unsafe','combat']){
+    const h=harness();h.stable.offer();h.stable.updateAvailability();await h.click();
+    h.stable.beginTravel('witch-cave');h.world.mapId='witch-cave';await h.stable.finishTravel(landing);
+    assert.equal(h.notices.at(-1),ridingLabels(h.doc).parked);
+    if(reason==='stage')h.stable.leave();
+    if(reason==='slot'){h.slot.clear();h.stable.reload();}
+    h.stable.beginTravel('village');h.world.mapId='village';
+    if(reason==='combat')h.combat();
+    await h.stable.finishTravel(reason==='unsafe'?()=>({x:1,y:NaN,z:2}):landing);
+    assert.equal(h.stable.active,false);assert.equal(h.saddle.position.y,0);
+    h.stable.updateAvailability();assert.equal(h.loads(),reason==='unsafe'?2:1);
+    h.stable.dispose();
+  }
+});
+test('a stalled cave-return mount releases the transition, even when the old load later succeeds',async ctx=>{
+  ctx.mock.timers.enable({apis:['setTimeout']});
+  const h=harness({delay:true}),landing=()=>({x:1,y:0,z:2});
+  h.stable.offer();h.stable.updateAvailability();
+  const first=h.click();h.finish();await first;
+  h.stable.beginTravel('witch-cave');h.world.mapId='witch-cave';await h.stable.finishTravel(landing);
+  h.stable.beginTravel('village');h.world.mapId='village';
+  const arrival=h.stable.finishTravel(landing);ctx.mock.timers.tick(4000);await arrival;h.finish();await Promise.resolve();
+  assert.equal(h.stable.active,false);assert.equal(h.root.dataset.v03Riding,'on-foot');
+  assert.equal(h.disposed(),2);assert.equal(h.notices.at(-1),ridingLabels(h.doc).loadError);
+  h.stable.dispose();
+});
 test('touch interaction and a late bag button survive mounting, cancellation and dismounting',async()=>{
   const h=harness({delay:true});
   h.root.dataset.hudInput='touch';
   const bag=h.root.querySelector('[data-chapter="bag"]');
   bag.remove();h.root.querySelector('.top-actions').append(bag);arrangeTopActions(h.root);
-  assert.equal(bag.nextElementSibling,h.button);
+  assert.equal(bag.previousElementSibling,h.button);
   const interact=createInteractButton({doc:h.doc});
   try{
     interact.sync({act:'talk',action:'Talk',label:'Talk to driver'});

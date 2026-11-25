@@ -1,13 +1,20 @@
 import { isInstalledDisplay } from './app-display.js';
 
+export function fullscreenOwnerDocument(doc) {
+  const view=doc.defaultView;
+  try { if (view?.parent?.__moonforestShell && view.parent !== view) return view.parent.document; }
+  catch { /* A cross-origin host cannot own the game's controls. */ }
+  return doc;
+}
+
 /** Fullscreen is requested inside the click gesture. Landscape lock is optional. */
-export function setupFullscreen(button, notify = () => {}, { autoEnter = false } = {}) {
-  if (!button) return () => {};
-  const root = document.documentElement;
+export function setupFullscreen(button, notify = () => {}, { autoEnter = false, owner = globalThis.document, labels, onSync } = {}) {
+  if (!button||!owner) return () => {};
+  const root = owner.documentElement;
   const orientation = globalThis.screen?.orientation;
   const iconOnly = button.textContent?.trim() === '⛶';
   const isLandscape = () => Boolean(orientation?.type?.startsWith('landscape') || globalThis.matchMedia?.('(orientation: landscape)').matches);
-  const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement || null;
+  const fullscreenElement = () => owner.fullscreenElement || owner.webkitFullscreenElement || null;
   let pending = false;
   let disposed = false;
   let wasFullscreen = false;
@@ -36,8 +43,10 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
     button.hidden = false;
     button.textContent = iconOnly ? (active ? '⤡' : '⛶') : (active ? '화면 축소' : '전체화면');
     button.setAttribute('aria-pressed', String(active));
-    button.setAttribute('aria-label', active ? '화면 축소' : '전체화면');
-    button.title = active ? '화면 축소' : '전체화면으로 열고 가로 방향 잠금 시도';
+    const words=labels?.(active);
+    button.setAttribute('aria-label', words?.name ?? (active ? '화면 축소' : '전체화면'));
+    button.title = words?.title ?? (active ? '화면 축소' : '전체화면으로 열고 가로 방향 잠금 시도');
+    onSync?.(button);
   }
   function waitForWebkitEntry() {
     if (fullscreenElement()) return Promise.resolve();
@@ -46,11 +55,11 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
       const timer = setTimeout(() => finish(false), 1800);
       function finish(success) {
         clearTimeout(timer);
-        for (const name of names) document.removeEventListener(name, changed);
+        for (const name of names) owner.removeEventListener(name, changed);
         success ? resolve() : reject(new Error('Fullscreen unavailable'));
       }
       function changed() { finish(Boolean(fullscreenElement())); }
-      for (const name of names) document.addEventListener(name, changed);
+      for (const name of names) owner.addEventListener(name, changed);
     });
   }
   async function toggle({quiet=false,enterOnly=false}={}) {
@@ -60,7 +69,7 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
     const report=quiet?()=>{}:notify;
     const exiting = Boolean(fullscreenElement());
     const method = exiting
-      ? (document.exitFullscreen || document.webkitExitFullscreen)
+      ? (owner.exitFullscreen || owner.webkitExitFullscreen)
       : (root.requestFullscreen || root.webkitRequestFullscreen);
     if (!method) {
       const appleTouch = /iPhone|iPad|iPod/.test(globalThis.navigator?.userAgent || '') || (globalThis.navigator?.platform === 'MacIntel' && globalThis.navigator?.maxTouchPoints > 1);
@@ -71,7 +80,7 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
     button.disabled = true;
     try {
       // Do not await anything before this call: transient user activation is required.
-      const request = method.call(exiting ? document : root);
+      const request = method.call(exiting ? owner : root);
       if (request?.then) await request;
       else if (!exiting) await waitForWebkitEntry();
       if (disposed) return;
@@ -98,8 +107,8 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
 
   const onButton=()=>{disarmAutoEntry();void toggle();};
   button.addEventListener('click', onButton);
-  document.addEventListener('fullscreenchange', sync);
-  document.addEventListener('webkitfullscreenchange', sync);
+  owner.addEventListener('fullscreenchange', sync);
+  owner.addEventListener('webkitfullscreenchange', sync);
   globalThis.addEventListener?.('pageshow', sync);
   sync();
   if(autoEnter && !isInstalledDisplay() && !fullscreenElement() && (root.requestFullscreen || root.webkitRequestFullscreen)){
@@ -109,12 +118,13 @@ export function setupFullscreen(button, notify = () => {}, { autoEnter = false }
     if(globalThis.navigator?.userActivation?.isActive)void toggle({quiet:true,enterOnly:true});
   }
   return () => {
+    if(disposed)return;
     disposed = true;
     button.removeEventListener('click', onButton);
     disarmAutoEntry();
-    document.removeEventListener('fullscreenchange', sync);
-    document.removeEventListener('webkitfullscreenchange', sync);
+    owner.removeEventListener('fullscreenchange', sync);
+    owner.removeEventListener('webkitfullscreenchange', sync);
     globalThis.removeEventListener?.('pageshow', sync);
-    unlock();
+    if(owner===document||!fullscreenElement())unlock();
   };
 }

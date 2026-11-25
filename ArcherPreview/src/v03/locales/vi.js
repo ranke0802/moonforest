@@ -1,6 +1,15 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'hud.tip.bag':'Mở túi để xem trang bị và vật phẩm (I).',
+  'hud.tip.journal':'Mở sổ tay để xem tiến độ nhiệm vụ.',
+  'hud.tip.summon':'Mở bảng triệu hồi quái vật.',
+  'hud.tip.fullscreen':'Chuyển sang toàn màn hình.',
+  'hud.tip.exitFullscreen':'Thoát toàn màn hình.',
+  'hud.tip.settings':'Mở cài đặt trò chơi.',
+  'hud.tip.fps':'Mở chẩn đoán hiệu năng. Các số liệu bộ nhớ cho biết mức sử dụng bộ nhớ kết cấu hiện tại và cao nhất.',
+  'hud.tip.help':'Xem hướng dẫn điều khiển.',
+  'pickup.received':'Đã nhận {item}.',
   'char.progressLevel':'Cấp độ','char.progressXp':'Kinh nghiệm','char.gearBroken':'Đã hỏng','char.repairAtSmith':'Đã hỏng · Hãy đến thợ rèn trong làng để sửa.',
   'char.skill.weaponCare':'Bảo dưỡng vũ khí',
   'char.skill.guardTraining':'Luyện khiên',

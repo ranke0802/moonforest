@@ -1,6 +1,7 @@
 import {bagContents,characterItems,combatSkills,PASSIVE_CELLS,SKILL_BRANCHES,SKILL_COLUMNS,SKILL_OPEN,SLOTS} from './character-menu-data.js';
 import {PASSIVE_LIMITS,SKILL_REFUND_GOLD} from './character-progression.js';
-import {createCharacterPortrait} from './character-menu-camera.js';
+import {createCharacterPortrait,PORTRAIT_PITCH} from './character-menu-camera.js';
+import {orbitCamera} from '../input.js';
 import {townItemIcon} from './town-item-art.js';
 import {t,language,cloneChapter,localizeChapter} from './i18n.js';
 import {COMBAT_HINTS,TIPS} from './data/chapter1.js';
@@ -9,6 +10,7 @@ import {COMBAT_HINTS,TIPS} from './data/chapter1.js';
 // every show(), so a language change at the title applies on the next open.
 const LESSONS=Object.freeze({COMBAT_HINTS,TIPS});
 const SVG='http://www.w3.org/2000/svg';
+const ORBIT_KEYS=new Map([['ArrowLeft',[-36,0]],['ArrowRight',[36,0]],['ArrowUp',[0,-36]],['ArrowDown',[0,36]]]);
 // Line art for the three skill branches (the mockup's sword, shield and boot).
 const BRANCH_ART=Object.freeze({
   sword:['M19 3l-9.5 9.5M9 11l4 4M5 19l3.5-3.5M19 3v3l-8 8-3-3 8-8z'],
@@ -39,7 +41,8 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     exit.setAttribute('aria-label',t('dialogue.close'));exit.title=t('dialogue.close');
   }
   nav.append(...tabButtons,gold,exit);dialog.append(nav,body);root.append(dialog);
-  let page='Status',filter='All',sort='Type',selected='',poseFrame=null,turn=0,zoom=1;
+  const orbit={alpha:0,beta:PORTRAIT_PITCH};
+  let page='Status',filter='All',sort='Type',selected='',poseFrame=null,zoom=1;
   let pendingDraw=0,disposed=false,portrait=null,portraitScene=null,retryDraw=0,lessons=null,lessonLang='',skillPick='';
   const lang=()=>doc.documentElement.lang||'ko';
   function invalidate(){
@@ -49,7 +52,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       const live=subject();
       if(!live||!dialog.open||!poseFrame||doc.hidden)return;
       if(portraitScene!==live.scene){portrait?.dispose();portrait=createCharacterPortrait(live.scene);portraitScene=live.scene;}
-      if(portrait.draw({...live,frameRect:poseFrame.getBoundingClientRect(),turn,zoom}))root.dataset.characterPortrait='';
+      if(portrait.draw({...live,frameRect:poseFrame.getBoundingClientRect(),turn:orbit.alpha,pitch:orbit.beta,zoom}))root.dataset.characterPortrait='';
       else if(!retryDraw)retryDraw=win.setTimeout(()=>{retryDraw=0;invalidate();},100);
     });
   }
@@ -60,25 +63,31 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   }
   function attachGestures(view){
     const touches=new Map();
+    const camera=subject()?.camera;
+    orbit.lowerBetaLimit=camera?.lowerBetaLimit;
+    orbit.upperBetaLimit=camera?.upperBetaLimit;
+    const rotate=(dx,dy)=>{orbitCamera(orbit,dx,dy);invalidate();};
     const span=()=>{const [a,b]=touches.values();return a&&b?Math.hypot(a.x-b.x,a.y-b.y):0;};
     view.addEventListener('pointerdown',e=>{
-      if(e.button!==0)return;e.preventDefault();
+      if(e.button!==0&&!(e.pointerType==='mouse'&&e.button===2))return;
+      e.preventDefault();
       view.setPointerCapture(e.pointerId);touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
     });
+    view.addEventListener('contextmenu',e=>e.preventDefault());
     view.addEventListener('pointermove',e=>{
       const point=touches.get(e.pointerId);if(!point)return;
-      const gap=span(),dx=e.clientX-point.x;
+      const gap=span(),dx=e.clientX-point.x,dy=e.clientY-point.y;
       point.x=e.clientX;point.y=e.clientY;
-      if(touches.size===1){turn-=dx*.013;invalidate();}
-      else if(gap>2)zoomBy(span()/gap);
+      if(touches.size===1)rotate(dx,dy);
+      else if(gap>5){const distance=span();if(distance>5)zoomBy(distance/gap);}
     });
     const end=e=>touches.delete(e.pointerId);
     for(const key of ['pointerup','pointercancel','lostpointercapture'])view.addEventListener(key,end);
     view.addEventListener('wheel',e=>{e.preventDefault();zoomBy(Math.exp(Math.max(-.3,Math.min(.3,-e.deltaY*.002))));},{passive:false});
     view.addEventListener('keydown',e=>{
-      if(!['ArrowLeft','ArrowRight','+','=','-'].includes(e.key))return;e.preventDefault();
-      if(e.key==='ArrowLeft'||e.key==='ArrowRight'){turn+=(e.key==='ArrowLeft'?1:-1)*.18;invalidate();}
-      else zoomBy(e.key==='-'?.86:1.16);
+      const delta=ORBIT_KEYS.get(e.key);
+      if(delta){e.preventDefault();rotate(...delta);}
+      else if(['+','=','-'].includes(e.key)){e.preventDefault();zoomBy(e.key==='-'?.86:1.16);}
     });
   }
   function status(state,items){
@@ -284,7 +293,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   function show(name){
     if(disposed)return;
     page=name;poseFrame=null;delete root.dataset.characterPortrait;relabel();
-    if(!dialog.open){turn=0;zoom=1;dialog.showModal();root.dataset.characterMenu='';onPause();}
+    if(!dialog.open){orbit.alpha=0;orbit.beta=PORTRAIT_PITCH;zoom=1;dialog.showModal();root.dataset.characterMenu='';onPause();}
     const state=read();
     gold.textContent=state.gold.toLocaleString(lang())+' G';dialog.dataset.page=name;
     for(let i=0;i<tabs.length;i++)tabButtons[i].setAttribute('aria-pressed',String(tabs[i]===name));

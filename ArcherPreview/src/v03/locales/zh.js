@@ -1,6 +1,15 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'hud.tip.bag':'打开背包，查看装备和物品（I）。',
+  'hud.tip.journal':'打开手记，查看任务进度。',
+  'hud.tip.summon':'打开怪物召唤面板。',
+  'hud.tip.fullscreen':'进入全屏模式。',
+  'hud.tip.exitFullscreen':'退出全屏模式。',
+  'hud.tip.settings':'打开游戏设置。',
+  'hud.tip.fps':'打开性能诊断。内存数值为当前和峰值纹理占用量。',
+  'hud.tip.help':'查看操作说明。',
+  'pickup.received':'获得了{item}。',
   'char.progressLevel':'等级','char.progressXp':'经验值','char.gearBroken':'已损坏','char.repairAtSmith':'已损坏 · 可前往村里的铁匠处修理。',
   'char.skill.weaponCare':'武器保养',
   'char.skill.guardTraining':'盾牌训练',

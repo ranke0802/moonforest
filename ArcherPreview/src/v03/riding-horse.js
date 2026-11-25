@@ -56,7 +56,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   // A URL-only comparison: no horse load, listeners or reads/writes to the player's save.
   if(!enabled){
     const noop=()=>{};
-    return {offer:()=>false,reload:noop,leave:noop,updateAvailability:noop,afterMove:noop,active:false,
+    return {offer:()=>false,reload:noop,leave:noop,beginTravel:noop,finishTravel:noop,updateAvailability:noop,afterMove:noop,active:false,
       inspect:()=>({state:'disabled',mounts:0,gait:null}),dispose:noop};
   }
   const doc = root.ownerDocument;
@@ -67,6 +67,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   let labels = ridingLabels(doc), riderContact = null;
   let seatedBones=[],updateReins=null;
   let checkedMap=null, nextOfferCheck=0, mounts=0;
+  let travellingTo=null, parked=false;
   let gallopRemaining=0, gallopStrength=0, trail=null;
   function stopGallop() {
     gallopRemaining=0;
@@ -74,7 +75,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     trail?.update(0,0);
   }
   function startGallop() {
-    if (!active || !available || !ridingAllowed()) return false;
+    if (!active || travellingTo || !available || !ridingAllowed()) return false;
     if (!gallopRemaining) gallopRemaining=GALLOP_SECONDS;
     return true;
   }
@@ -96,10 +97,10 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   const display = () => {
     labels = ridingLabels(doc);
-    controls.show(active ? 'mounted' : horse ? 'loading' : 'on-foot', owned && available, labels);
+    controls.show(travellingTo ? 'on-foot' : active ? 'mounted' : horse ? 'loading' : 'on-foot', owned && available && !travellingTo, labels);
   };
   function leave(keepPrograms=true) {
-    ++generation;
+    ++generation;travellingTo=null;parked=false;
     if(keepPrograms&&active&&saddle)keepRenderedMountPrograms(saddle,horse.root);
     stopGallop();
     trail?.dispose();trail=null;
@@ -127,22 +128,29 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     return true;
   }
   async function toggle() {
+    if (travellingTo) return;
     if (horse) { const wasMounted=active; leave(); if(wasMounted)tell(labels.dismounted); return; }
+    return mount(false);
+  }
+  async function mount(onArrival,findLanding) {
     const actor = player();
-    if (!owned || !available || !actor || !ridingAllowed()) return;
+    if (!owned || !actor || (!onArrival&&(!available||!ridingAllowed()))) return;
     const token = ++generation;
     mountMap = world.mapId;
-    const instance = makeHorse({scene:world.scene,shadows:world.shadows,wagon:actor.position,heightAt:(x,z)=>world.terrain.heightAt(x,z),mounted:true});
-    horse = instance; display();
+    let timer;
     try {
-      const model = await instance.ready;
+      const instance = makeHorse({scene:world.scene,shadows:world.shadows,wagon:actor.position,heightAt:(x,z)=>world.terrain.heightAt(x,z),mounted:true});
+      horse=instance;display();
+      // If a cave return cannot load the horse, release the travel curtain on foot.
+      const model=onArrival?await Promise.race([instance.ready,new Promise(resolve=>{timer=setTimeout(()=>resolve(null),4000);})]):await instance.ready;
       if (token !== generation) return;
-      if (!model || actor !== player() || world.mapId !== mountMap || !ridingAllowed()) { leave(); return; }
+      if(!model){leave();tell(ridingLabels(doc).loadError);return;}
+      if(actor!==player()||world.mapId!==mountMap||!ridingAllowed(onArrival)||(onArrival&&!placeAtArrival(actor,findLanding))){leave();return;}
       rider = actor; lift = actor.metadata?.saddleOffset;
       if (!lift) { leave(); return; }
       rig = pose(actor, REINS, {reuseHierarchy:true});
       if (!rig.ready || !rig.hips) { leave(); tell(ridingLabels(doc).poseError); return; }
-      active = true;
+      travellingTo=null;parked=false;available=true;active=true;
       riderContact=createRiderContact(actor);
       // The ground gait twists the pelvis and ankles differently on each
       // stride. The horse carries the pelvis; the rider balances with the torso.
@@ -166,11 +174,46 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       // Apply the seated pose after that blend, before the skeleton is drawn.
       if(world.scene)poseObserver=world.scene.onBeforeRenderObservable.add(drawMountedPose);
       ++mounts;
-      display();tell(labels.mounted);
+      display();if(!onArrival)tell(labels.mounted);
+      return true;
     } catch { if (token === generation) { leave(); tell(ridingLabels(doc).loadError); } }
+    finally{if(timer!==undefined)clearTimeout(timer);}
+  }
+  // Map changes retain the scene and player. Hide the existing outdoor mount
+  // until the destination has walkable terrain; the cave keeps only the intent.
+  function beginTravel(destination) {
+    if(travellingTo===destination)return; // retry of the same covered transition
+    if(!(active||parked)||(!OUTDOORS.has(destination)&&destination!=='witch-cave')){leave();return;}
+    if(destination==='witch-cave'){
+      leave();parked=true;
+    }else if(active){
+      stopGallop();horse.root?.setEnabled(false);
+    }
+    available=false;travellingTo=destination;display();
+  }
+  function placeAtArrival(actor,findLanding){
+    let landing;
+    try{landing=findLanding(actor.position);}catch{/* No horse-sized space at the arrival. */}
+    if(!landing||![landing.x,landing.y,landing.z].every(Number.isFinite))return false;
+    Object.assign(actor.position,landing);
+    return true;
+  }
+  async function finishTravel(findLanding) {
+    if(!travellingTo)return false;
+    if(world.mapId!==travellingTo||!owned){leave();return false;}
+    if(travellingTo==='witch-cave'){
+      travellingTo=null;tell(ridingLabels(doc).parked);return false;
+    }
+    const actor=player();
+    if(!actor||(active&&actor!==rider)||!ridingAllowed(true)){leave();return false;}
+    if(!active)return mount(true,findLanding);
+    if(!placeAtArrival(actor,findLanding)){leave();return false;}
+    mountMap=travellingTo;travellingTo=null;parked=false;available=true;
+    afterMove({state:'idle'},0);horse.root?.setEnabled(true);display();
+    return true;
   }
   function updateAvailability(now) {
-    if (!owned) return;
+    if (!owned || travellingTo) return;
     now??=performance.now();
     if (horse && world.mapId !== mountMap) leave();
     // On foot only the button depends on this check, which scans all enemies.
@@ -185,7 +228,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     else if (labels !== ridingLabels(doc)) display();
   }
   function afterMove(result, speed, dt=0) {
-    if (!active) return;
+    if (!active || travellingTo) return;
     const state = result.state ?? 'idle';
     if (player() !== rider || !available || (state !== 'idle' && state !== 'walk' && state !== 'run')) { leave(); return; }
     const yaw = rider.rotation.y - forwardYaw();
@@ -234,6 +277,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     updateReins?.();
   }
   function drawMountedPose() {
+    if(travellingTo)return;
     if(!diagnostics?.collecting){fitSaddle();return;}
     const start=diagnostics.mark();
     try{fitSaddle();}finally{diagnostics.measure('ridingPoseMs',start);}
@@ -244,8 +288,8 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   doc.addEventListener('keydown',hotkey);
   reload();
-  return { offer, reload, leave, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, get active(){return active;},
-    inspect:()=>({state:active?'mounted':horse?'loading':'on-foot',mounts,gait:clip||null,...(gallopRemaining>0?{galloping:true}:{})}),
+  return { offer, reload, leave, beginTravel, finishTravel, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, get active(){return active&&!travellingTo;},
+    inspect:()=>({state:travellingTo?'travelling':active?'mounted':horse?'loading':'on-foot',mounts,gait:clip||null,...(gallopRemaining>0?{galloping:true}:{})}),
     dispose(){leave(false);doc.removeEventListener('keydown',hotkey);controls.dispose();}
   };
 }

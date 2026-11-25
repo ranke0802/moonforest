@@ -50,8 +50,9 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
  const onVisibility=()=>{if(root.ownerDocument.hidden)flush();};
  win.addEventListener('pagehide',flush);root.ownerDocument.addEventListener('visibilitychange',onVisibility);
  function reset(keepOld){generation++;shop?.close();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
- function getTreasure(){return treasure??=createTownTreasure({root,world,economy,player,canInteract,notify,sound});}
+ function getTreasure(){return treasure??=createTownTreasure({root,world,economy,player,canInteract,sound});}
  return {economy,bag,canDrink,apply,
+  collectGold(amount){getTreasure().collectGold(amount);},
   get quick(){return items().quick;},get quickName(){return itemName(items().quick);},get remaining(){return items().bag[items().quick]??0;},
   get open(){return !!shop?.open;},get armorDefense(){return economy.gear(items().equipped.armor)?.defense??0;},
   get equippedFinishes(){const e=items().equipped;return {sword:TOWN_ITEMS[e.sword].finish,shield:TOWN_ITEMS[e.shield].finish};},

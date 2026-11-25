@@ -1,6 +1,15 @@
 // English. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'hud.tip.bag':'Open your bag to view gear and items (I).',
+  'hud.tip.journal':'Open the journal to check quest progress.',
+  'hud.tip.summon':'Open the monster summon panel.',
+  'hud.tip.fullscreen':'Enter fullscreen.',
+  'hud.tip.exitFullscreen':'Exit fullscreen.',
+  'hud.tip.settings':'Open game settings.',
+  'hud.tip.fps':'Open performance diagnostics. The memory figures show current and peak texture usage.',
+  'hud.tip.help':'View the game controls.',
+  'pickup.received':'Acquired {item}.',
   'char.progressLevel':'Level','char.progressXp':'Experience','char.gearBroken':'Broken','char.repairAtSmith':'Broken · Repair at the village smith.',
   'char.skill.weaponCare':'Weapon care',
   'char.skill.guardTraining':'Shield training',

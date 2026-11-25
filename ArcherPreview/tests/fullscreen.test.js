@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { setupFullscreen } from '../src/fullscreen.js';
+import { fullscreenOwnerDocument,setupFullscreen } from '../src/fullscreen.js';
 class Button extends EventTarget {
  constructor(){super();this.textContent='전체화면';this.attributes={};}
  contains(target){return target===this;}
@@ -59,4 +59,24 @@ test('unsupported iPhone browser explains how to open the home-screen app',async
  const {button,reports}=fixture(t,{supported:false,userAgent:'Mozilla/5.0 (iPhone; CPU iPhone OS) AppleWebKit Safari'});
  assert.equal(button.hidden,false);button.dispatchEvent(new Event('click'));await flush();
  assert.match(reports[0],/Safari.*공유.*홈 화면에 추가/);
+});
+
+test('a framed HUD follows the shell fullscreen state and releases shell listeners on disposal',async t=>{
+ const {doc,button,dispose}=fixture(t);dispose();
+ const shell=new EventTarget(),root={};shell.documentElement=root;shell.fullscreenElement=root;
+ doc.defaultView={parent:{__moonforestShell:{},document:shell}};
+ assert.equal(fullscreenOwnerDocument(doc),shell);
+ const seen=[];
+ root.requestFullscreen=async()=>{shell.fullscreenElement=root;shell.dispatchEvent(new Event('fullscreenchange'));};
+ shell.exitFullscreen=async()=>{shell.fullscreenElement=null;shell.dispatchEvent(new Event('fullscreenchange'));};
+ const stop=setupFullscreen(button,()=>{},{
+  owner:fullscreenOwnerDocument(doc),labels:active=>({name:'Fullscreen',title:active?'Exit fullscreen.':'Enter fullscreen.'}),
+  onSync:b=>seen.push(b.attributes['aria-pressed']),
+ });
+ assert.equal(button.title,'Exit fullscreen.');assert.equal(button.attributes['aria-label'],'Fullscreen');assert.equal(seen.at(-1),'true');
+ button.dispatchEvent(new Event('click'));await flush();
+ assert.equal(shell.fullscreenElement,null);assert.equal(button.title,'Enter fullscreen.');assert.equal(seen.at(-1),'false');
+ button.dispatchEvent(new Event('click'));await flush();assert.equal(shell.fullscreenElement,root);assert.equal(doc.fullscreenElement,null);
+ const count=seen.length;stop();stop();shell.dispatchEvent(new Event('fullscreenchange'));assert.equal(seen.length,count);
+ doc.defaultView={get parent(){throw Error('cross-origin');}};assert.equal(fullscreenOwnerDocument(doc),doc);
 });

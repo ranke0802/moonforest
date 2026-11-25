@@ -6,17 +6,17 @@ const strings = {
   vi: ['Lên ngựa', 'Xuống ngựa', 'Hủy gọi ngựa', 'Bạn đã nhận được ngựa. Chạm biểu tượng ngựa bên cạnh túi đồ hoặc nhấn H để lên ngựa.', 'Ngựa đã sẵn sàng. Chạm biểu tượng ngựa bên cạnh túi đồ hoặc nhấn H để lên ngựa.', 'Không thể lưu ngựa.', 'Không thể chuẩn bị tư thế cưỡi ngựa. Vui lòng thử lại.', 'Không thể tải ngựa. Vui lòng thử lại.']
 };
 const feedback={
-  ko:['말에 올랐습니다.','말에서 내렸습니다.','쾌속 질주'],
-  en:['Mounted.','Dismounted.','Gallop'],
-  ja:['馬に乗りました。','馬から降りました。','全速疾走'],
-  zh:['已上马。','已下马。','全速疾驰'],
-  vi:['Đã lên ngựa.','Đã xuống ngựa.','Phi nước đại']
+  ko:['말에 올랐습니다.','말에서 내렸습니다.','쾌속 질주','말은 동굴 밖에서 기다립니다. 밖으로 나가면 다시 탑니다.'],
+  en:['Mounted.','Dismounted.','Gallop','Your horse will wait outside the cave. You’ll mount again when you leave.'],
+  ja:['馬に乗りました。','馬から降りました。','全速疾走','馬は洞窟の外で待っています。外に出るとまた騎乗します。'],
+  zh:['已上马。','已下马。','全速疾驰','坐骑会在洞外等候，离开洞穴后将重新骑乘。'],
+  vi:['Đã lên ngựa.','Đã xuống ngựa.','Phi nước đại','Ngựa sẽ đợi ngoài hang. Khi ra ngoài, bạn sẽ lại cưỡi ngựa.']
 };
 const labels={};
 for(const [lang,values] of Object.entries(strings)){
  const [mount,dismount,cancel,acquired,ready,saveError,poseError,loadError]=values;
- const [mounted,dismounted,gallop]=feedback[lang];
- labels[lang]={mount,dismount,cancel,acquired,ready,saveError,poseError,loadError,mounted,dismounted,gallop};
+ const [mounted,dismounted,gallop,parked]=feedback[lang];
+ labels[lang]={mount,dismount,cancel,acquired,ready,saveError,poseError,loadError,mounted,dismounted,gallop,parked};
 }
 export function ridingLabels(doc) {
   const lang = doc.documentElement?.dataset?.lang ?? doc.documentElement?.lang ?? 'ko';

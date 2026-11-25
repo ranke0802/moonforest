@@ -586,11 +586,18 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // E advances every line and closes the last one without reopening the talk.
  // Three lines; then the driver goes to the wagon and the warrior pushes it
  // up with him (E three times at the roof side); his thanks follow.
- for(let i=0;i<3;i++){key('KeyE');await settle(2);}await settle();
+ const next=hud('.v03-dialogue-next');
+ assert.equal(next.querySelector('kbd').textContent,'E');
+ assert.equal(next.firstElementChild.textContent,'다음');
+ for(let i=0;i<3;i++){
+  if(i===2)assert.equal(next.firstElementChild.textContent,'닫기');
+  key('KeyE');await settle(2);
+ }await settle();
  assert.equal(hud('.v03-dialogue').hidden,true);assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기','the step completes when the wagon stands');
  const spot=h.shell.inspect().story.lift;assert.ok(spot,'the wagon waits for a push');
  key('KeyE');await settle();assert.equal(h.shell.inspect().story.lift.count,0,'pushing needs the warrior at the wagon');
  h.player.position={x:spot.x,z:spot.z};h.shell.update(.016);assert.match(hud('.v03-prompt').getAttribute('aria-label'),/마부를 기다리는 중/,'until the driver calls');
+ assert.equal(hud('.v03-bubble-body').textContent,'자, 내가 구령을 넣을 테니 같이 밀자꾸나!');
  // The driver calls each heave first ("하나!"); E before his call does nothing.
  key('KeyE');await settle();assert.equal(h.shell.inspect().story.lift.count,0,'no push before the driver calls');
  for(let push=1;push<=3;push++){for(let i=0;i<130;i++)h.shell.update(.016);assert.match(hud('.v03-bubble-body').textContent,[/하나/,/둘/,/셋/][push-1],'his count is a bubble over his head');assert.equal(hud('.v03-caption').hidden,true);assert.match(hud('.v03-prompt').getAttribute('aria-label'),new RegExp(`밀기 \\(${push-1}/3\\)`));key('KeyE');await settle();for(let i=0;i<40;i++)h.shell.update(.016);await settle();}

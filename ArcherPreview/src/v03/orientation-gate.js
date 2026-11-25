@@ -42,7 +42,7 @@ export function createOrientationGate({doc,mount=doc.body}){
  // A reload leaves fullscreen and drops the orientation lock. On Android the
  // first touch afterwards (any touch, in landscape too) takes both back, so a
  // phone with auto-rotate off does not fall back to portrait mid-game.
- const relock=()=>{if(!enabled||!touch||ios||isStandalone(view)||isFullscreen(doc))return;void goLandscape(doc);};
+ const relock=event=>{if(!enabled||!touch||ios||isStandalone(view)||isFullscreen(doc)||event.target?.closest?.('#fullscreen-button,#diagnostic-fullscreen'))return;void goLandscape(doc);};
  doc.addEventListener('pointerup',relock,true);
  function label(){
   title.textContent=t('rotate.title');

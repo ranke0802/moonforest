@@ -121,6 +121,13 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
   assert.ok(shadows.getShadowMap().renderList.includes(skin));assert.ok(skin.material.albedoTexture);
   for(const node of [...scene.meshes,...scene.transformNodes])node.onAfterWorldMatrixUpdateObservable.add(()=>{if(collectingPose)compositions++;});
   scene.render();assert.equal(measuredFrames,0);
+  const mountedScene=inventory(),horse=scene.getTransformNodeByName('v03-wagon-horse');
+  for(const area of ['great-plains','monster-forest','village']){
+    stable.beginTravel(area);assert.ok(!horse.isEnabled()&&!stable.active);world.mapId=area;stable.updateAvailability();
+    assert.ok(await stable.finishTravel(p=>({x:p.x,y:heightAt(p.x,p.z),z:p.z})));
+    scene.render();assert.ok(horse.isEnabled()&&stable.active);assert.equal(scene.getMeshByName('wagon_horse'),skin);
+    assert.deepEqual(inventory(),mountedScene);
+  }
   diagnostics.collecting=true;
   const saddle=scene.getMeshByName('v03-riding-saddle');assert.ok(saddle);assert.equal(scene.getMeshByName('harness').isEnabled(),false);
   const reins=scene.getMeshByName('v03-riding-reins');assert.ok(reins);

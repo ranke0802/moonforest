@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {GoldLoot} from '../src/gold-loot.js';
+import {GoldLoot,GOLD_LEDGER_KEY} from '../src/gold-loot.js';
 import {EnemyDeath} from '../src/enemy-death.js';
 
 test('deaths fade for exactly ten seconds and award once until reused',()=>{
@@ -36,4 +36,39 @@ test('unavailable or invalid saved gold does not break gameplay',()=>{
 test('new drops choose a reachable landing point and fall back safely when blocked',()=>{
  const loot=new GoldLoot(),a=loot.drop('bear',{x:2,y:1,z:3},{canLand:()=>true,heightAt:()=>2});assert.equal(Math.hypot(a.position.x-2,a.position.z-3).toFixed(2),'0.70');assert.equal(a.position.y,2.04);assert.deepEqual(a.origin,{x:2,y:1.04,z:3});
  const b=loot.drop('goblin',{x:9,y:0,z:10},{canLand:()=>false});assert.deepEqual(b.position,b.origin);assert.equal(loot.update(.6,{x:b.position.x,z:b.position.z}).length,1);assert.equal(loot.balance,10);
+});
+
+test('a failed pickup leaves the ground pile and retries once while standing on it',()=>{
+ const rows=new Map(),notices=[],balances=[],origin={x:0,z:0};
+ let writable=true,writes=0;
+ const storage={getItem:k=>rows.get(k)??null,setItem(k,v){
+  if(k===GOLD_LEDGER_KEY){writes++;if(!writable)throw Error('quota');}
+  rows.set(k,v);
+ }};
+ const gold=new GoldLoot({storage,onPickup:n=>notices.push(n),onBalance:n=>balances.push(n)});
+ gold.creditCumulative('base',7);
+ const pile=gold.drop('goblin',origin);
+ writable=false;
+ assert.deepEqual(gold.update(1,origin),[]);assert.equal(gold.balance,7);assert.deepEqual(gold.drops,[pile]);
+ for(let i=0;i<600;i++)gold.update(1/60,origin);
+ assert.equal(writes,3,'initial credit, failed pickup, one automatic retry');
+ assert.deepEqual(notices,[]);assert.deepEqual(balances,[0,7]);assert.equal(new GoldLoot({storage}).balance,7);
+ writable=true;gold.update(0,{x:9,z:0});assert.deepEqual(gold.update(0,origin),[pile]);
+ assert.deepEqual(gold.update(1,origin),[]);assert.equal(new GoldLoot({storage}).balance,17);
+ assert.deepEqual(notices,[10]);assert.deepEqual(balances,[0,7,17]);
+});
+
+test('a retry verifies its written pickup once, while another tab’s ledger remains authoritative',()=>{
+ const rows=new Map(),notices=[],origin={x:0,z:0};let readbackFails=false,failNextRead=false,writes=0;
+ const storage={getItem(k){if(k===GOLD_LEDGER_KEY&&failNextRead){failNextRead=false;throw Error('temporarily unreadable');}return rows.get(k)??null;},
+  setItem(k,v){rows.set(k,v);if(k===GOLD_LEDGER_KEY){writes++;failNextRead=readbackFails;}}};
+ const gold=new GoldLoot({storage,onPickup:n=>notices.push(n)});
+ const pile=gold.drop('goblin',origin);readbackFails=true;
+ assert.deepEqual(gold.update(1,origin),[]);assert.equal(gold.balance,0);assert.deepEqual(notices,[]);
+ readbackFails=false;assert.deepEqual(gold.update(2,origin),[pile]);
+ assert.equal(writes,1);assert.deepEqual(notices,[10]);assert.equal(new GoldLoot({storage}).balance,10);
+ const other=new GoldLoot({storage});other.creditCumulative('quest',25);
+ const raw=rows.get(GOLD_LEDGER_KEY);gold.drop('bear',origin);
+ assert.deepEqual(gold.update(1,origin),[]);assert.equal(gold.saveState,'conflict');assert.equal(gold.drops.length,1);
+ assert.deepEqual(notices,[10]);assert.equal(rows.get(GOLD_LEDGER_KEY),raw);assert.equal(writes,2);
 });
