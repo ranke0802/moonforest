@@ -36,6 +36,7 @@ jobs:
           ArcherPreview/tests/actor-encounter-adapter.test.js
           ArcherPreview/tests/resource-downloads.test.js
           ArcherPreview/tests/v03-talk-stage-trail.test.js
+          ArcherPreview/tests/shader-birth-watch.test.js
           ArcherPreview/tests/v03-gallery.test.js
           ArcherPreview/tests/v03-quest-settlement.test.js
           ArcherPreview/tests/v03-first-person-view.test.js

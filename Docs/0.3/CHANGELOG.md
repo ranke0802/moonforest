@@ -1,5 +1,11 @@
 # 0.3 변경 기록
 
+## 2026-11-25 · 성능 기록이 멈춘 부분의 이름을 남긴다 (S23 17:04 기록 판독)
+
+- S23 기록에서 세계 갱신 226ms·98ms, 그리기 제출 64~143ms 프레임이 있었지만 어느 부분인지, 새 셰이더가 만들어졌는지 기록에 없었다. 원인은 아직 미확정이다.
+- 기록 항목 추가(진단을 켜고 수집 중일 때만): `worldCameraMs`·`worldRangeMs`(몬스터 표시 범위·동굴 안개)·`worldOcclusionMs`(나무 가림)·`worldVisibilityMs`(마을 가시성·풀밭), 처치 보상 처리 `defeatMs`, 프레임별 새 셰이더 프로그램 수 `newShaders`와 최근 12개의 이름(`context.newShaders`). 그 프레임에서 가장 느린 몬스터에는 길찾기 시간·새로 시작한 애니메이션 수·화면 밖 휴면에서 깨어났는지·원거리 여부·모드 전환을 함께 남긴다(`slowFoe.navMs/animatablesAdded/woke/far/modeFrom/mode`).
+- 비용: 프레임당 시계 읽기 5회와 프로그램 표 개수 세기(할당 없음). 수집하지 않을 때는 표를 읽지 않는다. 수명: `shader-birth-watch.js`는 페이지 단위이고 키 문자열만 보관한다(Effect 객체를 잡지 않음, 상한 4,096).
+
 ## 2026-11-25 · 말 부르기와 승하차
 
 - [실제 승차 시범의 두 번째 영상](https://www.embryfamilyhorsesandtack.com/post/training-day-fred-the-roany-walker) 39~41초를 참고해 승차 후반 오른다리 궤적을 조정했다. 부츠가 안장 뒤를 넓게 돌아간 뒤 말 오른쪽으로 내려온다.

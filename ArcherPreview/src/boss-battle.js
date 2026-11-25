@@ -468,9 +468,11 @@ export class BossBattle {
       }
       boss._farDt=0;boss._farSkipped=false;
       const began=profile?clock():0,stateBefore=profile?boss.brain?.state:null;
+      // What the slowest foe of the frame did (recorder only): path work, animations started, a wake from the off-screen pause.
+      const navBefore=profile?navigationWork.gridMs+navigationWork.pathMs:0,animatablesBefore=profile?this.world.scene?._activeAnimatables?.length??0:0,wokeBefore=profile?!!boss._ambientWake:false,modeBefore=profile?boss.brain?.mode??'':'';
       boss._battleUpdateToken=updateToken;boss._ambientLogicalOnly=!!(managed&&boss._ambientSleeping);
       try{boss.update(step, player);}finally{boss._battleUpdateToken=null;boss._ambientLogicalOnly=false;boss._ambientWake=false;}
-      if(profile){const spent=clock()-began;if(far||boss._ambientSleeping){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxFrom=stateBefore??'';profile.maxState=boss.brain?.state??'';}}
+      if(profile){const spent=clock()-began;if(far||boss._ambientSleeping){profile.farMs+=spent;profile.far++;}else{profile.nearMs+=spent;profile.near++;}if(boss.brain?.mode==='attack'||boss.brain?.mode==='chase'||boss.engaged)profile.engaged++;if(spent>profile.maxMs){profile.maxMs=spent;profile.maxKind=boss.summonKind??boss.kind??'';profile.maxFrom=stateBefore??'';profile.maxState=boss.brain?.state??'';profile.maxNavMs=navigationWork.gridMs+navigationWork.pathMs-navBefore;profile.maxAnimatables=(this.world.scene?._activeAnimatables?.length??0)-animatablesBefore;profile.maxWoke=wokeBefore;profile.maxFar=!!far;profile.maxModeFrom=modeBefore;profile.maxMode=boss.brain?.mode??'';}}
     }
     if(this.world.prefetchResources&&this.encounters.some(b=>b.kind==='elena'&&b.phase===1&&b.engaged))this.preloadMourning({modelsOnly:this.encounters.some(b=>b.kind==='elena'&&b.manualSummon)});
     const running=this.frameEncounters;running.length=0;

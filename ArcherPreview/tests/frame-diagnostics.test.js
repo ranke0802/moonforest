@@ -214,3 +214,21 @@ test('real FrameLoop keeps 100ms simulation cap while diagnostics see a 400ms st
  loop.setPaused(false);tick(60033);tick(60066);
  await f.nodes['copy-frame-diagnostics'].listeners.click();assert.deepEqual(report.recentDelays.map(e=>e.frameMs),[400]);assert.equal(report.summary.slowFrames,0);
 });
+
+// 2026-11-25 S23: a 226 ms world update and 64-143 ms draw submissions had no named part.
+test('the world update parts, defeat time and the new shader count are recorded per frame',()=>{
+ const f=ui({stored:'1'});f.setTime(0);f.diagnostic.beginFrame(true,60);f.setTime(4);f.diagnostic.endFrame();
+ f.setTime(100);f.diagnostic.beginFrame(true,60);
+ const world=f.diagnostic.mark();f.setTime(101);f.diagnostic.measure('worldCameraMs',world);
+ const range=f.diagnostic.mark();f.setTime(108);f.diagnostic.measure('worldRangeMs',range);
+ const occlusion=f.diagnostic.mark();f.setTime(110);f.diagnostic.measure('worldOcclusionMs',occlusion);
+ const visibility=f.diagnostic.mark();f.setTime(113);f.diagnostic.measure('worldVisibilityMs',visibility);
+ f.diagnostic.measure('worldUpdateMs',world);
+ const defeat=f.diagnostic.mark();f.setTime(119);f.diagnostic.measure('defeatMs',defeat);
+ f.diagnostic.set('newShaders',3);
+ f.setTime(170);f.diagnostic.endFrame();
+ let e=f.diagnostic.snapshot().recentDelays.at(-1);
+ assert.deepEqual([e.worldCameraMs,e.worldRangeMs,e.worldOcclusionMs,e.worldVisibilityMs,e.worldUpdateMs,e.defeatMs,e.newShaders],[1,7,2,3,13,6,3]);
+ f.setTime(200);f.diagnostic.beginFrame(true,60);f.setTime(202);f.diagnostic.endFrame();
+ e=f.diagnostic.snapshot().recentDelays.at(-1);assert.deepEqual([e.worldRangeMs,e.defeatMs,e.newShaders],[0,0,0]);
+});

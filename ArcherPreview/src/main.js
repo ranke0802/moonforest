@@ -117,6 +117,7 @@ import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
 import {createCombatTrail} from './v03/combat-trail.js';
+import {createShaderBirthWatch} from './shader-birth-watch.js';
 import {createFirstPersonView} from './v03/first-person-view.js';
 import {createFrameDiagnostics,mapStreamSnapshot} from './frame-diagnostics.js';
 import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
@@ -459,8 +460,10 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()
     cameraZoom:cameraZoom?.snapshot()??null,
     viewportResize:world?.viewportResize?.snapshot?.()??null,cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
-    character,slowFoe:boss?.profile?.maxMs>=8?{kind:boss.profile.maxKind,from:boss.profile.maxFrom,state:boss.profile.maxState,ms:Math.round(boss.profile.maxMs)}:null,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
+    newShaders:shaderBirths.recent(),
+    character,slowFoe:boss?.profile?.maxMs>=8?{kind:boss.profile.maxKind,from:boss.profile.maxFrom,state:boss.profile.maxState,ms:Math.round(boss.profile.maxMs),navMs:Math.round(boss.profile.maxNavMs??0),animatablesAdded:boss.profile.maxAnimatables??0,woke:boss.profile.maxWoke===true,far:boss.profile.maxFar===true,modeFrom:boss.profile.maxModeFrom??'',mode:boss.profile.maxMode??''}:null,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
+const shaderBirths=createShaderBirthWatch(()=>engine);
 loadingView.setDiagnostics(()=>frameDiagnostics.snapshot());
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';
 function readAttackSpeed(){
@@ -1166,14 +1169,23 @@ function render(dt) {
     const collected=goldLoot.update(dt,actor.position,isV2()&&!controller.dead&&boss.playerAlive&&!controller.captured,(a,b)=>!world.navigation||world.navigation.segmentClear(a,b,0,true));
     if(collected.length){const amount=collected.reduce((sum,drop)=>sum+drop.amount,0);damageNumbers.show(actor.position.add(new Vector3(0,playerDimensions(actor).goldHeight,0)),`+${amount} G`,false,'gold');audio.play('gold_pickup');}
     goldLootView.sync(goldLoot.drops);
+    // worldUpdateMs stays the whole block; the four parts name where a long one went
+    // (S23 2026-11-25: 226 ms and 98 ms frames here, part unknown). Marks are null when not recording.
     const worldUpdateStart=frameDiagnostics.mark();syncCameraFocus(dt);
     world.caveCamera?.beginFrame();
     if(isVillage()){world.camera.getViewMatrix();world.camera.getProjectionMatrix();}
     updatePlainsBoundaryAtmosphere(world,actor.position);world.lighting.follow(actor.position);
+    frameDiagnostics.measure('worldCameraMs',worldUpdateStart);
+    const worldRangeStart=frameDiagnostics.mark();
     for(const enemy of boss.encounters)enemy.updateRenderRange(world.camera.globalPosition);
     syncCaveFog();
+    frameDiagnostics.measure('worldRangeMs',worldRangeStart);
+    const worldOcclusionStart=frameDiagnostics.mark();
     world.treeOcclusion?.update(world.camera.globalPosition, actor.position, dt,playerDimensions(actor));
+    frameDiagnostics.measure('worldOcclusionMs',worldOcclusionStart);
+    const worldVisibilityStart=frameDiagnostics.mark();
     world.villageVisibility?.update(world.camera.globalPosition, actor.position, dt);world.meadow?.update(world.camera.globalPosition,dt);
+    frameDiagnostics.measure('worldVisibilityMs',worldVisibilityStart);
     frameDiagnostics.measure('worldUpdateMs',worldUpdateStart);
     const hudUpdateStart=frameDiagnostics.mark();
     text('#state-label', result.captured?boss.grab.label:result.groggy?'그로기 · 행동 불가':result.staggered?'피격 · 경직':result.guarding?'방어 태세':result.chargeProgress>0?'심판 준비':isV2() ? V2_LABELS[result.state] : isWarrior() ? { idle:'대기', run:'달리기', attack:'찌르기·베기' }[result.state] : STATE_LABELS[result.state]);
@@ -1345,7 +1357,7 @@ try {
     if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
     applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
     return reacted;
-  },{onDefeat:event=>{try{townServices?.defeat(event);world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
+  },{onDefeat:event=>{const defeatStart=frameDiagnostics.mark();try{townServices?.defeat(event);world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}frameDiagnostics.measure('defeatMs',defeatStart);try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
   sceneDiagnostics.setEnabled(frameDiagnostics.enabled,world.scene);
   boss.setAttackSettings(bossPatternPanel.settings.value);
   if(world.gameplayV03)boss.combat.onBladeContact=actionId=>{if(world.v03?.playing)townServices?.weaponHit(actionId);};
@@ -1493,7 +1505,7 @@ try {
       loadDiagnostics.finish(frameFailure.message);
       frameLoop.failed=true;frameLoop.setPaused(true);input.reset();cancelAttackInput();audio.setSuspended(true);updateButtons();
       console.error('[Game frame]',error);loadingView.fail('게임 실행이 중단되었습니다','다시 불러오기를 눌러 주세요. '+frameFailure.message,{error,phase:'frame'});
-    }finally{world.caveCamera?.endFrame();frameDiagnostics.endFrame();}
+    }finally{world.caveCamera?.endFrame();if(frameDiagnostics.collecting)frameDiagnostics.set('newShaders',shaderBirths.frame());else shaderBirths.pause();frameDiagnostics.endFrame();}
   });
   const syncPlayback=()=>{
     if(mapDeparture?.departing||mapTransition?.busy)return;

@@ -240,3 +240,18 @@ test('a shared sword swing damages both bear and goblin, with independent hit de
  assert.deepEqual(battle.encounters.map(b=>b.hitCount),[1,1]);
  assert.deepEqual(battle.encounters.map(b=>b.brain.hp),[880,160]);
 });
+
+// 2026-11-25 S23: one gray wolf's update took 155 ms on Rise_From_Lie; the record named the state only.
+test('the recorder profile says what the slowest foe of the frame did',async t=>{
+ const {battle,player}=fixture(t);battle.world.navigation=new ArenaNavigation(FOREST_OBSTACLES);player.position.set(18,0,0);
+ await battle.summon(player,2);
+ battle.update(.1,player);assert.equal(battle.profile??null,null,'no profile, no bookkeeping');
+ const slow=battle.encounters[1],update=slow.update.bind(slow);
+ slow.update=(dt,target)=>{const until=performance.now()+12;while(performance.now()<until);return update(dt,target);};
+ battle.profile={};battle.update(.1,player);
+ const p=battle.profile;
+ assert.ok(p.maxMs>=12);assert.equal(p.maxKind,slow.summonKind??slow.kind);
+ assert.equal(typeof p.maxFrom,'string');assert.equal(typeof p.maxModeFrom,'string');assert.equal(typeof p.maxMode,'string');
+ assert.ok(Number.isFinite(p.maxNavMs)&&p.maxNavMs>=0);assert.ok(Number.isInteger(p.maxAnimatables));
+ assert.equal(p.maxWoke,false);assert.equal(p.maxFar,false);
+});
