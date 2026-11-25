@@ -483,7 +483,8 @@ export class BossEncounter {
     const key=kind==='evade'?`evade:${this.brain.serial}`:`block:${this.brain.serial}:${actionId}`;
     if(this.defenseFeedbackKey===key)return false;
     this.defenseFeedbackKey=key;this.lastHit=kind==='evade'?'보스 회피':'보스 BLOCK';
-    this.onDamage(this.nodes['mixamorig:Head'].getAbsolutePosition(),kind==='evade'?'Dodge':'BLOCK',false,kind);
+    const head=this.nodes['mixamorig:Head']??this.nodes.Head;
+    this.onDamage(head?.getAbsolutePosition()??this.damageNumberPosition(),kind==='evade'?'Dodge':'BLOCK',false,kind);
     this.onChange(this);
     return true;
   }

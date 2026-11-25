@@ -10,6 +10,8 @@ const aimYaws=[-1.04,-.78,-.52,-.26,0,.26,.52,.78,1.04];
 const swordLocal=[[-.002,.405,0],[-.002,-.951,0]],shieldLocal=[[-.66,0,.192],[.66,0,.192]];
 const body=/^(haunch|flank|ribcage|belly|mane|skull|muzzle|jaw|body|torso|pelvis|spine|chest|neck|head)/;
 const neck=/^(neck|mane)(\.|$)/;
+const shortGoblins=new Set(['goblin','goblin-warrior','goblin-archer','goblin-shaman']);
+export const isLowMeleeTarget=target=>!!target&&(!!target.regularWolfId||shortGoblins.has(target.kind));
 // Read the posed neck, rather than the animal's ground/root origin. Only the
 // selected upper-body branch is refreshed; no scene/mesh traversal is needed.
 export function meleeNeckPoint(target,out){
@@ -18,6 +20,14 @@ export function meleeNeckPoint(target,out){
  const capsule=target.hurtCapsules?.().find(part=>neck.test(part.name??''));
  if(!capsule)return null;
  const [a,b]=capsule.points;return out.set((a[0]+b[0])*.5,(a[1]+b[1])*.5,(a[2]+b[2])*.5);
+}
+// A low biped presents its posed chest; a quadruped presents the fitted neck.
+export function meleeApproachPoint(target,out){
+ if(shortGoblins.has(target?.kind)){
+  const chest=target.nodes?.Chest??target.nodes?.['mixamorig:Spine2'];
+  if(chest)return chest.getAbsolutePosition();
+ }
+ return meleeNeckPoint(target,out)??target?.actor?.position;
 }
 function neighbors(center,step,low,high){
  const a=clamp(center-step,low,high),b=clamp(center,low,high),c=clamp(center+step,low,high);
@@ -30,7 +40,7 @@ function rotate(point,pivot,axis,angle,out){
  out[2]=pivot.z+z*c+(axis.x*y-axis.y*x)*s+axis.z*d*(1-c);
 }
 
-// Adapt the real weapon pose to a short, fitted animal. Only arm rotations are
+// Adapt the real weapon pose to the selected animal or short biped. Only arm rotations are
 // added after native animation, then restored before the next sample. Damage
 // still requires the ordinary real 3D weapon sweep; no synthetic low hit volume.
 export class PlayerMeleeAim{
@@ -45,7 +55,7 @@ export class PlayerMeleeAim{
   // Reuse the identical cached visible-face hull used by the real contact
   // sweep. A centreline cannot select the low edge of a held shield.
   this.shieldSweep=new WolfV02ShieldSweep();this.shieldLines=[];
-  this.representativeShieldProfile=[];this.bodyCapsules=[];this.neckCapsules=[];this.neckFlags=[];
+  this.representativeShieldProfile=[];this.bodyCapsules=[];this.neckFlags=[];
   this.fitExtended=[];this.fitYawed=[];
   this.representativeShieldLines=[];this.elbowPivot=new Vector3();this.elbowAxis=new Vector3();this.upperDirection=new Vector3();this.lowerDirection=new Vector3();this.extended=[[0,0,0],[0,0,0]];
   this.axis=new Vector3();this.up=new Vector3(0,1,0);this.localAxis=new Vector3();this.localUp=new Vector3();this.pivot=new Vector3();this.point=new Vector3();this.inverseParent=Matrix.Identity();this.localDelta=Quaternion.Identity();this.yawDelta=Quaternion.Identity();this.combinedDelta=Quaternion.Identity();
@@ -54,7 +64,7 @@ export class PlayerMeleeAim{
  reset(){this.restore();this.action=null;this.target=this.candidate=null;this.pitch=this.yaw=this.extension=0;this.lastPitch=this.lastYaw=this.lastExtension=0;this.lastError=this.lastNeckError=null;this.resetFit();}
  resetFit(){this.fitReady=false;this.fitClock=0;this.lastWideTime=-Infinity;this.wideMissed=false;this.fitPitch=this.fitYaw=this.fitExtension=0;this.fullFitCount=this.localFitCount=0;}
  restore(){for(const arm of Object.values(this.arms))if(arm&&(arm.changed||arm.elbow?.changed)){if(arm.changed)arm.node.rotationQuaternion.copyFrom(arm.original);if(arm.elbow?.changed){arm.elbow.node.rotationQuaternion.copyFrom(arm.elbow.original);arm.elbow.changed=false;}arm.changed=false;for(const node of arm.branch){node.markAsDirty();node.computeWorldMatrix();}}}
- begin(result,player,target){
+ begin(result,player,target,chapterMelee=false){
   if(result.actionId===this.action)return;
   this.action=result.actionId;this.pitch=this.yaw=this.extension=0;
   this.resetFit();
@@ -62,7 +72,7 @@ export class PlayerMeleeAim{
   // judgment leap (and the light-combo step) closes from beyond 3 m, and an
   // aim decided only at the first frame left the descending blade at the
   // player's own chest height, above a standing fox.
-  this.candidate=target?.regularWolfId?target:null;this.target=null;this.acquire(player);
+  this.candidate=(target?.regularWolfId||chapterMelee&&isLowMeleeTarget(target))?target:null;this.target=null;this.acquire(player);
  }
  acquire(player){
   const target=this.candidate;if(this.target||!target?.active||!(target.brain?.hp>0))return;
@@ -81,8 +91,16 @@ export class PlayerMeleeAim{
   if(target.preparePlayerMeleePose)target.preparePlayerMeleePose(player,result);
   else (target.nodes?.head??target.nodes?.neck)?.computeWorldMatrix(true);
   const capsules=target.hurtCapsules?.();if(!capsules?.length)return;
-  this.bodyCapsules.length=this.neckCapsules.length=0;
-  for(const capsule of capsules)if(body.test(capsule.name??'')){this.neckFlags[this.bodyCapsules.length]=neck.test(capsule.name??'');this.bodyCapsules.push(capsule);if(neck.test(capsule.name??''))this.neckCapsules.push(capsule);}
+  this.bodyCapsules.length=0;
+  const biped=shortGoblins.has(target.kind);
+  for(let i=0;i<capsules.length;i++){
+   const capsule=capsules[i];
+   // Both goblin rigs expose the real hip-to-chest and chest-to-head capsules first.
+   // The legacy extra upright assistance capsule is never a weapon-pose target.
+   if(biped?i>1:!body.test(capsule.name??''))continue;
+   this.neckFlags[this.bodyCapsules.length]=biped?i===1:neck.test(capsule.name??'');
+   this.bodyCapsules.push(capsule);
+  }
   if(!this.bodyCapsules.length)return;
   this.fitClock+=Math.max(0,dt);
   const local=side==='Left'?shieldLocal:swordLocal;

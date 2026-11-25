@@ -1,4 +1,5 @@
-import {PlayerMeleeAim,meleeNeckPoint} from './player-melee-aim.js';
+import {strikeLungeStep} from './v03/strike-approach.js';
+import {PlayerMeleeAim,meleeNeckPoint,meleeApproachPoint} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
 import {validateStoryboard} from './storyboard-document.js';
 import './styles.css';
@@ -1077,8 +1078,11 @@ function render(dt) {
       if(strikeByInput){
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<Math.max(target.meleeAimDistance??4,world.v03?.aimReach??0)){const point=meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);}
-      meleeAim?.begin(result,actor,target);
+      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<Math.max(target.meleeAimDistance??4,world.v03?.aimReach??0)){
+        const point=versionRoute.edition&&!versionRoute.worldRevision?meleeApproachPoint(target,meleeTargetPoint):meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;
+        actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
+      }
+      meleeAim?.begin(result,actor,target,!!versionRoute.edition&&!versionRoute.worldRevision);
     }
     // 0.3: the guard raised without a direction turns to that foe too (once, as it goes up).
     if(isV2()&&world.v03?.aimTarget){
@@ -1090,24 +1094,12 @@ function render(dt) {
       guardFaced=guard;
     }
     // 0.3 light combo: the warrior steps into each swing (profile from the edition),
-    // eased over the opening of the clip, stopping short of the nearest foe.
+    // eased over the opening of the clip, stopping short of the locked foe.
     const lunge=world.v03?.lunge?.[result.state];
     if(isV2()&&lunge&&attacking&&result.actionId!=null&&!result.hitStopped){
-      // A lunge with reach (the judgment leap) closes to its striking distance
-      // from the foe it was aimed at, as the light combo tracks height: a fixed
-      // step left a standing fox short of (or behind) the descending blade.
-      if(lungeState.id!==result.actionId){lungeState.id=result.actionId;lungeState.done=0;const foe=lunge.reach?world.v03?.chainFoe??boss.nearestTarget(actor.position):null,ratio=playerDimensions(actor).ratio,gap=foe?.actor?Vector3.Distance(actor.position,foe.actor.position):Infinity;
-        lungeState.foe=gap<lunge.reach*ratio+(lunge.stop??1.3)?foe:null;lungeState.reach=lunge.reach?lunge.reach*ratio:0;
-        lungeState.span=lungeState.foe?Math.max(0,gap-(lunge.stop??1.3)):lunge.distance*ratio;}
-      // Home on a foe that keeps moving while the leap is still closing.
-      if(lungeState.foe?.actor&&lungeState.foe.active)lungeState.span=Math.min(lungeState.reach,Math.max(lungeState.span,lungeState.done+Vector3.Distance(actor.position,lungeState.foe.actor.position)-(lunge.stop??1.3)));
-      const duration=controller.durations?.[result.state]||1,f=Math.min(1,(result.clipTime??0)/(duration*lunge.until)),want=lungeState.span*(1-(1-f)**2);
-      // A strike that was not aimed by hand keeps turning to its chain's foe while it closes in (a bounded turn rate).
-      const chase=f<1&&!strikeByInput?world.v03?.chainFoe:null;
-      if(chase?.actor){let turn=Math.atan2(chase.actor.position.x-actor.position.x,chase.actor.position.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0)-actor.rotation.y;turn=Math.atan2(Math.sin(turn),Math.cos(turn));const most=4*dt;actor.rotation.y+=Math.max(-most,Math.min(most,turn));}
-      let step=want-lungeState.done;lungeState.done=want;
-      const target=boss.nearestTarget(actor.position);
-      if(target?.actor)step=Math.min(step,Math.max(0,Vector3.Distance(actor.position,target.actor.position)-(lunge.stop??1.3)));
+      const fitted=!versionRoute.worldRevision,nearest=fitted?null:boss.nearestTarget(actor.position);
+      const target=world.v03.chainFoe;
+      const step=strikeLungeStep(lungeState,actor,result,lunge,target,nearest,strikeByInput,playerDimensions(actor).ratio,controller.durations?.[result.state]||1,dt,fitted);
       if(step>1e-4){
         const yaw=actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[result.state]??0),before=actor.position.clone();
         actor.position.x+=Math.sin(yaw)*step;actor.position.z+=Math.cos(yaw)*step;
@@ -1401,7 +1393,7 @@ try {
       frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
       boss.hide();releaseNpcInteriorInkResources(world.scene);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
-      combatResult=null;meleeAim?.reset();strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
+      combatResult=null;meleeAim?.reset();lungeState.id=null;lungeState.foe=null;strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
       world.cancelResourceDownloads?.();
       prepareFixedLayouts(fixedLayoutsForCharacter(new URL(href,location.href).searchParams.get('character'))).catch(()=>{});
     },

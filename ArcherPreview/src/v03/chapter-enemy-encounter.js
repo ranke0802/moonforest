@@ -60,13 +60,19 @@ function makeSoleSampler(body,vertices){
 }
 
 class ChapterEncounter extends BossEncounter {
-  createBrain(durations){return new ChapterEnemyBrain(this.profile,durations);}
+  createBrain(durations){return new ChapterEnemyBrain(this.profile,durations,this.kind);}
   alignPose(){} // Fitted clips already include floor compensation at the hip.
-  motionSpec(){return this.profile;}
-  attackRange(){return this.profile.reach;}
-  attackDamage(){return this.profile.damage;}
-  isHeavyAttack(){return !!this.profile.heavy;}
-  movementPlan(player){
+  motionSpec(){return this.brain.move;}
+  attackRange(spec){return this.profile.reach*(spec?.reach??1);}
+  attackDamage(event){return event?.damage??this.profile.damage;}
+  isHeavyAttack(event){return event?.heavy??!!this.profile.heavy;}
+  movementPlan(player,result){
+    if(this.brain.move?.step&&result.speed>0){
+      // Commit the lunge to the facing chosen at wind-up; a sidestep can evade it.
+      const target=this.lungeTarget??=new Vector3();
+      target.copyFrom(this.actor.position);target.x+=Math.sin(this.actor.rotation.y);target.z+=Math.cos(this.actor.rotation.y);
+      return {target,stopDistance:0,direct:true};
+    }
     if(this.brain.returning)return {target:this.spawn,stopDistance:.10};
     return {target:player.position,stopDistance:this.brain.hasSight?this.profile.reach*.86:.15};
   }
@@ -79,10 +85,10 @@ class ChapterEncounter extends BossEncounter {
   damageNumberPosition(){this.damageAnchor.copyFrom(this.nodes.Chest.getAbsolutePosition());this.damageAnchor.y+=.24;return this.damageAnchor;}
   healthBarPosition(){this.healthAnchor.copyFrom(this.actor.position);this.healthAnchor.y+=this.model.height+.12;return this.healthAnchor;}
   attackContactPoints(){return [this.nodes['Hand.R'].getAbsolutePosition()];}
-  attackBodyContact(){
+  attackBodyContact(event){
     const target=this.player.position, p=this.actor.position, d=distance(target,p);
     const facing=d>.01?((target.x-p.x)*Math.sin(this.actor.rotation.y)+(target.z-p.z)*Math.cos(this.actor.rotation.y))/d:1;
-    return facing>.50&&Math.abs(target.y-p.y)<this.model.height*.72;
+    return facing>(event?.facing??.50)&&Math.abs(target.y-p.y)<this.model.height*.72;
   }
   async prepareAuxiliary(job){
     if(this.model.soleVertices&&!this.healthFootprint){
@@ -123,6 +129,10 @@ class ChapterEncounter extends BossEncounter {
   update(dt,player){
     if(!this.active||this.corpseGone)return;
     const b=this.brain, p=this.actor.position, toHome=distance(this.home,player.position),toPlayer=distance(p,player.position);
+    if(b.move?.guard){
+      const yaw=this.actor.rotation.y;
+      b.guardFacing=(player.position.x-p.x)*Math.sin(yaw)+(player.position.z-p.z)*Math.cos(yaw)>=toPlayer*.4;
+    }
     if(b.hp>0){
       if(b.engaged&&toHome>this.home.radius){b.engaged=false;b.returning=true;}
       if(b.returning&&distance(p,this.spawn)<.2)b.returning=false;
@@ -255,7 +265,7 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
       },
       onDefeat:event=>{if(valid()&&!delivered){delivered=true;onDefeat({...event,id,kind});}}
     });
-    Object.assign(enc,{id,kind,outlineProfile:'goblin',developmentActor:true,minorEnemy:kind!=='hobgoblin-boss',displayName:profile.name,
+    Object.assign(enc,{id,kind,outlineProfile:'goblin',developmentActor:true,minorEnemy:!profile.boss,displayName:profile.name,
       model,profile,mountWeapon,keepPreparedPrograms:false,radius:model.height*.205,separationRadius:model.height*.25,
       spawn:new Vector3(x,0,z),home:{x:home.x??x,z:home.z??z,radius:home.radius??13,combatRadius:home.combatRadius??7.2},
       territoryState:{enabled:true,engaged:false},sightTimer:0,sightPlayerX:Infinity,sightPlayerZ:Infinity,healthAnchor:new Vector3(),aim:new Vector3(x,0,z),

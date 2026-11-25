@@ -3,6 +3,7 @@
 // by boot.js from the game frame; it owns no timer or frame loop.
 import {TransformNode} from '@babylonjs/core/Meshes/transformNode.js';
 import {Quaternion,Vector3} from '@babylonjs/core/Maths/math.vector.js';
+import {STRIKE_LUNGE} from './strike-approach.js';
 import {createQuestLog} from './quests.js';
 import {createErrandLog} from './errands.js';
 import {itemName} from './town-items.js';
@@ -1224,7 +1225,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Normal combo hits flinch smaller foes and push them back ~0.4 m; the
  // warrior steps forward into each swing (main.js reads lunge per state).
  const LIGHT_HIT=Object.freeze({push:2.5,skip:Object.freeze(['bear','elena','mourning-elena'])});
- const LUNGE=Object.freeze({slash:{distance:.55,until:.35},attack:{distance:.7,until:.35},judgment:{distance:.9,until:.3,reach:3,stop:1.25}});
  const JUST_WINDOW=.25,JUST_STAGGER=1.6,JUST_REFUND=20,JUST_SLOW=.4;
  const combatState={controller:null,combat:null,justCount:0};
  function configureCombat(){
@@ -1347,7 +1347,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // The warrior lies in the wagon bed during the opening: main.js keeps him off the ground snap.
   get holdsPlayer(){return scene.active&&scene.sleeping===true;},
   get timeScale(){return slow.left>0?SLOW_SCALE:1;},
-  get lunge(){return scene.active?null:LUNGE;},
+  get lunge(){return scene.active?null:STRIKE_LUNGE;},
   // Where the current step is fought on this map (monster groups near it load first).
   // Where this quest's fight on the current map is: the current step, or a later
   // step of the same quest (M06 talks to the driver first, then the alpha pack

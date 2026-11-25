@@ -4,6 +4,7 @@ import fs from 'node:fs/promises';
 import {FreeCamera,NullEngine,Scene,TransformNode,Vector3} from '@babylonjs/core';
 import '@babylonjs/loaders/glTF/index.js';
 import {parseHTML} from 'linkedom';
+import {primaryHealthBoss} from '../src/combat-readability.js';
 import {BossHealthBars} from '../src/boss-health-bar.js';
 import {ScreenProjection} from '../src/screen-projection.js';
 import {PlayerCombat} from '../src/player-combat.js';
@@ -20,8 +21,8 @@ import {createChapterEnemyFactory} from '../src/v03/chapter-enemy-encounter.js';
 const clips={idle:1,walk:1,hit:1,death:3.5,attack:2};
 test('all six chapter rigs telegraph before one contact and can be interrupted',()=>{
   assert.deepEqual(Object.keys(CHAPTER_COMBAT).sort(),Object.keys(CHAPTER_MONSTER_MODELS).sort());
-  for(const profile of Object.values(CHAPTER_COMBAT)){
-    const brain=new ChapterEnemyBrain(profile,clips);brain.engaged=true;brain.hasSight=true;
+  for(const [kind,profile] of Object.entries(CHAPTER_COMBAT)){
+    const brain=new ChapterEnemyBrain(profile,clips,kind);brain.engaged=true;brain.hasSight=true;
     brain.update(.36,1);assert.equal(brain.mode,'attack');
     assert.deepEqual(brain.update(profile.windup-.02,1).events,[]);
     assert.equal(brain.update(.03,1).events.length,1);
@@ -29,6 +30,39 @@ test('all six chapter rigs telegraph before one contact and can be interrupted',
     brain.hit({damage:1,heavy:true});assert.equal(brain.mode,'hit');
     brain.hit({damage:1000});assert.equal(brain.mode,'dead');
     assert.equal(brain.hit({damage:1}),false);
+  }
+});
+
+test('each champion rotates three timed attacks with one contact per pass, recovery, and cancellable follow-ups',()=>{
+  for(const [kind,names] of Object.entries({
+    'hobgoblin-boss':['club-crush','club-sweep','club-double'],
+    'ghoul-warrior':['cleaver-cut','cleaver-lunge','cleaver-counter'],
+  }))for(const dt of [1/120,1/15]){
+    const build=()=>{const b=new ChapterEnemyBrain(CHAPTER_COMBAT[kind],clips,kind);b.engaged=b.hasSight=true;return b;};
+    const brain=build(),all=[];
+    for(const name of names){
+      brain.update(1,1);assert.equal(brain.move.id,name);
+      const hits=[],contacts=[],guardTimes=[];let elapsed=0,travel=0;
+      while(brain.mode==='attack'&&elapsed<3){
+        const {events,speed}=brain.update(dt,1);elapsed+=dt;travel+=speed*dt;
+        for(const hit of events){hits.push(hit);contacts.push(elapsed);}
+        if(brain.defense)guardTimes.push(elapsed);
+      }
+      assert.equal(brain.mode,'idle');assert.ok(contacts[0]>=.45&&elapsed-contacts.at(-1)>.35,name+' leaves a wind-up and recovery');
+      assert.deepEqual(hits.map(hit=>hit.pass),['club-double','cleaver-lunge'].includes(name)?[1,2]:[1]);
+      assert.ok(hits.every(hit=>hit.name===name&&hit.damage>0));all.push(...hits);
+      if(name==='cleaver-lunge')assert.ok(Math.abs(travel-.72)<1e-5);else assert.equal(travel,0);
+      if(name==='cleaver-counter')assert.ok(guardTimes.length&&guardTimes[0]>=.21&&guardTimes.at(-1)<.68);else assert.equal(guardTimes.length,0);
+    }
+    assert.ok(all.some(hit=>hit.heavy)&&all.some(hit=>!hit.heavy));
+    const fresh=build();fresh.update(.4,1);
+    assert.equal(fresh.move.id,names[0]);assert.equal(fresh.nextHit,0);
+    for(const interrupt of ['parry','hit','leave']){
+      const b=build();b.nextMove=names.indexOf(kind==='hobgoblin-boss'?'club-double':'cleaver-lunge');b.update(.4,1);
+      while(!b.nextHit)b.update(dt,1);
+      if(interrupt==='parry')b.parry();else if(interrupt==='hit')b.hit({damage:1});else b.engaged=false;
+      for(let i=0;i<Math.ceil(1/dt);i++)assert.equal(b.update(dt,1,false).events.length,0);
+    }
   }
 });
 
@@ -242,6 +276,88 @@ test('melee contact obeys dodge, block direction and map line of sight',async()=
     assert.ok(f.battle.combat.hp<hp);
   }finally{f.dispose();}
 });
+test('the fitted club uses distinct overhead and sweeping poses and damages a standing warrior once per pass',async t=>{
+  const f=fixture();t.after(()=>f.dispose());
+  f.player.position.z=1.6;f.player.rotation.y=Math.PI;
+  const {encounter:foe}=await f.factory.create(f.params('hobgoblin-boss','club'));
+  const dt=.025,observed=[];
+  const tick=()=>{
+    f.battle.combat.update(dt,f.player,()=>{});foe.update(dt,f.player);f.scene.render();
+    const hp=foe.playerHp,events=foe.pendingEvents.slice();
+    foe.poseAndContacts(f.player,{state:'idle'},null,null);
+    if(hp!==foe.playerHp)observed.push([events[0]?.name,events[0]?.pass,hp-foe.playerHp]);
+  };
+  const pose=(name,at)=>{
+    for(let i=0;i<200;i++){
+      tick();
+      if(foe.brain.move?.id===name&&foe.brain.elapsed>=at){
+        assert.equal(foe.animator.current,'attack');
+        return foe.nodes['Hand.R'].getAbsolutePosition().subtract(foe.actor.position);
+      }
+    }
+    assert.fail('Missing club pose '+name);
+  };
+  const overhead=pose('club-crush',.64),sweep=pose('club-sweep',.37);
+  assert.ok(overhead.y-sweep.y>.18&&Math.abs(overhead.x-sweep.x)>.25,
+    'the held club moves from the overhead pose '+overhead+' to the lateral pose '+sweep);
+  pose('club-double',1.82);
+  assert.deepEqual(observed,[
+    ['club-crush',1,55],['club-sweep',1,46],['club-double',1,39],['club-double',2,53],
+  ]);
+});
+test('the ghoul commits its moving blade to the approach line, exposes its back during a brace, and resets a pending return cut on summon',async t=>{
+  const f=fixture();t.after(()=>f.dispose());
+  f.player.position.z=2.2;
+  const {encounter:foe}=await f.factory.create(f.params('ghoul-warrior','cleaver'));
+  const dt=.025,hp=foe.playerHp;
+  const tick=()=>{
+    f.battle.combat.update(dt,f.player,()=>{});foe.update(dt,f.player);f.scene.render();
+    foe.poseAndContacts(f.player,{state:'idle'},null,null);
+  };
+  const until=condition=>{
+    for(let i=0;i<160&&!condition();i++)tick();
+    assert.ok(condition());
+  };
+  foe.brain.nextMove=1;
+  until(()=>foe.brain.move?.id==='cleaver-lunge'&&foe.brain.elapsed>=.29);
+  const start=foe.actor.position.clone();f.player.position.set(2,0,start.z+.7);
+  until(()=>foe.brain.nextHit===1);
+  assert.ok(Math.abs(foe.actor.position.x-start.x)<1e-5);
+  assert.ok(Math.abs(foe.actor.position.z-start.z-.72)<1e-5);
+  const thrust=foe.nodes['Hand.R'].getAbsolutePosition().subtract(foe.actor.position);
+  until(()=>foe.brain.nextHit===2);
+  assert.equal(foe.playerHp,hp,'stepping sideways evades both passes');
+  const backhand=foe.nodes['Hand.R'].getAbsolutePosition().subtract(foe.actor.position);
+  assert.ok(Vector3.Distance(thrust,backhand)>.38,'the mounted blade crosses the body on the second pass');
+  f.player.position.set(0,0,foe.actor.position.z+1.4);
+  until(()=>foe.brain.defense==='block');assert.equal(foe.brain.move.id,'cleaver-counter');
+  const strike=(id,window)=>{
+    const point=foe.nodes.Chest.getAbsolutePosition().asArray();
+    foe.poseAndContacts(f.player,{state:'idle'},{actionId:id,window,blade:[point,point]},null);
+  };
+  const blade={id:'ordinary-cut',damage:12},foeHp=foe.brain.hp,feedback=[];
+  foe.onDamage=(point,value,heavy,type)=>feedback.push(type);
+  strike(1,blade);strike(1,blade);
+  assert.deepEqual(feedback,['block']);assert.equal(foe.brain.hp,foeHp);
+  f.player.position.z=foe.actor.position.z-1.4;tick();assert.equal(foe.brain.defense,null);
+  f.player.position.z=foe.actor.position.z+1.4;tick();assert.equal(foe.brain.defense,'block');
+  until(()=>foe.brain.elapsed>=.70);assert.equal(foe.brain.defense,null);
+  strike(2,blade);assert.ok(foe.brain.hp<foeHp);assert.equal(foe.brain.mode,'hit');
+  foe.brain.nextMove=2;
+  until(()=>foe.brain.defense==='block');
+  const bracedHp=foe.brain.hp;
+  strike(3,{id:'shield-push',damage:10,stun:1.5});
+  assert.ok(foe.brain.hp<bracedHp);assert.equal(foe.brain.stagger,1.5);
+  // Restart during a later lunge with its second pass still pending.
+  foe.brain.nextMove=1;
+  until(()=>foe.brain.move?.id==='cleaver-lunge'&&foe.brain.nextHit===1);
+  foe.hide();await foe.summon(f.player,{position:foe.spawn,rotationY:0,reuseAnimator:true});
+  f.player.position.set(0,0,1.3);
+  until(()=>foe.brain.mode==='attack');assert.equal(foe.brain.move.id,'cleaver-cut');
+  const afterSummon=foe.playerHp;
+  until(()=>foe.brain.elapsed>=.44);
+  assert.equal(foe.playerHp,afterSummon);assert.equal(foe.brain.nextHit,0);
+});
 test('cancelling a pending region discards a late source before cloning or registering it',async()=>{
   let resolve,started;const ready=new Promise(r=>started=r);let releases=0;
   const f=fixture({loadModel:()=>{started();return new Promise(r=>resolve=r);}});
@@ -251,4 +367,22 @@ test('cancelling a pending region discards a late source before cloning or regis
     await assert.rejects(create,{name:'AbortError'});
     assert.equal(releases,1);assert.equal(f.battle.encounters.length,0);
   }finally{f.dispose();}
+});
+
+test('forest and cave champions use boss vitality and priority beside an ordinary foe',async t=>{
+  const f=fixture();t.after(()=>f.dispose());
+  const add=(await f.factory.create(f.params('goblin-warrior','add'))).encounter;
+  add.territoryState.engaged=true;
+  assert.equal(primaryHealthBoss([add],f.player.position),null);
+  for(const [kind,hp,damage] of [['hobgoblin-boss',780,48],['ghoul-warrior',720,42]]){
+    const handle=await f.factory.create(f.params(kind,kind,3)),champion=handle.encounter;
+    assert.equal(champion.brain.hp,hp);assert.equal(champion.brain.maxHp,hp);assert.equal(champion.profile.damage,damage);
+    assert.equal(primaryHealthBoss([add,champion],f.player.position),null);
+    champion.territoryState.engaged=true;
+    assert.equal(primaryHealthBoss([add,champion],f.player.position),champion);
+    const feedback=[];champion.onDamage=(...args)=>feedback.push(args);
+    assert.equal(champion.showDefense('block',42),true);assert.equal(champion.showDefense('block',42),false);
+    assert.equal(feedback.length,1);assert.equal(feedback[0][0],champion.nodes.Head.getAbsolutePosition());
+    handle.dispose();
+  }
 });

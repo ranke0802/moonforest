@@ -1,27 +1,63 @@
+import {CHAPTER_BOSS_ATTACKS} from './chapter-boss-attacks.js';
+
 // Metres and seconds in the chapter maps. Attack animation time is normalized
 // to the published wind-up and recovery, independently of its source frame rate.
 export const CHAPTER_COMBAT = {
   'goblin-warrior': {name:'고블린 전사', hp:115, damage:18, speed:2.35, reach:1.42, windup:.52, recover:.52, cooldown:.64},
   'goblin-archer': {name:'고블린 궁수', hp:92, damage:17, speed:1.95, reach:7.6, windup:.72, recover:.58, cooldown:1.15, missile:'arrow', velocity:11},
   'goblin-shaman': {name:'고블린 주술사', hp:128, damage:27, speed:1.6, reach:6.5, windup:1.1, recover:.75, cooldown:1.4, missile:'spell', velocity:6.2},
-  'hobgoblin-boss': {name:'홉고블린', hp:335, damage:35, speed:1.95, reach:2.03, windup:.88, recover:.85, cooldown:.9, heavy:true},
-  'ghoul-warrior': {name:'구울 전사', hp:178, damage:25, speed:2.55, reach:1.68, windup:.48, recover:.62, cooldown:.72},
+  'hobgoblin-boss': {name:'홉고블린', boss:true, hp:780, damage:48, speed:1.95, reach:2.03, windup:.88, recover:.85, cooldown:.9, heavy:true},
+  'ghoul-warrior': {name:'구울 전사', boss:true, hp:720, damage:42, speed:2.55, reach:1.68, windup:.48, recover:.62, cooldown:.72},
   zombie: {name:'좀비', hp:138, damage:19, speed:1.04, reach:1.36, windup:.82, recover:.78, cooldown:.85},
 };
 
 const labels = {idle:'대기', move:'이동', attack:'공격', dead:'격파', hit:'경직'};
 export class ChapterEnemyBrain {
-  constructor(profile, durations) {
+  constructor(profile, durations, kind) {
     this.profile=profile;this.durations=durations;this.hp=this.maxHp=profile.hp;
     this.visited=new Set();this.flash=0;this.flashDuration=.23;this.stagger=0;this.serial=0;
     this.wait=.35;this.hasSight=false;this.engaged=false;this.returning=false;
+    this.moves=CHAPTER_BOSS_ATTACKS[kind];
+    this.nextMove=0;this.guardFacing=true;
     this.change('idle','idle');
   }
   change(state,mode) {
     this.state=state;this.mode=mode;this.serial++;this.time=0;this.elapsed=0;
-    this.impacted=false;this.visited.add(state);
+    this.impacted=false;this.move=null;this.nextHit=0;this.poseKey=1;this.visited.add(state);
   }
   get label(){return labels[this.mode];}
+  get defense(){
+    const guard=this.move?.guard;
+    return this.guardFacing&&guard&&this.elapsed>=guard.from&&this.elapsed<guard.to?'block':null;
+  }
+  advanceMove(dt,events){
+    const move=this.move,previous=this.elapsed;
+    this.elapsed+=dt;
+    const now=this.elapsed;
+    while(this.nextHit<move.hits.length&&now>=move.hits[this.nextHit].at){
+      const hit=move.hits[this.nextHit++];
+      if(this.hasSight)events.push({
+        type:'attack',kind:'melee',name:move.id,pass:this.nextHit,
+        damage:Math.round(this.profile.damage*hit.power),heavy:!!hit.heavy,reach:move.reach,facing:move.facing,
+      });
+    }
+    // Show the warning again during the wind-up of a separate follow-up.
+    const next=move.hits[this.nextHit];
+    this.impacted=!next||(this.nextHit>0&&next.at-now>.5);
+    const poses=move.poses;
+    while(this.poseKey<poses.length-1&&now>poses[this.poseKey][0])this.poseKey++;
+    const [start,from]=poses[this.poseKey-1],[end,to]=poses[this.poseKey];
+    const mix=Math.min(1,(now-start)/(end-start));
+    this.time=this.durations.attack*(from+(to-from)*mix);
+    const step=move.step;
+    let travelled=0;
+    if(step){
+      const seconds=Math.max(0,Math.min(now,step.to)-Math.max(previous,step.from));
+      travelled=step.metres*seconds/(step.to-step.from);
+    }
+    if(now>=poses.at(-1)[0]){this.change('idle','idle');this.wait=this.profile.cooldown;}
+    return {events,speed:dt>0?travelled/dt:0};
+  }
   hit({damage=18,heavy=false,stun=0}={}) {
     if(this.hp<=0)return false;
     this.hp=Math.max(0,this.hp-damage);this.flash=this.flashDuration=.23;
@@ -44,6 +80,7 @@ export class ChapterEnemyBrain {
     }
     if(this.mode==='attack'&&(!this.engaged||!available))this.change('idle','idle');
     if(this.mode==='attack'){
+      if(this.move)return this.advanceMove(dt,events);
       this.elapsed+=dt;
       // For the drawn bow/cast and the melee contact the authored strike is
       // at roughly the middle of the clip. Keep its timing legible on all rigs.
@@ -57,8 +94,15 @@ export class ChapterEnemyBrain {
       return {events,speed:0};
     }
     const pursue=this.engaged&&available;
-    if(pursue&&this.hasSight&&distance<=p.reach&&this.wait<=0){
-      this.change('attack','attack');return {events,speed:0};
+    const move=this.moves?.[this.nextMove],startReach=p.reach*(move?.startReach??1);
+    if(pursue&&this.hasSight&&distance<=startReach&&this.wait<=0){
+      this.change('attack','attack');
+      if(move){
+        this.move=move;
+        this.nextMove=(this.nextMove+1)%this.moves.length;
+        this.time=this.durations.attack*move.poses[0][1];
+      }
+      return {events,speed:0};
     }
     const moving=this.returning||(pursue&&(distance>p.reach||!this.hasSight));
     const state=moving?'walk':'idle',mode=moving?'move':'idle';

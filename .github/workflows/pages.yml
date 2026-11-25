@@ -32,6 +32,7 @@ jobs:
           node --test --test-concurrency=2
           ArcherPreview/tests/v03-chapter-wildlife.test.js
           ArcherPreview/tests/v03-chapter-enemy-encounter.test.js
+          ArcherPreview/tests/v03-low-melee.test.js
           ArcherPreview/tests/v03-chapter-monster-models.test.js
           ArcherPreview/tests/v03-foe-weapons.test.js
           ArcherPreview/tests/v03-town-economy.test.js
