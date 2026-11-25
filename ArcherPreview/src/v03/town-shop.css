@@ -11,12 +11,13 @@
 .mf-town-shop{font-family:var(--v03-font)}
 .mf-shop-row>.mf-town-item-icon{--mf-item-icon-size:clamp(28px,6vmin,42px);flex:none}
 html[lang=ko] .mf-town-shop{word-break:keep-all}
-/* Temper view (2026-11-25, user: the screen was bare). Zones follow gradeStrike:
-   perfect 44-56%, success 30.5-69.5%, near miss 15.5-84.5%, else failed. Only the
+/* Temper view (2026-11-25, user: the screen was bare). The gauge's gradient and
+   the glow over the perfect zone are set per level from forgeZones (town-shop.js);
+   at +0 perfect 44-56%, success 30.5-69.5%, near miss 15.5-84.5%. Only the
    hammer rail moves (transform), the centre glow pulses (opacity); both stop with
    the view. Sparks are a few dots removed after 0.7 s. */
 .mf-town-shop.is-forging{width:min(38rem,94vw)}
-.mf-forge{--zone-perfect:#e8c45f;--zone-success:#76a56f;--zone-near:#9a7650;--zone-failed:#5e3d48;
+.mf-forge{--zone-perfect:#e2bd55;--zone-success:#7d8d58;--zone-near:#6a4a32;--zone-failed:#000;
   display:grid;gap:.7rem;margin-top:.6rem;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none}
 .mf-forge:focus-visible{box-shadow:0 0 0 2px #e0bd77;border-radius:.4rem}
 .mf-forge-side,.mf-forge-play{display:grid;gap:.6rem;min-width:0}
@@ -32,11 +33,11 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
 .mf-forge-item dd strong{display:inline;font-size:inherit;color:#8df3b1}.mf-forge-item dd small{display:inline;margin:0;color:#e8c45f}
 .mf-forge-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.3rem}
 .mf-forge-legend li{padding:.2rem .45rem;border-left:4px solid var(--zone-failed);border-radius:.2rem;background:#ffffff0b;font-size:.8rem;line-height:1.3}
+.mf-forge-legend li[data-zone=failed]{box-shadow:inset 1px 0 0 #ffffff33}
 .mf-forge-legend li[data-zone=perfect]{border-color:var(--zone-perfect)}.mf-forge-legend li[data-zone=success]{border-color:var(--zone-success)}
 .mf-forge-legend li[data-zone=near]{border-color:var(--zone-near)}
 .mf-forge-legend b{display:block;color:#f6e9d0}.mf-forge-legend span{color:#c3b8ae}
-.mf-forge-gauge{position:relative;height:3rem;margin:1.6rem .4rem .2rem;border:1px solid #a28c64;border-radius:.35rem;
-  background:linear-gradient(to right,var(--zone-failed) 0 15.5%,var(--zone-near) 15.5% 30.5%,var(--zone-success) 30.5% 44%,var(--zone-perfect) 44% 56%,var(--zone-success) 56% 69.5%,var(--zone-near) 69.5% 84.5%,var(--zone-failed) 84.5%);
+.mf-forge-gauge{position:relative;height:3rem;margin:1.6rem .4rem .2rem;border:1px solid #a28c64;border-radius:.35rem;background:var(--mf-forge-art,#000);
   box-shadow:inset 0 2px 6px #0008}
 .mf-forge-glow{position:absolute;top:-.2rem;bottom:-.2rem;left:44%;width:12%;border-radius:.3rem;background:radial-gradient(ellipse at center,#fff3c4cc,#ffd76a33 60%,transparent 75%);animation:mf-forge-pulse 1.1s ease-in-out infinite alternate}
 .mf-forge.is-struck .mf-forge-glow{animation:none;opacity:.5}

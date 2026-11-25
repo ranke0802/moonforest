@@ -122,7 +122,7 @@ export function createTownEconomy(wallet,legacy={}){
   forgeCost(id){return 12+4*(gear(id)?.level??0);},
   canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&['wolf-fang','boar-tusk','iron-scrap','tainted-fang','grave-dust','rune-shard'].some(id=>own(state,id));},
   forge(position,id=state.equipped.sword){if(!Number.isFinite(position)||!api.canForge(id))return null;
-   const grade=gradeStrike(position);
+   const grade=gradeStrike(position,state.condition[id]?.level??0);
    const material=['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard'].find(id=>own(state,id));
    return told(transact(-api.forgeCost(id),s=>{
     take(s,material,1);const w=s.condition[id];

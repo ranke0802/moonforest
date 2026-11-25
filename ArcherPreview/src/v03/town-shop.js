@@ -1,4 +1,4 @@
-import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,FORGE_MATERIALS,forgeCursor,forgeSpeed,itemName,itemNote,gradeLabel} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,FORGE_MATERIALS,forgeCursor,forgeZones,itemName,itemNote,gradeLabel} from './town-items.js';
 import {t} from './i18n.js';
 import {townItemIcon} from './town-item-art.js';
 
@@ -64,9 +64,10 @@ export function createTownShop({root,economy,onChange,onPause}){
   for(const [id,n] of materials){const it=TOWN_ITEMS[id],name=itemName(id);addButton(row(scroll,name,t('shop.inBag',{n}),id),t('shop.sellFor',{price:it.sell}),()=>trade(()=>economy.sell(current,id),t('shop.sold',{name})));}
  }
  // The temper (2026-11-25, user: the screen was bare). The item and what a
- // strike changes, the four zones and their outcome, a gauge whose mark sweeps
- // a little faster at each level, and the result on the same view. Its buttons
- // wait a moment, so the tap that struck cannot also press them.
+ // strike changes, the four zones and their outcome, a gradient gauge whose
+ // zones narrow a little at each level (same hammer speed; failed is plain
+ // black, 10:43), and the result on the same view. Its buttons wait a moment,
+ // so the tap that struck cannot also press them.
  const ZONES=[['Perfect','perfect'],['Success','success'],['Near miss','near'],['Failed','failed']];
  const signed=n=>(n>0?'+':'')+n;
  function forgePreview(id){
@@ -96,6 +97,13 @@ export function createTownShop({root,economy,onChange,onPause}){
   }
   return legend;
  }
+ // The gauge's picture for this level, set once per view: black where a strike
+ // fails, then bronze, green and gold blending toward the centre.
+ function gaugeArt(level){
+  const zone=forgeZones(level),pct=edge=>(50-edge*50).toFixed(2)+'%',far=edge=>(50+edge*50).toFixed(2)+'%';
+  return 'linear-gradient(to right,#000 0 '+pct(zone.near)+',#4b3424 '+pct(zone.near)+',#7d8d58 '+pct(zone.success)+',#d8b24c '+pct(zone.perfect)+
+   ',#fff0b5 50%,#d8b24c '+far(zone.perfect)+',#7d8d58 '+far(zone.success)+',#4b3424 '+far(zone.near)+',#000 '+far(zone.near)+' 100%)';
+ }
  function beginForge(id){
   if(!economy.canForge(id))return;
   stop();dialog.replaceChildren();dialog.classList.add('is-forging');receipt.textContent='';
@@ -104,16 +112,18 @@ export function createTownShop({root,economy,onChange,onPause}){
   area.className='mf-forge';area.tabIndex=0;area.setAttribute('aria-label',t('shop.forgeTap'));
   gauge.className='mf-forge-gauge';gauge.setAttribute('role','img');gauge.setAttribute('aria-label',t('shop.gauge'));
   glow.className='mf-forge-glow';rail.className='mf-forge-rail';
+  const zone=forgeZones(level);gauge.style.setProperty('--mf-forge-art',gaugeArt(level));
+  glow.style.left=(50-zone.perfect*50).toFixed(2)+'%';glow.style.width=(zone.perfect*100).toFixed(2)+'%';
   const hammer=element('span');hammer.className='mf-forge-hammer';hammer.setAttribute('aria-hidden','true');
   const mark=element('i');mark.className='mf-forge-mark';rail.append(hammer,mark);gauge.append(glow,rail);
-  const hint=element('p',t('shop.forgeTap')+' · '+t('shop.forgeSpeed',{n:forgeSpeed(level).toFixed(2)}));hint.className='mf-forge-hint';
+  const hint=element('p',t('shop.forgeTap')+' · '+t('shop.forgeZone',{n:Math.round(zone.scale*100)}));hint.className='mf-forge-hint';
   const result=element('div');result.className='mf-forge-result';result.hidden=true;result.setAttribute('role','status');
   const side=element('div');side.className='mf-forge-side';side.append(forgeCard(id),forgeLegend());
   const play=element('div');play.className='mf-forge-play';play.append(gauge,hint,result);
   area.append(side,play);dialog.append(area);
   forging={id,level,area,rail,mark,hint,result,side,struck:false};
   started=win.performance.now();
-  const draw=time=>{rail.style.transform='translateX('+(100*forgeCursor(time-started,level)).toFixed(2)+'%)';frame=win.requestAnimationFrame(draw);};
+  const draw=time=>{rail.style.transform='translateX('+(100*forgeCursor(time-started)).toFixed(2)+'%)';frame=win.requestAnimationFrame(draw);};
   draw(started);area.focus?.({preventScroll:true});
  }
  function sparks(mark,grade){
@@ -129,7 +139,7 @@ export function createTownShop({root,economy,onChange,onPause}){
  function strike(){
   const f=forging;if(!f||f.struck)return;
   f.struck=true;
-  const position=forgeCursor(win.performance.now()-started,f.level);
+  const position=forgeCursor(win.performance.now()-started);
   if(frame)win.cancelAnimationFrame(frame);frame=0;
   f.rail.style.transform='translateX('+(100*position).toFixed(2)+'%)';
   const grade=economy.forge(position,f.id);

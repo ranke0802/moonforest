@@ -86,18 +86,25 @@ export function itemNote(id){
 }
 export const FORGE_RULES=Object.freeze({
  maxLevel:12,minDurability:32,durabilityCost:7,perfectGain:2,failureWear:5,attackGain:2,defenseGain:1,
- // The hammer mark sweeps a little faster at each level (2026-11-25, user): x1.6 at +12.
- speedGain:.05,
+ // Each level narrows every zone by 3% of its +0 size (2026-11-25, user: not a faster
+ // hammer, smaller zones): 64% at +12. The hammer keeps one 900 ms sweep.
+ zoneShrink:.03,
 });
 // What a temper consumes: the first of these the bag holds (town-economy forge()).
 export const FORGE_MATERIALS=Object.freeze(['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard']);
-export const forgeSpeed=(level=0)=>1+FORGE_RULES.speedGain*Math.max(0,Math.min(FORGE_RULES.maxLevel,level|0));
-export function gradeStrike(position){
- const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2;
- return error<=.12?'Perfect':error<=.39?'Success':error<=.69?'Near miss':'Failed';
+// Zone edges as the distance from the centre (0 centre .. 1 either end of the bar).
+const ZONE_EDGES=Object.freeze({perfect:.12,success:.39,near:.69});
+export function forgeZones(level=0){
+ const scale=1-FORGE_RULES.zoneShrink*Math.max(0,Math.min(FORGE_RULES.maxLevel,level|0));
+ return {perfect:ZONE_EDGES.perfect*scale,success:ZONE_EDGES.success*scale,near:ZONE_EDGES.near*scale,scale};
+}
+// level: the item's forge level before this strike (zones narrow per level).
+export function gradeStrike(position,level=0){
+ const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2,zone=forgeZones(level);
+ return error<=zone.perfect?'Perfect':error<=zone.success?'Success':error<=zone.near?'Near miss':'Failed';
 }
 // gradeStrike returns stable ids (saved and tested); this is what the player reads.
 const GRADE_KEYS={Perfect:'perfect',Success:'success','Near miss':'near',Failed:'failed'};
 export const gradeLabel=grade=>t('shop.grade.'+GRADE_KEYS[grade]);
-// Position of the hammer mark (0..1..0), one sweep in 900 ms at +0, faster per level.
-export function forgeCursor(elapsed,level=0){const time=elapsed*forgeSpeed(level),phase=((time%1800)+1800)%1800/900;return phase<=1?phase:2-phase;}
+// Position of the hammer mark (0..1..0), one sweep in 900 ms at every level.
+export function forgeCursor(elapsed){const phase=((elapsed%1800)+1800)%1800/900;return phase<=1?phase:2-phase;}
