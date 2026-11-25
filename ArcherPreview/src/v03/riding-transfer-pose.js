@@ -15,7 +15,7 @@ const tracks={
  LeftHand:[[.15,.70,-.33,.22],[.31,.35,-.045,.195],[.48,.28,.075,.17],[.60,.25,.12,.17],[.75,.19,.18,.26]],
  RightHand:[[.15,.65,-.36,-.15],[.31,.35,-.045,-.16],[.48,.30,.085,-.155],[.61,.27,.13,-.15],[.77,.035,.18,.055],[.88,-.12,.27,.20]]
 };
-// Mount only. Hip-relative azimuth sweeps round the back of the saddle;
+// Hip-relative azimuth sweeps round the back of the saddle in either direction;
 // elevation and knee flexion keep the boot travelling past the croup until
 // the thigh reaches the opposite side. All three angles are in degrees.
 const swingArc=[
@@ -175,12 +175,17 @@ export function createRiderTransferPose(actor){
     local.set(1.02-1.77*cross,-.25+.99*over,.28-.46*over);
    }
    Vector3.TransformCoordinatesToRef(local,seat,pole);
-   const swing=near||dismounting?0:smooth((t-.56)/.07)*(1-smooth((t-.87)/.095));
+   const swing=near?0:smooth((t-.56)/.07)*(1-smooth((t-.87)/.095));
    if(swing){
     const hip=bones.RightUpLeg;hip.computeWorldMatrix();bones.RightLeg.computeWorldMatrix();bones.RightFoot.computeWorldMatrix();
     const thigh=Vector3.Distance(hip.absolutePosition,bones.RightLeg.absolutePosition),shin=Vector3.Distance(bones.RightLeg.absolutePosition,bones.RightFoot.absolutePosition);
     curve(swingArc,t,sweep);
-    const arcReach=Math.sqrt(thigh*thigh+shin*shin+2*thigh*shin*Math.cos(sweep.z*radians));
+    // On dismount the boot meets the released near leg beside the horse.
+    // Carry a soft knee into that descent instead of straightening for the
+    // ground push used when mounting.
+    const join=dismounting?1-smooth((t-.56)/.13):0;
+    const flex=sweep.z+(36-sweep.z)*join;
+    const arcReach=Math.sqrt(thigh*thigh+shin*shin+2*thigh*shin*Math.cos(flex*radians));
     const azimuth=sweep.x*radians,elevation=sweep.y*radians,horizontal=Math.cos(elevation)*arcReach;
     local.set(horizontal*Math.cos(azimuth),Math.sin(elevation)*arcReach,-horizontal*Math.sin(azimuth));
     Vector3.TransformNormalToRef(local,seat,sweptFoot);sweptFoot.addInPlace(hip.absolutePosition);

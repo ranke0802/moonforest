@@ -133,34 +133,42 @@ test('actual riding controls lift the warrior from the near stirrup over the cro
  // Record the actual leg at 60 Hz, including ticks between the review's
  // 30 fps frames. This also catches a one-tick sole flip when entering the stirrup.
  const seatInterior=horseSurface(saddle,Matrix.Invert(saddle.computeWorldMatrix(true)));
- const offThigh=garment.filter(i=>{
-  if(boneNames.get(ids[4*i])!=='RightUpLeg')return false;
-  let w=0;for(let k=0;k<4;k++)if(/^Right(?:UpLeg|Leg|Foot|ToeBase)$/.test(boneNames.get(ids[4*i+k])))w+=weights[4*i+k];
-  return w>.8;
- });
+ const offThigh=[],offBoot=[];
+ for(const i of garment){
+  let weight=0;for(let k=0;k<4;k++)if(/^Right(?:UpLeg|Leg|Foot|ToeBase)$/.test(boneNames.get(ids[4*i+k])))weight+=weights[4*i+k];
+  if(weight<=.8)continue;
+  const dominant=boneNames.get(ids[4*i]);
+  if(dominant==='RightUpLeg')offThigh.push(i);
+  if(dominant==='RightFoot'||dominant==='RightToeBase')offBoot.push(i);
+ }
  assert.ok(seatInterior(new Vector3(0,.075,0))>.05,'scan detects the leather seat');
- function rightLeg(tick){
+ function rightLeg(tick,descending=false){
   const inv=Matrix.Invert(saddle.computeWorldMatrix(true));
   // After the far boot clears the croup, the inner thigh should slide
   // past the seat rim. The boot itself enters the off-side iron below it.
-  if(tick>=66&&tick<=84){
+  let bootInIron=false;
+  if(descending?tick<=29:tick>=66&&tick<=84){
    const points=body.getPositionData(true),into=body.getWorldMatrix().multiply(inv);
    for(const i of offThigh){
     const p=Vector3.TransformCoordinates(Vector3.FromArray(points,3*i),into);
     if(p.y>0&&p.x<0&&p.x>-.212)assert.ok(seatInterior(p)<.002,'inner thigh entered the leather seat at tick '+tick+' '+i+' '+p.asArray());
    }
+   if(descending)bootInIron=offBoot.some(i=>{
+    const p=Vector3.TransformCoordinates(Vector3.FromArray(points,3*i),into);
+    return p.x<-.34&&p.y<-.24&&p.z>.14&&p.z<.19&&seatInterior(p)>.001;
+   });
   }
   const [hip,knee,ankle,toe]=['RightUpLeg','RightLeg','RightFoot','RightToeBase'].map(n=>Vector3.TransformCoordinates(joint(n),inv));
   const thigh=hip.subtract(knee),shin=ankle.subtract(knee),flex=angleDegrees(thigh,shin);
   thigh.z=0;shin.z=0;
-  return {hip,knee,ankle,toe:toe.subtract(ankle),angle:flex,rearAngle:angleDegrees(thigh,shin)};
+  return {hip,knee,ankle,bootInIron,toe:toe.subtract(ankle),angle:flex,rearAngle:angleDegrees(thigh,shin)};
  }
- const poses={},legTicks=[];
+ const poses={},legTicks=[],descentTicks=[];
  for(const phase of ['mounting','dismounting']){
   if(phase==='dismounting'){assert.ok(ride.active);await toggle();}
   const rows=poses[phase]=[];
   for(let i=0;i<140&&ride.inspect().state===phase;i++){
-   if(phase==='mounting')legTicks.push(rightLeg(i));
+   if(phase==='mounting')legTicks.push(rightLeg(i));else descentTicks.push(rightLeg(i,true));
    frame();if(i%2===0&&ride.inspect().state===phase)rows.push(measure());
   }
   assert.ok(rows.length>30);
@@ -199,6 +207,19 @@ test('actual riding controls lift the warrior from the near stirrup over the cro
   assert.ok(angleDegrees(legTicks[i].toe,legTicks[i-1].toe)<15,'no boot flip at mounting tick '+i);
  }
  assert.ok(atFrame(43).toe.z>.145&&atFrame(43).ankle.y<-.26,'the boot faces forward in the off-side stirrup');
+ assert.ok(descentTicks[0].bootInIron,'the seated boot begins in the far iron');
+ assert.ok(descentTicks.slice(8,30).every(r=>!r.bootInIron),'release the boot before swinging it over the croup');
+ const returnCrest=descentTicks.find(r=>Math.abs(r.ankle.x)<.12),join=descentTicks[34];
+ assert.ok(returnCrest.ankle.y>.18&&returnCrest.ankle.z<-.69&&returnCrest.toe.z<-.09,'right boot and toe sweep well behind the seat on dismount');
+ for(const r of descentTicks.slice(14,27)){
+  assert.ok(r.angle>150&&r.angle<173&&r.rearAngle>115&&Vector3.Distance(r.hip,r.ankle)>.65,'carry the extended leg across before lowering it');
+ }
+ for(let i=1;i<36;i++){
+  assert.ok(Math.abs(descentTicks[i].angle-descentTicks[i-1].angle)<8,'join the landing with a soft knee at dismount tick '+i);
+  assert.ok(angleDegrees(descentTicks[i].toe,descentTicks[i-1].toe)<16,'boot turns continuously on dismount at tick '+i);
+ }
+ assert.ok(join.ankle.x>.65&&join.ankle.y<-.25&&join.angle<151,'far boot joins the near leg with the knee already bent');
+ assert.ok(poses.dismounting.slice(0,13).every(r=>r.LeftFoot.x>.39&&r.LeftFoot.x<.48&&Math.abs(r.LeftFoot.y+.30)<.04),'near stirrup supports the weight across the swing');
  const {mounting,dismounting}=poses,first=mounting[0],last=dismounting.at(-1);
  const supported=mounting.find(r=>r.hip.y>-.06&&r.hip.y<.14);
  assert.ok(supported.LeftFoot.x>.39&&supported.LeftFoot.x<.475&&Math.abs(supported.LeftFoot.y+.31)<.025,'near ankle is in the left iron');
