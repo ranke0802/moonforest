@@ -97,14 +97,19 @@ export function createTownEconomy(wallet,legacy={}){
   creditQuests(ids,adoptCompleted=false,chapter=null){
    const known=[...new Set(ids)].filter(id=>questExperience(id)>0);
    const pending=known.filter(id=>!state.progression.quests.includes(id));
-   const settled=adoptCompleted?known.filter(id=>!state.settledQuests.includes(id)):[];
+   const definitions=adoptCompleted&&chapter?[...(chapter.QUESTS??[]),...(chapter.ERRANDS??[])]:[];
+   // Older shops kept both the quest XP entry and the cumulative gold source,
+   // but discarded settledQuests when serializing their own inventory schema.
+   const paid=definitions.filter(q=>q.reward?.gold>0&&state.progression.quests.includes(q.id)&&
+    (wallet.credits?.[goldSource(q)]??0)>=q.reward.gold).map(q=>q.id);
+   const settled=adoptCompleted?[...new Set([...known,...paid])].filter(id=>!state.settledQuests.includes(id)):[];
    if(!pending.length&&!settled.length)return 0;
    const gain=Math.min(MAX_TOTAL_XP-state.progression.totalXp,pending.reduce((sum,id)=>sum+questExperience(id),0));
    // The old ledger already marked each quest gold payment. A bare, nonzero
    // legacy balance has no provenance, so leave that balance intact.
    let gold=0;const credits={};
    if(settled.length&&chapter&&(wallet.saveState==='saved'||wallet.balance===0)){
-    for(const q of [...(chapter.QUESTS??[]),...(chapter.ERRANDS??[])]){
+    for(const q of definitions){
      if(!q.reward?.gold||!settled.includes(q.id))continue;
      const source=goldSource(q),due=q.reward.gold-(wallet.credits?.[source]??0);
      if(due>0){gold+=due;credits[source]=q.reward.gold;}

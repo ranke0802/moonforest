@@ -136,3 +136,45 @@ test('old unpaid or partially paid gold is restored once using the cumulative so
  storage.setItem(main,JSON.stringify({quest:1,step:0,count:0,done:[]}));
  const old=open(storage);assert.equal(old.town.gold,90,'a plain legacy gold total has no source history');old.story.dispose();
 });
+
+// Wallets captured from 1e39c7f5 after it reopened an a1cbbaf8 payout and
+// made an ordinary shop purchase. That writer dropped settledQuests. The
+// separate story/errand write had been interrupted immediately after payout.
+function oldShopWallet(id){
+ const mainQuest=id==='M00';
+ return {version:1,balance:mainQuest?0:16,credits:mainQuest?{'v03-quest-M00':30}:{'v03-errand-S03':20},town:{
+  version:1,bag:{'field-sword':1,'field-shield':1,...(mainQuest?{potion:6}:{potion:4,'moon-herb':1})},
+  equipped:{sword:'field-sword',shield:'field-shield',armor:null},condition:{'field-sword':{level:0,max:180,hp:180},'field-shield':{level:0,max:145,hp:145}},
+  opened:[],drops:[],progression:{totalXp:mainQuest?60:65,skills:{weaponCare:0,guardTraining:0,endurance:0},quests:[id]},quick:'potion',boost:0,boostRate:1.5,
+ }};
+}
+test('an old shop can spend the entire M00 payout or strip a delivered S03 receipt: three resumes repair only the cursor',()=>{
+ for(const id of ['M00','S03']){
+  const raw=disk(),storage=slotStorage(raw,'test03',1),saved=oldShopWallet(id);
+  storage.setItem(GOLD_LEDGER_KEY,JSON.stringify(saved));
+  storage.setItem(main,JSON.stringify(id==='M00'?road:{quest:0,step:0,count:0,done:[]}));
+  if(id==='S03')storage.setItem(errands,JSON.stringify({active:{S03:{step:0,count:0}},finished:[]}));
+  for(let cycle=0;cycle<3;cycle++){
+   const {town,story}=open(storage);
+   assert.deepEqual(town.state.settledQuests,[id]);
+   if(id==='M00')assert.equal(story.log.quest().id,'M01');
+   else assert.deepEqual(JSON.parse(storage.getItem(errands)),{active:{},finished:['S03']});
+   assert.deepEqual(balance(town),[saved.balance,saved.town.bag.potion,saved.town.progression.totalXp]);
+   assert.deepEqual(town.state.bag,saved.town.bag,'recovery needs no replacement meat');
+   assert.deepEqual(JSON.parse(storage.getItem(GOLD_LEDGER_KEY)).credits,saved.credits);
+   story.dispose();
+  }
+ }
+});
+test('a stale cursor and only one surviving payment marker cannot settle a delivery',()=>{
+ for(const missing of ['xp','gold','partial']){
+  const raw=disk(),storage=slotStorage(raw,'test03',1),saved=oldShopWallet('S03');
+  if(missing==='xp')saved.town.progression.quests=[];
+  else saved.credits['v03-errand-S03']=missing==='partial'?19:0;
+  storage.setItem(GOLD_LEDGER_KEY,JSON.stringify(saved));
+  storage.setItem(errands,JSON.stringify({active:{S03:{step:0,count:0}},finished:[]}));
+  const {town,story}=open(storage);
+  assert.equal(town.hasSettledQuest('S03'),false);assert.ok(JSON.parse(storage.getItem(errands)).active.S03);
+  assert.deepEqual(town.state.bag,saved.town.bag);assert.equal(town.gold,saved.balance);story.dispose();
+ }
+});
