@@ -85,7 +85,10 @@ export function itemNote(id){
  return BOOSTS[id]?boostText('item.note.boost',id):null;
 }
 export const FORGE_RULES=Object.freeze({
- maxLevel:12,minDurability:32,durabilityCost:7,perfectGain:2,failureWear:5,attackGain:2,defenseGain:1,
+ // 2026-11-25 11:14, user: a level costs 7 maximum durability; a failed strike costs
+ // 7 + 5 more (12) and keeps the level. Tempering never restores durability: the
+ // current value only follows a maximum that drops below it (45/57 -> 45/50, 45/45).
+ maxLevel:12,minDurability:32,durabilityCost:7,perfectGain:2,failureLoss:12,attackGain:2,defenseGain:1,
  // Each level narrows every zone by 3% of its +0 size (2026-11-25, user: not a faster
  // hammer, smaller zones): 64% at +12. The hammer keeps one 900 ms sweep.
  zoneShrink:.03,
@@ -102,6 +105,17 @@ export function forgeZones(level=0){
 export function gradeStrike(position,level=0){
  const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2,zone=forgeZones(level);
  return error<=zone.perfect?'Perfect':error<=zone.success?'Success':error<=zone.near?'Near miss':'Failed';
+}
+// Maximum durability of a piece at a level, after `loss` taken by failed tempers.
+export function forgeMax(id,level=0,loss=0){
+ const item=TOWN_ITEMS[id];return item?.max?Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost-loss):0;
+}
+// What a grade does to a piece at `level` with maximum durability `max`: the new
+// level and maximum (never below the floor, never above the old maximum).
+export function forgeResult(level,max,grade){
+ const gain=grade==='Perfect'?FORGE_RULES.perfectGain:grade==='Success'?1:0,next=Math.min(FORGE_RULES.maxLevel,level+gain);
+ const drop=grade==='Failed'?FORGE_RULES.failureLoss:(next-level)*FORGE_RULES.durabilityCost;
+ return {level:next,max:Math.min(max,Math.max(FORGE_RULES.minDurability,max-drop))};
 }
 // gradeStrike returns stable ids (saved and tested); this is what the player reads.
 const GRADE_KEYS={Perfect:'perfect',Success:'success','Near miss':'near',Failed:'failed'};

@@ -107,7 +107,7 @@ for(const id of Object.keys(PACKS))test(`village shops and the forge read ${id}`
      const picker=dialog.querySelector('select');[...picker.options].find(o=>o.value===gear).selected=true;picker.dispatchEvent(new window.Event('change'));
      const bonus=gear==='field-sword'?t('shop.attack',{n:FORGE_RULES.attackGain}):t('shop.defense',{n:FORGE_RULES.defenseGain});
      const note=byText(dialog,'.mf-shop-row small',t('shop.temperNote',{...FORGE_RULES,bonus}));
-     for(const value of [bonus,FORGE_RULES.minDurability,FORGE_RULES.maxLevel,FORGE_RULES.perfectGain,FORGE_RULES.durabilityCost])assert.ok(note.textContent.includes(String(value)));
+     for(const value of [bonus,FORGE_RULES.minDurability,FORGE_RULES.maxLevel,FORGE_RULES.perfectGain,FORGE_RULES.durabilityCost,FORGE_RULES.failureLoss])assert.ok(note.textContent.includes(String(value)));
     }
     const select=dialog.querySelector('select');
     const target=economy.state.equipped.shield;
@@ -119,7 +119,7 @@ for(const id of Object.keys(PACKS))test(`village shops and the forge read ${id}`
     assert.equal(dialog.querySelector('h2').textContent,t('shop.temperTitle',{name:itemName(target)}));
     const zones=[...dialog.querySelectorAll('.mf-forge-legend li')];
     assert.deepEqual(zones.map(zone=>zone.querySelector('b').textContent),['Perfect','Success','Near miss','Failed'].map(gradeLabel));
-    assert.ok(zones[3].textContent.includes(String(FORGE_RULES.failureWear)));
+    assert.ok(zones[3].textContent.includes(String(FORGE_RULES.failureLoss)));
     assert.equal(dialog.querySelector('[role="img"]').getAttribute('aria-label'),PACKS[id].ui['shop.gauge']);
     assert.equal(dialog.querySelector('.mf-forge').getAttribute('aria-label'),PACKS[id].ui['shop.forgeTap']);
     // No strike button: a tap anywhere on the temper view strikes.
@@ -187,7 +187,8 @@ test('forge limits in shop copy match a real near-broken sword at the reinforcem
  const saved=structuredClone(initial.state);saved.condition['ritual-blade']={level:11,hp:2};
  assert.equal(gold.tradeTown(0,saved),true);
  const economy=createTownEconomy(gold),id='ritual-blade';
- assert.equal(economy.gear(id).max,32);assert.equal(economy.forge(0,id),'Failed');assert.equal(economy.gear(id).hp,0);
- assert.equal(economy.forge(.5,id),'Perfect');assert.equal(economy.gear(id).level,12);assert.equal(economy.gear(id).max,32);
+ // At the floor a failure takes nothing more, and a perfect strike restores nothing (11:14, user).
+ assert.equal(economy.gear(id).max,32);assert.equal(economy.forge(0,id),'Failed');assert.equal(economy.gear(id).hp,2);assert.equal(economy.gear(id).max,32);
+ assert.equal(economy.forge(.5,id),'Perfect');assert.equal(economy.gear(id).level,12);assert.equal(economy.gear(id).max,32);assert.equal(economy.gear(id).hp,2);
  assert.equal(economy.canForge(id),false);assert.equal(economy.forge(.5,id),null);
 });

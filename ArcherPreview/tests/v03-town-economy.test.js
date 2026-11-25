@@ -15,13 +15,15 @@ import {createTownShop} from '../src/v03/town-shop.js';
 const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};};
 function wallet(storage=store(),amount=200){const gold=new GoldLoot({storage});gold.creditCumulative('test-grant',amount);return gold;}
 test('smith trades are atomic with gold and all four grades have distinct consequences',()=>{
+ // 11:14, user: a level costs 7 maximum durability, a failure 12; tempering never restores durability.
  const storage=store(),gold=wallet(storage),town=createTownEconomy(gold);
  assert.equal(town.gear().max,180);assert.equal(town.attack,3);assert.equal(town.buy('smith','iron-scrap'),true);
  assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:166,max:166,level:2,attack:7,defense:0});
  for(const grade of ['Success','Near miss','Failed']){town.grant('wolf-fang');assert.equal(town.forge({Success:.36,'Near miss':.24,Failed:0}[grade]),grade);}
- assert.equal(town.gear().level,3);assert.equal(town.gear().hp,town.gear().max-5);
+ // +2 166/166 -> Success +3 159/159 -> Near miss unchanged -> Failed +3 147/147.
+ assert.deepEqual(town.gear(),{hp:147,max:147,level:3,attack:9,defense:0});
  for(let action=0;action<10;action++){town.damageWeapon(action);town.damageWeapon(action);}
- assert.equal(town.gear().hp,town.gear().max-6);
+ assert.equal(town.gear().hp,town.gear().max-1);
  assert.equal(town.repair(),true);assert.equal(town.gear().hp,town.gear().max);
  assert.equal(createTownEconomy(new GoldLoot({storage})).attack,9);
  const rival=new GoldLoot({storage}),other=createTownEconomy(rival);assert.ok(town.buy('herbalist','potion'));

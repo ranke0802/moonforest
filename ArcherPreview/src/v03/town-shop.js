@@ -1,4 +1,4 @@
-import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,FORGE_MATERIALS,forgeCursor,forgeZones,itemName,itemNote,gradeLabel} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,FORGE_MATERIALS,forgeCursor,forgeZones,forgeResult,itemName,itemNote,gradeLabel} from './town-items.js';
 import {t} from './i18n.js';
 import {townItemIcon} from './town-item-art.js';
 
@@ -70,11 +70,16 @@ export function createTownShop({root,economy,onChange,onPause}){
  // so the tap that struck cannot also press them.
  const ZONES=[['Perfect','perfect'],['Success','success'],['Near miss','near'],['Failed','failed']];
  const signed=n=>(n>0?'+':'')+n;
+ // What each grade does to this piece (11:14, user): levels gained, maximum lost;
+ // durability is never restored, it only follows a maximum below it.
+ const gradeEffect=(key,n,d)=>key==='near'||key==='failed'&&!d?t('shop.gradeEffect.near'):key==='failed'?t('shop.gradeEffect.failed',{d}):
+  d?t('shop.gradeEffect.'+key,{n,d}):t('shop.gradeEffect.level',{n});
+ const outcome=(w,grade)=>{const next=forgeResult(w.level,w.max,grade);return {n:next.level-w.level,d:w.max-next.max,level:next.level,max:next.max,hp:Math.min(w.hp,next.max)};};
  function forgePreview(id){
   const item=TOWN_ITEMS[id],w=economy.gear(id),attack=item.slot==='sword',gain=attack?FORGE_RULES.attackGain:FORGE_RULES.defenseGain,base=attack?item.attack:item.defense;
-  const at=level=>({value:base+level*gain,max:Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost)});
-  const next=Math.min(FORGE_RULES.maxLevel,w.level+1),best=Math.min(FORGE_RULES.maxLevel,w.level+FORGE_RULES.perfectGain);
-  return {w,attack,now:attack?w.attack:w.defense,success:at(next),perfect:at(best),bestLevel:best,material:FORGE_MATERIALS.find(key=>economy.state.bag[key]),cost:economy.forgeCost(id)};
+  const success=outcome(w,'Success'),perfect=outcome(w,'Perfect'),value=level=>base+level*gain;
+  return {w,attack,now:attack?w.attack:w.defense,success:{...success,value:value(success.level)},perfect:{...perfect,value:value(perfect.level)},bestLevel:perfect.level,
+   material:FORGE_MATERIALS.find(key=>economy.state.bag[key]),cost:economy.forgeCost(id)};
  }
  function forgeCard(id){
   const view=forgePreview(id),card=element('div'),icon=element('div'),text=element('div'),stats=element('dl');
@@ -83,16 +88,16 @@ export function createTownShop({root,economy,onChange,onPause}){
   const change=element('dd');change.append(signed(view.now)+' → ',element('strong',signed(view.success.value)));
   if(view.bestLevel>view.w.level+1)change.append(' ',element('small',t('shop.forgeOnPerfect',{value:signed(view.perfect.value)})));
   stat(t(view.attack?'char.attack':'char.defense'),change);
-  stat(t('shop.forgeDurability'),element('dd',view.w.max+' → '+view.success.max));
+  stat(t('shop.forgeDurability'),element('dd',view.w.hp+'/'+view.w.max+' → '+view.success.hp+'/'+view.success.max));
   const cost=element('small',view.material?t('shop.forgeCost',{cost:view.cost,material:itemName(view.material),n:economy.state.bag[view.material]}):t('shop.forgeNeedsMaterial'));
   cost.className='mf-forge-cost';text.append(element('strong',itemName(id)+' +'+view.w.level),stats,cost);
   card.append(icon,text);return card;
  }
- function forgeLegend(){
-  const legend=element('ol');legend.className='mf-forge-legend';
+ function forgeLegend(id){
+  const legend=element('ol'),w=economy.gear(id);legend.className='mf-forge-legend';
   for(const [grade,key] of ZONES){
-   const row=element('li');row.dataset.zone=key;
-   row.append(element('b',gradeLabel(grade)),element('span',t('shop.gradeEffect.'+key,{n:key==='perfect'?FORGE_RULES.perfectGain:FORGE_RULES.failureWear})));
+   const row=element('li'),next=outcome(w,grade);row.dataset.zone=key;
+   row.append(element('b',gradeLabel(grade)),element('span',gradeEffect(key,next.n,next.d)));
    legend.append(row);
   }
   return legend;
@@ -119,7 +124,7 @@ export function createTownShop({root,economy,onChange,onPause}){
   const mark=element('i');mark.className='mf-forge-mark';rail.append(hammer,mark);gauge.append(glow,rail);
   const hint=element('p',t('shop.forgeTap')+' · '+t('shop.forgeZone',{n:Math.round(zone.scale*100)}));hint.className='mf-forge-hint';
   const result=element('div');result.className='mf-forge-result';result.hidden=true;result.setAttribute('role','status');
-  const side=element('div');side.className='mf-forge-side';side.append(forgeCard(id),forgeLegend());
+  const side=element('div');side.className='mf-forge-side';side.append(forgeCard(id),forgeLegend(id));
   const play=element('div');play.className='mf-forge-play';play.append(gauge,hint,result);
   area.append(side,play);dialog.append(area);
   forging={id,level,area,rail,mark,hint,result,side,struck:false};
@@ -143,16 +148,16 @@ export function createTownShop({root,economy,onChange,onPause}){
   const position=forgeCursor(win.performance.now()-started);
   if(frame)win.cancelAnimationFrame(frame);frame=0;
   f.rail.style.transform='translateX('+(100*position).toFixed(2)+'%)';
-  const grade=economy.forge(position,f.id);
+  const before=economy.gear(f.id),grade=economy.forge(position,f.id);
   if(grade)onChange();
   const w=economy.gear(f.id),key=grade?ZONES.find(([value])=>value===grade)[1]:'failed';
   receipt.textContent=grade?gradeLabel(grade)+' · '+itemName(f.id)+' +'+w.level:t('shop.failed');
   f.area.classList.add('is-struck');f.area.dataset.grade=key;sparks(f.mark,grade);
-  f.side.replaceChildren(forgeCard(f.id),forgeLegend());f.hint.hidden=true;
+  f.side.replaceChildren(forgeCard(f.id),forgeLegend(f.id));f.hint.hidden=true;
   const actions=element('div');actions.className='mf-forge-actions';
   const again=addButton(actions,economy.canForge(f.id)?t('shop.forgeAgain',{cost:economy.forgeCost(f.id)}):w.level>=FORGE_RULES.maxLevel?t('shop.forgeMaxed',FORGE_RULES):t('shop.forgeAgain',{cost:economy.forgeCost(f.id)}),()=>beginForge(f.id),true);
   const back=addButton(actions,t('panel.back'),render,true);
-  f.result.replaceChildren(element('strong',grade?gradeLabel(grade):t('shop.failed')),element('span',grade?t('shop.gradeEffect.'+key,{n:key==='perfect'?FORGE_RULES.perfectGain:FORGE_RULES.failureWear})+' · '+itemName(f.id)+' +'+w.level:''),actions);
+  f.result.replaceChildren(element('strong',grade?gradeLabel(grade):t('shop.failed')),element('span',grade?gradeEffect(key,w.level-before.level,before.max-w.max)+' · '+itemName(f.id)+' +'+w.level+' · '+w.hp+'/'+w.max:''),actions);
   f.result.hidden=false;
   armTimer=win.setTimeout(()=>{armTimer=0;again.disabled=!economy.canForge(f.id);back.disabled=false;(again.disabled?back:again).focus?.({preventScroll:true});},450);
  }

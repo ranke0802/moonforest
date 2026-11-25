@@ -74,10 +74,10 @@ export default {
   'item.boosted':'体力恢复 +{pct}% · {seconds}秒','shop.aria':'村庄商店','shop.smith':'铁匠','shop.herbalist':'草药师','shop.failed':'交易未能完成。','shop.workbench':'工作台','shop.target':'要处理的装备',
   'shop.attack':'攻击力 +{n}','shop.defense':'防御力 +{n}','shop.repair':'修理 · {cost} G','shop.repaired':'装备已修好。','reward.xp':'经验 +{n}','reward.levelUp':'达到 {level} 级，可分配技能点。',
   'shop.weaponBroken':'{name}已损坏：在村里的铁匠修好之前没有攻击力加成。','shop.temper':'锻造装备',
-  'shop.temperNote':'消耗1份材料。每升一级，{bonus}，耐久上限减少{durabilityCost}点，最低为{minDurability}点。完美敲击最多提升{perfectGain}级，强化上限为+{maxLevel}。','shop.forge':'锻造 · {cost} G','shop.buy':'购买','shop.inBag':'背包中 {n}','shop.bought':'已购买{name}。',
+  'shop.temperNote':'消耗1份材料。每升一级，{bonus}，耐久上限减少{durabilityCost}点，最低为{minDurability}点。完美敲击最多提升{perfectGain}级，强化上限为+{maxLevel}。失败会使耐久上限减少{failureLoss}点。锻造不会恢复耐久。','shop.forge':'锻造 · {cost} G','shop.buy':'购买','shop.inBag':'背包中 {n}','shop.bought':'已购买{name}。',
   'shop.makeGear':'制作装备','shop.brew':'调配','shop.make':'制作 · {cost} G','shop.made':'已制作{name}。','shop.sell':'出售','shop.sellFor':'出售 · {price} G','shop.sold':'已出售{name}。',
-  'shop.temperTitle':'锻造{name}','shop.forgeHelp':'标记经过中线时敲击。差一点则等级不变；失败会使所选装备的当前耐久最多减少{failureWear}点。','shop.gauge':'中间有目标的时机条','shop.strike':'敲击','shop.grade.perfect':'完美','shop.grade.success':'成功',
-  'shop.grade.near':'差一点','shop.grade.failed':'失败','shop.forgeTap':'点击画面落锤','shop.forgeZone':'判定区 {n}%','shop.forgeCost':'费用 {cost} G · 材料 {material}(持有 {n})','shop.forgeNeedsMaterial':'没有锻造材料','shop.forgeAgain':'再次锻造 · {cost} G','shop.forgeMaxed':'已锻造至最高 +{maxLevel}','shop.forgeDurability':'最大耐久','shop.forgeOnPerfect':'完美时 {value}','shop.gradeEffect.perfect':'+{n}级 · 耐久恢复','shop.gradeEffect.success':'+1级 · 耐久恢复','shop.gradeEffect.near':'无变化','shop.gradeEffect.failed':'耐久 −{n}','treasure.open':'打开 · {tier}级',
+  'shop.temperTitle':'锻造{name}','shop.forgeHelp':'标记经过中线时敲击。差一点则等级不变；失败会使所选装备的耐久上限减少{failureLoss}点。','shop.gauge':'中间有目标的时机条','shop.strike':'敲击','shop.grade.perfect':'完美','shop.grade.success':'成功',
+  'shop.grade.near':'差一点','shop.grade.failed':'失败','shop.forgeTap':'点击画面落锤','shop.forgeZone':'判定区 {n}%','shop.forgeCost':'费用 {cost} G · 材料 {material}(持有 {n})','shop.forgeNeedsMaterial':'没有锻造材料','shop.forgeAgain':'再次锻造 · {cost} G','shop.forgeMaxed':'已锻造至最高 +{maxLevel}','shop.forgeDurability':'耐久','shop.forgeOnPerfect':'完美时 {value}','shop.gradeEffect.perfect':'+{n}级 · 耐久上限 −{d}','shop.gradeEffect.success':'+{n}级 · 耐久上限 −{d}','shop.gradeEffect.level':'+{n}级','shop.gradeEffect.near':'无变化','shop.gradeEffect.failed':'耐久上限 −{d}','treasure.open':'打开 · {tier}级',
   // Optional errands (2026-11-24).
   'hud.errand':'委托','errand.accepted':'委托 · {title}','errand.done':'委托完成','errand.received':'获得 · {items}',
  },
