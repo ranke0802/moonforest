@@ -47,7 +47,13 @@ export function createVitalityHud({doc,battle}){
   decorate(element,foe){
    if(!foe?.brain)return;
    const row=foeRow(foe);
-   if(row.bar.element.parentElement!==element){const progress=element.querySelector('progress');(progress??element.firstChild)?.after?.(row.bar.element);element.dataset.v03Vital='';}
+   if(row.bar.element.parentElement!==element){
+    // A cloned or reused boss HUD may already contain another encounter's bar.
+    const previous=element.querySelector('.v03-vital-foe');
+    if(previous)previous.replaceWith(row.bar.element);
+    else (element.querySelector('progress')??element.firstChild)?.after?.(row.bar.element);
+    element.dataset.v03Vital='';
+   }
    row.bar.draw(row.life.view());
   },
   dispose(){player.bar.element.remove();delete doc.documentElement.dataset.v03Vital;},

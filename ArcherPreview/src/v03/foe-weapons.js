@@ -61,6 +61,7 @@ export function mountEnemyWeapon(scene,owner,kind,acquire=acquireFoeWeapon){
     mount.position.set(slot.side==='L'?.035:-.035,-.009,.018);mount.rotation.x=slot.tilt;mount.scaling.setAll(slot.scale);
     const mesh=new Mesh(kind+'-held-weapon',scene);mesh.parent=mount;
     mesh.position.y=-.72;source.geometry.applyToMesh(mesh);
+    mesh.sideOrientation=source.sideOrientation;
     mesh.material=source.material;mesh.isPickable=false;mesh.receiveShadows=true;
     return true;
   }).catch(error=>{if(!disposed)console.warn('[MoonForest] enemy weapon unavailable',kind,error);return false;}):Promise.resolve(false);

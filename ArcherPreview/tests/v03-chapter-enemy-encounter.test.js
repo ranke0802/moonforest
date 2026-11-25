@@ -3,7 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {FreeCamera,NullEngine,Scene,TransformNode,Vector3} from '@babylonjs/core';
 import '@babylonjs/loaders/glTF/index.js';
+import {parseHTML} from 'linkedom';
+import {BossHealthBars} from '../src/boss-health-bar.js';
+import {ScreenProjection} from '../src/screen-projection.js';
 import {PlayerCombat} from '../src/player-combat.js';
+import {caveFogFallback} from '../src/cave-fog-binding.js';
+import {isRuntimeOutline} from '../src/character-outlines.js';
+import {setSceneCharacterStyles} from '../src/character-style.js';
+import {CHARACTER_STYLE_DEFAULTS} from '../src/character-style-settings.js';
 import {readBinaryMapContainer} from '../src/map-container.js';
 import {acquireFoeWeapon,mountEnemyWeapon} from '../src/v03/foe-weapons.js';
 import {CHAPTER_MONSTER_MODELS} from '../src/v03/chapter-monster-models.js';
@@ -48,6 +55,9 @@ test('repeated GLB disposal releases the scene hook owned by every enemy contain
 });
 function fixture(extra={}){
   const engine=new NullEngine(),scene=new Scene(engine);
+  scene.useRightHandedSystem=true;
+  // The real engine uploads the shared 1x1 inactive fog sampler. NullEngine has no GPU upload.
+  caveFogFallback(scene).getInternalTexture().isReady=true;
   scene.activeCamera=new FreeCamera('camera',new Vector3(0,2,3),scene);
   const player=new TransformNode('player',scene); player.position.set(0,0,4);
   const world={scene,mapId:'monster-forest',shadows:{addShadowCaster(){},removeShadowCaster(){}}};
@@ -79,6 +89,82 @@ test('real chapter GLB clones share a source and release bones, materials and gr
     b.dispose();assert.equal(f.scene.skeletons.length,0);assert.equal(f.scene.animationGroups.length,0);
     assert.equal(f.battle.active,false);assert.equal(f.scene.meshes.length,0);
   }finally{f.dispose();}
+});
+test('six chapter foes submit body and held equipment silhouettes under the monster outline setting',async t=>{
+  const f=fixture();t.after(()=>f.dispose());
+  f.scene.activeCamera.position.set(0,1.1,3);
+  f.scene.activeCamera.setTarget(new Vector3(0,.9,0));
+  let sharedInk;
+  for(const kind of Object.keys(CHAPTER_MONSTER_MODELS)){
+    const handle=await f.factory.create(f.params(kind,kind)),foe=handle.encounter;
+    const shells=foe.asset.meshes.filter(isRuntimeOutline);
+    assert.deepEqual(shells.map(mesh=>mesh.parent.name).sort(),kind==='zombie'?[kind+'-body']:[kind+'-body',kind+'-held-weapon']);
+    const drawn=new Set();
+    for(const mesh of shells){
+      sharedInk??=mesh.material;
+      assert.equal(mesh.material,sharedInk);
+      assert.equal(mesh.metadata.characterStyleGroup,'boss');assert.equal(mesh.metadata.outlineWidth,.004);
+      assert.equal(mesh.material.stencil.funcRef,2);assert.equal(mesh.parent.material.stencil.funcRef,2);
+      assert.equal(mesh.skeleton,mesh.parent.skeleton);
+      assert.equal(mesh.material._getEffectiveOrientation(mesh),1,'matches the counterclockwise glTF exterior');
+      assert.equal(mesh.parent.material._getEffectiveOrientation(mesh.parent),1);
+      assert.equal(mesh.getVertexBuffer('position'),mesh.parent.getVertexBuffer('position'));
+      assert.ok(foe.deathVisibility.some(([part])=>part===mesh));
+      mesh.onBeforeDrawObservable.add(()=>drawn.add(mesh));
+    }
+    for(const outline of [true,false,true]){
+      setSceneCharacterStyles(f.scene,{...CHARACTER_STYLE_DEFAULTS,boss:{...CHARACTER_STYLE_DEFAULTS.boss,outline}});
+      drawn.clear();f.scene.render();
+      assert.equal(drawn.size,outline?shells.length:0,kind+' outline submission');
+    }
+    foe.brain.hit({damage:9999});foe.update(.15,f.player);
+    for(const mesh of shells){assert.ok(mesh.visibility<1);assert.equal(mesh.visibility,mesh.parent.visibility);}
+    handle.dispose();assert.equal(f.scene.meshes.length,0);
+  }
+});
+test('chapter goblin HP follows the skinned footwear in combat and through defeat',async t=>{
+  const f=fixture();t.after(()=>f.dispose());
+  const {document}=parseHTML('<main><section class="boss-hud"><span class="sr-only"></span><progress></progress><span></span></section></main>');
+  const bars=new BossHealthBars(document.querySelector('section'),{underFeet:true}),projection=new ScreenProjection(f.scene);
+  for(const kind of ['goblin-warrior','goblin-archer','goblin-shaman']){
+    const handle=await f.factory.create(f.params(kind,kind,1)),foe=handle.encounter;
+    const body=foe.asset.meshes.find(mesh=>mesh.name===kind+'-body');
+    const weights=body.getVerticesData('matricesWeights'),joints=body.getVerticesData('matricesIndices');
+    const footBones=new Set(body.skeleton.bones.filter(b=>/^(Foot|Toe)\./.test(b.name)).map(b=>b.getIndex()));
+    const indices=[];
+    for(let i=0;i<body.getTotalVertices();i++){
+      let largest=i*4;
+      for(let j=largest+1;j<i*4+4;j++)if(weights[j]>weights[largest])largest=j;
+      if(footBones.has(joints[largest]))indices.push(i);
+    }
+    assert.ok(indices.length>foe.model.soleVertices.length);assert.ok(foe.model.soleVertices.every(i=>indices.includes(i)));
+    const points=foe.healthFootprint();assert.equal(foe.healthFootprint(),points,'the actor reuses its sole points');
+    const checkPose=()=>{
+      for(const [az,width,height] of [[0,1920,1080],[.8,780,360],[1.6,1920,1080],[2.4,780,360],[3.14,1920,1080]]){
+        f.scene.activeCamera.position.set(1+Math.sin(az)*5,2,Math.cos(az)*5);
+        f.scene.activeCamera.setTarget(foe.actor.position.add(new Vector3(0,.8,0)));
+        projection.resize(width,height);f.scene.render();projection.beginFrame();
+        bars.update(f.scene,[foe],projection);
+        const el=bars.items.get(foe.id).element;
+        assert.equal(el.hidden,false);assert.equal(el.dataset.kind,'monster');assert.equal(el.dataset.hud,'world');
+        // Independent reference from every rendered vertex dominated by either foot or toe.
+        const posed=body.getPositionData(true,true),matrix=body.getWorldMatrix();
+        let left=Infinity,right=-Infinity,bottom=-Infinity;
+        for(const index of indices){
+          const point=projection.project(Vector3.TransformCoordinates(Vector3.FromArray(posed,index*3),matrix));
+          left=Math.min(left,point.x);right=Math.max(right,point.x);bottom=Math.max(bottom,point.y);
+        }
+        const [,x,y]=el.style.transform.match(/translate3d\(([^p]+)px,([^p]+)px/);
+        assert.ok(Math.abs(+x-(left+right)/2)<5*width/1920,kind+' centred on both feet');
+        assert.ok(Math.abs(+y-bottom-4)<5*height/1080,kind+' just below the soles');
+      }
+    };
+    foe.update(.05,f.player);checkPose();
+    foe.brain.hit({damage:999});for(let i=0;i<26;i++)foe.update(.04,f.player);
+    assert.equal(foe.brain.hp,0);checkPose();
+    foe.fogVisible=false;bars.update(f.scene,[foe],projection);assert.equal(bars.items.get(foe.id).element.hidden,true);
+    handle.dispose();bars.update(f.scene,f.battle.encounters,projection);assert.equal(bars.items.size,0);
+  }
 });
 test('a stationary sentry reuses its sight until either endpoint or the map obstacles change', async () => {
   const f = fixture();

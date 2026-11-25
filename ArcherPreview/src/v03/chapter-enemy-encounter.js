@@ -1,8 +1,9 @@
-import {Color3, MeshBuilder, Vector3} from '@babylonjs/core';
+import {Color3, Matrix, MeshBuilder, Vector3, VertexBuffer} from '@babylonjs/core';
 import {BossEncounter} from '../boss-encounter.js';
 import {readBinaryMapContainer} from '../map-container.js';
 import {instantiateBossModel} from '../boss-models.js';
 import {enableEnemyFade} from '../enemy-death.js';
+import {attachCharacterOutlinesAsync} from '../character-outlines.js';
 import {createBossPreparation,bossPreparationCancelled} from '../boss-preparation.js';
 import {prepareModelShaders} from '../boss-shader-warmup.js';
 import {playerDimensions} from '../player-dimensions.js';
@@ -23,6 +24,39 @@ async function loadChapterModel(scene,url,signal){
   const bytes=new Uint8Array(await response.arrayBuffer());
   if(signal.aborted)throw bossPreparationCancelled();
   return readBinaryMapContainer(scene,bytes,new URL('.',url).href,{signal,fileName:url.pathname.split('/').pop()});
+}
+
+// Keep only the palette weights and rest positions for the sole landmarks. After the
+// frame renders, the same skin matrices that drew the body also place its HP bar.
+const soleSamples=new WeakMap();
+function readSoleSamples(body,vertices){
+  const cached=soleSamples.get(body.geometry);if(cached)return cached;
+  const positions=body.getVerticesData(VertexBuffer.PositionKind),joints=body.getVerticesData(VertexBuffer.MatricesIndicesKind),weights=body.getVerticesData(VertexBuffer.MatricesWeightsKind);
+  if(!positions||!joints||!weights||vertices.some(i=>i>=body.getTotalVertices()))return null;
+  const samples=vertices.map(index=>{
+    const influences=[];
+    for(let i=index*4;i<index*4+4;i++)if(weights[i]>0)influences.push({offset:joints[i]*16,weight:weights[i]});
+    return {rest:Vector3.FromArray(positions,index*3),influences};
+  });
+  soleSamples.set(body.geometry,samples);return samples;
+}
+function makeSoleSampler(body,vertices){
+  if(!body?.skeleton)return null;
+  const samples=readSoleSamples(body,vertices);if(!samples)return null;
+  const points=samples.map(()=>new Vector3()),skin=Matrix.Zero(),weighted=Matrix.Zero();
+  return ()=>{
+    const palette=body.skeleton.getTransformMatrices(body),world=body.getWorldMatrix();
+    for(let i=0;i<samples.length;i++){
+      const {rest,influences}=samples[i];skin.reset();
+      for(const {offset,weight} of influences){
+        Matrix.FromFloat32ArrayToRefScaled(palette,offset,weight,weighted);
+        skin.addToSelf(weighted);
+      }
+      Vector3.TransformCoordinatesToRef(rest,skin,points[i]);
+      Vector3.TransformCoordinatesToRef(points[i],world,points[i]);
+    }
+    return points;
+  };
 }
 
 class ChapterEncounter extends BossEncounter {
@@ -51,13 +85,20 @@ class ChapterEncounter extends BossEncounter {
     return facing>.50&&Math.abs(target.y-p.y)<this.model.height*.72;
   }
   async prepareAuxiliary(job){
+    if(this.model.soleVertices&&!this.healthFootprint){
+      const body=this.asset.meshes.find(mesh=>mesh.name===this.kind+'-body');
+      this.healthFootprint=makeSoleSampler(body,this.model.soleVertices);
+    }
     if(!this.weapon&&this.kind!=='zombie'){
       this.weapon=this.mountWeapon(this.world.scene,this.asset,this.kind);
       if(!await job.wait(this.weapon.ready,'chapter-weapon'))throw new Error('몬스터 무기를 손에 부착하지 못했습니다. '+this.kind);
       const held=this.asset.transformNodes.flatMap(node=>node.name==='Hand.R'||node.name==='Hand.L'?node.getChildMeshes(false):[]).filter(mesh=>mesh.name===this.kind+'-held-weapon');
       if(held.length){
-        enableEnemyFade({meshes:held});this.world.lighting?.registerMeshes(held);
-        await prepareModelShaders({meshes:held},{preparation:job,shadows:this.world.shadows,keepPrograms:false});
+        this.world.lighting?.registerMeshes(held);
+        const equipment={meshes:held};
+        await attachCharacterOutlinesAsync(equipment,this.outlineProfile,job);
+        enableEnemyFade(equipment);
+        await prepareModelShaders(equipment,{preparation:job,shadows:this.world.shadows,keepPrograms:false});
         this.asset.meshes.push(...held);
         for(const mesh of held)this.deathVisibility.push([mesh,mesh.visibility]);
       }
@@ -214,7 +255,7 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
       },
       onDefeat:event=>{if(valid()&&!delivered){delivered=true;onDefeat({...event,id,kind});}}
     });
-    Object.assign(enc,{id,kind,developmentActor:true,minorEnemy:kind!=='hobgoblin-boss',displayName:profile.name,
+    Object.assign(enc,{id,kind,outlineProfile:'goblin',developmentActor:true,minorEnemy:kind!=='hobgoblin-boss',displayName:profile.name,
       model,profile,mountWeapon,keepPreparedPrograms:false,radius:model.height*.205,separationRadius:model.height*.25,
       spawn:new Vector3(x,0,z),home:{x:home.x??x,z:home.z??z,radius:home.radius??13,combatRadius:home.combatRadius??7.2},
       territoryState:{enabled:true,engaged:false},sightTimer:0,sightPlayerX:Infinity,sightPlayerZ:Infinity,healthAnchor:new Vector3(),aim:new Vector3(x,0,z),

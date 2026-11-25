@@ -11,25 +11,35 @@ export function projectBossHealth(scene,position,width,height){
 
 const PAWS=['fore.L.paw','fore.R.paw','hind.L.paw','hind.R.paw'];
 const FEET=['Foot.L','Foot.R'];
+const CHAPTER_GOBLIN_FEET=[...FEET,'Toe.L','Toe.R'];
 const MIXAMO_FEET=['mixamorig:LeftFoot','mixamorig:RightFoot'];
+const GOBLIN_FEET=[...MIXAMO_FEET,'mixamorig:LeftToeBase','mixamorig:RightToeBase','mixamorig:LeftToe_End','mixamorig:RightToe_End'];
+
+function footJoints(encounter){
+  if(encounter.model?.soleVertices)return CHAPTER_GOBLIN_FEET;
+  if(encounter.nodes[PAWS[0]])return PAWS;
+  if(encounter.nodes[FEET[0]])return FEET;
+  return encounter.kind==='goblin'?GOBLIN_FEET:MIXAMO_FEET;
+}
 
 export function updateBossHealthPosition(scene,encounter,element,projection,{fixed=false,underFeet=false}={}){
   if(!encounter?.active||encounter.corpseGone||!encounterInCombat(encounter)||encounter.renderVisible===false||encounter.fogVisible===false){element.hidden=true;return;}
   if(element.dataset)element.dataset.hud=fixed?'fixed':'world';
   if(fixed){element.hidden=false;element.style.left='';element.style.top='';element.style.transform='translateX(-50%)';return;}
   element.style.left='0';element.style.top='0';
-  const canvas=projection?null:scene.getEngine().getRenderingCanvas();
+  const engine=projection?null:scene.getEngine(),canvas=engine?.getRenderingCanvas();
+  const width=canvas?.clientWidth??engine?.getRenderWidth(),height=canvas?.clientHeight??engine?.getRenderHeight();
   const position=underFeet?encounter.actor.position:(encounter.healthBarPosition?.()??encounter.actor.position);
-  const p=projection?projection.project(position):projectBossHealth(scene,position,canvas.clientWidth,canvas.clientHeight);
+  const p=projection?projection.project(position):projectBossHealth(scene,position,width,height);
   let {x,y,visible}=p;
-  // Use only the rendered joints of this combatant. No mesh traversal or extra pose update.
-  if(underFeet&&projection&&encounter.nodes){
-    const nodes=encounter.nodes;
-    const feet=nodes[PAWS[0]]?PAWS:nodes[FEET[0]]?FEET:MIXAMO_FEET;
+  // Prefer the skinned soles when available; other rigs use their rendered joints.
+  if(underFeet&&encounter.nodes){
+    const nodes=encounter.nodes,surface=encounter.healthFootprint?.();
+    const feet=surface??footJoints(encounter);
     let left=Infinity,right=-Infinity,bottom=-Infinity;
-    for(const name of feet){
-      const foot=nodes[name];if(!foot)continue;
-      const point=projection.project(foot.getAbsolutePosition());
+    for(const foot of feet){
+      const sole=surface?foot:nodes[foot]?.getAbsolutePosition();if(!sole)continue;
+      const point=projection?projection.project(sole):projectBossHealth(scene,sole,width,height);
       if(!point.visible)continue;
       left=Math.min(left,point.x);right=Math.max(right,point.x);bottom=Math.max(bottom,point.y);
     }
@@ -62,10 +72,11 @@ export class BossHealthBars {
         }
         element.style.left='0';element.style.top='0';
         element.dataset.bossId = String(boss.id);
-        element.dataset.kind = boss.regularWolfId?'monster':boss.kind;
+        const minor=boss.regularWolfId||(this.underFeet&&boss.minorEnemy&&boss.kind.startsWith('goblin-'));
+        element.dataset.kind = minor?'monster':boss.kind;
         element.setAttribute('aria-label', `${tr(boss.displayName??(boss.kind==='goblin'?'고블린':'곰 보스'))} ${boss.number??boss.id} ${tr('체력')}`);
         item = { element, progress: element.querySelector('progress'), state: element.querySelector('.sr-only'), text: element.querySelector('span:last-child') };
-        item.progress.setAttribute('aria-label', tr(boss.regularWolfId?'일반 몬스터 체력':boss.kind === 'goblin' ? '고블린 체력' : '보스 체력'));
+        item.progress.setAttribute('aria-label', tr(minor?'일반 몬스터 체력':boss.kind === 'goblin' ? '고블린 체력' : '보스 체력'));
         this.items.set(boss.id, item);
       }
       const snapshot = `${boss.brain.hp}:${boss.brain.maxHp}:${boss.brain.label}:${boss.brain.mode}:${boss.brain.stagger > 0}:${encounters.length}`;

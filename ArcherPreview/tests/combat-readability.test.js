@@ -6,6 +6,7 @@ import {NullEngine,Scene,ArcRotateCamera,TransformNode,Vector3} from '@babylonjs
 import {BossHealthBars} from '../src/boss-health-bar.js';
 import {PlayerHealthBar} from '../src/player-health-bar.js';
 import {primaryHealthBoss} from '../src/combat-readability.js';
+import {createVitalityHud} from '../src/v03/vitality-hud.js';
 import {ScreenProjection} from '../src/screen-projection.js';
 import {createDamageNumbers} from '../src/damage-numbers.js';
 import {BossBattle} from '../src/boss-battle.js';
@@ -84,6 +85,36 @@ test('0.3 world bars follow the projected feet while the camera turns, the model
  }
 });
 
+test('without a body sampler a goblin follows its projected toes, then its actor until the joints are available',t=>{
+ const f=fixture(t),bars=new BossHealthBars(f.doc.getElementById('boss-hud'),{underFeet:true});
+ for(const [kind,foot,toe,model] of [['goblin','mixamorig:LeftFoot','mixamorig:LeftToe_End'],['goblin-archer','Foot.L','Toe.L',{soleVertices:[1]}]]){
+  const foe=f.enemy(kind,0,0,kind);foe.minorEnemy=true;foe.model=model;
+  const nodes=foe.nodes={};
+  for(const [name,height] of [[foot,.25],[toe,.025]]){
+   const joint=new TransformNode(name,f.scene);joint.parent=foe.actor;joint.position.y=height;nodes[name]=joint;
+  }
+  f.render();bars.update(f.scene,[foe],f.projection);
+  const element=bars.items.get(foe.id).element,under=(point,other=point)=>{
+   const {x:otherX}=f.projection.project(other);
+   const {x:lastX,y}=f.projection.project(point),x=(otherX+lastX)/2;
+   return `translate3d(${x}px,${y+4}px,0) translateX(-50%) scale(var(--v03-ui,1))`;
+  };
+  assert.equal(element.style.transform,under(nodes[toe].getAbsolutePosition(),nodes[foot].getAbsolutePosition()));
+  const coords=()=>element.style.transform.match(/translate3d\(([^p]+)px,([^p]+)px/).slice(1).map(value=>(+value).toFixed(6));
+  const projected=coords();bars.update(f.scene,[foe]);assert.deepEqual(coords(),projected);
+  foe.nodes={};bars.update(f.scene,[foe],f.projection);assert.equal(element.style.transform,under(foe.actor.position));
+ }
+});
+test('a goblin cloned from an active boss HUD gets one independent vitality strip',t=>{
+ const f=fixture(t),bars=new BossHealthBars(f.doc.getElementById('boss-hud'),{underFeet:true});
+ const boss=f.enemy(1),goblin=f.enemy('camp-archer',0,0,'goblin-archer');goblin.minorEnemy=true;
+ const hud=createVitalityHud({doc:f.doc,battle:{encounters:[boss,goblin]}});t.after(()=>hud.dispose());
+ bars.decorate=hud.decorate;bars.update(f.scene,[boss],f.projection);bars.update(f.scene,[boss,goblin],f.projection);
+ const el=bars.items.get(goblin.id).element;
+ assert.equal(el.dataset.kind,'monster');assert.equal(el.dataset.hud,'world');assert.equal(el.querySelectorAll('.v03-vital-foe').length,1);
+ assert.notEqual(el.querySelector('.v03-vital-foe'),bars.template.querySelector('.v03-vital-foe'));
+ assert.equal(bars.template.dataset.hud,'fixed');assert.equal(bars.template.querySelectorAll('.v03-vital-foe').length,1);
+});
 test('repeated pooled summon/replacement has one fixed primary and does not accumulate cloned HP DOM',t=>{
  const f=fixture(t),bars=new BossHealthBars(f.doc.getElementById('boss-hud'));
  for(let i=0;i<60;i++){

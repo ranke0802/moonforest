@@ -125,8 +125,9 @@ export class BossEncounter {
       this.preparePaint();this.world.lighting?.registerMeshes(this.asset.meshes);
     });this.assetPreparationStep=2;}
     if(this.assetPreparationStep<3){
-      if(preparation.incremental)await attachCharacterOutlinesAsync(this.asset,this.kind,preparation);
-      else attachCharacterOutlines(this.asset,this.kind);
+      const profile=this.outlineProfile??this.kind;
+      if(preparation.incremental)await attachCharacterOutlinesAsync(this.asset,profile,preparation);
+      else attachCharacterOutlines(this.asset,profile);
       await prepareActorCameraCullingAsync(this.asset,preparation);
       this.assetPreparationStep=3;
     }
