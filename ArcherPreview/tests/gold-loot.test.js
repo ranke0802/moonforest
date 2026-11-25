@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {GoldLoot,GOLD_LEDGER_KEY} from '../src/gold-loot.js';
+import {GoldLoot,GOLD_LEDGER_KEY,CHAPTER_ONE_COIN_DROPS} from '../src/gold-loot.js';
 import {EnemyDeath} from '../src/enemy-death.js';
 
 test('deaths fade for exactly ten seconds and award once until reused',()=>{
@@ -21,6 +21,18 @@ test('10G goblin / 100G bear loot is collected nearby once, persisted, and survi
   assert.equal(loot.update(.01,{x:4,z:0}).length,1);assert.equal(loot.balance,110);
   loot.drop('bear',{x:0,z:0});loot.clearDrops();assert.equal(loot.balance,110);assert.equal(loot.drops.length,0);
   assert.equal(new GoldLoot({storage}).balance,110);assert.deepEqual(balances,[0,10,110]);
+});
+test('0.3 animals create no coin piles, including on a return visit; goblins and quest gold still pay',()=>{
+ const rows=new Map(),storage={getItem:k=>rows.get(k),setItem:(k,v)=>rows.set(k,v)};
+ const gold=new GoldLoot({storage,coinDrops:CHAPTER_ONE_COIN_DROPS}),point={x:3,y:2,z:1};
+ for(const returning of [false,true]){
+  if(returning)gold.reload();
+  for(const kind of ['wolf','alpha-wolf','gray-wolf','stylized-wolf','wolf-3','boar','fox','bear','black-bear','black-wolf']){
+   assert.equal(gold.drop(kind,point),null);
+  }
+  assert.deepEqual(gold.drops,[]);gold.drop('goblin',point);assert.equal(gold.update(1,point)[0].amount,10);
+ }
+ assert.equal(gold.creditCumulative('quest:M04',120),120);assert.equal(gold.balance,140);
 });
 test('coincident loot and repeated summons keep all gold while bounding visual piles',()=>{
   const loot=new GoldLoot();loot.drop('goblin',{x:0,z:0});loot.drop('bear',{x:0,z:0});assert.equal(loot.drops[0].amount,110);

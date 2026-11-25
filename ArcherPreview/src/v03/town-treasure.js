@@ -3,6 +3,7 @@ import {createQuestProps} from '../chapter-quest-props.js';
 import {createItemDropView} from '../item-drop-view.js';
 import {scatterChestLoot,lootSeed} from '../chest-loot-motion.js';
 import {TOWN_ITEMS,monsterRewards,treasureRewards} from './town-items.js';
+import {MAX_GROUND_DROPS} from './town-economy.js';
 import {language,t} from './i18n.js';
 import {createPickupNotice} from './pickup-notice.js';
 
@@ -80,6 +81,13 @@ export function createTownTreasure({root,world,economy,canInteract,player,sound,
  return {clear,
   collectGold(amount){if(world.v03?.playing&&amount>0)pickup.show({gold:amount});},
   defeat(event,experience=0){if(!world.v03?.playing||!event?.position)return false;const rewards=monsterRewards(event.kind);
+   // The field has a fixed pickup budget across maps. Preserve the guaranteed boss trophy
+   // and its kill XP in one ledger write when every ground slot is occupied.
+   if(rewards['alpha-wolf-fang']&&economy.state.drops.length>=MAX_GROUND_DROPS){
+    const before=economy.state.bag['alpha-wolf-fang']??0;
+    if(!economy.grant('alpha-wolf-fang',1,experience))return false;
+    pickup.show({'alpha-wolf-fang':economy.state.bag['alpha-wolf-fang']-before});return true;
+   }
    return scatter(globalThis.crypto?.randomUUID?.()??Date.now().toString(36)+Math.random().toString(36).slice(2),event.position,rewards,0,experience);
   },
   tick(dt){

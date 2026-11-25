@@ -644,6 +644,44 @@ test('guide track keeps a lead, waits for the player and survives a path rebuild
  track.clear();track.setPath([{x:0,z:0},{x:0,z:5},{x:5,z:5}]);for(let i=0;i<300;i++)track.update(1/60,{x:0,z:4.6});
  assert.ok(Math.abs(track.position.z-5)<.01&&track.position.x>4.9);
 });
+test('the displayed guide leads a 14 m/s gallop through a turn and route rebuilds, then waits',ctx=>{
+ const corner=24,goal={x:60,z:corner};
+ for(const fps of [15,30,60]){
+  const {document}=dom(),dt=1/fps,riding={active:false},player={position:{x:0,z:0}},battle={encounters:[],combatCount:0};
+  let shown=null,travel=0,paths=0;
+  const guide={show(x,y,z){shown={x,y,z};},hide(){shown=null;},dispose(){}};
+  const world={scene:{isDisposed:false},mapId:'village',riding,terrain:{heightAt:(x,z)=>.02*x+.01*z},
+   navigation:{free:()=>true,path(from,to){paths++;return from.z<corner?[{x:0,z:corner},to]:[to];}}};
+  const api={world,battle,input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null};
+  const quest={id:'ride',title:'Ride',steps:[{id:'exit',type:'reach',map:'great-plains',text:'Exit'}]};
+  const content={QUESTS:[quest],NPCS:[],ROUTES:{village:{'great-plains':goal}}};
+  const story=createStory({api,doc:document,save:{journey:memory(),touch(){}},content,createGuide:()=>guide});
+  ctx.after(()=>story.dispose());story.start();
+  function frame(speed){
+   travel+=speed*dt;player.position.z=Math.min(corner,travel);player.position.x=Math.max(0,travel-corner);
+   story.update(dt,{ready:true,mapId:'village',character:'warrior-v3'});
+  }
+  const lead=()=>shown.x+shown.z-travel;
+  for(let i=0;i<2*fps;i++)frame(0);
+  for(let i=0;i<3*fps;i++)frame(3);
+  assert.ok(lead()>3&&lead()<6,'walking lead at '+fps+' FPS: '+lead());
+  riding.active=true;const before=paths;
+  for(let i=0;i<Math.round(2.4*fps);i++){
+   const last=shown;frame(14);
+   assert.ok(lead()>3&&lead()<7,'visible lead during gallop at '+fps+' FPS: '+lead());
+   assert.ok(Math.hypot(shown.x-last.x,shown.z-last.z)<20*dt,'the light jumps at a turn or route rebuild');
+   assert.ok(shown.y>world.terrain.heightAt(shown.x,shown.z)+.7);
+  }
+  assert.ok(paths>=before+2,'the gallop crosses two navigation updates');
+  for(let i=0;i<3*fps;i++)frame(0);
+  assert.ok(lead()>4.5&&lead()<6.5,'the light waits within its usual lead');
+  riding.active=false;
+  while(travel<goal.x+goal.z)frame(3);
+  for(let i=0;i<2*fps;i++)frame(0);
+  assert.ok(Math.hypot(shown.x-goal.x,shown.z-goal.z)<1,'the light waits at the quest destination');
+  battle.combatCount=1;frame(0);assert.equal(shown,null);
+ }
+});
 test('errands: a first greeting once, an errand offered after its main quest, the service event and the hand-in pay once',async()=>{
  const h=harness(),bag=new Map();let townEvent=null;
  Object.assign(h.api,{itemCount:id=>bag.get(id)??0,

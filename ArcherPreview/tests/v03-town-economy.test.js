@@ -18,9 +18,9 @@ test('smith trades are atomic with gold and all four grades have distinct conseq
  // 11:14, user: a level costs 7 maximum durability, a failure 12; tempering never restores durability.
  const storage=store(),gold=wallet(storage),town=createTownEconomy(gold);
  assert.equal(town.gear().max,180);assert.equal(town.attack,3);assert.equal(town.buy('smith','iron-scrap'),true);
- assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:166,max:166,level:2,attack:7,defense:0});
+ assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:173,max:173,level:2,attack:7,defense:0});
  for(const grade of ['Success','Near miss','Failed']){town.grant('wolf-fang');assert.equal(town.forge({Success:.36,'Near miss':.24,Failed:0}[grade]),grade);}
- // +2 166/166 -> Success +3 159/159 -> Near miss unchanged -> Failed +3 147/147.
+ // +2 173/173 -> Success +3 166/166 -> Near miss 159/159 -> Failed +3 147/147.
  assert.deepEqual(town.gear(),{hp:147,max:147,level:3,attack:9,defense:0});
  for(let action=0;action<10;action++){town.damageWeapon(action);town.damageWeapon(action);}
  assert.equal(town.gear().hp,town.gear().max-1);
@@ -37,7 +37,7 @@ test('craft, wear, repair armor; register and persist stamina consumables',()=>{
  assert.equal(a.state.bag.potion,4);assert.equal(a.state.bag['moon-herb'],undefined);
  a.grant('fox-pelt');a.grant('wolf-pelt',2);assert.ok(a.craft('smith','hunter-coat'));a.equip('hunter-coat');
  a.grant('iron-scrap');assert.equal(a.forge(.5,'hunter-coat'),'Perfect');assert.equal(a.defense,8);
- a.wearDefense(false);assert.equal(a.gear('hunter-coat').hp,105);assert.ok(a.repair('hunter-coat'));
+ a.wearDefense(false);assert.equal(a.gear('hunter-coat').hp,112);assert.ok(a.repair('hunter-coat'));
  a.grant('bear-bile');assert.ok(a.register('bear-bile'));assert.ok(a.drink());assert.equal(a.regen,1.75);
  a.tick(15);const again=createTownEconomy(new GoldLoot({storage}));assert.equal(again.state.boost,75);again.tick(75);assert.equal(again.regen,1);
 });
@@ -49,7 +49,7 @@ test('existing saves retain selected gear, new games have a sturdy low-strike sw
 test('animal trophies roll independently, themed monster weapons can be equipped, and chest rewards survive reopening',()=>{
  for(const kind of ['boar','bear','wolf','gray-wolf','fox','goblin-warrior','goblin-archer','goblin-shaman','hobgoblin','zombie','ghoul-warrior','black-bear','black-wolf']){
   for(const id of Object.keys(monsterRewards(kind,()=>0)))assert.ok(TOWN_ITEMS[id],kind+' '+id);
-  assert.ok(Object.keys(monsterRewards(kind,()=>0)).length);assert.deepEqual(monsterRewards(kind,()=>.9999),{});
+  assert.ok(Object.keys(monsterRewards(kind,()=>0)).length);assert.deepEqual(monsterRewards(kind,()=>.9999),kind==='wolf'?{'alpha-wolf-fang':1}:{});
  }
  assert.deepEqual(monsterRewards('boar',()=>.5),{'boar-meat':1});assert.equal(Object.keys(monsterRewards('bear',()=>0)).length,4);
  const storage=store(),a=createTownEconomy(wallet(storage)),point={x:0,y:0,z:0},sample={id:'chest:one',mapId:'village',model:'clue-satchel',origin:point,position:point,rewards:treasureRewards(5,()=>0)};
@@ -57,6 +57,27 @@ test('animal trophies roll independently, themed monster weapons can be equipped
  const b=createTownEconomy(new GoldLoot({storage}));assert.ok(b.collect(['chest:one']));assert.equal(b.collect(['chest:one']),null);
  assert.ok(b.equip('ghoul-blade'));assert.equal(b.attack,16);
  const points=CHAPTER_POINTS.filter(p=>p.treasure);assert.equal(points.length,24);assert.equal(new Set(points.map(p=>p.map)).size,4);assert.equal(new Set(points.map(p=>p.tier)).size,5);
+});
+test('only alpha wolves guarantee a fang and the smith makes its +17 sword from a saved pickup and two scraps',async()=>{
+ const fang='alpha-wolf-fang',blade='alpha-fang-blade',storage=store(),point={x:0,y:0,z:0};
+ for(const kind of ['wolf','alpha-wolf'])assert.deepEqual(monsterRewards(kind,()=>.99999),{[fang]:1});
+ for(const kind of ['gray-wolf','stylized-wolf','wolf-2','wolf-3','black-wolf','corrupted-wolf'])assert.equal(monsterRewards(kind,()=>0)[fang],undefined);
+ let town=createTownEconomy(wallet(storage,14));
+ const pile={id:'foe:wolf:0',mapId:'great-plains',origin:point,position:point,model:'clue-satchel',rewards:monsterRewards('wolf',()=>.99999)};
+ assert.ok(town.scatter([pile]));assert.equal(town.state.bag[fang],undefined);
+ town=createTownEconomy(new GoldLoot({storage}));assert.deepEqual(town.collect([pile.id]),{[fang]:1});assert.equal(town.collect([pile.id]),null);
+ assert.ok(town.buy('smith','iron-scrap'));assert.equal(town.craft('smith',blade),false);assert.equal(town.state.bag[fang],1);
+ assert.ok(town.buy('smith','iron-scrap'));assert.equal(town.gold,0);
+ const {document,window}=parseHTML('<main></main>'),root=document.querySelector('main');
+ const shop=createTownShop({root,economy:town,onPause(){},onChange(){}}),dialog=root.querySelector('dialog');
+ dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
+ const opened=shop.show('smith'),row=dialog.querySelector('[data-item-icon="'+blade+'"]').closest('.mf-shop-row');
+ assert.match(row.querySelector('small').textContent,/\+17/);assert.equal(row.querySelector('button').disabled,false);
+ row.querySelector('button').click();shop.close();await opened;shop.dispose();
+ assert.equal(town.state.bag[fang],undefined);assert.equal(town.state.bag['iron-scrap'],undefined);
+ assert.equal(town.craft('smith',blade),false);assert.equal(town.state.bag[blade],1);assert.ok(town.equip(blade));
+ town=createTownEconomy(new GoldLoot({storage}));assert.equal(town.state.equipped.sword,blade);assert.equal(town.attack,17);
+ assert.deepEqual(town.gear(blade),{level:0,attack:17,defense:0,hp:100,max:100});
 });
 test('equipping different blade profiles changes geometry below the guard and preserves hand mount and tip reach',()=>{
  const engine=new NullEngine(),scene=new Scene(engine),sword=MeshBuilder.CreateBox('Golden_Oathblade',{height:2},scene);

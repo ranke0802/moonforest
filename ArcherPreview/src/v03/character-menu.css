@@ -1,3 +1,5 @@
+@import './equipment-card.css';
+
 /* Same in-game canvas behind the clear model column. The rest of the HUD is
    hidden only while this native modal is open. */
 #app[data-character-menu] > :not(#viewport):not(.mf-character-menu):not(#loading){visibility:hidden}
@@ -34,7 +36,7 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-slots>*{display:grid;align-content:center;min-height:44px;padding:4px;text-align:center;border:1px solid #9b88567d;background:#141b18d9;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
 .mf-menu-slots button{cursor:pointer}
 .mf-menu-slots .mf-town-item-icon{--mf-item-icon-size:clamp(20px,4vmin,36px);justify-self:center}
-.mf-menu-grid button .mf-town-item-icon{inline-size:86%;block-size:86%;align-self:center}
+.mf-menu-grid button>.mf-town-item-icon{inline-size:86%;block-size:86%;align-self:center}
 .mf-menu-item>.mf-town-item-icon{--mf-item-icon-size:clamp(42px,10vmin,72px);display:block;margin:4px 0}
 .mf-menu-slots small,.mf-menu-item>small{color:#c9bb99;font-size:12px}
 .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1.5fr 1fr}
@@ -44,11 +46,22 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
 .mf-menu-grid>*{aspect-ratio:1;min-width:0;border:1px solid #a692664d;background:#101916}
 .mf-menu-grid button{display:grid;place-items:center;position:relative;cursor:pointer}
-.mf-menu-grid button .commercial-icon{width:80%;height:80%}
-.mf-menu-count{position:absolute;bottom:2px;right:4px;font:600 12px/1 system-ui;color:#f5e4b7;text-shadow:0 1px 3px #000}
+.mf-menu-grid button>.commercial-icon{width:80%;height:80%}
+.mf-menu-count,.mf-menu-worn{position:absolute;bottom:2px;right:4px;font:600 12px/1 system-ui;color:#f5e4b7;text-shadow:0 1px 3px #000}
+.mf-menu-grid .mf-menu-gear-tile{padding:0;border-radius:.45rem}
+.mf-menu-gear-tile>.mf-equipment-icon{width:100%;height:100%}
+.mf-menu-gear-tile[aria-pressed=true]>.mf-equipment-icon{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.mf-menu-gear-tile .mf-equipment-icon>b{right:1px;bottom:1px;padding:0 .2em;font-size:clamp(10px,1.8vmin,13px)}
+.mf-menu-gear-tile>.mf-menu-count,.mf-menu-gear-tile>.mf-menu-worn{padding:1px 2px;border-radius:2px;background:#1c1820;color:#fff3d8;font-size:clamp(10px,1.8vmin,13px)}
+.mf-menu-gear-tile>.mf-menu-count{right:auto;left:2px}
+.mf-menu-gear-tile>.mf-menu-count.is-large{bottom:1.5em}
+.mf-menu-gear-tile>.mf-menu-worn{top:2px;right:2px;bottom:auto;color:#b8e6b6}
 .mf-menu-grid button[data-broken]::after{content:'!';position:absolute;top:2px;left:2px;min-width:1.1em;text-align:center;border-radius:2px;background:#802e24;color:#fff3dc;font:700 12px/1.15 system-ui,sans-serif}
 .mf-menu-break-note{color:#ffc2a4}
 .mf-menu-item{border-left:1px solid var(--line)}
+.mf-menu-item>.mf-equipment-card{margin-bottom:.5rem}
+.mf-menu-item .mf-equipment-card h2{margin:2px 0;color:#fff3d8;overflow-wrap:anywhere}
+.mf-menu-item .mf-equipment-card small,.mf-menu-item .mf-menu-quantity{display:block;color:#c9bb99;font-size:12px}
 .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:72px;height:72px;margin:8px 0;display:grid;place-items:center}
 .mf-menu-item button,.mf-menu-equipped{display:inline-block;margin-top:10px;border:1px solid var(--line);color:var(--gold);padding:6px 12px}
 .mf-menu-item button:disabled{opacity:.45}
@@ -113,6 +126,8 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:min-content minmax(0,1fr)}
   .mf-menu-grid{--mf-cell:clamp(44px,13dvh,60px);grid-template-columns:repeat(6,var(--mf-cell));grid-auto-rows:var(--mf-cell)}
   .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:44px;height:44px;margin:2px 0}
+  .mf-menu-item>.mf-equipment-card{gap:.65rem;padding:.4rem .55rem}
+  .mf-menu-item .mf-equipment-icon{width:3rem}
   .mf-menu-item p{margin:5px 0}
     .mf-character-menu[data-page=Skills] .mf-menu-body{grid-template-columns:minmax(0,1fr) minmax(150px,28%)}
   .mf-character-menu .mf-skill-node{gap:4px;padding:2px 4px}

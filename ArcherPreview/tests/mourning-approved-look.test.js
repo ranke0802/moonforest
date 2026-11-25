@@ -68,7 +68,7 @@ test('approved paint/ink and pooled actors preserve geometry, texture, independe
  settings.reset('mourning');setSceneCharacterStyles(f.scene,settings.value);
  const a=actors[0];for(const mesh of [a.body,...a.shells]){await mesh.material.forceCompilationAsync(mesh);assert.equal(mesh.material.isReadyForSubMesh(mesh,mesh.subMeshes[0]),true);}
  const effect=a.body.subMeshes[0].effect;assert.match(effect.fragmentSourceCode,/\.78\+\.14\*smoothstep/);assert.match(effect.fragmentSourceCode,/gl_FrontFacing/);assert.match(effect.fragmentSourceCode,/caveFogShadeSurface/);assert.doesNotMatch(effect.fragmentSourceCode,/fwidth|reflectionSampler/);
- f.scene.render();const values={},original=effect.setFloat.bind(effect);effect.setFloat=(name,value)=>{values[name]=value;return original(name,value);};applyHitFlash(a.asset.meshes,.11);a.body.material.bind(a.body.getWorldMatrix(),a.body,undefined,a.body.subMeshes[0]);assert.equal(values.paintExposure,1.35);assert.equal(values.paintOpacity,1);assert.equal(values.paintHitFlash,.36);
+ f.scene.render();const values={},original=effect.setFloat.bind(effect);effect.setFloat=(name,value)=>{values[name]=value;return original(name,value);};applyHitFlash(a.asset.meshes,.11);a.body.material.bind(a.body.getWorldMatrix(),a.body,undefined,a.body.subMeshes[0]);assert.equal(values.paintExposure,1.3);assert.equal(values.paintOpacity,1);assert.equal(values.paintHitFlash,.36);
  a.body.visibility=.4;a.body.material.bind(a.body.getWorldMatrix(),a.body,undefined,a.body.subMeshes[0]);assert.equal(values.paintOpacity,.4);assert.equal(values.paintHitFlash,0);a.body.visibility=1;
  const texture=f.decoded.gltf.images.find(row=>row.uri?.endsWith('.ktx2'));const bytes=readFileSync(new URL(texture.uri,new URL(f.config.model,new URL('../public/assets/',import.meta.url))));assert.equal(hash(bytes),'b943792deead273c3d9793295a2660c005e750f23e1c4074de95f5e6487c4eb9');
  assert.equal(inspectNpcInteriorInk(f.scene).renderTargets,0,'unsupported depth never allocates a pass');
@@ -111,7 +111,8 @@ test('the cave Witch keeps a sampled exterior edge at reduced resolution with th
  const body=a.asset.meshes.find(mesh=>mesh.name==='Elina_Chimera_Skin'),bodyEffect=body.subMeshes[0].effect;
  const surfaceFlash=[],set1=bodyEffect.setFloat.bind(bodyEffect);
  bodyEffect.setFloat=(name,value)=>{if(name==='paintHitFlash')surfaceFlash.push(value);return set1(name,value);};
- render(1/1.7,1);
+ render(1/1.7,.4);render(1/.85,.4);
+ set({outlineWidth:.5});render(1/1.7,1);
  const open=()=>assert.deepEqual(stencils,Array.from({length:3},()=>[Constants.ALWAYS,Constants.ALWAYS,0]));
  open();assert.ok(depthGaps.includes(.035));
  applyHitFlash(a.asset.meshes,.22);render(1/1.7,1);open();

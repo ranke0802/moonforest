@@ -2,6 +2,7 @@ import {Color3,Matrix,ShaderMaterial,VertexBuffer} from '@babylonjs/core';
 import {BindBonesParameters,BindFogParameters} from '@babylonjs/core/Materials/materialHelper.functions.js';
 import {canInlineHitFlash} from './hit-feedback.js';
 import {characterStyleFor} from './character-style.js';
+import {CHARACTER_STYLE_DEFAULTS} from './character-style-settings.js';
 import {configureCharacterExteriorStencil} from './character-ink-stencil.js';
 import {registerNpcInteriorInk} from './character-interior-ink.js';
 import {CAVE_FOG_GLSL} from './cave-fog-cover.js';
@@ -11,7 +12,7 @@ import '@babylonjs/core/Shaders/ShadersInclude/fogVertex.js';
 import '@babylonjs/core/Shaders/ShadersInclude/fogFragmentDeclaration.js';
 import '@babylonjs/core/Shaders/ShadersInclude/fogFragment.js';
 
-export const MOURNING_REFERENCE_LOOK=Object.freeze({outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35,pbr:false});
+export const MOURNING_REFERENCE_LOOK=Object.freeze({...CHARACTER_STYLE_DEFAULTS.mourning,pbr:false});
 const vertexSource=`precision highp float;
 attribute vec3 position;attribute vec3 normal;
 #ifdef HASPAINTMAP
@@ -84,7 +85,7 @@ function paintMaterial(source,scene){
   const material=new ShaderMaterial('mourning-reference-'+source.name,scene,{vertexSource,fragmentSource},{attributes:texture?['position','normal','uv']:['position','normal'],defines:texture?['#define NORMAL','#define HASPAINTMAP']:['#define NORMAL'],uniforms:['world','view','viewProjection','paintMatrix','paintBase','paintHasMap','paintHardwareSRGB','paintExposure','paintOpacity','paintHitFlash','vFogInfos','vFogColor','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['paintSampler','caveFogMap']});
   material.backFaceCulling=false;material.disableDepthWrite=false;material.alpha=source.alpha??1;
   material.setColor3('paintBase',(source.albedoColor??source.diffuseColor??Color3.White()).clone());
-  material.setFloat('paintHasMap',texture?1:0);material.setFloat('paintOpacity',material.alpha);material.setFloat('paintExposure',1.35);material.setFloat('paintHitFlash',0);
+  material.setFloat('paintHasMap',texture?1:0);material.setFloat('paintOpacity',material.alpha);material.setFloat('paintExposure',MOURNING_REFERENCE_LOOK.brightness);material.setFloat('paintHitFlash',0);
   material.setMatrix('paintMatrix',texture?.getTextureMatrix?.()??Matrix.Identity());material.setTexture('paintSampler',texture??caveFogFallback(scene));
   material.metadata={moonforestMonsterToon:true,mourningReferenceLook:true,pbr:false,originalTexture:texture?.name??null};
   configureCharacterExteriorStencil(material);bindCaveFogMaterial(scene,material);

@@ -1,11 +1,9 @@
-import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,gradeStrike,forgeMax,forgeResult} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,FORGE_MATERIALS,gradeStrike,forgeMax,forgeResult} from './town-items.js';
 import {validateItemDrop} from '../item-drop-data.js';
 import {MAX_TOTAL_XP,PASSIVE_LIMITS,SKILL_REFUND_GOLD,normalizeProgression,progressionStatus,questExperience,weaponWearInterval} from './character-progression.js';
+export const MAX_GROUND_DROPS=128;
 const slots=['sword','shield','armor'];
 const qty=n=>Number.isSafeInteger(n)&&n>0&&n<=99999?n:0;
-// loss: maximum durability taken by failed tempers (saved per piece, absent when 0).
-const baseDur=(id,level,loss=0)=>forgeMax(id,level,loss);
-const lossCap=id=>Math.max(0,TOWN_ITEMS[id].max-FORGE_RULES.minDurability);
 const defaultGear={sword:'field-sword',shield:'field-shield',armor:null};
 const own=(state,id)=>!!state.bag[id];
 // One point in units divisible by 10, 15, 20, 25, 30 and 35 contacts.
@@ -28,23 +26,25 @@ export function normalizeTown(raw,legacy={}){
  for(const slot of slots){const id=raw.equipped?.[slot];if(bag[id]&&TOWN_ITEMS[id]?.slot===slot)equipped[slot]=id;}
  for(const id of Object.keys(bag)){
   if(!TOWN_ITEMS[id].slot)continue;
-  const source=raw.condition?.[id]??raw.weapons?.[id],level=Math.min(FORGE_RULES.maxLevel,qty(source?.level)),loss=Math.min(lossCap(id),qty(source?.loss)),max=baseDur(id,level,loss);
-  condition[id]={level,hp:Number.isSafeInteger(source?.hp)?Math.max(0,Math.min(max,source.hp)):max};
-  if(loss)condition[id].loss=loss;
+  const source=raw.condition?.[id]??raw.weapons?.[id],level=Math.min(FORGE_RULES.maxLevel,qty(source?.level));
+  // Old saves inferred the maximum from level and extra loss on failures.
+  const max=Number.isSafeInteger(source?.max)&&source.max>=FORGE_RULES.minDurability&&source.max<=TOWN_ITEMS[id].max
+   ?source.max:forgeMax(id,level,qty(source?.loss));
+  condition[id]={level,max,hp:Number.isSafeInteger(source?.hp)?Math.max(0,Math.min(max,source.hp)):max};
   if(TOWN_ITEMS[id].slot==='sword'&&condition[id].hp>0&&Number.isInteger(source?.wearUnits)&&source.wearUnits>0&&source.wearUnits<WEAR_UNITS)
    condition[id].wearUnits=source.wearUnits;
  }
  // The ground-drop budget applies to live pickups. Opened chests are permanent per-slot history.
  const opened=Array.isArray(raw.opened)?[...new Set(raw.opened.filter(id=>typeof id==='string'&&
    (id.length<120||/^placed:(?:village|great-plains|monster-forest|witch-cave):[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(id))))]:[];
- const drops=Array.isArray(raw.drops)?raw.drops.filter(d=>validateItemDrop(d)&&Object.keys(d.rewards).every(id=>TOWN_ITEMS[id])).slice(0,128):[];
+ const drops=Array.isArray(raw.drops)?raw.drops.filter(d=>validateItemDrop(d)&&Object.keys(d.rewards).every(id=>TOWN_ITEMS[id])).slice(0,MAX_GROUND_DROPS):[];
  return {version:1,bag,equipped,condition,opened,drops,progression:normalizeProgression(raw.progression),quick:TOWN_ITEMS[raw.quick]?.quick?raw.quick:'potion',
    boost:Math.max(0,Math.min(90,Number(raw.boost)||0)),boostRate:raw.boostRate===1.75?1.75:1.5};
 }
 function give(state,id,count){
  const item=TOWN_ITEMS[id];if(!item||!qty(count))return;
  state.bag[id]=Math.min(99999,(state.bag[id]??0)+count);
- if(item.slot&&!state.condition[id])state.condition[id]={level:0,hp:item.max};
+ if(item.slot&&!state.condition[id])state.condition[id]={level:0,max:item.max,hp:item.max};
 }
 function take(state,id,count){
  state.bag[id]-=count;
@@ -52,6 +52,9 @@ function take(state,id,count){
  delete state.bag[id];
  const slot=TOWN_ITEMS[id]?.slot;
  if(slot){delete state.condition[id];if(state.equipped[slot]===id)state.equipped[slot]=defaultGear[slot];}
+}
+function addKillExperience(state,amount){
+ if(Number.isSafeInteger(amount)&&amount>0)state.progression.totalXp=Math.min(MAX_TOTAL_XP,state.progression.totalXp+amount);
 }
 export function createTownEconomy(wallet,legacy={}){
  let state=normalizeTown(wallet.town,legacy),dirty=false,unsavedSeconds=0,lastAction=null;
@@ -68,7 +71,7 @@ export function createTownEconomy(wallet,legacy={}){
  function gear(id=state.equipped.sword){
   const item=TOWN_ITEMS[id],status=state.condition[id];
   if(!item||!status)return null;
-  return {level:status.level,hp:status.hp,max:baseDur(id,status.level,status.loss),attack:status.hp&&item.attack?item.attack+status.level*FORGE_RULES.attackGain:0,defense:status.hp&&item.defense?item.defense+status.level*FORGE_RULES.defenseGain:0};
+  return {level:status.level,hp:status.hp,max:status.max,attack:status.hp&&item.attack?item.attack+status.level*FORGE_RULES.attackGain:0,defense:status.hp&&item.defense?item.defense+status.level*FORGE_RULES.defenseGain:0};
  }
  // Village service events for the story's errands ({type:'town',action,item}).
  // One listener at a time; the story sets it on start and clears it on stop.
@@ -123,19 +126,19 @@ export function createTownEconomy(wallet,legacy={}){
   repairCost(id){const w=gear(id);return w?Math.ceil((w.max-w.hp)/7):0;},
   repair(id=state.equipped.sword){const cost=api.repairCost(id);return told(cost>0&&transact(-cost,s=>{s.condition[id].hp=gear(id).max;delete s.condition[id].wearUnits;}),'repair',id);},
   forgeCost(id){return 12+4*(gear(id)?.level??0);},
-  canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&['wolf-fang','boar-tusk','iron-scrap','tainted-fang','grave-dust','rune-shard'].some(id=>own(state,id));},
+  canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&FORGE_MATERIALS.some(key=>own(state,key));},
   forge(position,id=state.equipped.sword){if(!Number.isFinite(position)||!api.canForge(id))return null;
    const grade=gradeStrike(position,state.condition[id]?.level??0);
-   const material=['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard'].find(id=>own(state,id));
+   const material=FORGE_MATERIALS.find(key=>own(state,key));
    return told(transact(-api.forgeCost(id),s=>{
     take(s,material,1);const w=s.condition[id];
-    // 11:14, user: no repair from tempering; the current value only follows a lower maximum.
-    const next=forgeResult(w.level,baseDur(id,w.level,w.loss),grade);w.level=next.level;
-    if(grade==='Failed'){const loss=Math.min(lossCap(id),(w.loss??0)+FORGE_RULES.failureLoss);if(loss)w.loss=loss;}
-    w.hp=Math.min(w.hp,baseDur(id,w.level,w.loss));
+    const next=forgeResult(w.level,w.max,grade);
+    w.level=next.level;w.max=next.max;w.hp=Math.min(w.hp,w.max);
    }),'forge',id)?grade:null;
   },
-  grant(id,count=1){return !!TOWN_ITEMS[id]&&qty(count)>0&&transact(0,s=>give(s,id,count));},
+  grant(id,count=1,experience=0){return !!TOWN_ITEMS[id]&&qty(count)>0&&transact(0,s=>{
+   give(s,id,count);addKillExperience(s,experience);
+  });},
   // Hands bag items over (an errand delivery). All or nothing.
   spend(id,count=1){const item=TOWN_ITEMS[id];return !!item&&qty(count)>0&&(state.bag[id]??0)>=count&&
    !(defaultGear[item.slot]===id&&count===state.bag[id])&&transact(0,s=>take(s,id,count));},
@@ -146,11 +149,11 @@ export function createTownEconomy(wallet,legacy={}){
   },
   // A chest and its on-ground items must either both exist or neither be committed.
   scatter(drops,chestId=null,experience=0){
-   if((chestId&&state.opened.includes(chestId))||!drops.length||state.drops.length+drops.length>128||!drops.every(validateItemDrop))return false;
+   if((chestId&&state.opened.includes(chestId))||!drops.length||state.drops.length+drops.length>MAX_GROUND_DROPS||!drops.every(validateItemDrop))return false;
    return transact(0,s=>{
     if(chestId)s.opened.push(chestId);
     s.drops.push(...drops);
-    if(Number.isSafeInteger(experience)&&experience>0)s.progression.totalXp=Math.min(MAX_TOTAL_XP,s.progression.totalXp+experience);
+    addKillExperience(s,experience);
    });
   },
   collect(ids){

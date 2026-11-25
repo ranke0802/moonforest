@@ -1,10 +1,13 @@
 export const GOLD_REWARDS=Object.freeze({goblin:10,bear:100,wolf:100,'gray-wolf':25,'stylized-wolf':25,'wolf-3':25,fox:25,boar:25});
+// Chapter 1 animals drop materials. Quest payouts are credited separately.
+export const CHAPTER_ONE_COIN_DROPS=Object.freeze({goblin:GOLD_REWARDS.goblin});
 export const GOLD_STORAGE_KEY='moonforest-gold-v1';
 export const GOLD_LEDGER_KEY='moonforest-gold-ledger-v1';
 const STORAGE_KEY=GOLD_STORAGE_KEY,LEDGER_KEY=GOLD_LEDGER_KEY;
 const PICKUP_RETRY_SECONDS=2;
 export class GoldLoot {
-  constructor({storage,onBalance=()=>{},onPickup=()=>{}}={}) {
+  constructor({storage,onBalance=()=>{},onPickup=()=>{},coinDrops=GOLD_REWARDS}={}) {
+    this.coinDrops=coinDrops;
     this.storage=storage;this.onBalance=onBalance;this.onPickup=onPickup;this.drops=[];this.serial=0;this.balance=0;this.credits={};this.saveState='new';this.volatile=false;this._expectedLedger=null;this._blocked=false;
     this._pickupMemoryOnly=!storage||storage.available===false;
     this._unverifiedLedger=null;
@@ -38,7 +41,7 @@ export class GoldLoot {
   }
   creditCumulative(source,total){if(!/^[a-zA-Z0-9:_-]{1,90}$/.test(source)||!Number.isSafeInteger(total)||total<0)return 0;const delta=Math.max(0,total-(this.credits[source]??0));if(!delta)return 0;const granted=Math.min(delta,Number.MAX_SAFE_INTEGER-this.balance);this.credits[source]=total;this.balance+=granted;this.persist();this.onBalance(this.balance);return granted;}
   drop(kind,position,{canLand=()=>true,heightAt=null}={}) {
-    const amount=GOLD_REWARDS[kind];if(!amount)return null;
+    const amount=this.coinDrops[kind];if(!Number.isSafeInteger(amount)||amount<=0)return null;
     // Bound the number of draw calls even during repeated test summons.
     let pile=this.drops.find(d=>Math.hypot((d.origin??d.position).x-position.x,(d.origin??d.position).z-position.z)<.45);
     if(!pile&&this.drops.length>=64)pile=this.drops.reduce((a,b)=>Math.hypot(a.position.x-position.x,a.position.z-position.z)<Math.hypot(b.position.x-position.x,b.position.z-position.z)?a:b);

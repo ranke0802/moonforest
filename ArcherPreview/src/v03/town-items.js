@@ -39,12 +39,14 @@ export const TOWN_ITEMS=Object.freeze({
  'rune-shard':mat(9),'tainted-fang':mat(11),
  'arrow-fletching':mat(5),'ward-cord':mat(8),
  'iron-stud':mat(9),'burial-clasp':mat(6),'ghoul-mail':mat(12),
+ 'alpha-wolf-fang':mat(20),
+ 'alpha-fang-blade':blade(17,100,'violet-silver','fang'),
 });
 const wolf=[['wolf-pelt',.6],['wolf-bone',.45],['wolf-fang',.28]];
 const bear=[['bear-meat',.85],['bear-hide',.55],['bear-fur',.48],['bear-bile',.27]];
 export const LOOT_TABLES={
  fox:[['fox-pelt',.72]],boar:[['boar-meat',.80],['boar-tusk',.40]],bear,
- wolf:[...wolf,['wolf-blade',.22]],'gray-wolf':wolf,'stylized-wolf':wolf,'wolf-2':wolf,'wolf-3':wolf,
+ wolf:[...wolf,['wolf-blade',.22],['alpha-wolf-fang',1]],'gray-wolf':wolf,'stylized-wolf':wolf,'wolf-2':wolf,'wolf-3':wolf,
  goblin:[['iron-scrap',.7],['goblin-cleaver',.15]],'goblin-warrior':[['iron-scrap',.7],['raider-dagger',.18]],
  'goblin-archer':[['arrow-fletching',.70],['field-bow',.20]],'goblin-shaman':[['ward-cord',.55],['rune-shard',.7],['crooked-staff',.18]],
  hobgoblin:[['iron-stud',.72],['spiked-club',.23],['oak-shield',.17]],
@@ -71,7 +73,8 @@ export const STOCK={
  herbalist:{potion:15,'stamina-tonic':29,'moon-herb':4}
 };
 export const RECIPES={
- smith:{'wolf-blade':{gold:22,inputs:{'wolf-fang':2,'iron-scrap':2}},'hunter-knife':{gold:12,inputs:{'boar-tusk':1,'iron-scrap':1}},'hunter-coat':{gold:12,inputs:{'wolf-pelt':2,'fox-pelt':1}}},
+ smith:{'alpha-fang-blade':{gold:0,inputs:{'alpha-wolf-fang':1,'iron-scrap':2}},
+  'wolf-blade':{gold:22,inputs:{'wolf-fang':2,'iron-scrap':2}},'hunter-knife':{gold:12,inputs:{'boar-tusk':1,'iron-scrap':1}},'hunter-coat':{gold:12,inputs:{'wolf-pelt':2,'fox-pelt':1}}},
  herbalist:{potion:{gold:2,inputs:{'moon-herb':2}},'stamina-tonic':{gold:4,inputs:{'moon-herb':1,'boar-meat':1}}}
 };
 // Stamina boosts: how long and how much faster stamina recovers (town-economy drink()).
@@ -85,7 +88,7 @@ export function itemNote(id){
  return BOOSTS[id]?boostText('item.note.boost',id):null;
 }
 export const FORGE_RULES=Object.freeze({
- // 2026-11-25 11:14, user: a level costs 7 maximum durability; a failed strike costs
+ // 2026-11-25 11:14, user: a completed strike costs 7 maximum durability; a failed strike costs
  // 7 + 5 more (12) and keeps the level. Tempering never restores durability: the
  // current value only follows a maximum that drops below it (45/57 -> 45/50, 45/45).
  maxLevel:12,minDurability:32,durabilityCost:7,perfectGain:2,failureLoss:12,attackGain:2,defenseGain:1,
@@ -106,7 +109,7 @@ export function gradeStrike(position,level=0){
  const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2,zone=forgeZones(level);
  return error<=zone.perfect?'Perfect':error<=zone.success?'Success':error<=zone.near?'Near miss':'Failed';
 }
-// Maximum durability of a piece at a level, after `loss` taken by failed tempers.
+// Recover the effective maximum of saves written before per-strike durability.
 export function forgeMax(id,level=0,loss=0){
  const item=TOWN_ITEMS[id];return item?.max?Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost-loss):0;
 }
@@ -114,7 +117,7 @@ export function forgeMax(id,level=0,loss=0){
 // level and maximum (never below the floor, never above the old maximum).
 export function forgeResult(level,max,grade){
  const gain=grade==='Perfect'?FORGE_RULES.perfectGain:grade==='Success'?1:0,next=Math.min(FORGE_RULES.maxLevel,level+gain);
- const drop=grade==='Failed'?FORGE_RULES.failureLoss:(next-level)*FORGE_RULES.durabilityCost;
+ const drop=grade==='Failed'?FORGE_RULES.failureLoss:FORGE_RULES.durabilityCost;
  return {level:next,max:Math.min(max,Math.max(FORGE_RULES.minDurability,max-drop))};
 }
 // gradeStrike returns stable ids (saved and tested); this is what the player reads.

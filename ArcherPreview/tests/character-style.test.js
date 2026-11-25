@@ -57,6 +57,16 @@ test('untouched legacy defaults migrate once while customized profiles and boss 
  bossMigrated.set('boss',oldBoss);assert.deepEqual(new CharacterStyleSettings(s).value.boss,oldBoss,'intentional old boss style is retained after migration');
 });
 
+test('fresh, unchanged legacy and individually saved witch styles select the intended look',()=>{
+ const db=storage(),old={outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35};
+ const expected={outline:true,outlineWidth:.4,internal:true,internalStrength:.2,brightness:1.3};
+ assert.deepEqual(new CharacterStyleSettings(db).value.mourning,expected);
+ const oldSave=mourning=>db.setItem('moonforest-character-style-v1',JSON.stringify({defaultsVersion:3,mourning,boss:{brightness:1.6}}));
+ oldSave(old);const migrated=new CharacterStyleSettings(db);assert.deepEqual(migrated.value.mourning,expected);assert.equal(migrated.value.boss.brightness,1.6);
+ migrated.set('mourning',old);assert.deepEqual(new CharacterStyleSettings(db).value.mourning,old);
+ const custom={...old,outline:false};oldSave(custom);assert.deepEqual(new CharacterStyleSettings(db).value.mourning,custom);
+});
+
 test('modal real controls stay inside fullscreen root, save/reset groups and retain camera controls',t=>{
   const {document,window}=parseHTML(readFileSync(new URL('../index.html',import.meta.url),'utf8')),previous=globalThis.document;globalThis.document=document;t.after(()=>globalThis.document=previous);
   Object.defineProperty(window.HTMLSelectElement.prototype,'value',{configurable:true,get(){return this.querySelector('option[selected]')?.getAttribute('value')??this.querySelector('option')?.getAttribute('value')??'';},set(v){for(const o of this.querySelectorAll('option'))o.toggleAttribute('selected',o.getAttribute('value')===String(v));}});
@@ -70,6 +80,9 @@ test('modal real controls stay inside fullscreen root, save/reset groups and ret
   fire('#character-style-group','change','boss');assert.equal(q('#character-brightness').value,'1');
   fire('#character-internal-strength','input','.72');fire('#character-outline-width','input','1.25');assert.equal(panel.settings.value.boss.outlineWidth,1.25);assert.equal(panel.settings.value.player.outline,false);
   assert.deepEqual(new CharacterStyleSettings(s).value,panel.settings.value);fire('#reset-character-style','click');assert.deepEqual(panel.settings.value.boss,CHARACTER_STYLE_DEFAULTS.boss);assert.equal(panel.settings.value.player.brightness,1.6);
+  fire('#character-style-group','change','mourning');fire('#character-brightness','input','1.8');fire('#reset-character-style','click');
+  assert.equal(q('#character-outline-value').textContent,'0.40 px');assert.equal(q('#character-internal-value').textContent,'0.20');assert.equal(q('#character-brightness-value').textContent,'1.30×');
+  assert.equal(q('#character-outline-enabled').checked,true);assert.equal(q('#character-internal-enabled').checked,true);
   fire('.close-style','click');assert.equal(panel.dialog.hasAttribute('open'),false);assert.ok(changed>=5);
 });
 

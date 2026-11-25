@@ -76,6 +76,11 @@ test('all owned items open the matching detail and equipped and shop icons use t
  const services=setupTownServices({root,world:{},wallet,legacy:()=>({}),player:noop,battle:noop,controls:noop,appearance:noop,canInteract:noop,onPause:noop,notify:noop,sound:noop});
  for(const id of ids)assert.ok(services.economy.grant(id),id);
  for(const id of ['field-bow','silver-shield','guard-armor'])assert.ok(services.equip(id));
+ const levels={'field-bow':9,'silver-shield':3,'guard-armor':5};
+ const record=structuredClone(services.economy.state);
+ for(const [id,level] of Object.entries(levels))record.condition[id].level=level;
+ record.condition['field-bow'].hp=0;record.bag['field-bow']=2;
+ assert.ok(wallet.tradeTown(0,record));services.reset(true);
  const state={equipment:{sword:'original',shield:'original'},hp:500,maxHp:500,stamina:100,maxStamina:100,attackBonus:5,defense:2,armorDefense:2,potions:1,gold:30,canUsePotion:true,touch:true,allows:()=>true,tradeBag:services.bag()};
  const menu=createCharacterMenu({root,read:()=>state,subject:()=>null,onPause:noop});
  const dialog=root.querySelector('dialog');
@@ -84,11 +89,22 @@ test('all owned items open the matching detail and equipped and shop icons use t
  const drawn=el=>[...el.querySelectorAll('.mf-town-item-icon[data-item-icon]')].map(n=>n.getAttribute('data-item-icon'));
  menu.show('Status');
  assert.deepEqual(drawn(dialog).sort(),['field-bow','silver-shield','guard-armor'].sort());
+ assert.equal(dialog.querySelector('.mf-equipment-icon'),null);
  menu.show('Inventory');
  assert.deepEqual(drawn(dialog.querySelector('.mf-menu-grid')).sort(),ids.toSorted());
  for(const tile of dialog.querySelectorAll('.mf-menu-grid button')){
   const id=drawn(tile)[0];assert.ok(tile.getAttribute('aria-label'));tile.click();
-  assert.deepEqual(drawn(dialog.querySelector('.mf-menu-item')),[id]);
+  const detail=dialog.querySelector('.mf-menu-item');
+  assert.deepEqual(drawn(detail),[id]);
+  const expected=TOWN_ITEMS[id].slot?'+'+(levels[id]??0):undefined;
+  assert.equal(tile.querySelector('.mf-equipment-icon>b')?.textContent,expected,id+' grid level');
+  assert.equal(detail.querySelector('.mf-equipment-card .mf-equipment-icon>b')?.textContent,expected,id+' detail level');
+  if(id==='field-bow'){
+   assert.ok(tile.hasAttribute('data-broken'));assert.ok(detail.querySelector('.mf-menu-break-note'));
+   assert.equal(tile.querySelector('.mf-menu-count').textContent,'2');
+   assert.equal(tile.querySelector('.mf-menu-worn').textContent,'✓');
+   assert.ok(detail.querySelector('.mf-menu-quantity').textContent.includes('2'));
+  }
  }
  menu.show('Skills');assert.deepEqual(drawn(dialog),[]);menu.dispose();
  const shop=createTownShop({root,economy:services.economy,onPause:noop,onChange:noop});

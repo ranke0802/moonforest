@@ -13,7 +13,9 @@ import zh from '../src/v03/locales/zh.js';
 import {setupTownServices} from '../src/v03/town-services.js';
 import {COMBAT_HINTS,TIPS} from '../src/v03/data/chapter1.js';
 import {setPack,t} from '../src/v03/i18n.js';
-import {GoldLoot} from '../src/gold-loot.js';
+import {GOLD_LEDGER_KEY,GoldLoot} from '../src/gold-loot.js';
+import {slotStorage} from '../src/v03/save-slots.js';
+import {createTownTreasure} from '../src/v03/town-treasure.js';
 import {POTION} from '../src/healing-potion.js';
 import {createCharacterMenu} from '../src/v03/character-menu.js';
 import {createTownEconomy} from '../src/v03/town-economy.js';
@@ -191,4 +193,45 @@ test('forge limits in shop copy match a real near-broken sword at the reinforcem
  assert.equal(economy.gear(id).max,32);assert.equal(economy.forge(0,id),'Failed');assert.equal(economy.gear(id).hp,2);assert.equal(economy.gear(id).max,32);
  assert.equal(economy.forge(.5,id),'Perfect');assert.equal(economy.gear(id).level,12);assert.equal(economy.gear(id).max,32);assert.equal(economy.gear(id).hp,2);
  assert.equal(economy.canForge(id),false);assert.equal(economy.forge(.5,id),null);
+});
+
+test('reopening the bag after a goblin pickup shows the saved material stack even after inspecting worn gear',ctx=>{
+ const {window,root}=page(),storage=slotStorage(store(),'0.3',1);
+ storage.setItem(GOLD_LEDGER_KEY,JSON.stringify({version:1,balance:0,credits:{},town:{version:1,bag:{'iron-scrap':2,'wolf-pelt':1}}}));
+ const wallet=new GoldLoot({storage}),world={mapId:'monster-forest',v03:{playing:true}};
+ const services=setupTownServices({root,world,wallet,legacy:()=>({}),battle:()=>null,appearance:()=>null,controls:()=>null});
+ const origin={x:0,y:0,z:0},noop=()=>{};
+ let pos=origin;
+ const treasure=createTownTreasure({root,world,economy:services.economy,player:()=>pos,canInteract:()=>true,sound:noop,fieldChestsEnabled:false,
+  props:{stats:{modelFailures:0},release:noop,dispose:noop},makeDrops:()=>({ready:()=>true,sync:noop,clear:noop,dispose:noop})});
+ const menu=createCharacterMenu({root,read:()=>({gold:wallet.balance,tradeBag:services.bag(),hp:100,maxHp:100,stamina:100,maxStamina:100}),
+  subject:()=>null,onPause:noop});
+ ctx.after(()=>{menu.dispose();treasure.dispose();services.dispose();});
+ const dialog=root.querySelector('.mf-character-menu');modal(dialog,window);
+ menu.show('Status');
+ dialog.querySelector('.mf-menu-slots button').click();
+ const activeFilter=()=>dialog.querySelector('.mf-menu-filters button[aria-pressed=true]').textContent;
+ assert.equal(activeFilter(),t('char.type.Gear'));
+ menu.close();
+
+ ctx.mock.method(Math,'random',()=>.4); // The warrior drops one scrap and no dagger.
+ treasure.tick(.3);
+ assert.ok(treasure.defeat({kind:'goblin-warrior',position:origin}));
+ assert.equal(services.economy.state.bag['iron-scrap'],2);
+ pos=services.economy.state.drops[0].position;
+ treasure.tick(.3);treasure.tick(.3);
+ assert.equal(root.querySelector('.acquisition-row strong').textContent,itemName('iron-scrap'));
+
+ for(const reload of [false,true]){
+  if(reload){wallet.reload();services.reset(true);}
+  menu.show('Inventory');
+  assert.equal(activeFilter(),t('char.filter.All'));
+  const count=id=>dialog.querySelector('.mf-menu-grid [data-item-icon="'+id+'"]')?.closest('button').querySelector('.mf-menu-count').textContent;
+  assert.equal(count('iron-scrap'),'3');
+  byText(dialog,'.mf-menu-filters button',t('char.type.Materials')).click();
+  assert.equal(count('iron-scrap'),'3');
+  assert.equal(count('wolf-pelt'),'1');
+  byText(dialog,'.mf-menu-filters button',t('char.type.Supplies')).click();
+  menu.close();
+ }
 });

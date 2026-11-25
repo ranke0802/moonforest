@@ -4,7 +4,7 @@ import {parseHTML} from 'linkedom';
 import {GoldLoot} from '../src/gold-loot.js';
 import {LANGUAGES,t,useLanguage} from '../src/v03/i18n.js';
 import {createPickupNotice} from '../src/v03/pickup-notice.js';
-import {createTownEconomy} from '../src/v03/town-economy.js';
+import {createTownEconomy,MAX_GROUND_DROPS} from '../src/v03/town-economy.js';
 import {itemName} from '../src/v03/town-items.js';
 import {createTownTreasure} from '../src/v03/town-treasure.js';
 
@@ -50,6 +50,21 @@ test('short screens queue every pickup, aggregate repeated items and release wai
  assert.equal(root.children.length,0);
 });
 
+test('an alpha fang and its XP reach the bag together when the field is full',ctx=>{
+ const {document}=parseHTML('<main></main>'),root=document.querySelector('main'),values=new Map();
+ const storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};
+ const economy=createTownEconomy(new GoldLoot({storage})),origin={x:0,y:0,z:0},noop=()=>{};
+ const piles=Array.from({length:MAX_GROUND_DROPS},(_,i)=>({id:'foe:test:'+i,mapId:'village',origin,position:origin,model:'clue-satchel',rewards:{'iron-scrap':1}}));
+ assert.ok(economy.scatter(piles));
+ const treasure=createTownTreasure({root,world:{mapId:'great-plains',v03:{playing:true}},economy,player:()=>origin,canInteract:()=>true,sound:noop,
+  props:{stats:{modelFailures:0},release:noop,dispose:noop},fieldChestsEnabled:false});
+ ctx.after(()=>treasure.dispose());
+ assert.ok(treasure.defeat({kind:'wolf',position:origin},20));
+ const saved=createTownEconomy(new GoldLoot({storage}));
+ assert.equal(saved.state.drops.length,MAX_GROUND_DROPS);assert.equal(saved.state.bag['alpha-wolf-fang'],1);
+ assert.equal(saved.state.progression.totalXp,20);
+ assert.equal(root.querySelector('.acquisition-row strong').textContent,itemName('alpha-wolf-fang'));
+});
 test('chest and monster pickups announce committed bag changes once, including capped stacks and retries',ctx=>{
  const {document}=parseHTML('<main></main>'),root=document.querySelector('main'),values=new Map();
  const storage={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};

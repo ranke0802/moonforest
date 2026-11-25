@@ -6,7 +6,7 @@ import postcss from 'postcss';
 import {GoldLoot} from '../src/gold-loot.js';
 import {createTownEconomy} from '../src/v03/town-economy.js';
 import {createTownShop} from '../src/v03/town-shop.js';
-import {FORGE_RULES,FORGE_MATERIALS,TOWN_ITEMS,forgeCursor,forgeZones,gradeStrike,gradeLabel,itemName} from '../src/v03/town-items.js';
+import {FORGE_RULES,FORGE_MATERIALS,TOWN_ITEMS,forgeMax,forgeCursor,forgeZones,gradeStrike,gradeLabel,itemName} from '../src/v03/town-items.js';
 import {t} from '../src/v03/i18n.js';
 
 // 2026-11-25, user: the smith's temper screen was bare; a tap on the dialog (not a
@@ -21,7 +21,7 @@ function forge({id='goblin-cleaver',level=0,hp=null,materials={'wolf-fang':2,'ir
  const gold=new GoldLoot({storage:store()});gold.creditCumulative('forge-view',5000);
  const economy=createTownEconomy(gold);economy.grant(id);economy.equip(id);
  for(const [key,n] of Object.entries(materials))economy.grant(key,n);
- const piece=economy.state.condition[id];piece.level=level;piece.hp=hp??economy.gear(id).max;
+ const piece=economy.state.condition[id];piece.level=level;piece.max=forgeMax(id,level);piece.hp=hp??economy.gear(id).max;
  let changes=0;const shop=createTownShop({root:document.getElementById('app'),economy,onChange:()=>changes++,onPause(){}});
  const dialog=document.querySelector('dialog');dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
  void shop.show('smith');
@@ -92,9 +92,10 @@ test('the temper view shows the item, what changes, the cost, the material and t
   assert.equal(durability.querySelector('dd').textContent,max(4)+'/'+max(4)+' → '+max(5)+'/'+max(5));
   const material=FORGE_MATERIALS.find(id=>h.economy.state.bag[id]);
   assert.equal(material,'iron-scrap');
+  assert.equal(card.querySelector('.mf-forge-stock').textContent,t('shop.forgeStock',{items:itemName('iron-scrap')+' ×1 · '+itemName('wolf-fang')+' ×2'}));
   assert.equal(card.querySelector('.mf-forge-cost').textContent,t('shop.forgeCost',{cost:h.economy.forgeCost('goblin-cleaver'),material:itemName(material),n:1}));
   assert.deepEqual([...h.dialog.querySelectorAll('.mf-forge-legend li span')].map(node=>node.textContent),
-   [t('shop.gradeEffect.perfect',{n:2,d:14}),t('shop.gradeEffect.success',{n:1,d:7}),t('shop.gradeEffect.near'),t('shop.gradeEffect.failed',{d:12})]);
+   [t('shop.gradeEffect.perfect',{n:2,d:7}),t('shop.gradeEffect.success',{n:1,d:7}),t('shop.gradeEffect.failed',{d:7}),t('shop.gradeEffect.failed',{d:12})]);
   assert.equal(h.button(t('shop.strike')),undefined);
   const zone=forgeZones(4);
   assert.ok(h.dialog.querySelector('.mf-forge-hint').textContent.endsWith(t('shop.forgeZone',{n:Math.round(zone.scale*100)})));
@@ -117,7 +118,8 @@ test('a tap on the dialog strikes once at the mark position; the result stays, i
   const area=h.dialog.querySelector('.mf-forge');
   assert.equal(area.dataset.grade,'perfect');assert.equal(h.dialog.querySelector('.mf-forge-result strong').textContent,gradeLabel('Perfect'));
   assert.equal(h.economy.gear().level,6);assert.equal(h.economy.state.bag['iron-scrap']??0,before-1,'the shown material is the one used');
-  assert.equal(h.economy.gear().max,Math.max(FORGE_RULES.minDurability,TOWN_ITEMS['goblin-cleaver'].max-6*FORGE_RULES.durabilityCost),'the previewed durability');
+  assert.equal(h.economy.gear().max,Math.max(FORGE_RULES.minDurability,TOWN_ITEMS['goblin-cleaver'].max-5*FORGE_RULES.durabilityCost),'the previewed durability');
+  assert.equal(h.dialog.querySelector('.mf-forge-stock').textContent,t('shop.forgeStock',{items:itemName('iron-scrap')+' ×0 · '+itemName('wolf-fang')+' ×2'}));
   assert.equal(h.changes,1);assert.ok(h.cancelled>=1,'the hammer animation stopped');
   assert.equal(h.dialog.querySelector('.mf-forge-icon b').textContent,'+6','the card shows the new level');
   assert.equal(area.querySelectorAll('.mf-forge-spark').length,10);
@@ -167,25 +169,25 @@ test('tempering never restores durability: 45/57 becomes 45/50 on success and 45
  {const {economy}=seeded(55);assert.equal(economy.forge(success,'oathblade'),'Success');
   assert.deepEqual([economy.gear('oathblade').hp,economy.gear('oathblade').max],[50,50],'above the new maximum it follows it');}
  {const {economy}=seeded(45);assert.equal(economy.forge(.5,'oathblade'),'Perfect');
-  assert.deepEqual([economy.gear('oathblade').level,economy.gear('oathblade').hp,economy.gear('oathblade').max],[11,43,43],'+2 costs 14');}
+  assert.deepEqual([economy.gear('oathblade').level,economy.gear('oathblade').hp,economy.gear('oathblade').max],[11,45,50],'+2 is one strike');}
  {const {economy,storage}=seeded(45);assert.equal(economy.forge(0,'oathblade'),'Failed');
   assert.deepEqual([economy.gear('oathblade').level,economy.gear('oathblade').hp,economy.gear('oathblade').max],[9,45,45]);
   // The loss is saved, repair fills only to the lowered maximum, and later levels cost 7 from there.
-  const again=createTownEconomy(new GoldLoot({storage}));assert.equal(again.gear('oathblade').max,45);assert.equal(again.state.condition.oathblade.loss,12);
+  const again=createTownEconomy(new GoldLoot({storage}));assert.equal(again.gear('oathblade').max,45);assert.equal(again.state.condition.oathblade.max,45);
   assert.equal(again.repairCost('oathblade'),0);
   assert.equal(again.forge(success,'oathblade'),'Success');assert.deepEqual([again.gear('oathblade').hp,again.gear('oathblade').max],[38,38]);
   for(let i=0;i<9;i++)again.forge(0,'oathblade');
   assert.equal(again.gear('oathblade').max,FORGE_RULES.minDurability,'never below the floor');
-  assert.ok(again.state.condition.oathblade.loss<=TOWN_ITEMS.oathblade.max-FORGE_RULES.minDurability,'the saved loss stays bounded');}
+  assert.equal(again.state.condition.oathblade.max,FORGE_RULES.minDurability);}
  {const {economy}=seeded(45);assert.equal(economy.forge(.3,'oathblade'),'Near miss');
-  assert.deepEqual([economy.gear('oathblade').level,economy.gear('oathblade').hp,economy.gear('oathblade').max],[9,45,57]);}
+  assert.deepEqual([economy.gear('oathblade').level,economy.gear('oathblade').hp,economy.gear('oathblade').max],[9,45,50]);}
  // The view: the card and the zones say what this piece would get; the result names what it got.
  const h=forge({id:'oathblade',level:9,hp:45});
  try{
   const [,durability]=[...h.dialog.querySelectorAll('.mf-forge-item dl>div')];
   assert.equal(durability.querySelector('dd').textContent,'45/57 → 45/50');
   assert.deepEqual([...h.dialog.querySelectorAll('.mf-forge-legend li span')].map(node=>node.textContent),
-   [t('shop.gradeEffect.perfect',{n:2,d:14}),t('shop.gradeEffect.success',{n:1,d:7}),t('shop.gradeEffect.near'),t('shop.gradeEffect.failed',{d:12})]);
+   [t('shop.gradeEffect.perfect',{n:2,d:7}),t('shop.gradeEffect.success',{n:1,d:7}),t('shop.gradeEffect.failed',{d:7}),t('shop.gradeEffect.failed',{d:12})]);
   h.at(success*900);h.tap();
   assert.equal(h.dialog.querySelector('.mf-forge').dataset.grade,'success');
   assert.equal(h.dialog.querySelector('.mf-forge-result span').textContent,t('shop.gradeEffect.success',{n:1,d:7})+' · '+itemName('oathblade')+' +10 · 45/50');
@@ -196,4 +198,20 @@ test('tempering never restores durability: 45/57 becomes 45/50 on success and 45
   assert.deepEqual([...low.dialog.querySelectorAll('.mf-forge-legend li span')].map(node=>node.textContent),
    [t('shop.gradeEffect.level',{n:1}),t('shop.gradeEffect.level',{n:1}),t('shop.gradeEffect.near'),t('shop.gradeEffect.near')]);
  }finally{low.shop.dispose();}
+});
+
+test('older maximums with failure loss migrate across a perfect strike and repeated reloads',()=>{
+ const storage=store(),wallet=new GoldLoot({storage});
+ wallet.creditCumulative('migration',500);
+ const inventory=createTownEconomy(wallet);inventory.grant('oathblade');inventory.grant('iron-scrap',2);
+ const saved=structuredClone(inventory.state);saved.condition.oathblade={level:3,loss:12,hp:61,wearUnits:210};
+ assert.equal(wallet.tradeTown(0,saved),true);
+ const load=()=>createTownEconomy(new GoldLoot({storage}));
+ const first=load();assert.equal(first.gear('oathblade').max,87);
+ assert.equal(first.forge(.5,'oathblade'),'Perfect');
+ for(let i=0;i<2;i++){
+  const restored=load();
+  assert.deepEqual(restored.state.condition.oathblade,{level:5,max:80,hp:61,wearUnits:210});
+  assert.equal(restored.state.bag['iron-scrap'],1);
+ }
 });

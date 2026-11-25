@@ -23,3 +23,12 @@ export function townItemIcon(doc,id){
  }
  return el;
 }
+
+export function townEquipmentIcon(doc,id,level){
+ const frame=doc.createElement('span'),badge=doc.createElement('b');
+ frame.className='mf-equipment-icon';
+ frame.setAttribute('aria-hidden','true');
+ badge.textContent='+'+level;
+ frame.append(townItemIcon(doc,id),badge);
+ return frame;
+}

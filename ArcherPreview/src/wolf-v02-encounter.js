@@ -17,6 +17,7 @@ import {wolfContactShape} from './wolf-v02-contact-shapes.js';
 import {WolfV02PlayerImpact} from './wolf-v02-momentum.js';
 import {WolfV02AirReaction} from './wolf-v02-air-reaction.js';
 import {WolfV02RunRamLayer,WolfV02ForepawBrace,WOLF_V02_RUN_RAM_OVERLAY} from './wolf-v02-run-ram.js';
+import {isV03} from './v03/edition.js';
 
 // These are the physical part envelopes; player capsule radius is added once.
 // Their centres always come from the post-navigation, authored skeletal pose.
@@ -32,6 +33,24 @@ const FALLBACK_COMMIT=Object.freeze({
 });
 const angleDelta=(to,from)=>Math.atan2(Math.sin(to-from),Math.cos(to-from));
 const ORBIT_CLIPS=new Set(Object.values(WOLF_V02_ORBIT));
+const fittedMouthGeometry=new WeakSet();
+const mouthParts=new Set(['Mouth_Upper_Interior','Mouth_Lower_Interior','Upper_Canine_-1','Upper_Canine_1','Lower_Canine_-1','Lower_Canine_1']);
+
+function fitAlphaWolfMouth(meshes){
+  // The six R8 inserts were built around x=0. The painted muzzle is centred
+  // at x=-.046 m; tuck the front ends behind the lip as well. Translate in
+  // bind space so the fitted inserts follow their original head/jaw weights.
+  for(const mesh of meshes){
+    if(!mouthParts.has(mesh.name)||fittedMouthGeometry.has(mesh.geometry))continue;
+    const positions=mesh.getVerticesData('position',false,true);
+    for(let i=0;i<positions.length;i+=3){
+      positions[i]-=.046;
+      positions[i+2]-=.012;
+    }
+    mesh.setVerticesData('position',positions);
+    fittedMouthGeometry.add(mesh.geometry);
+  }
+}
 
 function sampleRoot(clip,time){
   const frames=clip.rootTrack,f=Math.max(0,Math.min(frames.length-1,time*clip.fps));
@@ -92,7 +111,10 @@ export class WolfV02Encounter extends WolfEncounter{
     const animator=super.createAnimator(),transition=animator.transition.bind(animator);
     animator.transition=(state,options={})=>{const b=this.brain;if(b?.action?.momentumRam&&state===WOLF_CLIPS.run&&animator.current===WOLF_CLIPS.run)return transition(state,{...options,blendDuration:0});if(b?.action?.momentumRam&&b.ramStage==='settle')return transition(state,{...options,blendDuration:.20});if(b?.ramMaulHold&&b.ramLoopPoseKey)return transition(state,{...options,actionId:b.ramLoopPoseKey,blendDuration:.10});return transition(state,options);};return animator;
   }
-  prepareAsset(){this.config=installWolfV02AttackClips(this.asset,this.config);}
+  prepareAsset(){
+    this.config=installWolfV02AttackClips(this.asset,this.config);
+    if(isV03(this.world.edition))fitAlphaWolfMouth(this.asset.meshes);
+  }
   async prepareAuxiliary(preparation){await prepareWolfV02Telegraph(this,preparation);this.warningRing.update=()=>{if(this.brain?.action?.momentumRam)this.ring.isVisible=false;else this.v02Telegraph.update();};if(this.playerNodes?.Bunnyguard_Shield)await preparation.step('wolf-shield-profile',()=>this.v02Shield.warm(this.playerNodes.Bunnyguard_Shield));}
   contactShape(name,kind){return wolfContactShape(name,kind);}
   hurtCapsules(){this.v02Hurt??=new WolfV02HurtVolumes(this.nodes,this.config.scale);return this.v02Hurt.sample();}

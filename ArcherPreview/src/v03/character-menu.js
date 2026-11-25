@@ -2,7 +2,7 @@ import {bagContents,characterItems,combatSkills,PASSIVE_CELLS,SKILL_BRANCHES,SKI
 import {PASSIVE_LIMITS,SKILL_REFUND_GOLD} from './character-progression.js';
 import {createCharacterPortrait,PORTRAIT_PITCH} from './character-menu-camera.js';
 import {orbitCamera} from '../input.js';
-import {townItemIcon} from './town-item-art.js';
+import {townEquipmentIcon,townItemIcon} from './town-item-art.js';
 import {t,language,cloneChapter,localizeChapter} from './i18n.js';
 import {COMBAT_HINTS,TIPS} from './data/chapter1.js';
 
@@ -135,11 +135,20 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     const list=bagContents(items,filter,sort,lang()),detail=make('section','mf-menu-card mf-menu-item');
     body.append(bag,detail);
     const nodes=new Map();
+    const bagIcon=row=>row.level===undefined?icon(row):townEquipmentIcon(doc,row.tradeId,row.level);
     function inspect(row){
       selected=row?.id??'';detail.replaceChildren();
       for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===selected));
       if(!row){detail.append(make('p','',t('char.empty')));return;}
-      detail.append(make('small','',t('char.type.'+row.type)),icon(row),make('h2','',row.name));
+      const category=make('small','',t('char.type.'+row.type)),title=make('h2','',row.name);
+      const amount=row.quantity?make('small','mf-menu-quantity',t('shop.inBag',{n:row.quantity})):null;
+      if(row.level!==undefined){
+        const header=make('div','mf-equipment-card'),description=make('div');
+        description.append(category,title);if(amount)description.append(amount);
+        header.append(bagIcon(row),description);detail.append(header);
+      }else{
+        detail.append(category,bagIcon(row),title);if(amount)detail.append(amount);
+      }
       if(row.broken)detail.append(make('p','mf-menu-break-note',t('char.repairAtSmith')));
       if(row.stat){
         const stats=make('dl');stat(stats,t('char.'+row.stat),'+'+row.value);
@@ -163,12 +172,21 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     }
     for(const row of list){
       const tile=button('',()=>inspect(row));
-      const label=row.broken?row.name+' · '+t('char.gearBroken'):row.name;
-      tile.title=label;tile.setAttribute('aria-label',label);
+      const labels=[row.level===0?row.name+' +0':row.name];
+      if(row.worn)labels.push(t('char.equipped'));
+      if(row.broken)labels.push(t('char.gearBroken'));
+      if(row.quantity>1)labels.push(t('shop.inBag',{n:row.quantity}));
+      tile.title=row.broken?row.name+' · '+t('char.gearBroken'):row.name;
+      tile.setAttribute('aria-label',labels.join(' · '));
       if(row.broken)tile.dataset.broken='';
-      tile.append(icon(row));
-      if(row.worn)tile.append(make('small','mf-menu-count','✓'));
-      else if(row.quantity)tile.append(make('small','mf-menu-count',String(row.quantity)));
+      if(row.level!==undefined)tile.className='mf-menu-gear-tile';
+      tile.append(bagIcon(row));
+      if(row.worn)tile.append(make('small','mf-menu-worn','✓'));
+      if(row.quantity&&(!row.worn||row.quantity>1)){
+        const count=make('small','mf-menu-count',String(row.quantity));
+        if(row.level!==undefined&&row.quantity>99)count.classList.add('is-large');
+        tile.append(count);
+      }
       nodes.set(row.id,tile);grid.append(tile);
     }
     for(let i=list.length;i<Math.ceil(list.length/6)*6;i++){const blank=make('i','mf-menu-empty');blank.setAttribute('aria-hidden','true');grid.append(blank);}
@@ -293,7 +311,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
   function show(name){
     if(disposed)return;
     page=name;poseFrame=null;delete root.dataset.characterPortrait;relabel();
-    if(!dialog.open){orbit.alpha=0;orbit.beta=PORTRAIT_PITCH;zoom=1;dialog.showModal();root.dataset.characterMenu='';onPause();}
+    if(!dialog.open){filter='All';orbit.alpha=0;orbit.beta=PORTRAIT_PITCH;zoom=1;dialog.showModal();root.dataset.characterMenu='';onPause();}
     const state=read();
     gold.textContent=state.gold.toLocaleString(lang())+' G';dialog.dataset.page=name;
     for(let i=0;i<tabs.length;i++)tabButtons[i].setAttribute('aria-pressed',String(tabs[i]===name));

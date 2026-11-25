@@ -1,0 +1,4 @@
+.mf-equipment-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:center;padding:.65rem .75rem;border:1px solid #6d5d43;border-radius:.45rem;background:linear-gradient(160deg,#2f2a36,#221f29)}
+.mf-equipment-icon{position:relative;display:grid;place-items:center;box-sizing:border-box;width:3.8rem;aspect-ratio:1;border:1px solid #a28c64;border-radius:.45rem;background:radial-gradient(circle at 50% 62%,#6b4128,#2a2129 58%,#1b1920)}
+.mf-equipment-icon>.mf-town-item-icon,.mf-equipment-icon>.commercial-icon{inline-size:78%;block-size:78%}
+.mf-equipment-icon>b{position:absolute;right:-.4rem;bottom:-.4rem;padding:0 .32rem;border-radius:.25rem;background:#e0bd77;color:#1c1820;font-size:.82rem;line-height:1.35;font-variant-numeric:tabular-nums}

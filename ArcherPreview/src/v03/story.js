@@ -291,7 +291,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(points.length<2||Math.hypot(last.x-guidePoint.x,last.z-guidePoint.z)>1)points.push({x:guidePoint.x,z:guidePoint.z});
    guide.track.setPath(points);guide.key=target.key;guide.originX=player.x;guide.originZ=player.z;guide.age=0;
   }
-  const before=guide.track.distance,arrived=guide.track.update(dt,player,{stopShort:target.stopShort}),moving=guide.track.distance-before>dt*1.5;
+  const before=guide.track.distance,arrived=guide.track.update(dt,player,{stopShort:target.stopShort,mounted:api.world.riding?.active}),moving=guide.track.distance-before>dt*1.5;
   const p=guide.track.position;
   // Every wobble blends in and out; nothing switches in one frame.
   guide.sway+=((moving?.45:.7)-guide.sway)*blend;guide.lift+=((arrived?1.7:1.3)-guide.lift)*blend;
@@ -311,7 +311,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // corners and mode changes become curves instead of jumps.
  function chase(dt,x,y,z){
   if(!guide.shown){guide.x=x;guide.y=y;guide.z=z;guide.shown=true;return;}
-  const follow=1-Math.exp(-dt*3.2);guide.x+=(x-guide.x)*follow;guide.y+=(y-guide.y)*follow;guide.z+=(z-guide.z)*follow;
+  // At a gallop the walking lag alone would leave the sprite over four metres behind its route point.
+  const follow=1-Math.exp(-dt*(api.world.riding?.active?8:3.2));guide.x+=(x-guide.x)*follow;guide.y+=(y-guide.y)*follow;guide.z+=(z-guide.z)*follow;
  }
  // ----- quest markers: ? = quest waiting, ! = report back -----
  let markers=null,markerKey='';const mapMarks=[];

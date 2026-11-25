@@ -13,12 +13,10 @@ export function characterStyleFor(mesh){
   const group=mesh?.metadata?.characterStyleOverrideGroup??mesh?.metadata?.characterStyleGroup;
   return mesh?.getScene().metadata?.characterStyleSettings?.[group]??CHARACTER_STYLE_DEFAULTS[group]??neutral;
 }
-// The hull shader measures CSS pixels. At a reduced 3D resolution the Witch's
-// half-pixel default can fall between samples, especially against dark cave walls.
-// Leave room for an antialiased edge after the framebuffer is scaled to the
-// screen. A deliberate sub-default width remains an exact CSS pixel setting.
+// Keep the mobile sampling aid at its original 0.50 px threshold. Lower slider
+// values, including the approved 0.40 px look, render at their selected width.
 export function exteriorInkPixels(mesh,cssPixels){
-  if(mesh.metadata?.characterStyleGroup!=='mourning'||cssPixels<CHARACTER_STYLE_DEFAULTS.mourning.outlineWidth)return cssPixels;
+  if(mesh.metadata?.characterStyleGroup!=='mourning'||cssPixels<.5)return cssPixels;
   const scene=mesh.getScene();
   if(scene.metadata?.caveFogRuntime?.world?.edition!=='moonforest-0.3')return cssPixels;
   return Math.max(cssPixels+.5,1.5*scene.getEngine().getHardwareScalingLevel());

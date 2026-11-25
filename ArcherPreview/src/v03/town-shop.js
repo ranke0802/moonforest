@@ -1,6 +1,6 @@
 import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,FORGE_MATERIALS,forgeCursor,forgeZones,forgeResult,itemName,itemNote,gradeLabel} from './town-items.js';
 import {t} from './i18n.js';
-import {townItemIcon} from './town-item-art.js';
+import {townEquipmentIcon,townItemIcon} from './town-item-art.js';
 
 export function createTownShop({root,economy,onChange,onPause}){
  const doc=root.ownerDocument,win=doc.defaultView,dialog=doc.createElement('dialog');
@@ -46,6 +46,7 @@ export function createTownShop({root,economy,onChange,onPause}){
    addButton(box,t('shop.repair',{cost}),()=>trade(()=>economy.repair(id),t('shop.repaired')),!cost||economy.gold<cost);
    const bonus=item.slot==='sword'?t('shop.attack',{n:FORGE_RULES.attackGain}):t('shop.defense',{n:FORGE_RULES.defenseGain});
    const forge=row(scroll,t('shop.temper'),t('shop.temperNote',{...FORGE_RULES,bonus}));
+   forge.querySelector('span').append(forgeStock());
    addButton(forge,t('shop.forge',{cost:economy.forgeCost(id)}),()=>beginForge(id),!economy.canForge(id));
   }
   scroll.append(element('h3',t('shop.buy')));
@@ -56,7 +57,10 @@ export function createTownShop({root,economy,onChange,onPause}){
   scroll.append(element('h3',t(current==='smith'?'shop.makeGear':'shop.brew')));
   for(const [id,recipe] of Object.entries(RECIPES[current])){
    const inputs=Object.entries(recipe.inputs),name=itemName(id);
-   const line=row(scroll,name,inputs.map(([k,n])=>itemName(k)+' '+(state.bag[k]??0)+'/'+n).join(' · '),id);
+   const item=TOWN_ITEMS[id],details=inputs.map(([k,n])=>itemName(k)+' '+(state.bag[k]??0)+'/'+n);
+   if(item.attack)details.unshift(t('shop.attack',{n:item.attack}));
+   if(item.defense)details.unshift(t('shop.defense',{n:item.defense}));
+   const line=row(scroll,name,details.join(' · '),id);
    addButton(line,t('shop.make',{cost:recipe.gold}),()=>trade(()=>economy.craft(current,id),t('shop.made',{name})),economy.gold<recipe.gold||inputs.some(([k,n])=>(state.bag[k]??0)<n));
   }
   const materials=Object.entries(state.bag).filter(([id,n])=>n&&TOWN_ITEMS[id]?.sell);
@@ -72,7 +76,7 @@ export function createTownShop({root,economy,onChange,onPause}){
  const signed=n=>(n>0?'+':'')+n;
  // What each grade does to this piece (11:14, user): levels gained, maximum lost;
  // durability is never restored, it only follows a maximum below it.
- const gradeEffect=(key,n,d)=>key==='near'||key==='failed'&&!d?t('shop.gradeEffect.near'):key==='failed'?t('shop.gradeEffect.failed',{d}):
+ const gradeEffect=(key,n,d)=>!n&&!d?t('shop.gradeEffect.near'):!n?t('shop.gradeEffect.failed',{d}):
   d?t('shop.gradeEffect.'+key,{n,d}):t('shop.gradeEffect.level',{n});
  const outcome=(w,grade)=>{const next=forgeResult(w.level,w.max,grade);return {n:next.level-w.level,d:w.max-next.max,level:next.level,max:next.max,hp:Math.min(w.hp,next.max)};};
  function forgePreview(id){
@@ -81,16 +85,23 @@ export function createTownShop({root,economy,onChange,onPause}){
   return {w,attack,now:attack?w.attack:w.defense,success:{...success,value:value(success.level)},perfect:{...perfect,value:value(perfect.level)},bestLevel:perfect.level,
    material:FORGE_MATERIALS.find(key=>economy.state.bag[key]),cost:economy.forgeCost(id)};
  }
- function forgeCard(id){
-  const view=forgePreview(id),card=element('div'),icon=element('div'),text=element('div'),stats=element('dl');
-  card.className='mf-forge-item';icon.className='mf-forge-icon';icon.append(townItemIcon(doc,id),element('b','+'+view.w.level));
+ function forgeStock(lastUsed){
+  const bag=economy.state.bag;
+  const items=FORGE_MATERIALS.filter(id=>bag[id]||id===lastUsed).map(id=>itemName(id)+' ×'+(bag[id]??0));
+  const stock=element('small',t('shop.forgeStock',{items:items.join(' · ')||'0'}));
+  stock.className='mf-forge-stock';
+  return stock;
+ }
+ function forgeCard(id,lastUsed){
+  const view=forgePreview(id),card=element('div'),icon=townEquipmentIcon(doc,id,view.w.level),text=element('div'),stats=element('dl');
+  card.className='mf-forge-item mf-equipment-card';icon.classList.add('mf-forge-icon');
   const stat=(label,value)=>{const pair=element('div');pair.append(element('dt',label),value);stats.append(pair);};
   const change=element('dd');change.append(signed(view.now)+' → ',element('strong',signed(view.success.value)));
   if(view.bestLevel>view.w.level+1)change.append(' ',element('small',t('shop.forgeOnPerfect',{value:signed(view.perfect.value)})));
   stat(t(view.attack?'char.attack':'char.defense'),change);
   stat(t('shop.forgeDurability'),element('dd',view.w.hp+'/'+view.w.max+' → '+view.success.hp+'/'+view.success.max));
   const cost=element('small',view.material?t('shop.forgeCost',{cost:view.cost,material:itemName(view.material),n:economy.state.bag[view.material]}):t('shop.forgeNeedsMaterial'));
-  cost.className='mf-forge-cost';text.append(element('strong',itemName(id)+' +'+view.w.level),stats,cost);
+  cost.className='mf-forge-cost';text.append(element('strong',itemName(id)+' +'+view.w.level),stats,cost,forgeStock(lastUsed));
   card.append(icon,text);return card;
  }
  function forgeLegend(id){
@@ -150,12 +161,12 @@ export function createTownShop({root,economy,onChange,onPause}){
   const position=forgeCursor(win.performance.now()-started);
   if(frame)win.cancelAnimationFrame(frame);frame=0;
   moveHammer(f.rail,position);
-  const before=economy.gear(f.id),grade=economy.forge(position,f.id);
+  const before=economy.gear(f.id),paid=FORGE_MATERIALS.find(id=>economy.state.bag[id]),grade=economy.forge(position,f.id);
   if(grade)onChange();
   const w=economy.gear(f.id),key=grade?ZONES.find(([value])=>value===grade)[1]:'failed';
   receipt.textContent=grade?gradeLabel(grade)+' · '+itemName(f.id)+' +'+w.level:t('shop.failed');
   f.area.classList.add('is-struck');f.area.dataset.grade=key;sparks(f.mark,grade);
-  f.side.replaceChildren(forgeCard(f.id),forgeLegend(f.id));f.hint.hidden=true;
+  f.side.replaceChildren(forgeCard(f.id,grade?paid:null),forgeLegend(f.id));f.hint.hidden=true;
   const actions=element('div');actions.className='mf-forge-actions';
   const again=addButton(actions,economy.canForge(f.id)?t('shop.forgeAgain',{cost:economy.forgeCost(f.id)}):w.level>=FORGE_RULES.maxLevel?t('shop.forgeMaxed',FORGE_RULES):t('shop.forgeAgain',{cost:economy.forgeCost(f.id)}),()=>beginForge(f.id),true);
   const back=addButton(actions,t('panel.back'),render,true);

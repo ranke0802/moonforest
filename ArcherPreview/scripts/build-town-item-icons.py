@@ -13,6 +13,8 @@ ROOT = Path(__file__).resolve().parents[1]
 COLUMNS, CELL, PADDING = 8, 128, 4
 ART = ROOT / "src/v03/art/town-item-icons.webp"
 CSS = ROOT / "src/v03/town-item-icons.css"
+# The alpha trophy uses the wolf fang cutout and the blade uses the same equipped shape and finish.
+SOURCE_ICONS = {"alpha-wolf-fang": "wolf-fang", "alpha-fang-blade": "wolf-blade"}
 
 
 def catalog(node):
@@ -69,14 +71,19 @@ def stylesheet(items, rows):
 def pack(items, source):
     rows = math.ceil(len(items) / COLUMNS)
     sheet = Image.new("RGBA", (COLUMNS * CELL, rows * CELL))
-    expected = {source / group / (item_id + ".png") for item_id, group, _ in items}
+    def icon_path(item_id, group):
+        return source / group / (SOURCE_ICONS.get(item_id, item_id) + ".png")
+
+    expected = {icon_path(item_id, group) for item_id, group, _ in items}
     actual = set().union(*[set((source / group).glob("*.png")) for group in ("equipment", "supplies")])
     if actual != expected:
         missing, extra = sorted(expected - actual), sorted(actual - expected)
         raise ValueError(f"PNG/catalog mismatch. Missing: {[p.name for p in missing]}. Extra: {[p.name for p in extra]}.")
     digests = {}
     for index, (item_id, group, appearance) in enumerate(items):
-        tile = source_tile(source / group / (item_id + ".png"))
+        tile = source_tile(icon_path(item_id, group))
+        if group == "supplies":
+            appearance = SOURCE_ICONS.get(item_id, item_id)
         digest = hashlib.sha256(tile.tobytes()).digest()
         if digest in digests and digests[digest][1] != appearance:
             raise ValueError(f"Duplicate icons: {item_id} and {digests[digest][0]}")

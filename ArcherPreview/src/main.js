@@ -136,7 +136,7 @@ import {setupPlainsViewDistanceControl,applyPlainsViewDistance,applyAdaptiveRang
 import { ScreenProjection } from './screen-projection.js';
 import { GameAudio } from './game-audio.js';
 import { ActionAudio } from './action-audio.js';
-import { GoldLoot } from './gold-loot.js';
+import { GoldLoot, CHAPTER_ONE_COIN_DROPS } from './gold-loot.js';
 import { createGoldLootView } from './gold-loot-view.js';
 import { attachCharacterOutlines,setFarOutlinesEnabled } from './character-outlines.js';
 import {setupQualityRestoreSettings,QUALITY_RESTORE_V03} from './quality-restore-settings.js';
@@ -303,7 +303,7 @@ let equipmentChoices = readEquipmentChoices(equipmentStorage);
 const journeyStorage=uiTestEnabled?uiTestStorage(equipmentStorage):v03Save?v03Save.journey:equipmentStorage;
 if(uiTestEnabled)travelStorage=uiTestStorage(travelStorage);
 let goldLootView, townServices;
-const goldLoot=new GoldLoot({storage:journeyStorage,onPickup:amount=>townServices?.collectGold(amount),onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
+const goldLoot=new GoldLoot({storage:journeyStorage,coinDrops:versionRoute.edition&&!versionRoute.worldRevision?CHAPTER_ONE_COIN_DROPS:undefined,onPickup:amount=>townServices?.collectGold(amount),onBalance:value=>text('#gold-balance',`${value.toLocaleString()} G`)});
 const minimap=new DotMinimap($('#dot-minimap'), {translucent:()=>!!versionRoute.edition&&!versionRoute.worldRevision&&$('#app').dataset.hudInput==='touch'});
 let minimapTravel;
 const resumeStore=new MapResumeStore(journeyStorage);

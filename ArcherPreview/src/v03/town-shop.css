@@ -1,3 +1,5 @@
+@import './equipment-card.css';
+
 .mf-town-shop{width:min(34rem,92vw);max-height:87dvh;box-sizing:border-box;overflow:auto;border:1px solid #ab9361;border-radius:.55rem;padding:1rem;color:#f6e9d0;background:#201e26;font:inherit}
 .mf-town-shop::backdrop{background:#100e16a6}
 .mf-town-shop header,.mf-shop-row{display:flex;align-items:center;justify-content:space-between;gap:.65rem}
@@ -23,10 +25,6 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
   display:grid;grid-template-columns:minmax(0,1fr);gap:.7rem;margin-top:.6rem;cursor:pointer;touch-action:manipulation;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;outline:none}
 .mf-forge:focus-visible{box-shadow:0 0 0 2px #e0bd77;border-radius:.4rem}
 .mf-forge-side,.mf-forge-play{display:grid;grid-template-columns:minmax(0,1fr);gap:.6rem;min-width:0}
-.mf-forge-item{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.8rem;align-items:center;padding:.65rem .75rem;border:1px solid #6d5d43;border-radius:.45rem;background:linear-gradient(160deg,#2f2a36,#221f29)}
-.mf-forge-icon{position:relative;display:grid;place-items:center;width:3.8rem;aspect-ratio:1;border:1px solid #a28c64;border-radius:.45rem;background:radial-gradient(circle at 50% 62%,#6b4128,#2a2129 58%,#1b1920)}
-.mf-forge-icon>.mf-town-item-icon{--mf-item-icon-size:2.9rem}
-.mf-forge-icon>b{position:absolute;right:-.4rem;bottom:-.4rem;padding:0 .32rem;border-radius:.25rem;background:#e0bd77;color:#1c1820;font-size:.82rem;line-height:1.35}
 .mf-forge-item strong{display:block;font-size:1.05rem;color:#fff3d8}
 .mf-forge-item small{display:block;margin-top:.25rem;color:#c3b8ae;font-size:.82rem}
 .mf-forge-item dl{margin:.3rem 0 0;display:grid;gap:.12rem;font-size:.9rem}
@@ -71,7 +69,7 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
   .mf-town-shop.is-forging{width:min(46rem,94vw);padding:.6rem .8rem}
   .mf-town-shop.is-forging header{padding-bottom:.3rem}
   .mf-forge{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:.8rem;margin-top:.4rem}
-  .mf-forge-item{padding:.45rem .55rem;gap:.6rem}.mf-forge-icon{width:3rem}.mf-forge-icon>.mf-town-item-icon{--mf-item-icon-size:2.3rem}
+  .mf-forge-item{padding:.45rem .55rem;gap:.6rem}.mf-forge-icon{width:3rem}
   .mf-forge-legend li{font-size:.74rem;padding:.12rem .35rem}
   .mf-forge-gauge{height:2.6rem}
   .mf-forge-result>strong{font-size:1.2rem}

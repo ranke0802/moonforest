@@ -37,11 +37,13 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    const it=TOWN_ITEMS[id];if(!it||!count)continue;
    const row={id,name:itemName(id),type:it.type,icon:id,quantity:count,
     worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
-   if(it.slot==='sword'){
-    const w=economy.gear(id);row.broken=w.hp===0;row.stat='attack';row.value=w.attack;row.delta=row.value-economy.attack;
-    row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max})+(it.usage?' · '+itemUsage(id):'');
-   }else if(it.slot){const w=economy.gear(id);row.broken=w.hp===0;row.stat='defense';row.value=w.defense;row.delta=w.defense-(economy.gear(s.equipped[it.slot])?.defense??0);row.name+=w.level?' +'+w.level:'';row.note=t('char.durability',{hp:w.hp,max:w.max});}
-   else row.note=itemNote(id)??t('char.materialNote');
+   if(it.slot){
+    const gear=economy.gear(id);row.level=gear.level;row.broken=gear.hp===0;
+    row.stat=it.slot==='sword'?'attack':'defense';row.value=gear[row.stat];
+    row.delta=row.value-(it.slot==='sword'?economy.attack:economy.gear(s.equipped[it.slot])?.defense??0);
+    if(gear.level)row.name+=' +'+gear.level;
+    row.note=t('char.durability',{hp:gear.hp,max:gear.max})+(it.usage?' · '+itemUsage(id):'');
+   }else row.note=itemNote(id)??t('char.materialNote');
    equipment.push(row);
   }
   return equipment;

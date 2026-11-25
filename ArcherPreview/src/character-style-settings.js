@@ -5,11 +5,11 @@ export const CHARACTER_STYLE_DEFAULTS=Object.freeze({
   wolf:WOLF_STYLE,
   player:Object.freeze({outline:true,outlineWidth:.15,internal:true,internalStrength:.04,brightness:.95}),
   boss:Object.freeze({outline:true,outlineWidth:.3,internal:true,internalStrength:.3,brightness:1}),
-  mourning:Object.freeze({outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35}),
+  mourning:Object.freeze({outline:true,outlineWidth:.4,internal:true,internalStrength:.2,brightness:1.3}),
 });
 const bounded=(value,min,max,fallback)=>typeof value==='number'&&Number.isFinite(value)?Math.round(Math.max(min,Math.min(max,value))*100)/100:fallback;
 export function normalizeCharacterStyles(value){
-  const result={version:1,defaultsVersion:3};
+  const result={version:1,defaultsVersion:4};
   for(const group of Object.keys(CHARACTER_STYLE_DEFAULTS)){
     const d=CHARACTER_STYLE_DEFAULTS[group],v=value?.[group];
     result[group]={outline:typeof v?.outline==='boolean'?v.outline:d.outline,outlineWidth:bounded(v?.outlineWidth,group==='player'?-1:0,3,d.outlineWidth),internal:typeof v?.internal==='boolean'?v.internal:d.internal,internalStrength:bounded(v?.internalStrength,0,1,d.internalStrength),brightness:bounded(v?.brightness,.25,2.5,d.brightness)};
@@ -21,8 +21,9 @@ export class CharacterStyleSettings{
     // Adopt new defaults for an untouched old profile, not a user's custom look.
     const old={outline:true,outlineWidth:0,internal:true,internalStrength:0,brightness:1};
     if((saved?.defaultsVersion??0)<2&&saved?.player&&Object.entries(old).every(([key,value])=>saved.player[key]===value))saved={...saved,player:CHARACTER_STYLE_DEFAULTS.player};
-    const oldBoss={outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35};
-    if((saved?.defaultsVersion??0)<3&&saved?.boss&&Object.entries(oldBoss).every(([key,value])=>saved.boss[key]===value))saved={...saved,boss:CHARACTER_STYLE_DEFAULTS.boss};
+    const oldElenaLook={outline:true,outlineWidth:.5,internal:true,internalStrength:.2,brightness:1.35};
+    if((saved?.defaultsVersion??0)<3&&saved?.boss&&Object.entries(oldElenaLook).every(([key,value])=>saved.boss[key]===value))saved={...saved,boss:CHARACTER_STYLE_DEFAULTS.boss};
+    if((saved?.defaultsVersion??0)<4&&saved?.mourning&&Object.entries(oldElenaLook).every(([key,value])=>saved.mourning[key]===value))saved={...saved,mourning:CHARACTER_STYLE_DEFAULTS.mourning};
     this.value=normalizeCharacterStyles(saved);
   }
   set(group,change){if(!CHARACTER_STYLE_DEFAULTS[group])return this.value;this.value=normalizeCharacterStyles({...this.value,[group]:{...this.value[group],...change}});try{this.storage?.setItem(CHARACTER_STYLE_KEY,JSON.stringify(this.value));}catch{}return this.value;}
