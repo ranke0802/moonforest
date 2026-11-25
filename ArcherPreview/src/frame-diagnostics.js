@@ -6,6 +6,15 @@ import {onBeforePageReload} from './page-reload-hooks.js';
 import {storeCarriedRecording,takeCarriedRecording} from './recording-carry.js';
 import {readRendererInfo,rendererDetail} from './renderer-diagnostics.js';
 import {disabledComparisonFeatures} from './performance-comparison.js';
+
+// A map keeps updating its stage counters after a delay or recording start.
+export function mapStreamSnapshot(world){
+  const stages=world?.environment?.streamLoad;
+  const streamLoad=stages?{}:null;
+  if(stages)for(const name in stages)streamLoad[name]={...stages[name]};
+  return {map:world?.mapId??null,streamLoad};
+}
+
 // CPU-side frame intervals, not GPU timestamps. Fixed buffers keep collection
 // cheap; summaries and DOM updates run only twice a second while enabled.
 export class FrameDiagnostics {

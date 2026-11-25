@@ -253,9 +253,17 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    try{
     if(step.intro&&!staged.introduced.has(key)&&content.DIALOGUES[step.intro]){
      staged.introduced.add(key);talking=true;api.input.setSuspended(true);
-     try{await dialogue.play(content.DIALOGUES[step.intro]);}finally{talking=false;if(!disposed)api.input.setSuspended(false);}
+     try{
+      const lines=dialogue.play(content.DIALOGUES[step.intro]);
+      // This wave is now due. Start only its shared source while the warning
+      // is on screen. summon() joins the same load and owns all four actors.
+      if(step.intro==='raid-start'&&step.summon.kind==='goblin'&&dialogue.open){
+       void api.battle.goblinModels?.load().catch(()=>{}); // summon retries a failed source load
+      }
+      if(!await lines){staged.introduced.delete(key);return;}
+     }finally{talking=false;if(started&&!disposed)api.input.setSuspended(false);}
     }
-    if(disposed||log.step()!==step)return;
+    if(!started||disposed||(api.world.mapId??mapId)!==step.map||log.step()!==step)return;
     const left=Math.max(1,step.summon.count-log.snapshot().count);
     // summon.from: the group appears there (outside the village for the raid) and comes at the player.
     const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind,step.summon.from?{origin:step.summon.from}:undefined);

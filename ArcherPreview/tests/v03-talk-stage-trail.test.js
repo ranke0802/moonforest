@@ -12,11 +12,11 @@ import {QUESTS,NPCS,DIALOGUES} from '../src/v03/data/chapter1.js';
 const memory=()=>{const values=new Map();let writes=0;return {getItem:k=>values.get(k)??null,setItem(k,v){writes++;values.set(k,String(v));},removeItem:k=>values.delete(k),get writes(){return writes;}};};
 const settle=async(n=4)=>{for(let i=0;i<n;i++)await new Promise(resolve=>setTimeout(resolve,0));};
 
-function village(stageMark,metaSaved=true){
+function village(stageMark,metaSaved=true,step=1){
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const journey=memory(),log=[],player={position:{x:0,z:0}};
  const index=QUESTS.findIndex(quest=>quest.id==='M05');
- journey.setItem('v03-story-v1',JSON.stringify({quest:index,step:1,count:0,done:[]}));
+ journey.setItem('v03-story-v1',JSON.stringify({quest:index,step,count:0,done:[]}));
  const world={scene:{isDisposed:false},mapId:'village',terrain:{heightAt:()=>0},navigation:{free:()=>true,path:()=>null}};
  const api={world,battle:{encounters:[],combatCount:0},input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null,
   creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},addPotions:n=>{log.push('potions:'+n);return n;},toast:m=>log.push('toast:'+m)};
@@ -27,8 +27,32 @@ function village(stageMark,metaSaved=true){
  const frame=()=>story.update(1/60,{ready:true,mapId:'village',character:'warrior-v3'});
  frame();
  const youth=story.castVisual('youth');Object.assign(player.position,{x:youth.position.x,z:youth.position.z});frame();
- return {document,story,log,frame};
+ return {document,story,log,frame,api,player};
 }
+
+test('the raid overlaps the shared goblin source with its warning and only spawns after dismissal',async t=>{
+ for(const exit of ['dismiss','stop','travel','source-error']){
+  await t.test(exit,async t=>{
+   const {api,story,player,document,frame}=village(null,true,0);
+   t.after(()=>story.dispose());
+   const calls=[];
+   let complete;
+   const pending=new Promise(resolve=>{complete=resolve;});
+   api.battle.goblinModels={load(){calls.push('source');return exit==='source-error'?Promise.reject(new Error('unavailable')):pending;}};
+   api.battle.summon=async(_player,count,kind)=>{calls.push([kind,count]);return true;};
+   Object.assign(player.position,{x:0,z:-30});frame();
+   assert.deepEqual(calls,[]);
+   Object.assign(player.position,{x:0,z:28});frame();frame();
+   assert.equal(story.dialogueOpen,true);assert.deepEqual(calls,['source']);
+   if(exit==='stop')story.stop();
+   if(exit==='travel')api.world.mapId='great-plains';
+   for(let i=0;i<12&&story.dialogueOpen;i++)document.querySelector('.v03-dialogue-next').click();
+   await settle();
+   assert.deepEqual(calls,exit==='dismiss'||exit==='source-error'?['source',['goblin',4]]:['source']);
+   complete();
+  });
+ }
+});
 
 test('the M05 youth report leaves asked, first line, closed, reward and saved stages once each',async()=>{
  const marks=[];const {document,story,log}=village(stage=>marks.push(stage));

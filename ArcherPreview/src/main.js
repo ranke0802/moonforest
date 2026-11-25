@@ -118,7 +118,7 @@ import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
 import {createCombatTrail} from './v03/combat-trail.js';
 import {createFirstPersonView} from './v03/first-person-view.js';
-import {createFrameDiagnostics} from './frame-diagnostics.js';
+import {createFrameDiagnostics,mapStreamSnapshot} from './frame-diagnostics.js';
 import {readRendererInfo,showSoftwareRendererNotice} from './renderer-diagnostics.js';
 import {SceneDiagnostics} from './scene-diagnostics.js';
 import {LoadDiagnostics,readDiagnosticMemory} from './load-diagnostics.js';
@@ -293,8 +293,7 @@ const characterStylePanel=setupCharacterStylePanel({storage:equipmentStorage,onC
 let travelStorage;
 try { travelStorage=sessionStorage; } catch { /* Travel also works without state storage. */ }
 const combatTrail = versionRoute.edition && !versionRoute.worldRevision && !cinematicAuthoringPreview
-  ? createCombatTrail({local: v03RawStorage, session: travelStorage,
-      build: () => document.querySelector('script[type="module"][src]')?.getAttribute('src') ?? null})
+  ? createCombatTrail({local: v03RawStorage, session: travelStorage,build:buildChunks})
   : null;
 function gameplayTrail() {
   return world?.v03?.playing && !world.toolLease?.active ? combatTrail : null;
@@ -403,7 +402,7 @@ const mapWorkDiagnostics=()=>({
   playerTextures:playerTextureSelection,
   preparationBudget:world?.scene?frameWorkSnapshot(world.scene):null,
   // Which step of a streamed scenery load takes the main thread, and the browser's own long tasks (0.3 diagnostics).
-  streamLoad:world?.environment?.streamLoad??null,longTasks:longTaskLog?.snapshot()??null,
+  ...mapStreamSnapshot(world),longTasks:longTaskLog?.snapshot()??null,
   // true while the loading picture still covers the stage (frames already run behind it to settle the map)
   covered:document.documentElement.dataset.loading!==undefined,
   preparedShaders:engine?inspectPreparedEffects(engine):null,
@@ -460,7 +459,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()
     cameraZoom:cameraZoom?.snapshot()??null,
     viewportResize:world?.viewportResize?.snapshot?.()??null,cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
-    map:character,slowFoe:boss?.profile?.maxMs>=8?{kind:boss.profile.maxKind,from:boss.profile.maxFrom,state:boss.profile.maxState,ms:Math.round(boss.profile.maxMs)}:null,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
+    character,slowFoe:boss?.profile?.maxMs>=8?{kind:boss.profile.maxKind,from:boss.profile.maxFrom,state:boss.profile.maxState,ms:Math.round(boss.profile.maxMs)}:null,bosses:boss?.encounters.filter(b=>b.active&&!b.corpseGone).map(b=>({kind:b.kind,phase:b.phase??null,state:b.brain?.state,hp:b.brain?.hp}))??[],
     renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,targetFps:engine?.maxFPS??null})});
 loadingView.setDiagnostics(()=>frameDiagnostics.snapshot());
 const attackSpeedStorageKey=()=>isV2()?'warrior-v2-attack-speed-base-1.8':'archer-attack-speed';

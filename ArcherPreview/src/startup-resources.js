@@ -15,8 +15,10 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
   const fileSizes=world.gameplayV03&&world.touchDevice?{...sizes.files,...mobileExterior.extraFileSizes}:sizes.files;
   const selectedPaths=paths=>world.gameplayV03?sceneryPrefetchPaths(paths):paths;
   resources=selectedPaths(resources);
-  const probeCacheKeys=!!world.gameplayV03&&new URLSearchParams(globalThis.location?.search).get('cacheProbe')==='1';
-  const downloads=new ResourceDownloads(fileSizes,base,{index:sizes,probeCacheKeys});let released=false;const preparedUrls=new Set();
+  const cacheProbe=new URLSearchParams(globalThis.location?.search).get('cacheProbe');
+  const probeCacheKeys=!!world.gameplayV03&&cacheProbe==='1';
+  const adaptiveCacheKeys=!!world.gameplayV03&&cacheProbe!=='0'&&!probeCacheKeys;
+  const downloads=new ResourceDownloads(fileSizes,base,{index:sizes,probeCacheKeys,adaptiveCacheKeys});let released=false;const preparedUrls=new Set();
   const cancel=()=>{downloads.cancel();lifetime.abort(mapLoadAbortError());};
   const abort=()=>downloads.cancel();lifetime.signal.addEventListener('abort',abort,{once:true});
   const release=()=>{if(released)return;released=true;preparedUrls.clear();cancel();lifetime.signal.removeEventListener('abort',abort);scene.onDisposeObservable.remove(observer);if(world.releaseResourceDownloads===release)Object.assign(world,{prefetchResources:null,releaseResourceDownloads:null,cancelResourceDownloads:null,resourceLoadLedger:null});};

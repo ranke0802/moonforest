@@ -2,6 +2,7 @@ import {CONTENT_NAME as CONTENT,validateResourceIndex,planResourceTransfers,getR
 import {canExtractResourceBundles,extractResourceBundle} from './resource-bundles.js';
 import {MapLoadLifetime,stacklessError} from './map-load-lifetime.js';
 import {ResourceLoadLedger} from './resource-load-ledger.js';
+import {runtimeTimers} from './runtime-timers.js';
 export function resourceUrl(path,base){
   const url=new URL(path,base);
   if(!CONTENT.test(url.pathname.split('/').at(-1)))throw new Error('Invalid content resource');
@@ -14,15 +15,23 @@ export function downloadText({loaded,total}){return `${(loaded/1e6).toFixed(1)} 
 // The last few visits' counters (plain numbers; no map objects), for records.
 const storageDenied=error=>['QuotaExceededError','NotAllowedError','SecurityError'].includes(error?.name);
 const recentStats=[];
+// Only retain scan costs and plan sizes in this document.
+// Presence of any content hash must still be checked on the live cache.
+const lastKeyScan=new WeakMap();
+async function boundedKeyProbe(read,timers,delay){
+  let timer;
+  try{return await Promise.race([read,new Promise(resolve=>{timer=timers.setTimeout(()=>resolve(null),delay);})]);}
+  finally{timers.clearTimeout(timer);}
+}
 export const recentResourceDownloadStats=()=>recentStats.map(stats=>({...stats}));
 export class ResourceDownloads {
-  constructor(sizes,base,{cacheStorage=getResourceCacheStorage(),fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null,idleTimeoutMs=30000,timers,ledgerMaxEntries=4096,ledgerTiming=null,probeCacheKeys=false}={}){
+  constructor(sizes,base,{cacheStorage=getResourceCacheStorage(),fetcher=(...args)=>fetch(...args),now=()=>performance.now(),index=null,idleTimeoutMs=30000,timers,ledgerMaxEntries=4096,ledgerTiming=null,probeCacheKeys=false,adaptiveCacheKeys=false}={}){
     this.sizes=sizes;this.base=base;this.storage=cacheStorage;this.fetcher=fetcher;this.now=now;this.tail=Promise.resolve();this.storageUnavailable=false;
-    this.probeCacheKeys=probeCacheKeys;
+    this.probeCacheKeys=probeCacheKeys;this.adaptiveCacheKeys=adaptiveCacheKeys;
     this.index=index?validateResourceIndex(index):null;
     // Cache Storage reads are counted apart from transfers (2026-11-24): how many
     // times a visit listed the cache's keys or matched one file, and how long.
-    this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0,jobs:0,cacheKeyLists:0,cacheKeyListMs:0,cacheKeyListMaxMs:0,cacheEntries:null,cacheMatches:0,cacheMatchMs:0,cacheProbeMode:probeCacheKeys,cacheProbeUrls:0,cacheProbeBatches:0,cacheProbeMs:0};
+    this.stats={revision:index?.revision??null,bundleRequests:0,fileRequests:0,extractedFiles:0,cacheHits:0,downloadBytes:0,jobs:0,cacheKeyLists:0,cacheKeyListMs:0,cacheKeyListMaxMs:0,cacheEntries:null,cacheMatches:0,cacheMatchMs:0,cacheProbeMode:probeCacheKeys,cacheAdaptiveMode:adaptiveCacheKeys,cacheAdaptiveFallbacks:0,cacheProbeUrls:0,cacheProbeBatches:0,cacheProbeMs:0};
     recentStats.push(this.stats);if(recentStats.length>8)recentStats.shift();
     this.abort=new AbortController();
     this.idleTimeoutMs=idleTimeoutMs;this.timers=timers;
@@ -66,25 +75,42 @@ export class ResourceDownloads {
         this.storageUnavailable=true;cache=null;
       }
     };
-    // Enumerate keys once instead of creating a Response/body handle for every
-    // cached file. Refresh on every job so eviction/deletion remains visible.
+    // A region may need only a fraction of the hashes stored for the release.
+    // Compare metadata read costs, without using an old list as proof of a hit.
     this.stats.jobs++;
     let cachedUrls=null;
-    if(cache?.keys&&this.probeCacheKeys){
-      // Compare exact metadata-only lookups with listing the whole cache. Four
-      // at a time bounds work and leaves the actual resource bodies unopened.
+    const largePlan=urls.length>=16;
+    const history=this.adaptiveCacheKeys&&largePlan?lastKeyScan.get(this.storage):null;
+    const priorScan=history?.revision===this.stats.revision?history:null;
+    let slowPlanSize=priorScan?.slowPlanSize??Infinity;
+    const adaptive=priorScan?.entries>urls.length&&priorScan.ms>0&&urls.length<slowPlanSize&&!this.probeCacheKeys;
+    if(cache?.keys&&(this.probeCacheKeys||adaptive)){
+      const started=this.now(),timers=runtimeTimers(this.timers);
       cachedUrls=new Set();
       for(let start=0;start<urls.length&&cache;start+=4){
         const batch=urls.slice(start,start+4);
         this.stats.cacheProbeUrls+=batch.length;
-        const hits=await readCache('probe','resource-cache-probe',()=>Promise.all(
-          batch.map(url=>cache.keys(url,{ignoreVary:true}).then(keys=>keys.some(key=>key.url===url)))
-        ));
+        const hits=await readCache('probe','resource-cache-probe',()=>{
+          const read=Promise.all(batch.map(url=>cache.keys(url,{ignoreVary:true}).then(keys=>keys.some(key=>key.url===url))));
+          // Native key reads cannot be cancelled. Late results are metadata
+          // only. Start the full scan promptly if this batch is still waiting.
+          return adaptive?boundedKeyProbe(read,timers,Math.min(100,priorScan.ms/8)):read;
+        });
         if(hits)batch.forEach((url,i)=>{if(hits[i])cachedUrls.add(url);});
+        const checked=start+batch.length;
+        if(adaptive&&cache&&(hits===null||(this.now()-started)*(urls.length-checked)/checked>priorScan.ms)){
+          slowPlanSize=urls.length;
+          cachedUrls=null;this.stats.cacheAdaptiveFallbacks++;break;
+        }
       }
-    }else if(cache?.keys&&urls.length>=16){
+    }
+    if(!cachedUrls&&cache?.keys&&largePlan){
+      const started=this.now();
       const listed=await readCache('list','resource-cache-keys',()=>cache.keys());
-      if(listed){cachedUrls=new Set(listed.map(request=>request.url));this.stats.cacheEntries=cachedUrls.size;}
+      if(listed){
+        cachedUrls=new Set(listed.map(request=>request.url));this.stats.cacheEntries=cachedUrls.size;
+        if(this.adaptiveCacheKeys)lastKeyScan.set(this.storage,{revision:this.stats.revision,entries:cachedUrls.size,ms:this.now()-started,slowPlanSize});
+      }
     }
     const missing=[];let cached=0;
     for(const url of urls){

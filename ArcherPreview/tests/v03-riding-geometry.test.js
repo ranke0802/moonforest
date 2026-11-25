@@ -81,8 +81,8 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
  const heightAt=(x,z)=>.16*x-.07*z;
  const shadows=new ShadowGenerator(32,new DirectionalLight('sun',new Vector3(0,-1,0),scene));
  const world={mapId:'village',scene,shadows,terrain:{heightAt}};
- let collectingPose=false,compositions=0,measuredFrames=0,largestPose=0;
- const diagnostics={collecting:false,mark(){collectingPose=true;compositions=0;return 7;},measure(section,start){
+ let collectingPose=false,compositions=0,measuredFrames=0,largestPose=0,leftGripSampled=false;
+ const diagnostics={collecting:false,mark(){collectingPose=true;compositions=0;leftGripSampled=false;return 7;},measure(section,start){
    collectingPose=false;assert.equal(start,7);assert.equal(section,'ridingPoseMs');measuredFrames++;largestPose=Math.max(largestPose,compositions);
  }};
  const stable=createRidingHorse({world,diagnostics,
@@ -133,6 +133,11 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
   assert.ok(stable.wardrobe.setCoat('#8b6c51'));assert.equal(paint.strength,1);
   assert.equal(skin.material.albedoTexture,originalAtlas);assert.equal(scene.meshes.length,meshCount);
   for(const node of [...scene.meshes,...scene.transformNodes])node.onAfterWorldMatrixUpdateObservable.add(()=>{if(collectingPose)compositions++;});
+  // Computing the other grip in the same fit must reuse the shared chest.
+  grips[0].onAfterWorldMatrixUpdateObservable.add(()=>{if(collectingPose)leftGripSampled=true;});
+  scene.getTransformNodeByName('mixamorig:Spine2').onAfterWorldMatrixUpdateObservable.add(()=>{
+    if(collectingPose)assert.equal(leftGripSampled,false,'second grip recomposed the shared chest');
+  });
   scene.render();assert.equal(measuredFrames,0);
   const mountedScene=inventory(),horse=scene.getTransformNodeByName('v03-wagon-horse');
   for(const area of ['great-plains','monster-forest','village']){

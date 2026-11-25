@@ -1,8 +1,28 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {LongFrameRecording} from '../src/long-frame-recording.js';
+import {mapStreamSnapshot} from '../src/frame-diagnostics.js';
 import {RenderCpuSampler} from '../src/render-cpu-sampler.js';
 import {Observable} from '@babylonjs/core';
+
+test('recording start and delays retain their actual map and stream stage counters',()=>{
+  const record=new LongFrameRecording({now:()=>0});
+  const stage={count:1,ms:4,maxMs:4,worst:'oak:0'};
+  const world={mapId:'great-plains',environment:{streamLoad:{setup:stage}}};
+  const context=()=>mapStreamSnapshot(world);
+  record.start(context());
+  const frame=(startMs,intervalMs)=>record.record({startMs,intervalMs,workMs:4,targetFps:60,sections:{},context});
+  stage.count=2;stage.ms=7;
+  frame(100,60);
+  stage.count=3;stage.ms=10;world.environment.streamLoad.install={count:1,ms:2,maxMs:2,worst:'oak:0'};
+  world.mapId='village';world.environment={};
+  frame(400,230);
+  const {metadata,events,critical}=record.snapshot();
+  assert.deepEqual(metadata,{map:'great-plains',streamLoad:{setup:{count:1,ms:4,maxMs:4,worst:'oak:0'}}});
+  assert.deepEqual(events[0].context,{map:'great-plains',streamLoad:{setup:{count:2,ms:7,maxMs:4,worst:'oak:0'}}});
+  assert.deepEqual(critical[0].context,{map:'village',streamLoad:null});
+  assert.deepEqual(mapStreamSnapshot(null),{map:null,streamLoad:null});
+});
 
 test('ten-minute capture keeps 200ms evidence after many ordinary stalls and reports truncation',()=>{
  let now=0;const r=new LongFrameRecording({now:()=>now,eventLimit:2,criticalLimit:2});r.start({map:'plains'});

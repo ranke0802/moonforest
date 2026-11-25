@@ -43,8 +43,9 @@ export function createRidingReins(horse,rider,material){
     head.computeWorldMatrix().multiplyToRef(inverse,headLocal);
     for(let side=0;side<2;side++){
       const sign=side===0?1:-1;
-      // Refresh the hand after the seat correction moved its ancestor this frame.
-      const hm=hands[side].computeWorldMatrix(true).m;
+      // The seat and transfer poses dirty the joints they move. Both hands
+      // share the same freshly updated spine after the first grip is sampled.
+      const hm=hands[side].computeWorldMatrix().m;
       Vector3.TransformCoordinatesFromFloatsToRef(hm[12],hm[13],hm[14],inverse,grip);
       Vector3.TransformCoordinatesFromFloatsToRef(sign*CHEEK_X,CHEEK_Y-.53,CHEEK_Z+.53,headLocal,bit);
       const sag=Math.min(.095,Vector3.Distance(grip,bit)*.10);

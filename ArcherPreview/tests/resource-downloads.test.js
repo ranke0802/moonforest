@@ -176,3 +176,46 @@ test('blocked CacheStorage getter still lets the normal loader fetch once',async
   assert.equal((await repairCachedResource(resourceUrl(a,base))).status,'unavailable');
  }finally{if(previous)Object.defineProperty(globalThis,'caches',previous);else delete globalThis.caches;}
 });
+
+test('adaptive map preparation validates only requested keys on a warm revisit and detects eviction across managers',async()=>{
+ const paths=Array.from({length:1270},(_,i)=>'content/'+i.toString(16).padStart(64,'0')+'.bin');
+ const sizes=Object.fromEntries(paths.map(path=>[path.slice(8),4])),resident=new Set(paths.map(path=>resourceUrl(path,base)));
+ let clock=0,listCalls=0,returnedKeys=0,probeCalls=0,fetches=0,probeCost=1,active=0,peak=0,pendingRead;
+ const cache={
+   async keys(url){
+     if(!url){listCalls++;clock+=1669.7;returnedKeys+=resident.size;return [...resident].map(url=>({url}));}
+     probeCalls++;peak=Math.max(peak,++active);await pendingRead;active--;clock+=probeCost;
+     if(!resident.has(url))return [];
+     returnedKeys++;return [{url}];
+   },
+   async put(url,response){assert.equal((await response.arrayBuffer()).byteLength,4);resident.add(url);}
+ };
+ const storage={open:async()=>cache};
+ const create=(cacheStorage=storage)=>new ResourceDownloads(sizes,base,{cacheStorage,adaptiveCacheKeys:true,now:()=>clock,
+   fetcher:async()=>{fetches++;return new Response(new Uint8Array(4));}});
+ await create().prepare(paths.slice(0,115));
+ assert.equal(listCalls,1);assert.equal(returnedKeys,1270);
+ const before=returnedKeys,requested=paths.slice(100,315);
+ resident.delete(resourceUrl(requested.at(-1),base));
+ const visit=create(),result=await visit.prepare(requested);
+ assert.equal(listCalls,1);assert.equal(probeCalls,215);assert.equal(returnedKeys-before,214);
+ assert.equal(result.cached,214*4);assert.equal(result.loaded,4);assert.equal(fetches,1);assert.equal(peak,4);
+ // Expensive exact reads on the same device switch back to a full snapshot.
+ probeCost=40;
+ await create().prepare(requested);
+ assert.equal(listCalls,2);assert.equal(probeCalls,219);
+ await create().prepare(requested);
+ assert.equal(listCalls,3);assert.equal(probeCalls,219,'an equally large visit skips known slow probes');
+ // A new CacheStorage context must learn its own full-list cost.
+ const newStorage={open:async()=>cache};
+ await create(newStorage).prepare(requested);assert.equal(listCalls,4);
+ // A stalled native metadata batch must not hold up the fallback. Even a
+ // late negative result cannot schedule a download or overwrite a newer hit.
+ let resume;pendingRead=new Promise(resolve=>{resume=resolve;});
+ const stalled=create(newStorage);
+ try{
+   assert.equal((await stalled.prepare(requested)).cached,215*4);
+   assert.equal(listCalls,5);assert.equal(stalled.stats.cacheAdaptiveFallbacks,1);assert.equal(probeCalls,223);
+ }finally{resume();}
+ assert.equal(fetches,1);
+});
