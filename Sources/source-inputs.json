@@ -48552,11 +48552,33 @@
         "town-item-icons-2026-11-24"
       ],
       "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/art/riding-gallop.svg",
+      "path": "ArcherPreview/src/v03/art/riding-gallop.svg",
+      "bytes": 835,
+      "sha256": "4231795b15a80891651c69e2a2ddd5e96de5c654f74a09ffa921ff8e85bd160d",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-riding-hud"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:ArcherPreview/src/v03/art/riding-horse.svg",
+      "path": "ArcherPreview/src/v03/art/riding-horse.svg",
+      "bytes": 741,
+      "sha256": "2dd040ec040d3a6de31f49d053b11deba5f452c2cbf0da7a69edd273025271ae",
+      "origins": [],
+      "requiredBy": [
+        "moonforest-0.3-riding-hud"
+      ],
+      "status": "bundled"
     }
   ],
   "summary": {
-    "files": 3732,
-    "bytes": 14017926449,
+    "files": 3734,
+    "bytes": 14017928025,
     "missing": [],
     "layoutDuplicates": 44
   },

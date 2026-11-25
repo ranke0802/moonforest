@@ -213,7 +213,7 @@ export class PlaygroundInput {
       if (radius > 4) { this.panOffset.x *= 4 / radius; this.panOffset.z *= 4 / radius; }
     }
   }
-  zoom(factor) { if(!this.suspended&&this.callbacks.canTurn?.()!==false)zoomCamera(this.camera, factor); }
+  zoom(factor) { if(!this.suspended&&this.callbacks?.canTurn?.()!==false)zoomCamera(this.camera, factor); }
   value() {
     if(this.suspended)return {x:0,y:0,run:false};
     const down = (...codes) => codes.some(c => this.keys.has(c));

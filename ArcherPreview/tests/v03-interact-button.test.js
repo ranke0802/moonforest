@@ -46,6 +46,22 @@ test('with keyboard controls the attack button stays an attack button',()=>{
  assert.equal(h.control.sync(talk),false);assert.equal(h.button.classList.contains('v03-interact'),false);
  h.fire('pointerdown');assert.deepEqual(h.seen,['pointerdown']);
 });
+test('mounting by a resident hands the button to gallop and restores the same prompt on dismount',()=>{
+ const h=setup(),app=h.document.getElementById('app');
+ h.control.sync(talk);
+ function setRide(value){
+   app.dataset.v03Riding=value;
+   app.dispatchEvent(new h.document.defaultView.Event('v03ridingchange',{bubbles:true}));
+ }
+ setRide('mounted');
+ assert.equal(h.button.getAttribute('aria-label'),'공격');
+ for(const event of ['pointerdown','pointerup','click'])assert.equal(h.fire(event,{detail:1}).defaultPrevented,false);
+ assert.equal(h.interacted,0);
+ assert.equal(h.control.sync(talk),false);
+ setRide('on-foot');
+ assert.equal(h.button.getAttribute('aria-label'),talk.label);
+ h.fire('click',{detail:0});assert.equal(h.interacted,1);
+});
 test('dispose removes the listeners and the face',()=>{
  const h=setup();h.control.sync(talk);h.control.dispose();
  assert.equal(h.button.classList.contains('v03-interact'),false);assert.equal(h.button.querySelector('.v03-interact-face'),null);

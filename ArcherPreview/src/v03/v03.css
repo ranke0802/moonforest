@@ -9,6 +9,10 @@
 [data-v03-layer] button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;background:none;border:0;padding:0}
 [data-v03-layer] button:focus-visible{outline:2px solid #f5d897;outline-offset:3px}
 
+/* A long translated line scrolls above the Next button on short screens. */
+.v03-dialogue-text{max-height:calc(45vh / var(--v03-ui,1));max-height:calc(45dvh / var(--v03-ui,1));overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+html[data-v03-ios] .v03-dialogue-next{font-size:clamp(16px,calc(1.7vmin / var(--v03-ui,1)),22px)!important}
+
 /* While the shell owns the screen the game HUD is not shown. Dialogs stay
    reachable (settings opens from the title), and so does the loading card. */
 html[data-v03-screen="boot"] #app>:not(#viewport):not(#loading):not(dialog),

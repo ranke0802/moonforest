@@ -1,0 +1,23 @@
+/* Native panning is resolved up to the nearest scroll container. The page
+   stays still while the inventory, settings, dialogue text and editors keep
+   their own overflow and the canvas keeps its pointer gestures. */
+html.v03-viewport,
+html.v03-viewport body,
+html.v03-viewport #app {
+  overflow: hidden;
+  overflow: clip;
+  overscroll-behavior: none;
+  touch-action: none;
+  height: 100%;
+  height: 100dvh;
+}
+
+/* The shared app has a 380px minimum; landscape Safari with its bars visible
+   can have less actual height than that. */
+html.v03-viewport #app { min-height: 0; }
+
+/* WebKit versions that ignore "manipulation" for double taps honour "none".
+   Declare this on the interactive surfaces as well as the document. */
+html.v03-viewport :is(#viewport, #app > .action-controls, .v03-prompt, .mf-treasure-prompt, .v03-dialogue, .v03-dialogue-next) {
+  touch-action: none;
+}

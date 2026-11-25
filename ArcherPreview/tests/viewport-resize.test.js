@@ -1,8 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {observeViewportSize} from '../src/viewport-resize.js';
+import {observePageZoom,observeViewportSize} from '../src/viewport-resize.js';
 import {isInstalledDisplay} from '../src/app-display.js';
 import {renderPixelRatio} from '../src/render-policy.js';
+
+test('page pinch diagnostics use the outer viewport and retain a transient peak',()=>{
+  const viewport=Object.assign(new EventTarget(),{scale:1});
+  const observer=observePageZoom({top:{visualViewport:viewport},visualViewport:{scale:1}});
+  viewport.scale=1.8;viewport.dispatchEvent(new Event('resize'));viewport.scale=1;
+  assert.deepEqual(observer.snapshot(),{visualViewportScale:1,visualViewportPeakScale:1.8});
+  observer.dispose();viewport.scale=3;viewport.dispatchEvent(new Event('resize'));viewport.scale=1;
+  assert.equal(observer.snapshot().visualViewportPeakScale,1.8);
+  const inaccessible=observePageZoom({get top(){throw new Error('blocked');}});
+  assert.deepEqual(inaccessible.snapshot(),{visualViewportScale:null,visualViewportPeakScale:null});
+  inaccessible.dispose();
+});
 
 function fixture(t,{width=393,height=852,observer=true,mobile=true,pixelRatio=3}={}){
   const targets=[];

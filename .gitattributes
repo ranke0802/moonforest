@@ -16,4 +16,5 @@
 *.sf2 binary
 # Runtime filenames and the deployment inventory are hashes of exact bytes.
 ArcherPreview/public/assets/content/** -text
+ArcherPreview/src/v03/art/riding-*.svg text eol=lf
 ArcherPreviewSite/** -text

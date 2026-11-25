@@ -66,7 +66,7 @@ import {CameraZoom,setupCameraZoomControls} from './camera-zoom.js';
 import {CameraPitch,setupCameraPitchControls} from './camera-pitch.js';
 import { ARENA_RADIUS, VILLAGE_MAP, setEnemyTravelRule } from './world-limits.js';
 import { setupFullscreen } from './fullscreen.js';
-import { observeViewportSize } from './viewport-resize.js';
+import { observePageZoom, observeViewportSize } from './viewport-resize.js';
 import { createTrainingTargets } from './targets.js';
 import { createProjectiles } from './projectiles.js';
 import { POTION } from './healing-potion.js';
@@ -380,7 +380,23 @@ const effectReviewSettings=setupEffectReviewSettings({host:$('.settings-display-
 if(import.meta.hot)import.meta.hot.dispose(()=>{effectReviewGeneration++;playerTextureSettings.dispose();effectReviewSettings.dispose();});
 // Copy only scalar work state so old delay events cannot change as streaming
 // and candidate selection advance. No extra scene traversal is needed.
+function viewpointSample(){
+  return {
+    position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
+    camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null
+  };
+}
+function ridingAndViewSample(){
+  if(!versionRoute.edition||versionRoute.worldRevision)return {};
+  return {
+    riding:world?.riding?.inspect?.()??null,
+    ...world?.pageZoom?.snapshot(),
+    orbitZoom:cameraZoom&&world?.camera?.radius>0?cameraZoom.referenceRadius/world.camera.radius:null,
+    dialogueOpen:world?.v03?.story?.dialogueOpen??null
+  };
+}
 const mapWorkDiagnostics=()=>({
+  ...ridingAndViewSample(),
   renderResolution:renderResolution(),
   playerTextures:playerTextureSelection,
   preparationBudget:world?.scene?frameWorkSnapshot(world.scene):null,
@@ -416,7 +432,7 @@ function buildChunks(){try{const names=new Set();for(const entry of performance.
 function recordingProbe(){
   const scene=world?.scene,counts=animator?.bindingCounts,previous=probePlayerBindings,memory=performance.memory,profile=boss?.profile,gpuTextures=compactMeterEnabled ? sampleTextureMemory(engine) : textureMemoryTotals(engine);
   probePlayerBindings=counts?{...counts}:null;
-  return {map:world?.mapId??null,hz:refreshMeter.hz,calibrationMs:calibrationMs(),targetFps:engine?.maxFPS??null,
+  return {...ridingAndViewSample(),...(compactMeterEnabled?viewpointSample():{}),map:world?.mapId??null,hz:refreshMeter.hz,calibrationMs:calibrationMs(),targetFps:engine?.maxFPS??null,
     meshes:scene?.meshes.length??null,activeMeshes:scene?.getActiveMeshes().length??null,skeletons:scene?.skeletons.length??null,animationGroups:scene?.animationGroups.length??null,animatables:scene?._activeAnimatables?.length??null,
     jsHeapMB:memory?Math.round(memory.usedJSHeapSize/1048576):null,materials:scene?.materials.length??null,textures:scene?.textures.length??null,disposeObservers:scene?.onDisposeObservable.observers.length??null,foes:boss?.encounters?.filter(foe=>foe.active).length??null,engaged:profile?.engaged??null,nearFoes:profile?.near??null,farFoes:profile?.far??null,maxFoe:profile?.maxKind?`${profile.maxKind}:${profile.maxState}`:null,
     playerClipStarts:counts&&previous?counts.created-previous.created:null,playerClipReuses:counts&&previous?counts.reused-previous.reused:null,
@@ -438,8 +454,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()
   memory:()=>readDiagnosticMemory(performance,{textureSample:compactMeterEnabled?sampleTextureMemory(engine):null,highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
   metadata:()=>({...mapWorkDiagnostics(),fixedLayouts:structuredClone(fixedLayoutStats),resourceDownloadVisits:recentResourceDownloadStats(),manifestReads:{...manifestReadStats},speeds:{...movementSpeedSettings.value,attack:attackSpeed},splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,...(combatTrail?{previousCombat:combatTrail.previous,currentCombat:combatTrail.current}:{}),textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({...mapWorkDiagnostics(),activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
-    position:actor?[Math.round(actor.position.x*10)/10,Math.round(actor.position.z*10)/10]:null,
-    camera:world?[world.camera.alpha,world.camera.beta,world.camera.radius].map(n=>Math.round(n*100)/100):null,
+    ...viewpointSample(),
     cameraZoom:cameraZoom?.snapshot()??null,
     viewportResize:world?.viewportResize?.snapshot?.()??null,cameraFollow:cameraFollow?.snapshot()??null,cameraGuard:world?.caveCamera?.inspect()??null,
     geometryPending:world?.environment?.geometryPending??0,texturePending:world?.environment?.highTexturePending??0,
@@ -600,7 +615,7 @@ const actions = {
   cancelDodgeInput(source){return input?.dodgeSprintGesture?.cancel(source);},
   isHudDodgeHeld(pointerType){return input?.dodgeSprintGesture?.hasTouchHud(pointerType)??false;},
   potion() { if(ready&&isV2()&&allowed('potion')&&!controller.captured&&!controller.groggy){if((world?.v03?.playing&&townServices)?townServices.drink():boss.usePotion()){questLive()?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
-  attack() { if (ready && allowed('attack') && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
+  attack() { if (world?.riding?.active) {world.riding.startGallop();return;} if (ready && allowed('attack') && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
   isHudAttackHeld(pointerType) { return isHudAttackHeld(pointerType); },
@@ -640,6 +655,7 @@ function resetBeforeBoss(){
 }
 
 function setAttackHeld(source, held, pointerType) {
+  if(held&&world?.riding?.active){world.riding.startGallop();return;}
   if(elenaReview){if(held&&ready)elenaReview.requestReviewCast();return;}
   if (held) {
     if (!ready || !allowed('attack') || controller.dead || (boss?.active && !boss.playerAlive) || controller.setAttackHeld(true) === false) return;
@@ -657,6 +673,7 @@ function isHudAttackHeld(pointerType) {
 }
 
 function cancelAttackInput(source,{preserveCompletedCharge=false}={}) {
+  if(!source)world?.riding?.stopGallop?.();
   if(source){attackPointerTypes.delete(source);if(!attackSources.delete(source)||attackSources.size)return;}
   else {attackSources.clear();attackPointerTypes.clear();}
   // A captured HUD pointer can be released by the browser before pointerup.
@@ -1018,6 +1035,7 @@ function render(dt) {
       elenaReview.reviewMovement={x:direction.x*Math.min(1,length),z:direction.z*Math.min(1,length),run:rawMovement.run||controller.runToggled};
     }
     const movement = elenaReview||(boss?.active&&!boss.playerAlive)?{x:0,y:0}:rawMovement;
+    if(world.riding?.active&&allowed('move')&&!input.suspended)world.riding.steerGallop(movement,world.camera.alpha,dt);
     if(boss?.active&&!boss.playerAlive)cancelAttackInput();
     input.dodgeSprintGesture?.advance(dt);
     movement.alive=!controller.dead&&boss.playerHp>0;
@@ -1105,7 +1123,7 @@ function render(dt) {
       const forward = new Vector3(-Math.cos(alpha), 0, -Math.sin(alpha));
       const right = new Vector3(-forward.z, 0, forward.x);
       const direction = forward.scale(movement.y).add(right.scale(movement.x)).normalize();
-      const travelSpeed=result.speed*(world.riding?.active ? 1.7 : 1);
+      const travelSpeed=world.riding?.active?world.riding.travelSpeed(result.speed):result.speed;
       actor.position.addInPlace(direction.scale(travelSpeed * (result.movementDt??dt)));
       constrainPlayerPosition(beforeMove);
       sprintRequested=travelSpeed*(result.movementDt??dt);sprintActual=Math.hypot(actor.position.x-beforeMove.x,actor.position.z-beforeMove.z);
@@ -1115,7 +1133,7 @@ function render(dt) {
     // Authored jump/roll poses remain local to the actor. Only its ground anchor
     // follows terrain; a boss holding or throwing the actor owns its altitude.
     if(!result.captured&&!boss.grab.active&&!world.v03?.holdsPlayer)world.terrain.place(actor.position);
-    world.riding?.afterMove(result,dt>0?sprintActual/dt:0);
+    world.riding?.afterMove(result,dt>0?sprintActual/dt:0,dt);
     if (attacking && shotTarget && !isWarrior()) {
       const direction = shotTarget.aimPoint.subtract(actor.position);
       faceHeading(Math.atan2(direction.x, direction.z) - (config.attackYaw?.[result.state] || 0), dt);
@@ -1481,6 +1499,10 @@ try {
     world.scene.onDisposeObservable.addOnce(()=>{contextRecovery.dispose();notice.dispose();});
   }else engine.onContextRestoredObservable.add(()=>{if(world.toolRecovery){world.toolRecovery.recover();world.toolRecovery=null;}restorePlayback();});
   syncPlayback();
+  if(versionRoute.edition&&!versionRoute.worldRevision){
+    const pageZoom=world.pageZoom=observePageZoom(window);
+    world.scene.onDisposeObservable.addOnce(pageZoom.dispose);
+  }
   const viewportResize=world.viewportResize=observeViewportSize(canvas, () => {
     if(mapDeparture?.departing||mapTransition?.busy)return;
     applyRenderQuality();
@@ -1808,7 +1830,7 @@ try {
       }});
       world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
-      world.riding=createRidingHorse({world,root:$('#app'),storage:v03Save.journey,player:()=>actor,
+      world.riding=createRidingHorse({world,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
         forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:()=>!!(ready&&!loadingAsset&&!mapTransition?.busy&&
           world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.dead&&boss.playerAlive&&!boss.combatCount)});
       world.scene.onDisposeObservable.addOnce(()=>world.riding.dispose());

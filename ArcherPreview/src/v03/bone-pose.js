@@ -17,7 +17,7 @@ const toFrame=(out,v)=>{out.set(0,0,0);up.scaleToRef(v[0],scratch);out.addInPlac
 //     joint pair a -> b faces across the body (or, with face, to its front).
 // nodes: the rig's transform nodes when they are not all under root by name
 // (the NPC runtime prefixes some); names match exactly or by their last part.
-export function createBonePose(root,chains,{nodes=null}={}){
+export function createBonePose(root,chains,{nodes=null,reuseHierarchy=false}={}){
  const list=nodes??root.getDescendants(false),byName=new Map();
  for(const node of list){byName.set(node.name,node);const cut=Math.max(node.name.lastIndexOf(' '),node.name.lastIndexOf('.'));if(cut>=0){const tail=node.name.slice(cut+1);if(!byName.has(tail))byName.set(tail,node);}}
  const links=chains.map(row=>Array.isArray(row)?{bone:byName.get(row[0]),child:byName.get(row[1]),first:row[2],second:row[3]??null}:{bone:byName.get(row.twist),a:byName.get(row.a),child:byName.get(row.b),twist:true,face:row.face===true}).filter(link=>link.bone&&link.child&&link.bone.parent&&(!link.twist||link.a));
@@ -33,15 +33,19 @@ export function createBonePose(root,chains,{nodes=null}={}){
   // direction to its second (rows without one keep the first).
   apply(weight,blend=0){
    if(!(weight>0)||!links.length)return;
-   root.computeWorldMatrix(true);const m=root.getWorldMatrix();
+   // The rider's joints all descend from this actor. After the animation blend,
+   // invalidate them once, then invalidate only branches touched by the solve.
+   // Story poses can supply a separate node hierarchy and keep the forced walk.
+   if(reuseHierarchy)root.markAsDirty();
+   const m=root.computeWorldMatrix(true);
    Vector3.TransformNormalToRef(Vector3.UpReadOnly,m,up);up.normalize();
    Vector3.TransformNormalToRef(Vector3.RightReadOnly,m,side);side.normalize();
    Vector3.TransformNormalToRef(FORWARD,m,front);front.normalize();
    for(const link of links){
     const {bone,child}=link;
-    bone.computeWorldMatrix(true);child.computeWorldMatrix(true);
+    bone.computeWorldMatrix(!reuseHierarchy);child.computeWorldMatrix(!reuseHierarchy);
     if(link.twist){
-     link.a.computeWorldMatrix(true);child.absolutePosition.subtractToRef(link.a.absolutePosition,from);
+     link.a.computeWorldMatrix(!reuseHierarchy);child.absolutePosition.subtractToRef(link.a.absolutePosition,from);
      up.scaleToRef(Vector3.Dot(from,up),scratch);from.subtractInPlace(scratch);if(from.lengthSquared()<1e-10)continue;from.normalize();
      Quaternion.FromUnitVectorsToRef(from,link.face?front:side,turn);
     }else{
@@ -55,7 +59,8 @@ export function createBonePose(root,chains,{nodes=null}={}){
     bone.parent.absoluteRotationQuaternion.conjugateToRef(parentWorld);
     turn.multiplyToRef(bone.absoluteRotationQuaternion,world);
     parentWorld.multiplyToRef(world,bone.rotationQuaternion??=new Quaternion());
-    bone.computeWorldMatrix(true);
+    if(reuseHierarchy)bone.markAsDirty();
+    else bone.computeWorldMatrix(true);
    }
   },
  };

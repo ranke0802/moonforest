@@ -7,6 +7,7 @@ export function arrangeTopActions(root){
   for(const [key,selector]of [
     ['fps','#live-fps'],
     ['bag','[data-chapter="bag"],[data-uit-action="inventory"]'],
+    ['riding','.v03-ride-toggle'],
     ['journal','[data-chapter="journal"],[data-uit-action="journal"]'],
     ['summon','#open-summon'],
     ['fullscreen','#fullscreen-button'],

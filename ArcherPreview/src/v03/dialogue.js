@@ -22,6 +22,7 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  const talking=on=>{const data=doc.documentElement?.dataset;if(!data)return;if(on)data.v03Talk='';else delete data.v03Talk;};
  function show(){
   const line=lines[index];who.textContent=line.who?speaker(line.who):'';who.hidden=!line.who;said.textContent=line.text;typewriter.start(text,line.text,{who:line.who??null});
+  text.scrollTop=0;
   box.classList.toggle('is-self',line.who==='나');
   const art=line.illustration??portraitFor(line.who);portrait.classList.toggle('is-journal',!!line.illustration);
   if(art!==shownArt){shownArt=art;portrait.hidden=!art;if(art){portrait.src=art;portrait.classList.remove('is-in');void portrait.offsetWidth;portrait.classList.add('is-in');}}next.textContent=t(index===lines.length-1?'dialogue.close':'dialogue.next');

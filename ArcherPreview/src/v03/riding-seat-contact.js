@@ -34,10 +34,10 @@ export function createRiderContact(actor){
   for(const link of entries)for(let i=0;i<2;i++){
     if(link.weights[i]>0)link.points[i].scaleInPlace(1/link.weights[i]);
   }
-  return out=>{
+  return (out,force=true)=>{
     for(const p of supports)p.set(0,0,0);
     for(const {node,points,weights} of entries){
-      const matrix=node.computeWorldMatrix(true);
+      const matrix=node.computeWorldMatrix(force);
       for(let i=0;i<2;i++){
         Vector3.TransformCoordinatesToRef(points[i],matrix,local);
         local.scaleAndAddToRef(weights[i],supports[i]);

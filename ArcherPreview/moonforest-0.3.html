@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-loading="true">
+<html lang="ko" data-loading="true" class="v03-viewport">
   <head>
     <meta charset="UTF-8" />
     <script id="moonforest-shell-redirect">
@@ -16,7 +16,9 @@
         location.replace('moonforest-shell.html?'+query.toString());
       }catch(error){}})();
     </script>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
+    <link rel="stylesheet" href="./src/v03/game-viewport.css" />
+    <script type="module" src="./src/v03/game-viewport.js"></script>
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

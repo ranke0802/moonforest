@@ -1,12 +1,52 @@
-.top-actions .v03-ride-toggle {
-  min-height: 42px;
-  padding: 0 10px;
-  border: 1px solid #d1b885;
-  border-radius: 6px;
-  background: rgba(26, 28, 27, .76);
-  color: #fff0cc;
-  font: inherit;
+#app > .topbar .top-actions button.v03-ride-toggle {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  font-size: 0;
   cursor: pointer;
 }
-.top-actions .v03-ride-toggle[hidden] { display: none; }
-.top-actions .v03-ride-toggle:disabled { opacity: .55; }
+.v03-ride-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('./art/riding-horse.svg') center / contain no-repeat;
+  pointer-events: none;
+}
+.v03-ride-toggle:active::before { transform: scale(.93); }
+.v03-ride-toggle:focus-visible { outline: 2px solid #f1d99a; outline-offset: 2px; }
+#app:is([data-v03-riding=loading],[data-v03-riding=mounted]) .v03-ride-toggle::after {
+  content: '';
+  position: absolute;
+  right: 1px;
+  bottom: 3px;
+  width: 13px;
+  height: 13px;
+  border: 1px solid #d7be86;
+  border-radius: 50%;
+  background: #393428 center / 9px 9px no-repeat;
+  pointer-events: none;
+}
+#app[data-v03-riding=loading] .v03-ride-toggle::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23ffe7b2' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='m2 2 6 6m0-6L2 8'/%3E%3C/svg%3E");
+}
+#app[data-v03-riding=mounted] .v03-ride-toggle::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23ffe7b2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m1.5 5 2.5 2.5L8.5 2'/%3E%3C/svg%3E");
+}
+@media (orientation: portrait) {
+  #app[data-hud-input=touch] > .topbar .top-actions button.v03-ride-toggle {
+    width: 38px; height: 40px; min-width: 36px;
+  }
+}
+/* Keep the combat button's own touch opacity, hit area and PC key cap. */
+#app[data-v03-riding=mounted] #attack-button > .hud-v1-sprite {
+  background: url('./art/riding-gallop.svg') center / contain no-repeat;
+}
+#app[data-v03-riding=mounted] #attack-button:is(:active,[data-hud-sprite-state=press],[data-hud-sprite-state=held]) > .hud-v1-sprite {
+  transform: scale(.94);
+}

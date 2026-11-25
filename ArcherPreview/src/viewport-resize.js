@@ -1,3 +1,23 @@
+// In the Android fullscreen shell the game runs in a same-origin iframe.
+// Only the top-level VisualViewport reports the browser's actual pinch scale.
+export function observePageZoom(host) {
+  let viewport;
+  try { viewport=(host.top??host).visualViewport; } catch { /* Cross-origin embedding. */ }
+  let peak=null;
+  function sample(){
+    const value=viewport?.scale;
+    if(!Number.isFinite(value)||value<=0)return null;
+    peak=Math.max(peak??value,value);
+    return value;
+  }
+  sample();
+  viewport?.addEventListener('resize',sample);
+  return {
+    snapshot:()=>({visualViewportScale:sample(),visualViewportPeakScale:peak}),
+    dispose:()=>viewport?.removeEventListener('resize',sample)
+  };
+}
+
 /** Resize from the laid-out canvas, never from the physical screen or notch size.
  * iOS can finish rotating/resuming after window.resize; observe the canvas too.
  * Let mobile rotation/toolbar layout settle before reallocating the GPU buffer.

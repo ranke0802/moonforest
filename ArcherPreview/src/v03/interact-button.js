@@ -16,7 +16,8 @@ const ICONS=Object.freeze({
 
 export function createInteractButton({doc,onInteract=()=>{},isTouch=null,buttonId='attack-button'}){
  const svgNs='http://www.w3.org/2000/svg';
- let button=null,face=null,path=null,label=null,active=null,pointer=null,savedLabel=null,disposed=false;
+ let button=null,face=null,path=null,label=null,active=null,pointer=null,savedLabel=null,disposed=false,lastPrompt=null;
+ const mounted=()=>doc.getElementById('app')?.dataset.v03Riding==='mounted';
  const touch=isTouch??(()=>{
   // The HUD says which controls it laid out; a coarse pointer is the fallback.
   const mode=doc.getElementById('app')?.dataset?.hudInput;
@@ -53,12 +54,13 @@ export function createInteractButton({doc,onInteract=()=>{},isTouch=null,buttonI
   target.classList.remove('v03-interact');delete target.dataset.v03Interact;
   if(savedLabel===null)target.removeAttribute('aria-label');else target.setAttribute('aria-label',savedLabel);savedLabel=null;
  }
- return {
+ const controls={
   // value: the prompt ({act:'talk'|'push', action, label}) or null. Only an
   // actionable prompt on touch controls turns the button over.
   sync(value){
    if(disposed)return false;
-   const want=value?.act&&ICONS[value.act]&&touch()?value:null;
+   lastPrompt=value;
+   const want=value?.act&&ICONS[value.act]&&touch()&&!mounted()?value:null;
    const target=find();
    if(!want||!target){if(active)release();return false;}
    if(!face||face.parentNode!==target)build(target);
@@ -70,9 +72,13 @@ export function createInteractButton({doc,onInteract=()=>{},isTouch=null,buttonI
   },
   get active(){return active!==null;},
   dispose(){
-   if(disposed)return;disposed=true;release();face?.remove();face=null;
+   if(disposed)return;disposed=true;if(active)release();face?.remove();face=null;lastPrompt=null;
+   doc.removeEventListener('v03ridingchange',ridingChange);
    doc.removeEventListener('pointerdown',down,options);doc.removeEventListener('pointerup',up,options);
    doc.removeEventListener('pointercancel',cancel,true);doc.removeEventListener('click',click,true);doc.removeEventListener('contextmenu',menu,true);
   },
  };
+ function ridingChange(){controls.sync(lastPrompt);}
+ doc.addEventListener('v03ridingchange',ridingChange);
+ return controls;
 }

@@ -38,6 +38,16 @@ const saddleJoints=[
  ['scap.R',.0175231,4.54028,-5.63419,7.32146],
  ['scap.L',.0194156,-4.78952,-5.74710,7.47608]
 ];
+// Babylon resets these SmartArrays by shortening their logical count. A
+// dismounted horse can still occupy the previous frame's entries indefinitely.
+function forgetMountNodes(list,owned){
+ if(!list)return;
+ for(let i=list.data.length-1;i>=0;i--){
+  if(!owned.has(list.data[i]))continue;
+  if(i<list.length){list.data.copyWithin(i,i+1,list.length);list.data[--list.length]=null;}
+  else list.data[i]=null;
+ }
+}
 export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounted=false}){
  let disposed=false,container=null,root=null,observer=null,chest=null,stirTime=0,breathing=false;const casters=[],stirBones=[];
  const groups=new Map();let current=null,previous=null,fade=0,wanted='Horse_Idle';
@@ -98,9 +108,10 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   get clip(){return wanted;},
   saddleContactToRef(out){
    if(saddle.length!==saddleJoints.length)return false;
+   root.markAsDirty();
    out.set(0,0,0);
    for(const s of saddle){
-    const m=s.bone.computeWorldMatrix(true).m;
+    const m=s.bone.computeWorldMatrix().m;
     out.x+=s.weight*(s.x*m[0]+s.y*m[4]+s.z*m[8]+m[12]);
     out.y+=s.weight*(s.x*m[1]+s.y*m[5]+s.z*m[9]+m[13]);
     out.z+=s.weight*(s.x*m[2]+s.y*m[6]+s.z*m[10]+m[14]);
@@ -114,11 +125,20 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   // Moves the horse (story ride); y follows the ground.
   place(x,z,yaw){if(!root)return;root.position.set(x,heightAt(x,z),z);root.rotation.y=yaw;},
   dispose(){
-   disposed=true;loadController?.abort();saddle.length=0;for(const mesh of casters.splice(0))try{shadows?.removeShadowCaster(mesh,false);}catch{}
+   disposed=true;loadController?.abort();saddle.length=0;
+   for(const mesh of casters)try{shadows?.removeShadowCaster(mesh,false);}catch{}
+   casters.length=0;
    if(observer){scene.onBeforeRenderObservable.remove(observer);observer=null;}
    for(const group of groups.values())group.stop();groups.clear();current=previous=null;chest=null;stirBones.length=0;
    // Meshes, outline shells, clips, loader materials and the toon copies all go with the model.
-   if(container){container.dispose();container=null;}
+   if(container){
+    if(mounted){
+     const owned=new Set([...container.meshes,...container.transformNodes]);
+     for(const renderer of scene.objectRenderers)forgetMountNodes(renderer.getActiveMeshes(),owned);
+     forgetMountNodes(scene._registeredForLateAnimationBindings,owned);
+    }
+    container.dispose();container=null;
+   }
    root?.dispose();root=null;
   },
  };

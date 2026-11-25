@@ -1,26 +1,20 @@
 import test from 'node:test';
+import {parseHTML} from 'linkedom';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {FreeCamera,Matrix,NullEngine,Ray,Scene,TransformNode,Vector3,VertexBuffer} from '@babylonjs/core';
-import '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
+import {DirectionalLight,FreeCamera,Matrix,NullEngine,RawTexture,Ray,Scene,ShadowGenerator,TransformNode,Vector3,VertexBuffer} from '@babylonjs/core';
+import {GLTFLoader} from '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {readMapContainer} from '../src/map-container.js';
 import {createRidingHorse} from '../src/v03/riding-horse.js';
 import {SADDLE_PAD_HEIGHT} from '../src/v03/riding-saddle.js';
 import {configurePlayerSize} from '../src/player-dimensions.js';
 import {CharacterAnimator} from '../src/animation.js';
+import {inspectPreparedEffects} from '../src/prepared-effect-lifetime.js';
 
 function skipPaint(g){
  delete g.extensionsRequired;delete g.extensionsUsed;delete g.images;delete g.materials;delete g.textures;
  for(const m of g.meshes)for(const p of m.primitives)delete p.material;
-}
-function horseForNullEngine(){
- const input=readFileSync(new URL('../src/v03/models/wagon-horse-rig.glb',import.meta.url)),n=input.readUInt32LE(12);
- const g=JSON.parse(input.subarray(20,n+20)),raw=input.subarray(20+n);
- skipPaint(g);
- const json=Buffer.from(JSON.stringify(g)),pad=Buffer.alloc((4-json.length%4)%4,32),head=Buffer.from(input.subarray(0,20));
- head.writeUInt32LE(20+json.length+pad.length+raw.length,8);head.writeUInt32LE(json.length+pad.length,12);
- return Buffer.concat([head,json,pad,raw]);
 }
 function seatGap(mesh,worldPoint){
  const p=Vector3.TransformCoordinates(worldPoint,Matrix.Invert(mesh.getWorldMatrix()));
@@ -51,7 +45,7 @@ function underside(points,indices,x,z){
  }
  return lowest;
 }
-test('shipped mobile warrior seats the skinned breeches on the back throughout locomotion, slope and turns; loading cancellation releases the mount',async()=>{
+test('shipped mobile warrior seats the skinned breeches on the back throughout locomotion, slope and turns; loading cancellation releases the mount',async t=>{
  const confUrl=new URL('../public/assets/warrior-v3-mobile4k.json',import.meta.url);
  const cfg=JSON.parse(readFileSync(confUrl)),rt=await readRuntimeGltf(new URL(cfg.model,confUrl)),g=rt.gltf;
  skipPaint(g);
@@ -72,25 +66,62 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
  const body=scene.getMeshByName('Warrior_Body_primitive0');
  const ankles=['Left','Right'].map(s=>scene.getTransformNodeByName('mixamorig:'+s+'Foot'));
  const grips=['Left','Right'].map(s=>scene.getTransformNodeByName('mixamorig:'+s+'HandMiddle1'));
- const originalFetch=globalThis.fetch,horse=horseForNullEngine(),baseMeshes=scene.meshes.length;
- let abort=false,hold=true,click;
+ const originalFetch=globalThis.fetch,horse=readFileSync(new URL('../src/v03/models/wagon-horse-rig.glb',import.meta.url)),baseMeshes=scene.meshes.length;
+ // Keep the real horse texture, imported materials and toon ownership. Stub only pixel decoding.
+ t.mock.method(GLTFLoader.prototype,'_loadTextureAsync',function(_context,texture,assign){
+   const image=RawTexture.CreateRGBATexture(new Uint8Array([70,45,35,255]),1,1,this.babylonScene,false,false);
+   image.getInternalTexture().isReady=true;image.name=texture.name??'horse base colour';assign(image);return Promise.resolve(image);
+ });
+ let abort=false,hold=true;
  globalThis.fetch=(_url,{signal})=>{
   if(!hold)return Promise.resolve(new Response(horse));
   return new Promise((_resolve,reject)=>signal.addEventListener('abort',()=>{abort=true;reject(signal.reason);},{once:true}));
  };
- const doc={documentElement:{lang:'en'},addEventListener(){},removeEventListener(){},querySelector(){return null;},createElement:()=>button};
- const button={dataset:{},setAttribute(){},addEventListener(name,fn){click=fn;},remove(){}};
+ const {document:doc}=parseHTML('<html lang="en"><body><main id="app"><div class="top-actions"></div><button id="attack-button"></button></main></body></html>');
  const heightAt=(x,z)=>.16*x-.07*z;
- const world={mapId:'village',scene,terrain:{heightAt}};
- const stable=createRidingHorse({world,
-  root:{ownerDocument:doc,querySelector:()=>({append(){}})},storage:{getItem:()=> '1',setItem(){}},player:()=>root,
+ const shadows=new ShadowGenerator(32,new DirectionalLight('sun',new Vector3(0,-1,0),scene));
+ const world={mapId:'village',scene,shadows,terrain:{heightAt}};
+ let collectingPose=false,compositions=0,measuredFrames=0,largestPose=0;
+ const diagnostics={collecting:false,mark(){collectingPose=true;compositions=0;return 7;},measure(section,start){
+   collectingPose=false;assert.equal(start,7);assert.equal(section,'ridingPoseMs');measuredFrames++;largestPose=Math.max(largestPose,compositions);
+ }};
+ const stable=createRidingHorse({world,diagnostics,
+  root:doc.getElementById('app'),storage:{getItem:()=> '1',setItem(){}},player:()=>root,
   ridingAllowed:()=>true,tell(){},forwardYaw:()=>cfg.forwardYaw});
+ const button=doc.querySelector('.v03-ride-toggle'),click=()=>button.onclick();
  try{
+  const inventory=()=>Object.fromEntries(['meshes','transformNodes','geometries','materials','textures','skeletons','animationGroups','animatables']
+    .map(k=>[k,scene[k].length]).concat([
+      ['casters',shadows.getShadowMap().renderList?.length??0],
+      ['beforeRender',scene.onBeforeRenderObservable.observers.filter(o=>!o._willBeUnregistered).length],
+      ['sceneDispose',scene.onDisposeObservable.observers.filter(o=>!o._willBeUnregistered).length]
+    ]));
+  scene.render();
+  const onFoot=inventory();
+  const priorTextures=new Set(scene.textures);
+  const nextFrame=async()=>{await new Promise(resolve=>setTimeout(resolve,5));scene.render();engine.endFrame();};
+  async function drawnPrograms(){
+   const meshes=['v03-riding-saddle','wagon_horse'].map(name=>scene.getMeshByName(name));
+   for(let i=0;i<100;i++){
+    await nextFrame();
+    const effects=meshes.map(mesh=>mesh.subMeshes[0]._getDrawWrapper(scene.activeCamera.renderPassId,false)?.effect);
+    if(effects.every(effect=>effect?.isReady())&&meshes.every(mesh=>scene.isActiveMesh(mesh)))return effects;
+   }
+   assert.fail('saddle and painted horse did not complete their main-camera draw');
+  }
   stable.updateAvailability();
-  const loading=click();assert.equal(button.textContent,'Cancel');assert.ok(!button.hidden&&!button.disabled);
+  assert.deepEqual(stable.inspect(),{state:'on-foot',mounts:0,gait:null});
+  const loading=click();assert.equal(button.textContent,'Cancel horse loading');assert.ok(!button.hidden&&!button.disabled);
+  assert.deepEqual(stable.inspect(),{state:'loading',mounts:0,gait:null});
   await click();await loading;assert.ok(abort);assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);
+  assert.equal(inspectPreparedEffects(engine).kept,0);
   hold=false;await click();assert.ok(stable.active);assert.equal(button.textContent,'Dismount');
+  assert.deepEqual(stable.inspect(),{state:'mounted',mounts:1,gait:'Horse_Idle'});
   const skin=scene.meshes.find(m=>m.name==='wagon_horse');assert.ok(skin?.skeleton);
+  assert.ok(shadows.getShadowMap().renderList.includes(skin));assert.ok(skin.material.albedoTexture);
+  for(const node of [...scene.meshes,...scene.transformNodes])node.onAfterWorldMatrixUpdateObservable.add(()=>{if(collectingPose)compositions++;});
+  scene.render();assert.equal(measuredFrames,0);
+  diagnostics.collecting=true;
   const saddle=scene.getMeshByName('v03-riding-saddle');assert.ok(saddle);assert.equal(scene.getMeshByName('harness').isEnabled(),false);
   const reins=scene.getMeshByName('v03-riding-reins');assert.ok(reins);
   assert.equal(reins.material,saddle.material);assert.equal(reins.isPickable,false);
@@ -143,10 +174,39 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
     const lateral=j===0?d:-d;assert.ok(lateral>.38&&lateral<.44,'boot lost its place on the flank during '+state);}
    }
   }
+  diagnostics.collecting=false;
+  const firstPrograms=await drawnPrograms();
   await click();assert.equal(scene.meshes.length,baseMeshes);assert.equal(lift.position.y,0);assert.equal(scene.animationGroups.length,asset.animationGroups.length);
   assert.ok(reins.isDisposed());
+  assert.equal(measuredFrames,24);
+  assert.ok(largestPose>0&&largestPose<200,'world matrices recomposed in one rider fit: '+largestPose);
+  assert.deepEqual(stable.inspect(),{state:'on-foot',mounts:1,gait:null});
+  await nextFrame();
+  assert.ok(firstPrograms.every(effect=>!effect.isDisposed));
+  assert.equal(inspectPreparedEffects(engine).kept,2);assert.equal(inspectPreparedEffects(engine).liveOwners,0);
+  assert.ok(scene.objectRenderers.every(renderer=>!renderer.getActiveMeshes().data.includes(skin)));
+  assert.ok(scene._registeredForLateAnimationBindings.data.every(node=>!node?.isDisposed?.()));
+  const afterFirst=inventory();
+  // This bare scene had no other painted actors. The first one initializes two
+  // scene-wide textures, their disposal hooks and the shared outline material.
+  const sceneTextures=scene.textures.filter(texture=>!priorTextures.has(texture)).map(texture=>texture.name).sort();
+  assert.deepEqual(sceneTextures,['cave-fog-inactive-sampler','data:EnvironmentBRDFTexture0']);
+  assert.deepEqual(afterFirst,{...onFoot,materials:onFoot.materials+1,textures:onFoot.textures+2,sceneDispose:onFoot.sceneDispose+2});
+  assert.ok(scene.materials.some(material=>material.name==='moonforest-character-outline'));
+  assert.equal(measuredFrames,24);
   await click();const remountedReins=scene.getMeshByName('v03-riding-reins');assert.ok(stable.active&&remountedReins);
   world.mapId='witch-cave';stable.updateAvailability();
   assert.equal(stable.active,false);assert.ok(remountedReins.isDisposed());assert.equal(scene.meshes.length,baseMeshes);
+  world.mapId='village';stable.updateAvailability();
+  for(let cycle=0;cycle<4;cycle++){
+    await click();const programs=await drawnPrograms();
+    assert.ok(programs.every((effect,i)=>effect===firstPrograms[i]),'remount compiled a replacement program');
+    await click();await nextFrame();
+    assert.equal(inspectPreparedEffects(engine).kept,2);assert.equal(inspectPreparedEffects(engine).refs,0);
+    assert.deepEqual(inventory(),afterFirst);
+  }
+  assert.deepEqual(stable.inspect(),{state:'on-foot',mounts:6,gait:null});
+  t.diagnostic('World matrices per mounted fit (max) '+largestPose+'. After dismount '+JSON.stringify(afterFirst));
  }finally{stable.dispose();animator.dispose();asset.dispose();scene.dispose();engine.dispose();globalThis.fetch=originalFetch;}
+ assert.equal(inspectPreparedEffects(engine).kept,0);
 });

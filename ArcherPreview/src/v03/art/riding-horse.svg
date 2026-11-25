@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="gold" x2=".3" y2="1" gradientUnits="objectBoundingBox">
+      <stop stop-color="#fff3ce"/><stop offset=".52" stop-color="#f4dba0"/><stop offset="1" stop-color="#dbbb80"/>
+    </linearGradient>
+    <path id="horse" d="M10 52c2-10 6-18 14-25l-8 2c2-6 7-12 13-15l-5 1c3-4 8-7 13-7l4-5 2 8 7-6-1 12c4 4 4 8 5 11l4 9-5 6-7-2-6-8c-2 5-2 11 0 19M18 52c1-6 4-13 9-18"/>
+  </defs>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <use href="#horse" stroke="#8a7353" stroke-width="6.5"/>
+    <use href="#horse" stroke="url(#gold)" stroke-width="3.8"/>
+    <path d="m44 22 3 1m2 9 4-2" stroke="#f7e2b7" stroke-width="2.6"/>
+  </g>
+</svg>

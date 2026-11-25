@@ -2,12 +2,34 @@ import { createWagonHorse } from './wagon-horse.js';
 import { createBonePose } from './bone-pose.js';
 import { Matrix, Vector3 } from '@babylonjs/core/Maths/math.vector.js';
 import { ridingLabels } from './riding-locale.js';
+import { createRidingControls } from './riding-controls.js';
 import { createRidingSaddle, SADDLE_PAD_HEIGHT } from './riding-saddle.js';
 import { createRidingReins } from './riding-reins.js';
 import { createRiderContact } from './riding-seat-contact.js';
+import { createRidingGallopTrail } from './riding-gallop-trail.js';
+import { createPreparedEffectLease } from '../prepared-effect-lifetime.js';
+import { cameraRenderPass } from '../render-variant-state.js';
+
+function keepRenderedMountPrograms(saddle,horseRoot){
+  const scene=saddle.getScene();
+  if(scene.isDisposed||scene.getEngine().isDisposed)return;
+  const pass=cameraRenderPass(scene),lease=createPreparedEffectLease();
+  const body=horseRoot.getChildMeshes(false,mesh=>mesh.name==='wagon_horse')[0];
+  for(const mesh of [saddle,body]){
+    if(!mesh||!scene.isActiveMesh(mesh)||mesh._internalMeshDataInfo._effectiveMaterial!==mesh.material)continue;
+    // Read the last main-camera draw. A readiness query here would start work
+    // for a mount that was cancelled before its first visible frame.
+    for(const sub of mesh.subMeshes){
+      const wrapper=sub._getDrawWrapper(pass,false);
+      if(wrapper?._wasPreviouslyReady)lease.retain(mesh,wrapper.effect);
+    }
+  }
+  lease.commit({keep:true});
+}
 
 const OWNED = 'v03:stable:horse';
 const OUTDOORS = new Set(['village', 'great-plains', 'monster-forest']);
+const GALLOP_SECONDS = 2.4, GALLOP_SPEED = 14;
 const REINS = [
   {twist:'mixamorig:Hips', a:'mixamorig:RightUpLeg', b:'mixamorig:LeftUpLeg'},
   ['mixamorig:Spine', 'mixamorig:Spine1', [1,.08,0]],
@@ -29,34 +51,58 @@ for(const [strand,spread] of [['L',.12],['C',0],['R',-.12]]){
     [bone(3),bone(4),[-.15,-1,spread]]);
 }
 
-export function createRidingHorse({ world, root, storage, player, ridingAllowed, tell, forwardYaw, makeHorse = createWagonHorse, pose = createBonePose,
+export function createRidingHorse({ world, root, storage, player, ridingAllowed, tell, forwardYaw, diagnostics, makeHorse = createWagonHorse, pose = createBonePose,
   enabled = new URLSearchParams(globalThis.location?.search).get('riding') !== '0' }) {
   // A URL-only comparison: no horse load, listeners or reads/writes to the player's save.
   if(!enabled){
     const noop=()=>{};
-    return {offer:()=>false,reload:noop,leave:noop,updateAvailability:noop,afterMove:noop,active:false,dispose:noop};
+    return {offer:()=>false,reload:noop,leave:noop,updateAvailability:noop,afterMove:noop,active:false,
+      inspect:()=>({state:'disabled',mounts:0,gait:null}),dispose:noop};
   }
   const doc = root.ownerDocument;
-  const button = doc.createElement('button');
-  button.type = 'button';
-  button.className = 'v03-ride-toggle';
-  button.dataset.ui = '';
-  button.hidden = true;
-  root.querySelector('.top-actions').append(button);
+  const controls = createRidingControls(root, toggle);
   let owned = false, horse = null, active = false, generation = 0, rig = null, lift = null, rider = null;
   let hiddenArms = [], clip = '', available = false, mountMap = '', poseObserver = null, saddle = null;
   const contact = new Vector3(), correction = new Vector3(), local = new Vector3(), inverse = new Matrix();
   let labels = ridingLabels(doc), riderContact = null;
   let seatedBones=[],updateReins=null;
-  let checkedMap=null, nextOfferCheck=0;
+  let checkedMap=null, nextOfferCheck=0, mounts=0;
+  let gallopRemaining=0, gallopStrength=0, trail=null;
+  function stopGallop() {
+    gallopRemaining=0;
+    gallopStrength=0;
+    trail?.update(0,0);
+  }
+  function startGallop() {
+    if (!active || !available || !ridingAllowed()) return false;
+    if (!gallopRemaining) gallopRemaining=GALLOP_SECONDS;
+    return true;
+  }
+  function steerGallop(movement,cameraYaw,dt) {
+    if (!gallopRemaining) return;
+    gallopRemaining=Math.max(0,gallopRemaining-dt);
+    gallopStrength=Math.min(1,(GALLOP_SECONDS-gallopRemaining)/.22,gallopRemaining/.30);
+    if (gallopRemaining && Math.hypot(movement.x,movement.y)<.08) {
+      // Project the horse's forward direction onto the active camera's controls.
+      const angle=rider.rotation.y-forwardYaw()+cameraYaw;
+      movement.x=-Math.cos(angle);
+      movement.y=-Math.sin(angle);
+    }
+  }
+  function travelSpeed(base) {
+    if(base<=0)return 0;
+    const usual=base*1.7;
+    return usual+gallopStrength*Math.max(0,GALLOP_SPEED-usual);
+  }
   const display = () => {
     labels = ridingLabels(doc);
-    button.hidden = !owned || !available;
-    button.textContent = active ? labels.dismount : horse ? labels.cancel : labels.mount;
-    button.setAttribute('aria-label', button.textContent+' (H)');
+    controls.show(active ? 'mounted' : horse ? 'loading' : 'on-foot', owned && available, labels);
   };
-  function leave() {
+  function leave(keepPrograms=true) {
     ++generation;
+    if(keepPrograms&&active&&saddle)keepRenderedMountPrograms(saddle,horse.root);
+    stopGallop();
+    trail?.dispose();trail=null;
     checkedMap=null;
     if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
     poseObserver=null;
@@ -94,7 +140,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       if (!model || actor !== player() || world.mapId !== mountMap || !ridingAllowed()) { leave(); return; }
       rider = actor; lift = actor.metadata?.saddleOffset;
       if (!lift) { leave(); return; }
-      rig = pose(actor, REINS);
+      rig = pose(actor, REINS, {reuseHierarchy:true});
       if (!rig.ready || !rig.hips) { leave(); tell(ridingLabels(doc).poseError); return; }
       active = true;
       riderContact=createRiderContact(actor);
@@ -118,7 +164,8 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       afterMove({moving:false},0);
       // Weighted walk/run tracks write their values during scene.render().
       // Apply the seated pose after that blend, before the skeleton is drawn.
-      if(world.scene)poseObserver=world.scene.onBeforeRenderObservable.add(fitSaddle);
+      if(world.scene)poseObserver=world.scene.onBeforeRenderObservable.add(drawMountedPose);
+      ++mounts;
       display();tell(labels.mounted);
     } catch { if (token === generation) { leave(); tell(ridingLabels(doc).loadError); } }
   }
@@ -137,7 +184,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     if (value !== available) { available = value; if (!value && horse) leave(); else display(); }
     else if (labels !== ridingLabels(doc)) display();
   }
-  function afterMove(result, speed) {
+  function afterMove(result, speed, dt=0) {
     if (!active) return;
     const state = result.state ?? 'idle';
     if (player() !== rider || !available || (state !== 'idle' && state !== 'walk' && state !== 'run')) { leave(); return; }
@@ -146,6 +193,9 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     const next = speed < .04 ? 'Horse_Idle' : speed > 3 ? 'Horse_Gallop' : 'Horse_Walk';
     if (clip !== next) { horse.play(next); clip = next; }
     horse.speed(clip === 'Horse_Idle' ? 1 : Math.max(.55,Math.min(1.7,speed/(clip === 'Horse_Walk'?1.7:5))));
+    const strength=gallopStrength*Math.min(1,speed/6);
+    if(strength>0&&!trail)trail=createRidingGallopTrail(horse.root);
+    trail?.update(dt,strength);
     if(!poseObserver)fitSaddle();
   }
   function fitSaddle() {
@@ -159,7 +209,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       contact.x-=.09*Math.sin(horse.root.rotation.y);
       contact.z-=.09*Math.cos(horse.root.rotation.y);
       contact.y-=.003;
-      horse.root.computeWorldMatrix(true).invertToRef(inverse);
+      horse.root.getWorldMatrix().invertToRef(inverse);
       Vector3.TransformCoordinatesToRef(contact,inverse,saddle.position);
     }
     // The run clip translates the hips forward and sideways. Place the actual
@@ -167,8 +217,9 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     if(riderContact){
       // Neutralise the alternating hip roll from the biped run. Both seat
       // bones then carry weight on their pads, including the gait changeover.
-      lift.rotation.z=Math.max(-.15,Math.min(.15,riderContact(local)));
-      riderContact(local);
+      lift.rotation.z=Math.max(-.15,Math.min(.15,riderContact(local,false)));
+      lift.markAsDirty();
+      riderContact(local,false);
       contact.y+=SADDLE_PAD_HEIGHT;
       contact.subtractToRef(local,correction);
     }else{
@@ -176,18 +227,25 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       contact.y+=.28;
       contact.subtractToRef(rig.hips.absolutePosition,correction);
     }
-    lift.parent.computeWorldMatrix(true).invertToRef(inverse);
+    lift.parent.computeWorldMatrix().invertToRef(inverse);
     Vector3.TransformNormalToRef(correction,inverse,local);
     lift.position.addInPlace(local);
+    lift.markAsDirty?.();
     updateReins?.();
   }
+  function drawMountedPose() {
+    if(!diagnostics?.collecting){fitSaddle();return;}
+    const start=diagnostics.mark();
+    try{fitSaddle();}finally{diagnostics.measure('ridingPoseMs',start);}
+  }
   function hotkey(e) {
-    if (e.code !== 'KeyH' || e.repeat || e.ctrlKey || e.altKey || e.metaKey || button.hidden || doc.querySelector('dialog[open]')) return;
+    if (e.code !== 'KeyH' || e.repeat || e.ctrlKey || e.altKey || e.metaKey || controls.button.hidden || doc.querySelector('dialog[open]')) return;
     e.preventDefault(); void toggle();
   }
-  button.addEventListener('click',toggle);doc.addEventListener('keydown',hotkey);
+  doc.addEventListener('keydown',hotkey);
   reload();
-  return { offer, reload, leave, updateAvailability, afterMove, get active(){return active;},
-    dispose(){leave();doc.removeEventListener('keydown',hotkey);button.remove();}
+  return { offer, reload, leave, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, get active(){return active;},
+    inspect:()=>({state:active?'mounted':horse?'loading':'on-foot',mounts,gait:clip||null,...(gallopRemaining>0?{galloping:true}:{})}),
+    dispose(){leave(false);doc.removeEventListener('keydown',hotkey);controls.dispose();}
   };
 }
