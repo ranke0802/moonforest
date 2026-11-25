@@ -1,22 +1,34 @@
-import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,forgeCursor,itemName,itemNote,gradeLabel} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,FORGE_RULES,FORGE_MATERIALS,forgeCursor,forgeSpeed,itemName,itemNote,gradeLabel} from './town-items.js';
 import {t} from './i18n.js';
 import {townItemIcon} from './town-item-art.js';
 
 export function createTownShop({root,economy,onChange,onPause}){
  const doc=root.ownerDocument,win=doc.defaultView,dialog=doc.createElement('dialog');
  dialog.className='mf-town-shop';root.append(dialog);
- let current=null,resolveClose=null,frame=0,started=0,hammer=null,smithTarget=null;
+ let current=null,resolveClose=null,frame=0,started=0,smithTarget=null,forging=null,armTimer=0,sparkTimer=0;
  const element=(tag,text)=>{const node=doc.createElement(tag);if(text!==undefined)node.textContent=text;return node;};
  function addButton(parent,label,action,disabled=false){
   const node=element('button',label);node.type='button';node.disabled=disabled;node.onclick=action;parent.append(node);return node;
  }
- function stop(){if(frame)win.cancelAnimationFrame(frame);frame=0;hammer=null;}
+ function stop(){
+  if(frame)win.cancelAnimationFrame(frame);frame=0;
+  if(armTimer)win.clearTimeout(armTimer);armTimer=0;
+  if(sparkTimer)win.clearTimeout(sparkTimer);sparkTimer=0;
+ }
  const receipt=element('p');receipt.className='mf-shop-receipt';receipt.setAttribute('role','status');
- function finish(){stop();current=null;onPause();resolveClose?.();resolveClose=null;}
+ function finish(){stop();forging=null;current=null;onPause();resolveClose?.();resolveClose=null;}
  dialog.addEventListener('close',finish);
+ // The temper strikes on a tap or click anywhere on the dialog (its backdrop
+ // included) or Space/Enter, never on its own buttons (2026-11-25, user).
+ const outsideControls=target=>!target?.closest?.('button,select');
+ dialog.addEventListener('pointerdown',event=>{if(forging&&!forging.struck&&outsideControls(event.target)){event.preventDefault?.();strike();}});
+ dialog.addEventListener('keydown',event=>{
+  if(!forging||forging.struck||event.repeat||(event.code!=='Space'&&event.code!=='Enter')||!outsideControls(event.target))return;
+  event.preventDefault();strike();
+ });
  function trade(act,success){const ok=act();receipt.textContent=ok?success:t('shop.failed');if(ok)onChange();render();}
  function render(){
-  stop();dialog.replaceChildren();dialog.setAttribute('aria-label',t('shop.aria'));const state=economy.state,stock=STOCK[current],lang=doc.documentElement.lang||'ko';
+  stop();forging=null;dialog.classList.remove('is-forging');dialog.replaceChildren();dialog.setAttribute('aria-label',t('shop.aria'));const state=economy.state,stock=STOCK[current],lang=doc.documentElement.lang||'ko';
   const head=element('header'),title=element('h2',t(current==='smith'?'shop.smith':'shop.herbalist'));
   head.append(title,element('strong',economy.gold.toLocaleString(lang)+' G'));addButton(head,t('dialogue.close'),()=>dialog.close());dialog.append(head);
   const scroll=element('section');scroll.className='mf-shop-scroll';dialog.append(scroll,receipt);
@@ -51,21 +63,87 @@ export function createTownShop({root,economy,onChange,onPause}){
   if(materials.length)scroll.append(element('h3',t('shop.sell')));
   for(const [id,n] of materials){const it=TOWN_ITEMS[id],name=itemName(id);addButton(row(scroll,name,t('shop.inBag',{n}),id),t('shop.sellFor',{price:it.sell}),()=>trade(()=>economy.sell(current,id),t('shop.sold',{name})));}
  }
+ // The temper (2026-11-25, user: the screen was bare). The item and what a
+ // strike changes, the four zones and their outcome, a gauge whose mark sweeps
+ // a little faster at each level, and the result on the same view. Its buttons
+ // wait a moment, so the tap that struck cannot also press them.
+ const ZONES=[['Perfect','perfect'],['Success','success'],['Near miss','near'],['Failed','failed']];
+ const signed=n=>(n>0?'+':'')+n;
+ function forgePreview(id){
+  const item=TOWN_ITEMS[id],w=economy.gear(id),attack=item.slot==='sword',gain=attack?FORGE_RULES.attackGain:FORGE_RULES.defenseGain,base=attack?item.attack:item.defense;
+  const at=level=>({value:base+level*gain,max:Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost)});
+  const next=Math.min(FORGE_RULES.maxLevel,w.level+1),best=Math.min(FORGE_RULES.maxLevel,w.level+FORGE_RULES.perfectGain);
+  return {w,attack,now:attack?w.attack:w.defense,success:at(next),perfect:at(best),bestLevel:best,material:FORGE_MATERIALS.find(key=>economy.state.bag[key]),cost:economy.forgeCost(id)};
+ }
+ function forgeCard(id){
+  const view=forgePreview(id),card=element('div'),icon=element('div'),text=element('div'),stats=element('dl');
+  card.className='mf-forge-item';icon.className='mf-forge-icon';icon.append(townItemIcon(doc,id),element('b','+'+view.w.level));
+  const stat=(label,value)=>{const pair=element('div');pair.append(element('dt',label),value);stats.append(pair);};
+  const change=element('dd');change.append(signed(view.now)+' → ',element('strong',signed(view.success.value)));
+  if(view.bestLevel>view.w.level+1)change.append(' ',element('small',t('shop.forgeOnPerfect',{value:signed(view.perfect.value)})));
+  stat(t(view.attack?'char.attack':'char.defense'),change);
+  stat(t('shop.forgeDurability'),element('dd',view.w.max+' → '+view.success.max));
+  const cost=element('small',view.material?t('shop.forgeCost',{cost:view.cost,material:itemName(view.material),n:economy.state.bag[view.material]}):t('shop.forgeNeedsMaterial'));
+  cost.className='mf-forge-cost';text.append(element('strong',itemName(id)+' +'+view.w.level),stats,cost);
+  card.append(icon,text);return card;
+ }
+ function forgeLegend(){
+  const legend=element('ol');legend.className='mf-forge-legend';
+  for(const [grade,key] of ZONES){
+   const row=element('li');row.dataset.zone=key;
+   row.append(element('b',gradeLabel(grade)),element('span',t('shop.gradeEffect.'+key,{n:key==='perfect'?FORGE_RULES.perfectGain:FORGE_RULES.failureWear})));
+   legend.append(row);
+  }
+  return legend;
+ }
  function beginForge(id){
   if(!economy.canForge(id))return;
-  dialog.replaceChildren();receipt.textContent='';
+  stop();dialog.replaceChildren();dialog.classList.add('is-forging');receipt.textContent='';
   const head=element('header');head.append(element('h2',t('shop.temperTitle',{name:itemName(id)})));addButton(head,t('panel.back'),render);dialog.append(head);
-  dialog.append(element('p',t('shop.forgeHelp',FORGE_RULES)));
-  const gauge=element('div');gauge.className='mf-forge-gauge';gauge.setAttribute('role','img');gauge.setAttribute('aria-label',t('shop.gauge'));
-  const mark=element('i');gauge.append(mark);dialog.append(gauge);
-  started=win.performance.now();hammer=addButton(dialog,t('shop.strike'),()=>{
-   if(!hammer)return;
-   const grade=economy.forge(forgeCursor(win.performance.now()-started),id);stop();
-   receipt.textContent=grade?gradeLabel(grade)+' · '+itemName(id)+' +'+economy.gear(id).level:t('shop.failed');
-   onChange();render();
-  });hammer.focus();
-  function draw(now){mark.style.left=100*forgeCursor(now-started)+'%';frame=win.requestAnimationFrame(draw);}
-  draw(started);
+  const level=economy.gear(id).level,area=element('section'),gauge=element('div'),rail=element('div'),glow=element('i');
+  area.className='mf-forge';area.tabIndex=0;area.setAttribute('aria-label',t('shop.forgeTap'));
+  gauge.className='mf-forge-gauge';gauge.setAttribute('role','img');gauge.setAttribute('aria-label',t('shop.gauge'));
+  glow.className='mf-forge-glow';rail.className='mf-forge-rail';
+  const hammer=element('span');hammer.className='mf-forge-hammer';hammer.setAttribute('aria-hidden','true');
+  const mark=element('i');mark.className='mf-forge-mark';rail.append(hammer,mark);gauge.append(glow,rail);
+  const hint=element('p',t('shop.forgeTap')+' · '+t('shop.forgeSpeed',{n:forgeSpeed(level).toFixed(2)}));hint.className='mf-forge-hint';
+  const result=element('div');result.className='mf-forge-result';result.hidden=true;result.setAttribute('role','status');
+  const side=element('div');side.className='mf-forge-side';side.append(forgeCard(id),forgeLegend());
+  const play=element('div');play.className='mf-forge-play';play.append(gauge,hint,result);
+  area.append(side,play);dialog.append(area);
+  forging={id,level,area,rail,mark,hint,result,side,struck:false};
+  started=win.performance.now();
+  const draw=time=>{rail.style.transform='translateX('+(100*forgeCursor(time-started,level)).toFixed(2)+'%)';frame=win.requestAnimationFrame(draw);};
+  draw(started);area.focus?.({preventScroll:true});
+ }
+ function sparks(mark,grade){
+  const count={Perfect:10,Success:6,'Near miss':3}[grade]??0;
+  for(let i=0;i<count;i++){
+   const spark=element('i');spark.className='mf-forge-spark';
+   const angle=Math.PI*(1.1+.8*i/Math.max(1,count-1)),reach=1.2+.9*((i*7)%5)/4;
+   spark.style.setProperty('--dx',(Math.cos(angle)*reach).toFixed(2)+'rem');spark.style.setProperty('--dy',(Math.sin(angle)*reach).toFixed(2)+'rem');
+   mark.append(spark);
+  }
+  if(count)sparkTimer=win.setTimeout(()=>{sparkTimer=0;for(const spark of [...mark.querySelectorAll('.mf-forge-spark')])spark.remove();},700);
+ }
+ function strike(){
+  const f=forging;if(!f||f.struck)return;
+  f.struck=true;
+  const position=forgeCursor(win.performance.now()-started,f.level);
+  if(frame)win.cancelAnimationFrame(frame);frame=0;
+  f.rail.style.transform='translateX('+(100*position).toFixed(2)+'%)';
+  const grade=economy.forge(position,f.id);
+  if(grade)onChange();
+  const w=economy.gear(f.id),key=grade?ZONES.find(([value])=>value===grade)[1]:'failed';
+  receipt.textContent=grade?gradeLabel(grade)+' · '+itemName(f.id)+' +'+w.level:t('shop.failed');
+  f.area.classList.add('is-struck');f.area.dataset.grade=key;sparks(f.mark,grade);
+  f.side.replaceChildren(forgeCard(f.id),forgeLegend());f.hint.hidden=true;
+  const actions=element('div');actions.className='mf-forge-actions';
+  const again=addButton(actions,economy.canForge(f.id)?t('shop.forgeAgain',{cost:economy.forgeCost(f.id)}):w.level>=FORGE_RULES.maxLevel?t('shop.forgeMaxed',FORGE_RULES):t('shop.forgeAgain',{cost:economy.forgeCost(f.id)}),()=>beginForge(f.id),true);
+  const back=addButton(actions,t('panel.back'),render,true);
+  f.result.replaceChildren(element('strong',grade?gradeLabel(grade):t('shop.failed')),element('span',grade?t('shop.gradeEffect.'+key,{n:key==='perfect'?FORGE_RULES.perfectGain:FORGE_RULES.failureWear})+' · '+itemName(f.id)+' +'+w.level:''),actions);
+  f.result.hidden=false;
+  armTimer=win.setTimeout(()=>{armTimer=0;again.disabled=!economy.canForge(f.id);back.disabled=false;(again.disabled?back:again).focus?.({preventScroll:true});},450);
  }
  return {get open(){return dialog.open;},show(shop){
   if(!STOCK[shop]||dialog.open)return Promise.resolve();

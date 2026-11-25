@@ -117,11 +117,19 @@ for(const id of Object.keys(PACKS))test(`village shops and the forge read ${id}`
     const forge=byText(dialog,'button',t('shop.forge',{cost:economy.forgeCost(target)}));
     assert.ok(forge&&!forge.disabled,'forge is offered');forge.click();expectLanguage(id,readable(dialog),'forge');
     assert.equal(dialog.querySelector('h2').textContent,t('shop.temperTitle',{name:itemName(target)}));
-    assert.ok(byText(dialog,'p',t('shop.forgeHelp',FORGE_RULES)).textContent.includes(String(FORGE_RULES.failureWear)));
+    const zones=[...dialog.querySelectorAll('.mf-forge-legend li')];
+    assert.deepEqual(zones.map(zone=>zone.querySelector('b').textContent),['Perfect','Success','Near miss','Failed'].map(gradeLabel));
+    assert.ok(zones[3].textContent.includes(String(FORGE_RULES.failureWear)));
     assert.equal(dialog.querySelector('[role="img"]').getAttribute('aria-label'),PACKS[id].ui['shop.gauge']);
-    byText(dialog,'button',t('shop.strike')).click();
-    const grade=dialog.querySelector('.mf-shop-receipt').textContent.split(' · ')[0];
+    assert.equal(dialog.querySelector('.mf-forge').getAttribute('aria-label'),PACKS[id].ui['shop.forgeTap']);
+    // No strike button: a tap anywhere on the temper view strikes.
+    assert.equal([...dialog.querySelectorAll('button')].some(b=>b.textContent===t('shop.strike')),false);
+    dialog.querySelector('.mf-forge-gauge').dispatchEvent(new window.Event('pointerdown',{bubbles:true}));
+    const grade=dialog.querySelector('.mf-forge-result strong').textContent;
     assert.ok(['Perfect','Success','Near miss','Failed'].some(value=>gradeLabel(value)===grade),id+' forge result: '+grade);
+    expectLanguage(id,readable(dialog),'forge result');
+    byText(dialog,'header button',t('panel.back')).click();
+    assert.equal(dialog.querySelector('.mf-shop-receipt').textContent.split(' · ')[0],grade);
    }
    const made=kind==='smith'?'wolf-blade':'potion',before=economy.state.bag[made]??0,cost=kind==='smith'?22:2;
    const button=byText(dialog,'button',t('shop.make',{cost}));assert.equal(button.disabled,false);button.click();
