@@ -1509,6 +1509,7 @@ try {
       if(travelResume){travelResume=false;resumePose=readMapResume(journeyStorage,destination,world,{radius:WARRIOR_DIMENSIONS.moveRadius,portalArrival:false});}
       const spawn=handoff?.position??waypoint?.position??mapSpawn();actor.position.set(spawn.x,0,spawn.z);world.terrain.place(actor.position);
       syncCaveFog(true);
+      world.v03?.prepareGreatAttack?.(controller.greatAttackLevel);
       if(handoff){actor.rotation.y=handoff.yaw;world.camera.alpha=handoff.alpha;if(handoff.pan&&input.panOffset)Object.assign(input.panOffset,handoff.pan);}
       if(context?.minimap)applyMinimapArrivalPose(actor,world.camera,input.panOffset,{destination,position:spawn,waypoint});
       else carryPortalPose(actor,world.camera,input.panOffset,{from:handoff?.from??sourceCharacter,to:destination});

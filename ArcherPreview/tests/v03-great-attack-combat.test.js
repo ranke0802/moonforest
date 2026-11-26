@@ -6,6 +6,9 @@ import {parseHTML} from 'linkedom';
 import {WarriorV2Controller,V2_HOLD_SECONDS} from '../src/warrior-v2.js';
 import {PlayerStrikeSampler,PLAYER_STRIKES} from '../src/player-strikes.js';
 import {BossEncounter} from '../src/boss-encounter.js';
+import {GoblinEncounter} from '../src/goblin-encounter.js';
+import {RegularWolfEncounter} from '../src/regular-wolf-encounter.js';
+import {WolfV02Encounter} from '../src/wolf-v02-encounter.js';
 import {BossBrain} from '../src/boss-spec.js';
 import {WolfV02ContactGate} from '../src/wolf-v02-hurt.js';
 import {GreatAttackCast,GREAT_ATTACK_CHARGE_SECONDS,GREAT_ATTACK_POSE,GREAT_ATTACK_SLOW} from '../src/v03/great-attack.js';
@@ -13,7 +16,7 @@ import {ChapterEnemyBrain,CHAPTER_COMBAT} from '../src/v03/chapter-enemy-brain.j
 import {TOWN_ITEMS} from '../src/v03/town-items.js';
 import {createTrainingTargets} from '../src/targets.js';
 import {createDamageNumbers} from '../src/damage-numbers.js';
-import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
+import {WARRIOR_DIMENSIONS,playerDimensions} from '../src/player-dimensions.js';
 import {ArenaNavigation} from '../src/navigation.js';
 import {createCombatTarget} from '../src/v03/combat-target.js';
 import {strikeLungeStep,applyStrikeTravel,STRIKE_LUNGE,STARFALL_REACH_SCALE} from '../src/v03/strike-approach.js';
@@ -271,7 +274,7 @@ test('interrupted input clears the rendered charge and camera, ordinary button r
 
 test('release locks the combat target and hits its current ground position after a collision-limited dash',()=>{
   const distances={near:6,moving:5.3,wall:5.8,manual:5.8,far:6.01,tracked:13.5,personal:7.5,outsidePersonal:7.51};
-  for(const scene of ['empty','near','moving','wall','manual','far','tracked','personal','outsidePersonal','dead','escaped','ledge']){
+  for(const scene of ['empty','near','moving','wall','manual','far','tracked','personal','outsidePersonal','dead','despawned','escaped','ledge']){
     const c=heavy(1,{held:true}),cast=c.action.greatAttack,player=actor(0,0),ledger={},aim=createCombatTarget();
     const wall=scene==='wall'?[{id:'wall',x:0,z:.8,radius:.20,height:2}]:[];
     const world={navigation:new ArenaNavigation(wall),terrain:{heightAt:(x,z)=>scene==='ledge'&&z>1.3?2.5:0}};
@@ -298,6 +301,7 @@ test('release locks the combat target and hits its current ground position after
       if(frame===63){
         if(scene==='moving')foe.actor.position.x=.55;
         if(scene==='dead')foe.brain.hp=0;
+        if(scene==='despawned')foe.active=false;
         if(scene==='escaped')foe.actor.position.z=14;
       }
       if(scene==='moving'&&!cast.charging&&!cast.impacted)foe.actor.position.z+=2*dt;
@@ -311,10 +315,12 @@ test('release locks the combat target and hits its current ground position after
       if(['near','moving','tracked','personal'].includes(scene)){
         const target=foe.actor.position;
         assert.deepEqual(cast.center,{x:target.x,y:target.y,z:target.z},scene);
+        assert.equal(cast.clearRadius,foe.radius,scene);
         assert.ok(Vector3.Distance(player.position,target)>1&&player.position.z>1,scene+' dash stops at melee clearance');
         assert.ok(cast.contains(target,world.navigation));
         if(other)assert.ok(!cast.contains(other.actor.position,world.navigation));
       }else{
+        assert.equal(cast.clearRadius,0,scene);
         if(scene==='wall'){
           assert.ok(p.z<.4&&cast.center.z<.6,'wall blocks both player and impact');
           assert.ok(!cast.contains(foe.actor.position,world.navigation));
@@ -329,6 +335,31 @@ test('release locks the combat target and hits its current ground position after
       }
     }
     assert.equal(hits,1,scene+' has exactly one impact');
+  }
+});
+
+test('a landed Starfall exposes only the target body radius to FX at every learned rank',()=>{
+  const world={},player=actor(0,0),dimensions=playerDimensions(player);
+  const foes=[new GoblinEncounter(world,()=>{}),
+    new RegularWolfEncounter(world,()=>{},undefined,undefined,{regularWolfId:'fox'}),
+    new WolfV02Encounter(world,()=>{})];
+  for(const foe of foes){
+    foe.active=true;foe.brain={hp:100};
+    foe.actor=actor(0,Math.max(STRIKE_LUNGE.judgment.stop,foe.radius+dimensions.standingClearance));
+    assert.notEqual(foe.radius,foe.separationRadius);
+    for(const rank of [1,2,3,4,5]){
+      const cast=new GreatAttackCast(1,rank,false,.5),action={state:'judgment',clipTime:1.1,greatAttack:cast};
+      strikeLungeStep({},player,action,STRIKE_LUNGE.judgment,foe,null,false,dimensions.ratio,durations.judgment,1/60);
+      assert.equal(cast.clearRadius,0);
+      const sample={contacts:[]};
+      cast.sample(action.clipTime,sample,PLAYER_STRIKES.judgment[0],0,player.position,world);
+      assert.equal(cast.clearRadius,foe.radius);assert.equal(cast.target,null);
+      assert.deepEqual(cast.center,{x:0,y:0,z:foe.actor.position.z});
+      almost(cast.radius,1.25*(1+.2*rank));
+      assert.ok(cast.contains(foe.actor.position));
+      assert.equal(cast.contains({x:cast.radius+.01,y:0,z:cast.center.z}),false);
+      assert.equal(sample.contacts.length,1);
+    }
   }
 });
 

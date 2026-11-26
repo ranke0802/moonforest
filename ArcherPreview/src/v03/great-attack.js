@@ -18,6 +18,7 @@ export class GreatAttackCast{
     this.releaseCharge=0;
     this.center={x:0,y:0,z:0};
     this.radius=GREAT_ATTACK_BASE_RADIUS*(100+this.rankBonusPercent)/100;
+    this.clearRadius=0;
     this.progress=charging?chargeProgress:0;
     this.phase='windup';
     this.impacted=false;
@@ -44,12 +45,15 @@ export class GreatAttackCast{
   }
 
   placeImpact(feet,blade,world,heading){
-    const target=this.target?.active&&this.target.brain?.hp>0?this.target.actor.position:null;
+    const foe=this.target;
+    const target=foe?.active&&foe.brain?.hp>0?foe.actor.position:null;
     this.target=null;
     const center=this.center,terrain=world?.terrain,nav=world?.navigation;
     const clear=p=>Math.abs(p.y-feet.y)<=GREAT_ATTACK_BASE_RADIUS&&(!nav||nav.segmentClear(feet,p,0,true));
     if(target&&Math.hypot(target.x-feet.x,target.z-feet.z)<=this.standoff+.12&&clear(target)){
       center.x=target.x;center.z=target.z;center.y=terrain?.heightAt?.(target.x,target.z)??target.y;
+      // FX clears the body's ground footprint while damage covers the entire circle.
+      this.clearRadius=Number.isFinite(foe.radius)?Math.max(0,foe.radius):0;
       return;
     }
     // The sword is held to one side. Keep its forward reach on the attack
