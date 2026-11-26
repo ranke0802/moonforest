@@ -229,13 +229,13 @@ test('windup slows the world with the selected camera zoom and restores the view
   t.after(()=>story.dispose());
   let now=1000;t.mock.method(performance,'now',()=>now);
   story.start();const frame=()=>{now+=50;story.update(.05,{ready:true,mapId:'great-plains'});};
-  for(let i=0;i<8;i++)frame();almost(story.timeScale,GREAT_ATTACK_SLOW);almost(camera.fov,.85*.8*.74);
+  for(let i=0;i<8;i++)frame();almost(story.timeScale,GREAT_ATTACK_SLOW);almost(camera.fov,.85*.8*.80);
   assert.deepEqual([camera.alpha,camera.beta,camera.radius],[1,2,8]);assert.equal(Object.hasOwn(camera,'screenArea'),true);
   controller.knockdown();story.cancelGreatAttackFocus();almost(camera.fov,.85);almost(story.timeScale,1);assert.equal(Object.hasOwn(camera,'screenArea'),false);
   controller=heavy(1,{held:true});
   for(let i=0;i<8;i++)frame();
   controller.setAttackHeld(false);frame();
-  almost(story.timeScale,1);assert.ok(camera.fov>.85*.8*.74&&camera.fov<.85);
+  almost(story.timeScale,1);assert.ok(camera.fov>.85*.8*.80&&camera.fov<.85);
   for(let i=0;i<12;i++)frame();
   almost(camera.fov,.85);assert.equal(Object.hasOwn(camera,'screenArea'),false);
   story.dispose();
