@@ -143,6 +143,25 @@ test('the predicted circle follows collision-limited ground travel and ends at t
   }
 });
 
+test('a stationary 60-frame charge reuses its landing sweep and picks up a moving blocker',t=>{
+  const c=heavy(1),cast=c.action.greatAttack,player=actor(0,0),ledger={remaining:1.5};
+  const r={greatAttack:cast,actionElapsed:0},obstacles=[];
+  let sweeps=0,detected=null;
+  const world={navigation:{get obstacles(){sweeps++;return obstacles;}}};
+  for(let frame=0;frame<60;frame++){
+    if(frame===11)obstacles.push({x:0,z:.8,radius:.2});
+    r.actionElapsed=frame*GREAT_ATTACK_SLOW/60;
+    applyStrikeTravel(player,r,ledger,0,0,world,[],48,WARRIOR_DIMENSIONS);
+    if(frame<11)almost(cast.center.z,1.5);
+    if(frame>=11&&cast.center.z<.4&&detected===null)detected=frame;
+  }
+  assert.ok(sweeps>1&&sweeps<=8);assert.ok(detected!==null&&detected-11<=10);
+  const before=sweeps;
+  applyStrikeTravel(player,r,ledger,.5,0,world,[],48,WARRIOR_DIMENSIONS);
+  assert.equal(sweeps,before+1,'turning immediately updates the prediction');
+  t.diagnostic('60 stationary charge frames: '+before+' full landing sweeps, new blocker detected after '+(detected-11)+' frames');
+});
+
 test('an untrained heavy breaks a guard on contact in 0.3; a light hit is blocked and an evade still consumes the swing',()=>{
   const player=actor(0,0),sword={computeWorldMatrix(){},getWorldMatrix:()=>Matrix.Identity()};
   for(const [state,mode,playing,expected] of [

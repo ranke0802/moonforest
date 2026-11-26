@@ -55,6 +55,18 @@ export function applyStrikeTravel(player,action,state,heading,step,world,encount
   if(step>1e-4)sweepStrike(feet,feet.clone(),heading,step,world,encounters,limit,dimensions,clampExit);
   const cast=action.greatAttack;
   if(!cast||cast.impacted)return;
-  sweepStrike(cast.center,feet,heading,state.remaining,world,encounters,limit,dimensions,clampExit);
+  const remaining=state.remaining;
+  if(remaining<=1e-4){
+    cast.center.x=feet.x;cast.center.z=feet.z;
+  }else{
+    const now=action.actionElapsed??action.clipTime;
+    const preview=cast.landingPreview??={next:0,x:0,z:0,heading:0,remaining:0};
+    // The crouch keeps this sweep identical for many frames. Recheck moving
+    // blockers at least every 75 ms of simulation (156 ms at charge speed).
+    if(now<preview.next&&Math.abs(feet.x-preview.x)+Math.abs(feet.z-preview.z)<.008&&
+       Math.abs(heading-preview.heading)<.008&&Math.abs(remaining-preview.remaining)<.008)return;
+    preview.x=feet.x;preview.z=feet.z;preview.heading=heading;preview.remaining=remaining;preview.next=now+.075;
+    sweepStrike(cast.center,feet,heading,remaining,world,encounters,limit,dimensions,clampExit);
+  }
   cast.center.y=world.terrain?.heightAt?.(cast.center.x,cast.center.z)??feet.y;
 }
