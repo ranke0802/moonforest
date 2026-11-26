@@ -8,7 +8,11 @@ import {PlayerStrikeSampler,PLAYER_STRIKES} from '../src/player-strikes.js';
 import {BossEncounter} from '../src/boss-encounter.js';
 import {BossBrain} from '../src/boss-spec.js';
 import {WolfV02ContactGate} from '../src/wolf-v02-hurt.js';
-import {GREAT_ATTACK_CHARGE_SECONDS,GREAT_ATTACK_POSE,GREAT_ATTACK_SLOW} from '../src/v03/great-attack.js';
+import {GreatAttackCast,GREAT_ATTACK_CHARGE_SECONDS,GREAT_ATTACK_POSE,GREAT_ATTACK_SLOW} from '../src/v03/great-attack.js';
+import {ChapterEnemyBrain,CHAPTER_COMBAT} from '../src/v03/chapter-enemy-brain.js';
+import {TOWN_ITEMS} from '../src/v03/town-items.js';
+import {createTrainingTargets} from '../src/targets.js';
+import {createDamageNumbers} from '../src/damage-numbers.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {ArenaNavigation} from '../src/navigation.js';
 import {createCombatTarget} from '../src/v03/combat-target.js';
@@ -157,6 +161,91 @@ test('the target-centred blast deals one equipped, rank-scaled three-hit burst t
     assert.equal(guard.b.brain.hp,1000-expected.reduce((a,b)=>a+b,0));assert.deepEqual(guard.damage,['BREAK',...expected]);
     for(const {b,damage} of foes.slice(0,2)){assert.deepEqual(damage,expected);assert.equal(b.brain.hp,1000-expected.reduce((a,b)=>a+b,0));}
     for(const {b,damage} of foes.slice(2)){assert.deepEqual(damage,[]);assert.equal(b.brain.hp,1000);}
+  }
+});
+
+test('each displayed Starfall hit removes its equipped, rank- and release-scaled damage from chapter HP',()=>{
+  const player=actor(0,0),sword={computeWorldMatrix(){},getWorldMatrix:()=>Matrix.Identity()};
+  const cases=[
+    // The zero-charge lower bound can also be sampled without a physical hold.
+    {ms:0,rank:5,gear:'oathblade',kind:'goblin-shaman',hits:[25,25,29]},
+    {ms:450,rank:5,gear:'oathblade',kind:'hobgoblin-boss',hits:[29,29,33]},
+    {ms:1500,rank:1,gear:'oathblade',kind:'hobgoblin-boss',hits:[28,28,32]},
+    {ms:1500,rank:3,gear:'oathblade',kind:'hobgoblin-boss',hits:[33,33,38]},
+    {ms:1500,rank:5,gear:'oathblade',kind:'hobgoblin-boss',hits:[38,38,44]},
+    {ms:3000,rank:5,gear:'oathblade',kind:'ghoul-warrior',hits:[50,50,58]},
+    {ms:8000,rank:5,gear:'bronze-blade',kind:'ghoul-warrior',hits:[58,58,66]},
+    {ms:1500,rank:1,gear:'oathblade',kind:'hobgoblin-boss',buffered:true,rear:true,hits:[36,36,41]},
+  ];
+  for(const {ms,rank,gear,kind,buffered,rear,hits} of cases){
+    let now=0;
+    const c=new WarriorV2Controller({durations,holdNow:()=>now});c.greatAttackLevel=rank;
+    if(ms===0)c.startAttack('judgment');
+    else{
+      if(buffered)c.shieldPush();
+      c.setAttackHeld(true);now=450;c.update(.45);
+      if(ms>3000){now=3000;c.update(1);}
+      now=ms;c.setAttackHeld(false); // The release can arrive before the next frame.
+      if(buffered)c.update(durations.shieldPush-.45+.01);
+    }
+    const cast=c.action.greatAttack,sampler=new PlayerStrikeSampler(),bonus=TOWN_ITEMS[gear].attack;
+    const {b,damage}=opponent(player,0,1.25);
+    b.kind=kind;b.brain=new ChapterEnemyBrain(CHAPTER_COMBAT[kind],{},kind);
+    if(rear)b.actor.rotation.y=0;
+    const startHp=b.brain.hp;let previousHp=startHp;
+    b.onDamage=(_position,amount)=>{
+      damage.push(amount);assert.equal(previousHp-b.brain.hp,amount,kind+' HP and floating damage');
+      previousHp=b.brain.hp;
+    };
+    almost(cast.radius,1.25*(1+.2*rank));
+    for(let frame=0;frame<180;frame++){
+      const r=c.update(1/60);if(!r.greatAttack)break;
+      const sample=sampler.sample(r,sword,null,true,0,bonus);
+      cast.sample(r.clipTime,sample,PLAYER_STRIKES.judgment[0],bonus,player.position,b.world);
+      c.pauseOnImpact(b.poseAndContacts(player,r,sample,null)??0);
+    }
+    assert.deepEqual(damage,hits,kind+' release at '+ms+'ms');
+    assert.equal(b.brain.hp,startHp-hits.reduce((sum,value)=>sum+value,0));
+  }
+});
+
+test('release clamps charge and later samples or a duplicate release cannot change the damage or radius',()=>{
+  for(const [progress,scale] of [[-.2,1],[.5,1.5],[1.2,2]]){
+    for(const buffered of [false,true]){
+      const cast=new GreatAttackCast(1,5,!buffered,progress);
+      cast.release();cast.chargeProgress=1-progress;cast.release();
+      const sample={contacts:[]};
+      cast.sample(1.1,sample,PLAYER_STRIKES.judgment[0],0,{x:0,y:0,z:0});
+      const expected=[20,20,24].map(value=>value*scale);
+      assert.deepEqual(sample.contacts[0].window.burst,expected);
+      assert.equal(sample.contacts[0].window.damage,64*scale);
+      assert.equal(cast.radius,2.5);
+    }
+  }
+});
+
+test('the practice dummy displays three rounded Starfall numbers at ranks one, three and five',t=>{
+  const engine=new NullEngine(),scene=new Scene(engine);
+  const previous=globalThis.document,{document}=parseHTML('<main></main>');globalThis.document=document;
+  const host=document.querySelector('main'),numbers=createDamageNumbers(scene,host);
+  const training=createTrainingTargets(scene,null,(...args)=>numbers.show(...args));
+  t.after(()=>{
+    training.dispose();numbers.dispose();scene.dispose();engine.dispose();
+    if(previous===undefined)delete globalThis.document;else globalThis.document=previous;
+  });
+  const target=training.targets[0],feet=target.position.clone();feet.z-=1.25;
+  const blade=[feet.asArray(),target.position.asArray()];
+  let id=0;
+  for(const [rank,expected] of [[1,[28,28,32]],[3,[33,33,38]],[5,[38,38,44]]]){
+    const cast=new GreatAttackCast(++id,rank,false,.5);
+    for(const elapsed of [0,.055,.11,.5]){
+      const sample={actionId:id,elapsed,blade,contacts:[]};
+      cast.sample(1.1+elapsed,sample,PLAYER_STRIKES.judgment[0],TOWN_ITEMS.oathblade.attack,feet);
+      training.melee(sample);
+    }
+    assert.deepEqual([...host.children].map(element=>element.textContent),expected.map(String));
+    assert.equal(target.hits,id*3);
+    numbers.update(1.2);
   }
 });
 

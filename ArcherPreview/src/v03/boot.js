@@ -100,11 +100,12 @@ export function setupV03(api){
  function resetGreatAttackFx(){greatAttackFx?.reset();greatAttackMap=null;}
  function prepareGreatAttack(rank){
   const scene=api.world?.scene;
-  if(greatAttackFx&&(!rank||greatAttackFx.scene!==scene||scene?.isDisposed)){
+  const cave=!!api.world?.cave;
+  if(greatAttackFx&&(!rank||greatAttackFx.scene!==scene||greatAttackFx.cave!==cave||scene?.isDisposed)){
    greatAttackFx.dispose();greatAttackFx=null;
   }
   if(rank>0&&!greatAttackFx&&scene?.getEngine&&!scene.isDisposed){
-   greatAttackFx=createGreatAttackFx({scene,root,project:api.projectFeet,
+   greatAttackFx=createGreatAttackFx({scene,root,cave,project:api.projectFeet,
     ground:(x,z)=>api.world.terrain?.heightAt(x,z)});
   }
  }

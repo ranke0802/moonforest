@@ -165,6 +165,9 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
         const contacts=record.gate.collect({...sample,capsules,areaContact:sample.radialAttack?.contains(record.target.position,navigation)});
         for(const hit of contacts.hits){
           if(hit.id!=='shield-push')onBladeContact?.(sample.actionId);
+          // A practice target has no rear critical. Show each Starfall pulse
+          // with the same final rounding as a frontal enemy contact.
+          if(sample.radialAttack)hit.damage=Math.round(hit.damage);
           this.hit(record.target,hit);hitStop=Math.max(hitStop,contacts.hitStop);
         }
       }

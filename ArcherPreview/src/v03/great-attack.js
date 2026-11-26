@@ -12,19 +12,23 @@ export class GreatAttackCast{
   constructor(actionId,level,charging=true,chargeProgress=0){
     this.actionId=actionId;
     this.level=Math.min(5,Math.trunc(level));
-    this.multiplier=1+.2*this.level;
-    this.charging=charging;
+    this.rankBonusPercent=20*this.level;
+    this.charging=true;
     this.chargeProgress=chargeProgress;
+    this.releaseCharge=0;
     this.center={x:0,y:0,z:0};
-    this.radius=GREAT_ATTACK_BASE_RADIUS*this.multiplier;
+    this.radius=GREAT_ATTACK_BASE_RADIUS*(100+this.rankBonusPercent)/100;
     this.progress=charging?chargeProgress:0;
-    this.phase=charging?'windup':'release';
+    this.phase='windup';
     this.impacted=false;
+    if(!charging)this.release(); // A buffered press may already have ended.
   }
 
   release(){
+    if(!this.charging)return;
+    this.releaseCharge=Math.max(0,Math.min(1,this.chargeProgress||0));
     this.charging=false;
-    if(this.phase==='windup')this.phase='release';
+    this.phase='release';
   }
 
   // Only the animation clock waits for the physical release. Approach the
@@ -80,8 +84,11 @@ export class GreatAttackCast{
       this.placeImpact(feet,sample.blade,world,heading);
       this.impacted=true;this.phase='impact';this.progress=1;
       const strike=boostSwordStrike(baseStrike,attackBonus);
-      const burst=strike.burst.map(value=>value*this.multiplier);
-      const window={...strike,burst,damage:strike.damage*this.multiplier};
+      const burst=strike.burst.map(value=>{
+        // Leave rounding to each enemy contact, after any rear critical.
+        return value+value*this.rankBonusPercent*this.releaseCharge/100;
+      });
+      const window={...strike,burst,damage:burst.reduce((sum,value)=>sum+value,0)};
       sample.contacts.push({window,blade:sample.blade,previous:null});
     }else{this.phase='recovery';this.progress=1;}
   }
