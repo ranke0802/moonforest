@@ -19,11 +19,13 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  const actions=doc.createElement('div');actions.className='v03-dialogue-actions';
  const key=doc.createElement('kbd');key.className='v03-dialogue-key';key.textContent='E';key.setAttribute('aria-hidden','true');
  next.setAttribute('aria-keyshortcuts','E Enter Space');
- // A short list to pick from (2026-11-26, user: the smith and the herbalist ask what the
- // visit is for, and the last entry always ends the talk). Touch: tap an entry. Keyboard:
- // W/S or the arrows move, Enter, Space or E picks, Escape takes the last entry.
- const menu=doc.createElement('div');menu.className='v03-dialogue-menu';menu.setAttribute('role','menu');menu.hidden=true;
- actions.append(key,next);box.append(who,text,said,menu,actions);
+ // A short choice (2026-11-26, user: the smith and the herbalist ask what the visit is for,
+ // and the last entry always ends the talk). Second pass the same day (user: the stacked
+ // list covered the art): the speaker's greeting stays in the box and the choices are a row
+ // of small buttons where Next/Close sits. Touch: tap a button. Keyboard: A/D or the
+ // arrows (W/S too) move, Enter, Space or E picks, Escape takes the last entry.
+ const menu=doc.createElement('div');menu.className='v03-dialogue-choices';menu.setAttribute('role','menu');menu.hidden=true;
+ actions.append(key,next,menu);box.append(who,text,said,actions);
  // Speaker art on the left, behind the box. Swapped only when the speaker changes.
  const portrait=doc.createElement('img');portrait.className='v03-dialogue-portrait';portrait.alt='';portrait.decoding='async';portrait.draggable=false;portrait.hidden=true;
  layer.append(portrait,box);mount.append(layer);
@@ -42,7 +44,8 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  function settle(at){
   if(!choices||(at!=null&&now()<armedAt))return;
   const done=pick,value=at==null?null:choices[at]?.id??null;
-  choices=null;pick=null;menu.hidden=true;menu.replaceChildren();actions.hidden=false;text.hidden=false;layer.hidden=true;talking(false);hideArt();done?.(value);
+  typewriter.stop();choices=null;pick=null;menu.hidden=true;menu.replaceChildren();next.hidden=false;text.hidden=false;box.classList.remove('is-choosing');
+  layer.hidden=true;talking(false);hideArt();done?.(value);
  }
  // While someone speaks the play HUD steps back (CSS reads this flag).
  const talking=on=>{const data=doc.documentElement?.dataset;if(!data)return;if(on)data.v03Talk='';else delete data.v03Talk;};
@@ -63,15 +66,17 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
  next.addEventListener('click',step);
  // Touching anywhere on the box advances too (thumb-friendly on phones); the
  // button keeps its own click, so one tap never advances twice.
- box.addEventListener('click',event=>{if(!next.contains(event.target))step();});
+ // While the choices are up a tap there only completes the greeting; only a button picks.
+ box.addEventListener('click',event=>{if(choices){if(!menu.contains(event.target))typewriter.complete();return;}if(!next.contains(event.target))step();});
  // Anywhere else on the screen as well, the speaker's picture included (user, 2026-11-21).
- layer.addEventListener('click',event=>{if(!box.contains(event.target))step();});
+ layer.addEventListener('click',event=>{if(box.contains(event.target))return;if(choices){typewriter.complete();return;}step();});
  const onKey=event=>{
   if(choices){
    const code=event.code,last=choices.length-1;
-   if(code==='KeyW'||code==='ArrowUp'){if(!event.repeat||chosen>0)chosen=Math.max(0,chosen-1);mark();}
-   else if(code==='KeyS'||code==='ArrowDown'){if(!event.repeat||chosen<last)chosen=Math.min(last,chosen+1);mark();}
-   else if(code==='Enter'||code==='Space'||code==='KeyE'){if(event.repeat)return;settle(chosen);}
+   if(code==='KeyA'||code==='ArrowLeft'||code==='KeyW'||code==='ArrowUp'){chosen=Math.max(0,chosen-1);mark();}
+   else if(code==='KeyD'||code==='ArrowRight'||code==='KeyS'||code==='ArrowDown'){chosen=Math.min(last,chosen+1);mark();}
+   // While the greeting is still typing the first press shows it whole, as on any line.
+   else if(code==='Enter'||code==='Space'||code==='KeyE'){if(event.repeat)return;if(!typewriter.complete())settle(chosen);}
    else if(code==='Escape')settle(last);
    else return;
    event.preventDefault();event.stopImmediatePropagation();return;
@@ -91,11 +96,14 @@ export function createDialogue({doc,mount=doc.body,portraitFor=()=>null,blip=cre
    lines=script;index=0;layer.hidden=false;talking(true);show();next.focus?.({preventScroll:true});
    return new Promise(resolve=>{finish=resolve;});
   },
-  // options: [{id,label,mark?}]. Resolves with the picked id (null when cancelled).
-  choose(options,{who:name=null}={}){
+  // options: [{id,label,mark?}]. line: what the speaker says above the choices (typed like
+  // any line; none leaves only the name). Resolves with the picked id (null when cancelled).
+  choose(options,{who:name=null,line=null}={}){
    if(lines||choices||!Array.isArray(options)||!options.length)return Promise.resolve(null);
    choices=options;chosen=0;armedAt=now()+CHOICE_ARM_MS;
-   who.textContent=name?speaker(name):'';who.hidden=!name;said.textContent='';text.textContent='';text.hidden=true;actions.hidden=true;
+   who.textContent=name?speaker(name):'';who.hidden=!name;next.hidden=true;box.classList.add('is-choosing');
+   if(line){text.hidden=false;said.textContent=line;typewriter.start(text,line,{who:name});text.scrollTop=0;}
+   else{typewriter.stop();said.textContent='';text.textContent='';text.hidden=true;}
    box.classList.remove('is-self');portrait.classList.remove('is-journal');showArt(portraitFor(name));
    menu.replaceChildren(...options.map((option,i)=>{
     const entry=doc.createElement('button');entry.type='button';entry.className='v03-dialogue-choice';entry.setAttribute('role','menuitem');entry.textContent=option.label;

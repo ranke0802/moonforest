@@ -14,7 +14,7 @@
 
 /* A long translated line scrolls above the Next button on short screens. */
 .v03-dialogue-text{max-height:calc(45vh / var(--v03-ui,1));max-height:calc(45dvh / var(--v03-ui,1));overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
-html[data-v03-ios] .v03-dialogue-next{font-size:clamp(16px,calc(1.7vmin / var(--v03-ui,1)),22px)!important}
+html[data-v03-ios] :is(.v03-dialogue-next,.v03-dialogue-choice){font-size:clamp(16px,calc(1.7vmin / var(--v03-ui,1)),22px)!important}
 
 /* While the shell owns the screen the game HUD is not shown. Dialogs stay
    reachable (settings opens from the title), and so does the loading card. */
@@ -207,8 +207,8 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-box.is-self .v03-dialogue-text{color:#c9d4e6;font-style:italic}
 .v03-dialogue-box.is-self .v03-dialogue-who{color:#9fb4d6}
 .v03-dialogue-actions{position:absolute;right:clamp(14px,calc(1.4vmin / var(--v03-ui,1)),24px);bottom:clamp(10px,calc(1vmin / var(--v03-ui,1)),18px);display:flex;align-items:center;gap:10px}
-.v03-dialogue-next{min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
-.v03-dialogue-next:hover{background:#cfb77b22!important}
+:is(.v03-dialogue-next,.v03-dialogue-choice){min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
+:is(.v03-dialogue-next,.v03-dialogue-choice):hover{background:#cfb77b22!important}
 .v03-dialogue-key{font-family:inherit;letter-spacing:normal}
 /* 2026-11-26: a yes/no question during play (going straight back to the map just left). */
 .v03-confirm{width:min(26rem,88vw);box-sizing:border-box;padding:1.1rem 1.2rem;border:1px solid #ab9361;border-radius:.55rem;color:#f6e9d0;background:#201e26;font-family:var(--v03-font)}
@@ -219,14 +219,25 @@ html[lang=ko] .v03-confirm p{word-break:keep-all}
 .v03-confirm button{min-height:44px;min-width:6.5rem;padding:.4rem .9rem;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;background:#3b3641;font:inherit;cursor:pointer}
 .v03-confirm .v03-confirm-yes{background:#6b5526;border-color:#e0bd77}
 .v03-confirm button:focus-visible{outline:2px solid var(--v03-gold);outline-offset:2px}
-/* 2026-11-26: the pick-one list in the dialogue box (smith, herbalist). Entries are
-   full-width buttons at least 44px tall; the highlighted one is the keyboard choice. */
-.v03-dialogue-menu{display:grid;gap:8px;margin-top:.3em}
-.v03-dialogue-menu[hidden]{display:none}
-.v03-dialogue-choice{display:block;width:100%;min-height:44px;padding:.45em 1em!important;text-align:left;font-size:clamp(15px,calc(2.1vmin / var(--v03-ui,1)),28px)!important;color:#f3ead2!important;background:#00000038!important;border:1px solid #ae925970!important;border-radius:4px;cursor:pointer}
-.v03-dialogue-choice.is-selected{color:var(--v03-gold)!important;background:#cfb77b26!important;border-color:var(--v03-gold)!important}
-.v03-dialogue-choice[data-mark]::after{content:'!';float:right;font-weight:700;color:var(--v03-gold)}
-.v03-dialogue-menu:not([hidden])~.v03-dialogue-actions{display:none}
+/* 2026-11-26 (second pass, user: the stacked list hid the art): the smith's and the
+   herbalist's choices are a row of buttons like Next/Close, under their greeting, where
+   Next/Close sits. The row flows inside the box (not pinned to its corner) so it can
+   wrap; the box keeps its normal height on PC. The highlighted one is the keyboard choice. */
+.v03-dialogue-box.is-choosing{padding-bottom:clamp(10px,calc(1vmin / var(--v03-ui,1)),18px)}
+.v03-dialogue-box.is-choosing .v03-dialogue-actions{position:static;justify-content:flex-end;align-items:flex-end;margin-top:.55em}
+.v03-dialogue-next[hidden]{display:none}
+.v03-dialogue-choices{display:flex;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;gap:8px;min-width:0}
+.v03-dialogue-choices[hidden]{display:none}
+.v03-dialogue-choice{flex:0 1 auto;min-width:5.5em;max-width:16em;line-height:1.25;white-space:normal;text-align:center;overflow-wrap:anywhere}
+.v03-dialogue-choice.is-selected{background:#cfb77b26!important;border-color:var(--v03-gold)!important;box-shadow:inset 0 0 0 1px #cfb77b66}
+.v03-dialogue-choice[data-mark]::after{content:'!';margin-left:.35em;font-weight:700;color:#f5d897}
+/* Phones and short windows: buttons at least 44px tall, at most two rows (two to four
+   buttons a row), long labels wrap inside their button. */
+@media (pointer:coarse),(max-height:520px){
+ .v03-dialogue-box.is-choosing{padding-bottom:10px}
+ .v03-dialogue-choices{flex:1 1 auto}
+ .v03-dialogue-choice{flex:1 1 auto;min-height:44px;min-width:calc(25% - 6px);max-width:calc(50% - 4px)}
+}
 @media (pointer:coarse){.v03-dialogue-key{display:none}}
 
 .v03-tip{position:absolute;right:max(18px,env(safe-area-inset-right));top:clamp(150px,calc(34vh / var(--v03-ui,1)),260px);width:min(380px,calc(42vw / var(--v03-ui,1)));padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
@@ -249,7 +260,7 @@ html[lang=ko] .v03-confirm p{word-break:keep-all}
  .v03-tip{top:max(10px,env(safe-area-inset-top));right:auto;left:50%;margin-left:calc(min(320px,calc(60vw / var(--v03-ui,1)))/-2);width:min(320px,calc(60vw / var(--v03-ui,1)));padding:8px 12px 9px}
  .v03-prompt{bottom:clamp(120px,calc(34vh / var(--v03-ui,1)),220px);min-height:52px;padding:9px 38px 9px 18px}
  .v03-quest{top:clamp(64px,calc(17vh / var(--v03-ui,1)),120px);max-width:calc(46vw / var(--v03-ui,1))}
- .v03-dialogue-box{padding-bottom:54px}.v03-dialogue-next{min-height:44px}
+ .v03-dialogue-box{padding-bottom:54px}:is(.v03-dialogue-next,.v03-dialogue-choice){min-height:44px}
 }
 
 .v03-dialogue-portrait{position:absolute;left:max(2vw,env(safe-area-inset-left));bottom:0;-webkit-mask-image:linear-gradient(to top,transparent 0,#000 12%);mask-image:linear-gradient(to top,transparent 0,#000 12%);height:86vh;width:auto;max-width:60vw;object-fit:contain;object-position:bottom left;pointer-events:none;filter:drop-shadow(0 6px 22px #000c);opacity:0;transform:translateX(-18px)}

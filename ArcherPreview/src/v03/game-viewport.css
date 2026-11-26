@@ -18,6 +18,6 @@ html.v03-viewport #app { min-height: 0; }
 
 /* WebKit versions that ignore "manipulation" for double taps honour "none".
    Declare this on the interactive surfaces as well as the document. */
-html.v03-viewport :is(#viewport, #app > .action-controls, .v03-prompt, .mf-treasure-prompt, .v03-dialogue, .v03-dialogue-next) {
+html.v03-viewport :is(#viewport, #app > .action-controls, .v03-prompt, .mf-treasure-prompt, .v03-dialogue, .v03-dialogue-next, .v03-dialogue-choice) {
   touch-action: none;
 }

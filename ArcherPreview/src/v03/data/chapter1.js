@@ -26,8 +26,8 @@ export const NPCS=Object.freeze([
  {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-72.87,z:-30.14,yaw:.42,idle:'driver-idle'},
  {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle',greet:'elder-greet'},
- {id:'smith',name:'대장장이',visual:'smith',map:'village',x:7.4,z:3.5,yaw:-1.4,idle:'smith-idle',greet:'smith-greet'},
- {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle',greet:'herbalist-greet'},
+ {id:'smith',name:'대장장이',visual:'smith',map:'village',x:7.4,z:3.5,yaw:-1.4,idle:'smith-idle',greet:'smith-greet',menu:'smith-menu'},
+ {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle',greet:'herbalist-greet',menu:'herbalist-menu'},
  {id:'chief',name:'촌장',visual:'chief',map:'village',x:7.2,z:9.4,yaw:-2.2,idle:'chief-idle',greet:'chief-greet'},
  {id:'youth',name:'청년',visual:'youth',map:'village',x:-5.2,z:5.6,yaw:1.6,idle:'youth-idle',greet:'youth-greet'},
 ]);
@@ -151,6 +151,13 @@ export const DIALOGUES=Object.freeze({
  ],
  'smith-idle':[
   {who:'대장장이',text:'날 상했으면 가져와라. 쇠는 거짓말 안 한다.'},
+ ],
+ // 2026-11-26: the one greeting line above the service choices (NPCS menu; story.js interact).
+ 'smith-menu':[
+  {who:'대장장이',text:'왔구나. 사러 왔냐, 손보러 왔냐?'},
+ ],
+ 'herbalist-menu':[
+  {who:'약초사',text:'어서 오세요. 오늘은 뭐가 필요하세요?'},
  ],
  'herbalist-witness':[
   {who:'약초사',text:'성녀님은 상처 씻을 물을 몇 번이고 데워 가셨어요. 제 약통도 자주 빌려 가셨고요. 늘 꽉 채워서 돌려주셨어요.'},

@@ -1,6 +1,7 @@
-// 2026-11-26, user: talking to the smith offers "talk / use the shop / temper equipment",
-// the herbalist "talk / use the shop"; W and S move on a keyboard; the last entry of
-// every such menu ends the talk.
+// 2026-11-26, user: talking to the smith offers "talk / shop / temper", the herbalist
+// "talk / shop"; the last entry of every such menu ends the talk. Second pass the same day:
+// the same window as any talk (art, name, one greeting line) with the choices as a row of
+// small buttons where Next/Close sits; A/D or the arrows move on a keyboard.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -10,6 +11,7 @@ import {SERVICE_MENUS,serviceMenu} from '../src/v03/service-menu.js';
 import {createStory} from '../src/v03/story.js';
 import {QUESTS,NPCS,DIALOGUES} from '../src/v03/data/chapter1.js';
 import {setPack} from '../src/v03/i18n.js';
+import {portraitFor,PORTRAITS} from '../src/v03/portraits.js';
 import ko from '../src/v03/locales/ko.js';
 import en from '../src/v03/locales/en.js';
 import ja from '../src/v03/locales/ja.js';
@@ -17,10 +19,12 @@ import vi from '../src/v03/locales/vi.js';
 import zh from '../src/v03/locales/zh.js';
 
 const PACKS={ko,en,ja,vi,zh};
-function stage(){
+function stage({typing=false}={}){
  const {document,window}=parseHTML('<html><body></body></html>');
- let time=0;
- const typewriter={start(node,text){node.textContent=text;return Promise.resolve();},complete:()=>false,stop(){},typing:false};
+ let time=0,pending=false;
+ // typing: start() leaves the line half shown until complete() (the real typewriter's contract).
+ const typewriter={start(node,text){if(typing){node.textContent=text.slice(0,1);pending=text;}else node.textContent=text;return Promise.resolve();},
+  complete(){if(!pending)return false;document.querySelector('.v03-dialogue-text').textContent=pending;pending=false;return true;},stop(){pending=false;},get typing(){return !!pending;}};
  const dialogue=createDialogue({doc:document,blip:null,typewriter,portraitFor:who=>who?'art/'+who+'.webp':null,now:()=>time});
  const press=(code,extra={})=>{
   const event=new window.Event('keydown',{bubbles:true,cancelable:true});
@@ -31,18 +35,27 @@ function stage(){
  const selected=()=>entries().findIndex(node=>node.classList.contains('is-selected'));
  return {document,window,dialogue,press,entries,selected,wait(ms=CHOICE_ARM_MS){time+=ms;},layer:document.querySelector('.v03-dialogue')};
 }
-const SMITH=[{id:'talk',label:'대화하기'},{id:'shop',label:'상점 이용'},{id:'forge',label:'장비 재련'},{id:'leave',label:'대화 그만하기'}];
+const SMITH=[{id:'talk',label:'대화하기'},{id:'shop',label:'상점'},{id:'forge',label:'장비 재련'},{id:'leave',label:'대화 종료'}];
+const HELLO='왔구나. 사러 왔냐, 손보러 왔냐?';
+const $=(s,sel)=>s.document.querySelector(sel);
 
-test('the menu lists its entries under the speaker, the first one selected, and a tap picks one',async()=>{
+test('the choices sit in the actions row under the greeting, the first one selected, and a tap picks one',async()=>{
  const s=stage();
- const picked=s.dialogue.choose(SMITH,{who:'대장장이'});
+ const picked=s.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});
  assert.equal(s.dialogue.open,true);assert.equal(s.layer.hidden,false);
- assert.equal(s.document.querySelector('.v03-dialogue-who').textContent,'대장장이');
- assert.equal(s.document.querySelector('.v03-dialogue-menu').hidden,false);
- assert.equal(s.document.querySelector('.v03-dialogue-menu').getAttribute('role'),'menu');
- assert.equal(s.document.querySelector('.v03-dialogue-actions').hidden,true,'no "next" button while choosing');
- assert.equal(s.document.querySelector('.v03-dialogue-text').hidden,true);
- assert.deepEqual(s.entries().map(node=>node.textContent),['대화하기','상점 이용','장비 재련','대화 그만하기']);
+ assert.equal($(s,'.v03-dialogue-who').textContent,'대장장이');
+ // The greeting stays readable together with the buttons.
+ assert.equal($(s,'.v03-dialogue-text').hidden,false);assert.equal($(s,'.v03-dialogue-text').textContent,HELLO);
+ assert.equal($(s,'.v03-sr-only').textContent,HELLO);
+ const row=$(s,'.v03-dialogue-choices'),actions=$(s,'.v03-dialogue-actions');
+ assert.equal(row.hidden,false);assert.equal(row.getAttribute('role'),'menu');
+ assert.equal(row.parentNode,actions,'the buttons live in the actions row');assert.equal(actions.hidden,false);
+ assert.ok(s.entries().every(node=>node.parentNode===row));
+ assert.equal($(s,'.v03-dialogue-menu'),null,'the stacked list is gone');
+ assert.equal($(s,'.v03-dialogue-next').hidden,true,'Next/Close steps aside for the choices');
+ assert.equal($(s,'.v03-dialogue-key').hidden,false,'the E hint stays (CSS hides it on touch)');
+ assert.ok($(s,'.v03-dialogue-box').classList.contains('is-choosing'));
+ assert.deepEqual(s.entries().map(node=>node.textContent),['대화하기','상점','장비 재련','대화 종료']);
  assert.ok(s.entries().every(node=>node.getAttribute('role')==='menuitem'&&node.type==='button'));
  assert.equal(s.selected(),0);assert.equal(s.entries()[0].getAttribute('aria-current'),'true');
  assert.equal(s.document.querySelector('.v03-dialogue-portrait').getAttribute('src'),'art/대장장이.webp');
@@ -50,13 +63,14 @@ test('the menu lists its entries under the speaker, the first one selected, and 
  s.wait();s.entries()[2].click();
  assert.equal(await picked,'forge');
  assert.equal(s.dialogue.open,false);assert.equal(s.layer.hidden,true);assert.equal(s.entries().length,0);
- assert.equal(s.document.querySelector('.v03-dialogue-actions').hidden,false);assert.equal(s.document.querySelector('.v03-dialogue-text').hidden,false);
+ assert.equal($(s,'.v03-dialogue-next').hidden,false);assert.equal($(s,'.v03-dialogue-text').hidden,false);
+ assert.equal($(s,'.v03-dialogue-box').classList.contains('is-choosing'),false);
  assert.equal('v03Talk' in s.document.documentElement.dataset,false);
  s.dialogue.dispose();
 });
 
-test('W and S (and the arrows) move without wrapping; Enter, Space or E picks; Escape ends the talk',async()=>{
- for(const [down,up] of [['KeyS','KeyW'],['ArrowDown','ArrowUp']]){
+test('A and D, the arrows (and W/S) move without wrapping; Enter, Space or E picks; Escape ends the talk',async()=>{
+ for(const [down,up] of [['KeyD','KeyA'],['ArrowRight','ArrowLeft'],['KeyS','KeyW'],['ArrowDown','ArrowUp']]){
   const s=stage(),picked=s.dialogue.choose(SMITH,{who:'대장장이'});
   assert.equal(s.press(up).defaultPrevented,true);assert.equal(s.selected(),0,'stays on the first');
   s.press(down);assert.equal(s.selected(),1);s.press(down);s.press(down);assert.equal(s.selected(),3);
@@ -94,10 +108,12 @@ test('a pick within a quarter second of the menu appearing is ignored (the tap t
 test('a menu and a conversation never overlap, and a waiting quest line marks the talk entry',async()=>{
  const s=stage();
  const lines=[{who:'대장장이',text:'어서 오게.'}];
+ // Without a line only the name shows above the buttons.
+ {const t=stage(),p=t.dialogue.choose(SMITH,{who:'대장장이'});assert.equal($(t,'.v03-dialogue-text').hidden,true);t.dialogue.cancel();assert.equal(await p,null);t.dialogue.dispose();}
  const talk=s.dialogue.play(lines);
  assert.equal(await s.dialogue.choose(SMITH),null,'no menu over a line');
  s.document.querySelector('.v03-dialogue-next').click();assert.equal(await talk,lines);
- const picked=s.dialogue.choose([{id:'talk',label:'대화하기',mark:true},{id:'leave',label:'대화 그만하기'}]);
+ const picked=s.dialogue.choose([{id:'talk',label:'대화하기',mark:true},{id:'leave',label:'대화 종료'}]);
  assert.equal(await s.dialogue.play(lines),null,'no line over a menu');
  assert.equal(await s.dialogue.choose(SMITH),null,'one menu at a time');
  assert.deepEqual(s.entries().map(node=>'mark' in node.dataset),[true,false]);
@@ -105,6 +121,43 @@ test('a menu and a conversation never overlap, and a waiting quest line marks th
  s.wait();s.layer.dispatchEvent(new s.window.Event('click',{bubbles:true}));assert.equal(s.dialogue.open,true);
  s.dialogue.dispose();assert.equal(await picked,null,'disposing settles the pick');
  assert.equal(await s.dialogue.choose([]),null);
+});
+
+test('a tap on the box or the picture never picks: it only completes the greeting; keys complete it first too',async()=>{
+ const s=stage({typing:true});
+ const picked=s.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});let value;picked.then(v=>{value=v;});
+ s.wait();
+ assert.equal($(s,'.v03-dialogue-text').textContent,HELLO.slice(0,1),'still typing');
+ $(s,'.v03-dialogue-box').dispatchEvent(new s.window.Event('click',{bubbles:true}));await Promise.resolve();
+ assert.equal($(s,'.v03-dialogue-text').textContent,HELLO,'the tap shows the whole greeting');assert.equal(value,undefined);
+ $(s,'.v03-dialogue-box').dispatchEvent(new s.window.Event('click',{bubbles:true}));
+ $(s,'.v03-dialogue-text').dispatchEvent(new s.window.Event('click',{bubbles:true}));
+ $(s,'.v03-dialogue-portrait').dispatchEvent(new s.window.Event('click',{bubbles:true}));
+ s.layer.dispatchEvent(new s.window.Event('click',{bubbles:true}));await Promise.resolve();
+ assert.equal(value,undefined);assert.equal(s.dialogue.open,true);
+ s.dialogue.cancel();assert.equal(await picked,null);s.dialogue.dispose();
+ // A key while the greeting types shows it whole; the next one picks.
+ const k=stage({typing:true}),p=k.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});k.wait();
+ k.press('KeyD');k.press('KeyE');let got;p.then(v=>{got=v;});await Promise.resolve();
+ assert.equal(got,undefined);assert.equal($(k,'.v03-dialogue-text').textContent,HELLO);
+ k.press('KeyE');assert.equal(await p,'shop');k.dialogue.dispose();
+});
+
+test('the smith has a picture of his own (the blacksmith sheet, shared with the driver for now)',()=>{
+ assert.notEqual(portraitFor('대장장이'),null);
+ assert.equal(portraitFor('대장장이'),PORTRAITS.driver);assert.equal(portraitFor('마부'),PORTRAITS.driver);
+ assert.equal(portraitFor('약초사'),PORTRAITS.herbalist);
+});
+
+test('the service people greet in one short line of their own, in every language',()=>{
+ for(const id of ['smith','herbalist']){
+  const npc=NPCS.find(row=>row.id===id),lines=DIALOGUES[npc.menu];
+  assert.equal(lines?.length,1,id);assert.equal(lines[0].who,npc.name);
+  for(const [lang,pack] of Object.entries(PACKS)){
+   const text=lang==='ko'?lines[0].text:pack.story.dialogues[npc.menu]?.[0];
+   assert.ok(text&&text.length<=48,lang+': '+id+' greeting is short');
+  }
+ }
 });
 
 test('the smith offers talk, shop and tempering, the herbalist talk and shop; ending the talk is always last',()=>{
@@ -122,8 +175,8 @@ test('the smith offers talk, shop and tempering, the herbalist talk and shop; en
    assert.equal(smith[0].mark,false);assert.equal(herbalist[0].mark,true);
   }
   setPack('ko',ko);
-  assert.deepEqual(serviceMenu('smith').map(entry=>entry.label),['대화하기','상점 이용','장비 재련','대화 그만하기']);
-  assert.deepEqual(serviceMenu('herbalist').map(entry=>entry.label),['대화하기','상점 이용','대화 그만하기']);
+  assert.deepEqual(serviceMenu('smith').map(entry=>entry.label),['대화하기','상점','장비 재련','대화 종료']);
+  assert.deepEqual(serviceMenu('herbalist').map(entry=>entry.label),['대화하기','상점','대화 종료']);
  }finally{setPack('ko',ko);}
 });
 
@@ -145,7 +198,7 @@ function village(npc){
  const frame=()=>story.update(1/60,{ready:true,mapId:'village',character:'warrior-v3'});
  frame();
  const stand=story.castVisual(npc);Object.assign(player.position,{x:stand.position.x,z:stand.position.z});frame();
- const menu=()=>document.querySelector('.v03-dialogue-menu');
+ const menu=()=>document.querySelector('.v03-dialogue-choices');
  return {document,story,visits,suspended,menu,entries:()=>[...menu().querySelectorAll('.v03-dialogue-choice')],closeShop:()=>leaveShop?.()};
 }
 
@@ -156,12 +209,16 @@ test('the smith: talk, shop and tempering each return to the menu, and only "end
   assert.equal(v.story.near,true);
   v.document.querySelector('.v03-prompt').click();
   assert.equal(v.story.dialogueOpen,true);assert.equal(v.menu().hidden,false);
-  assert.deepEqual(v.entries().map(node=>node.textContent),['대화하기','상점 이용','장비 재련','대화 그만하기']);
+  assert.deepEqual(v.entries().map(node=>node.textContent),['대화하기','상점','장비 재련','대화 종료']);
+  const hello=DIALOGUES['smith-menu'][0].text,said=()=>v.document.querySelector('.v03-sr-only').textContent;
+  assert.equal(said(),hello,'the greeting is said above the buttons');assert.equal(v.document.querySelector('.v03-dialogue-text').hidden,false);
+  assert.equal(v.document.querySelector('.v03-dialogue-who').textContent,'대장장이');
+  assert.match(v.document.querySelector('.v03-dialogue-portrait').getAttribute('src')??'',/portraits\/driver\.webp$/,'the smith is pictured');
   assert.deepEqual(v.suspended,[true],'play input waits while the menu is up');assert.deepEqual(v.visits,[],'no shop opens by itself');
   // Shop, then back to the menu when it closes.
   await armed();v.entries()[1].click();await tick();
   assert.deepEqual(v.visits,[['smith','shop']]);assert.equal(v.menu().hidden,true,'the menu is away while the shop is open');
-  v.closeShop();await tick();assert.equal(v.menu().hidden,false);assert.equal(v.entries().length,4);
+  v.closeShop();await tick();assert.equal(v.menu().hidden,false);assert.equal(v.entries().length,4);assert.equal(said(),hello,'the same greeting again');
   // Tempering.
   await armed();v.entries()[2].click();await tick();
   assert.deepEqual(v.visits,[['smith','shop'],['smith','forge']]);
@@ -170,7 +227,7 @@ test('the smith: talk, shop and tempering each return to the menu, and only "end
   await armed();v.entries()[0].click();await tick();
   assert.equal(v.menu().hidden,true);assert.ok(v.document.querySelector('.v03-dialogue-text').textContent.length>0,'a line is shown');
   for(let i=0;i<40&&v.menu().hidden;i++){v.document.querySelector('.v03-dialogue-next').click();await tick(1);}
-  assert.equal(v.menu().hidden,false,'back at the menu after the talk');assert.equal(v.visits.length,2);
+  assert.equal(v.menu().hidden,false,'back at the menu after the talk');assert.equal(v.visits.length,2);assert.equal(said(),hello);
   // The last entry ends it.
   await armed();v.entries()[3].click();await tick();
   assert.equal(v.story.dialogueOpen,false);assert.equal(v.suspended.at(-1),false,'play input is back');
@@ -183,7 +240,8 @@ test('the herbalist: talk, shop, end; Escape ends the talk from the keyboard',as
  const v=village('herbalist');
  try{
   v.document.querySelector('.v03-prompt').click();
-  assert.deepEqual(v.entries().map(node=>node.textContent),['대화하기','상점 이용','대화 그만하기']);
+  assert.deepEqual(v.entries().map(node=>node.textContent),['대화하기','상점','대화 종료']);
+  assert.equal(v.document.querySelector('.v03-sr-only').textContent,DIALOGUES['herbalist-menu'][0].text);
   await armed();v.entries()[1].click();await tick();
   assert.deepEqual(v.visits,[['herbalist','shop']]);v.closeShop();await tick();
   await armed();

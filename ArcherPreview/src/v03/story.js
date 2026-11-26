@@ -567,7 +567,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!services)await converse();
    else while(!disposed){
     const waiting=script();
-    const choice=await dialogue.choose(serviceMenu(npc,waiting.questLine||waiting.errand),{who:member.npc.name});
+    // The same window as any talk: the speaker's art, one greeting line, the choices below it.
+    const hello=content.DIALOGUES[member.npc.menu]?.[0];
+    const choice=await dialogue.choose(serviceMenu(npc,waiting.questLine||waiting.errand),{who:hello?.who??member.npc.name,line:hello?.text??null});
     if(disposed||!choice||choice==='leave')break;
     if(choice==='talk')await converse();else await api.openTownShop(npc,choice);
    }
