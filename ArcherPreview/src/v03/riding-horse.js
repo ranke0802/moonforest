@@ -1,5 +1,5 @@
 import { createWagonHorse } from './wagon-horse.js';
-import { planHorseApproach, planHorseDeparture, findHorseDismount, startHorseTravel } from './riding-horse-path.js';
+import { planHorseApproach, planHorseCall, planHorseDeparture, findHorseDismount, startHorseTravel } from './riding-horse-path.js';
 import { createRidingWardrobe, RIDING_STATS } from './riding-wardrobe.js';
 import { createRidingAudio } from './riding-audio.js';
 import { createRiderTransferPose } from './riding-transfer-pose.js';
@@ -80,7 +80,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   let checkedMap=null, nextOfferCheck=0, mounts=0;
   let travellingTo=null, parked=false;
   let phase='on-foot', travel=null, standing=null, transfer=null, transferTime=0;
-  let whistleRig=null, whistleTime=0, route=null, departRoute=null, savedPrograms=false;
+  let whistleRig=null, whistleTime=0, route=null, departRoute=null, savedPrograms=false, turning=null;
   const transferring=()=>phase==='mounting'||phase==='dismounting';
   const locksRider=()=>phase==='approaching'||transferring();
   let gallopRemaining=0, gallopStrength=0, trail=null;
@@ -124,7 +124,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
     poseObserver=null;
     transfer?.reset();
-    phase='on-foot';transfer=null;transferTime=0;whistleRig=null;travel=null;route=null;departRoute=null;standing=null;savedPrograms=false;
+    phase='on-foot';transfer=null;transferTime=0;whistleRig=null;travel=null;route=null;departRoute=null;standing=null;savedPrograms=false;turning=null;
     if (lift && !lift.isDisposed()) {lift.position.set(0,0,0);lift.rotation.z=0;}
     for (const mesh of hiddenArms) if (!mesh.isDisposed()) mesh.setEnabled(true);
     hiddenArms = []; seatedBones=[]; rig = lift = rider = riderContact = null;updateReins=null;
@@ -176,8 +176,11 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       if(!onArrival){
         // Keep the original ground anchor until the pelvis has reached the saddle.
         world.firstPerson?.exit();
-        route=planHorseApproach(world,actor,actor.rotation.y-forwardYaw());
-        if(!route){leave();tell(labels.space);return;}
+        // The horse may need another facing than the caller's (a tree at that flank): the
+        // caller turns to it while whistling (2026-11-26, user: calls were refused on open ground).
+        const call=planHorseCall(world,actor,actor.rotation.y-forwardYaw());
+        if(!call){leave();tell(labels.space);return;}
+        route=call.route;turning=call.turn?{actor,from:actor.rotation.y,by:call.turn}:null;
         standing={x:actor.position.x,y:actor.position.y??world.terrain.heightAt(actor.position.x,actor.position.z),z:actor.position.z};
         sounds?.call();
         whistleTime=0;
@@ -249,6 +252,11 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     if(state!=='idle'&&state!=='walk'&&state!=='run'){leave();return;}
     if(phase==='loading'||phase==='approaching'){
       whistleTime+=delta;
+      if(turning){
+        const k=Math.min(1,whistleTime/.28);
+        if(!turning.actor.isDisposed?.())turning.actor.rotation.y=turning.from+turning.by*k*k*(3-2*k);
+        if(k>=1)turning=null;
+      }
       const actor=player();
       if(standing&&(!actor||Math.hypot(actor.position.x-standing.x,actor.position.z-standing.z)>.15)){
         leave();return;

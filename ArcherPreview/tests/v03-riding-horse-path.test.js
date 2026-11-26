@@ -6,7 +6,7 @@ import '@babylonjs/loaders/glTF/glTFFileLoader.js';
 import {GLTFLoader} from '@babylonjs/loaders/glTF/2.0/glTFLoader.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {installVillageShadowFade,shadowFadeAttribute} from '../src/village-shadow-fade.js';
-import {planHorseApproach,planHorseDeparture,findHorseDismount,startHorseTravel} from '../src/v03/riding-horse-path.js';
+import {planHorseApproach,planHorseCall,planHorseDeparture,findHorseDismount,startHorseTravel} from '../src/v03/riding-horse-path.js';
 import {createWagonHorse} from '../src/v03/wagon-horse.js';
 import {mapNavigation} from '../src/world.js';
 import {prepareFixedLayouts,fixedPlacements} from '../src/fixed-layouts.js';
@@ -111,9 +111,51 @@ test('wall, rider clearance and terrain apply to the full approach, left-side tr
   drive(still,true,p=>{near(p.x,0);near(p.z,0);});
   const cliff=worldFor();
   cliff.terrain.heightAt=(x,z)=>z< -3?-5:0;
+  // 2026-11-26: a drop behind the camera no longer refuses the call. The horse comes
+  // from the level ground and never crosses the edge.
+  const ledge=planHorseApproach(cliff,rider,0);assert.ok(ledge);
+  drive(ledge,false,p=>assert.ok(p.z>=-3,'the horse stays on the level ground'));
+  // No level ground for the stage behind its place: still refused.
+  cliff.terrain.heightAt=(x,z)=>Math.hypot(x,z)>1.2?-5:0;
   assert.equal(planHorseApproach(cliff,rider,0),null);
   cliff.terrain.heightAt=(x,z)=>x>.55?1.8:0;
   assert.equal(findHorseDismount(cliff,rider.position,0),null);
+});
+
+test('a call near a map edge succeeds wherever the horse can stand: other run-ins, a step out from behind, another facing',async()=>{
+  // 2026-11-26, user: just after a map change the call was refused on open ground. The
+  // run-in from behind the camera left the map or crossed roadside trees.
+  await prepareFixedLayouts(['village','great-plains']);
+  try{
+    setWorldCharacter('warrior-v3');
+    const placements=settlementPlacements('village',fixedPlacements('village'));
+    const world={mapId:'village',terrain:createVillageTerrain(),navigation:mapNavigation({village:true,plains:false,forest:false,placements,gameplayV03:true}),camera:{}};
+    // The arrival from the plains, on the exit road. Every facing and camera side passes.
+    const arrival={position:{x:.35,z:70}};
+    for(const distance of [8,12])for(let h=0;h<8;h++)for(let c=0;c<8;c++){
+      world.camera.position={x:arrival.position.x+distance*Math.sin(c*Math.PI/4),z:arrival.position.z+distance*Math.cos(c*Math.PI/4)};
+      const plan=planHorseApproach(world,arrival,h*Math.PI/4);
+      assert.ok(plan,`facing ${h}, camera ${c} at ${distance} m`);
+      drive(plan,false,(p,opacity)=>{if(opacity>0)assert.ok(world.navigation.free(p,.64,80),'the horse stays clear of solids and inside the road limit');});
+    }
+    // With the camera's back to the edge (z 80 is the limit) the run-in comes from elsewhere.
+    world.camera.position={x:.35,z:80};
+    const turned=planHorseApproach(world,arrival,Math.PI);assert.ok(turned);
+    assert.ok(turned.start.z<80&&Math.hypot(turned.start.x,turned.start.z)<=80);
+    // On the shoulder a tree can take the horse's place at this facing; the call turns the caller.
+    let turnedCalls=0,refused=0,spots=0;
+    for(let x=-15;x<=15;x+=2.5)for(let z=58;z<=77;z+=2.5){
+      const actor={position:{x,z}};
+      if(!world.navigation.free(actor.position,.32,80))continue;
+      spots++;world.camera.position={x:x+8,z:z+6};
+      const call=planHorseCall(world,actor,0);
+      if(!call){refused++;continue;}
+      assert.ok(call.route);if(call.turn){turnedCalls++;assert.equal(planHorseApproach(world,actor,0),null);}
+      near(call.route.heading,call.turn);
+    }
+    assert.ok(spots>=80&&turnedCalls>0);
+    assert.ok(refused<=spots*.05,`${refused} of ${spots} standable spots still refuse`);
+  }finally{setWorldCharacter(null);}
 });
 
 test('chapter streets, plains wagon road and monster-forest road admit a complete ride on their shipped terrain and collision layouts',async()=>{

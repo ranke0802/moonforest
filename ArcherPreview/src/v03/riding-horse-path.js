@@ -107,16 +107,22 @@ export function planHorseApproach(world,actor,heading){
   const first=Math.max(2,7.5-distance(eye,foot));
   // A bounded local detour at the right flank avoids running through the
   // caller, including when the camera is looking straight at their face.
-  for(const rear of [first,Math.max(.9,first*.55),first+2.8])for(const side of [0,2.4,-2.4,5.3,-5.3]){
-    const start=along(eye,behind,rear,side);
-    if(distance(start,end)<3||!free(world,start,HORSE_RADIUS))continue;
+  const runIn=start=>{
+    if(distance(start,end)<3||!free(world,start,HORSE_RADIUS))return null;
     const direct=checkedRoute(world,[start,stage,end],heading,foot);
-    if(direct)return cameraFade(world,direct);
+    if(direct)return direct;
     for(const outward of [2.3,3.8])for(const forward of [-.5,-2.6,1.4]){
       const corner=along(end,heading,forward,-outward);
       const detour=checkedRoute(world,[start,corner,stage,end],heading,foot);
-      if(detour)return cameraFade(world,detour);
+      if(detour)return detour;
     }
+    return null;
+  };
+  for(const rear of [first,Math.max(.9,first*.55),first+2.8])for(const side of [0,2.4,-2.4,5.3,-5.3]){
+    const start=along(eye,behind,rear,side);
+    const direct=runIn(start);
+    if(direct)return cameraFade(world,direct);
+    if(distance(start,end)<3||!free(world,start,HORSE_RADIUS))continue;
     // When called from a front view the horse passes the player on the right
     // and loops round the back to face forward, without pivoting in place.
     for(const radius of [1.45,2.25]){
@@ -130,6 +136,29 @@ export function planHorseApproach(world,actor,heading){
         if(loop)return cameraFade(world,loop);
       }
     }
+  }
+  // 2026-11-26, user: just past a map edge the call was refused with open ground all
+  // round. The place beside the caller and the stage behind it are already clear here;
+  // only the run-in from behind the camera was off the map or through roadside trees
+  // (shipped layouts: 47-75% of camera and facing combinations passed on the village
+  // exit road, under half on its shoulders). Try a ring of starts around the caller,
+  // those nearest the camera's back first, then let the horse step out from the stage.
+  for(const reach of [9,6.5,4.5])for(let i=0;i<12;i++){
+    const turn=Math.ceil(i/2)*(i%2?1:-1)*Math.PI/6;
+    const route=runIn(along(end,behind+turn,reach));
+    if(route)return cameraFade(world,route);
+  }
+  const step=checkedRoute(world,[stage,end],heading,foot);
+  return step?cameraFade(world,step):null;
+}
+// A call tries the caller's facing first, then the nearest other facings, and the caller
+// turns to the horse (shipped layouts near the village exit: 74% of facings pass as they
+// stand, 97.5% of standable spots have one that does). {route,turn} or null.
+const CALL_TURNS=Object.freeze([0,Math.PI/4,-Math.PI/4,Math.PI/2,-Math.PI/2,3*Math.PI/4,-3*Math.PI/4,Math.PI]);
+export function planHorseCall(world,actor,heading){
+  for(const turn of CALL_TURNS){
+    const route=planHorseApproach(world,actor,heading+turn);
+    if(route)return {route,turn};
   }
   return null;
 }
