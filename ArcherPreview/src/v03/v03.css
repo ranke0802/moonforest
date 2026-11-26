@@ -7,6 +7,27 @@
 /* MoonForest 0.3 shell. Layers live on <body> so they stay visible while the
    game's own loading rule hides #app children. Only opacity/transform animate. */
 :root{--v03-gold:#cfb77b;--v03-text:#ece0bc;--v03-ink:#0b0f0d;--v03-font:MoonforestUI,'Malgun Gothic','Apple SD Gothic Neo',sans-serif}
+/* UI tone tokens (2026-11-26). Measured from the 2026-11-13 HUD atlases
+   (src/hud-v1-art, 256px cells): line icons without a disc are cream #efe1b4,
+   about 4% of their box thick, round ends, a soft baked glow, the drawing in the
+   middle 80%; disc buttons are an 80% disc, face #524937, a 2% rim #dfb481, the
+   picture #ebd1aa. New icons follow these values; SVG files repeat the hex
+   values because a background image cannot read CSS variables
+   (tests/v03-ui-tone.test.js keeps them equal). */
+:root{
+ --mf-icon-box:44px;--mf-icon-pad:10%;
+ --mf-line-icon-color:#efe1b4;--mf-line-icon-glow:drop-shadow(0 0 2px #efe1b4aa) drop-shadow(0 0 1px #0009);
+ --mf-disc-face:#524937;--mf-disc-rim:#dfb481;--mf-disc-ink:#ebd1aa;
+ --mf-gold-hi:#e2c994;
+ --mf-line:#c9b980;--mf-line-mid:#c9b980bf;--mf-line-soft:#c9b98066;
+ --mf-panel:#14271e;--mf-panel-raised:#223b29;--mf-panel-selected:#354731;
+ --mf-text:var(--v03-text);--mf-text-2:#f4ead0;--mf-text-3:#c9bb99;
+ --mf-radius:3px;--mf-radius-lg:6px;
+ --mf-kbd-size:18px;--mf-kbd-bg:#1a140c;--mf-kbd-ink:#f2dc9c;--mf-kbd-line:var(--mf-line);
+ --mf-badge-bg:#1d3027;--mf-badge-line:#cab984;--mf-badge-ink:#f2e5bd;
+ --mf-press-scale:.94;--mf-touch-art:.58;--mf-touch-art-press:.84;
+ --mf-focus:#f1d99a;--mf-disabled:.45;
+}
 [data-v03-layer]{position:fixed;inset:0;z-index:20000;font-family:var(--v03-font);color:var(--v03-text);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 [data-v03-layer][hidden]{display:none!important}
 [data-v03-layer] button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;background:none;border:0;padding:0}
