@@ -3,7 +3,7 @@ export default {
  ui:{
   'potion.slots':'Ô thuốc','potion.slot':'Ô {n}','potion.empty':'Ô trống','potion.choose':'Chọn thuốc mặc định cho ô 1','potion.remove':'Gỡ khỏi ô','potion.gesture':'Chạm để dùng. Nhấn giữ để chọn thuốc.',
   'char.skill.greatAttack':'Trọng kích tinh quang',
-  'char.skillText.greatAttack':'Giữ nút đánh để tụ ánh sao trên lưỡi kiếm. Thả nút để lao đến mục tiêu và đánh ba lần lên các kẻ địch xung quanh. Sát thương và bán kính đạt {percent}%. Vẫn nhận sát thương khi tụ lực. Bị đánh ngã hoặc bị tóm sẽ hủy chiêu.',
+  'char.skillText.greatAttack':'Giữ nút đánh để tụ ánh sao trên lưỡi kiếm, sau 3 giây sẽ đầy. Thả nút để lao tới mục tiêu và đánh ba lần vào vùng xung quanh. Nếu không có mục tiêu, đòn đánh giáng thẳng về phía trước. Sát thương và bán kính đạt {percent}%. Vẫn nhận sát thương khi tụ lực. Bị đánh ngã hoặc bị tóm sẽ hủy chiêu.',
   'opening.castLoading':'Đang chuẩn bị xe ngựa và trận đánh đầu tiên…','opening.castFailed':'Không thể tải cảnh mở đầu.','opening.castRetry':'Thử lại',
   'gallery.noTitles':'Hiện chưa có danh hiệu để nhận.',
   'hud.tip.bag':'Mở túi để xem trang bị và vật phẩm (I).',

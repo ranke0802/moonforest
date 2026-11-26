@@ -36,9 +36,10 @@ export function createCombatTarget(){
   // The foe an action that starts now should face. nearest: the game's own
   // pick. starts: an attack (it begins or continues a chain); false for the
   // guard, which only turns.
-  aim(position,nearest,starts=true){
-   const pick=chainLeft>0&&alive(chain)&&within(chain,position,TARGET_REACH)?chain:alive(foe)&&within(foe,position,TARGET_REACH)?foe:null;
-   reach=pick?TARGET_REACH:0;
+  aim(position,nearest,starts=true,reachScale=1){
+   const trackedReach=TARGET_REACH*reachScale;
+   const pick=chainLeft>0&&alive(chain)&&within(chain,position,trackedReach)?chain:alive(foe)&&within(foe,position,trackedReach)?foe:null;
+   reach=pick?trackedReach:0;
    if(starts){chain=pick??(alive(nearest)?nearest:null);chainLeft=chain?CHAIN_HOLD:0;}
    return pick??nearest??null;
   },

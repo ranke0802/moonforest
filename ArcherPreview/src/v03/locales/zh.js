@@ -3,7 +3,7 @@ export default {
  ui:{
   'potion.slots':'药水栏','potion.slot':'栏位 {n}','potion.empty':'空栏位','potion.choose':'选择第 1 栏的默认药水','potion.remove':'取消登记','potion.gesture':'轻点使用，长按选择药水。',
   'char.skill.greatAttack':'星辉重击',
-  'char.skillText.greatAttack':'按住攻击将星光汇聚于剑刃。松开后冲向目标，对其周围的敌人造成三连击。伤害和范围半径为 {percent}%。蓄力时仍会受伤，倒地或被抓会中断蓄力。',
+  'char.skillText.greatAttack':'按住攻击将星光汇聚于剑刃，3秒蓄满。松开后冲向目标，对其周围造成三连击。没有目标时向正前方劈下。伤害和范围半径为 {percent}%。蓄力时仍会受伤，倒地或被抓会中断蓄力。',
   'opening.castLoading':'正在准备马车和首场战斗。','opening.castFailed':'未能载入开场场景。','opening.castRetry':'重试',
   'gallery.noTitles':'目前没有可获得的称号。',
   'hud.tip.bag':'打开背包，查看装备和物品（I）。',

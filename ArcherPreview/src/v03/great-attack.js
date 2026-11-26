@@ -3,19 +3,21 @@ import {boostSwordStrike} from '../equipment-stats.js';
 // The authored Sword_Judgment hips reach the bottom of the pre-jump crouch
 // at frame 28 (60 fps). Hold that exact animation sample before releasing.
 export const GREAT_ATTACK_POSE=28/60;
+export const GREAT_ATTACK_CHARGE_SECONDS=3;
 export const GREAT_ATTACK_SLOW=.48;
 export const GREAT_ATTACK_BASE_RADIUS=1.25;
 export const GREAT_ATTACK_IMPACT=1.10;
 
 export class GreatAttackCast{
-  constructor(actionId,level,charging=true){
+  constructor(actionId,level,charging=true,chargeProgress=0){
     this.actionId=actionId;
     this.level=Math.min(5,Math.trunc(level));
     this.multiplier=1+.2*this.level;
     this.charging=charging;
+    this.chargeProgress=chargeProgress;
     this.center={x:0,y:0,z:0};
     this.radius=GREAT_ATTACK_BASE_RADIUS*this.multiplier;
-    this.progress=0;
+    this.progress=charging?chargeProgress:0;
     this.phase=charging?'windup':'release';
     this.impacted=false;
   }
@@ -37,7 +39,7 @@ export class GreatAttackCast{
     return dx*dx+dz*dz<=this.radius*this.radius&&(!navigation||navigation.segmentClear(this.center,position,0,true));
   }
 
-  placeImpact(feet,blade,world){
+  placeImpact(feet,blade,world,heading){
     const target=this.target?.active&&this.target.brain?.hp>0?this.target.actor.position:null;
     this.target=null;
     const center=this.center,terrain=world?.terrain,nav=world?.navigation;
@@ -46,11 +48,13 @@ export class GreatAttackCast{
       center.x=target.x;center.z=target.z;center.y=terrain?.heightAt?.(target.x,target.z)??target.y;
       return;
     }
-    // A free swing lands under the actual descending blade. Clip that ground
-    // point to the warrior's side of a wall or ledge.
-    const tip=blade?.[1],dx=(tip?.[0]??feet.x)-feet.x,dz=(tip?.[2]??feet.z)-feet.z;
+    // The sword is held to one side. Keep its forward reach on the attack
+    // centerline, then clip that point to the warrior's side of a wall or ledge.
+    const tip=blade?.[1],forwardX=Math.sin(heading),forwardZ=Math.cos(heading);
+    const projected=tip?(tip[0]-feet.x)*forwardX+(tip[2]-feet.z)*forwardZ:0;
+    const reach=projected>0?projected:GREAT_ATTACK_BASE_RADIUS;
     const project=t=>{
-      center.x=feet.x+dx*t;center.z=feet.z+dz*t;
+      center.x=feet.x+forwardX*reach*t;center.z=feet.z+forwardZ*reach*t;
       center.y=terrain?.heightAt?.(center.x,center.z)??feet.y;
     };
     project(1);
@@ -64,16 +68,16 @@ export class GreatAttackCast{
     }
   }
 
-  sample(clipTime,sample,baseStrike,attackBonus,feet,world){
+  sample(clipTime,sample,baseStrike,attackBonus,feet,world,heading=0){
     sample.radialAttack=this;
     sample.contacts.length=0;
     if(this.charging){
       this.phase='windup';
-      this.progress=Math.min(1,clipTime/GREAT_ATTACK_POSE);
+      this.progress=this.chargeProgress;
     }else if(clipTime<GREAT_ATTACK_IMPACT){
       this.phase='release';this.progress=Math.max(0,(clipTime-GREAT_ATTACK_POSE)/(GREAT_ATTACK_IMPACT-GREAT_ATTACK_POSE));
     }else if(!this.impacted){
-      this.placeImpact(feet,sample.blade,world);
+      this.placeImpact(feet,sample.blade,world,heading);
       this.impacted=true;this.phase='impact';this.progress=1;
       const strike=boostSwordStrike(baseStrike,attackBonus);
       const burst=strike.burst.map(value=>value*this.multiplier);

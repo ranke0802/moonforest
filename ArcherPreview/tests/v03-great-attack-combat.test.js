@@ -1,19 +1,20 @@
 import test from 'node:test';
 import {readFileSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import {Vector3,Matrix} from '@babylonjs/core';
+import {Vector3,Matrix,NullEngine,Scene} from '@babylonjs/core';
 import {parseHTML} from 'linkedom';
 import {WarriorV2Controller,V2_HOLD_SECONDS} from '../src/warrior-v2.js';
 import {PlayerStrikeSampler,PLAYER_STRIKES} from '../src/player-strikes.js';
 import {BossEncounter} from '../src/boss-encounter.js';
 import {BossBrain} from '../src/boss-spec.js';
 import {WolfV02ContactGate} from '../src/wolf-v02-hurt.js';
-import {GREAT_ATTACK_POSE,GREAT_ATTACK_SLOW} from '../src/v03/great-attack.js';
+import {GREAT_ATTACK_CHARGE_SECONDS,GREAT_ATTACK_POSE,GREAT_ATTACK_SLOW} from '../src/v03/great-attack.js';
 import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
 import {ArenaNavigation} from '../src/navigation.js';
 import {createCombatTarget} from '../src/v03/combat-target.js';
-import {strikeLungeStep,applyStrikeTravel,STRIKE_LUNGE} from '../src/v03/strike-approach.js';
+import {strikeLungeStep,applyStrikeTravel,STRIKE_LUNGE,STARFALL_REACH_SCALE} from '../src/v03/strike-approach.js';
 import {createStory} from '../src/v03/story.js';
+import {createGreatAttackFx} from '../src/v03/great-attack-fx.js';
 
 const durations={idle:2,run:1,attack:3,slash:1.5,judgment:4.33,shieldPush:2.37,dodge:2.46,knockdown:1.7,getUp:2};
 const almost=(a,b)=>assert.ok(Math.abs(a-b)<1e-7,`${a} and ${b}`);
@@ -46,6 +47,34 @@ test('the learned held heavy pauses the authored crouch, resumes without a time 
   assert.equal(c.action.state,'slash');assert.equal(c.action.greatAttack,undefined);
 });
 
+test('Starfall fills in exactly three wall-clock seconds from the physical press while the game is slowed',()=>{
+  assert.equal(GREAT_ATTACK_CHARGE_SECONDS,3);
+  let now=9000;const start=now;
+  const c=new WarriorV2Controller({durations,holdNow:()=>now});
+  c.greatAttackLevel=4;c.setAttackHeld(true);
+  let previous=0;
+  for(const ms of [225,450,900,1500,2999,3000,9000]){
+    now=start+ms;
+    const r=c.update((ms-previous)/1000*GREAT_ATTACK_SLOW);
+    const expected=Math.min(1,ms/3000);
+    almost(r.chargeProgress,expected);
+    if(ms<450){assert.equal(c.action,null);}
+    else{
+      const cast=r.greatAttack;
+      assert.equal(cast.charging,true);almost(cast.chargeProgress,expected);
+      const sample={contacts:[]};
+      cast.sample(r.clipTime,sample,PLAYER_STRIKES.judgment[0],0,{x:0,y:0,z:0});
+      almost(cast.progress,expected);assert.deepEqual(sample.contacts,[]);
+      if(ms>=1500)almost(r.clipTime,GREAT_ATTACK_POSE);
+      assert.equal(c.stamina,70);
+    }
+    previous=ms;
+  }
+  const cast=c.action.greatAttack;c.setAttackHeld(false);
+  assert.equal(cast.chargeProgress,1);assert.equal(c.update(.1).greatAttack.charging,false);
+  assert.equal(c.serial,1);assert.equal(c.stamina,70);
+});
+
 test('normal body contacts damage and flash through the windup without pushing it; knockdown, defense input and death end it',()=>{
   const c=heavy(3,{held:true}),action=c.update(.12);
   const foe=new BossEncounter({},()=>{},()=>{},(duration,options={})=>options.knockdown?c.knockdown():c.hit(duration,options));
@@ -71,9 +100,21 @@ test('a physical release before a frame or during shield recovery is remembered 
     assert.equal(c.queuedAttack,'judgment');
     c.update(buffered?durations.shieldPush:0);
     assert.equal(c.action.greatAttack.charging,false);
+    almost(c.action.greatAttack.chargeProgress,.55/GREAT_ATTACK_CHARGE_SECONDS);
     assert.ok(c.update(.4).clipTime>GREAT_ATTACK_POSE);
     assert.equal(c.stamina,buffered?50:70);
   }
+});
+
+test('releasing between frames keeps the exact partial charge for the blade effect',()=>{
+  let now=1000;const c=new WarriorV2Controller({durations,holdNow:()=>now});
+  c.greatAttackLevel=2;c.setAttackHeld(true);now+=500;c.update(.1);
+  const cast=c.action.greatAttack;almost(cast.chargeProgress,1/6);
+  now+=700;c.setAttackHeld(false);
+  almost(cast.chargeProgress,.4);assert.equal(cast.charging,false);
+  const r=c.update(.3),sample={contacts:[]};
+  cast.sample(r.clipTime,sample,PLAYER_STRIKES.judgment[0],0,{x:0,y:0,z:0});
+  almost(cast.chargeProgress,.4);assert.equal(cast.phase,'release');
 });
 
 function actor(x,z){return {position:new Vector3(x,0,z),rotation:{y:0},computeWorldMatrix(){}};}
@@ -140,12 +181,14 @@ test('interrupted input clears the rendered charge and camera, ordinary button r
 });
 
 test('release locks the combat target and hits its current ground position after a collision-limited dash',()=>{
-  for(const scene of ['empty','near','moving','wall','manual','far','tracked','dead','escaped','ledge']){
+  const distances={near:6,moving:5.3,wall:5.8,manual:5.8,far:6.01,tracked:13.5,personal:7.5,outsidePersonal:7.51};
+  for(const scene of ['empty','near','moving','wall','manual','far','tracked','personal','outsidePersonal','dead','escaped','ledge']){
     const c=heavy(1,{held:true}),cast=c.action.greatAttack,player=actor(0,0),ledger={},aim=createCombatTarget();
     const wall=scene==='wall'?[{id:'wall',x:0,z:.8,radius:.20,height:2}]:[];
     const world={navigation:new ArenaNavigation(wall),terrain:{heightAt:(x,z)=>scene==='ledge'&&z>1.3?2.5:0}};
     const makeFoe=(x,z)=>({actor:actor(x,z),active:true,brain:{hp:20},radius:.3});
-    const foe=scene==='empty'?null:makeFoe(0,scene==='far'||scene==='tracked'?8:3.2);
+    const foe=scene==='empty'?null:makeFoe(0,distances[scene]??3.2);
+    if(scene==='personal'||scene==='outsidePersonal')foe.meleeAimDistance=5;
     if(foe)foe.actor.position.y=world.terrain.heightAt(foe.actor.position.x,foe.actor.position.z);
     const other=scene==='tracked'?makeFoe(1,0):null;
     if(other)aim.note('enemy',foe);
@@ -156,7 +199,7 @@ test('release locks the combat target and hits its current ground position after
     for(let frame=0;frame<150;frame++){
       if(frame===60){
         c.setAttackHeld(false);
-        aim.aim(player.position,other??foe);
+        aim.aim(player.position,other??foe,true,STARFALL_REACH_SCALE);
       }
       const action=c.update(dt);
       if(!action.greatAttack)break;
@@ -170,12 +213,13 @@ test('release locks the combat target and hits its current ground position after
       }
       if(scene==='moving'&&!cast.charging&&!cast.impacted)foe.actor.position.z+=2*dt;
       if(action.clipTime>=1.10&&!cast.impacted&&scene==='moving')foe.actor.position.x+=.055; // Enemy's update runs before sampling.
-      const p=player.position,tip=[p.x+Math.sin(player.rotation.y),p.y,p.z+Math.cos(player.rotation.y)];
+      const p=player.position,yaw=player.rotation.y,dx=Math.sin(yaw),dz=Math.cos(yaw);
+      const tip=[p.x+dx+.65*dz,p.y,p.z+dz-.65*dx];
       const sample={blade:[p.asArray(),tip],contacts:[]};
-      cast.sample(action.clipTime,sample,PLAYER_STRIKES.judgment[0],0,p,world);
+      cast.sample(action.clipTime,sample,PLAYER_STRIKES.judgment[0],0,p,world,yaw);
       if(cast.phase!=='impact')continue;
       hits++;
-      if(['near','moving','tracked'].includes(scene)){
+      if(['near','moving','tracked','personal'].includes(scene)){
         const target=foe.actor.position;
         assert.deepEqual(cast.center,{x:target.x,y:target.y,z:target.z},scene);
         assert.ok(Vector3.Distance(player.position,target)>1&&player.position.z>1,scene+' dash stops at melee clearance');
@@ -189,13 +233,35 @@ test('release locks the combat target and hits its current ground position after
           assert.ok(p.z<=1.3&&cast.center.z<=1.3,'the cliff keeps travel and impact on the near ground');
           assert.ok(!cast.contains(new Vector3(cast.center.x,2.5,cast.center.z),world.navigation));
         }else{
-          almost(cast.center.x,tip[0]);almost(cast.center.z,tip[2]);
+          almost(cast.center.x,p.x+dx);almost(cast.center.z,p.z+dz);
           if(manual)assert.ok(p.x>.7&&Math.abs(p.z)<.001);
-          if(scene==='escaped'||scene==='far')assert.ok(!cast.contains(foe.actor.position,world.navigation));
+          if(['escaped','far','outsidePersonal'].includes(scene))assert.ok(!cast.contains(foe.actor.position,world.navigation));
         }
       }
     }
     assert.equal(hits,1,scene+' has exactly one impact');
+  }
+});
+
+test('an off-centre sword places free-swing damage and the ground crack directly ahead in all four directions',t=>{
+  const engine=new NullEngine(),scene=new Scene(engine),{document}=parseHTML('<main></main>');
+  const terrain={heightAt:(x,z)=>(x+z)/8};
+  const fx=createGreatAttackFx({scene,root:document.querySelector('main'),ground:terrain.heightAt});
+  t.after(()=>{fx.dispose();scene.dispose();engine.dispose();});
+  const feet=new Vector3(8,terrain.heightAt(8,-16),-16);
+  for(const heading of [0,Math.PI/2,-Math.PI/2,Math.PI]){
+    const dx=Math.sin(heading),dz=Math.cos(heading),c=heavy(1,{held:true});
+    c.update(2);c.setAttackHeld(false);const cast=c.action.greatAttack;
+    const blade=[feet.asArray(),[feet.x+dx*1.5+dz*.66,feet.y+.3,feet.z+dz*1.5-dx*.66]];
+    const sample={blade,contacts:[]};
+    cast.sample(1.1,sample,PLAYER_STRIKES.judgment[0],0,feet,{terrain},heading);
+    assert.equal(sample.contacts.length,1);assert.equal(sample.radialAttack,cast);
+    const x=cast.center.x-feet.x,z=cast.center.z-feet.z;
+    almost(x*dz-z*dx,0);almost(x*dx+z*dz,1.5);
+    almost(cast.center.y,terrain.heightAt(cast.center.x,cast.center.z));
+    fx.reset();fx.update(cast,blade,feet);
+    const anchors=scene.getMeshByName('v03-starfall-ground').material._vectors4Arrays.anchors;
+    almost(anchors[0],cast.center.x);almost(anchors[1],cast.center.y);almost(anchors[2],cast.center.z);
   }
 });
 
@@ -229,13 +295,15 @@ test('windup slows the world with the selected camera zoom and restores the view
   t.after(()=>story.dispose());
   let now=1000;t.mock.method(performance,'now',()=>now);
   story.start();const frame=()=>{now+=50;story.update(.05,{ready:true,mapId:'great-plains'});};
-  for(let i=0;i<8;i++)frame();almost(story.timeScale,GREAT_ATTACK_SLOW);almost(camera.fov,.85*.8*.80);
+  for(let i=0;i<8;i++)frame();almost(story.timeScale,GREAT_ATTACK_SLOW);almost(camera.fov,.85*.8*.90);
   assert.deepEqual([camera.alpha,camera.beta,camera.radius],[1,2,8]);assert.equal(Object.hasOwn(camera,'screenArea'),true);
   controller.knockdown();story.cancelGreatAttackFocus();almost(camera.fov,.85);almost(story.timeScale,1);assert.equal(Object.hasOwn(camera,'screenArea'),false);
   controller=heavy(1,{held:true});
   for(let i=0;i<8;i++)frame();
+  controller.action.greatAttack.chargeProgress=1;frame();
+  almost(story.timeScale,1);almost(camera.fov,.85*.8*.90);
   controller.setAttackHeld(false);frame();
-  almost(story.timeScale,1);assert.ok(camera.fov>.85*.8*.80&&camera.fov<.85);
+  almost(story.timeScale,1);assert.ok(camera.fov>.85*.8*.90&&camera.fov<.85);
   for(let i=0;i<12;i++)frame();
   almost(camera.fov,.85);assert.equal(Object.hasOwn(camera,'screenArea'),false);
   story.dispose();

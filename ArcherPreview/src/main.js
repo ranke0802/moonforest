@@ -1,4 +1,4 @@
-import {strikeLungeStep,applyStrikeTravel,strikeAimRange} from './v03/strike-approach.js';
+import {strikeLungeStep,applyStrikeTravel,strikeAimRange,STARFALL_REACH_SCALE} from './v03/strike-approach.js';
 import {PlayerMeleeAim,meleeNeckPoint,meleeApproachPoint} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
 import {validateStoryboard} from './storyboard-document.js';
@@ -735,6 +735,10 @@ function faceHeading(heading, dt) {
   actor.rotation.y += delta * (1 - Math.exp(-18 * dt));
 }
 
+function strikeHeading(state){
+  return actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[state]??0);
+}
+
 function shootAtTarget() {
   actor.computeWorldMatrix(true);
   arrowNode?.computeWorldMatrix(true);
@@ -1133,14 +1137,18 @@ function render(dt) {
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
       // 0.3: without a direction the strike turns to the foe being fought (the one hit or hitting), a chain to the foe of its first swing.
-      const nearest=isV2()?boss.nearestTarget(actor.position):null,target=nearest&&world.v03?.aimTarget?world.v03.aimTarget(actor.position,nearest):nearest;
+      const reachScale=result.greatAttack?STARFALL_REACH_SCALE:1;
+      const nearest=isV2()?boss.nearestTarget(actor.position):null,target=nearest&&world.v03?.aimTarget?world.v03.aimTarget(actor.position,nearest,true,reachScale):nearest;
       strikeByInput=isV2()&&Math.hypot(movement.x||0,movement.y||0)>.08;
       if(strikeByInput){
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<strikeAimRange(target,world.v03?.aimReach)){
-        const point=result.greatAttack?target.actor.position:versionRoute.edition&&!versionRoute.worldRevision?meleeApproachPoint(target,meleeTargetPoint):meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;
-        actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
+      }else if(target){
+        const reach=strikeAimRange(target,world.v03?.aimReach,reachScale),distance=Vector3.Distance(actor.position,target.actor.position);
+        if(result.greatAttack?distance<=reach:distance<reach){
+          const point=result.greatAttack?target.actor.position:versionRoute.edition&&!versionRoute.worldRevision?meleeApproachPoint(target,meleeTargetPoint):meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;
+          actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
+        }
       }
       meleeAim?.begin(result,actor,target,!!versionRoute.edition&&!versionRoute.worldRevision);
     }
@@ -1161,7 +1169,7 @@ function render(dt) {
       const target=world.v03.chainFoe;
       const step=strikeLungeStep(lungeState,actor,result,lunge,target,nearest,strikeByInput,playerDimensions(actor).ratio,controller.durations?.[result.state]||1,dt,fitted,world.v03.aimReach);
       if(step>1e-4){
-        const yaw=actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[result.state]??0);
+        const yaw=strikeHeading(result.state);
         applyStrikeTravel(actor,result,yaw,step,world,boss.encounters,movementLimit(actor.position),playerDimensions(actor),world.mapId==='village'?clampVillageExit:null);
       }
     }
@@ -1431,7 +1439,7 @@ try {
     const cast=combatResult.greatAttack;
     if(cast){
       if(sample&&cast.center&&controller.action?.greatAttack===cast&&boss.playerAlive){
-        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus,actor.position,world);
+        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus,actor.position,world,strikeHeading(combatResult.state));
         shownGreatAttack=cast;world.v03?.greatAttackFrame?.(cast,sample.blade);
       }else{sample=null;if(shownGreatAttack)clearGreatAttack();}
     }

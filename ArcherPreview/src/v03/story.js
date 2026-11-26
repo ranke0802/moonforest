@@ -1337,7 +1337,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // comes back into view during the dash, even if a separate slow-motion beat is active.
  const SLOW_ZOOM_IN=.1,SLOW_ZOOM_OUT=.45,STARFALL_ZOOM_IN=.20,STARFALL_ZOOM_OUT=.20;
  const zoom={weight:0,base:null,last:0,camera:null,skillWeight:0};
- const chargingGreatAttack=()=>started&&!disposed&&!scene.active&&!dialogue.open&&api.getController?.()?.action?.greatAttack?.charging===true;
+ function chargingGreatAttack(){
+  if(!started||disposed||scene.active||dialogue.open)return null;
+  const cast=api.getController?.()?.action?.greatAttack;
+  return cast?.charging?cast:null;
+ }
  function restoreSlowZoom(){
   if(zoom.base!==null&&zoom.camera){zoom.camera.fov=zoom.base;unpinScreenArea(zoom.camera);}
   zoom.base=null;zoom.weight=0;zoom.skillWeight=0;zoom.last=0;
@@ -1358,7 +1362,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
   const skillEase=zoom.skillWeight*zoom.skillWeight*(3-2*zoom.skillWeight);
-  camera.fov=zoom.base*(1-slowSetting().zoom*eased)*(1-.20*skillEase);
+  camera.fov=zoom.base*(1-slowSetting().zoom*eased)*(1-.10*skillEase);
   if(zoom.weight===0&&!target)restoreSlowZoom();
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
@@ -1493,7 +1497,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // The warrior lies in the wagon bed during the opening: main.js keeps him off the ground snap.
   get holdsPlayer(){return scene.active&&scene.sleeping===true;},
   cancelGreatAttackFocus,
-  get timeScale(){return slow.left>0?SLOW_SCALE:chargingGreatAttack()?GREAT_ATTACK_SLOW:1;},
+  get timeScale(){
+   if(slow.left>0)return SLOW_SCALE;
+   const windup=chargingGreatAttack();
+   return windup&&windup.chargeProgress<1?GREAT_ATTACK_SLOW:1;
+  },
   get lunge(){return scene.active?null:STRIKE_LUNGE;},
   // Where the current step is fought on this map (monster groups near it load first).
   // Where this quest's fight on the current map is: the current step, or a later

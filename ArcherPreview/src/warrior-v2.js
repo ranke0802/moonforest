@@ -1,5 +1,5 @@
 import { normalizeAttackSpeed } from './controller.js';
-import {GreatAttackCast} from './v03/great-attack.js';
+import {GreatAttackCast,GREAT_ATTACK_CHARGE_SECONDS} from './v03/great-attack.js';
 import { JUDGMENT_CONTACT_END } from './player-strike-timings.js';
 export const V2_ATTACKS = ['slash', 'attack', 'judgment'];
 export const V2_COMBO = ['slash', 'attack'];
@@ -26,7 +26,7 @@ export class WarriorV2Controller {
     this.durations=durations;this.runSpeed=speeds.run||4.4371;
     this.attackSpeed=V2_ATTACK_BASE_RATE;this.state='idle';this.time=0;this.action=null;this.serial=0;
     this.held=false;this.holdTime=0;this.holdTriggered=false;this.holdNow=holdNow;this.holdStartedAt=null;this.lastAttack=null;this.attackIndex=0;this.comboRemaining=0;this.dead=false;
-    this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.queuedAttack=null;
+    this.staggerRemaining=0;this.staggerLocked=false;this.hitPose=null;this.queuedAttack=null;this.queuedChargeProgress=0;
     this.shieldHeld=false;this.shieldHoldTime=0;this.shieldStartedAt=null;this.shieldExhausted=false;
     this.staminaEnabled=staminaEnabled;this.maxStamina=V2_STAMINA_MAX;this.stamina=this.maxStamina;this.staminaRejectSerial=0;
     this.sprintHeld=false;this.sprinting=false;this.sprintExhausted=false;this.sprintInitialSeconds=null;this.pendingSprint=null;this.staminaSpent=false;
@@ -63,7 +63,7 @@ export class WarriorV2Controller {
       if(this.stamina<=1e-8){this.stamina=0;this.sprintExhausted=true;this.staminaRejectSerial++;}
     }
   }
-  startAttack(kind) {
+  startAttack(kind,chargeProgress=0) {
     if(this.captured||this.knockedDown||this.groggy||this.shieldPending||this.guarding)return false;
     const normal=kind==null;kind??=this.combo[this.attackIndex%this.combo.length];
     if(!this.spendStamina(kind,normal?this.comboCost?.[kind]:undefined))return false;
@@ -71,24 +71,37 @@ export class WarriorV2Controller {
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
     if(!normal&&kind==='judgment'&&Number.isInteger(this.greatAttackLevel)&&this.greatAttackLevel>0){
       // A heavy buffered behind another action can already have received its keyup.
-      this.action.greatAttack=new GreatAttackCast(this.serial,this.greatAttackLevel,this.held&&this.holdTriggered);
+      this.action.greatAttack=new GreatAttackCast(this.serial,this.greatAttackLevel,this.held&&this.holdTriggered,chargeProgress);
     }
     return true;
   }
   releaseHold(){this.held=false;this.holdTime=0;this.holdTriggered=false;this.holdStartedAt=null;}
-  heavyIntent(){return {held:this.held,holdTime:this.holdTime,holdTriggered:this.holdTriggered,holdStartedAt:this.holdStartedAt,queuedAttack:this.queuedAttack==='judgment'?'judgment':null};}
+  heavyIntent(){return {held:this.held,holdTime:this.holdTime,holdTriggered:this.holdTriggered,holdStartedAt:this.holdStartedAt,queuedAttack:this.queuedAttack==='judgment'?'judgment':null,queuedChargeProgress:this.queuedChargeProgress};}
   heldSeconds(){
-    if(!this.holdNow||!Number.isFinite(this.holdStartedAt))return 0;
-    const now=this.holdNow();return Number.isFinite(now)?Math.max(0,(now-this.holdStartedAt)/1000):0;
+    if(!this.holdNow||!Number.isFinite(this.holdStartedAt))return null;
+    const now=this.holdNow();return Number.isFinite(now)?Math.max(0,(now-this.holdStartedAt)/1000):null;
   }
-  syncHeldCharge(){
-    if(!this.held||this.holdTriggered)return;
-    this.holdTime=Math.min(V2_HOLD_SECONDS,Math.max(this.holdTime,this.heldSeconds()));
-    if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
+  syncHeldCharge(dt=0){
+    const trained=this.greatAttackLevel>0,limit=trained?GREAT_ATTACK_CHARGE_SECONDS:V2_HOLD_SECONDS;
+    if(!this.held||this.holdTime>=limit)return 0;
+    const before=this.holdTime,physical=this.heldSeconds(),advanced=before+dt;
+    // Starfall uses the physical press clock through slow motion and frame stalls.
+    const elapsed=trained?(physical??advanced):Math.max(advanced,physical??0);
+    const missed=Math.max(0,elapsed-advanced);
+    const readyAt=this.holdTriggered?0:Math.max(0,V2_HOLD_SECONDS-before-missed);
+    this.holdTime=Math.min(limit,Math.max(before,elapsed));
+    if(!this.holdTriggered&&this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
+    if(trained&&this.holdTriggered){
+      const progress=this.holdTime/GREAT_ATTACK_CHARGE_SECONDS;
+      if(this.queuedAttack==='judgment')this.queuedChargeProgress=progress;
+      const cast=this.action?.greatAttack;
+      if(cast?.charging){cast.chargeProgress=progress;cast.progress=progress;}
+    }
+    return readyAt;
   }
   cancelAttackInput(){
     if(this.action?.greatAttack?.charging)this.action=null;
-    this.releaseHold();this.queuedAttack=null;
+    this.releaseHold();this.queuedAttack=null;this.queuedChargeProgress=0;
   }
   cancelAttack(){this.cancelShieldInput();this.action=null;this.cancelAttackInput();this.attackIndex=0;this.comboRemaining=0;}
   requestMovement(){
@@ -222,15 +235,10 @@ export class WarriorV2Controller {
       if(this.action){if(alive&&!spentAtStart)this.restoreStamina(dt);this.state=this.action.state;return {state:this.state,clipTime:this.action.time,knockedDown:true,moving:false,speed:0,loop:false,actionId:null,chargeProgress:0,blendDuration:this.state==='getUp'?.18:.08,events:[]};}
       this.state='idle';this.time=0;dt=remaining;
     }
-    const frameDt=dt;let readyAt=0,rollFrom=null,rollTo=null;
+    const frameDt=dt;let rollFrom=null,rollTo=null;
     // A fresh press is accepted during recovery or hit-stun. Charging runs alongside
     // the current clip; only one next action is buffered, regardless of tap spam.
-    if(this.held&&!this.holdTriggered){
-      const physicalTime=this.heldSeconds(),missedTime=Math.max(0,physicalTime-this.holdTime-dt);
-      readyAt=Math.max(0,V2_HOLD_SECONDS-this.holdTime-missedTime);
-      this.holdTime=Math.min(V2_HOLD_SECONDS,Math.max(this.holdTime+dt,physicalTime));
-      if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
-    }
+    const readyAt=this.syncHeldCharge(dt);
     const shieldActive=this.shieldPending||this.guarding;
     this.syncShieldHold(dt);
     // Guard drain belongs to this frame; release-time spending still enters via spentAtStart.
@@ -273,7 +281,8 @@ export class WarriorV2Controller {
       else {idleDt=dt-left;this.comboRemaining=this.combo.includes(this.action.state)?V2_COMBO_GRACE:0;this.action=null;}
     }
     if(!this.action&&this.queuedAttack&&!this.shieldHeld){
-      const kind=this.queuedAttack;this.queuedAttack=null;
+      const kind=this.queuedAttack,charge=this.queuedChargeProgress;
+      this.queuedAttack=null;this.queuedChargeProgress=0;
       const available=Math.max(0,idleDt-Math.max(0,readyAt-(frameDt-idleDt)));
       // If a held attack becomes ready partway through an otherwise free
       // frame, regenerate only the time before its actual execution.
@@ -281,7 +290,7 @@ export class WarriorV2Controller {
         recoveredBeforeAttack=Math.max(0,idleDt-available);this.restoreStamina(recoveredBeforeAttack);
       }
       if(kind==='judgment')this.attackIndex=0;
-      if(alive&&this.startAttack(kind==='normal'?undefined:kind)){
+      if(alive&&this.startAttack(kind==='normal'?undefined:kind,charge)){
         const duration=this.durations[this.action.state],rate=this.playbackRate(this.action.state);
         const playable=this.action.greatAttack?this.action.greatAttack.clipStep(0,available,rate):available;
         this.action.elapsed=available;this.action.time=Math.min(duration,playable*rate);idleDt=0;
@@ -306,5 +315,12 @@ export class WarriorV2Controller {
       guarding:this.guarding,shieldPending:this.shieldPending,
       rollFrom,rollTo,movementDt:idleDt,blendDuration:this.state==='dodge'?.06:this.state==='idle'?.24:.16,events:[]};
   }
-  get chargeProgress(){return this.queuedAttack==='judgment'?1:this.held&&!this.holdTriggered?this.holdTime/V2_HOLD_SECONDS:0;}
+  get chargeProgress(){
+    if(this.greatAttackLevel>0){
+      if(this.action?.greatAttack?.charging)return this.action.greatAttack.chargeProgress;
+      if(this.held&&!this.holdTriggered)return this.holdTime/GREAT_ATTACK_CHARGE_SECONDS;
+      return this.queuedAttack==='judgment'&&this.held?this.queuedChargeProgress:0;
+    }
+    return this.queuedAttack==='judgment'?1:this.held&&!this.holdTriggered?this.holdTime/V2_HOLD_SECONDS:0;
+  }
 }

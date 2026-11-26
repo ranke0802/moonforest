@@ -712,7 +712,7 @@ export function setupV03(api){
    try{return await returnQuestion.ask({title:t('travel.returnTitle'),message:t('travel.returnConfirm',{place:name===key?destination:name}),accept:t('travel.returnAccept')});}
    finally{if(!state.disposed)input.setSuspended(false);}
   },
-  aimTarget(position,nearest,starts=true){return state.screen==='play'?combatTarget.aim(position,nearest,starts):nearest;},
+  aimTarget(position,nearest,starts=true,reachScale=1){return state.screen==='play'?combatTarget.aim(position,nearest,starts,reachScale):nearest;},
   get aimReach(){return state.screen==='play'?combatTarget.reach:0;},
   get chainFoe(){return state.screen==='play'?combatTarget.chainFoe:null;},
   story,

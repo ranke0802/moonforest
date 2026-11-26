@@ -1,9 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createCombatTarget,TARGET_REACH,TARGET_FAR,TARGET_IDLE,CHAIN_HOLD} from '../src/v03/combat-target.js';
+import {STARFALL_REACH_SCALE,strikeAimRange} from '../src/v03/strike-approach.js';
 
 const foe=(id,x,z,hp=10)=>({id,active:true,brain:{hp},actor:{position:{x,y:0,z}}});
 const me={x:0,y:0,z:0};
+
+test('Starfall scales both acquisition ranges without extending a later guard or ordinary strike',()=>{
+ const aim=createCombatTarget(),near=foe('near',1,0),tracked=foe('tracked',13.5,0);
+ assert.equal(strikeAimRange(near),4);assert.equal(strikeAimRange(near,0,STARFALL_REACH_SCALE),6);
+ near.meleeAimDistance=5;assert.equal(strikeAimRange(near),5);assert.equal(strikeAimRange(near,0,STARFALL_REACH_SCALE),7.5);
+ aim.note('enemy',tracked);
+ assert.equal(aim.aim(me,near,true,STARFALL_REACH_SCALE),tracked);
+ assert.equal(aim.reach,13.5);assert.equal(aim.chainFoe,tracked);
+ assert.equal(strikeAimRange(tracked,aim.reach,STARFALL_REACH_SCALE),13.5);
+ assert.equal(aim.aim(me,near,false),near);assert.equal(aim.reach,0);
+ assert.equal(aim.aim(me,near,true),near);
+ // The foe chosen at the first swing moved, so only the extended chain can follow it.
+ near.actor.position.x=13.49;tracked.actor.position.x=2;
+ assert.equal(aim.aim(me,tracked,true,STARFALL_REACH_SCALE),near);
+ near.actor.position.x=13.51;
+ assert.equal(aim.aim(me,tracked,true,STARFALL_REACH_SCALE),tracked);
+});
 
 test('combat target: the foe that hit me or that I hit; let go when dead, far or idle',()=>{
  const target=createCombatTarget(),a=foe('a',2,0),b=foe('b',1,0);

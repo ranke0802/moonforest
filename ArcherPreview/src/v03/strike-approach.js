@@ -6,17 +6,19 @@ import {playerDimensions} from '../player-dimensions.js';
 import {PLAYER_STRIKE_AIM_YAW} from '../player-strikes.js';
 
 export const STRIKE_LUNGE=Object.freeze({slash:{distance:.55,until:.35},attack:{distance:.7,until:.35},judgment:{distance:.9,until:.3,reach:3,stop:GREAT_ATTACK_BASE_RADIUS}});
+export const STARFALL_REACH_SCALE=1.5;
 const point=new Vector3();
 const previousFeet=new Vector3();
-export const strikeAimRange=(foe,trackedReach=0)=>Math.max(foe?.meleeAimDistance??4,trackedReach);
+// Tracked reach already reflects the range used to select the chain foe.
+export const strikeAimRange=(foe,trackedReach=0,reachScale=1)=>Math.max((foe?.meleeAimDistance??4)*reachScale,trackedReach);
 
 function greatAttackStep(cast,player,foe,manual,profile,ratio,clipTime,aimReach){
   if(cast.charging||cast.impacted)return 0;
   const feet=player.position;
   if(cast.dashTime===undefined){
     cast.dashTime=0;cast.dashDistance=0;
-    cast.dashLimit=strikeAimRange(foe,aimReach);
-    cast.target=!manual&&foe?.active&&foe.brain?.hp>0&&Vector3.Distance(feet,foe.actor.position)<cast.dashLimit?foe:null;
+    cast.dashLimit=strikeAimRange(foe,aimReach,STARFALL_REACH_SCALE);
+    cast.target=!manual&&foe?.active&&foe.brain?.hp>0&&Vector3.Distance(feet,foe.actor.position)<=cast.dashLimit?foe:null;
     // Large bosses keep their physical body clearance when the warrior lands.
     cast.standoff=Math.max(profile.stop,(cast.target?.radius??0)+playerDimensions(player).standingClearance);
   }
