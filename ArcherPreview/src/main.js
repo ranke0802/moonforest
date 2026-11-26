@@ -1,4 +1,4 @@
-import {strikeLungeStep} from './v03/strike-approach.js';
+import {strikeLungeStep,applyStrikeTravel} from './v03/strike-approach.js';
 import {PlayerMeleeAim,meleeNeckPoint,meleeApproachPoint} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
 import {validateStoryboard} from './storyboard-document.js';
@@ -617,11 +617,16 @@ const actions = {
   },
   cancelShieldInput(source){return shieldInput.cancel(source);},
   isHudShieldHeld(pointerType){return shieldInput.hasTouchHud(pointerType);},
-  dodge() { if(ready&&isV2()&&allowed('dodge')&&(!boss?.active||boss.playerAlive))startDefense('dodge'); },
+  dodge() {
+    if(!ready||!isV2()||!allowed('dodge')||(boss?.active&&!boss.playerAlive))return;
+    if(world?.riding?.active){world.riding.startGallop();return;}
+    startDefense('dodge');
+  },
   setDodgeHeld(held,source='keyboard',pointerType){
     if(!held)return input?.dodgeSprintGesture?.end(source);
     if(!ready||!isV2()||!allowed('dodge')||controller.dead||boss.playerHp<=0||controller.groggy)return false;
     if(controller.captured){actions.dodge();return false;}
+    if(world?.riding?.active){world.riding.startGallop();return true;}
     return input?.dodgeSprintGesture?.begin(source,{pointerType});
   },
   cancelDodgeInput(source){return input?.dodgeSprintGesture?.cancel(source);},
@@ -1131,14 +1136,10 @@ function render(dt) {
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
       }else if(target&&Vector3.Distance(actor.position,target.actor.position)<Math.max(target.meleeAimDistance??4,world.v03?.aimReach??0)){
-        const point=versionRoute.edition&&!versionRoute.worldRevision?meleeApproachPoint(target,meleeTargetPoint):meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;
+        const point=result.greatAttack?target.actor.position:versionRoute.edition&&!versionRoute.worldRevision?meleeApproachPoint(target,meleeTargetPoint):meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;
         actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
       }
       meleeAim?.begin(result,actor,target,!!versionRoute.edition&&!versionRoute.worldRevision);
-      if(result.greatAttack&&world.v03?.lunge?.judgment){
-        const selected=!strikeByInput&&target?.active&&target.brain?.hp>0?target.actor.position:null;
-        result.greatAttack.aim(actor.position,actor.rotation.y-(config.forwardYaw||0),selected,playerDimensions(actor).ratio,world.v03.lunge.judgment,world.terrain,world.navigation);
-      }
     }
     // 0.3: the guard raised without a direction turns to that foe too (once, as it goes up).
     if(isV2()&&world.v03?.aimTarget){
@@ -1156,11 +1157,9 @@ function render(dt) {
       const fitted=!versionRoute.worldRevision,nearest=fitted?null:boss.nearestTarget(actor.position);
       const target=world.v03.chainFoe;
       const step=strikeLungeStep(lungeState,actor,result,lunge,target,nearest,strikeByInput,playerDimensions(actor).ratio,controller.durations?.[result.state]||1,dt,fitted);
-      if(step>1e-4){
-        const yaw=actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[result.state]??0),before=actor.position.clone();
-        actor.position.x+=Math.sin(yaw)*step;actor.position.z+=Math.cos(yaw)*step;
-        constrainDodge(actor.position,before,world.navigation,boss.encounters,movementLimit(before),playerDimensions(actor));
-        if(world.mapId==='village')clampVillageExit(actor.position,before);
+      if(step>1e-4||result.greatAttack){
+        const yaw=actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[result.state]??0);
+        applyStrikeTravel(actor,result,lungeState,yaw,step,world,boss.encounters,movementLimit(actor.position),playerDimensions(actor),world.mapId==='village'?clampVillageExit:null);
       }
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
@@ -1395,7 +1394,7 @@ try {
     if(encounter.playerHp<=0){world.developmentStoryboardLive?.update();if(!world.storyboardDeathPlayback&&!deathScreen.isOpen()){const events=world.storyboardEvents?.inspect();const count=!events?.active&&!events?.queued?world.storyboardEvents?.emit('death',{mapId:world.mapId})??0:0;if(count){world.storyboardDeathPlayback=true;input?.reset();cancelAttackInput();}else deathScreen.show();}}
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
-      if(options.captured){if(shownGreatAttack)clearGreatAttack();actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
+      if(options.captured){world.riding?.playerCaptured?.();if(shownGreatAttack)clearGreatAttack();actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
       attackSources.clear();attackPointerTypes.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
@@ -1429,7 +1428,7 @@ try {
     const cast=combatResult.greatAttack;
     if(cast){
       if(sample&&cast.center&&controller.action?.greatAttack===cast&&boss.playerAlive){
-        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus);
+        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus,actor.position);
         shownGreatAttack=cast;world.v03?.greatAttackFrame?.(cast,sample.blade);
       }else{sample=null;if(shownGreatAttack)clearGreatAttack();}
     }
@@ -1648,7 +1647,7 @@ try {
       event.preventDefault();lastPress=performance.now();
       if(actions.setDodgeHeld(true,'button:'+event.pointerId,event.pointerType)!==false)try{button.setPointerCapture(event.pointerId);}catch{}
     });
-    button.addEventListener('pointerup',event=>{event.preventDefault();actions.setDodgeHeld(false,'button:'+event.pointerId);if(button.hasPointerCapture?.(event.pointerId))button.releasePointerCapture(event.pointerId);});
+    button.addEventListener('pointerup',event=>{event.preventDefault();lastPress=performance.now();actions.setDodgeHeld(false,'button:'+event.pointerId);if(button.hasPointerCapture?.(event.pointerId))button.releasePointerCapture(event.pointerId);});
     for(const name of ['pointercancel','lostpointercapture'])button.addEventListener(name,event=>actions.cancelDodgeInput('button:'+event.pointerId));
     button.addEventListener('click',event=>{if(event.detail===0&&performance.now()-lastPress>350)actions.dodge();});
   }
@@ -1940,9 +1939,9 @@ try {
       world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
       world.riding=createRidingHorse({world,audio,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
-        forwardYaw:()=>config?.forwardYaw??0,tell:toast,riderAlive:()=>!controller?.dead&&boss.playerHp>0,canCall:()=>!boss.combatCount,
+        forwardYaw:()=>config?.forwardYaw??0,tell:toast,riderAlive:()=>!controller?.dead&&boss.playerHp>0,
         ridingAllowed:(onArrival=false)=>!!(ready&&!loadingAsset&&world.v03?.playing&&(onArrival||
-          !mapTransition?.busy&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended))});
+          !mapTransition?.busy&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.captured&&!controller?.groggy))});
       boss.combat.onPlayerDamaged=world.riding.playerDamaged;
       world.scene.onDisposeObservable.addOnce(()=>world.riding.dispose());
     }

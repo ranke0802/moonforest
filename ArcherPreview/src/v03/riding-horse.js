@@ -35,6 +35,7 @@ const OWNED = 'v03:stable:horse';
 const OUTDOORS = new Set(['village', 'great-plains', 'monster-forest']);
 const {gallopSeconds:GALLOP_SECONDS,gallopSpeed:GALLOP_SPEED,speedMultiplier}=RIDING_STATS;
 const MOUNT_SECONDS = 1.45, DISMOUNT_SECONDS = 1.30;
+const FALL_SECONDS = 52/30, FALL_FADE_SECONDS = 1;
 const WHISTLE_ARM = [
   ['mixamorig:RightArm', 'mixamorig:RightForeArm', [-.62,.72,-.20]],
   ['mixamorig:RightForeArm','mixamorig:RightHand',[.86,-.32,.41]]
@@ -60,7 +61,7 @@ for(const [strand,spread] of [['L',.12],['C',0],['R',-.12]]){
     [bone(3),bone(4),[-.15,-1,spread]]);
 }
 
-export function createRidingHorse({ world, root, storage, player, ridingAllowed, riderAlive=()=>true, canCall=()=>true, tell, forwardYaw, diagnostics, audio, makeHorse = createWagonHorse, pose = createBonePose,
+export function createRidingHorse({ world, root, storage, player, ridingAllowed, riderAlive=()=>true, tell, forwardYaw, diagnostics, audio, makeHorse = createWagonHorse, pose = createBonePose,
   enabled = new URLSearchParams(globalThis.location?.search).get('riding') !== '0' }) {
   // A URL-only comparison: no horse load, listeners or reads/writes to the player's save.
   if(!enabled){
@@ -161,18 +162,36 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     display();
   }
   function playerDamaged() {
-    if(horse&&!travellingTo&&phase!=='departing')leave();
+    if(horse&&!travellingTo&&phase!=='departing'&&phase!=='falling')leave();
+  }
+  function playerCaptured() {
+    if (!horse || travellingTo || phase==='departing' || phase==='falling') return;
+    if (!active && !transferring()) { leave(); return; }
+    if (active && saddle && !savedPrograms) keepRenderedMountPrograms(saddle,horse.root);
+    sounds?.stop();stopGallop();
+    if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
+    poseObserver=null;
+    releaseRider(true);
+    // The saddle normally follows the moving pelvis each frame. Attach it
+    // at its current world pose so it tips onto its side with this horse.
+    if(saddle){
+      const chest=horse.root.getChildTransformNodes(false,node=>node.name==='chest')[0];
+      if(chest){chest.computeWorldMatrix(true);saddle.setParent(chest);}
+    }
+    active=false;phase='falling';transferTime=0;
+    clip='Horse_Fall';horse.play(clip);horse.speed(1);
+    display();
   }
   async function toggle() {
     if (travellingTo) return;
     if (phase==='mounted') return dismount();
-    if(transferring()||phase==='departing')return;
+    if(transferring()||phase==='departing'||phase==='falling')return;
     if(horse){leave();return;}
     return mount(false);
   }
   async function mount(onArrival,findLanding) {
     const actor = player();
-    if (!owned || !actor || !riderAlive() || (!onArrival&&(!available||!ridingAllowed()||!canCall()))) return;
+    if (!owned || !actor || !riderAlive() || (!onArrival&&(!available||!ridingAllowed()))) return;
     const token = ++generation;
     mountMap = world.mapId;
     let timer;
@@ -239,8 +258,8 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       }
     }
   }
-  function releaseRider(){
-    transfer?.reset();transfer=null;
+  function releaseRider(restorePose=false){
+    transfer?.reset(restorePose);transfer=null;
     if(lift&&!lift.isDisposed()){lift.position.set(0,0,0);lift.rotation.z=0;}
     for(const mesh of hiddenArms)if(!mesh.isDisposed())mesh.setEnabled(true);
     hiddenArms=[];seatedBones=[];rig=lift=rider=riderContact=null;whistleRig=null;
@@ -249,6 +268,16 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   function advanceSequence(result,dt){
     const delta=Math.max(0,Math.min(dt,.1));
+    if(phase==='falling'){
+      transferTime+=delta;
+      if(transferTime<FALL_SECONDS)return;
+      if(clip!=='Horse_Down'){clip='Horse_Down';horse.play(clip);}
+      const opacity=Math.max(0,1-(transferTime-FALL_SECONDS)/FALL_FADE_SECONDS);
+      horse.setOpacity?.(opacity);
+      if(saddle)saddle.visibility=opacity;
+      if(!opacity)leave();
+      return;
+    }
     if(phase==='departing'){
       if(travel.update(delta)){leave();return;}
       sounds?.run(travel.speed,1-travel.progress);return;
@@ -328,15 +357,15 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   function updateAvailability(now) {
     if (!owned || travellingTo) return;
     now??=performance.now();
-    if (horse && (world.mapId !== mountMap || !riderAlive() || (rider && rider!==player()))) leave();
-    // Only a new call needs the enemy scan. Its button samples periodically,
-    // and the actual press rechecks immediately.
+    if (horse && (world.mapId !== mountMap || (!riderAlive()&&phase!=='falling') || (rider && rider!==player()))) leave();
+    // The toolbar samples availability periodically on foot. The call itself
+    // rechecks input and player state immediately, including a fresh capture.
     if(!horse && checkedMap===world.mapId && now<nextOfferCheck){
       if(labels!==ridingLabels(doc))display();
       return;
     }
     checkedMap=world.mapId;nextOfferCheck=now+150;
-    const value = OUTDOORS.has(world.mapId) && riderAlive() && ridingAllowed() && (!!horse || canCall());
+    const value = OUTDOORS.has(world.mapId) && riderAlive() && ridingAllowed();
     if (value !== available) { available = value; display(); }
     else if (labels !== ridingLabels(doc)) display();
   }
@@ -407,8 +436,8 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   doc.addEventListener('keydown',hotkey);
   reload();
-  return { wardrobe, offer, reload, leave, dismount, playerDamaged, beginTravel, finishTravel, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, get active(){return active&&!travellingTo;},get locksRider(){return locksRider()&&!travellingTo;},
-    get blocksFirstPerson(){return phase!=='on-foot'&&phase!=='departing';},
+  return { wardrobe, offer, reload, leave, dismount, playerDamaged, playerCaptured, beginTravel, finishTravel, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, get active(){return active&&!travellingTo;},get locksRider(){return locksRider()&&!travellingTo;},
+    get blocksFirstPerson(){return phase!=='on-foot'&&phase!=='departing'&&phase!=='falling';},
     inspect:()=>({state:travellingTo?'travelling':phase,mounts,gait:clip||null,...(gallopRemaining>0?{galloping:true}:{})}),
     dispose(){leave(false);sounds?.dispose();doc.removeEventListener('keydown',hotkey);controls.dispose();}
   };

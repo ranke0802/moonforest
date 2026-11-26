@@ -4,6 +4,7 @@ export function createRidingControls(root, toggle) {
   const doc = root.ownerDocument;
   const attack = root.querySelector('#attack-button');
   const guard = root.querySelector('#guard-button');
+  const dodge = root.querySelector('#dodge-button');
   const button = doc.createElement('button');
   button.type = 'button';
   button.className = 'v03-ride-toggle';
@@ -43,7 +44,7 @@ export function createRidingControls(root, toggle) {
     const wasMounted = state === 'mounted';
     const caption = mounted ? labels.dismount : (next === 'loading' || next === 'approaching') ? labels.cancel : labels.mount;
     button.hidden = !available;
-    button.disabled = next === 'mounting' || next === 'dismounting' || next === 'departing';
+    button.disabled = next === 'mounting' || next === 'dismounting' || next === 'departing' || next === 'falling';
     button.textContent = caption;
     button.setAttribute('aria-label', caption);
     button.title = caption + ' (H)';
@@ -58,6 +59,8 @@ export function createRidingControls(root, toggle) {
       override(guard, 'title', labels.dismount + ' (F)');
       override(guard, 'aria-keyshortcuts', 'F');
       override(guard, 'aria-pressed', null);
+      override(dodge, 'aria-label', labels.gallop);
+      override(dodge, 'title', labels.gallop + ' (Space)');
     } else if (wasMounted) {
       restore();
       change();

@@ -9,7 +9,9 @@ import {BossEncounter} from '../src/boss-encounter.js';
 import {BossBrain} from '../src/boss-spec.js';
 import {WolfV02ContactGate} from '../src/wolf-v02-hurt.js';
 import {GREAT_ATTACK_POSE,GREAT_ATTACK_HOLD,GREAT_ATTACK_SLOW} from '../src/v03/great-attack.js';
-import {STRIKE_LUNGE} from '../src/v03/strike-approach.js';
+import {WARRIOR_DIMENSIONS} from '../src/player-dimensions.js';
+import {ArenaNavigation} from '../src/navigation.js';
+import {strikeLungeStep,applyStrikeTravel,STRIKE_LUNGE} from '../src/v03/strike-approach.js';
 import {createStory} from '../src/v03/story.js';
 
 const durations={idle:2,run:1,attack:3,slash:1.5,judgment:4.33,shieldPush:2.37,dodge:2.46,knockdown:1.7,getUp:2};
@@ -54,7 +56,7 @@ test('normal body contacts damage and flash through the windup without pushing i
 
 function actor(x,z){return {position:new Vector3(x,0,z),rotation:{y:0},computeWorldMatrix(){}};}
 function opponent(player,x,z,wall=false){
-  const damage=[],world={navigation:{segmentClear:()=>!wall}};
+  const damage=[],world={v03:{playing:true},navigation:{segmentClear:()=>!wall}};
   const b=new BossEncounter(world,()=>{},(_at,n)=>damage.push(n));
   b.actor=actor(x,z);b.actor.rotation.y=Math.atan2(-x,-z);
   b.active=true;b.player=player;b.nodes={};b.brain=new BossBrain({Knock_Down_1:1});b.brain.hp=1000;
@@ -65,13 +67,11 @@ function opponent(player,x,z,wall=false){
 }
 
 test('the shown circle deals one equipped, rank-scaled three-hit burst to each admitted enemy, including wolves',()=>{
-  const player=actor(0,0),sword={computeWorldMatrix(){},getWorldMatrix:()=>Matrix.Identity()};
-  const baseReach=1.356,bonus=5;
+  const player=actor(0,3),sword={computeWorldMatrix(){},getWorldMatrix:()=>Matrix.Identity()};
+  const baseRadius=1.25,bonus=5;
   for(const level of [1,2,3,4,5]){
     const c=heavy(level),cast=c.action.greatAttack,sampler=new PlayerStrikeSampler(),mult=1+.2*level;
-    cast.aim(player.position,0,{x:0,y:0,z:3},1,STRIKE_LUNGE.judgment);
-    assert.deepEqual(cast.center,{x:0,y:0,z:3});
-    const radius=baseReach*mult;
+    const radius=baseRadius*mult;
     const guard=opponent(player,0,3);
     guard.b.brain.mode='guard';guard.b.kind='goblin';guard.b.onPlayerHit=()=>assert.fail('area guard canceled the cast for other enemies');
     const foes=[opponent(player,0,3),opponent(player,radius-.0001,3),opponent(player,radius+.0001,3),opponent(player,0,3,true),opponent(player,0,0)];
@@ -82,12 +82,13 @@ test('the shown circle deals one equipped, rank-scaled three-hit burst to each a
       const r=c.update(1/60);
       if(!r.greatAttack)break;
       const sample=sampler.sample(r,sword,null,true,0,bonus);
-      cast.sample(r.clipTime,sample,PLAYER_STRIKES.judgment[0],bonus);
+      cast.sample(r.clipTime,sample,PLAYER_STRIKES.judgment[0],bonus,player.position);
       almost(cast.radius,radius);if(cast.phase==='impact')impacts++;
       for(const {b} of [guard,...foes])c.pauseOnImpact(b.poseAndContacts(player,r,sample,null)??0);
     }
     const expected=[25,25,29].map(n=>Math.round(n*mult));
-    assert.equal(impacts,1);assert.equal(guard.b.brain.hp,1000);assert.deepEqual(guard.damage,['BLOCK']);
+    assert.equal(impacts,1);
+    assert.equal(guard.b.brain.hp,1000-expected.reduce((a,b)=>a+b,0));assert.deepEqual(guard.damage,['BREAK',...expected]);
     for(const {b,damage} of foes.slice(0,2)){assert.deepEqual(damage,expected);assert.equal(b.brain.hp,1000-expected.reduce((a,b)=>a+b,0));}
     for(const {b,damage} of foes.slice(2)){assert.deepEqual(damage,[]);assert.equal(b.brain.hp,1000);}
   }
@@ -111,10 +112,53 @@ test('interrupted input clears the rendered charge and camera, ordinary button r
   }
 });
 
-test('manual and unreachable targets leave the cast in front, clipped by a blocking wall',()=>{
-  const c=heavy(2),cast=c.action.greatAttack,origin={x:0,y:0,z:0},yaw=Math.PI/2;
-  cast.aim(origin,yaw,{x:-20,y:0,z:0},1,STRIKE_LUNGE.judgment,{heightAt:()=>.25},{segmentClear:(_a,b)=>b.x<=1});
-  assert.ok(cast.center.x>.98&&cast.center.x<=1);almost(cast.center.z,0);assert.equal(cast.center.y,.25);
+test('the predicted circle follows collision-limited ground travel and ends at the actual feet',()=>{
+  for(const scene of ['empty','wall','near','moving','far']){
+    const c=heavy(1),cast=c.action.greatAttack,player=actor(0,0),ledger={};
+    const world={navigation:new ArenaNavigation(scene==='wall'?[{id:'wall',x:0,z:.7,radius:.20,height:2}]:[]),terrain:{heightAt:(x,z)=>.04*z}};
+    const foe=['near','moving','far'].includes(scene)?{actor:actor(0,scene==='far'?8:3.2),active:true,brain:{hp:20},radius:.3}:null;
+    const hits=[],dt=1/60;
+    let first=null,prior=null;
+    for(let i=0;i<180;i++){
+      const r=c.update(dt);
+      if(!r.greatAttack)break;
+      if(scene==='moving'&&i===13)foe.actor.position.x=1.25;
+      const step=strikeLungeStep(ledger,player,r,STRIKE_LUNGE.judgment,foe,null,false,WARRIOR_DIMENSIONS.ratio,durations.judgment,dt);
+      applyStrikeTravel(player,r,ledger,player.rotation.y,step,world,foe?[foe]:[],48,WARRIOR_DIMENSIONS);
+      player.position.y=world.terrain.heightAt(player.position.x,player.position.z);
+      const sample={blade:[[0,0,0],[0,1,0]],contacts:[]};
+      cast.sample(r.clipTime,sample,PLAYER_STRIKES.judgment[0],0,player.position);
+      const point={...cast.center};first??=point;
+      if(cast.phase==='impact'){
+        assert.deepEqual(point,{x:player.position.x,y:player.position.y,z:player.position.z});
+        assert.ok(Math.hypot(point.x-prior.x,point.z-prior.z)<.01,scene+' final preview matches landing');
+        hits.push(cast.contains(foe?.actor.position,world.navigation));
+      }
+      prior=point;
+    }
+    assert.deepEqual(hits,[['near','moving'].includes(scene)]);
+    if(scene==='wall')assert.ok(player.position.z>.1&&player.position.z<.25);
+    if(scene==='moving')assert.ok(cast.center.x>first.x+.1);
+    else assert.ok(Math.hypot(cast.center.x-first.x,cast.center.z-first.z)<.01,scene+' stable landing');
+  }
+});
+
+test('an untrained heavy breaks a guard on contact in 0.3; a light hit is blocked and an evade still consumes the swing',()=>{
+  const player=actor(0,0),sword={computeWorldMatrix(){},getWorldMatrix:()=>Matrix.Identity()};
+  for(const [state,mode,playing,expected] of [
+    ['judgment','guard',true,['BREAK',25,25,29]],['slash','guard',true,['BLOCK']],
+    ['judgment','evade',true,['Dodge']],['judgment','guard',false,['BLOCK']]
+  ]){
+    const {b,damage}=opponent(player,0,2);b.brain.mode=mode;b.world.v03.playing=playing;
+    let groggy=0;b.onPlayerHit=(_duration,options)=>{if(options.reason==='blocked')groggy++;};
+    const sampler=new PlayerStrikeSampler();const start=PLAYER_STRIKES[state][0].from;
+    for(let i=0;i<12;i++){
+      const r={state,actionId:7,clipTime:start+i/60,actionElapsed:i/60};
+      b.poseAndContacts(player,r,sampler.sample(r,sword,null,true,0,5),null);
+    }
+    assert.deepEqual(damage,expected);assert.equal(groggy,Number(expected[0]==='BLOCK'));
+    assert.equal(b.brain.hp,expected[0]==='BREAK'?921:1000);
+  }
 });
 
 test('windup slows the world with the selected camera zoom and restores the view on interruption and disposal',t=>{

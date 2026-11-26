@@ -417,14 +417,15 @@ export class BossEncounter {
       // still enforces strike windows, per-swing deduplication and burst timing.
       const rangeContact=grounded&&distance<=(this.bearSize?.groundHitRange??BOSS_GROUNDED_HIT_RANGE);
       let contacts;
-      if(this.brain.defense){
+      const judgmentBreak=this.world.v03?.playing&&result.state==='judgment'&&this.brain.defense==='block';
+      if(this.brain.defense&&!judgmentBreak){
         // A contacting shield push breaks both block and evade states.
         // Other contacts still consume their swing without delayed damage.
         this.gate.pending=[];
         const all=sample.contacts??[sample],breaking=all.filter(contact=>contact.window?.id==='shield-push');
         for(const contact of all)if(!breaking.includes(contact)&&this.gate.check({...sample,...contact,capsules:contactCapsules,areaContact})){
           if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block'){
-            this.combat.onBladeContact?.(sample.actionId);if(!sample.radialAttack)this.playerBlocked();
+            this.combat.onBladeContact?.(sample.actionId);this.playerBlocked();
           }
         }
         contacts=breaking.length?this.gate.collect({...sample,contacts:breaking,capsules:contactCapsules,rangeContact,areaContact}):{hits:[],hitStop:0};
@@ -434,10 +435,17 @@ export class BossEncounter {
         // A released shield push should trigger the same fall response as a
         // heavy strike without changing its damage, hit feedback or input.
         const shieldPush=hit.id==='shield-push';
+        const breakGuard=judgmentBreak&&hit.id==='jump-cut'&&this.brain.defense==='block';
+        if(breakGuard)hit.ignoreDefense=true;
         // Optional light-combo reaction (an edition sets combat.lightHit): normal
         // hits make smaller foes flinch and slide back a little.
         const light=this.combat.lightHit,flinch=!!light&&!hit.heavy&&!shieldPush&&!light.skip?.includes(this.kind);
         if(!this.brain.hit(shieldPush?{...hit,heavy:true,ignoreDefense:true}:flinch?{...hit,interruptsBoss:true}:hit))continue;
+        if(breakGuard){
+          const head=this.nodes['mixamorig:Head']??this.nodes.Head;
+          const at=head?.getAbsolutePosition()??this.damageNumberPosition();
+          this.onDamage(at.add(new Vector3(0,.3,0)),'BREAK',false,'guard-break');
+        }
         if(!shieldPush)this.combat.onBladeContact?.(sample.actionId);
         if(flinch&&this.brain.hp>0&&this.brain.mode!=='down'&&!this.brain.unflinching){const away=this.actor.position.subtract(player.position);away.y=0;if(away.lengthSquared()>1e-8)this.knockVelocity.copyFrom(away.normalize().scale(light.push));}
         if(this.brain.hp>0)this.animator?.reactToHit?.();

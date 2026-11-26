@@ -11,6 +11,8 @@ import {SADDLE_PAD_HEIGHT} from '../src/v03/riding-saddle.js';
 import {configurePlayerSize} from '../src/player-dimensions.js';
 import {CharacterAnimator} from '../src/animation.js';
 import {inspectPreparedEffects} from '../src/prepared-effect-lifetime.js';
+import {BossEncounter} from '../src/boss-encounter.js';
+import {WolfEncounter} from '../src/wolf-encounter.js';
 
 function skipPaint(g){
  delete g.extensionsRequired;delete g.extensionsUsed;delete g.images;delete g.materials;delete g.textures;
@@ -229,7 +231,33 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
   for(let cycle=0;cycle<4;cycle++){
     await click();const programs=await drawnPrograms();
     assert.ok(programs.every((effect,i)=>effect===firstPrograms[i]),'remount compiled a replacement program');
-    await click();await nextFrame();
+    if(cycle<2){
+      await click();
+    }else{
+      const Enemy=cycle===2?BossEncounter:WolfEncounter;
+      const enemy=new Enemy(world,()=>{},()=>{},(_duration,options)=>{if(options.captured)stable.playerCaptured();});
+      const actorNodes=Object.fromEntries(asset.transformNodes.map(node=>[node.name,node]));
+      const body=scene.getMeshByName('wagon_horse'),seat=scene.getMeshByName('v03-riding-saddle');
+      const paintAlpha=body.material.alpha,outline=scene.getMeshByName('v03-riding-reins');
+      assert.ok(enemy.grab.start(root,actorNodes,2));
+      assert.equal(stable.inspect().gait,'Horse_Fall');assert.ok(!stable.active&&!stable.locksRider);
+      assert.equal(lift.position.lengthSquared(),0);assert.ok(!outline.isEnabled());assert.equal(seat.parent.name,'chest');
+      if(cycle===2){
+        const foot=actorNodes['mixamorig:RightFoot'];foot.computeWorldMatrix(true);
+        assert.ok(Vector3.Distance(foot.absolutePosition,enemy.grab.startFoot)<.001,'bear anchored the released ankle');
+      }
+      stable.playerDamaged();stable.playerCaptured();enemy.grab.reset();
+      for(let frame=0;frame<180&&stable.inspect().state==='falling';frame++){
+        stable.afterMove({state:'hit'},0,1/60);scene.render();engine.endFrame();
+        if(frame===60){assert.equal(stable.inspect().gait,'Horse_Fall');assert.equal(body.visibility,1);}
+        if(frame===130){
+          assert.equal(stable.inspect().gait,'Horse_Down');assert.ok(body.visibility>.4&&body.visibility<.8);
+          assert.equal(seat.visibility,body.visibility);assert.equal(body.material.alpha,paintAlpha);
+        }
+      }
+      assert.ok(body.isDisposed()&&seat.isDisposed()&&outline.isDisposed());
+    }
+    await nextFrame();
     assert.equal(inspectPreparedEffects(engine).kept,2);assert.equal(inspectPreparedEffects(engine).refs,0);
     assert.deepEqual(inventory(),afterFirst);
   }

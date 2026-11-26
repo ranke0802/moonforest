@@ -9,12 +9,12 @@ import {BossBattle} from '../src/boss-battle.js';
 import {BossModelLibrary} from '../src/boss-models.js';
 import {configurePlayerSize} from '../src/player-dimensions.js';
 import {PlayerMeleeAim,meleeApproachPoint,meleeNeckPoint} from '../src/player-melee-aim.js';
-import {PLAYER_STRIKE_AIM_YAW,PlayerStrikeSampler} from '../src/player-strikes.js';
+import {PLAYER_STRIKES,PLAYER_STRIKE_AIM_YAW,PlayerStrikeSampler} from '../src/player-strikes.js';
 import {MeleeContactGate} from '../src/melee-collision.js';
 import {CHAPTER_MONSTER_MODELS} from '../src/v03/chapter-monster-models.js';
 import {createChapterEnemyFactory} from '../src/v03/chapter-enemy-encounter.js';
-import {STRIKE_LUNGE,strikeLungeStep} from '../src/v03/strike-approach.js';
-import {constrainDodge} from '../src/dodge-collision.js';
+import {GreatAttackCast} from '../src/v03/great-attack.js';
+import {STRIKE_LUNGE,strikeLungeStep,applyStrikeTravel} from '../src/v03/strike-approach.js';
 import {setHitScale} from '../src/hit-scale.js';
 import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
 
@@ -58,33 +58,33 @@ test('shipped warrior swings track their target and use real contacts on low and
   await battle.summon(player,1,kind);return battle.encounters.find(e=>e.kind===kind||e.regularWolfId===kind);
  }
  let serial=0;
- function swing(foe,state,start,fitted,other,{yaw=0,level=0,manual=false,blocked=false}={}){
+ function swing(foe,state,start,fitted,other,{yaw=0,level=0,manual=false,blocked=false,rank=0}={}){
   aim.reset();animator.transition('idle',{clipTime:0,actionId:null,blendDuration:0});animator.update(1);scene.render();
   player.position.set(0,0,0);foe.actor.position.set(0,level,start);foe.actor.rotation.y=yaw;
   foe.player=player;foe.actor.computeWorldMatrix(true);foe.alignPose();refreshPoseMatrices(foe.poseNodes);
-  const first=fitted?meleeApproachPoint(foe,new Vector3()):meleeNeckPoint(foe,new Vector3())??foe.actor.position;
+  const first=rank?foe.actor.position:fitted?meleeApproachPoint(foe,new Vector3()):meleeNeckPoint(foe,new Vector3())??foe.actor.position;
   const correction=PLAYER_STRIKE_AIM_YAW[state]??0;
   player.rotation.y=(manual?Math.PI:Math.atan2(first.x,first.z))+correction;
   const gate=new MeleeContactGate(),sampler=new PlayerStrikeSampler(),ledger={},actionId=++serial,hits=[];
   const duration=animator.durations[state],dt=1/60;
   const navigation={obstacles:blocked?[{x:0,z:.48,radius:.12}]:[],segmentClear:()=>!blocked};
   const hp=foe.brain.hp;if(blocked)world.navigation=navigation;
+  const cast=rank?new GreatAttackCast(actionId,rank):null;
+  if(cast)cast.holdLeft=0; // This fixture samples the authored clip by clip seconds.
+  const contactWorld={navigation,terrain:world.terrain},encounters=other?[foe,other]:[foe];
   for(let time=0;time<=duration;time+=dt){
-   const action={actionId,state,clipTime:time};
+   const action={actionId,state,clipTime:time,greatAttack:cast};
    aim.restore();animator.transition(state,action);animator.update(dt);
    if(time===0)aim.begin(action,player,foe,fitted);
    const step=strikeLungeStep(ledger,player,action,STRIKE_LUNGE[state],foe,other??foe,manual,dimensions.ratio,duration,dt,fitted);
-   if(step>0){
-    const before=player.position.clone(),heading=player.rotation.y-correction;
-    player.position.x+=step*Math.sin(heading);player.position.z+=step*Math.cos(heading);
-    constrainDodge(player.position,before,navigation,[foe,...(other?[other]:[])],50,dimensions);
-   }
+   if(step>0||cast)applyStrikeTravel(player,action,ledger,player.rotation.y-correction,step,contactWorld,encounters,50,dimensions);
    scene.render();refreshPoseMatrices(pose);aim.apply(action,player,dt);
    const sample=sampler.sample(action,sword,null,true,player.rotation.y,0,dimensions);
    const capsules=foe.hurtCapsules();
    // Test the hooded goblin's real body independently of its upright assist.
    if(foe.kind==='goblin')capsules.pop();
-   hits.push(...gate.collect({...sample,capsules}).hits.map(h=>h.id));
+   if(cast)cast.sample(time,sample,PLAYER_STRIKES.judgment[0],0,player.position);
+   hits.push(...gate.collect({...sample,capsules,areaContact:cast?.contains(foe.actor.position,navigation)}).hits.map(h=>h.id));
    if(blocked)foe.poseAndContacts(player,action,sample,null);
   }
   if(blocked){delete world.navigation;assert.equal(foe.brain.hp,hp,'wall occludes the real encounter damage path');}
@@ -113,6 +113,11 @@ test('shipped warrior swings track their target and use real contacts on low and
   assert.deepEqual(leap.hits,['jump-cut','jump-cut','jump-cut'],kind+' closes for one normal three-part heavy hit');
   assert.ok(leap.travel<=STRIKE_LUNGE.judgment.reach*dimensions.ratio+.001);
   assert.deepEqual(outOfReach.hits,[],kind+' misses beyond the leap range');
+  if(kind==='fox'||kind==='goblin'||kind==='goblin-warrior'){
+   const charged=swing(foe,'judgment',3.2,true,nearSide,{rank:1});
+   assert.deepEqual(charged.hits,['jump-cut','jump-cut','jump-cut'],kind+' lies inside the level-one landing circle');
+   assert.ok(Vector3.Distance(player.position,foe.actor.position)<=1.5);
+  }
   if(kind==='goblin-warrior'){
    const far=swing(foe,'slash',4,true,null),away=swing(foe,'slash',1.9,true,null,{manual:true});
    assert.deepEqual(far.hits,[]);assert.deepEqual(away.hits,[]);

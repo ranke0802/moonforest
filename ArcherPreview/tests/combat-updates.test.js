@@ -123,13 +123,14 @@ test('throw landing deals exactly 300 or 390 rear-critical damage, bypassing the
  }
 });
 
-test('actual grab captures Judgment before contact and clears its action, buffered input and pending burst',()=>{
+for(const level of [0,5])test(`actual grab captures Judgment at rank ${level} before contact and clears its action, buffered input and pending burst`,()=>{
  const engine=new NullEngine(),scene=new Scene(engine),player=new TransformNode('player',scene);
  const c=new WarriorV2Controller({durations}),sampler=new PlayerStrikeSampler();
  const b=new BossEncounter({},()=>{},()=>{},(duration,options)=>{if(options.captured)c.capture();else c.releaseCapture();sampler.reset();});
  b.actor=new TransformNode('boss',scene);b.actor.position.z=1.8;b.player=player;b.brain=new BossBrain({Skill_02:2});b.brain.start('Skill_02','attack');
  b.playerNodes={};for(const [name,y] of [['RightFoot',.1],['Head',1.7]]){const node=new TransformNode(name,scene);node.parent=player;node.position.y=y;b.playerNodes['mixamorig:'+name]=node;}
- c.startAttack('judgment');const windup=c.update(.4);assert.ok(windup.clipTime<PLAYER_STRIKES.judgment[0].from);
+ c.greatAttackLevel=level;c.startAttack('judgment');const windup=c.update(.4);assert.ok(windup.clipTime<PLAYER_STRIKES.judgment[0].from);
+ if(level)assert.ok(windup.greatAttack.holdLeft>0);
  c.setAttackHeld(true);b.gate.pending=[{damage:24}];
  assert.equal(b.receiveBossHit({damage:300,grab:true,bodyContact:true,shieldContact:true,action:windup}),true);
  assert.equal(c.captured,true);assert.equal(c.action,null);assert.equal(c.held,false);assert.equal(b.gate.pending.length,0);

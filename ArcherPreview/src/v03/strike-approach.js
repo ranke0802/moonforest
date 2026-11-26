@@ -1,19 +1,22 @@
 import {Vector3} from '@babylonjs/core/Maths/math.vector.js';
 import {isLowMeleeTarget,meleeApproachPoint} from '../player-melee-aim.js';
+import {constrainDodge} from '../dodge-collision.js';
+import {GREAT_ATTACK_BASE_RADIUS,GREAT_ATTACK_IMPACT} from './great-attack.js';
 import {PLAYER_STRIKE_AIM_YAW} from '../player-strikes.js';
 
-export const STRIKE_LUNGE=Object.freeze({slash:{distance:.55,until:.35},attack:{distance:.7,until:.35},judgment:{distance:.9,until:.3,reach:3,stop:1.25}});
+export const STRIKE_LUNGE=Object.freeze({slash:{distance:.55,until:.35},attack:{distance:.7,until:.35},judgment:{distance:.9,until:.3,reach:3,stop:GREAT_ATTACK_BASE_RADIUS}});
 const point=new Vector3();
 
 // Ground travel follows the attack's locked target. The caller sweeps each
 // step against terrain, walls and every solid actor, including bystanders.
 export function strikeLungeStep(state,player,action,profile,foe,nearest,manual,ratio,duration,dt,fitted=true){
-  const phase=Math.min(1,(action.clipTime??0)/(duration*profile.until));
+  const end=action.greatAttack?GREAT_ATTACK_IMPACT:duration*profile.until;
+  const phase=Math.min(1,(action.clipTime??0)/end);
   if(fitted&&state.id===action.actionId&&state.finished)return 0;
   const track=fitted?(manual?null:foe):foe??(profile.reach?nearest:null);
   const live=track?.active&&track.brain?.hp>0,p=player.position;
   const root=live?track.actor.position:null;
-  const goal=live?(fitted?meleeApproachPoint(track,point):root):null;
+  const goal=live&&fitted&&!action.greatAttack?meleeApproachPoint(track,point):root;
   const rootGap=root?(fitted?Math.hypot(root.x-p.x,root.z-p.z):Vector3.Distance(p,root)):Infinity;
   const gap=fitted&&goal?Math.min(rootGap,Math.hypot(goal.x-p.x,goal.z-p.z)):rootGap;
   const stop=profile.stop??(fitted&&isLowMeleeTarget(track)?1:1.3);
@@ -29,6 +32,29 @@ export function strikeLungeStep(state,player,action,profile,foe,nearest,manual,r
     player.rotation.y+=Math.max(-4*dt,Math.min(4*dt,Math.atan2(Math.sin(turn),Math.cos(turn))));
   }
   const step=want-state.done;state.done=want;state.finished=phase===1;
-  if(fitted)return Math.max(0,Math.min(step,gap-stop));
+  if(fitted){
+    const move=Math.max(0,Math.min(step,gap-stop));
+    if(action.greatAttack)state.remaining=Math.max(0,Math.min(state.span-want,gap-stop-move));
+    return move;
+  }
   return nearest?.actor?Math.max(0,Math.min(step,Vector3.Distance(p,nearest.actor.position)-stop)):step;
+}
+
+function sweepStrike(to,from,heading,step,world,encounters,limit,dimensions,clampExit){
+  to.x=from.x;to.z=from.z;
+  if(step<=1e-4)return;
+  to.x+=Math.sin(heading)*step;to.z+=Math.cos(heading)*step;
+  constrainDodge(to,from,world.navigation,encounters,limit,dimensions);
+  clampExit?.(to,from);
+}
+
+// Forecast only the unspent, currently reachable travel. A moving target,
+// changed facing, wall or bystander updates the preview before impact.
+export function applyStrikeTravel(player,action,state,heading,step,world,encounters,limit,dimensions,clampExit){
+  const feet=player.position;
+  if(step>1e-4)sweepStrike(feet,feet.clone(),heading,step,world,encounters,limit,dimensions,clampExit);
+  const cast=action.greatAttack;
+  if(!cast||cast.impacted)return;
+  sweepStrike(cast.center,feet,heading,state.remaining,world,encounters,limit,dimensions,clampExit);
+  cast.center.y=world.terrain?.heightAt?.(cast.center.x,cast.center.z)??feet.y;
 }

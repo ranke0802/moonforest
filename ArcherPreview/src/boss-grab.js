@@ -23,6 +23,8 @@ export class BossGrab {
     this.savedRotation=player.rotation.clone();this.savedQuaternion=player.rotationQuaternion?.clone()||null;this.savedY=player.position.y;
     this.startPosition=player.position.clone();
     this.startRotation=this.savedQuaternion?.clone()||Quaternion.FromEulerVector(this.savedRotation);
+    // Release a mounted pose before sampling the captured ankle and body axis.
+    this.onControl(true);
     this.foot=localPosition(nodes['mixamorig:RightFoot'],player);
     this.points=Object.entries(nodes).filter(([name])=>name.startsWith('mixamorig:')).map(([,node])=>localPosition(node,player));
     const bodyAxis=localPosition(nodes['mixamorig:Head'],player).subtract(this.foot).normalize();
@@ -30,7 +32,7 @@ export class BossGrab {
     this.localFrame=Quaternion.RotationQuaternionFromAxis(Vector3.Cross(bodyAxis,front).normalize(),bodyAxis,front);
     this.startFoot=nodes['mixamorig:RightFoot'].getAbsolutePosition().clone();
     this.previousPosition=player.position.clone();this.velocity=Vector3.Zero();this.radial=new Vector3(0,0,1);
-    this.onControl(true);return true;
+    return true;
   }
   hold(dt,boss,nodes){
     const hand=nodes['mixamorig:RightHand'],forearm=nodes['mixamorig:RightForeArm'];

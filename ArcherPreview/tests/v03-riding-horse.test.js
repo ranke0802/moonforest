@@ -16,10 +16,10 @@ function harness({delay=false}={}) {
   const world = {mapId:'great-plains',terrain:{heightAt:()=>0}};
   const saddle = {position:new Vector3(),rotation:new Vector3(),parent:{computeWorldMatrix:()=>Matrix.IdentityReadOnly},isDisposed:()=>false};
   const actor = {position:{x:1,z:2},rotation:{y:0},metadata:{saddleOffset:saddle},getChildMeshes:()=>[]};
-  let combat=false, paused=false, alive=true, disposeCount=0, loads=0, scans=0, finish;
+  let paused=false, alive=true, disposeCount=0, loads=0, scans=0, finish;
   const clips=[],notices=[];
   const stable=createRidingHorse({root,world,player:()=>actor,
-    storage,ridingAllowed:arrival=>arrival||!paused,riderAlive:()=>alive,canCall:()=>{scans++;return !combat;},forwardYaw:()=>0,tell:text=>notices.push(text),
+    storage,ridingAllowed:arrival=>{scans++;return arrival||!paused;},riderAlive:()=>alive,forwardYaw:()=>0,tell:text=>notices.push(text),
     pose:()=>({ready:true,hips:{computeWorldMatrix(){},get absolutePosition(){return new Vector3(0,1+saddle.position.y,0);}},apply(){}}),
     makeHorse:()=>{loads++;return {ready:delay?new Promise(r=>{finish=r;}):Promise.resolve({}),play:c=>clips.push(c),
       saddleContactToRef(v){v.set(0,1.48,0);return true;},speed(){},place(){},dispose(){disposeCount++;}};}});
@@ -30,7 +30,7 @@ function harness({delay=false}={}) {
   };
   const click=async()=>{await button.onclick();advance();};
   return {stable,button,root,attack,doc,clips,notices,world,slot,saddle,click,advance,finish:()=>finish({}),
-    combat:()=>{combat=true;},pause:value=>{paused=value;},die:()=>{alive=false;},scans:()=>scans,loads:()=>loads,disposed:()=>disposeCount};
+    combat:()=>{world.combatCount=1;},pause:value=>{paused=value;},die:()=>{alive=false;},scans:()=>scans,loads:()=>loads,disposed:()=>disposeCount};
 }
 test('the driver grants the horse to the current save; only mounting loads the model',async()=>{
   const h=harness();h.stable.updateAvailability();assert.equal(h.button.hidden,true);
@@ -57,7 +57,7 @@ test('dialogue, notices, combat reactions and enemy attack attempts keep the sam
   assert.equal(foe.playerHp,500);assert.ok(ride.active);assert.equal(h.loads(),1);assert.equal(h.disposed(),0);
   foe.playerInvulnerable=0;foe.receiveBossHit({damage:15,bodyContact:true});
   assert.equal(foe.playerHp,485);assert.equal(ride.active,false);assert.equal(h.saddle.position.y,0);assert.equal(h.disposed(),1);
-  ride.updateAvailability();assert.ok(h.button.hidden);ride.dispose();
+  ride.updateAvailability();assert.equal(h.button.hidden,false);ride.dispose();
 });
 test('mount controls and acquisition/save/load messages follow all five game languages',async()=>{
   const h=harness();h.stable.offer();h.stable.updateAvailability();
@@ -133,14 +133,15 @@ test('touch interaction and a late bag button survive mounting, cancellation and
     interact.sync(null);assert.equal(h.attack.getAttribute('aria-label'),'Attack');
   }finally{interact.dispose();h.stable.dispose();}
 });
-test('on foot the mount hint samples combat without per-frame scans and clicks still check immediately',async()=>{
+test('the mount hint samples input availability, and a new call succeeds with an alerted enemy',async()=>{
   const h=harness();
   for(let i=0;i<600;i++)h.stable.updateAvailability(100+i*1000/60);
   assert.equal(h.scans(),0);h.stable.offer();
   for(let i=0;i<600;i++)h.stable.updateAvailability(10100+i*1000/60);
   assert.ok(h.scans()>=60&&h.scans()<=67);
   assert.equal(h.loads(),0);assert.equal(h.button.hidden,false);
-  h.combat();await h.click();assert.equal(h.loads(),0);assert.equal(h.stable.active,false);
+  h.pause(true);await h.click();assert.equal(h.loads(),0);
+  h.pause(false);h.combat();await h.click();assert.equal(h.loads(),1);assert.ok(h.stable.active);
 });
 test('the riding URL switch skips the horse UI and does not read or write ownership',t=>{
   t.mock.method(URLSearchParams.prototype,'get',key=>key==='riding'?'0':null);

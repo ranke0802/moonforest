@@ -97,9 +97,9 @@ export function createRiderTransferPose(actor){
   lift.rotation.set(0,0,0);Vector3.FromFloatsToRef(position.x-actor.position.x,position.y-actor.position.y,position.z-actor.position.z,delta);
   Vector3.TransformNormalToRef(delta,actorInv,lift.position);lift.markAsDirty();
  }
- function reset(){
+ function reset(force=false){
   landingCape?.reset();
-  if(!changed)return;
+  if(!changed&&!force)return;
   for(const [node,q] of initial){node.rotationQuaternion.copyFrom(q);node.markAsDirty();}
   lift.position.set(0,0,0);lift.rotation.set(0,0,0);lift.markAsDirty();changed=false;
  }

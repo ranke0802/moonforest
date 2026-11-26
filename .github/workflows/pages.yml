@@ -55,6 +55,7 @@ jobs:
           ArcherPreview/tests/v03-character-progression.test.js
           ArcherPreview/tests/v03-starfall-visual.test.js
           ArcherPreview/tests/v03-great-attack-combat.test.js
+          ArcherPreview/tests/combat-updates.test.js
           ArcherPreview/tests/v03-potion-slots.test.js
           ArcherPreview/tests/v03-skill-training-menu.test.js
           ArcherPreview/tests/v03-weapon-condition-hud.test.js
@@ -73,6 +74,10 @@ jobs:
           ArcherPreview/tests/v03-return-gate.test.js
           ArcherPreview/tests/cave-portal-facing.test.js
           ArcherPreview/tests/v03-riding-horse.test.js
+          ArcherPreview/tests/dodge-sprint-hud-integration.test.js
+          ArcherPreview/tests/shield-hud-integration.test.js
+          ArcherPreview/tests/equipment-draw-ranges.test.js
+          ArcherPreview/tests/hud-layout.test.js
           ArcherPreview/tests/v03-riding-geometry.test.js
           ArcherPreview/tests/v03-riding-horse-path.test.js
           ArcherPreview/tests/v03-riding-audio.test.js
