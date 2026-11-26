@@ -19,7 +19,7 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 #app[data-character-menu]:not([data-character-portrait]) #viewport{visibility:hidden}
 .mf-character-menu nav,.mf-menu-card,.mf-character-menu button,.mf-character-menu select{color:inherit;font:inherit}
 .mf-character-menu nav{display:flex;align-items:center;gap:3px;padding:4px 10px;border-bottom:1px solid var(--line);background:#18231ff7}
-.mf-character-menu nav button,.mf-menu-filters button,.mf-character-menu select,.mf-menu-item button{min-height:42px;padding:5px 12px;border:1px solid transparent;background:transparent;cursor:pointer}
+.mf-character-menu nav button,.mf-menu-filters button,.mf-character-menu select,.mf-menu-item button{min-height:44px;padding:5px 12px;border:1px solid transparent;background:transparent;cursor:pointer}
 .mf-character-menu button:focus-visible,.mf-character-menu select:focus-visible,.mf-menu-pose:focus-visible{outline:2px solid var(--mf-focus);outline-offset:-2px}
 .mf-character-menu button[aria-pressed=true],.mf-menu-filters button[aria-pressed=true]{color:var(--gold);border-color:var(--line);background:#78644338}
 .mf-menu-gold{margin-left:auto;color:var(--gold);white-space:nowrap}
@@ -35,15 +35,16 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-pose:active{cursor:grabbing}
 .mf-menu-model{min-width:0;min-height:0;display:grid;grid-template-columns:minmax(50px,16%) 1fr minmax(50px,16%);gap:6px;padding:clamp(4px,1.7vmin,16px)}
 .mf-menu-slots{display:grid;align-content:center;gap:6px;min-width:0;overflow:auto}
-.mf-menu-slots>*{display:grid;align-content:center;min-height:44px;padding:4px;text-align:center;border:1px solid #9b88567d;background:#141b18d9;font-size:12px;line-height:1.2;overflow-wrap:anywhere}
+.mf-menu-slots>*{display:grid;align-content:center;min-height:44px;padding:4px;text-align:center;border:1px solid #9b88567d;background:#141b18d9;font-size:13px;line-height:1.2;overflow-wrap:anywhere}
 .mf-menu-slots button{cursor:pointer}
 .mf-menu-slots .mf-town-item-icon{--mf-item-icon-size:clamp(20px,4vmin,36px);justify-self:center}
 .mf-menu-grid button>.mf-town-item-icon{inline-size:86%;block-size:86%;align-self:center}
 .mf-menu-item>.mf-town-item-icon{--mf-item-icon-size:clamp(42px,10vmin,72px);display:block;margin:4px 0}
-.mf-menu-slots small,.mf-menu-item>small{color:#c9bb99;font-size:12px}
+.mf-menu-slots small,.mf-menu-item>small{color:#c9bb99;font-size:13px}
 .mf-character-menu[data-page=Inventory] .mf-menu-body{grid-template-columns:1.5fr 1fr}
 .mf-menu-filters{display:flex;align-items:center;gap:2px;flex-wrap:wrap;margin-bottom:9px}
 .mf-menu-filters button,.mf-character-menu select{padding:2px 6px}
+.mf-menu-filters button{min-width:44px}
 .mf-character-menu select{margin-left:auto;color:var(--ink);background:#202c25}
 .mf-menu-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:3px}
 .mf-menu-grid>*{aspect-ratio:1;min-width:0;border:1px solid #a692664d;background:#101916}
@@ -53,8 +54,8 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-grid .mf-menu-gear-tile{padding:0;border-radius:.45rem}
 .mf-menu-gear-tile>.mf-equipment-icon{width:100%;height:100%}
 .mf-menu-gear-tile[aria-pressed=true]>.mf-equipment-icon{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
-.mf-menu-gear-tile .mf-equipment-icon>b{right:1px;bottom:1px;padding:0 .2em;font-size:clamp(10px,1.8vmin,13px)}
-.mf-menu-gear-tile>.mf-menu-count,.mf-menu-gear-tile>.mf-menu-worn{padding:1px 2px;border-radius:2px;background:var(--mf-panel);color:#fff3d8;font-size:clamp(10px,1.8vmin,13px)}
+.mf-menu-gear-tile .mf-equipment-icon>b{right:1px;bottom:1px;padding:0 .2em;font-size:clamp(12px,1.8vmin,13px)}
+.mf-menu-gear-tile>.mf-menu-count,.mf-menu-gear-tile>.mf-menu-worn{padding:1px 2px;border-radius:2px;background:var(--mf-panel);color:#fff3d8;font-size:clamp(12px,1.8vmin,13px)}
 .mf-menu-gear-tile>.mf-menu-count{right:auto;left:2px}
 .mf-menu-gear-tile>.mf-menu-count.is-large{bottom:1.5em}
 .mf-menu-gear-tile>.mf-menu-worn{top:2px;right:2px;bottom:auto;color:#b8e6b6}
@@ -63,7 +64,7 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-menu-item{border-left:1px solid var(--line)}
 .mf-menu-item>.mf-equipment-card{margin-bottom:.5rem}
 .mf-menu-item .mf-equipment-card h2{margin:2px 0;color:#fff3d8;overflow-wrap:anywhere}
-.mf-menu-item .mf-equipment-card small,.mf-menu-item .mf-menu-quantity{display:block;color:#c9bb99;font-size:12px}
+.mf-menu-item .mf-equipment-card small,.mf-menu-item .mf-menu-quantity{display:block;color:#c9bb99;font-size:inherit}
 .mf-menu-item>.commercial-icon,.mf-menu-item>.mf-menu-blank{width:72px;height:72px;margin:8px 0;display:grid;place-items:center}
 .mf-menu-item button,.mf-menu-equipped{display:inline-block;margin-top:10px;border:1px solid var(--line);color:var(--gold);padding:6px 12px}
 .mf-menu-item button:disabled{opacity:.45}
@@ -85,10 +86,10 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px;align-items:center;padding:4px 6px;text-align:left;
   background:#0d1410;border:1px solid #8e795466;border-radius:4px;color:#a8946a;cursor:pointer}
 .mf-skill-node b{display:block;font-weight:400;font-size:13px;line-height:1.2;color:#f2ebd8b3;overflow-wrap:anywhere}
-.mf-skill-node em{display:block;margin-top:1px;font-style:normal;font-size:11px;line-height:1.2;color:#f2ebd880}
+.mf-skill-node em{display:block;margin-top:1px;font-style:normal;font-size:12px;line-height:1.2;color:#f2ebd880}
 .mf-character-menu .mf-skill-node.is-ready{background:#1c2a20;border-color:var(--gold);color:var(--gold)}
 .mf-skill-node.is-ready b{color:var(--ink)}.mf-skill-node.is-ready em{color:var(--gold)}
-.mf-character-menu .mf-skill-node.is-open{grid-template-columns:1fr;place-items:center;min-height:30px;font-style:normal;font-size:11px;text-align:center;
+.mf-character-menu .mf-skill-node.is-open{grid-template-columns:1fr;place-items:center;min-height:30px;font-style:normal;font-size:13px;text-align:center;
   letter-spacing:.06em;background:none;border-style:dashed;color:#f2ebd866;cursor:default}
 .mf-character-menu .mf-skill-node[aria-pressed=true]{background:#18231c;border-color:#f5d897;box-shadow:0 0 0 1px #f5d897,0 0 12px #cfb77b55}
 .mf-character-menu .mf-skill-node.is-ready[aria-pressed=true]{background:#22331f}
@@ -99,10 +100,10 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
 .mf-skill-head .mf-skill-icon{width:40px}
 .mf-character-menu .mf-skill-head h2{margin:0}
 .mf-skill-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
-.mf-skill-tags i{font-style:normal;font-size:11px;padding:1px 7px;border:1px solid #8e795499;border-radius:3px;color:#f2ebd8cc}
+.mf-skill-tags i{font-style:normal;font-size:13px;padding:1px 7px;border:1px solid #8e795499;border-radius:3px;color:#f2ebd8cc}
 .mf-character-menu .mf-skill-keys{margin:12px 0 0;padding:8px 10px;background:#0b0f0d;border:1px solid #8e795455;border-radius:4px}
 .mf-skill-keys>div+div{margin-top:6px}
-.mf-skill-keys dt{font-size:11px;color:#c9bb99}
+.mf-skill-keys dt{font-size:13px;color:#c9bb99}
 .mf-skill-keys>div+div dd{color:#f2ebd8cc}
 .mf-skill-detail p{margin:10px 0 0;line-height:1.5}
 .mf-skill-tree.has-training{grid-template-rows:auto minmax(0,1fr);overflow:auto}
@@ -133,7 +134,13 @@ html:has(#app[data-character-menu]) .v03-hud{visibility:hidden}
   .mf-menu-item p{margin:5px 0}
     .mf-character-menu[data-page=Skills] .mf-menu-body{grid-template-columns:minmax(0,1fr) minmax(150px,28%)}
   .mf-character-menu .mf-skill-node{gap:4px;padding:2px 4px}
-  .mf-skill-node b{font-size:12px}.mf-skill-node em{font-size:10px}
+  /* 2026-11-26: a row is never shorter than its skill's words (long languages
+     wrap to two lines); the tree scrolls instead of letting nodes overlap. */
+  .mf-character-menu[data-page=Skills] .mf-menu-body{grid-template-rows:minmax(0,1fr)}
+  .mf-skill-tree{grid-template-rows:minmax(min-content,1fr);overflow:auto}
+  .mf-skill-tree.has-training{grid-template-rows:auto minmax(min-content,1fr)}
+  .mf-skill-nodes{grid-template-rows:repeat(var(--mf-skill-rows,6),minmax(min-content,1fr));row-gap:2px}
+  .mf-skill-node em{font-size:12px}
   .mf-skill-icon{width:22px}.mf-skill-head .mf-skill-icon{width:30px}
   .mf-character-menu .mf-skill-keys{margin-top:6px;padding:5px 8px}
   .mf-skill-detail p,.mf-skill-needs{margin-top:6px}
@@ -189,3 +196,9 @@ html[lang=ko] .mf-character-menu{word-break:keep-all}
  .mf-mount-palette{margin:auto auto 2dvh;width:min(94vw,350px);max-height:52dvh}
 }
 @media(max-width:420px){.mf-character-menu nav{flex-wrap:wrap}.mf-character-menu nav button{min-height:44px;padding:3px 5px}}
+/* Touch (2026-11-26, DESIGN.md: 44 px targets on phones): the small buttons grow;
+   a skill node is at least 44 px tall (on short screens the tree scrolls). */
+@media (pointer:coarse){
+  .mf-menu-item .mf-menu-potion-slots button,.mf-skill-training button,.mf-skill-invest{min-height:44px}
+  .mf-character-menu button.mf-skill-node{min-height:44px}
+}
