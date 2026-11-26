@@ -1,6 +1,7 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'opening.castLoading':'馬車と最初の戦闘を準備しています。','opening.castFailed':'最初の場面を読み込めませんでした。','opening.castRetry':'再試行',
   'gallery.noTitles':'現在、獲得できる称号はありません。',
   'hud.tip.bag':'バッグを開いて装備や持ち物を確認します（I）。',
   'hud.tip.journal':'手帳を開いて依頼の進行状況を確認します。',

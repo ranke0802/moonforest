@@ -50,11 +50,12 @@ function outlinePoints(root,meshes){
  return points;
 }
 
-export function createWagonModel({scene,wagon,heightAt=()=>0,shadows=null}){
+export function createWagonModel({scene,wagon,heightAt=()=>0,shadows=null,signal}){
  let disposed=false,container=null,root=null,contact=null,hinge=null,dropped=0;const casters=[];
  const ready=(async()=>{
-  container=await loadOwnedModel(scene,MODEL);
+  container=await loadOwnedModel(scene,MODEL,{signal});
   if(disposed){container.dispose();container=null;return null;}
+  if(signal&&!container.meshes.some(mesh=>mesh.getTotalVertices?.()>0))throw new Error('Opening wagon has no drawable mesh');
   root=new TransformNode('v03-story-wagon',scene);
   const body=new TransformNode('v03-story-wagon-body',scene);body.parent=root;body.rotation.y=WAGON_MODEL.turn;
   for(const node of container.rootNodes)node.parent=body;
@@ -75,7 +76,7 @@ export function createWagonModel({scene,wagon,heightAt=()=>0,shadows=null}){
   root.position.set(wagon.x,heightAt(wagon.x,wagon.z),wagon.z);
   root.rotationQuaternion=Quaternion.RotationYawPitchRoll(wagon.yaw??0,0,0);
   return root;
- })().catch(error=>{console.warn('[MoonForest 0.3] story wagon unavailable',error);return null;});
+ })().catch(error=>{if(!disposed)console.warn('[MoonForest 0.3] story wagon unavailable',error);return null;});
  return {
   ready,
   get root(){return root;},

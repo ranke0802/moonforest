@@ -50,7 +50,7 @@ function forgetMountNodes(list,owned){
   else list.data[i]=null;
  }
 }
-export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounted=false,initialOpacity=1}){
+export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounted=false,initialOpacity=1,signal}){
  let disposed=false,container=null,root=null,observer=null,chest=null,stirTime=0,breathing=false;const casters=[],stirBones=[];
  const groups=new Map();let current=null,previous=null,fade=0,wanted='Horse_Idle';
  const loadController=mounted?new AbortController():null,saddle=[];
@@ -72,8 +72,9 @@ export function createWagonHorse({scene,heightAt=()=>0,wagon,shadows=null,mounte
   if(!previous)fade=1;
  }
  const ready=(async()=>{
-  container=await loadOwnedModel(scene,MODEL,{signal:loadController?.signal});
+  container=await loadOwnedModel(scene,MODEL,{signal:loadController?.signal??signal});
   if(disposed){container.dispose();container=null;return null;}
+  if(signal&&!container.meshes.some(mesh=>mesh.getTotalVertices?.()>0))throw new Error('Opening horse has no drawable mesh');
   root=new TransformNode('v03-wagon-horse',scene);
   const s=WAGON_HORSE.height/87;
   const body=new TransformNode('v03-wagon-horse-body',scene);body.parent=root;

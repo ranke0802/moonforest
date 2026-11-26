@@ -86,14 +86,16 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
  function ensure(){
   const world=getWorld();
   if(!runtime||runtimeScene!==world.scene){
-   observer?.remove?.();observer=null;runtimeScene=world.scene;runtime=Promise.resolve(load(world));
+   observer?.remove?.();observer=null;runtimeScene=world.scene;
+   const loading=runtime=Promise.resolve().then(()=>load(world));
+   loading.catch(()=>{if(runtime===loading)runtime=null;});
    const scene=world.scene;last=0;
    observer=scene.onBeforeRenderObservable.add(()=>{const t=now(),dt=last?Math.min(.1,Math.max(0,(t-last)/1000)):0;last=t;view.prepare(world);for(const actor of actors)actor.tick(dt);});
    observer.remove=()=>scene.onBeforeRenderObservable.remove(observer);
   }
   return runtime;
  }
- function create(scene,key,{id=key}={}){
+ function create(scene,key,{id=key,requireModel=false}={}){
   if(key==='sword-instructor')return createSeatedInstructor(scene);
   const assetId=CAST_MODELS[key];
   if(!assetId)return fallback(scene,key,{id});
@@ -110,6 +112,7 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
   let attempts=0;
   const swapToBlock=error=>{
    if(disposed)return;actors.delete(actor);console.warn('[MoonForest 0.3] cast model unavailable',key,error);
+   if(requireModel)return; // The opening owns its retry and keeps its cover.
    if(!block){block=fallback(scene,key,{id});if(pose)block.place(...pose.position,pose.yaw);}
    if(++attempts<=RETRY_LIMIT&&!scene.isDisposed)setTimeout(()=>{if(!disposed&&!scene.isDisposed)void spawn();},RETRY_MS*attempts);
   };
@@ -205,19 +208,25 @@ export function createCastVisuals({getWorld,fallback=createActorVisual,loadRunti
     if(gazeWeight>0){gaze??=createGaze(record.encounter.asset);gaze?.apply(eye,ease(gazeWeight)*(watch?1:.7));}
    },
   };
-  const spawn=()=>ensure().then(async world=>{
+  let pendingSpawn=null;
+  const spawn=()=>pendingSpawn??=ensure().then(async world=>{
    npc=world;if(disposed)return;if(!pose)await new Promise(resolve=>{wake=resolve;});
    if(disposed)return;
    try{world.remove(instanceId,{persist:false});}catch{}
    await world.add(assetId,{instanceId,...transform(),clipId:IDLE,loop:true,persist:false});
    if(disposed){world.remove(instanceId,{persist:false});return;}
    if(block){block.dispose();block=null;}
-   ready=true;world.setTransform(instanceId,transform());actors.add(actor);
-  }).catch(swapToBlock);
+   world.setTransform(instanceId,transform());ready=true;actors.add(actor);
+  }).catch(swapToBlock).finally(()=>{pendingSpawn=null;});
   // Resolves once the model stands there (its textures uploaded) or the block took its place.
   const settled=spawn();
   return {
    id,key,label:spec.label,placeholder:false,height:spec.height??1.7,settled,
+   async ensureModel(){
+    if(!disposed&&!ready)await spawn();
+    const record=ready&&!disposed?npc?.get(instanceId):null;
+    return record?.ready?record.encounter.actor:null;
+   },
    place(x,y,z,yaw=0){
     if(sleeping)actor.tick(0,true);
     scriptedWalk=false;

@@ -24,6 +24,7 @@ import {createLiePose,createCrouchPose,createPushPose} from './story-poses.js';
 import {layOnBack} from './bone-pose.js';
 import {SLOW_FX_DEFAULT} from './slow-fx.js';
 import {pinScreenArea,unpinScreenArea} from './zoom-lod-pin.js';
+import {MapLoadLifetime,mapLoadAbortError} from '../map-load-lifetime.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
 // A walkable spot at or near the authored point: the point itself, then rings.
@@ -385,13 +386,16 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // (measured 2026-11-20). Prepared again here, behind the prologue or cover.
  function warmLoot(){try{const job=api.world?.goldLootView?.prepare?.();job?.catch?.(()=>{});}catch{/* built on first use instead */}}
  let wagonHorse=null,wagonModel=null,hiddenWagon=null,driverMember=null;
- let wagonMap=null,wagonScene=null;
+ let wagonMap=null,wagonScene=null,openingCast=null;
+ const hiddenWagonMeshes=[];
  function clearWagon(){
+  for(const mesh of hiddenWagonMeshes)if(!mesh.isDisposed?.())mesh.isVisible=true;
+  hiddenWagonMeshes.length=0;
   wagonHorse?.dispose();wagonHorse=null;wagonModel?.dispose();wagonModel=null;
   wagonMap=null;wagonScene=null;hiddenWagon=null;wagonRig.dispose();
  }
  function clearCast(keepWagon=false){clearCover();if(!keepWagon)clearWagon();endLift();resetDriver();stopRoute();clearBubble();thanks.done=false;driverMember=null;for(const member of cast)member.visual.dispose();cast.length=0;castMap=null;castSettled=null;near=null;hud.setPrompt(null);markers?.clear();markerKey='';}
- function placeProps(id){
+ function placeProps(id,signal){
   const props=(content.PROPS??[]).filter(prop=>prop.map===id);
   // The wolf's hiding place: a bush clump on open ground with a clear run to
   // the horse (2026-11-19: it used to start between trees and shake against them).
@@ -401,30 +405,34 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(props.length)void Promise.resolve(api.placeProps?.(props)).then(()=>{if(!disposed)poseWagonForStory();}).catch(error=>console.warn('[MoonForest 0.3] story scenery unavailable',error));
   if(hide)placeCover(hide);
   // The driver's wagon has its horse in the shafts.
-  const wagon=props.find(prop=>prop.asset==='covered-wagon'),scene=api.world?.scene;
+  const wagon=props.find(prop=>prop.asset==='covered-wagon');
+  if(wagon)ensureWagonModels(id,wagon,signal);
+ }
+ function ensureWagonModels(id,wagon,signal,part){
+  const scene=api.world?.scene;
   if(wagon&&scene&&!scene.isDisposed&&typeof scene.addPendingData==='function'){
    if(wagonMap!==id||wagonScene!==scene)clearWagon();
    wagonMap=id;wagonScene=scene;
-   const options={scene,wagon,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0};
-   if(!wagonModel){
+   const options={scene,wagon,signal,shadows:api.world.shadows??null,heightAt:(x,z)=>api.world.terrain?.heightAt?.(x,z)??0};
+   if(!wagonModel&&part!=='horse'){
     const model=wagonModel=createWagonModel(options);
     void model.ready.then(root=>{if(!root&&wagonModel===model){model.dispose();wagonModel=null;}});
    }
-   if(!wagonHorse){
+   if(!wagonHorse&&part!=='wagon'){
     const horse=wagonHorse=createWagonHorse(options);
     void horse.ready.then(root=>{if(!root&&wagonHorse===horse){horse.dispose();wagonHorse=null;}});
    }
   }
  }
- function buildCast(id){
+ function buildCast(id,openingSignal){
   // The prologue may have imported both GLBs already, or still be importing
   // them on a skip. Transfer ownership for this map visit in either case.
-  clearCast(wagonMap===id&&wagonScene===api.world?.scene);placeProps(id);
+  clearCast(wagonMap===id&&wagonScene===api.world?.scene);placeProps(id,openingSignal);
   const world=api.world,scene=world.scene;if(!scene||scene.isDisposed)return;
   for(const npc of content.NPCS){
    if(npc.map!==id)continue;
    try{
-    const visual=createVisual(scene,npc.visual,{id:npc.id}),spot=findFreeSpot(world.navigation,npc);
+    const visual=createVisual(scene,npc.visual,{id:npc.id,requireModel:!!openingSignal&&npc.id==='driver'}),spot=findFreeSpot(world.navigation,npc);
     visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);
     // Village folk stroll a little around their spot; the driver stays by his wagon.
     if(npc.roam!==false&&npc.id!=='driver')visual.roam?.({radius:npc.roam??2.2,free:(x,z)=>{try{return world.navigation?.free?.({x,z},.4)??true;}catch{return true;}},heightAt:(x,z)=>world.terrain?.heightAt?.(x,z)??0,player:()=>api.getPlayer?.()?.position??null});
@@ -432,6 +440,81 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }catch(error){console.warn('[MoonForest 0.3] cast member unavailable',npc.id,error);}
   }
   castMap=id;castSettled=Promise.allSettled(cast.map(member=>member.visual.settled).filter(Boolean));
+ }
+ function unbindOpening(owner){
+  owner.scene.onDisposeObservable?.remove(owner.observer);
+  owner.signal?.removeEventListener('abort',owner.cancel);
+ }
+ function cancelOpeningCast(){
+  const owner=openingCast;if(!owner)return;
+  openingCast=null;unbindOpening(owner);owner.controller.abort(mapLoadAbortError());
+  clearCast();
+ }
+ function prepareOpeningCast(id,{signal}={}){
+  const currentScene=api.world?.scene;
+  if(disposed||signal?.aborted||!currentScene||currentScene.isDisposed)return Promise.reject(mapLoadAbortError());
+  if(openingCast&&(openingCast.id!==id||openingCast.scene!==currentScene||openingCast.ground!==api.world.ground))cancelOpeningCast();
+  const wagon=(content.PROPS??[]).find(prop=>prop.map===id&&prop.asset==='covered-wagon');
+  if(!wagon)return Promise.reject(new Error('Opening wagon missing on '+id));
+  if(!openingCast){
+   const owner=openingCast={id,scene:currentScene,ground:api.world.ground,controller:new AbortController(),ready:new Set()};
+   owner.cancel=()=>{if(openingCast===owner)cancelOpeningCast();};
+   owner.observer=currentScene.onDisposeObservable?.addOnce(owner.cancel);
+   buildCast(id,owner.controller.signal);warmOpening(id);
+  }
+  const owner=openingCast;
+  if(owner.signal!==signal){
+   owner.signal?.removeEventListener('abort',owner.cancel);owner.signal=signal;
+   signal?.addEventListener('abort',owner.cancel,{once:true});
+  }
+  if(owner.job)return owner.job;
+  if(owner.needsDriver&&driverMember){
+   const {npc,x,z}=driverMember;
+   driverMember.visual=createVisual(currentScene,npc.visual,{id:npc.id,requireModel:true});
+   driverMember.visual.place(x,heightAt(x,z),z,npc.yaw??0);owner.needsDriver=false;
+   castSettled=Promise.allSettled(cast.map(member=>member.visual.settled).filter(Boolean));
+  }
+  const lifetime=new MapLoadLifetime({signal:owner.controller.signal,stage:'opening-cast'});
+  const checkVisit=()=>{
+   lifetime.check();
+   if(api.world.scene!==currentScene||currentScene.isDisposed||api.world.ground!==owner.ground||(api.world.mapId&&api.world.mapId!==id)){owner.cancel();throw mapLoadAbortError();}
+  };
+  const retry=async(name,load)=>{
+   if(owner.ready.has(name))return;
+   for(let attempt=0;attempt<2;attempt++){
+    checkVisit();
+    if(await lifetime.wait(load())){owner.ready.add(name);return;}
+   }
+   throw new Error('Opening '+name+' model unavailable');
+  };
+  const wagonPart=name=>{
+   ensureWagonModels(id,wagon,owner.controller.signal,name);
+   return (name==='horse'?wagonHorse:wagonModel)?.ready;
+  };
+  owner.job=Promise.allSettled([
+   retry('wagon',()=>wagonPart('wagon')),retry('horse',()=>wagonPart('horse')),
+   retry('driver',()=>driverMember?.visual.ensureModel?.()),
+  ]).then(rows=>{
+   checkVisit();
+   const failed=rows.find(row=>row.status==='rejected');if(failed)throw failed.reason;
+   hidePlacedWagon();
+  }).catch(error=>{
+   owner.job=null;
+   // A stalled import can remain pending after the deadline. Abandon that
+   // import; a manual retry starts just the missing models in this visit.
+   if(openingCast===owner&&lifetime.signal.aborted){
+    owner.controller.abort(mapLoadAbortError());owner.controller=new AbortController();
+    if(!owner.ready.has('wagon')){wagonModel?.dispose();wagonModel=null;}
+    if(!owner.ready.has('horse')){wagonHorse?.dispose();wagonHorse=null;}
+    if(!owner.ready.has('driver')&&driverMember){driverMember.visual.dispose();owner.needsDriver=true;}
+   }
+   throw error;
+  }).finally(()=>lifetime.close());
+  return owner.job;
+ }
+ function warmOpening(id){
+  warmStoryVisuals();warmLoot();
+  try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,GUIDE_PATH_RADIUS);}catch{/* warm-up only */}
  }
  function runEffects(lines){
   for(const line of lines)for(const effect of line.effects??[]){
@@ -500,9 +583,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  const wagonRig=createWagonRig({getRoot:()=>wagonModel?.root??null,getContact:()=>wagonModel?.contact??null,heightAt:(x,z)=>heightAt(x,z)});
  // The map's placed wagon stays for collision; the shafted story wagon is drawn instead.
  function hidePlacedWagon(){
+  if(!wagonModel?.root)return;
   const id=openingWagon()?.id;if(!id)return;
   const record=api.world?.authoredPlacements?.records?.get?.(id);if(!record||record===hiddenWagon)return;
-  for(const mesh of record.meshes??[])mesh.isVisible=false;hiddenWagon=record;
+  for(const mesh of record.meshes??[])if(mesh.isVisible){mesh.isVisible=false;hiddenWagonMeshes.push(mesh);}
+  hiddenWagon=record;
  }
  // The horse: gallops on the ride, rears at the wolf, stays nervous while the
  // wagon is down, calm again once it stands.
@@ -1404,6 +1489,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get replaying(){return replaying;},
   get log(){return log;},
   start({fresh=false,key,replay=false,onComplete=null}={}){
+   if(openingCast){
+    if(fresh){unbindOpening(openingCast);openingCast=null;}else cancelOpeningCast();
+   }
    replaying=replay;onChapterEnd=onComplete;const settle=!replay&&api.settleQuest?settleQuest:null;
    log=createQuestLog({quests:content.QUESTS,storage:save.journey,key,settle});
    if(fresh||!log.load())log.reset();
@@ -1430,6 +1518,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // record is not touched: start({fresh:false}) picks it up again.
   cancelRaidWarning,
   stop(){
+   cancelOpeningCast();
    if(!started)return false;
    cancelRaidWarning();
    if(scene.active){try{endScene();}catch(error){console.warn('[MoonForest 0.3] scene left open',error);scene.active=false;showPlayer(true);api.input.setSuspended(false);}}
@@ -1454,9 +1543,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // Called behind the prologue: scenery and the path grid are ready before
   // the player sees the stage.
   prepare(id){
-   placeProps(id);warmStoryVisuals();warmLoot();
-   try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,GUIDE_PATH_RADIUS);}catch{/* warm-up only */}
+   placeProps(id);warmOpening(id);
   },
+  prepareOpeningCast,cancelOpeningCast,
   update(dt,s){
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){
@@ -1509,6 +1598,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // five 2048 px uploads at +5.5 s). A promise for the models, else null.
   arrive(id){if(!started||disposed||!id)return null;if(castMap!==id)buildCast(id);return castMap===id?castSettled:null;},
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
-  dispose(){if(disposed)return;disposed=true;cancelRaidWarning();api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
+  dispose(){if(disposed)return;disposed=true;cancelOpeningCast();cancelRaidWarning();api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }

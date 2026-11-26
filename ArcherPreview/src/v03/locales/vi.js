@@ -1,6 +1,7 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'opening.castLoading':'Đang chuẩn bị xe ngựa và trận đánh đầu tiên…','opening.castFailed':'Không thể tải cảnh mở đầu.','opening.castRetry':'Thử lại',
   'gallery.noTitles':'Hiện chưa có danh hiệu để nhận.',
   'hud.tip.bag':'Mở túi để xem trang bị và vật phẩm (I).',
   'hud.tip.journal':'Mở sổ tay để xem tiến độ nhiệm vụ.',

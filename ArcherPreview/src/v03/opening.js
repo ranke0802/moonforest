@@ -56,6 +56,10 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
  // layer: filtering the game canvas itself let it paint over the lids).
  const focus=doc.createElement('div');focus.className='v03-opening-focus';
  layer.append(...planes.map(p=>p.plane),rim,veil,motes,glow,shade,line,said,flash,focus,...lids,skip);mount.append(layer);
+ const prep=doc.createElement('div');prep.className='v03-opening-preparation';prep.hidden=true;
+ const status=doc.createElement('p');status.setAttribute('role','status');
+ const retry=doc.createElement('button'),back=doc.createElement('button');retry.type=back.type='button';
+ prep.append(status,retry,back);layer.append(prep);
  let run=0,front=0,retireTimer;
  // How long a caption takes to type (0 when typing is off): the paintings
  // hold that much longer so a caption never outlives its picture.
@@ -88,6 +92,13 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
  const dropPictures=()=>{clearTimeout(retireTimer);clear();for(const p of planes){setPicture(p,null);if(p.haze)p.haze.style.backgroundImage='';}};
  return {
   element:layer,
+  preparation({failed=false,onRetry=null,onBack}={}){
+   prep.hidden=!onBack;skip.hidden=!!onBack;
+   retry.onclick=onRetry;back.onclick=onBack??null;
+   if(!onBack)return;
+   status.textContent=t(failed?'opening.castFailed':'opening.castLoading');
+   retry.hidden=!failed;retry.textContent=t('opening.castRetry');back.textContent=t('settings.toTitle');
+  },
   get active(){return !layer.hidden;},
   // Resolves 'done' or 'skipped'. The layer stays black until release().
   async play(){

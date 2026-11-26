@@ -142,6 +142,11 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-opening[data-tone="voice"] .v03-opening-line.is-in{transform:translate(-50%,-50%)}
 .v03-opening-skip{position:absolute!important;z-index:2;right:max(20px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));min-height:44px;padding:8px 16px!important;font-size:13px!important;letter-spacing:.14em;opacity:.55;border:1px solid #ffffff30!important;border-radius:4px}
 .v03-opening-skip:hover,.v03-opening-skip:focus-visible{opacity:1}
+.v03-opening-preparation{position:absolute;z-index:4;inset:0;display:grid;grid-auto-flow:column;grid-template-columns:auto auto;align-content:center;justify-content:center;gap:.75rem;background:#151711;color:#fff2ce;text-align:center}
+.v03-opening-preparation p{grid-column:1/-1;margin:0 0 .5rem}
+.v03-opening-preparation button{min-height:44px;justify-self:center}
+.v03-opening-preparation button[hidden]+button{grid-column:1/-1}
+.v03-opening-preparation[hidden],.v03-opening-preparation button[hidden],.v03-opening-skip[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){.v03-opening-plane.is-in{animation:none}.v03-opening-motes{display:none}}
 /* A new game loads behind the prologue cover painting (00), not the map art. */
 /* New game: the loading card stays dark (dust motes only); the cosmic cut is

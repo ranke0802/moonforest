@@ -234,19 +234,69 @@ export function setupV03(api){
  // they are not, the stage stays covered for up to five seconds.
  async function sceneUp(){for(let left=5000;left>0&&!state.disposed&&story.scenePending&&!story.sceneActive;left-=50)await wait(50);}
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
+ let openingAttempt=null;
  async function stageAmbush(dream){
-  state.ambush=true;
-  trail.mark('opening:ambush-load');
-  const wolf=battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind).catch(error=>{console.warn('[MoonForest 0.3] ambush unavailable',error);return false;});
-  const transition=Promise.resolve(dream).then(()=>Promise.race([wolf,wait(6000).then(()=>null)]));
-  // Import the horse and wagon after the wolf on Apple devices. Even a
-  // stalled summon may only hold a skipped dream for the usual six seconds.
-  if(appleTouch)await Promise.race([wolf,transition]);
-  if(state.screen!=='opening'||state.disposed)return false;
-  trail.mark('opening:wagon-load');story.prepare(gameState().mapId);
-  const ready=await transition;
-  if(ready===false)state.ambush=false;
-  return state.screen==='opening'&&!state.disposed;
+  const controller=new AbortController(),{signal}=controller;
+  openingAttempt=controller;
+  const cancelled=new Promise(resolve=>signal.addEventListener('abort',()=>resolve(false),{once:true}));
+  const current=()=>!signal.aborted&&!state.disposed&&state.screen==='opening';
+  let wolfJob=null,castJob=null;
+  async function summonWolf(){
+   // The title fight may still be unwinding after resetStage cancelled it.
+   if(battle.summonPending)await battle.summonPending.catch(()=>{});
+   if(!current())return;
+   trail.mark('opening:ambush-load');
+   if(!await battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind))throw new Error('Opening wolf unavailable');
+  }
+  async function prepareActors(){
+   wolfJob??=summonWolf().catch(error=>{wolfJob=null;throw error;});
+   if(appleTouch)await wolfJob;
+   if(!current())return;
+   if(!castJob){
+    trail.mark('opening:wagon-load');
+    const map=gameState().mapId;
+    // ?cast=0 explicitly selects block stand-ins for local development.
+    castJob=Promise.resolve().then(()=>castPreview()?story.prepareOpeningCast(map,{signal}):story.prepare(map))
+     .catch(error=>{castJob=null;throw error;});
+   }
+   await Promise.all([wolfJob,castJob]);
+  }
+  function back(){
+   if(!current())return;
+   controller.abort();story.stop();battle.resetBattle();opening.cancel();
+   state.ambush=false;state.busy=false;state.dream=null;state.sceneShown=false;
+   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+  }
+  try{
+   const art=Promise.resolve(dream);
+   while(current()){
+    let finished=false;
+    const actors=prepareActors().then(()=>true,error=>{
+     if(current()){console.warn('[MoonForest 0.3] opening preparation failed',error);trail.mark('opening:prepare-failed');}
+     return false;
+    }).finally(()=>{finished=true;});
+    await Promise.race([art,cancelled]);
+    if(!current())return false;
+    if(!finished)opening.preparation({onBack:back});
+    if(await Promise.race([actors,cancelled])){
+     if(!current())return false;
+     state.ambush=true;trail.mark('opening:cast-and-wolf-ready');return true;
+    }
+    if(!current())return false;
+    const retry=new Promise(resolve=>opening.preparation({failed:true,onRetry:resolve,onBack:back}));
+    await Promise.race([retry,cancelled]);
+   }
+   return false;
+  }finally{
+   if(openingAttempt===controller){openingAttempt=null;opening.preparation();}
+  }
+ }
+ async function finishOpening(dream){
+  if(!await stageAmbush(dream))return;
+  state.dream=null;save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
+  await enterPlay();await sceneUp();
+  if(!state.disposed&&state.screen==='play')await opening.release();
+  state.busy=false;
  }
  async function beginNewGame({replay=false}={}){
   gallery.reset();
@@ -270,10 +320,7 @@ export function setupV03(api){
    if(!moved||gameState().mapId!==OPENING_STAGE.map){reloadInto(save.slot,replay?'load':'new',replay?'warrior-plains':null);return;}
   }
   api.resetStage(OPENING_STAGE);title.hide();
-  if(!await stageAmbush(dream))return;
-  save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
-  await enterPlay();state.busy=false;await sceneUp();
-  await opening.release();
+  await finishOpening(dream);
  }
  async function continueHere(){
   const back=state.returnPose?.map===gameState().mapId?state.returnPose:undefined;state.returnPose=null;
@@ -570,7 +617,7 @@ export function setupV03(api){
  // The frame loop is paused in that state, so the loading card is watched too.
  function fail(){
   if(state.failed||state.disposed)return;
-  state.failed=true;cancelTap?.();endEarlyLine();stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
+  state.failed=true;openingAttempt?.abort();cancelTap?.();endEarlyLine();stopAttract();title.hide();opening.cancel();splash?.remove?.();input?.setSuspended(false);screen('failed');
  }
  const loadingCard=doc.getElementById('loading'),Observer=view?.MutationObserver;
  const loadingWatch=loadingCard&&Observer?new Observer(()=>{if(loadingCard.classList.contains('error'))fail();}):null;
@@ -665,9 +712,7 @@ export function setupV03(api){
     state.busy=true;api.resetStage(OPENING_STAGE);
     void (async()=>{
      save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));
-     if(!await stageAmbush(state.dream))return;
-     state.dream=null;
-     save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));await enterPlay();state.busy=false;await sceneUp();await opening.release();
+     await finishOpening(state.dream);
     })().catch(report);
    }else if(state.screen==='resume'&&s.ready&&state.langReady&&!state.busy){
     if(!appleTouch)prepareWorld();
@@ -697,6 +742,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;openingAttempt?.abort();cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

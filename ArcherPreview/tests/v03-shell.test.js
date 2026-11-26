@@ -142,7 +142,7 @@ test('village quest markers sample only visible heads; talk range drops out imme
  assert.equal(story.dialogueOpen,false);frame();assert.deepEqual([...shown.keys()],['elder']);assert.equal(pins.at(-1)[0].x,at.x);
 });
 
-function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null,iphone=false}={}){
+function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopWorld=false,reloadProgress=false,travel=null,iphone=false,wait=instant}={}){
  const {document,window,root}=dom(),log=[];
  if(iphone)Object.defineProperty(document,'defaultView',{value:new Proxy(window,{get(target,key){return key==='navigator'?{userAgent:'iPhone',maxTouchPoints:5}:target[key];}})});
  let resolveSplash;window.__moonforestSplash={done:new Promise(r=>{resolveSplash=r;}),remove:()=>{log.push('splash-removed');resolveSplash();}};
@@ -157,7 +157,7 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
  const made=[],marks=[],guide={shown:null,hidden:0,show(x,y,z,time,moving){guide.shown={x,y,z,moving};},hide(){guide.shown=null;guide.hidden++;},dispose(){}};
  const createVisual=(_scene,key,{id})=>{const v={id,key,placed:null,disposed:false,place(x,y,z,yaw){v.placed={x,y,z,yaw};},dispose(){v.disposed=true;}};made.push(v);return v;};
  battle.combatCount=0;
- const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait:instant,random:()=>.5,createVisual,createGuide:()=>guide,createMarkers:null,setMapMarkers:list=>marks.push(list),placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
+ const api={root,save,world:{camera,scene:{isDisposed:false},navigation:{free:()=>true,path:(from,to)=>[{x:(from.x+to.x)/2,z:(from.z+to.z)/2+3},{x:to.x,z:to.z}]},terrain:{heightAt:()=>1.5}},battle,wait,random:()=>.5,createVisual,createGuide:()=>guide,createMarkers:null,setMapMarkers:list=>marks.push(list),placeProps:async props=>{log.push('props:'+props.map(p=>p.id).join(','));return true;},rest:()=>log.push('rest'),
   input:{setSuspended:v=>log.push('suspend:'+v)},actions:{attack:()=>log.push('attack'),dodge:()=>log.push('dodge'),guard:()=>log.push('guard'),move:()=>{}},
   toast:m=>log.push('toast:'+m),creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},getPlayer:()=>player,getController:()=>controller,getState:()=>state,
   resetStage:stage=>log.push('resetStage:'+(stage?`${stage.x},${stage.z}`:'spawn')),openSettings:()=>log.push('settings'),travel:travel?id=>travel(id,state,log):async id=>{log.push('travel:'+id);state.character=id;return true;},
@@ -166,6 +166,9 @@ function harness({local=memory(),session=memory(),ready=true,inPlace=false,stopW
  if(stopWorld)api.stopWorld=()=>log.push('stopWorld');
  if(reloadProgress)api.reloadProgress=()=>{log.push('reloadProgress');return true;};
  const shell=setupV03(api);
+ // This shell fixture has a camera stub and DOM only. Real GLB loading is
+ // exercised separately against a Babylon scene.
+ shell.story.prepareOpeningCast=async id=>shell.story.prepare(id);
  const click=selector=>document.querySelector(selector).dispatchEvent(new window.Event('click',{bubbles:true}));
  return {api,document,window,shell,log,state,battle,camera,save,local,session,click,finishSplash:()=>resolveSplash(),controller,player,made,marks,guide,
   reveal:async()=>{await settle();shell.update(.016);await settle();for(let i=0;i<90;i++)shell.update(.016);await settle();}};
@@ -293,6 +296,49 @@ test('iPhone starts the dream without priming the roaming population or decoding
  assert.equal(preparations,1);assert.equal(h.shell.screen,'play');
  assert.ok(h.log.includes(`summon:${AMBUSH.kind}:1`));
  h.shell.dispose();
+});
+
+for(const entry of ['title','new-intent']){
+ test('an immediate skip waits for both the real cast gate and the first wolf via '+entry,async t=>{
+  const local=memory(),session=memory();let endBeat;
+  if(entry==='new-intent')createSaveSession({local,session,edition:E}).request(1,'new');
+  const h=harness({local,session,wait:ms=>ms===100?new Promise(done=>{endBeat=done;}):instant()});t.after(()=>h.shell.dispose());
+  let readyCast,readyWolf;
+  const normalSummon=h.battle.summon;
+  h.battle.summon=async(player,count,kind)=>{
+   if(kind===AMBUSH.kind)await new Promise(done=>{readyWolf=done;});
+   return normalSummon(player,count,kind);
+  };
+  h.shell.story.prepareOpeningCast=()=>new Promise(done=>{readyCast=done;});
+  if(entry==='title'){h.finishSplash();await h.reveal();await newGame(h);}
+  else{await settle();h.shell.update(.016);}
+  await settle();
+  h.click('.v03-opening-skip');endBeat?.();await settle();
+  assert.equal(h.shell.screen,'opening');assert.equal(h.document.querySelector('.v03-opening-preparation').hidden,false);
+  if(entry==='title')readyCast();else readyWolf();
+  await settle();assert.equal(h.shell.screen,'opening');assert.equal(h.shell.story.started,false);
+  if(entry==='title')readyWolf();else readyCast();
+  await settle(40);assert.equal(h.shell.screen,'play');
+  assert.equal(h.log.filter(x=>x==='summon:'+AMBUSH.kind+':1').length,1);
+ });
+}
+test('the opening can retry a cast failure without summoning a second wolf',async t=>{
+ const h=harness();t.after(()=>h.shell.dispose());let tries=0;
+ h.shell.story.prepareOpeningCast=async()=>{if(++tries===1)throw new Error('simulated cast failure');};
+ h.finishSplash();await h.reveal();await newGame(h);await settle(40);
+ assert.equal(h.shell.screen,'opening');const panel=h.document.querySelector('.v03-opening-preparation');
+ assert.equal(panel.hidden,false);const retry=panel.querySelector('button');assert.equal(retry.hidden,false);
+ retry.click();await settle(40);
+ assert.equal(h.shell.screen,'play');assert.equal(tries,2);
+ assert.equal(h.log.filter(x=>x==='summon:'+AMBUSH.kind+':1').length,1);
+});
+test('leaving a stalled opening prevents a late asset completion from starting play',async t=>{
+ const h=harness();t.after(()=>h.shell.dispose());let done,signal;
+ h.shell.story.prepareOpeningCast=(_map,options)=>{signal=options.signal;return new Promise(resolve=>{done=resolve;});};
+ h.finishSplash();await h.reveal();await newGame(h);await settle(40);
+ h.document.querySelector('.v03-opening-preparation').lastElementChild.click();
+ assert.equal(signal.aborted,true);done();await settle(40);
+ assert.equal(h.shell.screen,'title');assert.equal(h.shell.story.started,false);
 });
 
 test('dream retains at most two pictures and removes image references on release, cancel and disposal',async()=>{

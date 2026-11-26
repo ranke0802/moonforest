@@ -30,6 +30,8 @@ jobs:
       - name: Verify the playable chapter, gear, riding and village actors
         run: >
           node --test --test-concurrency=2
+          ArcherPreview/tests/v03-opening-cast.test.js
+          ArcherPreview/tests/v03-opening-first-contact.test.js
           ArcherPreview/tests/v03-chapter-wildlife.test.js
           ArcherPreview/tests/v03-chapter-enemy-encounter.test.js
           ArcherPreview/tests/v03-low-melee.test.js

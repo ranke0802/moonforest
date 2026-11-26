@@ -1,6 +1,7 @@
 // English. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'opening.castLoading':'Preparing the wagon and the first fight…','opening.castFailed':'The opening scene could not be loaded.','opening.castRetry':'Retry',
   'gallery.noTitles':'There are currently no titles to earn.',
   'hud.tip.bag':'Open your bag to view gear and items (I).',
   'hud.tip.journal':'Open the journal to check quest progress.',

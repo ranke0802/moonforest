@@ -1,6 +1,7 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'opening.castLoading':'正在准备马车和首场战斗。','opening.castFailed':'未能载入开场场景。','opening.castRetry':'重试',
   'gallery.noTitles':'目前没有可获得的称号。',
   'hud.tip.bag':'打开背包，查看装备和物品（I）。',
   'hud.tip.journal':'打开手记，查看任务进度。',

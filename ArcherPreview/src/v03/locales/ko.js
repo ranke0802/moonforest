@@ -3,6 +3,7 @@
 import {particle} from '../korean.js';
 export default {
  ui:{
+  'opening.castLoading':'마차와 첫 전투를 준비하고 있습니다.','opening.castFailed':'첫 장면을 불러오지 못했습니다.','opening.castRetry':'다시 시도',
   'gallery.noTitles':'현재 획득할 수 있는 칭호가 없습니다.',
   'hud.tip.bag':'가방을 열어 장비와 소지품을 확인합니다 (I).',
   'hud.tip.journal':'수첩을 열어 의뢰 진행 상황을 확인합니다.',
