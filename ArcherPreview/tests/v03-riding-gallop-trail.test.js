@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {FreeCamera, NullEngine, Scene, TransformNode, Vector3, VertexBuffer} from '@babylonjs/core';
 import {createRidingGallopTrail} from '../src/v03/riding-gallop-trail.js';
+import {setupAccessibility,disposeAccessibility} from '../src/v03/accessibility.js';
 
 function setup(t, reduced = false) {
   const engine = new NullEngine(), scene = new Scene(engine);
@@ -11,11 +12,11 @@ function setup(t, reduced = false) {
   const preference = new EventTarget();
   preference.matches = reduced;
   const view = {matchMedia(query) { assert.equal(query, '(prefers-reduced-motion: reduce)'); return preference; }};
-  const canvas = t.mock.method(engine, 'getRenderingCanvas', () => ({ownerDocument:{defaultView:view}}));
+  // The device setting reaches the trail through accessibility.js (2026-11-26).
+  setupAccessibility({doc:{documentElement:{dataset:{},style:{setProperty(){},removeProperty(){}}}},view});
   const trail = createRidingGallopTrail(horse);
-  canvas.mock.restore();
   const mesh = scene.getMeshByName('v03-riding-gallop-trail');
-  t.after(() => { trail.dispose(); scene.dispose(); engine.dispose(); });
+  t.after(() => { trail.dispose(); scene.dispose(); engine.dispose(); disposeAccessibility(); });
   return {engine, scene, horse, trail, mesh, setReduced(matches) {
     preference.matches = matches;
     preference.dispatchEvent(Object.assign(new Event('change'), {matches}));

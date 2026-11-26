@@ -1,0 +1,84 @@
+/* MoonForest 0.3 accessibility (2026-11-26). The state is on the page root,
+   written by accessibility.js / hud-blur-diagnostic.js only when it changes. */
+
+/* ----- Text size: ONE variable, --mf-text-scale (1, or 1.15 for "large").
+   0.3's font sizes are written per rule (px and clamp(), ~120 rules over several
+   files), with no shared root size. What the rules do share is the zoom used for
+   large PC windows (v03.css, html[data-v03-zoom] … zoom:var(--v03-ui)). The same
+   mechanism is used here, one level down: the outermost text element of each 0.3
+   panel is zoomed by --mf-text-scale. Its font and its own spacing grow 15 %,
+   while the panel keeps its width, so longer lines wrap instead of overflowing.
+   Nested text is not zoomed again (the :not(… *) part), and zoom multiplies with
+   the PC window zoom of the panel around it. Fixed-size cells (bag grid, icons,
+   portraits, gauges) are left out. */
+html[data-mf-text] :is(.v03-menu,.v03-panel-box,.v03-hud,.v03-dialogue-box,.v03-confirm,.mf-character-menu,.mf-town-shop,#motion-speed-dialog,#help-dialog) :is(p,span,small,strong,b,em,label,summary,button,h1,h2,h3,h4,li,dt,dd,output,select,legend,th,td,a,cite):not(:is(p,span,small,strong,b,em,label,summary,button,h1,h2,h3,h4,li,dt,dd,output,select,legend,th,td,a,cite) *):not(.mf-a11y-fixed,.mf-a11y-fixed *,[aria-hidden="true"],svg *){zoom:var(--mf-text-scale,1)}
+/* The panels whose root is itself the text (menu entries are the root's children),
+   and the dialogue line, which is aria-hidden (its words are read from a twin). */
+html[data-mf-text] :is(.v03-title-kicker,.v03-title-sub,.v03-veil-note,.v03-veil-memory,.v03-dialogue-text,#app>#toast,#app>.chapter-toast){zoom:var(--mf-text-scale,1)}
+html[data-mf-text] :is(.v03-dialogue-text,.v03-dialogue-choice,.v03-quest-objective,.v03-errand-step,.v03-tip-body,.v03-caption-text,.v03-menu-item){overflow-wrap:anywhere}
+html[data-mf-text] .v03-dialogue-choices{flex-wrap:wrap}
+
+/* ----- Reduced motion: the device setting (prefers-reduced-motion, already in
+   v03.css) or the player's choice; the same rules under data-mf-motion. */
+html[data-mf-motion] .v03-veil-dot{animation:none;opacity:var(--o,.6)}
+html[data-mf-motion] :is(.v03-veil-ring,.v03-veil-spark){display:none}
+html[data-mf-motion] .v03-opening-plane.is-in,
+html[data-mf-motion] .v03-opening-plane.is-in:is([data-drift="reveal"],[data-drift="fork"]),
+html[data-mf-motion] .v03-opening-plane.is-in img{animation:none!important;opacity:1}
+html[data-mf-motion] .v03-opening-motes{display:none}
+html[data-mf-motion] .v03-opening[data-tone] .v03-opening-haze{animation:none}
+html[data-mf-motion][data-edition="moonforest-0.3"] :is(#loading-art,#loading::after){animation:none}
+/* The wake flash becomes a soft fade; the blinking eyes-opening veil one slow fade. */
+html[data-mf-motion] .v03-opening .v03-opening-flash{transition:opacity 1.2s ease!important}
+html[data-mf-motion] .v03-opening.is-flash .v03-opening-flash{opacity:.3}
+html[data-mf-motion] .v03-opening-focus{display:none!important}
+html[data-mf-motion] .v03-wake-veil{animation:mf-soft-fade 1.6s ease-out both}
+@keyframes mf-soft-fade{from{opacity:1}to{opacity:0}}
+html[data-mf-motion] .v03-focus{display:none}
+/* Forge: no shaking gauge on a miss, no flying sparks; the grade text stays. Low HP: a steady red rim, no pulse. */
+html[data-mf-motion] .mf-forge[data-grade] .mf-forge-gauge{animation:none}
+html[data-mf-motion] .mf-forge-spark{display:none}
+html[data-mf-motion] #player-hud[data-low=true] .v03-vital{animation:none}
+html[data-mf-motion] .v03-place.is-shown .v03-place-rule{animation:none}
+html[data-mf-motion] .v03-tap-act{animation:none;opacity:.8}
+html[data-mf-motion] #app #attack-button.v03-interact .v03-interact-face{animation:none}
+html[data-mf-motion] :is(#loading .v03-lore,#loading .v03-loadtip){transition:none}
+/* DOM transitions shortened (they still end, so transitionend listeners still run). */
+html[data-mf-motion] :is(#app,[data-v03-layer],dialog) *{transition-duration:.01s!important;transition-delay:0s!important}
+
+/* ----- Diagnostic: no backdrop blur behind the action buttons and joystick (0.3 only). */
+html[data-edition="moonforest-0.3"][data-mf-hud-blur="off"] #app :is(.action-controls .action-button,.joystick-rim,.joystick-ghost){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+
+/* ----- Settings rows of the accessibility group (look of the other groups). */
+.mf-a11y-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;min-height:44px}
+.mf-a11y-row>span{flex:1 1 9em;min-width:0}
+.mf-a11y-row select{min-height:40px;width:auto;max-width:100%}
+.mf-a11y-note,.v03-hud-blur-help{display:block;line-height:1.55;opacity:.85}
+.v03-hud-blur-row{display:flex;align-items:center;gap:8px;min-height:40px}
+
+/* ----- Title: "continue" names the record it continues. */
+.v03-menu-item .v03-menu-label{display:block}
+.v03-menu-item .v03-menu-detail{display:block;margin-top:2px;font-size:max(12px,.7em);letter-spacing:.04em;line-height:1.35;opacity:.8;max-width:min(30em,calc(70vw / var(--v03-ui,1)));white-space:normal;overflow-wrap:anywhere}
+
+/* ----- Colour is not the only cue: the bound record and the current language
+   were told by a gold border alone; they also get a check mark (no new text). */
+.v03-slot.is-current .v03-slot-title::after,.v03-language.is-current::after{content:'\2713';margin-left:.35em;color:var(--v03-gold,#cfb77b);font-weight:700}
+
+/* Title menu entries: the scale goes into their own font-size formula (v03.css
+   .v03-menu-item) instead of zoom, so the 40-44px touch height and the padding
+   stay and six entries still fit a 375px-high screen at "large". */
+html[data-mf-text] .v03-menu-item{zoom:1!important;font-size:calc(clamp(16px,calc(2.9vmin / var(--v03-ui,1)),24px) * var(--mf-text-scale,1))!important}
+/* Short landscape screens: the continue entry's record stays on one line (its
+   full text is in the button's aria-label). */
+@media (max-height:420px) and (orientation:landscape){
+ .v03-menu-item .v03-menu-detail{margin-top:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(30em,calc(62vw / var(--v03-ui,1)))}
+}
+
+/* Dialogue: Next and the choices scale their own font-size formula (v03.css)
+   so they keep the 44px touch height, and at "large" the button row is in the
+   flow under the line instead of pinned to the box's corner: a longer line or
+   choices wrapping to a second row push the box up instead of covering the text. */
+html[data-mf-text] :is(.v03-dialogue-next,.v03-dialogue-choice){zoom:1!important;font-size:calc(clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px) * var(--mf-text-scale,1))!important}
+html[data-mf-text][data-v03-ios] :is(.v03-dialogue-next,.v03-dialogue-choice){font-size:calc(clamp(16px,calc(1.7vmin / var(--v03-ui,1)),22px) * var(--mf-text-scale,1))!important}
+html[data-mf-text] .v03-dialogue-box{padding-bottom:clamp(12px,calc(1.4vmin / var(--v03-ui,1)),22px)!important}
+html[data-mf-text] .v03-dialogue-actions{position:static;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}

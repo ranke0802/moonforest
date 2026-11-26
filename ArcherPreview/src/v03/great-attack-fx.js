@@ -4,6 +4,7 @@ import {CAVE_FOG_GLSL} from '../cave-fog-cover.js';
 import {bindCaveFogMaterial} from '../cave-fog-binding.js';
 import {createStarfallGlow} from './starfall-glow.js';
 import {CRACK_LIP,CRACK_STATIONS,buildCrackField,crackReach,station} from './starfall-cracks.js';
+import {vibrate} from './accessibility.js';
 
 // Twelve marks cover five seconds even at the .45 s held-input threshold.
 // All three batches are built once. Only occupied impact slots are drawn.
@@ -518,7 +519,7 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
     count++;syncImpactDraw();glow.tick(born[count-1]);
     const doc=root.ownerDocument,view=doc.defaultView;
     if(!doc.hidden&&view?.matchMedia?.('(pointer: coarse)')?.matches){
-      try{view.navigator?.vibrate?.(55);}catch{/* The browser can disallow vibration. */}
+      vibrate(55,view.navigator); // honours the 진동 switch (accessibility.js)
     }
   }
   function hideBlade(){action=null;light.setEnabled(false);gauge.hidden=true;}

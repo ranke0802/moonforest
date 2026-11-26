@@ -24,6 +24,7 @@ import {createSitPose} from './sit-pose.js';
 import {createLiePose,createCrouchPose,createPushPose} from './story-poses.js';
 import {layOnBack} from './bone-pose.js';
 import {SLOW_FX_DEFAULT} from './slow-fx.js';
+import {reducedMotion} from './accessibility.js';
 import {GREAT_ATTACK_SLOW} from './great-attack.js';
 import {pinScreenArea,unpinScreenArea} from './zoom-lod-pin.js';
 import {MapLoadLifetime,mapLoadAbortError} from '../map-load-lifetime.js';
@@ -899,7 +900,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     scene.wolfYaw=from+Math.max(-7*dt,Math.min(7*dt,turn));wolf.actor.rotation.y=scene.wolfYaw;
    }}
   const Wf=scene.wolfAt,rx=P.r.x,rz=P.r.z;
-  scene.shake=Math.max(0,scene.shake-dt);const jolt=scene.shake>0?Math.sin(now*61)*.05*scene.shake/.45:0;
+  scene.shake=Math.max(0,scene.shake-dt);const jolt=scene.shake>0&&!reducedMotion()?Math.sin(now*61)*.05*scene.shake/.45:0;
   if(shot===0){
    // Over the plains, closing slowly on the wagon from behind and to the side.
    const k=ease(now/SCENE.sleepShot),back=28-21.5*k,side=14-11.8*k,up=26-22.6*k,ahead=8*(1-k);
@@ -1357,14 +1358,16 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   zoom.skillWeight=skill?Math.min(1,zoom.skillWeight+dt/STARFALL_ZOOM_IN):Math.max(0,zoom.skillWeight-dt/STARFALL_ZOOM_OUT);
   // Focus lines at the screen's edge for as long as the beat lasts (hud: one
   // small canvas, written only when the value changes).
-  hud.setFocus(target===1&&slowSetting().on&&slowSetting().lines);
+  // Reduced motion (accessibility.js): no focus lines and no push-in; the slow beat itself stays.
+  const calm=reducedMotion();
+  hud.setFocus(target===1&&!calm&&slowSetting().on&&slowSetting().lines);
   if(zoom.weight===0&&target===0){zoom.base=null;return;}
   // Scenery detail keeps the un-zoomed view for the length of the push-in (zoom-lod-pin.js).
   if(zoom.base===null){zoom.base=camera.fov;pinScreenArea(camera);}
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
   const skillEase=zoom.skillWeight*zoom.skillWeight*(3-2*zoom.skillWeight);
-  camera.fov=zoom.base*(1-slowSetting().zoom*eased)*(1-.10*skillEase);
+  camera.fov=calm?zoom.base:zoom.base*(1-slowSetting().zoom*eased)*(1-.10*skillEase);
   if(zoom.weight===0&&!target)restoreSlowZoom();
  }
  // ----- light combat (M3 prototype: Genshin-like) -----

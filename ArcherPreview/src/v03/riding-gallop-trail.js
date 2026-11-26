@@ -1,5 +1,6 @@
 import {BoundingInfo, Mesh, ShaderMaterial, Vector3, VertexData} from '@babylonjs/core';
 import {prepareModelShaders} from '../boss-shader-warmup.js';
+import {reducedMotion,onAccessibilityChange} from './accessibility.js';
 
 // Horse-local metres, with the nose facing +Z. The strips stay beside the
 // flanks and the dust lifts behind the hind hooves, below the rider.
@@ -89,24 +90,23 @@ export function createRidingGallopTrail(horseRoot) {
   mesh.setEnabled(false);
 
   let disposed = false, cycle = 0, preparation = null, ready = false;
-  const view = scene.getEngine().getRenderingCanvas()?.ownerDocument?.defaultView ?? globalThis;
-  const preference = view.matchMedia?.('(prefers-reduced-motion: reduce)');
-  let reduced = preference?.matches === true;
+  // Reduced motion: the device setting or the player's choice (accessibility.js).
+  let reduced = reducedMotion();
   function prepare() {
     if (preparation || reduced) return;
     preparation = prepareModelShaders({meshes:[mesh]}, {includeInstanceVariants:false, keepPrograms:false})
       .then(() => { ready = !disposed; })
       .catch(error => { if (!disposed) console.warn('[MoonForest 0.3] gallop trail unavailable', error); });
   }
-  function motionChanged(event) {
-    reduced = event.matches;
+  function motionChanged() {
+    reduced = reducedMotion();
     if (reduced) mesh.setEnabled(false);
     else prepare();
   }
-  preference?.addEventListener?.('change', motionChanged);
+  const stopListening = onAccessibilityChange(motionChanged);
   mesh.onDisposeObservable.addOnce(() => {
     disposed = true;
-    preference?.removeEventListener?.('change', motionChanged);
+    stopListening();
     material.dispose();
   });
   prepare();

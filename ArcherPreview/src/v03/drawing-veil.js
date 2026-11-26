@@ -21,6 +21,7 @@
 // Lifetime: owned by the title screen; stop() when the scene is ready,
 // dispose() with the title.
 import {CURSOR_ART} from './cursors.js';
+import {reducedMotion} from './accessibility.js';
 import {phaseShare} from '../phase-share.js';
 
 export const VEIL_ART=new URL('./prologue/00.webp',import.meta.url).href;
@@ -74,17 +75,19 @@ export function createDrawingVeil({doc,mount,label=()=>'',memory=()=>'',left=n=>
  root.classList.toggle('is-first',!!first);
 
  let active=false,disposed=false,next=0,bursted=0,shownPct=-1,shownLeft=-1,fadeTimer=0;
- const reduced=(()=>{try{return view?.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;}catch{return false;}})();
+ // Reduced motion (device or the player's choice, accessibility.js), asked at each tap.
  function burst(px,py){
   const b=bursts[next];next=(next+1)%bursts.length;bursted++;
   for(const animation of b.running.splice(0))animation.cancel();
   b.flash.place(px,py);
   b.ring.style.transform=`translate3d(${px-60}px,${py-60}px,0)`;b.spark.style.transform=`translate3d(${px}px,${py}px,0)`;
   if(!b.flash.frame.animate)return;
+  const reduced=reducedMotion();
+  // Reduced: one soft glow that fades, without the ring and the flying motes.
+  if(reduced){b.running.push(b.flash.frame.animate([{opacity:0},{opacity:.45,offset:.3},{opacity:0}],{duration:2600,easing:'ease-in-out'}));return;}
   // Bright at once, then sinking slowly back into the black.
   b.running.push(b.flash.frame.animate([{opacity:0},{opacity:1,offset:.08},{opacity:.6,offset:.35},{opacity:0}],{duration:2600,easing:'ease-out'}));
   b.running.push(b.ring.animate([{opacity:.9,transform:`translate3d(${px-60}px,${py-60}px,0) scale(.2)`},{opacity:0,transform:`translate3d(${px-60}px,${py-60}px,0) scale(4.2)`}],{duration:1100,easing:'cubic-bezier(.15,.7,.3,1)'}));
-  if(reduced)return;
   for(const mote of b.motes){
    const angle=random()*Math.PI*2,reach=60+random()*150,dx=Math.cos(angle)*reach,dy=Math.sin(angle)*reach-30*random(),size=.6+random()*.9;
    b.running.push(mote.animate([{opacity:1,transform:`translate3d(0,0,0) scale(${size})`},{opacity:.85,offset:.35},{opacity:0,transform:`translate3d(${dx}px,${dy-40}px,0) scale(${size*.3})`}],{duration:900+random()*900,easing:'cubic-bezier(.1,.6,.3,1)'}));
