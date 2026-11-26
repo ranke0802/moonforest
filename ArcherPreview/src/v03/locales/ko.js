@@ -3,7 +3,7 @@
 import {particle} from '../korean.js';
 export default {
  ui:{
-  'potion.slots':'물약 슬롯','potion.slot':'{n}번 슬롯','potion.empty':'빈 슬롯','potion.choose':'물약 선택','potion.remove':'등록 해제','potion.gesture':'짧게 눌러 사용하고 길게 눌러 물약을 선택합니다.',
+  'potion.slots':'물약 슬롯','potion.slot':'{n}번 슬롯','potion.empty':'빈 슬롯','potion.choose':'1번 슬롯에 둘 기본 물약','potion.remove':'등록 해제','potion.gesture':'짧게 눌러 사용하고 길게 눌러 물약을 선택합니다.',
   'char.skill.greatAttack':'별빛 강타',
   'char.skillText.greatAttack':'점프 전 검에 빛을 모아 내려친다. 피해와 폭발 반경은 기본 강공격의 {percent}%. 차징 중에도 피해를 받으며 넘어지면 취소된다.',
   'opening.castLoading':'마차와 첫 전투를 준비하고 있습니다.','opening.castFailed':'첫 장면을 불러오지 못했습니다.','opening.castRetry':'다시 시도',

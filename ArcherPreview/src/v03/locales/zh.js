@@ -1,7 +1,7 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
-  'potion.slots':'药水栏','potion.slot':'栏位 {n}','potion.empty':'空栏位','potion.choose':'选择药水','potion.remove':'取消登记','potion.gesture':'轻点使用，长按选择药水。',
+  'potion.slots':'药水栏','potion.slot':'栏位 {n}','potion.empty':'空栏位','potion.choose':'选择第 1 栏的默认药水','potion.remove':'取消登记','potion.gesture':'轻点使用，长按选择药水。',
   'char.skill.greatAttack':'星辉重击',
   'char.skillText.greatAttack':'跃起前将光芒凝聚于剑刃。伤害和爆炸半径为普通重击的 {percent}%。蓄力时仍会受到伤害，被击倒会中断蓄力。',
   'opening.castLoading':'正在准备马车和首场战斗。','opening.castFailed':'未能载入开场场景。','opening.castRetry':'重试',

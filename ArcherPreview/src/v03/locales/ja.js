@@ -1,7 +1,7 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
-  'potion.slots':'ポーションスロット','potion.slot':'スロット{n}','potion.empty':'空きスロット','potion.choose':'ポーションを選択','potion.remove':'登録を解除','potion.gesture':'タップで使用、長押しでポーションを選択します。',
+  'potion.slots':'ポーションスロット','potion.slot':'スロット{n}','potion.empty':'空きスロット','potion.choose':'スロット1のポーションを選択','potion.remove':'登録を解除','potion.gesture':'タップで使用、長押しでポーションを選択します。',
   'char.skill.greatAttack':'星光強撃',
   'char.skillText.greatAttack':'跳躍の前に剣へ光を集める。威力と爆発半径は通常の強攻撃の{percent}%。溜め中もダメージを受け、転倒すると中断する。',
   'opening.castLoading':'馬車と最初の戦闘を準備しています。','opening.castFailed':'最初の場面を読み込めませんでした。','opening.castRetry':'再試行',

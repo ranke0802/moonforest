@@ -1,7 +1,7 @@
 // English. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
-  'potion.slots':'Potion slots','potion.slot':'Slot {n}','potion.empty':'Empty slot','potion.choose':'Choose a potion','potion.remove':'Remove from slot','potion.gesture':'Tap to use. Hold to choose a potion.',
+  'potion.slots':'Potion slots','potion.slot':'Slot {n}','potion.empty':'Empty slot','potion.choose':'Choose a potion for slot 1','potion.remove':'Remove from slot','potion.gesture':'Tap to use. Hold to choose a potion.',
   'char.skill.greatAttack':'Starfall Strike',
   'char.skillText.greatAttack':'Gather light along the blade before leaping. Damage and blast radius reach {percent}% of a normal heavy attack. Charging absorbs no damage and ends on knockdown.',
   'opening.castLoading':'Preparing the wagon and the first fight…','opening.castFailed':'The opening scene could not be loaded.','opening.castRetry':'Retry',

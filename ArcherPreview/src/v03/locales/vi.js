@@ -1,7 +1,7 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
-  'potion.slots':'Ô thuốc','potion.slot':'Ô {n}','potion.empty':'Ô trống','potion.choose':'Chọn thuốc','potion.remove':'Gỡ khỏi ô','potion.gesture':'Chạm để dùng. Nhấn giữ để chọn thuốc.',
+  'potion.slots':'Ô thuốc','potion.slot':'Ô {n}','potion.empty':'Ô trống','potion.choose':'Chọn thuốc mặc định cho ô 1','potion.remove':'Gỡ khỏi ô','potion.gesture':'Chạm để dùng. Nhấn giữ để chọn thuốc.',
   'char.skill.greatAttack':'Trọng kích tinh quang',
   'char.skillText.greatAttack':'Tụ sáng trên lưỡi kiếm trước khi nhảy. Sát thương và bán kính nổ bằng {percent}% đòn đánh mạnh thường. Vẫn nhận sát thương khi tụ lực, bị đánh ngã sẽ hủy chiêu.',
   'opening.castLoading':'Đang chuẩn bị xe ngựa và trận đánh đầu tiên…','opening.castFailed':'Không thể tải cảnh mở đầu.','opening.castRetry':'Thử lại',

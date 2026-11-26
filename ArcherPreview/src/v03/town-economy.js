@@ -48,10 +48,11 @@ export function normalizeTown(raw,legacy={}){
  const drops=Array.isArray(raw.drops)?raw.drops.filter(d=>validateItemDrop(d)&&Object.keys(d.rewards).every(id=>TOWN_ITEMS[id])).slice(0,MAX_GROUND_DROPS):[];
  const settledQuests=[...new Set(Array.isArray(raw.settledQuests)?raw.settledQuests.filter(validQuestId):[])];
  const quickSlots=Array(POTION_SLOT_COUNT).fill(null);
- // Preserve deliberately empty slots. Only a pre-belt ledger may supply a legacy default.
+ // Old ledgers had one binding. Keep it first and place any carried healing
+ // potion next. A four-slot save can deliberately leave that potion unbound.
  const oldChoice=typeof raw.quick==='string'&&TOWN_ITEMS[raw.quick]?.quick?raw.quick:null;
  const legacySlot=oldChoice??(Object.hasOwn(raw,'quick')||bag.potion?'potion':null);
- const saved=Object.hasOwn(raw,'quickSlots')?(Array.isArray(raw.quickSlots)?raw.quickSlots:[]):[legacySlot];
+ const saved=Object.hasOwn(raw,'quickSlots')?(Array.isArray(raw.quickSlots)?raw.quickSlots:[]):[legacySlot,bag.potion?'potion':null];
  for(let i=0;i<quickSlots.length;i++)if(typeof saved[i]==='string'&&TOWN_ITEMS[saved[i]]?.quick&&!quickSlots.includes(saved[i]))quickSlots[i]=saved[i];
  const selectedQuickSlot=validPotionSlot(raw.selectedQuickSlot)&&quickSlots[raw.selectedQuickSlot]?raw.selectedQuickSlot:Math.max(0,quickSlots.findIndex(Boolean));
  return {version:1,bag,equipped,condition,opened,drops,settledQuests,progression:normalizeProgression(raw.progression),quickSlots,selectedQuickSlot,quick:quickSlots[0],
@@ -256,7 +257,12 @@ export function createTownEconomy(wallet,legacy={},{random=Math.random}={}){
   },
   selectQuickSlot(slot){
    if(!validPotionSlot(slot)||!state.quickSlots[slot])return false;
-   return slot===state.selectedQuickSlot||transact(0,s=>{s.selectedQuickSlot=slot;});
+   if(slot===0&&state.selectedQuickSlot===0)return true;
+   return transact(0,s=>{
+    const first=s.quickSlots[slot],ordered=[first,...s.quickSlots.filter(id=>id&&id!==first)];
+    s.quickSlots=s.quickSlots.map((_,i)=>ordered[i]??null);
+    s.selectedQuickSlot=0;
+   });
   },
   drink(slot=state.selectedQuickSlot){const id=state.quickSlots[slot];if(!validPotionSlot(slot)||!own(state,id)||!TOWN_ITEMS[id]?.quick||BOOSTS[id]&&state.boost>0)return false;
    return transact(0,s=>{take(s,id,1);if(BOOSTS[id]){s.boost=BOOSTS[id].seconds;s.boostRate=BOOSTS[id].rate;}});

@@ -10,9 +10,13 @@ import {slotStorage} from '../src/v03/save-slots.js';
 function storage(){
  const map=new Map();return {getItem:k=>map.get(k)??null,setItem:(k,v)=>map.set(k,v),removeItem:k=>map.delete(k)};
 }
-test('legacy choice migrates into slot 1, empty or invalid slots never refill from healing supplies',()=>{
+test('legacy choice stays first and carried healing is registered once, only in a pre-belt save',()=>{
  const old={bag:{potion:6,'stamina-tonic':3},quick:'stamina-tonic'};
- assert.deepEqual(normalizeTown(old).quickSlots,['stamina-tonic',null,null,null]);
+ assert.deepEqual(normalizeTown(old).quickSlots,['stamina-tonic','potion',null,null]);
+ assert.deepEqual(normalizeTown({...old,bag:{'stamina-tonic':3}}).quickSlots,['stamina-tonic',null,null,null]);
+ assert.deepEqual(normalizeTown({...old,quick:'potion'}).quickSlots,['potion',null,null,null]);
+ const custom=[null,'stamina-tonic',null,null];
+ assert.deepEqual(normalizeTown({...old,quickSlots:custom}).quickSlots,custom);
  const empty=Array(4).fill(null);
  assert.deepEqual(normalizeTown({...old,quickSlots:empty}).quickSlots,empty);
  assert.deepEqual(normalizeTown({...old,quickSlots:null}).quickSlots,empty);
@@ -27,13 +31,15 @@ test('moving, swapping, selecting and clearing survive reload in their own journ
  const raw=storage(),one=slotStorage(raw,'moonforest-0.3',1),two=slotStorage(raw,'moonforest-0.3',2);
  one.setItem(GOLD_LEDGER_KEY,JSON.stringify({version:1,balance:10,town:{bag:{potion:2,'bear-bile':1},quick:'bear-bile'}}));
  const open=storage=>createTownEconomy(new GoldLoot({storage}));let town=open(one);
+ assert.deepEqual(town.state.quickSlots,['bear-bile','potion',null,null]);assert.equal(town.state.bag.potion,2);
  assert.ok(town.register('potion',3));assert.ok(town.register('bear-bile',3));
  assert.deepEqual(town.state.quickSlots,['potion',null,null,'bear-bile']);assert.ok(town.selectQuickSlot(3));
- assert.equal(JSON.parse(one.getItem(GOLD_LEDGER_KEY)).town.quick,'potion');
- town=open(one);assert.equal(town.state.selectedQuickSlot,3);assert.deepEqual(open(two).state.quickSlots,['potion',null,null,null]);
- assert.equal(town.drink(1),false);assert.equal(town.drink(4),false);assert.equal(town.register('stamina-tonic',2),false);
+ assert.equal(JSON.parse(one.getItem(GOLD_LEDGER_KEY)).town.quick,'bear-bile');
+ town=open(one);assert.equal(town.state.selectedQuickSlot,0);assert.deepEqual(town.state.quickSlots,['bear-bile','potion',null,null]);
+ assert.deepEqual(open(two).state.quickSlots,['potion',null,null,null]);
+ assert.equal(town.drink(2),false);assert.equal(town.drink(4),false);assert.equal(town.register('stamina-tonic',2),false);
  assert.ok(town.drink());assert.equal(town.state.bag['bear-bile'],undefined);assert.equal(town.state.bag.potion,2);
- assert.ok(town.unregister(3));assert.ok(town.unregister(0));town=open(one);
+ assert.ok(town.unregister(1));assert.ok(town.unregister(0));town=open(one);
  assert.deepEqual(town.state.quickSlots,[null,null,null,null]);assert.equal(town.drink(),false);assert.equal(town.state.bag.potion,2);
 });
 
@@ -57,17 +63,33 @@ test('a touch tap commits one carried dose, a hold selects without drinking and 
  battle.playerHp=battle.playerMaxHp;town.updatePotionHud(true,true);assert.equal(button.disabled,false,'can switch at full health while healing');
  fire('pointerdown');ctx.mock.timers.tick(450);assert.equal(dialog.open,true);assert.equal(dialog.querySelectorAll('[data-potion-choice]').length,2);
  fire('pointerup');dialog.querySelector('[data-potion-choice="3"]').click();fire('click',{detail:0,pointerType:''});
- assert.equal(uses,1);assert.equal(town.economy.state.selectedQuickSlot,3);assert.equal(town.economy.state.bag['stamina-tonic'],2);
+ assert.equal(uses,1);assert.equal(town.economy.state.selectedQuickSlot,0);assert.equal(town.economy.state.bag['stamina-tonic'],2);
+ assert.deepEqual([...root.querySelectorAll('.mf-potion-bar button')].map(el=>el.querySelector('[data-item-icon]')?.dataset.itemIcon??null),['stamina-tonic','potion',null,null]);
  assert.equal(button.querySelector('.mf-potion-current [data-item-icon]').dataset.itemIcon,'stamina-tonic');
  for(const event of ['pointercancel','lostpointercapture','pointermove']){
   fire('pointerdown');fire(event,{clientX:70});ctx.mock.timers.tick(600);fire('pointerup');assert.equal(uses,1);assert.equal(dialog.open,false);
  }
- suspended=true;fire('pointerdown');ctx.mock.timers.tick(600);fire('pointerup');root.querySelectorAll('.mf-potion-bar button')[3].click();
+ suspended=true;fire('pointerdown');ctx.mock.timers.tick(600);fire('pointerup');root.querySelectorAll('.mf-potion-bar button')[0].click();
  assert.equal(uses,1);assert.equal(dialog.open,false,'dialogue blocks touch and desktop button actions');
  suspended=false;fire('pointerdown');fire('pointerup');assert.equal(uses,2);assert.equal(town.economy.state.boost,45);assert.equal(town.economy.state.bag['stamina-tonic'],1);
- assert.equal(town.drink(3),false);assert.equal(town.economy.state.bag['stamina-tonic'],1);
- battle.potions.cancel();battle.playerHp=0;assert.equal(town.drink(0),false,'the encounter may report alive outside combat at zero HP');
+ assert.equal(town.drink(0),false);assert.equal(town.economy.state.bag['stamina-tonic'],1);
+ battle.potions.cancel();battle.playerHp=0;assert.equal(town.drink(1),false,'the encounter may report alive outside combat at zero HP');
  battle.playerHp=350;town.updatePotionHud(true,true);
  store.setItem(GOLD_LEDGER_KEY,JSON.stringify({version:1,balance:20})); // A newer tab owns the ledger.
- root.querySelector('.mf-potion-bar button').click();assert.equal(uses,2);assert.equal(battle.potions.active,false);assert.equal(town.economy.state.bag.potion,2);
+ root.querySelectorAll('.mf-potion-bar button')[1].click();assert.equal(uses,2);assert.equal(battle.potions.active,false);assert.equal(town.economy.state.bag.potion,2);
+});
+
+test('promoting slot four keeps the other two items in order and updates all four numeric bindings together',()=>{
+ const store=storage(),wallet=new GoldLoot({storage:store}),town=createTownEconomy(wallet);
+ town.grant('stamina-tonic',2);town.grant('bear-bile',1);
+ assert.ok(town.register('stamina-tonic',2));assert.ok(town.register('bear-bile',3));
+ assert.deepEqual(town.state.quickSlots,['potion',null,'stamina-tonic','bear-bile']);
+ const bag={...town.state.bag};
+ assert.ok(town.selectQuickSlot(3));assert.deepEqual(town.state.quickSlots,['bear-bile','potion','stamina-tonic',null]);
+ assert.deepEqual(town.state.bag,bag);
+ const rival=createTownEconomy(new GoldLoot({storage:store}));
+ assert.ok(town.drink(1));assert.equal(town.state.bag.potion,bag.potion-1);
+ assert.ok(town.drink(2));assert.equal(town.state.bag['stamina-tonic'],1);assert.equal(town.drink(3),false);
+ assert.equal(rival.selectQuickSlot(2),false,'a stale writer cannot partly promote its choice');
+ assert.deepEqual(rival.state.quickSlots,['bear-bile','potion','stamina-tonic',null]);assert.equal(rival.state.selectedQuickSlot,0);
 });
