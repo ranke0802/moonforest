@@ -75,7 +75,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    const b=battle(),id=items().quickSlots[slot];if(!economy.drink(slot))return false;
    if(id==='potion'){b.potions.remaining=(items().bag.potion??0)+1;b.potions.use(b.playerHp,b.playerMaxHp);}
    else{notify(boostText('item.boosted',id));apply();}
-   return id;
+   return true;
   },
   equip(id){if(!economy.equip(id))return false;apply();sound('equip');return true;},
   // Only completed durability points need feedback. Repeated contacts of the

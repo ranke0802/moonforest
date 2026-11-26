@@ -16,7 +16,8 @@ test('legacy choice migrates into slot 1, empty or invalid slots never refill fr
  const empty=Array(4).fill(null);
  assert.deepEqual(normalizeTown({...old,quickSlots:empty}).quickSlots,empty);
  assert.deepEqual(normalizeTown({...old,quickSlots:null}).quickSlots,empty);
- assert.deepEqual(normalizeTown({...old,quick:'moon-herb'}).quickSlots,empty);
+ // The one-slot client displayed a healing potion for a damaged legacy key.
+ assert.deepEqual(normalizeTown({...old,quick:'moon-herb'}).quickSlots,['potion',null,null,null]);
  assert.deepEqual(normalizeTown({bag:{}}).quickSlots,empty);
  const bad=normalizeTown({...old,quickSlots:['potion','potion',['stamina-tonic'],'bear-bile','moon-herb'],selectedQuickSlot:2});
  assert.deepEqual(bad.quickSlots,['potion',null,null,'bear-bile']);assert.equal(bad.selectedQuickSlot,0);

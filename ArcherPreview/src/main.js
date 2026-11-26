@@ -632,10 +632,12 @@ const actions = {
     const carried=versionRoute.edition&&!versionRoute.worldRevision;
     if(carried&&(!actions.potionSlotsEnabled()||input.suspended||document.hidden||document.querySelector('dialog[open]')))return;
     if(!carried&&slot!==undefined&&slot!==0)return;
-    const used=carried?townServices.drink(slot):boss.usePotion()&&'potion';
+    const belt=carried?townServices.economy.state:null;
+    const kind=belt?belt.quickSlots[slot??belt.selectedQuickSlot]:'potion';
+    const used=carried?townServices.drink(slot):boss.usePotion();
     if(used){
       audio.play('potion_drink');
-      if(used==='potion'){questLive()?.action('potion');audio.play('heal_start',{volume:.65});}
+      if(kind==='potion'){questLive()?.action('potion');audio.play('heal_start',{volume:.65});}
     }else audio.play('ui_error');
     updateButtons();
   },

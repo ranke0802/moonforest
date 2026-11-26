@@ -49,7 +49,9 @@ export function normalizeTown(raw,legacy={}){
  const settledQuests=[...new Set(Array.isArray(raw.settledQuests)?raw.settledQuests.filter(validQuestId):[])];
  const quickSlots=Array(POTION_SLOT_COUNT).fill(null);
  // Preserve deliberately empty slots. Only a pre-belt ledger may supply a legacy default.
- const saved=Object.hasOwn(raw,'quickSlots')?(Array.isArray(raw.quickSlots)?raw.quickSlots:[]):[Object.hasOwn(raw,'quick')?raw.quick:bag.potion?'potion':null];
+ const oldChoice=typeof raw.quick==='string'&&TOWN_ITEMS[raw.quick]?.quick?raw.quick:null;
+ const legacySlot=oldChoice??(Object.hasOwn(raw,'quick')||bag.potion?'potion':null);
+ const saved=Object.hasOwn(raw,'quickSlots')?(Array.isArray(raw.quickSlots)?raw.quickSlots:[]):[legacySlot];
  for(let i=0;i<quickSlots.length;i++)if(typeof saved[i]==='string'&&TOWN_ITEMS[saved[i]]?.quick&&!quickSlots.includes(saved[i]))quickSlots[i]=saved[i];
  const selectedQuickSlot=validPotionSlot(raw.selectedQuickSlot)&&quickSlots[raw.selectedQuickSlot]?raw.selectedQuickSlot:Math.max(0,quickSlots.findIndex(Boolean));
  return {version:1,bag,equipped,condition,opened,drops,settledQuests,progression:normalizeProgression(raw.progression),quickSlots,selectedQuickSlot,quick:quickSlots[0],
