@@ -222,8 +222,17 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   await talk('innkeeper');await finishDialogue();assert.equal(h.save.journey.getItem(questKey(2)),completed);
   await back();await panel();h.click('[data-chapter="1"]');await settle(40);assert.equal(h.shell.story.log.finished,true);
   assert.equal(h.log.filter(e=>e.startsWith('gold:v03-quest-M09')).length,1);assert.equal(h.save.index()[1].used,false);
+  // The second chapter has no wagon props. Replaying chapter one in the same
+  // document must restore them before the camera's model gate is asked to run.
+  await back();await loadGame(h,1,2);await settle(40);await back();
+  const prepareCast=h.shell.story.prepareOpeningCast;
+  let preparedWagon=false;
+  h.shell.story.prepareOpeningCast=async(...args)=>{
+   const before=h.log.length;await prepareCast(...args);
+   preparedWagon=h.log.slice(before).includes('props:v03-opening-wagon');
+  };
+  await panel();h.click('[data-replay="1"]');await settle(40);assert.equal(h.shell.story.log.quest().id,'M00');assert.equal(preparedWagon,true);
   // Restore a player part way through a replay of a potion-paying chapter-one quest.
-  await back();await panel();h.click('[data-replay="1"]');await settle(40);assert.equal(h.shell.story.log.quest().id,'M00');
   await back();h.save.journey.setItem(questKey(1,true),JSON.stringify({quest:1,step:0,count:0,done:[]}));
   let potions=0;h.api.addPotions=count=>{potions+=count;return count;};
   await loadGame(h,1,1);await settle(40);await h.api.travel('warrior-v3');tick();

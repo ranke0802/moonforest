@@ -52,6 +52,8 @@ async function game(context,local,language='ko'){
     reloadProgress:()=>{wallet.reload();calls.push(['reload',save.slot]);return true;},
     restartProgress:()=>{wallet.reload();calls.push(['restart',save.slot]);return true;},
     travel:async character=>{state.character=character;state.mapId=({'warrior-v3':'village','warrior-v5':'witch-cave','warrior-plains':'great-plains'})[character];return true;}});
+  // Slot journeys have no Babylon scene. The opening model gate has its own integration tests.
+  shell.story.prepareOpeningCast=async map=>shell.story.prepare(map);
   context.after(()=>shell.dispose());
   for(let i=0;i<5;i++){await turn();shell.update(.4);}
   await turn();

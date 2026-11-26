@@ -236,6 +236,8 @@ export function setupV03(api){
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
  let openingAttempt=null;
  async function stageAmbush(dream){
+  // A same-tab replay can arrive with chapter two's empty wagon list.
+  setStoryChapter(1);
   const controller=new AbortController(),{signal}=controller;
   openingAttempt=controller;
   const cancelled=new Promise(resolve=>signal.addEventListener('abort',()=>resolve(false),{once:true}));
