@@ -17,14 +17,26 @@ const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,s
 function open(kind='herbalist',{gold:amount=200,grant={},view}={}){
  setPack('ko',ko);
  const {document,window}=parseHTML('<html lang="ko"><body><main id="app"></main></body></html>');
+ // Linkedom dispatches focus events but supplies neither activeElement nor native
+ // dialog autofocus and button activation. Model those keyboard contracts here.
+ let focused=document.body;
+ const create=document.createElement.bind(document);
+ document.createElement=(...args)=>{
+  const node=create(...args);node.addEventListener('focus',()=>{focused=node;});return node;
+ };
+ Object.defineProperty(document,'activeElement',{get:()=>document.contains(focused)?focused:document.body});
  const storage=store(),gold=new GoldLoot({storage});gold.creditCumulative('cart',amount);
  const economy=createTownEconomy(gold,{},{random:()=>.5});for(const [id,n] of Object.entries(grant))economy.grant(id,n);
  let changes=0,pauses=0;
  const shop=createTownShop({root:document.getElementById('app'),economy,onChange:()=>changes++,onPause:()=>pauses++});
- const dialog=document.querySelector('dialog');dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
+ const dialog=document.querySelector('dialog');dialog.showModal=()=>{dialog.open=true;dialog.querySelector('button').focus();};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
  const closed=shop.show(kind,view);
  const line=id=>dialog.querySelector('.mf-shop-row[data-item="'+id+'"]');
- const press=(code,target=dialog)=>{const event=new window.Event('keydown',{bubbles:true,cancelable:true});Object.defineProperty(event,'code',{value:code});target.dispatchEvent(event);return event;};
+ const press=(code,target=document.activeElement)=>{
+  const event=new window.Event('keydown',{bubbles:true,cancelable:true});Object.defineProperty(event,'code',{value:code});target.dispatchEvent(event);
+  if(!event.defaultPrevented&&code==='Enter'&&target.localName==='button'&&!target.disabled)target.click();
+  return event;
+ };
  return {document,window,dialog,economy,shop,storage,closed,line,press,
   get changes(){return changes;},
   rows:()=>[...dialog.querySelectorAll('.mf-shop-row[data-item]')],
@@ -183,6 +195,30 @@ test('keyboard: W/S or the arrows move between items, A/D change the quantity, E
   assert.equal(s.press('Enter',s.tabs()[0]).defaultPrevented,false);assert.equal(s.economy.gold,gold);
   // With an empty cart Enter does nothing.
   s.press('KeyA');s.press('Enter');assert.equal(s.economy.gold,gold);
+ }finally{s.shop.dispose();}
+});
+
+test('keyboard checkout keeps focus in the list after opening, changing tab and buying or selling',()=>{
+ const s=open('herbalist',{gold:40});
+ try{
+  const active=()=>s.document.activeElement;
+  assert.ok(active()===s.line('potion'),'the initial row receives focus instead of Close');
+  s.press('KeyS');s.press('KeyS');s.press('KeyD');s.press('Enter');
+  assert.equal(s.shop.open,true);assert.equal(s.economy.gold,36);assert.equal(s.economy.state.bag['moon-herb'],1);
+  assert.ok(active()===s.line('moon-herb'),'checkout replaced the row');
+  const plus=s.more('moon-herb');
+  plus.focus();s.press('Enter');
+  assert.equal(s.count('moon-herb'),'1','Enter on the stepper still activates the button');
+  s.press('KeyD');s.press('Enter');
+  assert.equal(s.economy.gold,28);assert.equal(s.economy.state.bag['moon-herb'],3,'keyboard quantity change resumes list checkout');
+  s.tabs()[1].focus();s.press('Enter');
+  assert.ok(active()===s.line('moon-herb'),'arrive on the sale list');
+  for(let i=0;i<3;i++)s.press('KeyD');
+  s.press('Enter');
+  assert.equal(s.economy.gold,34);assert.equal(s.economy.state.bag['moon-herb'],undefined);
+  assert.ok(active()===s.tabs()[1],'an empty sale list returns focus to its tab');
+  s.dialog.querySelector('header button').focus();s.press('Enter');
+  assert.equal(s.shop.open,false,'the close button keeps native Enter activation');
  }finally{s.shop.dispose();}
 });
 

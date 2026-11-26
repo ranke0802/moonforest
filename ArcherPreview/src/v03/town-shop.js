@@ -42,9 +42,9 @@ export function createTownShop({root,economy,onChange,onPause}){
   else if(code==='KeyS'||code==='ArrowDown')select(cursor+1);
   else if(code==='KeyA'||code==='ArrowLeft')change(rows[cursor].id,-1);
   else if(code==='KeyD'||code==='ArrowRight')change(rows[cursor].id,1);
-  else if(code==='Enter'&&!event.target?.closest?.('button'))commit();
+  else if(code==='Enter'&&!event.target?.closest?.('button')){event.preventDefault();commit();return;}
   else return;
-  event.preventDefault();
+  event.preventDefault();focusList();
  });
  const lang=()=>doc.documentElement.lang||'ko';
  const price=n=>n.toLocaleString(lang())+' G';
@@ -69,7 +69,11 @@ export function createTownShop({root,economy,onChange,onPause}){
  }
  function select(index){
   if(!rows.length)return;
-  cursor=Math.max(0,Math.min(rows.length-1,index));rows[cursor].line.scrollIntoView?.({block:'nearest'});refresh();
+  cursor=Math.max(0,Math.min(rows.length-1,index));refresh();
+ }
+ function focusList(){
+  const target=rows[cursor]?.line??dialog.querySelector('.mf-shop-tabs [aria-selected="true"]');
+  target?.focus({preventScroll:true});target?.scrollIntoView?.({block:'nearest'});
  }
  const makeLabel=()=>t(current==='smith'?'shop.makeAction':'shop.brew');
  function refresh(){
@@ -103,8 +107,14 @@ export function createTownShop({root,economy,onChange,onPause}){
  function stepRow(parent,id,name,detail,cost){
   const line=row(parent,name,detail,id),index=rows.length,tag=element('b',cost),step=element('div'),count=element('output','0');
   line.dataset.item=id;tag.className='mf-shop-price';step.className='mf-shop-step';
-  const less=addButton(step,'−',()=>{cursor=index;change(id,-1);});step.append(count);
-  const more=addButton(step,'+',()=>{cursor=index;change(id,1);});
+  line.tabIndex=-1;line.setAttribute('role','group');line.setAttribute('aria-label',name);
+  line.addEventListener('focusin',()=>{if(cursor!==index)select(index);});
+  function stepBy(event,delta){
+   cursor=index;change(id,delta);
+   if(event.currentTarget.disabled)focusList();
+  }
+  const less=addButton(step,'−',event=>stepBy(event,-1));step.append(count);
+  const more=addButton(step,'+',event=>stepBy(event,1));
   less.setAttribute('aria-label',t('shop.less',{name}));more.setAttribute('aria-label',t('shop.more',{name}));
   line.append(tag,step);rows.push({id,line,less,more,count});
  }
@@ -135,7 +145,7 @@ export function createTownShop({root,economy,onChange,onPause}){
   }
   cursor=Math.min(cursor,Math.max(0,rows.length-1));
   for(const id of Object.keys(cart))if(!rows.some(line=>line.id===id))delete cart[id];
-  refresh();
+  refresh();if(dialog.open)focusList();
  }
  // The smith's bench: choose a piece, repair it, temper it.
  function renderBench(state){
@@ -259,6 +269,7 @@ export function createTownShop({root,economy,onChange,onPause}){
  return {get open(){return dialog.open;},show(shop,view='shop'){
   if(!STOCK[shop]||dialog.open)return Promise.resolve();
   current=shop;mode=view==='forge'&&shop==='smith'?'forge':'shop';tab='buy';cart={};cursor=0;smithTarget=null;receipt.textContent='';render();dialog.showModal();onPause();
+  if(mode==='shop')focusList();
   return new Promise(res=>{resolveClose=res;});
  },close(){if(dialog.open)dialog.close();},dispose(){if(dialog.open)dialog.close();finish();dialog.remove();}};
 }
