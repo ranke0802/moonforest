@@ -96,7 +96,8 @@ export function setupV03(api){
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
  // A model without the cloth grid, or a world without a scene (tests), leaves a stub so it is not tried every frame.
  // Until it has been judged on screen it runs on the development server and with ?cape=1 only (2026-11-20).
- let cape=null, greatAttackFx=null;
+ let cape=null, greatAttackFx=null, greatAttackMap=null;
+ function resetGreatAttackFx(){greatAttackFx?.reset();greatAttackMap=null;}
  function prepareGreatAttack(rank){
   const scene=api.world?.scene;
   if(greatAttackFx&&(!rank||greatAttackFx.scene!==scene||scene?.isDisposed)){
@@ -108,7 +109,11 @@ export function setupV03(api){
   }
  }
  function greatAttackFrame(cast,blade){
-  if(cast)prepareGreatAttack(cast.level);
+  if(cast){
+   prepareGreatAttack(cast.level);
+   if(greatAttackMap!==api.world?.mapId)resetGreatAttackFx();
+   greatAttackMap=api.world?.mapId;
+  }
   greatAttackFx?.update(cast,blade,api.getPlayer?.()?.position);
  }
  const capeWanted=(()=>{try{return !!import.meta.env?.DEV||new URLSearchParams(view?.location?.search??'').get('cape')==='1';}catch{return false;}})();
@@ -504,9 +509,9 @@ export function setupV03(api){
  // the fight and stage in hand (api.resetStage). The record was saved by the caller.
  // Resolves false when a part is missing or it fails: the caller reloads as before.
  async function returnToTitle(){
-  greatAttackFx?.hide();
   if(state.busy||state.screen!=='play'||state.disposed)return false;
   if(typeof story.stop!=='function'||typeof api.stopWorld!=='function'||typeof api.resetStage!=='function')return false;
+  resetGreatAttackFx();
   state.busy=true;
   try{
    opening.cover();
@@ -678,7 +683,7 @@ export function setupV03(api){
   // The prologue's black stage hides the world: main.js draws it only now and
   // then (uploads keep moving) so the ambush wolf's preparation and the
   // prologue's own animation get the frame time.
-  prepareGreatAttack,greatAttackFrame,
+  prepareGreatAttack,greatAttackFrame,resetGreatAttackFx,
   get stageHidden(){return (state.screen==='opening'||state.screen==='resume')&&opening.covering;},
   // The simulation is frozen while the prologue covers the stage.
   // Dialogue no longer stops the world (2026-11-20, user: the player and the NPC
@@ -725,6 +730,10 @@ export function setupV03(api){
    if(state.disposed)return;
    if(state.screen!=='play')cursors.set('ui');
    const s=gameState();
+   if(greatAttackFx?.active){
+    if(!s.ready||state.screen!=='play'||greatAttackMap!==s.mapId)resetGreatAttackFx();
+    else greatAttackFx.tick();
+   }
    if(s.failed&&!state.failed){fail();return;}
    if(s.ready)bindCape();
    if(state.screen==='title'){

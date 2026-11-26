@@ -70,25 +70,25 @@ test('shipped warrior swings track their target and use real contacts on low and
   const navigation={obstacles:blocked?[{x:0,z:.48,radius:.12}]:[],segmentClear:()=>!blocked};
   const hp=foe.brain.hp;if(blocked)world.navigation=navigation;
   const cast=rank?new GreatAttackCast(actionId,rank):null;
-  if(cast)cast.holdLeft=0; // This fixture samples the authored clip by clip seconds.
+  cast?.release(); // This fixture samples the released attack by clip seconds.
   const contactWorld={navigation,terrain:world.terrain},encounters=other?[foe,other]:[foe];
   for(let time=0;time<=duration;time+=dt){
    const action={actionId,state,clipTime:time,greatAttack:cast};
    aim.restore();animator.transition(state,action);animator.update(dt);
    if(time===0)aim.begin(action,player,foe,fitted);
    const step=strikeLungeStep(ledger,player,action,STRIKE_LUNGE[state],foe,other??foe,manual,dimensions.ratio,duration,dt,fitted);
-   if(step>0||cast)applyStrikeTravel(player,action,ledger,player.rotation.y-correction,step,contactWorld,encounters,50,dimensions);
+   if(step>0)applyStrikeTravel(player,action,player.rotation.y-correction,step,contactWorld,encounters,50,dimensions);
    scene.render();refreshPoseMatrices(pose);aim.apply(action,player,dt);
    const sample=sampler.sample(action,sword,null,true,player.rotation.y,0,dimensions);
    const capsules=foe.hurtCapsules();
    // Test the hooded goblin's real body independently of its upright assist.
    if(foe.kind==='goblin')capsules.pop();
-   if(cast)cast.sample(time,sample,PLAYER_STRIKES.judgment[0],0,player.position);
+   if(cast)cast.sample(time,sample,PLAYER_STRIKES.judgment[0],0,player.position,contactWorld);
    hits.push(...gate.collect({...sample,capsules,areaContact:cast?.contains(foe.actor.position,navigation)}).hits.map(h=>h.id));
    if(blocked)foe.poseAndContacts(player,action,sample,null);
   }
   if(blocked){delete world.navigation;assert.equal(foe.brain.hp,hp,'wall occludes the real encounter damage path');}
-  aim.restore();return {hits,aimed:aim.target===foe,travel:player.position.length(),z:player.position.z};
+  aim.restore();return {hits,aimed:aim.target===foe,travel:player.position.length(),z:player.position.z,center:cast?.center};
  }
  const nearSide={kind:'goblin',active:true,actor:{position:new Vector3(-1,0,0)},radius:.34,brain:{hp:10}};
  for(const kind of ['fox','goblin','goblin-warrior','goblin-archer','goblin-shaman','ghoul-warrior','zombie','hobgoblin-boss']){
@@ -115,8 +115,9 @@ test('shipped warrior swings track their target and use real contacts on low and
   assert.deepEqual(outOfReach.hits,[],kind+' misses beyond the leap range');
   if(kind==='fox'||kind==='goblin'||kind==='goblin-warrior'){
    const charged=swing(foe,'judgment',3.2,true,nearSide,{rank:1});
-   assert.deepEqual(charged.hits,['jump-cut','jump-cut','jump-cut'],kind+' lies inside the level-one landing circle');
-   assert.ok(Vector3.Distance(player.position,foe.actor.position)<=1.5);
+   assert.deepEqual(charged.hits,['jump-cut','jump-cut','jump-cut'],kind+' receives all three hits');
+   assert.deepEqual(charged.center,{x:0,y:0,z:3.2},kind+' is the centre of the level-one blast');
+   assert.ok(charged.travel>1&&Vector3.Distance(player.position,foe.actor.position)>1,kind+' is reached without overlapping its rig');
   }
   if(kind==='goblin-warrior'){
    const far=swing(foe,'slash',4,true,null),away=swing(foe,'slash',1.9,true,null,{manual:true});

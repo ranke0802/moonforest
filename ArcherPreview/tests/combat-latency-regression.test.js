@@ -9,15 +9,18 @@ import {BossEncounter} from '../src/boss-encounter.js';
 import {Vector3} from '@babylonjs/core';
 
 const durations={idle:2,run:.8,slash:1.5,attack:3,judgment:130/30,shieldPush:71/30,dodge:74/30};
+function attackInput(source,controller,sources){
+ const body=source.slice(source.indexOf('function setAttackHeld('),source.indexOf('function faceHeading('));
+ return new Function('attackSources','attackPointerTypes','controller','ready','allowed','boss','elenaReview','world',
+  body+';return {setAttackHeld,cancelAttackInput};')(sources,new Map(),controller,true,()=>true,null,null,{});
+}
 test('production attack button buffers a full hold during dodge/push at 15/30/60 FPS, even released before recovery ends',()=>{
  const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
  for(const kind of ['dodge','shieldPush'])for(const fps of [15,30,60])for(const releaseEarly of [false,true,'lost-capture']){
   const c=new WarriorV2Controller({durations}),{document,Event}=parseHTML('<button id="attack"></button>'),button=document.getElementById('attack'),sources=new Set();
   button.setPointerCapture=()=>{};
-  const held=(id,value)=>{if(value){if(c.setAttackHeld(true)!==false)sources.add(id);}else if(sources.delete(id))c.setAttackHeld(sources.size>0);};
-  const cancelSource=source.slice(source.indexOf('function cancelAttackInput('),source.indexOf('function faceHeading('));
-  const cancel=new Function('attackSources','attackPointerTypes','controller',cancelSource+';return cancelAttackInput;')(sources,new Map(),c);
-  new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},held,cancel,{attack:()=>c.attack()});
+  const input=attackInput(source,c,sources);
+  new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},input.setAttackHeld,input.cancelAttackInput,{attack:()=>c.attack()});
   const send=type=>{const e=new Event(type);Object.assign(e,{pointerId:7,button:0});button.dispatchEvent(e);};
   c[kind]();send('pointerdown');for(let i=0;i<Math.ceil(.46*fps);i++)c.update(1/fps);
   assert.equal(c.chargeProgress,1);
@@ -29,9 +32,9 @@ test('production attack button buffers a full hold during dodge/push at 15/30/60
 });
 
 test('early lost HUD capture cannot turn a partial charge into a tap, and global focus loss clears a retained heavy',()=>{
- const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8'),body=source.slice(source.indexOf('function cancelAttackInput('),source.indexOf('function faceHeading('));
+ const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  for(const time of [.2,.5]){
-  const c=new WarriorV2Controller({durations}),sources=new Set(['button:7']),cancel=new Function('attackSources','attackPointerTypes','controller',body+';return cancelAttackInput;')(sources,new Map(),c);
+  const c=new WarriorV2Controller({durations}),sources=new Set(['button:7']),cancel=attackInput(source,c,sources).cancelAttackInput;
   c.shieldPush();c.setAttackHeld(true);c.update(time);cancel('button:7',{preserveCompletedCharge:true});
   assert.equal(c.held,false);assert.equal(c.queuedAttack,time===.5?'judgment':null);
   cancel();assert.equal(c.queuedAttack,null);c.update(3);assert.equal(c.action,null);

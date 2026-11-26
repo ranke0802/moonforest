@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import { PlaygroundInput } from '../src/input.js';
-import { WarriorV2Controller } from '../src/warrior-v2.js';
+import { WarriorV2Controller, V2_HOLD_SECONDS } from '../src/warrior-v2.js';
+import { GREAT_ATTACK_POSE } from '../src/v03/great-attack.js';
 
 class Surface {
   constructor() { this.events = new Map(); this.style = {}; this.hidden = true; this.captured = new Set(); }
@@ -419,15 +420,38 @@ test('touch stick: direction changes do not interrupt; releasing stick avoids de
  assert.equal(tick(3).state,'run');
 });
 
-test('separate joystick and camera touch cancellation preserves the charged HUD attack',()=>{
+function attackButtonFixture(){
  const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
  const functions=source.slice(source.indexOf('function setAttackHeld('),source.indexOf('function faceHeading('));
  const binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
+ const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
+ const actions=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview','allowed','world',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,new Map(),controller,true,null,null,()=>true,{riding:null});
+ const controls=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
+ const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
+ return {...controls,controller,attackSources,button};
+}
+
+test('keyboard, mouse and touch hold Starfall until release, ignoring subsequent pointer capture loss',()=>{
+ for(const device of ['keyboard','mouse','touch']){
+  const {input,controller,canvas,button}=attackButtonFixture();
+  controller.greatAttackLevel=1;
+  const target=device==='touch'?button:canvas,pointer={pointerId:7,button:0,pointerType:device};
+  if(device==='keyboard')window.emit('keydown',{code:'KeyJ',target:{tagName:'BODY'}});
+  else target.emit('pointerdown',{...pointer,buttons:1});
+  controller.update(V2_HOLD_SECONDS);
+  const cast=controller.action.greatAttack;
+  assert.equal(controller.update(12).clipTime,GREAT_ATTACK_POSE);assert.equal(cast.charging,true);
+  if(device==='keyboard')window.emit('keyup',{code:'KeyJ'});
+  else {target.emit('pointerup',{...pointer,buttons:0});target.emit('lostpointercapture',pointer);}
+  assert.equal(cast.charging,false);assert.equal(controller.action.greatAttack,cast);
+  assert.ok(controller.update(.1).clipTime>GREAT_ATTACK_POSE);assert.equal(controller.stamina,70);
+  input.dispose();
+ }
+});
+
+test('separate joystick and camera touch cancellation preserves the charged HUD attack',()=>{
  for(const cancelled of ['stick','camera'])for(const type of ['pointercancel','lostpointercapture'])for(const release of [true,false]){
-  const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
-  const actions=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview','allowed','world',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,new Map(),controller,true,null,null,()=>true,{riding:null});
-  const {input,canvas,pointer,elements}=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
-  const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
+  const {controller,attackSources,input,canvas,pointer,elements,button}=attackButtonFixture();
   controller.shieldPush();pointer('pointerdown',31,120,650);pointer('pointermove',31,174,596);
   pointer('pointerdown',32,700,250);pointer('pointerdown',33,850,250);
   button.emit('pointerdown',{pointerId:7,button:0});controller.update(.5);assert.equal(controller.queuedAttack,'judgment');
@@ -447,16 +471,13 @@ test('separate joystick and camera touch cancellation preserves the charged HUD 
 });
 
 test('HUD pointer cancellation and global blur discard the charged attack safely',()=>{
- const source=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
- const functions=source.slice(source.indexOf('function setAttackHeld('),source.indexOf('function faceHeading('));
- const binding=source.slice(source.indexOf('  let lastPointerAttack'),source.indexOf('  const releaseAttack'));
- for(const cancellation of ['pointercancel','blur','visibilitychange']){
-  const controller=new WarriorV2Controller({durations:{idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46}}),attackSources=new Set();
-  const actions=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview','allowed','world',functions+';return {setAttackHeld,cancelAttackInput};')(attackSources,new Map(),controller,true,null,null,()=>true,{riding:null});
-  const {input}=setup({setAttackHeld:(held,source='keyboard')=>actions.setAttackHeld(source,held),cancelAttackInput:actions.cancelAttackInput});
-  const button=new Surface();new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(button,true,{now:()=>100},actions.setAttackHeld,actions.cancelAttackInput,{attack:()=>controller.attack()});
-  controller.shieldPush();button.emit('pointerdown',{pointerId:7,button:0});controller.update(.5);assert.equal(controller.queuedAttack,'judgment');
-  if(cancellation==='pointercancel')button.emit('pointercancel',{pointerId:7});
+ for(const buffered of [true,false])for(const cancellation of ['pointercancel','lostpointercapture','blur','visibilitychange']){
+  const {controller,attackSources,input,button}=attackButtonFixture();
+  controller.greatAttackLevel=3;
+  if(buffered)controller.shieldPush();
+  button.emit('pointerdown',{pointerId:7,button:0});controller.update(.5);
+  if(buffered)assert.equal(controller.queuedAttack,'judgment');else assert.ok(controller.action.greatAttack.charging);
+  if(cancellation==='pointercancel'||cancellation==='lostpointercapture')button.emit(cancellation,{pointerId:7});
   else if(cancellation==='blur')window.emit('blur');else{document.hidden=true;document.emit('visibilitychange');}
   assert.equal(controller.queuedAttack,null);assert.equal(controller.held,false);assert.equal(attackSources.size,0);
   button.emit('pointerup',{pointerId:7});controller.update(4);assert.equal(controller.serial,1);input.dispose();

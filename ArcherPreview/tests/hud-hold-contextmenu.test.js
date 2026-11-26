@@ -14,6 +14,10 @@ const binding=main.slice(main.indexOf('  let lastPointerAttack'),main.indexOf(' 
 const feedbackSource=main.slice(main.indexOf('function updateButtons()'),main.indexOf('  const snapshot=',main.indexOf('function updateButtons()')))+'\n}';
 const toastSource=main.slice(main.indexOf('function toast('),main.indexOf('function updateSummonControls('));
 const durations={idle:2,run:1,slash:1.5,attack:3,judgment:4.33,shieldPush:2.37,dodge:2.46};
+function staminaHud(controller,feedback,toast,audio,container,boss){
+ const build=new Function('controller','staminaFeedback','toast','audio','applyPlayerFlash','container','boss','world','wolfMaulNotice','townServices',feedbackSource+';return updateButtons;');
+ return build(controller,feedback,toast,audio,applyPlayerFlash,container,{...boss,potions:{remaining:3}},{},{update(){}},null);
+}
 class Surface{
  constructor(){this.events=new Map();this.style={};this.hidden=true;this.captured=new Set();}
  addEventListener(name,fn,options={}){if(!this.events.has(name))this.events.set(name,[]);this.events.get(name).push(fn);options.signal?.addEventListener('abort',()=>this.events.set(name,this.events.get(name).filter(f=>f!==fn)),{once:true});}
@@ -26,7 +30,7 @@ function fixture(kind){
  const root=new Surface(),canvas=new Surface(),attackButton=new Surface(),label={closest:selector=>selector==='#attack-button'?attackButton:null};
  root.contains=target=>target===canvas||target===attackButton||target===label;canvas.closest=()=>root;attackButton.closest=selector=>selector==='#attack-button'?attackButton:null;
  let now=0;const controller=new WarriorV2Controller({durations,holdNow:()=>now});controller.startAttack(kind);const attackSources=new Set();
- const production=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview',inputFunctions+';return {setAttackHeld,cancelAttackInput,isHudAttackHeld};')(attackSources,new Map(),controller,true,null,null);
+ const production=new Function('attackSources','attackPointerTypes','controller','ready','boss','elenaReview','world','allowed',inputFunctions+';return {setAttackHeld,cancelAttackInput,isHudAttackHeld};')(attackSources,new Map(),controller,true,null,null,{},()=>true);
  const input=new PlaygroundInput(canvas,{alpha:0,beta:1,radius:5},{canMove:()=>true,setAttackHeld:(held,source='keyboard')=>production.setAttackHeld(source,held),cancelAttackInput:production.cancelAttackInput,isHudAttackHeld:production.isHudAttackHeld});
  new Function('attackButton','ready','performance','setAttackHeld','cancelAttackInput','actions',binding)(attackButton,true,{now:()=>now},production.setAttackHeld,production.cancelAttackInput,{attack:()=>controller.attack()});
  const loop=new FrameLoop({stopRenderLoop(){},runRenderLoop(){}},dt=>controller.update(dt),()=>now);loop.frame();
@@ -77,7 +81,7 @@ test('real sword HUD queues one heavy and spends stamina only at execution',()=>
 test('actual held sword HUD rejection displays one exact message and one independent flash without repeated charges',t=>{
  const f=fixture('shieldPush'),c=f.controller,engine=new NullEngine(),scene=new Scene(engine),mesh=MeshBuilder.CreateBox('player',{},scene),material=new PBRMaterial('player-material',scene);mesh.material=material;t.after(()=>{f.input.dispose();scene.dispose();engine.dispose();});
  let now=0;const feedback=new StaminaFailureFeedback({now:()=>now}),reaction=new PlayerHitReaction(),messages=[],sounds=[],boss={playerReaction:reaction},container={meshes:[mesh]};
- const update=new Function('controller','staminaFeedback','toast','audio','applyPlayerFlash','container','boss',feedbackSource+';return updateButtons;')(c,feedback,message=>messages.push(message),{play:s=>sounds.push(s)},applyPlayerFlash,container,boss);
+ const update=staminaHud(c,feedback,message=>messages.push(message),{play:s=>sounds.push(s)},container,boss);
  c.stamina=29;update();f.attackButton.emit('pointerdown',{button:0,pointerId:7,pointerType:'touch'});
  for(let i=0;i<110;i++){now+=1000/30;f.step(1000/30);feedback.advance(1/30);applyPlayerFlash(container.meshes,reaction,feedback);update();if(messages.length)break;}
  assert.equal(c.staminaRejectSerial,1);assert.equal(c.serial,1);assert.deepEqual(messages,['스테미나가 부족합니다.']);assert.deepEqual(sounds,['ui_error']);assert.equal(mesh.renderOverlay,true);assert.strictEqual(mesh.material,material);
@@ -89,8 +93,8 @@ test('failure feedback coalesces rapid attempts and never mutates the active dam
  const engine=new NullEngine(),scene=new Scene(engine),mesh=MeshBuilder.CreateBox('player',{},scene),material=new PBRMaterial('player-material',scene);mesh.material=material;t.after(()=>{scene.dispose();engine.dispose();});
  let now=0,writes=0;const c=new WarriorV2Controller({durations}),feedback=new StaminaFailureFeedback({now:()=>now}),reaction=new PlayerHitReaction(),sounds=[],container={meshes:[mesh]},boss={playerReaction:reaction};
  const {document:doc}=parseHTML('<div id="root"><div id="toast" hidden></div></div>'),node=doc.getElementById('toast'),proxy=new Proxy(node,{set(target,key,value){if(key==='textContent')writes++;return Reflect.set(target,key,value);}});
- const toast=new Function('$','setTimeout','clearTimeout','staminaNoticeAnchor','let toastTimer;'+toastSource+';return toast;')(()=>proxy,()=>1,()=>{});
- const update=new Function('controller','staminaFeedback','toast','audio','applyPlayerFlash','container','boss',feedbackSource+';return updateButtons;')(c,feedback,toast,{play:s=>sounds.push(s)},applyPlayerFlash,container,boss);
+ const toast=new Function('$','setTimeout','clearTimeout','staminaNoticeAnchor','tr','let toastTimer;'+toastSource+';return toast;')(()=>proxy,()=>1,()=>{},null,value=>value);
+ const update=staminaHud(c,feedback,toast,{play:s=>sounds.push(s)},container,boss);
  update();reaction.start(new Vector3(1,0,0),{flashDuration:.4});reaction.flashRemaining=.1;const before={remaining:reaction.remaining,flashRemaining:reaction.flashRemaining,direction:reaction.direction.clone()};
  c.stamina=0;assert.equal(c.dodge(),false);update();assert.equal(mesh.renderOverlay,true);assert.equal(mesh.overlayAlpha,.72);assert.equal(reaction.remaining,before.remaining);assert.equal(reaction.flashRemaining,before.flashRemaining);assert.ok(reaction.direction.equals(before.direction));
  for(let i=0;i<20;i++){now+=20;c.dodge();update();}assert.equal(writes,1);assert.equal(node.textContent,'스테미나가 부족합니다.');assert.equal(doc.getElementById('root').children.length,1);assert.equal(sounds.length,1);assert.equal(c.serial,0);

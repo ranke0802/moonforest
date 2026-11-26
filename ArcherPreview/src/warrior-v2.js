@@ -69,7 +69,10 @@ export class WarriorV2Controller {
     if(!this.spendStamina(kind,normal?this.comboCost?.[kind]:undefined))return false;
     if(normal)this.attackIndex++;
     this.lastAttack=kind;this.comboRemaining=0;this.action={id:++this.serial,state:kind,time:0,elapsed:0,hitStop:0};
-    if(kind==='judgment'&&Number.isInteger(this.greatAttackLevel)&&this.greatAttackLevel>0)this.action.greatAttack=new GreatAttackCast(this.serial,this.greatAttackLevel);
+    if(!normal&&kind==='judgment'&&Number.isInteger(this.greatAttackLevel)&&this.greatAttackLevel>0){
+      // A heavy buffered behind another action can already have received its keyup.
+      this.action.greatAttack=new GreatAttackCast(this.serial,this.greatAttackLevel,this.held&&this.holdTriggered);
+    }
     return true;
   }
   releaseHold(){this.held=false;this.holdTime=0;this.holdTriggered=false;this.holdStartedAt=null;}
@@ -83,7 +86,10 @@ export class WarriorV2Controller {
     this.holdTime=Math.min(V2_HOLD_SECONDS,Math.max(this.holdTime,this.heldSeconds()));
     if(this.holdTime>=V2_HOLD_SECONDS-1e-8){this.holdTriggered=true;this.queuedAttack='judgment';}
   }
-  cancelAttackInput(){this.releaseHold();this.queuedAttack=null;}
+  cancelAttackInput(){
+    if(this.action?.greatAttack?.charging)this.action=null;
+    this.releaseHold();this.queuedAttack=null;
+  }
   cancelAttack(){this.cancelShieldInput();this.action=null;this.cancelAttackInput();this.attackIndex=0;this.comboRemaining=0;}
   requestMovement(){
     // Movement is sampled when combat finishes. It never interrupts an attack or charge.
@@ -126,7 +132,9 @@ export class WarriorV2Controller {
       if(this.queuedAttack==='normal')this.queuedAttack=null;
     }else{
       // A short press fires on release; a completed hold never also fires a normal attack.
-      this.syncHeldCharge();const tap=this.held&&!this.holdTriggered;this.releaseHold();
+      this.syncHeldCharge();const tap=this.held&&!this.holdTriggered;
+      if(this.held&&this.holdTriggered)this.action?.greatAttack?.release();
+      this.releaseHold();
       if(tap)this.attack();
     }
     return true;

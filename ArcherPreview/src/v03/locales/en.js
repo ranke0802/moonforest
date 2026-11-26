@@ -3,7 +3,7 @@ export default {
  ui:{
   'potion.slots':'Potion slots','potion.slot':'Slot {n}','potion.empty':'Empty slot','potion.choose':'Choose a potion for slot 1','potion.remove':'Remove from slot','potion.gesture':'Tap to use. Hold to choose a potion.',
   'char.skill.greatAttack':'Starfall Strike',
-  'char.skillText.greatAttack':'Gather light along the blade before leaping. Damage and blast radius reach {percent}% of a normal heavy attack. Charging absorbs no damage and ends on knockdown.',
+  'char.skillText.greatAttack':'Hold attack to gather starlight on the blade. Release to rush the target and strike nearby enemies three times. Damage and radius: {percent}%. You still take damage while charging. Knockdown or capture cancels the charge.',
   'opening.castLoading':'Preparing the wagon and the first fight…','opening.castFailed':'The opening scene could not be loaded.','opening.castRetry':'Retry',
   'gallery.noTitles':'There are currently no titles to earn.',
   'hud.tip.bag':'Open your bag to view gear and items (I).',

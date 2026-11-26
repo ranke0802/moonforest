@@ -3,7 +3,7 @@ export default {
  ui:{
   'potion.slots':'ポーションスロット','potion.slot':'スロット{n}','potion.empty':'空きスロット','potion.choose':'スロット1のポーションを選択','potion.remove':'登録を解除','potion.gesture':'タップで使用、長押しでポーションを選択します。',
   'char.skill.greatAttack':'星光強撃',
-  'char.skillText.greatAttack':'跳躍の前に剣へ光を集める。威力と爆発半径は通常の強攻撃の{percent}%。溜め中もダメージを受け、転倒すると中断する。',
+  'char.skillText.greatAttack':'攻撃を長押しして剣に星の光を集める。離すと標的に踏み込み、周囲の敵に3連撃を放つ。威力と効果半径は{percent}%。溜め中もダメージを受け、転倒や拘束で中断する。',
   'opening.castLoading':'馬車と最初の戦闘を準備しています。','opening.castFailed':'最初の場面を読み込めませんでした。','opening.castRetry':'再試行',
   'gallery.noTitles':'現在、獲得できる称号はありません。',
   'hud.tip.bag':'バッグを開いて装備や持ち物を確認します（I）。',

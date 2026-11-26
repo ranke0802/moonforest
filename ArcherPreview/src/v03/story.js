@@ -1333,26 +1333,22 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   else if((mine||theirs)&&!slow.used&&!scene.active&&(first||fx.everywhere&&fighting)){slow.used=true;slow.left=Math.max(slow.left,fx.seconds);}
   updateSlowZoom();
  }
- // A light push-in while slow motion lasts (user request 2026-11-19): the
- // field of view narrows by up to 9 % and eases back, on real time so the slow
- // itself does not stretch the zoom. FOV only: the player's zoom distance,
- // pitch and the camera guard are untouched.
- // Stronger since 2026-11-19 evening (user: hard to notice): 20 % push-in;
- // 32 % by default since 2026-11-20 and set by the player (slow-fx.js).
- const SLOW_ZOOM_IN=.1,SLOW_ZOOM_OUT=.45;
- const zoom={weight:0,base:null,last:0,camera:null,skill:false};
- const chargingGreatAttack=()=>started&&!disposed&&!scene.active&&!dialogue.open&&api.getController?.()?.action?.greatAttack?.holdLeft>0;
+ // FOV follows real time. The extra Starfall close-up eases off on release so the target
+ // comes back into view during the dash, even if a separate slow-motion beat is active.
+ const SLOW_ZOOM_IN=.1,SLOW_ZOOM_OUT=.45,STARFALL_ZOOM_IN=.20,STARFALL_ZOOM_OUT=.20;
+ const zoom={weight:0,base:null,last:0,camera:null,skillWeight:0};
+ const chargingGreatAttack=()=>started&&!disposed&&!scene.active&&!dialogue.open&&api.getController?.()?.action?.greatAttack?.charging===true;
  function restoreSlowZoom(){
   if(zoom.base!==null&&zoom.camera){zoom.camera.fov=zoom.base;unpinScreenArea(zoom.camera);}
-  zoom.base=null;zoom.weight=0;zoom.skill=false;zoom.last=0;
+  zoom.base=null;zoom.weight=0;zoom.skillWeight=0;zoom.last=0;
  }
- function cancelGreatAttackFocus(){if(zoom.skill){restoreSlowZoom();hud.setFocus(false);}}
+ function cancelGreatAttackFocus(){if(zoom.skillWeight>0){restoreSlowZoom();hud.setFocus(false);}}
  function updateSlowZoom(){
   const camera=api.world?.camera;if(!camera||!Number.isFinite(camera.fov))return;
   const now=performance.now(),dt=zoom.last?Math.min(.1,(now-zoom.last)/1000):0;zoom.last=now;
   if(zoom.camera!==camera){restoreSlowZoom();zoom.camera=camera;}
   const skill=chargingGreatAttack(),target=slow.left>0||skill?1:0;
-  if(skill)zoom.skill=true;
+  zoom.skillWeight=skill?Math.min(1,zoom.skillWeight+dt/STARFALL_ZOOM_IN):Math.max(0,zoom.skillWeight-dt/STARFALL_ZOOM_OUT);
   // Focus lines at the screen's edge for as long as the beat lasts (hud: one
   // small canvas, written only when the value changes).
   hud.setFocus(target===1&&slowSetting().on&&slowSetting().lines);
@@ -1361,7 +1357,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(zoom.base===null){zoom.base=camera.fov;pinScreenArea(camera);}
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
-  camera.fov=zoom.base*(1-slowSetting().zoom*eased);
+  const skillEase=zoom.skillWeight*zoom.skillWeight*(3-2*zoom.skillWeight);
+  camera.fov=zoom.base*(1-slowSetting().zoom*eased)*(1-.34*skillEase);
   if(zoom.weight===0&&!target)restoreSlowZoom();
  }
  // ----- light combat (M3 prototype: Genshin-like) -----

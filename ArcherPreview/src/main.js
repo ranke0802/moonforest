@@ -1,4 +1,4 @@
-import {strikeLungeStep,applyStrikeTravel} from './v03/strike-approach.js';
+import {strikeLungeStep,applyStrikeTravel,strikeAimRange} from './v03/strike-approach.js';
 import {PlayerMeleeAim,meleeNeckPoint,meleeApproachPoint} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
 import {validateStoryboard} from './storyboard-document.js';
@@ -720,11 +720,12 @@ function cancelAttackInput(source,{preserveCompletedCharge=false}={}) {
   if(!source)world?.riding?.stopGallop?.();
   if(source){attackPointerTypes.delete(source);if(!attackSources.delete(source)||attackSources.size)return;}
   else {attackSources.clear();attackPointerTypes.clear();}
-  if(!preserveCompletedCharge)interruptGreatAttack();
-  // A captured HUD pointer can be released by the browser before pointerup.
-  // Stop holding, but retain an already accepted heavy attack for recovery.
-  // Global blur/pause/cancel still clears everything, including this buffer.
-  if(source&&preserveCompletedCharge){controller?.syncHeldCharge?.();if(controller?.queuedAttack==='judgment'){controller.setAttackHeld(false);return;}}
+  // A lost HUD capture used to retain a completed, buffered ordinary heavy.
+  // Starfall needs an actual release, including when queued behind another action.
+  if(source&&preserveCompletedCharge&&!controller?.greatAttackLevel){
+    controller?.syncHeldCharge?.();
+    if(controller?.queuedAttack==='judgment'){controller.setAttackHeld(false);return;}
+  }else interruptGreatAttack();
   if(controller?.cancelAttackInput)controller.cancelAttackInput();
   else controller?.setAttackHeld(false);
 }
@@ -745,6 +746,7 @@ function shootAtTarget() {
 // 0.3 stage reset: same state clearing as resetBeforeBoss, without its sound,
 // and optionally at an authored stage point when that point is walkable.
 function v03ResetStage(stage){
+  world?.v03?.resetGreatAttackFx?.();
   world.riding?.leave();
   goldLoot.clearDrops();goldLootView.clear();actionAudio.reset();
   boss.resetBattle();controller.releaseCapture();controller.staggerRemaining=0;controller.hitPose=null;controller.resetStamina?.();controller.cancelAttack?.();
@@ -1125,7 +1127,7 @@ function render(dt) {
     animator.transition(result.state, result); animator.update(result.captured||result.staggered||result.hitStopped?0:dt);
     frameDiagnostics.measure('playerAnimationMs',playerAnimationStart);
     const attacking = !result.captured&&!result.staggered&&['attack', 'moveAttack','slash','judgment','shieldPush'].includes(result.state);
-    if (attacking && result.actionId !== shotActionId) {
+    if (attacking && !result.greatAttack?.charging && result.actionId !== shotActionId) {
       shotActionId = result.actionId;
       shotTarget = isWarrior() ? null : training.selectNearest(actor.position);
       hiddenArrowForAction = null;
@@ -1135,7 +1137,7 @@ function render(dt) {
       if(strikeByInput){
         const d=dodgeDirection(movement,world.camera.alpha,actor.rotation.y);
         actor.rotation.y=Math.atan2(d.x,d.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<Math.max(target.meleeAimDistance??4,world.v03?.aimReach??0)){
+      }else if(target&&Vector3.Distance(actor.position,target.actor.position)<strikeAimRange(target,world.v03?.aimReach)){
         const point=result.greatAttack?target.actor.position:versionRoute.edition&&!versionRoute.worldRevision?meleeApproachPoint(target,meleeTargetPoint):meleeNeckPoint(target,meleeTargetPoint)??target.actor.position;
         actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
       }
@@ -1156,10 +1158,10 @@ function render(dt) {
     if(isV2()&&lunge&&attacking&&result.actionId!=null&&!result.hitStopped){
       const fitted=!versionRoute.worldRevision,nearest=fitted?null:boss.nearestTarget(actor.position);
       const target=world.v03.chainFoe;
-      const step=strikeLungeStep(lungeState,actor,result,lunge,target,nearest,strikeByInput,playerDimensions(actor).ratio,controller.durations?.[result.state]||1,dt,fitted);
-      if(step>1e-4||result.greatAttack){
+      const step=strikeLungeStep(lungeState,actor,result,lunge,target,nearest,strikeByInput,playerDimensions(actor).ratio,controller.durations?.[result.state]||1,dt,fitted,world.v03.aimReach);
+      if(step>1e-4){
         const yaw=actor.rotation.y-(config.forwardYaw||0)-(PLAYER_STRIKE_AIM_YAW[result.state]??0);
-        applyStrikeTravel(actor,result,lungeState,yaw,step,world,boss.encounters,movementLimit(actor.position),playerDimensions(actor),world.mapId==='village'?clampVillageExit:null);
+        applyStrikeTravel(actor,result,yaw,step,world,boss.encounters,movementLimit(actor.position),playerDimensions(actor),world.mapId==='village'?clampVillageExit:null);
       }
     }
     const selectedTarget = controller.dead ? null : attacking ? shotTarget : isWarrior() ? null : training.selectNearest(actor.position);
@@ -1428,7 +1430,7 @@ try {
     const cast=combatResult.greatAttack;
     if(cast){
       if(sample&&cast.center&&controller.action?.greatAttack===cast&&boss.playerAlive){
-        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus,actor.position);
+        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus,actor.position,world);
         shownGreatAttack=cast;world.v03?.greatAttackFrame?.(cast,sample.blade);
       }else{sample=null;if(shownGreatAttack)clearGreatAttack();}
     }
@@ -1460,7 +1462,7 @@ try {
   window.addEventListener('pagehide',leaveFullscreenPage);
   world.scene.onDisposeObservable.addOnce(releaseFullscreen);
   mapDeparture=createMapDeparture({
-    prepare:href=>{townServices?.clear();characterMenu?.close();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
+    prepare:href=>{world.v03?.resetGreatAttackFx?.();townServices?.clear();characterMenu?.close();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-departure',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();ready=false;loadingView.begin(new URL(href,location.href).searchParams.get('character'));input.reset();cancelAttackInput();frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();world.cancelResourceDownloads?.();},
     release:()=>{staminaNoticeAnchor.dispose();input.dispose();audio.dispose();engine.dispose();},
     navigate:url=>{void runBeforePageReload().finally(()=>location.replace(url));},
     onError:error=>{console.error('[Map departure]',error);loading.classList.add('error');$('#loading-title').textContent='맵 이동을 완료하지 못했습니다';$('#loading-text').textContent='연결을 확인한 후 새로고침해 주세요.';},
@@ -1469,7 +1471,7 @@ try {
   mapTransition=createMapTransition({
     prepare:(href,context)=>{
       world.v03?.story?.cancelRaidWarning?.();
-      townServices?.clear();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
+      world.v03?.resetGreatAttackFx?.();townServices?.clear();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.chapterResidents?.leave();
       if(context?.playerTravelFrom&&world.v03?.playing&&!world.v03.story?.sceneActive){
         world.riding?.beginTravel(mapForCharacter(new URL(href,location.href).searchParams.get('character')));

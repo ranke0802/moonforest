@@ -524,7 +524,7 @@ export class BossEncounter {
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
     // The shield may cross a body hit while the sword is drawn back. A
     // charging warrior takes that hit, including a knockdown, through armor.
-    if((shieldContact&&!(action?.greatAttack?.holdLeft>0&&bodyContact))||casting){
+    if((shieldContact&&!(action?.greatAttack?.charging&&bodyContact))||casting){
       this.brain.parry();this.lastHit='블록 · 보스 1초 경직';
       // Optional just guard (an edition sets combat.justGuard): a shield raised
       // just before contact staggers the attacker longer and is reported once.
