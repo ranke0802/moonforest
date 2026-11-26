@@ -1,0 +1,11 @@
+{
+  "sourceAssetId": "hud-ride-sprites-2026-11-26-v1",
+  "cellSize": 256,
+  "styleOf": "hud-ui-sprites-2026-11-13-v1",
+  "columns": ["idle", "press", "held", "release"],
+  "files": [
+    {"name": "menu-press-ride-1x4.png", "rows": ["ride"], "width": 1024, "height": 256, "bytes": 221629, "sha256": "c7a27af5c557af6fb5d89639f726bf0a09e9042774f900bc6e8abdd2d7808410"},
+    {"name": "combat-press-ride-2x4.png", "rows": ["gallop", "dismount"], "width": 1024, "height": 512, "bytes": 436902, "sha256": "4405274030543c42a418f68dd2eab279b3fd20e4c3f748b2f2b2d274f2aa4dc3"}
+  ],
+  "note": "Drawn on request (UI tone pass, 2026-11-26) to match menu-press-4x4.png and combat-press-4x4.png: scale 1/.98/.95/.99, brightness 1/.98/.90/1.03, Y shift 0/1/2/0 px per column. The originals go to Sources/ui/moonforest-hud/2026-11-26-ride-v1/ (see the handoff README for the source-inputs.json entries)."
+}

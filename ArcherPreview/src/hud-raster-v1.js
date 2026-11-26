@@ -10,6 +10,8 @@ export const HUD_RASTER_SPRITES=Object.freeze({
  journal:{selector:'.top-actions [data-chapter="journal"],.top-actions [data-uit-action="journal"]',atlas:'menu',row:1},
  settings:{selector:'#motion-speed-toggle',atlas:'menu',row:2},
  story:{selector:'.chapter-story button',atlas:'menu',row:3},
+ // 0.3 riding toggle (src/v03/riding-controls.js); absent in 0.2, so no layer is made there. Its strip is src/v03/art/menu-press-ride-1x4.png (riding-horse.css).
+ ride:{selector:'.top-actions .v03-ride-toggle',atlas:'ride',row:0,key:'KeyH'},
 });
 export function hudRasterFrame({held=false,elapsed=0,released=false}={}){return released?(elapsed<70?'release':'idle'):held?(elapsed<45?'press':'held'):'idle';}
 

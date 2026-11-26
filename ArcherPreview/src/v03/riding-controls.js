@@ -1,4 +1,5 @@
 import { arrangeTopActions } from '../hud-top-actions.js';
+import { releaseFocusAfterPointer } from './hud-focus.js';
 
 export function createRidingControls(root, toggle) {
   const doc = root.ownerDocument;
@@ -11,9 +12,15 @@ export function createRidingControls(root, toggle) {
   button.dataset.ui = '';
   button.hidden = true;
   button.setAttribute('aria-keyshortcuts', 'H');
+  // The caption sits in its own node: the HUD sprite layer (hud-raster-v1.js) is a
+  // sibling that a textContent write on the button would remove.
+  const caption = doc.createElement('span');
+  caption.className = 'v03-ride-caption';
+  button.append(caption);
   root.querySelector('.top-actions').append(button);
   arrangeTopActions(root);
   button.onclick = toggle;
+  const releaseFocus = releaseFocusAfterPointer(button);
   let state;
   const overrides = [];
 
@@ -42,12 +49,12 @@ export function createRidingControls(root, toggle) {
   function show(next, available, labels) {
     const mounted = next === 'mounted';
     const wasMounted = state === 'mounted';
-    const caption = mounted ? labels.dismount : (next === 'loading' || next === 'approaching') ? labels.cancel : labels.mount;
+    const label = mounted ? labels.dismount : (next === 'loading' || next === 'approaching') ? labels.cancel : labels.mount;
     button.hidden = !available;
     button.disabled = next === 'mounting' || next === 'dismounting' || next === 'departing' || next === 'falling';
-    button.textContent = caption;
-    button.setAttribute('aria-label', caption);
-    button.title = caption + ' (H)';
+    if (caption.textContent !== label) caption.textContent = label;
+    button.setAttribute('aria-label', label);
+    button.title = label + ' (H)';
     button.setAttribute('aria-pressed', String(mounted));
     root.dataset.v03Riding = state = next;
     // Return the touch interaction label to its owner before taking the attack button.
@@ -70,6 +77,7 @@ export function createRidingControls(root, toggle) {
     restore();
     delete root.dataset.v03Riding;
     button.onclick = null;
+    releaseFocus();
     button.remove();
   } };
 }

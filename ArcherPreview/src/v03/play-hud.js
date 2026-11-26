@@ -1,6 +1,7 @@
 // In-game 0.3 HUD pieces: quest tracker, coaching hint, interaction prompt and
 import {t} from './i18n.js';
 import {createInteractButton} from './interact-button.js';
+import {releaseFocusAfterPointer} from './hud-focus.js';
 // a short banner. Text nodes are written only when their value changes.
 // The focus-line picture: FOCUS_LINES wedges with their points toward the
 // middle, in a fixed pseudo-random order (the same picture every visit).
@@ -62,6 +63,8 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  place.addEventListener('animationend',event=>{if(event.target!==place)return;place.classList.remove('is-shown');place.hidden=true;});
  root.append(focus,quest,hint,banner,place,tip,prompt,ring,caption,bubble);mount.append(root);
  prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
+ // The prompt lives on <body> beside the game: a tap or click leaves no focus behind (hud-focus.js).
+ const releasePrompt=releaseFocusAfterPointer(prompt);
  // Touch: the attack button stands in for the prompt while one can be acted on (interact-button.js).
  const interactButton=createInteractButton({doc,onInteract});
  const last={title:null,objective:null,errandTitle:null,errandStep:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
@@ -135,6 +138,6 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    const size=Math.max(box.width,box.height)+18;
    ring.style.width=ring.style.height=size+'px';ring.style.left=box.left+box.width/2-size/2+'px';ring.style.top=box.top+box.height/2-size/2+'px';ring.hidden=false;
   },
-  dispose(){interactButton.dispose();root.remove();},
+  dispose(){releasePrompt();interactButton.dispose();root.remove();},
  };
 }

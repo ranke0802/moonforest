@@ -31,7 +31,7 @@
 [data-v03-layer]{position:fixed;inset:0;z-index:20000;font-family:var(--v03-font);color:var(--v03-text);-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 [data-v03-layer][hidden]{display:none!important}
 [data-v03-layer] button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;background:none;border:0;padding:0}
-[data-v03-layer] button:focus-visible{outline:2px solid #f5d897;outline-offset:3px}
+[data-v03-layer] button:focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}
 
 /* A long translated line scrolls above the Next button on short screens. */
 .v03-dialogue-text{max-height:calc(45vh / var(--v03-ui,1));max-height:calc(45dvh / var(--v03-ui,1));overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
@@ -91,7 +91,7 @@ html[data-v03-screen="opening"] #app>:not(#viewport):not(#loading):not(dialog){v
 .v03-menu-item:hover:not(:disabled),.v03-title.is-keyed .v03-menu-item:focus{opacity:1;color:#fff4d6;transform:translateX(6px)}
 .v03-menu-item:hover:not(:disabled)::before,.v03-title.is-keyed .v03-menu-item:focus::before{opacity:1;transform:none}
 .v03-title:focus,.v03-title:not(.is-keyed) .v03-menu-item:focus,.v03-title:not(.is-keyed) .v03-menu-item:focus-visible{outline:none}
-.v03-title.is-keyed .v03-menu-item:focus{outline:2px solid #f5d897;outline-offset:3px}
+.v03-title.is-keyed .v03-menu-item:focus{outline:2px solid var(--mf-focus);outline-offset:3px}
 .v03-menu-item:disabled{opacity:.3;cursor:default}
 .v03-title-foot{position:absolute;left:max(clamp(28px,calc(7vw / var(--v03-ui,1)),110px),env(safe-area-inset-left));bottom:max(18px,env(safe-area-inset-bottom));font-size:12px;letter-spacing:.14em;opacity:.5}
 .v03-title-black{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .65s ease}
@@ -209,8 +209,8 @@ html[data-loading] .v03-hud{display:none}
 .v03-hud.has-caption .v03-prompt{bottom:calc(clamp(110px,calc(22vh / var(--v03-ui,1)),190px) + 124px)}
 .v03-prompt::before,.v03-prompt::after{content:'';position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,#cfb77b00,#cfb77bcc 30%,#cfb77bcc 70%,#cfb77b00)}
 .v03-prompt::before{top:0}.v03-prompt::after{bottom:0}
-.v03-prompt:hover .v03-prompt-key,.v03-prompt:focus-visible .v03-prompt-key{background:#cfb77b;color:#14100a}
-.v03-prompt-key{display:grid;place-items:center;flex:none;width:30px;height:30px;font-size:15px;font-weight:700;color:#f2dc9c;background:#1a140c;border:1px solid #cfb77b;border-radius:3px;box-shadow:inset 0 -3px 0 #0b080c,0 0 0 1px #0b080c;transition:background .15s ease,color .15s ease}
+.v03-prompt:hover .v03-prompt-key,.v03-prompt:focus-visible .v03-prompt-key{background:var(--v03-gold);color:#14100a}
+.v03-prompt-key{display:grid;place-items:center;flex:none;width:30px;height:30px;font-size:15px;font-weight:700;transition:background .15s ease,color .15s ease}
 .v03-prompt-text{display:flex;flex-direction:column;line-height:1.2}
 .v03-prompt-name{font-size:clamp(14px,calc(2.3vmin / var(--v03-ui,1)),17px);letter-spacing:.06em;color:#f2dc9c;font-weight:700}
 .v03-prompt-action{font-size:clamp(12px,calc(1.9vmin / var(--v03-ui,1)),14px);letter-spacing:.08em;color:#e8dfc8;opacity:.85}
@@ -305,10 +305,13 @@ html[data-v03-lock~=attack] #attack-button,html[data-v03-lock~=dodge] #dodge-but
 .mf-potion-bar{display:none}
 #app[data-potion-slots][data-hud-input=pc] .action-controls[data-character] #potion-button{display:none}
 #app[data-potion-slots][data-hud-input=pc] .mf-potion-bar{position:absolute;left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));bottom:calc(env(safe-area-inset-bottom) + 22px);display:flex;gap:4px;pointer-events:auto}
-.mf-potion-bar button,.mf-potion-picker button{font:inherit;color:#f4e7c2;background:#1b2b20ef;border:1px solid #897c56;border-radius:5px}
+.mf-potion-picker button{font:inherit;color:#f4e7c2;background:#1b2b20ef;border:1px solid #897c56;border-radius:5px}
+.mf-potion-bar button{font:inherit;color:#f4e7c2;background:#14271ef0;border:1px solid var(--mf-line-soft);border-radius:var(--mf-radius);transition:transform .08s ease}
+.mf-potion-bar button:active:not(:disabled){transform:scale(var(--mf-press-scale))}
 .mf-potion-bar button{position:relative;width:39px;height:42px;padding:0;--mf-item-icon-size:30px}
-.mf-potion-bar button:disabled{opacity:.58}
-.mf-potion-bar kbd,.mf-potion-bar small{position:absolute;z-index:1;font:600 10px MoonforestUI,sans-serif;background:#17231cf2;border-radius:3px;padding:1px 3px;color:#fff2d1}
+.mf-potion-bar button:disabled{opacity:var(--mf-disabled)}
+.mf-potion-bar kbd,.mf-potion-bar small{position:absolute;z-index:1;font:600 10px/1 var(--v03-font);padding:1px 3px}
+.mf-potion-bar small{background:var(--mf-badge-bg);color:var(--mf-badge-ink);border-radius:var(--mf-radius)}
 .mf-potion-bar kbd{left:1px;top:1px}.mf-potion-bar small{right:1px;bottom:1px}
 #app #potion-button>.mf-potion-current:not([hidden]){position:absolute;inset:17%;z-index:1;display:grid;place-items:center;background:#1b2c22;border-radius:50%;pointer-events:none;--mf-item-icon-size:100%}
 .mf-potion-picker{width:min(280px,86vw);max-height:80dvh;overflow:auto;padding:16px;border:1px solid #988963;border-radius:8px;background:#15251bed;color:#f4e7c2;font:14px MoonforestUI,sans-serif}
@@ -422,9 +425,11 @@ html[data-edition] .game-settings #motion-speed-title{padding-left:18px}
 
 /* ----- Top bar: fullscreen gets its own mark (corner brackets) instead of
    the shared crest; the purse gets a coin. ----- */
-html[data-edition] #app[data-commercial-ui] .commercial-top-fullscreen:before{background:#e7d4a2;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5'/%3E%3C/svg%3E") center/contain no-repeat;inset:6px 13px 16px}
-html[data-edition] #app[data-commercial-ui] .commercial-top-fullscreen[aria-pressed=true]:before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='square'%3E%3Cpath d='M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5'/%3E%3C/svg%3E")}
-html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-commercial-ui] .top-actions .commercial-top-fullscreen:before{inset:10px}
+html[data-edition] #app[data-commercial-ui] .commercial-top-fullscreen:before{background:var(--mf-line-icon-color);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 20 20' fill='none' stroke='black' stroke-width='.82' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 20 20' fill='none' stroke='black' stroke-width='.82' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5'/%3E%3C/svg%3E") center/contain no-repeat;inset:6px 13px 16px}
+html[data-edition] #app[data-commercial-ui] .commercial-top-fullscreen[aria-pressed=true]:before{-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 20 20' fill='none' stroke='black' stroke-width='.82' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='2 2 20 20' fill='none' stroke='black' stroke-width='.82' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 4v5H4M20 9h-5V4M15 20v-5h5M4 15h5v5'/%3E%3C/svg%3E")}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-commercial-ui] .top-actions .commercial-top-fullscreen:before{inset:0}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-commercial-ui]>.topbar .top-actions .commercial-top-fullscreen{width:var(--mf-icon-box);height:var(--mf-icon-box);min-width:40px;filter:var(--mf-line-icon-glow)}
+@media(orientation:portrait){html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch]>.topbar .top-actions .commercial-top-fullscreen{width:38px;height:40px;min-width:36px}}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-commercial-ui] .top-actions :is(.commercial-top-fullscreen,.commercial-top-bag,.commercial-top-journal):after{content:none}
 #v03-hud-tooltip{position:fixed;z-index:15;width:max-content;max-width:min(32ch,calc(100vw - 16px));padding:7px 10px;border:1px solid #ad955e;border-radius:3px;background:#17251c;color:#f1e5c5;box-shadow:0 2px 6px #0008;font:13px/1.45 var(--v03-font,sans-serif);text-align:start;overflow-wrap:anywhere}
 html:not([data-v03-screen=play]) #v03-hud-tooltip{display:none}
@@ -677,8 +682,9 @@ html[data-v03-lock~=attack] #attack-button.v03-interact{opacity:1!important;filt
 /* Dim the artwork, leaving hit areas, potion counts and map markers intact. */
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] .action-controls :is(#attack-button,#guard-button,#dodge-button,#run-button,#potion-button)>.hud-v1-sprite{opacity:.58}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] .action-controls :is(#attack-button,#guard-button,#dodge-button,#run-button,#potion-button):is([data-hud-sprite-state=press],[data-hud-sprite-state=held])>.hud-v1-sprite{opacity:.84}
-html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face{border:1px solid #cdb687ba;background:radial-gradient(circle at 50% 38%,#3b342487,#15120c91 72%);box-shadow:0 1px 3px #0003}
-html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face svg{stroke-width:1.35}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face{inset:10%;border:2px solid var(--mf-disc-rim);background:var(--mf-disc-face);box-shadow:none;color:var(--mf-disc-ink);opacity:var(--mf-touch-art)}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact:active .v03-interact-face{opacity:var(--mf-touch-art-press);transform:scale(var(--mf-press-scale))}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face svg{width:52%;stroke-width:1.9}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face b{display:none}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #live-fps{font-variant-numeric:tabular-nums;font-size:clamp(10px,1.55vmin,13px);white-space:nowrap}
 .mf-treasure-prompt{position:absolute;z-index:9;left:50%;bottom:18%;transform:translateX(-50%);pointer-events:auto;background:#201e26e3;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;font:inherit;min-height:2.65rem;padding:.35rem .65rem;cursor:pointer}.mf-treasure-prompt[hidden]{display:none}
@@ -692,3 +698,20 @@ html[data-v03-screen=play]:not([data-loading]):not([data-v03-talk]) .mf-pickup-n
  .mf-pickup-notice .acquisition-row{min-height:32px;padding:2px 12px 2px 2px;gap:6px;font-size:12px}
  .mf-pickup-notice .acquisition-icon{width:30px;height:30px;padding:1px}
 }
+
+/* ----- UI tone pass (2026-11-26): one keycap, one focus ring, 0.1 blue removed. -----
+   Every key shown on the play screen (the prompt's E, the PC combat keys, the
+   potion slot numbers, the W/A/S/D guide) shares this one style; sizes follow. */
+html[data-edition] .v03-prompt-key,html[data-edition] #app .keyboard-hint kbd,html[data-edition] #app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] [data-hud-sprite]>kbd,html[data-edition] .mf-potion-bar kbd{box-sizing:border-box;font-family:var(--v03-font);color:var(--mf-kbd-ink);background:var(--mf-kbd-bg);border:1px solid var(--mf-kbd-line);border-radius:var(--mf-radius);box-shadow:inset 0 -2px 0 #0b080c}
+html[data-edition] #app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] [data-hud-sprite]>kbd{display:grid;place-items:center;top:11px;min-width:var(--mf-kbd-size);height:var(--mf-kbd-size);padding:0 4px;font-size:10px;line-height:1}
+html[data-edition] .mf-potion-bar kbd{display:grid;place-items:center;min-width:14px;height:14px;padding:0 2px;font-size:9px}
+html[data-edition] #app .keyboard-hint kbd{width:22px;height:22px;font-size:10px}
+html[data-edition] #app .keyboard-hint{color:var(--mf-text-2)}
+html[data-edition] #app .joystick-hint{color:#ece0bcb3}
+/* One focus ring for 0.3. The play HUD (.v03-hud) and the debug bench live on
+   <body>, outside #app and outside the [data-v03-layer] shells, so no other rule
+   reached them and the browser's own ring showed (user screenshot, 2026-11-26).
+   The last rule (specificity 0,2,1: above the 0.1 styles.css button:focus-visible,
+   below every component's own rule) catches any focusable element left unstyled. */
+.v03-hud :is(button,[tabindex]):focus-visible,.v03-bench :is(button,[tabindex]):focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}
+html[data-edition] :where(button,[tabindex],a,select,input,summary,textarea):focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}

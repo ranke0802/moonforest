@@ -1,6 +1,7 @@
 import {townItemIcon} from './town-item-art.js';
 import {itemName} from './town-items.js';
 import {t} from './i18n.js';
+import {releaseFocusAfterPointer} from './hud-focus.js';
 
 // Touch uses on release. Opening the picker disarms that release before the
 // modal takes focus, including on devices that subsequently synthesize a click.
@@ -24,7 +25,7 @@ export function createPotionHud({root,button,read,canDrink,use,canOpen,select,on
   return [number,townItemIcon(doc,id),qty];
  }
  const slotButtons=read().quickSlots.map((_,i)=>{
-  const el=make('button');el.type='button';el.addEventListener('click',()=>{if(active&&canOpen())use(i);});bar.append(el);return el;
+  const el=make('button');el.type='button';el.addEventListener('click',()=>{if(active&&canOpen())use(i);});listeners.push(releaseFocusAfterPointer(el));bar.append(el);return el;
  });
  function update(playing,unlocked){
   if(active!==playing){active=playing;root.toggleAttribute('data-potion-slots',playing);lastState=null;if(!playing)clear();onLayout?.();}

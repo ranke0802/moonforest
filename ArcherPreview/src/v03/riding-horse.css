@@ -1,56 +1,83 @@
+/* Riding controls in the 0.3 HUD (2026-11-26 tone pass). The pictures are raster
+   strips drawn to the 2026-11-13 atlases and run by the same sprite layer and
+   frame timing as the bag and the attack button (hud-raster-v1.js: the toggle is
+   its `ride` entry; the mounted combat buttons keep their own entries):
+   - art/menu-press-ride-1x4.png   1024x256, idle/press/held/release, top-bar horse
+   - art/combat-press-ride-2x4.png 1024x512, row 1 gallop, row 2 dismount, same columns
+   Only the image, its grid and its row change here; the frame column comes from
+   --hud-sprite-column (hud-raster-v1.css:8-10). The 2026-11-25 SVGs
+   (art/riding-horse.svg, art/riding-gallop.svg) are no longer used. */
 #app > .topbar .top-actions button.v03-ride-toggle {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: var(--mf-icon-box, 44px);
+  height: var(--mf-icon-box, 44px);
   min-width: 40px;
   min-height: 40px;
   padding: 0;
   border: 0;
   box-shadow: none;
-  background: transparent;
+  background-color: transparent;
+  background-image: none;
   font-size: 0;
   cursor: pointer;
 }
-.v03-ride-toggle::before {
+#app[data-raster-hud] .top-actions .v03-ride-toggle > .hud-v1-ride {
+  background-image: url('./art/menu-press-ride-1x4.png');
+  background-size: 400% 100%;
+  background-position: var(--hud-sprite-column, 0%) 0%;
+}
+/* Without the sprite HUD (no runtime known today) the idle frame still shows. */
+#app:not([data-raster-hud]) .v03-ride-toggle::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('./art/riding-horse.svg') center / contain no-repeat;
+  background-image: url('./art/menu-press-ride-1x4.png');
+  background-size: 400% 100%;
+  background-position: 0% 0%;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
-.v03-ride-toggle:active::before { transform: scale(.93); }
-.v03-ride-toggle:focus-visible { outline: 2px solid #f1d99a; outline-offset: 2px; }
-#app:is([data-v03-riding=loading],[data-v03-riding=mounted]) .v03-ride-toggle::after {
-  content: '';
+.v03-ride-toggle:focus-visible { outline: 2px solid var(--mf-focus, #f1d99a); outline-offset: 3px; }
+/* State badge: the potion count badge's colours (hud-raster-v1.css:19). The sprite
+   HUD clears ::after on top-bar sprites with !important (hud-raster-v1.css:14), so
+   the badge restates content with a more specific !important. */
+#app:is([data-v03-riding=loading],[data-v03-riding=mounted]) .top-actions .v03-ride-toggle::after {
+  content: '' !important;
   position: absolute;
+  z-index: 1;
   right: 1px;
   bottom: 3px;
   width: 13px;
   height: 13px;
-  border: 1px solid #d7be86;
+  box-sizing: border-box;
+  border: 1px solid var(--mf-badge-line, #cab984);
   border-radius: 50%;
-  background: #393428 center / 9px 9px no-repeat;
+  background-color: var(--mf-badge-bg, #1d3027);
+  background-position: center;
+  background-size: 9px 9px;
+  background-repeat: no-repeat;
   pointer-events: none;
 }
-#app[data-v03-riding=loading] .v03-ride-toggle::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23ffe7b2' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='m2 2 6 6m0-6L2 8'/%3E%3C/svg%3E");
+#app[data-v03-riding=loading] .top-actions .v03-ride-toggle::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23f2e5bd' stroke-width='1.8' stroke-linecap='round'%3E%3Cpath d='m2 2 6 6m0-6L2 8'/%3E%3C/svg%3E");
 }
-#app[data-v03-riding=mounted] .v03-ride-toggle::after {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23ffe7b2' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m1.5 5 2.5 2.5L8.5 2'/%3E%3C/svg%3E");
+#app[data-v03-riding=mounted] .top-actions .v03-ride-toggle::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' fill='none' stroke='%23f2e5bd' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m1.5 5 2.5 2.5L8.5 2'/%3E%3C/svg%3E");
 }
 @media (orientation: portrait) {
   #app[data-hud-input=touch] > .topbar .top-actions button.v03-ride-toggle {
     width: 38px; height: 40px; min-width: 36px;
   }
 }
-/* Keep the combat button's own touch opacity, hit area and PC key cap. */
+/* Mounted: the combat buttons' sprite layers switch to the riding sheet. Size,
+   key cap, touch dimming and the frame column stay those of the base buttons. */
+#app[data-v03-riding=mounted] :is(#attack-button,#guard-button,#dodge-button) > .hud-v1-sprite {
+  background-image: url('./art/combat-press-ride-2x4.png');
+  background-size: 400% 200%;
+}
 #app[data-v03-riding=mounted] :is(#attack-button,#dodge-button) > .hud-v1-sprite {
-  background: url('./art/riding-gallop.svg') center / contain no-repeat;
+  background-position: var(--hud-sprite-column, 0%) 0%; /* row 1: gallop */
 }
 #app[data-v03-riding=mounted] #guard-button > .hud-v1-sprite {
-  background: url('./art/riding-horse.svg') center / 62% no-repeat,
-    radial-gradient(circle closest-side, #65563e 0%, #40362b 77%, #dfc48f 78% 81%, transparent 82%);
-}
-#app[data-v03-riding=mounted] :is(#attack-button,#guard-button,#dodge-button):is(:active,[data-hud-sprite-state=press],[data-hud-sprite-state=held]) > .hud-v1-sprite {
-  transform: scale(.94);
+  background-position: var(--hud-sprite-column, 0%) 100%; /* row 2: dismount */
 }
