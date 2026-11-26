@@ -541,6 +541,22 @@ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(.stat
 html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .status-divider{background:var(--mf-line-soft)}
 html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-sections>.v03-settings-leave.is-armed{background:#cfb77b2e;border-color:var(--v03-gold,#cfb77b);color:#fff4d6}
 html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(button,select,input,summary,a):focus-visible{outline:2px solid var(--mf-focus);outline-offset:2px}
+/* Its inner groups (camera, speeds, diagnostics, credits) were drawn at 9-11 px:
+   12 px on PC and 13 px with 44 px controls on touch. Icon buttons and the close
+   cross keep their glyph size. */
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(small,p,label,cite,summary,a,.touch-copy,.mouse-copy,.status-pill span,button:not(.icon-button):not(#close-motion-speed)){font-size:12px}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(.build-tag,#hit-button span,#death-label,kbd){font-size:12px}
+@media (pointer:coarse){
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(small,p,label,cite,summary,a,.touch-copy,.mouse-copy,.status-pill span,button:not(.icon-button):not(#close-motion-speed)){font-size:13px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(button,select,summary,input[type=number],input[type=text]){min-height:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings button{min-width:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings input[type=range]{height:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-section-body>a{display:inline-block;padding-block:12px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings button.icon-button{min-width:44px;min-height:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings #help-toggle{font-size:13px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings label:has(>input[type=checkbox]){min-height:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings input[type=checkbox]{width:20px;height:20px}
+}
 
 /* PC: the gold line sits clear of the quest panel's first line. */
 html[data-v03-vital] #app[data-hud-input=pc]{--v03-quest-top:calc(clamp(20px,calc(4vh / var(--v03-ui,1)),44px) + 62px)}
