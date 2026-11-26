@@ -232,14 +232,14 @@ html[data-loading] .v03-hud{display:none}
 :is(.v03-dialogue-next,.v03-dialogue-choice){min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 :is(.v03-dialogue-next,.v03-dialogue-choice):hover{background:#cfb77b22!important}
 /* 2026-11-26: a yes/no question during play (going straight back to the map just left). */
-.v03-confirm{width:min(26rem,88vw);box-sizing:border-box;padding:1.1rem 1.2rem;border:1px solid #ab9361;border-radius:.55rem;color:#f6e9d0;background:#201e26;font-family:var(--v03-font)}
-.v03-confirm::backdrop{background:#100e16a6}
+.v03-confirm{width:min(26rem,88vw);box-sizing:border-box;padding:1.1rem 1.2rem;border:1px solid var(--mf-line-mid);border-radius:.55rem;color:var(--mf-text-2);background:var(--mf-panel);font-family:var(--v03-font)}
+.v03-confirm::backdrop{background:#020a07a6}
 .v03-confirm h2{margin:0 0 .5rem;font-size:1.15rem;color:var(--v03-gold)}.v03-confirm p{margin:0 0 1rem;line-height:1.6}
 html[lang=ko] .v03-confirm p{word-break:keep-all}
 .v03-confirm-actions{display:flex;gap:.6rem;justify-content:flex-end;flex-wrap:wrap}
-.v03-confirm button{min-height:44px;min-width:6.5rem;padding:.4rem .9rem;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;background:#3b3641;font:inherit;cursor:pointer}
-.v03-confirm .v03-confirm-yes{background:#6b5526;border-color:#e0bd77}
-.v03-confirm button:focus-visible{outline:2px solid var(--v03-gold);outline-offset:2px}
+.v03-confirm button{min-height:44px;min-width:6.5rem;padding:.4rem .9rem;border:1px solid var(--mf-line-mid);border-radius:.3rem;color:#fff3d8;background:var(--mf-panel-raised);font:inherit;cursor:pointer}
+.v03-confirm .v03-confirm-yes{background:#6b5526;border-color:var(--v03-gold)}
+.v03-confirm button:focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}
 /* 2026-11-26 (second pass, user): the smith's and the herbalist's choices are the
    Next/Close button repeated, in its corner (bottom right, the last one, ending the talk,
    where Close was). They share every size rule with .v03-dialogue-next; width follows the
@@ -687,7 +687,7 @@ html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch]
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face svg{width:52%;stroke-width:1.9}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face b{display:none}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #live-fps{font-variant-numeric:tabular-nums;font-size:clamp(10px,1.55vmin,13px);white-space:nowrap}
-.mf-treasure-prompt{position:absolute;z-index:9;left:50%;bottom:18%;transform:translateX(-50%);pointer-events:auto;background:#201e26e3;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;font:inherit;min-height:2.65rem;padding:.35rem .65rem;cursor:pointer}.mf-treasure-prompt[hidden]{display:none}
+.mf-treasure-prompt{position:absolute;z-index:9;left:50%;bottom:18%;transform:translateX(-50%);pointer-events:auto;background:#14271ee3;border:1px solid var(--mf-line-mid);border-radius:.3rem;color:#fff3d8;font:inherit;min-height:2.65rem;padding:.35rem .65rem;cursor:pointer}.mf-treasure-prompt[hidden]{display:none}
 
 /* The original acquisition ribbon, below dialogs and above the movement stick on touch. */
 .acquisition-stack.mf-pickup-notice{display:none;z-index:8;font-family:var(--v03-font);overflow-wrap:anywhere}
@@ -715,3 +715,5 @@ html[data-edition] #app .joystick-hint{color:#ece0bcb3}
    below every component's own rule) catches any focusable element left unstyled. */
 .v03-hud :is(button,[tabindex]):focus-visible,.v03-bench :is(button,[tabindex]):focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}
 html[data-edition] :where(button,[tabindex],a,select,input,summary,textarea):focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}
+/* Shared 0.2 controls inside #app: the same focus ring colour in 0.3 (commercial-ui.css:3 keeps #f2d592 for 0.2). */
+html[data-edition="moonforest-0.3"] #app[data-commercial-ui] :is(button,select,input):focus-visible{outline-color:var(--mf-focus)}

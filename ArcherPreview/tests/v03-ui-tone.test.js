@@ -125,3 +125,16 @@ test('every 0.3 root outside #app and the shells has the one focus ring; nothing
  for(const file of ['dialogue.js','opening.js','orientation-gate.js','title-screen.js'])assert.match(read('v03/'+file),/v03Layer=/,file+' is a [data-v03-layer] shell');
  assert.doesNotMatch(css,/#f5d897;outline-offset/);
 });
+
+test('menus and shop: one font, the green-ink panel family, colours through the tokens',()=>{
+ const menu=strip(read('v03/character-menu.css')),shop=strip(read('v03/town-shop.css')),card=strip(read('v03/equipment-card.css'));
+ assert.doesNotMatch(menu,/Georgia|system-ui|serif\b/,'character menu uses var(--v03-font)');
+ const purple=/#201e26|#100e16|#3b3641|#2f2a36|#221f29|#2a2129|#1b1920|#1c1820|#17151d|#5a4a2c/i;
+ for(const [name,css] of [['town-shop.css',shop],['equipment-card.css',card],['character-menu.css',menu],['v03.css',strip(v03)]])assert.doesNotMatch(css,purple,name+' keeps no purple-ink colour');
+ assert.match(shop,/\.mf-town-shop\{[^}]*color:var\(--mf-text-2\);background:var\(--mf-panel\)/);
+ assert.match(shop,/\.mf-town-shop button,\.mf-treasure-prompt\{[^}]*background:var\(--mf-panel-raised\)/);
+ assert.match(menu,/--line:var\(--mf-line-mid\);--gold:var\(--mf-gold-hi\)/);
+ assert.match(menu,/\.mf-skill-icon svg\{[^}]*stroke-width:2\.2;/);
+ assert.match(shop,/\.mf-forge:focus-visible\{box-shadow:0 0 0 2px var\(--mf-focus\)/);
+ assert.match(strip(v03),/html\[data-edition="moonforest-0\.3"\] #app\[data-commercial-ui\] :is\(button,select,input\):focus-visible\{outline-color:var\(--mf-focus\)\}/);
+});
