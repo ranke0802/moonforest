@@ -516,6 +516,32 @@ html[data-edition="moonforest-0.3"] #motion-speed-dialog :is(#motion-speed-descr
  html[data-edition="moonforest-0.3"] #motion-speed-dialog :is(#close-motion-speed,select){min-width:44px;min-height:44px}
 }
 
+/* ----- Settings dialog in the 0.3 family (2026-11-26): green ink, gold lines,
+   the 0.3 font, 3/6 px radii and the one focus ring, the same at the title (no
+   commercial frame yet) and in play. Generic selectors, so a group added later
+   (accessibility.css) takes the same look; layout and markup are unchanged. ----- */
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings{border:1px solid var(--mf-line-mid);border-radius:var(--mf-radius-lg);background:var(--mf-panel);color:var(--mf-text-2);font-family:var(--v03-font);box-shadow:0 18px 60px #000c}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings::backdrop{background:#020a07a6;backdrop-filter:none}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings>header{background:var(--mf-panel);border-bottom:1px solid var(--mf-line-soft);color:var(--mf-text-2)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings h2{color:var(--mf-gold-hi);font-weight:400}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-section{border:1px solid var(--mf-line-soft);border-radius:var(--mf-radius);background:#ffffff06}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings summary{color:var(--mf-text-2)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-section>summary{background:none;border-bottom:0}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-section[open]>summary{background:var(--mf-panel-raised);color:var(--mf-gold-hi);border-bottom:1px solid var(--mf-line-soft)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-section-body,html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings label{color:var(--mf-text-2)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(p,small,kbd,footer span,#speed-label,#render-status,.mouse-copy,.build-tag,.gesture-icon,#character-subtitle){color:var(--mf-text-3)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(output,a,b#character-name){color:var(--mf-gold-hi)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(footer,.scene-footer){border-color:var(--mf-line-soft)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(select,button,input:not([type=range]):not([type=checkbox]):not([type=radio])){border:1px solid var(--mf-line-soft);border-radius:var(--mf-radius);background:var(--mf-panel-raised);color:var(--mf-text-2);font-family:inherit;color-scheme:dark}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(select,button):hover:not(:disabled){border-color:var(--mf-line-mid)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(button.selected,button[aria-pressed=true],button[aria-checked=true]){background:var(--mf-panel-selected);border-color:var(--mf-line-mid);color:var(--mf-gold-hi)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(select,button,input):disabled{opacity:var(--mf-disabled)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(input[type=range],input[type=checkbox],input[type=radio]){accent-color:var(--mf-gold-hi);background:transparent}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(.status-pill,.tool-switch,.attack-speed-control,.equipment-panel,.diagnostic-help,.boss-catalog,.v03-language-row){border-color:var(--mf-line-soft);border-radius:var(--mf-radius);background:#ffffff06}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .status-divider{background:var(--mf-line-soft)}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings .settings-sections>.v03-settings-leave.is-armed{background:#cfb77b2e;border-color:var(--v03-gold,#cfb77b);color:#fff4d6}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog.game-settings :is(button,select,input,summary,a):focus-visible{outline:2px solid var(--mf-focus);outline-offset:2px}
+
 /* PC: the gold line sits clear of the quest panel's first line. */
 html[data-v03-vital] #app[data-hud-input=pc]{--v03-quest-top:calc(clamp(20px,calc(4vh / var(--v03-ui,1)),44px) + 62px)}
 /* In-game text is never selectable or draggable (long-press menus too); only
