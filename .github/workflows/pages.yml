@@ -37,7 +37,7 @@ jobs:
         env:
           MOONFOREST_GLSL_VALIDATOR: glslangValidator
         run: >
-          node --test --test-concurrency=2
+          node --expose-gc --test --test-concurrency=2
           ArcherPreview/tests/v03-opening-cast.test.js
           ArcherPreview/tests/v03-opening-first-contact.test.js
           ArcherPreview/tests/v03-chapter-wildlife.test.js
@@ -79,6 +79,8 @@ jobs:
           ArcherPreview/tests/v03-menu-language.test.js
           ArcherPreview/tests/v03-shop-cart.test.js
           ArcherPreview/tests/v03-dialogue-menu.test.js
+          ArcherPreview/tests/v03-ui-tone.test.js
+          ArcherPreview/tests/v03-load-diagnostics.test.js
           ArcherPreview/tests/v03-return-gate.test.js
           ArcherPreview/tests/cave-portal-facing.test.js
           ArcherPreview/tests/v03-riding-horse.test.js

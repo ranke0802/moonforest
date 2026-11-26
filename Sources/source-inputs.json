@@ -56,7 +56,9 @@
     "hud-ui-sprites-2026-11-13-v1": "Sources/ui/moonforest-hud/2026-11-13-v1",
     "creature-audio-r1": "Sources/audio/creatures-2026-11-17",
     "town-item-icons-2026-11-24": "Sources/ui/town-item-icons/2026-11-24",
-    "v03-horse-audio": "Sources/audio/horse-call-2026-11-25"
+    "v03-horse-audio": "Sources/audio/horse-call-2026-11-25",
+    "hud-ride-sprites-2026-11-26-v1": "Sources/ui/moonforest-hud/2026-11-26-ride-v1",
+    "v03-portraits": "Sources/story/portraits/2026-11-26"
   },
   "inputs": [
     {
@@ -48780,11 +48782,50 @@
         "moonforest-0.3-horse-audio"
       ],
       "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-26-ride-v1/menu-press-ride-1x4.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-26-ride-v1/menu-press-ride-1x4.png",
+      "bytes": 221629,
+      "sha256": "c7a27af5c557af6fb5d89639f726bf0a09e9042774f900bc6e8abdd2d7808410",
+      "origins": [
+        "MoonForest UI tone pass 2026-11-26: riding toggle strip drawn to menu-press-4x4.png"
+      ],
+      "requiredBy": [
+        "hud-ride-sprites-2026-11-26-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/ui/moonforest-hud/2026-11-26-ride-v1/combat-press-ride-2x4.png",
+      "path": "Sources/ui/moonforest-hud/2026-11-26-ride-v1/combat-press-ride-2x4.png",
+      "bytes": 436902,
+      "sha256": "4405274030543c42a418f68dd2eab279b3fd20e4c3f748b2f2b2d274f2aa4dc3",
+      "origins": [
+        "MoonForest UI tone pass 2026-11-26: gallop/dismount discs drawn to combat-press-4x4.png"
+      ],
+      "requiredBy": [
+        "hud-ride-sprites-2026-11-26-v1"
+      ],
+      "status": "bundled"
+    },
+    {
+      "id": "file:Sources/story/portraits/2026-11-26/coachman.png",
+      "path": "Sources/story/portraits/2026-11-26/coachman.png",
+      "bytes": 1556731,
+      "sha256": "06c18927cd5432e422171bd471451c876870e35bead27d39f7803762b6febb8f",
+      "origins": [
+        "MoonForest 0.3 coachman dialogue portrait 2026-11-26 (runtime ArcherPreview/src/v03/portraits/coachman.webp, 48770 bytes, sha256 719e8455790266856d0dc3a46b6fe5ff46a002aa29fd24fae882435eac053e5e)"
+      ],
+      "requiredBy": [
+        "v03-portraits"
+      ],
+      "status": "bundled"
     }
   ],
   "summary": {
-    "files": 3751,
-    "bytes": 14019309902,
+    "files": 3754,
+    "bytes": 14021525164,
     "missing": [],
     "layoutDuplicates": 44
   },
