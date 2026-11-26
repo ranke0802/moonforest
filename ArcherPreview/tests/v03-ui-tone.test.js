@@ -62,7 +62,10 @@ test('top-bar line icons share the cream and glow tokens; fullscreen has round c
  assert.ok(fullscreen.some(rule=>rule.decls.background==='var(--mf-line-icon-color)'));
  assert.ok(fullscreen.some(rule=>rule.decls.filter==='var(--mf-line-icon-glow)'&&rule.decls.width==='var(--mf-icon-box)'));
  assert.doesNotMatch(css,/stroke-linecap='square'|#e7d4a2/);
- assert.equal((css.match(/stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M(4 9V4h5|9 4v5H4)/g)??[]).length,4,'both marks, -webkit-mask and mask');
+ // Same optical size as the bag/gear glyphs: 44-unit box, centre lines 7..37, stroke 1.8 (4%), extent 6.1..37.9 = 72% (< the 80% box).
+ assert.equal((css.match(/viewBox='0 0 44 44' fill='none' stroke='black' stroke-width='1\.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M(7 16V7h9M28 7h9v9M37 28v9h-9M16 37H7v-9|16 7v9H7M37 16h-9V7M28 37v-9h9M7 28h9v9)'/g)??[]).length,4,'both marks, -webkit-mask and mask');
+ assert.doesNotMatch(css,/viewBox='(0 0 24 24|2 2 20 20)'/);
+ const extent=(37-7+1.8)/44;assert.ok(extent>=.7&&extent<=.8,'bracket extent '+extent);
 });
 
 test('the riding toggle is a sprite of the base HUD: same layer, frame timing and key handling as the bag',()=>{
