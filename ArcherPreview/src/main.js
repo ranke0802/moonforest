@@ -786,6 +786,7 @@ function resetCamera() {
 async function loadCharacter() {
   if (loadingAsset) return;
   world?.firstPerson?.exit();
+  world?.v03?.resetGreatAttackFx?.();
   effectReviewGeneration++;world?.effectWorld?.clear();world?.sceneryStrikes?.leave();setFrameWorkContext(world?.scene,{active:false,frameId:engine?.frameId,generation:world?.toolGeneration});
   originalTextureRetry.hidden=true;
   mapResourceInspector.begin();

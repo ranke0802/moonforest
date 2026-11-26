@@ -43,15 +43,24 @@ test('Starfall gathers on the blade throughout a full hold and preserves two ind
  await scene.whenReadyAsync();
  fx.dispose();assert.equal(scene.meshes.length,0);assert.equal(scene.geometries.length,0);assert.equal(gauge.removed,true);scene.dispose();engine.dispose();
 });
-test('Starfall reuses two mesh buffers through a burst, resets all slots at map and stage boundaries, and disposes with the scene',()=>{
- const {engine,scene,fx,light,scars,gauge}=visualFixture(),actor=new Vector3(4,1,3);
+test('the transparent pass renders the first impact, partial and full batches, expiry and the first hit after a map reset',async()=>{
+ const {engine,scene,fx,light,scars,gauge,advance}=visualFixture(),actor=new Vector3(4,1,3);
  const geometry=scars.geometry,limit=scars.getTotalIndices();
+ await scene.whenReadyAsync();scene.render();
  const cast={actionId:1,center:actor,radius:2,level:2,phase:'impact',charging:false,progress:1};
- for(let i=0;i<20;i++){cast.actionId=i;actor.x=i;fx.update(cast,null,actor);}
+ for(let i=0;i<20;i++){
+  cast.actionId=i;actor.set(i,1+(i-4)*.2,3);fx.update(cast,null,actor);scene.render();
+  assert.ok(scars.subMeshes[0].getBoundingInfo().intersectsPoint(actor));
+  advance(20);
+ }
  assert.equal(scene.meshes.length,2);assert.equal(scene.geometries.length,2);assert.equal(scars.geometry,geometry);
  assert.equal(scars.subMeshes[0].indexCount,limit);assert.equal(scars.material._vectors4Arrays.anchors[0],8);
+ advance(4800);scene.render();
+ assert.ok(scars.subMeshes[0].indexCount>0&&scars.subMeshes[0].indexCount<limit);
  fx.reset();assert.equal(fx.active,false);assert.equal(scars.subMeshes[0].indexCount,0);
- fx.update(cast,null,actor);assert.equal(scars.isEnabled(),true);
+ scene.render();
+ actor.set(-58,-3,14);fx.update(cast,null,actor);scene.render();
+ assert.equal(scars.isEnabled(),true);assert.equal(scars.subMeshes[0].getBoundingInfo().boundingSphere.centerWorld.x,-58);
  scene.dispose();assert.equal(light.isDisposed(),true);assert.equal(scars.isDisposed(),true);assert.equal(gauge.removed,true);
  fx.dispose();engine.dispose();
 });

@@ -3,6 +3,7 @@ import test from 'node:test';
 import {readFileSync} from 'node:fs';
 import {FreeCamera,NullEngine,Scene,StandardMaterial,TransformNode,Vector3} from '@babylonjs/core';
 import {GLTFFileLoader} from '@babylonjs/loaders/glTF/glTFFileLoader.js';
+import {parseHTML} from 'linkedom';
 import {readRuntimeGltf} from './helpers/read-runtime-gltf.js';
 import {CharacterAnimator} from '../src/animation.js';
 import {BossBattle} from '../src/boss-battle.js';
@@ -14,6 +15,7 @@ import {MeleeContactGate} from '../src/melee-collision.js';
 import {CHAPTER_MONSTER_MODELS} from '../src/v03/chapter-monster-models.js';
 import {createChapterEnemyFactory} from '../src/v03/chapter-enemy-encounter.js';
 import {GreatAttackCast} from '../src/v03/great-attack.js';
+import {createGreatAttackFx} from '../src/v03/great-attack-fx.js';
 import {STRIKE_LUNGE,strikeLungeStep,applyStrikeTravel} from '../src/v03/strike-approach.js';
 import {setHitScale} from '../src/hit-scale.js';
 import {orderPoseNodes,refreshPoseMatrices} from '../src/pose-matrices.js';
@@ -49,6 +51,10 @@ test('shipped warrior swings track their target and use real contacts on low and
  asset.addAllToScene();for(const n of [...asset.meshes,...asset.transformNodes])if(!n.parent)n.parent=player;
  const dimensions=configurePlayerSize(player,cfg,{warrior:true}),animator=new CharacterAnimator(asset.animationGroups,cfg.animations);
  const pose=orderPoseNodes([player,...asset.transformNodes,...asset.meshes]),sword=asset.meshes.find(n=>n.name==='Golden_Oathblade'),aim=new PlayerMeleeAim(asset);
+ const {document}=parseHTML('<main></main>');
+ const fx=createGreatAttackFx({scene,root:document.querySelector('main'),ground:world.terrain.heightAt});
+ let scarDraws=0;
+ scene.getMeshByName('v03-starfall-ground').onAfterRenderObservable.add(()=>scarDraws++);
  async function opponent(kind){
   if(CHAPTER_MONSTER_MODELS[kind])return (await factory.create({kind,id:kind,x:0,z:1.7,player})).encounter;
   const modelId=kind==='goblin'?'hooded-goblin':'fox-r2',spec=manifest(modelId),lib=new BossModelLibrary(scene,modelId);
@@ -70,6 +76,8 @@ test('shipped warrior swings track their target and use real contacts on low and
   const navigation={obstacles:blocked?[{x:0,z:.48,radius:.12}]:[],segmentClear:()=>!blocked};
   const hp=foe.brain.hp;if(blocked)world.navigation=navigation;
   const cast=rank?new GreatAttackCast(actionId,rank):null;
+  const renderedHits=[];
+  if(cast)fx.reset();
   cast?.release(); // This fixture samples the released attack by clip seconds.
   const contactWorld={navigation,terrain:world.terrain},encounters=other?[foe,other]:[foe];
   for(let time=0;time<=duration;time+=dt){
@@ -83,12 +91,22 @@ test('shipped warrior swings track their target and use real contacts on low and
    const capsules=foe.hurtCapsules();
    // Test the hooded goblin's real body independently of its upright assist.
    if(foe.kind==='goblin')capsules.pop();
-   if(cast)cast.sample(time,sample,PLAYER_STRIKES.judgment[0],0,player.position,contactWorld);
+   if(cast){
+    cast.sample(time,sample,PLAYER_STRIKES.judgment[0],0,player.position,contactWorld);
+    fx.update(cast,sample.blade,player.position);fx.tick();
+    const before=foe.brain.hp;
+    foe.poseAndContacts(player,action,sample,null);
+    if(foe.brain.hp<before){
+     const draws=scarDraws;scene.render();
+     assert.ok(scarDraws>draws,'the ground crack drew on the frame that dealt damage');
+     renderedHits.push(foe.brain.mode);
+    }
+   }
    hits.push(...gate.collect({...sample,capsules,areaContact:cast?.contains(foe.actor.position,navigation)}).hits.map(h=>h.id));
    if(blocked)foe.poseAndContacts(player,action,sample,null);
   }
   if(blocked){delete world.navigation;assert.equal(foe.brain.hp,hp,'wall occludes the real encounter damage path');}
-  aim.restore();return {hits,aimed:aim.target===foe,travel:player.position.length(),z:player.position.z,center:cast?.center};
+  aim.restore();return {hits,aimed:aim.target===foe,travel:player.position.length(),z:player.position.z,center:cast?.center,renderedHits};
  }
  const nearSide={kind:'goblin',active:true,actor:{position:new Vector3(-1,0,0)},radius:.34,brain:{hp:10}};
  for(const kind of ['fox','goblin','goblin-warrior','goblin-archer','goblin-shaman','ghoul-warrior','zombie','hobgoblin-boss']){
@@ -116,6 +134,8 @@ test('shipped warrior swings track their target and use real contacts on low and
   if(kind==='fox'||kind==='goblin'||kind==='goblin-warrior'){
    const charged=swing(foe,'judgment',3.2,true,nearSide,{rank:1});
    assert.deepEqual(charged.hits,['jump-cut','jump-cut','jump-cut'],kind+' receives all three hits');
+   assert.equal(charged.renderedHits.length,3,kind+' rendered the first, second and third HP loss');
+   if(kind==='fox')assert.equal(charged.renderedHits[0],'down','fox knockdown and the first partial crack batch share a frame');
    assert.deepEqual(charged.center,{x:0,y:0,z:3.2},kind+' is the centre of the level-one blast');
    assert.ok(charged.travel>1&&Vector3.Distance(player.position,foe.actor.position)>1,kind+' is reached without overlapping its rig');
   }

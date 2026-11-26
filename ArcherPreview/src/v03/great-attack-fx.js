@@ -206,6 +206,10 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
   const light=batch(scene,'v03-starfall',chargeGeometry(),vertexSource,['view','grip','tip','charge','clock','swing']);
   const scars=batch(scene,'v03-starfall-ground',impactGeometry(),impactVertexSource,['anchors','heights','born','elapsed']);
   const draw=scars.subMeshes[0],indicesPerImpact=draw.indexCount/IMPACT_CAPACITY;
+  // Babylon uses the mesh bounds for a full submesh, but asks the submesh itself
+  // for its bounds as soon as we shorten the draw range to the occupied slots.
+  const bounds=scars.getBoundingInfo(),minimum=new Vector3(),maximum=new Vector3();
+  draw.setBoundingInfo(bounds);
   const anchors=new Float32Array(IMPACT_CAPACITY*4),heights=new Float32Array(IMPACT_CAPACITY*16),born=new Float32Array(IMPACT_CAPACITY);
   scars.material.setArray4('anchors',anchors).setArray4('heights',heights).setFloats('born',born);
   let disposed=false;
@@ -216,17 +220,31 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
   const grip=new Vector3(),tip=new Vector3();
   let count=0,epoch=0,action=null,chargeAt=0,lastCharge=0,lastImpact=null;
 
+  function syncImpactDraw(){
+    draw.indexCount=count*indicesPerImpact;scars.setEnabled(count>0);
+    if(!count)return;
+    minimum.set(Infinity,Infinity,Infinity);maximum.set(-Infinity,-Infinity,-Infinity);
+    // Positions are placed in world space by the shader. Refit for transparent
+    // sorting only when slots change, using the terrain already sampled on impact.
+    for(let slot=0;slot<count;slot++){
+      const i=slot*4,x=anchors[i],y=anchors[i+1],z=anchors[i+2],r=anchors[i+3];
+      let low=Infinity,high=-Infinity;
+      for(let j=slot*16;j<(slot+1)*16;j++){low=Math.min(low,heights[j]);high=Math.max(high,heights[j]);}
+      minimum.minimizeInPlaceFromFloats(x-r,y+low,z-r);
+      maximum.maximizeInPlaceFromFloats(x+r,y+high+1.5,z+r);
+    }
+    bounds.reConstruct(minimum,maximum,scars.getWorldMatrix());
+  }
   function removeOldest(n){
     count-=n;
     if(count){anchors.copyWithin(0,n*4);heights.copyWithin(0,n*16);born.copyWithin(0,n);}
-    draw.indexCount=count*indicesPerImpact;scars.setEnabled(count>0);
   }
   function tick(){
     if(disposed||!count)return;
     const elapsed=(now()-epoch)/1000;
     let expired=0;
     while(expired<count&&elapsed-born[expired]>=IMPACT_SECONDS)expired++;
-    if(expired)removeOldest(expired);
+    if(expired){removeOldest(expired);syncImpactDraw();}
     if(count)scars.material.setFloat('elapsed',elapsed);
   }
   function impact(cast){
@@ -242,12 +260,12 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
       heights[count*16+iz*4+ix]=Number.isFinite(h)?h-y:0;
     }
     scars.material.setFloat('elapsed',born[count]);
-    draw.indexCount=++count*indicesPerImpact;scars.setEnabled(true);
+    count++;syncImpactDraw();
   }
   function hideBlade(){action=null;light.setEnabled(false);gauge.hidden=true;}
   function reset(){
     hideBlade();lastImpact=null;
-    if(count)removeOldest(count);
+    if(count){count=0;syncImpactDraw();}
   }
   function update(cast,blade,player){
     if(disposed)return;
