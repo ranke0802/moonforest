@@ -26,7 +26,7 @@ export function setupSettingsPanel() {
     summary.textContent = title;
     const body = document.createElement('div');
     body.className = 'settings-section-body';
-    body.append(...nodes);
+    body.append(...nodes.filter(Boolean));
     details.append(summary, body);
     sections.append(details);
     return details;

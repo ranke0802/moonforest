@@ -1,3 +1,4 @@
+import {devControlsHidden} from './v03/dev-controls.js';
 import {strikeLungeStep,applyStrikeTravel,strikeAimRange,STARFALL_REACH_SCALE} from './v03/strike-approach.js';
 import {PlayerMeleeAim,meleeNeckPoint,meleeApproachPoint} from './player-melee-aim.js';
 import {createStoryboardEvents} from './storyboard-events.js';
@@ -156,7 +157,7 @@ globalThis.__moonforestStartup?.entered();
 const gameSelection=setupGameSelection(document.getElementById('app'));
 if(import.meta.hot)import.meta.hot.dispose(()=>gameSelection.dispose());
 setupSettingsPanel();
-setupSummonPanel();
+setupSummonPanel({openButton:!devControlsHidden()});
 const elements=new Map();
 const $ = selector => {if(!elements.has(selector))elements.set(selector,document.querySelector(selector));return elements.get(selector);};
 const text=(selector,value)=>{const node=$(selector);value=tr(value);if(node.textContent!==value)node.textContent=value;};
@@ -165,7 +166,8 @@ const audio=new GameAudio(),actionAudio=new ActionAudio(audio);
 audio.bindUnlock(document);
 const loading = $('#loading');
 const loadingView=createLoadingView();
-const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($);
+// The hit/death test buttons exist only in development on 0.3 (v03/dev-controls.js).
+const buttons = ['#run-button', '#attack-button', '#hit-button', '#death-button', '#guard-button', '#dodge-button'].map($).filter(Boolean);
 const validCharacters = ['archer', 'warrior', 'warrior-v2', 'warrior-v3', 'warrior-plains', 'warrior-v4', 'warrior-v5'];
 const versionRoute=releaseRoute(location.href),releaseEnabled=versionRoute.enabled;
 const splitUploadOverride=splitUploadPreference(location.search); // before the route rewrites the address
@@ -456,7 +458,7 @@ const frameDiagnostics=createFrameDiagnostics({probe:recordingProbe,cameraYaw:()
   renderMetrics:()=>sceneDiagnostics.sample(),
   zoom:()=>cameraZoom?.snapshot()??null,
   memory:()=>readDiagnosticMemory(performance,{textureSample:compactMeterEnabled?sampleTextureMemory(engine):null,highTextureBytes:world?.environment?.highTextureBytes,highTextureBudget:world?.environment?.highTextureBudget,textures:world?.scene.textures.length,meshes:world?.scene.meshes.length,geometries:world?.scene.geometries.length}),
-  metadata:()=>({...mapWorkDiagnostics(),fixedLayouts:structuredClone(fixedLayoutStats),resourceDownloadVisits:recentResourceDownloadStats(),manifestReads:{...manifestReadStats},speeds:{...movementSpeedSettings.value,attack:attackSpeed},splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,...(combatTrail?{previousCombat:combatTrail.previous,currentCombat:combatTrail.current}:{}),textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
+  metadata:()=>({...mapWorkDiagnostics(),fixedLayouts:structuredClone(fixedLayoutStats),resourceDownloadVisits:recentResourceDownloadStats(),manifestReads:{...manifestReadStats},speeds:{...movementSpeedSettings.value,attack:attackSpeed},splitUpload:splitTextureUploadStats(world?.scene?.getEngine?.()),animationCompaction:{...animationCompaction,ms:Math.round(animationCompaction.ms)},previousRun:world?.v03?.previousRun??null,...world?.v03?.recordMetadata?.(),...(combatTrail?{previousCombat:combatTrail.previous,currentCombat:combatTrail.current}:{}),textureMemory:estimateTextureMemory(world?.scene?.getEngine?.()),sceneResources:world?.scene?{meshes:world.scene.meshes?.length??null,skeletons:world.scene.skeletons?.length??null,animationGroups:world.scene.animationGroups?.length??null,sdkActiveAnimatablesIncludingPaused:world.scene._activeAnimatables?.length??null,materials:world.scene.materials?.length??null,textures:world.scene.textures?.length??null,geometries:world.scene.geometries?.length??null,transformNodes:world.scene.transformNodes?.length??null,sceneObservers:{beforeRender:world.scene.onBeforeRenderObservable?.observers?.length??null,afterRender:world.scene.onAfterRenderObservable?.observers?.length??null,dispose:world.scene.onDisposeObservable?.observers?.length??null}}:null,summonPreparation:boss?.lastSummon??null,animationBindings:{player:animator?.inspectBindingCache?.()??null,enemies:(boss?.encounters??[]).map(enemy=>({kind:enemy.kind,active:enemy.active,state:enemy.brain?.state??null,bindings:enemy.animator?.inspectBindingCache?.()??null}))},playerResources:{hp:boss?.playerHp??null,maxHp:boss?.playerMaxHp??null,stamina:controller?.stamina??null,maxStamina:controller?.maxStamina??null},plainsViewDistance:world?{selected:plainsViewDistanceControl.value,applied:world.mapId==='great-plains',range:plainsRenderRange(world)}:null,questProps:chapterQuests?.propDiagnostics?.()??null,playerSize:actor?playerDimensions(actor):null,mapTransition:mapTransition?.inspect?.()??null,viewportResize:world?.viewportResize?.snapshot?.()??null,goldLootPreparation:goldLootView?.inspect?.()??null,lastFrameError:frameFailure,playback:{ready,loading:loadingAsset,running:frameLoop?.running,failed:!!(frameLoop?.failed||frameLoop?.loadingFailed),frames:frameLoop?.frames},character,quality:qualityMode,touchDevice,userAgent:navigator.userAgent,bundle:document.querySelector('script[type="module"][src]')?.getAttribute('src'),build:buildChunks(),renderSize:engine?[engine.getRenderWidth(),engine.getRenderHeight()]:null,mapDecodeCache:inspectMapDecodeCache(engine),ktxWorker:inspectKtxWorkerPool(),meshoptWorker:inspectMeshoptWorkerPool(),skyLoad:world?.sky?.lastLoad??null,screenReady:world?.scene?.metadata?.screenReady??null,mapTerrainCache:inspectMapTerrainCache(engine),mapNavigationCache:inspectMapNavigationCache(engine),caveMaterials:world?.caveAtmosphere?.inspect()??null,cameraGuard:world?.caveCamera?.inspect()??null,resourceDownloads:world?.resourceDownloadStats??null,textureStreaming:world?.environment?Object.fromEntries(Object.entries(world.environment).filter(([key])=>key.startsWith('highTexture'))):null}),
   context:()=>({...mapWorkDiagnostics(),activity:[combatResult?.moving?'이동':null,input?.cameraPointers.size?'회전/시점 조작':null,world?.environment?.geometryPending?'모델 준비':null,world?.environment?.highTexturePending?'텍스처 준비':null].filter(Boolean).join(' · ')||'플레이',
     ...viewpointSample(),
     cameraZoom:cameraZoom?.snapshot()??null,
@@ -542,7 +544,7 @@ function updateSummonControls(encounter=boss) {
   $('#boss-count').value=String(selection.count);
   $('#boss-count').disabled=disabled;
   $('#summon-boss').disabled=disabled;
-  $('#open-summon').disabled=disabled;$('#open-summon').hidden=!isV2();
+  if($('#open-summon')){$('#open-summon').disabled=disabled;$('#open-summon').hidden=!isV2();}
   text('#boss-selection-help',bossSelectionHelp(selection));
   const present=encounter?.encounters.some(enemy=>(enemy.summonKind??enemy.kind)===(selection.phase?'elena':selection.kind)&&(!selection.phase||enemy.phase===selection.phase));
   text('#summon-boss',encounter?.loading?'불러오는 중…':present?'보스 다시 소환':'보스 소환');
@@ -578,9 +580,11 @@ function updateButtons() {
   const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,controller?.shieldHeld,controller?.guarding,boss?.active,boss?.playerAlive,boss?.loading,canDrink,boss?.canEscapeGrab,potionCount,!!liveTown,boss?.potions.pulsesLeft,rejected].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
+  if($('#death-button')){
   $('#death-label').textContent = dead ? '부활' : '사망';
   $('#death-key').textContent = dead ? 'R' : 'K';
   $('#death-button').classList.toggle('dead', dead);
+  }
   if(!world?.riding?.active)$('#guard-button').setAttribute('aria-pressed',String(isV2()?!!controller?.guarding:!!controller?.guardToggled));
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   if(ready&&isV2()&&!dead&&boss?.canEscapeGrab)$('#dodge-button').disabled=false;
@@ -929,8 +933,8 @@ async function loadCharacter() {
     $('.action-controls').hidden = false;
     $('.action-controls').dataset.character = isV2()?'warrior-v2':character;
     $('#run-button').hidden = isWarrior();
-    $('.secondary-actions').hidden = isWarrior();
-    $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();
+    if($('.secondary-actions')){$('.secondary-actions').hidden = isWarrior();
+    $('#hit-button').hidden = isWarrior(); $('#death-button').hidden = isWarrior();}
     $('.keyboard-hint strong').textContent = tr(isWarrior() ? '달리기 이동' : '이동');
     $('.keyboard-hint small').textContent = isV2() ? 'J 공격 · 길게 심판 · F 짧게 밀치기 / 길게 방어 · Space 짧게 회피 / 길게 질주' : isWarrior() ? 'J 공격 · 공격 후 이동 재개' : 'Shift 달리기 · J 공격';
     $('#attack-label').textContent = isWarrior() ? '검 공격' : '활 공격';
@@ -1726,8 +1730,8 @@ try {
   const releaseAttack = () => cancelAttackInput();
   window.addEventListener('blur', releaseAttack);
   document.addEventListener('visibilitychange', () => { if (document.hidden) releaseAttack(); });
-  $('#hit-button').addEventListener('click', actions.hit);
-  $('#death-button').addEventListener('click', () => controller?.dead ? actions.revive() : actions.death());
+  $('#hit-button')?.addEventListener('click', actions.hit);
+  $('#death-button')?.addEventListener('click', () => controller?.dead ? actions.revive() : actions.death());
   $('#retry-load').addEventListener('click', retryLoading);
   for (const mode of ['orbit', 'pan']) $(`#${mode}-mode`).addEventListener('click', () => {
     input.cameraMode = mode;
