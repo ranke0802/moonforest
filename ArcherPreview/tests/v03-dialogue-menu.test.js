@@ -19,13 +19,16 @@ import vi from '../src/v03/locales/vi.js';
 import zh from '../src/v03/locales/zh.js';
 
 const PACKS={ko,en,ja,vi,zh};
-function stage({typing=false}={}){
+function stage({typing=false,coarse=false}={}){
  const {document,window}=parseHTML('<html><body></body></html>');
  let time=0,pending=false;
+ // The window closes before the next paint: frames are run by hand here (s.frame()).
+ const frames=new Set();
+ const later=fn=>{const job={fn};frames.add(job);return ()=>frames.delete(job);};
  // typing: start() leaves the line half shown until complete() (the real typewriter's contract).
  const typewriter={start(node,text){if(typing){node.textContent=text.slice(0,1);pending=text;}else node.textContent=text;return Promise.resolve();},
   complete(){if(!pending)return false;document.querySelector('.v03-dialogue-text').textContent=pending;pending=false;return true;},stop(){pending=false;},get typing(){return !!pending;}};
- const dialogue=createDialogue({doc:document,blip:null,typewriter,portraitFor:who=>who?'art/'+who+'.webp':null,now:()=>time});
+ const dialogue=createDialogue({doc:document,blip:null,typewriter,portraitFor:who=>who?'art/'+who+'.webp':null,now:()=>time,later,coarse:()=>coarse});
  const press=(code,extra={})=>{
   const event=new window.Event('keydown',{bubbles:true,cancelable:true});
   Object.defineProperty(event,'code',{value:code});Object.defineProperty(event,'repeat',{value:!!extra.repeat});
@@ -33,11 +36,13 @@ function stage({typing=false}={}){
  };
  const entries=()=>[...document.querySelectorAll('.v03-dialogue-choice')];
  const selected=()=>entries().findIndex(node=>node.classList.contains('is-selected'));
- return {document,window,dialogue,press,entries,selected,wait(ms=CHOICE_ARM_MS){time+=ms;},layer:document.querySelector('.v03-dialogue')};
+ const frame=()=>{const jobs=[...frames];frames.clear();for(const job of jobs)job.fn();};
+ return {document,window,dialogue,press,entries,selected,frame,wait(ms=CHOICE_ARM_MS){time+=ms;},layer:document.querySelector('.v03-dialogue')};
 }
 const SMITH=[{id:'talk',label:'대화하기'},{id:'shop',label:'상점'},{id:'forge',label:'장비 재련'},{id:'leave',label:'대화 종료'}];
 const HELLO='왔구나. 사러 왔냐, 손보러 왔냐?';
 const $=(s,sel)=>s.document.querySelector(sel);
+const css=readFileSync(new URL('../src/v03/v03.css',import.meta.url),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
 
 test('the choices sit in the actions row under the greeting, the first one selected, and a tap picks one',async()=>{
  const s=stage();
@@ -53,7 +58,10 @@ test('the choices sit in the actions row under the greeting, the first one selec
  assert.ok(s.entries().every(node=>node.parentNode===row));
  assert.equal($(s,'.v03-dialogue-menu'),null,'the stacked list is gone');
  assert.equal($(s,'.v03-dialogue-next').hidden,true,'Next/Close steps aside for the choices');
- assert.equal($(s,'.v03-dialogue-key').hidden,false,'the E hint stays (CSS hides it on touch)');
+ assert.equal($(s,'.v03-dialogue-key'),null,'the boxed E is gone');
+ assert.equal($(s,'.v03-dialogue-hint').textContent,'WASD 이동 · E 선택');assert.equal($(s,'.v03-dialogue-hint').getAttribute('aria-hidden'),'true');
+ assert.equal($(s,'.v03-dialogue-hint').parentNode,$(s,'.v03-dialogue-who').parentNode,'the hint shares the name line');
+ assert.ok($(s,'.v03-dialogue-choices').classList.contains('is-keyed'),'on PC the first button shows selected at once');
  assert.ok($(s,'.v03-dialogue-box').classList.contains('is-choosing'));
  assert.deepEqual(s.entries().map(node=>node.textContent),['대화하기','상점','장비 재련','대화 종료']);
  assert.ok(s.entries().every(node=>node.getAttribute('role')==='menuitem'&&node.type==='button'));
@@ -62,7 +70,8 @@ test('the choices sit in the actions row under the greeting, the first one selec
  assert.ok('v03Talk' in s.document.documentElement.dataset,'the play HUD steps back');
  s.wait();s.entries()[2].click();
  assert.equal(await picked,'forge');
- assert.equal(s.dialogue.open,false);assert.equal(s.layer.hidden,true);assert.equal(s.entries().length,0);
+ assert.equal(s.dialogue.open,false);assert.equal(s.entries().length,0);
+ assert.equal(s.layer.hidden,false,'closing waits for the next frame');s.frame();assert.equal(s.layer.hidden,true);
  assert.equal($(s,'.v03-dialogue-next').hidden,false);assert.equal($(s,'.v03-dialogue-text').hidden,false);
  assert.equal($(s,'.v03-dialogue-box').classList.contains('is-choosing'),false);
  assert.equal('v03Talk' in s.document.documentElement.dataset,false);
@@ -121,6 +130,87 @@ test('a menu and a conversation never overlap, and a waiting quest line marks th
  s.wait();s.layer.dispatchEvent(new s.window.Event('click',{bubbles:true}));assert.equal(s.dialogue.open,true);
  s.dialogue.dispose();assert.equal(await picked,null,'disposing settles the pick');
  assert.equal(await s.dialogue.choose([]),null);
+});
+
+// Records every write that would close, reset or re-enter the window.
+function spy(s){
+ const log=[],layer=s.layer,portrait=$(s,'.v03-dialogue-portrait'),box=$(s,'.v03-dialogue-box');
+ const hidden=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Object.getPrototypeOf(layer)),'hidden')??Object.getOwnPropertyDescriptor(s.window.HTMLElement.prototype,'hidden');
+ Object.defineProperty(layer,'hidden',{configurable:true,get(){return hidden.get.call(this);},set(v){if(v)log.push('layer hidden');hidden.set.call(this,v);}});
+ const src=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(portrait),'src')??Object.getOwnPropertyDescriptor(s.window.HTMLImageElement.prototype,'src');
+ Object.defineProperty(portrait,'src',{configurable:true,get(){return src.get.call(this);},set(v){log.push('portrait src');src.set.call(this,v);}});
+ const removeAttribute=portrait.removeAttribute.bind(portrait);portrait.removeAttribute=name=>{log.push('portrait remove '+name);removeAttribute(name);};
+ const remove=box.classList.remove.bind(box.classList);box.classList.remove=(...names)=>{if(names.includes('is-in'))log.push('box re-enter');remove(...names);};
+ return log;
+}
+
+test('talk after a pick, and the choices after the lines, keep the same window up (no hide, no new picture, no re-entrance)',async()=>{
+ const s=stage();
+ const first=s.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});
+ const art=$(s,'.v03-dialogue-portrait').getAttribute('src');assert.equal(art,'art/대장장이.webp');
+ const log=spy(s);
+ s.wait();s.entries()[0].click();
+ assert.equal(await first,'talk');
+ // The caller plays the talk at once (story.js interact: no frame in between).
+ const lines=[{who:'대장장이',text:'어서 오게.'},{who:'대장장이',text:'날 보자.'}];
+ const talk=s.dialogue.play(lines);
+ assert.equal(s.layer.hidden,false);assert.equal($(s,'.v03-dialogue-text').textContent,'어서 오게.');
+ s.frame();assert.equal(s.layer.hidden,false,'the cancelled close does not run later');
+ assert.deepEqual(log,[],'nothing closed, reset or re-entered between the pick and the first line');
+ assert.equal($(s,'.v03-dialogue-portrait').getAttribute('src'),art);
+ $(s,'.v03-dialogue-next').click();log.length=0;// the second line re-enters as lines always do
+ $(s,'.v03-dialogue-next').click();assert.equal(await talk,lines);
+ const again=s.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});
+ s.frame();assert.equal(s.layer.hidden,false);assert.deepEqual(log,[],'back to the choices without a close');
+ assert.equal($(s,'.v03-dialogue-portrait').getAttribute('src'),art);assert.equal(s.entries().length,4);
+ // Ending the talk closes the window (before the next paint).
+ s.wait();s.entries()[3].click();assert.equal(await again,'leave');
+ s.frame();assert.equal(s.layer.hidden,true);assert.deepEqual(log,['layer hidden','portrait remove src']);
+ assert.equal('v03Talk' in s.document.documentElement.dataset,false);
+ s.dialogue.dispose();
+});
+
+test('the key hint: "E 다음"/"E 닫기" on lines, "WASD 이동 · E 선택" on the choices, in every language',async()=>{
+ try{
+  for(const [lang,pack] of Object.entries(PACKS)){
+   setPack(lang,pack);
+   const s=stage(),hint=()=>$(s,'.v03-dialogue-hint').textContent,ui=key=>pack.ui[key];
+   const talk=s.dialogue.play([{who:'대장장이',text:'a'},{who:'대장장이',text:'b'}]);
+   assert.equal(hint(),'E '+ui('dialogue.next'),lang);assert.equal($(s,'.v03-dialogue-next').textContent,ui('dialogue.next'));
+   $(s,'.v03-dialogue-next').click();assert.equal(hint(),'E '+ui('dialogue.close'),lang+': follows the last-line switch');
+   $(s,'.v03-dialogue-next').click();await talk;
+   const p=s.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});
+   assert.equal(hint(),`WASD ${ui('talk.hint.move')} · E ${ui('talk.hint.pick')}`,lang);
+   assert.ok(ui('talk.hint.move')&&ui('talk.hint.pick'),lang);
+   assert.ok(s.entries().every(node=>!node.textContent.includes('WASD')),'not in the buttons\' names');
+   s.dialogue.cancel();await p;s.dialogue.dispose();
+  }
+ }finally{setPack('ko',ko);}
+ // CSS: hidden on touch screens, small text with no box.
+ assert.match(css,/@media \(pointer:coarse\)\{\.v03-dialogue-hint\{display:none\}\}/);
+ assert.doesNotMatch(css,/v03-dialogue-key/,'no rule for the old badge');
+});
+
+test('touch: no highlight until a key is used; the first pick key only shows it',async()=>{
+ const s=stage({coarse:true}),p=s.dialogue.choose(SMITH,{who:'대장장이',line:HELLO});s.wait();
+ const row=$(s,'.v03-dialogue-choices');
+ assert.equal(row.classList.contains('is-keyed'),false);
+ s.press('KeyE');assert.equal(row.classList.contains('is-keyed'),true);
+ let got;p.then(v=>{got=v;});await Promise.resolve();assert.equal(got,undefined,'the blind E did not pick');
+ s.press('KeyD');assert.equal(s.selected(),1);s.press('KeyE');assert.equal(await p,'shop');s.dialogue.dispose();
+ // A tap needs no highlight.
+ const t=stage({coarse:true}),q=t.dialogue.choose(SMITH,{who:'대장장이'});t.wait();t.entries()[2].click();assert.equal(await q,'forge');t.dialogue.dispose();
+});
+
+test('CSS: the stacked list is gone and the choice buttons share every size rule with Next/Close',()=>{
+ assert.doesNotMatch(css,/\.v03-dialogue-menu/);
+ const rules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(([,selector,body])=>({selector:selector.trim(),body}));
+ const shared=rules.filter(rule=>/:is\(\.v03-dialogue-next,\.v03-dialogue-choice\)/.test(rule.selector));
+ assert.ok(shared.some(rule=>/min-height:clamp\(36px/.test(rule.body)&&/padding:/.test(rule.body)&&/font-size:/.test(rule.body)),'the main size rule is shared');
+ assert.ok(shared.some(rule=>/min-height:44px/.test(rule.body)),'the touch height is shared');
+ for(const rule of rules)if(/\.v03-dialogue-choice(?![s\w-])/.test(rule.selector)&&!/\.v03-dialogue-next/.test(rule.selector))
+  assert.doesNotMatch(rule.body,/(^|;)\s*(width|min-width|max-width|height|min-height|padding|font-size|letter-spacing|flex|border-radius)\s*:/,rule.selector+' sizes the choice on its own');
+ assert.doesNotMatch(css,/grid-auto-columns|calc\(25%|calc\(50%/,'no stretched or equal-width layout');
 });
 
 test('a tap on the box or the picture never picks: it only completes the greeting; keys complete it first too',async()=>{
@@ -224,10 +314,16 @@ test('the smith: talk, shop and tempering each return to the menu, and only "end
   assert.deepEqual(v.visits,[['smith','shop'],['smith','forge']]);
   v.closeShop();await tick();assert.equal(v.menu().hidden,false);
   // Talk: the lines play, then the menu again; the shop does not follow.
+  // story.js plays the talk right after the pick and asks again right after the lines:
+  // the window never closes in between.
+  const layer=v.document.querySelector('.v03-dialogue'),hides=[];
+  const own=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(Object.getPrototypeOf(layer)),'hidden')??Object.getOwnPropertyDescriptor(v.document.defaultView.HTMLElement.prototype,'hidden');
+  Object.defineProperty(layer,'hidden',{configurable:true,get(){return own.get.call(this);},set(value){if(value)hides.push('hidden');own.set.call(this,value);}});
   await armed();v.entries()[0].click();await tick();
   assert.equal(v.menu().hidden,true);assert.ok(v.document.querySelector('.v03-dialogue-text').textContent.length>0,'a line is shown');
   for(let i=0;i<40&&v.menu().hidden;i++){v.document.querySelector('.v03-dialogue-next').click();await tick(1);}
   assert.equal(v.menu().hidden,false,'back at the menu after the talk');assert.equal(v.visits.length,2);assert.equal(said(),hello);
+  await tick();assert.deepEqual(hides,[],'no close between the pick, the lines and the choices');assert.equal(layer.hidden,false);
   // The last entry ends it.
   await armed();v.entries()[3].click();await tick();
   assert.equal(v.story.dialogueOpen,false);assert.equal(v.suspended.at(-1),false,'play input is back');

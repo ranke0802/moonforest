@@ -189,7 +189,7 @@ html[data-loading] .v03-hud{display:none}
 .v03-prompt::before,.v03-prompt::after{content:'';position:absolute;left:8%;right:8%;height:1px;background:linear-gradient(90deg,#cfb77b00,#cfb77bcc 30%,#cfb77bcc 70%,#cfb77b00)}
 .v03-prompt::before{top:0}.v03-prompt::after{bottom:0}
 .v03-prompt:hover .v03-prompt-key,.v03-prompt:focus-visible .v03-prompt-key{background:#cfb77b;color:#14100a}
-.v03-prompt-key,.v03-dialogue-key{display:grid;place-items:center;flex:none;width:30px;height:30px;font-size:15px;font-weight:700;color:#f2dc9c;background:#1a140c;border:1px solid #cfb77b;border-radius:3px;box-shadow:inset 0 -3px 0 #0b080c,0 0 0 1px #0b080c;transition:background .15s ease,color .15s ease}
+.v03-prompt-key{display:grid;place-items:center;flex:none;width:30px;height:30px;font-size:15px;font-weight:700;color:#f2dc9c;background:#1a140c;border:1px solid #cfb77b;border-radius:3px;box-shadow:inset 0 -3px 0 #0b080c,0 0 0 1px #0b080c;transition:background .15s ease,color .15s ease}
 .v03-prompt-text{display:flex;flex-direction:column;line-height:1.2}
 .v03-prompt-name{font-size:clamp(14px,calc(2.3vmin / var(--v03-ui,1)),17px);letter-spacing:.06em;color:#f2dc9c;font-weight:700}
 .v03-prompt-action{font-size:clamp(12px,calc(1.9vmin / var(--v03-ui,1)),14px);letter-spacing:.08em;color:#e8dfc8;opacity:.85}
@@ -202,14 +202,14 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-box{position:relative;width:min(max(780px,calc(54vw / var(--v03-ui,1))),1400px,100%);min-height:clamp(118px,calc(15vh / var(--v03-ui,1)),240px);padding:clamp(16px,calc(1.6vmin / var(--v03-ui,1)),28px) clamp(22px,calc(2.2vmin / var(--v03-ui,1)),40px) clamp(46px,calc(4.6vmin / var(--v03-ui,1)),76px);background:linear-gradient(180deg,#18241cf5,#0f1712f5);border:1px solid #ae925990;border-radius:6px;box-shadow:0 12px 40px #000a;opacity:0;transform:translateY(6px)}
 .v03-dialogue-box{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .v03-dialogue-box.is-in{opacity:1;transform:none;transition:opacity .18s ease,transform .18s ease}
-.v03-dialogue-who{display:block;margin-bottom:.4em;font-size:clamp(14px,calc(2vmin / var(--v03-ui,1)),26px);letter-spacing:.1em;color:var(--v03-gold)}
+.v03-dialogue-head{display:flex;align-items:baseline;gap:1em;margin-bottom:.4em}
+.v03-dialogue-who{display:block;flex:0 1 auto;min-width:0;overflow-wrap:anywhere;font-size:clamp(14px,calc(2vmin / var(--v03-ui,1)),26px);letter-spacing:.1em;color:var(--v03-gold)}
 .v03-dialogue-text{margin:0;font-size:clamp(15px,calc(2.3vmin / var(--v03-ui,1)),30px);line-height:1.75;white-space:pre-line}
 .v03-dialogue-box.is-self .v03-dialogue-text{color:#c9d4e6;font-style:italic}
 .v03-dialogue-box.is-self .v03-dialogue-who{color:#9fb4d6}
 .v03-dialogue-actions{position:absolute;right:clamp(14px,calc(1.4vmin / var(--v03-ui,1)),24px);bottom:clamp(10px,calc(1vmin / var(--v03-ui,1)),18px);display:flex;align-items:center;gap:10px}
 :is(.v03-dialogue-next,.v03-dialogue-choice){min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 :is(.v03-dialogue-next,.v03-dialogue-choice):hover{background:#cfb77b22!important}
-.v03-dialogue-key{font-family:inherit;letter-spacing:normal}
 /* 2026-11-26: a yes/no question during play (going straight back to the map just left). */
 .v03-confirm{width:min(26rem,88vw);box-sizing:border-box;padding:1.1rem 1.2rem;border:1px solid #ab9361;border-radius:.55rem;color:#f6e9d0;background:#201e26;font-family:var(--v03-font)}
 .v03-confirm::backdrop{background:#100e16a6}
@@ -219,26 +219,23 @@ html[lang=ko] .v03-confirm p{word-break:keep-all}
 .v03-confirm button{min-height:44px;min-width:6.5rem;padding:.4rem .9rem;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;background:#3b3641;font:inherit;cursor:pointer}
 .v03-confirm .v03-confirm-yes{background:#6b5526;border-color:#e0bd77}
 .v03-confirm button:focus-visible{outline:2px solid var(--v03-gold);outline-offset:2px}
-/* 2026-11-26 (second pass, user: the stacked list hid the art): the smith's and the
-   herbalist's choices are a row of buttons like Next/Close, under their greeting, where
-   Next/Close sits. The row flows inside the box (not pinned to its corner) so it can
-   wrap; the box keeps its normal height on PC. The highlighted one is the keyboard choice. */
-.v03-dialogue-box.is-choosing{padding-bottom:clamp(10px,calc(1vmin / var(--v03-ui,1)),18px)}
-.v03-dialogue-box.is-choosing .v03-dialogue-actions{position:static;justify-content:flex-end;align-items:flex-end;margin-top:.55em}
+/* 2026-11-26 (second pass, user): the smith's and the herbalist's choices are the
+   Next/Close button repeated, in its corner (bottom right, the last one, ending the talk,
+   where Close was). They share every size rule with .v03-dialogue-next; width follows the
+   label. Only a row too wide for the box (narrow portrait) wraps, still right-aligned.
+   The box paddings are the same in every state, and the text keeps room for two lines,
+   so the box does not jump between the greeting, the talk and the choices again. */
+.v03-dialogue-text{min-height:3.5em}
 .v03-dialogue-next[hidden]{display:none}
-.v03-dialogue-choices{display:flex;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;gap:8px;min-width:0}
+.v03-dialogue-choices{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px}
 .v03-dialogue-choices[hidden]{display:none}
-.v03-dialogue-choice{flex:0 1 auto;min-width:5.5em;max-width:16em;line-height:1.25;white-space:normal;text-align:center;overflow-wrap:anywhere}
-.v03-dialogue-choice.is-selected{background:#cfb77b26!important;border-color:var(--v03-gold)!important;box-shadow:inset 0 0 0 1px #cfb77b66}
+/* The highlight is the keyboard choice; on a touch screen it shows once a key is used. */
+.v03-dialogue-choices.is-keyed .v03-dialogue-choice.is-selected{background:#cfb77b26!important;border-color:var(--v03-gold)!important;box-shadow:inset 0 0 0 1px #cfb77b66}
 .v03-dialogue-choice[data-mark]::after{content:'!';margin-left:.35em;font-weight:700;color:#f5d897}
-/* Phones and short windows: buttons at least 44px tall, at most two rows (two to four
-   buttons a row), long labels wrap inside their button. */
-@media (pointer:coarse),(max-height:520px){
- .v03-dialogue-box.is-choosing{padding-bottom:10px}
- .v03-dialogue-choices{flex:1 1 auto}
- .v03-dialogue-choice{flex:1 1 auto;min-height:44px;min-width:calc(25% - 6px);max-width:calc(50% - 4px)}
-}
-@media (pointer:coarse){.v03-dialogue-key{display:none}}
+/* The keys as small text at the top right, on the name's line ("E 다음", "WASD 이동 · E 선택"). */
+.v03-dialogue-hint{flex:none;margin-left:auto;font-size:clamp(11px,calc(1.2vmin / var(--v03-ui,1)),16px);letter-spacing:.06em;white-space:nowrap;color:var(--v03-gold);opacity:.7}
+.v03-dialogue-hint:empty{display:none}
+@media (pointer:coarse){.v03-dialogue-hint{display:none}}
 
 .v03-tip{position:absolute;right:max(18px,env(safe-area-inset-right));top:clamp(150px,calc(34vh / var(--v03-ui,1)),260px);width:min(380px,calc(42vw / var(--v03-ui,1)));padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}
 .v03-tip.is-shown{animation:v03-tip 7.5s ease forwards}
