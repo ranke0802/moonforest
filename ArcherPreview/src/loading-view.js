@@ -19,8 +19,21 @@ export function needsModuleReload(error){
 export function loadingErrorRecord(error,depth=0){
   const record={name:String(error?.name??'Error').slice(0,120),message:String(error?.message??error??'알 수 없는 오류').slice(0,2000),stack:String(error?.stack??'').slice(0,8000)};
   for(const key of ['code','stage','assetId','level','timeoutMs','ktxStage','meshoptStage','textureRole','resourceUrl','loaderMessage','loaderCause','repairStatus','repairError'])if(['string','number'].includes(typeof error?.[key]))record[key]=typeof error[key]==='string'?error[key].slice(0,1000):error[key];
+  const modelWait=primitiveRecord(error?.modelWait);if(modelWait)record.modelWait=modelWait;
   if(error?.cause&&depth<2&&error.cause!==error)record.cause=loadingErrorRecord(error.cause,depth+1);
   return record;
+}
+// Downloadable diagnostic only (never shown on the card): a bounded copy of
+// plain objects/arrays of strings, numbers, booleans and null.
+function primitiveRecord(value,depth=0){
+  if(value===null||typeof value==='boolean')return value;
+  if(typeof value==='number')return Number.isFinite(value)?value:null;
+  if(typeof value==='string')return value.slice(0,240);
+  if(depth>=6||typeof value!=='object')return undefined;
+  if(Array.isArray(value))return value.slice(0,8).map(item=>primitiveRecord(item,depth+1)??null);
+  if(Object.getPrototypeOf(value)!==Object.prototype)return undefined;
+  const out={};let keys=0;for(const key of Object.keys(value)){if(++keys>24)break;const item=primitiveRecord(value[key],depth+1);if(item!==undefined)out[key]=item;}
+  return out;
 }
 
 export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.clipboard}={}){

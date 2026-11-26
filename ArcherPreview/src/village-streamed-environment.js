@@ -56,6 +56,16 @@ export function configureVillageSurfaceCulling(mesh,{cave=false,assetId,category
   const reviewedExterior=assetId==='village-approach'&&approvedVillageExterior?.revision==='approved-village-exterior-2026-11-09'&&approvedVillageExterior.assetId===assetId&&authoredTwoSided;
   material.backFaceCulling=!(['tree','plant'].includes(category)||reviewedNear||reviewedExterior||(cave&&authoredTwoSided&&openCaveSurfaces.has(assetId)));
 }
+// Diagnostic record of the await a failed asset load was in. Copies primitives
+// only; the material snapshot was taken by prepareMapMaterials at the deadline.
+const LOADER_COUNTS=['views','viewsDone','images','imagesDone','textures','texturesReady'];
+export function attachModelWait(error,wait,now){
+  if(!error||typeof error!=='object'||error.modelWait)return;
+  const record={step:wait.step,stepMs:Math.round(now-wait.stepAt),totalMs:Math.round(now-wait.started),subStep:wait.subStep};
+  if(wait.subStep&&wait.subStep!=='json'){record.loader={};for(const key of LOADER_COUNTS)if(Number.isFinite(wait[key]))record.loader[key]=wait[key];}
+  if(error.mapMaterialWait){record.materials=error.mapMaterialWait;try{delete error.mapMaterialWait;}catch{/* kept as is */}}
+  try{error.modelWait=record;}catch{/* A frozen external error keeps its own fields. */}
+}
 export function caveStructuralRecord(record,asset){return record.placement.kind==='rock'||asset?.config?.category==='rock';}
 
 export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timers}={}){
@@ -201,10 +211,14 @@ export function loadStreamedVillage(world,{
     const load=async({id,level})=>{
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
       const lifetime=new MapLoadLifetime({signal:controller.signal,timeoutMs:modelTimeoutMs,timers:modelTimers}),cancelled=()=>disposed||lifetime.signal.aborted;
+      // Which await this asset is in, for the failure record only (primitives; one object per load).
+      const wait={step:'prefetch',stepAt:lifetime.now(),started:lifetime.now(),subStep:null},step=name=>{wait.step=name;wait.stepAt=lifetime.now();},signal=lifetime.signal;
       const operation=lifetime.run(async()=>{
       const work=new VillageWorkBudget(()=>world.villageStreaming?.active,cancelled);
       await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();
-      const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime}),{onLate:container=>container?.dispose()});
+      step('container');
+      const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime,wait}),{onLate:container=>container?.dispose()});
+      step('setup');
       lifetime.check();containers.push(container);
       let since=performance.now();
       const meshes=geometry(container);
@@ -214,8 +228,8 @@ export function loadStreamedVillage(world,{
       for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
       for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
       world.lighting.registerMeshes(meshes);stageTime('setup',since,id,level);
-      await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled}));lifetime.check();
-      since=performance.now();installVillageGeometry(asset,container,level,world);stageTime('install',since,id,level);
+      step('materials');await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled,signal}));lifetime.check();
+      step('install');since=performance.now();installVillageGeometry(asset,container,level,world);stageTime('install',since,id,level);
       const instances=recordsByAsset.get(id)??[];
       // 0.4: derived far-distance levels for small scenery (see v04/detail-lod.js).
       if(detailLodEnabled()&&!asset.detailLods){
@@ -230,8 +244,9 @@ export function loadStreamedVillage(world,{
           try{world.meadow??=createMeadow();world.meadow.add(createScatterLayer(world,{name:id,sources:asset.baseMeshes,spec:layerSpec,amount:world.touchDevice?.75:1}));stats.meadow=world.meadow.layers.map(layer=>layer.stats);}
           catch(error){console.warn('[MoonForest 0.4] scattered vegetation unavailable',id,error);}
         }
-        if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
+        if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);step('detail-materials');await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled,signal}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
       }
+      step('instances');
       for(const record of instances)if(!record.meshes.length){
         if(work.due('instance:'+id))await lifetime.run(()=>work.yield());lifetime.check();
         since=performance.now();
@@ -249,7 +264,7 @@ export function loadStreamedVillage(world,{
       if(!outskirtsGround){
         since=performance.now();
         for(const mesh of activeSources)outlines.sourceFor(mesh);
-        outlines.addRecords(instances);stageTime('outlines',since,id,level);await lifetime.run(()=>outlines.prepare(activeSources,{cancelled}));lifetime.check();
+        outlines.addRecords(instances);stageTime('outlines',since,id,level);step('outlines');await lifetime.run(()=>outlines.prepare(activeSources,{cancelled,signal}));lifetime.check();
       }
       if(level===2&&instances.some(r=>r.essentialStructural)){
         for(const record of instances)if(record.essentialStructural)record.structuralReady=true;
@@ -258,6 +273,7 @@ export function loadStreamedVillage(world,{
       }
       // Cave rock walls use a narrow eye-to-player cutaway; never fade an
       // entire room wall like a tree canopy and reveal rooms behind it.
+      step('occlusion');
       const covered=instances.filter(r=>r.blocksPlayerView&&!r.placement.background&&!(world.cave&&caveStructuralRecord(r,asset))&&(world.forest||world.plains||world.cave||Math.hypot(r.placement.x,r.placement.z)<54||villageRoadside(r.placement)));
       for(const record of covered){
         if(work.due('occlusion:'+id))await lifetime.run(()=>work.yield());lifetime.check();
@@ -266,7 +282,7 @@ export function loadStreamedVillage(world,{
       stats.loadedLods[level]++;stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
       });pendingLoads.add(operation);
       try{return await operation;}catch(error){
-        if(error.name!=='AbortError'){error.assetId??=id;error.level??=level;stats.modelFailure={name:error.name,code:error.code??null,timeoutMs:error.timeoutMs??null,assetId:id,level,message:String(error.message??error)};}
+        if(error.name!=='AbortError'){error.assetId??=id;error.level??=level;attachModelWait(error,wait,lifetime.now());stats.modelFailure={name:error.name,code:error.code??null,timeoutMs:error.timeoutMs??null,assetId:id,level,modelWait:error.modelWait??null,message:String(error.message??error)};}
         throw error;
       }finally{pendingLoads.delete(operation);lifetime.close();}
     };

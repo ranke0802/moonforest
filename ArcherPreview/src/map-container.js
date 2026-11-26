@@ -7,7 +7,11 @@ import {releaseMapTexture} from './map-texture-lifetime.js';
 // Babylon 9.31's AssetContainer.dispose leaves its scene-disposal closure
 // registered. Its constructor runs synchronously between _getLoader and the
 // importMeshAsync call; capture precisely that hook and release it with the map.
-export async function readMapContainer(scene,json,rootUrl,{bin,skipMaterials=false,fileName='',signal,lifetime,timeoutMs,timers,onMeshLoaded}={}){
+// Built at module scope so a texture's load observer captures only the counter record.
+const countTexture=wait=>{const ready=()=>{wait.texturesReady++;};return texture=>{wait.textures++;if(texture?.isReady?.())ready();else texture?.onLoadObservable?.addOnce(ready);};};
+// wait (optional, diagnostics): a per-load record of primitives. subStep and
+// counters say how far the loader got if its owner's deadline fires.
+export async function readMapContainer(scene,json,rootUrl,{bin,skipMaterials=false,fileName='',signal,lifetime,timeoutMs,timers,onMeshLoaded,wait}={}){
   const minimum=json?.asset?.minVersion;
   if(json?.asset?.version!=='2.0'||(minimum!==undefined&&(!/^\d+\.\d+$/.test(minimum)||Number(minimum)>2)))throw new Error('지원하지 않는 맵 모델 버전입니다.');
   const ownLifetime=!lifetime; lifetime??=new MapLoadLifetime({signal,timeoutMs,timers});
@@ -20,6 +24,7 @@ export async function readMapContainer(scene,json,rootUrl,{bin,skipMaterials=fal
   const loaded={meshes:new Set(),materials:new Set(),textures:new Set(),cameras:new Set()};
   for(const [key,observable]of [['meshes','onMeshLoadedObservable'],['materials','onMaterialLoadedObservable'],['textures','onTextureLoadedObservable'],['cameras','onCameraLoadedObservable']])loader[observable].add(value=>loaded[key].add(value));
   if(typeof onMeshLoaded==='function')loader.onMeshLoadedObservable.add(onMeshLoaded);
+  if(wait){Object.assign(wait,{subStep:'loader',views:0,viewsDone:0,images:0,imagesDone:0,textures:0,texturesReady:0});loader.onTextureLoadedObservable.add(countTexture(wait));}
   const detach=()=>{if(observer){scene.onDisposeObservable.remove(observer);observer=null;}};
   const bindContainer=container=>{
     partial=container;const dispose=container.dispose.bind(container);
@@ -40,8 +45,8 @@ export async function readMapContainer(scene,json,rootUrl,{bin,skipMaterials=fal
     implementation.importMeshAsync=(names,target,container,...args)=>{observer=target.onDisposeObservable.observers.find(o=>!before.has(o));bindContainer(container);lifetime.check();return importMesh(names,target,container,...args);};
     // A completed old worker may fill the bounded CPU decode cache, but cannot
     // continue from its buffer-view into new Babylon vertex/GPU construction.
-    implementation.loadBufferViewAsync=(...args)=>Promise.resolve(bufferView(...args)).then(data=>{lifetime.check();return data;});
-    implementation.loadImageAsync=(...args)=>Promise.resolve(image(...args)).then(data=>{lifetime.check();return data;});
+    implementation.loadBufferViewAsync=(...args)=>{if(wait)wait.views++;return Promise.resolve(bufferView(...args)).then(data=>{if(wait)wait.viewsDone++;lifetime.check();return data;});};
+    implementation.loadImageAsync=(...args)=>{if(wait)wait.images++;return Promise.resolve(image(...args)).then(data=>{if(wait)wait.imagesDone++;lifetime.check();return data;});};
     return implementation;
   };
   const disposePartial=()=>{
@@ -71,6 +76,7 @@ export async function readMapContainer(scene,json,rootUrl,{bin,skipMaterials=fal
   const sceneObserver=scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError()));
   try{
     const container=await lifetime.run(()=>loader.loadAssetContainerAsync(scene,{json,bin},rootUrl,undefined,fileName),{onLate:container=>container.dispose()});
+    if(wait)wait.subStep='ready';
     return container;
   }catch(error){
     lifetime.abort(error);disposePartial();throw error;
@@ -85,14 +91,15 @@ export async function readBinaryMapContainer(scene,bytes,rootUrl,options={}){
     return await readMapContainer(scene,json,rootUrl,{...options,bin});
   }finally{reader.dispose();}
 }
-export async function loadMapContainer(model,scene,{signal,lifetime,timeoutMs,timers}={}){
+export async function loadMapContainer(model,scene,{signal,lifetime,timeoutMs,timers,wait}={}){
   const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers});
   if(scene.isDisposed)lifetime.abort(mapLoadAbortError());
   const observer=scene.onDisposeObservable.addOnce(()=>lifetime.abort(mapLoadAbortError()));
   try{
+    if(wait)wait.subStep='json';
     const response=await lifetime.run(()=>fetch(model,{cache:'force-cache',signal:lifetime.signal}));
     if(!response.ok)throw new Error(`맵 모델을 불러오지 못했습니다 (${response.status}).`);
     const json=await lifetime.run(()=>response.json());
-    return await readMapContainer(scene,json,new URL('.',model).href,{fileName:model.pathname.split('/').pop(),lifetime});
+    return await readMapContainer(scene,json,new URL('.',model).href,{fileName:model.pathname.split('/').pop(),lifetime,wait});
   }finally{scene.onDisposeObservable.remove(observer);if(ownLifetime)lifetime.close();}
 }

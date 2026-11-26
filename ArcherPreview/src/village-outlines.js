@@ -138,11 +138,11 @@ export class VillageOutlines {
     }
     this.next=0;
   }
-  async prepare(sources=this.sources,{cancelled=()=>false,tinted=false}={}){
+  async prepare(sources=this.sources,{cancelled=()=>false,tinted=false,signal}={}){
     const groups=new Map();
     for(const source of sources){const material=this.materialFor(source,tinted||this.tintedSources.has(source));if(!groups.has(material))groups.set(material,[]);groups.get(material).push(source);}
     const stopped=()=>this.world.scene.isDisposed||cancelled();
-    for(const [material,items]of groups){if(stopped())break;await prepareMapMaterials(items,{material,cancelled:stopped});}
+    for(const [material,items]of groups){if(stopped())break;await prepareMapMaterials(items,{material,cancelled:stopped,signal});}
   }
   removeRecords(records){
     const removed=new Set(records);this.entries=this.entries.filter(entry=>{if(!removed.has(entry.record))return true;entry.mesh.instancedBuffers.villageInk.set(0,0);this.selected.delete(entry);this.selectedMeshes.delete(entry.mesh);this.entryMeshes.delete(entry.mesh);return false;});this.next=0;
