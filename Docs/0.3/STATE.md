@@ -1,5 +1,11 @@
 # 0.3 현재 상태
 
+## 2026-11-26 · 글자 크기·터치 영역·설정 창 톤 (CSS만, 화면 미확인)
+
+- 바뀐 파일: `src/v03/v03.css`(HUD·타이틀·물약 선택·설정 창, 공용 시트 덮어쓰기는 0.3 edition 선택자 아래), `character-menu.css`, `town-shop.css`. 시험 `tests/v03-ux-readability.test.js`가 최솟값을 고정한다.
+- 검토 페이지(`review/ux`, 커밋 안 함)로 844×390·667×375(터치)·786×547·1280×720, 5개 언어를 재서 터치 화면 글자 최소 12px(배지·개수·단축키·버전 줄·스킬 상태 줄만 12px), 나머지 13px 이상을 확인했다. 실기기에서 본다: 스킬 트리(짧은 화면에서 세로 스크롤), 단련 창(판정 칸이 게이지 아래), 설정 창 색.
+- 남은 것: 크레딧 본문 속 링크(줄 안 글자 링크)는 44px가 아니다. 667×375 베트남어에서 상태 화면 장비 칸 이름 3줄, 팁 카드가 HP 숫자를 가리는 것은 이전과 같다.
+
 ## 2026-11-26 · 첫 실행 명료성과 접근성 (화면 미확인, 브랜치 fable/ux-access)
 
 - 접근성 상태는 `src/v03/accessibility.js` 하나(`reducedMotion()`·`vibrationAllowed()`·`textScale()`, 키 `moonforest:a11y:v1`)에서 읽는다. 새 흔들림·번쩍임·진동·확대 연출은 이 함수로 막고, 새 화면 CSS는 `html[data-mf-motion]`/`html[data-mf-text]`를 따른다(`accessibility.css`).
