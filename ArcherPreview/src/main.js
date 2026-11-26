@@ -1223,7 +1223,7 @@ function bindMapPortal(disarmRoadDestination=null,cameFrom=null){
   mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,disarmRoadDestination,
     returnGate:cameFrom&&world.gameplayV03?{destination:cameFrom,seconds:3,confirm:portal=>world.v03?.playing&&world.v03.confirmReturn?world.v03.confirmReturn(portal.destination):true}:null,
     getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount(),hp:boss.playerHp,potions:boss.potions.remaining}),
-    onTravel:(url,portal)=>{world.firstPerson?.exit();const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,{boundary,playerTravel:true});}});
+    onTravel:(url,portal)=>{world.firstPerson?.exit();const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,{boundary,playerTravelFrom:character});}});
 }
 
 function travelFromMinimap(href){
@@ -1237,7 +1237,7 @@ function travelFromMinimap(href){
     applyMinimapArrivalPose(actor,world.camera,input.panOffset,{destination:character,position:waypoint.position,waypoint});
     syncCameraFocus(0,{snap:true});syncCaveFog(true);world.lighting.follow(actor.position,true);saveMapPosition(true);return true;
   }
-  return mapTransition.travel(href,{minimap:true,playerTravel:true});
+  return mapTransition.travel(href,{minimap:true,playerTravelFrom:character});
 }
 
 try {
@@ -1425,7 +1425,7 @@ try {
       world.v03?.story?.cancelRaidWarning?.();
       townServices?.clear();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.chapterResidents?.leave();
-      if(context?.playerTravel&&world.v03?.playing&&!world.v03.story?.sceneActive){
+      if(context?.playerTravelFrom&&world.v03?.playing&&!world.v03.story?.sceneActive){
         world.riding?.beginTravel(mapForCharacter(new URL(href,location.href).searchParams.get('character')));
       }else world.riding?.leave();
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
@@ -1469,7 +1469,7 @@ try {
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
-      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);bindMapPortal(handoff?.from??null,context?.playerTravel?sourceCharacter:null);
+      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);bindMapPortal(handoff?.from??null,context?.playerTravelFrom);
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();world.authoredPlacements?.update(0,actor);
       await skyReady;
@@ -1641,7 +1641,7 @@ try {
     }
     const next=validCharacters.includes(event.target.value) ? event.target.value : 'archer';
     const url = new URL(location.href); url.searchParams.set('character', next);
-    if(next!==character&&isWorldCharacter(character)&&isWorldCharacter(next)){url.searchParams.set('arrival','portal');mapTransition.travel(url.href,{playerTravel:true});return;}
+    if(next!==character&&isWorldCharacter(character)&&isWorldCharacter(next)){url.searchParams.set('arrival','portal');mapTransition.travel(url.href,{playerTravelFrom:character});return;}
     if(mapForCharacter(next)!==mapForCharacter(character)){mapDeparture.leave(url.href);return;}
     character=next;history.replaceState(null, '', url);
     loadCharacter();

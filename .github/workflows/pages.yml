@@ -68,6 +68,7 @@ jobs:
           ArcherPreview/tests/v03-shop-cart.test.js
           ArcherPreview/tests/v03-dialogue-menu.test.js
           ArcherPreview/tests/v03-return-gate.test.js
+          ArcherPreview/tests/cave-portal-facing.test.js
           ArcherPreview/tests/v03-riding-horse.test.js
           ArcherPreview/tests/v03-riding-geometry.test.js
           ArcherPreview/tests/v03-riding-horse-path.test.js
