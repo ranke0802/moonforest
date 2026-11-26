@@ -1358,7 +1358,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
   const skillEase=zoom.skillWeight*zoom.skillWeight*(3-2*zoom.skillWeight);
-  camera.fov=zoom.base*(1-slowSetting().zoom*eased)*(1-.34*skillEase);
+  camera.fov=zoom.base*(1-slowSetting().zoom*eased)*(1-.26*skillEase);
   if(zoom.weight===0&&!target)restoreSlowZoom();
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
