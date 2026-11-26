@@ -11,6 +11,7 @@ const vertexSource = `
  uniform mat4 worldViewProjection;
  uniform vec3 grip, tip, center, slope;
  uniform float charge, age, windup, radius;
+ uniform float rimHeights[17];
  varying vec4 tint;
  void main() {
    float kind=uv.x, seed=uv.y, alpha=color.a;
@@ -18,7 +19,10 @@ const vertexSource = `
    if(kind<1.5) {
      float extent=kind<0.5?1.0:mix(0.08,1.0,1.0-pow(1.0-age,2.0));
      vec2 offset=p.xz*radius*extent;
-     p=center+vec3(offset.x,dot(offset,slope.xz)+0.045,offset.y);
+     float segment=16.0*seed;
+     int sector=int(min(15.0,floor(segment)));
+     float edgeHeight=mix(rimHeights[sector],rimHeights[sector+1],segment-float(sector));
+     p=center+vec3(offset.x,edgeHeight*length(p.xz)*extent+0.045,offset.y);
      alpha*=kind<0.5?mix((1.0-age)*0.95,0.24+charge*0.48,windup):(1.0-windup)*(1.0-age);
    } else if(kind<2.5) {
      vec3 ray=normalize(tip-grip+vec3(0.00001));
@@ -65,9 +69,9 @@ function geometry() {
     let previous;
     for(let i=0;i<=64;i++){
       const angle=i*Math.PI/32, x=Math.cos(angle),z=Math.sin(angle);
-      const start=vertex(x,0,z,kind,0,ivory,1);
+      const start=vertex(x,0,z,kind,i/64,ivory,1);
       const inner=kind===0?.979:.83;
-      vertex(inner*x,0,inner*z,kind,0,kind===0?gold:blue,kind===0?.62:0);
+      vertex(inner*x,0,inner*z,kind,i/64,kind===0?gold:blue,kind===0?.62:0);
       if(i>0)indices.push(previous,previous+1,start, start,previous+1,start+1);
       previous=start;
     }
@@ -110,7 +114,7 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
   mesh.setEnabled(false);
   const material=new ShaderMaterial('v03-starfall-light',scene,{vertexSource,fragmentSource},{
     attributes:['position','uv','color'],
-    uniforms:['worldViewProjection','grip','tip','center','slope','charge','age','windup','radius'],needAlphaBlending:true,
+    uniforms:['worldViewProjection','grip','tip','center','slope','charge','age','windup','radius','rimHeights'],needAlphaBlending:true,
   });
   mesh.material=material;material.disableDepthWrite=true;material.backFaceCulling=false;
   void prepareModelShaders({meshes:[mesh]},{includeInstanceVariants:false,keepPrograms:false})
@@ -118,24 +122,32 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
   const gauge=root.ownerDocument.createElement('div'), fill=root.ownerDocument.createElement('div');
   gauge.className='mf-starfall-gauge';gauge.hidden=true;gauge.setAttribute('aria-hidden','true');gauge.append(fill);root.append(gauge);
   const grip=new Vector3(),tip=new Vector3(),center=new Vector3(),slope=new Vector3();
-  let action=null, impactAt=null, sampledGround=false, disposed=false;
+  const rimHeights=new Array(17).fill(0);
+  let sampledX=Infinity,sampledZ=Infinity,action=null,impactAt=null,disposed=false;
+  function sampleRim(radius){
+    for(let i=0;i<16;i++){
+      const angle=i*Math.PI/8;
+      const h=ground?.(center.x+radius*Math.cos(angle),center.z+radius*Math.sin(angle));
+      rimHeights[i]=Number.isFinite(h)?h-center.y:0;
+    }
+    rimHeights[16]=rimHeights[0];
+    slope.set((rimHeights[0]-rimHeights[8])/(2*radius),0,(rimHeights[4]-rimHeights[12])/(2*radius));
+    material.setFloats('rimHeights',rimHeights);
+    sampledX=center.x;sampledZ=center.z;
+  }
   function hide(){action=null;impactAt=null;mesh.setEnabled(false);gauge.hidden=true;}
   function update(cast,blade,player){
     if(disposed)return;
     if(!cast||!player){hide();return;}
     const {phase,radius}=cast, windup=phase==='windup', p=cast.center;
-    if(action!==cast.actionId){impactAt=null;action=cast.actionId;}
+    if(action!==cast.actionId){impactAt=null;sampledX=Infinity;action=cast.actionId;}
     if(phase==='impact'&&impactAt===null)impactAt=now();
     const age=impactAt===null?0:Math.min(1,Math.max(0,(now()-impactAt)/550));
     if(age>=1){mesh.setEnabled(false);gauge.hidden=true;return;}
     if(!mesh.isEnabled())mesh.setEnabled(true);
-    if(p.x!==center.x||p.z!==center.z||!sampledGround){
-      const h=ground?.(p.x,p.z);
-      center.set(p.x,Number.isFinite(h)?h:p.y,p.z);
-      const hX=ground?.(p.x+.4,p.z), hZ=ground?.(p.x,p.z+.4);
-      slope.set(Number.isFinite(hX)?(hX-center.y)/.4:0,0,Number.isFinite(hZ)?(hZ-center.y)/.4:0);
-      sampledGround=true;
-    }
+    center.set(p.x,p.y,p.z);
+    // Refit a moving preview only after a material displacement. Always fit the actual landing.
+    if(radius>0&&(phase==='impact'||Math.abs(center.x-sampledX)+Math.abs(center.z-sampledZ)>.35))sampleRim(radius);
     if(blade?.[0]&&blade?.[1]){
       Vector3.FromArrayToRef(blade[0],0,grip);Vector3.FromArrayToRef(blade[1],0,tip);
     }else{
