@@ -80,6 +80,8 @@ export const RECIPES={
 // Stamina boosts: how long and how much faster stamina recovers (town-economy drink()).
 export const BOOSTS=Object.freeze({'stamina-tonic':Object.freeze({seconds:45,rate:1.5}),'bear-bile':Object.freeze({seconds:90,rate:1.75})});
 export const itemName=id=>t('item.'+id);
+// A blessed piece carries the blessing in its name (crafted gear, 10%: town-economy craft()).
+export const gearName=(id,blessed=false)=>blessed?t('item.blessed',{name:itemName(id)}):itemName(id);
 export const itemUsage=id=>TOWN_ITEMS[id]?.usage?t('item.usage.'+id):'';
 export const boostText=(key,id)=>{const b=BOOSTS[id];return t(key,{seconds:b.seconds,pct:Math.round((b.rate-1)*100)});};
 // What a supply does, or null for gear and materials.
@@ -88,40 +90,60 @@ export function itemNote(id){
  return BOOSTS[id]?boostText('item.note.boost',id):null;
 }
 export const FORGE_RULES=Object.freeze({
- // 2026-11-25 11:14, user: a completed strike costs 7 maximum durability; a failed strike costs
- // 7 + 5 more (12) and keeps the level. Tempering never restores durability: the
- // current value only follows a maximum that drops below it (45/57 -> 45/50, 45/45).
- maxLevel:12,minDurability:32,durabilityCost:7,perfectGain:2,failureLoss:12,attackGain:2,defenseGain:1,
- // Each level narrows every zone by 3% of its +0 size (2026-11-25, user: not a faster
- // hammer, smaller zones): 64% at +12. The hammer keeps one 900 ms sweep.
- zoneShrink:.03,
+ // 2026-11-26 10:41, user: "+N" counts tempering attempts, up to 20, and each attempt is
+ // saved. The grade decides how much the stat grows: failed 0, fair 1, success 2, great 3
+ // (4 on blessed gear). Shields and armour grow at half the blade's rate (0/0/1/2, blessed 3).
+ // An attempt wears the maximum durability by 3..6, 4 most often, never below the floor,
+ // and never restores durability: the current value only follows a maximum below it.
+ maxLevel:20,minDurability:32,
+ attackGains:Object.freeze({Failed:0,'Near miss':1,Success:2,Perfect:3}),
+ defenseGains:Object.freeze({Failed:0,'Near miss':0,Success:1,Perfect:2}),
+ blessedBonus:1,blessChance:.1,
+ // [maximum durability lost, chance]; the chances sum to 1.
+ wear:Object.freeze([Object.freeze([3,.2]),Object.freeze([4,.5]),Object.freeze([5,.2]),Object.freeze([6,.1])]),
+ // Saves from before this rule: +2 attack or +1 defence and 7 durability per level, cap +12.
+ legacyAttackGain:2,legacyDefenseGain:1,legacyDurabilityCost:7,
+ // The zones keep their size; the hammer sweeps faster with each attempt already made
+ // (900 ms at +0, about 460 ms at +19).
+ sweepMs:900,speedPerLevel:.05,
 });
 // What a temper consumes: the first of these the bag holds (town-economy forge()).
 export const FORGE_MATERIALS=Object.freeze(['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard']);
 // Zone edges as the distance from the centre (0 centre .. 1 either end of the bar).
-const ZONE_EDGES=Object.freeze({perfect:.12,success:.39,near:.69});
-export function forgeZones(level=0){
- const scale=1-FORGE_RULES.zoneShrink*Math.max(0,Math.min(FORGE_RULES.maxLevel,level|0));
- return {perfect:ZONE_EDGES.perfect*scale,success:ZONE_EDGES.success*scale,near:ZONE_EDGES.near*scale,scale};
+const ZONE_EDGES=Object.freeze({perfect:.12,success:.39,near:.69,scale:1});
+export function forgeZones(){return ZONE_EDGES;}
+export function gradeStrike(position){
+ const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2;
+ return error<=ZONE_EDGES.perfect?'Perfect':error<=ZONE_EDGES.success?'Success':error<=ZONE_EDGES.near?'Near miss':'Failed';
 }
-// level: the item's forge level before this strike (zones narrow per level).
-export function gradeStrike(position,level=0){
- const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2,zone=forgeZones(level);
- return error<=zone.perfect?'Perfect':error<=zone.success?'Success':error<=zone.near?'Near miss':'Failed';
+const forgeLevel=level=>Math.max(0,Math.min(FORGE_RULES.maxLevel,level|0));
+// Stat gained by one attempt of this grade on a piece in `slot`.
+export function forgeGain(slot,grade,blessed=false){
+ const gain=(slot==='sword'?FORGE_RULES.attackGains:FORGE_RULES.defenseGains)[grade]??0;
+ return grade==='Perfect'&&blessed?gain+FORGE_RULES.blessedBonus:gain;
 }
+// Maximum durability one attempt costs (random() in [0,1)).
+export function forgeWear(random=Math.random){
+ let roll=random();
+ for(const [loss,chance] of FORGE_RULES.wear)if((roll-=chance)<0)return loss;
+ return FORGE_RULES.wear.at(-1)[0];
+}
+export const FORGE_WEAR_RANGE=Object.freeze({min:Math.min(...FORGE_RULES.wear.map(([loss])=>loss)),max:Math.max(...FORGE_RULES.wear.map(([loss])=>loss))});
+// The stat a piece carried under the rule before 2026-11-26 (a save without `bonus`).
+export const legacyForgeBonus=(slot,level)=>forgeLevel(level)*(slot==='sword'?FORGE_RULES.legacyAttackGain:FORGE_RULES.legacyDefenseGain);
 // Recover the effective maximum of saves written before per-strike durability.
 export function forgeMax(id,level=0,loss=0){
- const item=TOWN_ITEMS[id];return item?.max?Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.durabilityCost-loss):0;
+ const item=TOWN_ITEMS[id];return item?.max?Math.max(FORGE_RULES.minDurability,item.max-level*FORGE_RULES.legacyDurabilityCost-loss):0;
 }
-// What a grade does to a piece at `level` with maximum durability `max`: the new
-// level and maximum (never below the floor, never above the old maximum).
-export function forgeResult(level,max,grade){
- const gain=grade==='Perfect'?FORGE_RULES.perfectGain:grade==='Success'?1:0,next=Math.min(FORGE_RULES.maxLevel,level+gain);
- const drop=grade==='Failed'?FORGE_RULES.failureLoss:FORGE_RULES.durabilityCost;
- return {level:next,max:Math.min(max,Math.max(FORGE_RULES.minDurability,max-drop))};
+// One attempt on a piece at `level` with maximum durability `max` that wears it by `wear`:
+// the attempt always counts, the maximum never drops below the floor or rises.
+export function forgeResult(level,max,wear){
+ return {level:Math.min(FORGE_RULES.maxLevel,level+1),max:Math.min(max,Math.max(FORGE_RULES.minDurability,max-wear))};
 }
 // gradeStrike returns stable ids (saved and tested); this is what the player reads.
 const GRADE_KEYS={Perfect:'perfect',Success:'success','Near miss':'near',Failed:'failed'};
 export const gradeLabel=grade=>t('shop.grade.'+GRADE_KEYS[grade]);
-// Position of the hammer mark (0..1..0), one sweep in 900 ms at every level.
-export function forgeCursor(elapsed){const phase=((elapsed%1800)+1800)%1800/900;return phase<=1?phase:2-phase;}
+// One sweep of the hammer across the bar at this many attempts already made.
+export function forgeSweepMs(level=0){return FORGE_RULES.sweepMs/(1+FORGE_RULES.speedPerLevel*forgeLevel(level));}
+// Position of the hammer mark (0..1..0).
+export function forgeCursor(elapsed,level=0){const sweep=forgeSweepMs(level),phase=((elapsed%(2*sweep))+2*sweep)%(2*sweep)/sweep;return phase<=1?phase:2-phase;}

@@ -14,14 +14,15 @@ import {createTownShop} from '../src/v03/town-shop.js';
 
 const store=()=>{const values=new Map();return {getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,v)};};
 function wallet(storage=store(),amount=200){const gold=new GoldLoot({storage});gold.creditCumulative('test-grant',amount);return gold;}
-test('smith trades are atomic with gold and all four grades have distinct consequences',()=>{
- // 11:14, user: a level costs 7 maximum durability, a failure 12; tempering never restores durability.
- const storage=store(),gold=wallet(storage),town=createTownEconomy(gold);
+test('smith trades are atomic with gold; every attempt counts and each of the four grades adds its own gain',()=>{
+ // 2026-11-26, user: +N is the number of attempts; failed 0, fair 1, success 2, great 3;
+ // an attempt wears the maximum by 3..6 and tempering never restores durability.
+ const storage=store(),gold=wallet(storage),rolls=[.3,.75,.95,.05],town=createTownEconomy(gold,{},{random:()=>rolls.shift()??.3});
  assert.equal(town.gear().max,180);assert.equal(town.attack,3);assert.equal(town.buy('smith','iron-scrap'),true);
- assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:173,max:173,level:2,attack:7,defense:0});
+ assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:176,max:176,level:1,bonus:3,blessed:false,attack:6,defense:0});
  for(const grade of ['Success','Near miss','Failed']){town.grant('wolf-fang');assert.equal(town.forge({Success:.36,'Near miss':.24,Failed:0}[grade]),grade);}
- // +2 173/173 -> Success +3 166/166 -> Near miss 159/159 -> Failed +3 147/147.
- assert.deepEqual(town.gear(),{hp:147,max:147,level:3,attack:9,defense:0});
+ // +1 176 -> success +2 (wears 5) 171 -> fair +3 (wears 6) 165 -> failed +4 (wears 3) 162.
+ assert.deepEqual(town.gear(),{hp:162,max:162,level:4,bonus:6,blessed:false,attack:9,defense:0});
  for(let action=0;action<10;action++){town.damageWeapon(action);town.damageWeapon(action);}
  assert.equal(town.gear().hp,town.gear().max-1);
  assert.equal(town.repair(),true);assert.equal(town.gear().hp,town.gear().max);
@@ -31,13 +32,13 @@ test('smith trades are atomic with gold and all four grades have distinct conseq
  assert.deepEqual([.5,.35,.24,.0].map(gradeStrike),['Perfect','Success','Near miss','Failed']);
 });
 test('craft, wear, repair armor; register and persist stamina consumables',()=>{
- const storage=store(),w=wallet(storage),a=createTownEconomy(w);
+ const storage=store(),w=wallet(storage),a=createTownEconomy(w,{},{random:()=>.3});
  assert.equal(a.craft('herbalist','potion'),false);
  a.buy('herbalist','moon-herb');a.buy('herbalist','moon-herb');assert.ok(a.craft('herbalist','potion'));
  assert.equal(a.state.bag.potion,4);assert.equal(a.state.bag['moon-herb'],undefined);
  a.grant('fox-pelt');a.grant('wolf-pelt',2);assert.ok(a.craft('smith','hunter-coat'));a.equip('hunter-coat');
  a.grant('iron-scrap');assert.equal(a.forge(.5,'hunter-coat'),'Perfect');assert.equal(a.defense,8);
- a.wearDefense(false);assert.equal(a.gear('hunter-coat').hp,112);assert.ok(a.repair('hunter-coat'));
+ a.wearDefense(false);assert.equal(a.gear('hunter-coat').hp,115);assert.ok(a.repair('hunter-coat'));
  a.grant('bear-bile');assert.ok(a.register('bear-bile'));assert.ok(a.drink());assert.equal(a.regen,1.75);
  a.tick(15);const again=createTownEconomy(new GoldLoot({storage}));assert.equal(again.state.boost,75);again.tick(75);assert.equal(again.regen,1);
 });
@@ -65,19 +66,22 @@ test('only alpha wolves guarantee a fang and the smith makes its +17 sword from 
  let town=createTownEconomy(wallet(storage,14));
  const pile={id:'foe:wolf:0',mapId:'great-plains',origin:point,position:point,model:'clue-satchel',rewards:monsterRewards('wolf',()=>.99999)};
  assert.ok(town.scatter([pile]));assert.equal(town.state.bag[fang],undefined);
- town=createTownEconomy(new GoldLoot({storage}));assert.deepEqual(town.collect([pile.id]),{[fang]:1});assert.equal(town.collect([pile.id]),null);
+ town=createTownEconomy(new GoldLoot({storage}),{},{random:()=>.5});assert.deepEqual(town.collect([pile.id]),{[fang]:1});assert.equal(town.collect([pile.id]),null);
  assert.ok(town.buy('smith','iron-scrap'));assert.equal(town.craft('smith',blade),false);assert.equal(town.state.bag[fang],1);
  assert.ok(town.buy('smith','iron-scrap'));assert.equal(town.gold,0);
  const {document,window}=parseHTML('<main></main>'),root=document.querySelector('main');
  const shop=createTownShop({root,economy:town,onPause(){},onChange(){}}),dialog=root.querySelector('dialog');
  dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new window.Event('close'));};
- const opened=shop.show('smith'),row=dialog.querySelector('[data-item-icon="'+blade+'"]').closest('.mf-shop-row');
- assert.match(row.querySelector('small').textContent,/\+17/);assert.equal(row.querySelector('button').disabled,false);
- row.querySelector('button').click();shop.close();await opened;shop.dispose();
+ // 2026-11-26: the making tab, one of it, then the button at the bottom.
+ const opened=shop.show('smith');[...dialog.querySelectorAll('.mf-shop-tabs button')][2].click();
+ const row=dialog.querySelector('[data-item-icon="'+blade+'"]').closest('.mf-shop-row'),more=row.querySelector('.mf-shop-step button:last-child'),make=dialog.querySelector('.mf-shop-act');
+ assert.match(row.querySelector('small').textContent,/\+17/);assert.equal(more.disabled,false);assert.equal(make.disabled,true,'nothing chosen yet');
+ more.click();assert.equal(more.disabled,true,'one piece of gear at a time');assert.equal(make.disabled,false);
+ make.click();shop.close();await opened;shop.dispose();
  assert.equal(town.state.bag[fang],undefined);assert.equal(town.state.bag['iron-scrap'],undefined);
  assert.equal(town.craft('smith',blade),false);assert.equal(town.state.bag[blade],1);assert.ok(town.equip(blade));
  town=createTownEconomy(new GoldLoot({storage}));assert.equal(town.state.equipped.sword,blade);assert.equal(town.attack,17);
- assert.deepEqual(town.gear(blade),{level:0,attack:17,defense:0,hp:100,max:100});
+ assert.deepEqual(town.gear(blade),{level:0,bonus:0,blessed:false,attack:17,defense:0,hp:100,max:100});
 });
 test('equipping different blade profiles changes geometry below the guard and preserves hand mount and tip reach',()=>{
  const engine=new NullEngine(),scene=new Scene(engine),sword=MeshBuilder.CreateBox('Golden_Oathblade',{height:2},scene);
@@ -90,12 +94,14 @@ test('equipping different blade profiles changes geometry below the guard and pr
  eq.selectTrophy('teal-bronze','cleaver');assert.equal(sword.geometry,first);
  eq.dispose();assert.equal(sword.geometry,source);scene.dispose();engine.dispose();
 });
-test('herbalist shop opens from play, bills the visible button once and resumes on close',async()=>{
+test('herbalist shop opens from play, bills the chosen quantity once at the bottom button and resumes on close',async()=>{
  const {document}=parseHTML('<html><body><main></main></body></html>'),root=document.querySelector('main');
  const town=createTownEconomy(wallet()),shop=createTownShop({root,economy:town,onChange(){},onPause(){}});
  const dialog=root.querySelector('dialog');dialog.showModal=()=>{dialog.open=true;};dialog.close=()=>{dialog.open=false;dialog.dispatchEvent(new document.defaultView.Event('close'));};
- const opened=shop.show('herbalist');assert.equal(shop.open,true);const buttons=[...dialog.querySelectorAll('button')];
- buttons.find(b=>b.textContent==='15 G').click();assert.equal(town.state.bag.potion,4);assert.equal(town.gold,185);
+ const opened=shop.show('herbalist');assert.equal(shop.open,true);
+ const row=dialog.querySelector('[data-item="potion"]');assert.equal(row.querySelector('.mf-shop-price').textContent,'15 G');
+ row.querySelector('.mf-shop-step button:last-child').click();assert.equal(town.state.bag.potion,3,'choosing a quantity buys nothing');
+ dialog.querySelector('.mf-shop-act').click();assert.equal(town.state.bag.potion,4);assert.equal(town.gold,185);
  shop.close();await opened;assert.equal(shop.open,false);shop.dispose();
 });
 test('the blacksmith lives in the village with a real catalog model and reachable dialogue',()=>{

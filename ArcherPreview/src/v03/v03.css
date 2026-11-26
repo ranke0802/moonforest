@@ -207,6 +207,23 @@ html[data-loading] .v03-hud{display:none}
 .v03-dialogue-next{min-height:clamp(36px,calc(3.4vmin / var(--v03-ui,1)),56px);padding:.3em 1.1em!important;font-size:clamp(14px,calc(1.7vmin / var(--v03-ui,1)),22px)!important;letter-spacing:.12em;color:var(--v03-gold)!important;border:1px solid #ae925970!important;border-radius:4px}
 .v03-dialogue-next:hover{background:#cfb77b22!important}
 .v03-dialogue-key{font-family:inherit;letter-spacing:normal}
+/* 2026-11-26: a yes/no question during play (going straight back to the map just left). */
+.v03-confirm{width:min(26rem,88vw);box-sizing:border-box;padding:1.1rem 1.2rem;border:1px solid #ab9361;border-radius:.55rem;color:#f6e9d0;background:#201e26;font-family:var(--v03-font)}
+.v03-confirm::backdrop{background:#100e16a6}
+.v03-confirm h2{margin:0 0 .5rem;font-size:1.15rem;color:var(--v03-gold)}.v03-confirm p{margin:0 0 1rem;line-height:1.6}
+html[lang=ko] .v03-confirm p{word-break:keep-all}
+.v03-confirm-actions{display:flex;gap:.6rem;justify-content:flex-end;flex-wrap:wrap}
+.v03-confirm button{min-height:44px;min-width:6.5rem;padding:.4rem .9rem;border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;background:#3b3641;font:inherit;cursor:pointer}
+.v03-confirm .v03-confirm-yes{background:#6b5526;border-color:#e0bd77}
+.v03-confirm button:focus-visible{outline:2px solid var(--v03-gold);outline-offset:2px}
+/* 2026-11-26: the pick-one list in the dialogue box (smith, herbalist). Entries are
+   full-width buttons at least 44px tall; the highlighted one is the keyboard choice. */
+.v03-dialogue-menu{display:grid;gap:8px;margin-top:.3em}
+.v03-dialogue-menu[hidden]{display:none}
+.v03-dialogue-choice{display:block;width:100%;min-height:44px;padding:.45em 1em!important;text-align:left;font-size:clamp(15px,calc(2.1vmin / var(--v03-ui,1)),28px)!important;color:#f3ead2!important;background:#00000038!important;border:1px solid #ae925970!important;border-radius:4px;cursor:pointer}
+.v03-dialogue-choice.is-selected{color:var(--v03-gold)!important;background:#cfb77b26!important;border-color:var(--v03-gold)!important}
+.v03-dialogue-choice[data-mark]::after{content:'!';float:right;font-weight:700;color:var(--v03-gold)}
+.v03-dialogue-menu:not([hidden])~.v03-dialogue-actions{display:none}
 @media (pointer:coarse){.v03-dialogue-key{display:none}}
 
 .v03-tip{position:absolute;right:max(18px,env(safe-area-inset-right));top:clamp(150px,calc(34vh / var(--v03-ui,1)),260px);width:min(380px,calc(42vw / var(--v03-ui,1)));padding:10px 26px 11px 14px;background:linear-gradient(90deg,#101a14e6,#101a1499 70%,#101a1400);border-left:2px solid var(--v03-gold);opacity:0}

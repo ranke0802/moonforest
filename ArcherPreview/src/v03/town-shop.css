@@ -9,6 +9,24 @@
 .mf-shop-row>span{flex:1}.mf-shop-row strong,.mf-shop-row small{display:block}.mf-shop-row small{color:#c3b8ae}
 .mf-town-shop button,.mf-treasure-prompt{border:1px solid #a28c64;border-radius:.3rem;color:#fff3d8;background:#3b3641;font:inherit;min-height:2.65rem;padding:.35rem .65rem;cursor:pointer}
 .mf-town-shop button:disabled{opacity:.45}.mf-shop-receipt{min-height:1.2em;margin:.5rem 0 0;color:#eed493}
+/* 2026-11-26, user: a quantity beside each item and one button that stays at the
+   bottom. The dialog is a column; only the list scrolls, the bar never leaves. */
+/* The temper view keeps its own scrolling block layout (.is-forging below). */
+.mf-town-shop[open]:not(.is-forging){display:flex;flex-direction:column;overflow:hidden}
+.mf-town-shop[open]:not(.is-forging)>.mf-shop-scroll{flex:1 1 auto;min-height:0;max-height:none}
+.mf-shop-tabs{display:flex;gap:.4rem;padding:.5rem 0 .25rem}.mf-shop-tabs button{flex:1 1 0;min-width:0}
+.mf-shop-tabs button[aria-selected=true]{background:#5a4a2c;border-color:#e0bd77;color:#fff}
+.mf-shop-price{flex:none;min-width:3.4rem;text-align:right;color:#eed493;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mf-shop-step{flex:none;display:flex;align-items:center;gap:.25rem}
+.mf-town-shop .mf-shop-step button{min-width:2.75rem;padding:.2rem 0;font-size:1.15rem;line-height:1}
+.mf-shop-step output{min-width:1.9rem;text-align:center;font-variant-numeric:tabular-nums}
+.mf-shop-row.is-selected{background:#ffffff12;box-shadow:inset 3px 0 0 #e0bd77}
+.mf-shop-row.is-picked output{color:#8df3b1;font-weight:700}
+.mf-shop-bar{flex:none;display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-top:.5rem;padding-top:.6rem;border-top:1px solid #716448}
+.mf-shop-bar strong{font-variant-numeric:tabular-nums}
+.mf-town-shop .mf-shop-act{min-width:8.5rem;font-size:1.05rem;background:#6b5526;border-color:#e0bd77}
+.mf-forge-saved{display:block;margin:.25rem 0 0;color:#eed493;font-size:.82rem;text-align:center}
+.mf-shop-row .mf-forge-saved{text-align:left}
 /* 2026-11-24: shop words follow the chosen language (v03.css html[lang]). */
 .mf-town-shop{font-family:var(--v03-font)}
 .mf-shop-row>.mf-town-item-icon{--mf-item-icon-size:clamp(28px,6vmin,42px);flex:none}

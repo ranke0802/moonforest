@@ -1,12 +1,13 @@
 import {createTownEconomy} from './town-economy.js';
-import {TOWN_ITEMS,itemName,itemNote,itemUsage,boostText} from './town-items.js';
+import {TOWN_ITEMS,itemName,gearName,itemNote,itemUsage,boostText} from './town-items.js';
 import {t} from './i18n.js';
 import {monsterExperience} from './character-progression.js';
 import {createTownTreasure} from './town-treasure.js';
 import {createWeaponConditionHud} from './weapon-condition-hud.js';
 
-export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound}){
- const economy=createTownEconomy(wallet,legacy()),win=root.ownerDocument.defaultView;
+// random: the economy's dice (temper wear, blessed crafting); tests fix it.
+export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound,random=Math.random}){
+ const economy=createTownEconomy(wallet,legacy(),{random}),win=root.ownerDocument.defaultView;
  const healthHud=root.querySelector('#player-hud'),durabilityHud=healthHud?createWeaponConditionHud(healthHud):null;
  let shop=null,generation=0,disposed=false,wasPlaying=false,lastGear=null,appliedTo=null,treasure=null;
  const items=()=>economy.state;
@@ -35,7 +36,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   const s=items(),equipment=[];
   for(const [id,count] of Object.entries(s.bag)){
    const it=TOWN_ITEMS[id];if(!it||!count)continue;
-   const row={id,name:itemName(id),type:it.type,icon:id,quantity:count,
+   const row={id,name:it.slot?gearName(id,s.condition[id]?.blessed===true):itemName(id),type:it.type,icon:id,quantity:count,
     worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
    if(it.slot){
     const gear=economy.gear(id);row.level=gear.level;row.broken=gear.hp===0;
@@ -72,7 +73,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    const id=items().equipped.sword;
    if(!economy.damageWeapon(actionId))return false;
    syncDurability();
-   if(economy.gear(id)?.hp===0)notify(t('shop.weaponBroken',{name:itemName(id)}));
+   if(economy.gear(id)?.hp===0)notify(t('shop.weaponBroken',{name:gearName(id,economy.gear(id).blessed)}));
    return true;
   },
   // Diagnostics only: the worn blade after a hit (plain values).
@@ -82,13 +83,14 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    if(!economy.grant('leather-coat'))return false;if(!items().equipped.armor)economy.equip('leather-coat');apply();return true;},
   addPotions(count){return economy.grant('potion',count)?count:0;},
   rest(){const n=3-(items().bag.potion??0);if(n>0)economy.grant('potion',n);},
-  get equippedSwordName(){return itemName(items().equipped.sword);},
+  get equippedSwordName(){const id=items().equipped.sword;return gearName(id,economy.gear(id)?.blessed);},
   reset,clear(){generation++;shop?.close();treasure?.clear();flush();},
-  async openShop(id){
+  // view: 'shop' (buy, sell, make) or 'forge' (the smith's bench: repair and temper).
+  async openShop(id,view='shop'){
    if(!['smith','herbalist'].includes(id)||!world.v03?.playing||world.mapId!=='village')return;
    const token=generation;const [{createTownShop}]=await Promise.all([import('./town-shop.js'),import('./town-shop.css')]);
    if(disposed||generation!==token||!world.v03?.playing||world.mapId!=='village')return;
-   shop??=createTownShop({root,economy,onPause,onChange:apply});await shop.show(id);
+   shop??=createTownShop({root,economy,onPause,onChange:apply});await shop.show(id,view);
   },
   creditQuestExperience(ids,quiet=false,chapter=null){
    const previous=economy.progression.level,gain=economy.creditQuests(ids,quiet,chapter);

@@ -7,6 +7,7 @@ import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
 import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
+import {createConfirmDialog} from './confirm-dialog.js';
 import {createPlayerCombatLock} from './player-combat-lock.js';
 import {createSlowFx,mountSlowFxSettings} from './slow-fx.js';
 import {createLoadingLore} from './loading-lore.js';
@@ -90,6 +91,7 @@ export function setupV03(api){
  const combatTarget=createCombatTarget();
  const playerCombatLock=createPlayerCombatLock();
  const combatLocksTravel=()=>api.world?.gameplayV03 ? playerCombatLock.active(api.world.mapId,battle) : battle.combatCount>0;
+ let returnQuestion=null;
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
  // A model without the cloth grid, or a world without a scene (tests), leaves a stub so it is not tried every frame.
  // Until it has been judged on screen it runs on the development server and with ?cape=1 only (2026-11-20).
@@ -678,6 +680,16 @@ export function setupV03(api){
    combatTarget.note(kind,foe);playerCombatLock.note(kind,foe,damage,api.world.mapId);
   }},
   get combatLocksTravel(){return combatLocksTravel();},
+  // main.js (map-travel returnGate): going straight back to the map just left asks first
+  // (user, 2026-11-26). The player holds still while the question is up.
+  async confirmReturn(destination){
+   if(state.screen!=='play'||state.disposed)return true;
+   const key='place.'+destination,name=t(key);
+   returnQuestion??=createConfirmDialog({doc,mount:root});
+   input.setSuspended(true);
+   try{return await returnQuestion.ask({title:t('travel.returnTitle'),message:t('travel.returnConfirm',{place:name===key?destination:name}),accept:t('travel.returnAccept')});}
+   finally{if(!state.disposed)input.setSuspended(false);}
+  },
   aimTarget(position,nearest,starts=true){return state.screen==='play'?combatTarget.aim(position,nearest,starts):nearest;},
   get aimReach(){return state.screen==='play'?combatTarget.reach:0;},
   get chainFoe(){return state.screen==='play'?combatTarget.chainFoe:null;},
@@ -744,6 +756,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;openingAttempt?.abort();cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

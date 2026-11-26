@@ -1,4 +1,4 @@
-import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,FORGE_MATERIALS,gradeStrike,forgeMax,forgeResult} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,FORGE_MATERIALS,gradeStrike,forgeMax,forgeResult,forgeGain,forgeWear,legacyForgeBonus} from './town-items.js';
 import {validateItemDrop} from '../item-drop-data.js';
 import {MAX_TOTAL_XP,PASSIVE_LIMITS,SKILL_REFUND_GOLD,normalizeProgression,progressionStatus,questExperience,weaponWearInterval} from './character-progression.js';
 export const MAX_GROUND_DROPS=128;
@@ -32,7 +32,11 @@ export function normalizeTown(raw,legacy={}){
   // Old saves inferred the maximum from level and extra loss on failures.
   const max=Number.isSafeInteger(source?.max)&&source.max>=FORGE_RULES.minDurability&&source.max<=TOWN_ITEMS[id].max
    ?source.max:forgeMax(id,level,qty(source?.loss));
-  condition[id]={level,max,hp:Number.isSafeInteger(source?.hp)?Math.max(0,Math.min(max,source.hp)):max};
+  // A level used to be worth a fixed amount; since 2026-11-26 each attempt adds its own gain.
+  const bonus=Number.isSafeInteger(source?.bonus)&&source.bonus>=0&&source.bonus<=level*(FORGE_RULES.attackGains.Perfect+FORGE_RULES.blessedBonus)
+   ?source.bonus:legacyForgeBonus(TOWN_ITEMS[id].slot,level);
+  condition[id]={level,bonus,max,hp:Number.isSafeInteger(source?.hp)?Math.max(0,Math.min(max,source.hp)):max};
+  if(source?.blessed===true)condition[id].blessed=true;
   if(TOWN_ITEMS[id].slot==='sword'&&condition[id].hp>0&&Number.isInteger(source?.wearUnits)&&source.wearUnits>0&&source.wearUnits<WEAR_UNITS)
    condition[id].wearUnits=source.wearUnits;
  }
@@ -47,7 +51,7 @@ export function normalizeTown(raw,legacy={}){
 function give(state,id,count){
  const item=TOWN_ITEMS[id];if(!item||!qty(count))return;
  state.bag[id]=Math.min(99999,(state.bag[id]??0)+count);
- if(item.slot&&!state.condition[id])state.condition[id]={level:0,max:item.max,hp:item.max};
+ if(item.slot&&!state.condition[id])state.condition[id]={level:0,bonus:0,max:item.max,hp:item.max};
 }
 function take(state,id,count){
  state.bag[id]-=count;
@@ -59,7 +63,12 @@ function take(state,id,count){
 function addKillExperience(state,amount){
  if(Number.isSafeInteger(amount)&&amount>0)state.progression.totalXp=Math.min(MAX_TOTAL_XP,state.progression.totalXp+amount);
 }
-export function createTownEconomy(wallet,legacy={}){
+// A cart is {id:count}; every entry must pass `allowed` and hold a whole count.
+const cartOf=(cart,allowed)=>{
+ const entries=Object.entries(cart??{});
+ return entries.length&&entries.every(([id,n])=>allowed(id)&&qty(n))?entries:null;
+};
+export function createTownEconomy(wallet,legacy={},{random=Math.random}={}){
  let state=normalizeTown(wallet.town,legacy),dirty=false,unsavedSeconds=0,lastAction=null;
  function transact(delta,change,creditTotals=null){
   const next=structuredClone(state);
@@ -74,7 +83,7 @@ export function createTownEconomy(wallet,legacy={}){
  function gear(id=state.equipped.sword){
   const item=TOWN_ITEMS[id],status=state.condition[id];
   if(!item||!status)return null;
-  return {level:status.level,hp:status.hp,max:status.max,attack:status.hp&&item.attack?item.attack+status.level*FORGE_RULES.attackGain:0,defense:status.hp&&item.defense?item.defense+status.level*FORGE_RULES.defenseGain:0};
+  return {level:status.level,bonus:status.bonus,blessed:status.blessed===true,hp:status.hp,max:status.max,attack:status.hp&&item.attack?item.attack+status.bonus:0,defense:status.hp&&item.defense?item.defense+status.bonus:0};
  }
  // Village service events for the story's errands ({type:'town',action,item}).
  // One listener at a time; the story sets it on start and clears it on stop.
@@ -83,8 +92,8 @@ export function createTownEconomy(wallet,legacy={}){
  const api={
   set onEvent(fn){listener=typeof fn==='function'?fn:null;},
   get state(){return state;},get gold(){return wallet.balance;},
-  get attack(){const id=state.equipped.sword,w=state.condition[id];return w.hp?TOWN_ITEMS[id].attack+w.level*FORGE_RULES.attackGain:0;},
-  get defense(){let total=state.progression.skills.guardTraining;for(const slot of ['shield','armor']){const id=state.equipped[slot],w=state.condition[id];if(w?.hp)total+=TOWN_ITEMS[id].defense+w.level*FORGE_RULES.defenseGain;}return total;},
+  get attack(){const id=state.equipped.sword,w=state.condition[id];return w.hp?TOWN_ITEMS[id].attack+w.bonus:0;},
+  get defense(){let total=state.progression.skills.guardTraining;for(const slot of ['shield','armor']){const id=state.equipped[slot],w=state.condition[id];if(w?.hp)total+=TOWN_ITEMS[id].defense+w.bonus;}return total;},
   get regen(){return (state.boost>0?state.boostRate:1)*(1+.02*state.progression.skills.endurance);},gear,flush,
   get progression(){return progressionStatus(state.progression);},
   gainExperience(amount){
@@ -162,23 +171,53 @@ export function createTownEconomy(wallet,legacy={}){
    return true;
   },
   wearDefense(blocked){const w=state.condition[state.equipped[blocked?'shield':'armor']];if(!w?.hp)return false;w.hp--;dirty=true;return true;},
-  buy(shop,id){const price=STOCK[shop]?.[id];return told(!!price&&transact(-price,s=>give(s,id,1)),'buy',id);},
-  sell(shop,id){
-   const item=TOWN_ITEMS[id];return !!item?.sell&&!!STOCK[shop]&&own(state,id)&&transact(item.sell,s=>take(s,id,1));
+  // One wallet write for the whole cart ({id:count}); all of it or none (2026-11-26, user:
+  // pick quantities, then one button at the bottom).
+  buyAll(shop,cart){
+   const stock=STOCK[shop],items=stock&&cartOf(cart,id=>stock[id]>0);if(!items)return false;
+   if(!transact(-items.reduce((sum,[id,n])=>sum+stock[id]*n,0),s=>{for(const [id,n] of items)give(s,id,n);}))return false;
+   for(const [id] of items)told(true,'buy',id);return true;
   },
-  craft(shop,id){const recipe=RECIPES[shop]?.[id];return told(!!recipe&&Object.entries(recipe.inputs).every(([k,n])=>(state.bag[k]??0)>=n)&&transact(-recipe.gold,s=>{
-   for(const [key,n] of Object.entries(recipe.inputs))take(s,key,n);give(s,id,1);
-  }),'craft',id);},
+  buy(shop,id,count=1){return api.buyAll(shop,{[id]:count});},
+  sellAll(shop,cart){
+   const items=STOCK[shop]&&cartOf(cart,id=>TOWN_ITEMS[id]?.sell>0);
+   if(!items||items.some(([id,n])=>(state.bag[id]??0)<n))return false;
+   return transact(items.reduce((sum,[id,n])=>sum+TOWN_ITEMS[id].sell*n,0),s=>{for(const [id,n] of items)take(s,id,n);});
+  },
+  sell(shop,id,count=1){return api.sellAll(shop,{[id]:count});},
+  // Returns {blessed:[ids]} or null. A crafted piece of gear is blessed one time in ten
+  // (2026-11-26, user); the blessing belongs to that kind of piece in this bag from then on.
+  craftAll(shop,cart){
+   const recipes=RECIPES[shop],items=recipes&&cartOf(cart,id=>!!recipes[id]);if(!items)return null;
+   const need={};let gold=0;
+   for(const [id,n] of items){gold+=recipes[id].gold*n;for(const [key,each] of Object.entries(recipes[id].inputs))need[key]=(need[key]??0)+each*n;}
+   if(Object.entries(need).some(([key,n])=>(state.bag[key]??0)<n))return null;
+   const blessed=[];
+   for(const [id,n] of items){
+    if(!TOWN_ITEMS[id].slot||state.condition[id]?.blessed)continue;
+    let lucky=false;for(let i=0;i<n;i++)if(random()<FORGE_RULES.blessChance)lucky=true;
+    if(lucky)blessed.push(id);
+   }
+   if(!transact(-gold,s=>{
+    for(const [key,n] of Object.entries(need))take(s,key,n);
+    for(const [id,n] of items)give(s,id,n);
+    for(const id of blessed)s.condition[id].blessed=true;
+   }))return null;
+   for(const [id] of items)told(true,'craft',id);return {blessed};
+  },
+  craft(shop,id,count=1){return !!api.craftAll(shop,{[id]:count});},
   repairCost(id){const w=gear(id);return w?Math.ceil((w.max-w.hp)/7):0;},
   repair(id=state.equipped.sword){const cost=api.repairCost(id);return told(cost>0&&transact(-cost,s=>{s.condition[id].hp=gear(id).max;delete s.condition[id].wearUnits;}),'repair',id);},
   forgeCost(id){return 12+4*(gear(id)?.level??0);},
   canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&FORGE_MATERIALS.some(key=>own(state,key));},
+  // Every attempt counts towards +N and is written at once, whatever its grade.
   forge(position,id=state.equipped.sword){if(!Number.isFinite(position)||!api.canForge(id))return null;
-   const grade=gradeStrike(position,state.condition[id]?.level??0);
+   const grade=gradeStrike(position),wear=forgeWear(random);
    const material=FORGE_MATERIALS.find(key=>own(state,key));
    return told(transact(-api.forgeCost(id),s=>{
     take(s,material,1);const w=s.condition[id];
-    const next=forgeResult(w.level,w.max,grade);
+    const next=forgeResult(w.level,w.max,wear);
+    w.bonus+=forgeGain(TOWN_ITEMS[id].slot,grade,w.blessed===true);
     w.level=next.level;w.max=next.max;w.hp=Math.min(w.hp,w.max);
    }),'forge',id)?grade:null;
   },

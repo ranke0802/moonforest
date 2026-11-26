@@ -1218,9 +1218,10 @@ function travelCombatCount(){
   return world?.gameplayV03&&world.v03?.playing ? Number(world.v03.combatLocksTravel) : boss.combatCount;
 }
 
-function bindMapPortal(disarmRoadDestination=null){
+function bindMapPortal(disarmRoadDestination=null,cameFrom=null){
   mapPortal?.dispose();
   mapPortal=createMapPortal(world,{button:$('#map-travel'),persistTravel:false,disarmRoadDestination,
+    returnGate:cameFrom&&world.gameplayV03?{destination:cameFrom,seconds:3,confirm:portal=>world.v03?.playing&&world.v03.confirmReturn?world.v03.confirmReturn(portal.destination):true}:null,
     getState:()=>({position:actor?.position,loading:!ready||loadingAsset||mapTransition?.busy||boss.loading,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount(),hp:boss.playerHp,potions:boss.potions.remaining}),
     onTravel:(url,portal)=>{world.firstPerson?.exit();const boundary=portal.roadPassage?captureVillagePlainsHandoff(character,portal.destination,actor,world.camera,input.panOffset):null;mapTransition.travel(url,{boundary,playerTravel:true});}});
 }
@@ -1468,7 +1469,7 @@ try {
       $('#build-tag').textContent=isCave()?'CAVERN / 05':isPlains()?'PLAINS / 06':isForest()?'FOREST / 04':'VILLAGE / 03';
       $('#character-name').textContent=isCave()?'Violet Vanguard v5':isPlains()?'Violet Vanguard · 대평원':isForest()?'Violet Vanguard v4':'Violet Vanguard v3';
       $('#character-subtitle').textContent=isCave()?'마녀의 동굴':isPlains()?'대평원':isForest()?'마물의 숲':'숲의 경계 마을';
-      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);bindMapPortal(handoff?.from??null);
+      $('#character-select').value=releaseSelectionValue(releaseEnabled,character,uiTestEnabled,world?.release);bindMapPortal(handoff?.from??null,context?.playerTravel?sourceCharacter:null);
       if(isCave())await boss.activateResident(actor);
       await prepareElenaReview();world.authoredPlacements?.update(0,actor);
       await skyReady;
@@ -1897,7 +1898,7 @@ try {
     }
     world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,
       offerMount:()=>world.riding?.offer(),
-      getPlayer:()=>actor,getController:()=>controller,openTownShop:id=>townServices?.openShop(id),
+      getPlayer:()=>actor,getController:()=>controller,openTownShop:(id,view)=>townServices?.openShop(id,view),
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId,
         // Scenery still streaming in (models and higher-resolution textures).
         pending:(world.environment?.geometryPending??0)+(world.environment?.highTexturePending??0)}),

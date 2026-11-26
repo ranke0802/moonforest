@@ -48,7 +48,7 @@ test('HUD, bag and smith follow the equipped sword through fractional wear, brea
  assert.ok(services.equip('goblin-cleaver'));assert.ok(hud.hasAttribute('data-broken'));
  const shop=createTownShop({root,economy:services.economy,onPause(){},onChange:services.apply});
  enableDialog(root.querySelector('.mf-town-shop'));
- const closed=shop.show('smith');
+ const closed=shop.show('smith','forge');
  const repair=t('shop.repair',{cost:services.economy.repairCost('goblin-cleaver')});
  const repairButton=[...root.querySelectorAll('.mf-town-shop button')].find(button=>button.textContent===repair);
  assert.equal(repairButton.disabled,false);repairButton.click();shop.close();await closed;

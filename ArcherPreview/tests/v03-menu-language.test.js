@@ -20,7 +20,7 @@ import {POTION} from '../src/healing-potion.js';
 import {createCharacterMenu} from '../src/v03/character-menu.js';
 import {createTownEconomy} from '../src/v03/town-economy.js';
 import {createTownShop} from '../src/v03/town-shop.js';
-import {TOWN_ITEMS,BOOSTS,FORGE_RULES,itemName,itemNote,gradeLabel,gradeStrike} from '../src/v03/town-items.js';
+import {TOWN_ITEMS,STOCK,BOOSTS,FORGE_RULES,FORGE_WEAR_RANGE,itemName,itemNote,gradeLabel,gradeStrike} from '../src/v03/town-items.js';
 
 const PACKS={ko,en,ja,vi,zh};
 const byText=(parent,selector,label)=>{const node=[...parent.querySelectorAll(selector)].find(el=>el.textContent===label);assert.ok(node,'control: '+label);return node;};
@@ -62,8 +62,8 @@ test('every village item, use and supply note has a name in all five languages',
  assert.equal(itemNote('wolf-fang'),null);
  const economy=createTownEconomy(new GoldLoot({storage:store()}));economy.grant('stamina-tonic');economy.register('stamina-tonic');
  assert.ok(economy.drink());assert.equal(economy.state.boost,BOOSTS['stamina-tonic'].seconds);assert.equal(economy.regen,BOOSTS['stamina-tonic'].rate);
- assert.deepEqual([.5,.35,.24,0].map(gradeStrike).map(gradeLabel),['완벽','성공','아깝게 빗나감','실패']);
- setPack('en',en);assert.equal(itemName('cave-fang'),'Black Wolf Fangblade');assert.equal(gradeLabel('Near miss'),'Near miss');
+ assert.deepEqual([.5,.35,.24,0].map(gradeStrike).map(gradeLabel),['대성공','성공','보통','실패']);
+ setPack('en',en);assert.equal(itemName('cave-fang'),'Black Wolf Fangblade');assert.equal(gradeLabel('Near miss'),'Fair');assert.equal(gradeLabel('Perfect'),'Great success');
  setPack('ko',ko);
 });
 
@@ -97,49 +97,75 @@ for(const id of Object.keys(PACKS))test(`village shops and the forge read ${id}`
  try{
   const {window,root}=page();root.ownerDocument.documentElement.lang=id;
   const gold=new GoldLoot({storage:store()});gold.creditCumulative('test-grant',500);
-  const economy=createTownEconomy(gold);for(const item of ['wolf-fang','iron-scrap','wolf-pelt','bear-hide'])economy.grant(item,2);
+  const economy=createTownEconomy(gold,{},{random:()=>.3});for(const item of ['wolf-fang','iron-scrap','wolf-pelt','bear-hide'])economy.grant(item,2);
   economy.grant('moon-herb',2);economy.grant('iron-scrap',2);economy.grant('leather-coat');
   const shop=createTownShop({root,economy,onChange(){},onPause(){}}),dialog=root.querySelector('dialog');modal(dialog,window);
-  for(const kind of ['smith','herbalist']){
-   const closed=shop.show(kind);expectLanguage(id,readable(dialog),kind);
-   [...dialog.querySelectorAll('button')].find(b=>/^\d+ G$/.test(b.textContent)).click();
-   expectLanguage(id,readable(dialog),kind+' receipt');
-   if(kind==='smith'){
-    for(const gear of ['field-sword','leather-coat','field-shield']){
-     const picker=dialog.querySelector('select');[...picker.options].find(o=>o.value===gear).selected=true;picker.dispatchEvent(new window.Event('change'));
-     const bonus=gear==='field-sword'?t('shop.attack',{n:FORGE_RULES.attackGain}):t('shop.defense',{n:FORGE_RULES.defenseGain});
-     const note=byText(dialog,'.mf-shop-row small',t('shop.temperNote',{...FORGE_RULES,bonus}));
-     for(const value of [bonus,FORGE_RULES.minDurability,FORGE_RULES.maxLevel,FORGE_RULES.perfectGain,FORGE_RULES.durabilityCost,FORGE_RULES.failureLoss])assert.ok(note.textContent.includes(String(value)));
-    }
-    const select=dialog.querySelector('select');
-    const target=economy.state.equipped.shield;
-    [...select.options].find(option=>option.value===target).selected=true;
-    select.dispatchEvent(new window.Event('change'));
-    assert.equal(dialog.querySelector('select').value,target);
-    const forge=byText(dialog,'button',t('shop.forge',{cost:economy.forgeCost(target)}));
-    assert.ok(forge&&!forge.disabled,'forge is offered');forge.click();expectLanguage(id,readable(dialog),'forge');
-    assert.equal(dialog.querySelector('h2').textContent,t('shop.temperTitle',{name:itemName(target)}));
-    const zones=[...dialog.querySelectorAll('.mf-forge-legend li')];
-    assert.deepEqual(zones.map(zone=>zone.querySelector('b').textContent),['Perfect','Success','Near miss','Failed'].map(gradeLabel));
-    assert.ok(zones[3].textContent.includes(String(FORGE_RULES.failureLoss)));
-    assert.equal(dialog.querySelector('[role="img"]').getAttribute('aria-label'),PACKS[id].ui['shop.gauge']);
-    assert.equal(dialog.querySelector('.mf-forge').getAttribute('aria-label'),PACKS[id].ui['shop.forgeTap']);
-    // No strike button: a tap anywhere on the temper view strikes.
-    assert.equal([...dialog.querySelectorAll('button')].some(b=>b.textContent===t('shop.strike')),false);
-    dialog.querySelector('.mf-forge-gauge').dispatchEvent(new window.Event('pointerdown',{bubbles:true}));
-    const grade=dialog.querySelector('.mf-forge-result strong').textContent;
-    assert.ok(['Perfect','Success','Near miss','Failed'].some(value=>gradeLabel(value)===grade),id+' forge result: '+grade);
-    expectLanguage(id,readable(dialog),'forge result');
-    byText(dialog,'header button',t('panel.back')).click();
-    assert.equal(dialog.querySelector('.mf-shop-receipt').textContent.split(' · ')[0],grade);
+  const receipt=()=>dialog.querySelector('.mf-shop-receipt').textContent;
+  {
+   // The smith's bench is its own view (2026-11-26: reached from "temper equipment" in the talk menu).
+   const closed=shop.show('smith','forge');expectLanguage(id,readable(dialog),'bench');
+   assert.equal(dialog.dataset.mode,'forge');assert.equal(dialog.querySelector('.mf-shop-tabs'),null);assert.equal(dialog.querySelector('.mf-shop-act'),null);
+   const limits={maxLevel:FORGE_RULES.maxLevel,minDurability:FORGE_RULES.minDurability,...FORGE_WEAR_RANGE};
+   for(const gear of ['field-sword','leather-coat','field-shield']){
+    const picker=dialog.querySelector('select');[...picker.options].find(o=>o.value===gear).selected=true;picker.dispatchEvent(new window.Event('change'));
+    const note=byText(dialog,'.mf-shop-row small',t('shop.temperNote',limits));
+    for(const value of Object.values(limits))assert.ok(note.textContent.includes(String(value)),id+' temper note: '+value);
+    assert.equal(dialog.querySelector('.mf-shop-row .mf-forge-saved').textContent,PACKS[id].ui['shop.forgeSaved']);
    }
-   const made=kind==='smith'?'wolf-blade':'potion',before=economy.state.bag[made]??0,cost=kind==='smith'?22:2;
-   const button=byText(dialog,'button',t('shop.make',{cost}));assert.equal(button.disabled,false);button.click();
+   const select=dialog.querySelector('select');
+   const target=economy.state.equipped.shield;
+   [...select.options].find(option=>option.value===target).selected=true;
+   select.dispatchEvent(new window.Event('change'));
+   assert.equal(dialog.querySelector('select').value,target);
+   const forge=byText(dialog,'button',t('shop.forge',{cost:economy.forgeCost(target)}));
+   assert.ok(forge&&!forge.disabled,'forge is offered');forge.click();expectLanguage(id,readable(dialog),'forge');
+   assert.equal(dialog.querySelector('h2').textContent,t('shop.temperTitle',{name:itemName(target)}));
+   const zones=[...dialog.querySelectorAll('.mf-forge-legend li')];
+   assert.deepEqual(zones.map(zone=>zone.querySelector('b').textContent),['Perfect','Success','Near miss','Failed'].map(gradeLabel));
+   // A shield grows at half the blade's rate: 2, 1, 0, 0.
+   assert.deepEqual(zones.map(zone=>zone.querySelector('span').textContent),[2,1,0,0].map(n=>t('shop.gradeGain',{stat:t('char.defense'),n})));
+   assert.equal(dialog.querySelector('[role="img"]').getAttribute('aria-label'),PACKS[id].ui['shop.gauge']);
+   assert.equal(dialog.querySelector('.mf-forge').getAttribute('aria-label'),PACKS[id].ui['shop.forgeTap']);
+   assert.equal(dialog.querySelector('.mf-forge-play .mf-forge-saved').textContent,PACKS[id].ui['shop.forgeSaved']);
+   // No strike button: a tap anywhere on the temper view strikes.
+   assert.equal([...dialog.querySelectorAll('button')].some(b=>b.textContent===t('shop.strike')),false);
+   dialog.querySelector('.mf-forge-gauge').dispatchEvent(new window.Event('pointerdown',{bubbles:true}));
+   const grade=dialog.querySelector('.mf-forge-result strong').textContent;
+   assert.ok(['Perfect','Success','Near miss','Failed'].some(value=>gradeLabel(value)===grade),id+' forge result: '+grade);
+   assert.equal(economy.gear(target).level,1,'the attempt counted');
+   expectLanguage(id,readable(dialog),'forge result');
+   byText(dialog,'header button',t('panel.back')).click();
+   assert.equal(receipt().split(' · ')[0],grade);
+   shop.close();await closed;
+  }
+  for(const kind of ['smith','herbalist']){
+   // 2026-11-26, user: a quantity beside each price and one button, always at the bottom.
+   const closed=shop.show(kind);expectLanguage(id,readable(dialog),kind);
+   const tabs=()=>[...dialog.querySelectorAll('.mf-shop-tabs button')],act=()=>dialog.querySelector('.mf-shop-act');
+   const more=item=>dialog.querySelector('[data-item="'+item+'"] .mf-shop-step button:last-child');
+   assert.deepEqual(tabs().map(tab=>tab.textContent),[t('shop.buy'),t('shop.sell'),t(kind==='smith'?'shop.makeGear':'shop.brew')]);
+   assert.equal(dialog.dataset.mode,'shop');assert.equal(dialog.querySelector('select'),null,'no bench in the shop');
+   const bought=kind==='smith'?'iron-scrap':'potion',had=economy.state.bag[bought]??0;
+   for(const line of dialog.querySelectorAll('.mf-shop-row[data-item]'))assert.match(line.querySelector('.mf-shop-price').textContent,/^\d+ G$/);
+   assert.equal(act().textContent,t('shop.buy'));assert.equal(act().disabled,true);
+   more(bought).click();more(bought).click();assert.equal(economy.state.bag[bought]??0,had,'nothing is bought until the button');
+   assert.equal(dialog.querySelector('.mf-shop-bar strong').textContent,t('shop.total',{n:STOCK[kind][bought]*2}));
+   expectLanguage(id,readable(dialog),kind+' cart');
+   act().click();assert.equal(economy.state.bag[bought],had+2);
+   assert.equal(receipt(),t('shop.boughtItems',{items:itemName(bought)+' ×2'}));
+   expectLanguage(id,readable(dialog),kind+' receipt');
+   tabs()[2].click();expectLanguage(id,readable(dialog),kind+' making');
+   const made=kind==='smith'?'wolf-blade':'potion',before=economy.state.bag[made]??0;
+   assert.equal(act().textContent,t(kind==='smith'?'shop.makeAction':'shop.brew'));
+   assert.equal(more(made).disabled,false);more(made).click();act().click();
    assert.equal(economy.state.bag[made],before+1);
-   assert.equal(dialog.querySelector('.mf-shop-receipt').textContent,t('shop.made',{name:itemName(made)}));
-   const sale=[...dialog.querySelectorAll('.mf-shop-row')].find(row=>row.querySelector('strong').textContent===itemName('wolf-pelt')&&row.querySelector('button')?.textContent===t('shop.sellFor',{price:TOWN_ITEMS['wolf-pelt'].sell}));
-   assert.ok(sale);sale.querySelector('button').click();
-   assert.equal(dialog.querySelector('.mf-shop-receipt').textContent,t('shop.sold',{name:itemName('wolf-pelt')}));
+   assert.equal(receipt(),t('shop.madeItems',{items:itemName(made)+' ×1'}));
+   tabs()[1].click();expectLanguage(id,readable(dialog),kind+' selling');
+   assert.equal(dialog.querySelector('[data-item="wolf-pelt"] .mf-shop-price').textContent,TOWN_ITEMS['wolf-pelt'].sell+' G');
+   more('wolf-pelt').click();
+   assert.equal(dialog.querySelector('.mf-shop-bar strong').textContent,t('shop.totalGain',{n:TOWN_ITEMS['wolf-pelt'].sell}));
+   assert.equal(act().textContent,t('shop.sell'));act().click();
+   assert.equal(receipt(),t('shop.soldItems',{items:itemName('wolf-pelt')+' ×1'}));
    shop.close();await closed;
   }
   shop.dispose();
@@ -183,18 +209,25 @@ for(const [id,pack] of Object.entries(PACKS))test(`owned equipment, quick-bar re
   }
  }finally{menu.dispose();services.dispose();setPack('ko',ko);}
 });
-test('forge limits in shop copy match a real near-broken sword at the reinforcement cap',()=>{
+test('forge limits in shop copy match a real near-broken sword at the attempt cap',()=>{
  const gold=new GoldLoot({storage:store()});gold.creditCumulative('forge-test',1000);
  const initial=createTownEconomy(gold);initial.grant('ritual-blade');initial.grant('iron-scrap',3);
- const saved=structuredClone(initial.state);saved.condition['ritual-blade']={level:11,hp:2};
+ const saved=structuredClone(initial.state);saved.condition['ritual-blade']={level:FORGE_RULES.maxLevel-1,bonus:30,max:FORGE_RULES.minDurability,hp:2};
  assert.equal(gold.tradeTown(0,saved),true);
- const economy=createTownEconomy(gold),id='ritual-blade';
- // At the floor a failure takes nothing more, and a perfect strike restores nothing (11:14, user).
- assert.equal(economy.gear(id).max,32);assert.equal(economy.forge(0,id),'Failed');assert.equal(economy.gear(id).hp,2);assert.equal(economy.gear(id).max,32);
- assert.equal(economy.forge(.5,id),'Perfect');assert.equal(economy.gear(id).level,12);assert.equal(economy.gear(id).max,32);assert.equal(economy.gear(id).hp,2);
+ const economy=createTownEconomy(gold,{},{random:()=>.95}),id='ritual-blade',base=TOWN_ITEMS[id].attack;
+ // At the durability floor an attempt wears nothing more and restores nothing; it still counts (2026-11-26, user).
+ assert.deepEqual(economy.gear(id),{level:19,bonus:30,blessed:false,hp:2,max:32,attack:base+30,defense:0});
+ assert.equal(economy.forge(0,id),'Failed');
+ assert.deepEqual(economy.gear(id),{level:20,bonus:30,blessed:false,hp:2,max:32,attack:base+30,defense:0});
  assert.equal(economy.canForge(id),false);assert.equal(economy.forge(.5,id),null);
+ for(const [lang,pack] of Object.entries(PACKS)){
+  setPack(lang,pack);
+  const note=t('shop.temperNote',{maxLevel:FORGE_RULES.maxLevel,minDurability:FORGE_RULES.minDurability,...FORGE_WEAR_RANGE});
+  for(const value of ['+20','32','3','6'])assert.ok(note.includes(value),lang+': '+value);
+  assert.equal(t('shop.forgeMaxed',FORGE_RULES).includes('+20'),true,lang);
+ }
+ setPack('ko',ko);
 });
-
 test('reopening the bag after a goblin pickup shows the saved material stack even after inspecting worn gear',ctx=>{
  const {window,root}=page(),storage=slotStorage(store(),'0.3',1);
  storage.setItem(GOLD_LEDGER_KEY,JSON.stringify({version:1,balance:0,credits:{},town:{version:1,bag:{'iron-scrap':2,'wolf-pelt':1}}}));

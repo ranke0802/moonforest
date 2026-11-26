@@ -65,6 +65,9 @@ jobs:
           ArcherPreview/tests/v03-title-save-journeys.test.js
           ArcherPreview/tests/v03-character-menu.test.js
           ArcherPreview/tests/v03-menu-language.test.js
+          ArcherPreview/tests/v03-shop-cart.test.js
+          ArcherPreview/tests/v03-dialogue-menu.test.js
+          ArcherPreview/tests/v03-return-gate.test.js
           ArcherPreview/tests/v03-riding-horse.test.js
           ArcherPreview/tests/v03-riding-geometry.test.js
           ArcherPreview/tests/v03-riding-horse-path.test.js

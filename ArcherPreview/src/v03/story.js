@@ -13,6 +13,7 @@ import {createGuideTrack} from './guide-track.js';
 import {PLAINS_MONSTER_GROUPS} from '../plains-monster-spawns.js';
 import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
+import {SERVICE_MENUS,serviceMenu} from './service-menu.js';
 import {clearAlpha} from './title-camera.js';
 import {blocksView} from '../tree-occlusion.js';
 import {createAuthoredPlacementNavigation} from '../authored-placement-runtime.js';
@@ -524,24 +525,29 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(effect.startsWith('give:')){const [,item,count]=effect.split(':'),n=Number(count)||1;if(!replaying&&api.grantItem?.(item,n)){hud.flash(t('errand.received',{items:itemName(item)+' ×'+n}));refreshErrands();}}
   }
  }
+ // The smith and the herbalist ask what the visit is for (service-menu.js).
  async function interact(){
   if(!started||talking||dialogue.open||api.battle.combatCount>0)return false;
   // While the wagon waits, E means push (at the roof side next to the driver).
   if(lift.active)return nearLift(api.getPlayer?.()?.position)?push():false;
   if(!near)return false;
-  const member=near,npc=member.npc.id,questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc);
-  const greeting=!questLine&&!errand&&!greeted.has(npc)?member.npc.greet:null;
-  const lines=content.DIALOGUES[questLine??errand?.dialogue??greeting??member.npc.idle];
-  if(!lines)return false;
+  const member=near,npc=member.npc.id,services=!!(api.openTownShop&&dialogue.choose&&SERVICE_MENUS[npc]);
+  const script=()=>{
+   const questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc);
+   const greeting=!questLine&&!errand&&!greeted.has(npc)?member.npc.greet:null;
+   return {questLine,errand,lines:content.DIALOGUES[questLine??errand?.dialogue??greeting??member.npc.idle]};
+  };
+  if(!services&&!script().lines)return false;
   if(member===driverMember){thanks.done=true;if(route.member===member)stopRoute();}
-  // Quest conversations leave their stages in the run trail (boot: only while
-  // frame diagnostics are on; Astra #211, an iPhone page died after the M05
-  // youth): asked, first line shown, closed, then reward/saved from emit().
-  const stage=questLine&&stageMark?'talk:'+log.quest()?.id+'/'+log.step()?.id:null;
-  if(stage)stageMark(stage);
-  talking=true;hud.setPrompt(null);api.input.setSuspended(true);
-  member.visual.talk?.(true,()=>api.getPlayer?.()?.position??null);
-  try{
+  let stage=null;
+  async function converse(){
+   const {questLine,errand,lines}=script();
+   if(!lines)return;
+   // Quest conversations leave their stages in the run trail (boot: only while
+   // frame diagnostics are on; Astra #211, an iPhone page died after the M05
+   // youth): asked, first line shown, closed, then reward/saved from emit().
+   stage=questLine&&stageMark?'talk:'+log.quest()?.id+'/'+log.step()?.id:null;
+   if(stage)stageMark(stage);
    const playing=dialogue.play(lines);if(stage&&dialogue.open)stageMark(stage+':line1');
    if(questLine?.startsWith('journal-')&&dialogue.open)onScene?.(questLine);
    const played=await playing;if(stage)stageMark(stage+(played?':end':':cancel'));
@@ -552,7 +558,17 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
     markGreeted(npc);afterErrandTalk(errand,npc);
     if(member.npc.id==='driver'&&(questLine==='driver-thanks'||log.quest()?.id!=='M00'||log.step()?.id==='road'))api.offerMount?.();
-    if(!disposed&&(member.npc.id==='smith'||member.npc.id==='herbalist'))await api.openTownShop?.(member.npc.id);
+   }
+  }
+  talking=true;hud.setPrompt(null);api.input.setSuspended(true);
+  member.visual.talk?.(true,()=>api.getPlayer?.()?.position??null);
+  try{
+   if(!services)await converse();
+   else while(!disposed){
+    const waiting=script();
+    const choice=await dialogue.choose(serviceMenu(npc,waiting.questLine||waiting.errand),{who:member.npc.name});
+    if(disposed||!choice||choice==='leave')break;
+    if(choice==='talk')await converse();else await api.openTownShop(npc,choice);
    }
   }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
   if(stage&&!disposed)stageMark('play');

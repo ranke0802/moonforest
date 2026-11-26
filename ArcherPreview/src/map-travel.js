@@ -64,10 +64,13 @@ export function consumeTravel(storage,character,now=Date.now()){
     return {hp:Math.min(500,data.hp),potions:Math.max(0,Math.min(3,Math.floor(data.potions)))};
   }catch{return null;}
 }
-export function createMapPortal(world,{button,getState,onTravel,storage,persistTravel=true,disarmRoadDestination=null}){
+// returnGate (0.3, user 2026-11-26): {destination,seconds,confirm(portal)->boolean|Promise}. Going
+// straight back to the map just left within `seconds` of arriving asks first. The clock runs only
+// while the player can act, and a refusal re-arms the road like a fresh arrival.
+export function createMapPortal(world,{button,getState,onTravel,storage,persistTravel=true,disarmRoadDestination=null,returnGate=null}){
   const portals=mapPortals(world.mapId);if(!portals.length)return null;
   let portal=portals[0];const mists=portals.filter(p=>!p.roadPassage).map(p=>createPortalMist(world,p));button.hidden=true;
-  let available=false,disposed=false,automaticPending=false;
+  let available=false,disposed=false,automaticPending=false,sinceArrival=0,asking=false;
   // A transformed arrival can be inside the return trigger. Track the most
   // inward point, so reversing works even before leaving the broad strip.
   // Time, camera rotation and small positional jitter cannot trigger a return.
@@ -75,10 +78,26 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
   let inwardProgress=disarmed?roadOutwardProgress(world.mapId,disarmed,getState().position):null;
   const inside=(p,state)=>p.roadPassage?roadPortalContains(world.mapId,p,state.position):portalAvailable(state.position,p,{});
   const canUse=(p,state)=>p.roadPassage?inside(p,state)&&portalAvailable({x:p.x,z:p.z},p,state):portalAvailable(state.position,p,state);
+  const travel=(to,state)=>{
+    if(persistTravel)try{storage?.setItem(key,JSON.stringify({destination:to.destination,hp:state.hp,potions:state.potions,time:Date.now()}));}catch{}
+    onTravel(travelUrl(location.href,to.destination),to);
+  };
   const activate=()=>{
-    const state=getState();if(disposed||portal===disarmed||!canUse(portal,state))return;
-    if(persistTravel)try{storage?.setItem(key,JSON.stringify({destination:portal.destination,hp:state.hp,potions:state.potions,time:Date.now()}));}catch{}
-    onTravel(travelUrl(location.href,portal.destination),portal);
+    const state=getState();if(disposed||asking||portal===disarmed||!canUse(portal,state))return;
+    if(returnGate&&portal.destination===returnGate.destination&&sinceArrival<returnGate.seconds){
+      const asked=portal;asking=true;
+      const answer=ok=>{
+        asking=false;if(disposed)return;
+        const now=getState();
+        if(ok===true&&asked!==disarmed&&canUse(asked,now)){travel(asked,now);return;}
+        automaticPending=false;
+        if(asked.roadPassage){disarmed=asked;inwardProgress=roadOutwardProgress(world.mapId,asked,now.position);}
+      };
+      let reply;try{reply=returnGate.confirm(asked);}catch{reply=false;}
+      Promise.resolve(reply).then(answer,()=>answer(false));
+      return;
+    }
+    travel(portal,state);
   };
   button.addEventListener('click',activate);
   const keyboard=event=>{if(event.code==='KeyT'&&!event.repeat&&!event.target?.closest?.('input,select,textarea,dialog'))activate();};
@@ -88,6 +107,7 @@ export function createMapPortal(world,{button,getState,onTravel,storage,persistT
   return {dispose,update(dt=0){
     if(disposed)return;for(const mist of mists)mist.update(dt);
     const position=getState().position;
+    if(returnGate&&dt>0&&sinceArrival<returnGate.seconds&&!getState().loading)sinceArrival+=dt;
     if(disarmed&&position){
       if(!inside(disarmed,{position}))disarmed=null;
       else {
