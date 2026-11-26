@@ -1,6 +1,8 @@
 /* Save slot export / restore on the title's slot screen (save-transfer.js).
    Same look as the slot panel; widths wrap for the five languages. */
-.v03-slot-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+/* Rows share the list's two columns, so the action buttons line up. */
+.v03-slots.has-transfer{grid-template-columns:minmax(0,1fr) auto;align-items:stretch}
+.v03-slot-row{display:contents}
 .v03-slot-row>.v03-slot{min-width:0}
 .v03-slot-transfer{display:flex!important;align-items:center;justify-content:center;min-height:44px;min-width:84px;max-width:9.5em;padding:6px 12px!important;text-align:center;line-height:1.25;font-size:13px!important;letter-spacing:.04em;overflow-wrap:anywhere;background:#ffffff08!important;border:1px solid #ae925940!important;border-radius:4px;color:#e6d8b0;transition:background .15s ease,border-color .15s ease}
 .v03-slot-transfer:hover,.v03-slot-transfer:focus-visible{background:#cfb77b22!important;border-color:var(--v03-gold)!important}
@@ -21,9 +23,12 @@
 .v03-transfer-text[hidden]{display:none}
 .v03-transfer-text:focus-visible{outline:2px solid var(--mf-focus,var(--v03-gold));outline-offset:2px}
 .v03-transfer-back{display:block;margin-top:4px}
-.v03-title-notice{position:relative;max-width:min(30em,80vw);margin:clamp(8px,2vh,18px) 0 0;padding:6px 12px;font-size:13px;line-height:1.5;text-shadow:0 1px 4px #000;border-left:2px solid var(--v03-gold);background:#0b0f0d99;opacity:.92;overflow-wrap:anywhere}
+/* Bottom right of the title layer, clear of the menu and the footer. */
+.v03-title-notice{position:absolute;z-index:1;transition:opacity .4s ease;right:max(28px,env(safe-area-inset-right));bottom:max(18px,env(safe-area-inset-bottom));max-width:min(28em,46vw);margin:0;padding:6px 12px;font-size:13px;line-height:1.5;text-align:left;text-shadow:0 1px 4px #000;border-left:2px solid var(--v03-gold);background:#0b0f0db3;overflow-wrap:anywhere}
+.v03-title:not(.scene-ready) .v03-title-notice,.v03-title.is-leaving .v03-title-notice{opacity:0}
+.v03-title.has-panel .v03-title-notice{opacity:.25}
 @media (max-height:480px) and (orientation:landscape){
- .v03-slot-row{gap:6px}
+ .v03-slots.has-transfer{gap:6px}
  .v03-slot-transfer{min-height:40px;min-width:72px;font-size:12px!important;padding:4px 10px!important}
  .v03-transfer-notice,.v03-transfer-status{margin-bottom:8px;padding:6px 10px;font-size:12px;line-height:1.4}
  .v03-transfer-card{margin-bottom:8px;padding:6px 12px}
@@ -31,5 +36,5 @@
  .v03-transfer-card small{font-size:12px}
  .v03-transfer-actions{margin-bottom:8px}
  .v03-transfer-text{min-height:52px;max-height:22vh}
- .v03-title-notice{font-size:12px;padding:4px 10px}
+ .v03-title-notice{bottom:max(12px,env(safe-area-inset-bottom));font-size:12px;line-height:1.4;padding:4px 10px}
 }

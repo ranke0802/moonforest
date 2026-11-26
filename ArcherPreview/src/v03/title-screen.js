@@ -110,7 +110,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
     box.append(el(doc,'h2','v03-panel-title',mode==='chapters'?chapterWords().menu:t(mode==='new'?'menu.new':'menu.load')));
     if(mode!=='chapters')box.append(el(doc,'p','v03-panel-note',t(mode==='new'?'panel.newNote':'panel.loadNote')));
     if(notice?.text){const line=el(doc,'p','v03-transfer-notice'+(notice.tone==='error'?' is-error':''),notice.text);line.setAttribute('role',notice.tone==='error'?'alert':'status');box.append(line);}
-    const list=el(doc,'div','v03-slots');
+    const list=el(doc,'div','v03-slots');if(transfer&&mode!=='chapters')list.classList.add('has-transfer');
     for(const meta of index){
      const summary=slotSummary(meta,describe),button=el(doc,'button','v03-slot');button.type='button';button.dataset.slot=String(meta.slot);
      button.disabled=mode==='load'&&!meta.used;
@@ -179,11 +179,11 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   },
   // A panel in the title's own look (save-transfer.js builds its steps here).
   panel:build=>openPanel(build),
-  // One calm line under the menu (null removes it).
+  // One calm line in the title's corner, under any panel (null removes it).
   setNotice(text){
-   let line=inner.querySelector('.v03-title-notice');
+   let line=layer.querySelector('.v03-title-notice');
    if(!text){line?.remove();return;}
-   if(!line){line=el(doc,'p','v03-title-notice');line.setAttribute('role','status');inner.insertBefore(line,foot);}
+   if(!line){line=el(doc,'p','v03-title-notice');line.setAttribute('role','status');layer.insertBefore(line,panel);}
    if(line.textContent!==text)line.textContent=text;
   },
   closePanel:()=>closePanel(null),
