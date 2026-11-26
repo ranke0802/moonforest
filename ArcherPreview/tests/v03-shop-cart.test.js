@@ -251,5 +251,7 @@ test('the list scrolls inside the dialog and the bottom bar stays in view; the t
  assert.equal(value('.mf-town-shop.is-forging','overflow-y'),'auto');
  // Thumb-sized steppers: at least 2.65rem tall (every shop button) and 2.75rem wide.
  assert.equal(value('.mf-town-shop .mf-shop-step button','min-width'),'2.75rem');
- assert.equal(value('.mf-town-shop button,.mf-treasure-prompt','min-height'),'2.65rem');
+ // 2026-11-26 readability pass: the base rule stays 2.65rem; on touch (pointer:coarse) every shop button is 44 px (2.75rem).
+ const heights=[];css.walkRules(rule=>{if(rule.selector==='.mf-town-shop button,.mf-treasure-prompt')rule.walkDecls('min-height',decl=>{heights.push([rule.parent.type==='atrule'?rule.parent.params:'',decl.value]);});});
+ assert.deepEqual(heights,[['','2.65rem'],['(pointer:coarse)','2.75rem']]);
 });
