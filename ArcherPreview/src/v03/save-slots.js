@@ -99,6 +99,8 @@ export function createSaveSession({local,session,edition,now=()=>Date.now()}){
    slot=target;journey.rebind(slotPrefix(edition,target));try{local?.setItem(editionPrefix(edition)+LAST_KEY,String(slot));}catch{/* optional */}return true;
   },
   get available(){return usable(local);},
+  // The raw storage, for slot export/restore (save-transfer.js).
+  get local(){return local;},
   index:()=>readSlotIndex(local,edition),
   inspectSlot:target=>validSlot(target)?slotStorage(local,edition,target):null,
   meta:()=>readSlotIndex(local,edition)[slot-1],
