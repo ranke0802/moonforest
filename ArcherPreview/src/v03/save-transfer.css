@@ -1,0 +1,35 @@
+/* Save slot export / restore on the title's slot screen (save-transfer.js).
+   Same look as the slot panel; widths wrap for the five languages. */
+.v03-slot-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+.v03-slot-row>.v03-slot{min-width:0}
+.v03-slot-transfer{display:flex!important;align-items:center;justify-content:center;min-height:44px;min-width:84px;max-width:9.5em;padding:6px 12px!important;text-align:center;line-height:1.25;font-size:13px!important;letter-spacing:.04em;overflow-wrap:anywhere;background:#ffffff08!important;border:1px solid #ae925940!important;border-radius:4px;color:#e6d8b0;transition:background .15s ease,border-color .15s ease}
+.v03-slot-transfer:hover,.v03-slot-transfer:focus-visible{background:#cfb77b22!important;border-color:var(--v03-gold)!important}
+.v03-slot-transfer[data-transfer="restore"]{border-style:dashed!important}
+.v03-transfer-notice,.v03-transfer-status{margin:0 0 12px;padding:8px 12px;font-size:13px;line-height:1.5;border-left:2px solid var(--v03-gold);background:#cfb77b14;overflow-wrap:anywhere}
+.v03-transfer-status:empty{display:none}
+.v03-transfer-notice.is-error,.v03-transfer-status.is-error{border-left-color:#d98a6a;background:#d98a6a14;color:#f4dccd}
+.v03-transfer-card{display:grid;gap:3px;margin:0 0 12px;padding:10px 14px;text-align:left;background:#ffffff0a;border:1px solid #ae925940;border-radius:4px}
+.v03-transfer-card strong{font-size:16px;color:#f4ead0;overflow-wrap:anywhere}
+.v03-transfer-card small{font-size:13px;opacity:.75;overflow-wrap:anywhere}
+.v03-transfer-actions{flex-wrap:wrap;margin-bottom:12px}
+.v03-transfer .v03-panel-actions>button{max-width:100%;white-space:normal;line-height:1.3}
+.v03-transfer-paste{display:grid;gap:6px;margin:0 0 12px}
+.v03-transfer-paste small{font-size:12px;opacity:.7}
+.v03-transfer-paste .v03-panel-back{justify-self:start;max-width:100%;white-space:normal}
+.v03-transfer-text{display:block;box-sizing:border-box;width:100%;min-height:72px;max-height:28vh;margin:0 0 12px;padding:8px 10px;resize:vertical;font:12px/1.4 ui-monospace,Menlo,Consolas,monospace;color:#f4ead0;background:#0b0f0dcc;border:1px solid #ae925966;border-radius:4px;user-select:text;-webkit-user-select:text}
+.v03-transfer-paste .v03-transfer-text{margin:0}
+.v03-transfer-text[hidden]{display:none}
+.v03-transfer-text:focus-visible{outline:2px solid var(--mf-focus,var(--v03-gold));outline-offset:2px}
+.v03-transfer-back{display:block;margin-top:4px}
+.v03-title-notice{position:relative;max-width:min(30em,80vw);margin:clamp(8px,2vh,18px) 0 0;padding:6px 12px;font-size:13px;line-height:1.5;text-shadow:0 1px 4px #000;border-left:2px solid var(--v03-gold);background:#0b0f0d99;opacity:.92;overflow-wrap:anywhere}
+@media (max-height:480px) and (orientation:landscape){
+ .v03-slot-row{gap:6px}
+ .v03-slot-transfer{min-height:40px;min-width:72px;font-size:12px!important;padding:4px 10px!important}
+ .v03-transfer-notice,.v03-transfer-status{margin-bottom:8px;padding:6px 10px;font-size:12px;line-height:1.4}
+ .v03-transfer-card{margin-bottom:8px;padding:6px 12px}
+ .v03-transfer-card strong{font-size:14px}
+ .v03-transfer-card small{font-size:12px}
+ .v03-transfer-actions{margin-bottom:8px}
+ .v03-transfer-text{min-height:52px;max-height:22vh}
+ .v03-title-notice{font-size:12px;padding:4px 10px}
+}

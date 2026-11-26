@@ -2,6 +2,7 @@
 // It owns no engine, scene, frame loop or timer loop: main.js calls update(dt)
 // from the existing game frame, and every stage change goes through `api`.
 import {createTitleScreen} from './title-screen.js';
+import {createSaveTransfer} from './save-transfer.js';
 import {createGreatAttackFx} from './great-attack-fx.js';
 import {createStarfallAura} from './starfall-aura.js';
 import {createGallery} from './gallery.js';
@@ -175,10 +176,13 @@ export function setupV03(api){
   return {title:titleKey==='dream'?t('meta.dream'):titleKey?questTitle(titleKey):undefined,place:placeKey?t('place.'+placeKey):undefined};
  };
  const title=createTitleScreen({doc,wait,describe,version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
+ // Slot export / restore on the slot screen. A slot restored into the one this
+ // page is bound to is read again like another record when it is loaded.
+ const transfer=save.local!==undefined?createSaveTransfer({doc,view,save,title,describe}):null,restoredHere=new Set();
  // The first-launch picker lives in the splash, so the choice is read after it.
  let liveText=null;
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.picked??view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})).finally(()=>{try{view?.__moonforestSplash?.packReady?.();}catch{/* the splash is gone */}}):startLanguage(view)).then(()=>{
-  if(state.disposed)return;localizeChapter(content,source);title.relabel();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));translateLabels(doc.getElementById('app'));liveText=watchTranslations(doc);mountControlsGuide();loadingLore??=createLoadingLore({doc,t});state.langReady=true;
+  if(state.disposed)return;localizeChapter(content,source);title.relabel();transfer?.mount();mountLanguageSetting();gate.enable();translateTree(doc.getElementById('app'));translateTree(doc.getElementById('loading'));translateLabels(doc.getElementById('app'));liveText=watchTranslations(doc);mountControlsGuide();loadingLore??=createLoadingLore({doc,t});state.langReady=true;
  }).catch(error=>{console.warn('[MoonForest 0.3] language setup failed',error);state.langReady=true;});
  const splash=view?.__moonforestSplash;
  function report(error){console.error('[MoonForest 0.3]',error);api.toast?.(t('toast.failed'));state.busy=false;}
@@ -344,7 +348,7 @@ export function setupV03(api){
   const travelling=OPENING_STAGE.map&&gameState().mapId!==OPENING_STAGE.map
    ?Promise.resolve().then(()=>api.travel?.(MAP_CHARACTERS[OPENING_STAGE.map])).then(moved=>moved===true,error=>{console.warn('[MoonForest 0.3] opening travel failed',error);return false;})
    :null;
-  screen('opening');if(!replay)state.playSeconds=0;save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream'}));
+  screen('opening');if(!replay)state.playSeconds=0;save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream'}));transfer?.saved();
   const dream=opening.play();
   if(travelling){
    const moved=await travelling;
@@ -374,14 +378,24 @@ export function setupV03(api){
   if(character&&PLACE_NAMES[character])url.searchParams.set('character',character);else url.searchParams.delete('character');
   void runBeforePageReload().finally(()=>view.location.replace(url.href));return true;
  }
+ // The slot list; export and restore run from it and return to it.
+ async function pickSlot(mode){
+  for(;;){
+   const picked=await title.chooseSlot({mode,index:save.index(),bootSlot:save.slot,transfer:!!transfer,notice:transfer?.notice()});
+   if(!picked||typeof picked!=='object')return picked;
+   const done=await transfer.run(picked);if(state.disposed||state.screen!=='title')return null;
+   if(done?.restored===save.slot)restoredHere.add(done.restored);
+   title.setEnabled('load',save.index().some(meta=>meta.used));
+  }
+ }
  async function handle(action){
   if(state.busy||state.screen!=='title'||!state.revealed)return;
-  const index=save.index(),ready=gameState().ready;
+  const ready=gameState().ready;
   // 2026-11-24 21:07 (user): 새로하기 → slot (overwrite confirmed) → chapter → a new game;
   // 불러오기 → slot → chapter → that record (its current chapter continues where it was).
   if(action==='new'){
-   const slot=await title.chooseSlot({mode:'new',index,bootSlot:save.slot});if(slot===null)return;
-   const meta=index[slot-1];
+   const slot=await pickSlot('new');if(slot===null)return;
+   const meta=save.index()[slot-1];
    if(meta.used){
     const ok=await title.confirm({title:t('confirm.overwriteTitle'),message:t('confirm.overwrite',{slot}),accept:t('confirm.overwriteAccept')});if(!ok)return;
    }
@@ -399,15 +413,16 @@ export function setupV03(api){
    }
    await beginNewGame();
   }else if(action==='load'){
-   const slot=await title.chooseSlot({mode:'load',index,bootSlot:save.slot});if(slot===null)return;
-   const meta=index[slot-1];if(!meta.used)return;
+   const slot=await pickSlot('load');if(slot===null)return;
+   const meta=save.index()[slot-1];if(!meta.used)return;
    const preview=chaptersFor(save.inspectSlot?.(slot)??save.journey);
    const choice=await title.chooseChapter({progress:preview,used:true,reset:false});
    if(!choice)return;
    if(!ready){api.toast?.(t('toast.preparing'));return;}
    // The chapter the record is on (no replay asked) continues exactly where it was.
-   const resume=choice.id===preview.id&&!choice.replay,changed=slot!==save.slot;
+   const resume=choice.id===preview.id&&!choice.replay,changed=slot!==save.slot||restoredHere.has(slot);
    if(changed){
+    restoredHere.delete(slot);
     // In place when the game can read a record again on this page (user, 2026-11-21: no
     // reload, the loaded world stays); otherwise a clean document as before.
     if(resume&&!api.reloadProgress){reloadInto(slot,'load',meta.character);return;}
@@ -758,7 +773,7 @@ export function setupV03(api){
     if(s.mapId!==OPENING_STAGE.map)return;
     state.busy=true;api.resetStage(OPENING_STAGE);
     void (async()=>{
-     save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));
+     save.commit(metaPatch({chapter:1,title:'꿈',titleKey:'dream',playSeconds:0}));transfer?.saved();
      await finishOpening(state.dream);
     })().catch(report);
    }else if(state.screen==='resume'&&s.ready&&state.langReady&&!state.busy){
@@ -789,6 +804,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

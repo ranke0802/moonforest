@@ -103,18 +103,25 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   },
   hide(){layer.hidden=true;layer.classList.remove('is-shown','is-leaving');},
   chooseChapter(options){return openPanel((box,close)=>chapterPanel({doc,box,close,...options}));},
-  // Returns the chosen slot number, or null.
-  chooseSlot({mode,index,bootSlot}){
+  // Returns the chosen slot number, or null. With `transfer`, filled slots
+  // offer export and empty ones restore: those resolve {transfer,slot}.
+  chooseSlot({mode,index,bootSlot,transfer=false,notice=null}){
    return openPanel((box,close)=>{
     box.append(el(doc,'h2','v03-panel-title',mode==='chapters'?chapterWords().menu:t(mode==='new'?'menu.new':'menu.load')));
     if(mode!=='chapters')box.append(el(doc,'p','v03-panel-note',t(mode==='new'?'panel.newNote':'panel.loadNote')));
+    if(notice?.text){const line=el(doc,'p','v03-transfer-notice'+(notice.tone==='error'?' is-error':''),notice.text);line.setAttribute('role',notice.tone==='error'?'alert':'status');box.append(line);}
     const list=el(doc,'div','v03-slots');
     for(const meta of index){
      const summary=slotSummary(meta,describe),button=el(doc,'button','v03-slot');button.type='button';button.dataset.slot=String(meta.slot);
      button.disabled=mode==='load'&&!meta.used;
      button.append(el(doc,'span','v03-slot-number',String(meta.slot)),el(doc,'strong','v03-slot-title',summary.title),el(doc,'small','v03-slot-detail',mode==='load'&&!meta.used?t('slot.none'):summary.detail));
      if(meta.slot===bootSlot&&meta.used)button.classList.add('is-current');
-     button.addEventListener('click',()=>close(meta.slot));list.append(button);
+     button.addEventListener('click',()=>close(meta.slot));
+     if(transfer&&mode!=='chapters'){
+      const kind=meta.used?'export':'restore',row=el(doc,'div','v03-slot-row'),act=el(doc,'button','v03-slot-transfer',t('transfer.'+kind));
+      act.type='button';act.dataset.transfer=kind;act.dataset.transferSlot=String(meta.slot);act.setAttribute('aria-label',t('transfer.'+kind+'Aria',{slot:meta.slot}));
+      act.addEventListener('click',()=>close({transfer:kind,slot:meta.slot}));row.append(button,act);list.append(row);
+     }else list.append(button);
     }
     const back=el(doc,'button','v03-panel-back',t('panel.back'));back.type='button';back.addEventListener('click',()=>close(null));
     box.append(list,back);
@@ -169,6 +176,15 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
     const back=el(doc,'button','v03-panel-back',t('panel.back'));back.type='button';back.addEventListener('click',()=>close(null));
     box.append(list,el(doc,'p','v03-panel-note',t('settings.languageNote')),game,back);
    });
+  },
+  // A panel in the title's own look (save-transfer.js builds its steps here).
+  panel:build=>openPanel(build),
+  // One calm line under the menu (null removes it).
+  setNotice(text){
+   let line=inner.querySelector('.v03-title-notice');
+   if(!text){line?.remove();return;}
+   if(!line){line=el(doc,'p','v03-title-notice');line.setAttribute('role','status');inner.insertBefore(line,foot);}
+   if(line.textContent!==text)line.textContent=text;
   },
   closePanel:()=>closePanel(null),
   dispose(){if(disposed)return;disposed=true;doc.removeEventListener('keydown',onKey);closePanel(null);veil.dispose();layer.remove();},
