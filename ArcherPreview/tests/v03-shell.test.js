@@ -830,7 +830,8 @@ test('title: 새로하기 → slot (overwrite confirmed) → chapter wipes only 
  const press=button=>button.dispatchEvent(new h.window.Event('click',{bubbles:true})),back=()=>press(all('.v03-panel-back').at(-1));
  const recordKept=()=>{const index=createSaveSession({local,session:memory(),edition:E}).index();return index[0].used===true;};
  h.finishSplash();await h.reveal();
- assert.deepEqual(all('.v03-menu-item').slice(0,2).map(b=>b.textContent),['새로하기','불러오기']);
+ // With a record, 이어하기 comes first and names the record it continues (2026-11-26).
+ assert.deepEqual(all('.v03-menu-item').slice(0,3).map(b=>b.textContent),['이어하기1장 · 남겨진 방 · 몬트하임 마을','새로하기','불러오기']);
  // 새로하기: any slot, empty or used.
  h.click('[data-action="new"]');await settle();
  assert.equal(q('.v03-panel-title').textContent,'새로하기');assert.deepEqual(all('.v03-slot').map(b=>b.disabled),[false,false,false]);

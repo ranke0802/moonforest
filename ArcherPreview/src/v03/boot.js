@@ -18,6 +18,8 @@ import {createQuestMarkers} from './quest-markers.js';
 import {createCursors} from './cursors.js';
 import {createOrientationGate,isIos} from './orientation-gate.js';
 import {setupUiScale} from './ui-scale.js';
+import {setupAccessibility,disposeAccessibility,mountAccessibilitySettings} from './accessibility.js';
+import {createHudBlurDiagnostic} from './hud-blur-diagnostic.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createCombatTarget} from './combat-target.js';
 import {createCapeSpring} from './cape-spring.js';
@@ -58,6 +60,10 @@ export function setupV03(api){
  // roaming placement actors of the same model reuse that one source model.
  battle?.shareModelKinds?.(TITLE_FOE.kind,AMBUSH.kind);
  const wait=api.wait??(ms=>new Promise(resolve=>setTimeout(resolve,ms)));
+ // Text size and reduced motion are on the root before the title is drawn (accessibility.js).
+ const prefs=(()=>{try{return api.a11yStorage??view?.localStorage??null;}catch{return null;}})();
+ setupAccessibility({doc,view,storage:prefs});
+ const hudBlur=createHudBlurDiagnostic({doc,view,storage:prefs});
  // A run of frames each under 40 ms, or the deadline (a hidden page draws nothing: it waits out the time).
  async function smoothFrames(until,run=12,slowMs=40){
   const raf=view?.requestAnimationFrame?.bind(view);if(!raf||doc.hidden)return;
@@ -173,9 +179,13 @@ export function setupV03(api){
   if(meta.chapter>1)return {title:chapterContent.get(meta.chapter)?.QUESTS.find(q=>q.id===meta.titleKey)?.title??chapterWords().chapters[meta.chapter-1],place:PLACE_NAMES[meta.character]?t('place.'+meta.character):undefined};
   const titleKey=meta.titleKey??(meta.title==='꿈'?'dream':source.QUESTS?.find(quest=>quest.title===meta.title)?.id);
   const placeKey=meta.placeKey||Object.keys(PLACE_NAMES).find(key=>PLACE_NAMES[key]===meta.place);
-  return {title:titleKey==='dream'?t('meta.dream'):titleKey?questTitle(titleKey):undefined,place:placeKey?t('place.'+placeKey):undefined};
+  // Records without a place name still know their map (character): named from it.
+  const placeId=placeKey||(PLACE_NAMES[meta.character]?meta.character:null);
+  return {title:titleKey==='dream'?t('meta.dream'):titleKey?questTitle(titleKey):undefined,place:placeId?t('place.'+placeId):undefined};
  };
- const title=createTitleScreen({doc,wait,describe,version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
+ // "이어하기": the record this page has bound if it is used, else the last one saved.
+ const continueSlot=()=>{const index=save.index();if(index[save.slot-1]?.used)return save.slot;return [...index].filter(meta=>meta.used).sort((a,b)=>(b.savedAt??0)-(a.savedAt??0))[0]?.slot??null;};
+ const title=createTitleScreen({doc,wait,describe,continued:()=>{const slot=continueSlot();return slot?save.index()[slot-1]:null;},version:doc.documentElement?.dataset?.world?'MoonForest '+doc.documentElement.dataset.world:undefined,onAction:action=>{void handle(action).catch(report);}});
  // Slot export / restore on the slot screen. A slot restored into the one this
  // page is bound to is read again like another record when it is loaded.
  const transfer=save.local!==undefined?createSaveTransfer({doc,view,save,title,describe}):null,restoredHere=new Set();
@@ -416,11 +426,12 @@ export function setupV03(api){
     api.restartProgress();
    }
    await beginNewGame();
-  }else if(action==='load'){
-   const slot=await pickSlot('load');if(slot===null)return;
-   const meta=save.index()[slot-1];if(!meta.used)return;
+  }else if(action==='load'||action==='continue'){
+   // 이어하기 = 불러오기 of that record with its current chapter, without the two pickers.
+   const slot=action==='continue'?continueSlot():await pickSlot('load');if(slot===null)return;
+   const meta=save.index()[slot-1];if(!meta?.used)return;
    const preview=chaptersFor(save.inspectSlot?.(slot)??save.journey);
-   const choice=await title.chooseChapter({progress:preview,used:true,reset:false});
+   const choice=action==='continue'?{id:preview.id}:await title.chooseChapter({progress:preview,used:true,reset:false});
    if(!choice)return;
    if(!ready){api.toast?.(t('toast.preparing'));return;}
    // The chapter the record is on (no replay asked) continues exactly where it was.
@@ -510,6 +521,8 @@ export function setupV03(api){
  function tidySettings(dialog){
   const host=dialog.querySelector('.settings-sections');if(!host)return;
   mountSlowFxSettings({doc,host,fx:slowFx,t});
+  mountAccessibilitySettings({doc,host,t});
+  hudBlur.mount({host:dialog.querySelector('#frame-diagnostics-options'),t});
   const credits=dialog.querySelector('#v03-audio-credits');
   if(credits)host.append(credits);
   // Back to the title: saved first; a second tap within three seconds confirms.
@@ -684,6 +697,8 @@ export function setupV03(api){
   returnToTitle,
   // The run before this one (stage it last reached; ended=false and hidden=false: killed on screen).
   get previousRun(){return trail.previous;},
+  // Written into the performance record's metadata (main.js), so two records can be told apart.
+  recordMetadata(){return hudBlur.metadata();},
   // Title/prologue never write progress, quests or map position.
   get blocksProgress(){return state.screen!=='play';},
   // A map trip waits here before it takes the loading picture away: the place's people load
@@ -808,6 +823,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;hudBlur.dispose();disposeAccessibility();greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

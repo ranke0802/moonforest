@@ -17,7 +17,8 @@ export function slotSummary(meta,describe=null){
  const text=describe?.(meta)??{};
  return {title:t('slot.title',{chapter:meta.chapter||1,title:text.title||meta.title||t('slot.journey')}),detail:[text.place??meta.place,`Lv.${meta.level||1}`,formatPlayTime(meta.playSeconds)].filter(Boolean).join(' · ')};
 }
-export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),onAction=()=>{},version='MoonForest 0.3',describe=null}){
+// continued(): the record "이어하기" continues (slot meta), or null when there is none.
+export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),onAction=()=>{},version='MoonForest 0.3',describe=null,continued=()=>null}){
  const layer=el(doc,'section','v03-title');layer.hidden=true;layer.dataset.v03Layer='title';
  const shade=el(doc,'div','v03-title-shade'),inner=el(doc,'div','v03-title-inner');
  const head=el(doc,'header','v03-title-head');
@@ -26,6 +27,19 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
  const menu=el(doc,'nav','v03-menu');
  const buttons=new Map();
  for(const id of MENU){const button=el(doc,'button','v03-menu-item');button.type='button';button.dataset.action=id;menu.append(button);buttons.set(id,button);}
+ // 2026-11-26 (audit): with a record, "이어하기" comes first and names what it
+ // continues; without one it is not in the menu at all, and "새로하기" is first.
+ const resume=el(doc,'button','v03-menu-item v03-menu-continue');resume.type='button';resume.dataset.action='continue';
+ const resumeLabel=el(doc,'span','v03-menu-label'),resumeDetail=el(doc,'small','v03-menu-detail');resume.append(resumeLabel,resumeDetail);
+ let resumeMeta=null;
+ function setContinue(meta){
+  resumeMeta=meta?.used?meta:null;
+  if(!resumeMeta){resume.remove();return;}
+  const summary=slotSummary(resumeMeta,describe),place=describe?.(resumeMeta)?.place??resumeMeta.place;
+  resumeLabel.textContent=t('menu.continue');resumeDetail.textContent=[summary.title,place].filter(Boolean).join(' · ');
+  resume.setAttribute('aria-label',t('menu.continueAria',{record:resumeDetail.textContent}));
+  if(resume.parentNode!==menu||menu.firstChild!==resume)menu.prepend(resume);
+ }
  const foot=el(doc,'footer','v03-title-foot',`${version} · HYProduct`);
  inner.append(head,menu,foot);
  const panel=el(doc,'div','v03-panel');panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');
@@ -42,6 +56,7 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   kicker.textContent=t('title.kicker');sub.textContent=t('title.sub');
   // 새로하기 / 불러오기 (user, 2026-11-24 21:07): both go slot → chapter.
   for(const [id,button] of buttons)button.textContent=t('menu.'+id);
+  if(resumeMeta)setContinue(resumeMeta);
  }
  label();
  let disposed=false,panelClose=null,lastFocus=null;
@@ -89,13 +104,14 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   element:layer,
   get visible(){return !layer.hidden;},
   relabel:label,
-  show(){if(disposed)return;layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');if(!layer.classList.contains('scene-ready'))veil.start();focusFirst();},
+  show(){if(disposed)return;try{setContinue(continued());}catch{setContinue(null);}layer.hidden=false;layer.classList.remove('is-leaving');void layer.offsetWidth;layer.classList.add('is-shown');if(!layer.classList.contains('scene-ready'))veil.start();focusFirst();},
   // The scene behind becomes visible only once it is really ready.
   setSceneReady(value){layer.classList.toggle('scene-ready',!!value);if(value){veil.setProgress(1,0);veil.stop();try{doc.defaultView?.localStorage?.setItem(WORLD_DRAWN_KEY,'1');}catch{/* told again next time */}}},
   // Preparation progress for the black title (ratio 0..1, things still being prepared).
   setProgress(ratio,remaining){veil.setProgress(ratio,remaining);},
   get veil(){return veil;},
   setEnabled(action,enabled){const button=buttons.get(action);if(button)button.disabled=!enabled;},
+  setContinue,
   // Fades the whole screen to black, then hides the layer. The caller swaps
   // the stage while it is black.
   async leave(){
