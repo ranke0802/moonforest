@@ -186,7 +186,7 @@ html[data-v03-screen="play"] .v03-hud{display:block}
 html[data-loading] .v03-hud{display:none}
 .v03-hud [hidden]{display:none!important}
 .v03-quest{position:absolute;left:max(18px,env(safe-area-inset-left));top:clamp(104px,calc(19vh / var(--v03-ui,1)),150px);max-width:min(300px,calc(44vw / var(--v03-ui,1)));padding:8px 14px 9px 12px;border-left:2px solid var(--v03-gold);background:linear-gradient(90deg,#101a14d9,#101a1480 70%,#101a1400)}
-.v03-quest-kicker{display:block;font-size:11px;letter-spacing:.24em;color:var(--v03-gold);opacity:.85}
+.v03-quest-kicker{display:block;font-size:12px;letter-spacing:.24em;color:var(--v03-gold);opacity:.85}
 .v03-quest-title{display:block;margin-top:1px;font-size:clamp(14px,calc(2.3vmin / var(--v03-ui,1)),17px);color:#f4ead0;text-shadow:0 1px 4px #000}
 .v03-quest-objective{margin:3px 0 0;font-size:clamp(13px,calc(2vmin / var(--v03-ui,1)),15px);line-height:1.45;text-shadow:0 1px 4px #000}
 .v03-quest.is-updated .v03-quest-objective{animation:v03-pulse .9s ease}
@@ -254,7 +254,7 @@ html[lang=ko] .v03-confirm p{word-break:keep-all}
 .v03-dialogue-choices.is-keyed .v03-dialogue-choice.is-selected{background:#cfb77b26!important;border-color:var(--v03-gold)!important;box-shadow:inset 0 0 0 1px #cfb77b66}
 .v03-dialogue-choice[data-mark]::after{content:'!';margin-left:.35em;font-weight:700;color:#f5d897}
 /* The keys as small text at the top right, on the name's line ("E 다음", "WASD 이동 · E 선택"). */
-.v03-dialogue-hint{flex:none;margin-left:auto;font-size:clamp(11px,calc(1.2vmin / var(--v03-ui,1)),16px);letter-spacing:.06em;white-space:nowrap;color:var(--v03-gold);opacity:.7}
+.v03-dialogue-hint{flex:none;margin-left:auto;font-size:clamp(12px,calc(1.2vmin / var(--v03-ui,1)),16px);letter-spacing:.06em;white-space:nowrap;color:var(--v03-gold);opacity:.7}
 .v03-dialogue-hint:empty{display:none}
 @media (pointer:coarse){.v03-dialogue-hint{display:none}}
 
@@ -310,7 +310,7 @@ html[data-v03-lock~=attack] #attack-button,html[data-v03-lock~=dodge] #dodge-but
 .mf-potion-bar button:active:not(:disabled){transform:scale(var(--mf-press-scale))}
 .mf-potion-bar button{position:relative;width:39px;height:42px;padding:0;--mf-item-icon-size:30px}
 .mf-potion-bar button:disabled{opacity:var(--mf-disabled)}
-.mf-potion-bar kbd,.mf-potion-bar small{position:absolute;z-index:1;font:600 10px/1 var(--v03-font);padding:1px 3px}
+.mf-potion-bar kbd,.mf-potion-bar small{position:absolute;z-index:1;font:600 12px/1 var(--v03-font);padding:1px 3px}
 .mf-potion-bar small{background:var(--mf-badge-bg);color:var(--mf-badge-ink);border-radius:var(--mf-radius)}
 .mf-potion-bar kbd{left:1px;top:1px}.mf-potion-bar small{right:1px;bottom:1px}
 #app #potion-button>.mf-potion-current:not([hidden]){position:absolute;inset:17%;z-index:1;display:grid;place-items:center;background:#1b2c22;border-radius:50%;pointer-events:none;--mf-item-icon-size:100%}
@@ -318,7 +318,7 @@ html[data-v03-lock~=attack] #attack-button,html[data-v03-lock~=dodge] #dodge-but
 .mf-potion-picker::backdrop{background:#09100a70}
 .mf-potion-picker h2{margin:0 0 10px;font-size:17px}
 .mf-potion-picker div{display:grid;gap:5px}
-.mf-potion-picker button{display:flex;align-items:center;gap:8px;min-height:42px;padding:4px 10px;text-align:left;--mf-item-icon-size:32px}
+.mf-potion-picker button{display:flex;align-items:center;gap:8px;min-height:44px;padding:4px 10px;text-align:left;--mf-item-icon-size:32px}
 .mf-potion-picker button[aria-pressed=true]{border-color:#e6c778;background:#354731}
 .mf-potion-picker>button{margin:10px 0 0 auto}
 html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opacity:.2}
@@ -329,8 +329,8 @@ html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opa
 .v03-caption-text{margin:0;font-size:clamp(16px,calc(2.6vmin / var(--v03-ui,1)),21px);line-height:1.5;color:#fff4d6;text-shadow:0 2px 6px #000;white-space:pre-line}
 /* Language row in the game's settings dialog */
 .v03-language-row{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;margin:4px 0 12px;padding:10px 12px;border:1px solid #ae925955;border-radius:6px;background:#ffffff08}
-.v03-language-row select{min-height:40px;font:inherit;color:inherit;background:#22301f;border:1px solid #819071;border-radius:4px;padding:4px 8px}
-.v03-language-row small{grid-column:1/-1;opacity:.75}
+.v03-language-row select{min-height:44px;font:inherit;color:inherit;background:#22301f;border:1px solid #819071;border-radius:4px;padding:4px 8px}
+.v03-language-row small{grid-column:1/-1;font-size:12px;opacity:.75}
 
 /* Language list in title Settings: highlight follows the pointer, a click shows the choice. */
 .v03-language{transition:transform .16s ease,background .16s ease,border-color .16s ease,box-shadow .16s ease,opacity .3s ease}
@@ -382,9 +382,9 @@ html[data-v03-vital] #app #player-hud:before{content:'';position:absolute;left:0
 html[data-v03-vital] #player-hud .v03-vital-player{height:13px;border-radius:1px;border:1px solid #0b080c;background:linear-gradient(180deg,#0a100c,#111b14);box-shadow:0 0 0 1px #c9b98066,-4px 0 0 -1px #e6c97e,4px 0 0 -1px #e6c97e,0 2px 5px #0009,inset 0 1px 3px #000c}
 /* The player's bar is the green of the +5 healing number (.damage-number.heal, #8df3b1). */
 html[data-v03-vital] #player-hud .v03-vital-fill{background:#8df3b1;box-shadow:inset 0 -2px #4fb97f99,inset 0 1px #dcffe966}
-html[data-v03-vital] #app #player-hud #player-health{font-size:clamp(10px,calc(1.5vmin / var(--v03-ui,1)),12px);letter-spacing:.04em;color:#f1e6c6;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000,0 0 6px #000a}
+html[data-v03-vital] #app #player-hud #player-health{font-size:clamp(12px,calc(1.5vmin / var(--v03-ui,1)),13px);letter-spacing:.04em;color:#f1e6c6;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000,0 0 6px #000a}
 html[data-v03-vital] #app #player-hud #player-stamina{width:calc(100% - 10px)!important;height:3px!important;margin:1px 0 0 0!important;border-radius:0 2px 2px 0;background:#231f12!important;box-shadow:0 0 0 1px #0b080c,0 1px 3px #0008}
-html[data-v03-vital] #app #gold-balance{top:calc(env(safe-area-inset-top) + var(--hud-v1-top,20px) + 27px);left:calc(env(safe-area-inset-left) + var(--hud-v1-edge,18px) + 15px);font-size:clamp(10px,calc(1.5vmin / var(--v03-ui,1)),12px);letter-spacing:.05em;color:#e6c97e;text-shadow:0 1px 2px #000}
+html[data-v03-vital] #app #gold-balance{top:calc(env(safe-area-inset-top) + var(--hud-v1-top,20px) + 27px);left:calc(env(safe-area-inset-left) + var(--hud-v1-edge,18px) + 15px);font-size:clamp(12px,calc(1.5vmin / var(--v03-ui,1)),13px);letter-spacing:.05em;color:#e6c97e;text-shadow:0 1px 2px #000}
 html[data-v03-vital] .v03-quest{top:calc(env(safe-area-inset-top) + var(--v03-quest-top,74px))}
 html[data-v03-vital] #app{--v03-quest-top:calc(clamp(20px,calc(4vh / var(--v03-ui,1)),44px) + 52px)}
 
@@ -440,7 +440,7 @@ html:not([data-v03-screen=play]) #v03-hud-tooltip{display:none}
 html[data-v03-vital] #app #gold-balance:before{content:'';display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fbeab4,#e6c97e 45%,#a8833f);box-shadow:0 0 0 1px #0b080c,0 1px 2px #000a;vertical-align:-1px}
 
 /* Keep the weapon beside the purse line, anchored to movable player vitals. */
-.mf-weapon-condition{position:absolute;right:0;top:calc(100% + 3px);display:inline-flex;align-items:center;gap:3px;pointer-events:none;color:#eee3c6;white-space:nowrap;font:600 11px/1 var(--v03-font,sans-serif);font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000,0 0 3px #000}
+.mf-weapon-condition{position:absolute;right:0;top:calc(100% + 3px);display:inline-flex;align-items:center;gap:3px;pointer-events:none;color:#eee3c6;white-space:nowrap;font:600 12px/1 var(--v03-font,sans-serif);font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #000,0 0 3px #000}
 .mf-weapon-condition .mf-town-item-icon,.mf-weapon-condition .commercial-icon{width:19px;height:19px}
 .mf-weapon-condition[data-broken]{color:#ffc0a2}
 .mf-weapon-condition[data-broken]::after{content:'!';font-weight:800}
@@ -494,6 +494,26 @@ html[lang=ko] .v03-tip,html[lang=ko] .v03-dialogue-text,html[lang=ko] .v03-quest
  .v03-banner{top:calc(max(10px,env(safe-area-inset-top)) + 122px)}
  .v03-hud:has(.v03-hint:not([hidden])) .v03-banner{top:max(10px,env(safe-area-inset-top))}
  .v03-prompt{bottom:clamp(58px,calc(18vh / var(--v03-ui,1)),120px)}
+}
+
+/* ----- Readability and touch targets (2026-11-26, audit "화면·조작"; DESIGN.md:
+   text 13 px and targets 44 px on phones). Nothing below 12 px on 0.3; key caps,
+   counters and the version line stay at 12. The shared sheets (commercial-ui,
+   hud-raster-v1, styles) are overridden here under the 0.3 edition only. ----- */
+html[data-edition="moonforest-0.3"] #app[data-commercial-ui] #dot-minimap>strong{margin-inline:-16px;font-size:12px;line-height:1.3}
+html[data-edition="moonforest-0.3"] #app .action-controls[data-character] #potion-count{font-size:12px}
+html[data-edition="moonforest-0.3"] #app[data-raster-hud] .keyboard-hint strong{font-size:12px}
+html[data-edition="moonforest-0.3"] #motion-speed-dialog :is(#motion-speed-description,footer span,#state-label,#speed-label,#character-subtitle){font-size:12px}
+@media (pointer:coarse){
+ .v03-quest-kicker,.v03-errand-title,.v03-errand-step,.v03-prompt-action,.v03-tip-text{font-size:13px}
+ html[data-v03-vital] #app #player-hud #player-health,html[data-v03-vital] #app #gold-balance,.mf-weapon-condition{font-size:13px}
+ html[data-edition="moonforest-0.3"] #app[data-commercial-ui] #dot-minimap>strong{font-size:13px}
+ .v03-title-kicker{font-size:clamp(13px,1.6vmin,16px)}.v03-title-sub{font-size:clamp(13px,1.8vmin,17px)}
+ .v03-slot-detail{font-size:13px}
+ .v03-menu-item,.v03-panel-back,.v03-panel-accept{min-height:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog :is(#motion-speed-description,footer span,.v03-language-row>span,.v03-language-row small){font-size:13px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog .settings-section>summary{box-sizing:border-box;min-height:44px}
+ html[data-edition="moonforest-0.3"] #motion-speed-dialog :is(#close-motion-speed,select){min-width:44px;min-height:44px}
 }
 
 /* PC: the gold line sits clear of the quest panel's first line. */
@@ -679,7 +699,7 @@ html[data-edition="moonforest-0.3"]:not([data-world]) #app>.boss-hud[data-hud="w
 html[data-v03-lock~=attack] #attack-button.v03-interact{opacity:1!important;filter:none;pointer-events:auto}
 #app #attack-button.v03-interact .v03-interact-face{position:absolute;inset:0;z-index:2;opacity:1;visibility:visible;font-style:normal;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#3b3424f2,#15120cf2 72%);border:2px solid #e8c77a;box-shadow:0 0 14px #e8c77a66;color:#f6e7bf;font-family:var(--v03-font);pointer-events:none;animation:v03-interact-in .22s ease-out}
 #app #attack-button.v03-interact .v03-interact-face svg{width:42%;height:auto;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-#app #attack-button.v03-interact .v03-interact-face b{max-width:84%;font-size:clamp(10px,1.7vmin,13px);font-weight:700;line-height:1.1;text-align:center;overflow-wrap:anywhere}
+#app #attack-button.v03-interact .v03-interact-face b{max-width:84%;font-size:clamp(12px,1.7vmin,13px);font-weight:700;line-height:1.1;text-align:center;overflow-wrap:anywhere}
 @keyframes v03-interact-in{from{transform:scale(.86);opacity:.4}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){#app #attack-button.v03-interact .v03-interact-face{animation:none}}
 
@@ -690,7 +710,7 @@ html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch]
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact:active .v03-interact-face{opacity:var(--mf-touch-art-press);transform:scale(var(--mf-press-scale))}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face svg{width:52%;stroke-width:1.9}
 html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #attack-button.v03-interact .v03-interact-face b{display:none}
-html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #live-fps{font-variant-numeric:tabular-nums;font-size:clamp(10px,1.55vmin,13px);white-space:nowrap}
+html[data-edition="moonforest-0.3"]:not([data-world]) #app[data-hud-input=touch] #live-fps{font-variant-numeric:tabular-nums;font-size:clamp(12px,1.55vmin,13px);white-space:nowrap}
 .mf-treasure-prompt{position:absolute;z-index:9;left:50%;bottom:18%;transform:translateX(-50%);pointer-events:auto;background:#14271ee3;border:1px solid var(--mf-line-mid);border-radius:.3rem;color:#fff3d8;font:inherit;min-height:2.65rem;padding:.35rem .65rem;cursor:pointer}.mf-treasure-prompt[hidden]{display:none}
 
 /* The original acquisition ribbon, below dialogs and above the movement stick on touch. */
@@ -707,9 +727,9 @@ html[data-v03-screen=play]:not([data-loading]):not([data-v03-talk]) .mf-pickup-n
    Every key shown on the play screen (the prompt's E, the PC combat keys, the
    potion slot numbers, the W/A/S/D guide) shares this one style; sizes follow. */
 html[data-edition] .v03-prompt-key,html[data-edition] #app .keyboard-hint kbd,html[data-edition] #app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] [data-hud-sprite]>kbd,html[data-edition] .mf-potion-bar kbd{box-sizing:border-box;font-family:var(--v03-font);color:var(--mf-kbd-ink);background:var(--mf-kbd-bg);border:1px solid var(--mf-kbd-line);border-radius:var(--mf-radius);box-shadow:inset 0 -2px 0 #0b080c}
-html[data-edition] #app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] [data-hud-sprite]>kbd{display:grid;place-items:center;top:11px;min-width:var(--mf-kbd-size);height:var(--mf-kbd-size);padding:0 4px;font-size:10px;line-height:1}
-html[data-edition] .mf-potion-bar kbd{display:grid;place-items:center;min-width:14px;height:14px;padding:0 2px;font-size:9px}
-html[data-edition] #app .keyboard-hint kbd{width:22px;height:22px;font-size:10px}
+html[data-edition] #app[data-raster-hud][data-hud-input=pc] .action-controls[data-character] [data-hud-sprite]>kbd{display:grid;place-items:center;top:11px;min-width:var(--mf-kbd-size);height:var(--mf-kbd-size);padding:0 4px;font-size:12px;line-height:1}
+html[data-edition] .mf-potion-bar kbd{display:grid;place-items:center;min-width:16px;height:16px;padding:0 2px;font-size:12px}
+html[data-edition] #app .keyboard-hint kbd{width:22px;height:22px;font-size:12px}
 html[data-edition] #app .keyboard-hint{color:var(--mf-text-2)}
 html[data-edition] #app .joystick-hint{color:#ece0bcb3}
 /* One focus ring for 0.3. The play HUD (.v03-hud) and the debug bench live on
