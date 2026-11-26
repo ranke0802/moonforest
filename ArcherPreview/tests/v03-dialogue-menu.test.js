@@ -233,9 +233,9 @@ test('a tap on the box or the picture never picks: it only completes the greetin
  k.press('KeyE');assert.equal(await p,'shop');k.dialogue.dispose();
 });
 
-test('the smith has a picture of his own (the blacksmith sheet, shared with the driver for now)',()=>{
+test('the smith keeps the blacksmith sheet; the coachman has his own picture since 2026-11-26',()=>{
  assert.notEqual(portraitFor('대장장이'),null);
- assert.equal(portraitFor('대장장이'),PORTRAITS.driver);assert.equal(portraitFor('마부'),PORTRAITS.driver);
+ assert.equal(portraitFor('대장장이'),PORTRAITS.driver);assert.equal(portraitFor('마부'),PORTRAITS.coachman);assert.match(PORTRAITS.coachman,/portraits\/coachman\.webp$/);assert.notEqual(PORTRAITS.coachman,PORTRAITS.driver);
  assert.equal(portraitFor('약초사'),PORTRAITS.herbalist);
 });
 
