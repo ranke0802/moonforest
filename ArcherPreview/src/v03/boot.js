@@ -3,6 +3,7 @@
 // from the existing game frame, and every stage change goes through `api`.
 import {createTitleScreen} from './title-screen.js';
 import {createGreatAttackFx} from './great-attack-fx.js';
+import {createStarfallAura} from './starfall-aura.js';
 import {createGallery} from './gallery.js';
 import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
@@ -97,17 +98,21 @@ export function setupV03(api){
  // A model without the cloth grid, or a world without a scene (tests), leaves a stub so it is not tried every frame.
  // Until it has been judged on screen it runs on the development server and with ?cape=1 only (2026-11-20).
  let cape=null, greatAttackFx=null, greatAttackMap=null;
- function resetGreatAttackFx(){greatAttackFx?.reset();greatAttackMap=null;}
+ let starfallAura=null; // The whole warrior glows while Starfall charges (starfall-aura.js).
+ function resetGreatAttackFx(){greatAttackFx?.reset();starfallAura?.reset();greatAttackMap=null;}
  function prepareGreatAttack(rank){
   const scene=api.world?.scene;
   const cave=!!api.world?.cave;
   if(greatAttackFx&&(!rank||greatAttackFx.scene!==scene||greatAttackFx.cave!==cave||scene?.isDisposed)){
    greatAttackFx.dispose();greatAttackFx=null;
   }
+  if(starfallAura&&(!rank||starfallAura.scene!==scene||starfallAura.cave!==cave||scene?.isDisposed)){starfallAura.dispose();starfallAura=null;}
   if(rank>0&&!greatAttackFx&&scene?.getEngine&&!scene.isDisposed){
    greatAttackFx=createGreatAttackFx({scene,root,cave,project:api.projectFeet,
     ground:(x,z)=>api.world.terrain?.heightAt(x,z)});
   }
+  if(rank>0&&!starfallAura&&scene?.getEngine&&!scene.isDisposed)starfallAura=createStarfallAura({scene,cave});
+  starfallAura?.bind(api.getPlayer?.()??null);
  }
  function greatAttackFrame(cast,blade){
   if(cast){
@@ -116,6 +121,7 @@ export function setupV03(api){
    greatAttackMap=api.world?.mapId;
   }
   greatAttackFx?.update(cast,blade,api.getPlayer?.()?.position);
+  starfallAura?.update(cast);
  }
  const capeWanted=(()=>{try{return !!import.meta.env?.DEV||new URLSearchParams(view?.location?.search??'').get('cape')==='1';}catch{return false;}})();
  function bindCape(){
@@ -731,9 +737,9 @@ export function setupV03(api){
    if(state.disposed)return;
    if(state.screen!=='play')cursors.set('ui');
    const s=gameState();
-   if(greatAttackFx?.active){
+   if(greatAttackFx?.active||starfallAura?.active){
     if(!s.ready||state.screen!=='play'||greatAttackMap!==s.mapId)resetGreatAttackFx();
-    else greatAttackFx.tick();
+    else{greatAttackFx?.tick();starfallAura?.tick();}
    }
    if(s.failed&&!state.failed){fail();return;}
    if(s.ready)bindCape();
@@ -783,6 +789,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;greatAttackFx?.dispose();greatAttackFx=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }
