@@ -56,6 +56,7 @@ export const SKILL_COLUMNS=4;
 // tutorial controls, players may train these immediately and refund them.
 export const PASSIVE_CELLS=Object.freeze([
   {id:'weaponCare',branch:'sword',row:1,col:2},
+  {id:'greatAttack',branch:'sword',row:2,col:3,need:['heavy']},
   {id:'guardTraining',branch:'shield',row:4,col:2},
   {id:'endurance',branch:'footwork',row:5,col:2}
 ]);

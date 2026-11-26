@@ -374,7 +374,7 @@ export const COMBAT_HINTS=Object.freeze([
 // (low-stamina also fires once the first-fight lessons are done)
 export const TIPS=Object.freeze([
  {id:'guide',when:'guide-shown',title:'길잡이 빛',keys:'빛무리가 갈 곳으로 먼저 날아갑니다.',touch:'빛무리가 갈 곳으로 먼저 날아갑니다.',text:'길을 모를 땐 빛을 따라가세요.'},
- {id:'potion',when:'low-hp',title:'회복약',target:'#potion-button',keys:'숫자 1 키로 회복약을 마십니다.',touch:'물약 버튼으로 회복약을 마십니다.',text:'마시는 중에도 움직일 수 있습니다.'},
+ {id:'potion',when:'low-hp',title:'물약',target:'#potion-button',keys:'숫자 1~4로 해당 슬롯의 물약을 사용합니다.',touch:'물약 버튼을 짧게 눌러 사용하고 길게 눌러 종류를 선택합니다.',text:'가방에서 물약을 슬롯에 등록할 수 있습니다.'},
  {id:'boss',when:'step:M04/bear',title:'큰 짐승',keys:'Space로 피하고 F를 길게 눌러 막으세요.',touch:'장화로 피하고 방패를 길게 눌러 막으세요.',text:'젖히면 강공격, 끝나면 반격하세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
  {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 목표·지도를 따라가세요.'},

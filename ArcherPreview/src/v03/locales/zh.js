@@ -1,6 +1,9 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'potion.slots':'药水栏','potion.slot':'栏位 {n}','potion.empty':'空栏位','potion.choose':'选择药水','potion.remove':'取消登记','potion.gesture':'轻点使用，长按选择药水。',
+  'char.skill.greatAttack':'星辉重击',
+  'char.skillText.greatAttack':'跃起前将光芒凝聚于剑刃。伤害和爆炸半径为普通重击的 {percent}%。蓄力时仍会受到伤害，被击倒会中断蓄力。',
   'opening.castLoading':'正在准备马车和首场战斗。','opening.castFailed':'未能载入开场场景。','opening.castRetry':'重试',
   'gallery.noTitles':'目前没有可获得的称号。',
   'hud.tip.bag':'打开背包，查看装备和物品（I）。',
@@ -172,7 +175,7 @@ export default {
   },
   tips:{
    guide:{title:'引路之光',keys:'光群会先飞向你该去的地方。',touch:'光群会先飞向你该去的地方。',text:'迷路时就跟着光走。'},
-   potion:{title:'恢复药',keys:'按数字键1喝恢复药。',touch:'点击药水按钮饮用。',text:'饮用时也能移动。'},
+   potion:{title:'药水',keys:'按数字键 1–4 使用对应栏位的药水。',touch:'轻点使用当前药水，长按选择种类。',text:'可在背包中将药水放入栏位。'},
    boss:{title:'巨兽',keys:'按Space闪避，或长按F格挡。',touch:'用靴子闪避，或长按盾格挡。',text:'大幅后仰就是强攻击，结束后立刻反击。'},
    talk:{title:'对话',keys:'靠近后按E键搭话。',touch:'靠近后点击出现的按钮搭话。',text:'战斗中无法对话。'},
    sprint:{title:'疾跑',keys:'长按Space奔跑。',touch:'长按闪避按钮奔跑。',text:'会消耗体力。请跟着目标和地图前进。'},

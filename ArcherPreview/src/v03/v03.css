@@ -1,4 +1,7 @@
 @import './riding-horse.css';
+.mf-starfall-gauge{position:absolute;z-index:5;width:clamp(42px,6vw,78px);height:5px;transform:translateX(-50%);pointer-events:none;overflow:hidden;border:1px solid #ebce8e;border-radius:2px;background:#201b23;box-shadow:0 1px 3px #100c12}
+.mf-starfall-gauge[hidden]{display:none}
+.mf-starfall-gauge>div{height:100%;transform-origin:left;background:linear-gradient(90deg,#e3a956,#fff2bd)}
 #app[data-character-menu-opening]{background:#000}
 #app[data-character-menu-opening] > :not(.mf-character-menu){visibility:hidden}
 /* MoonForest 0.3 shell. Layers live on <body> so they stay visible while the
@@ -270,6 +273,22 @@ html[lang=en]{--v03-font:MoonforestUI,'Segoe UI',sans-serif}
 .v03-settings-game{width:100%;margin-top:6px}
 /* Tutorial locks: controls a lesson does not use are dimmed and inert. */
 html[data-v03-lock~=attack] #attack-button,html[data-v03-lock~=dodge] #dodge-button,html[data-v03-lock~=guard] #guard-button,html[data-v03-lock~=potion] #potion-button{opacity:.22!important;filter:grayscale(1);pointer-events:none}
+.mf-potion-bar{display:none}
+#app[data-potion-slots][data-hud-input=pc] .action-controls[data-character] #potion-button{display:none}
+#app[data-potion-slots][data-hud-input=pc] .mf-potion-bar{position:absolute;left:calc(env(safe-area-inset-left) + var(--hud-v1-edge));bottom:calc(env(safe-area-inset-bottom) + 22px);display:flex;gap:4px;pointer-events:auto}
+.mf-potion-bar button,.mf-potion-picker button{font:inherit;color:#f4e7c2;background:#1b2b20ef;border:1px solid #897c56;border-radius:5px}
+.mf-potion-bar button{position:relative;width:39px;height:42px;padding:0;--mf-item-icon-size:30px}
+.mf-potion-bar button:disabled{opacity:.58}
+.mf-potion-bar kbd,.mf-potion-bar small{position:absolute;z-index:1;font:600 10px MoonforestUI,sans-serif;background:#17231cf2;border-radius:3px;padding:1px 3px;color:#fff2d1}
+.mf-potion-bar kbd{left:1px;top:1px}.mf-potion-bar small{right:1px;bottom:1px}
+#app #potion-button>.mf-potion-current:not([hidden]){position:absolute;inset:17%;z-index:1;display:grid;place-items:center;background:#1b2c22;border-radius:50%;pointer-events:none;--mf-item-icon-size:100%}
+.mf-potion-picker{width:min(280px,86vw);max-height:80dvh;overflow:auto;padding:16px;border:1px solid #988963;border-radius:8px;background:#15251bed;color:#f4e7c2;font:14px MoonforestUI,sans-serif}
+.mf-potion-picker::backdrop{background:#09100a70}
+.mf-potion-picker h2{margin:0 0 10px;font-size:17px}
+.mf-potion-picker div{display:grid;gap:5px}
+.mf-potion-picker button{display:flex;align-items:center;gap:8px;min-height:42px;padding:4px 10px;text-align:left;--mf-item-icon-size:32px}
+.mf-potion-picker button[aria-pressed=true]{border-color:#e6c778;background:#354731}
+.mf-potion-picker>button{margin:10px 0 0 auto}
 html[data-v03-lock~=move] #joystick,html[data-v03-lock~=move] #joystick-hint{opacity:.2}
 /* Cutscene subtitle */
 .v03-caption{position:absolute;left:50%;bottom:clamp(110px,calc(22vh / var(--v03-ui,1)),190px);transform:translateX(-50%);width:max-content;max-width:min(720px,calc(88vw / var(--v03-ui,1)));padding:10px 26px 12px;text-align:center;background:linear-gradient(90deg,#0000,#000b 18%,#000b 82%,#0000);opacity:0;transition:opacity .35s ease;pointer-events:none}

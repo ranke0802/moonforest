@@ -179,8 +179,8 @@ for(const [id,pack] of Object.entries(PACKS))test(`owned equipment, quick-bar re
  const economy=services.economy;for(const item of ['field-bow','bear-bile','wolf-fang'])economy.grant(item,1);
  let touch=true;
  const menu=createCharacterMenu({root,read:()=>({hp:340,maxHp:500,stamina:74,maxStamina:100,attackBonus:economy.attack,defense:economy.defense,
-  gold:wallet.balance,tradeBag:services.bag(),touch,allows:kind=>kind!=='attack'}),
-  subject:()=>null,onPause(){},equipItem:services.equip,registerItem:services.register,usePotion(){}});
+  gold:wallet.balance,tradeBag:services.bag(),quickSlots:economy.state.quickSlots,touch,allows:kind=>kind!=='attack'}),
+  subject:()=>null,onPause(){},equipItem:services.equip,registerItem:services.register,unregisterItem:services.unregister,usePotion(){}});
  const dialog=root.querySelector('dialog');modal(dialog,window);
  const tab=name=>byText(dialog,'nav button',pack.ui['char.tab.'+name]).click();
  const tile=item=>{const name=pack.ui['item.'+item],node=[...dialog.querySelectorAll('.mf-menu-grid button')].find(b=>b.title===name);assert.ok(node,id+' tile '+name);node.click();};
@@ -193,8 +193,10 @@ for(const [id,pack] of Object.entries(PACKS))test(`owned equipment, quick-bar re
   tab('Status');const worn=[...dialog.querySelectorAll('.mf-menu-slots button')].find(el=>el.title===pack.ui['item.field-bow']);assert.ok(worn);worn.click();
   assert.equal(dialog.dataset.page,'Inventory');assert.equal(dialog.querySelector('.mf-menu-item h2').textContent,pack.ui['item.field-bow']);
   byText(dialog,'.mf-menu-filters button',pack.ui['char.type.Supplies']).click();tile('bear-bile');
-  byText(dialog,'.mf-menu-item button',pack.ui['char.quickAssign']).click();assert.equal(economy.state.quick,'bear-bile');
-  assert.equal(dialog.querySelector('.mf-menu-equipped').textContent,pack.ui['char.quickSet']);
+  dialog.querySelectorAll('.mf-menu-potion-slots button')[2].click();assert.deepEqual(economy.state.quickSlots,['potion',null,'bear-bile',null]);
+  assert.equal(dialog.querySelector('.mf-menu-potion-slots [aria-pressed=true]').textContent,'3');
+  dialog.querySelectorAll('.mf-menu-potion-slots button')[0].click();assert.deepEqual(economy.state.quickSlots,['bear-bile',null,'potion',null]);
+  byText(dialog,'.mf-menu-item button',pack.ui['potion.remove']).click();assert.deepEqual(economy.state.quickSlots,[null,null,'potion',null]);
   byText(dialog,'.mf-menu-filters button',pack.ui['char.type.Materials']).click();tile('wolf-fang');
   assert.equal(dialog.querySelector('.mf-menu-item p').textContent,pack.ui['char.materialNote']);
   for(touch of [true,false]){

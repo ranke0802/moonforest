@@ -4,9 +4,10 @@ import {t} from './i18n.js';
 import {monsterExperience} from './character-progression.js';
 import {createTownTreasure} from './town-treasure.js';
 import {createWeaponConditionHud} from './weapon-condition-hud.js';
+import {createPotionHud} from './potion-hud.js';
 
 // random: the economy's dice (temper wear, blessed crafting); tests fix it.
-export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound,random=Math.random}){
+export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound,usePotion,canOpenPotionPicker,onPotionLayout,random=Math.random}){
  const economy=createTownEconomy(wallet,legacy(),{random}),win=root.ownerDocument.defaultView;
  const healthHud=root.querySelector('#player-hud'),durabilityHud=healthHud?createWeaponConditionHud(healthHud):null;
  let shop=null,generation=0,disposed=false,wasPlaying=false,lastGear=null,appliedTo=null,treasure=null;
@@ -21,23 +22,29 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    lastGear=s.equipped.sword+'/'+s.equipped.shield;appliedTo=e;
   }
   const b=battle();if(b)b.combat.defense=economy.defense;
-  const c=controls();if(c)c.staminaRecoveryScale=economy.regen;
+  const c=controls();
+  if(c){
+   c.staminaRecoveryScale=economy.regen;
+   c.greatAttackLevel=s.progression.skills.greatAttack;
+   world.v03?.prepareGreatAttack?.(c.greatAttackLevel);
+  }
   syncDurability();
  }
  function announceLevel(previous){
   const level=economy.progression.level;
   if(level>previous)notify(t('reward.levelUp',{level}));
  }
- function canDrink(){
-  const b=battle(),s=items(),id=s.quick;if(!b||b.loading||b.grab?.active||!b.playerAlive||!s.bag[id])return false;
+ function canDrink(slot=items().selectedQuickSlot){
+  const b=battle(),s=items(),id=s.quickSlots[slot];if(!b||b.loading||b.grab?.active||!b.playerAlive||b.playerHp<=0||!s.bag[id])return false;
   return id==='potion'?b.playerHp<b.playerMaxHp&&!b.potions.active:s.boost<=0;
  }
  function bag(){
   const s=items(),equipment=[];
-  for(const [id,count] of Object.entries(s.bag)){
-   const it=TOWN_ITEMS[id];if(!it||!count)continue;
+  // Keep a depleted registration editable until the player removes it.
+  for(const id of new Set([...Object.keys(s.bag),...s.quickSlots.filter(Boolean)])){
+   const it=TOWN_ITEMS[id],count=s.bag[id]??0;if(!it)continue;
    const row={id,name:it.slot?gearName(id,s.condition[id]?.blessed===true):itemName(id),type:it.type,icon:id,quantity:count,
-    worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,registered:it.quick&&id===s.quick};
+    worn:!!it.slot&&s.equipped[it.slot]===id,slot:it.slot,tradeId:id,quick:it.quick,quickSlot:it.quick?s.quickSlots.indexOf(id):-1};
    if(it.slot){
     const gear=economy.gear(id);row.level=gear.level;row.broken=gear.hp===0;
     row.stat=it.slot==='sword'?'attack':'defense';row.value=gear[row.stat];
@@ -52,19 +59,23 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
  function flush(){economy.flush();}
  const onVisibility=()=>{if(root.ownerDocument.hidden)flush();};
  win.addEventListener('pagehide',flush);root.ownerDocument.addEventListener('visibilitychange',onVisibility);
- function reset(keepOld){generation++;shop?.close();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
+ const potionButton=root.querySelector('#potion-button');
+ const potionHud=usePotion&&potionButton?createPotionHud({root,button:potionButton,read:items,canDrink,use:usePotion,canOpen:canOpenPotionPicker,
+  select:slot=>economy.selectQuickSlot(slot),onPause,onLayout:onPotionLayout}):null;
+ function reset(keepOld){generation++;shop?.close();potionHud?.clear();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
  function getTreasure(){return treasure??=createTownTreasure({root,world,economy,player,canInteract,sound});}
  return {economy,bag,canDrink,apply,
   collectGold(amount){getTreasure().collectGold(amount);},
-  get quick(){return items().quick;},get quickName(){return itemName(items().quick);},get remaining(){return items().bag[items().quick]??0;},
-  get open(){return !!shop?.open;},get armorDefense(){return economy.gear(items().equipped.armor)?.defense??0;},
+  updatePotionHud(playing,unlocked){potionHud?.update(playing,unlocked);},
+  get remaining(){const s=items();return s.bag[s.quickSlots[s.selectedQuickSlot]]??0;},
+  get open(){return !!shop?.open||!!potionHud?.open;},get armorDefense(){return economy.gear(items().equipped.armor)?.defense??0;},
   get equippedFinishes(){const e=items().equipped;return {sword:TOWN_ITEMS[e.sword].finish,shield:TOWN_ITEMS[e.shield].finish};},
-  drink(){
-   if(!canDrink())return false;
-   const b=battle(),id=items().quick;if(!economy.drink())return false;
+  drink(slot=items().selectedQuickSlot){
+   if(!canDrink(slot))return false;
+   const b=battle(),id=items().quickSlots[slot];if(!economy.drink(slot))return false;
    if(id==='potion'){b.potions.remaining=(items().bag.potion??0)+1;b.potions.use(b.playerHp,b.playerMaxHp);}
    else{notify(boostText('item.boosted',id));apply();}
-   return true;
+   return id;
   },
   equip(id){if(!economy.equip(id))return false;apply();sound('equip');return true;},
   // Only completed durability points need feedback. Repeated contacts of the
@@ -78,13 +89,13 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   },
   // Diagnostics only: the worn blade after a hit (plain values).
   weaponMark(){const id=items().equipped.sword,w=economy.gear(id);return w?{id,level:w.level,hp:w.hp,max:w.max,attack:w.attack}:null;},
-  register:id=>economy.register(id),
+  register:(id,slot)=>economy.register(id,slot),unregister:slot=>economy.unregister(slot),
   grantArmor(id){if(id!=='leather'||items().bag['leather-coat'])return false;
    if(!economy.grant('leather-coat'))return false;if(!items().equipped.armor)economy.equip('leather-coat');apply();return true;},
   addPotions(count){return economy.grant('potion',count)?count:0;},
   rest(){const n=3-(items().bag.potion??0);if(n>0)economy.grant('potion',n);},
   get equippedSwordName(){const id=items().equipped.sword;return gearName(id,economy.gear(id)?.blessed);},
-  reset,clear(){generation++;shop?.close();treasure?.clear();flush();},
+  reset,clear(){generation++;shop?.close();potionHud?.clear();treasure?.clear();flush();},
   // view: 'shop' (buy, sell, make) or 'forge' (the smith's bench: repair and temper).
   async openShop(id,view='shop'){
    if(!['smith','herbalist'].includes(id)||!world.v03?.playing||world.mapId!=='village')return;
@@ -116,6 +127,6 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    economy.tick(dt);const c=controls();if(c&&c.staminaRecoveryScale!==economy.regen)c.staminaRecoveryScale=economy.regen;
    getTreasure().tick(dt);
   },
-  dispose(){disposed=true;generation++;flush();shop?.dispose();treasure?.dispose();durabilityHud?.dispose();win.removeEventListener('pagehide',flush);root.ownerDocument.removeEventListener('visibilitychange',onVisibility);}
+  dispose(){disposed=true;generation++;flush();shop?.dispose();potionHud?.dispose();treasure?.dispose();durabilityHud?.dispose();win.removeEventListener('pagehide',flush);root.ownerDocument.removeEventListener('visibilitychange',onVisibility);}
  };
 }

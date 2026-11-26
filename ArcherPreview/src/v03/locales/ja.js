@@ -1,6 +1,9 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'potion.slots':'ポーションスロット','potion.slot':'スロット{n}','potion.empty':'空きスロット','potion.choose':'ポーションを選択','potion.remove':'登録を解除','potion.gesture':'タップで使用、長押しでポーションを選択します。',
+  'char.skill.greatAttack':'星光強撃',
+  'char.skillText.greatAttack':'跳躍の前に剣へ光を集める。威力と爆発半径は通常の強攻撃の{percent}%。溜め中もダメージを受け、転倒すると中断する。',
   'opening.castLoading':'馬車と最初の戦闘を準備しています。','opening.castFailed':'最初の場面を読み込めませんでした。','opening.castRetry':'再試行',
   'gallery.noTitles':'現在、獲得できる称号はありません。',
   'hud.tip.bag':'バッグを開いて装備や持ち物を確認します（I）。',
@@ -173,7 +176,7 @@ export default {
   },
   tips:{
    guide:{title:'導きの光',keys:'光の群れが行き先へ先に飛んでいきます。',touch:'光の群れが行き先へ先に飛んでいきます。',text:'迷ったら光を追ってください。'},
-   potion:{title:'回復薬',keys:'数字の1キーで回復薬を飲みます。',touch:'回復薬ボタンで飲みます。',text:'飲みながらでも動けます。'},
+   potion:{title:'ポーション',keys:'数字キー1～4で対応するスロットのポーションを使います。',touch:'タップで使用し、長押しで種類を選びます。',text:'所持品からポーションをスロットに登録できます。'},
    boss:{title:'大きな獣',keys:'Spaceで回避、Fを長押しで防御。',touch:'ブーツで回避、盾を長押しで防御。',text:'のけぞったら強攻撃。直後に反撃！'},
    talk:{title:'会話',keys:'近くでEキーを押すと話しかけます。',touch:'近づくと出るボタンで話しかけます。',text:'戦闘中は会話できません。'},
    sprint:{title:'疾走',keys:'Spaceを長押しすると走ります。',touch:'回避ボタンを長押しすると走ります。',text:'スタミナを使います。目標と地図を頼りに。'},

@@ -214,7 +214,8 @@ class ChapterEncounter extends BossEncounter {
   poseAndContacts(player,action,sample,shield){
     // Dormant, distant actors have no possible blade/actor contact. The
     // parent's render, navigation and culling continue to own their transforms.
-    if(!this.brain.engaged&&!this.brain.returning&&distance(this.actor.position,player.position)>4)return 0;
+    if(!this.brain.engaged&&!this.brain.returning&&distance(this.actor.position,player.position)>4&&
+       !this.gate.pending.length&&!sample?.radialAttack?.contains(this.actor.position,this.world.navigation))return 0;
     const stop=super.poseAndContacts(player,action,sample,shield);
     if(this.shotHit){
       this.shotHit=false;

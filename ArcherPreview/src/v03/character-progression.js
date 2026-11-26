@@ -2,7 +2,7 @@ import {questKey} from './chapter-progress.js';
 
 export const CHAPTER_LEVEL_CAP=20;
 export const SKILL_REFUND_GOLD=100;
-export const PASSIVE_LIMITS=Object.freeze({weaponCare:5,guardTraining:10,endurance:10});
+export const PASSIVE_LIMITS=Object.freeze({weaponCare:5,guardTraining:10,endurance:10,greatAttack:5});
 export const weaponWearInterval=rank=>10+5*rank;
 
 const QUEST_XP=Object.freeze({

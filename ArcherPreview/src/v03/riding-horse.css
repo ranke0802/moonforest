@@ -47,6 +47,10 @@
 #app[data-v03-riding=mounted] #attack-button > .hud-v1-sprite {
   background: url('./art/riding-gallop.svg') center / contain no-repeat;
 }
-#app[data-v03-riding=mounted] #attack-button:is(:active,[data-hud-sprite-state=press],[data-hud-sprite-state=held]) > .hud-v1-sprite {
+#app[data-v03-riding=mounted] #guard-button > .hud-v1-sprite {
+  background: url('./art/riding-horse.svg') center / 62% no-repeat,
+    radial-gradient(circle closest-side, #65563e 0%, #40362b 77%, #dfc48f 78% 81%, transparent 82%);
+}
+#app[data-v03-riding=mounted] :is(#attack-button,#guard-button):is(:active,[data-hud-sprite-state=press],[data-hud-sprite-state=held]) > .hud-v1-sprite {
   transform: scale(.94);
 }

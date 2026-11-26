@@ -2,6 +2,7 @@
 // It owns no engine, scene, frame loop or timer loop: main.js calls update(dt)
 // from the existing game frame, and every stage change goes through `api`.
 import {createTitleScreen} from './title-screen.js';
+import {createGreatAttackFx} from './great-attack-fx.js';
 import {createGallery} from './gallery.js';
 import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
@@ -95,7 +96,21 @@ export function setupV03(api){
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
  // A model without the cloth grid, or a world without a scene (tests), leaves a stub so it is not tried every frame.
  // Until it has been judged on screen it runs on the development server and with ?cape=1 only (2026-11-20).
- let cape=null;
+ let cape=null, greatAttackFx=null;
+ function prepareGreatAttack(rank){
+  const scene=api.world?.scene;
+  if(greatAttackFx&&(!rank||greatAttackFx.scene!==scene||scene?.isDisposed)){
+   greatAttackFx.dispose();greatAttackFx=null;
+  }
+  if(rank>0&&!greatAttackFx&&scene?.getEngine&&!scene.isDisposed){
+   greatAttackFx=createGreatAttackFx({scene,root,project:api.projectFeet,
+    ground:(x,z)=>api.world.terrain?.heightAt(x,z)});
+  }
+ }
+ function greatAttackFrame(cast,blade){
+  if(cast)prepareGreatAttack(cast.level);
+  greatAttackFx?.update(cast,blade,api.getPlayer?.()?.position);
+ }
  const capeWanted=(()=>{try{return !!import.meta.env?.DEV||new URLSearchParams(view?.location?.search??'').get('cape')==='1';}catch{return false;}})();
  function bindCape(){
   if(!capeWanted)return;
@@ -489,6 +504,7 @@ export function setupV03(api){
  // the fight and stage in hand (api.resetStage). The record was saved by the caller.
  // Resolves false when a part is missing or it fails: the caller reloads as before.
  async function returnToTitle(){
+  greatAttackFx?.hide();
   if(state.busy||state.screen!=='play'||state.disposed)return false;
   if(typeof story.stop!=='function'||typeof api.stopWorld!=='function'||typeof api.resetStage!=='function')return false;
   state.busy=true;
@@ -662,6 +678,7 @@ export function setupV03(api){
   // The prologue's black stage hides the world: main.js draws it only now and
   // then (uploads keep moving) so the ambush wolf's preparation and the
   // prologue's own animation get the frame time.
+  prepareGreatAttack,greatAttackFrame,
   get stageHidden(){return (state.screen==='opening'||state.screen==='resume')&&opening.covering;},
   // The simulation is frozen while the prologue covers the stage.
   // Dialogue no longer stops the world (2026-11-20, user: the player and the NPC
@@ -756,6 +773,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;greatAttackFx?.dispose();greatAttackFx=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

@@ -27,7 +27,7 @@ import './commercial-ui.css';
 import './hud-layout.css';
 import './hud-raster-v1.css';
 import {setupCommercialUi} from './commercial-ui.js';
-import {setupHudLayout} from './hud-layout.js';
+import {setupHudLayout,POTION_SLOTS_HUD_SELECTOR} from './hud-layout.js';
 import {setupHudRasterV1} from './hud-raster-v1.js';
 import {setupCaveStoryInspection} from './cave-story-inspection.js';
 import {setupGameSelection} from './game-selection.js';
@@ -92,7 +92,7 @@ import { loadVillageTrainingTarget } from './village-training.js';
 import { GOBLIN_MOTIONS } from './goblin-spec.js';
 import { BOSS_ACTIVE_MOTIONS } from './boss-spec.js';
 import {createSceneryStrikes} from './scenery-strikes.js';
-import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW } from './player-strikes.js';
+import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW, PLAYER_STRIKES } from './player-strikes.js';
 import {createSwordTrail,setupSwordTrailSettings} from './sword-trail.js';
 import {configurePlayerSize,playerDimensions,WARRIOR_DIMENSIONS} from './player-dimensions.js';
 import { createDamageNumbers } from './damage-numbers.js';
@@ -573,27 +573,28 @@ function updateButtons() {
   const dead = controller?.dead || false;
   const rejected=controller?.staminaRejectSerial??0, liveTown=world?.v03?.playing?townServices:null;
   const potionCount=liveTown?liveTown.remaining:boss?.potions.remaining??3,canDrink=liveTown?liveTown.canDrink():boss?.canUsePotion;
+  townServices?.updatePotionHud(!!liveTown,ready&&!dead&&!boss?.loading&&!!boss?.playerAlive&&!input?.suspended&&!controller?.captured&&!controller?.groggy&&allowed('potion'));
   if(staminaFeedback.observe(controller)){toast('스테미나가 부족합니다.',{stamina:true});audio.play('ui_error');applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);}
-  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,controller?.shieldHeld,controller?.guarding,boss?.active,boss?.playerAlive,boss?.loading,canDrink,boss?.canEscapeGrab,potionCount,liveTown?.quick,boss?.potions.pulsesLeft,rejected].join('|');
+  const snapshot=[character,ready,dead,controller?.captured,controller?.groggy,controller?.runToggled,controller?.guardToggled,controller?.shieldHeld,controller?.guarding,boss?.active,boss?.playerAlive,boss?.loading,canDrink,boss?.canEscapeGrab,potionCount,!!liveTown,boss?.potions.pulsesLeft,rejected].join('|');
   if(snapshot===buttonSnapshot)return;buttonSnapshot=snapshot;
   $('#run-button').setAttribute('aria-pressed', String(controller?.runToggled || false));
   $('#death-label').textContent = dead ? '부활' : '사망';
   $('#death-key').textContent = dead ? 'R' : 'K';
   $('#death-button').classList.toggle('dead', dead);
-  if(isV2())$('#guard-button').setAttribute('aria-pressed',String(!!controller?.guarding));
-  else $('#guard-button').setAttribute('aria-pressed', String(controller?.guardToggled || false));
+  if(!world?.riding?.active)$('#guard-button').setAttribute('aria-pressed',String(isV2()?!!controller?.guarding:!!controller?.guardToggled));
   for (const button of buttons) button.disabled = !ready || controller?.captured || controller?.groggy || (dead && button.id !== 'death-button') || (boss?.active && !boss.playerAlive);
   if(ready&&isV2()&&!dead&&boss?.canEscapeGrab)$('#dodge-button').disabled=false;
   updateSummonControls();
   $('#summon-goblin').disabled=$('#goblin-count').disabled=$('#summon-boss').disabled;
   $('#boss-controls').hidden = !isV2();
   $('#potion-button').hidden=!isV2();
-  $('#potion-button').disabled=!ready||!canDrink||controller?.captured||controller?.groggy;
-  $('#potion-count').textContent=String(potionCount);
-  if(liveTown){$('#potion-button').title=liveTown.quickName+' · 1';$('#potion-button').setAttribute('aria-label',liveTown.quickName);}
+  if(!liveTown){
+    $('#potion-button').disabled=!ready||!canDrink||controller?.captured||controller?.groggy;
+    $('#potion-count').textContent=String(potionCount);
+    $('#potion-button').setAttribute('aria-label',`회복 물약, 남은 횟수 ${boss?.potions.remaining??3}회${boss?.potions.active?', 회복 중':''}`);
+  }
   $('#potion-status').textContent=boss?.potions.active?`회복 ${4-boss.potions.pulsesLeft}/4`:'1';
   $('#potion-button').classList.toggle('healing',!!boss?.potions.active);
-  $('#potion-button').setAttribute('aria-label',`회복 물약, 남은 횟수 ${boss?.potions.remaining??3}회${boss?.potions.active?', 회복 중':''}`);
 }
 // 0.3 tutorial gate: a step can allow only some actions (move, camera,
 // attack, dodge, guard, potion). Always true outside the tutorial and in 0.2.
@@ -602,10 +603,16 @@ const noMovement=()=>({x:0,y:0,run:false});
 const allowed=kind=>(kind==='camera'||!world?.riding?.locksRider)&&world?.v03?.allows?.(kind)!==false;
 const actions = {
   move() { if(ready&&isV2())controller.requestMovement(); },
-  guard() { if (ready && allowed('guard') && (!boss?.active || boss.playerAlive)) { if(isV2())startDefense('shieldPush');else controller.toggleGuard?.(); updateButtons(); } },
+  guard() {
+    if(!ready||!allowed('guard')||(boss?.active&&!boss.playerAlive))return;
+    if(world?.riding?.active){world.riding.dismount();return;}
+    if(isV2())startDefense('shieldPush');else controller.toggleGuard?.();
+    updateButtons();
+  },
   setShieldHeld(held,source='keyboard',pointerType){
     if(!isV2()){if(held)actions.guard();return false;}
     if(held&&(!ready||!allowed('guard')||controller.dead||controller.captured||controller.groggy||boss?.playerHp<=0))return false;
+    if(held&&world?.riding?.active){world.riding.dismount();return true;}
     return shieldInput.setHeld(source,held,pointerType);
   },
   cancelShieldInput(source){return shieldInput.cancel(source);},
@@ -619,7 +626,19 @@ const actions = {
   },
   cancelDodgeInput(source){return input?.dodgeSprintGesture?.cancel(source);},
   isHudDodgeHeld(pointerType){return input?.dodgeSprintGesture?.hasTouchHud(pointerType)??false;},
-  potion() { if(ready&&isV2()&&allowed('potion')&&!controller.captured&&!controller.groggy){if((world?.v03?.playing&&townServices)?townServices.drink():boss.usePotion()){questLive()?.action('potion');audio.play('potion_drink');audio.play('heal_start',{volume:.65});}else audio.play('ui_error');updateButtons();} },
+  potionSlotsEnabled(){return !!world?.v03?.playing&&!!townServices;},
+  potion(slot) {
+    if(!ready||!isV2()||!allowed('potion')||controller.dead||controller.captured||controller.groggy)return;
+    const carried=versionRoute.edition&&!versionRoute.worldRevision;
+    if(carried&&(!actions.potionSlotsEnabled()||input.suspended||document.hidden||document.querySelector('dialog[open]')))return;
+    if(!carried&&slot!==undefined&&slot!==0)return;
+    const used=carried?townServices.drink(slot):boss.usePotion()&&'potion';
+    if(used){
+      audio.play('potion_drink');
+      if(used==='potion'){questLive()?.action('potion');audio.play('heal_start',{volume:.65});}
+    }else audio.play('ui_error');
+    updateButtons();
+  },
   attack() { if (world?.riding?.active) {world.riding.startGallop();return;} if (ready && allowed('attack') && (!boss?.active || boss.playerAlive)) {if(elenaReview)elenaReview.requestReviewCast();else controller.attack();} },
   setAttackHeld(held, source = 'keyboard') { setAttackHeld(source, held); },
   cancelAttackInput(source) { cancelAttackInput(source); },
@@ -679,10 +698,22 @@ function isHudAttackHeld(pointerType) {
   return touch&&(!!pointerType||!mouse);
 }
 
+let shownGreatAttack=null;
+function clearGreatAttack(){
+  if(shownGreatAttack){shownGreatAttack=null;world?.v03?.greatAttackFrame?.(null,null);}
+  world?.v03?.story?.cancelGreatAttackFocus?.();
+}
+function interruptGreatAttack(){
+  if(!shownGreatAttack&&!controller?.action?.greatAttack)return;
+  if(controller?.action?.greatAttack)controller.cancelAttack();
+  clearGreatAttack();
+}
+
 function cancelAttackInput(source,{preserveCompletedCharge=false}={}) {
   if(!source)world?.riding?.stopGallop?.();
   if(source){attackPointerTypes.delete(source);if(!attackSources.delete(source)||attackSources.size)return;}
   else {attackSources.clear();attackPointerTypes.clear();}
+  if(!preserveCompletedCharge)interruptGreatAttack();
   // A captured HUD pointer can be released by the browser before pointerup.
   // Stop holding, but retain an already accepted heavy attack for recovery.
   // Global blur/pause/cancel still clears everything, including this buffer.
@@ -1000,6 +1031,7 @@ function render(dt) {
   world.v03?.update(dt);
   world.riding?.updateAvailability();
   if(world.chapterResidents&&!mapTransition?.busy)world.chapterResidents.update(dt,world.v03?.playing,world.v03?.story?.sceneActive||input?.suspended||document.hidden||!boss?.playerAlive);
+  if(world.v03&&(shownGreatAttack||controller?.action?.greatAttack)&&(!world.v03.playing||world.v03.story?.sceneActive||world.v03.story?.dialogueOpen||world.v03.blocksGame))interruptGreatAttack();
   // 0.3 slow motion (short, story-driven): the rest of the frame runs scaled.
   dt*=world.v03?.timeScale??1;
   world.storyboardOpening?.update();
@@ -1060,6 +1092,7 @@ function render(dt) {
     movement.alive=!controller.dead&&boss.playerHp>0;
     const playerControllerStart=frameDiagnostics.mark();
     const result = controller.update(dt, movement);
+    if(world.v03&&shownGreatAttack&&result.greatAttack!==shownGreatAttack)clearGreatAttack();
     frameDiagnostics.measure('playerControllerMs',playerControllerStart);
     if(isV2()&&result.rollFrom!=null){
       const beforeRoll=actor.position.clone();
@@ -1100,6 +1133,10 @@ function render(dt) {
         actor.rotation.y=Math.atan2(point.x-actor.position.x,point.z-actor.position.z)+(PLAYER_STRIKE_AIM_YAW[result.state]??0);
       }
       meleeAim?.begin(result,actor,target,!!versionRoute.edition&&!versionRoute.worldRevision);
+      if(result.greatAttack&&world.v03?.lunge?.judgment){
+        const selected=!strikeByInput&&target?.active&&target.brain?.hp>0?target.actor.position:null;
+        result.greatAttack.aim(actor.position,actor.rotation.y-(config.forwardYaw||0),selected,playerDimensions(actor).ratio,world.v03.lunge.judgment,world.terrain,world.navigation);
+      }
     }
     // 0.3: the guard raised without a direction turns to that foe too (once, as it goes up).
     if(isV2()&&world.v03?.aimTarget){
@@ -1356,11 +1393,11 @@ try {
     if(encounter.playerHp<=0){world.developmentStoryboardLive?.update();if(!world.storyboardDeathPlayback&&!deathScreen.isOpen()){const events=world.storyboardEvents?.inspect();const count=!events?.active&&!events?.queued?world.storyboardEvents?.emit('death',{mapId:world.mapId})??0:0;if(count){world.storyboardDeathPlayback=true;input?.reset();cancelAttackInput();}else deathScreen.show();}}
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
-      if(options.captured){actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
+      if(options.captured){if(shownGreatAttack)clearGreatAttack();actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
       attackSources.clear();attackPointerTypes.clear();strikeSampler.reset();return true;
     }
     const reacted=options.knockdown?controller.knockdown(options):controller.hit(duration,options);
-    if(reacted!==false){if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
+    if(reacted!==false){if(shownGreatAttack)clearGreatAttack();if(!controller.held){attackSources.clear();attackPointerTypes.clear();}strikeSampler.reset();}
     applyPlayerFlash(container.meshes,boss.playerReaction,staminaFeedback);
     return reacted;
   },{onDefeat:event=>{const defeatStart=frameDiagnostics.mark();try{townServices?.defeat(event);world.v03?.defeat(event);}catch(error){console.error('[MoonForest 0.3]',error);}frameDiagnostics.measure('defeatMs',defeatStart);try{sceneDiagnostics.requestDrawCpuCapture('enemy-defeat');frameDiagnostics.captureEvent('enemy-defeat');}catch{/* Diagnostics must not alter rewards or combat. */}if(chapterQuests)chapterQuests.defeat(event);else goldLoot.drop(event.kind,event.position,{canLand:(from,to)=>!world.navigation||world.navigation.free(to,.08)&&world.navigation.segmentClear(from,to,.05),heightAt:(x,z)=>world.terrain.heightAt(x,z)});world.developmentStoryboardLive?.defeat(event);},onDiagnosticEvent:event=>frameDiagnostics.bossEvent(event)});
@@ -1375,7 +1412,8 @@ try {
     const meleeAimStart=frameDiagnostics.mark();
     meleeAim?.apply(combatResult,actor,meleeAimDt);
     frameDiagnostics.measure('playerMeleeAimMs',meleeAimStart);
-    let sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,(world.v03?.playing&&townServices)?townServices.economy.attack:equipmentStats(equipmentChoices).attackBonus,playerDimensions(actor));
+    const attackBonus=(world.v03?.playing&&townServices)?townServices.economy.attack:equipmentStats(equipmentChoices).attackBonus;
+    let sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,attackBonus,playerDimensions(actor));
     try{swordTrail?.update(sample,combatResult.state,elapsed,equipmentChoices.sword);}catch(error){swordTrail?.setEnabled(false);console.warn('[검격 잔상]',error);}
     const contactsStart=frameDiagnostics.mark();
     if(sample?.contacts.length && world.sceneryStrikes && world.v03?.playing && !world.v03.story?.sceneActive &&
@@ -1386,9 +1424,16 @@ try {
         sample=null;strikeSampler.reset();swordTrail?.clear();
       }else if(surface)controller.pauseOnImpact(.025);
     }
+    const cast=combatResult.greatAttack;
+    if(cast){
+      if(sample&&cast.center&&controller.action?.greatAttack===cast&&boss.playerAlive){
+        cast.sample(combatResult.clipTime,sample,PLAYER_STRIKES.judgment[0],attackBonus);
+        shownGreatAttack=cast;world.v03?.greatAttackFrame?.(cast,sample.blade);
+      }else{sample=null;if(shownGreatAttack)clearGreatAttack();}
+    }
     const bossStop=isV2()?boss.poseAndContacts(actor,combatResult,sample,shieldNode):0;
     frameDiagnostics.measure('contactsMs',contactsStart);
-    const targetStop=!controller.captured&&!controller.staggerRemaining?training.melee(sample,boss.combat.onBladeContact):0;
+    const targetStop=!controller.captured&&!controller.staggerRemaining&&(!cast||controller.action?.greatAttack===cast)?training.melee(sample,boss.combat.onBladeContact,world.navigation):0;
     if(isV2())controller.pauseOnImpact(Math.max(bossStop||0,targetStop||0));
   });
   training = createTrainingTargets(world.scene, world.shadows,damageFeedback,world.terrain);
@@ -1586,8 +1631,8 @@ try {
   $('#run-button').addEventListener('click', () => { controller?.toggleRun?.(); updateButtons(); });
   const shieldButtonBinding=bindShieldHoldButton($('#guard-button'),{setHeld:actions.setShieldHeld,cancel:actions.cancelShieldInput,tap:actions.guard});
   world.scene.onDisposeObservable.addOnce(()=>shieldButtonBinding.dispose());
-  for(const [selector,action] of [['#potion-button',actions.potion]]){
-    const button=$(selector);let lastPress=-Infinity;
+  if(!versionRoute.edition||versionRoute.worldRevision){
+    const button=$('#potion-button'),action=actions.potion;let lastPress=-Infinity;
     button.addEventListener('pointerdown',event=>{
       if(event.button!==0||button.disabled)return;
       event.preventDefault();lastPress=performance.now();action();
@@ -1722,7 +1767,7 @@ try {
     }
     hudLayout=setupHudLayout({root:$('#app'),storage:equipmentStorage,getReady:()=>ready&&!loadingAsset&&!mapTransition?.busy&&!frameLoop?.failed&&!controller?.dead,resetInput:()=>{input?.reset();cancelAttackInput();},onPauseChange:()=>reconcilePlayback(),onClose:message=>toast(message),
       // 0.3: its own quest panel, and a reviewed landscape layout (portrait keeps the authored default).
-      ...(versionRoute.edition?{selectors:{quest:'.v03-quest'},orientationDefaults:{landscape:hudLandscapeV03}}:{})});
+      ...(versionRoute.edition?{selectors:{quest:'.v03-quest',potion:POTION_SLOTS_HUD_SELECTOR},orientationDefaults:{landscape:hudLandscapeV03}}:{})});
     if(import.meta.hot)import.meta.hot.dispose(()=>{hudLayout?.dispose();commercialUi?.dispose();});
   }
   if(releaseEnabled&&new URLSearchParams(location.search).get('actorLab')==='1'){
@@ -1878,6 +1923,7 @@ try {
     if(!versionRoute.worldRevision){
       const {setupTownServices}=await import('./v03/town-services.js');
       townServices=setupTownServices({world,root:$('#app'),wallet:goldLoot,player:()=>actor?.position,battle:()=>boss,controls:()=>controller,appearance:()=>equipment,
+        usePotion:actions.potion,canOpenPotionPicker:()=>actions.potionSlotsEnabled()&&ready&&!input.suspended&&!document.hidden&&!document.querySelector('dialog[open]')&&allowed('potion')&&!controller.dead&&!controller.captured&&!controller.groggy,onPotionLayout:()=>hudLayout?.refresh(),
         legacy:()=>v03Save.meta().used?{...equipmentChoices,armor:journeyStorage.getItem(V03_ARMOR_KEY)}:{},
         canInteract:()=>!!world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!world.v03.story?.dialogueOpen&&!loadingAsset&&!mapTransition?.busy&&boss.playerAlive&&!boss.combatCount&&!controller?.captured&&!controller?.groggy&&!document.querySelector('dialog[open]'),
         onPause:()=>reconcilePlayback(),notify:message=>toast(message),sound:cue=>audio.play(cue)});
@@ -1892,11 +1938,14 @@ try {
       world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
       world.riding=createRidingHorse({world,audio,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
-        forwardYaw:()=>config?.forwardYaw??0,tell:toast,ridingAllowed:(onArrival=false)=>!!(ready&&!loadingAsset&&(onArrival||!mapTransition?.busy)&&
-          world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.dead&&boss.playerAlive&&!boss.combatCount)});
+        forwardYaw:()=>config?.forwardYaw??0,tell:toast,riderAlive:()=>!controller?.dead&&boss.playerHp>0,canCall:()=>!boss.combatCount,
+        ridingAllowed:(onArrival=false)=>!!(ready&&!loadingAsset&&world.v03?.playing&&(onArrival||
+          !mapTransition?.busy&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended))});
+      boss.combat.onPlayerDamaged=world.riding.playerDamaged;
       world.scene.onDisposeObservable.addOnce(()=>world.riding.dispose());
     }
     world.v03=setupV03({root:$('#app'),save:v03Save,world,input,actions,battle:boss,toast,
+      projectFeet:point=>screenProjection?.transform?screenProjection.project(point):null,
       offerMount:()=>world.riding?.offer(),
       getPlayer:()=>actor,getController:()=>controller,openTownShop:(id,view)=>townServices?.openShop(id,view),
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId,
@@ -1947,7 +1996,7 @@ try {
       restartProgress:()=>{goldLoot.reload();world.riding?.reload();townServices?.reset(false);resumePose=null;resumeStore.last='';if(boss){boss.combat.defense=playerDefense();boss.potions.reset?.();boss.combat.hp=boss.playerMaxHp;}controller?.resetStamina?.();updateHealthBars?.();return true;},
       unlockAudio:()=>{try{return audio.unlock();}catch{return null;}},
       exit:()=>world.showGameExit?.(),wake:()=>wakeRendering()});
-    world.scene.onDisposeObservable.addOnce(()=>world.v03?.dispose());
+    world.scene.onDisposeObservable.addOnce(()=>{interruptGreatAttack();world.v03?.dispose();});
     if(!versionRoute.worldRevision){
       const root=$('#app'),scene=world.scene,launch=document.createElement('button');
       launch.type='button';launch.dataset.chapter='bag';launch.id='character-menu-toggle';
@@ -1970,13 +2019,14 @@ try {
             read:()=>{
               const stats=equipmentStats(equipmentChoices),defense=playerDefense();
               return {equipment:townServices?.equippedFinishes??{...equipmentChoices},tradeBag:townServices?.bag(),attackBonus:townServices?.economy.attack??stats.attackBonus,defense,armorDefense:townServices?.armorDefense??defense-stats.defense,
-                progression:townServices?.economy.progression,
+                progression:townServices?.economy.progression,quickSlots:townServices?.economy.state.quickSlots,
+                canUseSlot:slot=>allowed('potion')&&!controller.captured&&!controller.groggy&&townServices?.canDrink(slot),
                 hp:boss.playerHp,maxHp:boss.playerMaxHp,stamina:controller.stamina,maxStamina:controller.maxStamina,
                 gold:goldLoot.balance,potions:townServices?.remaining??boss.potions.remaining,canUsePotion:allowed('potion')&&!controller.captured&&!controller.groggy&&(townServices?townServices.canDrink():boss.canUsePotion),
                 touch:root.dataset.hudInput==='touch',allows:allowed};
             },
             equip:(slot,id)=>{const select=$('#'+slot+'-select');select.value=id;select.dispatchEvent(new Event('change'));},
-            equipItem:id=>townServices?.equip(id),registerItem:id=>townServices?.register(id),usePotion:()=>actions.potion(),
+            equipItem:id=>townServices?.equip(id),registerItem:(id,slot)=>townServices?.register(id,slot),unregisterItem:slot=>townServices?.unregister(slot),usePotion:actions.potion,
             learnSkill:id=>{
               if(!townServices?.economy.learnSkill(id))return false;
               townServices.apply();return true;

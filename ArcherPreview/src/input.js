@@ -74,7 +74,8 @@ export class PlaygroundInput {
     if(this.suspended)return;
     if (document.querySelector('dialog[open]') || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
     const controls = ['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyJ', 'KeyH', 'KeyK', 'KeyR', 'KeyF', 'KeyE', 'Digit1', 'Space'];
-    if (!controls.includes(e.code)) return;
+    const potionSlot=/^Digit[1-4]$/.test(e.code)?Number(e.code.slice(-1))-1:null;
+    if (!controls.includes(e.code)&&!(potionSlot!==null&&this.callbacks.potionSlotsEnabled?.())) return;
     e.preventDefault();
     const wasDown = this.keys.has(e.code);
     if (e.repeat && !wasDown) return; // A cancelled hold requires a fresh press.
@@ -89,7 +90,9 @@ export class PlaygroundInput {
       if(!wasDown&&!e.repeat){if(this.callbacks.setShieldHeld)this.callbacks.setShieldHeld(true,'keyboard');else this.callbacks.guard?.();}
     } else if(e.code==='Space'){
       if(!wasDown&&!e.repeat){if(this.callbacks.setDodgeHeld)this.callbacks.setDodgeHeld(true,'keyboard');else this.callbacks.dodge?.();}
-    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive, Digit1: this.callbacks.potion }[e.code])?.();
+    } else if(potionSlot!==null){
+      if(!wasDown&&!e.repeat)this.callbacks.potion?.(potionSlot);
+    } else if (!wasDown&&!e.repeat) ({ KeyH: this.callbacks.hit, KeyK: this.callbacks.death, KeyR: this.callbacks.revive }[e.code])?.();
   }
   pointerDown(e) {
     if(this.suspended)return;

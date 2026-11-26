@@ -53,6 +53,9 @@ jobs:
           ArcherPreview/tests/v03-forge-view.test.js
           ArcherPreview/tests/v03-weapon-durability-strikes.test.js
           ArcherPreview/tests/v03-character-progression.test.js
+          ArcherPreview/tests/v03-starfall-visual.test.js
+          ArcherPreview/tests/v03-great-attack-combat.test.js
+          ArcherPreview/tests/v03-potion-slots.test.js
           ArcherPreview/tests/v03-skill-training-menu.test.js
           ArcherPreview/tests/v03-weapon-condition-hud.test.js
           ArcherPreview/tests/v03-guide-wisp.test.js

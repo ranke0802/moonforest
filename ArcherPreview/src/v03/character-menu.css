@@ -1,4 +1,6 @@
 @import './equipment-card.css';
+.mf-menu-potion-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.mf-menu-item .mf-menu-potion-slots button{display:flex;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:36px;padding:2px;color:var(--ink);border:1px solid var(--line);--mf-item-icon-size:22px}
 
 /* Same in-game canvas behind the clear model column. The rest of the HUD is
    hidden only while this native modal is open. */

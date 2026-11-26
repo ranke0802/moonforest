@@ -37,6 +37,7 @@ export function bindShieldHoldButton(button,{setHeld,cancel,tap,now=()=>performa
   },options);
   const finish=(event,cancelled=false)=>{
     if(!owned.delete(event.pointerId))return;
+    lastPress=now();
     if(!cancelled)event.preventDefault();
     if(cancelled)cancel('button:'+event.pointerId);else setHeld(false,'button:'+event.pointerId);
     if(button.hasPointerCapture?.(event.pointerId))try{button.releasePointerCapture(event.pointerId);}catch{}

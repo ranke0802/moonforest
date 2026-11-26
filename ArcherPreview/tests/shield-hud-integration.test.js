@@ -33,7 +33,7 @@ class Surface {
   releasePointerCapture(id) { this.captured.delete(id);this.emit('lostpointercapture',{pointerId:id}); }
 }
 
-function fixture({v2=true,captureThrows=false}={}) {
+function fixture({v2=true,captureThrows=false,riding=null}={}) {
   const win=new Surface(),doc=new Surface();globalThis.window=win;globalThis.document=doc;
   const elements=Object.fromEntries(['#joystick','#joystick-knob','#joystick-hint'].map(selector=>[selector,new Surface()]));
   doc.querySelector=selector=>elements[selector]??null;
@@ -46,10 +46,10 @@ function fixture({v2=true,captureThrows=false}={}) {
   const controller=new WarriorV2Controller({durations,holdNow:()=>now});
   controller.toggleGuard=()=>legacyGuards++;
   const quests=[],boss={active:false,playerAlive:true,playerHp:100,playerReaction:{cancelRecoil(){recoilCancels++;}}};
-  const production=new Function('ShieldHoldSources','controller','strikeSampler','boss','chapterQuests','isV2','startDefense','updateButtons',
-    `const ready=true;${shieldSource}\nconst actions={${actionsSource}};return {actions,shieldInput};`)(
+  const production=new Function('ShieldHoldSources','controller','strikeSampler','boss','chapterQuests','isV2','startDefense','updateButtons','world',
+    `const ready=true,allowed=()=>!world.riding?.locksRider,questLive=()=>chapterQuests;${shieldSource}\nconst actions={${actionsSource}};return {actions,shieldInput};`)(
       ShieldHoldSources,controller,{reset(){resets++;}},boss,{action:action=>quests.push(action)},()=>v2,
-      kind=>{if(kind==='shieldPush')controller.shieldPush();},()=>{},
+      kind=>{if(kind==='shieldPush')controller.shieldPush();},()=>{},{riding},
     );
   const {actions,shieldInput}=production;
   const input=new PlaygroundInput(canvas,{alpha:0,beta:1,radius:5},{
@@ -180,4 +180,22 @@ test('production non-v2 F action calls the legacy guard exactly once per fresh p
   const f=fixture({v2:false});f.key('keydown');f.key('keydown','KeyF',{repeat:true});f.key('keydown','KeyF',{repeat:true});
   assert.equal(f.legacyGuards(),1);assert.equal(f.shieldInput.sources.size,0);assert.equal(f.controller.shieldHeld,false);
   f.key('keyup');assert.equal(f.legacyGuards(),1);f.key('keydown');assert.equal(f.legacyGuards(),2);f.close();
+});
+
+test('mounted F, touch and accessible clicks each dismount once without starting a shield action on release',()=>{
+  for(const source of ['keyboard','touch','accessible']){
+    let count=0;
+    const riding={active:true,locksRider:false,dismount(){count++;this.active=false;this.locksRider=true;}};
+    const f=fixture({riding});
+    if(source==='keyboard'){
+      f.key('keydown');riding.locksRider=false;f.key('keydown','KeyF',{repeat:true});f.key('keyup');
+    }else if(source==='touch'){
+      f.down();f.advance(2000);riding.locksRider=false;f.up();
+      f.button.emit('click',{detail:1});f.button.emit('click',{detail:0});
+    }else f.button.emit('click',{detail:0});
+    assert.equal(count,1,source);assert.equal(f.shieldInput.sources.size,0);assert.equal(f.controller.serial,0);
+    assert.equal(f.controller.stamina,100);
+    riding.locksRider=false;f.key('keydown');f.key('keyup');assert.equal(f.controller.action?.state,'shieldPush');
+    f.close();
+  }
 });

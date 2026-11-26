@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
-import {HUD_GROUPS,HUD_LAYOUT_KEY,defaultHudLayout,parseHudLayout,resolveHudBox,setupHudLayout} from '../src/hud-layout.js';
+import {HUD_GROUPS,HUD_LAYOUT_KEY,defaultHudLayout,parseHudLayout,resolveHudBox,setupHudLayout,POTION_SLOTS_HUD_SELECTOR} from '../src/hud-layout.js';
 
 const store=()=>{const values=new Map();return {values,getItem:k=>values.get(k),setItem:(k,v)=>values.set(k,v)};};
-function fixture(storage=store()){
+function fixture(storage=store(),options={}){
  const {document,window}=parseHTML('<html><body><main id="app"><section class="top-actions"></section><section id="player-hud"></section><output id="gold-balance"></output><div class="chapter-stack"></div><aside id="dot-minimap"></aside><aside id="frame-diagnostics"></aside><button id="guard-button"></button><button id="potion-button"></button><button id="dodge-button"></button><button id="attack-button"></button><dialog id="motion-speed-dialog"><div><div id="camera-follow-options"></div></div></dialog></main></body></html>');
  const root=document.querySelector('#app'),frame={left:0,top:0,width:1000,height:600};let paused=0,resets=0,ready=true,lastMessage='',frameCalls=0;
  const create=document.createElement.bind(document);document.createElement=tag=>{const node=create(tag);if(tag==='dialog')modal(node);return node;};
@@ -20,7 +20,7 @@ function fixture(storage=store()){
  // Linkedom has no browser select setter or pointer capture. These adapters
  // model their contracts; this is a DOM/lifecycle test, not browser rendering.
  const selectPrototype=Object.getPrototypeOf(create('select'));Object.defineProperty(selectPrototype,'value',{configurable:true,get(){return this.getAttribute('data-test-value')??this.querySelector('option')?.value;},set(v){this.setAttribute('data-test-value',v);}});
- const ui=setupHudLayout({root,storage,getReady:()=>ready,resetInput:()=>resets++,onPauseChange:()=>paused++,onClose:v=>lastMessage=v});
+ const ui=setupHudLayout({root,storage,...options,getReady:()=>ready,resetInput:()=>resets++,onPauseChange:()=>paused++,onClose:v=>lastMessage=v});
  const dialog=document.querySelector('#hud-layout-dialog');dialog.setPointerCapture=()=>{};dialog.releasePointerCapture=()=>{};
  const event=(node,type,props={})=>{const e=new window.Event(type,{bubbles:true,cancelable:true});Object.assign(e,props);node.dispatchEvent(e);return e;};
  const choose=id=>{const select=dialog.querySelector('select');select.value=id;event(select,'change');};
@@ -31,6 +31,23 @@ function fixture(storage=store()){
 test('layout documents strictly validate numbers, schema and movable combat controls',()=>{
  const data={version:1,items:defaultHudLayout()};data.items.attack.x=.8;data.items.attack.y=-.7;assert.deepEqual(parseHudLayout(data).attack,{x:.8,y:-.7,scale:1});
  for(const change of [v=>v.version=2,v=>delete v.items.gold,v=>v.items.health.x=NaN,v=>v.items.attack.scale=9,v=>v.items.gold.fake=1,v=>v.items.health.x='1',v=>v.items.foo={}]){const v=structuredClone(data);change(v);assert.throws(()=>parseHudLayout(v));}
+});
+test('the saved potion transform follows the touch button or desktop bar without adding the offset twice',()=>{
+ const storage=store(),items=defaultHudLayout();items.potion={x:-.18,y:0,scale:1.2};
+ storage.setItem(HUD_LAYOUT_KEY,JSON.stringify({version:1,items}));
+ const f=fixture(storage,{selectors:{potion:POTION_SLOTS_HUD_SELECTOR}}),button=f.root.querySelector('#potion-button');
+ f.frame.width=1280;f.frame.height=720;f.resize();f.flush();
+ const bar=f.root.ownerDocument.createElement('div');bar.className='mf-potion-bar';f.root.append(bar);
+ bar.getBoundingClientRect=()=>({left:400,top:300,width:170,height:42});
+ const touchOffset=button.style.translate;assert.ok(touchOffset);
+ f.root.setAttribute('data-potion-slots','');
+ for(let i=0;i<2;i++){
+  f.root.dataset.hudInput='pc';f.ui.refresh();f.flush();f.flush();
+  assert.equal(button.style.translate,'');assert.equal(bar.style.translate,(items.potion.x*f.frame.width)+'px 0px');assert.equal(bar.style.scale,'1.2');
+  f.root.dataset.hudInput='touch';f.ui.refresh();f.flush();f.flush();
+  assert.equal(bar.style.translate,'');assert.equal(button.style.translate,touchOffset);
+ }
+ f.ui.dispose();
 });
 test('viewport resolver preserves neutral authored placement and clips moved groups inside screen',()=>{
  const g=HUD_GROUPS[0],b={x:20,y:20,width:200,height:40},v={width:1000,height:600};assert.deepEqual(resolveHudBox(g,{x:0,y:0,scale:1},b,v),{x:0,y:0,scale:1});

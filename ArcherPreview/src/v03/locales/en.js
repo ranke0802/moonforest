@@ -1,6 +1,9 @@
 // English. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'potion.slots':'Potion slots','potion.slot':'Slot {n}','potion.empty':'Empty slot','potion.choose':'Choose a potion','potion.remove':'Remove from slot','potion.gesture':'Tap to use. Hold to choose a potion.',
+  'char.skill.greatAttack':'Starfall Strike',
+  'char.skillText.greatAttack':'Gather light along the blade before leaping. Damage and blast radius reach {percent}% of a normal heavy attack. Charging absorbs no damage and ends on knockdown.',
   'opening.castLoading':'Preparing the wagon and the first fight…','opening.castFailed':'The opening scene could not be loaded.','opening.castRetry':'Retry',
   'gallery.noTitles':'There are currently no titles to earn.',
   'hud.tip.bag':'Open your bag to view gear and items (I).',
@@ -182,7 +185,7 @@ export default {
   },
   tips:{
    guide:{title:'Guiding light',keys:'The wisp flies ahead to your goal.',touch:'The wisp flies ahead to your goal.',text:'Lost? Follow the light.'},
-   potion:{title:'Potion',keys:'Press 1 to drink a potion.',touch:'Tap the potion button to drink.',text:'You can move while drinking.'},
+   potion:{title:'Potions',keys:'Press 1–4 to use the potion in that slot.',touch:'Tap to use the selected potion. Hold to choose another.',text:'Assign potions to slots in your inventory.'},
    boss:{title:'A great beast',keys:'Dodge (Space) or guard (hold F).',touch:'Dodge, or hold the shield to guard.',text:'It rears back to hit hard. Then strike.'},
    talk:{title:'Talk',keys:'Press E nearby to talk.',touch:'Get close and tap the button.',text:'You can’t talk in combat.'},
    sprint:{title:'Sprint',keys:'Hold Space to run.',touch:'Hold the dodge button to run.',text:'Uses stamina. Follow the goal and map.'},

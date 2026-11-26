@@ -96,6 +96,7 @@ export function resolveHudBox(group,value,box,viewport,responsiveScale=1){
 // orientationDefaults: {landscape:rawLayout} keeps a separate layout per
 // orientation (stored under HUD_LAYOUT_KEY+':landscape' / ':portrait'), with
 // that default for landscape and the authored default for portrait.
+export const POTION_SLOTS_HUD_SELECTOR='#app[data-potion-slots][data-hud-input=pc] .mf-potion-bar, #app:not([data-potion-slots]) #potion-button, #app:not([data-hud-input=pc]) #potion-button';
 export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{},onPauseChange=()=>{},onClose=()=>{},selectors={},orientationDefaults=null}){
   const doc=root.ownerDocument,win=doc.defaultView;
   const resolveGroups=()=>HUD_GROUPS.map(g=>({...g,selector:selectors[g.id]??g.selector})).map(g=>({...g,node:root.querySelector(g.selector)})).filter(g=>g.node);
@@ -276,6 +277,14 @@ export function setupHudLayout({root,storage,getReady=()=>true,resetInput=()=>{}
   const host=root.querySelector('#camera-follow-options')?.parentElement??root.querySelector('.settings-sections');host?.append(entry);listen(entry,'click',open);
   const observer=win.ResizeObserver?new win.ResizeObserver(schedule):null;observer?.observe(root);for(const g of groups)observer?.observe(g.node);const mutations=win.MutationObserver?new win.MutationObserver(schedule):null;for(const g of groups)if(g.node.tagName==='DIALOG')mutations?.observe(g.node,{childList:true,subtree:true});listen(win,'resize',schedule);draw();
   // Picks up HUD pieces created after setup (the 0.3 story HUD).
-  function rebind(){const next=resolveGroups();for(const g of next)if(!original.has(g.id)||groups.find(row=>row.id===g.id)?.node!==g.node)original.set(g.id,{translate:g.node.style.translate||'',scale:g.node.style.scale||'',origin:g.node.style.transformOrigin||''});groups=next;if(!groups.some(g=>g.id===selected))selected=groups[0]?.id;select.replaceChildren(...groups.map(g=>{const option=doc.createElement('option');option.value=g.id;option.textContent=g.label;return option;}));select.value=selected;schedule();}
+  function rebind(){
+    const next=resolveGroups();
+    // The touch potion button and PC slot bar can trade places repeatedly.
+    // Restore the outgoing node before treating its successor as the authored layout.
+    for(const g of groups)if(!next.some(row=>row.id===g.id&&row.node===g.node))restore(g);
+    for(const g of next)if(!original.has(g.id)||groups.find(row=>row.id===g.id)?.node!==g.node)original.set(g.id,{translate:g.node.style.translate||'',scale:g.node.style.scale||'',origin:g.node.style.transformOrigin||''});
+    groups=next;if(!groups.some(g=>g.id===selected))selected=groups[0]?.id;
+    select.replaceChildren(...groups.map(g=>{const option=doc.createElement('option');option.value=g.id;option.textContent=g.label;return option;}));select.value=selected;schedule();
+  }
   return {open,rebind,isOpen:()=>editing,close:()=>finish(false),refresh:schedule,inspect:()=>({version:1,items:JSON.parse(JSON.stringify(committed)),editing,storageAvailable:!storageError}),dispose(){if(disposed)return;finish(false);releaseDownload();disposed=true;if(scheduled!==null)win.cancelAnimationFrame(scheduled);observer?.disconnect();mutations?.disconnect();for(const stop of cleanups)stop();restoreComponents();for(const g of groups){restore(g);g.node.removeAttribute('data-hud-selected');}dialog.remove();entry.remove();}};
 }

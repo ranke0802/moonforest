@@ -104,6 +104,18 @@ test('1 uses one potion per fresh press and ignores autorepeat and form typing',
   window.emit('keyup',{code:'Digit1'});window.emit('keydown',{...event,target:{tagName:'INPUT'}});assert.equal(uses,2);
 });
 
+test('four potion shortcuts use only their own slot on a fresh gameplay keydown',()=>{
+ const uses=[];let enabled=true;
+ setup({potionSlotsEnabled:()=>enabled,potion:i=>uses.push(i)});
+ for(const i of [2,4,1,3]){
+  const key={code:'Digit'+i,target:{tagName:'BODY'}};
+  window.emit('keydown',key);window.emit('keydown',{...key,repeat:true});window.emit('keyup',key);
+  window.emit('keydown',{...key,target:{tagName:'SELECT'}});
+ }
+ enabled=false;window.emit('keydown',{code:'Digit2',target:{tagName:'BODY'}});
+ assert.deepEqual(uses,[1,3,0,2]);
+});
+
 test('DOM stub: dynamic joystick originates at touch, moves, and resets on pointercancel', () => {
   const { input, elements, pointer } = setup();
   pointer('pointerdown', 1, 120, 650);

@@ -2,6 +2,8 @@ import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,FORGE_MATERIALS,gradeStrike,
 import {validateItemDrop} from '../item-drop-data.js';
 import {MAX_TOTAL_XP,PASSIVE_LIMITS,SKILL_REFUND_GOLD,normalizeProgression,progressionStatus,questExperience,weaponWearInterval} from './character-progression.js';
 export const MAX_GROUND_DROPS=128;
+export const POTION_SLOT_COUNT=4;
+const validPotionSlot=i=>Number.isInteger(i)&&i>=0&&i<POTION_SLOT_COUNT;
 const slots=['sword','shield','armor'];
 const qty=n=>Number.isSafeInteger(n)&&n>0&&n<=99999?n:0;
 const defaultGear={sword:'field-sword',shield:'field-shield',armor:null};
@@ -45,7 +47,12 @@ export function normalizeTown(raw,legacy={}){
    (id.length<120||/^placed:(?:village|great-plains|monster-forest|witch-cave):[A-Za-z0-9][A-Za-z0-9._:-]{0,119}$/.test(id))))]:[];
  const drops=Array.isArray(raw.drops)?raw.drops.filter(d=>validateItemDrop(d)&&Object.keys(d.rewards).every(id=>TOWN_ITEMS[id])).slice(0,MAX_GROUND_DROPS):[];
  const settledQuests=[...new Set(Array.isArray(raw.settledQuests)?raw.settledQuests.filter(validQuestId):[])];
- return {version:1,bag,equipped,condition,opened,drops,settledQuests,progression:normalizeProgression(raw.progression),quick:TOWN_ITEMS[raw.quick]?.quick?raw.quick:'potion',
+ const quickSlots=Array(POTION_SLOT_COUNT).fill(null);
+ // Preserve deliberately empty slots. Only a pre-belt ledger may supply a legacy default.
+ const saved=Object.hasOwn(raw,'quickSlots')?(Array.isArray(raw.quickSlots)?raw.quickSlots:[]):[Object.hasOwn(raw,'quick')?raw.quick:bag.potion?'potion':null];
+ for(let i=0;i<quickSlots.length;i++)if(typeof saved[i]==='string'&&TOWN_ITEMS[saved[i]]?.quick&&!quickSlots.includes(saved[i]))quickSlots[i]=saved[i];
+ const selectedQuickSlot=validPotionSlot(raw.selectedQuickSlot)&&quickSlots[raw.selectedQuickSlot]?raw.selectedQuickSlot:Math.max(0,quickSlots.findIndex(Boolean));
+ return {version:1,bag,equipped,condition,opened,drops,settledQuests,progression:normalizeProgression(raw.progression),quickSlots,selectedQuickSlot,quick:quickSlots[0],
    boost:Math.max(0,Math.min(90,Number(raw.boost)||0)),boostRate:raw.boostRate===1.75?1.75:1.5};
 }
 function give(state,id,count){
@@ -72,7 +79,9 @@ export function createTownEconomy(wallet,legacy={},{random=Math.random}={}){
  let state=normalizeTown(wallet.town,legacy),dirty=false,unsavedSeconds=0,lastAction=null;
  function transact(delta,change,creditTotals=null){
   const next=structuredClone(state);
-  if(change(next)===false||!wallet.tradeTown(delta,next,creditTotals))return false;
+  if(change(next)===false)return false;
+  next.quick=next.quickSlots[0]; // Keep slot 1 readable by a cached single-slot client.
+  if(!wallet.tradeTown(delta,next,creditTotals))return false;
   state=next;dirty=false;unsavedSeconds=0;return true;
  }
  function flush(){
@@ -228,8 +237,26 @@ export function createTownEconomy(wallet,legacy={},{random=Math.random}={}){
   spend(id,count=1){const item=TOWN_ITEMS[id];return !!item&&qty(count)>0&&(state.bag[id]??0)>=count&&
    !(defaultGear[item.slot]===id&&count===state.bag[id])&&transact(0,s=>take(s,id,count));},
   equip(id){const item=TOWN_ITEMS[id];return Boolean(item?.slot&&own(state,id))&&transact(0,s=>{s.equipped[item.slot]=id;});},
-  register(id){return !!TOWN_ITEMS[id]?.quick&&own(state,id)&&transact(0,s=>{s.quick=id;});},
-  drink(){const id=state.quick;if(!own(state,id)||!TOWN_ITEMS[id]?.quick)return false;
+  register(id,slot=state.selectedQuickSlot){
+   if(!validPotionSlot(slot)||typeof id!=='string'||!TOWN_ITEMS[id]?.quick)return false;
+   const previous=state.quickSlots.indexOf(id);
+   if(previous<0&&!own(state,id))return false;
+   if(previous===slot)return true;
+   return transact(0,s=>{
+    if(previous>=0)s.quickSlots[previous]=s.quickSlots[slot];
+    s.quickSlots[slot]=id;
+    if(!s.quickSlots[s.selectedQuickSlot])s.selectedQuickSlot=slot;
+   });
+  },
+  unregister(slot){
+   if(!validPotionSlot(slot)||!state.quickSlots[slot])return false;
+   return transact(0,s=>{s.quickSlots[slot]=null;if(s.selectedQuickSlot===slot)s.selectedQuickSlot=Math.max(0,s.quickSlots.findIndex(Boolean));});
+  },
+  selectQuickSlot(slot){
+   if(!validPotionSlot(slot)||!state.quickSlots[slot])return false;
+   return slot===state.selectedQuickSlot||transact(0,s=>{s.selectedQuickSlot=slot;});
+  },
+  drink(slot=state.selectedQuickSlot){const id=state.quickSlots[slot];if(!validPotionSlot(slot)||!own(state,id)||!TOWN_ITEMS[id]?.quick||BOOSTS[id]&&state.boost>0)return false;
    return transact(0,s=>{take(s,id,1);if(BOOSTS[id]){s.boost=BOOSTS[id].seconds;s.boostRate=BOOSTS[id].rate;}});
   },
   // A chest and its on-ground items must either both exist or neither be committed.

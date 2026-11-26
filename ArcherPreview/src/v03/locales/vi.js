@@ -1,6 +1,9 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'potion.slots':'Ô thuốc','potion.slot':'Ô {n}','potion.empty':'Ô trống','potion.choose':'Chọn thuốc','potion.remove':'Gỡ khỏi ô','potion.gesture':'Chạm để dùng. Nhấn giữ để chọn thuốc.',
+  'char.skill.greatAttack':'Trọng kích tinh quang',
+  'char.skillText.greatAttack':'Tụ sáng trên lưỡi kiếm trước khi nhảy. Sát thương và bán kính nổ bằng {percent}% đòn đánh mạnh thường. Vẫn nhận sát thương khi tụ lực, bị đánh ngã sẽ hủy chiêu.',
   'opening.castLoading':'Đang chuẩn bị xe ngựa và trận đánh đầu tiên…','opening.castFailed':'Không thể tải cảnh mở đầu.','opening.castRetry':'Thử lại',
   'gallery.noTitles':'Hiện chưa có danh hiệu để nhận.',
   'hud.tip.bag':'Mở túi để xem trang bị và vật phẩm (I).',
@@ -182,7 +185,7 @@ export default {
   },
   tips:{
    guide:{title:'Ánh sáng dẫn đường',keys:'Đốm sáng bay trước đến nơi cần đến.',touch:'Đốm sáng bay trước đến nơi cần đến.',text:'Lạc đường thì đi theo ánh sáng.'},
-   potion:{title:'Thuốc hồi phục',keys:'Nhấn phím 1 để uống thuốc.',touch:'Chạm nút thuốc để uống.',text:'Vẫn di chuyển được khi uống.'},
+   potion:{title:'Thuốc',keys:'Nhấn phím 1–4 để dùng thuốc trong ô tương ứng.',touch:'Chạm để dùng thuốc đã chọn. Nhấn giữ để chọn loại khác.',text:'Gán thuốc vào các ô trong túi đồ.'},
    boss:{title:'Mãnh thú',keys:'Né bằng Space hoặc giữ F để đỡ.',touch:'Né bằng giày hoặc giữ khiên để đỡ.',text:'Ngả người là đòn mạnh. Đỡ xong đánh trả.'},
    talk:{title:'Trò chuyện',keys:'Nhấn E khi ở gần để bắt chuyện.',touch:'Lại gần rồi chạm nút hiện ra.',text:'Không thể nói chuyện khi giao chiến.'},
    sprint:{title:'Chạy nhanh',keys:'Giữ Space để chạy.',touch:'Giữ nút né để chạy.',text:'Tốn thể lực. Hãy theo mục tiêu và bản đồ.'},

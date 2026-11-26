@@ -154,7 +154,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
       onDamage(target.aimPoint.add(new Vector3(0,.65,0)),damage,heavy,'enemy',burstIndex);
       return true;
     },
-    melee(sample,onBladeContact){
+    melee(sample,onBladeContact,navigation){
       if(!sample||disposed)return;
       let hitStop=0;
       for(const record of records){
@@ -162,7 +162,7 @@ export function createTrainingTargets(scene, shadows, onDamage = () => {}, terra
         const capsules=[[[0,.55,0],[0,1.20,0],.29],[[0,1.3,0],[0,1.76,0],.22],
           [[-.75,1.065,0],[.75,1.065,0],.13]].map(([a,b,radius])=>({
             points:[a,b].map(p=>Vector3.TransformCoordinates(Vector3.FromArray(p),matrix).asArray()),radius:radius*Math.max(Math.abs(record.root.absoluteScaling.x),Math.abs(record.root.absoluteScaling.y),Math.abs(record.root.absoluteScaling.z))}));
-        const contacts=record.gate.collect({...sample,capsules});
+        const contacts=record.gate.collect({...sample,capsules,areaContact:sample.radialAttack?.contains(record.target.position,navigation)});
         for(const hit of contacts.hits){
           if(hit.id!=='shield-push')onBladeContact?.(sample.actionId);
           this.hit(record.target,hit);hitStop=Math.max(hitStop,contacts.hitStop);

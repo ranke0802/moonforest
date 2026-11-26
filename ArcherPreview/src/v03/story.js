@@ -24,6 +24,7 @@ import {createSitPose} from './sit-pose.js';
 import {createLiePose,createCrouchPose,createPushPose} from './story-poses.js';
 import {layOnBack} from './bone-pose.js';
 import {SLOW_FX_DEFAULT} from './slow-fx.js';
+import {GREAT_ATTACK_SLOW} from './great-attack.js';
 import {pinScreenArea,unpinScreenArea} from './zoom-lod-pin.js';
 import {MapLoadLifetime,mapLoadAbortError} from '../map-load-lifetime.js';
 
@@ -1339,22 +1340,29 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Stronger since 2026-11-19 evening (user: hard to notice): 20 % push-in;
  // 32 % by default since 2026-11-20 and set by the player (slow-fx.js).
  const SLOW_ZOOM_IN=.1,SLOW_ZOOM_OUT=.45;
- const zoom={weight:0,base:null,last:0,camera:null};
+ const zoom={weight:0,base:null,last:0,camera:null,skill:false};
+ const chargingGreatAttack=()=>started&&!disposed&&!scene.active&&!dialogue.open&&api.getController?.()?.action?.greatAttack?.holdLeft>0;
+ function restoreSlowZoom(){
+  if(zoom.base!==null&&zoom.camera){zoom.camera.fov=zoom.base;unpinScreenArea(zoom.camera);}
+  zoom.base=null;zoom.weight=0;zoom.skill=false;zoom.last=0;
+ }
+ function cancelGreatAttackFocus(){if(zoom.skill){restoreSlowZoom();hud.setFocus(false);}}
  function updateSlowZoom(){
   const camera=api.world?.camera;if(!camera||!Number.isFinite(camera.fov))return;
   const now=performance.now(),dt=zoom.last?Math.min(.1,(now-zoom.last)/1000):0;zoom.last=now;
-  if(zoom.camera!==camera){unpinScreenArea(zoom.camera);zoom.camera=camera;zoom.weight=0;zoom.base=null;}
-  const target=slow.left>0?1:0;
+  if(zoom.camera!==camera){restoreSlowZoom();zoom.camera=camera;}
+  const skill=chargingGreatAttack(),target=slow.left>0||skill?1:0;
+  if(skill)zoom.skill=true;
   // Focus lines at the screen's edge for as long as the beat lasts (hud: one
   // small canvas, written only when the value changes).
-  hud.setFocus(target===1&&slowSetting().lines);
+  hud.setFocus(target===1&&slowSetting().on&&slowSetting().lines);
   if(zoom.weight===0&&target===0){zoom.base=null;return;}
   // Scenery detail keeps the un-zoomed view for the length of the push-in (zoom-lod-pin.js).
   if(zoom.base===null){zoom.base=camera.fov;pinScreenArea(camera);}
   zoom.weight=target?Math.min(1,zoom.weight+dt/SLOW_ZOOM_IN):Math.max(0,zoom.weight-dt/SLOW_ZOOM_OUT);
   const eased=zoom.weight*zoom.weight*(3-2*zoom.weight);
   camera.fov=zoom.base*(1-slowSetting().zoom*eased);
-  if(zoom.weight===0){camera.fov=zoom.base;zoom.base=null;unpinScreenArea(camera);}
+  if(zoom.weight===0&&!target)restoreSlowZoom();
  }
  // ----- light combat (M3 prototype: Genshin-like) -----
  // Taps chain two hits (slash → thrust);
@@ -1487,7 +1495,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get cameraFocus(){return scene.active?scene.cameraFocus:null;},
   // The warrior lies in the wagon bed during the opening: main.js keeps him off the ground snap.
   get holdsPlayer(){return scene.active&&scene.sleeping===true;},
-  get timeScale(){return slow.left>0?SLOW_SCALE:1;},
+  cancelGreatAttackFocus,
+  get timeScale(){return slow.left>0?SLOW_SCALE:chargingGreatAttack()?GREAT_ATTACK_SLOW:1;},
   get lunge(){return scene.active?null:STRIKE_LUNGE;},
   // Where the current step is fought on this map (monster groups near it load first).
   // Where this quest's fight on the current map is: the current step, or a later
@@ -1547,7 +1556,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    tips.queue.length=0;tips.showing=null;tips.step=null;
    hud.setTip(null);hud.setCaption(null);hud.setPrompt(null);hud.setHint(null);hud.setRing(null);hud.setFocus(false);
    slow.left=0;slow.calm=0;
-   if(zoom.base!==null&&zoom.camera){zoom.camera.fov=zoom.base;unpinScreenArea(zoom.camera);}zoom.weight=0;zoom.base=null;
+   restoreSlowZoom();
    staged.key=null;staged.busy=false;staged.next=0;
    return true;
   },
@@ -1614,6 +1623,6 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // five 2048 px uploads at +5.5 s). A promise for the models, else null.
   arrive(id){if(!started||disposed||!id)return null;if(castMap!==id)buildCast(id);return castMap===id?castSettled:null;},
   inspect:()=>({sceneTime:scene.active?+scene.time.toFixed(2):null,driver:fallen.state,lift:lift.active?{x:lift.spot.x,z:lift.spot.z,count:lift.count}:null,started,mapId,cast:cast.map(member=>({id:member.npc.id,x:member.x,z:member.z})),near:near?.npc.id??null,quest:log.quest()?.id??null,step:log.step()?.id??null,objective:log.objective(),dialogue:dialogue.open,hint:coachState.index,guideVisible:guide.visual?.visible===true,guide:guide.key,guideAt:guide.key?{x:+guide.track.position.x.toFixed(1),z:+guide.track.position.z.toFixed(1)}:null,tips:[...tips.seen],tip:tips.showing?.id??null,justGuards:combatState.justCount}),
-  dispose(){if(disposed)return;disposed=true;cancelOpeningCast();cancelRaidWarning();api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
+  dispose(){if(disposed)return;disposed=true;restoreSlowZoom();zoom.camera=null;cancelOpeningCast();cancelRaidWarning();api.onTownEvent?.(null);stopSleepPose();doc.removeEventListener('keydown',onKey,true);guide.visual?.dispose();guide.visual=null;clearCast();markers?.dispose();markers=null;api.setMapMarkers?.([]);dialogue.dispose();hud.dispose();},
  };
 }

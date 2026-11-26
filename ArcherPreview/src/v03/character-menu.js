@@ -20,7 +20,7 @@ const BRANCH_ART=Object.freeze({
   footwork:['M9 4h5v9l5 3v4H9z','M9 16h10']
 });
 
-export function createCharacterMenu({root,read,equip,equipItem,registerItem,usePotion,subject,mount,onPause,learnSkill,refundSkills}){
+export function createCharacterMenu({root,read,equip,equipItem,registerItem,unregisterItem,usePotion,subject,mount,onPause,learnSkill,refundSkills}){
   const doc=root.ownerDocument,win=doc.defaultView;
   const make=(tag,cls='',text='')=>{
     const node=doc.createElement(tag);
@@ -152,7 +152,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       for(const [id,node] of nodes)node.setAttribute('aria-pressed',String(id===selected));
       if(!row){detail.append(make('p','',t('char.empty')));return;}
       const category=make('small','',t('char.type.'+row.type)),title=make('h2','',row.name);
-      const amount=row.quantity?make('small','mf-menu-quantity',t('shop.inBag',{n:row.quantity})):null;
+      const amount=row.quantity!==undefined?make('small','mf-menu-quantity',t('shop.inBag',{n:row.quantity})):null;
       if(row.level!==undefined){
         const header=make('div','mf-equipment-card'),description=make('div');
         description.append(category,title);if(amount)description.append(amount);
@@ -169,10 +169,21 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       if(row.worn){detail.append(make('span','mf-menu-equipped',t('char.equipped')));return;}
       if(row.tradeId&&row.slot){detail.append(button(t('char.equip'),()=>{equipItem?.(row.tradeId);show('Inventory');}));return;}
       if(row.quick){
-        if(row.registered){
-          detail.append(make('small','mf-menu-equipped',t('char.quickSet')));
-          const use=button(t('char.use'),()=>{if(read().canUsePotion){dialog.close();usePotion();}});use.disabled=!state.canUsePotion;detail.append(use);
-        }else detail.append(button(t('char.quickAssign'),()=>{registerItem?.(row.tradeId);show('Inventory');}));
+        const targets=make('div','mf-menu-potion-slots');
+        targets.setAttribute('role','group');targets.setAttribute('aria-label',t('char.quickAssign'));
+        detail.append(make('small','',t('char.quickAssign')),targets);
+        state.quickSlots?.forEach((id,i)=>{
+          const slot=button(String(i+1),()=>{registerItem?.(row.tradeId,i);show('Inventory');});
+          if(id)slot.append(townItemIcon(doc,id));
+          slot.title=t('potion.slot',{n:i+1})+' · '+(id?t('item.'+id):t('potion.empty'));
+          slot.setAttribute('aria-label',slot.title);slot.setAttribute('aria-pressed',String(row.quickSlot===i));
+          targets.append(slot);
+        });
+        if(row.quickSlot>=0){
+          const use=button(t('char.use'),()=>{if(read().canUseSlot?.(row.quickSlot)){dialog.close();usePotion(row.quickSlot);}});
+          use.disabled=!state.canUseSlot?.(row.quickSlot);
+          detail.append(use,button(t('potion.remove'),()=>{unregisterItem?.(row.quickSlot);show('Inventory');}));
+        }
         return;
       }
       if(row.style){detail.append(button(t('char.equip'),()=>{equip(row.slot,row.style);show('Inventory');}));return;}
@@ -193,7 +204,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       if(row.level!==undefined)tile.className='mf-menu-gear-tile';
       tile.append(bagIcon(row));
       if(row.worn)tile.append(make('small','mf-menu-worn','✓'));
-      if(row.quantity&&(!row.worn||row.quantity>1)){
+      if(row.quantity!==undefined&&(!row.worn||row.quantity>1)){
         const count=make('small','mf-menu-count',String(row.quantity));
         if(row.level!==undefined&&row.quantity>99)count.classList.add('is-large');
         tile.append(count);
@@ -221,8 +232,8 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
     if(!lessons||lessonLang!==language()){lessons=localizeChapter(cloneChapter(LESSONS),LESSONS);lessonLang=language();}
     const list=combatSkills(lessons,state.touch,state.allows),progress=state.progression;
     if(progress)for(const passive of PASSIVE_CELLS){
-      const rank=progress.skills[passive.id],limit=PASSIVE_LIMITS[passive.id];
-      list.push({...passive,name:t('char.skill.'+passive.id),rank,limit,need:[],available:rank>0});
+      const rank=progress.skills[passive.id]??0,limit=PASSIVE_LIMITS[passive.id];
+      list.push({...passive,name:t('char.skill.'+passive.id),rank,limit,need:passive.need??[],available:rank>0});
     }
     const byId=new Map(list.map(skill=>[skill.id,skill]));
     const rows=SKILL_BRANCHES.length*2;
@@ -276,7 +287,7 @@ export function createCharacterMenu({root,read,equip,equipItem,registerItem,useP
       title.append(make('h2','',skill.name),tags);head.append(branchIcon(skill.branch),title);
       if(passive){
         const rank=make('p','mf-skill-rank',t('char.skill.rank',{rank:skill.rank,max:skill.limit}));
-        const effect=make('p','',t('char.skillText.'+skill.id));
+        const effect=make('p','',t('char.skillText.'+skill.id,{percent:100+20*Math.max(1,skill.rank)}));
         const learn=button(t(skill.rank>=skill.limit?'char.skill.mastered':'char.skill.invest'),()=>{
           if(!learn.isConnected||learn.disabled||!dialog.open)return;
           learn.disabled=true;

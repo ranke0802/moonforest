@@ -118,9 +118,14 @@ for(const reduced of [false,true])test('saved and re-equipped weapons submit the
   }
   stable.updateAvailability();
   const ride=root.querySelector('.v03-ride-toggle');
-  ride.click();await tick();assert.equal(stable.active,true,notices.join(', '));assert.equal(sword.isEnabled(),false);
+  async function toggleRide(destination){
+    await ride.onclick();
+    for(let i=0;i<250&&stable.inspect().state!==destination;i++)stable.afterMove({state:'idle'},0,1/30);
+    assert.equal(stable.inspect().state,destination,notices.join(', '));
+  }
+  await toggleRide('mounted');assert.equal(stable.active,true);assert.equal(sword.isEnabled(),false);
   assert.ok(services.equip('field-bow'));await Promise.all(equipment.shapes.values());await tick();
   assert.ok(services.equip('field-sword'));await Promise.all(equipment.shapes.values());await tick();
   assert.equal(sword.isEnabled(),false);assert.equal(shell.isEnabled(),false);
-  ride.click();await tick();assert.equal(stable.active,false);await check('field-sword');
+  await toggleRide('on-foot');assert.equal(stable.active,false);await check('field-sword');
 });

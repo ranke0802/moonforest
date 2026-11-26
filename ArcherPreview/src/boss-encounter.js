@@ -407,9 +407,11 @@ export class BossEncounter {
     const needsSight=(sample&&this.playerAlive&&this.brain.hp>0)||this.pendingEvents.length>0;
     const clearSight=!needsSight||!this.world.navigation||this.world.navigation.segmentClear(player.position,this.actor.position,0,true);
     if(sample&&clearSight&&!this.grab.active&&this.playerAlive&&this.brain.hp>0){
-      const capsules=this.hurtCapsules(),skillCore=this.skillHurtCapsule();
+      const area=sample.radialAttack;
+      const capsules=area?null:this.hurtCapsules(),skillCore=area?null:this.skillHurtCapsule();
       const contactCapsules=skillCore?[...capsules,skillCore]:capsules;
       const grounded=['down','recover'].includes(this.brain.mode);
+      const areaContact=area&&sample.contacts.length>0?area.contains(this.actor.position,this.world.navigation):undefined;
       // Downed/recovering bosses are always vulnerable within melee range, even
       // when an upright sword swing passes above the lying skeleton. The gate
       // still enforces strike windows, per-swing deduplication and burst timing.
@@ -420,13 +422,13 @@ export class BossEncounter {
         // Other contacts still consume their swing without delayed damage.
         this.gate.pending=[];
         const all=sample.contacts??[sample],breaking=all.filter(contact=>contact.window?.id==='shield-push');
-        for(const contact of all)if(!breaking.includes(contact)&&this.gate.check({...sample,...contact,capsules:contactCapsules})){
+        for(const contact of all)if(!breaking.includes(contact)&&this.gate.check({...sample,...contact,capsules:contactCapsules,areaContact})){
           if(this.showDefense(this.brain.defense,sample.actionId)&&this.brain.defense==='block'){
-            this.combat.onBladeContact?.(sample.actionId);this.playerBlocked();
+            this.combat.onBladeContact?.(sample.actionId);if(!sample.radialAttack)this.playerBlocked();
           }
         }
-        contacts=breaking.length?this.gate.collect({...sample,contacts:breaking,capsules:contactCapsules,rangeContact}):{hits:[],hitStop:0};
-      }else contacts=this.gate.collect({...sample,capsules:contactCapsules,rangeContact});
+        contacts=breaking.length?this.gate.collect({...sample,contacts:breaking,capsules:contactCapsules,rangeContact,areaContact}):{hits:[],hitStop:0};
+      }else contacts=this.gate.collect({...sample,capsules:contactCapsules,rangeContact,areaContact});
       for(const contact of contacts.hits){
         const hit={...contact,...rearDamage(contact.damage,player.position,this.actor.position,facingYaw(this.nodes,this.actor.rotation?.y||0))};
         // A released shield push should trigger the same fall response as a
@@ -512,7 +514,9 @@ export class BossEncounter {
     // and the same contact rules apply while the shield is pressed or held.
     // Contact is still required; distant attacks cannot trigger a parry.
     const casting=action?.state==='shieldPush'&&action.actionId!=null;
-    if(shieldContact||casting){
+    // The shield may cross a body hit while the sword is drawn back. A
+    // charging warrior takes that hit, including a knockdown, through armor.
+    if((shieldContact&&!(action?.greatAttack?.holdLeft>0&&bodyContact))||casting){
       this.brain.parry();this.lastHit='블록 · 보스 1초 경직';
       // Optional just guard (an edition sets combat.justGuard): a shield raised
       // just before contact staggers the attacker longer and is reported once.
@@ -531,7 +535,9 @@ export class BossEncounter {
     if((this.playerInvulnerable&&!grabImpact)||!this.playerAlive)return;
     const critical=fixedCritical??(source?rearDamage(damage,source,this.player.position,facingYaw(this.playerNodes,this.player.rotation?.y||0)).critical:false);
     damage=armoredDamage(damage*(critical?1.3:1),this.combat.defense);
-    this.playerHp=Math.max(0,this.playerHp-damage);this.playerInvulnerable=PLAYER_STAGGER;
+    const previousHp=this.playerHp;
+    this.playerHp=Math.max(0,previousHp-damage);this.playerInvulnerable=PLAYER_STAGGER;
+    if(this.playerHp<previousHp)this.combat.onPlayerDamaged?.();
     this.playerReaction.start(source?this.player.position.subtract(source):new Vector3(0,0,-1),{recoil:!landed&&(!superArmor||knockdown)});
     if(knockdown)this.onPlayerHit(PLAYER_STAGGER,{knockdown:true,landed});
     else if(!grabImpact)this.onPlayerHit(PLAYER_STAGGER);

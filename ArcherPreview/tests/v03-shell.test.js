@@ -647,7 +647,7 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  h.shell.update(.016);assert.equal(hud('.v03-tip-title').textContent,'스태미나');
  for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);
  h.battle.combat.hp=200;h.shell.update(.016);
- assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'회복약');assert.match(hud('.v03-tip-lead').textContent,/숫자 1 키/);
+ assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'물약');assert.match(hud('.v03-tip-lead').textContent,/숫자 1~4/);
  for(let i=0;i<500;i++)h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true);h.battle.combat.hp=500;
  // No talking during combat; the title/prologue never count defeats.
  // No guide light in the opening fight (it starts with the driver's talk) nor in any fight (2026-11-19).

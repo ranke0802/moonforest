@@ -3,6 +3,7 @@ import { arrangeTopActions } from '../hud-top-actions.js';
 export function createRidingControls(root, toggle) {
   const doc = root.ownerDocument;
   const attack = root.querySelector('#attack-button');
+  const guard = root.querySelector('#guard-button');
   const button = doc.createElement('button');
   button.type = 'button';
   button.className = 'v03-ride-toggle';
@@ -12,19 +13,30 @@ export function createRidingControls(root, toggle) {
   root.querySelector('.top-actions').append(button);
   arrangeTopActions(root);
   button.onclick = toggle;
-  let state, priorAttack, gallopLabel;
+  let state;
+  const overrides = [];
 
   function change() {
     root.dispatchEvent(new doc.defaultView.Event('v03ridingchange', { bubbles: true }));
   }
-  function restoreAttack() {
-    if (!priorAttack) return;
-    for (const [attribute, value] of priorAttack) {
-      if (attack.getAttribute(attribute) !== gallopLabel) continue;
-      if (value === null) attack.removeAttribute(attribute);
-      else attack.setAttribute(attribute, value);
+  function override(node, attribute, value) {
+    if (!node) return;
+    let entry = overrides.find(item => item.node === node && item.attribute === attribute);
+    if (!entry) {
+      entry = {node, attribute, prior:node.getAttribute(attribute)};
+      overrides.push(entry);
     }
-    priorAttack = null;
+    entry.value = value;
+    if (value === null) node.removeAttribute(attribute);
+    else node.setAttribute(attribute, value);
+  }
+  function restore() {
+    for (const {node, attribute, prior, value} of overrides) {
+      if (node.getAttribute(attribute) !== value) continue;
+      if (prior === null) node.removeAttribute(attribute);
+      else node.setAttribute(attribute, prior);
+    }
+    overrides.length = 0;
   }
   function show(next, available, labels) {
     const mounted = next === 'mounted';
@@ -38,21 +50,21 @@ export function createRidingControls(root, toggle) {
     button.setAttribute('aria-pressed', String(mounted));
     root.dataset.v03Riding = state = next;
     // Return the touch interaction label to its owner before taking the attack button.
-    if (mounted && !wasMounted) {
-      change();
-      if (attack) priorAttack = ['aria-label', 'title'].map(key => [key, attack.getAttribute(key)]);
-    }
-    if (mounted && attack) {
-      gallopLabel = labels.gallop;
-      attack.setAttribute('aria-label', gallopLabel);
-      attack.title = gallopLabel;
+    if (mounted && !wasMounted) change();
+    if (mounted) {
+      override(attack, 'aria-label', labels.gallop);
+      override(attack, 'title', labels.gallop);
+      override(guard, 'aria-label', labels.dismount);
+      override(guard, 'title', labels.dismount + ' (F)');
+      override(guard, 'aria-keyshortcuts', 'F');
+      override(guard, 'aria-pressed', null);
     } else if (wasMounted) {
-      restoreAttack();
+      restore();
       change();
     }
   }
   return { button, show, dispose() {
-    restoreAttack();
+    restore();
     delete root.dataset.v03Riding;
     button.onclick = null;
     button.remove();
