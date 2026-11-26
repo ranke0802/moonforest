@@ -50,7 +50,7 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
 .mf-forge-item dt{color:var(--mf-text-3)}.mf-forge-item dd{margin:0;color:#f6e9d0;font-variant-numeric:tabular-nums}
 .mf-forge-item dd strong{display:inline;font-size:inherit;color:#8df3b1}.mf-forge-item dd small{display:inline;margin:0;color:#e8c45f}
 .mf-forge-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.3rem}
-.mf-forge-legend li{padding:.2rem .45rem;border-left:4px solid var(--zone-failed);border-radius:.2rem;background:#ffffff0b;font-size:.8rem;line-height:1.3}
+.mf-forge-legend li{padding:.2rem .45rem;border-left:4px solid var(--zone-failed);border-radius:.2rem;background:#ffffff0b;font-size:.9rem;line-height:1.3}
 .mf-forge-legend li[data-zone=failed]{box-shadow:inset 1px 0 0 #ffffff33}
 .mf-forge-legend li[data-zone=perfect]{border-color:var(--zone-perfect)}.mf-forge-legend li[data-zone=success]{border-color:var(--zone-success)}
 .mf-forge-legend li[data-zone=near]{border-color:var(--zone-near)}
@@ -87,8 +87,23 @@ html[lang=ko] .mf-town-shop{word-break:keep-all}
   .mf-town-shop.is-forging{width:min(46rem,94vw);padding:.6rem .8rem}
   .mf-town-shop.is-forging header{padding-bottom:.3rem}
   .mf-forge{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);align-items:center;gap:.8rem;margin-top:.4rem}
+  /* 2026-11-26: the four judgement cells sit under the gauge, at the body size,
+     so they are read with the gauge just before the tap (the item card scrolls
+     on its own column when a long language makes it tall). */
+  .mf-town-shop.is-forging{max-height:96dvh}
+  .mf-forge{grid-template-areas:"item track" "item legend" "item hint" "item saved" "item result";grid-template-rows:repeat(4,auto) 1fr;align-items:start;row-gap:.45rem}
+  .mf-forge-side,.mf-forge-play{display:contents}
+  .mf-forge-item{grid-area:item}.mf-forge-legend{grid-area:legend}.mf-forge-track{grid-area:track}
+  .mf-forge-hint{grid-area:hint}.mf-forge .mf-forge-saved{grid-area:saved;margin:0}.mf-forge-result{grid-area:result}
+  .mf-forge-gauge{margin-top:1.7rem;margin-bottom:.3rem}
+  /* The struck result takes the cells' place until the next attempt (the again
+     button opens a fresh gauge with the cells), so its buttons stay on screen. */
+  .mf-forge[data-grade] .mf-forge-legend{display:none}
   .mf-forge-item{padding:.45rem .55rem;gap:.6rem}.mf-forge-icon{width:3rem}
-  .mf-forge-legend li{font-size:.74rem;padding:.12rem .35rem}
+  .mf-forge-legend li{padding:.12rem .35rem}
+  .mf-forge-legend b{display:inline;margin-right:.4em}
   .mf-forge-gauge{height:2.6rem}
   .mf-forge-result>strong{font-size:1.2rem}
 }
+/* Touch (2026-11-26, DESIGN.md: 44 px targets on phones). */
+@media (pointer:coarse){.mf-town-shop button,.mf-treasure-prompt{min-height:2.75rem}}
