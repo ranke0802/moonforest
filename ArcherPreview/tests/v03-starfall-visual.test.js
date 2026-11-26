@@ -8,6 +8,7 @@ import {Process} from '@babylonjs/core/Engines/Processors/shaderProcessor.js';
 import {WebGL2ShaderProcessor} from '@babylonjs/core/Engines/WebGL/webGL2ShaderProcessors.js';
 import {FreeCamera, NullEngine, Scene, Vector3} from '@babylonjs/core';
 import {createGreatAttackFx} from '../src/v03/great-attack-fx.js';
+import {CRACK_STATIONS,buildCrackField,crackReach,station} from '../src/v03/starfall-cracks.js';
 import {createTownEconomy} from '../src/v03/town-economy.js';
 import {GoldLoot} from '../src/gold-loot.js';
 import {CaveFogRuntime,fogBoundsFullyVisible} from '../src/cave-fog-runtime.js';
@@ -84,7 +85,9 @@ test('Starfall gathers on the blade throughout a full hold and preserves two ind
  assert.deepEqual([...anchors.subarray(0,3)],[4,1,3]);assert.equal(scars.isEnabled(),true);
  const next={...cast,phase:'windup',charging:true,actionId:2};
  fx.update(next,blade,actor);assert.equal(light.isEnabled(),true);assert.equal(scars.subMeshes[0].indexCount,one);
+ const beforeSecond=fixture.queries;
  fx.update({...next,phase:'impact',charging:false},blade,actor);assert.equal(scars.subMeshes[0].indexCount,one*2);
+ const secondQueries=fixture.queries-beforeSecond;assert.ok(secondQueries>0&&secondQueries<=2400,'ground reads per landing: '+secondQueries);
  assert.equal(glowDraw.indexCount,oneGlow*2);
  fx.update({...next,phase:'windup',actionId:3},blade,actor);fx.update(null,null,actor);
  advance(190);assert.equal(glowDraw.indexCount,oneGlow*2);
@@ -92,7 +95,7 @@ test('Starfall gathers on the blade throughout a full hold and preserves two ind
  assert.equal(glowDraw.indexStart,oneGlow);
  assert.ok(glow.getBoundingInfo().intersectsPoint(actor));assert.ok(glowDraw.getBoundingInfo().intersectsPoint(actor));
  advance(1300);assert.equal(glow.isEnabled(),false);assert.equal(glowDraw.indexCount,0);
- advance(2098);assert.equal(scars.subMeshes[0].indexCount,one*2);assert.equal(fixture.queries,queriesPerImpact*2);
+ advance(2098);assert.equal(scars.subMeshes[0].indexCount,one*2);assert.equal(fixture.queries,beforeSecond+secondQueries,'terrain is read on landing frames only');
  advance(1);assert.equal(scars.subMeshes[0].indexCount,one);assert.deepEqual([...anchors.subarray(0,3)],[12,1,3]);
  advance(1301);assert.equal(scars.isEnabled(),false);assert.equal(fx.active,false);
  await scene.whenReadyAsync();
@@ -138,34 +141,33 @@ test('the first impact, partial and full batches, expiry and the first hit after
  assert.equal(gauge.removed,true);
  fx.dispose();engine.dispose();
 });
-test('fracture vertices follow a sharp ridge and share the depth-writing cutout pass with their airborne debris',()=>{
+test('impact-web trenches follow a sharp ridge and share the depth-writing cutout pass with their airborne debris',()=>{
  const height=(x,z)=>.73*Math.abs(x-.31*z)+.44*Math.abs(z+.12);
  const {fx,scars,scene,engine}=visualFixture(null,false,height),at=new Vector3(.1,17,.15);
- const cast={actionId:1,phase:'impact',center:at,radius:2};
+ const cast={actionId:1,phase:'impact',center:at,radius:2,level:5,releaseCharge:1};
  fx.update(cast,null,at);
- const {material}=scars,[c,s]=material._vectors4Arrays.groundFrame,r=material._vectors4Arrays.anchors[3];
- const uv=scars.getVerticesData('uv'),xy=scars.getVerticesData('position'),h=scars.getVerticesData('sampleY');
- const travel=scars.getVerticesData('uv2'),color=scars.getVerticesData('color');
- let groundVertices=0,hairlineTips=0;
+ const {material}=scars,[c,s]=material._vectors4Arrays.groundFrame;
+ const uv=scars.getVerticesData('uv'),xyz=scars.getVerticesData('position'),h=scars.getVerticesData('sampleY');
+ const color=scars.getVerticesData('color');
  const elevation=(dx,dz)=>height(at.x+c*dx-s*dz,at.z+s*dx+c*dz);
+ const reach=crackReach(2,5,1);
+ let groundVertices=0,open=0,widest=0;
  while(uv[groundVertices*2+1]<1){
-  const i=groundVertices++,kind=uv[2*i+1],dx=r*xy[3*i],dz=r*xy[3*i+2];
-  const across=travel[2*i],along=travel[2*i+1];
-  if(kind>.88){
-   assert.ok(Math.abs(at.y+h[2*i]-elevation(across*r,along*r))<.00001);
-   assert.ok(Math.abs(at.y+h[2*i+1]-elevation(dx,dz))<.00001);
-   continue;
-  }
-  assert.ok(along>=0&&along<=1);
-  const edgeX=dx+r*across*color[4*i],edgeZ=dz+r*across*color[4*i+1];
-  assert.ok(Math.abs(at.y+h[2*i]-elevation(dx,dz))<.00001);
-  assert.ok(Math.abs(at.y+h[2*i+1]-elevation(edgeX,edgeZ))<.00001);
-  if(Math.hypot(edgeX,edgeZ)>r*1.15){
-   assert.ok(Math.hypot(color[4*i],color[4*i+1])<.015,'only hairline fractures extend beyond the damage footprint');
-   hairlineTips++;
-  }
+  const i=groundVertices++,x=xyz[3*i],z=xyz[3*i+2],nx=color[4*i],nz=color[4*i+1];
+  const side=i%4<2?-1:1,station=i>>2;
+  assert.ok(uv[2*i+1]<.88,'crack vertices carry the crack kind');
+  assert.ok(Math.hypot(x,z)<=reach+1e-4,'the web stays inside its rank reach');
+  assert.ok(xyz[3*i+1]>=0&&xyz[3*i+1]<=1,'normalised rip distance');
+  // Both trench edges are traced on the terrain; the centre is their mean.
+  const edge=at.y+h[2*i+1],left=elevation(x-nx,z-nz),right=elevation(x+nx,z+nz);
+  assert.ok(Math.abs(edge-(side<0?left:right))<1e-4);
+  assert.ok(Math.abs(at.y+h[2*i]-(left+right)/2)<1e-4);
+  if(nx||nz){open++;widest=Math.max(widest,2*Math.hypot(nx,nz));}
+  if(i%4===3)assert.equal(station,(i-3)/4);
  }
- assert.ok(hairlineTips>0);
+ assert.equal(groundVertices,CRACK_STATIONS*4);
+ assert.ok(open>400,'a rank-five web fills a large part of its block: '+open);
+ assert.ok(widest>.30&&widest<.34*1.3*1.4+1e-6,'primary width near the centre: '+widest);
  const families=new Map();
  for(let i=groundVertices;i<uv.length/2&&uv[i*2]===0;i++){
   const kind=uv[i*2+1],family=Math.floor(kind);
@@ -176,10 +178,59 @@ test('fracture vertices follow a sharp ridge and share the depth-writing cutout 
  }
  assert.deepEqual([...families.values()].map(pieces=>pieces.size),[6,10,18,12]);
  assert.doesNotMatch(material.shaderPath.fragmentSource,/bayer|gl_FragCoord/);
- assert.ok(groundVertices>100);assert.equal(cast.radius,2);
+ assert.equal(cast.radius,2);
  assert.equal(material.needAlphaBlendingForMesh(scars),false);assert.equal(material.needAlphaTestingForMesh(scars),true);
  assert.equal(material.disableDepthWrite,false);assert.equal(scars.renderingGroupId,0);
+ assert.ok(scars.getTotalVertices()<65536&&scars.getTotalVertices()/12<=4800,'per-landing block within budget');
  fx.dispose();scene.dispose();engine.dispose();
+});
+function primaryTips(count){
+ // Primaries are written first (layer 2); each starts with a zero-width joint near the centre.
+ const tips=[];let current=-1,lastZero=true;
+ for(let i=0;i<count&&station.layer[i]===2;i++){
+  const zero=!station.nx[i]&&!station.nz[i],r=Math.hypot(station.x[i],station.z[i]);
+  if(zero&&lastZero&&r<.12){tips.push(0);current++;}
+  if(current>=0)tips[current]=Math.max(tips[current],r);
+  lastZero=zero;
+ }
+ return tips;
+}
+test('the impact web grows with rank and charge, keeps clear of a body, and differs per landing',()=>{
+ for(const [rank,primaries,ratio] of [[1,5,1.45],[3,7,1.775],[5,9,2.1]]){
+  const radius=1.25*(1+.2*rank);
+  for(const charge of [1,.15]){
+   const reach=crackReach(radius,rank,charge);
+   assert.ok(Math.abs(reach-radius*ratio*(.72+.28*charge))<1e-6);
+   for(let seed=1;seed<40;seed++){
+    const used=buildCrackField(seed*7919,radius,rank,charge);
+    assert.ok(used>40&&used<=CRACK_STATIONS);
+    const tips=primaryTips(used);
+    assert.equal(tips.length,primaries);
+    assert.ok(Math.max(...tips)>reach*.85&&Math.max(...tips)<=reach+1e-4,"longest fault "+Math.max(...tips)+" of "+reach);
+    assert.ok(Math.min(...tips)>reach*.7,'every primary fault runs most of the reach');
+   }
+  }
+ }
+ // A target at the centre: faults reach 0.9 m past its body even on a rank-one tap.
+ for(const [radius,clear] of [[1.5,.7],[1.5,1.625],[2.5,1.625]]){
+  for(let seed=1;seed<40;seed++){
+   const tips=primaryTips(buildCrackField(seed*104729,radius,1,.15,clear));
+   assert.ok(Math.min(...tips)>=clear+.9-1e-4,'primary tip '+Math.min(...tips)+' with body '+clear);
+  }
+ }
+ const a=buildCrackField(11,2,3,1),first=station.x.slice(0,a);
+ assert.equal(buildCrackField(11,2,3,1),a);assert.deepEqual(station.x.slice(0,a),first,'seeded');
+ buildCrackField(12,2,3,1);assert.notDeepEqual(station.x.slice(0,a),first,'another landing breaks differently');
+});
+test('crack and stone tones derive from the floor tone given to the effect',()=>{
+ for(const cave of [false,true]){
+  const {fx,scars,scene,engine}=visualFixture(null,false,undefined,cave);
+  const tone=scars.material._colors3.groundTone;
+  assert.ok(cave?tone.b>tone.r:tone.r>tone.b,'sand on the plains, blue-grey in caves');
+  assert.match(scars.material.shaderPath.vertexSource,/uniform mediump vec3 groundTone/);
+  assert.match(scars.material.shaderPath.fragmentSource,/uniform mediump vec3 groundTone/);
+  fx.dispose();scene.dispose();engine.dispose();
+ }
 });
 test('simultaneous rock volleys keep their own release charge, sampled reach and culling bounds',()=>{
  const fixture=visualFixture(null,false,(x,z)=>Math.hypot(x-1,z));
@@ -191,7 +242,7 @@ test('simultaneous rock volleys keep their own release charge, sampled reach and
   const before=fixture.queries;
   fx.update({...cast,actionId,releaseCharge:power},null,at);
   const samples=fixture.queries-before;
-  assert.ok(samples>0&&samples<=1000,'terrain samples for a fracture, volley and glow: '+samples);
+  assert.ok(samples>0&&samples<=2400,'terrain samples for a fracture, volley and glow: '+samples);
   range.push(scars.getBoundingInfo().boundingBox.maximumWorld.x);
   flight.push(Math.abs(h[(actionId*vertices+first)*2+1]-h[(actionId*vertices+first)*2]));
   advance(100);

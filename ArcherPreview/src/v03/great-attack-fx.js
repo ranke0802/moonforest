@@ -1,13 +1,18 @@
-import {Mesh, ShaderMaterial, Vector3, VertexData} from '@babylonjs/core';
+import {Color3, Mesh, ShaderMaterial, Vector3, VertexData} from '@babylonjs/core';
 import {prepareModelShaders} from '../boss-shader-warmup.js';
 import {CAVE_FOG_GLSL} from '../cave-fog-cover.js';
 import {bindCaveFogMaterial} from '../cave-fog-binding.js';
 import {createStarfallGlow} from './starfall-glow.js';
+import {CRACK_LIP,CRACK_STATIONS,buildCrackField,crackReach,station} from './starfall-cracks.js';
 
 // Twelve marks cover five seconds even at the .45 s held-input threshold.
 // All three batches are built once. Only occupied impact slots are drawn.
 const IMPACT_CAPACITY=12;
 const IMPACT_SECONDS=5;
+// On-screen floor colour the crack and stone tones derive from: per-map constants,
+// the median screen colour around the review landings (Great Plains clearing,
+// Witch's Cave hall). A map can pass its own groundTone.
+const PLAINS_GROUND=[.61,.55,.39],CAVE_GROUND=[.24,.255,.30];
 
 const projectPoint=cave=>`
  ${cave?'varying highp vec3 fogPoint;':''}
@@ -89,8 +94,10 @@ const impactVertexSource = cave=>`
  uniform mat4 worldViewProjection, view;
  uniform vec4 anchors[12], groundFrame[12];
  uniform float born[12], impactCharge[12], clearRadius[12], elapsed;
+ uniform mediump vec3 groundTone;
  varying vec4 tint;
- varying mediump vec4 rubbleSurface;
+ varying highp vec4 rubbleSurface;
+ varying mediump vec4 crackLook;
  ${projectPoint(cave)}
  mat3 tumble(vec3 angle){
    vec3 s=sin(angle),c=cos(angle);
@@ -108,27 +115,32 @@ const impactVertexSource = cave=>`
    vec2 offset;
    float height,alpha=color.a;
    vec3 tone=color.rgb;
-   rubbleSurface=vec4(0.);
+   rubbleSurface=vec4(0.);crackLook=vec4(0.);
    if(uv.y>=1.0&&age>1.75){tint=vec4(0.);projectStarfall(anchor.xyz);return;}
    if(uv.y<1.0){
-     float power=impactCharge[slot],radius=anchor.w*(0.86+0.14*power);
-     float close=1.-smoothstep(4.,5.,age);
-     if(uv.y>.88){
-       float opening=smoothstep(0.018,0.10,age)*close*float(clearRadius[slot]<=0.);
-       offset=mix(uv2,position.xz,opening)*radius;
-       height=mix(sampleY.x,sampleY.y,opening)+0.009;
-     }else{
-       // Center and edge terrain samples move together as the crack opens and heals.
-       float front=age-length(position.xz)*0.105;
-       float branch=uv.y<0.01?1.:smoothstep(uv.y-0.08,uv.y+0.08,power);
-       float opening=smoothstep(-0.01,0.045,front)*branch*close;
-       offset=(position.xz+color.rg*uv2.x*opening)*radius;
-       height=mix(sampleY.x,sampleY.y,opening)+0.009;
-       vec2 normal=turn*normalize(color.rg);
-       float facing=dot(normal,normalize(vec2(view[0][2],view[2][2])+vec2(0.00001)));
-       float hot=(1.-smoothstep(0.0,0.78,front))*(0.65+0.35*power);
-       rubbleSurface=vec4(uv2,facing,-1.-hot);
-     }
+     // Impact web, built per landing in metres. It rips open from the centre in
+     // 0.16 s, holds, then closes from the tips inward between 3.2 and 5 s.
+     float across=uv2.x,side=abs(across),dist=position.y;
+     float layer=floor(uv2.y*0.5),heat=uv2.y-2.*layer;
+     float mode=floor(color.b*0.5),along=color.b-2.*mode;
+     float opening=smoothstep(0.0,0.24,age/0.16-dist);
+     // Full until 3.2 s; by 4.6 s the whole fault narrows to 35% while the tips
+     // retreat by a quarter; the last 0.4 s closes the rest.
+     float fade=clamp((age-3.2)/1.4,0.,1.),last=clamp((age-4.6)/0.4,0.,1.);
+     float shut=smoothstep(0.,0.06,1.-0.25*fade-0.75*last-along);
+     float width=opening*shut*mix(1.,0.35,smoothstep(0.,1.,fade))*(1.-last);
+     offset=position.xz+color.rg*across*width;
+     // Edge samples extrapolate to the lip; trenches sit above lips, primaries above forks.
+     // A collapsed station keeps one height so the bridges between strips stay flat.
+     float lift=dot(color.rg,color.rg)>0.?(side>1.01?0.008:0.016+0.003*layer):0.012;
+     height=mix(sampleY.x,sampleY.y,side*width)+lift;
+     vec2 normal=turn*color.rg;
+     normal*=inversesqrt(max(dot(normal,normal),1e-8));
+     float facing=dot(normal,normalize(vec2(view[0][2],view[2][2])+vec2(0.00001)));
+     // Starlight strength: level and charge (heat), fading toward the tips.
+     float hot=heat*opening*pow(max(0.,1.-0.9*dist),1.5);
+     rubbleSurface=vec4(across,color.a,facing,-1.-hot);
+     crackLook=vec4(fade,mode,dist,age-dist*0.16);
    }else{
      float family=floor(uv.y),power=impactCharge[slot];
      bool slab=family==1.,gravel=family==3.,spark=family==4.;
@@ -158,8 +170,10 @@ const impactVertexSource = cave=>`
      vec3 face=rot*(color.rgb*2.-1.);
      face.xz=turn*face.xz;
      float sun=0.5+0.5*dot(face,vec3(-0.45,0.81,-0.37));
-     vec3 crust=mix(vec3(0.15,0.12,0.11),vec3(0.57,0.49,0.39),sun*sun);
-     vec3 fracture=mix(vec3(0.27,0.20,0.15),vec3(0.86,0.74,0.55),sun);
+     // Stone takes the floor's hue: identical on the plains, blue-grey in caves.
+     vec3 soil=groundTone/vec3(${PLAINS_GROUND.join(',')});
+     vec3 crust=mix(vec3(0.15,0.12,0.11),vec3(0.57,0.49,0.39),sun*sun)*soil;
+     vec3 fracture=mix(vec3(0.27,0.20,0.15),vec3(0.86,0.74,0.55),sun)*soil;
      float cut=color.a,heat=(1.-smoothstep(0.06,0.56,t))*(0.58+0.42*power);
      tone=mix(crust,fracture,cut);
      tone=mix(tone,mix(vec3(1.,0.54,0.15),vec3(1.,0.93,0.68),sun),heat*cut*(0.55+0.45*sun));
@@ -177,21 +191,45 @@ const impactVertexSource = cave=>`
 
 // Physical fissures and rocks write depth; their geometry closes or shrinks.
 const impactFragmentSource = cave=>`precision mediump float; varying vec4 tint;
- varying mediump vec4 rubbleSurface;
+ varying highp vec4 rubbleSurface;
+ varying mediump vec4 crackLook;
+ uniform mediump vec3 groundTone;
  ${fogFragment(cave)}
  void main(){
    ${hideInFog(cave)}
    vec3 lit=tint.rgb;
    if(rubbleSurface.w<0.){
-     float across=rubbleSurface.x,along=rubbleSurface.y,hot=-1.-rubbleSurface.w;
-     float depth=abs(across),sun=0.5+0.5*across*rubbleSurface.z;
-     float chips=abs(fract(along*17.3+across*0.37)-0.5);
-     float wall=smoothstep(0.18,0.83,depth+chips*0.12);
-     vec3 shaded=mix(vec3(0.14,0.12,0.13),vec3(0.47,0.42,0.36),sun);
-     lit=mix(vec3(0.045,0.037,0.053),shaded,wall);
-     float lip=smoothstep(0.82,0.92,depth+chips*0.045)*(1.-smoothstep(0.965,1.,depth));
-     vec3 lipColor=mix(vec3(0.51,0.48,0.43),mix(vec3(0.86,0.91,1.),vec3(1.,0.95,0.73),sun),hot);
-     lit=mix(lit,lipColor,lip*(0.52+0.36*sun));
+     // V-shaped trench: dark floor toward the centre line, the wall that faces the
+     // camera lit, a raised lip on the rims. Tones derive from the ground colour.
+     float across=rubbleSurface.x,arc=rubbleSurface.y,facing=rubbleSurface.z,hot=-1.-rubbleSurface.w;
+     float fade=crackLook.x,mode=crackLook.y,dist=crackLook.z;
+     float side=abs(across);
+     float chip=abs(fract(arc*5.3)-.5)+.6*abs(fract(arc*13.1+.37)-.5);
+     float rim=0.93-0.16*chip;
+     vec3 g=groundTone;
+     if(side<rim){
+       float t=side/rim,far=step(0.,across*facing);
+       lit=g*mix(0.22,0.40,t*t);
+       float wall=smoothstep(0.66,0.80,t);
+       lit=mix(lit,g*mix(0.30,0.62,far),wall*(0.55+0.45*far));
+       // Starlight in the fissure, in the flash and ring palette: cream-white to
+       // 0.22 s after the fault opens, pale gold to 0.45 s, a dim amber line to 1.1 s.
+       // Only a narrow core of the floor glows; both walls stay dark.
+       float a=crackLook.w;
+       vec3 star=mix(vec3(1.,0.94,0.74),vec3(1.,0.84,0.56),smoothstep(0.16,0.30,a));
+       star=mix(star,vec3(1.,0.68,0.32),smoothstep(0.38,0.58,a));
+       float life=step(0.,a)*(1.-0.40*smoothstep(0.18,0.32,a))*(1.-0.45*smoothstep(0.40,0.62,a))*(1.-smoothstep(0.70,1.10,a));
+       float core=mix(0.35,0.16,smoothstep(0.20,0.60,a));
+       lit=mix(lit,star,clamp(hot*life*1.3,0.,1.)*(1.-smoothstep(core*0.6,core,t)));
+     }else{
+       float u=(side-rim)/(${CRACK_LIP.toFixed(2)}-rim);
+       float strength=(1.-0.55*dist)*(1.-fade);
+       // Alternate plates: the lifted rim catches light, the dropped rim has no lip.
+       float up=mode<0.5?0.6:(((mode<1.5)==(across>0.))?1.:0.);
+       float broken=step(0.22,fract(arc*1.7+0.31*chip));
+       if(u>up*strength*broken*(0.55+0.6*chip))discard;
+       lit=g*(1.+0.18*strength*up);
+     }
    }else if(rubbleSurface.w>0.){
      // A crooked mineral seam follows the stone as it turns; no texture samples.
      vec2 q=rubbleSurface.xy;float seed=rubbleSurface.z;
@@ -253,72 +291,22 @@ function chargeGeometry(){
   return data;
 }
 
-// Main faults run through the strike in different directions. Smaller fractures
-// start on an existing fault or link two plates, leaving intact islands between.
-const FAULTS=[
- [.073,[[0,0],[.13,.05],[.29,.02],[.40,.16],[.58,.12],[.68,.24],[.89,.24],[1.06,.35]]],
- [.063,[[.06,.01],[-.12,-.08],[-.28,-.04],[-.40,-.23],[-.58,-.20],[-.69,-.39],[-.86,-.43]]],
- [.058,[[-.07,.02],[-.18,.18],[-.14,.31],[-.28,.43],[-.24,.58],[-.41,.76],[-.40,.97]]],
- [.051,[[.03,-.05],[.12,-.20],[.07,-.32],[.22,-.46],[.18,-.58],[.34,-.75]]],
- [.037,[[-.18,.18],[-.30,.22],[-.43,.16],[-.58,.26],[-.80,.29]]],
- [.032,[[.29,.02],[.35,-.12],[.51,-.17],[.59,-.33],[.77,-.40]]],
- [.027,[[.40,.16],[.43,.30],[.36,.40],[.45,.58],[.40,.72]]],
- [.031,[[-.40,-.23],[-.36,-.37],[-.48,-.51],[-.46,-.67]]],
- [.023,[[-.14,.31],[.01,.32],[.12,.43],[.30,.40],[.36,.40]]],
- [.019,[[.07,-.32],[-.07,-.40],[-.22,-.36],[-.36,-.37]]],
- [.018,[[.68,.24],[.72,.39],[.83,.45],[.86,.59]]],
- [.023,[[-.28,-.04],[-.37,.02],[-.43,.16]]],
- [.014,[[-.28,.43],[-.42,.46],[-.48,.60],[-.60,.63]]],
- [.014,[[.22,-.46],[.40,-.49],[.49,-.63]]],
- [.007,[[1.06,.35],[1.14,.30],[1.23,.39],[1.38,.38]]],
- [.006,[[-.40,.97],[-.48,1.06],[-.46,1.18],[-.55,1.24]]],
-];
-const cutFace=[.31,.25,.21],deepCut=[.065,.052,.066],sunlitEdge=[.66,.59,.49];
-function branchCharge(index){return index<4?0:0.10+(index-4)*0.067;}
+// The ground cut is a fixed block of crack stations per slot (four vertices each:
+// lip, trench edge, trench edge, lip) followed by the authored debris. Stations are
+// filled for each landing; their quads are static and collapse when unused.
+const CRACK_VERTICES=CRACK_STATIONS*4;
 function impactGeometry(){
-  const {data,vertex,strip,indices}=makeGeometry(),travel=[];
+  const {data,vertex,indices}=makeGeometry(),travel=[];
   let endX=0,endZ=0;
   function point(x,y,z,kind,tone,alpha=1){
     travel.push(endX,endZ);return vertex(x,y,z,0,kind,tone,alpha);
   }
-  // Recessed dark floors, a shaded wall, intermittent hot rock, a pale broken lip.
-  // Split long segments so even a narrow ridge is traced by nearby vertices.
-  for(const [index,[width,path]] of FAULTS.entries()){
-    let previous;
-    for(let i=0;i<path.length-1;i++){
-      const [x,z]=path[i],[ex,ez]=path[i+1],dx=ex-x,dz=ez-z,len=Math.hypot(dx,dz);
-      const steps=Math.ceil(len/.077);
-      for(let j=0;j<=steps;j++){
-        if(i&&j===0)continue;
-        const t=j/steps,u=(i+t)/(path.length-1),chip=Math.sin(i*9.7+j*5.3+width*128);
-        const bend=.009*chip*Math.sin(t*Math.PI);
-        const cx=x+t*dx-dz/len*bend,cz=z+t*dz+dx/len*bend;
-        // Retain width through the fork and taper only at its very tip.
-        const tip=Math.min(1,(1-u)*8);
-        const w=width*1.65*(1-.47*u)*(.07+.93*tip)*(.91+.16*chip),nx=-dz/len*w,nz=dx/len*w;
-        const normalWidth=[nx,nz,0],gate=branchCharge(index);
-        endX=-1;endZ=u;
-        const start=point(cx,0,cz,gate,normalWidth);
-        endX=0;point(cx,0,cz,gate,normalWidth);
-        endX=1;point(cx,0,cz,gate,normalWidth);
-        if(previous!==undefined){strip(previous,start);strip(previous+1,start+1);}
-        previous=start;
-      }
+  const lip=[-CRACK_LIP,-1,1,CRACK_LIP],blank=[0,0,0];
+  for(let i=0;i<CRACK_STATIONS;i++){
+    for(const across of lip){endX=across;endZ=0;point(0,0,0,.1,blank,0);}
+    if(i)for(let c=0;c<3;c++){
+      const a=4*(i-1)+c,b=4*i+c;indices.push(a,a+1,b,b,a+1,b+1);
     }
-  }
-  // The blow shatters a central shelf into asymmetric flakes. Adjacent fragments
-  // leave narrow gaps through which the underlying ground is still visible.
-  for(let i=0;i<13;i++){
-    const a=i*2.39996,r=.046+.23*((i*.618)%1),x=Math.cos(a)*r,z=Math.sin(a)*r;
-    const w=.026+.045*((i*.732+.3)%1),l=w*(1.2+.6*((i*.473)%1));
-    const dx=Math.cos(a)*l,dz=Math.sin(a)*l,nx=-Math.sin(a)*w,nz=Math.cos(a)*w;
-    endX=x;endZ=z;
-    const base=point(x-dx,0,z-dz,.91,deepCut);
-    point(x-.45*dx+nx,0,z-.45*dz+nz,.91,cutFace);
-    point(x+.86*dx+.6*nx,0,z+.86*dz+.6*nz,.91,sunlitEdge);
-    point(x+dx-.42*nx,0,z+dz-.42*nz,.91,cutFace);
-    point(x-.55*nx,0,z-.55*nz,.91,stone);
-    indices.push(base,base+1,base+4,base+1,base+2,base+4,base+2,base+3,base+4);
   }
   // Flat normals occupy RGB on solid pieces; alpha distinguishes crust and fresh cuts.
   // Each side has its own vertices while the two triangles of a face share corners.
@@ -365,8 +353,9 @@ function impactGeometry(){
       face([a,b,c],kind,.10);face([a,d,b],kind,.39);face([b,d,c],kind,.89);face([c,d,a],kind,.22);
     }
   }
-  // Every slot uses the same authored shape. Its location, turn and sampled ground
-  // heights belong to the slot, so revisiting a map never retains the old terrain.
+  // Every slot starts from the same block. Crack stations, sampled ground heights,
+  // location and turn belong to the slot, so revisiting a map never retains old terrain.
+  const template={positions:data.positions,colors:data.colors,uvs:data.uvs,uvs2:travel};
   const repeated=new VertexData(),vertices=data.positions.length/3;
   for(const [key,source] of [['positions',data.positions],['colors',data.colors],['uvs',data.uvs],['uvs2',travel]]){
     const array=new Float32Array(source.length*IMPACT_CAPACITY);
@@ -378,7 +367,7 @@ function impactGeometry(){
     for(let i=0;i<vertices;i++)repeated.uvs[(slot*vertices+i)*2]=slot;
     for(let j=0;j<indices.length;j++)repeated.indices[slot*indices.length+j]=indices[j]+slot*vertices;
   }
-  return repeated;
+  return {repeated,template,vertices};
 }
 
 function batch(scene,name,data,shader,uniforms,cave,impact=false){
@@ -398,28 +387,35 @@ function batch(scene,name,data,shader,uniforms,cave,impact=false){
   return mesh;
 }
 
-export function createGreatAttackFx({scene,root,project,ground,now=()=>performance.now(),cave=!!scene.metadata?.caveFogRuntime}){
+export function createGreatAttackFx({scene,root,project,ground,now=()=>performance.now(),cave=!!scene.metadata?.caveFogRuntime,groundTone=cave?CAVE_GROUND:PLAINS_GROUND}){
   const light=batch(scene,'v03-starfall',chargeGeometry(),vertexSource,['grip','tip','charge','clock','swing'],cave);
-  const shape=impactGeometry(),vertices=shape.positions.length/(3*IMPACT_CAPACITY);
-  const scars=batch(scene,'v03-starfall-ground',shape,impactVertexSource,['anchors','groundFrame','born','impactCharge','clearRadius','elapsed'],cave,true);
+  const {repeated:shape,template,vertices}=impactGeometry();
+  const scars=batch(scene,'v03-starfall-ground',shape,impactVertexSource,['anchors','groundFrame','born','impactCharge','clearRadius','elapsed','groundTone'],cave,true);
   const draw=scars.subMeshes[0],indicesPerImpact=draw.indexCount/IMPACT_CAPACITY;
+  const engine=scene.getEngine();
+  // The crack block of every slot is rewritten per landing; the debris after it
+  // repeats the template, so shifting whole slots keeps both correct.
+  const heights=new Float32Array(IMPACT_CAPACITY*vertices*2);
+  const dynamic=[['position',shape.positions,3],['color',shape.colors,4],['uv2',shape.uvs2,2],['sampleY',heights,2]];
+  for(const [kind,array,stride] of dynamic)scars.setVerticesData(kind,array,true,stride);
+  const buffers=dynamic.map(([kind])=>scars.getVertexBuffer(kind));
   // Babylon uses the mesh bounds for a full submesh, but asks the submesh itself
   // for its bounds as soon as we shorten the draw range to the occupied slots.
   const bounds=scars.getBoundingInfo(),minimum=new Vector3(),maximum=new Vector3();
   draw.setBoundingInfo(bounds);
   const anchors=new Float32Array(IMPACT_CAPACITY*4),groundFrame=new Float32Array(IMPACT_CAPACITY*4),born=new Float32Array(IMPACT_CAPACITY);
-  const impactCharge=new Float32Array(IMPACT_CAPACITY),clearRadius=new Float32Array(IMPACT_CAPACITY);
-  const heights=new Float32Array(IMPACT_CAPACITY*vertices*2);
-  scars.setVerticesData('sampleY',heights,true,2);
-  const heightBuffer=scars.getVertexBuffer('sampleY'),engine=scene.getEngine();
-  function uploadHeights(first,end){
-    const start=first*vertices*2,range=heights.subarray(start,end*vertices*2);
-    // Keep the complete CPU array on the vertex buffer for context restoration,
-    // and transfer only the inserted or shifted slots to the existing GPU buffer.
-    engine.updateDynamicVertexBuffer(heightBuffer.getBuffer(),range,start*heights.BYTES_PER_ELEMENT);
+  const impactCharge=new Float32Array(IMPACT_CAPACITY),clearRadius=new Float32Array(IMPACT_CAPACITY),reach=new Float32Array(IMPACT_CAPACITY);
+  function upload(first,end){
+    // Keep the complete CPU arrays on the vertex buffers for context restoration,
+    // and transfer only the inserted or shifted slots to the existing GPU buffers.
+    for(let k=0;k<dynamic.length;k++){
+      const array=dynamic[k][1],stride=dynamic[k][2],start=first*vertices*stride;
+      engine.updateDynamicVertexBuffer(buffers[k].getBuffer(),array.subarray(start,end*vertices*stride),start*array.BYTES_PER_ELEMENT);
+    }
   }
   scars.material.setArray4('anchors',anchors).setArray4('groundFrame',groundFrame).setFloats('born',born).setFloats('impactCharge',impactCharge).setFloats('clearRadius',clearRadius);
-  const glow=createStarfallGlow(scene,{cave,anchors,groundFrame,born,impactCharge,clearRadius,faults:FAULTS,branchCharge});
+  scars.material.setColor3('groundTone',Color3.FromArray(groundTone));
+  const glow=createStarfallGlow(scene,{cave,anchors,groundFrame,born,impactCharge,clearRadius,faults:[],branchCharge:()=>0});
   let disposed=false;
   void prepareModelShaders({meshes:[light,scars,glow.mesh]},{includeInstanceVariants:false,keepPrograms:false})
     .catch(error=>{if(!disposed&&!scene.isDisposed)console.warn('[MoonForest] starfall preparation',error);});
@@ -432,12 +428,12 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
     draw.indexCount=count*indicesPerImpact;scars.setEnabled(count>0);glow.sync(count,bounds);
     if(!count)return;
     minimum.set(Infinity,Infinity,Infinity);maximum.set(-Infinity,-Infinity,-Infinity);
-    // Includes the farthest gravel and the width and drift of the dust fans.
+    // Includes the crack web, the farthest gravel and the width and drift of the dust fans.
     for(let slot=0;slot<count;slot++){
       const i=slot*4,x=anchors[i],y=anchors[i+1],z=anchors[i+2],span=anchors[i+3];
       const power=impactCharge[slot],clear=clearRadius[slot];
       const origin=Math.max(span*.73,clear?clear+.20:span*.35)+.66*(.72+.58*power);
-      const r=Math.max(span*1.8,1.4*span*(AIR_REACH+AIR_CHARGE_REACH*power),origin+span*(.28+.54*power)*1.35)+1.05;
+      const r=Math.max(span*1.8,1.4*span*(AIR_REACH+AIR_CHARGE_REACH*power),origin+span*(.28+.54*power)*1.35,reach[slot]+.3)+1.05;
       minimum.minimizeInPlaceFromFloats(x-r,y+groundFrame[i+2]-.8,z-r);
       maximum.maximizeInPlaceFromFloats(x+r,y+groundFrame[i+3]+2.85+2.0*power,z+r);
     }
@@ -446,9 +442,9 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
   function removeOldest(n){
     count-=n;glow.shift(n,count);
     if(count){
-      anchors.copyWithin(0,n*4);groundFrame.copyWithin(0,n*4);born.copyWithin(0,n);impactCharge.copyWithin(0,n);clearRadius.copyWithin(0,n);
-      heights.copyWithin(0,n*vertices*2,(n+count)*vertices*2);
-      uploadHeights(0,count);
+      anchors.copyWithin(0,n*4);groundFrame.copyWithin(0,n*4);born.copyWithin(0,n);impactCharge.copyWithin(0,n);clearRadius.copyWithin(0,n);reach.copyWithin(0,n);
+      for(const [,array,stride] of dynamic)array.copyWithin(0,n*vertices*stride,(n+count)*vertices*stride);
+      upload(0,count);
     }
   }
   function tick(){
@@ -469,7 +465,8 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
     // Legacy/direct impact events have no release sample and used full-strength art.
     const power=impactCharge[count]=Math.max(0,Math.min(1,cast.releaseCharge??1));
     const bodyRadius=clearRadius[count]=Math.max(0,cast.clearRadius??0);
-    const clearance=bodyRadius?bodyRadius+.20:r*.35,crackRadius=r*(.86+.14*power);
+    const clearance=bodyRadius?bodyRadius+.20:r*.35,level=cast.level??3;
+    reach[count]=crackReach(r,level,power,bodyRadius);
     born[count]=(stamp-epoch)/1000;
     const angle=(x*.235+z*.373+born[count]*.29)*2*Math.PI;
     const c=groundFrame[offset]=Math.fround(Math.cos(angle)),s=groundFrame[offset+1]=Math.fround(Math.sin(angle));
@@ -479,37 +476,44 @@ export function createGreatAttackFx({scene,root,project,ground,now=()=>performan
       const relative=Number.isFinite(h)?h-y:0;
       low=Math.min(low,relative);high=Math.max(high,relative);return relative;
     }
-    // Trace the actual strips, including both edges. A coarse bilinear patch
-    // spanning a hillside can bridge straight across a depression above a prone target.
-    let lastX=NaN,lastZ=NaN,sourceY=0,landingY=0;
-    for(let i=0;i<vertices;i++){
-      const px=shape.positions[3*i],pz=shape.positions[3*i+2],at=(count*vertices+i)*2;
-      const kind=shape.uvs[2*i+1];
-      if(kind<.88){
-        if(px!==lastX||pz!==lastZ){sourceY=elevation(px*crackRadius,pz*crackRadius);lastX=px;lastZ=pz;}
-        const across=shape.uvs2[2*i];
-        heights[at]=sourceY;
-        heights[at+1]=across===0?sourceY:elevation((px+shape.colors[4*i]*across)*crackRadius,(pz+shape.colors[4*i+1]*across)*crackRadius);
-      }else if(kind<1){
-        const dx=shape.uvs2[2*i],dz=shape.uvs2[2*i+1];
-        if(dx!==lastX||dz!==lastZ){sourceY=elevation(dx*crackRadius,dz*crackRadius);lastX=dx;lastZ=dz;}
-        heights[at]=sourceY;heights[at+1]=bodyRadius?sourceY:elevation(px*crackRadius,pz*crackRadius);
-      }else{
-        const dx=shape.uvs2[2*i],dz=shape.uvs2[2*i+1];
-        if(lastX!==dx||lastZ!==dz){
-          const family=Math.floor(kind),len=Math.hypot(dx,dz);
-          const margin=family===1?.66:family===2?.39:.30;
-          const start=Math.max(len*r*(AIR_ORIGIN+AIR_ORIGIN_SPREAD*(kind%1)),clearance+margin*(.72+.58*power))/len;
-          const end=Math.max(len*r*(AIR_REACH+AIR_CHARGE_REACH*power),start*len+r*(.28+.54*power)*(family===3?1.35:.85))/len;
-          sourceY=elevation(dx*start,dz*start);landingY=elevation(dx*end,dz*end);
-          lastX=dx;lastZ=dz;
-        }
-        heights[at]=sourceY;heights[at+1]=landingY;
+    // The web is seeded by the landing, so two strikes never share a pattern.
+    const seed=(Math.round(x*97)*73856093^Math.round(z*89)*19349663^Math.round(stamp*7)*83492791)|0;
+    const used=buildCrackField(seed,r,level,power,bodyRadius),centre=elevation(0,0);
+    const base=count*vertices;
+    // Trace both trench edges at every station; lips extrapolate from them.
+    for(let i=0;i<CRACK_STATIONS;i++){
+      const sx=station.x[i],sz=station.z[i],nx=station.nx[i],nz=station.nz[i];
+      let left,right;
+      if(i>=used)left=right=centre;
+      else if(nx===0&&nz===0){left=right=elevation(sx,sz);}
+      else{left=elevation(sx-nx,sz-nz);right=elevation(sx+nx,sz+nz);}
+      const middle=(left+right)*.5,meta=station.meta[i],arc=station.arc[i];
+      const uv2=(station.layer[i]*2)+Math.min(.999,station.heat[i]);
+      for(let k=0;k<4;k++){
+        const v=base+4*i+k;
+        shape.positions[3*v]=sx;shape.positions[3*v+1]=station.dist[i];shape.positions[3*v+2]=sz;
+        shape.colors[4*v]=nx;shape.colors[4*v+1]=nz;shape.colors[4*v+2]=meta;shape.colors[4*v+3]=arc;
+        shape.uvs2[2*v+1]=uv2;
+        heights[2*v]=middle;heights[2*v+1]=k<2?left:right;
       }
+    }
+    let lastX=NaN,lastZ=NaN,sourceY=0,landingY=0;
+    for(let i=CRACK_VERTICES;i<vertices;i++){
+      const at=(base+i)*2,kind=template.uvs[2*i+1];
+      const dx=template.uvs2[2*i],dz=template.uvs2[2*i+1];
+      if(lastX!==dx||lastZ!==dz){
+        const family=Math.floor(kind),len=Math.hypot(dx,dz);
+        const margin=family===1?.66:family===2?.39:.30;
+        const start=Math.max(len*r*(AIR_ORIGIN+AIR_ORIGIN_SPREAD*(kind%1)),clearance+margin*(.72+.58*power))/len;
+        const end=Math.max(len*r*(AIR_REACH+AIR_CHARGE_REACH*power),start*len+r*(.28+.54*power)*(family===3?1.35:.85))/len;
+        sourceY=elevation(dx*start,dz*start);landingY=elevation(dx*end,dz*end);
+        lastX=dx;lastZ=dz;
+      }
+      heights[at]=sourceY;heights[at+1]=landingY;
     }
     glow.add(count,elevation);
     groundFrame[offset+2]=low;groundFrame[offset+3]=high;
-    uploadHeights(count,count+1);
+    upload(count,count+1);
     scars.material.setFloat('elapsed',born[count]);
     count++;syncImpactDraw();glow.tick(born[count-1]);
     const doc=root.ownerDocument,view=doc.defaultView;
