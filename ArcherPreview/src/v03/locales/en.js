@@ -187,7 +187,7 @@ export default {
   },
   tips:{
    guide:{title:'Guiding light',keys:'The wisp flies ahead to your goal.',touch:'The wisp flies ahead to your goal.',text:'Lost? Follow the light.'},
-   potion:{title:'Potions',keys:'Press 1–4 to use the potion in that slot.',touch:'Tap to use the selected potion. Hold to choose another.',text:'Assign potions to slots in your inventory.'},
+   potion:{title:'Potions',keys:'Press 1–4 to use that slot’s potion.',touch:'Tap to use. Hold to choose a potion.',text:'Assign potions to slots in your bag.'},
    boss:{title:'A great beast',keys:'Dodge (Space) or guard (hold F).',touch:'Dodge, or hold the shield to guard.',text:'It rears back to hit hard. Then strike.'},
    talk:{title:'Talk',keys:'Press E nearby to talk.',touch:'Get close and tap the button.',text:'You can’t talk in combat.'},
    sprint:{title:'Sprint',keys:'Hold Space to run.',touch:'Hold the dodge button to run.',text:'Uses stamina. Follow the goal and map.'},
