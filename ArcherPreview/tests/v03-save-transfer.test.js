@@ -384,7 +384,11 @@ test('a new device: restore the exported file into the empty boot slot from the 
  const source=filled(),made=await exported(source);
  const local=memory(),h=await game(context,local);
  assert.equal(h.save.slot,1,'a blank device binds the page to slot 1');
- assert.equal(h.find('[data-action="load"]').disabled,true);
+ assert.equal(h.find('[data-action="load"]').disabled,false,'불러오기 leads to the restore on a blank device');
+ await h.press('[data-action="load"]');
+ assert.equal(h.find('.v03-transfer-notice').textContent,t('transfer.noRecords'));
+ assert.ok([...h.find('.v03-slots').querySelectorAll('[data-slot]')].every(slot=>slot.disabled));
+ await h.escape();
  await h.press('[data-action="new"]');
  assert.equal(h.find('[data-transfer="export"]'),null);
  await h.press('[data-transfer="restore"][data-transfer-slot="1"]');
@@ -395,7 +399,6 @@ test('a new device: restore the exported file into the empty boot slot from the 
  assert.ok(h.find('[data-transfer="export"][data-transfer-slot="1"]'),'the restored slot now offers export');
  assert.deepEqual(readSlotPayload(local,edition,1).data,readSlotPayload(source,edition,1).data);
  await h.escape();
- assert.equal(h.find('[data-action="load"]').disabled,false,'continue opens once a record exists');
  await h.press('[data-action="load"]');await h.press('[data-slot="1"]');
  await waitFor(h.find,'[data-chapter="2"]');await h.press('[data-chapter="2"]');
  for(let i=0;i<150&&h.shell.screen!=='play';i++)await delay(4);

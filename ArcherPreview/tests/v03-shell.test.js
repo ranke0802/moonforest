@@ -388,7 +388,8 @@ test('first run: logo → title → attract battle → new game without reload �
  assert.equal(h.shell.screen,'boot');assert.equal(h.shell.blocksProgress,true);
  h.finishSplash();await settle();
  assert.equal(h.shell.screen,'title');assert.equal(h.document.documentElement.dataset.v03Screen,'title');assert.ok(h.log.includes('splash-removed'));
- assert.equal(h.document.querySelector('[data-action="load"]').disabled,true);
+ // 불러오기 stays open on an empty device: it leads to restoring a file (2026-11-26).
+ assert.equal(h.document.querySelector('[data-action="load"]').disabled,false);
  h.shell.update(.016);await settle();
  assert.ok(h.log.includes('suspend:true'));assert.ok(h.log.includes(`summon:${TITLE_FOE.kind}:${TITLE_FOE.count}`));
  // The menu waits, black, until the scene is drawn and streaming is quiet.
@@ -396,6 +397,18 @@ test('first run: logo → title → attract battle → new game without reload �
  h.click('[data-action="new"]');await settle();assert.equal(h.shell.screen,'title','menu clicks wait for the reveal');
  h.state.pending=0;for(let i=0;i<80;i++)h.shell.update(.016);
  assert.ok(h.document.querySelector('.v03-title').classList.contains('scene-ready'));
+ // Nothing is preselected (새로하기 is what the keys mark first), and 불러오기 on an empty
+ // device only opens empty slots offering a restore: it can never continue anything.
+ assert.equal(h.document.querySelector('.v03-menu-item.is-current,.v03-menu-item[aria-current]'),null);
+ assert.equal(h.document.querySelector('.v03-menu .v03-menu-item').dataset.action,'new');
+ {const before=JSON.stringify(h.save.index());h.click('[data-action="load"]');await settle();
+  const slots=[...h.document.querySelectorAll('.v03-panel [data-slot]')];
+  assert.equal(slots.length,3);assert.ok(slots.every(slot=>slot.disabled),'no empty slot can be continued');
+  assert.equal(h.document.querySelectorAll('.v03-panel [data-transfer="restore"]').length,3);
+  assert.equal(h.document.querySelectorAll('.v03-panel [data-transfer="export"]').length,0);
+  assert.ok(h.document.querySelector('.v03-transfer-notice')?.textContent.length>0,'the empty list says why');
+  h.click('.v03-panel-back');await settle();
+  assert.equal(h.shell.screen,'title');assert.equal(JSON.stringify(h.save.index()),before);}
  assert.equal(h.shell.pilotMovement!==null,true);
  // The showcase cannot end: player topped up, foe floored, camera orbits.
  const alpha=h.camera.alpha;for(let i=0;i<120;i++)h.shell.update(.016);

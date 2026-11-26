@@ -179,6 +179,9 @@ export function setupV03(api){
  // Slot export / restore on the slot screen. A slot restored into the one this
  // page is bound to is read again like another record when it is loaded.
  const transfer=save.local!==undefined?createSaveTransfer({doc,view,save,title,describe}):null,restoredHere=new Set();
+ // 2026-11-26: with restore available, 불러오기 stays open on an empty device (a
+ // player who lost their storage looks for the restore there).
+ const canLoad=()=>!!transfer||save.index().some(meta=>meta.used);
  // The first-launch picker lives in the splash, so the choice is read after it.
  let liveText=null;
  const langReady=(api.languageStorage?Promise.resolve(view?.__moonforestSplash?.picked??view?.__moonforestSplash?.done).then(()=>useLanguage(readLanguage(languageStore)??'ko',{doc})).finally(()=>{try{view?.__moonforestSplash?.packReady?.();}catch{/* the splash is gone */}}):startLanguage(view)).then(()=>{
@@ -300,7 +303,7 @@ export function setupV03(api){
    if(!current())return;
    controller.abort();story.stop();battle.resetBattle();opening.cancel();
    state.ambush=false;state.busy=false;state.dream=null;state.sceneShown=false;
-   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+   screen('title');title.setEnabled('load',canLoad());title.show();
   }
   try{
    const art=Promise.resolve(dream);
@@ -381,11 +384,12 @@ export function setupV03(api){
  // The slot list; export and restore run from it and return to it.
  async function pickSlot(mode){
   for(;;){
-   const picked=await title.chooseSlot({mode,index:save.index(),bootSlot:save.slot,transfer:!!transfer,notice:transfer?.notice()});
+   const empty=mode==='load'&&!save.index().some(meta=>meta.used);
+   const picked=await title.chooseSlot({mode,index:save.index(),bootSlot:save.slot,transfer:!!transfer,notice:transfer?.notice()??(empty&&transfer?{tone:'info',text:t('transfer.noRecords')}:null)});
    if(!picked||typeof picked!=='object')return picked;
    const done=await transfer.run(picked);if(state.disposed||state.screen!=='title')return null;
    if(done?.restored===save.slot)restoredHere.add(done.restored);
-   title.setEnabled('load',save.index().some(meta=>meta.used));
+   title.setEnabled('load',canLoad());
   }
  }
  async function handle(action){
@@ -542,7 +546,7 @@ export function setupV03(api){
    playerCombatLock.reset();story.stop();api.stopWorld();state.worldStarted=false;
    api.resetStage(state.returnPose??undefined);
    state.ambush=false;state.sinceSave=0;state.trailScene=false;
-   screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();
+   screen('title');title.setEnabled('load',canLoad());title.show();
    await startAttract();
    await opening.release();
    return true;
@@ -556,7 +560,7 @@ export function setupV03(api){
   // Since 2026-11-20 (user) the black title with its veil is the download
   // screen too: it shows at once and follows the loading card underneath
   // (that card stays for errors). The world is prepared once the card closes.
-  screen('title');title.setEnabled('load',save.index().some(meta=>meta.used));title.show();watchDownload();
+  screen('title');title.setEnabled('load',canLoad());title.show();watchDownload();
   // The prologue score is decoded once the download and world loading are over
   // (as before the title became the download screen), not on top of them.
   afterLoading(()=>{
