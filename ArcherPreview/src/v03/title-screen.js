@@ -108,7 +108,8 @@ export function createTitleScreen({doc,mount=doc.body,wait=ms=>new Promise(resol
   chooseSlot({mode,index,bootSlot,transfer=false,notice=null}){
    return openPanel((box,close)=>{
     box.append(el(doc,'h2','v03-panel-title',mode==='chapters'?chapterWords().menu:t(mode==='new'?'menu.new':'menu.load')));
-    if(mode!=='chapters')box.append(el(doc,'p','v03-panel-note',t(mode==='new'?'panel.newNote':'panel.loadNote')));
+    // With nothing to continue, the notice below says so; "pick a record" would contradict it.
+    if(mode!=='chapters'&&!(mode==='load'&&!index.some(meta=>meta.used)))box.append(el(doc,'p','v03-panel-note',t(mode==='new'?'panel.newNote':'panel.loadNote')));
     if(notice?.text){const line=el(doc,'p','v03-transfer-notice'+(notice.tone==='error'?' is-error':''),notice.text);line.setAttribute('role',notice.tone==='error'?'alert':'status');box.append(line);}
     const list=el(doc,'div','v03-slots');if(transfer&&mode!=='chapters')list.classList.add('has-transfer');
     for(const meta of index){

@@ -407,3 +407,15 @@ test('a new device: restore the exported file into the empty boot slot from the 
  assert.equal(h.wallet.balance,1234);assert.deepEqual(h.wallet.town,LEDGER.town);
  assert.equal(h.state.mapId,'witch-cave');assert.equal(h.shell.story.log.quest().id,'E02');
 });
+
+test('the load panel drops "pick a record" when there is nothing to continue, and keeps it when a slot is filled',()=>{
+ const empty=memory(),{title,find}=screen(empty);
+ void title.chooseSlot({mode:'load',index:readSlotIndex(empty,edition),bootSlot:1,transfer:true,notice:{tone:'info',text:t('transfer.noRecords')}});
+ assert.equal(find('.v03-panel-note'),null,'no "pick a record" line above "no records"');
+ assert.equal(find('.v03-transfer-notice').textContent,t('transfer.noRecords'));title.closePanel();
+ void title.chooseSlot({mode:'new',index:readSlotIndex(empty,edition),bootSlot:1,transfer:true});
+ assert.equal(find('.v03-panel-note').textContent,t('panel.newNote'),'starting a new game keeps its note');title.closePanel();
+ const local=filled(),full=screen(local);
+ void full.title.chooseSlot({mode:'load',index:readSlotIndex(local,edition),bootSlot:3,transfer:true});
+ assert.equal(full.find('.v03-panel-note').textContent,t('panel.loadNote'));full.title.closePanel();
+});
