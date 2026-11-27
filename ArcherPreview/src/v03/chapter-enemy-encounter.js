@@ -257,12 +257,15 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
   // Holds a kind's source model for the visit: foes that leave and come back
   // (39 m / 25 m) are clones again, not a new download and decode.
   function hold(kind){
-    if(retired||held.has(kind))return;
+    if(retired)return;
+    if(held.has(kind))return held.get(kind);
     const entry=acquire(kind);let released=false;
-    held.set(kind,()=>{if(released)return;released=true;held.delete(kind);
+    const drop=()=>{if(released)return;released=true;held.delete(kind);
       if(--entry.demand===0){if(sources.get(kind)===entry)sources.delete(kind);entry.controller.abort();}
-      release(kind,entry);});
-    entry.ready.catch(()=>held.get(kind)?.());
+      release(kind,entry);};
+    held.set(kind,drop);
+    entry.ready.catch(drop);
+    return drop;
   }
   // Behind the loading cover: one hidden foe per kind runs the whole spawn
   // preparation (paint, outline, fade, instance and shadow variants, weapon,
@@ -272,9 +275,10 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
     for(const kind of new Set(kinds)){
       if(retired||!isCurrent()||scene.isDisposed)break;
       if(!CHAPTER_MONSTER_MODELS[kind]||!CHAPTER_COMBAT[kind])continue;
-      hold(kind);
+      const drop=hold(kind);
       const handle=await create({kind,id:'chapter-warm-'+kind,x:0,z:0,isCurrent,warmOnly:true}).catch(error=>{if(error?.name!=='AbortError')console.warn('[MoonForest] chapter warm '+kind,error);return null;});
-      handle?.dispose();if(handle)done.push(kind);
+      if(handle){handle.dispose();done.push(kind);}
+      else drop?.();
     }
     return done;
   }
@@ -288,7 +292,9 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
     const enc=new ChapterEncounter(world,b=>battle.bossChanged?.(b),battle.onDamage??noop,(...args)=>battle.playerHit?.(...args),{
       combat:battle.combat,
       loadAsset:async()=>{
-        const source=await entry.ready;preparation.check();
+        // Settle asset acquisition on cancellation even if the source loader
+        // never responds. Disposing the encounter can then release the source.
+        const source=await preparation.wait(entry.ready,'chapter-foe-source');
         await preparation.step('chapter-foe-clone',()=>{owned=instantiateBossModel(source);});preparation.check();
         const catalog=Object.keys(model.clips).map(name=>({name,fps:1,rootTrack:[[0,0,0]]}));
         return {asset:owned,config:{scale:1,catalog,animations:model.clips}};

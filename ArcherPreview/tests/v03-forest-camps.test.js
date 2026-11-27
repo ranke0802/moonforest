@@ -70,13 +70,23 @@ test('M07 goblins: entering the forest brings the camp goblins, their defeats co
 
 test('a camp create that never settles is dropped after the timeout; a failed load is tried again',async()=>{
  const world={mapId:'monster-forest',scene:{isDisposed:false}},player={position:{x:.6,z:53.9}};
- let calls=0;const made=[],errors=[];
- const hang={createChapterEnemyFactory:()=>({create:row=>{calls++;if(calls===1)return new Promise(()=>{});made.push(row.id);return Promise.resolve({encounter:{active:true,actor:{position:{x:row.x,z:row.z}}},dispose(){}});},dispose(){}})};
+ let calls=0,first=null,settleFirst=null;const made=[],errors=[];
+ const hang={createChapterEnemyFactory:()=>({create:row=>{
+  calls++;
+  if(calls===1){first=row;return new Promise(resolve=>{settleFirst=resolve;});}
+  made.push(row);return Promise.resolve({encounter:{active:true,actor:{position:{x:row.x,z:row.z}}},dispose(){}});
+ },dispose(){}})};
  const v=createChapterResidentVisits({world,battle:{},getPlayer:()=>player,onDefeat(){},loadCamp:async()=>[wildlife,hang],onError:(...a)=>errors.push(String(a[1]?.message??a[0]))});
  await v.enter('monster-forest');player.position.z=30;
  for(let i=0;i<30*70;i++){v.update(1/30,true,false);if(i%30===0)await null;}
  await tick();
  assert.ok(made.length>=1,'camps go on after a stuck create');assert.match(errors[0],/did not settle/);
+ assert.equal(first.isCurrent(),false,'the old encounter cannot publish after timeout');
+ assert.equal(made[0].isCurrent(),true,'a live encounter can still deliver defeat after later admissions');
+ let lateDisposals=0;
+ settleFirst({encounter:{},dispose(){lateDisposals++;}});
+ await tick();
+ assert.equal(lateDisposals,1);
  v.dispose();
  // The camp modules fail to arrive once: the visit loads them again a few seconds later.
  let loads=0;const again=createChapterResidentVisits({world,battle:{},getPlayer:()=>player,onDefeat(){},onError(){},
@@ -86,4 +96,42 @@ test('a camp create that never settles is dropped after the timeout; a failed lo
  await tick();await tick();
  assert.equal(loads,2);assert.equal(again.inspect().ready,true);
  again.dispose();
+});
+
+test('a timed-out camp source settles and the next approach starts a new request',async()=>{
+ const s=stage(),nativeNow=performance.now.bind(performance);
+ let extraTime=0;
+ const clock=Object.getOwnPropertyDescriptor(performance,'now');
+ Object.defineProperty(performance,'now',{configurable:true,value:()=>nativeNow()+extraTime});
+ const signals=[];
+ const f=enemies.createChapterEnemyFactory({...s,incremental:false,loadModel:(_,url,signal)=>{
+  signals.push(signal);
+  if(signals.length===1)return new Promise(()=>{});
+  return readRig(s.scene,url);
+ },mountWeapon:(scene,owner,kind)=>mountEnemyWeapon(scene,owner,kind,(inner,id)=>acquireFoeWeapon(inner,id,readRig))});
+ const originalWarn=console.warn;
+ const warnings=[];
+ const deadline=async work=>{
+  let timer;
+  const limit=new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('camp promise did not settle')),1000);});
+  try{return await Promise.race([work,limit]);}finally{clearTimeout(timer);}
+ };
+ try{
+  console.warn=(...message)=>warnings.push(message);
+  const warm=f.warm(['goblin-warrior']);
+  await tick();
+  assert.equal(signals.length,1);
+  extraTime+=46_000;
+  assert.deepEqual(await deadline(warm),[]);
+  assert.equal(signals[0].aborted,true);
+  assert.equal(warnings[0]?.[1]?.name,'TimeoutError');
+  const foe=await deadline(f.create({kind:'goblin-warrior',x:2,z:27,player:s.player}));
+  assert.equal(signals.length,2);
+  assert.equal(foe.encounter.active,true);
+  foe.dispose();
+ }finally{
+  console.warn=originalWarn;
+  if(clock)Object.defineProperty(performance,'now',clock);else delete performance.now;
+  f.dispose();s.dispose();
+ }
 });
