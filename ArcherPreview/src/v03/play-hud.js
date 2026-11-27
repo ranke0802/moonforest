@@ -2,6 +2,7 @@
 import {t} from './i18n.js';
 import {createInteractButton} from './interact-button.js';
 import {releaseFocusAfterPointer} from './hud-focus.js';
+import {createQuestPager} from './quest-pages.js';
 // a short banner. Text nodes are written only when their value changes.
 // The focus-line picture: FOCUS_LINES wedges with their points toward the
 // middle, in a fixed pseudo-random order (the same picture every visit).
@@ -20,14 +21,14 @@ export function paintFocus(canvas){
  }
  return true;
 }
-export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
+export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=()=>{}}){
  const make=(tag,className)=>{const node=doc.createElement(tag);node.className=className;return node;};
  const root=make('div','v03-hud');root.dataset.v03Hud='';
  const quest=make('section','v03-quest'),kicker=make('small','v03-quest-kicker'),title=make('strong','v03-quest-title'),objective=make('p','v03-quest-objective');
- kicker.textContent=t('hud.main');quest.append(kicker,title,objective);quest.hidden=true;
- // One optional errand under the main line (2026-11-24): kicker · title, then its step.
- const errand=make('div','v03-quest-errand'),errandKicker=make('small','v03-quest-kicker'),errandTitle=make('strong','v03-errand-title'),errandStep=make('p','v03-errand-step');
- errand.append(errandKicker,errandTitle,errandStep);errand.hidden=true;quest.append(errand);
+ kicker.textContent=t('hud.main');quest.hidden=true;
+ // Pages (2026-11-27): the main quest, then each accepted errand (quest-pages.js).
+ const mainPage=make('div','is-main');mainPage.append(kicker,title,objective);
+ const pager=createQuestPager({doc,host:quest,mainPage,onPage:id=>onQuestPage(id)});
  // Two lines at most: what to do, then how (keys or touch control), each on one line.
  const hint=make('div','v03-hint'),hintWhat=make('strong','v03-hint-what'),hintHow=make('span','v03-hint-how');hint.append(hintWhat,hintHow);hint.hidden=true;
  // Interaction plate: key cap · name · action. The whole plate is the touch target.
@@ -67,7 +68,7 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
  const releasePrompt=releaseFocusAfterPointer(prompt);
  // Touch: the attack button stands in for the prompt while one can be acted on (interact-button.js).
  const interactButton=createInteractButton({doc,onInteract});
- const last={title:null,objective:null,errandTitle:null,errandStep:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
+ const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
  return {
   element:root,
   setQuest(nextTitle,nextObjective){
@@ -76,14 +77,12 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;kicker.textContent=t('hud.main');title.textContent=nextTitle??'';objective.textContent=nextObjective??'';
    if(changedStep){quest.classList.remove('is-updated');void quest.offsetWidth;quest.classList.add('is-updated');}
   },
-  // The errand shown under the main quest (null hides it). DOM written only when it changes.
-  setErrand(nextTitle,nextStep){
-   if(last.errandTitle===nextTitle&&last.errandStep===nextStep)return;
-   const changedStep=last.errandStep!==null&&last.errandStep!==nextStep&&last.errandTitle===nextTitle;
-   last.errandTitle=nextTitle;last.errandStep=nextStep;errand.hidden=!nextTitle;
-   errandKicker.textContent=t('hud.errand');errandTitle.textContent=nextTitle??'';errandStep.textContent=nextStep??'';
-   if(changedStep){errand.classList.remove('is-updated');void errand.offsetWidth;errand.classList.add('is-updated');}
-  },
+  // The errand pages ([{id,title,step}] in accepted order, null: none) and the page
+  // shown (an errand id, null: main). Returns the page actually shown.
+  setQuestPages(errands,page=null){return pager.set(errands,page);},
+  // A new errand was taken: the count line lights up, the page stays.
+  pulseErrands(){pager.pulse();},
+  get questPage(){return pager.page;},
   setCaption(value){
    // The prompt moves up out of a caption's way (v03.css).
    root.classList.toggle('has-caption',!!value);
@@ -138,6 +137,6 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{}}){
    const size=Math.max(box.width,box.height)+18;
    ring.style.width=ring.style.height=size+'px';ring.style.left=box.left+box.width/2-size/2+'px';ring.style.top=box.top+box.height/2-size/2+'px';ring.hidden=false;
   },
-  dispose(){releasePrompt();interactButton.dispose();root.remove();},
+  dispose(){releasePrompt();interactButton.dispose();pager.dispose();root.remove();},
  };
 }

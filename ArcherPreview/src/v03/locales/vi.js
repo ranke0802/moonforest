@@ -107,6 +107,7 @@ export default {
   'treasure.open':'Mở · Bậc {tier}',
   // Optional errands (2026-11-24).
   'hud.errand':'Việc nhờ','errand.accepted':'Việc nhờ · {title}','errand.done':'Hoàn thành việc nhờ','errand.received':'Đã nhận · {items}',
+  'hud.errandCount':'Việc nhờ {n}','hud.questPage':'Trang nhiệm vụ {n}/{total}',
  },
  story:{
   speakers:{'대장장이':'Thợ rèn','양아버지':'Cha','나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},

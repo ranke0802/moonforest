@@ -791,9 +791,11 @@ test('errands: a first greeting once, an errand offered after its main quest, th
   for(let i=0;i<lines;i++){said.push(hud('.v03-dialogue-text').textContent);key('KeyE');await settle(2);}
   await settle();h.shell.update(.016);return said;
  };
- assert.equal(hud('.v03-quest-errand').hidden,true,'no errand before M02 is reported');
+ // Errand pages (2026-11-27): none and no count line until one is taken.
+ const errandPage=()=>h.document.querySelector('.v03-quest-errand');
+ assert.equal(errandPage(),null,'no errand before M02 is reported');assert.equal(hud('.v03-quest-pager').hidden,true);
  assert.deepEqual(await talk('innkeeper',DIALOGUES['inn-report'].length),DIALOGUES['inn-report'].map(line=>line.text));
- assert.equal(hud('.v03-quest-title').textContent,'마을의 부탁');assert.equal(hud('.v03-quest-errand').hidden,true,'no errand yet');
+ assert.equal(hud('.v03-quest-title').textContent,'마을의 부탁');assert.equal(errandPage(),null,'no errand yet');
  // The minimap's mark nearest a villager (they stroll a little around their spot).
  const glyphAt=(run,id)=>{const npc=run.shell.inspect().story.cast.find(row=>row.id===id);let best=null,bestSq=9;for(const mark of run.marks.at(-1)){const sq=(mark.x-npc.x)**2+(mark.z-npc.z)**2;if(sq<bestSq){best=mark.glyph;bestSq=sq;}}return best;};
  assert.equal(glyphAt(h,'herbalist'),'+');assert.equal(glyphAt(h,'youth'),'+');assert.equal(glyphAt(h,'chief'),'?','the main quest keeps its own mark');assert.equal(glyphAt(h,'smith'),null,'the smith’s errand waits for the bear');
@@ -802,14 +804,15 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  assert.deepEqual(await talk('smith',1),[DIALOGUES['smith-idle'][0].text]);
  // The herbalist offers her errand and hands over the herbs for it.
  assert.deepEqual(await talk('herbalist',3),DIALOGUES['herbalist-errand'].map(line=>line.text));
- assert.ok(h.log.includes('grant:moon-herb:2'));assert.equal(hud('.v03-quest-errand').hidden,false);
+ assert.ok(h.log.includes('grant:moon-herb:2'));assert.notEqual(errandPage(),null);assert.equal(hud('.v03-quest-pager').hidden,false);assert.equal(hud('.v03-quest-count').textContent,'선택 의뢰 1');
+ assert.equal(h.shell.story.questPage,null,'taking an errand keeps the main page shown');
  assert.equal(hud('.v03-errand-title').textContent,'물약 한 병');assert.equal(hud('.v03-errand-step').textContent,'약초사에게서 회복약 한 병 조제하기');
  assert.equal(hud('.v03-quest-title').textContent,'마을의 부탁','the main line stays on top');
  townEvent({type:'town',action:'repair',item:'oathblade'});h.shell.update(.016);assert.equal(hud('.v03-errand-step').textContent,'약초사에게서 회복약 한 병 조제하기');
  townEvent({type:'town',action:'craft',item:'potion'});h.shell.update(.016);assert.equal(hud('.v03-errand-step').textContent,'약초사에게 알리기');
  assert.equal(glyphAt(h,'herbalist'),'!');
  assert.deepEqual(await talk('herbalist',3),DIALOGUES['herbalist-errand-done'].map(line=>line.text));
- assert.ok(h.log.includes('gold:v03-errand-S02:10'));assert.ok(h.log.includes('potions:1'));assert.equal(hud('.v03-quest-errand').hidden,true);
+ assert.ok(h.log.includes('gold:v03-errand-S02:10'));assert.ok(h.log.includes('potions:1'));assert.equal(errandPage(),null);assert.equal(hud('.v03-quest-pager').hidden,true);
  assert.deepEqual(await talk('herbalist',1),[DIALOGUES['herbalist-idle'][0].text],'done errands are not offered again; her greeting was the errand talk');
  assert.equal(h.log.filter(row=>row.startsWith('gold:v03-errand-S02')).length,1);
  // A later document keeps the errand finished and the greetings given.

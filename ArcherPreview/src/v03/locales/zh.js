@@ -97,6 +97,7 @@ export default {
   'shop.grade.near':'普通','shop.grade.failed':'失败','shop.forgeTap':'点击画面落锤','shop.forgeCost':'费用 {cost} G · 材料 {material}(持有 {n})','shop.forgeNeedsMaterial':'没有锻造材料','shop.forgeAgain':'再次锻造 · {cost} G','shop.forgeMaxed':'已锻造至最高 +{maxLevel}','shop.forgeDurability':'耐久','shop.forgeOnPerfect':'大成功时 {value}','shop.gradeGain':'{stat} +{n}','shop.forgeWear':'每次最大耐久 −{min}~−{max}','shop.forgeWore':'最大耐久 −{d}','shop.forgeCount':'锻造次数','shop.forgeSpeed':'锤速 {n}%','shop.forgeSaved':'每次锻造都会立即保存，无法撤销。','shop.total':'合计 {n} G','shop.totalGain':'获得 {n} G','shop.makeAction':'制作','shop.boughtItems':'已购买 · {items}','shop.soldItems':'已出售 · {items}','shop.madeItems':'已制作 · {items}','shop.blessedMade':'获得了祝福：{name}','shop.nothingToSell':'没有可出售的物品。','shop.less':'减少{name}','shop.more':'增加{name}','item.blessed':'受祝福的{name}','talk.menu.talk':'交谈','talk.menu.shop':'商店','talk.menu.forge':'锻造','talk.menu.leave':'结束对话','talk.hint.move':'移动','talk.hint.pick':'选择','travel.returnTitle':'地区移动','travel.returnConfirm':'要返回{place}吗？','travel.returnAccept':'移动','treasure.open':'打开 · {tier}级',
   // Optional errands (2026-11-24).
   'hud.errand':'委托','errand.accepted':'委托 · {title}','errand.done':'委托完成','errand.received':'获得 · {items}',
+  'hud.errandCount':'委托 {n}','hud.questPage':'任务第 {n}/{total} 页',
  },
  story:{
   speakers:{'대장장이':'铁匠','양아버지':'父亲','나':'我','마부':'车夫','여관 주인':'旅店老板','노년 여성':'老妇人','약초사':'草药师','촌장':'村长','청년':'青年','요아힘':'约阿希姆','비비앙':'薇薇安','엘레나':'艾莲娜'},

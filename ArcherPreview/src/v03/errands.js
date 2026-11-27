@@ -50,6 +50,8 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
   step:stepOf,isActive,isFinished,
   // Errands in the order they were defined that are active now.
   active:()=>errands.filter(errand=>state.active[errand.id]),
+  // Active errands in the order they were accepted (the quest panel's pages, 2026-11-27).
+  accepted:()=>Object.keys(state.active).map(id=>byId.get(id)),
   // An errand this NPC can offer now (mainDone: id => boolean).
   offerFor(npc,mainDone){return errands.find(errand=>errand.giver===npc&&!isActive(errand.id)&&!isFinished(errand.id)&&(!errand.after||mainDone(errand.after)))??null;},
   accept(id){if(!byId.has(id)||isActive(id)||isFinished(id))return false;state.active[id]={step:0,count:0};save();return true;},

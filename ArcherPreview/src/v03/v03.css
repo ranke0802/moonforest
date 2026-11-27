@@ -783,3 +783,32 @@ html[data-edition] #app .joystick-hint{color:#ece0bcb3}
 html[data-edition] :where(button,[tabindex],a,select,input,summary,textarea):focus-visible{outline:2px solid var(--mf-focus);outline-offset:3px}
 /* Shared 0.2 controls inside #app: the same focus ring colour in 0.3 (commercial-ui.css:3 keeps #f2d592 for 0.2). */
 html[data-edition="moonforest-0.3"] #app[data-commercial-ui] :is(button,select,input):focus-visible{outline-color:var(--mf-focus)}
+/* ----- 2026-11-27 questui: the quest panel as pages (quest-pages.js). Page 1 the main
+   quest, then every accepted errand; the count line shows only with errands. The strip
+   moves by transform alone; reduced motion turns pages at once. The arrows draw 24 px
+   and take a 44 px press (their ::before). ----- */
+.v03-quest.has-pages{width:min(320px,calc(100vw / var(--v03-ui,1)));pointer-events:auto}
+.v03-quest-pages{overflow:hidden;touch-action:pan-y}
+.v03-quest-track{display:flex;align-items:flex-start;transition:transform .28s cubic-bezier(.2,.7,.2,1)}
+.v03-quest-track.is-dragging,html[data-mf-motion="reduce"] .v03-quest-track{transition:none}
+.v03-quest-page{flex:0 0 100%;min-width:0;box-sizing:border-box}
+.v03-quest-page.v03-quest-errand{margin:0;padding:0;border:0}
+/* Pages out of view are hidden once the slide has run (their text shadows would bleed in at the edge); a drag shows its neighbours. */
+.v03-quest-page[aria-hidden="true"]{visibility:hidden;transition:visibility 0s linear .28s}
+.v03-quest-track.is-dragging .v03-quest-page{visibility:visible;transition:none}
+html[data-mf-motion="reduce"] .v03-quest-page[aria-hidden="true"]{transition:none}
+.v03-quest-pager{display:flex;align-items:center;gap:7px;margin:-1px 0 5px;font-size:12px;line-height:1.2;color:#cfc6ee;text-shadow:0 1px 4px #000}
+.v03-quest-pager[hidden]{display:none}
+.v03-quest-count{display:inline-block;white-space:nowrap;letter-spacing:.06em;transform-origin:left center}
+.v03-quest-count.is-new{animation:v03-count-new 1.4s ease-out}
+@keyframes v03-count-new{0%,100%{transform:none;opacity:1}18%{transform:scale(1.22);opacity:1}40%{opacity:.55}60%{transform:scale(1.08);opacity:1}}
+html[data-mf-motion="reduce"] .v03-quest-count.is-new{animation:v03-count-new-still 1.4s steps(2,jump-none)}
+@keyframes v03-count-new-still{0%,100%{opacity:1}50%{opacity:.5}}
+.v03-quest-dots{display:inline-flex;align-items:center;gap:4px;flex:1;min-width:0}
+.v03-quest-dot{flex:none;width:6px;height:6px;border:1px solid #cfc6eebb;border-radius:50%;box-sizing:border-box}
+.v03-quest-dot.is-on{background:#ece6ff;border-color:#ece6ff}
+.v03-quest-turn{position:relative;flex:none;width:24px;height:24px;padding:0;border:1px solid #cfc6ee66;border-radius:4px;background:#101a14b3;color:#ece6ff;font-family:inherit;font-size:15px;line-height:1;cursor:pointer}
+.v03-quest-turn::before{content:'';position:absolute;inset:-10px}
+.v03-quest-turn:disabled{opacity:.3;cursor:default}
+.v03-quest-turn:not(:disabled):hover{border-color:#ece6ffaa}
+@media (pointer:coarse){.v03-quest-pager{font-size:13px}}

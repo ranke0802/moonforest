@@ -107,6 +107,7 @@ export default {
   'treasure.open':'Open · Tier {tier}',
   // Optional errands (2026-11-24).
   'hud.errand':'Errand','errand.accepted':'Errand · {title}','errand.done':'Errand complete','errand.received':'Received · {items}',
+  'hud.errandCount':'Errands {n}','hud.questPage':'Quest page {n} of {total}',
  },
  story:{
   speakers:{'대장장이':'Blacksmith','양아버지':'Father','나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},

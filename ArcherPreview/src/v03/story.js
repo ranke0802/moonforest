@@ -45,11 +45,13 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  let log=createQuestLog({quests:content.QUESTS,storage:save.journey}),replaying=false,onChapterEnd=null;
  // Optional errands (errands.js) and who has been greeted once (NPCS greet), per slot.
  let errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey});
- const GREET_KEY='v03-greeted-v1',greeted=new Set(),errandMarks=new Map();let greetKey=GREET_KEY,errandFocus=null,errandPoll=0;
+ const GREET_KEY='v03-greeted-v1',greeted=new Set(),errandMarks=new Map();let greetKey=GREET_KEY,errandPoll=0;
+ // The quest panel's page (quest-pages.js): an errand id, or null for the main quest. Saved per record.
+ const PAGE_KEY='v03-quest-page-v1';let pageKey=PAGE_KEY,questPage=null;
  const dialogue=createDialogue({doc,portraitFor});
  // Warm the art cache so the first line never shows an empty frame.
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
- const hud=createPlayHud({doc,onInteract:()=>interact()});
+ const hud=createPlayHud({doc,onInteract:()=>interact(),onQuestPage:id=>selectPage(id)});
  const cast=[];let mapId=null,near=null,started=false,talking=false,disposed=false;
  // The cast of castMap, settled when every member's model is on stage (cast-models.js).
  let castMap=null,castSettled=null;
@@ -102,15 +104,22 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   refreshErrands();
  }
  // ----- optional errands (선택 의뢰, errands.js) -----
- // The HUD shows one errand under the main line: the one last accepted or
- // advanced while it is active, else the first active one. Marks over heads
- // (+ offered, ! ready to hand in) are worked out here, on changes, not per frame.
+ // The panel's pages: the main quest, then every active errand in the order it was
+ // taken (2026-11-27). Marks over heads (+ offered, ! ready to hand in) are worked
+ // out here, on changes, not per frame.
  const mainDone=id=>log.isDone(id);
  function deliverReady(errand){const step=errands.step(errand.id);return step?.type==='deliver'&&(api.itemCount?.(step.item)??0)>=step.count;}
+ function loadPage(){let id=null;try{id=save.journey.getItem(pageKey);}catch{/* main */}questPage=typeof id==='string'&&id?id:null;}
+ function storePage(){try{if(questPage)save.journey.setItem(pageKey,questPage);else save.journey.removeItem(pageKey);}catch{/* kept for this visit */}}
+ // The player turned the panel (or the shown errand ended): a finished or unknown id is main.
+ function selectPage(id){
+  const next=id&&errands.isActive(id)?id:null;if(next===questPage)return;
+  questPage=next;storePage();guide.key=null;refreshErrands();
+ }
  function refreshErrands(){
-  if(!errands.isActive(errandFocus))errandFocus=errands.active()[0]?.id??null;
-  const focus=errandFocus?errands.errand(errandFocus):null,step=focus?errands.step(focus.id):null;
-  hud.setErrand(focus?.title??null,focus?errands.objective(focus.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null):null);
+  if(questPage&&!errands.isActive(questPage)){questPage=null;storePage();}
+  const pages=errands.accepted().map(errand=>{const step=errands.step(errand.id);return {id:errand.id,title:errand.title,step:errands.objective(errand.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null)};});
+  hud.setQuestPages(pages,questPage);
   errandMarks.clear();
   for(const npc of content.NPCS??[]){
    const waiting=errands.waitingOn(npc.id);
@@ -130,7 +139,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function errandResults(results){
   let changed=false;
-  for(const row of results){if(!row)continue;changed=true;if(errands.isActive(row.id))errandFocus=row.id;if(row.errandDone)errandDone(errands.errand(row.id));}
+  for(const row of results){if(!row)continue;changed=true;if(row.errandDone)errandDone(errands.errand(row.id));}
   if(changed)refreshErrands();
  }
  function errandEvent(event){if(started&&event)errandResults(errands.notify(event));}
@@ -150,10 +159,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(!talk)return;
   if(talk.kind==='offer'){
    if(!errands.accept(talk.errand.id))return;
-   errandFocus=talk.errand.id;
    if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
    tips.queue.unshift({title:t('errand.accepted',{title:talk.errand.title}),keys:errands.objective(talk.errand.id),touch:errands.objective(talk.errand.id),text:''});
-   refreshErrands();return;
+   // Its page joins the panel; the page shown stays, the count lights up (2026-11-27).
+   refreshErrands();hud.pulseErrands();return;
   }
   if(talk.kind==='deliver'&&!replaying){
    const step=errands.step(talk.errand.id),final=step===talk.errand.steps.at(-1);
@@ -1521,6 +1530,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    return null;
   },
   get started(){return started;},
+  // The quest panel's page: an errand id, or null for the main quest.
+  get questPage(){return questPage;},
+  selectPage,
   get replaying(){return replaying;},
   get log(){return log;},
   start({fresh=false,key,replay=false,onComplete=null}={}){
@@ -1537,8 +1549,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(log.recoverSettled(api.hasSettledQuest)&&log.finished)onChapterEnd?.();
     errands.recoverSettled(api.hasSettledQuest);
    }
-   errandFocus=null;errandPoll=0;greetKey=key?key+':greeted':GREET_KEY;loadGreeted();
+   errandPoll=0;greetKey=key?key+':greeted':GREET_KEY;loadGreeted();
    if(fresh){greeted.clear();try{save.journey.removeItem(greetKey);}catch{/* optional */}}
+   pageKey=key?key+':page':PAGE_KEY;loadPage();if(fresh){questPage=null;storePage();}
    api.onTownEvent?.(event=>errandEvent(event));
    // A new game opens on the wolf at the wagon (once the cast is placed).
    scene.pending=fresh===true&&log.quest()?.id==='M00';scene.pendingFor=0;
@@ -1560,7 +1573,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    scene.pending=false;scene.pendingFor=0;
    try{dialogue.cancel();}catch{/* nothing open */}talking=false;
    clearCast();mapId=null;started=false;
-   api.onTownEvent?.(null);hud.setErrand(null,null);errandMarks.clear();
+   api.onTownEvent?.(null);hud.setQuestPages(null);errandMarks.clear();
    guide.visual?.hide();guide.key=null;guide.shown=false;
    try{api.setMapMarkers?.([]);}catch{/* optional */}
    tips.queue.length=0;tips.showing=null;tips.step=null;
