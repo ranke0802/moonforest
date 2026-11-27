@@ -18,13 +18,15 @@ export const CHAPTER_CAMPS = Object.freeze({
     ...camp('ghoul-patrol',31,10,[['ghoul-warrior',0,0]]),
   ]),
 });
+// Longer than a boss preparation's own timeout (45 s, boss-preparation.js).
+const STUCK_SECONDS=60;
 const goblins=new Set(['goblin-warrior','goblin-archer','goblin-shaman','hobgoblin-boss']);
 export function chapterQuestFamily(kind){return goblins.has(kind)?'goblin':kind;}
 
 // The caller owns one visit. Admissions run serially, proximity checks at 4 Hz;
 // movement, animation and hits are handled once by the normal battle update.
 export function createChapterWildlife({world,battle,getPlayer,makeEnemies,makeBeasts,onDefeat,onError=console.warn}) {
-  let disposed=false, pending=false, age=0, next=0;
+  let disposed=false, pending=false, pendingSince=0, attempt=0, age=0, next=0, lastError=null, failures=0;
   const map=world.mapId, rows=CHAPTER_CAMPS[map]??[], live=new Map(), defeated=new Set(), retry=new Map();
   const current=()=>!disposed && world.mapId===map && !world.scene.isDisposed;
   function defeatedAt(event){
@@ -32,7 +34,7 @@ export function createChapterWildlife({world,battle,getPlayer,makeEnemies,makeBe
     defeated.add(event.id);
     onDefeat({...event,family:chapterQuestFamily(event.kind)});
   }
-  let enemies, beasts;
+  let enemies, beasts, pendingRow=null;
   return {
     // Behind the loading cover (chapter-resident-visits.js): the camp's foe kinds
     // load and compile once, before play, instead of at the first approach.
@@ -54,6 +56,9 @@ export function createChapterWildlife({world,battle,getPlayer,makeEnemies,makeBe
           live.delete(id);handle.dispose();
         }
       }
+      // A create that never settles would hold every later camp back for the whole visit
+      // (2026-11-27 forest report: no foes for 95 s). Past the preparation timeout it is dropped.
+      if(pending&&age-pendingSince>STUCK_SECONDS){pending=false;lastError='stuck '+pendingRow;failures++;retry.set(pendingRow,age+15);onError('[MoonForest] '+pendingRow,new Error('chapter foe creation did not settle'));}
       if(pending||live.size>=6)return;
       let chosen=null,closest=25*25;
       for(const row of rows){
@@ -64,12 +69,14 @@ export function createChapterWildlife({world,battle,getPlayer,makeEnemies,makeBe
       if(!chosen)return;
       const beast=chosen.kind.startsWith('corrupted-');
       const factory=beast?(beasts??=makeBeasts({world,battle,onDefeat:defeatedAt})):(enemies??=makeEnemies({world,battle,onDefeat:defeatedAt}));
-      pending=true;
+      pending=true;pendingSince=age;pendingRow=chosen.id;const mine=++attempt,ours=()=>current()&&attempt===mine;
       return Promise.resolve().then(()=>current()?factory.create({...chosen,player,isCurrent:current}):null)
-        .then(handle=>{if(!handle)return;if(!current()){handle.dispose();return;}live.set(chosen.id,handle);handle.encounter.questFamily=chapterQuestFamily(chosen.kind);})
-        .catch(error=>{if(current()){retry.set(chosen.id,age+15);onError('[MoonForest] '+chosen.id,error);}})
-        .finally(()=>{pending=false;});
+        .then(handle=>{if(!handle)return;if(!ours()||live.has(chosen.id)){handle.dispose();return;}live.set(chosen.id,handle);handle.encounter.questFamily=chapterQuestFamily(chosen.kind);})
+        .catch(error=>{if(current()){failures++;lastError=chosen.id+': '+String(error?.message??error).slice(0,120);retry.set(chosen.id,age+15);onError('[MoonForest] '+chosen.id,error);}})
+        .finally(()=>{if(attempt===mine)pending=false;});
     },
+    // Diagnostics (frame recording, 0.3): small and read once a second.
+    inspect(){return {live:live.size,pending,pendingSeconds:pending?Math.round(age-pendingSince):0,defeated:defeated.size,failures,lastError};},
     dispose(){if(disposed)return;disposed=true;for(const handle of live.values())handle.dispose();live.clear();enemies?.dispose();beasts?.dispose();}
   };
 }
