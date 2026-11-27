@@ -48,7 +48,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  let errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey});
  const GREET_KEY='v03-greeted-v1',greeted=new Set(),errandMarks=new Map();let greetKey=GREET_KEY,errandPoll=0;
  // The quest panel's page (quest-pages.js): an errand id, or null for the main quest. Saved per record.
- const PAGE_KEY='v03-quest-page-v1';let pageKey=PAGE_KEY,questPage=null;
+ const PAGE_KEY='v03-quest-page-v1';let pageKey=PAGE_KEY,questPage=null,firstErrand=null;// firstErrand: the panel's first errand page (refreshErrands)
  const dialogue=createDialogue({doc,portraitFor});
  // Warm the art cache so the first line never shows an empty frame.
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
@@ -123,7 +123,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function refreshErrands(){
   if(questPage&&!errands.isActive(questPage)){questPage=null;storePage();}
   const pages=errands.accepted().map(errand=>{const step=errands.step(errand.id);return {id:errand.id,title:errand.title,step:waves.objective(errand.id)??errands.objective(errand.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null)};});
-  hud.setQuestPages(pages,questPage);
+  hud.setQuestPages(pages,questPage);firstErrand=pages[0]?.id??null;
   errandMarks.clear();
   for(const npc of content.NPCS??[]){
    const waiting=errands.waitingOn(npc.id);
@@ -259,9 +259,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   }
   return target??npcTarget(player,[errand.giver]);
  }
+ // The main line is over and the panel shows its end (2026-11-27 playtest: the light went out while
+ // errands were still open): it leads to the first errand taken. Only read once log.step() is null.
+ function afterLine(){return !log.step()&&firstErrand&&errands.isActive(firstErrand)?errands.errand(firstErrand):null;}
  function guideTarget(player){
   // The page the quest panel shows decides what the light leads to; main by default.
-  const shown=questPage&&errands.isActive(questPage)?errands.errand(questPage):null;
+  const shown=questPage&&errands.isActive(questPage)?errands.errand(questPage):afterLine();
   if(shown)return errandTarget(player,shown);
   const step=log.step();if(!step)return null;
   if(step.type==='defeat')return defeatTarget(player,step);
@@ -362,7 +365,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // driver's talk), and not while a fight is on: it would only add glare and
   // overdraw around the player where the combat effects already are.
   const opening=log.quest()?.id==='M00'&&log.step()?.id==='fight';
-  if(!createGuide||guide.failed||talking||dialogue.open||!player||!(log.step()||questPage)||opening||combatLocksTravel()){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
+  if(!createGuide||guide.failed||talking||dialogue.open||!player||!(log.step()||questPage||afterLine())||opening||combatLocksTravel()){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
   try{guide.visual??=createGuide(api.world.scene);}catch(error){guide.failed=true;console.warn('[MoonForest 0.3] guide light unavailable',error);return;}
   // Its explanation card comes with the light's first appearance (once per record).
   trigger('guide-shown');

@@ -22,7 +22,7 @@ import {createTownEconomy} from '../src/v03/town-economy.js';
 import {QUESTS,ERRANDS,NPCS,ROUTES} from '../src/v03/data/chapter1.js';
 import {CHAPTER_CAMPS,chapterQuestFamily} from '../src/v03/chapter-wildlife.js';
 import {PLAINS_MONSTER_SPAWNS} from '../src/plains-monster-spawns.js';
-import {mapPortals,mapForCharacter} from '../src/map-route.js';
+import {mapPortals,mapForCharacter,MAP_PORTALS,FOREST_SPAWN,CAVE_SPAWN} from '../src/map-route.js';
 import {ELENA_HOME} from '../src/elena-spec.js';
 import {createWaveRaid} from '../src/v03/defense-waves.js';
 import {CHAPTER_COMBAT} from '../src/v03/chapter-enemy-brain.js';
@@ -32,6 +32,8 @@ import {LEGACY_ORDER} from '../src/v03/quest-migration.js';
 
 setTypewriterEnabled(false);
 const E='moonforest-0.3';
+// Where the player stands on arriving at each map (map-route.js).
+const ARRIVAL=Object.freeze({village:MAP_PORTALS['great-plains'].arrival,'great-plains':MAP_PORTALS.village.arrival,'monster-forest':FOREST_SPAWN,'witch-cave':CAVE_SPAWN});
 const CHARACTER=Object.freeze({village:'warrior-v3','great-plains':'warrior-plains','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function settle(times=12){for(let i=0;i<times;i++)await tick();}
@@ -202,7 +204,9 @@ function createPlayer(h,{lang='ko',notes}){
   const from={...h.player.position};
   frames(20,false);
   const guide=h.shell.inspect().story.guide;
-  if(!guide&&!h.battle.combatCount)note('주의',`빛무리 대상 없음 (${label}, 플레이어 ${from.x.toFixed(0)},${from.z.toFixed(0)})`);
+  // After the main line with no errand taken there is nothing to lead to (offers wear a + mark).
+  const idle=!log().step()&&!Object.keys(errandState(h).active).length;
+  if(!guide&&!h.battle.combatCount&&!idle)note('주의',`빛무리 대상 없음 (${label}, 플레이어 ${from.x.toFixed(0)},${from.z.toFixed(0)})`);
   return guide;
  }
  function checkPanel(){
@@ -233,6 +237,7 @@ function createPlayer(h,{lang='ko',notes}){
   if(step.at&&!source&&!spot.length)note('막힘',`${step.kind}가 목표 지점(${step.at.x},${step.at.z} 반경 ${step.at.radius}m)에 없음`);
   const rows=[...spot,...all.filter(row=>!spot.includes(row))];
   if(!rows.some(row=>row.respawn)&&rows.length<count)note('주의',`${map}의 ${step.kind??'짐승'} ${rows.length}마리 < 필요 ${count} (한 방문에 다 못 잡음)`);
+  Object.assign(h.player.position,ARRIVAL[map]);
   h.battle.encounters=standing(map,h.player.position);
   checkGuide('defeat '+(step.kind??'any'));
   for(let n=0;n<count;n++){
@@ -484,7 +489,7 @@ test('이어하기: 1장 모든 단계에서 저장 → 불러오기 후 끝까�
   const h=harness(seedSlot({cursor:{v:2,id:quest.id,quest:qi,step:si,count:0,done:[]},map})),notes=[],p=createPlayer(h,{notes});
   try{
    await playChapterOne(h,p,{errands:false,start:'load'});
-   const stuck=notes.filter(n=>n.kind==='막힘');
+   const stuck=notes.filter(n=>n.kind==='막힘'||n.text.startsWith('빛무리'));
    if(stuck.length||!p.log().finished)blocked.push({from:quest.id+'/'+step.id,map,stuck,finished:p.log().finished});
    await report('resume-'+quest.id+'-'+step.id,{notes,finished:p.log().finished});
   }finally{h.shell.dispose?.();}
@@ -551,7 +556,8 @@ test('옛 저장(11/27 전 형식): 모든 단계에서 새 흐름으로 옮겨 
    const receipts=h.economy.state.settledQuests,twice=receipts.filter((r,i)=>receipts.indexOf(r)!==i);
    const unfinished=ERRANDS.filter(e=>!errandState(h).finished.includes(e.id)).map(e=>e.id);
    await report('legacy-'+id+'-'+old.step,{notes,moved:moved&&{v:moved.v,id:moved.id,step:moved.step},finished:p.log().finished,over,twice,unfinished});
-   if(stuck.length||!p.log().finished||over.length||twice.length||unfinished.length)bad.push({old:id+'/'+old.step,stuck,finished:p.log().finished,over,twice,unfinished});
+   const dark=notes.filter(n=>n.text.startsWith('빛무리'));
+   if(stuck.length||dark.length||!p.log().finished||over.length||twice.length||unfinished.length)bad.push({old:id+'/'+old.step,stuck,finished:p.log().finished,over,twice,unfinished});
   }finally{h.shell.dispose?.();}
  }
  assert.deepEqual(bad,[]);
