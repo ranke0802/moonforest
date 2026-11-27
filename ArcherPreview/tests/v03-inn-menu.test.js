@@ -20,11 +20,13 @@ import zh from '../src/v03/locales/zh.js';
 setTypewriterEnabled(false);
 const tick=async(n=4)=>{for(let i=0;i<n;i++)await new Promise(resolve=>setTimeout(resolve,0));};
 const armed=()=>new Promise(resolve=>setTimeout(resolve,CHOICE_ARM_MS+30));
-function inn({quest='M05',step=1,shop=true}={}){
+function inn({quest='M07',step=0,shop=true,met=true}={}){
  setPack('ko',ko);
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const values=new Map(),journey={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
- journey.setItem('v03-story-v1',JSON.stringify({quest:QUESTS.findIndex(row=>row.id===quest),step,count:0,done:[]}));
+ // On the way to the forest by default (nothing waits on him); met: the reunion was heard already (2026-11-27).
+ journey.setItem('v03-story-v1',JSON.stringify({v:2,id:quest,quest:QUESTS.findIndex(row=>row.id===quest),step,count:0,done:[]}));
+ if(met)journey.setItem('v03-greeted-v1',JSON.stringify(['innkeeper']));
  const player={position:{x:0,z:0}},rests=[],touches=[];
  const world={scene:{isDisposed:false},mapId:'village',terrain:{heightAt:()=>0},navigation:{free:()=>true,path:()=>null}};
  const api={world,battle:{encounters:[],combatCount:0},input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null,creditGold:(_s,n)=>n,addPotions:n=>n,toast(){},
@@ -47,7 +49,7 @@ test('the innkeeper asks first: one greeting over talk / rest / leave; opening t
   assert.equal(v.story.dialogueOpen,true);assert.equal(v.menuUp(),true);
   assert.deepEqual(v.entries().map(node=>node.textContent),['대화하기','숙박','대화 종료']);
   assert.equal(v.$('.v03-dialogue-who').textContent,'여관 주인');
-  assert.equal(v.$('.v03-sr-only').textContent,'어서 와. 쉬어 갈 텐가, 얘기나 할 텐가?');
+  assert.equal(v.$('.v03-sr-only').textContent,DIALOGUES['inn-menu'][0].text);
   assert.deepEqual(v.rests,[]);
   // 대화하기: his idle line (which used to rest) only talks, then the choices again.
   await armed();v.entries()[0].click();await tick();
@@ -73,7 +75,7 @@ test('ending the talk or Escape never rests',async()=>{
 });
 
 test('a quest line with him comes first under 대화하기 (marked), as with the smith; the quest completes without resting',async()=>{
- for(const [quest,step,dialogue,next] of [['M01',0,'inn-arrive','M02'],['M02',1,'inn-report','M03']]){
+ for(const [quest,step,dialogue,next] of [['M01',0,'inn-arrive','M10']]){
   const v=inn({quest,step});
   try{
    await v.open();
@@ -85,6 +87,17 @@ test('a quest line with him comes first under 대화하기 (marked), as with the
    await armed();v.entries()[1].click();await tick();assert.deepEqual(v.rests,[1]);
   }finally{v.story.dispose();}
  }
+});
+
+test('the first meeting: his reunion once before the choices, then the choices as usual (2026-11-27)',async()=>{
+ const v=inn({quest:'M01',met:false});
+ try{
+  await v.open();assert.equal(v.menuUp(),false,'the reunion comes first');
+  assert.deepEqual(await v.lines(DIALOGUES['inn-greet'].length),DIALOGUES['inn-greet'].map(line=>line.text));
+  assert.equal(v.menuUp(),true,'then his choices');assert.deepEqual(v.rests,[]);
+  await armed();v.entries()[2].click();await tick();v.frame();await v.open();
+  assert.equal(v.menuUp(),true,'the second visit opens on the choices');
+ }finally{v.story.dispose();}
 });
 
 test('without the town shops (the shell) the inn menu still stands: resting needs no shop window',async()=>{

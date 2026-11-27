@@ -127,7 +127,7 @@ function village({active={},page,finished=[]}={}){
  setPack('ko',ko);
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const values=new Map(),journey={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
- journey.setItem('v03-story-v1',JSON.stringify({quest:QUESTS.findIndex(quest=>quest.id==='M07'),step:0,count:0,done:[]}));
+ journey.setItem('v03-story-v1',JSON.stringify({v:2,id:'M07',quest:QUESTS.findIndex(quest=>quest.id==='M07'),step:0,count:0,done:[]}));
  journey.setItem('v03-errands-v1',JSON.stringify({active,finished}));
  if(page!==undefined)journey.setItem('v03-quest-page-v1',page);
  const player={position:{x:0,z:0}};
@@ -171,9 +171,9 @@ test('story: taking a new errand keeps the page and lights the count; finishing 
   await talkTo(v,'herbalist');
   assert.deepEqual(v.pages(),['main','S01','S02']);assert.equal(v.story.questPage,'S01','the page does not jump to the new errand');
   assert.ok(v.$('.v03-quest-count').classList.contains('is-new'));assert.equal(v.$('.v03-quest-count').textContent,'선택 의뢰 2');
-  // The last beast on the plains, then the report to the youth.
+  // The last beast on the plains, then the report to Jeffrey (the youth).
   v.story.update(1/60,{ready:true,mapId:'great-plains',character:'warrior-plains'});v.story.defeat({kind:'wolf'});
-  assert.equal(v.$('[data-page=S01] .v03-errand-step').textContent,'청년에게 알리기');assert.equal(v.story.questPage,'S01');
+  assert.equal(v.$('[data-page=S01] .v03-errand-step').textContent,'제프리에게 알리기');assert.equal(v.story.questPage,'S01');
   await talkTo(v,'youth');
   assert.equal(v.story.questPage,null,'back on the main page');assert.deepEqual(v.pages(),['main','S02']);
   assert.equal(v.values.has('v03-quest-page-v1'),false);

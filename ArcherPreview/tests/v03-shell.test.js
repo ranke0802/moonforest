@@ -186,6 +186,8 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
  const {elenaJournal}=await import('../src/v03/data/chapter2.js');
  seed.commit({chapter:1,character:'warrior-v3',title:'남겨진 방',playSeconds:37});
  seed.journey.setItem(questKey(1),JSON.stringify({quest:QUESTS.length-1,step:0,count:0,done:[]}));
+ // A returning warrior who has met everyone (the reunions were heard on the way, 2026-11-27).
+ seed.journey.setItem(questKey(1)+':greeted',JSON.stringify(NPCS.map(npc=>npc.id)));
  const h=harness({local,session,stopWorld:true,reloadProgress:true,travel:async(character,state)=>{
   state.character=character;state.mapId=({'warrior-v3':'village','warrior-v5':'witch-cave','warrior-plains':'great-plains'})[character];return true;
  }});
@@ -241,6 +243,7 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   await panel();h.click('[data-replay="1"]');await settle(40);assert.equal(h.shell.story.log.quest().id,'M00');assert.equal(preparedWagon,true);
   // Restore a player part way through a replay of a potion-paying chapter-one quest.
   await back();h.save.journey.setItem(questKey(1,true),JSON.stringify({quest:1,step:0,count:0,done:[]}));
+  h.save.journey.setItem(questKey(1,true)+':greeted',JSON.stringify(['innkeeper']));
   let potions=0;h.api.addPotions=count=>{potions+=count;return count;};
   await loadGame(h,1,1);await settle(40);await h.api.travel('warrior-v3');tick();
   await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.quest().id,'M10');assert.equal(potions,0);

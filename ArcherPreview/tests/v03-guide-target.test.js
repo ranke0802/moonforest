@@ -21,7 +21,8 @@ function run({active,page,quest='M07',step=0}){
  setPack('ko',ko);
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const values=new Map(),journey={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
- journey.setItem('v03-story-v1',JSON.stringify({quest:quest==='done'?QUESTS.length:QUESTS.findIndex(row=>row.id===quest),step,count:0,done:[]}));
+ // Format 2 (2026-11-27): the cursor is read by quest id.
+ journey.setItem('v03-story-v1',JSON.stringify({v:2,id:quest==='done'?'#end':quest,quest:quest==='done'?QUESTS.length:QUESTS.findIndex(row=>row.id===quest),step,count:0,done:[]}));
  journey.setItem('v03-errands-v1',JSON.stringify({active,finished:[]}));
  if(page)journey.setItem('v03-quest-page-v1',page);
  const player={position:{x:0,z:0}},shown=[];
@@ -68,6 +69,16 @@ test('village steps: buy where it is sold, craft where the recipe is, repair at 
  const r=run({active:Object.fromEntries(rows.map(([id])=>[id,{step:0,count:0}]))});
  try{for(const [id,key] of rows){r.story.selectPage(id);assert.equal(r.at('village'),key,id);}}
  finally{r.story.dispose();}
+});
+
+test('the driver\u2019s alpha errand (M06, 2026-11-27): out to the plains, the spot, then back to the driver',()=>{
+ const r=run({active:{M06:{step:0,count:0}},page:'M06'});
+ try{
+  assert.equal(r.at('village'),'exit:great-plains','the alpha is on the plains');
+  r.player.position={x:-60,z:-30};assert.equal(r.at('great-plains'),'spot:alpha','its ground in the middle of the grassland');
+ }finally{r.story.dispose();}
+ const h=run({active:{M06:{step:1,count:0}},page:'M06'});
+ try{assert.equal(h.at('village'),'exit:great-plains','the driver waits by his wagon');assert.equal(h.at('great-plains'),'npc:driver');}finally{h.story.dispose();}
 });
 
 test('with the chapter done, an errand page still has its light',()=>{
