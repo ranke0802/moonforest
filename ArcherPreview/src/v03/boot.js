@@ -782,9 +782,8 @@ export function setupV03(api){
   get cameraFocus(){return state.screen==='play'?story.cameraFocus:null;},
   get holdsPlayer(){return state.screen==='play'&&story.holdsPlayer===true;},
   get timeScale(){return state.screen==='play'?story.timeScale*combatFeel.timeScale:1;},
-  // main.js: added to the sword's attack (heavy attack, dodge counter), and whether a dodge rolls on the press.
+  // main.js: added to the sword's attack (heavy attack, dodge counter).
   get strikeBonus(){return state.screen==='play'?combatFeel.strikeBonus:0;},
-  get pressDodge(){return state.screen==='play'&&!story.sceneActive&&battle.combatCount>0;},
   // town-services defeat(): a heavy attack's finishing blow on this kind earns more experience (once).
   finishBonus(kind){return state.screen==='play'&&combatFeel.takeFinish(kind);},
   get lunge(){return state.screen==='play'?story.lunge:null;},

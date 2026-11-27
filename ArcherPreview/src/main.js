@@ -1465,7 +1465,7 @@ try {
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   if(cinematicAuthoringPreview)input.setSuspended(true);
-  input.dodgeSprintGesture=new DodgeSprintGesture({onDodge:()=>actions.dodge(),onSprint:(held,seconds)=>controller?.setSprintHeld?.(held,seconds),pressDodge:()=>world.v03?.pressDodge===true});
+  input.dodgeSprintGesture=new DodgeSprintGesture({onDodge:()=>actions.dodge(),onSprint:(held,seconds)=>controller?.setSprintHeld?.(held,seconds)});
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});if(frameLoop&&!frameLoop.running)reconcilePlayback();frameLoop?.recover();};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});

@@ -3,18 +3,12 @@
 export const DODGE_SPRINT_HOLD_SECONDS=.2;
 
 export class DodgeSprintGesture {
-  // pressDodge (optional, 0.3 in a fight): the roll starts on the press instead of the release, so a
-  // touch tap is not late by its own length and a long panic press still rolls (then sprints if held).
-  constructor({onDodge=()=>{},onSprint=()=>{},now=()=>performance.now(),holdSeconds=DODGE_SPRINT_HOLD_SECONDS,pressDodge=()=>false}={}){
+  constructor({onDodge=()=>{},onSprint=()=>{},now=()=>performance.now(),holdSeconds=DODGE_SPRINT_HOLD_SECONDS}={}){
     this.onDodge=onDodge;this.onSprint=onSprint;this.now=now;this.holdSeconds=holdSeconds;this.sources=new Map();this.sprinting=false;
-    this.pressDodge=pressDodge;this.rolled=false;
   }
   begin(source,{pointerType='unknown'}={}){
     if(this.sources.has(source))return false;
-    const first=!this.sources.size;
-    this.sources.set(source,{start:this.now(),pointerType});
-    if(first&&this.pressDodge()){this.rolled=true;this.onDodge();}
-    return true;
+    this.sources.set(source,{start:this.now(),pointerType});return true;
   }
   advance(frameSeconds=0){
     if(this.sprinting||!this.sources.size)return;
@@ -30,15 +24,13 @@ export class DodgeSprintGesture {
     if(!this.sources.has(source))return false;
     this.advance();this.sources.delete(source);
     if(this.sources.size)return true;
-    const rolled=this.rolled;this.rolled=false;
     if(this.sprinting){this.sprinting=false;this.onSprint(false,0);}
-    else if(!rolled)this.onDodge();
+    else this.onDodge();
     return true;
   }
   cancel(source){
     if(source!==undefined){if(!this.sources.delete(source))return false;if(this.sources.size)return true;}
     else this.sources.clear();
-    this.rolled=false;
     if(this.sprinting){this.sprinting=false;this.onSprint(false,0);}
     return true;
   }

@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {parseHTML} from 'linkedom';
 import {createCombatFeel,FREEZE_SCALE,HIT_STOP,KICK,COUNTER,HEAVY_BONUS,LIGHT_STREAK} from '../src/v03/combat-feel.js';
 import {BossBrain,BOSS_BY_NAME} from '../src/boss-spec.js';
@@ -134,13 +135,15 @@ test('the bear tune: heavy blows hold before contact, rest between blows; untune
  assert.deepEqual(bear.tune,{hp:580,damage:.6,rest:.75,telegraph:.3});
 });
 
-test('in a fight the dodge rolls on the press, and a held press still turns into the sprint',()=>{
- let clock=0,rolls=0;const sprint=[];let fighting=true;
- const g=new DodgeSprintGesture({now:()=>clock,onDodge:()=>rolls++,onSprint:h=>sprint.push(h),pressDodge:()=>fighting});
- g.begin('key');assert.equal(rolls,1,'rolled at the press');clock=80;g.end('key');assert.equal(rolls,1,'no second roll at release');
- g.begin('key');clock=400;g.advance(1/60);assert.deepEqual(sprint,[true]);g.end('key');assert.equal(rolls,2);assert.deepEqual(sprint,[true,false]);
- fighting=false;clock=1000;g.begin('key');assert.equal(rolls,2,'outside a fight the release decides');clock=1080;g.end('key');assert.equal(rolls,3);
- const old=new DodgeSprintGesture({now:()=>clock,onDodge:()=>rolls++});clock=2000;old.begin('k');assert.equal(rolls,3);clock=2050;old.end('k');assert.equal(rolls,4,'0.2 default unchanged');
+// 2026-11-27 22:34 user: the dodge/sprint button works the same in a fight as outside it (tap rolls on the
+// release, hold sprints); the press-to-roll change was reverted.
+test('the dodge button keeps one rule in and out of a fight: a tap rolls on the release, a hold sprints',()=>{
+ let clock=0,rolls=0;const sprint=[];
+ const g=new DodgeSprintGesture({now:()=>clock,onDodge:()=>rolls++,onSprint:h=>sprint.push(h)});
+ g.begin('key');assert.equal(rolls,0,'no roll at the press');clock=80;g.end('key');assert.equal(rolls,1,'tap rolls at the release');
+ g.begin('key');clock=400;g.advance(1/60);assert.deepEqual(sprint,[true]);g.end('key');assert.equal(rolls,1,'a hold sprints without rolling');assert.deepEqual(sprint,[true,false]);
+ const boot=readFileSync(new URL('../src/v03/boot.js',import.meta.url),'utf8'),main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
+ assert.doesNotMatch(boot+main,/pressDodge/,'no fight-only dodge rule');
 });
 
 test('each level adds health and attack, shown on the banner; an older record gets its level\'s values',ctx=>{
