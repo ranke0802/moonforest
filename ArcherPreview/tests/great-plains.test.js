@@ -6,7 +6,7 @@ import {approvedVillageExteriorVersion} from '../scripts/approved-village-exteri
 import {PLAINS_PLACEMENTS,PLAINS_ROUTES,PLAINS_CLEARINGS,PLAINS_TREASURE_ANCHORS,PLAINS_LOOKOUT,PLAINS_RADIUS,plainsObstacles,plainsRoadDistance,plainsStreamDistance} from '../src/great-plains-layout.js';
 import {VillageNavigation} from '../src/village-navigation.js';
 import {mapPortals,mapForCharacter,worldSpawn,portalHeadingTurn,portalAvailable,travelUrl} from '../src/map-route.js';
-import {greatPlainsHeight,createGreatPlainsTerrain} from '../src/great-plains-terrain.js';
+import {greatPlainsHeight,createGreatPlainsTerrain,createGreatPlainsV03Terrain} from '../src/great-plains-terrain.js';
 import {NullEngine,VertexBuffer} from '@babylonjs/core';
 import {createWorld,replaceWorldMap} from '../src/world.js';
 import {createTerrainGround} from '../src/terrain-mesh.js';
@@ -226,4 +226,12 @@ test('town-facing hill climb reaches the unchanged summit, while the former east
  assert.equal(nav.segmentClear({x:0,z:-20},{x:-28,z:-20},.35),false,'old eastern approach is framed by solid rock');
  assert.ok(greatPlainsHeight(-18,-20)-greatPlainsHeight(-13,-20)>5,'old ramp must no longer exist');
  const samples=[[-71,7],[-18,49],[21,3],[41,76],[-40,-63]].map(([x,z])=>greatPlainsHeight(x,z));assert.ok(samples.every(h=>h>1));assert.ok(Math.max(...samples)-Math.min(...samples)>.5);
+});
+
+
+test('the 0.3 bounded river scan preserves every shared plains height sample',()=>{
+ const original=createGreatPlainsTerrain(),optimized=createGreatPlainsV03Terrain();
+ assert.equal(optimized.size,original.size);
+ assert.equal(optimized.subdivisions,original.subdivisions);
+ assert.deepEqual(optimized.heights,original.heights);
 });

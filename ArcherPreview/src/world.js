@@ -21,7 +21,7 @@ import {plainsObstacles} from './great-plains-layout-base.js';
 import {plainsCliffObstacles} from './plains-cliff-collision.js';
 import {VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS} from './village-plains-outskirts.js';
 import {villageOutskirtsSkirtHeight} from './village-outskirts-skirt.js';
-import {createGreatPlainsTerrain} from './great-plains-terrain.js';
+import {createGreatPlainsTerrain,createGreatPlainsV03Terrain} from './great-plains-terrain.js';
 import {configurePlainsDecor} from './great-plains-decor.js';
 import {settlementPlacements} from './v03/settlement-scenery.js';
 import {fitOutdoorRockBodies} from './scenery-rock-bodies.js';
@@ -112,7 +112,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
   configureOutdoorVista({mountains,sky,lighting,camera},{village,plains,villageNotch:village&&!forest&&!cave&&!plains});
 
-  const terrain=village?cachedMapTerrain(engine,plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
+  const terrain=village?cachedMapTerrain(engine,plains?(gameplayV03?createGreatPlainsV03Terrain:createGreatPlainsTerrain):cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();
   const ground = createTerrainGround(scene,terrain,{borderExtension:plains?PLAINS_GROUND_BORDER:SCENERY_VIEW_DISTANCE,borderHeight:village&&!plains&&!forest&&!cave?villageOutskirtsSkirtHeight:null});
   const material = new StandardMaterial('forest-floor-material', scene);
   material.diffuseColor = new Color3(.65, .68, .58);
@@ -177,7 +177,7 @@ export function replaceWorldMap(world,character){
   world.caveFog?.dispose();world.caveFog=null;
   retainMapEffect(world.floorMaterial.getEffect());
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
-  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?createGreatPlainsTerrain:cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
+  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?(world.gameplayV03?createGreatPlainsV03Terrain:createGreatPlainsTerrain):cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?plainsPlacements():cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:villageWithOutskirts(),trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
   installSettlementLayout(world);
