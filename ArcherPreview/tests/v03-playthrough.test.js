@@ -482,6 +482,54 @@ function seedSlot({cursor,map='village',greeted=null,errands=null,credits=null,l
 }
 const stepMap=(quest,step)=>{const s=quest.steps[step];if(s.map&&s.type!=='reach')return s.map;if(s.type==='talk')return NPCS.find(n=>n.id===s.targets[0]).map;return quest.id==='M00'?'great-plains':'village';};
 
+for(const [phase,hp] of [[1,100],[2,0]]){
+ test(`2장 성소: ${phase}페이즈 HP ${hp} 거주 개체가 남아 있어도 비탄의 마녀를 준비한다`,async()=>{
+  const seeded=seedSlot({cursor:{v:2,id:'#end',quest:QUESTS.length,step:0,count:0,done:[]},map:'witch-cave'});
+  const prefix=E+':slot1:';
+  seeded.local.setItem(prefix+'v03-chapters-v1',JSON.stringify({id:2,done:[1]}));
+  seeded.local.setItem(prefix+questKey(2),JSON.stringify({v:2,id:'E02',quest:1,step:1,count:0,done:[]}));
+  const h=harness(seeded);
+  try{
+   h.finishSplash();await h.reveal();
+   h.click('[data-action="load"]');await settle();
+   h.click('.v03-slot[data-slot="1"]');await settle();
+   h.click('[data-chapter="2"]');await settle(40);
+   h.update();
+   assert.equal(h.shell.inspect().story.step,'sanctuary');
+   const row={active:true,kind:'elena',phase,brain:{hp,mode:'idle'},death:{started:hp===0},actor:{position:{...ELENA_HOME}}};
+   h.battle.encounters=[row];
+   const requests=[];
+   let release;
+   h.battle.activateResident=(player,options)=>{
+    assert.equal(player,h.player);
+    requests.push(options);
+    return new Promise(resolve=>{release=resolve;});
+   };
+   for(let i=0;i<16;i++)h.update();
+   assert.equal(requests.length,0,'loads only at the sanctuary');
+   Object.assign(h.player.position,{x:39,z:-19});
+   h.battle.combatCount=phase===1?1:0;
+   h.battle.residentPending=true;h.update();h.battle.residentPending=false;
+   assert.equal(requests.length,0,'does not start over an existing resident operation');
+   for(let i=0;i<16;i++)h.update();
+   assert.deepEqual(requests,[{reset:true,phase:2}],'starts the right phase once while loading');
+   release(false);await settle();
+   for(let i=0;i<10;i++)h.update(.1);
+   assert.equal(requests.length,1,'a failed request waits before retrying');
+   for(let i=0;i<40;i++)h.update(.1);
+   assert.equal(requests.length,2,'the sanctuary retries a failed request');
+   h.battle.encounters=[{...row,phase:2,brain:{hp:100,mode:'idle'},death:{started:false}}];
+   release(true);await settle();
+   for(let i=0;i<60;i++)h.update(.1);
+   assert.equal(requests.length,2,'leaves a living phase 2 resident alone');
+   h.shell.defeat({kind:'elena',phase:1,position:{...ELENA_HOME}});
+   assert.equal(h.shell.inspect().story.step,'sanctuary');
+   h.shell.defeat({kind:'elena',phase:2,position:{...ELENA_HOME}});
+   assert.equal(h.shell.inspect().story.step,'last-page');
+  }finally{h.shell.dispose?.();}
+ });
+}
+
 test('이어하기: 1장 모든 단계에서 저장 → 불러오기 후 끝까지 갈 수 있다',{timeout:240000},async()=>{
  const blocked=[];
  for(const [qi,quest] of QUESTS.entries())for(const [si,step] of quest.steps.entries()){

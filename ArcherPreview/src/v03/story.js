@@ -212,10 +212,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // its kind, the nearest plains den; null when there (circle the player).
  function defeatTarget(player,step){
   if(step.map&&step.map!==mapId){const exit=content.ROUTES?.[mapId]?.[step.map];if(!exit)return null;guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};}
-  if(step.at&&!livingFoe(step.kind)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
+  if(step.at&&!livingFoe(step.kind,step.phase)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
   // Lead toward the nearest living foe, stopping short of it.
   let best=null,bestSq=Infinity;
-  for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind&&foe.questFamily!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
+  for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||!matchesFoe(foe,step.kind,step.phase))continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
   if(best&&bestSq<16)return null;
   if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};}
   // No beast awake nearby: lead to the nearest plains den instead of vanishing.
@@ -288,7 +288,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  // A foe counts until its defeat has been reported (the event fires one frame
  // after the killing blow): otherwise the last kill of a wave summons one more.
- const livingFoe=kind=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain&&(foe.brain.hp>0||foe.death&&!foe.death.started)&&(!kind||(foe.summonKind??foe.kind)===kind||foe.questFamily===kind));
+ function matchesFoe(foe,kind,phase){
+  return (!kind||(foe.summonKind??foe.kind)===kind||foe.questFamily===kind)&&(!phase||foe.phase===phase);
+ }
+ const livingFoe=(kind,phase)=>(api.battle.encounters??[]).some(foe=>foe.active&&foe.brain&&(foe.brain.hp>0||foe.death&&!foe.death.started)&&matchesFoe(foe,kind,phase));
  // Story fights: a defeat step with {at,summon} calls its foes once the player
  // is inside the spot, and again after a retreat or death left none alive.
  const staged={key:null,busy:false,next:0,introduced:new Set()};
@@ -303,12 +306,15 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const step=log.step(),quest=log.quest();
   if(step?.type!=='defeat'||!step.at||step.map!==mapId||!player||staged.busy||talking||dialogue.open)return;
   const tune=step.tune??step.summon?.tune;
-  if(!step.summon&&!step.intro&&!tune)return;
+  // The journal revisits Elena after chapter 1. Its cave slot can still hold
+  // her old corpse, so this step must prepare the required phase again.
+  const residentPhase=step.kind==='elena'&&step.phase;
+  if(!step.summon&&!step.intro&&!tune&&!residentPhase)return;
   const key=quest.id+'/'+step.id;
   const inside=(step.at.x-player.x)**2+(step.at.z-player.z)**2<=step.at.radius**2;
   // While a foe of the step is alive: apply the 0.3 balance and play the
   // arrival line once, before the fight starts.
-  if(livingFoe(step.kind)){
+  if(livingFoe(step.kind,step.phase)){
    staged.key=key;staged.since=null;if(tune)tuneFoes(step.kind,tune);
    if(inside&&step.intro&&!staged.introduced.has(key)&&content.DIALOGUES[step.intro]&&api.battle.combatCount===0){
     staged.introduced.add(key);staged.busy=true;talking=true;api.input.setSuspended(true);
@@ -316,10 +322,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }
    return;
   }
-  // No summon: the step is fought against the resident placed on the map.
-  if(!step.summon||api.battle.loading||api.battle.combatCount>0||guide.time<staged.next)return;
+  // Other unsummoned fights keep their existing map resident.
+  if((!step.summon&&!residentPhase)||api.battle.loading||guide.time<staged.next)return;
+  if(residentPhase&&api.battle.residentPending)return;
+  if(!residentPhase&&api.battle.combatCount>0)return;
   if(!inside){staged.since=null;return;}
-  if(step.summon.after){staged.since??=guide.time;if(guide.time-staged.since<step.summon.after)return;}
+  if(step.summon?.after){staged.since??=guide.time;if(guide.time-staged.since<step.summon.after)return;}
   staged.busy=true;
   void (async()=>{
    let warning;
@@ -330,7 +338,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
       const lines=dialogue.play(content.DIALOGUES[step.intro]);
       // This wave is now due. Start only its shared source while the warning
       // is on screen. summon() joins the same load and owns all four actors.
-      if(step.intro==='raid-start'&&step.summon.kind==='goblin'&&dialogue.open){
+      if(step.intro==='raid-start'&&step.summon?.kind==='goblin'&&dialogue.open){
        warning=raidWarning=new AbortController();
        void api.battle.goblinModels?.load({preloadSignal:warning.signal}).catch(()=>{});
       }
@@ -338,10 +346,14 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
      }finally{if(raidWarning===warning)raidWarning=null;talking=false;if(started&&!disposed)api.input.setSuspended(false);}
     }
     if(!started||disposed||(api.world.mapId??mapId)!==step.map||log.step()!==step)return;
-    const left=Math.max(1,step.summon.count-log.snapshot().count);
-    // summon.from: the group appears there (outside the village for the raid) and comes at the player.
-    const ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind,step.summon.from?{origin:step.summon.from}:undefined);
-    if(ok!==false&&tune)tuneFoes(step.summon.kind,tune);
+    let ok;
+    if(residentPhase)ok=await api.battle.activateResident(api.getPlayer(),{reset:true,phase:residentPhase});
+    else{
+     const left=Math.max(1,step.summon.count-log.snapshot().count);
+     // summon.from: the group appears there and comes at the player.
+     ok=await api.battle.summon(api.getPlayer(),left,step.summon.kind,step.summon.from?{origin:step.summon.from}:undefined);
+    }
+    if(ok!==false&&tune)tuneFoes(step.summon?.kind??step.kind,tune);
     if(ok!==false&&!disposed&&step.arrival)hud.flash(step.arrival);
    }catch(error){console.warn('[MoonForest 0.3] story fight unavailable',error);}
    finally{warning?.abort();staged.busy=false;staged.key=key;staged.next=guide.time+4;}
