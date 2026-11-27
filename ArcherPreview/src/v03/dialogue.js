@@ -4,9 +4,13 @@
 import {t,speaker} from './i18n.js';
 import {createTypewriter} from './typewriter.js';
 import {createTextBlip} from './text-blip.js';
+import {holding,trustedInput} from './dialogue-hold.js';
 // A menu takes no pick for this long after it appears, so the tap or key that closed
 // the last line (or opened the talk) cannot also choose its first entry.
 export const CHOICE_ARM_MS=250;
+// A person's press also waits DIALOGUE_MIN_HOLD (dialogue-hold.js) after a line or the
+// choices appear before it moves on or picks (2026-11-28, user). Completing a typing line
+// is still allowed inside the hold.
 // later(fn): runs fn once before the next paint and returns a cancel function (the window's
 // close waits for it, see close()). Default: requestAnimationFrame, else the next macrotask.
 function nextFrame(view){
@@ -16,7 +20,7 @@ function nextFrame(view){
  return fn=>{const id=setTimeout(fn,0);return ()=>clearTimeout(id);};
 }
 export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultView),portraitFor=()=>null,blip=createTextBlip({view:doc.defaultView??globalThis}),typewriter=createTypewriter({doc,onChar:(ch,count,who)=>blip?.onChar(ch,count,who)}),
- now=()=>doc.defaultView?.performance?.now?.()??Date.now(),
+ now=()=>doc.defaultView?.performance?.now?.()??Date.now(),trusted=trustedInput,
  // A touch screen (no keyboard in use): the choices show no highlight until a key is used.
  coarse=()=>{try{return !!doc.defaultView?.matchMedia?.('(pointer:coarse)')?.matches;}catch{return false;}}}){
  const layer=doc.createElement('section');layer.className='v03-dialogue';layer.hidden=true;layer.dataset.v03Layer='dialogue';layer.setAttribute('role','dialog');layer.setAttribute('aria-live','polite');
@@ -46,7 +50,9 @@ export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultVi
  layer.append(portrait,box);mount.append(layer);
  let shownArt=null;
  let lines=null,index=0,finish=null;
- let choices=null,chosen=0,pick=null,armedAt=0;
+ let choices=null,chosen=0,pick=null,armedAt=0,shownAt=-Infinity;
+ // A held press: one from a person inside the minimum hold of the line now up.
+ const held=event=>trusted(event)&&holding(shownAt,now());
  const hideArt=()=>{shownArt=null;portrait.hidden=true;portrait.removeAttribute('src');portrait.classList.remove('is-in');};
  function showArt(art){
   if(art===shownArt)return;
@@ -66,8 +72,8 @@ export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultVi
  function close(){closing?.();closing=later(()=>{closing=null;if(!lines&&!choices)hideNow();});}
  // Returns true when the window was still up (a continuation).
  function reopen(){const kept=!!closing&&!layer.hidden;closing?.();closing=null;layer.hidden=false;talking(true);return kept;}
- function settle(at,{now:immediate=false}={}){
-  if(!choices||(at!=null&&now()<armedAt))return;
+ function settle(at,{now:immediate=false,event=null}={}){
+  if(!choices||(at!=null&&(now()<armedAt||held(event))))return;
   const done=pick,value=at==null?null:choices[at]?.id??null;
   typewriter.stop();choices=null;pick=null;menu.hidden=true;menu.replaceChildren();next.hidden=false;text.hidden=false;box.classList.remove('is-choosing');
   if(immediate)hideNow();else close();done?.(value);
@@ -75,26 +81,27 @@ export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultVi
  // While someone speaks the play HUD steps back (CSS reads this flag).
  const talking=on=>{const data=doc.documentElement?.dataset;if(!data)return;if(on)data.v03Talk='';else delete data.v03Talk;};
  function show(enter=true){
-  const line=lines[index];who.textContent=line.who?speaker(line.who):'';who.hidden=!line.who;said.textContent=line.text;typewriter.start(text,line.text,{who:line.who??null});
+  const line=lines[index];shownAt=now();who.textContent=line.who?speaker(line.who):'';who.hidden=!line.who;said.textContent=line.text;typewriter.start(text,line.text,{who:line.who??null});
   text.scrollTop=0;
   box.classList.toggle('is-self',line.who==='나');
   portrait.classList.toggle('is-journal',!!line.illustration);showArt(line.illustration??portraitFor(line.who));
   next.textContent=t(index===lines.length-1?'dialogue.close':'dialogue.next');setHint('E '+next.textContent);
   if(enter){box.classList.remove('is-in');void box.offsetWidth;box.classList.add('is-in');}
  }
- function step(){
+ function step(event){
   if(!lines)return;
   if(typewriter.complete())return;
+  if(held(event))return;
   if(++index<lines.length){show();return;}
   typewriter.stop();const done=finish,played=lines;lines=null;finish=null;close();done?.(played);
  }
- next.addEventListener('click',step);
+ next.addEventListener('click',event=>step(event));
  // Touching anywhere on the box advances too (thumb-friendly on phones); the
  // button keeps its own click, so one tap never advances twice.
  // While the choices are up a tap there only completes the greeting; only a button picks.
- box.addEventListener('click',event=>{if(choices){if(!menu.contains(event.target))typewriter.complete();return;}if(!next.contains(event.target))step();});
+ box.addEventListener('click',event=>{if(choices){if(!menu.contains(event.target))typewriter.complete();return;}if(!next.contains(event.target))step(event);});
  // Anywhere else on the screen as well, the speaker's picture included (user, 2026-11-21).
- layer.addEventListener('click',event=>{if(box.contains(event.target))return;if(choices){typewriter.complete();return;}step();});
+ layer.addEventListener('click',event=>{if(box.contains(event.target))return;if(choices){typewriter.complete();return;}step(event);});
  const onKey=event=>{
   if(choices){
    const code=event.code,last=choices.length-1;
@@ -104,15 +111,15 @@ export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultVi
    if(code==='KeyA'||code==='ArrowLeft'||code==='KeyW'||code==='ArrowUp'){chosen=Math.max(0,chosen-1);mark();}
    else if(code==='KeyD'||code==='ArrowRight'||code==='KeyS'||code==='ArrowDown'){chosen=Math.min(last,chosen+1);mark();}
    // While the greeting is still typing the first press shows it whole, as on any line.
-   else if(code==='Enter'||code==='Space'||code==='KeyE'){if(event.repeat)return;if(!typewriter.complete())settle(chosen);}
-   else if(code==='Escape')settle(last);
+   else if(code==='Enter'||code==='Space'||code==='KeyE'){if(event.repeat)return;if(!typewriter.complete())settle(chosen,{event});}
+   else if(code==='Escape')settle(last,{event});
    else return;
    event.preventDefault();event.stopImmediatePropagation();return;
   }
   if(!lines||event.repeat)return;
   // Stop every other listener too: the key that closes the last line must not
   // reach the story's own E handler and reopen the conversation.
-  if(event.code==='Enter'||event.code==='Space'||event.code==='KeyE'){event.preventDefault();event.stopImmediatePropagation();step();}
+  if(event.code==='Enter'||event.code==='Space'||event.code==='KeyE'){event.preventDefault();event.stopImmediatePropagation();step(event);}
  };
  doc.addEventListener('keydown',onKey,true);
  return {
@@ -121,14 +128,14 @@ export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultVi
   // Resolves with the played lines when the last one is dismissed.
   play(script){
    if(lines||choices||!Array.isArray(script)||!script.length)return Promise.resolve(null);
-   lines=script;index=0;const kept=reopen();show(!kept);next.focus?.({preventScroll:true});
+   lines=script;index=0;blip?.prime?.();const kept=reopen();show(!kept);next.focus?.({preventScroll:true});
    return new Promise(resolve=>{finish=resolve;});
   },
   // options: [{id,label,mark?}]. line: what the speaker says above the choices (typed like
   // any line; none leaves only the name). Resolves with the picked id (null when cancelled).
   choose(options,{who:name=null,line=null}={}){
    if(lines||choices||!Array.isArray(options)||!options.length)return Promise.resolve(null);
-   choices=options;chosen=0;armedAt=now()+CHOICE_ARM_MS;const kept=reopen();
+   choices=options;chosen=0;armedAt=now()+CHOICE_ARM_MS;shownAt=now();blip?.prime?.();const kept=reopen();
    who.textContent=name?speaker(name):'';who.hidden=!name;next.hidden=true;box.classList.add('is-choosing');
    if(line){text.hidden=false;said.textContent=line;typewriter.start(text,line,{who:name});text.scrollTop=0;}
    else{typewriter.stop();said.textContent='';text.textContent='';text.hidden=true;}
@@ -136,7 +143,7 @@ export function createDialogue({doc,mount=doc.body,later=nextFrame(doc.defaultVi
    menu.replaceChildren(...options.map((option,i)=>{
     const entry=doc.createElement('button');entry.type='button';entry.className='v03-dialogue-choice';entry.setAttribute('role','menuitem');entry.textContent=option.label;
     if(option.mark)entry.dataset.mark='';
-    entry.addEventListener('click',event=>{event.stopPropagation();settle(i);});
+    entry.addEventListener('click',event=>{event.stopPropagation();settle(i,{event});});
     entry.addEventListener('pointerenter',()=>{if(choices&&chosen!==i){chosen=i;mark();}});
     return entry;
    }));

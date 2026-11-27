@@ -859,3 +859,11 @@ html[data-v03-combat] .v03-quest .v03-step-count{flex:none;white-space:pre;color
 .v03-quest-held::before,.v03-quest-held::after{content:'';position:absolute;left:5px;top:50%;width:2px;height:11px;margin-top:-5.5px;border-radius:1px;background:#f0b48a;transform:rotate(45deg)}
 .v03-quest-held::after{transform:rotate(-45deg)}
 html[data-v03-combat] .v03-quest-held{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+
+/* ---------- 2026-11-28 dialog: prologue skip at the top right, a bar for the wait ---------- */
+/* The dream layer covers the play HUD (minimap, top-right icons), so the corner is free. */
+.v03-opening-skip{top:max(14px,env(safe-area-inset-top));right:max(16px,env(safe-area-inset-right));bottom:auto;min-width:44px}
+/* After the dream: only a thin bar while the wagon and the wolf get ready (no sentence). */
+.v03-opening-progress{grid-column:1/-1;justify-self:center;position:relative;width:min(320px,62vw);height:3px;margin:0 0 1rem;overflow:hidden;border-radius:2px;background:#ffffff26}
+.v03-opening-progress i{position:absolute;inset:0;background:#e9d8af;transform:scaleX(0);transform-origin:left center;transition:transform .25s linear}
+.v03-opening-progress[hidden],.v03-opening-preparation p[hidden]{display:none}

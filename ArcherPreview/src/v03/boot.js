@@ -295,6 +295,7 @@ export function setupV03(api){
  async function sceneUp(){for(let left=5000;left>0&&!state.disposed&&story.scenePending&&!story.sceneActive;left-=50)await wait(50);}
  const MAP_CHARACTERS=Object.freeze({'great-plains':'warrior-plains',village:'warrior-v3','monster-forest':'warrior-v4','witch-cave':'warrior-v5'});
  let openingAttempt=null;
+ const OPENING_WAIT_STEPS=3;
  async function stageAmbush(dream){
   // A same-tab replay can arrive with chapter two's empty wagon list.
   setStoryChapter(1);
@@ -303,6 +304,8 @@ export function setupV03(api){
   const cancelled=new Promise(resolve=>signal.addEventListener('abort',()=>resolve(false),{once:true}));
   const current=()=>!signal.aborted&&!state.disposed&&state.screen==='opening';
   let wolfJob=null,castJob=null;
+  // The progress bar after the dream: wolf, cast, then the first scene frame (finishOpening).
+  const ready={wolf:false,cast:false},report=()=>opening.progress?.((ready.wolf?1:0)+(ready.cast?1:0),OPENING_WAIT_STEPS);report();
   async function summonWolf(){
    // The title fight may still be unwinding after resetStage cancelled it.
    if(battle.summonPending)await battle.summonPending.catch(()=>{});
@@ -311,7 +314,7 @@ export function setupV03(api){
    if(!await battle.summon(api.getPlayer(),AMBUSH.count,AMBUSH.kind))throw new Error('Opening wolf unavailable');
   }
   async function prepareActors(){
-   wolfJob??=summonWolf().catch(error=>{wolfJob=null;throw error;});
+   wolfJob??=summonWolf().then(()=>{ready.wolf=true;report();}).catch(error=>{wolfJob=null;throw error;});
    if(appleTouch)await wolfJob;
    if(!current())return;
    if(!castJob){
@@ -319,7 +322,7 @@ export function setupV03(api){
     const map=gameState().mapId;
     // ?cast=0 explicitly selects block stand-ins for local development.
     castJob=Promise.resolve().then(()=>castPreview()?story.prepareOpeningCast(map,{signal}):story.prepare(map))
-     .catch(error=>{castJob=null;throw error;});
+     .then(value=>{ready.cast=true;report();return value;}).catch(error=>{castJob=null;throw error;});
    }
    await Promise.all([wolfJob,castJob]);
   }
@@ -329,6 +332,7 @@ export function setupV03(api){
    state.ambush=false;state.busy=false;state.dream=null;state.sceneShown=false;
    screen('title');title.setEnabled('load',canLoad());title.show();
   }
+  let staged=false;
   try{
    const art=Promise.resolve(dream);
    while(current()){
@@ -342,7 +346,7 @@ export function setupV03(api){
     if(!finished)opening.preparation({onBack:back});
     if(await Promise.race([actors,cancelled])){
      if(!current())return false;
-     state.ambush=true;trail.mark('opening:cast-and-wolf-ready');return true;
+     state.ambush=true;trail.mark('opening:cast-and-wolf-ready');staged=true;return true;
     }
     if(!current())return false;
     const retry=new Promise(resolve=>opening.preparation({failed:true,onRetry:resolve,onBack:back}));
@@ -350,13 +354,14 @@ export function setupV03(api){
    }
    return false;
   }finally{
-   if(openingAttempt===controller){openingAttempt=null;opening.preparation();}
+   // A bar already up stays until the scene runs (release() takes it down).
+   if(openingAttempt===controller){openingAttempt=null;opening.preparation(staged?{hold:true}:undefined);}
   }
  }
  async function finishOpening(dream){
   if(!await stageAmbush(dream))return;
   state.dream=null;save.touch(metaPatch({title:'늑대와 마차',titleKey:'M00'}));
-  await enterPlay();await sceneUp();
+  await enterPlay();await sceneUp();opening.progress?.(OPENING_WAIT_STEPS,OPENING_WAIT_STEPS);
   if(!state.disposed&&state.screen==='play')await opening.release();
   state.busy=false;
  }

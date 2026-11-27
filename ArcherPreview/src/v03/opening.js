@@ -9,6 +9,7 @@
 import {t} from './i18n.js';
 import {createTypewriter,typingMs,typewriterEnabled} from './typewriter.js';
 import {createTextBlip} from './text-blip.js';
+import {holding,trustedInput} from './dialogue-hold.js';
 const art=name=>new URL(`./prologue/${name}.webp`,import.meta.url).href;
 // 00 is no longer the loading cover: its first sight is the dream's entrance.
 export const PROLOGUE_COVER=art('00');
@@ -27,9 +28,14 @@ export const dreamSeconds=()=>.5+INTRO.seconds+FADE_SECONDS+DREAM_BEATS.reduce((
 const MOTES=14;
 // Captions: 60 ms a character (talk is 25), starting once the line is up.
 export const TYPE_PACE=2.4,TYPE_DELAY_MS=450;
+// The wait after the dream (skipped or not) for the wagon, the driver and the first wolf
+// (2026-11-28, user: no "preparing" sentence, only a progress bar). Steps come from the
+// shell (progress(done,total)); inside a step the bar eases toward the next one so it never
+// stands still. The way back to the title appears only if the wait runs long.
+export const PREP_CREEP_MS=2500,PREP_BACK_AFTER_MS=10000,PREP_TICK_MS=250;
 // Captions type out (typewriter.js). A caption's hold starts only once it is
 // fully shown; a tap, click, Enter or Space on the dream shows it at once.
-export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),blip=createTextBlip({view:doc.defaultView??globalThis}),typewriter=createTypewriter({doc,onChar:(ch,count,who)=>blip?.onChar(ch,count,who)}),typing=()=>typewriterEnabled(doc.defaultView??globalThis)}){
+export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=ms=>new Promise(resolve=>setTimeout(resolve,ms)),blip=createTextBlip({view:doc.defaultView??globalThis}),typewriter=createTypewriter({doc,onChar:(ch,count,who)=>blip?.onChar(ch,count,who)}),typing=()=>typewriterEnabled(doc.defaultView??globalThis),now=()=>doc.defaultView?.performance?.now?.()??Date.now(),trusted=trustedInput,every=(fn,ms)=>{const id=setInterval(fn,ms);id?.unref?.();return ()=>clearInterval(id);}}){
  const layer=doc.createElement('section');layer.className='v03-opening';layer.hidden=true;layer.dataset.v03Layer='opening';layer.setAttribute('aria-live','polite');
  // The same two planes display and preload cuts. Only the rich composition
  // adds a second, blurred drawing of the visible painting.
@@ -59,7 +65,21 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
  const prep=doc.createElement('div');prep.className='v03-opening-preparation';prep.hidden=true;
  const status=doc.createElement('p');status.setAttribute('role','status');
  const retry=doc.createElement('button'),back=doc.createElement('button');retry.type=back.type='button';
- prep.append(status,retry,back);layer.append(prep);
+ // The bar (transform only, written when the whole percent changes). Its name is the old
+ // sentence, for screen readers only.
+ const bar=doc.createElement('div');bar.className='v03-opening-progress';bar.setAttribute('role','progressbar');bar.setAttribute('aria-valuemin','0');bar.setAttribute('aria-valuemax','100');bar.hidden=true;
+ const fill=doc.createElement('i');bar.append(fill);
+ prep.append(bar,status,retry,back);layer.append(prep);
+ let stepsDone=0,stepsTotal=1,stepAt=0,waitFrom=0,shownPct=-1,stopCreep=null,backLater=false;
+ const paint=()=>{
+  const at=now(),span=1/stepsTotal,base=Math.min(1,stepsDone*span);
+  const ease=stepsDone>=stepsTotal?0:span*.9*(1-Math.exp(-Math.max(0,at-stepAt)/PREP_CREEP_MS));
+  const pct=Math.max(0,Math.min(100,Math.floor((base+ease)*100)));
+  if(pct!==shownPct){shownPct=pct;fill.style.transform=`scaleX(${pct/100})`;bar.setAttribute('aria-valuenow',String(pct));}
+  if(backLater&&at-waitFrom>=PREP_BACK_AFTER_MS){backLater=false;back.hidden=false;}
+ };
+ const endCreep=()=>{stopCreep?.();stopCreep=null;backLater=false;};
+ const hidePrep=()=>{endCreep();prep.hidden=true;bar.hidden=true;retry.onclick=back.onclick=null;};
  let run=0,front=0,retireTimer;
  // How long a caption takes to type (0 when typing is off): the paintings
  // hold that much longer so a caption never outlives its picture.
@@ -69,8 +89,8 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
  const typeMs=key=>key&&typing()?TYPE_DELAY_MS+typingMs(t(key),TYPE_PACE):0;
  // A tap (or Enter/Space) while a caption types shows all of it; the next one
  // moves on to the next caption without waiting out its hold (user, 2026-11-21).
- let advance=false;
- const hurry=event=>{if(layer.hidden||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;if(event.type==='keydown'&&event.repeat)return;if(!typewriter.complete())advance=true;};
+ let advance=false,shownAt=-Infinity;
+ const hurry=event=>{if(layer.hidden||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;if(event.type==='keydown'&&event.repeat)return;if(!typewriter.complete()){if(trusted(event)&&holding(shownAt,now()))return;advance=true;}};
  layer.addEventListener('click',hurry);
  function setPicture(p,url){
   if(url){if(p.sharp.getAttribute('src')!==url)p.sharp.setAttribute('src',url);}
@@ -92,24 +112,48 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
  const dropPictures=()=>{clearTimeout(retireTimer);clear();for(const p of planes){setPicture(p,null);if(p.haze)p.haze.style.backgroundImage='';}};
  return {
   element:layer,
-  preparation({failed=false,onRetry=null,onBack}={}){
-   prep.hidden=!onBack;skip.hidden=!!onBack;
-   retry.onclick=onRetry;back.onclick=onBack??null;
-   if(!onBack)return;
-   status.textContent=t(failed?'opening.castFailed':'opening.castLoading');
-   retry.hidden=!failed;retry.textContent=t('opening.castRetry');back.textContent=t('settings.toTitle');
+  // The wait after the dream. Loading: the bar only (the way back after a long wait).
+  // failed: the sentence with retry and back. hold: the wait is over but the scene is
+  // still starting; a bar already up stays (without buttons) until release(). Nothing: hidden.
+  preparation({failed=false,onRetry=null,onBack,hold=false}={}){
+   if(hold&&!onBack){
+    if(prep.hidden)return;
+    retry.hidden=back.hidden=true;retry.onclick=back.onclick=null;backLater=false;status.hidden=true;return;
+   }
+   skip.hidden=!!onBack;
+   if(!onBack){hidePrep();return;}
+   const fresh=prep.hidden;prep.hidden=false;
+   retry.onclick=onRetry;back.onclick=onBack;
+   retry.textContent=t('opening.castRetry');back.textContent=t('settings.toTitle');
+   if(failed){
+    endCreep();bar.hidden=true;status.hidden=false;status.textContent=t('opening.castFailed');retry.hidden=false;back.hidden=false;return;
+   }
+   status.hidden=true;status.textContent='';retry.hidden=true;
+   bar.hidden=false;bar.setAttribute('aria-label',t('opening.castLoading'));
+   if(fresh||bar.dataset.shown!=='1'){waitFrom=now();back.hidden=true;backLater=true;}
+   bar.dataset.shown='1';stepAt=Math.max(stepAt,waitFrom);
+   paint();stopCreep??=every(paint,PREP_TICK_MS);
   },
+  // done of total waiting steps are finished (the shell reports them as they end).
+  progress(done,total=stepsTotal){
+   const count=Math.max(1,total|0),value=Math.max(0,Math.min(count,done|0));
+   if(count!==stepsTotal||value!==stepsDone){stepsTotal=count;stepsDone=value;stepAt=now();}
+   if(!bar.hidden)paint();
+  },
+  get progressValue(){return shownPct;},
   get active(){return !layer.hidden;},
   // Resolves 'done' or 'skipped'. The layer stays black until release().
   async play(){
    const id=++run;let skipped=false;const onSkip=()=>{skipped=true;typewriter.stop();};
    skip.addEventListener('click',onSkip);doc.addEventListener('keydown',hurry);
+   // The blip's audio starts now, so it runs by the first caption's first character.
+   blip?.prime?.();
    skip.textContent=t('opening.skip');layer.hidden=false;layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;line.textContent='';said.textContent='';
    // hold: a caption's reading time, cut short by the second tap. pause: fades and the wake, never cut.
    const hold=async ms=>{for(let left=ms;left>0&&!skipped&&!advance&&id===run;left-=100)await wait(Math.min(100,left));};
    const pause=async ms=>{for(let left=ms;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));};
    // Types the caption; resolves when it is fully shown (or skipped).
-   const caption=key=>{advance=false;const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null,pace:TYPE_PACE,delay:key?TYPE_DELAY_MS:0});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
+   const caption=key=>{advance=false;shownAt=now();const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null,pace:TYPE_PACE,delay:key?TYPE_DELAY_MS:0});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
    try{
     await wait(500);
     // 1. The entrance: the table of fate, revealed from the warrior upward.
@@ -158,12 +202,12 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
    const id=run;
    layer.classList.add('is-releasing');await wait(layer.dataset.woke==='1'?1350:900);
    if(id!==run)return;
-   layer.hidden=true;layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;delete layer.dataset.tone;delete layer.dataset.dream;dropPictures();
+   layer.hidden=true;layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;delete layer.dataset.tone;delete layer.dataset.dream;dropPictures();hidePrep();delete bar.dataset.shown;skip.hidden=false;
   },
   // Shows the black stage without captions (used to hide a stage swap).
   // art: keep the prologue cover painting up (new game, before the dream).
   cover({art=false}={}){run++;typewriter.stop();doc.removeEventListener('keydown',hurry);layer.classList.remove('is-releasing','is-flash','is-white','is-shading');delete layer.dataset.woke;delete layer.dataset.tone;delete layer.dataset.dream;line.textContent='';said.textContent='';dropPictures();layer.hidden=false;if(art)show({image:PROLOGUE_COVER,drift:'breathe',seconds:30});},
-  cancel(){run++;typewriter.stop();doc.removeEventListener('keydown',hurry);dropPictures();layer.hidden=true;},
+  cancel(){run++;typewriter.stop();doc.removeEventListener('keydown',hurry);dropPictures();hidePrep();delete bar.dataset.shown;layer.hidden=true;},
   dispose(){this.cancel();layer.removeEventListener('click',hurry);layer.remove();},
  };
 }

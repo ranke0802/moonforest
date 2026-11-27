@@ -32,6 +32,11 @@ export function setTextBlipEnabled(on,{view=globalThis,persist=true}={}){
 export function resetTextBlip(){enabled=null;shared?.context?.close?.().catch?.(()=>{});shared=null;armedView=null;}
 
 // A stable pitch per speaker: hash of the key onto a pentatonic-ish range.
+// 0.3 (2026-11-28, user: the dot sounds were all different): every line, the prologue
+// captions included, speaks with Jeffrey's voice. voicePitch keeps the per-speaker map;
+// set SHARED_VOICE to null to bring the different voices back.
+export const SHARED_VOICE='제프리';
+export const voiceFor=who=>SHARED_VOICE??who;
 const STEPS=[0,2,4,7,9,12,14];
 export function voicePitch(who){
  const key=String(who??'');let h=2166136261;
@@ -51,17 +56,26 @@ function makeShared(contextFactory){
 const defaultFactory=view=>()=>{const Ctor=view?.AudioContext??view?.webkitAudioContext??globalThis.AudioContext;return new Ctor({latencyHint:'interactive'});};
 // Creates the shared context on the first gesture (browsers keep a context
 // made earlier suspended). Listeners go away once it exists.
+// 2026-11-28 (user: the prologue's first caption had no dots): the listeners stay until the
+// context really runs. A touch pointerdown is not a user activation, so a context made there
+// can stay suspended; before, the listeners went away with that first event, so the touchend
+// that could start it was not heard and the context was first resumed by the first blip
+// itself (the prologue's first caption), skipping blips until the device ran.
+const GESTURES=['pointerdown','pointerup','touchend','click','keydown'];
+const running=context=>!context?.state||context.state==='running';
 function arm(view,contextFactory){
  armedView=view;
- if(shared||!view?.addEventListener||view.__v03BlipArmed)return;
+ if(running(shared?.context)&&shared||!view?.addEventListener||view.__v03BlipArmed)return;
  view.__v03BlipArmed=true;
- const kinds=['pointerdown','keydown','touchend'];
+ const disarm=()=>{for(const kind of GESTURES)view.removeEventListener(kind,onGesture,true);delete view.__v03BlipArmed;};
  const onGesture=()=>{
   if(!textBlipEnabled(view))return;
-  try{shared??=makeShared(contextFactory??defaultFactory(view));shared.context.resume?.().catch?.(()=>{});}catch{shared=null;return;}
-  for(const kind of kinds)view.removeEventListener(kind,onGesture,true);delete view.__v03BlipArmed;
+  try{shared??=makeShared(contextFactory??defaultFactory(view));}catch{shared=null;return;}
+  const context=shared.context;
+  if(running(context)){disarm();return;}
+  try{Promise.resolve(context.resume?.()).then(()=>{if(running(context))disarm();},()=>{});}catch{}
  };
- for(const kind of kinds)view.addEventListener(kind,onGesture,{capture:true,passive:true});
+ for(const kind of GESTURES)view.addEventListener(kind,onGesture,{capture:true,passive:true});
 }
 
 // every: a blip on the 1st visible character, then every 2 or 3 more.
@@ -78,6 +92,15 @@ export function createTextBlip({view=globalThis,contextFactory=null,random=Math.
    if(!isEnabled())return false;
    return this.play(who);
   },
+  // Starts (or resumes) the shared context ahead of the first line, so the device is
+  // running by the first character (the prologue calls it when the dream starts).
+  prime(){
+   if(!isEnabled())return false;
+   if(!shared){try{shared=makeShared(contextFactory??defaultFactory(armedView??view));}catch{return false;}}
+   const context=shared.context;
+   if(!running(context)){try{context.resume?.()?.catch?.(()=>{});}catch{}arm(armedView??view,contextFactory);}
+   return running(context);
+  },
   play(who){
    // The prologue after a new-game reload types before any gesture on the new
    // document: create the context here too (the site's earlier activation
@@ -86,13 +109,13 @@ export function createTextBlip({view=globalThis,contextFactory=null,random=Math.
    const {context,out}=shared;
    // A context the browser suspended (tab switch, autoplay) is resumed here;
    // this blip is skipped, the next ones play.
-   if(context.state&&context.state!=='running'){context.resume?.().catch?.(()=>{});return false;}
+   if(!running(context)){context.resume?.()?.catch?.(()=>{});arm(armedView??view,contextFactory);return false;}
    const t=context.currentTime??0;
    if(shared.voices>=MAX_VOICES||t-shared.last<MIN_GAP)return false;
    shared.last=t;shared.voices++;
    const osc=context.createOscillator(),env=context.createGain();
    osc.type='triangle';
-   osc.frequency.value=voicePitch(who);
+   osc.frequency.value=voicePitch(voiceFor(who));
    if(osc.detune)osc.detune.value=(random()-.5)*60;
    const g=env.gain;g.setValueAtTime(0,t);g.linearRampToValueAtTime(1,t+.004);g.exponentialRampToValueAtTime(.001,t+BLIP_SECONDS);
    osc.connect(env);env.connect(out);
