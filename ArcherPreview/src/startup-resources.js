@@ -7,12 +7,13 @@ import {loadingArtResources} from './loading-art.js';
 import {prepareCaveCameraField} from './witch-cave-camera.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {sceneryPrefetchPaths} from './texture-replacements.js';
-import mobileExterior from '../public/assets/v03-mobile-village-exterior.json' with {type:'json'};
+import {startupFileSizes} from './startup-file-sizes.js';
+import {PLAYER_2K_KTX2} from './player-texture-profile.js';
 
 async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStream,context){
   const {lifetime,check}=context;check();const scene=world.scene;
   world.releaseResourceDownloads?.();
-  const fileSizes=world.gameplayV03&&world.touchDevice?{...sizes.files,...mobileExterior.extraFileSizes}:sizes.files;
+  const fileSizes=startupFileSizes(sizes.files,{edition:world.gameplayV03,mobile:world.touchDevice,usesPlayer2k:context.usesPlayer2k});
   const selectedPaths=paths=>world.gameplayV03?sceneryPrefetchPaths(paths):paths;
   resources=selectedPaths(resources);
   const cacheProbe=new URLSearchParams(globalThis.location?.search).get('cacheProbe');
@@ -76,7 +77,9 @@ export async function prepareMapResources(world,base,onProgress,onStream,options
 export async function prepareStartupResources(world,playerUrl,onProgress,onStream,options){
   return resourceSetup(world,async context=>{
   const {lifetime,check,timeoutMs,timers}=context,base=new URL('./',playerUrl),read=name=>readMapManifest(new URL(name+'.json',base),{timeoutMs,timers});
-  const player=await lifetime.run(()=>read(playerUrl.pathname.split('/').at(-1).replace('.json','')));check();
+  const playerName=playerUrl.pathname.split('/').at(-1).replace('.json','');
+  const player=await lifetime.run(()=>read(playerName));check();
+  context.usesPlayer2k=playerName===PLAYER_2K_KTX2;
   const [village,sizes,ground,sky,environment,ktx,meshopt,resident]=await lifetime.run(()=>Promise.all([
     prepareVillageStart(world,{lifetime,timeoutMs,timers}).then(value=>{context.prepared=value;return value;}),read('resource-index'),read(world.groundManifest??'village-ground'),read('sky'),read('environment'),read('ktx2-decoder'),read('meshopt-decoder'),world.cave?read('elena'):null,world.cave?prepareCaveCameraField():null]));check();lifetime.finishDeadline();
   // Configure the same decoder the GLTF loader uses before choosing which colour to

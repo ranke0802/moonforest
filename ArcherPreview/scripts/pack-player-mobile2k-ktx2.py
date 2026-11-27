@@ -89,6 +89,11 @@ def main():
     output['bytes'] = sum((ASSETS / resource).stat().st_size for resource in output['resources'])
     manifest = ASSETS / (NAME + '.json')
     base.write(manifest, output)
+    # The immutable 0.1 resource index cannot list newly packed player files.
+    indexed = base.read(ASSETS / 'resource-index.json')['files']
+    loose_sizes = {Path(ref).name: (ASSETS / ref).stat().st_size for ref in output['resources']
+                   if Path(ref).name not in indexed}
+    base.write(base.ROOT / 'src/v03/data/player-mobile2k-sizes.json', dict(sorted(loose_sizes.items())))
     block = sum(base.mip_bytes(row['width'], row['height'], True) for row in rows)
     for path, expected in before.items():
         if base.file_record(path) != expected:

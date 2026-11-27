@@ -5,6 +5,8 @@ import {parseHTML} from 'linkedom';
 import {selectEditionPlayerTextureProfile,selectPlayerTextureProfile,playerTexture4kSupported,PLAYER_2K_KTX2,defaultPlayerTextureDetail} from '../src/player-texture-profile.js';
 import {readPlayerTextureChoice,writePlayerTextureChoice,selectV03PlayerTextures,mountPlayerTextureSettings,activePlayerTexture,PLAYER_TEXTURE_KEY,LEGACY_PC_TEXTURE_KEY} from '../src/v03/player-texture-choice.js';
 import {t,setPack} from '../src/v03/i18n.js';
+import {startupFileSizes} from '../src/startup-file-sizes.js';
+import {ResourceDownloads} from '../src/resource-downloads.js';
 import ko from '../src/v03/locales/ko.js';
 import en from '../src/v03/locales/en.js';
 import ja from '../src/v03/locales/ja.js';
@@ -57,6 +59,21 @@ test('the memory picture behind the choice (estimates as reported in the diagnos
  assert.equal(Math.round(two.estimatedGpuBytes/MiB),32);
  assert.equal(Math.round(four.estimatedGpuBytes/MiB),80);
  assert.equal(Math.round(rgba.estimatedGpuBytes/MiB),128);
+});
+
+test('a fresh 0.3 2K startup can plan every player download against the frozen resource index',async()=>{
+ const assets=new URL('../public/assets/',import.meta.url);
+ const read=name=>JSON.parse(readFileSync(new URL(name,assets),'utf8'));
+ const index=read('resource-index.json'),player=read(PLAYER_2K_KTX2+'.json');
+ assert.ok(player.resources.some(path=>!Object.hasOwn(index.files,path.split('/').at(-1))));
+ for(const mobile of [false,true]){
+  const sizes=startupFileSizes(index.files,{edition:true,mobile,usesPlayer2k:true});
+  for(const path of player.resources)assert.equal(sizes[path.split('/').at(-1)],readFileSync(new URL(path,assets)).length,path);
+  const downloads=new ResourceDownloads(sizes,new URL('https://example.test/assets/'),{cacheStorage:null});
+  try{assert.equal((await downloads.prepare(player.resources)).total,player.bytes);}
+  finally{downloads.cancel();}
+ }
+ assert.equal(startupFileSizes(index.files,{edition:false,mobile:true,usesPlayer2k:true}),index.files);
 });
 
 test('the stored choice is an id; the address and the old 0.3 PC list still count',()=>{
