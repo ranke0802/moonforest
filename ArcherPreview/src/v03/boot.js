@@ -34,6 +34,7 @@ import {runBeforePageReload} from '../page-reload-hooks.js';
 import * as chapter1 from './data/chapter1.js';
 
 import {recordedQuestIds} from './character-progression.js';
+import {LEGACY_TITLE_IDS} from './quest-migration.js';
 import {CHAPTERS,chapterProgress,questKey} from './chapter-progress.js';
 import {chapterWords} from './chapter-select.js';
 import {watchTranslations,translateLabels} from './live-translate.js';
@@ -181,7 +182,7 @@ export function setupV03(api){
  // (swapped 2026-11-19, user choice); play returns to the map's own music.
  const SCREEN_SCORE=Object.freeze({boot:'elena_saint',title:'elena_saint',resume:'elena_saint',opening:'forest'});
  const screen=value=>{state.screen=value;trail.mark(value);html.dataset.v03Screen=value;if(value!=='title')delete html.dataset.v03Veil;try{api.setScore?.(SCREEN_SCORE[value]??null);api.setSfxMuted?.(value==='boot'||value==='title'||value==='resume');}catch{}};
- const questTitle=id=>content.QUESTS?.find(quest=>quest.id===id)?.title;
+ const questTitle=id=>content.QUESTS?.find(quest=>quest.id===(LEGACY_TITLE_IDS[id]??id))?.title;
  // Records written before keys were saved carry Korean text only: map it back.
  const describe=meta=>{
   if(meta.chapter>1)return {title:chapterContent.get(meta.chapter)?.QUESTS.find(q=>q.id===meta.titleKey)?.title??chapterWords().chapters[meta.chapter-1],place:PLACE_NAMES[meta.character]?t('place.'+meta.character):undefined};

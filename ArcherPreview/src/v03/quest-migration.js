@@ -23,6 +23,8 @@ function rule(id,step,count){
   default:return null;
  }
 }
+// Slot titles saved under a quest that left the main line: the quest an old save now stands at.
+export const LEGACY_TITLE_IDS=Object.freeze({M02:'M10',M05:'M11',M06:'M11'});
 // Whether this quest list is the reordered chapter 1 line.
 export const isHomecomingLine=quests=>Array.isArray(quests)&&quests.some(quest=>quest?.id==='M10')&&quests[0]?.id==='M00';
 // value: a parsed legacy record {quest,step,count,done}. Returns the cursor on
