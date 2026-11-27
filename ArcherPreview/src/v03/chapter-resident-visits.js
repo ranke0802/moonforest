@@ -33,6 +33,7 @@ export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
         if(current())actors=camp.createChapterWildlife({world,battle,getPlayer,onDefeat,makeEnemies:enemies.createChapterEnemyFactory,
           makeBeasts:beasts?.createCorruptedBeastFactory,onError});
       }
+      if(current()&&actors?.prepare)await actors.prepare();
       const player=current()&&actors&&getPlayer();
       if(player)await actors.update(0,player.position);
     })().catch(error=>{if(current())onError('[MoonForest] residents of '+next,error);});

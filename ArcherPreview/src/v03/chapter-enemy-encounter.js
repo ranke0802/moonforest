@@ -104,7 +104,7 @@ class ChapterEncounter extends BossEncounter {
         const equipment={meshes:held};
         await attachCharacterOutlinesAsync(equipment,this.outlineProfile,job);
         enableEnemyFade(equipment);
-        await prepareModelShaders(equipment,{preparation:job,shadows:this.world.shadows,keepPrograms:false});
+        await prepareModelShaders(equipment,{preparation:job,shadows:this.world.shadows,keepPrograms:this.keepPreparedPrograms});
         this.asset.meshes.push(...held);
         for(const mesh of held)this.deathVisibility.push([mesh,mesh.visibility]);
       }
@@ -119,7 +119,7 @@ class ChapterEncounter extends BossEncounter {
     // at the actor's feet. Ranged attacks indicate the locked destination.
     const update=this.warningRing.update;
     this.warningRing.update=()=>update(this.aim,arrow?.42:1.05);
-    await prepareModelShaders({meshes:[this.bolt]},{preparation:job,keepPrograms:false});
+    await prepareModelShaders({meshes:[this.bolt]},{preparation:job,keepPrograms:this.keepPreparedPrograms});
   }
   ambientUpdatePeriod(player){
     const b=this.brain,p=player?.position,a=this.actor?.position;
@@ -227,8 +227,13 @@ class ChapterEncounter extends BossEncounter {
   }
 }
 
-export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=loadChapterModel,mountWeapon=mountEnemyWeapon,incremental=true}){
-  const scene=world.scene, sources=new Map(), handles=new Set();let retired=false,next=0;
+// Camp foes spawn when the player comes within 25 m, in play. Their kinds are
+// warmed behind the loading cover instead (warm, 2026-11-27: the S23 20-minute
+// record built goblin/ghoul/zombie programs 22 times in play, up to 129 ms each).
+// keepPrograms: also hand the programs to the 96-slot keep (off: Node showed the
+// programs survive the warm foe anyway, and the keep would push out other actors').
+export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=loadChapterModel,mountWeapon=mountEnemyWeapon,incremental=true,keepPrograms=false}){
+  const scene=world.scene, sources=new Map(), handles=new Set(), held=new Map();let retired=false,next=0;
   function acquire(kind){
     let entry=sources.get(kind);
     if(!entry){
@@ -249,7 +254,31 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
     for(const material of entry.materials)material.dispose(false,false);
     entry.materials.clear();entry.source?.dispose();
   }
-  async function create({kind,id='chapter-foe-'+(++next),x,z,yaw=0,home={},player,isCurrent=()=>true}){
+  // Holds a kind's source model for the visit: foes that leave and come back
+  // (39 m / 25 m) are clones again, not a new download and decode.
+  function hold(kind){
+    if(retired||held.has(kind))return;
+    const entry=acquire(kind);let released=false;
+    held.set(kind,()=>{if(released)return;released=true;held.delete(kind);
+      if(--entry.demand===0){if(sources.get(kind)===entry)sources.delete(kind);entry.controller.abort();}
+      release(kind,entry);});
+    entry.ready.catch(()=>held.get(kind)?.());
+  }
+  // Behind the loading cover: one hidden foe per kind runs the whole spawn
+  // preparation (paint, outline, fade, instance and shadow variants, weapon,
+  // missile) and is freed again; its programs stay (keepPrograms).
+  async function warm(kinds,{isCurrent=()=>true}={}){
+    const done=[];
+    for(const kind of new Set(kinds)){
+      if(retired||!isCurrent()||scene.isDisposed)break;
+      if(!CHAPTER_MONSTER_MODELS[kind]||!CHAPTER_COMBAT[kind])continue;
+      hold(kind);
+      const handle=await create({kind,id:'chapter-warm-'+kind,x:0,z:0,isCurrent,warmOnly:true}).catch(error=>{if(error?.name!=='AbortError')console.warn('[MoonForest] chapter warm '+kind,error);return null;});
+      handle?.dispose();if(handle)done.push(kind);
+    }
+    return done;
+  }
+  async function create({kind,id='chapter-foe-'+(++next),x,z,yaw=0,home={},player,isCurrent=()=>true,warmOnly=false}){
     if(retired||!isCurrent()||scene.isDisposed)throw bossPreparationCancelled();
     const model=CHAPTER_MONSTER_MODELS[kind],profile=CHAPTER_COMBAT[kind];
     if(!model||!profile)throw new Error('Unknown chapter enemy '+kind);
@@ -267,7 +296,7 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
       onDefeat:event=>{if(valid()&&!delivered){delivered=true;onDefeat({...event,id,kind});}}
     });
     Object.assign(enc,{id,kind,outlineProfile:'goblin',developmentActor:true,minorEnemy:!profile.boss,displayName:profile.name,
-      model,profile,mountWeapon,keepPreparedPrograms:false,radius:model.height*.205,separationRadius:model.height*.25,
+      model,profile,mountWeapon,keepPreparedPrograms:keepPrograms,radius:model.height*.205,separationRadius:model.height*.25,
       spawn:new Vector3(x,0,z),home:{x:home.x??x,z:home.z??z,radius:home.radius??13,combatRadius:home.combatRadius??7.2},
       territoryState:{enabled:true,engaged:false},sightTimer:0,sightPlayerX:Infinity,sightPlayerZ:Infinity,healthAnchor:new Vector3(),aim:new Vector3(x,0,z),
       origin:new Vector3(),endpoint:new Vector3(),previousShot:new Vector3(),shotAim:new Vector3()});
@@ -293,6 +322,7 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
     }};
     handles.add(handle);
     try{
+      if(warmOnly){await enc.prepareHidden({preparation});preparation.check();return handle;}
       await enc.summon(player,{position:enc.spawn,rotationY:yaw,preparation,reuseAnimator:true});
       preparation.check();battle.encounters.push(enc);(battle.developmentPool??=[]).push(enc);battle.active=true;
       return handle;
@@ -309,6 +339,6 @@ export function createChapterEnemyFactory({world,battle,onDefeat=noop,loadModel=
     }
   }
   const observer=scene.onDisposeObservable.addOnce(()=>dispose());
-  function dispose(){if(retired)return;retired=true;scene.onDisposeObservable.remove(observer);for(const handle of [...handles])handle.dispose();}
-  return {create,dispose};
+  function dispose(){if(retired)return;retired=true;scene.onDisposeObservable.remove(observer);for(const handle of [...handles])handle.dispose();for(const free of [...held.values()])free();}
+  return {create,warm,hold,dispose};
 }

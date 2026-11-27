@@ -34,6 +34,14 @@ export function createChapterWildlife({world,battle,getPlayer,makeEnemies,makeBe
   }
   let enemies, beasts;
   return {
+    // Behind the loading cover (chapter-resident-visits.js): the camp's foe kinds
+    // load and compile once, before play, instead of at the first approach.
+    async prepare(){
+      if(!current())return [];
+      const kinds=rows.map(row=>row.kind).filter(kind=>!kind.startsWith('corrupted-'));if(!kinds.length)return [];
+      enemies??=makeEnemies({world,battle,onDefeat:defeatedAt});
+      return enemies.warm?await enemies.warm(kinds,{isCurrent:current}):[];
+    },
     update(dt){
       if(!current())return;
       age+=dt;if(age<next)return;next=age+.25;
