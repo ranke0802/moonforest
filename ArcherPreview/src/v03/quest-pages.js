@@ -16,6 +16,18 @@ export const SWIPE_PX=36,SWIPE_SHARE=.22;
 // Up to this travel a touch is still undecided (sideways turns pages, up/down is ignored).
 const SLOP=8;
 
+// "... (2/5)" (quests.js objective()): the count goes in its own span so that the folded
+// panel in a fight (v03.css "Combat HUD") cuts the words, never the count. The text the
+// node reads stays the same. Called only when the text changed.
+const STEP_COUNT=/\s*\(\d+\s*\/\s*\d+\)\s*$/;
+export function writeStep(node,text){
+ const value=text??'',match=STEP_COUNT.exec(value);
+ if(!match){node.textContent=value;return;}
+ const doc=node.ownerDocument,words=doc.createElement('span'),count=doc.createElement('span');
+ words.className='v03-step-words';count.className='v03-step-count';
+ words.textContent=value.slice(0,match.index);count.textContent=value.slice(match.index);node.replaceChildren(words,count);
+}
+
 export function createQuestPager({doc,host,mainPage,onPage=()=>{}}){
  const make=(tag,className,text)=>{const node=doc.createElement(tag);node.className=className;if(text!==undefined)node.textContent=text;return node;};
  const bar=make('div','v03-quest-pager'),prev=make('button','v03-quest-turn is-prev','‹'),next=make('button','v03-quest-turn is-next','›');
@@ -63,7 +75,7 @@ export function createQuestPager({doc,host,mainPage,onPage=()=>{}}){
   for(const [i,row] of rows.entries()){
    const page=list[i],stepChanged=page.stepText!==null&&page.stepText!==row.step;
    if(page.titleText!==row.title){page.titleText=row.title;page.title.textContent=row.title??'';}
-   if(page.stepText!==row.step){page.stepText=row.step;page.step.textContent=row.step??'';}
+   if(page.stepText!==row.step){page.stepText=row.step;writeStep(page.step,row.step);}
    if(stepChanged){page.node.classList.remove('is-updated');void page.node.offsetWidth;page.node.classList.add('is-updated');}
   }
   const at=selected?list.findIndex(page=>page.id===selected):-1;index=at+1;

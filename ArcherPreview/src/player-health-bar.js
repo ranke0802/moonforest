@@ -39,6 +39,8 @@ export class PlayerHealthBar {
     const staminaValue=Math.max(0,Math.min(staminaMax,Number.isFinite(stamina)?stamina:staminaMax));
     if(staminaValue!==this.staminaValue||staminaMax!==this.staminaMax){
       this.staminaValue=staminaValue;this.staminaMax=staminaMax;this.stamina.max=staminaMax;this.stamina.value=staminaValue;
+      // Nearly spent (0.3 colours it, v03.css): written only when the state flips.
+      const tired=staminaValue/staminaMax<.25;if(tired!==this.tired){this.tired=tired;this.element.dataset.tired=String(tired);}
     }
     this.element.hidden=false;
     // A marker is opt-in only with a positive structure line-of-sight check.

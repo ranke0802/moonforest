@@ -1,6 +1,8 @@
 import { Vector3 } from '@babylonjs/core';
-export function createDamageNumbers(scene,host,{visibleAt=()=>true}={}){
-  const records=[],pool=[],anchor=new Vector3();
+// keepOut (0.3, v03/damage-keep-out.js): moves a number's screen spot {x,y} out of the HUD
+// corners. Without it (0.2) numbers sit where their target is, as before.
+export function createDamageNumbers(scene,host,{visibleAt=()=>true,keepOut=null}={}){
+  const records=[],pool=[],anchor=new Vector3(),spot={x:0,y:0};
   const release=record=>{record.element.remove();pool.push(record.element);};
   return {
     show(position,damage,heavy=false,kind='enemy',burstIndex=0,critical=false,owner=null){
@@ -22,7 +24,8 @@ export function createDamageNumbers(scene,host,{visibleAt=()=>true}={}){
         anchor.copyFrom(r.position);anchor.y+=r.age*.65;
         const p=projection.project(anchor);
         r.element.style.display=p.visible&&visibleAt(r.position)?'':'none';
-        r.element.style.transform=`translate3d(${p.x+r.offsetX}px,${p.y}px,0) translate(-50%,-100%)`;
+        spot.x=p.x;spot.y=p.y;if(keepOut)keepOut.place(spot);
+        r.element.style.transform=`translate3d(${spot.x+r.offsetX}px,${spot.y}px,0) translate(-50%,-100%)`;
         r.element.style.opacity=String(Math.min(1,(1.1-r.age)/.4));
       }
     },

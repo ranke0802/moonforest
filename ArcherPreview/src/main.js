@@ -98,6 +98,7 @@ import { PlayerStrikeSampler, PLAYER_STRIKE_AIM_YAW, PLAYER_STRIKES } from './pl
 import {createSwordTrail,setupSwordTrailSettings} from './sword-trail.js';
 import {configurePlayerSize,playerDimensions,WARRIOR_DIMENSIONS} from './player-dimensions.js';
 import { createDamageNumbers } from './damage-numbers.js';
+import {damageKeepOut} from './v03/damage-keep-out.js';
 import { BossHealthBars } from './boss-health-bar.js';
 import { PlayerHealthBar } from './player-health-bar.js';
 import { setupSettingsPanel } from './settings-panel.js';
@@ -1390,7 +1391,7 @@ try {
   world.lighting.setQuality(qualityMode);applyAdaptiveShadows();
   screenProjection=new ScreenProjection(world.scene);
   resizeScreenProjection();
-  damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
+  damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true,keepOut:versionRoute.edition?damageKeepOut(document):null});
   goldLootView=world.goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   if(world.gameplayV03)world.sceneryStrikes=createSceneryStrikes(world,audio);
   const damageFeedback=(...args)=>{

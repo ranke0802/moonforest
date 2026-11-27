@@ -817,3 +817,45 @@ html[data-mf-motion="reduce"] .v03-quest-count.is-new{animation:v03-count-new-st
 .settings-display-options .v03-texture-row{flex:1 1 100%}
 .v03-texture-note{flex:1 1 100%;font-size:12px}
 @media (pointer:coarse){.v03-texture-note{font-size:13px}}
+
+/* ----- 2026-11-27 hudui: combat HUD (player review, 844×390: health, stamina, the quest
+   and hit numbers crowded the left side in a fight). While engaged (play-hud.js setCombat,
+   html[data-v03-combat]) the quest folds to its one objective line, the page strip, its
+   heading and the title step aside, and the panel dims. Written once per change; the fold
+   fades in and out with opacity and transform only. Reduced motion: at once. ----- */
+html[data-v03-combat] .v03-quest{width:clamp(200px,calc(30vw / var(--v03-ui,1)),300px);padding:4px 10px 5px 9px;opacity:.82;background:linear-gradient(90deg,#101a14b3,#101a1466 70%,#101a1400);pointer-events:none}
+html[data-v03-combat] .v03-quest :is(.v03-quest-pager,.v03-quest-kicker,.v03-quest-title,.v03-errand-title){display:none}
+html[data-v03-combat] .v03-quest :is(.v03-quest-objective,.v03-errand-step){margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;line-height:1.35}
+html[data-v03-combat] .v03-quest-track{transition:none}
+html:not([data-v03-combat]) .v03-quest:not([hidden]){animation:v03-quest-open .32s ease-out}
+@keyframes v03-quest-open{from{opacity:.4;transform:translateX(-6px)}to{opacity:1;transform:none}}
+html[data-mf-motion="reduce"] .v03-quest{animation:none!important}
+/* Stamina: its own line clear of the health bar's gold frame, a little thicker on
+   touch, ember when nearly spent (player-health-bar.js data-tired, written on change). */
+html[data-v03-vital] #app #player-hud #player-stamina{margin-top:3px!important}
+@media (pointer:coarse){html[data-v03-vital] #app #player-hud #player-stamina{height:4px!important}}
+html[data-v03-vital] #player-hud[data-tired=true] #player-stamina::-webkit-progress-value{background:linear-gradient(90deg,#ff9a5a,#e8673a)!important;box-shadow:0 0 5px #ff7a4a99}
+html[data-v03-vital] #player-hud[data-tired=true] #player-stamina::-moz-progress-bar{background:#f07a46!important}
+html[data-v03-vital] #player-hud[data-tired=true] #player-stamina{background:#3a1d12!important}
+/* Hit numbers a size down on short landscape screens (they also keep out of the HUD
+   corners, damage-keep-out.js). */
+@media (max-height:500px) and (orientation:landscape){html[data-edition] .damage-number{font-size:19px}html[data-edition] .damage-number.heavy{font-size:26px}}
+/* A target held by a fight (story.js prompt.clearFoes): the plate reads as shut, not as a
+   button. Ember rules, crossed blades where the key would be, no hover, no press. */
+.v03-prompt.is-blocked{cursor:not-allowed}
+.v03-prompt.is-blocked::before,.v03-prompt.is-blocked::after{background:linear-gradient(90deg,#d5835a00,#d5835acc 30%,#d5835acc 70%,#d5835a00)}
+.v03-prompt.is-blocked{padding-left:40px}
+.v03-prompt.is-blocked .v03-prompt-text::before,.v03-prompt.is-blocked .v03-prompt-text::after{content:'';position:absolute;left:19px;top:50%;width:2px;height:16px;margin-top:-8px;border-radius:1px;background:#f0b48a;box-shadow:0 0 0 1px #2a120c;transform:rotate(45deg)}
+.v03-prompt.is-blocked .v03-prompt-text::after{transform:rotate(-45deg)}
+.v03-prompt.is-blocked .v03-prompt-name{color:#d9c9a6}
+.v03-prompt.is-blocked .v03-prompt-action{color:#f0b48a;opacity:1}
+/* The objective's count stays whole when the folded line runs out (quest-pages.js writeStep). */
+html[data-v03-combat] .v03-quest :is(.v03-quest-objective,.v03-errand-step){display:flex;min-width:0}
+html[data-v03-combat] .v03-quest .v03-step-words{flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+html[data-v03-combat] .v03-quest .v03-step-count{flex:none;white-space:pre;color:#f2dc9c}
+/* The held target's reason under the objective (play-hud.js .v03-quest-held). */
+.v03-quest-held{position:relative;margin:4px 0 0;padding-left:18px;font-size:13px;line-height:1.35;color:#f0b48a;text-shadow:0 1px 4px #000}
+.v03-quest-held[hidden]{display:none!important}
+.v03-quest-held::before,.v03-quest-held::after{content:'';position:absolute;left:5px;top:50%;width:2px;height:11px;margin-top:-5.5px;border-radius:1px;background:#f0b48a;transform:rotate(45deg)}
+.v03-quest-held::after{transform:rotate(-45deg)}
+html[data-v03-combat] .v03-quest-held{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}

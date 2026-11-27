@@ -2,12 +2,14 @@
 import {t} from './i18n.js';
 import {createInteractButton} from './interact-button.js';
 import {releaseFocusAfterPointer} from './hud-focus.js';
-import {createQuestPager} from './quest-pages.js';
+import {createQuestPager,writeStep} from './quest-pages.js';
 // a short banner. Text nodes are written only when their value changes.
 // The focus-line picture: FOCUS_LINES wedges with their points toward the
 // middle, in a fixed pseudo-random order (the same picture every visit).
 // k: distance from the middle as a share of the way to the screen's edge.
 const FOCUS_LINES=84;
+// Seconds of calm after a fight before the folded quest panel opens again (setCombat).
+export const COMBAT_CALM=1.6;
 export function paintFocus(canvas){
  const ctx=canvas.getContext?.('2d');if(!ctx)return false;
  const w=canvas.width,h=canvas.height,cx=w/2,cy=h/2;let seed=20261120;
@@ -29,6 +31,9 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=
  // Pages (2026-11-27): the main quest, then each accepted errand (quest-pages.js).
  const mainPage=make('div','is-main');mainPage.append(kicker,title,objective);
  const pager=createQuestPager({doc,host:quest,mainPage,onPage:id=>onQuestPage(id)});
+ // Why the target ahead does not open (a fight holds it, setPrompt blocked): one line under
+ // the objective, where the player looks for what to do next (2026-11-27 player review).
+ const held=make('p','v03-quest-held');held.hidden=true;quest.append(held);
  // Two lines at most: what to do, then how (keys or touch control), each on one line.
  const hint=make('div','v03-hint'),hintWhat=make('strong','v03-hint-what'),hintHow=make('span','v03-hint-how');hint.append(hintWhat,hintHow);hint.hidden=true;
  // Interaction plate: key cap · name · action. The whole plate is the touch target.
@@ -63,18 +68,25 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=
  const place=make('div','v03-place'),placeName=make('strong','v03-place-name');place.append(make('i','v03-place-rule'),placeName,make('i','v03-place-rule'));place.hidden=true;
  place.addEventListener('animationend',event=>{if(event.target!==place)return;place.classList.remove('is-shown');place.hidden=true;});
  root.append(focus,quest,hint,banner,place,tip,prompt,ring,caption,bubble);mount.append(root);
- prompt.addEventListener('click',event=>{event.preventDefault();onInteract();});
+ prompt.addEventListener('click',event=>{event.preventDefault();if(prompt.classList.contains('is-blocked'))return;onInteract();});
  // The prompt lives on <body> beside the game: a tap or click leaves no focus behind (hud-focus.js).
  const releasePrompt=releaseFocusAfterPointer(prompt);
  // Touch: the attack button stands in for the prompt while one can be acted on (interact-button.js).
  const interactButton=createInteractButton({doc,onInteract});
  const last={title:null,objective:null,hint:null,hintHow:null,prompt:null,ring:null,bubble:null,bubbleX:NaN,bubbleY:NaN};
+ // Combat (2026-11-27 player review, 844×390: health, stamina, the quest and hit numbers
+ // crowded the left side in a fight). Engaged, the quest folds to its one objective line
+ // and the page strip steps aside (v03.css "Combat HUD"). It folds at once and opens again
+ // COMBAT_CALM seconds after the last foe lets go, so a fight between two foes does not
+ // flicker. One attribute on <html>, written only when it changes.
+ const combat={on:false,calm:0},html=doc.documentElement;
+ function writeCombat(on){combat.on=on;if(on)html.dataset.v03Combat='';else delete html.dataset.v03Combat;}
  return {
   element:root,
   setQuest(nextTitle,nextObjective){
    if(last.title===nextTitle&&last.objective===nextObjective)return;
    const changedStep=last.objective!==null&&last.objective!==nextObjective;
-   last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;kicker.textContent=t('hud.main');title.textContent=nextTitle??'';objective.textContent=nextObjective??'';
+   last.title=nextTitle;last.objective=nextObjective;quest.hidden=!nextTitle;kicker.textContent=t('hud.main');title.textContent=nextTitle??'';writeStep(objective,nextObjective);
    if(changedStep){quest.classList.remove('is-updated');void quest.offsetWidth;quest.classList.add('is-updated');}
   },
   // The errand pages ([{id,title,step}] in accepted order, null: none) and the page
@@ -83,6 +95,12 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=
   // A new errand was taken: the count line lights up, the page stays.
   pulseErrands(){pager.pulse();},
   get questPage(){return pager.page;},
+  // Called every play frame: engaged (a foe is fighting the player), dt in seconds.
+  setCombat(engaged,dt=0){
+   if(engaged){combat.calm=COMBAT_CALM;if(!combat.on)writeCombat(true);return;}
+   if(!combat.on)return;combat.calm-=dt;if(combat.calm<=0)writeCombat(false);
+  },
+  get combat(){return combat.on;},
   setCaption(value){
    // The prompt moves up out of a caption's way (v03.css).
    root.classList.toggle('has-caption',!!value);
@@ -110,12 +128,17 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=
    if(px===last.bubbleX&&py===last.bubbleY)return;last.bubbleX=px;last.bubbleY=py;
    bubble.style.transform=`translate3d(${px}px,${py}px,0)`;
   },
-  // value: null | {key,name,action,label,mark:'?'|'!'|null,act:'talk'|'push'|null}
+  // value: null | {key,name,action,label,mark:'?'|'!'|null,act:'talk'|'push'|null,blocked}
   // act: what a press does now (null: shown only, like waiting for the driver).
+  // blocked: the target is there but a fight holds it (story.js, prompt.clearFoes): the
+  // plate reads as shut (v03.css .is-blocked) and a press does nothing.
   setPrompt(value){
-   const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}|${value.act??''}`:null;if(last.prompt===id)return;last.prompt=id;
+   const id=value?`${value.key}|${value.name}|${value.action}|${value.mark}|${value.act??''}|${value.blocked?1:''}`:null;if(last.prompt===id)return;last.prompt=id;
    interactButton.sync(value);
-   if(!value){prompt.classList.remove('is-in');prompt.hidden=true;return;}
+   if(!value){prompt.classList.remove('is-in');prompt.hidden=true;held.hidden=true;return;}
+   const blocked=value.blocked===true;prompt.classList.toggle('is-blocked',blocked);
+   held.hidden=!blocked;held.textContent=blocked?value.action:'';
+   if(blocked)prompt.setAttribute('aria-disabled','true');else prompt.removeAttribute('aria-disabled');
    promptKey.textContent=value.key??'';promptKey.hidden=!value.key;promptName.textContent=value.name;promptAction.textContent=value.action;
    promptMark.textContent=value.mark??'';promptMark.hidden=!value.mark;promptMark.dataset.mark=value.mark??'';
    prompt.setAttribute('aria-label',value.label??`${value.name} ${value.action}`);
@@ -137,6 +160,6 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=
    const size=Math.max(box.width,box.height)+18;
    ring.style.width=ring.style.height=size+'px';ring.style.left=box.left+box.width/2-size/2+'px';ring.style.top=box.top+box.height/2-size/2+'px';ring.hidden=false;
   },
-  dispose(){releasePrompt();interactButton.dispose();pager.dispose();root.remove();},
+  dispose(){if(combat.on)writeCombat(false);releasePrompt();interactButton.dispose();pager.dispose();root.remove();},
  };
 }

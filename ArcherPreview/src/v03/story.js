@@ -1432,7 +1432,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const state=api.getController()?.state??null,attacking=ATTACK_STATES.has(state);
   const mine=attacking&&!ATTACK_STATES.has(slow.player);let theirs=false;slow.player=state;
   for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')theirs=true;slow.foes.set(foe,mode);}
-  const fighting=first||api.battle.combatCount>0;
+  // One combat read per frame serves the slow beat and the HUD's folded quest (play-hud.js setCombat).
+  const engaged=api.battle.combatCount>0,fighting=first||engaged;hud.setCombat(engaged&&!scene.active,dt);
   if(first!==slow.first){slow.first=first;if(first)slow.used=false;}
   if(fighting)slow.calm=0;else if(slow.calm<SLOW_CALM&&(slow.calm+=dt)>=SLOW_CALM)slow.used=false;
   if(!fx.on)slow.left=0;
@@ -1733,7 +1734,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     // browser playtest: the cave trace looked dead while a shaman behind the hobgoblin was alive).
     const blocked=near&&api.battle.combatCount>0?near:null;
     if(blocked)near=null;
-    if(blocked&&(blocked.npc.clue===true||log.isTarget(blocked.npc.id)||errandMarks.has(blocked.npc.id))){const name=speaker(blocked.npc.name);hud.setPrompt({key:null,name,action:t('prompt.clearFoes'),mark:null,label:t('prompt.clearFoes')});}
+    if(blocked&&(blocked.npc.clue===true||log.isTarget(blocked.npc.id)||errandMarks.has(blocked.npc.id))){const name=speaker(blocked.npc.name);hud.setPrompt({key:null,name,action:t('prompt.clearFoes'),mark:null,label:t('prompt.clearFoes'),blocked:true});}
     else if(near){
      const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name),clue=near.npc.clue===true;
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
