@@ -23,15 +23,29 @@ function queryShaderReady(renderer,mesh,engine){
   finally{engine.currentRenderPassId=previous;}
 }
 
+const indexRecoveryScenes=new WeakSet();
+function installQueryIndexRecovery(scene,engine){
+  if(indexRecoveryScenes.has(scene))return;
+  indexRecoveryScenes.add(scene);
+  const observer=engine.onContextLostObservable.add(()=>{
+    // Babylon 9.31 rebuilds the box line indices but not the filled proxy
+    // indices, which the scene renderer retains even across map changes.
+    const renderer=scene._boundingBoxRenderer;
+    if(renderer?._fillIndexBuffer)renderer._fillIndexBuffer=null;
+  });
+  scene.onDisposeObservable.addOnce(()=>engine.onContextLostObservable.remove(observer));
+}
+
 // Query the full, slightly expanded bounds against the actual depth buffer.
 // No guessed house proxies: a single visible sample retains the entire group.
 // Camera movement always reveals groups before rendering and invalidates old results.
 export class VillageOcclusion {
   constructor(world,records,stats){
     this.world=world;this.engine=world.scene.getEngine();this.stats=stats;this.groups=[];
-    this.view=null;this.epoch=0;this.stableFrames=0;this.cursor=0;this.disabled=false;this.near=new Plane(0,0,0,0);
+    this.view=null;this.epoch=0;this.stableFrames=0;this.cursor=0;this.disabled=false;this.contextLost=false;this.near=new Plane(0,0,0,0);
     stats.occludedProps=0;stats.occlusionQueries=0;
     if(!this.engine.getCaps().supportOcclusionQuery)return;
+    if(world.gameplayV03)installQueryIndexRecovery(world.scene,this.engine);
     const cells=new Map();
     for(const r of records){
       if(!['prop','garden','shrub'].includes(r.placement.kind)||Math.hypot(r.placement.x,r.placement.z)>44)continue;
@@ -46,6 +60,19 @@ export class VillageOcclusion {
       proxy.position.copyFrom(min.add(max).scale(.5));proxy.isVisible=false;proxy.isPickable=false;proxy.setEnabled(false);proxy.computeWorldMatrix(true);proxy.freezeWorldMatrix();
       this.groups.push({items,proxy,min,max,query:null,pending:false,epoch:0,hiddenSamples:0,lastQuery:-Infinity});
     }
+    if(world.gameplayV03&&this.groups.length){
+      this.contextLost=this.engine._contextWasLost;
+      this.lostObserver=this.engine.onContextLostObservable.add(()=>{
+        this.contextLost=true;this.epoch++;this.stableFrames=0;this.cursor=0;
+        this.stats.occludedProps=0;
+        for(const group of this.groups){
+          // Lost-context handles cannot be polled, reused, or deleted.
+          group.query=null;group.pending=false;group.lastQuery=-Infinity;
+          this.reveal(group);
+        }
+      });
+      this.restoredObserver=this.engine.onContextRestoredObservable.add(()=>{this.contextLost=false;});
+    }
     this.after=world.scene.onAfterRenderObservable.add(()=>{
       const start=world.frameDiagnostics?.mark()??null;
       try{this.afterRender();}finally{world.frameDiagnostics?.measure('sceneryOcclusionMs',start);}
@@ -56,7 +83,7 @@ export class VillageOcclusion {
     for(const r of group.items){r.occluded=false;r.root.setEnabled(caveFogRootEnabled(r));}
   }
   beforeRender(){
-    if(!this.groups.length||this.disabled)return;
+    if(!this.groups.length||this.disabled||this.contextLost)return;
     const view=this.world.camera.getTransformationMatrix().m;
     const changed=!this.view||view.some((n,i)=>Math.abs(n-this.view[i])>.00001);
     if(changed){this.epoch++;this.stableFrames=0;for(const g of this.groups)this.reveal(g);}
@@ -69,7 +96,7 @@ export class VillageOcclusion {
     this.stats.occludedProps=occludedProps;
   }
   afterRender(){
-    if(this.disabled||this.stableFrames<3||!this.groups.length)return;
+    if(this.disabled||this.contextLost||this.stableFrames<3||!this.groups.length)return;
     const now=performance.now(),engine=this.engine,renderer=this.world.scene.getBoundingBoxRenderer(),camera=this.world.camera;
     const scene=this.world.scene;
     const screenOnly=this.world.mapId==='village'&&this.world.edition==='moonforest-0.3'&&scene.activeCamera===camera&&!scene.frameGraph&&!(scene.activeCameras?.length>1);
@@ -119,6 +146,12 @@ export class VillageOcclusion {
   }
   dispose(){
     if(this.after)this.world.scene.onAfterRenderObservable.remove(this.after);
-    for(const g of this.groups){if(g.query)this.engine.deleteQuery(g.query);g.proxy.dispose();}
+    if(this.lostObserver)this.engine.onContextLostObservable.remove(this.lostObserver);
+    if(this.restoredObserver)this.engine.onContextRestoredObservable.remove(this.restoredObserver);
+    const canDelete=!(this.world.gameplayV03&&this.engine._contextWasLost);
+    for(const group of this.groups){
+      if(canDelete&&group.query)this.engine.deleteQuery(group.query);
+      group.query=null;group.proxy.dispose();
+    }
   }
 }

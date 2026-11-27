@@ -42,6 +42,8 @@ jobs:
           ArcherPreview/tests/v03-opening-first-contact.test.js
           ArcherPreview/tests/v03-adaptive-shadow-warmup.test.js
           ArcherPreview/tests/village-outline-render.test.js
+          ArcherPreview/tests/village-instance-attributes.test.js
+          ArcherPreview/tests/village-occlusion-query-draws.test.js
           ArcherPreview/tests/village-stream-retry.test.js
           ArcherPreview/tests/v03-chapter-wildlife.test.js
           ArcherPreview/tests/v03-chapter-enemy-encounter.test.js

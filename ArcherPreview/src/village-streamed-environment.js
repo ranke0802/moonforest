@@ -138,7 +138,7 @@ export function installVillageGeometry(asset,container,level,world){
       const copy=mesh.clone(mesh.name+'-stream-lod-'+level,null,true);
       // Babylon treats a null clone parent as "inherit source parent". Detach
       // explicitly so glTF root instantiation cannot duplicate the LOD archive.
-      copy.parent=null;copy.metadata={...mesh.metadata};prepareVillageInstancing([copy]);prepareTreeOcclusion([copy]);return copy;
+      copy.parent=null;copy.metadata={...mesh.metadata};prepareVillageInstancing([copy],{recoverContext:world.gameplayV03});prepareTreeOcclusion([copy]);return copy;
     });
     asset.tiers.set(level,{container,meshes:archive});
   }else{
@@ -238,7 +238,7 @@ export function loadStreamedVillage(world,{
         const meshes=geometry(container);
         applyVillagePlainsOutskirtsGround(world,container,{config:asset.config});
         if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
-        prepareVillageInstancing(meshes);if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
+        prepareVillageInstancing(meshes,{recoverContext:world.gameplayV03});if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
         for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
         for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
         world.lighting.registerMeshes(meshes);stageTime('setup',since,id,level);

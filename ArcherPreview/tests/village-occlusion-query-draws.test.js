@@ -13,11 +13,11 @@ const LegacyOcclusion=Function('AbstractMesh','Frustum','MeshBuilder','Plane','V
 const report=[];
 const turn=()=>new Promise(resolve=>setImmediate(resolve));
 
-function fixture(t,{Implementation=VillageOcclusion,clock={now:0},diagnostics}={}){
+function fixture(t,{Implementation=VillageOcclusion,clock={now:0},diagnostics,gameplayV03=false}={}){
   const engine=new NullEngine({renderWidth:800,renderHeight:400}),scene=new Scene(engine);engine.getCaps().supportOcclusionQuery=true;
   const camera=new FreeCamera('camera',new Vector3(13,5,-25),scene);camera.setTarget(new Vector3(13,1,0));camera.getViewMatrix();camera.getProjectionMatrix();scene.setTransformMatrix(camera.getViewMatrix(),camera.getProjectionMatrix());
   const records=[0,13,26].map((x,index)=>({placement:{id:'prop'+index,kind:'prop',x,z:0},min:new Vector3(x-1,0,-1),max:new Vector3(x+1,2,1),root:new TransformNode('root'+index,scene),cellActive:true,fogVisible:true,occluded:false}));
-  const world={scene,camera,frameDiagnostics:diagnostics},stats={},occlusion=new Implementation(world,records,stats),renderer=scene.getBoundingBoxRenderer();
+  const world={scene,camera,frameDiagnostics:diagnostics,gameplayV03},stats={},occlusion=new Implementation(world,records,stats),renderer=scene.getBoundingBoxRenderer();
   let active=null,next=0,canBegin=true;const draws=[],queries=[],events=[],deleted=[],renderCalls=[];
   const render=renderer.renderOcclusionBoundingBox.bind(renderer);renderer.renderOcclusionBoundingBox=mesh=>{renderCalls.push({query:active?.id??null});return render(mesh);};
   const draw=engine.drawElementsType.bind(engine);engine.drawElementsType=(...args)=>{draws.push({query:active?.id??null,pass:engine.currentRenderPassId,indexCount:args[2]});events.push('draw');return draw(...args);};
@@ -122,6 +122,56 @@ test('optional observer diagnostics measure the entire callback in finally and d
   report.push({case:'observer-cost-lifetime',finallyMeasured:true,removedOnDispose:true,noPollingTimersAdded:true});
 });
 
+test('0.3 WebGL loss invalidates query handles and rebuilt proxy draws use new fill indices',async t=>{
+  const clock={now:0};t.mock.method(performance,'now',()=>clock.now);
+  const f=fixture(t,{clock,gameplayV03:true});await f.warm();f.step(0,{available:false});
+  const previousQueries=new Set(f.queries),previousIndices=f.renderer._fillIndexBuffer;
+  assert.ok(previousQueries.size>0);assert.ok(previousIndices);
+  assert.ok(f.occlusion.groups.some(group=>group.pending));
+  for(const record of f.records){record.occluded=true;record.root.setEnabled(false);}
+  f.records[1].fogVisible=false;f.records[2].cellActive=false;
+  f.stats.occludedProps=3;
+
+  const isAvailable=f.engine.isQueryResultAvailable,begin=f.engine.beginOcclusionQuery;
+  f.engine.isQueryResultAvailable=query=>{assert.ok(!previousQueries.has(query));return isAvailable(query);};
+  f.engine.beginOcclusionQuery=(algorithm,query)=>{assert.ok(!previousQueries.has(query));return begin(algorithm,query);};
+  const submissions=f.stats.occlusionQueries;
+  f.engine.onContextLostObservable.notifyObservers(f.engine);
+  assert.equal(f.renderer._fillIndexBuffer,null);
+  assert.equal(f.stats.occludedProps,0);
+  assert.deepEqual(f.records.map(record=>record.root.isEnabled()),[true,false,false]);
+  assert.ok(f.records.every(record=>!record.occluded));
+  assert.ok(f.occlusion.groups.every(group=>!group.pending&&group.query===null&&group.hiddenSamples===0));
+  assert.deepEqual(f.deleted,[]);
+  for(let i=1;i<=8;i++)f.step(i*50);
+  assert.equal(f.stats.occlusionQueries,submissions);
+  assert.equal(f.occlusion.stableFrames,0);
+
+  f.engine.onContextRestoredObservable.notifyObservers(f.engine);
+  f.step(450);f.step(500);
+  assert.equal(f.stats.occlusionQueries,submissions);
+  f.step(550);
+  assert.equal(f.stats.occlusionQueries,submissions+1);
+  assert.ok(f.renderer._fillIndexBuffer);
+  assert.notEqual(f.renderer._fillIndexBuffer,previousIndices);
+  f.step(600,{visible:true});
+  assert.equal(f.records[0].root.isEnabled(),true);
+  assert.deepEqual(f.deleted,[]);
+});
+test('the 0.3 scene can lose its context between maps and discard the previous map proxy indices',async t=>{
+  const f=fixture(t,{gameplayV03:true});await f.warm();f.step(0,{available:false});
+  const previous=f.renderer._fillIndexBuffer;
+  assert.ok(previous);
+  f.occlusion.dispose();
+  assert.ok(f.deleted.length>0);
+  assert.equal(f.renderer._fillIndexBuffer,previous);
+  f.engine.onContextLostObservable.notifyObservers(f.engine);
+  assert.equal(f.renderer._fillIndexBuffer,null);
+  f.engine.onContextRestoredObservable.notifyObservers(f.engine);
+  f.renderer.renderOcclusionBoundingBox(MeshBuilder.CreateBox('next-map-proxy',{},f.scene));
+  assert.ok(f.renderer._fillIndexBuffer);
+  assert.notEqual(f.renderer._fillIndexBuffer,previous);
+});
 test.after(()=>{
   const directory=new URL('../reports/bear-combat-2026-11-05/',import.meta.url);mkdirSync(directory,{recursive:true});
   writeFileSync(new URL('occlusion-validation.json',directory),JSON.stringify({baseline:'99fcd56',passed:report.length===5,cases:report,limitations:['Real Babylon 9.31 BoundingBoxRenderer/ShaderMaterial/NullEngine drawElementsType is exercised; query availability/results are controlled.','Counts demonstrate removal of redundant outside-query draw calls, not actual GPU time, mobile FPS or causation of a recorded delay.','Cold shaders initialize outside queries; readiness is checked under the same dedicated render pass as the actual query draw.']},null,2)+'\n');

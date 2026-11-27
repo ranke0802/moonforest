@@ -112,3 +112,57 @@ test('replaced storage or engine and a later prototype hook use the complete cur
  f.engine.updateDynamicVertexBuffer=function(...args){if(!changed){changed=true;source.instancedBuffers=replacement;}return update.apply(this,args);};
  source._processInstancedBuffers([instance],false);assert.equal(source.instancedBuffers,replacement,'a foreign replacement during processing is never overwritten');source.instancedBuffers=buffers;
 });
+
+test('0.3 WebGL restore rebuilds detached scenery and refreshes native custom buffers across passes',t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);
+ t.after(()=>engine.dispose());
+ const attached=MeshBuilder.CreateBox('attached-lod',{},scene);
+ const detached=MeshBuilder.CreateBox('detached-gltf-root',{},scene);
+ const archived=detached.clone('attached-lod-sharing-detached-geometry');
+ const legacy=MeshBuilder.CreateBox('legacy',{},scene);
+ const geometry=detached.geometry;
+ const initialObservers=engine.onContextRestoredObservable.observers.length;
+ scene.removeMesh(detached);scene.removeGeometry(geometry);
+ prepareVillageInstancing([legacy]);
+ assert.equal(engine.onContextRestoredObservable.observers.length,initialObservers);
+ prepareVillageInstancing([attached,detached,archived],{recoverContext:true});
+ prepareVillageInstancing([detached],{recoverContext:true});
+ assert.equal(engine.onContextRestoredObservable.observers.length,initialObservers+1);
+
+ const assets=[attached,detached,archived,legacy].map(source=>{
+  prepareTreeOcclusion([source]);
+  const instance=source.createInstance(`${source.name}-instance`);
+  instance.instancedBuffers.treeCoverage=.375;
+  const passes=[engine.currentRenderPassId,engine.createRenderPassId(`${source.name}-shadow`)];
+  const upload=pass=>{engine.currentRenderPassId=pass;source._processInstancedBuffers([instance],false);};
+  for(const pass of passes)upload(pass);
+  engine.currentRenderPassId=passes[0];
+  const storage=source._userInstancedBuffersStorage;
+  return {storage,passes,upload,old:passes.map(pass=>storage.renderPasses[pass].treeCoverage)};
+ });
+ const counts=new Map([attached,detached,archived].map(mesh=>[mesh,0]));
+ for(const [mesh] of counts)mesh.onRebuildObservable.add(()=>counts.set(mesh,counts.get(mesh)+1));
+ let geometryRebuilds=0;
+ const rebuild=geometry._rebuild;
+ geometry._rebuild=function(){geometryRebuilds++;return rebuild.call(this);};
+
+ // Babylon rebuilds known scene resources before firing its engine event.
+ scene._rebuildGeometries();
+ assert.equal(counts.get(detached),0);assert.equal(geometryRebuilds,0);
+ for(const {storage,passes,old} of assets)for(const [i,pass] of passes.entries())assert.equal(storage.renderPasses[pass].treeCoverage,old[i]);
+ engine.onContextRestoredObservable.notifyObservers(engine);
+ assert.deepEqual([...counts.values()],[1,1,1]);
+ assert.equal(geometryRebuilds,1,'the renderable detached geometry is shared with another LOD');
+ assert.ok(!scene.meshes.includes(detached)&&!scene.geometries.includes(geometry),'container ownership remains detached');
+
+ for(const {storage,passes,upload,old} of assets.slice(0,-1))for(const [i,pass] of passes.entries()){
+  assert.equal(storage.renderPasses[pass],undefined);
+  upload(pass);
+  assert.notEqual(storage.renderPasses[pass].treeCoverage,old[i]);
+  assert.equal(storage.data.treeCoverage[0],.375);
+ }
+ const inactive=assets.at(-1);
+ assert.equal(inactive.storage.renderPasses[inactive.passes[0]].treeCoverage,inactive.old[0]);
+ detached.dispose();scene.dispose();
+ assert.equal(engine.onContextRestoredObservable.observers.filter(observer=>!observer._willBeUnregistered).length,initialObservers);
+});
