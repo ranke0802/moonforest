@@ -191,6 +191,39 @@ export const DIALOGUES=Object.freeze({
   {who:'제프리',text:'둘이 나란히 목책에 앉아 있던 게 엊그제 같은데…'},
   {who:'나',text:'(제프리도 아직 그날에서 벗어나지 못했구나.)'},
  ],
+ // Jeffrey's defense errand (W01, defense-waves.js): offer, the start of a stage by band
+ // (2–4 / 5–7 / 8–9 / 10), after a lost stage, a talk during one, the last report.
+ 'jeffrey-waves-offer':[
+  {who:'제프리',text:'누나, 큰일이에요. 숲 쪽 마물들이 목책으로 몰려오고 있어요. 막을 때마다 다음엔 더 많이, 더 세게 와요.'},
+  {who:'제프리',text:'저 혼자선 못 버텨요. 목책을 같이 지켜 주세요. …저기, 벌써 오고 있어요!'},
+  {who:'나',text:'(마을 안으로는 한 마리도 들이지 않는다.)'},
+ ],
+ 'jeffrey-waves-early':[
+  {who:'제프리',text:'또 와요! 이번엔 수가 더 많아요. 목책 앞에서 막아 주세요!'},
+ ],
+ 'jeffrey-waves-mid':[
+  {who:'제프리',text:'놈들 움직임이 달라졌어요. 활 든 놈들이 뒤에서 쏘고, 덩치 큰 놈까지 섞였어요.'},
+  {who:'제프리',text:'화살이 날아오면 옆으로 피하세요. 준비됐죠? 가요!'},
+ ],
+ 'jeffrey-waves-late':[
+  {who:'제프리',text:'이젠 숲이 통째로 내려오는 것 같아요… 그래도 누나가 있으니까 버틸 수 있어요.'},
+  {who:'제프리',text:'물약 챙겼죠? 목책 무너지기 전에 끝내요!'},
+ ],
+ 'jeffrey-waves-last':[
+  {who:'제프리',text:'이번이 마지막 큰 무리예요. 홉고블린이 둘이나 보여요.'},
+  {who:'제프리',text:'이것만 막으면 숲도 한동안 조용할 거예요. 누나, 부탁해요!'},
+ ],
+ 'jeffrey-waves-retry':[
+  {who:'제프리',text:'누나, 괜찮아요? 놈들은 일단 물러났어요. 숨 고르고 다시 가요.'},
+ ],
+ 'jeffrey-waves-hold':[
+  {who:'제프리',text:'목책이에요! 놈들이 아직 남았어요!'},
+ ],
+ 'jeffrey-waves-done':[
+  {who:'제프리',text:'…다 막았어요. 열 번을, 정말로 다요.'},
+  {who:'제프리',text:'요아힘 형이 지키던 목책을 누나가 지켜 줬네요. 고마워요, 누나.'},
+  {who:'나',text:'(이 마을의 목책은 아직 무너지지 않았다.)'},
+ ],
  'herbalist-errand':[
   {who:'약초사',text:'손이 빈 김에 하나 알려 드릴게요. 회복약 한 병 만드는 법이요.'},
   {who:'약초사',text:'달이슬 약초 두 줌이면 돼요. 이건 제가 드릴게요. 제 앞에서 조제로 한 병 만들어 보세요.',effects:['give:moon-herb:2']},
@@ -441,6 +474,25 @@ export const ERRANDS=Object.freeze([
  {id:'M06',giver:'driver',after:'M04',goldSource:'v03-quest-M06',reward:{gold:250},title:'우두머리 늑대',offer:'driver-alpha',wait:'driver-alpha-wait',done:'driver-alpha-done',steps:[
   {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28}},
   {id:'report',text:'마부에게 알리기',type:'talk',targets:['driver'],turnIn:true},
+ ]},
+ // Jeffrey's defense errand (2026-11-27, user): ten stronger stages at the palisade, each started by
+ // talking to him; a lost stage goes back to before that talk (defense-waves.js). kinds: the foe of each
+ // column; elite scale on top of the stage's hp/damage (WAVE_ELITE). Stage 10 pays the errand's reward
+ // (500 gold) when it is reported to him.
+ {id:'W01',giver:'youth',after:'M04',reward:{gold:500},title:'마물들이 몰려오고 있어요',offer:'jeffrey-waves-offer',wait:'jeffrey-waves-hold',done:'jeffrey-waves-done',steps:[
+  {id:'waves',text:'목책에서 몰려오는 마물 막아내기',type:'waves',map:'village',targets:['youth'],at:{x:0,z:28,radius:11},from:{x:-1.2,z:58},maxAlive:6,
+   kinds:{goblin:'goblin-warrior',archer:'goblin-archer',elite:'hobgoblin-boss'},lines:{retry:'jeffrey-waves-retry'},stages:[
+   {goblin:3,archer:0,elite:0,hp:1,damage:1,gold:60,line:'jeffrey-waves-early'},
+   {goblin:4,archer:0,elite:0,hp:1,damage:1,gold:80,line:'jeffrey-waves-early'},
+   {goblin:4,archer:1,elite:0,hp:1.1,damage:1,gold:100,potions:1,line:'jeffrey-waves-early'},
+   {goblin:5,archer:2,elite:0,hp:1.15,damage:1.05,gold:120,line:'jeffrey-waves-early'},
+   {goblin:4,archer:2,elite:1,hp:1.2,damage:1.1,gold:140,line:'jeffrey-waves-mid'},
+   {goblin:6,archer:2,elite:0,hp:1.3,damage:1.15,gold:160,potions:1,line:'jeffrey-waves-mid'},
+   {goblin:6,archer:3,elite:0,hp:1.35,damage:1.2,gold:180,line:'jeffrey-waves-mid'},
+   {goblin:7,archer:3,elite:1,hp:1.45,damage:1.25,gold:200,line:'jeffrey-waves-late'},
+   {goblin:8,archer:4,elite:0,hp:1.5,damage:1.3,gold:220,potions:1,line:'jeffrey-waves-late'},
+   {goblin:8,archer:4,elite:2,hp:1.6,damage:1.35,gold:0,line:'jeffrey-waves-last'},
+  ]},
  ]},
 ]);
 export const CHAPTER_END_NOTE='1장 끝 · 다음 이야기 · 엘레나의 일지';

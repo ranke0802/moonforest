@@ -112,5 +112,6 @@ export default {
   'talk.menu.rest':'숙박',
   'settings.playerTexture':'캐릭터 텍스처','settings.playerTexture2k':'2K (기본)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (이 기기 미지원)','settings.playerTextureNote':'4K는 더 선명하고 내려받는 양이 늘어납니다. 바꾸면 다음 접속 때 적용됩니다.','settings.playerTextureNext':'바꾼 값은 다음 접속 때 적용됩니다.','settings.playerTextureNote4kOff':'이 기기는 4K 텍스처를 쓸 수 없어 2K를 씁니다.',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (기본)',
+ 'waves.start':'{n}단계 습격!','waves.cleared':'{n}단계 돌파!','waves.allCleared':'{n}단계까지 모두 막아 냈다!','waves.lost':'목책에서 밀려났다 · 다시 말을 걸면 같은 단계부터','waves.cancelled':'마을을 떠나 습격 방어를 멈췄다','waves.unavailable':'지금은 습격 방어를 시작할 수 없습니다','waves.objective.fight':'{n}/{total}단계 · 남은 마물 {left}','waves.objective.idle':'{n}/{total}단계 · {who}에게 말 걸기','waves.objective.report':'{total}/{total}단계 돌파 · {who}에게 알리기',
  },
 };

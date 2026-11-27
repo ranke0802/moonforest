@@ -7,6 +7,9 @@
 // deliver {item,count,targets}: handing items over when talking to a target,
 // and town {action,item?}: a village service event (craft, forge, repair, buy).
 // Any number of errands can be active; events advance every active errand.
+// waves {stages,targets,at,from} (defense-waves.js): the giver starts each
+// stage in a talk; count holds the stages cleared, and once all are cleared
+// the step waits on a last talk with a target, like a talk step.
 const STORE_KEY='v03-errands-v1';
 export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=null}){
  const byId=new Map(errands.map(errand=>[errand.id,errand]));
@@ -36,7 +39,7 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
   if(row.step<byId.get(id).steps.length){save();return false;}
   delete state.active[id];state.finished.push(id);save();return true;
  }
- const pendingTalk=(step,npc)=>(step?.type==='talk'||step?.type==='deliver')&&step.targets?.includes(npc);
+ const pendingTalk=(step,npc,id)=>(step?.type==='talk'||step?.type==='deliver'||step?.type==='waves'&&state.active[id]?.count>=step.stages.length)&&step.targets?.includes(npc);
  return {
   load,save,
   recoverSettled(hasReceipt){
@@ -65,13 +68,14 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
    stateOf().active[id]={step:state.step,count:Math.max(0,Number(state.count)||0)};save();return true;
   },
   // The active errand whose current step waits on talking to this NPC.
-  waitingOn(npc){return errands.find(errand=>pendingTalk(stepOf(errand.id),npc))??null;},
+  waitingOn(npc){return errands.find(errand=>pendingTalk(stepOf(errand.id),npc,errand.id))??null;},
   // The active errand this NPC gave whose current step is elsewhere.
   givenBy(npc){return errands.find(errand=>errand.giver===npc&&isActive(errand.id))??null;},
   // Text for the tracker, e.g. "대평원에서 짐승 두 마리 쫓아내기 (1/2)".
   objective(id,have=null){
    const step=stepOf(id);if(!step)return '';
    if(step.type==='defeat')return `${step.text} (${Math.min(state.active[id].count,step.count)}/${step.count})`;
+   if(step.type==='waves')return `${step.text} (${Math.min(state.active[id].count,step.stages.length)}/${step.stages.length})`;
    if(step.type==='deliver'&&have!==null)return `${step.text} (${Math.min(have,step.count)}/${step.count})`;
    return step.text;
   },
@@ -94,7 +98,15 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
    }
    return results;
   },
+  // Stages cleared on a waves step; clear(id,n) records stage n (never fewer).
+  count:id=>state.active[id]?.count??0,
+  clear(id,n){
+   const row=state.active[id],step=stepOf(id);
+   if(step?.type!=='waves'||!Number.isInteger(n)||n<1||n>step.stages.length)return null;
+   if(n>row.count){row.count=n;save();}
+   return {id,stepDone:false,errandDone:false};
+  },
   // The talk or deliver step of an errand that waits on this NPC is done.
-  complete(id,npc){const step=stepOf(id);if(!pendingTalk(step,npc))return null;const errandDone=advance(id);return errandDone===null?null:{id,stepDone:true,errandDone};},
+  complete(id,npc){const step=stepOf(id);if(!pendingTalk(step,npc,id))return null;const errandDone=advance(id);return errandDone===null?null:{id,stepDone:true,errandDone};},
  };
 }

@@ -184,6 +184,18 @@ export function createTownEconomy(wallet,legacy={},{random=Math.random}={}){
    return true;
   },
   wearDefense(blocked){const w=state.condition[state.equipped[blocked?'shield':'armor']];if(!w?.hp)return false;w.hp--;dirty=true;return true;},
+  // Wear of the worn sword, shield and armour, and putting it back (a lost defense stage, defense-waves.js).
+  wearSnapshot(){const out={};for(const slot of ['sword','shield','armor']){const id=state.equipped[slot],w=id&&state.condition[id];if(w)out[id]={hp:w.hp,wearUnits:w.wearUnits??0};}return out;},
+  restoreWear(snapshot){
+   let changed=false;
+   for(const [id,row] of Object.entries(snapshot??{})){
+    const w=state.condition[id];if(!w||!Number.isInteger(row?.hp))continue;
+    const hp=Math.max(0,Math.min(w.max??row.hp,row.hp)),wear=hp&&Number.isInteger(row.wearUnits)&&row.wearUnits>0?row.wearUnits:0;
+    if(w.hp===hp&&(w.wearUnits??0)===wear)continue;
+    w.hp=hp;if(wear)w.wearUnits=wear;else delete w.wearUnits;changed=true;
+   }
+   if(changed)dirty=true;return changed;
+  },
   // One wallet write for the whole cart ({id:count}); all of it or none (2026-11-26, user:
   // pick quantities, then one button at the bottom).
   buyAll(shop,cart){

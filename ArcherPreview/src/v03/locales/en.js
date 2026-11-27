@@ -117,6 +117,7 @@ export default {
   'talk.menu.rest':'Rest',
   'settings.playerTexture':'Character textures','settings.playerTexture2k':'2K (default)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (not supported here)','settings.playerTextureNote':'4K is sharper and downloads more. A change applies from your next visit.','settings.playerTextureNext':'Your change applies from your next visit.','settings.playerTextureNote4kOff':'This device can’t use 4K textures, so 2K is used.',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (default)',
+ 'waves.start':'Stage {n} raid!','waves.cleared':'Stage {n} cleared!','waves.allCleared':'All {n} stages held!','waves.lost':'Pushed back from the palisade · Talk again to retry this stage','waves.cancelled':'You left the village · The defense has stopped','waves.unavailable':'The defense can’t start right now','waves.objective.fight':'Stage {n}/{total} · {left} fiends left','waves.objective.idle':'Stage {n}/{total} · Talk to {who}','waves.objective.report':'All {total} stages held · Tell {who}',
  },
  story:{
   speakers:{
@@ -168,6 +169,7 @@ export default {
    'youth-errand':["Sis, can I ask you a favour? There are beast tracks all over outside the fence.","They keep trailing me on my rounds. Drive off just two of them on the plains for me.","Got it. If any decent hides or fangs turn up, I’ll keep them."],
    'youth-errand-wait':['They’re still prowling outside the fence. Out toward the plains.'],
    'youth-errand-done':["Already? That’s my sis.","Joachim never thought twice about favours like this either. And when he got back, he always let the saint look at his scrapes.","Feels like only yesterday the two of them sat side by side on the palisade…","(Jeffrey still hasn’t left that day behind either.)"],
+   'jeffrey-waves-offer':['Big trouble. Fiends from the forest keep pouring toward the palisade. Every time we hold them, the next wave is bigger and meaner.','I can’t hold it alone. Guard the palisade with me. …Look, they’re already coming!','(Not one of them gets inside the village.)'],'jeffrey-waves-early':['Here they come again! More of them this time. Stop them at the palisade!'],'jeffrey-waves-mid':['They’re moving differently now. Archers shooting from the back, and a big one mixed in.','When the arrows fly, step aside. Ready? Let’s go!'],'jeffrey-waves-late':['It’s like the whole forest is coming down on us… but with you here, we can hold.','Got your potions? Let’s finish before the palisade gives way!'],'jeffrey-waves-last':['This is the last big wave. I can see two hobgoblins.','Hold this one and the forest should stay quiet for a while. Please!'],'jeffrey-waves-retry':['Are you all right? They’ve pulled back for now. Catch your breath and we’ll go again.'],'jeffrey-waves-hold':['The palisade! There are still some left!'],'jeffrey-waves-done':['…We held them. All ten times. We really did.','The palisade Joachim used to guard—you guarded it for him. Thank you.','(The village palisade hasn’t fallen yet.)'],
    'herbalist-errand':['While my hands are free, let me show you something. How to make a healing potion.','Two handfuls of moondew herb is all it takes. Here, take these. Brew one right here in front of me.','Keep the potion in your quick slot from the inventory. Then you can drink it right away in a fight.'],
    'herbalist-errand-wait':['The brewing table’s always free. Two handfuls of herb make one potion.'],
    'herbalist-errand-done':['Nicely done. The saint couldn’t get the water temperature right at first either; she boiled it again and again.','The last day I saw her, she heated water and said only that she’d be late. She didn’t say where she was going.','I wish I’d asked more then… I think about it sometimes.'],
@@ -223,6 +225,7 @@ export default {
    S04:{title:'A Dull Edge',steps:{temper:'Temper your sword once at the smith’s workbench',report:'Tell the blacksmith'}},
    S05:{title:'Archers at the Forest’s Edge',steps:{archers:'Defeat two goblin archers in the Forest of Fiends',report:'Tell the chief'}},
    S06:{title:'The Ghoul’s Chain',steps:{link:'Bring the blacksmith a ghoul mail link'}},
+   W01:{title:'The Fiends Keep Coming',steps:{waves:'Hold the palisade against the oncoming fiends'}},
   },
   endNote:"End of Chapter 1 · Next · Elena’s Journal",
   hints:{

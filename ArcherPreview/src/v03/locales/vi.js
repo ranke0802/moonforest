@@ -117,6 +117,7 @@ export default {
   'talk.menu.rest':'Nghỉ trọ',
   'settings.playerTexture':'Kết cấu nhân vật','settings.playerTexture2k':'2K (mặc định)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (thiết bị không hỗ trợ)','settings.playerTextureNote':'4K sắc nét hơn nhưng phải tải nhiều hơn. Thay đổi có hiệu lực từ lần vào sau.','settings.playerTextureNext':'Thay đổi sẽ có hiệu lực từ lần vào sau.','settings.playerTextureNote4kOff':'Thiết bị này không dùng được kết cấu 4K nên dùng 2K.',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (mặc định)',
+ 'waves.start':'Đợt {n}: ma vật tấn công!','waves.cleared':'Vượt qua đợt {n}!','waves.allCleared':'Đã chặn đủ {n} đợt!','waves.lost':'Bị đẩy lùi khỏi hàng rào · Nói chuyện lại để thử lại đợt này','waves.cancelled':'Đã rời làng · Dừng phòng thủ','waves.unavailable':'Chưa thể bắt đầu phòng thủ lúc này','waves.objective.fight':'Đợt {n}/{total} · Còn {left} ma vật','waves.objective.idle':'Đợt {n}/{total} · Nói chuyện với {who}','waves.objective.report':'Vượt {total}/{total} đợt · Báo cho {who}',
  },
  story:{
   speakers:{
@@ -168,6 +169,7 @@ export default {
    'youth-errand':["Chị, em nhờ chị một việc được không? Ngoài hàng rào đầy dấu chân thú.","Mỗi lần em đi tuần là chúng cứ bám theo. Chị đuổi giúp em hai con ở phía Đại Bình Nguyên nhé.","Được. Có da hay nanh nào dùng được thì chị giữ lại."],
    'youth-errand-wait':['Bọn ngoài hàng rào vẫn lảng vảng. Ở phía đồng cỏ ấy.'],
    'youth-errand-done':["Xong rồi á? Đúng là chị.","Anh Joachim cũng vậy, nhờ việc kiểu này là anh ấy nhận ngay. Đi về là lại cho Thánh nữ xem vết thương.","Cảnh hai người ngồi cạnh nhau trên hàng rào cứ như mới hôm qua…","(Jeffrey cũng vẫn chưa thoát ra khỏi ngày hôm đó.)"],
+   'jeffrey-waves-offer':['Chị ơi, nguy rồi. Ma vật từ phía rừng cứ kéo về hàng rào. Mỗi lần mình chặn được, lần sau chúng lại đông hơn, mạnh hơn.','Một mình em không trụ nổi. Chị giữ hàng rào cùng em nhé. …Kìa, chúng tới rồi!','(Không để con nào lọt vào làng.)'],'jeffrey-waves-early':['Chúng lại tới! Lần này đông hơn. Chặn chúng trước hàng rào nhé!'],'jeffrey-waves-mid':['Chúng đánh khác rồi. Bọn cầm cung bắn từ phía sau, còn có cả một con to xác.','Tên bay tới thì né sang bên. Sẵn sàng chưa? Đi thôi!'],'jeffrey-waves-late':['Cứ như cả khu rừng đang tràn xuống… nhưng có chị ở đây thì mình trụ được.','Chị mang thuốc hồi phục chưa? Xong trước khi hàng rào sập nhé!'],'jeffrey-waves-last':['Đây là đợt lớn cuối cùng. Em thấy tận hai con yêu tinh lớn.','Chặn được đợt này thì rừng sẽ yên một thời gian. Chị ơi, nhờ chị đấy!'],'jeffrey-waves-retry':['Chị không sao chứ? Chúng tạm rút rồi. Lấy lại hơi rồi mình đi tiếp.'],'jeffrey-waves-hold':['Hàng rào kìa! Vẫn còn mấy con!'],'jeffrey-waves-done':['…Chặn hết rồi. Cả mười lần, thật sự là hết.','Hàng rào anh Joachim từng giữ, giờ chị đã giữ thay anh ấy. Cảm ơn chị.','(Hàng rào của làng này vẫn chưa sụp.)'],
    'herbalist-errand':['Nhân lúc rảnh tay, tôi chỉ cô một việc. Cách làm một bình hồi máu.','Chỉ cần hai nắm thảo dược sương trăng. Tôi cho cô đây. Cô pha chế thử một bình ngay trước mặt tôi nhé.','Thuốc làm xong thì gán vào ô nhanh trong túi đồ. Lúc đánh nhau là uống được ngay.'],
    'herbalist-errand-wait':['Bàn pha chế lúc nào cũng trống. Hai nắm thảo dược là được một bình.'],
    'herbalist-errand-done':['Cô làm khéo lắm. Hồi đầu Thánh nữ cũng không canh được độ nóng của nước, phải đun lại mấy lần.','Ngày cuối tôi gặp, Thánh nữ vừa hâm nước vừa nói hôm nay sẽ về muộn. Không nói là đi đâu.','Giá lúc đó tôi hỏi thêm… Thỉnh thoảng tôi lại nghĩ vậy.'],
@@ -223,6 +225,7 @@ export default {
    S04:{title:'Lưỡi kiếm cùn',steps:{temper:'Rèn kiếm một lần ở bàn của thợ rèn',report:'Báo cho thợ rèn'}},
    S05:{title:'Cung thủ ở cửa rừng',steps:{archers:'Hạ hai cung thủ yêu tinh trong rừng ma vật',report:'Báo cho trưởng làng'}},
    S06:{title:'Xiềng xích của quỷ ăn xác',steps:{link:'Mang cho thợ rèn một mắt xích giáp quỷ ăn xác'}},
+   W01:{title:'Ma vật đang kéo đến',steps:{waves:'Giữ hàng rào trước lũ ma vật kéo đến'}},
   },
   endNote:"Hết chương 1 · Câu chuyện tiếp theo · Nhật ký của Elena",
   hints:{

@@ -6,6 +6,7 @@ import {Quaternion,Vector3} from '@babylonjs/core/Maths/math.vector.js';
 import {STRIKE_LUNGE} from './strike-approach.js';
 import {createQuestLog} from './quests.js';
 import {createErrandLog} from './errands.js';
+import {createWaveErrand} from './defense-waves.js';
 import {itemName,STOCK,RECIPES} from './town-items.js';
 import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
@@ -52,6 +53,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Warm the art cache so the first line never shows an empty frame.
  for(const npc of content.NPCS??[]){const art=portraitFor(npc.name);if(art&&view?.Image){const image=new view.Image();image.decoding='async';image.src=art;}}
  const hud=createPlayHud({doc,onInteract:()=>interact(),onQuestPage:id=>selectPage(id)});
+ // Jeffrey's defense errand (W01, defense-waves.js): stages, rewards and a lost stage's undo.
+ const waves=createWaveErrand({api,storage:()=>save.journey,hud,content,results:rows=>errandResults(rows),announce:(parts,summary)=>announceReward(parts,summary),refresh:()=>refreshErrands(),focus:id=>selectPage(id)});
  const cast=[];let mapId=null,near=null,started=false,talking=false,disposed=false;
  // The cast of castMap, settled when every member's model is on stage (cast-models.js).
  let castMap=null,castSettled=null;
@@ -119,7 +122,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function refreshErrands(){
   if(questPage&&!errands.isActive(questPage)){questPage=null;storePage();}
-  const pages=errands.accepted().map(errand=>{const step=errands.step(errand.id);return {id:errand.id,title:errand.title,step:errands.objective(errand.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null)};});
+  const pages=errands.accepted().map(errand=>{const step=errands.step(errand.id);return {id:errand.id,title:errand.title,step:waves.objective(errand.id)??errands.objective(errand.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null)};});
   hud.setQuestPages(pages,questPage);
   errandMarks.clear();
   for(const npc of content.NPCS??[]){
@@ -127,6 +130,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(waiting&&(errands.step(waiting.id).type==='talk'||deliverReady(waiting)))errandMarks.set(npc.id,'!');
    else if(errands.offerFor(npc.id,mainDone))errandMarks.set(npc.id,'+');
   }
+  waves.mark(errandMarks);
  }
  function errandDone(errand){
   if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
@@ -153,17 +157,18 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(step.type==='deliver')return deliverReady(waiting)?{kind:'deliver',errand:waiting,dialogue:waiting.done}:{kind:'wait',errand:waiting,dialogue:waiting.wait};
    return {kind:'turnIn',errand:waiting,dialogue:waiting.steps.indexOf(step)===waiting.steps.length-1?waiting.done:waiting.wait};
   }
+  const wave=waves.talk(npc,mainDone);if(wave)return wave;
   const offer=errands.offerFor(npc,mainDone);if(offer)return {kind:'offer',errand:offer,dialogue:offer.offer};
   const given=errands.givenBy(npc);return given?{kind:'wait',errand:given,dialogue:given.wait}:null;
  }
  function afterErrandTalk(talk,npc){
-  if(!talk)return;
+  if(!talk||talk.kind!=='offer'&&waves.after(talk))return;
   if(talk.kind==='offer'){
    if(!errands.accept(talk.errand.id))return;
    if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
    tips.queue.unshift({title:t('errand.accepted',{title:talk.errand.title}),keys:errands.objective(talk.errand.id),touch:errands.objective(talk.errand.id),text:''});
    // Its page joins the panel; the page shown stays, the count lights up (2026-11-27).
-   refreshErrands();hud.pulseErrands();return;
+   refreshErrands();hud.pulseErrands();waves.after(talk);return;
   }
   if(talk.kind==='deliver'&&!replaying){
    const step=errands.step(talk.errand.id),final=step===talk.errand.steps.at(-1);
@@ -246,6 +251,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(step.type==='talk'||step.type==='deliver')target=npcTarget(player,step.targets);
   else if(step.type==='town'){const host=townHost(step);if(host)target=npcTarget(player,[host]);}
   else if(step.type==='reach'){const exit=content.ROUTES?.[mapId]?.[step.map];if(exit){guidePoint.x=exit.x;guidePoint.z=exit.z;target={key:'exit:'+step.map,direct:false,stopShort:0};}}
+  // Jeffrey's defense errand: the giver while a stage waits, the palisade during one.
+  else if(step.type==='waves'){
+   const goal=waves.guide();
+   if(goal&&!goal.npc&&goal.map===mapId){if((goal.x-player.x)**2+(goal.z-player.z)**2<16)return null;guidePoint.x=goal.x;guidePoint.z=goal.z;target={key:'spot:'+errand.id,direct:false,stopShort:1};}
+   else if(goal&&!goal.npc){const exit=content.ROUTES?.[mapId]?.[goal.map];if(exit){guidePoint.x=exit.x;guidePoint.z=exit.z;target={key:'exit:'+goal.map,direct:false,stopShort:0};}}
+  }
   return target??npcTarget(player,[errand.giver]);
  }
  function guideTarget(player){
@@ -1616,6 +1627,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // An old save read in the 11/27 order (quest-migration.js): settle the errand that took
    // over a main quest, then write the cursor in the new format.
    if(!fresh&&log.migration){const moved=log.migration.errand;if(moved)errands.adopt(moved.id,moved.state);log.save();}
+   waves.bind(errands,key,replay,fresh);
    if(!fresh&&!replay&&api.hasSettledQuest){
     if(log.recoverSettled(api.hasSettledQuest)&&log.finished)onChapterEnd?.();
     errands.recoverSettled(api.hasSettledQuest);
@@ -1644,7 +1656,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    scene.pending=false;scene.pendingFor=0;
    try{dialogue.cancel();}catch{/* nothing open */}talking=false;
    clearCast();mapId=null;started=false;
-   api.onTownEvent?.(null);hud.setQuestPages(null);errandMarks.clear();
+   api.onTownEvent?.(null);hud.setQuestPages(null);errandMarks.clear();waves.stop();
    guide.visual?.hide();guide.key=null;guide.shown=false;
    try{api.setMapMarkers?.([]);}catch{/* optional */}
    tips.queue.length=0;tips.showing=null;tips.step=null;
@@ -1654,6 +1666,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    staged.key=null;staged.busy=false;staged.next=0;
    return true;
   },
+  // Jeffrey's defense errand: a fall during a stage goes back to before the talk (main.js asks first).
+  interceptDeath:()=>started&&waves.playerDown(),
+  get waves(){return waves;},
   defeat(event){
    if(!started||!event)return;
    const step=log.step(),row={type:'defeat',kind:event.family&&step?.kind===event.family?event.family:event.kind,family:event.family??null,source:event.kind,map:mapId};
@@ -1686,6 +1701,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(dialogue.open)onScene?.(reading.reading);
     void playing.then(played=>{if(played&&started&&log.step()===reading)emit({type:'reach',map:mapId});}).finally(()=>{talking=false;if(started&&!disposed)api.input.setSuspended(false);});
    }
+   waves.update(dt,mapId,talking||dialogue.open);
    hidePlacedWagon();updateCover(dt);
    if(scene.active){try{updateScene(dt);}catch(error){console.warn('[MoonForest 0.3] ambush scene stopped',error);try{endScene();}catch{scene.active=false;showPlayer(true);api.input.setSuspended(false);}}coach(0);updateGuide(dt,null);updateBubble(dt);return;}
    // Strolling actors: talk range and markers follow where they stand now.

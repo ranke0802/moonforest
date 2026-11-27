@@ -743,6 +743,8 @@ export function setupV03(api){
   get blocksGame(){return state.screen==='opening'||state.screen==='exit'||gate.active;},
   // Called by the game when an enemy is defeated.
   defeat(event){if(state.screen==='play'){gallery.encounter(event);story.defeat(event);}},
+  // main.js, before the death screen: true when the story takes the fall (Jeffrey's defense errand).
+  interceptDeath(){return state.screen==='play'&&story.interceptDeath?.()===true;},
   decorateFoeBar(element,foe){if(state.screen==='play'){
    if(!element.hidden&&foe?.brain?.hp>0&&foe.renderVisible!==false&&foe.fogVisible!==false)gallery.encounter(foe);
    vitality.decorate(element,foe);

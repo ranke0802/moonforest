@@ -11,6 +11,8 @@ const QUEST_XP=Object.freeze({
   // 2026-11-27 homecoming line: M02 and M05 left it (kept for saves that earned them); M06 is the driver's errand.
   M10:40,M11:120,M12:60,
   S01:55,S02:50,S03:65,S04:75,S05:95,S06:100,E01:80,E02:180,
+  // Jeffrey's defense errand: its stages already pay kill XP (about 84 foes); this is the report.
+  W01:120,
 });
 const MONSTER_XP=Object.freeze({
   fox:10,boar:16,'wild-boar':16,'gray-wolf':18,'stylized-wolf':18,'wolf-2':18,'wolf-3':18,

@@ -107,6 +107,7 @@ export default {
   'talk.menu.rest':'住宿',
   'settings.playerTexture':'角色贴图','settings.playerTexture2k':'2K（默认）','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K（此设备不支持）','settings.playerTextureNote':'4K 更清晰，但下载量更大。更改将在下次进入时生效。','settings.playerTextureNext':'更改将在下次进入时生效。','settings.playerTextureNote4kOff':'此设备无法使用 4K 贴图，因此使用 2K。',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K（默认）',
+ 'waves.start':'第{n}波 来袭！','waves.cleared':'第{n}波 突破！','waves.allCleared':'{n}波全部挡下！','waves.lost':'被逼退出栅栏 · 再次交谈可从这一波重来','waves.cancelled':'已离开村子 · 防守中止','waves.unavailable':'现在无法开始防守','waves.objective.fight':'第{n}/{total}波 · 剩余魔物 {left}','waves.objective.idle':'第{n}/{total}波 · 与{who}交谈','waves.objective.report':'{total}/{total}波已突破 · 告诉{who}',
  },
  story:{
   speakers:{
@@ -158,6 +159,7 @@ export default {
    'youth-errand':["姐，能拜托你件事吗？栅栏外面到处都是野兽的脚印。","我每次巡哨它们都跟着。帮我在大平原那边赶走两只就行。","好。要是有用得上的皮或獠牙，我帮你留着。"],
    'youth-errand-wait':['栅栏外面那些还在转悠。在大平原那边。'],
    'youth-errand-done':["这么快？不愧是姐。","约阿希姆哥也是，这种请求从来二话不说就答应。回来后总会让圣女看看他的伤。","他俩并肩坐在栅栏上的样子，就像昨天的事一样……","（杰弗里也还没能从那天走出来啊。）"],
+   'jeffrey-waves-offer':['姐，出大事了。森林那边的魔物一直往栅栏涌过来。每挡住一次，下一波就来得更多、更凶。','我一个人撑不住。跟我一起守住栅栏吧。……看，已经来了！','（一只都不能放进村子。）'],'jeffrey-waves-early':['又来了！这次数量更多。在栅栏前拦住它们！'],'jeffrey-waves-mid':['它们的打法变了。拿弓的在后面放箭，还混进了一个大块头。','箭飞过来就往旁边躲。准备好了吗？上吧！'],'jeffrey-waves-late':['感觉整片森林都压下来了……不过有姐在，我们撑得住。','带好药水了吗？在栅栏倒下之前结束它！'],'jeffrey-waves-last':['这是最后一大波了。我看到了两只大哥布林。','只要挡住这一波，森林应该能安静一阵子。姐，拜托了！'],'jeffrey-waves-retry':['姐，你没事吧？它们暂时退了。喘口气，我们再上。'],'jeffrey-waves-hold':['栅栏那边！还有剩下的！'],'jeffrey-waves-done':['……全挡住了。十次，真的全部。','约阿希姆哥守过的栅栏，姐替他守住了。谢谢你，姐。','（这个村子的栅栏，还没有倒下。）'],
    'herbalist-errand':['趁手头闲着，教你一样东西。怎么做一瓶回复药水。','两把月露草就够了。这些给你。就在我面前调配一瓶试试。','做好的药在背包里放进快捷栏。打起来就能马上喝。'],
    'herbalist-errand-wait':['调配台一直空着。两把草药做一瓶。'],
    'herbalist-errand-done':['做得不错。圣女大人一开始也掌握不好水温，烧了好几遍。','我最后一次见她那天，她一边烧水一边只说今天会晚些回来。没说去哪儿。','要是那时多问一句就好了……我有时会这么想。'],
@@ -213,6 +215,7 @@ export default {
    S04:{title:'钝了的刃',steps:{temper:'在铁匠工作台锻造一次剑',report:'告诉铁匠'}},
    S05:{title:'林口的弓手',steps:{archers:'在魔物之森打倒两名哥布林弓手',report:'告诉村长'}},
    S06:{title:'食尸鬼的锁链',steps:{link:'把一个食尸鬼链甲环交给铁匠'}},
+   W01:{title:'魔物正在涌来',steps:{waves:'在栅栏前挡住涌来的魔物'}},
   },
   endNote:"第一章 完 · 下一个故事 · 艾莲娜的日志",
   hints:{

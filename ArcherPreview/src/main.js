@@ -1410,7 +1410,7 @@ try {
     $('#player-combat-status').hidden=!encounter.active;
     if(!encounter.active){bossHealthBars.update(world.scene,[]);return;}
     $('#combat-feedback').textContent=encounter.lastHit||'방패 밀치기 시전 중 블록';
-    if(encounter.playerHp<=0){world.developmentStoryboardLive?.update();if(!world.storyboardDeathPlayback&&!deathScreen.isOpen()){const events=world.storyboardEvents?.inspect();const count=!events?.active&&!events?.queued?world.storyboardEvents?.emit('death',{mapId:world.mapId})??0:0;if(count){world.storyboardDeathPlayback=true;input?.reset();cancelAttackInput();}else deathScreen.show();}}
+    if(encounter.playerHp<=0){world.developmentStoryboardLive?.update();if(!world.storyboardDeathPlayback&&!deathScreen.isOpen()&&!world.v03?.interceptDeath?.()){const events=world.storyboardEvents?.inspect();const count=!events?.active&&!events?.queued?world.storyboardEvents?.emit('death',{mapId:world.mapId})??0:0;if(count){world.storyboardDeathPlayback=true;input?.reset();cancelAttackInput();}else deathScreen.show();}}
   },damageFeedback,(duration,options={})=>{
     if('captured' in options){
       if(options.captured){world.riding?.playerCaptured?.();if(shownGreatAttack)clearGreatAttack();actions.cancelDodgeInput();actions.cancelShieldInput();controller.capture();audio.play('grab_caught');}else controller.releaseCapture();
@@ -2008,6 +2008,8 @@ try {
       // Errands (v03/errands.js): bag items, village service events.
       grantItem:(id,count)=>{if(!townServices?.economy.grant(id,count))return false;townServices.apply();return true;},
       spendItem:(id,count)=>!!townServices?.economy.spend(id,count),itemCount:id=>townServices?.economy.state.bag[id]??0,
+      // Jeffrey's defense errand: a lost stage puts the gear wear back as it was at the talk.
+      gearCondition:()=>townServices?.economy.wearSnapshot()??null,restoreGearCondition:snapshot=>{if(townServices?.economy.restoreWear(snapshot))townServices.apply();},
       onTownEvent:fn=>{if(townServices)townServices.economy.onEvent=fn;},
       grantArmor:id=>{if(townServices)return townServices.grantArmor(id);if(!V03_ARMOR_DEFENSE[id])return false;try{if(journeyStorage?.getItem(V03_ARMOR_KEY)===id)return false;journeyStorage?.setItem(V03_ARMOR_KEY,id);}catch{return false;}if(boss)boss.combat.defense=playerDefense();audio.play('equip');return true;},
       playSound:(cue,options)=>{try{audio.play(cue,options);}catch{/* sound is optional */}},

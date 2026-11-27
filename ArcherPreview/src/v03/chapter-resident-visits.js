@@ -1,3 +1,5 @@
+import {createWaveRaid} from './defense-waves.js';
+
 const supported=new Set(['monster-forest','witch-cave','village']);
 
 // Each import and its scene objects belong to exactly one visit. Starting a
@@ -8,9 +10,9 @@ export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
   campsEnabled=new URLSearchParams(globalThis.location?.search).get('chapterCamps')!=='0',
   loadCamp=()=>Promise.all([import('./chapter-wildlife.js'),import('./chapter-enemy-encounter.js')]),
   loadBeasts=()=>import('./corrupted-beasts.js'),onError=console.warn}) {
-  let map=null, generation=0, actors=null, preparing=null, disposed=false;
+  let map=null, generation=0, actors=null, preparing=null, disposed=false, raid=null;
   function leave(){
-    generation++;map=null;preparing=null;actors?.dispose();actors=null;
+    generation++;map=null;preparing=null;actors?.dispose();actors=null;raid?.dispose();raid=null;
   }
   function enter(next){
     if(!supported.has(next)||disposed){if(map)leave();return;}
@@ -36,10 +38,16 @@ export function createChapterResidentVisits({world,battle,getPlayer,onDefeat,
     })().catch(error=>{if(current())onError('[MoonForest] residents of '+next,error);});
     return preparing;
   }
-  return {enter,leave,update(dt,playing,paused=false){
+  // Jeffrey's defense errand (defense-waves.js): this village visit's raid, made on first use.
+  function raidFor(){
+    if(disposed||map!=='village'||world.mapId!=='village')return null;
+    return raid??=createWaveRaid({world,battle,getPlayer,onDefeat,onError,loadEnemies:()=>loadCamp().then(([,enemies])=>enemies)});
+  }
+  return {enter,leave,raid:raidFor,update(dt,playing,paused=false){
     if(!playing){if(map)leave();return;}
     if(paused)return;
     if(world.mapId!==map){if(map||supported.has(world.mapId))enter(world.mapId);return;}
     if(actors){const player=getPlayer();if(player)actors.update(dt,player.position);}
+    raid?.update(dt);
   },dispose(){disposed=true;leave();}};
 }
