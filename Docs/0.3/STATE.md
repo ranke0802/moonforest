@@ -1,5 +1,14 @@
 # 0.3 현재 상태
 
+## 2026-11-27 · 사용성 검수 대응 4묶음 공개 (7252d527, 실기기 미확인)
+
+- 공개 순서: eddb3464(승마 달리기/질주·들이받기, 선택의뢰 쪽 넘기기·빛무리 대상·여관 선택창·캐릭터 텍스처 설정, 레벨업 연출, 성능 진단) → b0ed1c99(1장 귀향 흐름·재회 대사·저장 형식 2, 대장간 1인칭 작업대와 원형 파동 판정) → b93965bd(제프리 선택의뢰 W01 10단계 방어전) → 7252d527(적응 단계 고정 수정과 감속 단계 5·6, 숲·동굴 진영 몬스터를 가림막 안에서 준비, 배우 원본 보관).
+- 배포 방식: 클라우드 저장소의 드문 작업 트리에서 49b1682c 위에 `git am` → 서브트리 해시를 VM 통합 트리와 대조 → `archer`·`warrior`에 빨리 감기 푸시(강제 없음) → GitHub 빌드·배포 성공 확인. 푸시 전 VM 시험은 v03 전체 + CI 목록 + 바뀐 모듈 관련 파일. 자산·vite가 없어 못 돌린 것은 `v03-opening-cast`, `v03-resident-models`, `v03-town-item-icons`(CI에서 돈다).
+- 사용자 대기: (1) 압축 2K 플레이어 텍스처 변환(`.cache/handoff/opus-wip/1127-player2k/Convert-Player-2K-KTX2.cmd`). 끝나면 자산을 커밋하고 `PLAYER_2K_KTX2`에 매니페스트 이름을 넣으면 2K 기본이 된다(지금은 압축 4K 기본, 있는 2K는 RGBA). (2) 효과음 후보 15개 청취(`1127-audio-candidates/index.html`). 승인분만 `reward-cues.js`·`forge-sound.js`의 빈 자리에 연결한다. (3) 마녀의 동굴 퀘스트(M12 이후) 내용은 검수 뒤 지시. 기존 M08 목표 문구가 M12 직후 마녀의 정체를 먼저 드러내는 점도 그때 정한다.
+- 다음 S23 기록에서 볼 것: `metadata.adaptive`(시작 단계, 변경 이력, 감속 단계 진입), `gcCanary`, `animationCompaction.files`, `preparationBudget.recentOverruns`, 배우 원본 보관 집계. 분석과 A/B 순서는 `1127-perf/PERF-1127.md`, `1127-perf2/PERF2-1127.md`. 11/27 기록의 결론: 그리는 양은 같고 `calibrationMs`가 3.1 → 6.6ms(기기 CPU 속도 저하, 이유는 미확인), Node 왕복 검사에서 누수 없음.
+- 임시 자산: 강화 작업대의 손·망치·모루, 숲 증거 3종 상자(`ASSETS.md` 요청 목록). 정리 대상: `town-shop.css`의 옛 게이지 CSS와 `shop.grade.*`·`shop.temperNote`·`shop.gauge` 키(이제 안 씀).
+- 알아 둘 것: `CLAUDE.md`가 적은 `PROBE_MODE=resources,ground,frames,materials,cast`는 `tests/leak-probe.mjs`에 구현돼 있지 않다. 지금 읽는 값은 `horse,aura`와 `PROBE_TARGET`이다.
+
 ## 2026-11-26 · 글자 크기·터치 영역·설정 창 톤 (CSS만, 화면 미확인)
 
 - 바뀐 파일: `src/v03/v03.css`(HUD·타이틀·물약 선택·설정 창, 공용 시트 덮어쓰기는 0.3 edition 선택자 아래), `character-menu.css`, `town-shop.css`. 시험 `tests/v03-ux-readability.test.js`가 최솟값을 고정한다.
