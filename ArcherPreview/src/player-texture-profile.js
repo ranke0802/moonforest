@@ -74,15 +74,10 @@ export function playerTextureManifest(character,caps,navigator=globalThis.naviga
   return selectPlayerTextureProfile(character,caps,navigator,options).manifest;
 }
 
-// 0.3 character texture detail (2026-11-27, user: "플레이어 2K (모바일,피시 공통 기본값) 4K는
-// 선택 옵션"). A setting picks 2K or 4K; 4K loads only where the device holds the 4K KTX2 set
-// (4096 textures and a GPU-compressed format), else 2K. The 2K default waits for a GPU-compressed
-// 2K set (scripts/pack-player-mobile2k-ktx2.py, about 32 MiB): the one 2K set built so far,
-// warrior-v3-mobile2k-rgba, is uncompressed RGBA on the GPU (about 128 MiB against about 80 MiB
-// for the 4K KTX2 set), so until then nothing stored means compressed 4K (coordinator decision,
-// 2026-11-27). Naming the compressed 2K manifest here makes 2K the default by itself: devices
-// with a compressed format take it, the rest keep the RGBA set. 0.2 never calls this.
-export const PLAYER_2K_KTX2=null;
+// 0.3 defaults to 2K on mobile and PC. Devices with a supported GPU format
+// use the KTX2 set and other devices use the 2K RGBA fallback. 4K requires
+// support for 4096 textures and a compressed format. 0.2 uses its own selection.
+export const PLAYER_2K_KTX2='warrior-v3-mobile2k';
 // The detail used when nothing is stored or asked for.
 export const defaultPlayerTextureDetail=(ktx2Manifest=PLAYER_2K_KTX2)=>ktx2Manifest?'2k':'4k';
 export const PLAYER_TEXTURE_DETAILS=Object.freeze(['2k','4k']);

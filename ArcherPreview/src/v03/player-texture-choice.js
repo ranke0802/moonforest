@@ -1,7 +1,6 @@
 // The character texture choice of 0.3 (2026-11-27, user: "플레이어 2K (모바일,피시 공통
 // 기본값) 4K는 선택 옵션으로 변경해줘"). One device-wide key holding '2k' or '4k' (never a
-// translated label); nothing stored means the default: compressed 4K until a compressed 2K set
-// is published, then 2K (player-texture-profile.js, PLAYER_2K_KTX2). The choice is read when the
+// translated label); the published default is 2K. The choice is read when the
 // character is loaded (main.js), so a change applies from the next visit; the settings row
 // says so. 4K is offered only where the last load found 4096 textures and a GPU-compressed
 // format (player-texture-profile.js). Older choices still count:
@@ -37,7 +36,7 @@ export function selectV03PlayerTextures(character,caps,navigator,options={}){
 }
 
 // The row in the display group of the game's settings dialog.
-// "(기본)" follows the real default (4K now, 2K once a compressed 2K set exists): whole labels, no joined text.
+// "(기본)" follows the default texture profile.
 export function mountPlayerTextureSettings({doc,host,t,storage=null,ktx2Manifest=PLAYER_2K_KTX2}){
  if(!host||host.querySelector('.v03-texture-row'))return null;
  const make=(tag,className,text)=>{const node=doc.createElement(tag);if(className)node.className=className;if(text!==undefined)node.textContent=text;return node;};
