@@ -10,7 +10,7 @@ import {bindCaveFogMaterial} from './cave-fog-binding.js';
 import {CAVE_LABORATORY_CLIP_GLSL,activeLaboratoryClip} from './cave-laboratory-geometry.js';
 import {lootRarity} from './loot-rarity.js';
 
-const vertexSource=tinted=>`precision highp float;
+const vertexSource=(tinted,fragmentFog)=>`precision highp float;
 attribute vec3 position;attribute vec3 normal;
 uniform mat4 viewProjection;
 uniform vec3 inkCamera;uniform vec2 inkFogRange;uniform vec2 inkSingle;
@@ -33,11 +33,12 @@ void main(void){
   vec4 p=finalWorld*vec4(position,1.0);
   inkWorldPosition=p.xyz;
   p.xyz+=normalize(mat3(finalWorld)*normal)*ink.y;
-  inkCoverage=ink.x*(1.0-smoothstep(inkFogRange.x,inkFogRange.y,distance(p.xyz,inkCamera)));gl_Position=viewProjection*p;
+  inkCoverage=${fragmentFog?'ink.x':'ink.x*(1.0-smoothstep(inkFogRange.x,inkFogRange.y,distance(p.xyz,inkCamera)))'};gl_Position=viewProjection*p;
 }`;
-const fragmentSource=tinted=>`precision highp float;
+const fragmentSource=(tinted,fragmentFog)=>`precision highp float;
 ${tinted?'varying vec3 inkTint;':'uniform vec3 inkColor;'}varying float inkCoverage;varying vec3 inkWorldPosition;
 uniform float inkCaveActive;uniform vec3 inkCamera;uniform vec3 inkFocus;
+${fragmentFog?'uniform vec2 inkFogRange;':''}
 uniform float inkLegacyLabClip;uniform vec4 inkLaboratoryRect;
 ${CAVE_VIEW_UNIFORMS}
 ${CAVE_VIEW_GLSL}
@@ -50,7 +51,11 @@ void main(void){
   if(inkCaveActive>.5&&caveForegroundCutaway(inkWorldPosition,inkCamera,inkFocus))discard;
   vec2 p=mod(floor(gl_FragCoord.xy),4.0);
   float threshold=(4.0*inkBayer2(mod(p,2.0))+inkBayer2(floor(p/2.0))+0.5)/16.0;
-  if(inkCoverage<threshold)discard;
+  ${fragmentFog?`
+  // Match base coverage at the pixel on the unexpanded geometry.
+  // Vertex fade interpolation can leave solid ink over clipped faces.
+  float fogCoverage=1.0-smoothstep(inkFogRange.x,max(inkFogRange.x+1.0,inkFogRange.y),distance(inkWorldPosition,inkCamera));
+  if(inkCoverage*fogCoverage<threshold)discard;`:'if(inkCoverage<threshold)discard;'}
   gl_FragColor=vec4(${tinted?'inkTint':'inkColor'},1.0);
 }`;
 
@@ -85,8 +90,9 @@ export class VillageOutlines {
     // A private draw wrapper must not overwrite the base PBR submesh effect.
     this.laboratoryRect=new Vector4();
     this.fogRange=new Vector2(world.scene.fogStart,world.scene.fogEnd);
+    const fragmentFog=world.gameplayV03&&!world.cave;
     this.makeMaterial=(tinted,vertexColor=false)=>{
-      const material=new ShaderMaterial((tinted?'village-ink-tinted':'village-ink')+(vertexColor?'-vertex-color':''),world.scene,{vertexSource:vertexSource(tinted),fragmentSource:fragmentSource(tinted)},{attributes:['position','normal','villageInk',...(tinted?['villageInkTint']:[])],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','inkLegacyLabClip','inkLaboratoryRect','cavePlayerView','caveBossView','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['caveFogMap']},false);
+      const material=new ShaderMaterial((tinted?'village-ink-tinted':'village-ink')+(vertexColor?'-vertex-color':''),world.scene,{vertexSource:vertexSource(tinted,fragmentFog),fragmentSource:fragmentSource(tinted,fragmentFog)},{attributes:['position','normal','villageInk',...(tinted?['villageInkTint']:[])],uniforms:['world','viewProjection','inkColor','inkCamera','inkFogRange','inkSingle','inkFocus','inkCaveActive','inkLegacyLabClip','inkLaboratoryRect','cavePlayerView','caveBossView','caveFogRect','caveFogActive','caveFogOrigin'],samplers:['caveFogMap']},false);
       material.setFloat('inkLegacyLabClip',0);material.setVector4('inkLaboratoryRect',this.laboratoryRect);material.setFloat('caveFogActive',0);material.setVector2('inkSingle',new Vector2(0,0));
       material.backFaceCulling=true;material.cullBackFaces=false;material.disableDepthWrite=true;
       material.metadata={villageOutline:true,villageOutlineUsesSource:source=>this.sources.has(source)&&this.tintedSources.has(source)===tinted&&source.isVerticesDataPresent(VertexBuffer.ColorKind)===vertexColor};

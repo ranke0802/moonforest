@@ -40,6 +40,8 @@ jobs:
           node --expose-gc --test --test-concurrency=2
           ArcherPreview/tests/v03-opening-cast.test.js
           ArcherPreview/tests/v03-opening-first-contact.test.js
+          ArcherPreview/tests/v03-adaptive-shadow-warmup.test.js
+          ArcherPreview/tests/village-outline-render.test.js
           ArcherPreview/tests/v03-chapter-wildlife.test.js
           ArcherPreview/tests/v03-chapter-enemy-encounter.test.js
           ArcherPreview/tests/v03-low-melee.test.js

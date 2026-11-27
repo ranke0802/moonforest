@@ -116,6 +116,7 @@ import {ShieldHoldSources,bindShieldHoldButton} from './shield-hold-input.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
 import { AdaptivePerformance,resumeAdaptiveLevel } from './adaptive-performance.js';
+import {createAdaptiveShadowWarmup} from './adaptive-shadow-warmup.js';
 import {inspectActorSourceCache,setActorSourceCacheBudget} from './actor-source-cache.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
@@ -273,6 +274,7 @@ const renderActivity=new RenderActivity(touchDevice);
 const ADAPTIVE_LEVEL_KEY='moonforest-adaptive-level-v2';
 let adaptiveStoredLevel=0;try{adaptiveStoredLevel=Number(globalThis.localStorage?.getItem(ADAPTIVE_LEVEL_KEY))||0;}catch{/* storage optional */}
 const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition,level:resumeAdaptiveLevel(adaptiveStoredLevel)});
+const warmAdaptiveShadows=createAdaptiveShadowWarmup();
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
 function applyAdaptiveShadows(){const guard=adaptivePerformance.settings;if(world?.lighting){const restore=qualityRestore.value;world.lighting.actorShadowRange=restore.farActorShadows&&!guard.forceActorShadowRange?Infinity:guard.actorShadowRange??32;const map=world.lighting.shadows?.getShadowMap?.();if(map)map.refreshRate=restore.steadyShadows?1:guard.shadowRefresh??1;}if(world)world.detailCullRange=adaptivePerformance.settings.detailRange??0;if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
 function applyAdaptivePerformance(){try{globalThis.localStorage?.setItem(ADAPTIVE_LEVEL_KEY,String(adaptivePerformance.level));}catch{/* storage optional */}applyRenderQuality();if(world){applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale);world.detailCullRange=adaptivePerformance.settings.detailRange??0;}applyAdaptiveShadows();}
@@ -1577,6 +1579,7 @@ try {
     const firstCollectedFrame=frameDiagnostics.beginFrame((ready||!!world.toolLease?.active)&&!loadingAsset&&frameLoop.running,engine.maxFPS);
     if(frameDiagnostics.collecting)shaderBirths.beginFrame(firstCollectedFrame);
     if(adaptivePerformance.sample(frameLoop.intervalMs||dt*1000,{active:ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden,targetMs:1000/Math.min(engine.maxFPS||60,60)}))applyAdaptivePerformance();
+    if(touchDevice&&world.gameplayV03)warmAdaptiveShadows(world,ready&&!loadingAsset&&!mapTransition?.busy&&frameLoop.running&&!document.hidden&&world.v03?.playing&&adaptivePerformance.settings.emergency&&adaptivePerformance.settings.shadows&&!boss.combatCount);
     try{render(dt);}catch(error){
       gameplayTrail()?.fault(world.mapId,'frame-error',boss?.playerHp,error?.message);
       world.toolLease?.cancel('error',{restore:false});

@@ -141,3 +141,33 @@ test('a same-frame streamed color promotion gets the current fog and camera unif
  assert.equal(material,ink.vertexColorMaterial);assert.equal(material.metadata.villageOutlineUsesSource(source),true);assert.equal(ink.material.metadata.villageOutlineUsesSource(source),false);
  assert.equal(material._vectors2.inkFogRange.x,17);assert.equal(material._vectors2.inkFogRange.y,42);assert.ok(material._vectors3.inkCamera.equals(camera.globalPosition));assert.equal(material._floats.inkCaveActive,1);assert.ok(material._textures.caveFogMap);
 });
+
+test('0.3 outdoor ink clips at the fragment like the base surface, including after fog changes',async t=>{
+  const engine=new NullEngine(),scene=new Scene(engine);
+  const camera=new FreeCamera('camera',new Vector3(0,0,-8),scene);
+  camera.setTarget(Vector3.Zero());
+  caveFogFallback(scene).getInternalTexture().isReady=true;
+  const source=MeshBuilder.CreateBox('ground-cover',{},scene);
+  source.material=new PBRMaterial('paint',scene);
+  applyVillageToon([source],{direction:Vector3.Up(),shadowsActive:false});
+  const root=new TransformNode('root',scene),mesh=source.createInstance('instance');
+  mesh.parent=root;mesh.computeWorldMatrix(true);
+  const records=[{root,meshes:[mesh],placement:{kind:'rock'}}],outdoor={scene,camera,touchDevice:true};
+  const ink=new VillageOutlines({...outdoor,gameplayV03:true},records,{});
+  const legacy=new VillageOutlines(outdoor,[],{});
+  const cave=new VillageOutlines({...outdoor,gameplayV03:true,cave:true},[],{});
+  t.after(()=>{ink.dispose();legacy.dispose();cave.dispose();engine.dispose();});
+  await ink.prepare();
+  assert.match(ink.material.shaderPath.vertexSource,/inkWorldPosition=p\.xyz;\s*p\.xyz\+=/);
+  assert.doesNotMatch(ink.material.shaderPath.vertexSource,/smoothstep/);
+  assert.match(ink.material.shaderPath.fragmentSource,/smoothstep\(inkFogRange\.x,max\(inkFogRange\.x\+1\.0,inkFogRange\.y\),distance\(inkWorldPosition,inkCamera\)\)/);
+  assert.match(ink.material.shaderPath.fragmentSource,/inkCoverage\*fogCoverage<threshold/);
+  for(const original of [legacy.material,cave.material]){
+    assert.match(original.shaderPath.vertexSource,/smoothstep/);
+    assert.doesNotMatch(original.shaderPath.fragmentSource,/fogCoverage/);
+  }
+  scene.fogStart=32;scene.fogEnd=48;ink.update(1);
+  scene.fogStart=20;scene.fogEnd=28;ink.update(2);
+  const range=ink.material._vectors2.inkFogRange;
+  assert.deepEqual([range.x,range.y],[20,28]);
+});
