@@ -70,10 +70,11 @@ const KICKS={launch:{amp:.09,rise:.1,fall:.45},impact:{amp:-.035,rise:.03,fall:.
 
 export function createRidingChargeFx({scene,camera=()=>scene?.activeCamera,root=null}={}){
   if(!scene)return {launch(){},impact(){},finish(){},update(){},reset(){},inspect:()=>({ready:false}),dispose(){}};
-  const pulses=[],geometry=burstGeometry();
+  const pulses=[];
   for(let i=0;i<PULSE_CAPACITY;i++){
     const mesh=new Mesh('v03-riding-charge-burst-'+i,scene);
-    geometry.applyToMesh(mesh);
+    if(i===0)burstGeometry().applyToMesh(mesh);
+    else pulses[0].mesh.geometry.applyToMesh(mesh);
     mesh.setBoundingInfo(new BoundingInfo(new Vector3(-1.7,-1.7,-.1),new Vector3(1.7,1.7,.1)));
     const material=new ShaderMaterial('v03-riding-charge-burst-'+i,scene,{vertexSource,fragmentSource},{
       attributes:['position','uv'],uniforms:['worldViewProjection','age','tint'],needAlphaBlending:true,
@@ -81,7 +82,7 @@ export function createRidingChargeFx({scene,camera=()=>scene?.activeCamera,root=
     material.backFaceCulling=false;material.disableDepthWrite=true;material.alphaMode=Constants.ALPHA_ADD;
     mesh.material=material;mesh.isPickable=false;mesh.alwaysSelectAsActiveMesh=false;
     mesh.setEnabled(false);
-    pulses.push({mesh,material,time:0,seconds:0,tint:null,busy:false});
+    pulses.push({mesh,material,time:0,seconds:0,busy:false});
   }
   let lines=null;
   if(root?.ownerDocument){
@@ -91,7 +92,7 @@ export function createRidingChargeFx({scene,camera=()=>scene?.activeCamera,root=
     if(canvas?.parentNode===root)canvas.after(lines);else root.append(lines);
   }
   const kicks={launch:-1,impact:-1};
-  let disposed=false,ready=false,preparation=null,reduced=reducedMotion(),fovApplied=0,shownLines=0,cursor=0,launched=0,impacts=0;
+  let disposed=false,ready=false,preparation=null,reduced=reducedMotion(),fovApplied=0,shownLines=0,cursor=0,launched=0,impacts=0,busy=0;
   preparation=prepareModelShaders({meshes:pulses.map(p=>p.mesh)},{includeInstanceVariants:false,keepPrograms:false})
     .then(()=>{ready=!disposed;})
     .catch(error=>{if(!disposed)console.warn('[MoonForest 0.3] charge effects unavailable',error);});
@@ -110,7 +111,8 @@ export function createRidingChargeFx({scene,camera=()=>scene?.activeCamera,root=
     if(spec.ground){mesh.billboardMode=Mesh.BILLBOARDMODE_NONE;mesh.rotation.set(Math.PI/2,0,0);}
     else{mesh.billboardMode=Mesh.BILLBOARDMODE_ALL;mesh.rotation.set(0,0,0);}
     material.alphaMode=spec.add?Constants.ALPHA_ADD:Constants.ALPHA_COMBINE;
-    slot.tint=spec.tint;slot.time=0;slot.seconds=spec.seconds;slot.busy=true;
+    if(!slot.busy)busy++;
+    slot.time=0;slot.seconds=spec.seconds;slot.busy=true;
     material.setFloat('age',0);material.setColor4('tint',TINTS[kind]);
     if(!mesh.isEnabled(false))mesh.setEnabled(true);
     return slot;
@@ -153,13 +155,14 @@ export function createRidingChargeFx({scene,camera=()=>scene?.activeCamera,root=
     finish(x,y,z){spawn('dust',x,y+.05,z);},
     update(dt,lineStrength=0){
       if(disposed)return;
+      if(busy===0&&kicks.launch<0&&kicks.impact<0&&!fovApplied&&!shownLines&&!lineStrength)return;
       const step=Number.isFinite(dt)?Math.max(0,Math.min(.1,dt)):0;
       for(let i=0;i<PULSE_CAPACITY;i++){
         const p=pulses[i];
         if(!p.busy)continue;
         p.time+=step;
         const age=p.time/p.seconds;
-        if(age>=1){p.busy=false;p.mesh.setEnabled(false);continue;}
+        if(age>=1){p.busy=false;busy--;p.mesh.setEnabled(false);continue;}
         p.material.setFloat('age',age);
       }
       let offset=0;
@@ -179,9 +182,10 @@ export function createRidingChargeFx({scene,camera=()=>scene?.activeCamera,root=
       if(disposed)return;
       kicks.launch=kicks.impact=-1;
       for(const p of pulses)if(p.busy){p.busy=false;p.mesh.setEnabled(false);}
+      busy=0;
       applyFov(0);showLines(0);
     },
-    inspect:()=>({ready,busy:pulses.filter(p=>p.busy).length,fovOffset:fovApplied,lines:shownLines,launched,impacts}),
+    inspect:()=>({ready,busy,fovOffset:fovApplied,lines:shownLines,launched,impacts}),
     dispose(){
       if(disposed)return;
       disposed=true;stopListening();

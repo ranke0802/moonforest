@@ -409,17 +409,27 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   // Charge contact and effects; contact runs every simulated frame.
   function charge(yaw,speed,dt,strength){
-    const fx=Math.sin(yaw),fz=Math.cos(yaw),p=rider.position,y=world.terrain?.heightAt?.(p.x,p.z)??p.y??0;
-    if(launchPending&&gallopRemaining>0){launchPending=false;chargeFx?.launch(p.x,y,p.z,fx,fz);}
-    if(endPending){endPending=false;if(speed>2)chargeFx?.finish(p.x-fx*1.1,y,p.z-fz*1.1);}
-    if(gallopRemaining>0&&gallopStrength>.25&&speed>4&&canRam()){
-      const hits=ram.sweep(battle()?.encounters,p,fx,fz,struckAt);
-      for(let i=0;i<hits;i++){
-        rams++;
-        if(i<RAM_MAX)chargeFx?.impact(struckAt[i].x,world.terrain?.heightAt?.(struckAt[i].x,struckAt[i].z)??y,struckAt[i].z);
-      }
+    const launch=launchPending&&gallopRemaining>0,end=endPending,checkRam=gallopRemaining>0&&gallopStrength>.25&&speed>4&&canRam();
+    if(launch||end||checkRam){
+      const fx=Math.sin(yaw),fz=Math.cos(yaw),p=rider.position;
+      const y=chargeFx&&(launch||end&&speed>2)?world.terrain?.heightAt?.(p.x,p.z)??p.y??0:p.y??0;
+      if(launch){launchPending=false;chargeFx?.launch(p.x,y,p.z,fx,fz);}
+      if(end){endPending=false;if(speed>2)chargeFx?.finish(p.x-fx*1.1,y,p.z-fz*1.1);}
+      if(checkRam)ramContacts(p,fx,fz);
     }
     chargeFx?.update(dt,strength);
+  }
+  function ramContacts(p,fx,fz){
+    const measuring=diagnostics?.collecting,started=measuring?diagnostics.mark():0;
+    const hits=ram.sweep(battle()?.encounters,p,fx,fz,struckAt);
+    for(let i=0;i<hits;i++){
+      rams++;
+      if(i>=RAM_MAX||!chargeFx)continue;
+      const {x,z}=struckAt[i];
+      const y=world.terrain?.heightAt?.(x,z)??world.terrain?.heightAt?.(p.x,p.z)??p.y??0;
+      chargeFx.impact(x,y,z);
+    }
+    if(measuring)diagnostics.measure('ridingRamMs',started);
   }
   function placeSaddle(){return placeRidingSaddle(horse,saddle,contact,inverse);}
   function fitSaddle() {

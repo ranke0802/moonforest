@@ -189,6 +189,7 @@ test('charge effects: a fixed pool, no draws at rest, camera restored, lines off
   assert.equal(lines.previousElementSibling.id,'viewport','under every HUD layer');assert.equal(lines.hidden,true);
   const meshes=scene.meshes.filter(m=>m.name.startsWith('v03-riding-charge-burst'));
   assert.equal(meshes.length,PULSE_CAPACITY);assert.ok(meshes.every(m=>!m.isEnabled()));
+  assert.equal(new Set(meshes.map(m=>m.geometry)).size,1,'all pulses share the same vertex and index buffers');
   for(let i=0;i<200&&!fx.inspect().ready;i++)await new Promise(r=>setTimeout(r,10));
   assert.equal(fx.inspect().ready,true);
   const draws=t.mock.method(engine,'drawElementsType');
