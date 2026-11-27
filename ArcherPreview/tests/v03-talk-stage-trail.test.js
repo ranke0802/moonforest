@@ -3,7 +3,19 @@ import assert from 'node:assert/strict';
 import {parseHTML} from 'linkedom';
 import {createStory} from '../src/v03/story.js';
 import {createRunTrail} from '../src/v03/run-trail.js';
-import {QUESTS,NPCS,DIALOGUES} from '../src/v03/data/chapter1.js';
+import {NPCS,DIALOGUES} from '../src/v03/data/chapter1.js';
+// The goblin raid left the main line on 2026-11-27 (it returns as Jeffrey's defence errand).
+// The runtime below is the same for any defeat step with {summon,intro:'raid-start'}, so these
+// tests keep the raid as it shipped, followed by the alpha's first talk, as their own quest list.
+const QUESTS=Object.freeze([
+ {id:'M05',reward:{gold:150,potions:2},title:'마을을 습격한 고블린',steps:[
+  {id:'raid',text:'목책에서 고블린 막아내기',type:'defeat',kind:'goblin',count:4,map:'village',at:{x:0,z:28,radius:11},summon:{kind:'goblin',count:4,from:{x:-1.2,z:58}},intro:'raid-start',arrival:'고블린 습격!'},
+  {id:'report',text:'청년과 이야기하기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'youth-goblin'}},
+ ]},
+ {id:'M06',reward:{gold:250},title:'우두머리 늑대',steps:[
+  {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],dialogues:{driver:'driver-alpha'}},
+ ]},
+]);
 
 // Astra #211 (2026-11-25): an iPhone page died after the M05 youth's report talk
 // (goblin raid done). Quest conversations now leave their stages in the run
@@ -16,7 +28,8 @@ function village(stageMark,metaSaved=true,step=1){
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const journey=memory(),log=[],player={position:{x:0,z:0}};
  const index=QUESTS.findIndex(quest=>quest.id==='M05');
- journey.setItem('v03-story-v1',JSON.stringify({quest:index,step,count:0,done:[]}));
+ journey.setItem('v03-story-v1',JSON.stringify({v:2,id:'M05',quest:index,step,count:0,done:[]}));
+ journey.setItem('v03-greeted-v1',JSON.stringify(['youth']));
  const world={scene:{isDisposed:false},mapId:'village',terrain:{heightAt:()=>0},navigation:{free:()=>true,path:()=>null}};
  const api={world,battle:{encounters:[],combatCount:0},input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null,
   creditGold:(source,n)=>{log.push('gold:'+source+':'+n);return n;},addPotions:n=>{log.push('potions:'+n);return n;},toast:m=>log.push('toast:'+m)};

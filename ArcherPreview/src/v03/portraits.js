@@ -9,6 +9,6 @@ export const PORTRAITS=Object.freeze({
 // art: driver = blacksmith sheet (the smith's picture), chief = merchant sheet, innkeeper = farmer sheet.
 // The coachman has his own picture since 2026-11-26 (coachman.webp); until then he shared driver.webp with the smith.
 export const SPEAKER_PORTRAITS=Object.freeze({
- '나':'hero','마부':'coachman','대장장이':'driver','여관 주인':'farmer','노년 여성':'elder','약초사':'herbalist','청년':'youth','촌장':'innkeeper','요아힘':'joachim','비비앙':'vivian',
+ '나':'hero','마부':'coachman','대장장이':'driver','여관 주인':'farmer','노년 여성':'elder','약초사':'herbalist','청년':'youth','제프리':'youth','촌장':'innkeeper','요아힘':'joachim','비비앙':'vivian',
 });
 export const portraitFor=who=>PORTRAITS[SPEAKER_PORTRAITS[who]]??null;

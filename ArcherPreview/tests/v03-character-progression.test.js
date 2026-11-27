@@ -36,7 +36,11 @@ test('resume grants historical main and side quest XP once, excluding replay and
  slot.setItem('v03-story-v1:errands',JSON.stringify({finished:['S01','S99']}));
  slot.setItem('v03-story-chapter-2',JSON.stringify({quest:1,step:0,done:[]}));
  slot.setItem('replay:v03-story-v1',JSON.stringify({quest:10,step:0,done:[]}));
- const ids=recordedQuestIds(slot,quests);assert.deepEqual(ids,['M00','M01','M02','S01','E01']);
+ // An index-only chapter 1 record is read in the 11/27 order: old M03 hunt -> new M03 hunt, after M10.
+ const ids=recordedQuestIds(slot,quests);assert.deepEqual(ids,['M00','M01','M10','S01','E01']);
+ slot.setItem('v03-story-v1',JSON.stringify({v:2,id:'M04',quest:4,step:0,count:0,done:[]}));
+ assert.deepEqual(recordedQuestIds(slot,quests).slice(0,4),['M00','M01','M10','M03']);
+ slot.setItem('v03-story-v1',JSON.stringify({quest:3,step:1,done:[]}));
  const character=open(slot);assert.equal(character.creditQuests(ids),ids.reduce((a,k)=>a+questExperience(k),0));
  assert.equal(open(slot).creditQuests(ids),0);
 });

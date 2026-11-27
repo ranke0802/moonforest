@@ -14,13 +14,19 @@ export const ACTOR_VISUALS=Object.freeze({
  innkeeper:{label:'여관 주인',color:'#c98a3a',height:1.72},
  elder:{label:'노년 여성',color:'#9bb37a',height:1.5},
  herbalist:{label:'약초사',color:'#5fa07a',height:1.62},
- youth:{label:'청년',color:'#7fa3c4',height:1.75},
+ youth:{label:'제프리',color:'#7fa3c4',height:1.75},
  chief:{label:'촌장',color:'#8d8d93',height:1.68},
- 'chief-son':{label:'촌장의 아들',color:'#8a3b3b',height:1.8},
+ 'chief-son':{label:'할리안',color:'#8a3b3b',height:1.8},
  joachim:{label:'요아힘',color:'#3f6fb5',height:1.82},
  vivian:{label:'비비앙',color:'#7a4fb0',height:1.7},
  hobgoblin:{label:'홉고블린',color:'#4f7d3a',height:2.6,width:1.2},
  ghoul:{label:'구울 전사',color:'#6f8073',height:1.9},
+ // Forest clues (chapter1 NPCS clue, 2026-11-27): one flat box each, box = [width,height,depth].
+ // Replace with the item models listed in Docs/0.3/ASSETS.md when they exist.
+ 'clue-poison':{label:'고블린의 약병',color:'#6b4f8a',box:[.22,.32,.22]},
+ 'clue-sword':{label:'할리안의 검',color:'#c9c2b0',box:[1.05,.07,.16]},
+ 'clue-armor':{label:'할리안의 갑옷',color:'#7a5232',box:[.62,.22,.46]},
+ 'clue-cave':{label:'동굴로 이어진 흔적',color:'#3b2b4a',box:[1.1,.03,.6]},
 });
 const caches=new WeakMap();
 function materialFor(scene,hex,lift){
@@ -33,8 +39,19 @@ function materialFor(scene,hex,lift){
  }
  return material;
 }
+function createItemVisual(scene,key,id,spec){
+ const [width,height,depth]=spec.box,root=new TransformNode('v03-actor-'+id,scene);
+ const mesh=MeshBuilder.CreateBox('v03-actor-'+id+'-item',{width,height,depth},scene);
+ mesh.position.y=height/2;mesh.material=materialFor(scene,spec.color,0);mesh.parent=root;mesh.isPickable=false;mesh.doNotSyncBoundingInfo=true;mesh.metadata={moonforestPlaceholder:true};
+ return {
+  id,key,label:spec.label,placeholder:true,root,meshes:[mesh],height,
+  place(x,y,z,yaw=0){mesh.unfreezeWorldMatrix();root.position.set(x,y,z);root.rotation.y=yaw;root.computeWorldMatrix(true);mesh.computeWorldMatrix(true);mesh.freezeWorldMatrix();},
+  dispose(){mesh.dispose(false,false);root.dispose();},
+ };
+}
 export function createActorVisual(scene,key,{id=key}={}){
  const spec=ACTOR_VISUALS[key]??{label:key,color:'#999999',height:1.7};
+ if(spec.box)return createItemVisual(scene,key,id,spec);
  const height=spec.height??1.7,width=spec.width??.56,head=Math.min(.34,height*.2),body=height-head;
  const root=new TransformNode('v03-actor-'+id,scene);
  const torso=MeshBuilder.CreateBox('v03-actor-'+id+'-body',{width,height:body,depth:width*.62},scene);

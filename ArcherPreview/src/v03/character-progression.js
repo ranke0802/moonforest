@@ -1,4 +1,5 @@
 import {questKey} from './chapter-progress.js';
+import {readCursor} from './quests.js';
 
 export const CHAPTER_LEVEL_CAP=20;
 export const SKILL_REFUND_GOLD=100;
@@ -7,6 +8,8 @@ export const weaponWearInterval=rank=>10+5*rank;
 
 const QUEST_XP=Object.freeze({
   M00:60,M01:40,M02:70,M03:100,M04:160,M05:180,M06:220,M07:240,M08:300,M09:180,
+  // 2026-11-27 homecoming line: M02 and M05 left it (kept for saves that earned them); M06 is the driver's errand.
+  M10:40,M11:120,M12:60,
   S01:55,S02:50,S03:65,S04:75,S05:95,S06:100,E01:80,E02:180,
 });
 const MONSTER_XP=Object.freeze({
@@ -51,9 +54,9 @@ export function recordedQuestIds(storage,questSets){
   for(const [chapter,quests] of Object.entries(questSets)){
     if(!Array.isArray(quests))continue;
     const key=questKey(Number(chapter)),log=read(key);
-    if(Number.isSafeInteger(log?.quest)&&log.quest>=0&&log.quest<=quests.length&&Array.isArray(log.done)){
-      for(const row of quests.slice(0,log.quest))ids.push(typeof row==='string'?row:row.id);
-    }
+    // Read as the quest log reads it (format 2, or an old index moved by quest-migration.js).
+    const cursor=readCursor(log,quests);
+    if(cursor)for(const row of quests.slice(0,cursor.quest))ids.push(typeof row==='string'?row:row.id);
     const errands=read(key+':errands');
     if(Array.isArray(errands?.finished))ids.push(...errands.finished.filter(id=>questExperience(id)));
   }

@@ -1,19 +1,43 @@
 // Quest progress for 0.3. Pure logic over a storage-like object: no DOM, no
 // engine. One linear main line; each step listens for one kind of event.
+import {LEGACY_ORDER,isHomecomingLine,migrateLegacyCursor} from './quest-migration.js';
 const STORE_KEY='v03-story-v1';
+// Saved cursor format 2 (2026-11-27): {v:2,id,quest,step,count,done}. The quest
+// id ('#end' past the last quest) is what is read back; the index is kept for
+// older readers. Records without v are index-only (shipped before 11/27): the
+// reordered chapter 1 line moves them with quest-migration.js.
+export const CURSOR_FORMAT=2,END_ID='#end';
+// A stored record -> {quest,step,count,done[,migrated,errand]} on `quests` (quest
+// objects, or bare ids as chapter-progress passes them), or null.
+export function readCursor(value,quests){
+ if(!value||typeof value!=='object'||!Array.isArray(quests)||!Number.isInteger(value.step)||value.step<0||!Array.isArray(value.done))return null;
+ const count=Math.max(0,Number(value.count)||0),done=value.done.filter(v=>typeof v==='string').slice(0,32);
+ if(value.v===CURSOR_FORMAT){
+  const quest=value.id===END_ID?quests.length:quests.findIndex(row=>(typeof row==='string'?row:row?.id)===value.id);
+  if(quest<0||quest<quests.length&&value.step>=(quests[quest].steps?.length??Infinity))return null;
+  return {quest,step:value.step,count,done};
+ }
+ if(!Number.isInteger(value.quest)||value.quest<0)return null;
+ if(isHomecomingLine(quests))return value.quest<=LEGACY_ORDER.length?migrateLegacyCursor(value,quests):null;
+ if(value.quest>quests.length)return null;
+ const quest=quests[value.quest];
+ if(quest&&value.step>=(quest.steps?.length??Infinity))return null;
+ return {quest:value.quest,step:value.step,count,done};
+}
 export function createQuestLog({quests,storage=null,key=STORE_KEY,settle=null}){
  const state={quest:0,step:0,count:0,done:[]};
- const valid=value=>value&&Number.isInteger(value.quest)&&Number.isInteger(value.step)&&value.quest>=0&&value.quest<=quests.length&&value.step>=0&&Array.isArray(value.done);
+ // Set by load() when an old record was moved: {errand} for the caller to apply, then save().
+ let migration=null;
  function load(){
   try{
-   const value=JSON.parse(storage?.getItem(key)??'null');
-   if(!valid(value))return false;
-   const quest=quests[value.quest];
-   if(quest&&value.step>=quest.steps.length)return false;
-   Object.assign(state,{quest:value.quest,step:value.step,count:Math.max(0,Number(value.count)||0),done:value.done.filter(v=>typeof v==='string').slice(0,32)});return true;
+   const cursor=readCursor(JSON.parse(storage?.getItem(key)??'null'),quests);
+   migration=null;if(!cursor)return false;
+   Object.assign(state,{quest:cursor.quest,step:cursor.step,count:cursor.count,done:cursor.done});
+   if(cursor.migrated)migration={errand:cursor.errand};
+   return true;
   }catch{return false;}
  }
- function save(){try{storage?.setItem(key,JSON.stringify(state));return true;}catch{return false;}}
+ function save(){try{storage?.setItem(key,JSON.stringify({v:CURSOR_FORMAT,id:quests[state.quest]?.id??END_ID,...state}));return true;}catch{return false;}}
  const quest=()=>quests[state.quest]??null;
  const step=()=>quest()?.steps[state.step]??null;
  function advance(){
@@ -24,6 +48,7 @@ export function createQuestLog({quests,storage=null,key=STORE_KEY,settle=null}){
  }
  return {
   load,save,
+  get migration(){return migration;},
   recoverSettled(hasReceipt){
    let changed=false;
    while(quest()&&hasReceipt(quest().id)){state.quest++;changed=true;}

@@ -243,7 +243,7 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
   await back();h.save.journey.setItem(questKey(1,true),JSON.stringify({quest:1,step:0,count:0,done:[]}));
   let potions=0;h.api.addPotions=count=>{potions+=count;return count;};
   await loadGame(h,1,1);await settle(40);await h.api.travel('warrior-v3');tick();
-  await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.quest().id,'M02');assert.equal(potions,0);
+  await talk('innkeeper');await finishDialogue();assert.equal(h.shell.story.log.quest().id,'M10');assert.equal(potions,0);
   assert.equal(JSON.parse(h.save.journey.getItem(questKey(1))).quest,QUESTS.length);
  }finally{h.shell.dispose();}
 });
@@ -596,24 +596,30 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  log.notify({type:'talk',npc:'driver'});assert.equal(log.dialogueFor('driver'),'driver-thanks');log.notify({type:'talk',npc:'driver'});assert.equal(log.notify({type:'reach',map:'great-plains'}).changed,false);
  assert.equal(log.notify({type:'reach',map:'village'}).questDone,'M00');assert.equal(log.quest().id,'M01');
  assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M01');
- for(const npc of ['youth','elder'])assert.equal(log.notify({type:'talk',npc}).stepDone,false);
- assert.equal(log.objective(),'주민 세 사람의 이야기 듣기 (2/3)');assert.equal(log.notify({type:'talk',npc:'youth'}).changed,false,'no double count');
- assert.equal(log.notify({type:'talk',npc:'herbalist'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M02');
+ // 2026-11-27 homecoming line: father → chief → father → Jeffrey (bear) → herbalist → chief → forest → Jeffrey → cave.
+ assert.equal(log.notify({type:'talk',npc:'chief'}).changed,false,'the father first');assert.equal(log.notify({type:'talk',npc:'foster-father'}).questDone,'M10');
  assert.equal(log.notify({type:'talk',npc:'chief'}).stepDone,true);
  assert.equal(log.notify({type:'defeat',kind:'wolf',map:'village'}).changed,false,'M03 hunts only count on the plains');
  for(let i=0;i<3;i++)log.notify({type:'defeat',kind:'boar',map:'great-plains'});
  assert.equal(log.objective(),'촌장에게 알리기');assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M03');
+ assert.equal(log.notify({type:'talk',npc:'youth'}).changed,false,'the father sends you to Jeffrey');assert.equal(log.notify({type:'talk',npc:'foster-father'}).stepDone,true);
+ assert.equal(log.dialogueFor('youth'),'jeffrey-bear');assert.equal(log.notify({type:'talk',npc:'youth'}).stepDone,true);
  assert.equal(log.notify({type:'defeat',kind:'gray-wolf',map:'great-plains'}).changed,false,'only the bear counts for M04');
- assert.equal(log.notify({type:'defeat',kind:'bear',map:'great-plains'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M04');
- for(let i=0;i<4;i++)log.notify({type:'defeat',kind:'goblin',map:'village'});assert.equal(log.notify({type:'talk',npc:'youth'}).questDone,'M05');
- assert.equal(log.notify({type:'talk',npc:'driver'}).stepDone,true);assert.equal(log.notify({type:'defeat',kind:'gray-wolf',map:'great-plains'}).changed,false,'only the alpha counts');
- assert.equal(log.notify({type:'defeat',kind:'wolf',map:'great-plains'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M06');
- log.notify({type:'reach',map:'monster-forest'});for(let i=0;i<5;i++)log.notify({type:'defeat',kind:'goblin',map:'monster-forest'});assert.equal(log.notify({type:'reach',map:'witch-cave'}).questDone,'M07');
+ assert.equal(log.notify({type:'defeat',kind:'bear',map:'great-plains'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).changed,false,'the bear is reported to Jeffrey');
+ assert.equal(log.notify({type:'talk',npc:'youth'}).questDone,'M04');
+ assert.equal(log.notify({type:'talk',npc:'herbalist'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M11');
+ log.notify({type:'reach',map:'monster-forest'});for(let i=0;i<5;i++)log.notify({type:'defeat',kind:'goblin',map:'monster-forest'});
+ for(const npc of ['clue-armor','clue-poison'])assert.equal(log.notify({type:'talk',npc}).stepDone,false);
+ assert.equal(log.objective(),'야영지 주변 살펴보기 (2/3)');assert.equal(log.notify({type:'talk',npc:'clue-armor'}).changed,false,'no double count');
+ assert.equal(log.notify({type:'talk',npc:'clue-sword'}).stepDone,true);
+ assert.equal(log.notify({type:'defeat',kind:'goblin',map:'monster-forest'}).changed,false,'only the hobgoblin counts');assert.equal(log.notify({type:'defeat',kind:'hobgoblin-boss',map:'monster-forest'}).stepDone,true);
+ assert.equal(log.notify({type:'talk',npc:'clue-cave'}).stepDone,true);assert.equal(log.notify({type:'talk',npc:'youth'}).questDone,'M07');
+ assert.equal(log.quest().title,'마녀의 동굴 조사');assert.equal(log.notify({type:'reach',map:'witch-cave'}).questDone,'M12');
  assert.equal(log.notify({type:'defeat',kind:'elena',map:'witch-cave'}).questDone,'M08');assert.equal(log.notify({type:'talk',npc:'innkeeper'}).questDone,'M09');assert.equal(log.finished,true);assert.equal(log.objective(),'');
  // Data integrity: every referenced dialogue and NPC exists.
  const ids=new Set(NPCS.map(n=>n.id));
  for(const quest of QUESTS)for(const step of quest.steps)if(step.type==='talk')for(const target of step.targets){assert.ok(ids.has(target),target);assert.ok(DIALOGUES[step.dialogues[target]]?.length,step.dialogues[target]);}
- for(const npc of NPCS)assert.ok(DIALOGUES[npc.idle]?.length,npc.idle);
+ for(const npc of NPCS)assert.ok(npc.clue||DIALOGUES[npc.idle]?.length,npc.idle);
  for(const quest of QUESTS)for(const step of quest.steps){if(step.intro)assert.ok(DIALOGUES[step.intro]?.length,step.intro);if(step.summon)assert.ok(step.at&&step.map,step.id);}
  store.setItem('v03-story-v1','{"quest":99,"step":0,"done":[]}');assert.equal(createQuestLog({quests:QUESTS,storage:store}).load(),false);
 });
@@ -709,6 +715,9 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.shell.inspect().story.guide,'exit:village');assert.ok(Math.hypot(h.guide.shown.x+66,h.guide.shown.z+24)>4,'the light is ahead of the player');
  assert.equal(h.log.includes('startWorld'),false);
  h.state.mapId='village';h.state.character='warrior-v3';h.shell.update(.016);
+ // The homecoming line plays on arrival; the road step ends when it closes (2026-11-27).
+ h.shell.update(.016);assert.equal(hud('.v03-dialogue').hidden,false,'one line on arriving home');assert.equal(hud('.v03-quest-title').textContent,'늑대와 마차');
+ key('KeyE');await settle();h.shell.update(.016);
  assert.equal(hud('.v03-quest-title').textContent,'달빛 여관');assert.ok(h.log.includes('startWorld'),'the world wakes after the opening quest');assert.equal(h.made[0].disposed,true);assert.deepEqual(h.made.slice(1).map(v=>v.id),NPCS.filter(npc=>npc.map==='village').map(npc=>npc.id));
  assert.deepEqual(h.marks.at(-1),[{x:-3.4,z:10.6,glyph:'?'}],'the innkeeper carries a ? on the minimap');
  assert.equal(h.save.meta().title,'달빛 여관');
@@ -717,17 +726,19 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // Arriving in the village shows its name in the middle of the screen.
  assert.equal(hud('.v03-place-name').textContent,'몬트하임 마을');assert.equal(hud('.v03-place').hidden,false);assert.ok(hud('.v03-place').classList.contains('is-shown'));
  h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'여관 주인과 이야기하기');assert.equal(hud('.v03-prompt-mark').hidden,true);assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
- // The innkeeper asks first (2026-11-27): 대화하기 plays his quest line, which no longer rests by itself.
+ // The first meeting: the innkeeper's reunion comes before his choices (as with the smith and herbalist),
+ // then 대화하기 plays his quest line, which does not rest by itself (2026-11-27).
+ for(let i=0;i<DIALOGUES['inn-greet'].length;i++)key('Space');await settle();
  assert.equal(menuShown(h.document),true);await armed();key('KeyE');await settle();
- for(let i=0;i<5;i++)key('Space');await settle();
+ for(let i=0;i<DIALOGUES['inn-arrive'].length;i++)key('Space');await settle();
  assert.equal(h.log.includes('rest'),false,'talking does not rest');assert.equal(menuShown(h.document),true,'back at his choices');
  await armed();key('KeyD');key('KeyE');await settle();
- assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'사람들이 기억하는 성녀');assert.equal(hud('.v03-quest-objective').textContent,'주민 세 사람의 이야기 듣기 (0/3)');
+ assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'양아버지의 집');assert.equal(hud('.v03-quest-objective').textContent,'양아버지 찾아뵙기');
  assert.ok(h.log.includes('gold:v03-quest-M00:30'),'M00 pays its gold reward once');assert.equal(h.log.filter(x=>x.startsWith('gold:v03-quest-M00')).length,1);
  // A later document resumes the same quest step.
  const again=harness({local:h.local,session:(()=>{const s=memory();createSaveSession({local:h.local,session:s,edition:E}).request(1,'load');return s;})()});
  again.state.mapId='village';again.shell.update(.016);await settle();again.shell.update(.016);
- assert.equal(again.document.querySelector('.v03-quest-title').textContent,'사람들이 기억하는 성녀');
+ assert.equal(again.document.querySelector('.v03-quest-title').textContent,'양아버지의 집');
 });
 
 test('guide track keeps a lead, waits for the player and survives a path rebuild',async()=>{
@@ -792,9 +803,8 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  h.finishSplash();await h.reveal();await newGame(h);await settle(40);
  const story=h.shell.story,hud=sel=>h.document.querySelector(sel),key=code=>h.document.dispatchEvent(Object.assign(new h.window.Event('keydown',{bubbles:true,cancelable:true}),{code}));
  assert.equal(typeof townEvent,'function','the story listens to village services while it plays');
- // Up to M02's report by events (the talks themselves are covered by the story test above).
- for(const event of [{type:'defeat',kind:'wolf'},{type:'talk',npc:'driver'},{type:'talk',npc:'driver'},{type:'reach',map:'village'},{type:'talk',npc:'innkeeper'},
-  {type:'talk',npc:'elder'},{type:'talk',npc:'herbalist'},{type:'talk',npc:'youth'}])story.log.notify(event);
+ // Up to the father's talk (M10) by events (the talks themselves are covered by the story test above).
+ for(const event of [{type:'defeat',kind:'wolf'},{type:'talk',npc:'driver'},{type:'talk',npc:'driver'},{type:'reach',map:'village'},{type:'talk',npc:'innkeeper'}])story.log.notify(event);
  h.state.mapId='village';h.state.character='warrior-v3';for(let i=0;i<3;i++)h.shell.update(.016);await settle();
  const talk=async(id,lines)=>{
   const member=h.shell.inspect().story.cast.find(row=>row.id===id);h.player.position={x:member.x,z:member.z};h.shell.update(.016);
@@ -806,17 +816,20 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  };
  // Errand pages (2026-11-27): none and no count line until one is taken.
  const errandPage=()=>h.document.querySelector('.v03-quest-errand');
- assert.equal(errandPage(),null,'no errand before M02 is reported');assert.equal(hud('.v03-quest-pager').hidden,true);
- assert.deepEqual(await talk('innkeeper',DIALOGUES['inn-report'].length),DIALOGUES['inn-report'].map(line=>line.text));
+ assert.equal(errandPage(),null,'no errand before the father is seen');assert.equal(hud('.v03-quest-pager').hidden,true);
+ // The first meeting with the father: his reunion, then the quest talk, in one window.
+ const home=[...DIALOGUES['instructor-greet'],...DIALOGUES['instructor-call']];
+ assert.deepEqual(await talk('foster-father',home.length),home.map(line=>line.text));
  assert.equal(hud('.v03-quest-title').textContent,'마을의 부탁');assert.equal(errandPage(),null,'no errand yet');
  // The minimap's mark nearest a villager (they stroll a little around their spot).
  const glyphAt=(run,id)=>{const npc=run.shell.inspect().story.cast.find(row=>row.id===id);let best=null,bestSq=9;for(const mark of run.marks.at(-1)){const sq=(mark.x-npc.x)**2+(mark.z-npc.z)**2;if(sq<bestSq){best=mark.glyph;bestSq=sq;}}return best;};
- assert.equal(glyphAt(h,'herbalist'),'+');assert.equal(glyphAt(h,'youth'),'+');assert.equal(glyphAt(h,'chief'),'?','the main quest keeps its own mark');assert.equal(glyphAt(h,'smith'),null,'the smith’s errand waits for the bear');
- // The smith greets once, then has his short line.
- assert.deepEqual(await talk('smith',1),[DIALOGUES['smith-greet'][0].text]);
+ assert.equal(glyphAt(h,'herbalist'),'+');assert.equal(glyphAt(h,'youth'),null,'Jeffrey’s errand waits for the bear');assert.equal(glyphAt(h,'chief'),'?','the main quest keeps its own mark');assert.equal(glyphAt(h,'smith'),null,'the smith’s errand waits for the bear');
+ // The smith greets once (a reunion), then has his short line.
+ assert.deepEqual(await talk('smith',DIALOGUES['smith-greet'].length),DIALOGUES['smith-greet'].map(line=>line.text));
  assert.deepEqual(await talk('smith',1),[DIALOGUES['smith-idle'][0].text]);
- // The herbalist offers her errand and hands over the herbs for it.
- assert.deepEqual(await talk('herbalist',3),DIALOGUES['herbalist-errand'].map(line=>line.text));
+ // The herbalist greets first, then offers her errand and hands over the herbs for it.
+ const offer=[...DIALOGUES['herbalist-greet'],...DIALOGUES['herbalist-errand']];
+ assert.deepEqual(await talk('herbalist',offer.length),offer.map(line=>line.text));
  assert.ok(h.log.includes('grant:moon-herb:2'));assert.notEqual(errandPage(),null);assert.equal(hud('.v03-quest-pager').hidden,false);assert.equal(hud('.v03-quest-count').textContent,'선택 의뢰 1');
  assert.equal(h.shell.story.questPage,null,'taking an errand keeps the main page shown');
  assert.equal(hud('.v03-errand-title').textContent,'물약 한 병');assert.equal(hud('.v03-errand-step').textContent,'약초사에게서 회복약 한 병 조제하기');
@@ -826,7 +839,7 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  assert.equal(glyphAt(h,'herbalist'),'!');
  assert.deepEqual(await talk('herbalist',3),DIALOGUES['herbalist-errand-done'].map(line=>line.text));
  assert.ok(h.log.includes('gold:v03-errand-S02:10'));assert.ok(h.log.includes('potions:1'));assert.equal(errandPage(),null);assert.equal(hud('.v03-quest-pager').hidden,true);
- assert.deepEqual(await talk('herbalist',1),[DIALOGUES['herbalist-idle'][0].text],'done errands are not offered again; her greeting was the errand talk');
+ assert.deepEqual(await talk('herbalist',1),[DIALOGUES['herbalist-idle'][0].text],'done errands are not offered again; her greeting came once');
  assert.equal(h.log.filter(row=>row.startsWith('gold:v03-errand-S02')).length,1);
  // A later document keeps the errand finished and the greetings given.
  const again=harness({local:h.local,session:(()=>{const s=memory();createSaveSession({local:h.local,session:s,edition:E}).request(1,'load');return s;})()});
@@ -834,7 +847,7 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  assert.equal(again.shell.story.log.quest().id,'M03');
  // Its cast and minimap marks come with the first frames on the map.
  for(let i=0;i<60&&!again.marks.at(-1)?.length;i++){again.shell.update(.016);await settle(2);}
- assert.equal(glyphAt(again,'herbalist'),null);assert.equal(glyphAt(again,'youth'),'+');
+ assert.equal(glyphAt(again,'herbalist'),null);assert.equal(glyphAt(again,'chief'),'?');
 });
 test('title: 새로하기 → slot (overwrite confirmed) → chapter wipes only once a chapter is chosen; 불러오기 → used slot → its chapters',async()=>{
  const {questKey}=await import('../src/v03/chapter-progress.js'),{QUESTS}=await import('../src/v03/data/chapter1.js');

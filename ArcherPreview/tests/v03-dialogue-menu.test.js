@@ -272,11 +272,13 @@ test('the smith offers talk, shop and tempering, the herbalist talk and shop; en
 
 const tick=async(n=4)=>{for(let i=0;i<n;i++)await new Promise(resolve=>setTimeout(resolve,0));};
 const armed=()=>new Promise(resolve=>setTimeout(resolve,CHOICE_ARM_MS+30));
-function village(npc){
+function village(npc,{met=true}={}){
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const values=new Map(),journey={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
- const index=QUESTS.findIndex(quest=>quest.id==='M05');
- journey.setItem('v03-story-v1',JSON.stringify({quest:index,step:1,count:0,done:[]}));
+ // On the way to the forest (no one in the village waits to be talked to); met: everyone was greeted once already.
+ const index=QUESTS.findIndex(quest=>quest.id==='M07');
+ journey.setItem('v03-story-v1',JSON.stringify({v:2,id:'M07',quest:index,step:0,count:0,done:[]}));
+ if(met)journey.setItem('v03-greeted-v1',JSON.stringify(NPCS.map(row=>row.id)));
  const player={position:{x:0,z:0}},visits=[],suspended=[];let leaveShop=null;
  const world={scene:{isDisposed:false},mapId:'village',terrain:{heightAt:()=>0},navigation:{free:()=>true,path:()=>null}};
  const api={world,battle:{encounters:[],combatCount:0},input:{setSuspended:on=>suspended.push(on)},getPlayer:()=>player,getController:()=>null,
@@ -359,6 +361,22 @@ test('someone with no services talks at once, as before; leaving the map closes 
  v.document.querySelector('.v03-prompt').click();assert.equal(v.menu().hidden,false);
  v.story.dispose();await tick();
  assert.deepEqual(v.visits,[]);
+});
+
+test('the first meeting is a reunion once: before the service menu, then the menu as usual (2026-11-27)',async()=>{
+ setPack('ko',ko);
+ const v=village('smith',{met:false});
+ try{
+  v.document.querySelector('.v03-prompt').click();
+  assert.equal(v.story.dialogueOpen,true);assert.equal(v.menu().hidden,true,'the reunion comes first');
+  assert.equal(v.document.querySelector('.v03-dialogue-text').textContent.length>0,true);
+  for(let i=0;i<40&&v.menu().hidden;i++){v.document.querySelector('.v03-dialogue-next').click();await tick(1);}
+  assert.equal(v.menu().hidden,false,'then the menu');
+  assert.equal(v.document.querySelector('.v03-sr-only').textContent,DIALOGUES['smith-menu'][0].text);
+  await armed();v.entries().at(-1).click();await tick();
+  v.document.querySelector('.v03-prompt').click();await tick();
+  assert.equal(v.menu().hidden,false,'the second visit opens on the menu');
+ }finally{v.story.dispose();}
 });
 
 test('main.js and the town services pass the chosen view through to the shop',()=>{

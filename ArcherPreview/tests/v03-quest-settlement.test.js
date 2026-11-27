@@ -96,14 +96,15 @@ test('a shipped completion, a replay and another save slot cannot pay again into
 
 test('a stale document cannot overwrite the winner or refresh awarded armor on re-entry',()=>{
  const raw=disk(),storage=slotStorage(raw,'test03',1),index=QUESTS.findIndex(q=>q.id==='M04');
- storage.setItem(main,JSON.stringify({quest:index,step:1,count:0,done:[]}));
- const first=open(storage),stale=open(storage),priorGold=first.town.gold,report={type:'talk',npc:'chief'};
+ // Format 2 (2026-11-27): the bear is reported to Jeffrey (youth), the fourth step.
+ storage.setItem(main,JSON.stringify({v:2,id:'M04',quest:index,step:3,count:0,done:[]}));
+ const first=open(storage),stale=open(storage),priorGold=first.town.gold,report={type:'talk',npc:'youth'};
  raw.fault=key=>key.endsWith(main)?'before':null;
  assert.equal(first.story.log.notify(report).questDone,'M04');
  assert.equal(stale.story.log.notify(report).changed,false);
  assert.equal(first.town.gold,priorGold+120);assert.equal(first.town.state.equipped.armor,'leather-coat');
  first.story.dispose();stale.story.dispose();raw.fault=null;
- const healed=open(storage);assert.equal(healed.story.log.quest().id,'M05');assert.ok(healed.town.wearDefense(false));assert.ok(healed.town.flush());
+ const healed=open(storage);assert.equal(healed.story.log.quest().id,'M11');assert.ok(healed.town.wearDefense(false));assert.ok(healed.town.flush());
  const hp=healed.town.gear('leather-coat').hp;healed.story.dispose();
  const last=open(storage);assert.equal(last.town.gold,priorGold+120);assert.equal(last.town.state.bag['leather-coat'],1);
  assert.deepEqual(last.town.settleQuest(QUESTS[index]),{});assert.equal(last.town.gear('leather-coat').hp,hp);last.story.dispose();

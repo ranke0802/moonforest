@@ -26,6 +26,7 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
   }catch{return false;}
  }
  function save(){try{storage?.setItem(key,JSON.stringify(state));return true;}catch{return false;}}
+ const stateOf=()=>state;
  const stepOf=id=>{const row=state.active[id];return row?byId.get(id).steps[row.step]:null;};
  const isActive=id=>!!state.active[id],isFinished=id=>state.finished.includes(id);
  function advance(id){
@@ -55,6 +56,14 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
   // An errand this NPC can offer now (mainDone: id => boolean).
   offerFor(npc,mainDone){return errands.find(errand=>errand.giver===npc&&!isActive(errand.id)&&!isFinished(errand.id)&&(!errand.after||mainDone(errand.after)))??null;},
   accept(id){if(!byId.has(id)||isActive(id)||isFinished(id))return false;state.active[id]={step:0,count:0};save();return true;},
+  // An old save moved to the 11/27 line (quest-migration.js): the errand that took over a
+  // main quest takes its state, once. 'finished', or {step,count} if not yet taken or done.
+  adopt(id,state){
+   const errand=byId.get(id);if(!errand||isFinished(id))return false;
+   if(state==='finished'){delete stateOf().active[id];stateOf().finished.push(id);save();return true;}
+   if(isActive(id)||!Number.isInteger(state?.step)||state.step<0||state.step>=errand.steps.length)return false;
+   stateOf().active[id]={step:state.step,count:Math.max(0,Number(state.count)||0)};save();return true;
+  },
   // The active errand whose current step waits on talking to this NPC.
   waitingOn(npc){return errands.find(errand=>pendingTalk(stepOf(errand.id),npc))??null;},
   // The active errand this NPC gave whose current step is elsewhere.

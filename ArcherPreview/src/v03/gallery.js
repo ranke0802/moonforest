@@ -88,6 +88,9 @@ function restoreDiscoveries(storage,chapter,journal,found){
   if(!log.load())continue;
   const cursor=log.snapshot();
   if(log.finished&&cursor.step!==0)continue;
+  // An old chapter 1 record (quest-migration.js) also stands for the errand that took over a main quest.
+  const moved=id===1?log.migration?.errand:null,taken=moved&&(chapter.ERRANDS??[]).find(row=>row.id===moved.id);
+  if(taken)taken.steps.forEach((step,i)=>{if(moved.state==='finished'||moved.state.step>i||moved.state.step===i&&moved.state.count>0)credit(step,1,true);});
   for(let q=0;q<=cursor.quest&&q<episode.QUESTS.length;q++){
    episode.QUESTS[q].steps.forEach((step,i)=>{
     if(q<cursor.quest||i<cursor.step)credit(step,id,true);

@@ -1,3 +1,4 @@
+import {readCursor} from './quests.js';
 export const JOURNAL_QUEST_IDS=Object.freeze(['E01','E02']);
 
 // A chapter becomes eligible only when it has both content and a cleared prerequisite.
@@ -17,7 +18,9 @@ export function chapterProgress(storage,questSets){
  for(const row of CHAPTERS){
   if(!questSets[row.id]?.length||done.has(row.id))continue;
   let log;try{log=JSON.parse(storage.getItem(questKey(row.id)));}catch{continue;}
-  if(log?.quest===questSets[row.id].length&&log.step===0&&Array.isArray(log.done))done.add(row.id);
+  // readCursor: an index-only record of the shipped chapter 1 order is read in the new one (quest-migration.js).
+  const cursor=readCursor(log,questSets[row.id]);
+  if(cursor?.quest===questSets[row.id].length&&cursor.step===0)done.add(row.id);
  }
  const available=id=>{const row=CHAPTERS.find(row=>row.id===id);return !!row?.entry&&!!questSets[id]?.length&&(!row.requires||done.has(row.requires));};
  const id=available(record.id)?record.id:1;

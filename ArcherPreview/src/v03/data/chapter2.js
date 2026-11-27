@@ -39,7 +39,7 @@ export function elenaJournal(lang){
  const i=langIndex[lang]??1;
  const speak=(key)=>lines[key].map((words,j)=>({who:key==='close'&&j===1?'':caption[i],text:words[i],illustration:pictures[key]}));
  const talk=(id,target,key,n)=>({id,type:'talk',targets:[target],dialogues:{[target]:key},text:objectives[n][i]});
- return {PROPS:[],COMBAT_HINTS:[],TIPS:[],QUESTS:[
+ return {PROPS:[],COMBAT_HINTS:[],TIPS:[],REUNIONS:false,QUESTS:[
   {id:JOURNAL_QUEST_IDS[0],title:titles[0][i],steps:[talk('inn','innkeeper','journal-heal',0),talk('palisade','youth','journal-loss',1)]},
   {id:JOURNAL_QUEST_IDS[1],title:titles[1][i],steps:[{id:'cave',type:'reach',map:'witch-cave',reading:'journal-lab',text:objectives[2][i]},
    {id:'sanctuary',type:'defeat',map:'witch-cave',kind:'elena',phase:2,count:1,at:{x:39,z:-19,radius:18},text:objectives[3][i]},

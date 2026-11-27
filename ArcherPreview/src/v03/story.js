@@ -102,7 +102,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function refresh(){
   const quest=log.quest();
   if(quest)hud.setQuest(quest.title,log.objective());else hud.setQuest(t('hud.chapterNext'),content.CHAPTER_END_NOTE);
-  refreshErrands();
+  refreshErrands();syncClues();
  }
  // ----- optional errands (선택 의뢰, errands.js) -----
  // The panel's pages: the main quest, then every active errand in the order it was
@@ -134,7 +134,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(replaying||api.settleQuest)return;
   const reward=errand.reward??{},parts=[],summary={xp:0,gold:0,potions:0,armor:null};
   const xp=api.creditQuestExperience?.([errand.id]);if(xp>0){parts.push(t('reward.xp',{n:xp}));summary.xp=xp;}
-  try{if(reward.gold&&api.creditGold?.('v03-errand-'+errand.id,reward.gold)){parts.push(t('reward.gold',{n:reward.gold}));summary.gold=reward.gold;}}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
+  try{if(reward.gold&&api.creditGold?.(errand.goldSource??'v03-errand-'+errand.id,reward.gold)){parts.push(t('reward.gold',{n:reward.gold}));summary.gold=reward.gold;}}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0){parts.push(t('reward.potions',{n}));summary.potions=n;}}}catch(error){console.warn('[MoonForest 0.3] errand potions',error);}
   announceReward(parts,summary);
  }
@@ -278,6 +278,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Story fights: a defeat step with {at,summon} calls its foes once the player
  // is inside the spot, and again after a retreat or death left none alive.
  const staged={key:null,busy:false,next:0,introduced:new Set()};
+ // Kinds felled on this map visit (QUESTS defeat early).
+ const visitKills=new Set();
  let raidWarning=null;
  function cancelRaidWarning(){
   if(!raidWarning)return;
@@ -480,7 +482,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   clearCast(wagonMap===id&&wagonScene===api.world?.scene);placeProps(id,openingSignal);
   const world=api.world,scene=world.scene;if(!scene||scene.isDisposed)return;
   for(const npc of content.NPCS){
-   if(npc.map!==id)continue;
+   if(npc.map!==id||npc.clue&&!log.isTarget(npc.id))continue;
    try{
     const visual=createVisual(scene,npc.visual,{id:npc.id,requireModel:!!openingSignal&&npc.id==='driver'}),spot=findFreeSpot(world.navigation,npc);
     visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);
@@ -490,6 +492,22 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }catch(error){console.warn('[MoonForest 0.3] cast member unavailable',npc.id,error);}
   }
   castMap=id;castSettled=Promise.allSettled(cast.map(member=>member.visual.settled).filter(Boolean));
+ }
+ // Forest clues (NPCS clue, M07): one appears when its step starts waiting on it and goes
+ // once it has been looked at. Map-scoped like the rest of the cast (clearCast disposes them).
+ function syncClues(){
+  const world=api.world,scene=world?.scene;if(!castMap||castMap!==mapId||!scene||scene.isDisposed)return;
+  for(const npc of content.NPCS){
+   if(!npc.clue||npc.map!==castMap)continue;
+   const index=cast.findIndex(member=>member.npc===npc),want=log.isTarget(npc.id);
+   if(want&&index<0){
+    try{const visual=createVisual(scene,npc.visual,{id:npc.id}),spot=findFreeSpot(world.navigation,npc);visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);cast.push({npc,visual,x:spot.x,z:spot.z});}
+    catch(error){console.warn('[MoonForest 0.3] clue unavailable',npc.id,error);}
+   }else if(!want&&index>=0){
+    const [member]=cast.splice(index,1);if(near===member){near=null;hud.setPrompt(null);}
+    if(member.showingQuestMark)markers?.set(npc.id,null);member.visual.dispose();
+   }
+  }
  }
  function unbindOpening(owner){
   owner.scene.onDisposeObservable?.remove(owner.observer);
@@ -588,8 +606,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const restInMenu=services&&menu.includes('rest');
   const script=()=>{
    const questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc);
-   const greeting=!questLine&&!errand&&!greeted.has(npc)?member.npc.greet:null;
-   return {questLine,errand,lines:content.DIALOGUES[questLine??errand?.dialogue??greeting??member.npc.idle]};
+   // The first meeting in a save is a reunion (NPCS greet, 2026-11-27): it comes once,
+   // before the quest or errand line when there is one (service folk hear it before their menu).
+   const greeting=content.REUNIONS!==false&&!greeted.has(npc)&&!member.npc.clue&&!services?content.DIALOGUES[member.npc.greet]:null;
+   const main=content.DIALOGUES[questLine??errand?.dialogue];
+   return {questLine,errand,lines:main&&greeting?[...greeting,...main]:main??greeting??content.DIALOGUES[member.npc.idle]};
   };
   if(!services&&!script().lines)return false;
   if(member===driverMember){thanks.done=true;if(route.member===member)stopRoute();}
@@ -610,7 +631,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     // Setting the wagon up: the step completes when it stands again (updateLift).
     const heave=played.some(line=>line.effects?.includes('right-wagon'));
     if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
-    markGreeted(npc);afterErrandTalk(errand,npc);
+    if(!member.npc.clue)markGreeted(npc);afterErrandTalk(errand,npc);
     if(member.npc.id==='driver'&&(questLine==='driver-thanks'||log.quest()?.id!=='M00'||log.step()?.id==='road'))api.offerMount?.();
    }
   }
@@ -618,7 +639,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   member.visual.talk?.(true,()=>api.getPlayer?.()?.position??null);
   try{
    if(!services)await converse();
+   else if(content.REUNIONS!==false&&!greeted.has(npc)&&content.DIALOGUES[member.npc.greet]&&!await dialogue.play(content.DIALOGUES[member.npc.greet])){}
    else while(!disposed){
+    markGreeted(npc);
     const waiting=script();
     // The same window as any talk: the speaker's art, one greeting line, the choices below it.
     const hello=content.DIALOGUES[member.npc.menu]?.[0];
@@ -1590,6 +1613,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // Errands and greetings follow the same record (a replay keeps its own under its key).
    errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey,key:key?key+':errands':undefined,settle});
    if(fresh||!errands.load())errands.reset();
+   // An old save read in the 11/27 order (quest-migration.js): settle the errand that took
+   // over a main quest, then write the cursor in the new format.
+   if(!fresh&&log.migration){const moved=log.migration.errand;if(moved)errands.adopt(moved.id,moved.state);log.save();}
    if(!fresh&&!replay&&api.hasSettledQuest){
     if(log.recoverSettled(api.hasSettledQuest)&&log.finished)onChapterEnd?.();
     errands.recoverSettled(api.hasSettledQuest);
@@ -1631,6 +1657,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   defeat(event){
    if(!started||!event)return;
    const step=log.step(),row={type:'defeat',kind:event.family&&step?.kind===event.family?event.family:event.kind,family:event.family??null,source:event.kind,map:mapId};
+   if(event.kind)visitKills.add(event.kind);
    if(!step?.phase||event.phase===step.phase)emit(row);else errandEvent(row);
   },
   // Called behind the prologue: scenery and the path grid are ready before
@@ -1643,7 +1670,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!started||disposed||!s.ready)return;
    if(s.mapId!==mapId){
     // arrive() may have built this place's cast behind the loading picture already.
-    mapId=s.mapId;if(castMap!==mapId)buildCast(mapId);if(!log.step()?.reading)emit({type:'reach',map:mapId});
+    mapId=s.mapId;visitKills.clear();if(castMap!==mapId)buildCast(mapId);if(!log.step()?.reading)emit({type:'reach',map:mapId});
     // The place's name in the middle of the screen on arrival (2026-11-20,
     // user). Not over the opening scene.
     if(!scene.pending&&!scene.active){const key='place.'+s.character,name=t(key);if(name!==key)hud.showPlace(name);}
@@ -1651,6 +1678,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    // It waits for the wolf and the driver to be there (a few seconds at most): the stage stays covered meanwhile (boot.js).
    if(scene.pending){scene.pendingFor=(scene.pendingFor??0)+dt;try{if(beginAmbushScene()||scene.pendingFor>4){scene.pending=false;scene.pendingFor=0;}}catch(error){scene.pending=false;scene.pendingFor=0;console.warn('[MoonForest 0.3] ambush scene skipped',error);scene.active=false;releaseWolf(scene.wolf);api.input.setSuspended(false);}}
    const reading=log.step();
+   // early (QUESTS): the camp's resident of this kind already fell on this visit (it does not come back until the next one).
+   if(reading?.early&&reading.type==='defeat'&&reading.map===mapId&&visitKills.has(reading.kind)&&!livingFoe(reading.kind)){visitKills.delete(reading.kind);emit({type:'defeat',kind:reading.kind,map:mapId});}
    if(reading?.reading&&reading.type==='reach'&&reading.map===mapId&&!talking&&!dialogue.open&&api.battle.combatCount===0){
     talking=true;api.input.setSuspended(true);
     const playing=dialogue.play(content.DIALOGUES[reading.reading]);
@@ -1671,9 +1700,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     near=best;
     if(near&&api.battle.combatCount>0)near=null;
     if(near){
-     const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name);
+     const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name),clue=near.npc.clue===true;
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
-     hud.setPrompt({key:touch?null:'E',name,action:t(quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(quest?'prompt.talkQuest':'prompt.talkIdle',{name}),act:'talk'});
+     hud.setPrompt({key:touch?null:'E',name,action:t(clue?'prompt.actionInspect':quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(clue?'prompt.inspect':quest?'prompt.talkQuest':'prompt.talkIdle',{name}),act:'talk'});
     }else hud.setPrompt(null);
    }
    if((errandPoll-=dt)<=0){errandPoll=1;if(errands.active().some(errand=>errands.step(errand.id)?.type==='deliver'))refreshErrands();}

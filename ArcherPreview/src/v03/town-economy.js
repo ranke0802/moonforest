@@ -8,7 +8,8 @@ const slots=['sword','shield','armor'];
 const qty=n=>Number.isSafeInteger(n)&&n>0&&n<=99999?n:0;
 const defaultGear={sword:'field-sword',shield:'field-shield',armor:null};
 const own=(state,id)=>!!state.bag[id];
-const goldSource=quest=>(quest.giver?'v03-errand-':'v03-quest-')+quest.id;
+// goldSource: an errand that took over a main quest keeps that quest's ledger entry (M06, 2026-11-27).
+const goldSource=quest=>quest.goldSource??(quest.giver?'v03-errand-':'v03-quest-')+quest.id;
 const validQuestId=id=>typeof id==='string'&&/^[A-Za-z0-9:_-]{1,80}$/.test(id);
 // One point in units divisible by 10, 15, 20, 25, 30 and 35 contacts.
 // A skill change alters future contacts without rounding away existing wear.

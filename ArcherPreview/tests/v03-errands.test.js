@@ -52,7 +52,7 @@ test('herbalist crafting saves the purchase and errand across the same journey',
  wallet.creditCumulative('village-allowance',40);
  const town=createTownEconomy(wallet);
  const errands=createErrandLog({errands:ERRANDS,storage});
- const errand=errands.offerFor('herbalist',id=>id==='M02');
+ const errand=errands.offerFor('herbalist',id=>id==='M10');
  assert.equal(errand.id,'S02');
  assert.ok(errands.accept(errand.id));
  town.onEvent=event=>errands.notify(event);
@@ -98,13 +98,14 @@ test('chapter one errands can be offered, done and handed in with the game as it
     assert.ok(['craft','forge','repair','buy'].includes(step.action));
     if(step.action==='craft')assert.ok(Object.values(RECIPES).some(table=>table[step.item]),step.item+' has a recipe');
    }
-   if(step.type==='defeat'&&step.kind)assert.ok(campKinds.has(step.kind),step.kind+' lives in a chapter camp');
+   // wolf: the plains alpha (a 0.2 resident of the Great Plains), hunted for the driver since 2026-11-27.
+   if(step.type==='defeat'&&step.kind)assert.ok(campKinds.has(step.kind)||step.kind==='wolf'&&step.map==='great-plains',step.kind+' lives in a chapter camp');
   }
   // Errands that need materials give the first ones (give:<item>:<n>).
   if(errand.steps.some(step=>step.type==='town'&&step.action==='craft'))assert.ok(DIALOGUES[errand.offer].some(line=>line.effects?.some(e=>e.startsWith('give:moon-herb'))));
   if(errand.steps.some(step=>step.type==='town'&&step.action==='forge'))assert.ok(DIALOGUES[errand.offer].some(line=>line.effects?.some(e=>e.startsWith('give:iron-scrap'))));
  }
- for(const npc of NPCS){assert.ok(DIALOGUES[npc.idle]?.length,npc.id+' idle');if(npc.greet)assert.ok(DIALOGUES[npc.greet]?.length,npc.id+' greet');}
+ for(const npc of NPCS){assert.ok(npc.clue||DIALOGUES[npc.idle]?.length,npc.id+' idle');if(npc.greet)assert.ok(DIALOGUES[npc.greet]?.length,npc.id+' greet');}
  // The hooks other code relies on stay: the driver's thanks (horse offer) and every line's effects are known.
  assert.ok(DIALOGUES['driver-thanks'].length>=4);
  for(const [id,lines] of Object.entries(DIALOGUES))for(const line of lines)for(const effect of line.effects??[])assert.match(effect,/^(rest|right-wagon|give:[a-z-]+:\d+)$/,id);
