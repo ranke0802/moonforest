@@ -198,6 +198,9 @@ export function loadStreamedVillage(world,{
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
     const guard=candidateGuardFromLocation(world.edition==='moonforest-0.3'?'events':'full');
     const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats),candidates=new VillageActiveCandidates(world.scene,{holdLod:true,guard});stats.activeMeshCandidates=candidates.stats;
+    // Diagnostic handle only (render-target-diagnostics.js inspectVillageInk): a WeakRef, so the
+    // scene-lived world never keeps this map's ink, materials or meshes alive.
+    world.villageOutlinesRef=new WeakRef(outlines);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
     const has=r=>hasVillageGeometry(assets.get(r.id),r.level);

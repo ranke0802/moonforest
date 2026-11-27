@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {trackRenderTargetHealth,inspectSceneRenderTarget} from '../src/render-target-diagnostics.js';
+import {trackRenderTargetHealth,inspectSceneRenderTarget,inspectVillageInk} from '../src/render-target-diagnostics.js';
 
 const observable=()=>{const list=[];return {add:fn=>{list.push(fn);return fn;},fire:()=>list.forEach(fn=>fn()),list};};
 const fakeGl=({stencil=36161,depth=36161}={})=>{const calls=[];return {calls,FRAMEBUFFER:36160,DEPTH_ATTACHMENT:36096,STENCIL_ATTACHMENT:36128,FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:36048,
@@ -31,4 +31,20 @@ test('a lost context is reported without touching GL', () => {
   const gl={...fakeGl(),isContextLost:()=>true,getContextAttributes:()=>{throw new Error('lost');},bindFramebuffer:()=>{throw new Error('must not bind');}};
   const report=inspectSceneRenderTarget({_gl:gl,isStencilEnable:true},{_postProcesses:[{name:'phone-sharpen',inputTexture:{_framebuffer:'fb'}}]});
   assert.equal(report.context.isLost,true);assert.equal(report.sceneTarget.drawAttachments,null);
+});
+
+test('village ink health: base far clip from its uniform buffer next to the fog and ink range, held only weakly', async () => {
+  const material={name:'fence-toon',isFrozen:true,metadata:{villageToon:true},stencil:{enabled:true,funcRef:4,opStencilDepthPass:7681},
+    _uniformBuffer:{_uniformLocations:{villageFarClip:4,villageFarTone:0},_bufferData:[18,51.2,.62,1,30,44,0,0]}};
+  const mesh={material,getLODLevels:()=>[{}],getBoundingInfo:()=>({boundingSphere:{centerWorld:{x:3,y:0,z:4}}})};
+  const outlines={fogRange:{x:55.25,y:68},entries:[1,2,3],selected:new Set([{mesh,coverage:.5,record:{placement:{kind:'fence'}}}])};
+  const world={scene:{fogStart:55.25,fogEnd:68,activeCamera:{position:{x:0,y:0,z:0}}},villageOutlinesRef:new WeakRef(outlines)};
+  const report=inspectVillageInk(world);
+  assert.deepEqual(report.fog,[55.25,68]);assert.deepEqual(report.inkFogRange,[55.25,68]);
+  assert.equal(report.selected,1);assert.equal(report.rows[0].distance,5);
+  assert.deepEqual(report.rows[0].farClip,[30,44],'a stale clip shows up against the fog');
+  assert.equal(report.rows[0].stencil.ref,4);assert.equal(report.rows[0].frozen,true);
+  assert.equal(inspectVillageInk({scene:world.scene}),null);
+  const src=(await import('node:fs')).readFileSync(new URL('../src/village-streamed-environment.js',import.meta.url),'utf8');
+  assert.match(src,/world\.villageOutlinesRef=new WeakRef\(outlines\)/,'the scene-lived world must not hold the map ink strongly');
 });

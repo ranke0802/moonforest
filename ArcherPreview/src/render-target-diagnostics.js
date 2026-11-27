@@ -40,3 +40,28 @@ export function inspectSceneRenderTarget(engine,camera){
    drawAttachments:live?attachments(engine,gl,wrapper._MSAAFramebuffer??wrapper._framebuffer):null}:'canvas',
  };
 }
+
+// Diagnostic only (2026-11-28): village ink paints solid where its base drew nothing. For a
+// few inked meshes in view, the base material's far-fade clip as last written to its uniform
+// buffer, next to the scene fog and the ink's own fade range (they should match), and the
+// stencil the base writes. Read on export, never per frame.
+function uboValue(material,name,size){
+ try{const ubo=material?._uniformBuffer,at=ubo?._uniformLocations?.[name],data=ubo?._bufferData;
+  if(at===undefined||!data)return null;const out=[];for(let i=0;i<size;i++)out.push(Math.round(Number(data[at+i])*100)/100);return out;}catch{return null;}
+}
+export function inspectVillageInk(world,limit=6){
+ const outlines=world?.villageOutlinesRef?.deref?.()??null,scene=world?.scene;
+ if(!outlines||!scene)return null;
+ const camera=scene.activeCamera?.globalPosition??scene.activeCamera?.position??null,rows=[];
+ for(const entry of outlines.selected??[]){
+  if(rows.length>=limit)break;
+  const mesh=entry.mesh,source=mesh?.sourceMesh??mesh,material=source?.material,center=mesh?.getBoundingInfo?.()?.boundingSphere?.centerWorld;
+  rows.push({kind:entry.record?.placement?.kind??null,coverage:Math.round((entry.coverage??0)*1000)/1000,
+   distance:camera&&center?Math.round(Math.hypot(center.x-camera.x,center.y-camera.y,center.z-camera.z)*10)/10:null,
+   material:material?.name??null,frozen:!!material?.isFrozen,toon:!!material?.metadata?.villageToon,
+   stencil:material?.stencil?{enabled:!!material.stencil.enabled,ref:material.stencil.funcRef,op:material.stencil.opStencilDepthPass}:null,
+   farClip:uboValue(material,'villageFarClip',2),farTone:uboValue(material,'villageFarTone',4),lodLevels:source?.getLODLevels?.().length??0});
+ }
+ return {fog:[Math.round(scene.fogStart*100)/100,Math.round(scene.fogEnd*100)/100],inkFogRange:outlines.fogRange?[Math.round(outlines.fogRange.x*100)/100,Math.round(outlines.fogRange.y*100)/100]:null,
+  entries:outlines.entries?.length??0,selected:outlines.selected?.size??0,rows};
+}
