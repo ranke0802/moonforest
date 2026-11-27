@@ -52,14 +52,16 @@ test('keyboard Space uses the same release tap and held sprint; capture escapes 
  f.controller.capture();down(f);assert.equal(f.escapes(),1);up(f);assert.equal(f.escapes(),1);f.input.dispose();
 });
 
-test('mounted Space and the same touch button start gallop once without a roll on tap, hold, or release after capture',()=>{
+// 2026-11-27: mounted, the held dodge input is the horse's run; only attack inputs charge.
+test('mounted Space and the same touch button hold the horse run (never the charge) without a roll on tap, hold, or release after capture',()=>{
  for(const source of ['keyboard','touch'])for(const elapsed of [50,1100]){
-  let gallops=0;const riding={active:true,startGallop(){gallops++;return true;}}, f=fixture(riding);
+  let gallops=0;const held=[];const riding={active:true,startGallop(){gallops++;return true;},setRunHeld(value){held.push(value);return value;}}, f=fixture(riding);
   if(source==='touch')down(f);
   else window.emit('keydown',{code:'Space',target:{tagName:'DIV'}});
-  f.step(elapsed);assert.equal(gallops,1);riding.active=false;
+  f.step(elapsed);assert.equal(gallops,0);assert.deepEqual(held,[true]);riding.active=false;
   if(source==='touch'){up(f);f.button.emit('click',{detail:0});}
   else window.emit('keyup',{code:'Space'});
+  assert.equal(held.at(-1),false,'release ends the run');
   assert.equal(f.controller.action,null);assert.equal(f.controller.serial,0);assert.equal(f.controller.stamina,100);
   assert.equal(f.input.dodgeSprintGesture.sources.size,0);f.input.dispose();
  }

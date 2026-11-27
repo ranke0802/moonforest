@@ -624,17 +624,17 @@ const actions = {
   isHudShieldHeld(pointerType){return shieldInput.hasTouchHud(pointerType);},
   dodge() {
     if(!ready||!isV2()||!allowed('dodge')||(boss?.active&&!boss.playerAlive))return;
-    if(world?.riding?.active){world.riding.startGallop();return;}
+    if(world?.riding?.active)return; // mounted: the held press is the horse's run (setDodgeHeld)
     startDefense('dodge');
   },
   setDodgeHeld(held,source='keyboard',pointerType){
-    if(!held)return input?.dodgeSprintGesture?.end(source);
+    if(!held){world?.riding?.setRunHeld?.(false);return input?.dodgeSprintGesture?.end(source);}
     if(!ready||!isV2()||!allowed('dodge')||controller.dead||boss.playerHp<=0||controller.groggy)return false;
     if(controller.captured){actions.dodge();return false;}
-    if(world?.riding?.active){world.riding.startGallop();return true;}
+    if(world?.riding?.active){world.riding.setRunHeld(true);return true;}
     return input?.dodgeSprintGesture?.begin(source,{pointerType});
   },
-  cancelDodgeInput(source){return input?.dodgeSprintGesture?.cancel(source);},
+  cancelDodgeInput(source){world?.riding?.setRunHeld?.(false);return input?.dodgeSprintGesture?.cancel(source);},
   isHudDodgeHeld(pointerType){return input?.dodgeSprintGesture?.hasTouchHud(pointerType)??false;},
   potionSlotsEnabled(){return !!world?.v03?.playing&&!!townServices;},
   potion(slot) {
@@ -1956,6 +1956,7 @@ try {
       world.scene.onDisposeObservable.addOnce(()=>world.chapterResidents.dispose());
       const {createRidingHorse}=await import('./v03/riding-horse.js');
       world.riding=createRidingHorse({world,audio,root:$('#app'),storage:v03Save.journey,player:()=>actor,diagnostics:frameDiagnostics,
+        battle:()=>boss,canRam:()=>!!(world.v03?.playing&&!world.v03.story?.sceneActive&&boss.playerAlive&&!mapTransition?.busy),
         forwardYaw:()=>config?.forwardYaw??0,tell:toast,riderAlive:()=>!controller?.dead&&boss.playerHp>0,
         ridingAllowed:(onArrival=false)=>!!(ready&&!loadingAsset&&world.v03?.playing&&(onArrival||
           !mapTransition?.busy&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!input.suspended&&!controller?.captured&&!controller?.groggy))});

@@ -67,9 +67,9 @@ test('mount controls and acquisition/save/load messages follow all five game lan
     h.doc.documentElement.lang=lang;h.stable.updateAvailability();assert.equal(h.button.textContent,mount);
     const words=ridingLabels(h.doc);assert.ok(Object.values(words).every(Boolean));
     assert.equal(h.button.getAttribute('aria-label'),mount);assert.equal(h.button.getAttribute('aria-pressed'),'false');
-    await h.click();assert.equal(h.button.textContent,dismount);assert.equal(h.notices.at(-1),words.mounted);
+    await h.click();assert.equal(h.button.textContent,dismount);assert.equal(h.notices.at(-1),words.mounted+' '+words.controlsHint);
     assert.equal(h.button.getAttribute('aria-label'),dismount);assert.equal(h.button.getAttribute('aria-pressed'),'true');
-    assert.equal(h.attack.getAttribute('aria-label'),words.gallop);assert.equal(h.attack.title,words.gallop);
+    assert.equal(h.attack.getAttribute('aria-label'),words.charge);assert.equal(h.attack.title,words.charge+' (J)');
     assert.equal(guard.getAttribute('aria-label'),dismount);assert.equal(guard.title,dismount+' (F)');
     assert.equal(guard.getAttribute('aria-keyshortcuts'),'F');assert.ok(!guard.hasAttribute('aria-pressed'));
     await h.click();assert.equal(h.notices.at(-1),words.dismounted);assert.equal(h.attack.title,'Attack');
@@ -127,7 +127,7 @@ test('touch interaction and a late bag button survive mounting, cancellation and
     h.button.click();h.finish();await pending;
     assert.equal(h.root.dataset.v03Riding,'on-foot');assert.equal(h.attack.getAttribute('aria-label'),'Talk to driver');
     h.button.click();h.finish();await Promise.resolve();h.advance();
-    assert.equal(h.stable.active,true);assert.equal(interact.active,false);assert.equal(h.attack.getAttribute('aria-label'),'Gallop');
+    assert.equal(h.stable.active,true);assert.equal(interact.active,false);assert.equal(h.attack.getAttribute('aria-label'),'Gallop charge');
     h.button.click();h.advance();
     assert.equal(h.stable.active,false);assert.equal(interact.active,true);assert.equal(h.attack.getAttribute('aria-label'),'Talk to driver');
     interact.sync(null);assert.equal(h.attack.getAttribute('aria-label'),'Attack');
@@ -161,11 +161,11 @@ test('a gallop launches from rest along the horse heading, steers, and returns t
   ride.steerGallop(neutral,cameraAngle,.1);
   assert.ok(Math.abs(neutral.x)<1e-8);
   assert.equal(neutral.y,-1);
-  assert.ok(ride.travelSpeed(2)>3.4&&ride.travelSpeed(2)<14);
+  assert.ok(ride.travelSpeed(2)>3.4&&ride.travelSpeed(2)<15);
   const steer={x:1,y:0};
   ride.steerGallop(steer,cameraAngle,.15);
   assert.deepEqual(steer,{x:1,y:0});
-  assert.equal(ride.travelSpeed(2),14);
+  assert.equal(ride.travelSpeed(2),15);
   for(let i=0;i<150;i++)ride.steerGallop({x:0,y:0},0,1/60);
   assert.equal(ride.travelSpeed(2),3.4);
   ride.startGallop();ride.steerGallop(steer,0,.25);ride.stopGallop();

@@ -39,8 +39,9 @@ test('the mounted gallop uses a single transparent draw with static geometry, an
   assert.equal(mesh.isPickable, false);
   assert.equal(mesh.material.disableDepthWrite, true);
   assert.equal(mesh.material.getActiveTextures().length, 0);
-  assert.equal(mesh.getTotalVertices(), 70);
-  assert.equal(mesh.getTotalIndices()/3, 60);
+  // 2026-11-27 charge pass: 5 wind/streak ribbons and 5 dust puffs a side.
+  assert.equal(mesh.getTotalVertices(), 140);
+  assert.equal(mesh.getTotalIndices()/3, 120);
   assert.equal(mesh.subMeshes.length, 1);
   const buffer = mesh.getVertexBuffer(VertexBuffer.PositionKind);
   assert.equal(buffer.isUpdatable(), false);
@@ -65,7 +66,7 @@ test('the mounted gallop uses a single transparent draw with static geometry, an
   assert.equal(scene.materials.includes(material), false);
 });
 
-test('wind stays on the flanks and low dust behind the hind hooves throughout the shader travel', () => {
+test('wind stays on the flanks and low dust at the hooves throughout the shader travel', () => {
   const engine = new NullEngine(), scene = new Scene(engine), horse = new TransformNode('horse', scene);
   const trail = createRidingGallopTrail(horse), mesh = horse.getChildMeshes()[0];
   try {
@@ -74,12 +75,12 @@ test('wind stays on the flanks and low dust behind the hind hooves throughout th
     const flanks = new Set();
     for (let i = 0; i < mesh.getTotalVertices(); i++) {
       const x = position[3*i], y = position[3*i+1], z = position[3*i+2], dust = uv[2*i+1] === 1;
-      if (dust) { assert.ok(y < .23); assert.ok(z < -.62); }
-      else { assert.ok(Math.abs(x) > .46); assert.ok(y < 1.2); flanks.add(Math.sign(x)); }
-      assert.ok(colors[4*i+3] <= .53);
-      for (const age of [0, .5, 1]) {
+      if (dust) { assert.ok(y < .23); assert.ok(z < -.62 || (z > .5 && z < .9), 'dust at the hind or fore hooves'); }
+      else { assert.ok(Math.abs(x) > .28); assert.ok(y < 1.6); flanks.add(Math.sign(x)); }
+      assert.ok(colors[4*i+3] <= .81);
+      for (const age of [0, .5, 1]) for (const strength of [0, 1]) {
         const point = new Vector3(x + Math.sign(x)*age*(dust ? .24 : .10),
-          y + (dust ? age*(.5-.28*age) : 0), z-age*(dust ? 1.38 : .78));
+          y + (dust ? age*(.5-.28*age) : 0), z-age*(dust ? 1.38 : .78)*(.7+.6*strength));
         assert.ok(box.intersectsPoint(point), 'all animated vertices fit their culling bounds');
       }
     }

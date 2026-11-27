@@ -141,6 +141,8 @@ test('shipped mobile warrior seats the skinned breeches on the back throughout l
     if(collectingPose)assert.equal(leftGripSampled,false,'second grip recomposed the shared chest');
   });
   scene.render();assert.equal(measuredFrames,0);
+  // The charge effects (2026-11-27) are prepared asynchronously while mounting; let that settle.
+  for(let frames=0,calm=0,last=-1;frames<80&&calm<5;frames++){await nextFrame();const now=JSON.stringify(inventory());calm=now===last?calm+1:0;last=now;}
   const mountedScene=inventory(),horse=scene.getTransformNodeByName('v03-wagon-horse');
   for(const area of ['great-plains','monster-forest','village']){
     stable.beginTravel(area);assert.ok(!horse.isEnabled()&&!stable.active);world.mapId=area;stable.updateAvailability();

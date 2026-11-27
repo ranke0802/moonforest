@@ -4,7 +4,9 @@ import {WAGON_HORSE} from './wagon-horse.js';
 import {createRidingSaddle,placeRidingSaddle} from './riding-saddle.js';
 
 const COLOR_KEY='v03:stable:coat';
-export const RIDING_STATS=Object.freeze({speedMultiplier:1.7,gallopSpeed:14,gallopSeconds:2.4});
+// 2026-11-27: the held run (×1.35 the riding pace) and the charge (attack input)
+// are separate; the charge is at least 1.45× the full run (riding-horse.js travelSpeed).
+export const RIDING_STATS=Object.freeze({speedMultiplier:1.7,runMultiplier:1.35,gallopSpeed:15,gallopOverRun:1.45,gallopSeconds:2.4});
 
 export function createRidingWardrobe({world,storage,owned,fieldHorse,canBorrow=()=>true,makeHorse}){
   let coat='original',session=null;

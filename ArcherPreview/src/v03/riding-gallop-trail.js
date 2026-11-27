@@ -17,7 +17,7 @@ const vertexSource = `
     float dust = uv.y;
     vec3 p = position;
     p.x += sign(position.x) * age * mix(0.10, 0.24, dust);
-    p.z -= age * mix(0.78, 1.38, dust);
+    p.z -= age * mix(0.78, 1.38, dust) * (0.7 + 0.6 * strength);
     p.y += dust * age * (0.50 - 0.28 * age);
     tint = vec4(color.rgb, color.a * strength * 4.0 * age * (1.0 - age));
     gl_Position = worldViewProjection * vec4(p, 1.0);
@@ -29,7 +29,7 @@ const fragmentSource = `
 
 function trailGeometry() {
   const positions = [], colors = [], uvs = [], indices = [];
-  const air = [.80, .89, .85], earth = [.67, .55, .40];
+  const air = [.80, .89, .85], earth = [.67, .55, .40], gold = [1, .80, .42];
   function point(x, y, z, tint, alpha, phase, dust) {
     positions.push(x, y, z);
     colors.push(...tint, alpha);
@@ -40,21 +40,26 @@ function trailGeometry() {
   }
   for (const side of [-1, 1]) {
     const stagger = side > 0 ? .26 : 0;
-    for (const [baseX, baseY, noseZ, length, width, phase] of [
-      [.49, .99, .31, 1.08, .048, .07], [.58, .66, -.19, .76, .035, .58],
+    // 2026-11-27 charge pass: four wind lines a side (were two), longer, and a
+    // golden streak from the haunch. Same single draw, still static geometry.
+    for (const [baseX, baseY, noseZ, length, width, phase, tint, alpha] of [
+      [.49, .99, .31, 1.08, .048, .07, air, .52], [.58, .66, -.19, .76, .035, .58, air, .52],
+      [.42, 1.42, .55, 1.55, .04, .33, air, .45], [.66, .42, .05, 1.25, .03, .81, air, .45],
+      [.30, 1.05, -.75, 2.2, .12, .21, gold, .8],
     ]) {
       const start = positions.length / 3;
       const ribbonPoint = (along, edge, alpha) => point(
         side * (baseX + .22 * along + edge * width * .55),
         baseY + .09 * Math.sin(Math.PI * along) + edge * width,
-        noseZ - length * along, air, alpha, phase + stagger, 0);
-      ribbonPoint(.42, 0, .52);
+        noseZ - length * along, tint, alpha, phase + stagger, 0);
+      ribbonPoint(.42, 0, alpha);
       for (const [along, edge] of [[0,0],[.27,1],[.65,.75],[1,0],[.65,-.75],[.27,-1]]) {
         ribbonPoint(along, edge, 0);
       }
       closeFan(start);
     }
-    for (const [baseX, baseZ, size, phase] of [[.24,-.74,.14,.11],[.35,-.84,.105,.55],[.30,-1.04,.08,.84]]) {
+    for (const [baseX, baseZ, size, phase] of [[.24,-.74,.14,.11],[.35,-.84,.105,.55],[.30,-1.04,.08,.84],
+      [.20,.62,.12,.38],[.33,.74,.09,.71]]) {
       const start = positions.length / 3, y = .11, seed = phase + stagger;
       point(side * baseX, y, baseZ, earth, .43, seed, 1);
       for (let i = 0; i < 6; i++) {
@@ -78,7 +83,7 @@ export function createRidingGallopTrail(horseRoot) {
   const mesh = new Mesh('v03-riding-gallop-trail', scene);
   trailGeometry().applyToMesh(mesh);
   // The geometry is static. Include the full shader travel in its local bounds.
-  mesh.setBoundingInfo(new BoundingInfo(new Vector3(-1, 0, -2.7), new Vector3(1, 1.2, .4)));
+  mesh.setBoundingInfo(new BoundingInfo(new Vector3(-1.3, 0, -4.6), new Vector3(1.3, 1.7, 1)));
   const material = new ShaderMaterial('v03-riding-gallop-air', scene, {vertexSource, fragmentSource}, {
     attributes:['position','color','uv'], uniforms:['worldViewProjection','cycle','strength'], needAlphaBlending:true,
   });

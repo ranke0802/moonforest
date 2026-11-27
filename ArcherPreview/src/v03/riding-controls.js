@@ -60,14 +60,15 @@ export function createRidingControls(root, toggle) {
     // Return the touch interaction label to its owner before taking the attack button.
     if (mounted && !wasMounted) change();
     if (mounted) {
-      override(attack, 'aria-label', labels.gallop);
-      override(attack, 'title', labels.gallop);
+      // 2026-11-27: attack = the charge (rams foes), held dodge = the run.
+      override(attack, 'aria-label', labels.charge);
+      override(attack, 'title', labels.charge + ' (J)');
       override(guard, 'aria-label', labels.dismount);
       override(guard, 'title', labels.dismount + ' (F)');
       override(guard, 'aria-keyshortcuts', 'F');
       override(guard, 'aria-pressed', null);
-      override(dodge, 'aria-label', labels.gallop);
-      override(dodge, 'title', labels.gallop + ' (Space)');
+      override(dodge, 'aria-label', labels.run);
+      override(dodge, 'title', labels.run + ' (Space)');
     } else if (wasMounted) {
       restore();
       change();

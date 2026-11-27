@@ -71,13 +71,30 @@
 }
 /* Mounted: the combat buttons' sprite layers switch to the riding sheet. Size,
    key cap, touch dimming and the frame column stay those of the base buttons. */
-#app[data-v03-riding=mounted] :is(#attack-button,#guard-button,#dodge-button) > .hud-v1-sprite {
+/* 2026-11-27: the dodge button keeps its running-boot picture when mounted; a
+   held press is the horse's run. Only the attack button shows the charge. */
+#app[data-v03-riding=mounted] :is(#attack-button,#guard-button) > .hud-v1-sprite {
   background-image: url('./art/combat-press-ride-2x4.png');
   background-size: 400% 200%;
 }
-#app[data-v03-riding=mounted] :is(#attack-button,#dodge-button) > .hud-v1-sprite {
-  background-position: var(--hud-sprite-column, 0%) 0%; /* row 1: gallop */
+#app[data-v03-riding=mounted] #attack-button > .hud-v1-sprite {
+  background-position: var(--hud-sprite-column, 0%) 0%; /* row 1: gallop charge */
 }
 #app[data-v03-riding=mounted] #guard-button > .hud-v1-sprite {
   background-position: var(--hud-sprite-column, 0%) 100%; /* row 2: dismount */
 }
+/* Charge speed lines (riding-charge-fx.js, 2026-11-27): one layer at the screen
+   edges, placed right after the game canvas so every HUD layer stays above it.
+   The script writes only its opacity, and hides it at rest. */
+#app > .v03-gallop-lines {
+  position: absolute;
+  inset: -8%;
+  pointer-events: none;
+  opacity: 0;
+  background-image: repeating-conic-gradient(from 3deg at 50% 50%, rgba(255, 244, 214, .5) 0deg .55deg, rgba(255, 244, 214, 0) 1.4deg 7.5deg);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 52%, transparent 42%, #000 78%);
+  mask-image: radial-gradient(ellipse at 50% 52%, transparent 42%, #000 78%);
+  will-change: opacity;
+}
+#app > .v03-gallop-lines[hidden] { display: none; }
+:root[data-mf-motion=reduce] #app > .v03-gallop-lines { display: none; }

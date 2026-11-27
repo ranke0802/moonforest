@@ -11,6 +11,8 @@ import { createRidingSaddle, placeRidingSaddle, SADDLE_PAD_HEIGHT } from './ridi
 import { createRidingReins } from './riding-reins.js';
 import { createRiderContact } from './riding-seat-contact.js';
 import { createRidingGallopTrail } from './riding-gallop-trail.js';
+import { createRidingRam } from './riding-charge.js';
+import { createRidingChargeFx } from './riding-charge-fx.js';
 import { createPreparedEffectLease } from '../prepared-effect-lifetime.js';
 import { cameraRenderPass } from '../render-variant-state.js';
 
@@ -33,7 +35,10 @@ function keepRenderedMountPrograms(saddle,horseRoot){
 
 const OWNED = 'v03:stable:horse';
 const OUTDOORS = new Set(['village', 'great-plains', 'monster-forest']);
-const {gallopSeconds:GALLOP_SECONDS,gallopSpeed:GALLOP_SPEED,speedMultiplier}=RIDING_STATS;
+const {gallopSeconds:GALLOP_SECONDS,gallopSpeed:GALLOP_SPEED,speedMultiplier,runMultiplier:RUN_MULTIPLIER,gallopOverRun:GALLOP_OVER_RUN}=RIDING_STATS;
+// Mounted run (2026-11-27): the held run input eases in/out over this time.
+const RUN_EASE_SECONDS=.25;
+const RAM_MAX=4;
 const MOUNT_SECONDS = 1.45, DISMOUNT_SECONDS = 1.30;
 const FALL_SECONDS = 52/30, FALL_FADE_SECONDS = 1;
 const WHISTLE_ARM = [
@@ -62,6 +67,7 @@ for(const [strand,spread] of [['L',.12],['C',0],['R',-.12]]){
 }
 
 export function createRidingHorse({ world, root, storage, player, ridingAllowed, riderAlive=()=>true, tell, forwardYaw, diagnostics, audio, makeHorse = createWagonHorse, pose = createBonePose,
+  battle=()=>null, canRam=()=>true, random=Math.random, makeChargeFx=createRidingChargeFx,
   enabled = new URLSearchParams(globalThis.location?.search).get('riding') !== '0' }) {
   // A URL-only comparison: no horse load, listeners or reads/writes to the player's save.
   if(!enabled){
@@ -84,20 +90,30 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   let whistleRig=null, whistleTime=0, route=null, departRoute=null, savedPrograms=false, turning=null;
   const transferring=()=>phase==='mounting'||phase==='dismounting';
   const locksRider=()=>phase==='approaching'||transferring();
-  let gallopRemaining=0, gallopStrength=0, trail=null;
+  let gallopRemaining=0, gallopStrength=0, trail=null, chargeFx=null;
+  // Run: the held run input (dodge button / Space), a sustained faster gait with
+  // no charge effects or contact. Charge: the attack input only (2026-11-27).
+  let runHeld=false, runStrength=0, launchPending=false, endPending=false, rams=0;
+  const ram=createRidingRam({random});
+  const struckAt=Array.from({length:RAM_MAX},()=>({x:0,z:0,boss:false}));
   function stopGallop() {
     gallopRemaining=0;
-    gallopStrength=0;
-    trail?.update(0,0);
+    gallopStrength=0;launchPending=false;endPending=false;
+    trail?.update(0,0);chargeFx?.reset();
   }
   function startGallop() {
     if (!active || travellingTo || !available || !ridingAllowed()) return false;
-    if (!gallopRemaining) gallopRemaining=GALLOP_SECONDS;
+    if (!gallopRemaining) {gallopRemaining=GALLOP_SECONDS;ram.begin();launchPending=true;endPending=false;}
     return true;
+  }
+  function setRunHeld(held) {
+    runHeld=!!held&&active&&!travellingTo;
+    return runHeld;
   }
   function steerGallop(movement,cameraYaw,dt) {
     if (!gallopRemaining) return;
     gallopRemaining=Math.max(0,gallopRemaining-dt);
+    if(!gallopRemaining)endPending=true;
     gallopStrength=Math.min(1,(GALLOP_SECONDS-gallopRemaining)/.22,gallopRemaining/.30);
     if (gallopRemaining && Math.hypot(movement.x,movement.y)<.08) {
       // Project the horse's forward direction onto the active camera's controls.
@@ -108,8 +124,10 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   function travelSpeed(base) {
     if(base<=0)return 0;
-    const usual=base*speedMultiplier;
-    return usual+gallopStrength*Math.max(0,GALLOP_SPEED-usual);
+    const usual=base*speedMultiplier,running=usual*(1+(RUN_MULTIPLIER-1)*runStrength);
+    // The charge always outruns the full run, also at raised movement-speed settings.
+    const charge=Math.max(GALLOP_SPEED,usual*RUN_MULTIPLIER*GALLOP_OVER_RUN);
+    return running+gallopStrength*Math.max(0,charge-running);
   }
   const display = () => {
     labels = ridingLabels(doc);
@@ -119,8 +137,8 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     sounds?.stop();wardrobe.closePreview();
     ++generation;travellingTo=null;parked=false;
     if(keepPrograms&&active&&saddle&&!savedPrograms)keepRenderedMountPrograms(saddle,horse.root);
-    stopGallop();
-    trail?.dispose();trail=null;
+    stopGallop();runHeld=false;runStrength=0;
+    trail?.dispose();trail=null;chargeFx?.dispose();chargeFx=null;
     checkedMap=null;
     if(poseObserver)world.scene.onBeforeRenderObservable.remove(poseObserver);
     poseObserver=null;
@@ -238,6 +256,9 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       if(instance.root){
         saddle=createRidingSaddle(instance.root);
         updateReins=createRidingReins(instance.root,actor,saddle.material);
+        // Charge effects are prepared while the horse approaches and the rider climbs on.
+        trail=createRidingGallopTrail(instance.root);
+        if(world.scene)chargeFx=makeChargeFx({scene:world.scene,camera:()=>world.camera??world.scene.activeCamera,root});
       }
       hideEquipment(actor);
       if(world.scene&&!poseObserver)poseObserver=world.scene.onBeforeRenderObservable.add(drawMountedPose);
@@ -309,7 +330,7 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
       if(transferTime>=MOUNT_SECONDS){
         rider.position.x=route.end.x;rider.position.z=route.end.z;
         rider.position.y=world.terrain.heightAt(route.end.x,route.end.z);
-        phase='mounted';active=true;++mounts;display();tell(labels.mounted);
+        phase='mounted';active=true;++mounts;display();tell(labels.mounted+' '+labels.controlsHint);
         afterMove({state:'idle'},0);
       }
     }else if(phase==='dismounting'){
@@ -381,9 +402,24 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
     if (clip !== next) { horse.play(next); clip = next; }
     horse.speed(clip === 'Horse_Idle' ? 1 : Math.max(.55,Math.min(1.7,speed/(clip === 'Horse_Walk'?1.7:5))));
     const strength=gallopStrength*Math.min(1,speed/6);
-    if(strength>0&&!trail)trail=createRidingGallopTrail(horse.root);
     trail?.update(dt,strength);
+    runStrength=Math.max(0,Math.min(1,runStrength+(runHeld?1:-1)*Math.max(0,dt)/RUN_EASE_SECONDS));
+    charge(yaw,speed,dt,strength);
     if(!poseObserver)fitSaddle();
+  }
+  // Charge contact and effects; contact runs every simulated frame.
+  function charge(yaw,speed,dt,strength){
+    const fx=Math.sin(yaw),fz=Math.cos(yaw),p=rider.position,y=world.terrain?.heightAt?.(p.x,p.z)??p.y??0;
+    if(launchPending&&gallopRemaining>0){launchPending=false;chargeFx?.launch(p.x,y,p.z,fx,fz);}
+    if(endPending){endPending=false;if(speed>2)chargeFx?.finish(p.x-fx*1.1,y,p.z-fz*1.1);}
+    if(gallopRemaining>0&&gallopStrength>.25&&speed>4&&canRam()){
+      const hits=ram.sweep(battle()?.encounters,p,fx,fz,struckAt);
+      for(let i=0;i<hits;i++){
+        rams++;
+        if(i<RAM_MAX)chargeFx?.impact(struckAt[i].x,world.terrain?.heightAt?.(struckAt[i].x,struckAt[i].z)??y,struckAt[i].z);
+      }
+    }
+    chargeFx?.update(dt,strength);
   }
   function placeSaddle(){return placeRidingSaddle(horse,saddle,contact,inverse);}
   function fitSaddle() {
@@ -436,9 +472,9 @@ export function createRidingHorse({ world, root, storage, player, ridingAllowed,
   }
   doc.addEventListener('keydown',hotkey);
   reload();
-  return { wardrobe, offer, reload, leave, dismount, playerDamaged, playerCaptured, beginTravel, finishTravel, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, get active(){return active&&!travellingTo;},get locksRider(){return locksRider()&&!travellingTo;},
+  return { wardrobe, offer, reload, leave, dismount, playerDamaged, playerCaptured, beginTravel, finishTravel, updateAvailability, afterMove, startGallop, stopGallop, steerGallop, travelSpeed, setRunHeld, get active(){return active&&!travellingTo;},get locksRider(){return locksRider()&&!travellingTo;},
     get blocksFirstPerson(){return phase!=='on-foot'&&phase!=='departing'&&phase!=='falling';},
-    inspect:()=>({state:travellingTo?'travelling':phase,mounts,gait:clip||null,...(gallopRemaining>0?{galloping:true}:{})}),
+    inspect:()=>({state:travellingTo?'travelling':phase,mounts,gait:clip||null,...(gallopRemaining>0?{galloping:true}:{}),...(runHeld?{running:true}:{}),...(rams?{rams}:{})}),
     dispose(){leave(false);sounds?.dispose();doc.removeEventListener('keydown',hotkey);controls.dispose();}
   };
 }

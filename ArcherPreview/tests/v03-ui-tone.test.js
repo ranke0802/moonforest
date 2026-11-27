@@ -45,8 +45,10 @@ test('riding pictures use the raster strips on the base sprite layer, never the 
  assert.doesNotMatch(css,/(^|[;{\s])background\s*:/m,'no background shorthand in riding-horse.css');
  assert.doesNotMatch(css,/riding-horse\.svg|riding-gallop\.svg|scale\(\.9[34]\)/,'old SVG art and the scale stand-in are out of use');
  assert.match(css,/\.top-actions \.v03-ride-toggle > \.hud-v1-ride \{[^}]*background-image: url\('\.\/art\/menu-press-ride-1x4\.png'\);[^}]*background-size: 400% 100%;[^}]*background-position: var\(--hud-sprite-column, 0%\) 0%;/);
- assert.match(css,/:is\(#attack-button,#guard-button,#dodge-button\) > \.hud-v1-sprite \{[^}]*url\('\.\/art\/combat-press-ride-2x4\.png'\);[^}]*background-size: 400% 200%;/);
- assert.match(css,/:is\(#attack-button,#dodge-button\) > \.hud-v1-sprite \{\s*background-position: var\(--hud-sprite-column, 0%\) 0%;/);
+ // 2026-11-27: mounted, the dodge button keeps its running-boot picture (held = run).
+ assert.match(css,/:is\(#attack-button,#guard-button\) > \.hud-v1-sprite \{[^}]*url\('\.\/art\/combat-press-ride-2x4\.png'\);[^}]*background-size: 400% 200%;/);
+ assert.match(css,/#attack-button > \.hud-v1-sprite \{\s*background-position: var\(--hud-sprite-column, 0%\) 0%;/);
+ assert.doesNotMatch(css,/#dodge-button[^{]*\{[^}]*combat-press-ride/);
  assert.match(css,/#guard-button > \.hud-v1-sprite \{\s*background-position: var\(--hud-sprite-column, 0%\) 100%;/);
  assert.match(css,/border: 1px solid var\(--mf-badge-line, #cab984\);[^}]*background-color: var\(--mf-badge-bg, #1d3027\);/);
  assert.equal((css.match(/%23f2e5bd/g)??[]).length,2,'badge marks use the badge ink');

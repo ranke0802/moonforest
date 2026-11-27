@@ -12,12 +12,21 @@ const feedback={
   zh:['已上马。','已下马。','全速疾驰','坐骑会在洞外等候，离开洞穴后将重新骑乘。'],
   vi:['Đã lên ngựa.','Đã xuống ngựa.','Phi nước đại','Ngựa sẽ đợi ngoài hang. Khi ra ngoài, bạn sẽ lại cưỡi ngựa.']
 };
+// 2026-11-27: mounted run (held dodge input) and the charge (attack input) are separate.
+const charge={
+  ko:['달리기 (길게 누르기)','쾌속 질주 · 들이받기','회피 버튼(Space)을 누르고 있으면 달리고, 공격 버튼(J)을 누르면 쾌속 질주로 적을 들이받습니다.'],
+  en:['Run (hold)','Gallop charge','Hold Dodge (Space) to run. Press Attack (J) to gallop at full speed and ram enemies.'],
+  ja:['走る（長押し）','全速疾走・体当たり','回避ボタン（Space）を押し続けると走り、攻撃ボタン（J）で全速疾走して敵に体当たりします。'],
+  zh:['奔跑（长按）','全速疾驰・冲撞','按住闪避键（Space）奔跑，按攻击键（J）全速疾驰并冲撞敌人。'],
+  vi:['Chạy (giữ nút)','Phi nước đại · Húc','Giữ nút Né (Space) để chạy. Nhấn Tấn công (J) để phi nước đại và húc kẻ địch.']
+};
 const space={ko:'말 옆에 설 공간이 필요합니다. 조금 더 탁 트인 곳으로 이동하세요.',en:'Move to a clear space beside the horse.',ja:'馬の横に立てる広い場所に移動してください。',zh:'请移到马身旁有足够空间的开阔处。',vi:'Hãy đến chỗ thoáng để có thể đứng bên cạnh ngựa.'};
 const labels={};
 for(const [lang,values] of Object.entries(strings)){
  const [mount,dismount,cancel,acquired,ready,saveError,poseError,loadError]=values;
  const [mounted,dismounted,gallop,parked]=feedback[lang];
- labels[lang]={space:space[lang],mount,dismount,cancel,acquired,ready,saveError,poseError,loadError,mounted,dismounted,gallop,parked};
+ const [run,gallopCharge,controlsHint]=charge[lang];
+ labels[lang]={space:space[lang],mount,dismount,cancel,acquired,ready,saveError,poseError,loadError,mounted,dismounted,gallop,parked,run,charge:gallopCharge,controlsHint};
 }
 export function ridingLabels(doc) {
   const lang = doc.documentElement?.dataset?.lang ?? doc.documentElement?.lang ?? 'ko';
