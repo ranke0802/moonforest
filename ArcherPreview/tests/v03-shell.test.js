@@ -688,6 +688,9 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  assert.equal(h.guide.shown,null,'the guide light stays hidden during the opening fight');
  {const d=h.shell.inspect().story.cast.find(c=>c.id==='driver');h.player.position={x:d.x,z:d.z};}h.battle.combatCount=2;h.shell.update(.016);assert.equal(hud('.v03-prompt').hidden,true);
  h.shell.defeat({kind:'wolf'});h.battle.encounters=[];h.battle.combatCount=0;h.battle.livingCount=0;h.shell.update(.016);
+ // 2026-11-27 R2: a calm tip steps back while a fight is on (a boss bar comes first) and comes back whole after it.
+ assert.equal(hud('.v03-tip-title').textContent,'대화');h.battle.combatCount=1;h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,true,'the calm tip yields to the fight');
+ h.battle.combatCount=0;h.shell.update(.016);assert.equal(hud('.v03-tip').hidden,false);assert.equal(hud('.v03-tip-title').textContent,'대화');
  assert.equal(hud('.v03-quest-objective').textContent,'마부를 도와 마차 세우기');assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'마부와 이야기하기');assert.equal(hud('.v03-prompt-key').textContent,'E');assert.equal(hud('.v03-prompt-name').textContent,'마부');assert.equal(hud('.v03-prompt-action').textContent,'이야기하기');assert.equal(hud('.v03-prompt-mark').hidden,true,'no ? or ! after the button: the mark over his head says it');
  assert.ok(h.shell.inspect().story.tips.includes('guide'),'the guide light appears after the fight, and its card with it');
  const potionKey=[];h.window.addEventListener('keydown',()=>potionKey.push('game'));

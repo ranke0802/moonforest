@@ -64,7 +64,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  let castMap=null,castSettled=null;
  // Tutorial state: sequential fight coaching and one-time tips (saved per slot).
  const TIP_KEY='v03-tips-v1',TIP_SECONDS=7.5;
- const HINT_SECONDS=40,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null};
+ const HINT_SECONDS=40,coachState={index:0,moved:0,lastX:null,lastZ:null,alpha:null,shown:0,held:0},tips={seen:new Set(),queue:[],showing:null,left:0,step:null,engaged:false};
  function loadTips(){tips.seen=new Set();try{const value=JSON.parse(save.journey.getItem(TIP_KEY)??'[]');if(Array.isArray(value))for(const id of value)if(typeof id==='string')tips.seen.add(id);}catch{/* start fresh */}}
  function trigger(when){
   for(const tip of content.TIPS??[]){
@@ -73,10 +73,19 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    try{save.journey.setItem(TIP_KEY,JSON.stringify([...tips.seen]));}catch{/* shown anyway */}
   }
  }
+ // In a fight only combat:true tips show, and none while a boss bar is fixed at the top (the card would sit
+ // over the bar, the boss or the fight's banners on a phone). A tip already up steps back into the queue and
+ // is shown again whole once that is over (2026-11-27 R2 review).
  function runTips(dt){
-  if(tips.showing){tips.left-=dt;if(tips.left<=0){tips.showing=null;hud.setTip(null);hud.setRing(null);}return;}
-  if(!tips.queue.length||dialogue.open)return;
-  const tip=tips.queue.shift();tips.showing=tip;tips.left=TIP_SECONDS;hud.setTip({title:tip.title,lead:touch?tip.touch:tip.keys,text:tip.text});if(touch&&tip.target)hud.setRing(tip.target);
+  const engaged=tips.engaged===true,boss=engaged&&(tips.showing!==null||tips.queue.length>0)&&hud.bossBarUp?.()===true;
+  if(tips.showing){
+   if(boss||engaged&&tips.showing.combat!==true){tips.queue.unshift(tips.showing);tips.showing=null;hud.setTip(null);hud.setRing(null);return;}
+   tips.left-=dt;if(tips.left<=0){tips.showing=null;hud.setTip(null);hud.setRing(null);}return;
+  }
+  if(!tips.queue.length||dialogue.open||boss)return;
+  let at=0;
+  if(engaged){at=-1;for(let i=0;i<tips.queue.length;i++)if(tips.queue[i].combat===true){at=i;break;}if(at<0)return;}
+  const tip=at?tips.queue.splice(at,1)[0]:tips.queue.shift();tips.showing=tip;tips.left=TIP_SECONDS;hud.setTip({title:tip.title,lead:touch?tip.touch:tip.keys,text:tip.text});if(touch&&tip.target)hud.setRing(tip.target);
  }
  // Commit the 0.3 reward (and any final delivery) before advancing the log.
  // If the log write is interrupted its wallet receipt restores the completion.
@@ -1493,8 +1502,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const state=api.getController()?.state??null,attacking=ATTACK_STATES.has(state);
   const mine=attacking&&!ATTACK_STATES.has(slow.player);let theirs=false;slow.player=state;
   for(const foe of api.battle.encounters??[]){const mode=foe.brain?.mode;if(mode==='attack'&&slow.foes.get(foe)!=='attack')theirs=true;slow.foes.set(foe,mode);}
-  // One combat read per frame serves the slow beat and the HUD's folded quest (play-hud.js setCombat).
-  const engaged=api.battle.combatCount>0,fighting=first||engaged;hud.setCombat(engaged&&!scene.active,dt);
+  // One combat read per frame serves the slow beat, the HUD's folded quest (play-hud.js setCombat) and runTips.
+  const engaged=api.battle.combatCount>0;tips.engaged=engaged;const fighting=first||engaged;hud.setCombat(engaged&&!scene.active,dt);
   if(first!==slow.first){slow.first=first;if(first)slow.used=false;}
   if(fighting)slow.calm=0;else if(slow.calm<SLOW_CALM&&(slow.calm+=dt)>=SLOW_CALM)slow.used=false;
   if(!fx.on)slow.left=0;

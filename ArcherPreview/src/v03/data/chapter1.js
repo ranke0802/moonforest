@@ -546,16 +546,18 @@ export const COMBAT_HINTS=Object.freeze([
 // One-time tips, shown the first time a feature becomes relevant (per save).
 // when: low-hp · low-stamina · near-npc · step:<quest>/<step> · effect:<name>
 // (low-stamina also fires once the first-fight lessons are done)
+// combat:true — a lesson for the fight itself. Other tips wait while a fight is on (story.js runTips),
+// so a calm lesson does not sit over the boss bar when a fight starts.
 export const TIPS=Object.freeze([
  {id:'guide',when:'guide-shown',title:'길잡이 빛',keys:'빛무리가 갈 곳으로 먼저 날아갑니다.',touch:'빛무리가 갈 곳으로 먼저 날아갑니다.',text:'길을 모를 땐 빛을 따라가세요.'},
- {id:'potion',when:'low-hp',title:'물약',target:'#potion-button',keys:'숫자 1~4로 해당 슬롯의 물약을 사용합니다.',touch:'짧게 눌러 쓰고, 길게 눌러 종류를 고릅니다.',text:'가방에서 물약을 슬롯에 등록할 수 있습니다.'},
- {id:'boss',when:'step:M04/bear',title:'큰 짐승',keys:'Space로 피하고 F를 길게 눌러 막으세요.',touch:'장화로 피하고 방패를 길게 눌러 막으세요.',text:'젖히면 강공격, 끝나면 반격하세요.'},
+ {id:'potion',combat:true,when:'low-hp',title:'물약',target:'#potion-button',keys:'숫자 1~4로 해당 슬롯의 물약을 사용합니다.',touch:'짧게 눌러 쓰고, 길게 눌러 종류를 고릅니다.',text:'가방에서 물약을 슬롯에 등록할 수 있습니다.'},
+ {id:'boss',combat:true,when:'step:M04/bear',title:'큰 짐승',keys:'Space로 피하고 F를 길게 눌러 막으세요.',touch:'장화로 피하고 방패를 길게 눌러 막으세요.',text:'젖히면 강공격, 끝나면 반격하세요.'},
  {id:'talk',when:'near-npc',title:'대화',keys:'가까이에서 E 키로 말을 겁니다.',touch:'가까이 가면 뜨는 버튼으로 말을 겁니다.',text:'전투 중에는 대화할 수 없습니다.'},
  {id:'sprint',when:'step:M00/road',title:'질주',keys:'Space를 길게 누르면 달립니다.',touch:'회피 버튼을 길게 누르면 달립니다.',text:'스태미나를 씁니다. 목표·지도를 따라가세요.'},
- {id:'stamina',when:'low-stamina',title:'스태미나',keys:'노란 막대가 스태미나입니다.',touch:'노란 막대가 스태미나입니다.',text:'공격·회피·방패·질주에 쓰고, 멈추면 찹니다.'},
+ {id:'stamina',combat:true,when:'low-stamina',title:'스태미나',keys:'노란 막대가 스태미나입니다.',touch:'노란 막대가 스태미나입니다.',text:'공격·회피·방패·질주에 쓰고, 멈추면 찹니다.'},
  {id:'rest',when:'effect:rest',title:'휴식과 기록',keys:'여관 주인에게 말을 걸면 쉴 수 있습니다.',touch:'여관 주인에게 말을 걸면 쉴 수 있습니다.',text:'체력·회복약이 차고 여정이 기록됩니다.'},
  {id:'clues',when:'step:M07/clues',title:'살펴보기',keys:'수상한 물건 가까이에서 E 키로 살펴봅니다.',touch:'가까이 가면 뜨는 버튼으로 살펴봅니다.',text:'찾은 것은 목표에 표시됩니다.'},
  // 1127-combat: the heavy attack again once the hunt has only used plain hits; the dodge counter the first time it opens.
- {id:'heavy-hunt',when:'light-streak',title:'강공격',target:'#attack-button',keys:'J · 좌클릭을 길게 눌렀다 떼세요.',touch:'검 버튼을 길게 눌렀다 떼세요.',text:'강공격으로 마무리하면 경험치 +50%.'},
- {id:'counter',when:'dodge-counter',title:'회피 반격',target:'#attack-button',keys:'피한 직후 J로 반격하세요.',touch:'피한 직후 검 버튼으로 반격하세요.',text:'2초 동안 세 번까지 피해가 커집니다.'},
+ {id:'heavy-hunt',combat:true,when:'light-streak',title:'강공격',target:'#attack-button',keys:'J · 좌클릭을 길게 눌렀다 떼세요.',touch:'검 버튼을 길게 눌렀다 떼세요.',text:'강공격으로 마무리하면 경험치 +50%.'},
+ {id:'counter',combat:true,when:'dodge-counter',title:'회피 반격',target:'#attack-button',keys:'피한 직후 J로 반격하세요.',touch:'피한 직후 검 버튼으로 반격하세요.',text:'2초 동안 세 번까지 피해가 커집니다.'},
 ]);

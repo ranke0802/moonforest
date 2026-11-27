@@ -145,8 +145,12 @@ export function createPlayHud({doc,mount=doc.body,onInteract=()=>{},onQuestPage=
    prompt.hidden=false;prompt.classList.remove('is-in');void prompt.offsetWidth;prompt.classList.add('is-in');
   },
   // One-shot message (quest complete, saved). CSS runs the whole animation.
-  flash(text){banner.textContent=text;banner.hidden=false;banner.classList.remove('is-shown');void banner.offsetWidth;banner.classList.add('is-shown');},
+  // An arrival line wins over a region name still on screen (both sit in the upper middle).
+  flash(text){if(!place.hidden){place.hidden=true;place.classList.remove('is-shown');}banner.textContent=text;banner.hidden=false;banner.classList.remove('is-shown');void banner.offsetWidth;banner.classList.add('is-shown');},
   showPlace(name){placeName.textContent=name;place.hidden=false;place.classList.remove('is-shown');void place.offsetWidth;place.classList.add('is-shown');},
+  // A boss bar fixed at the top centre is up (boss-health-bar.js). story.js asks only while a fight is on and a
+  // tip is up or waiting: no layout read, one selector match.
+  bossBarUp(){return !!doc.querySelector('#app>.boss-hud[data-hud="fixed"]:not([hidden])');},
   // One-time tutorial card; pass null to hide it.
   setTip(value){
    if(!value){tip.hidden=true;tip.classList.remove('is-shown');return;}

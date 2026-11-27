@@ -1391,7 +1391,7 @@ try {
   world.lighting.setQuality(qualityMode);applyAdaptiveShadows();
   screenProjection=new ScreenProjection(world.scene);
   resizeScreenProjection();
-  damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true,keepOut:versionRoute.edition?damageKeepOut(document):null});
+  damageNumbers=createDamageNumbers(world.scene,$('#damage-numbers'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true,keepOut:versionRoute.edition?damageKeepOut(document):null,spread:!!versionRoute.edition});
   goldLootView=world.goldLootView=createGoldLootView(world.scene,$('#loot-labels'),{visibleAt:p=>world.caveFog?.allowsPoint(p)??true});
   if(world.gameplayV03)world.sceneryStrikes=createSceneryStrikes(world,audio);
   const damageFeedback=(...args)=>{
