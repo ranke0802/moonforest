@@ -14,10 +14,15 @@ export function retainMapEffect(effect){
 }
 export function mapShaderCacheSize(engine){return caches.get(engine)?.size??0;}
 
+export function createMapMaterialPreparation(scene,{cancelled=()=>false,now,wait=()=>new Promise(resolve=>setTimeout(resolve,16))}={}){
+  // Hot checks can share a slice, bounded by the same CPU budget as actor preparation.
+  return createBossPreparation({scene,now,frame:wait,maxBlocks:256,isCurrent:()=>!cancelled()&&!scene?.isDisposed});
+}
+
 // Warm the actual instanced submesh variant. Material.forceCompilationAsync
 // creates temporary PBR submeshes, and warms ShaderMaterial without INSTANCES;
 // neither guarantees the first real draw is ready.
-export async function prepareMapMaterials(meshes,{material:override,cancelled=()=>false,instances=true,now=()=>performance.now(),wait=()=>new Promise(r=>setTimeout(r,16)),preparation,signal}={}){
+export async function prepareMapMaterials(meshes,{material:override,cancelled=()=>false,instances=true,now,wait,preparation,signal}={}){
   const pending=[],seen=new Map();
   for(const mesh of meshes){
     let subs=seen.get(mesh);if(!subs){subs=new Set();seen.set(mesh,subs);}
@@ -27,9 +32,7 @@ export async function prepareMapMaterials(meshes,{material:override,cancelled=()
     }
   }
   if(!pending.length||cancelled())return;
-  // Cached readiness checks are often much cheaper than actor construction.
-  // Keep the CPU/shared limits, but do not turn 1,000 hot checks into 250 frames.
-  const scene=pending[0].mesh.getScene?.(),job=preparation??createBossPreparation({scene,now,frame:wait,maxBlocks:256,isCurrent:()=>!cancelled()&&!scene?.isDisposed});
+  const scene=pending[0].mesh.getScene?.(),job=preparation??createMapMaterialPreparation(scene,{cancelled,now,wait});
   // Failure record only: an owner deadline that fires while this loop still
   // polls gets a primitive snapshot of what was not ready (no live references).
   const onAbort=()=>{const reason=signal.reason;if(reason instanceof Error&&reason.name!=='AbortError'&&!reason.mapMaterialWait)try{reason.mapMaterialWait=describeMaterialWait(pending,scene);}catch{/* A frozen reason keeps its plain timeout. */}};

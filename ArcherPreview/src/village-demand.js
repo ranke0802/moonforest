@@ -7,6 +7,7 @@ import {sceneryDistanceRange as cinematicSceneryRange,sceneryDistanceScale as ci
 // The 1000-record cutoff is empirical: local paired tests found no consistent
 // benefit for the current village, forest and cave. Overview uses a direct scan.
 const DEMAND_INDEX_MIN_RECORDS=1000;
+const STREAM_TIMEOUT_BACKOFF_MS=1000;
 
 // The accepted shell has one authored triangle above the original native
 // frame. Bounds are from its immutable glTF POSITION accessor; the normal
@@ -271,15 +272,17 @@ export class VillageDemandCache {
 }
 
 export class VillageGeometryStreaming {
-  constructor(world,records,load,has,stats,{recordsByAsset=null,assets=null}={}){
+  constructor(world,records,load,has,stats,{recordsByAsset=null,assets=null,retryTimeouts=false,now=()=>performance.now()}={}){
     Object.assign(this,{world,records,load,has,stats});this.failed=new Set();this.active=false;this.pending=null;this.next=0;this.disposed=false;
+    this.retryAt=retryTimeouts?new Map():null;this.now=now;
+    if(retryTimeouts)stats.geometryRetries={scheduled:0,recovered:0,exhausted:0};
     this.recordsByAsset=recordsByAsset;this.assets=assets;this.indexedRecords=records;this.indexedLength=records.length;this.settledAssets=new Map();this.settledHas=has;
     stats.geometryCompleteSkips=0;this.demandBudget={maxUnits:DEMAND_SLICE_UNITS,milliseconds:DEMAND_SLICE_MS,now:()=>performance.now()};
     stats.geometrySettledEvaluations=0;stats.geometrySettledCacheHits=0;
     this.demand=new VillageDemandCache(world,records,stats);
     this.observer=world.scene.onAfterRenderObservable.add(()=>{
       const start=world.frameDiagnostics?.mark();
-      try{this.update(performance.now());}finally{world.frameDiagnostics?.measure('sceneryGeometryMs',start??null);}
+      try{this.update(this.now());}finally{world.frameDiagnostics?.measure('sceneryGeometryMs',start??null);}
     });
   }
   async initial(plan){for(const request of plan)if(!this.has(request))await this.load(request);}
@@ -288,6 +291,8 @@ export class VillageGeometryStreaming {
     this.indexedRecords=this.records;this.indexedLength=this.records.length;this.settledAssets.clear();this.demand.invalidate();this.demand.index=null;this.demand.indexLength=-1;
   }
   allGeometrySettled(){
+    // A timeout can leave the tier installed with preparation still unfinished.
+    if(this.retryAt?.size)return false;
     // Opt in only for the immutable base-placement index. Generic/editor
     // streams retain the original direct checks, including unannounced edits.
     if(this.recordsByAsset&&this.assets){
@@ -336,17 +341,35 @@ export class VillageGeometryStreaming {
     try{
       if(this.allGeometrySettled()){this.demand.job=null;this.stats.geometryCompleteSkips++;return;}
       const plan=this.demand.get(this.demandBudget);
-      request=plan?.find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
+      if(this.retryAt?.size){
+        request=plan?.find(r=>{
+          const key=r.id+':'+r.level;
+          if(this.failed.has(key))return false;
+          const retryAt=this.retryAt.get(key);
+          return retryAt===undefined?!this.has(r):now>=retryAt;
+        });
+      }else request=plan?.find(r=>!this.has(r)&&!this.failed.has(r.id+':'+r.level));
     }finally{this.world.frameDiagnostics?.measure('sceneryDemandMs',started??null);}
     if(!request)return;
+    const key=request.id+':'+request.level,retry=this.retryAt?.has(key)===true;
     this.stats.geometryPending=1;
     const loadStarted=this.world.frameDiagnostics?.mark();let operation;
-    try{operation=this.load(request);}finally{this.world.frameDiagnostics?.measure('sceneryLoadStartMs',loadStarted??null);}
-    this.pending=operation.catch(error=>{
-      if(this.disposed||error.name==='AbortError')return;
-      this.failed.add(request.id+':'+request.level);this.stats.geometryError=String(error.message??error);
+    try{operation=this.load(request,retry);}finally{this.world.frameDiagnostics?.measure('sceneryLoadStartMs',loadStarted??null);}
+    this.pending=operation.then(()=>{
+      if(this.retryAt?.delete(key))this.stats.geometryRetries.recovered++;
+    },error=>{
+      if(this.disposed)return;
+      if(error.name==='AbortError'){this.retryAt?.delete(key);return;}
+      if(this.retryAt&&error.name==='TimeoutError'&&!retry){
+        // Reuse the serial stream. Only current screen demand can start the retry.
+        this.retryAt.set(key,this.now()+STREAM_TIMEOUT_BACKOFF_MS);this.stats.geometryRetries.scheduled++;
+        console.warn('Village model timed out; one retry available.',request.id,request.level,error.modelWait?.step??null,error);
+        return;
+      }
+      if(this.retryAt?.delete(key))this.stats.geometryRetries.exhausted++;
+      this.failed.add(key);this.stats.geometryError=String(error.message??error);
       console.warn('Village model stopped; no automatic retry.',request.id,request.level,error);
     }).finally(()=>{this.pending=null;this.stats.geometryPending=0;});
   }
-  dispose(){this.disposed=true;this.settledAssets.clear();this.recordsByAsset=null;this.assets=null;this.world.scene.onAfterRenderObservable.remove(this.observer);}
+  dispose(){this.disposed=true;this.retryAt?.clear();this.settledAssets.clear();this.recordsByAsset=null;this.assets=null;this.world.scene.onAfterRenderObservable.remove(this.observer);}
 }

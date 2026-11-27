@@ -5,7 +5,7 @@ import {villagePlacements} from './fixed-layouts.js';
 import {plainsGateAssets} from './v03/settlement-scenery.js';
 import {vistaRenderPlacements} from './v03/scenery-diagnostics.js';
 import outskirtsManifest from '../public/assets/village-plains-outskirts.json' with {type:'json'};
-import {applyVillagePlainsOutskirtsGround} from './village-plains-outskirts-ground.js';
+import {applyVillagePlainsOutskirtsGround,isVillagePlainsOutskirtsGround} from './village-plains-outskirts-ground.js';
 import {createVillageTransform} from './village-environment.js';
 import {placementBounds,villageDemand,VillageGeometryStreaming} from './village-demand.js';
 import {villageLodSources,hasVillageGeometry,VILLAGE_LOD_COVERAGE} from './village-lod.js';
@@ -21,9 +21,10 @@ import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
 import {VillageActiveCandidates,candidateGuardFromLocation} from './village-active-candidates.js';
 import {VillageWorkBudget} from './village-work-budget.js';
-import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
+import {createMapMaterialPreparation,prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot,stacklessError} from './map-load-lifetime.js';
+import {runtimeTimers} from './runtime-timers.js';
 import {InstancedMesh,Mesh,SubMesh} from '@babylonjs/core';
 import {registerSceneryDistanceSource as registerCinematicSceneryLod} from './scenery-distance-state.js';
 import {groupVillageRecords} from './village-scenery-cache.js';
@@ -203,6 +204,7 @@ export function loadStreamedVillage(world,{
     world.villageOutlinesRef=new WeakRef(outlines);
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
+    const retryTimeouts=world.gameplayV03&&(world.mapId==='village'||world.mapId==='great-plains');
     const has=r=>hasVillageGeometry(assets.get(r.id),r.level);
     // Main-thread time of each synchronous stretch of a streamed load once the map is up
     // (diagnostics; phone recording 2026-11-20: long frames while scenery is prepared, with
@@ -212,28 +214,41 @@ export function loadStreamedVillage(world,{
       if(initializing)return;const ms=performance.now()-since;let row=streamLoad[name];if(!row)row=streamLoad[name]={count:0,ms:0,maxMs:0,worst:null};
       row.count++;row.ms+=ms;if(ms>row.maxMs){row.maxMs=ms;row.worst=id+':'+level;}
     };
-    const load=async({id,level})=>{
+    const load=async(request,retry=false)=>{
+      const {id,level}=request;
       if(disposed)return;const asset=assets.get(id),config=asset.levels.find(l=>l.level===level);if(!config)throw new Error('Missing LOD '+id+':'+level);
       const lifetime=new MapLoadLifetime({signal:controller.signal,timeoutMs:modelTimeoutMs,timers:modelTimers}),cancelled=()=>disposed||lifetime.signal.aborted;
       // Which await this asset is in, for the failure record only (primitives; one object per load).
       const wait={step:'prefetch',stepAt:lifetime.now(),started:lifetime.now(),subStep:null},step=name=>{wait.step=name;wait.stepAt=lifetime.now();},signal=lifetime.signal;
+      let beforeInstall=null;
       const operation=lifetime.run(async()=>{
       const work=new VillageWorkBudget(()=>world.villageStreaming?.active,cancelled);
-      await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();
-      step('container');
-      const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime,wait}),{onLate:container=>container?.dispose()});
-      step('setup');
-      lifetime.check();containers.push(container);
-      let since=performance.now();
-      const meshes=geometry(container);
-      const outskirtsGround=applyVillagePlainsOutskirtsGround(world,container,{config:asset.config});
-      if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
-      prepareVillageInstancing(meshes);if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
-      for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
-      for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
-      world.lighting.registerMeshes(meshes);stageTime('setup',since,id,level);
-      step('materials');await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled,signal}));lifetime.check();
-      step('install');since=performance.now();installVillageGeometry(asset,container,level,world);stageTime('install',since,id,level);
+      const materialOptions={cancelled,signal};
+      const outskirtsGround=isVillagePlainsOutskirtsGround(asset.config);
+      let since;
+      // A retry after installation resumes preparation using the existing tier.
+      // In particular, do not replace or duplicate a tier when only ink stalled.
+      if(!retry||!has(request)){
+        await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();
+        step('container');
+        const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime,wait}),{onLate:container=>container?.dispose()});
+        step('setup');
+        beforeInstall=container;lifetime.check();containers.push(container);
+        since=performance.now();
+        const meshes=geometry(container);
+        applyVillagePlainsOutskirtsGround(world,container,{config:asset.config});
+        if(world.cave&&asset.config.category==='rock')for(const mesh of meshes)if(mesh.material)mesh.material.metadata={...mesh.material.metadata,caveRockTone:true,caveRockPaletteOnly:asset.config.surfaceStyle==='cave-palette',caveLegacyLaboratoryClip:laboratoryLegacySource(id)};
+        prepareVillageInstancing(meshes);if(!outskirtsGround){applyVillageToon(meshes,world.lighting);prepareTreeOcclusion(meshes);}
+        for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
+        for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
+        world.lighting.registerMeshes(meshes);stageTime('setup',since,id,level);
+        // During cave entry the surface and its outlines belong to the same LOD.
+        // Installation time between them counts against the remaining preparation slice.
+        if(initializing&&world.cave&&world.gameplayV03)materialOptions.preparation=createMapMaterialPreparation(world.scene,{cancelled});
+        step('materials');await lifetime.run(()=>prepareMapMaterials(meshes,materialOptions));lifetime.check();
+        step('install');since=performance.now();beforeInstall=null;
+        installVillageGeometry(asset,container,level,world);stageTime('install',since,id,level);
+      }
       const instances=recordsByAsset.get(id)??[];
       // 0.4: derived far-distance levels for small scenery (see v04/detail-lod.js).
       if(detailLodEnabled()&&!asset.detailLods){
@@ -268,7 +283,7 @@ export function loadStreamedVillage(world,{
       if(!outskirtsGround){
         since=performance.now();
         for(const mesh of activeSources)outlines.sourceFor(mesh);
-        outlines.addRecords(instances);stageTime('outlines',since,id,level);step('outlines');await lifetime.run(()=>outlines.prepare(activeSources,{cancelled,signal}));lifetime.check();
+        outlines.addRecords(instances);stageTime('outlines',since,id,level);step('outlines');await lifetime.run(()=>outlines.prepare(activeSources,materialOptions));lifetime.check();
       }
       if(level===2&&instances.some(r=>r.essentialStructural)){
         for(const record of instances)if(record.essentialStructural)record.structuralReady=true;
@@ -283,14 +298,21 @@ export function loadStreamedVillage(world,{
         if(work.due('occlusion:'+id))await lifetime.run(()=>work.yield());lifetime.check();
         since=performance.now();world.treeOcclusion.refreshRoots([record.root]);stageTime('occlusion',since,id,level);
       }
-      stats.loadedLods[level]++;stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
+      if(asset.tiers.has(level))stats.loadedLods[level]++;
+      stats.loadedAssets=[...assets.values()].filter(a=>a.source).length;stats.largestTexture=Math.max(stats.largestTexture,config.textureSize);
       });pendingLoads.add(operation);
       try{return await operation;}catch(error){
+        if(retryTimeouts&&!initializing&&error.name==='TimeoutError'&&beforeInstall){
+          // This candidate has no live instances or tiers. Release it before
+          // another import. A late result still uses the original lifetime hook.
+          const owned=containers.indexOf(beforeInstall);if(owned>=0)containers.splice(owned,1);
+          try{beforeInstall.dispose();}catch(cleanupError){lifetime.noteCleanupError(cleanupError);}
+        }
         if(error.name!=='AbortError'){error.assetId??=id;error.level??=level;attachModelWait(error,wait,lifetime.now());stats.modelFailure={name:error.name,code:error.code??null,timeoutMs:error.timeoutMs??null,assetId:id,level,modelWait:error.modelWait??null,message:String(error.message??error)};}
         throw error;
       }finally{pendingLoads.delete(operation);lifetime.close();}
     };
-    const streaming=new VillageGeometryStreaming(world,records,load,has,stats,{recordsByAsset,assets});world.villageStreaming=streaming;
+    const streaming=new VillageGeometryStreaming(world,records,load,has,stats,{recordsByAsset,assets,retryTimeouts,now:runtimeTimers(modelTimers).now});world.villageStreaming=streaming;
     let cleaned=false;
     const stop=()=>{if(disposed)return;disposed=true;controller.abort(mapLoadAbortError());streaming.dispose();textures?.dispose();};
     const cleanup=()=>{

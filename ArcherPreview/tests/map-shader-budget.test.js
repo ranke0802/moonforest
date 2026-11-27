@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {prepareMapMaterials} from '../src/map-shader-cache.js';
+import {createMapMaterialPreparation,prepareMapMaterials} from '../src/map-shader-cache.js';
+import {VillageOutlines} from '../src/village-outlines.js';
 import {prepareModelShaders} from '../src/boss-shader-warmup.js';
 import {createBossPreparation} from '../src/boss-preparation.js';
 import {setFrameWorkContext,frameWorkSnapshot} from '../src/frame-work-coordinator.js';
@@ -31,6 +32,23 @@ test('one thousand cached readiness checks coalesce rather than waiting four che
  let frames=0,checks=0;const f=fixture(()=>{checks++;return true;});
  await prepareMapMaterials(Array.from({length:1000},()=>({...f.mesh})),{now:()=>0,wait:async()=>{frames++;}});
  assert.equal(checks,1000);assert.equal(frames,4,'a CPU-cheap cached batch must not be delayed for 250 scheduling frames');
+});
+test('one cave LOD gives the UI its first frame, then warms surface and ink in order within the remaining slice',async()=>{
+ for(const {installMs,cold,expected} of [
+  {installMs:.25,cold:false,expected:['frame','surface','install','ink']},
+  {installMs:1.5,cold:false,expected:['frame','surface','install','frame','ink']},
+  {installMs:.25,cold:true,expected:['frame','surface','install','ink','frame','ink']},
+ ]){
+  let clock=0,checks=0;const events=[];
+  const f=fixture(()=>{events.push('surface');return true;});
+  const ink={isReady:()=>{events.push('ink');return ++checks>1||!cold;}};
+  const outlines={world:{scene:f.scene},tintedSources:new Set(),materialFor:()=>ink};
+  const preparation=createMapMaterialPreparation(f.scene,{now:()=>clock,wait:async()=>{events.push('frame');clock+=16;}});
+  await prepareMapMaterials([f.mesh],{preparation});
+  events.push('install');clock+=installMs;
+  await VillageOutlines.prototype.prepare.call(outlines,[f.mesh],{preparation});
+  assert.deepEqual(events,expected);
+ }
 });
 test('final model readiness work is charged before returning to a different owner',async()=>{
  let clock=0;const f=fixture(()=>{clock+=1.1;return true;});setFrameWorkContext(f.scene,{active:true,frameId:1});
