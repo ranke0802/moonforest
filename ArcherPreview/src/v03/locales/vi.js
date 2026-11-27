@@ -112,6 +112,7 @@ export default {
   'hud.errandCount':'Việc nhờ {n}','hud.questPage':'Trang nhiệm vụ {n}/{total}',
   'talk.menu.rest':'Nghỉ trọ',
   'settings.playerTexture':'Kết cấu nhân vật','settings.playerTexture2k':'2K (mặc định)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (thiết bị không hỗ trợ)','settings.playerTextureNote':'4K sắc nét hơn nhưng phải tải nhiều hơn. Thay đổi có hiệu lực từ lần vào sau.','settings.playerTextureNext':'Thay đổi sẽ có hiệu lực từ lần vào sau.','settings.playerTextureNote4kOff':'Thiết bị này không dùng được kết cấu 4K nên dùng 2K.',
+  'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (mặc định)',
  },
  story:{
   speakers:{'대장장이':'Thợ rèn','양아버지':'Cha','나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},

@@ -107,5 +107,6 @@ export default {
   'hud.errandCount':'선택 의뢰 {n}','hud.questPage':'의뢰 {n}/{total}쪽',
   'talk.menu.rest':'숙박',
   'settings.playerTexture':'캐릭터 텍스처','settings.playerTexture2k':'2K (기본)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (이 기기 미지원)','settings.playerTextureNote':'4K는 더 선명하고 내려받는 양이 늘어납니다. 바꾸면 다음 접속 때 적용됩니다.','settings.playerTextureNext':'바꾼 값은 다음 접속 때 적용됩니다.','settings.playerTextureNote4kOff':'이 기기는 4K 텍스처를 쓸 수 없어 2K를 씁니다.',
+  'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (기본)',
  },
 };

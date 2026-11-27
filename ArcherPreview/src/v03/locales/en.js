@@ -112,6 +112,7 @@ export default {
   'hud.errandCount':'Errands {n}','hud.questPage':'Quest page {n} of {total}',
   'talk.menu.rest':'Rest',
   'settings.playerTexture':'Character textures','settings.playerTexture2k':'2K (default)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (not supported here)','settings.playerTextureNote':'4K is sharper and downloads more. A change applies from your next visit.','settings.playerTextureNext':'Your change applies from your next visit.','settings.playerTextureNote4kOff':'This device can’t use 4K textures, so 2K is used.',
+  'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (default)',
  },
  story:{
   speakers:{'대장장이':'Blacksmith','양아버지':'Father','나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},

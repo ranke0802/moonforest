@@ -75,20 +75,23 @@ export function playerTextureManifest(character,caps,navigator=globalThis.naviga
 }
 
 // 0.3 character texture detail (2026-11-27, user: "플레이어 2K (모바일,피시 공통 기본값) 4K는
-// 선택 옵션"). 2K on phones and PC unless 4K was chosen and the device can hold the 4K KTX2 set
-// (4096 textures and a GPU-compressed format). The one 2K set built so far is
-// warrior-v3-mobile2k-rgba (PNG/WebP, uncompressed RGBA on the GPU, about 128 MiB against about
-// 80 MiB for the 4K KTX2 set); a GPU-compressed 2K set (scripts/pack-player-mobile2k-ktx2.py,
-// about 32 MiB) has not been converted. Name its manifest here once it is published: devices with
-// a compressed format then take it, the rest keep the RGBA set. 0.2 never calls this.
+// 선택 옵션"). A setting picks 2K or 4K; 4K loads only where the device holds the 4K KTX2 set
+// (4096 textures and a GPU-compressed format), else 2K. The 2K default waits for a GPU-compressed
+// 2K set (scripts/pack-player-mobile2k-ktx2.py, about 32 MiB): the one 2K set built so far,
+// warrior-v3-mobile2k-rgba, is uncompressed RGBA on the GPU (about 128 MiB against about 80 MiB
+// for the 4K KTX2 set), so until then nothing stored means compressed 4K (coordinator decision,
+// 2026-11-27). Naming the compressed 2K manifest here makes 2K the default by itself: devices
+// with a compressed format take it, the rest keep the RGBA set. 0.2 never calls this.
 export const PLAYER_2K_KTX2=null;
+// The detail used when nothing is stored or asked for.
+export const defaultPlayerTextureDetail=(ktx2Manifest=PLAYER_2K_KTX2)=>ktx2Manifest?'2k':'4k';
 export const PLAYER_TEXTURE_DETAILS=Object.freeze(['2k','4k']);
 export function playerTexture4kSupported(caps){
   const {maxTextureSize,formats}=playerTextureCapabilities(caps);
   return maxTextureSize!==null&&maxTextureSize>=4096&&Object.values(formats).some(Boolean);
 }
-// detail: '2k' | '4k' as chosen; source: where the choice came from (default, user, url, legacy-original).
-export function selectEditionPlayerTextureProfile(character,caps,navigator=globalThis.navigator,{detail='2k',source='default',ktx2Manifest=PLAYER_2K_KTX2}={}){
+// detail: '2k' | '4k' as chosen (default: defaultPlayerTextureDetail()); source: where the choice came from (default, user, url, legacy-original).
+export function selectEditionPlayerTextureProfile(character,caps,navigator=globalThis.navigator,{ktx2Manifest=PLAYER_2K_KTX2,detail=defaultPlayerTextureDetail(ktx2Manifest),source='default'}={}){
   const capabilities=playerTextureCapabilities(caps);
   if(!playerAliases.has(character))return {manifest:character==='archer'?'character':character,mobile:false,capabilities};
   const mobile=isMobilePlayerTextureDevice(navigator),requested=detail==='4k'?'4k':'2k',fourK=playerTexture4kSupported(caps);
@@ -102,6 +105,6 @@ export function selectEditionPlayerTextureProfile(character,caps,navigator=globa
     :compressed2k?{manifest:ktx2Manifest,maxSize:2048,encoding:'ktx2-uastc',gpuCompressed:true,...estimates.compressed2k}
     :{manifest:'warrior-v3-mobile2k-rgba',maxSize:2048,encoding:'rgba',gpuCompressed:false,...estimates.rgba2k};
   return {...plan,mobile,preserveSourceResolution:false,estimateScope,capabilities,
-    selectionReason:use4k?'chosen-4k':requested==='4k'?'4k-unsupported-2k':source==='default'?'default-2k':'chosen-2k',
+    selectionReason:use4k?(source==='default'?'default-4k':'chosen-4k'):requested==='4k'?'4k-unsupported-2k':source==='default'?'default-2k':'chosen-2k',
     textureDetail:{value:use4k?'4k':'2k',requested,source,fourKAvailable:fourK}};
 }
