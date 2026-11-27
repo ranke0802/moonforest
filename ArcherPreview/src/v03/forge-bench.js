@@ -148,8 +148,10 @@ export function createForgeBench({scene,camera,canvas,piece=null,slot='sword',re
  const renderer=new ObjectRenderer('v03-forge-bench',scene);
  renderer.renderParticles=false;renderer.renderSprites=false;renderer.renderList=meshes;renderer.activeCamera=camera;
  // View placement (set by layout): the rig's frame in the camera's view space.
- const view=new Matrix(),inverse=new Matrix(),local=new Matrix(),placed=new Matrix(),tilt=new Quaternion(),offset=new Vector3(),spread=new Vector3();
- {const look=FORGE_VIEW.look*Math.PI/180,c=Math.cos(look),s=Math.sin(look);
+ const inverse=new Matrix(),local=new Matrix(),placed=new Matrix(),tilt=new Quaternion(),offset=new Vector3(),spread=new Vector3();
+ // The game scene is right-handed, so camera-forward is negative view Z.
+ const forward=scene.useRightHandedSystem?-1:1;
+ {const look=FORGE_VIEW.look*Math.PI/180,c=Math.cos(look),s=forward*Math.sin(look);
   Quaternion.RotationQuaternionFromAxisToRef(new Vector3(1,0,0),new Vector3(0,c,-s),new Vector3(0,s,c),tilt);}
  let fit=1,focusX=0,focusY=0,pixelHeight=1,laid=false,disposed=false;
  const heatColor=Color3.FromHexString(HEAT),gradeColor=new Color3(),glow=new Color3();
@@ -167,7 +169,7 @@ export function createForgeBench({scene,camera,canvas,piece=null,slot='sword',re
  }
  function place(shakeX,shakeY){
   const metres=2*FORGE_VIEW.distance*Math.tan((camera.fov??.8)/2)/pixelHeight;
-  offset.set((focusX+shakeX)*metres,(focusY+shakeY)*metres,FORGE_VIEW.distance);spread.setAll(fit);
+  offset.set((focusX+shakeX)*metres,(focusY+shakeY)*metres,forward*FORGE_VIEW.distance);spread.setAll(fit);
   Matrix.ComposeToRef(spread,tilt,offset,local);
   camera.getViewMatrix().invertToRef(inverse);local.multiplyToRef(inverse,placed);
   placed.decompose(root.scaling,root.rotationQuaternion,root.position);

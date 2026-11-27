@@ -197,6 +197,7 @@ test('four grades, four results: great keeps the maximum, success and failed wea
 test('the 3D bench uses the game scene: the worn piece, hands, hammer and anvil on their own layer, released on close; a broken stage falls back to 2D',async()=>{
  const engine=new NullEngine(),scene=new Scene(engine);
  try{
+  scene.useRightHandedSystem=true;
   const camera=new ArcRotateCamera('play',.6,1.1,11,new Vector3(2,1,5),scene);
   const sword=MeshBuilder.CreateBox('Golden_Oathblade',{height:1.2,width:.1,depth:.03},scene);sword.material=new StandardMaterial('sword',scene);
   const canvas={getBoundingClientRect:()=>({left:0,top:0,width:1280,height:720})};
@@ -213,12 +214,22 @@ test('the 3D bench uses the game scene: the worn piece, hands, hammer and anvil 
    for(let i=0;i<40&&area.classList.contains('is-flat');i++){await new Promise(done=>setImmediate(done));h.frameAt(16+i);}
    assert.equal(area.classList.contains('is-flat'),false);assert.ok(h.dialog.classList.contains('is-3d'));
    assert.equal(h.document.getElementById('app').dataset.forgeDrawn,'');
+   const piece=bench().find(m=>m.name==='v03-forge-piece-surface');
+   const depth=Vector3.TransformCoordinates(piece.getBoundingInfo().boundingBox.centerWorld,camera.getViewMatrix()).z;
+   assert.ok(depth < -camera.minZ&&depth > -camera.maxZ,'the piece is in front of the right-handed game camera');
    assert.ok(Number.parseFloat(h.dialog.querySelector('.mf-forge-aim').style.getPropertyValue('--ring'))>=44);
    h.at(450);h.tap();assert.equal(area.dataset.grade,'perfect');
    assert.equal(h.dialog.querySelectorAll('.mf-bench-spark').length,0,'the 3D bench throws its own sparks');
    for(let ms=466;ms<2000;ms+=16)h.frameAt(ms);
    assert.equal(bench().find(m=>m.name==='v03-forge-sparks').isVisible,false,'sparks are gone again');
    h.frameAt(2100);assert.equal(h.pending,false,'frames stop after the strike settles');
+   h.timers.find(timer=>timer.ms===450).fn();
+   h.button(t('shop.forgeAgain',{cost:h.economy.forgeCost(h.id)})).click();
+   const {dataset}=h.document.getElementById('app');
+   assert.equal(dataset.forgeStale,'','the previous attempt stays hidden until the new draw');
+   h.frameAt(2116);
+   assert.equal(dataset.forgeDrawn,'');
+   assert.equal(dataset.forgeStale,undefined,'the retry reveals the fresh canvas');
    h.shop.close();
    assert.equal(bench().length,0,'closing the shop releases the bench');
    assert.ok(sword.geometry&&!sword.isDisposed(),'the worn piece keeps its geometry');

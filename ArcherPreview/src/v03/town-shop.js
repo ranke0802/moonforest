@@ -274,7 +274,10 @@ export function createTownShop({root,economy,onChange,onPause,sound=null,stage=n
   if(bench){
    let drawn=false;
    try{drawn=bench.draw(time);}catch(error){console.warn('[Forge bench] draw failed; 2D bench',error);dropBench();}
-   if(drawn&&f.flat){f.flat=false;f.area.classList.remove('is-flat');dialog.classList.add('is-3d');root.dataset.forgeDrawn='';}
+   if(drawn&&f.flat){
+    f.flat=false;f.area.classList.remove('is-flat');dialog.classList.add('is-3d');
+    delete root.dataset.forgeStale;root.dataset.forgeDrawn='';
+   }
    else if(!drawn&&f.flat&&++f.waits>FLAT_AFTER_FRAMES)dropBench();
   }
   if(!f.struck||(bench&&!f.flat&&time<f.until))frame=win.requestAnimationFrame(drawBench);
