@@ -74,6 +74,28 @@ test('quota rejection cancels the stream and stops prefetch without retrying the
  assert.equal(state.storageAvailable,false);assert.equal(state.complete,false);assert.equal(cancelled,1);assert.equal(s.calls.length,1);
  await s.downloads.prepare([a,b]);assert.equal(s.calls.length,1,'actual loader handles storage fallback; prefetch does not repeat');
 });
+test("a browser's CacheStorage write error falls back to the HTTP loader",async()=>{
+ const s=setup();
+ s.cache.put=async()=>{throw new DOMException('Cache.put() encountered a network error','NetworkError');};
+ const state=await s.downloads.prepare([a,b],e=>s.events.push(e));
+ assert.equal(state.storageAvailable,false);
+ assert.equal(state.complete,false);
+ assert.equal(s.events.at(-1).unavailable,true);
+ assert.equal(s.calls.length,1);
+ await s.downloads.prepare([a,b]);
+ assert.equal(s.calls.length,1);
+});
+test('a truncated response cannot fall back when CacheStorage wraps the body error',async()=>{
+ const s=setup();
+ s.downloads.fetcher=async()=>new Response(new Uint8Array(3));
+ s.cache.put=async(url,response)=>{
+  try{await response.arrayBuffer();}
+  catch{throw new DOMException('Cache.put() encountered a network error','NetworkError');}
+ };
+ await assert.rejects(s.downloads.prepare([a],e=>s.events.push(e)),/불완전/);
+ assert.ok(s.events.every(e=>!e.unavailable&&!e.complete));
+});
+
 test('map departure cancels the active stream and queued jobs but preserves completed files for the next map',async()=>{
  const s=setup();await s.downloads.prepare([a]);let signal,cancelled=0,started;
  const reading=new Promise(resolve=>{started=resolve;});

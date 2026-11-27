@@ -162,7 +162,7 @@ export class ResourceDownloads {
       }
       if(signal.aborted){await response.body?.cancel().catch(()=>{});signal.throwIfAborted();}
       if(!response.ok)throw new Error(`리소스 다운로드 실패 (${response.status})`);
-      let received=0;const reader=response.body?.getReader();
+      let received=0,bodyFailure=null;const reader=response.body?.getReader();
       const abortRead=()=>{reader?.cancel(signal.reason).catch(()=>{});};
       signal.addEventListener('abort',abortRead,{once:true});
       const incomplete=()=>new Error('리소스가 불완전하게 다운로드되었습니다. 다시 시도해 주세요.');
@@ -178,7 +178,7 @@ export class ResourceDownloads {
             if(done){if(received!==size)throw incomplete();controller.close();return;}
             received+=value.byteLength;if(received>size)throw incomplete();
             count(value.byteLength);controller.enqueue(value);
-          }catch(error){controller.error(error);await reader.cancel(error).catch(()=>{});}
+          }catch(error){bodyFailure=error;controller.error(error);await reader.cancel(error).catch(()=>{});}
         },cancel:reason=>reader.cancel(reason),
       },{highWaterMark:0}):null;
       try{
@@ -194,7 +194,11 @@ export class ResourceDownloads {
         // A late failed write must not delete a successful same-hash retry.
         // CacheStorage commits complete bodies atomically; aborted writes need
         // no global cleanup or cache deletion while a new owner may be active.
-        if(storageDenied(error)){
+        signal.throwIfAborted();
+        // Chromium can wrap either a failed body or its own CacheStorage
+        // stream write in NetworkError. Only the latter permits HTTP fallback.
+        if(bodyFailure)throw bodyFailure;
+        if(storageDenied(error)||reader&&error?.name==='NetworkError'){
           this.ledger.fail(row,phase,error);job.failureRecorded=true;
           this.storageUnavailable=true;state.storageAvailable=false;
           onProgress({...state,ratio:0,unavailable:true});return state;
