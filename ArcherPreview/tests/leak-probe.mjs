@@ -21,6 +21,9 @@ import {createStarfallAura} from '../src/v03/starfall-aura.js';
 // left after the next map loads like riding-horse.js; aura = one scene-lifetime
 // Starfall aura bound to that horse root each visit (2026-11-27).
 const MODES=new Set((process.env.PROBE_MODE??'').split(',').map(s=>s.trim()).filter(Boolean));
+// Only these are read; any other word (CLAUDE.md once listed resources,ground,frames,materials,cast)
+// would otherwise pass silently as if it had been checked (2026-11-27 audit).
+const KNOWN_MODES=new Set(['horse','aura']),unknownModes=[...MODES].filter(mode=>!KNOWN_MODES.has(mode));
 
 const base=new URL('../public/assets/',import.meta.url),tick=()=>new Promise(r=>setTimeout(r,0));
 const rounds=Number(process.argv[2]??3),snapshot=process.argv[3]??null;
@@ -44,7 +47,7 @@ const pixel=scene=>RawTexture.CreateRGBATexture(new Uint8Array([128,128,128,255]
 const services={initialize:async()=>{},ground:async world=>{const material=world.floorMaterial;if(material&&!material.pluginManager?.getPlugin('MoonforestGroundDetail'))new VillageGroundDetail(material,pixel(world.scene));},loadContainer};
 const place=()=>{const p=world.plains?{x:-55,z:37}:{x:0,z:70};world.camera.setTarget(new Vector3(p.x,world.terrain.heightAt(p.x,p.z)+WARRIOR_DIMENSIONS.stableFocusHeight,p.z));world.camera.alpha=1.2;world.camera.beta=.95;world.camera.radius=13;world.camera.getViewMatrix();world.camera.getProjectionMatrix();readyRaw();return p;};
 const mb=()=>{globalThis.gc();const m=process.memoryUsage();return {heap:Math.round(m.heapUsed/1e6),ext:Math.round(m.external/1e6),ab:Math.round(m.arrayBuffers/1e6)};};
-const weak=[];const log=[];let horse=null;const aura=MODES.has('aura')?createStarfallAura({scene}):null;say('modes',[...MODES].join(',')||'none');
+const weak=[];const log=[];let horse=null;const aura=MODES.has('aura')?createStarfallAura({scene}):null;say('modes',[...MODES].join(',')||'none');if(unknownModes.length)say('unknown modes (not checked):',unknownModes.join(','),'- known:',[...KNOWN_MODES].join(','));
 for(let visit=0;visit<rounds*2;visit++){
  const character=visit%2?'warrior-v3':'warrior-plains';if(visit)replaceWorldMap(world,character);const p=place();
  say('load',character,Date.now()-T0);let n=0;const svc={...services,loadContainer:async(...a)=>{n++;return services.loadContainer(...a);}};
