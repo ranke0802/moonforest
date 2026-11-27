@@ -5,7 +5,15 @@ import {registerGLTFExtension} from '@babylonjs/loaders/glTF/2.0/glTFLoaderExten
 // pose with only its first and last key. Both ends stay because the runtime
 // clamps playback to a channel's own frame range.
 const EPSILON=1e-5;
-export const animationCompaction={enabled:false,channels:0,keys:0,ms:0};
+export const animationCompaction={enabled:false,channels:0,keys:0,ms:0,seenKeys:0,files:{}};
+// Per glTF file (diagnostics, 2026-11-27): how often its clips were parsed and
+// how many keys that allocated. A file that grows every visit is reloaded per map.
+const FILE_LIMIT=32;
+function countFile(file,groups,seen,removed){
+  if(!file)return;const files=animationCompaction.files;let row=files[file];
+  if(!row){if(Object.keys(files).length>=FILE_LIMIT)return;row=files[file]={groups:0,seenKeys:0,removedKeys:0};}
+  row.groups+=groups;row.seenKeys+=seen;row.removedKeys+=removed;
+}
 
 function steady(first,value){
   if(typeof first==='number')return typeof value==='number'&&Math.abs(value-first)<=EPSILON;
@@ -35,15 +43,16 @@ export function compactChannel(animation){
   return removed;
 }
 
-export function compactAnimationGroup(group){
+export function compactAnimationGroup(group,file=null){
   const channels=group?.targetedAnimations;
   if(!channels)return 0;
-  const started=performance.now();let removed=0;
+  const started=performance.now();let removed=0,seen=0;
   for(let i=0;i<channels.length;i++){
+    seen+=channels[i].animation?.getKeys?.()?.length??0;
     const dropped=compactChannel(channels[i].animation);
     if(dropped){removed+=dropped;animationCompaction.channels++;}
   }
-  animationCompaction.keys+=removed;animationCompaction.ms+=performance.now()-started;
+  animationCompaction.keys+=removed;animationCompaction.seenKeys+=seen;countFile(file,1,seen,removed);animationCompaction.ms+=performance.now()-started;
   return removed;
 }
 
@@ -53,7 +62,7 @@ const name='MOONFOREST_compact_animation';
 export function compactionExtension(loader){
   return {name,enabled:animationCompaction.enabled,
     // The loader skips this extension on the nested call, so this wraps the stock load.
-    loadAnimationAsync(context,animation){return loader.loadAnimationAsync(context,animation).then(group=>{compactAnimationGroup(group);return group;});},
+    loadAnimationAsync(context,animation){return loader.loadAnimationAsync(context,animation).then(group=>{compactAnimationGroup(group,typeof loader._fileName==='string'?loader._fileName.split('?')[0].slice(-64):null);return group;});},
     dispose(){}};
 }
 registerGLTFExtension(name,false,compactionExtension);
