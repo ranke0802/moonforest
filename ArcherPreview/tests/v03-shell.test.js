@@ -11,6 +11,7 @@ import {createOpening,dreamSeconds,DREAM_BEATS,INTRO} from '../src/v03/opening.j
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
 import {createSaveSession,readIntent} from '../src/v03/save-slots.js';
 import {setTypewriterEnabled} from '../src/v03/typewriter.js';
+import {CHOICE_ARM_MS} from '../src/v03/dialogue.js';
 
 // These flows assert whole lines and one key per line; typing is covered by
 // tests/v03-typewriter.test.js.
@@ -20,6 +21,10 @@ const E='moonforest-0.3';
 const instant=()=>Promise.resolve();
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 async function settle(times=12){for(let i=0;i<times;i++)await tick();}
+// The innkeeper opens with a menu (2026-11-27): a pick counts once the choices have stood a quarter second.
+const armed=()=>new Promise(resolve=>setTimeout(resolve,CHOICE_ARM_MS+20));
+const menuShown=doc=>doc.querySelector('.v03-dialogue-choices')?.hidden===false;
+async function pickEntry(doc,at){await armed();const entries=[...doc.querySelectorAll('.v03-dialogue-choice')];entries.at(at).click();await settle(4);}
 // 새로하기 → a slot → chapter one; 불러오기 → a slot → a chapter (user, 2026-11-24 21:07).
 async function newGame(h,slot=1){h.click('[data-action="new"]');await settle();h.click(`.v03-slot[data-slot="${slot}"]`);await settle();h.click('[data-chapter="1"]');}
 async function loadGame(h,slot,chapter=1){h.click('[data-action="load"]');await settle();h.click(`.v03-slot[data-slot="${slot}"]`);await settle();h.click(`[data-chapter="${chapter}"]`);}
@@ -138,7 +143,7 @@ test('village quest markers sample only visible heads; talk range drops out imme
  document.querySelector('.v03-prompt').click();assert.equal(story.dialogueOpen,true);
  events.length=0;heights.length=0;frame();frame();
  assert.equal(shown.size,0);assert.deepEqual(events,[{id:'elder',glyph:null}]);assert.equal(heights.length,0);assert.deepEqual(pins.at(-1),[]);
- document.querySelector('.v03-dialogue-next').click();await settle(2);
+ assert.equal(menuShown(document),true,'the innkeeper asks first');await pickEntry(document,-1);
  assert.equal(story.dialogueOpen,false);frame();assert.deepEqual([...shown.keys()],['elder']);assert.equal(pins.at(-1)[0].x,at.x);
 });
 
@@ -191,10 +196,12 @@ test('chapters: a returning warrior finishes the original slot, reads Elena’s 
  async function talk(id){
   const npc=NPCS.find(row=>row.id===id);Object.assign(h.player.position,{x:npc.x,z:npc.z});tick();
   assert.equal(h.shell.inspect().story.near,id);h.click('.v03-prompt');assert.equal(h.shell.story.dialogueOpen,true);
+  if(menuShown(h.document))await pickEntry(h.document,0);
  }
  async function finishDialogue(){
-  for(let i=0;i<22&&h.shell.story.dialogueOpen;i++)h.click('.v03-dialogue-next');
-  await settle();assert.equal(h.shell.story.dialogueOpen,false);
+  for(let i=0;i<22&&h.shell.story.dialogueOpen&&!menuShown(h.document);i++)h.click('.v03-dialogue-next');
+  await settle();if(menuShown(h.document))await pickEntry(h.document,-1);
+  assert.equal(h.shell.story.dialogueOpen,false);
  }
  async function back(){assert.equal(await h.shell.returnToTitle(),true);await settle();}
  try{
@@ -710,7 +717,11 @@ test('story: first fight coaching, driver talk, village cast, rest effect and sa
  // Arriving in the village shows its name in the middle of the screen.
  assert.equal(hud('.v03-place-name').textContent,'몬트하임 마을');assert.equal(hud('.v03-place').hidden,false);assert.ok(hud('.v03-place').classList.contains('is-shown'));
  h.player.position={x:-3.4,z:10.6};h.shell.update(.016);assert.equal(hud('.v03-prompt').getAttribute('aria-label'),'여관 주인과 이야기하기');assert.equal(hud('.v03-prompt-mark').hidden,true);assert.equal(h.document.documentElement.dataset.v03Cursor,'talk','the cursor offers a conversation');hud('.v03-prompt').dispatchEvent(new h.window.Event('click',{bubbles:true,cancelable:true}));await settle();
+ // The innkeeper asks first (2026-11-27): 대화하기 plays his quest line, which no longer rests by itself.
+ assert.equal(menuShown(h.document),true);await armed();key('KeyE');await settle();
  for(let i=0;i<5;i++)key('Space');await settle();
+ assert.equal(h.log.includes('rest'),false,'talking does not rest');assert.equal(menuShown(h.document),true,'back at his choices');
+ await armed();key('KeyD');key('KeyE');await settle();
  assert.ok(h.log.includes('rest'));assert.ok(h.shell.inspect().story.tips.includes('rest'));assert.equal(hud('.v03-quest-title').textContent,'사람들이 기억하는 성녀');assert.equal(hud('.v03-quest-objective').textContent,'주민 세 사람의 이야기 듣기 (0/3)');
  assert.ok(h.log.includes('gold:v03-quest-M00:30'),'M00 pays its gold reward once');assert.equal(h.log.filter(x=>x.startsWith('gold:v03-quest-M00')).length,1);
  // A later document resumes the same quest step.
@@ -788,8 +799,10 @@ test('errands: a first greeting once, an errand offered after its main quest, th
  const talk=async(id,lines)=>{
   const member=h.shell.inspect().story.cast.find(row=>row.id===id);h.player.position={x:member.x,z:member.z};h.shell.update(.016);
   key('KeyE');await settle();const said=[];
+  if(menuShown(h.document)){await armed();key('KeyE');await settle();}
   for(let i=0;i<lines;i++){said.push(hud('.v03-dialogue-text').textContent);key('KeyE');await settle(2);}
-  await settle();h.shell.update(.016);return said;
+  await settle();if(menuShown(h.document)){await armed();key('Escape');await settle();}
+  h.shell.update(.016);return said;
  };
  // Errand pages (2026-11-27): none and no count line until one is taken.
  const errandPage=()=>h.document.querySelector('.v03-quest-errand');

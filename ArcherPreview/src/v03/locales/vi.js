@@ -108,6 +108,7 @@ export default {
   // Optional errands (2026-11-24).
   'hud.errand':'Việc nhờ','errand.accepted':'Việc nhờ · {title}','errand.done':'Hoàn thành việc nhờ','errand.received':'Đã nhận · {items}',
   'hud.errandCount':'Việc nhờ {n}','hud.questPage':'Trang nhiệm vụ {n}/{total}',
+  'talk.menu.rest':'Nghỉ trọ',
  },
  story:{
   speakers:{'대장장이':'Thợ rèn','양아버지':'Cha','나':'Tôi','마부':'Người đánh xe','여관 주인':'Chủ quán trọ','노년 여성':'Bà lão','약초사':'Thầy thuốc','촌장':'Trưởng làng','청년':'Chàng trai','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
@@ -162,6 +163,7 @@ export default {
    'smith-chain':['Nghe nói sâu bên kia rừng có cái xác mặc giáp đi lại. Gỡ một mắt xích của nó mang về cho ta.','Nhìn sắt là biết nó đã ở đâu, bao lâu. Sắt không biết nói dối mà.','Hạ được tên chiến binh quỷ ăn xác thì cháu mang về.'],
    'smith-chain-wait':['Một mắt xích là đủ. Gỡ từ cái xác mặc giáp ấy.'],
    'smith-chain-done':['…Xích cũ đấy. Mắt nào cũng bị nước ăn mòn. Thứ đó ở lâu bên mép nước trong rừng.','Ai mặc thì ta không biết. Ta chỉ biết sắt thôi. Ghi lại cùng chuyện nước mà thầy thuốc kể, gửi cho giáo hội.'],
+   'inn-menu':['Vào đi. Nghỉ lại đây, hay muốn trò chuyện?'],
   },
   quests:{
    M00:{title:'Sói và xe ngựa',steps:{fight:'Đánh đuổi con sói',wagon:'Giúp bác đánh xe dựng xe ngựa lên',driver:'Nói chuyện với người đánh xe',road:'Đi theo con đường đến Làng Mondheim'}},

@@ -103,5 +103,6 @@ export default {
   // Optional errands (2026-11-24).
   'hud.errand':'선택 의뢰','errand.accepted':'선택 의뢰 · {title}','errand.done':'의뢰 완료','errand.received':'받음 · {items}',
   'hud.errandCount':'선택 의뢰 {n}','hud.questPage':'의뢰 {n}/{total}쪽',
+  'talk.menu.rest':'숙박',
  },
 };

@@ -108,6 +108,7 @@ export default {
   // Optional errands (2026-11-24).
   'hud.errand':'Errand','errand.accepted':'Errand · {title}','errand.done':'Errand complete','errand.received':'Received · {items}',
   'hud.errandCount':'Errands {n}','hud.questPage':'Quest page {n} of {total}',
+  'talk.menu.rest':'Rest',
  },
  story:{
   speakers:{'대장장이':'Blacksmith','양아버지':'Father','나':'Me','마부':'Driver','여관 주인':'Innkeeper','노년 여성':'Old Woman','약초사':'Herbalist','촌장':'Village Chief','청년':'Young Man','요아힘':'Joachim','비비앙':'Vivian','엘레나':'Elena'},
@@ -162,6 +163,7 @@ export default {
    'smith-chain':['They say a corpse in armor walks deep past the forest. Bring me one link from that chain.','Iron tells me where it’s been and for how long. Iron doesn’t lie.','If I bring down that ghoul warrior, I’ll bring you one.'],
    'smith-chain-wait':['One chain link is enough. Take it off the armored corpse.'],
    'smith-chain-done':['…Old chain. Every link is eaten by water. That thing spent a long time by the forest water.','Who wore it, I can’t say. I only know iron. Write it to the Church together with what the herbalist told you about the water.'],
+   'inn-menu':['Welcome. Staying the night, or here to talk?'],
   },
   quests:{
    M00:{title:'The Wolf and the Wagon',steps:{fight:'Fight off the wolf',wagon:'Help the driver right the wagon',driver:'Talk to the driver',road:'Follow the road to Mondheim Village'}},

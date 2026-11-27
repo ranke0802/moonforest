@@ -240,7 +240,7 @@ test('the smith keeps the blacksmith sheet; the coachman has his own picture sin
 });
 
 test('the service people greet in one short line of their own, in every language',()=>{
- for(const id of ['smith','herbalist']){
+ for(const id of ['smith','herbalist','innkeeper']){
   const npc=NPCS.find(row=>row.id===id),lines=DIALOGUES[npc.menu];
   assert.equal(lines?.length,1,id);assert.equal(lines[0].who,npc.name);
   for(const [lang,pack] of Object.entries(PACKS)){
@@ -251,7 +251,7 @@ test('the service people greet in one short line of their own, in every language
 });
 
 test('the smith offers talk, shop and tempering, the herbalist talk and shop; ending the talk is always last',()=>{
- assert.deepEqual(SERVICE_MENUS,{smith:['shop','forge'],herbalist:['shop']});
+ assert.deepEqual(SERVICE_MENUS,{smith:['shop','forge'],herbalist:['shop'],innkeeper:['rest']});
  assert.equal(serviceMenu('driver'),null);assert.equal(serviceMenu('elder'),null);
  try{
   for(const [lang,pack] of Object.entries(PACKS)){

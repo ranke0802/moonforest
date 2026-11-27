@@ -98,6 +98,7 @@ export default {
   // Optional errands (2026-11-24).
   'hud.errand':'委托','errand.accepted':'委托 · {title}','errand.done':'委托完成','errand.received':'获得 · {items}',
   'hud.errandCount':'委托 {n}','hud.questPage':'任务第 {n}/{total} 页',
+  'talk.menu.rest':'住宿',
  },
  story:{
   speakers:{'대장장이':'铁匠','양아버지':'父亲','나':'我','마부':'车夫','여관 주인':'旅店老板','노년 여성':'老妇人','약초사':'草药师','촌장':'村长','청년':'青年','요아힘':'约阿希姆','비비앙':'薇薇安','엘레나':'艾莲娜'},
@@ -152,6 +153,7 @@ export default {
    'smith-chain':['听说林子深处有穿甲的尸首在游荡。从那条锁链上掰个环给我带回来。','看铁就知道它在哪儿待过多久。铁不会骗人。','要是打倒了食尸鬼战士，我就带回来。'],
    'smith-chain-wait':['一个链环就够。从那穿甲的尸首上掰下来。'],
    'smith-chain-done':['……是条老链子。每个环上都有被水蚀的痕迹。那东西在林中水边待了很久。','是谁穿过的我不知道。我只懂铁。连同草药师说的水的事，一起写给教会。'],
+   'inn-menu':['来啦。歇一晚，还是聊几句？'],
   },
   quests:{
    M00:{title:'狼与马车',steps:{fight:'击退狼',wagon:'帮车夫把马车扶起来',driver:'与车夫交谈',road:'沿着路前往蒙特海姆村'}},

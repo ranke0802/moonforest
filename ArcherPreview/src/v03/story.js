@@ -13,7 +13,7 @@ import {createGuideTrack} from './guide-track.js';
 import {PLAINS_MONSTER_GROUPS} from '../plains-monster-spawns.js';
 import {portraitFor} from './portraits.js';
 import {t,speaker} from './i18n.js';
-import {SERVICE_MENUS,serviceMenu} from './service-menu.js';
+import {SERVICE_MENUS,STORY_SERVICES,serviceMenu} from './service-menu.js';
 import {clearAlpha} from './title-camera.js';
 import {blocksView} from '../tree-occlusion.js';
 import {createAuthoredPlacementNavigation} from '../authored-placement-runtime.js';
@@ -565,21 +565,26 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   warmStoryVisuals();warmLoot();
   try{const player=api.getPlayer()?.position,exit=Object.values(content.ROUTES?.[id]??{})[0];if(player&&exit)api.world.navigation?.path?.(player,exit,GUIDE_PATH_RADIUS);}catch{/* warm-up only */}
  }
- function runEffects(lines){
+ // A night at the inn: health and potions back, the journey written down.
+ function restAtInn(){api.rest?.();save.touch({});hud.flash(t('hud.rested'));trigger('effect:rest');}
+ // rest: false where resting is the menu's own choice (the innkeeper, 2026-11-27): his lines then only talk.
+ function runEffects(lines,{rest=true}={}){
   for(const line of lines)for(const effect of line.effects??[]){
    if(effect==='right-wagon')continue;// handled by interact (needs the member)
-   if(effect==='rest'){api.rest?.();save.touch({});hud.flash(t('hud.rested'));trigger('effect:rest');}
+   if(effect==='rest'){if(rest)restAtInn();continue;}
    // give:<item>:<count> — the speaker hands bag items over (errand materials).
    if(effect.startsWith('give:')){const [,item,count]=effect.split(':'),n=Number(count)||1;if(!replaying&&api.grantItem?.(item,n)){hud.flash(t('errand.received',{items:itemName(item)+' ×'+n}));refreshErrands();}}
   }
  }
- // The smith and the herbalist ask what the visit is for (service-menu.js).
+ // The smith, the herbalist and the innkeeper ask what the visit is for (service-menu.js).
  async function interact(){
   if(!started||talking||dialogue.open||api.battle.combatCount>0)return false;
   // While the wagon waits, E means push (at the roof side next to the driver).
   if(lift.active)return nearLift(api.getPlayer?.()?.position)?push():false;
   if(!near)return false;
-  const member=near,npc=member.npc.id,services=!!(api.openTownShop&&dialogue.choose&&SERVICE_MENUS[npc]);
+  const member=near,npc=member.npc.id,menu=SERVICE_MENUS[npc];
+  const services=!!(dialogue.choose&&menu&&(api.openTownShop||menu.every(id=>STORY_SERVICES.includes(id))));
+  const restInMenu=services&&menu.includes('rest');
   const script=()=>{
    const questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc);
    const greeting=!questLine&&!errand&&!greeted.has(npc)?member.npc.greet:null;
@@ -600,7 +605,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(questLine?.startsWith('journal-')&&dialogue.open)onScene?.(questLine);
    const played=await playing;if(stage)stageMark(stage+(played?':end':':cancel'));
    if(played&&!disposed){
-    runEffects(played);
+    runEffects(played,{rest:!restInMenu});
     // Setting the wagon up: the step completes when it stands again (updateLift).
     const heave=played.some(line=>line.effects?.includes('right-wagon'));
     if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
@@ -618,7 +623,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     const hello=content.DIALOGUES[member.npc.menu]?.[0];
     const choice=await dialogue.choose(serviceMenu(npc,waiting.questLine||waiting.errand),{who:hello?.who??member.npc.name,line:hello?.text??null});
     if(disposed||!choice||choice==='leave')break;
-    if(choice==='talk')await converse();else await api.openTownShop(npc,choice);
+    if(choice==='talk')await converse();
+    else if(choice==='rest'){restAtInn();break;}
+    else await api.openTownShop(npc,choice);
    }
   }finally{talking=false;member.visual.talk?.(false);if(!disposed)api.input.setSuspended(false);}
   if(stage&&!disposed)stageMark('play');

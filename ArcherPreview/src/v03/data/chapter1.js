@@ -24,7 +24,7 @@ export const ROUTES=Object.freeze({
 export const NPCS=Object.freeze([
  {id:'foster-father',name:'양아버지',visual:'sword-instructor',map:'village',x:7.3,z:-7.5,yaw:-.92,roam:false,idle:'instructor-idle',greet:'instructor-home'},
  {id:'driver',name:'마부',visual:'driver',map:'great-plains',x:-72.87,z:-30.14,yaw:.42,idle:'driver-idle'},
- {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle'},
+ {id:'innkeeper',name:'여관 주인',visual:'innkeeper',map:'village',x:-3.4,z:10.6,yaw:1.2,idle:'inn-idle',menu:'inn-menu'},
  {id:'elder',name:'노년 여성',visual:'elder',map:'village',x:4.2,z:-2.6,yaw:-1.9,idle:'elder-idle',greet:'elder-greet'},
  {id:'smith',name:'대장장이',visual:'smith',map:'village',x:7.4,z:3.5,yaw:-1.4,idle:'smith-idle',greet:'smith-greet',menu:'smith-menu'},
  {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle',greet:'herbalist-greet',menu:'herbalist-menu'},
@@ -158,6 +158,10 @@ export const DIALOGUES=Object.freeze({
  ],
  'herbalist-menu':[
   {who:'약초사',text:'어서 오세요. 오늘은 뭐가 필요하세요?'},
+ ],
+ // 2026-11-27: the innkeeper asks first (rest or talk); neutral for someone long away.
+ 'inn-menu':[
+  {who:'여관 주인',text:'어서 와. 쉬어 갈 텐가, 얘기나 할 텐가?'},
  ],
  'herbalist-witness':[
   {who:'약초사',text:'성녀님은 상처 씻을 물을 몇 번이고 데워 가셨어요. 제 약통도 자주 빌려 가셨고요. 늘 꽉 채워서 돌려주셨어요.'},
