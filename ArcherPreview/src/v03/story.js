@@ -6,7 +6,7 @@ import {Quaternion,Vector3} from '@babylonjs/core/Maths/math.vector.js';
 import {STRIKE_LUNGE} from './strike-approach.js';
 import {createQuestLog} from './quests.js';
 import {createErrandLog} from './errands.js';
-import {itemName} from './town-items.js';
+import {itemName,STOCK,RECIPES} from './town-items.js';
 import {createDialogue} from './dialogue.js';
 import {createPlayHud} from './play-hud.js';
 import {createGuideTrack} from './guide-track.js';
@@ -202,20 +202,57 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   for(const group of PLAINS_MONSTER_GROUPS){const {x,z}=group.territory,sq=(x-player.x)**2+(z-player.z)**2;if(sq<64||sq>=bestSq)continue;bestSq=sq;den={id:group.id,x,z};}
   return den;
  }
- function guideTarget(player){
-  const step=log.step();if(!step)return null;
-  if(step.type==='defeat'){
-   if(step.map&&step.map!==mapId){const exit=content.ROUTES?.[mapId]?.[step.map];if(!exit)return null;guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};}
-   if(step.at&&!livingFoe(step.kind)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
-   // Lead toward the nearest living foe, stopping short of it.
-   let best=null,bestSq=Infinity;
-   for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind&&foe.questFamily!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
-   if(best&&bestSq<16)return null;
-   if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};}
-   // No beast awake nearby: lead to the nearest plains den instead of vanishing.
-   const den=!step.kind&&mapId==='great-plains'?nearestDen(player):null;if(!den)return null;
-   guidePoint.x=den.x;guidePoint.z=den.z;return {key:'den:'+den.id,direct:false,stopShort:3};
+ // A defeat step's way: out toward its map, its spot, the nearest living foe of
+ // its kind, the nearest plains den; null when there (circle the player).
+ function defeatTarget(player,step){
+  if(step.map&&step.map!==mapId){const exit=content.ROUTES?.[mapId]?.[step.map];if(!exit)return null;guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+step.map,direct:false,stopShort:0};}
+  if(step.at&&!livingFoe(step.kind)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
+  // Lead toward the nearest living foe, stopping short of it.
+  let best=null,bestSq=Infinity;
+  for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||step.kind&&(foe.summonKind??foe.kind)!==step.kind&&foe.questFamily!==step.kind)continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
+  if(best&&bestSq<16)return null;
+  if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};}
+  // No beast awake nearby: lead to the nearest plains den instead of vanishing.
+  const den=!step.kind&&mapId==='great-plains'?nearestDen(player):null;if(!den)return null;
+  guidePoint.x=den.x;guidePoint.z=den.z;return {key:'den:'+den.id,direct:false,stopShort:3};
+ }
+ // The nearest of these people on this map, else the way out toward the first one's map.
+ function npcTarget(player,ids){
+  let best=null,bestSq=Infinity,away=null;
+  for(const id of ids??[]){
+   const member=cast.find(row=>row.npc.id===id);
+   if(member){const sq=(member.x-player.x)**2+(member.z-player.z)**2;if(sq<bestSq){best=member;bestSq=sq;}}
+   else away??=content.NPCS?.find(npc=>npc.id===id);
   }
+  if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'npc:'+best.npc.id,direct:false,stopShort:1.4};}
+  const exit=away&&content.ROUTES?.[mapId]?.[away.map];if(!exit)return null;
+  guidePoint.x=exit.x;guidePoint.z=exit.z;return {key:'exit:'+away.map,direct:false,stopShort:0};
+ }
+ // Who keeps the bench or the stall a village step needs (2026-11-27): craft at the
+ // herbalist (or whoever has the recipe), forge and repair at the smith, buy where it is sold.
+ function townHost(step){
+  if(step.action==='forge'||step.action==='repair')return 'smith';
+  if(step.action==='craft')return Object.keys(RECIPES).find(shop=>step.item&&RECIPES[shop][step.item])??'herbalist';
+  if(step.action==='buy')return Object.keys(STOCK).find(shop=>step.item&&STOCK[shop][step.item]!==undefined)??null;
+  return null;
+ }
+ // The way for the errand on the quest panel's page (2026-11-27, user: the light only
+ // ever followed the main quest). A step with no place of its own: the errand's giver.
+ function errandTarget(player,errand){
+  const step=errands.step(errand.id);if(!step)return null;
+  if(step.type==='defeat'&&(!step.map||step.map===mapId||content.ROUTES?.[mapId]?.[step.map]))return defeatTarget(player,step);
+  let target=null;
+  if(step.type==='talk'||step.type==='deliver')target=npcTarget(player,step.targets);
+  else if(step.type==='town'){const host=townHost(step);if(host)target=npcTarget(player,[host]);}
+  else if(step.type==='reach'){const exit=content.ROUTES?.[mapId]?.[step.map];if(exit){guidePoint.x=exit.x;guidePoint.z=exit.z;target={key:'exit:'+step.map,direct:false,stopShort:0};}}
+  return target??npcTarget(player,[errand.giver]);
+ }
+ function guideTarget(player){
+  // The page the quest panel shows decides what the light leads to; main by default.
+  const shown=questPage&&errands.isActive(questPage)?errands.errand(questPage):null;
+  if(shown)return errandTarget(player,shown);
+  const step=log.step();if(!step)return null;
+  if(step.type==='defeat')return defeatTarget(player,step);
   if(step.type==='talk'){
    let best=null,bestSq=Infinity,away=null;
    for(const id of step.targets){
@@ -311,7 +348,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   // driver's talk), and not while a fight is on: it would only add glare and
   // overdraw around the player where the combat effects already are.
   const opening=log.quest()?.id==='M00'&&log.step()?.id==='fight';
-  if(!createGuide||guide.failed||talking||dialogue.open||!player||!log.step()||opening||combatLocksTravel()){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
+  if(!createGuide||guide.failed||talking||dialogue.open||!player||!(log.step()||questPage)||opening||combatLocksTravel()){guide.visual?.hide();guide.key=null;guide.shown=false;return;}
   try{guide.visual??=createGuide(api.world.scene);}catch(error){guide.failed=true;console.warn('[MoonForest 0.3] guide light unavailable',error);return;}
   // Its explanation card comes with the light's first appearance (once per record).
   trigger('guide-shown');
