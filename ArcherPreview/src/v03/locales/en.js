@@ -116,7 +116,7 @@ export default {
   'talk.menu.rest':'Rest',
   'settings.playerTexture':'Character textures','settings.playerTexture2k':'2K (default)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (not supported here)','settings.playerTextureNote':'4K is sharper and downloads more. A change applies from your next visit.','settings.playerTextureNext':'Your change applies from your next visit.','settings.playerTextureNote4kOff':'This device can’t use 4K textures, so 2K is used.',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (default)',
- 'waves.start':'Stage {n} raid!','waves.cleared':'Stage {n} cleared!','waves.allCleared':'All {n} stages held!','waves.lost':'Pushed back from the palisade · Talk again to retry this stage','waves.cancelled':'You left the village · The defense has stopped','waves.unavailable':'The defense can’t start right now','waves.objective.fight':'Stage {n}/{total} · {left} fiends left','waves.objective.idle':'Stage {n}/{total} · Talk to {who}','waves.objective.report':'All {total} stages held · Tell {who}',
+ 'waves.start':'Stage {n} raid!','waves.cleared':'Stage {n} cleared!','waves.allCleared':'All {n} stages held!','waves.lost':'Pushed back from the palisade · Talk again to retry this stage','waves.cancelled':'You left the village · The defense has stopped','waves.unavailable':'The defense can’t start right now','waves.objective.fight':'Stage {n}/{total} · Fiends left: {left}','waves.objective.idle':'Stage {n}/{total} · Talk to {who}','waves.objective.report':'All {total} stages held · Tell {who}',
  },
  story:{
   speakers:{

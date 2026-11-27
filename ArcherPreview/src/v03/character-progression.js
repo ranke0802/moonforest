@@ -59,6 +59,9 @@ export function recordedQuestIds(storage,questSets){
     // Read as the quest log reads it (format 2, or an old index moved by quest-migration.js).
     const cursor=readCursor(log,quests);
     if(cursor)for(const row of quests.slice(0,cursor.quest))ids.push(typeof row==='string'?row:row.id);
+    // An old record moved to the 11/27 line: the errand that took over a finished main quest (M06) counts
+    // from this first read, not only once story.start() has written it (2026-11-27 playtest).
+    if(cursor?.errand?.state==='finished'&&questExperience(cursor.errand.id))ids.push(cursor.errand.id);
     const errands=read(key+':errands');
     if(Array.isArray(errands?.finished))ids.push(...errands.finished.filter(id=>questExperience(id)));
   }

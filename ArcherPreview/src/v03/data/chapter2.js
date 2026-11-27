@@ -27,7 +27,8 @@ const lines={
 };
 const objectives=[
  ['여관에서 일지의 첫 장 읽기','Read the first page at the inn','宿で日誌の最初の頁を読む','到旅店读日记的第一页','Đọc trang đầu tại quán trọ'],
- ['목책을 지키던 청년에게 다음 장 건네받기','Collect the next page from the young guard','柵を守る若者から次の頁を受け取る','向守木栅的青年领取下一页','Nhận trang tiếp theo từ chàng trai gác rào'],
+ // The palisade scout is Jeffrey since 2026-11-27 (chapter1.js NPCS youth): the prompt names him, so does the goal.
+ ['목책을 지키는 제프리에게 다음 장 건네받기','Collect the next page from Jeffrey at the palisade','柵を守るジェフリーから次の頁を受け取る','向守木栅的杰弗里领取下一页','Nhận trang tiếp theo từ Jeffrey ở hàng rào'],
  ['동굴로 돌아가 실험 기록 찾기','Return to the cave for the laboratory notes','洞窟へ戻り実験記録を探す','回到洞穴寻找实验记录','Trở lại hang tìm ghi chép thí nghiệm'],
  ['성소에서 비탄의 마녀와의 전투 되짚기','Relive the encounter with the Mourning Witch','聖所で悲嘆の魔女との戦いを追体験する','在圣所重温与悲恸魔女的战斗','Sống lại trận chiến với Phù thủy Bi ai'],
  ['여관에서 일지의 마지막 장 덮기','Close the last page at the inn','宿で日誌の最後の頁を閉じる','到旅店合上日记的末页','Khép trang cuối tại quán trọ'],

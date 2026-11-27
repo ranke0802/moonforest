@@ -397,7 +397,9 @@ export const DIALOGUES=Object.freeze({
 // Ids that kept their meaning kept their id (rewards, receipts); old saves: quest-migration.js.
 export const QUESTS=Object.freeze([
  {id:'M00',reward:{gold:30,potions:1},title:'늑대와 마차',steps:[
-  {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1},
+  // A record continued during this fight has no ambush wolf (the opening stages it only for a new game,
+  // and the roaming packs wait for M00): the story calls one in next to the player, anywhere on the plains (2026-11-27 playtest).
+  {id:'fight',text:'늑대를 물리치기',type:'defeat',count:1,map:'great-plains',at:{x:OPENING_STAGE.x,z:OPENING_STAGE.z,radius:120},summon:{kind:'gray-wolf',count:1}},
   {id:'wagon',text:'마부를 도와 마차 세우기',type:'talk',targets:['driver'],dialogues:{driver:'driver-wagon'}},
   {id:'driver',text:'마부와 이야기하기',type:'talk',targets:['driver'],turnIn:true,dialogues:{driver:'driver-thanks'}},
   {id:'road',text:'길을 따라 몬트하임 마을로 가기',type:'reach',map:'village',reading:'village-return'},
