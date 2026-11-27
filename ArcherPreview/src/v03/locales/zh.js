@@ -68,6 +68,7 @@ export default {
   'sky.clear':'晴','sky.cloudy':'多云','sky.rain':'雨','sky.storm':'暴风雨','rotate.install':'安装为应用（始终横屏）','rotate.title':'请将设备横过来','rotate.tap':'点击切换为横屏全屏。','rotate.ios':'本游戏需横屏游玩。添加到主屏幕后可无浏览器栏全屏游玩。','ios.add':'添加到主屏幕','ios.step1':'点击 Safari 底部的分享按钮（□↑）。','ios.step2':'选择“添加到主屏幕”。','ios.step3':'从主屏幕的 MoonForest 图标启动，并将设备横过来。',
   'hud.main':'主线','hud.chapterNext':'故事未完待续','reward.got':'奖励 · {items}','reward.gold':'{n} G','reward.potions':'回复药水 {n} 瓶','reward.armor.leather':'皮甲（防御力 +2）','combat.justGuard':'完美格挡！','hud.complete':'完成 · {done}','hud.completeNext':'完成 · {done}  →  {next}','hud.questDone':'任务完成','hud.questNext':'接下来 · {next}','hud.rested':'已休息 · 旅程已记录',
   'prompt.actionQuest':'交谈','prompt.actionIdle':'搭话','prompt.wagonName':'马车','prompt.pushWagon':'推（{n}/{total}）','prompt.waitDriver':'等车夫就位','lift.ready':'好嘞，听俺喊号子一起推！','lift.one':'一！','lift.two':'二！','lift.three':'三！',
+  'prompt.clearFoes':'请先击败附近的敌人',
   'prompt.talkQuest':'与{name}交谈','prompt.talkIdle':'向{name}搭话',
   // 2026-11-27 (1127-story): looking at a clue in the forest.
   "prompt.actionInspect":"调查","prompt.inspect":"调查{name}",

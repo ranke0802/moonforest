@@ -73,6 +73,7 @@ export default {
   'prompt.talkQuest':({name})=>particle(name,'과','와')+' 이야기하기',
   'prompt.talkIdle':({name})=>name+'에게 말 걸기',
   // 2026-11-27 (1127-story): looking at a clue in the forest.
+  'prompt.clearFoes':'주변의 적을 먼저 물리치세요',
   'prompt.actionInspect':'살펴보기','prompt.inspect':({name})=>name+' 살펴보기',
   // Character menu, village shops and items (2026-11-24).
   'char.aria':'캐릭터 메뉴','char.pages':'캐릭터 화면','char.tab.Status':'상태','char.tab.Inventory':'가방','char.tab.Skills':'스킬','char.warrior':'전사','char.health':'체력','char.stamina':'스태미나',

@@ -83,9 +83,11 @@ export function createForgeBench({scene,camera,canvas,piece=null,slot='sword',re
  let surface,ink=null;
  if(piece?.mesh?.geometry){
   const source=piece.mesh;surface=keep(new Mesh('v03-forge-piece-surface',scene));
-  source.geometry.applyToMesh(surface);surface.material=source.material;surface.sideOrientation=source.sideOrientation;
+  // Character materials read the drawn mesh's style metadata in their bind hooks (outline width, paint):
+  // a copy without it threw there and dropped the bench to 2D (2026-11-27 browser playtest).
+  source.geometry.applyToMesh(surface);surface.material=source.material;surface.sideOrientation=source.sideOrientation;surface.metadata={...source.metadata};
   const inkSource=source.getChildMeshes?.(true).find(m=>m.metadata?.moonforestOutline&&m.geometry);
-  if(inkSource){ink=keep(new Mesh('v03-forge-piece-ink',scene));inkSource.geometry.applyToMesh(ink);ink.material=inkSource.material;ink.sideOrientation=inkSource.sideOrientation;ink.parent=surface;}
+  if(inkSource){ink=keep(new Mesh('v03-forge-piece-ink',scene));inkSource.geometry.applyToMesh(ink);ink.material=inkSource.material;ink.sideOrientation=inkSource.sideOrientation;ink.metadata={...inkSource.metadata};ink.parent=surface;}
  }else surface=own(createPropVisual(scene,slot==='shield'?'forge-shield':slot==='armor'?'forge-armor':'forge-blade'));
  surface.parent=holder;
  // Lay it flat: length along +x (grip to the left hand), thickness up, centred on the face.

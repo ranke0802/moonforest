@@ -1729,8 +1729,12 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     let best=null,bestSq=TALK_RANGE_SQ;
     for(const member of cast){if(member===fallen.member)continue;const dx=member.x-player.x,dz=member.z-player.z,sq=dx*dx+dz*dz;if(sq<bestSq){best=member;bestSq=sq;}}
     near=best;
-    if(near&&api.battle.combatCount>0)near=null;
-    if(near){
+    // A quest target or clue in reach while foes are still fighting: say why nothing opens (2026-11-27
+    // browser playtest: the cave trace looked dead while a shaman behind the hobgoblin was alive).
+    const blocked=near&&api.battle.combatCount>0?near:null;
+    if(blocked)near=null;
+    if(blocked&&(blocked.npc.clue===true||log.isTarget(blocked.npc.id)||errandMarks.has(blocked.npc.id))){const name=speaker(blocked.npc.name);hud.setPrompt({key:null,name,action:t('prompt.clearFoes'),mark:null,label:t('prompt.clearFoes')});}
+    else if(near){
      const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name),clue=near.npc.clue===true;
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
      hud.setPrompt({key:touch?null:'E',name,action:t(clue?'prompt.actionInspect':quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(clue?'prompt.inspect':quest?'prompt.talkQuest':'prompt.talkIdle',{name}),act:'talk'});
