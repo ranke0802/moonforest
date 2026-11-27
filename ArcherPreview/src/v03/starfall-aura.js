@@ -161,7 +161,7 @@ function spineOf(root){
   return root.getDescendants(false,node=>node.name==='mixamorig:Hips')[0]??null;
 }
 
-export function createStarfallAura({scene,cave=!!scene.metadata?.caveFogRuntime,now=()=>performance.now()}){
+export function createStarfallAura({scene,cave=!!scene.metadata?.caveFogRuntime,now=()=>performance.now(),reward=false}){
   const fog=cave?['caveFogRect','caveFogActive','caveFogOrigin']:[],fogSamplers=cave?['caveFogMap']:[];
   const material=new ShaderMaterial('v03-starfall-aura'+(cave?'-cave':''),scene,{vertexSource,fragmentSource:fragmentSource(cave)},{
     attributes:['position','normal'],defines:['#define NORMAL'],
@@ -181,7 +181,7 @@ export function createStarfallAura({scene,cave=!!scene.metadata?.caveFogRuntime,
   const halo=new Mesh(AURA_HALO_NAME,scene),quad=new VertexData();
   quad.positions=[-1,-1,0,1,-1,0,1,1,0,-1,1,0];quad.indices=[0,1,2,0,2,3];quad.applyToMesh(halo);
   halo.isPickable=false;halo.checkCollisions=false;halo.receiveShadows=false;halo.renderOutline=false;
-  halo.alwaysSelectAsActiveMesh=true;halo.metadata={moonforestStarfallAura:true};halo.setEnabled(false);
+  halo.alwaysSelectAsActiveMesh=true;halo.metadata={moonforestStarfallAura:true,moonforestRewardFx:reward};halo.setEnabled(false);
   const haloMaterial=new ShaderMaterial(AURA_HALO_NAME+(cave?'-cave':''),scene,{vertexSource:haloVertexSource,fragmentSource:haloFragmentSource(cave)},{
     attributes:['position'],uniforms:['view','viewProjection','haloCenter','haloSize','haloGlow',...fog],samplers:fogSamplers,needAlphaBlending:true,
   });
@@ -210,7 +210,7 @@ export function createStarfallAura({scene,cave=!!scene.metadata?.caveFogRuntime,
     shell.skeleton=source.skeleton;shell.morphTargetManager=source.morphTargetManager;
     shell.numBoneInfluencers=source.numBoneInfluencers;shell.computeBonesUsingShaders=source.computeBonesUsingShaders;
     shell.material=material;
-    shell.metadata={moonforestStarfallAura:true};
+    shell.metadata={moonforestStarfallAura:true,moonforestRewardFx:reward};
     shell.isPickable=false;shell.checkCollisions=false;shell.receiveShadows=false;
     shell.renderOutline=false;shell.renderOverlay=false;
     shell.alwaysSelectAsActiveMesh=source.alwaysSelectAsActiveMesh;

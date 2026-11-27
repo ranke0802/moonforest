@@ -155,7 +155,7 @@ export function createLevelUpFx({scene,now=()=>performance.now()}){
   mesh.material=material;
   // The body flash: its own Starfall shells (the skill's may be charging at the same time).
   // Cave fog is not bound: the warrior always stands in the lit part of a cave.
-  const aura=createStarfallAura({scene,cave:false,now:()=>now()*BODY_FLASH_CLOCK});
+  const aura=createStarfallAura({scene,cave:false,now:()=>now()*BODY_FLASH_CLOCK,reward:true});
   let root=null,startedAt=-1,gain=1,flash=0,disposed=false,serial=0;
   const ready=prepareModelShaders({meshes:[mesh]},{includeInstanceVariants:false,keepPrograms:true})
     .catch(error=>{if(!disposed&&!scene.isDisposed)console.warn('[MoonForest 0.3] level-up light preparation',error);});

@@ -63,6 +63,24 @@ test('event guard checks a bounded slice per query instead of every record', t =
  assert.ok(events.candidates.stats.registryChecks < full.candidates.stats.registryChecks / 10);
 });
 
+test('only marked dormant reward meshes are omitted and the first enabled frame admits them', t => {
+ for(const guard of ['full','events','verify']){
+  const {scene,candidates}=fixture(t,guard,2,0);
+  const pulse=MeshBuilder.CreateBox('reward-pulse',{},scene),plain=MeshBuilder.CreateBox('arbitrary-pulse',{},scene);
+  pulse.metadata={moonforestRewardFx:true};
+  pulse.setEnabled(false);plain.setEnabled(false);
+  assert.equal(selected(scene).includes(pulse.name),false);
+  assert.equal(selected(scene).includes(plain.name),true);
+  assert.ok(scene.meshes.includes(pulse),'the resource remains prepared in the scene');
+  pulse.setEnabled(true);
+  assert.equal(selected(scene).includes(pulse.name),true);
+  pulse.setEnabled(false);
+  assert.equal(selected(scene).includes(pulse.name),false);
+  pulse.dispose();
+  assert.ok(!candidates.result.data.slice(0,selected(scene).length).includes(pulse));
+ }
+});
+
 test('an overridden method on a disabled instance is still picked up by the sweep', t => {
  const events = fixture(t, 'events');
  const target = events.items.find((item, i) => i % 3 !== 0).mesh;
