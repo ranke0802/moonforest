@@ -94,6 +94,8 @@ export default {
   'item.usage.crooked-staff':'전사는 이 조각된 지팡이를 쥐고 근접 공격에 씁니다.','item.note.potion':'{seconds}초 동안 체력을 최대 {amount} 회복합니다.','item.note.boost':'{seconds}초 동안 스태미나 회복이 {pct}% 빨라집니다.',
   'item.boosted':'스태미나 회복 +{pct}% · {seconds}초','shop.aria':'마을 상점','shop.smith':'대장장이','shop.herbalist':'약초사','shop.failed':'거래하지 못했습니다.','shop.workbench':'작업대',
   'shop.target':'손볼 장비','shop.attack':'공격력 +{n}','shop.defense':'방어력 +{n}','shop.repair':'수리 · {cost} G','shop.repaired':'장비를 수리했습니다.','reward.xp':'경험치 +{n}','reward.levelUp':'레벨 {level} 달성 · 스킬 포인트를 확인하세요.',
+  // Level-up banner (reward-hud.js, 2026-11-27).
+  'levelup.title':'LEVEL UP','levelup.level':'Lv {level}','levelup.points':'스킬 포인트 +{n}','levelup.max':'최고 레벨 달성','levelup.hint':'캐릭터 창에서 스킬을 올릴 수 있습니다.',
   'shop.weaponBroken':'{name} 파손: 마을 대장장이에게 수리할 때까지 공격력 보너스가 없습니다.','shop.temper':'장비 단련',
   'shop.temperNote':'+숫자는 단련을 시도한 횟수이고 +{maxLevel}까지 할 수 있습니다. 시도할 때마다 재료 1개를 쓰고 최대 내구도가 {min}~{max} 줄어듭니다(최소 {minDurability}). 오르는 수치는 판정에 따라 다릅니다.','shop.forgeStock':'보유 단련 재료 · {items}','shop.forge':'단련 · {cost} G','shop.buy':'구매','shop.inBag':'가방에 {n}개',
   'shop.makeGear':'장비 제작','shop.brew':'조제',

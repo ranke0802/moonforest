@@ -90,6 +90,8 @@ export default {
   'item.usage.crooked-staff':'战士握着这根雕纹法杖进行近战攻击。','item.note.potion':'{seconds}秒内恢复最多{amount}点生命。','item.note.boost':'{seconds}秒内体力恢复加快{pct}%。',
   'item.boosted':'体力恢复 +{pct}% · {seconds}秒','shop.aria':'村庄商店','shop.smith':'铁匠','shop.herbalist':'草药师','shop.failed':'交易未能完成。','shop.workbench':'工作台','shop.target':'要处理的装备',
   'shop.attack':'攻击力 +{n}','shop.defense':'防御力 +{n}','shop.repair':'修理 · {cost} G','shop.repaired':'装备已修好。','reward.xp':'经验 +{n}','reward.levelUp':'达到 {level} 级，可分配技能点。',
+  // Level-up banner (reward-hud.js, 2026-11-27).
+  'levelup.title':'升级','levelup.level':'Lv {level}','levelup.points':'技能点 +{n}','levelup.max':'已达最高等级','levelup.hint':'可在角色界面提升技能。',
   'shop.weaponBroken':'{name}已损坏：在村里的铁匠修好之前没有攻击力加成。','shop.temper':'锻造装备',
   'shop.temperNote':'+后的数字是锻造尝试的次数，最多到+{maxLevel}。每次消耗1个材料，最大耐久降低{min}~{max}（最低{minDurability}）。提升多少取决于判定结果。','shop.forgeStock':'持有的锻造材料 · {items}','shop.forge':'锻造 · {cost} G','shop.buy':'购买','shop.inBag':'背包中 {n}',
   'shop.makeGear':'制作装备','shop.brew':'调配','shop.sell':'出售',

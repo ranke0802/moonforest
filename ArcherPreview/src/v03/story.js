@@ -40,7 +40,7 @@ export function findFreeSpot(navigation,point,radius=.42){
  return {x:point.x,z:point.z};
 }
 export {particle} from './korean.js';
-export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0,stageMark=null,onScene=null}){
+export function createStory({api,doc,save,content,createVisual,createGuide=null,createMarkers=null,slowFx=null,combatLocksTravel=()=>api.battle.combatCount>0,stageMark=null,onScene=null,onReward=null}){
  const view=doc.defaultView,touch=view?.matchMedia?.('(pointer: coarse)')?.matches===true;
  let log=createQuestLog({quests:content.QUESTS,storage:save.journey}),replaying=false,onChapterEnd=null;
  // Optional errands (errands.js) and who has been greeted once (NPCS greet), per slot.
@@ -82,21 +82,22 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(paid.gold)parts.push(t('reward.gold',{n:paid.gold}));
   if(paid.potions)parts.push(t('reward.potions',{n:paid.potions}));
   if(paid.armor)parts.push(t('reward.armor.'+paid.armor));
-  announceReward(parts);return true;
+  announceReward(parts,{xp:paid.xp,gold:paid.gold,potions:paid.potions,armor:paid.armor});return true;
  }
- function announceReward(parts){
+ // summary: the same reward as numbers, for the gold burst and chips (reward-celebration.js).
+ function announceReward(parts,summary=null){
   if(!parts.length)return;
   api.playSound?.('gold_pickup',{volume:.9});
-  setTimeout(()=>{if(!disposed)api.toast?.(t('reward.got',{items:parts.join(' · ')}));},1400);
+  setTimeout(()=>{if(!disposed){api.toast?.(t('reward.got',{items:parts.join(' · ')}));if(summary)onReward?.(summary);}},1400);
  }
  function grantReward(quest){
   if(!quest||replaying||api.settleQuest)return;
-  const reward=quest.reward??{},parts=[];
-  const xp=api.creditQuestExperience?.([quest.id]);if(xp>0)parts.push(t('reward.xp',{n:xp}));
-  try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
-  try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
-  try{if(reward.armor&&api.grantArmor?.(reward.armor))parts.push(t('reward.armor.'+reward.armor));}catch(error){console.warn('[MoonForest 0.3] armor reward',error);}
-  announceReward(parts);
+  const reward=quest.reward??{},parts=[],summary={xp:0,gold:0,potions:0,armor:null};
+  const xp=api.creditQuestExperience?.([quest.id]);if(xp>0){parts.push(t('reward.xp',{n:xp}));summary.xp=xp;}
+  try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold)){parts.push(t('reward.gold',{n:reward.gold}));summary.gold=reward.gold;}}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
+  try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0){parts.push(t('reward.potions',{n}));summary.potions=n;}}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
+  try{if(reward.armor&&api.grantArmor?.(reward.armor)){parts.push(t('reward.armor.'+reward.armor));summary.armor=reward.armor;}}catch(error){console.warn('[MoonForest 0.3] armor reward',error);}
+  announceReward(parts,summary);
  }
  function refresh(){
   const quest=log.quest();
@@ -131,11 +132,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(tips.showing){tips.queue.unshift(tips.showing);tips.showing=null;hud.setRing(null);}
   tips.queue.unshift({title:t('errand.done'),keys:errand.title,touch:errand.title,text:''});
   if(replaying||api.settleQuest)return;
-  const reward=errand.reward??{},parts=[];
-  const xp=api.creditQuestExperience?.([errand.id]);if(xp>0)parts.push(t('reward.xp',{n:xp}));
-  try{if(reward.gold&&api.creditGold?.('v03-errand-'+errand.id,reward.gold))parts.push(t('reward.gold',{n:reward.gold}));}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
-  try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0)parts.push(t('reward.potions',{n}));}}catch(error){console.warn('[MoonForest 0.3] errand potions',error);}
-  announceReward(parts);
+  const reward=errand.reward??{},parts=[],summary={xp:0,gold:0,potions:0,armor:null};
+  const xp=api.creditQuestExperience?.([errand.id]);if(xp>0){parts.push(t('reward.xp',{n:xp}));summary.xp=xp;}
+  try{if(reward.gold&&api.creditGold?.('v03-errand-'+errand.id,reward.gold)){parts.push(t('reward.gold',{n:reward.gold}));summary.gold=reward.gold;}}catch(error){console.warn('[MoonForest 0.3] errand gold',error);}
+  try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0){parts.push(t('reward.potions',{n}));summary.potions=n;}}}catch(error){console.warn('[MoonForest 0.3] errand potions',error);}
+  announceReward(parts,summary);
  }
  function errandResults(results){
   let changed=false;

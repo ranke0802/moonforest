@@ -5,6 +5,8 @@ import {createTitleScreen} from './title-screen.js';
 import {createSaveTransfer} from './save-transfer.js';
 import {createGreatAttackFx} from './great-attack-fx.js';
 import {createStarfallAura} from './starfall-aura.js';
+import {createRewardCelebration} from './reward-celebration.js';
+import {playRewardCue} from './reward-cues.js';
 import {createGallery} from './gallery.js';
 import {createOpening} from './opening.js';
 import {createAttractPilot} from './attract-pilot.js';
@@ -159,10 +161,15 @@ export function setupV03(api){
   if(chapter)Object.assign(sharedStory,content,chapter,{DIALOGUES:{...content.DIALOGUES,...chapter.DIALOGUES}});
   else Object.assign(sharedStory,content);
  }
+ // Level-up and quest-reward moments (reward-celebration.js): they wait for dialogue,
+ // cutscenes, loading and open dialogs. allowed() is read only while one waits or plays.
+ const rewards=createRewardCelebration({doc,playCue:cue=>playRewardCue(cue,api.playSound)});
+ const rewardFrame={scene:null,player:null,mapId:null,s:null,
+  allowed(){const s=this.s;return state.screen==='play'&&!!s?.ready&&!s.failed&&!doc.hidden&&!story.sceneActive&&!story.dialogueOpen&&!gate.active&&!opening.covering&&!doc.querySelector?.('dialog[open]');}};
  const slowFx=createSlowFx((()=>{try{return view.localStorage;}catch{return null;}})());
  const story=createStory({api,doc,save,content:sharedStory,combatLocksTravel,createVisual:api.createVisual??(castPreview()?createCastVisuals({getWorld:()=>api.world}):createActorVisual),createGuide:api.createGuide===undefined?createGuideWisp:api.createGuide,createMarkers:api.createMarkers===undefined?createQuestMarkers:api.createMarkers,slowFx,
   // Quest talk/reward/save stages into the run trail, only while frame diagnostics are on (Astra #211).
-  stageMark:stage=>{if(api.world?.frameDiagnostics?.enabled===true)trail.mark(stage);},onScene:gallery.scene});
+  stageMark:stage=>{if(api.world?.frameDiagnostics?.enabled===true)trail.mark(stage);},onScene:gallery.scene,onReward:summary=>rewards.reward(summary)});
  // The title is revealed only once its scene is fully drawn: the attract
  // battle is in place and scenery streaming has been quiet for a moment.
  const REVEAL_QUIET=1.2,REVEAL_LIMIT=25;
@@ -769,10 +776,14 @@ export function setupV03(api){
   get lunge(){return state.screen==='play'?story.lunge:null;},
   get questSpot(){return state.screen==='play'?story.questSpot:null;},
   get playing(){return state.screen==='play';},
+  // town-services.js announceLevel: true when the 0.3 level-up moment takes the event.
+  celebrateLevel(event){return rewards.levelUp(event);},
   update(dt){
    if(state.disposed)return;
    if(state.screen!=='play')cursors.set('ui');
    const s=gameState();
+   rewardFrame.scene=api.world?.scene??null;rewardFrame.player=api.getPlayer?.()??null;rewardFrame.mapId=s.mapId??null;rewardFrame.s=s;
+   rewards.update(dt,rewardFrame);
    if(greatAttackFx?.active||starfallAura?.active){
     if(!s.ready||state.screen!=='play'||greatAttackMap!==s.mapId)resetGreatAttackFx();
     else{greatAttackFx?.tick();starfallAura?.tick();}
@@ -825,6 +836,6 @@ export function setupV03(api){
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
   inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;hudBlur.dispose();disposeAccessibility();greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  dispose(){if(state.disposed)return;state.disposed=true;hudBlur.dispose();disposeAccessibility();greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();rewards.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

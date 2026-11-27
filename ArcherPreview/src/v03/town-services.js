@@ -7,7 +7,7 @@ import {createWeaponConditionHud} from './weapon-condition-hud.js';
 import {createPotionHud} from './potion-hud.js';
 
 // random: the economy's dice (temper wear, blessed crafting); tests fix it.
-export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound,usePotion,canOpenPotionPicker,onPotionLayout,random=Math.random}){
+export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound,usePotion,canOpenPotionPicker,onPotionLayout,onLevelUp=null,random=Math.random}){
  const economy=createTownEconomy(wallet,legacy(),{random}),win=root.ownerDocument.defaultView;
  const healthHud=root.querySelector('#player-hud'),durabilityHud=healthHud?createWeaponConditionHud(healthHud):null;
  let shop=null,generation=0,disposed=false,wasPlaying=false,lastGear=null,appliedTo=null,treasure=null;
@@ -30,9 +30,14 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   }
   syncDurability();
  }
+ // xpRatio: how far into the current level the bar stood at the last gain (the banner fills from it).
+ let xpRatio=null;
+ const ratioOf=p=>p.nextXp?p.xp/p.nextXp:1;
  function announceLevel(previous){
-  const level=economy.progression.level;
-  if(level>previous)notify(t('reward.levelUp',{level}));
+  const p=economy.progression,level=p.level,fromRatio=xpRatio??0;xpRatio=ratioOf(p);
+  if(level<=previous)return;
+  // 0.3 level-up moment (reward-celebration.js); the old message when nothing takes it.
+  if(onLevelUp?.({level,points:level-previous,cap:p.cap,ratio:xpRatio,fromRatio})!==true)notify(t('reward.levelUp',{level}));
  }
  function canDrink(slot=items().selectedQuickSlot){
   const b=battle(),s=items(),id=s.quickSlots[slot];if(!b||b.loading||b.grab?.active||!b.playerAlive||b.playerHp<=0||!s.bag[id])return false;
@@ -62,7 +67,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
  const potionButton=root.querySelector('#potion-button');
  const potionHud=usePotion&&potionButton?createPotionHud({root,button:potionButton,read:items,canDrink,use:usePotion,canOpen:canOpenPotionPicker,
   select:slot=>economy.selectQuickSlot(slot),onPause,onLayout:onPotionLayout}):null;
- function reset(keepOld){generation++;shop?.close();potionHud?.clear();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
+ function reset(keepOld){generation++;xpRatio=null;shop?.close();potionHud?.clear();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
  function getTreasure(){return treasure??=createTownTreasure({root,world,economy,player,canInteract,sound});}
  return {economy,bag,canDrink,apply,
   collectGold(amount){getTreasure().collectGold(amount);},
@@ -123,7 +128,7 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   },
   tick(dt){
    if(!world.v03?.playing){if(wasPlaying){treasure?.clear();flush();}wasPlaying=false;return;}
-   if(!wasPlaying||appearance()!==appliedTo){wasPlaying=true;apply();}
+   if(!wasPlaying||appearance()!==appliedTo){wasPlaying=true;apply();xpRatio??=ratioOf(economy.progression);}
    economy.tick(dt);const c=controls();if(c&&c.staminaRecoveryScale!==economy.regen)c.staminaRecoveryScale=economy.regen;
    getTreasure().tick(dt);
   },

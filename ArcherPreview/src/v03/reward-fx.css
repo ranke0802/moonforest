@@ -1,0 +1,70 @@
+/* ----- Level-up and reward moments (2026-11-27, reward-hud.js) -----
+   Shown only in play, never over loading, dialogue or the title. Everything that moves
+   animates transform or opacity; a show only flips [hidden] (display none -> block restarts). */
+.v03-reward-fx{position:fixed;inset:0;z-index:905;pointer-events:none;font-family:var(--v03-font);color:var(--mf-text-2,#f4ead0);display:none;contain:layout style}
+html[data-v03-screen="play"]:not([data-loading]):not([data-v03-talk]) .v03-reward-fx{display:block}
+.v03-reward-fx [hidden]{display:none!important}
+
+/* Gold edge: a soft frame of light, once. */
+.v03-lvup-edge{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse 72% 64% at 50% 46%,transparent 58%,#ffcf6e30 76%,#ffd77a8c 100%);animation:v03-lvup-edge .9s ease-out forwards}
+@keyframes v03-lvup-edge{0%{opacity:0}9%{opacity:1}100%{opacity:0}}
+
+.v03-lvup{position:absolute;left:50%;top:clamp(56px,15vh,150px);width:min(520px,calc(100% - 32px));transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;animation:v03-lvup-out 2.8s linear forwards}
+@keyframes v03-lvup-out{0%,88%{opacity:1}100%{opacity:0}}
+.v03-lvup-rays{position:absolute;left:50%;top:clamp(24px,5.4vmin,46px);width:min(420px,78vw);aspect-ratio:1;margin-left:calc(min(420px,78vw)/-2);margin-top:calc(min(420px,78vw)/-2);border-radius:50%;opacity:0;z-index:-1;
+ background:radial-gradient(circle,#fff3c8d9 0,#ffd77a80 14%,#ffc85a26 34%,transparent 62%),repeating-conic-gradient(from 6deg,#ffe3a040 0 5deg,transparent 5deg 22deg);
+ -webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%);animation:v03-lvup-rays 1.5s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes v03-lvup-rays{0%{opacity:0;transform:scale(.3) rotate(-18deg)}14%{opacity:1}100%{opacity:0;transform:scale(1.25) rotate(14deg)}}
+.v03-lvup-title{display:block;font-size:clamp(34px,8vmin,64px);line-height:1.05;letter-spacing:.08em;font-weight:700;color:#ffe9a8;white-space:nowrap;
+ -webkit-text-stroke:1.5px #3a2508;paint-order:stroke fill;text-shadow:0 0 18px #ffc75acc,0 0 4px #fff4d0,0 3px 0 #6b4512,0 5px 10px #000a;animation:v03-lvup-pop .62s cubic-bezier(.2,.8,.3,1.2) both}
+.v03-lvup-level{display:block;font-size:clamp(20px,4.4vmin,34px);line-height:1.15;color:var(--mf-text-2,#f4ead0);font-weight:700;-webkit-text-stroke:1px #10160e;paint-order:stroke fill;text-shadow:0 0 10px #e8b84f99,0 2px 3px #000c;animation:v03-lvup-pop .5s .14s cubic-bezier(.2,.8,.3,1.25) both}
+@keyframes v03-lvup-pop{0%{opacity:0;transform:scale(1.9)}55%{opacity:1;transform:scale(.95)}78%{transform:scale(1.03)}100%{opacity:1;transform:none}}
+.v03-lvup-bar{position:relative;width:min(300px,56vw);height:8px;margin:6px 0 4px;border:1px solid var(--mf-line,#c9b980);background:#0d1712d9;box-shadow:0 0 0 1px #0008,0 2px 6px #0008}
+.v03-lvup-fill{position:absolute;inset:1px;transform-origin:left center;transform:scaleX(var(--lv-to,0));background:linear-gradient(90deg,#c98d2f,#ffd979 70%,#fff2c2);animation:v03-lvup-fill 1.25s .18s ease-in-out both}
+@keyframes v03-lvup-fill{0%{transform:scaleX(var(--lv-from,0))}34%,46%{transform:scaleX(1)}47%{transform:scaleX(0)}100%{transform:scaleX(var(--lv-to,0))}}
+.v03-lvup-fill[data-full="1"]{animation-name:v03-lvup-fill-cap}
+@keyframes v03-lvup-fill-cap{0%{transform:scaleX(var(--lv-from,0))}34%,100%{transform:scaleX(1)}}
+.v03-lvup-flare{position:absolute;right:-14px;top:50%;width:46px;height:46px;margin-top:-23px;border-radius:50%;opacity:0;background:radial-gradient(circle,#fffbe8 0,#ffe08acc 22%,#ffc24d44 48%,transparent 70%);animation:v03-lvup-flare .9s .5s ease-out both}
+@keyframes v03-lvup-flare{0%{opacity:0;transform:scale(.2)}22%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.9)}}
+.v03-lvup-stats{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin:2px 0 0;padding:0;list-style:none;font-size:clamp(14px,2.6vmin,18px);line-height:1.35;color:#ffe3a0;-webkit-text-stroke:.8px #10160e;paint-order:stroke fill;text-shadow:0 1px 2px #000,0 0 8px #0009}
+.v03-lvup-stats li{animation:v03-lvup-rise .42s .62s ease-out both}
+.v03-lvup-stats li+li{animation-delay:.74s}
+.v03-lvup-hint{display:block;max-width:100%;font-size:13px;line-height:1.35;color:var(--mf-text-2,#f4ead0);-webkit-text-stroke:.7px #10160e;paint-order:stroke fill;text-shadow:0 1px 2px #000,0 0 6px #000a;overflow-wrap:anywhere;animation:v03-lvup-rise .42s .86s ease-out both}
+@keyframes v03-lvup-rise{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
+
+/* Reward chips: under the centred reward message (#toast), gold counts up, items pop. */
+.v03-reward{position:absolute;left:50%;top:calc(50% + 46px);width:min(620px,calc(100% - 32px));transform:translateX(-50%);display:flex;justify-content:center;animation:v03-lvup-out 2.6s linear forwards}
+.v03-reward-rays{position:absolute;left:50%;top:50%;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;opacity:0;z-index:-1;background:radial-gradient(circle,#fff1c4b3 0,#ffd06a59 22%,transparent 62%);animation:v03-reward-burst .7s ease-out forwards}
+@keyframes v03-reward-burst{0%{opacity:0;transform:scale(.3)}20%{opacity:1}100%{opacity:0;transform:scale(1.5)}}
+.v03-reward-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin:0;padding:0;list-style:none}
+.v03-reward-chip{display:flex;align-items:center;gap:7px;min-height:36px;padding:3px 12px 3px 3px;background:linear-gradient(90deg,#17271ff2,#102019d9);border:1px solid var(--mf-line-mid,#c9b980bf);border-radius:var(--mf-radius,3px);box-shadow:0 3px 10px #0007;animation:v03-reward-pop .46s calc(var(--i,0)*90ms) cubic-bezier(.2,.8,.3,1.4) both}
+@keyframes v03-reward-pop{0%{opacity:0;transform:translateY(10px) scale(.4)}60%{opacity:1;transform:translateY(-3px) scale(1.12)}100%{opacity:1;transform:none}}
+.v03-reward-icon{flex:none;width:30px;height:30px;display:grid;place-items:center;--mf-item-icon-size:100%;font:700 17px/1 Georgia,serif}
+.v03-reward-icon.is-gold{border-radius:50%;color:#ffe08a;background:radial-gradient(circle at 38% 34%,#a98a3a,#3a2f14);box-shadow:inset 0 0 0 2px #d6b15a,0 0 10px #ffcb5a88}
+.v03-reward-icon.is-xp{color:#fff2c4;font-size:19px;text-shadow:0 0 8px #ffd06a}
+.v03-reward-value{font-size:15px;line-height:1.2;font-weight:700;color:#ffe3a0;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* Pickup ribbon (pickup-notice.js): the icon pops in and one glint sweeps the row. */
+.mf-pickup-notice .acquisition-row{position:relative;overflow:hidden}
+.mf-pickup-notice .acquisition-row::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;pointer-events:none;background:linear-gradient(100deg,transparent,#ffe6a033 45%,#fff4cf55 50%,#ffe6a033 55%,transparent);transform:translateX(-110%);animation:v03-pickup-glint .75s .1s ease-out forwards}
+@keyframes v03-pickup-glint{to{transform:translateX(260%)}}
+.mf-pickup-notice .acquisition-icon{animation:v03-reward-pop .38s cubic-bezier(.2,.8,.3,1.4) both}
+
+@media (max-height:500px){
+ .v03-lvup{top:max(10px,calc(env(safe-area-inset-top) + 8px))}
+ .v03-lvup-title{font-size:clamp(30px,9vmin,44px)}
+ .v03-lvup-level{font-size:clamp(18px,5vmin,24px)}
+ .v03-lvup-bar{width:min(240px,48vw);margin:4px 0 2px}
+ .v03-lvup-stats{font-size:14px}
+ .v03-reward{top:calc(50% + 40px)}
+ .v03-reward-chip{min-height:32px;padding:2px 10px 2px 2px}
+ .v03-reward-icon{width:26px;height:26px}
+}
+
+/* Reduced motion: no edge light, no rays, no glint, no scaling; the banner fades in and the numbers stay. */
+html[data-mf-motion="reduce"] .v03-lvup-edge,html[data-mf-motion="reduce"] .v03-lvup-rays,html[data-mf-motion="reduce"] .v03-lvup-flare,
+html[data-mf-motion="reduce"] .v03-reward-rays,html[data-mf-motion="reduce"] .mf-pickup-notice .acquisition-row::after{display:none}
+html[data-mf-motion="reduce"] .v03-lvup-title,html[data-mf-motion="reduce"] .v03-lvup-level,html[data-mf-motion="reduce"] .v03-reward-chip,
+html[data-mf-motion="reduce"] .mf-pickup-notice .acquisition-icon{animation-name:v03-reward-fade;animation-timing-function:ease-out}
+html[data-mf-motion="reduce"] .v03-lvup-fill{animation:none}
+@keyframes v03-reward-fade{0%{opacity:0}100%{opacity:1}}

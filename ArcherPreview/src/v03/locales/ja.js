@@ -91,6 +91,8 @@ export default {
   'item.usage.crooked-staff':'戦士はこの彫刻入りの杖を握り、近接攻撃に使います。','item.note.potion':'{seconds}秒かけて体力を最大{amount}回復します。','item.note.boost':'{seconds}秒間、スタミナの回復が{pct}%速くなります。',
   'item.boosted':'スタミナ回復 +{pct}% · {seconds}秒','shop.aria':'村の店','shop.smith':'鍛冶屋','shop.herbalist':'薬草師','shop.failed':'取引できませんでした。','shop.workbench':'作業台','shop.target':'手入れする装備',
   'shop.attack':'攻撃力 +{n}','shop.defense':'防御力 +{n}','shop.repair':'修理 · {cost} G','shop.repaired':'装備を修理しました。','reward.xp':'経験値 +{n}','reward.levelUp':'レベル{level}に到達 · スキルポイントを確認できます。',
+  // Level-up banner (reward-hud.js, 2026-11-27).
+  'levelup.title':'LEVEL UP','levelup.level':'Lv {level}','levelup.points':'スキルポイント +{n}','levelup.max':'最高レベル到達','levelup.hint':'キャラクター画面でスキルを上げられます。',
   'shop.weaponBroken':'{name}が壊れました。村の鍛冶屋で修理するまで攻撃力ボーナスはありません。','shop.temper':'装備の鍛錬',
   'shop.temperNote':'+の数字は鍛錬を試した回数で、+{maxLevel}まで行えます。1回ごとに素材1個を使い、最大耐久値が{min}〜{max}減ります（下限{minDurability}）。上がる数値は判定によって変わります。','shop.forgeStock':'所持している鍛錬素材 · {items}','shop.forge':'鍛える · {cost} G','shop.buy':'購入','shop.inBag':'所持 {n}',
   'shop.makeGear':'装備の製作','shop.brew':'調合','shop.sell':'売却',

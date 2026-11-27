@@ -98,6 +98,8 @@ export default {
   'item.note.boost':'Tăng tốc hồi thể lực thêm {pct}% trong {seconds} giây.','item.boosted':'Hồi thể lực +{pct}% · {seconds} giây','shop.aria':'Cửa hàng trong làng',
   'shop.smith':'Thợ rèn','shop.herbalist':'Thầy thuốc','shop.failed':'Không thể hoàn tất giao dịch.','shop.workbench':'Bàn làm việc','shop.target':'Trang bị cần xử lý',
   'shop.attack':'Tấn công +{n}','shop.defense':'Phòng thủ +{n}','shop.repair':'Sửa · {cost} G','shop.repaired':'Đã sửa trang bị.','reward.xp':'+{n} XP','reward.levelUp':'Đạt cấp {level} · Có điểm kỹ năng để phân bổ.',
+  // Level-up banner (reward-hud.js, 2026-11-27).
+  'levelup.title':'LÊN CẤP','levelup.level':'Cấp {level}','levelup.points':'Điểm kỹ năng +{n}','levelup.max':'Đã đạt cấp tối đa','levelup.hint':'Có thể nâng kỹ năng trong bảng nhân vật.',
   'shop.weaponBroken':'{name} đã hỏng: không có điểm cộng tấn công cho đến khi thợ rèn trong làng sửa.','shop.temper':'Rèn trang bị',
   'shop.temperNote':'Số sau dấu + là số lần đã rèn, tối đa +{maxLevel}. Mỗi lần dùng 1 nguyên liệu và giảm độ bền tối đa {min}–{max} (tối thiểu {minDurability}). Chỉ số tăng bao nhiêu tùy theo kết quả.','shop.forgeStock':'Nguyên liệu rèn đang có · {items}','shop.forge':'Rèn · {cost} G',
   'shop.buy':'Mua','shop.inBag':'Trong túi · {n}','shop.makeGear':'Chế tạo trang bị','shop.brew':'Pha chế',

@@ -98,6 +98,8 @@ export default {
   'item.note.boost':'Raises stamina recovery by {pct}% for {seconds} seconds.','item.boosted':'Stamina recovery +{pct}% · {seconds}s','shop.aria':'Village services',
   'shop.smith':'Blacksmith','shop.herbalist':'Herbalist','shop.failed':'Could not complete the transaction.','shop.workbench':'Workbench','shop.target':'Equipment to work on',
   'shop.attack':'Strike +{n}','shop.defense':'Defense +{n}','shop.repair':'Repair · {cost} G','shop.repaired':'Equipment repaired.','reward.xp':'+{n} XP','reward.levelUp':'Level {level} reached · Skill points available.',
+  // Level-up banner (reward-hud.js, 2026-11-27).
+  'levelup.title':'LEVEL UP','levelup.level':'Lv {level}','levelup.points':'Skill points +{n}','levelup.max':'Max level reached','levelup.hint':'Raise your skills in the character window.',
   'shop.weaponBroken':'{name} broke: no strike bonus until the village blacksmith repairs it.','shop.temper':'Temper equipment',
   'shop.temperNote':'The +number counts tempering attempts, up to +{maxLevel}. Each attempt uses one material and lowers maximum durability by {min}–{max} (minimum {minDurability}). How much the stat grows depends on the result.','shop.forgeStock':'Tempering materials on hand · {items}','shop.forge':'Forge · {cost} G',
   'shop.buy':'Buy','shop.inBag':'In bag · {n}','shop.makeGear':'Make equipment','shop.brew':'Brew',

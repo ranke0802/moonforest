@@ -1947,7 +1947,7 @@ try {
         usePotion:actions.potion,canOpenPotionPicker:()=>actions.potionSlotsEnabled()&&ready&&!input.suspended&&!document.hidden&&!document.querySelector('dialog[open]')&&allowed('potion')&&!controller.dead&&!controller.captured&&!controller.groggy,onPotionLayout:()=>hudLayout?.refresh(),
         legacy:()=>v03Save.meta().used?{...equipmentChoices,armor:journeyStorage.getItem(V03_ARMOR_KEY)}:{},
         canInteract:()=>!!world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!world.v03.story?.dialogueOpen&&!loadingAsset&&!mapTransition?.busy&&boss.playerAlive&&!boss.combatCount&&!controller?.captured&&!controller?.groggy&&!document.querySelector('dialog[open]'),
-        onPause:()=>reconcilePlayback(),notify:message=>toast(message),sound:cue=>audio.play(cue)});
+        onPause:()=>reconcilePlayback(),notify:message=>toast(message),sound:cue=>audio.play(cue),onLevelUp:event=>world.v03?.celebrateLevel?.(event)===true});
       world.scene.onDisposeObservable.addOnce(()=>{townServices?.dispose();townServices=null;});
     }
     if(world.gameplayV03){
