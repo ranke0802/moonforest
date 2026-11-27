@@ -13,6 +13,7 @@ import {createChapterEnemyFactory} from '../src/v03/chapter-enemy-encounter.js';
 import {createWaveRaid,wavePlan} from '../src/v03/defense-waves.js';
 import {ERRANDS} from '../src/v03/data/chapter1.js';
 import {setWorldCharacter} from '../src/world-limits.js';
+import {CHAPTER_COMBAT} from '../src/v03/chapter-enemy-brain.js';
 
 const STEP=ERRANDS.find(errand=>errand.id==='W01').steps[0];
 async function readRig(scene,url){
@@ -66,7 +67,7 @@ test('a stage brings real foes in, marches them on the palisade, tunes their hit
   await until(()=>raid.alive===6&&!raid.pending,'the next one');
   assert.ok(battle.encounters.some(foe=>foe.kind==='hobgoblin-boss'));
   const elite=battle.encounters.find(foe=>foe.kind==='hobgoblin-boss');
-  assert.equal(elite.brain.maxHp,Math.round(780*1.2*.6));assert.ok(elite.waveElite);
+  assert.equal(elite.brain.maxHp,Math.round(CHAPTER_COMBAT['hobgoblin-boss'].hp*1.2*.6));assert.ok(elite.waveElite);
   assert.equal(raid.left,6);
  }finally{
   raid.dispose();

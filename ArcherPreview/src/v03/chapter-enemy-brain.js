@@ -6,11 +6,14 @@ export const CHAPTER_COMBAT = {
   'goblin-warrior': {name:'고블린 전사', hp:115, damage:18, speed:2.35, reach:1.42, windup:.52, recover:.52, cooldown:.64},
   'goblin-archer': {name:'고블린 궁수', hp:92, damage:17, speed:1.95, reach:7.6, windup:.72, recover:.58, cooldown:1.15, missile:'arrow', velocity:11},
   'goblin-shaman': {name:'고블린 주술사', hp:128, damage:27, speed:1.6, reach:6.5, windup:1.1, recover:.75, cooldown:1.4, missile:'spell', velocity:6.2},
-  'hobgoblin-boss': {name:'홉고블린', boss:true, hp:780, damage:48, speed:1.95, reach:2.03, windup:.88, recover:.85, cooldown:.9, heavy:true},
+  // 2026-11-27 combat pass (1127-combat): hp 780 → 700, damage 48 → 44, a 0.3 s telegraph before each heavy club hit.
+  'hobgoblin-boss': {name:'홉고블린', boss:true, hp:700, damage:44, speed:1.95, reach:2.03, windup:.88, recover:.85, cooldown:.9, heavy:true, telegraph:.3},
   'ghoul-warrior': {name:'구울 전사', boss:true, hp:720, damage:42, speed:2.55, reach:1.68, windup:.48, recover:.62, cooldown:.72},
   zombie: {name:'좀비', hp:138, damage:19, speed:1.04, reach:1.36, windup:.82, recover:.78, cooldown:.85},
 };
 
+// Telegraph: the hold starts this many seconds before the heavy contact; glow strength (hit flash is .23 s).
+const TELEGRAPH_LEAD=.12,TELEGRAPH_FLASH=.3;
 const labels = {idle:'대기', move:'이동', attack:'공격', dead:'격파', hit:'경직'};
 export class ChapterEnemyBrain {
   constructor(profile, durations, kind) {
@@ -23,7 +26,7 @@ export class ChapterEnemyBrain {
   }
   change(state,mode) {
     this.state=state;this.mode=mode;this.serial++;this.time=0;this.elapsed=0;
-    this.impacted=false;this.move=null;this.nextHit=0;this.poseKey=1;this.visited.add(state);
+    this.impacted=false;this.move=null;this.nextHit=0;this.poseKey=1;this.visited.add(state);this.hold=0;this.heldHit=-1;
   }
   get label(){return labels[this.mode];}
   get defense(){
@@ -31,7 +34,17 @@ export class ChapterEnemyBrain {
     return this.guardFacing&&guard&&this.elapsed>=guard.from&&this.elapsed<guard.to?'block':null;
   }
   advanceMove(dt,events){
-    const move=this.move,previous=this.elapsed;
+    const move=this.move,tele=this.profile.telegraph,pending=move.hits[this.nextHit];
+    // profile.telegraph (seconds): the pose holds just before a heavy hit and glows once.
+    if(tele>0&&pending?.heavy&&this.heldHit!==this.nextHit&&this.elapsed+dt>=pending.at-TELEGRAPH_LEAD){
+      if(!(this.hold>0)){this.telegraphSerial=(this.telegraphSerial??0)+1;if(this.flash<TELEGRAPH_FLASH){this.flash=TELEGRAPH_FLASH;this.flashDuration=TELEGRAPH_FLASH*2;}}
+      // A long frame reaches the hold point, holds, and goes on with what is left of it.
+      const lead=pending.at-TELEGRAPH_LEAD;let left=dt-Math.max(0,lead-this.elapsed);this.elapsed=Math.max(this.elapsed,lead);
+      const used=Math.min(left,tele-this.hold);this.hold+=used;left-=used;
+      if(this.hold>=tele-1e-9){this.heldHit=this.nextHit;this.hold=0;}
+      dt=left;
+    }
+    const previous=this.elapsed;
     this.elapsed+=dt;
     const now=this.elapsed;
     while(this.nextHit<move.hits.length&&now>=move.hits[this.nextHit].at){

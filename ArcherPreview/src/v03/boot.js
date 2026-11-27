@@ -14,6 +14,7 @@ import {crownBoxes,clearView} from './title-camera.js';
 import {createStory} from './story.js';
 import {createConfirmDialog} from './confirm-dialog.js';
 import {createPlayerCombatLock} from './player-combat-lock.js';
+import {createCombatFeel} from './combat-feel.js';
 import {createSlowFx,mountSlowFxSettings} from './slow-fx.js';
 import {createLoadingLore} from './loading-lore.js';
 import {createQuestMarkers} from './quest-markers.js';
@@ -103,6 +104,10 @@ export function setupV03(api){
  // The foe being fought: what an attack or the guard turns to without a direction (combat-target.js).
  const combatTarget=createCombatTarget();
  const playerCombatLock=createPlayerCombatLock();
+ // Hit stop, camera kick, dodge counter and the heavy-attack lesson (combat-feel.js, 1127-combat).
+ const combatFeel=createCombatFeel({camera:()=>api.world?.camera??null,controller:()=>api.getController?.()??null,battle:()=>battle,player:()=>api.getPlayer?.()??null,
+  onTip:when=>story.tip(when),onFlash:text=>story.flash(text),sound:(cue,options)=>api.playSound?.(cue,options),text:key=>t(key),
+  lessonsOpen:()=>story.started&&story.log?.quest?.()?.id!=='M00'});
  const combatLocksTravel=()=>api.world?.gameplayV03 ? playerCombatLock.active(api.world.mapId,battle) : battle.combatCount>0;
  let returnQuestion=null;
  // The cape's spring (cape-spring.js): bound to the warrior of the current scene, rebuilt when either changes.
@@ -750,8 +755,9 @@ export function setupV03(api){
    vitality.decorate(element,foe);
   }},
   // main.js: a hit landed (kind 'enemy': on that foe; 'player'/'block': by that foe), and which foe a starting action faces.
-  combatEvent(kind,foe,damage){if(state.screen==='play'&&!story.sceneActive){
+  combatEvent(kind,foe,damage,heavy=false){if(state.screen==='play'&&!story.sceneActive){
    if(foe?.brain&&(kind==='enemy'||kind==='player'||kind==='block'))gallery.encounter(foe);
+   combatFeel.note(kind,foe,damage,heavy);
    combatTarget.note(kind,foe);playerCombatLock.note(kind,foe,damage,api.world.mapId);
   }},
   get combatLocksTravel(){return combatLocksTravel();},
@@ -775,7 +781,12 @@ export function setupV03(api){
   // Cutscene camera target and short slow motion (read by main.js each frame).
   get cameraFocus(){return state.screen==='play'?story.cameraFocus:null;},
   get holdsPlayer(){return state.screen==='play'&&story.holdsPlayer===true;},
-  get timeScale(){return state.screen==='play'?story.timeScale:1;},
+  get timeScale(){return state.screen==='play'?story.timeScale*combatFeel.timeScale:1;},
+  // main.js: added to the sword's attack (heavy attack, dodge counter), and whether a dodge rolls on the press.
+  get strikeBonus(){return state.screen==='play'?combatFeel.strikeBonus:0;},
+  get pressDodge(){return state.screen==='play'&&!story.sceneActive&&battle.combatCount>0;},
+  // town-services defeat(): a heavy attack's finishing blow on this kind earns more experience (once).
+  finishBonus(kind){return state.screen==='play'&&combatFeel.takeFinish(kind);},
   get lunge(){return state.screen==='play'?story.lunge:null;},
   get questSpot(){return state.screen==='play'?story.questSpot:null;},
   get playing(){return state.screen==='play';},
@@ -816,7 +827,7 @@ export function setupV03(api){
     state.busy=true;void enterPlay({resume:true}).catch(report).finally(()=>{state.busy=false;});
    }else if(state.screen==='play'&&s.ready){
     if(battle.playerAlive===false)playerCombatLock.reset();
-    state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);
+    state.playSeconds+=dt;state.sinceSave+=dt;story.update(dt,s);combatFeel.update(dt);
     combatTarget.update(dt,api.getController()?.state,api.getPlayer()?.position,s.mapId);
     if(story.sceneActive!==state.trailScene){state.trailScene=story.sceneActive;state.wagonShown=false;trail.mark(state.trailScene?'play:opening-scene':'play');}
     if(story.sceneActive&&!state.wagonShown&&!opening.covering&&!doc.hidden){gallery.scene('wagon');state.wagonShown=true;}
@@ -838,7 +849,7 @@ export function setupV03(api){
    castVisual:id=>story.castVisual?.(id)??null,
    foes:()=>(battle.encounters??[]).map(foe=>({kind:foe.summonKind??foe.kind,active:!!foe.active,hp:Math.round(foe.brain?.hp??0),x:+(foe.actor?.position.x??0).toFixed(1),z:+(foe.actor?.position.z??0).toFixed(1)})),
   },
-  inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
-  dispose(){if(state.disposed)return;state.disposed=true;hudBlur.dispose();disposeAccessibility();greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();rewards.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
+  inspect:()=>({story:story.inspect(),combat:combatTarget.inspect(),feel:combatFeel.inspect(),screen:state.screen,attract:state.attract,slot:save.slot,intent:save.intent,playSeconds:Math.floor(state.playSeconds),worldStarted:state.worldStarted}),
+  dispose(){if(state.disposed)return;state.disposed=true;combatFeel.dispose();hudBlur.dispose();disposeAccessibility();greatAttackFx?.dispose();greatAttackFx=null;starfallAura?.dispose();starfallAura=null;openingAttempt?.abort();returnQuestion?.dispose();returnQuestion=null;cancelTap?.();endEarlyLine();cape?.dispose();cape=null;liveText?.dispose();liveText=null;loadingLore?.dispose();loadingLore=null;state.bench?.dispose();selection.dispose();stopAttract();loadingWatch?.disconnect();loadingWait?.disconnect();downloadWatch?.disconnect();view?.removeEventListener?.('pagehide',onPageHide);doc.removeEventListener?.('visibilitychange',onVisibility);story.dispose();rewards.dispose();cursors.dispose();gate.dispose();uiScale?.dispose();vitality.dispose();transfer?.dispose();title.dispose();opening.dispose();delete html.dataset.v03Screen;delete html.dataset.v03Veil;delete html.dataset.v03Ios;},
  };
 }

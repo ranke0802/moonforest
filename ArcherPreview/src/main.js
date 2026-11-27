@@ -1398,7 +1398,7 @@ try {
     const target=args[6]??args[7];
     if(world.v03?.playing&&townServices&&(args[3]==='block'||args[3]==='player')&&townServices.economy.wearDefense(args[3]==='block'))boss.combat.defense=townServices.economy.defense;
     gameplayTrail()?.hit(world.mapId,args[3],target,boss?.playerHp,frameDiagnostics.enabled&&args[3]==='enemy'?{damage:args[1],weapon:townServices?.weaponMark()??null}:null);
-    world?.v03?.combatEvent?.(args[3],target,args[1]);
+    world?.v03?.combatEvent?.(args[3],target,args[1],args[2]===true);
     damageNumbers.show(...args);
     if(!isWarrior()&&args[3]==='enemy')audio.play('arrow_hit',{position:args[0]});
     else actionAudio.damage(...args);
@@ -1435,7 +1435,7 @@ try {
     const meleeAimStart=frameDiagnostics.mark();
     meleeAim?.apply(combatResult,actor,meleeAimDt);
     frameDiagnostics.measure('playerMeleeAimMs',meleeAimStart);
-    const attackBonus=(world.v03?.playing&&townServices)?townServices.economy.attack:equipmentStats(equipmentChoices).attackBonus;
+    const attackBonus=(world.v03?.playing&&townServices)?townServices.attackPower+(world.v03.strikeBonus??0):equipmentStats(equipmentChoices).attackBonus;
     let sample=strikeSampler.sample(combatResult,swordNode,shieldNode,isV2(),actor.rotation.y,attackBonus,playerDimensions(actor));
     try{swordTrail?.update(sample,combatResult.state,elapsed,equipmentChoices.sword);}catch(error){swordTrail?.setEnabled(false);console.warn('[검격 잔상]',error);}
     const contactsStart=frameDiagnostics.mark();
@@ -1465,7 +1465,7 @@ try {
   projectiles = createProjectiles(world.scene, target => training.hit(target));
   input = new PlaygroundInput(canvas, world.camera, actions);
   if(cinematicAuthoringPreview)input.setSuspended(true);
-  input.dodgeSprintGesture=new DodgeSprintGesture({onDodge:()=>actions.dodge(),onSprint:(held,seconds)=>controller?.setSprintHeld?.(held,seconds)});
+  input.dodgeSprintGesture=new DodgeSprintGesture({onDodge:()=>actions.dodge(),onSprint:(held,seconds)=>controller?.setSprintHeld?.(held,seconds),pressDodge:()=>world.v03?.pressDodge===true});
   const wakeRendering=()=>{renderActivity.wake();engine.maxFPS=renderActivity.limit({quality:qualityMode});if(frameLoop&&!frameLoop.running)reconcilePlayback();frameLoop?.recover();};
   for(const event of ['pointerdown','keydown','wheel'])document.addEventListener(event,wakeRendering,{capture:true,passive:true});
   document.addEventListener('pointermove',event=>{if(event.buttons)wakeRendering();},{capture:true,passive:true});
@@ -2045,7 +2045,7 @@ try {
             subject:()=>actor&&({camera:world.camera,scene,actor,meshes:container?.meshes,height:playerDimensions(actor).height,canvasRect:canvas.getBoundingClientRect()}),
             read:()=>{
               const stats=equipmentStats(equipmentChoices),defense=playerDefense();
-              return {equipment:townServices?.equippedFinishes??{...equipmentChoices},tradeBag:townServices?.bag(),attackBonus:townServices?.economy.attack??stats.attackBonus,defense,armorDefense:townServices?.armorDefense??defense-stats.defense,
+              return {equipment:townServices?.equippedFinishes??{...equipmentChoices},tradeBag:townServices?.bag(),attackBonus:townServices?.attackPower??stats.attackBonus,defense,armorDefense:townServices?.armorDefense??defense-stats.defense,
                 progression:townServices?.economy.progression,quickSlots:townServices?.economy.state.quickSlots,
                 canUseSlot:slot=>allowed('potion')&&!controller.captured&&!controller.groggy&&townServices?.canDrink(slot),
                 hp:boss.playerHp,maxHp:boss.playerMaxHp,stamina:controller.stamina,maxStamina:controller.maxStamina,

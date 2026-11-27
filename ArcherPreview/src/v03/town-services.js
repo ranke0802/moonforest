@@ -1,7 +1,8 @@
 import {createTownEconomy} from './town-economy.js';
 import {TOWN_ITEMS,itemName,gearName,itemNote,itemUsage,boostText} from './town-items.js';
 import {t} from './i18n.js';
-import {monsterExperience} from './character-progression.js';
+import {monsterExperience,levelHp,levelAttack} from './character-progression.js';
+import {FINISH_XP} from './combat-feel.js';
 import {createTownTreasure} from './town-treasure.js';
 import {createWeaponConditionHud} from './weapon-condition-hud.js';
 import {createPotionHud} from './potion-hud.js';
@@ -10,7 +11,7 @@ import {createPotionHud} from './potion-hud.js';
 export function setupTownServices({root,world,wallet,legacy,player,battle,controls,appearance,canInteract,onPause,notify,sound,usePotion,canOpenPotionPicker,onPotionLayout,onLevelUp=null,random=Math.random}){
  const economy=createTownEconomy(wallet,legacy(),{random}),win=root.ownerDocument.defaultView;
  const healthHud=root.querySelector('#player-hud'),durabilityHud=healthHud?createWeaponConditionHud(healthHud):null;
- let shop=null,generation=0,disposed=false,wasPlaying=false,lastGear=null,appliedTo=null,treasure=null;
+ let shop=null,generation=0,disposed=false,wasPlaying=false,lastGear=null,appliedTo=null,treasure=null,levelBonus=0;
  const items=()=>economy.state;
  function syncDurability(){
   if(durabilityHud){const id=items().equipped.sword;durabilityHud.update(id,economy.gear(id));}
@@ -21,7 +22,8 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    e.selectTrophy(sword.finish,sword.profile);e.select('shield',shield.finish);
    lastGear=s.equipped.sword+'/'+s.equipped.shield;appliedTo=e;
   }
-  const b=battle();if(b)b.combat.defense=economy.defense;
+  levelBonus=levelAttack(economy.progression.level);
+  const b=battle();if(b){b.combat.defense=economy.defense;fitHealth(b.combat);}
   const c=controls();
   if(c){
    c.staminaRecoveryScale=economy.regen;
@@ -30,14 +32,23 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   }
   syncDurability();
  }
+ // Maximum health from the level (character-progression.js); a higher maximum adds the difference to
+ // the current health, a lower one (a new record) only clamps it.
+ function fitHealth(combat){
+  const max=levelHp(economy.progression.level);if(!(combat.maxHp>0)||combat.maxHp===max)return;
+  const grow=max-combat.maxHp;combat.maxHp=max;
+  combat.hp=grow>0&&combat.hp>0?Math.min(max,combat.hp+grow):Math.min(combat.hp,max);
+ }
  // xpRatio: how far into the current level the bar stood at the last gain (the banner fills from it).
  let xpRatio=null;
  const ratioOf=p=>p.nextXp?p.xp/p.nextXp:1;
  function announceLevel(previous){
   const p=economy.progression,level=p.level,fromRatio=xpRatio??0;xpRatio=ratioOf(p);
   if(level<=previous)return;
+  apply();
+  const hp=levelHp(level)-levelHp(previous),attack=levelAttack(level)-levelAttack(previous);
   // 0.3 level-up moment (reward-celebration.js); the old message when nothing takes it.
-  if(onLevelUp?.({level,points:level-previous,cap:p.cap,ratio:xpRatio,fromRatio})!==true)notify(t('reward.levelUp',{level}));
+  if(onLevelUp?.({level,points:level-previous,cap:p.cap,ratio:xpRatio,fromRatio,hp,attack})!==true)notify(t('reward.levelUp',{level}));
  }
  function canDrink(slot=items().selectedQuickSlot){
   const b=battle(),s=items(),id=s.quickSlots[slot];if(!b||b.loading||b.grab?.active||!b.playerAlive||b.playerHp<=0||!s.bag[id])return false;
@@ -111,6 +122,8 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
    if(!economy.grant('leather-coat'))return false;if(!items().equipped.armor)economy.equip('leather-coat');apply();return true;},
   addPotions(count){return economy.grant('potion',count)?count:0;},
   rest(){const n=3-(items().bag.potion??0);if(n>0)economy.grant('potion',n);},
+  // The sword's attack and the level's (read by main.js for every sampled strike: no allocation).
+  get attackPower(){return economy.attack+levelBonus;},
   get equippedSwordName(){const id=items().equipped.sword;return gearName(id,economy.gear(id)?.blessed);},
   reset,clear(){generation++;shop?.close();potionHud?.clear();treasure?.clear();flush();},
   // view: 'shop' (buy, sell, make) or 'forge' (the smith's bench: repair and temper).
@@ -131,7 +144,9 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   },
   defeat(event){
    if(!world.v03?.playing||!event?.position)return;
-   const xp=world.v03.story?.replaying?0:monsterExperience(event.kind);
+   let xp=world.v03.story?.replaying?0:monsterExperience(event.kind);
+   // A heavy attack's finishing blow earns half again (combat-feel.js).
+   if(xp&&world.v03.finishBonus?.(event.kind)===true)xp+=Math.max(4,Math.round(xp*FINISH_XP));
    const previous=xp?economy.progression.level:0;
    // Keep the kill and its random loot in one ledger write. A kill still
    // earns XP when no item rolls or the field has reached its pickup cap.

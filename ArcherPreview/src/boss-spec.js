@@ -35,6 +35,8 @@ export const BOSS_ADVANCING_COMBO=['Right_Jab_from_Guard','Left_Hook_from_Guard'
 export const BOSS_DAMAGE={Axe_Spin_Attack:160,Flying_Fist_Kick:150,Left_Hook_from_Guard:100,Left_Uppercut_from_Guard:120,
   Lunge_Spin_Kick:150,Right_Jab_from_Guard:80,Rising_Flying_Kick:140,Shield_Push_Left:100,Skill_01:180,Skill_02:300,Skill_03:160,Weapon_Combo:180};
 
+// Telegraph hold (opt-in): where in the wind-up the pose holds, and the glow strength (hit flash is .22 s).
+export const BOSS_TELEGRAPH_AT=.8,BOSS_TELEGRAPH_FLASH=.3;
 export class BossBrain {
   constructor(durations,random=Math.random,{distanceScale=1}={}){
     this.durations=durations;this.random=random;this.distanceScale=distanceScale;this.hp=this.maxHp=900;
@@ -42,7 +44,7 @@ export class BossBrain {
     this.stagger=0;this.flash=0;this.bag=[];this.attackCount=0;this.visited=new Set([this.state]);this.impacted=false;this.comboStep=0;
   }
   configureAttacks(config={}){const old=this.attackSettings;if(old?.custom!==config.custom||old?.sequence?.join('|')!==config.sequence?.join('|'))this.customAttackIndex=0;this.attackSettings=config;}
-  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.impacted=false;this.interrupted=false;this.visited.add(state);if(mode!=='attack')this.comboStep=0;else this.castSpeed=Number.isFinite(this.attackSettings?.speed)?Math.max(.5,Math.min(2,this.attackSettings.speed)):1;}
+  start(state,mode){this.state=state;this.mode=mode;this.time=0;this.serial++;this.held=0;this.impacted=false;this.interrupted=false;this.visited.add(state);if(mode!=='attack')this.comboStep=0;else this.castSpeed=Number.isFinite(this.attackSettings?.speed)?Math.max(.5,Math.min(2,this.attackSettings.speed)):1;}
   startCombo(){this.comboStep=1;this.start(BOSS_ADVANCING_COMBO[0],'attack');}
   nextAttack(){
     const sequence=this.attackSettings?.custom&&this.attackSettings.sequence;
@@ -80,7 +82,7 @@ export class BossBrain {
     const events=[];dt=Math.max(0,dt);this.flash=Math.max(0,this.flash-dt);
     if(this.stagger>0){
       this.stagger=Math.max(0,this.stagger-dt);
-      if(!this.stagger&&this.interrupted){this.interrupted=false;this.start('Block6','idle');this.wait=.3;}
+      if(!this.stagger&&this.interrupted){this.interrupted=false;this.start('Block6','idle');this.wait=this.restWait??.3;}
       return {events,speed:0};
     }
     const duration=this.durations[this.state];
@@ -101,12 +103,25 @@ export class BossBrain {
     }
     if(['attack','guard','evade'].includes(this.mode)){
       const spec=BOSS_BY_NAME[this.state];
+      // Optional (0.3 sets telegraph, seconds): a heavy attack holds its pose just
+      // before contact and glows once, so a dodge can be read in time.
+      if(this.telegraph>0&&this.mode==='attack'&&!this.impacted&&BOSS_HEAVY_ATTACKS.has(this.state)&&this.held<this.telegraph){
+        const at=duration*spec.impact*BOSS_TELEGRAPH_AT,rate=(spec.playRate||1.12)*(this.castSpeed??1);
+        if(this.time+dt*rate>=at){
+          if(!(this.held>0)){this.telegraphSerial=(this.telegraphSerial??0)+1;if(this.flash<BOSS_TELEGRAPH_FLASH){this.flash=BOSS_TELEGRAPH_FLASH;this.flashDuration=BOSS_TELEGRAPH_FLASH*2;}}
+          // A long frame reaches the hold point, holds, and goes on with what is left of it.
+          let left=dt-Math.max(0,(at-this.time)/rate);this.time=Math.max(this.time,at);
+          const used=Math.min(left,this.telegraph-this.held);this.held+=used;left-=used;
+          if(this.held<this.telegraph-1e-9)return {events,speed:0};
+          dt=left;
+        }
+      }
       this.time=Math.min(duration,this.time+dt*(this.mode==='attack'?(spec.playRate||1.12)*(this.castSpeed??1):1));
       const speed=this.comboStep&&this.time<duration*spec.impact?1.8:0;
       if(this.mode==='attack'&&!this.impacted&&this.time>=duration*spec.impact){this.impacted=true;events.push({type:'attack',...spec,comboStep:this.comboStep});}
       if(this.time>=duration){
         if(this.comboStep&&this.comboStep<BOSS_ADVANCING_COMBO.length)this.start(BOSS_ADVANCING_COMBO[this.comboStep++],'attack');
-        else {this.start('Block6','idle');this.wait=.3;}
+        else {this.start('Block6','idle');this.wait=this.restWait??.3;}
       }
       return {events,speed};
     }

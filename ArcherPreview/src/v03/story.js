@@ -410,6 +410,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(!foe.active||foe.v03Tuned||(foe.summonKind??foe.kind)!==kind||!foe.brain)continue;
    if(tune.hp){foe.brain.maxHp=tune.hp;foe.brain.hp=Math.min(foe.brain.hp,tune.hp);}
    if(tune.damage)foe.damageScale=tune.damage;
+   // rest: seconds between the foe's blows; telegraph: the hold before a heavy blow (boss-spec.js, 1127-combat).
+   if(tune.rest!=null)foe.brain.restWait=tune.rest;if(tune.telegraph)foe.brain.telegraph=tune.telegraph;
    foe.v03Tuned=true;
   }
  }
@@ -1654,6 +1656,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // also receive the key that starts a conversation.
  doc.addEventListener('keydown',onKey,true);
  return {
+  // combat-feel.js: a one-time tip by its when (TIPS), and the short banner line.
+  tip(when){if(started)trigger(when);},
+  flash(text){if(started&&!disposed)hud.flash(text);},
   get dialogueOpen(){return dialogue.open;},
   get near(){return near!==null;},
   allows,

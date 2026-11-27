@@ -109,6 +109,8 @@ export default {
   'settings.playerTexture':'角色贴图','settings.playerTexture2k':'2K（默认）','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K（此设备不支持）','settings.playerTextureNote':'4K 更清晰，但下载量更大。更改将在下次进入时生效。','settings.playerTextureNext':'更改将在下次进入时生效。','settings.playerTextureNote4kOff':'此设备无法使用 4K 贴图，因此使用 2K。',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K（默认）',
  'waves.start':'第{n}波 来袭！','waves.cleared':'第{n}波 突破！','waves.allCleared':'{n}波全部挡下！','waves.lost':'被逼退出栅栏 · 再次交谈可从这一波重来','waves.cancelled':'已离开村子 · 防守中止','waves.unavailable':'现在无法开始防守','waves.objective.fight':'第{n}/{total}波 · 剩余魔物 {left}','waves.objective.idle':'第{n}/{total}波 · 与{who}交谈','waves.objective.report':'{total}/{total}波已突破 · 告诉{who}',
+  // 1127-combat: dodge counter, heavy finish, level growth.
+  'combat.counter':'反击！','combat.heavyFinish':'重击收尾！经验 +50%','levelup.growth':'最大生命 +{hp} · 攻击力 +{attack}','levelup.hp':'最大生命 +{n}','levelup.attack':'攻击力 +{n}',
  },
  story:{
   speakers:{
@@ -241,6 +243,8 @@ export default {
    stamina:{title:'体力',keys:'生命值下方的黄色条是体力。',touch:'生命值下方的黄色条是体力。',text:'攻击、闪避、格挡、疾跑会消耗，停下就恢复。'},
    rest:{title:'休息与记录',keys:'与旅店老板交谈即可休息。',touch:'与旅店老板交谈即可休息。',text:'恢复生命和恢复药，并记录旅程。'},
    clues:{"title":"调查","keys":"靠近可疑之物按 E 键调查。","touch":"靠近后点按出现的按钮调查。","text":"找到的东西会显示在目标中。"},
+   'heavy-hunt':{title:'重击',keys:'按住 J 或鼠标左键再松开。',touch:'按住剑按钮再松开。',text:'用它收尾，经验 +50%。'},
+   'counter':{title:'闪避反击',keys:'闪避后立刻按 J 反击。',touch:'闪避后立刻点剑按钮反击。',text:'2 秒内最多 3 次攻击伤害提高。'},
   },
  },
  legacy:{

@@ -14,9 +14,9 @@ export const LEVEL_SECONDS=2.8, REWARD_SECONDS=2.6, MERGE_SECONDS=.9;
 
 const merge=(into,event)=>{
  into.level=Math.max(into.level,event.level);into.points+=event.points??0;
- into.ratio=event.ratio??into.ratio;into.cap=event.cap??into.cap;return into;
+ into.ratio=event.ratio??into.ratio;into.cap=event.cap??into.cap;into.hp=(into.hp??0)+(event.hp??0);into.attack=(into.attack??0)+(event.attack??0);return into;
 };
-const copy=event=>({level:event.level,points:event.points??0,cap:event.cap??20,ratio:event.ratio??0,fromRatio:event.fromRatio??0});
+const copy=event=>({level:event.level,points:event.points??0,cap:event.cap??20,ratio:event.ratio??0,fromRatio:event.fromRatio??0,hp:event.hp??0,attack:event.attack??0});
 const addReward=(into,r)=>{into.gold+=r.gold??0;into.xp+=r.xp??0;into.potions+=r.potions??0;into.armor=r.armor??into.armor;return into;};
 
 export function createRewardCelebration({doc,mount,reduced=reducedMotion,playCue=()=>false,createFx=createLevelUpFx,createHud=createRewardHud}){
@@ -46,7 +46,7 @@ export function createRewardCelebration({doc,mount,reduced=reducedMotion,playCue
  }
  return {hud,
   get fx(){return fx;},
-  // event: {level, points, cap, ratio (0..1 into the next level), fromRatio (before the gain)}
+  // event: {level, points, cap, ratio (0..1 into the next level), fromRatio (before the gain), hp, attack (what the levels added)}
   levelUp(event){
    if(disposed||!Number.isSafeInteger(event?.level))return false;
    if(current&&age<MERGE_SECONDS){merge(current,event);hud.updateLevel(current);return true;}

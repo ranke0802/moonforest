@@ -118,6 +118,8 @@ export default {
   'settings.playerTexture':'Kết cấu nhân vật','settings.playerTexture2k':'2K (mặc định)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (thiết bị không hỗ trợ)','settings.playerTextureNote':'4K sắc nét hơn nhưng phải tải nhiều hơn. Thay đổi có hiệu lực từ lần vào sau.','settings.playerTextureNext':'Thay đổi sẽ có hiệu lực từ lần vào sau.','settings.playerTextureNote4kOff':'Thiết bị này không dùng được kết cấu 4K nên dùng 2K.',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (mặc định)',
  'waves.start':'Đợt {n}: ma vật tấn công!','waves.cleared':'Vượt qua đợt {n}!','waves.allCleared':'Đã chặn đủ {n} đợt!','waves.lost':'Bị đẩy lùi khỏi hàng rào · Nói chuyện lại để thử lại đợt này','waves.cancelled':'Đã rời làng · Dừng phòng thủ','waves.unavailable':'Chưa thể bắt đầu phòng thủ lúc này','waves.objective.fight':'Đợt {n}/{total} · Còn {left} ma vật','waves.objective.idle':'Đợt {n}/{total} · Nói chuyện với {who}','waves.objective.report':'Vượt {total}/{total} đợt · Báo cho {who}',
+  // 1127-combat: dodge counter, heavy finish, level growth.
+  'combat.counter':'Phản đòn!','combat.heavyFinish':'Kết liễu bằng đòn mạnh! +50% EXP','levelup.growth':'Máu tối đa +{hp} · Tấn công +{attack}','levelup.hp':'Máu tối đa +{n}','levelup.attack':'Tấn công +{n}',
  },
  story:{
   speakers:{
@@ -250,6 +252,8 @@ export default {
    stamina:{title:'Thể lực',keys:'Thanh vàng dưới máu là thể lực.',touch:'Thanh vàng dưới máu là thể lực.',text:'Mọi hành động đều tốn, dừng lại sẽ hồi.'},
    rest:{title:'Nghỉ ngơi và ghi lại',keys:'Nói chuyện với chủ quán trọ để nghỉ.',touch:'Nói chuyện với chủ quán trọ để nghỉ.',text:'Hồi máu, thuốc và ghi lại hành trình.'},
    clues:{"title":"Xem xét","keys":"Đến gần vật lạ, nhấn E để xem.","touch":"Đến gần rồi chạm nút để xem.","text":"Thứ tìm thấy sẽ hiện ở mục tiêu."},
+   'heavy-hunt':{title:'Đòn mạnh',keys:'Giữ J hoặc chuột trái rồi thả.',touch:'Giữ nút kiếm rồi thả.',text:'Kết liễu bằng đòn này: +50% EXP.'},
+   'counter':{title:'Né rồi phản đòn',keys:'Ngay sau khi né, chém bằng J.',touch:'Ngay sau khi né, chạm nút kiếm.',text:'Tối đa 3 đòn trong 2 giây mạnh hơn.'},
   },
  },
  legacy:{

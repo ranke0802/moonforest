@@ -5,6 +5,11 @@ export const CHAPTER_LEVEL_CAP=20;
 export const SKILL_REFUND_GOLD=100;
 export const PASSIVE_LIMITS=Object.freeze({weaponCare:5,guardTraining:10,endurance:10,greatAttack:5});
 export const weaponWearInterval=rank=>10+5*rank;
+// Every level past the first adds a little to the warrior himself (1127-combat). Derived from the
+// level alone, so an older record gets the values of the level it already reached.
+export const PLAYER_BASE_HP=500,LEVEL_GROWTH=Object.freeze({hp:10,attack:1});
+export const levelHp=level=>PLAYER_BASE_HP+LEVEL_GROWTH.hp*Math.max(0,(level|0)-1);
+export const levelAttack=level=>LEVEL_GROWTH.attack*Math.max(0,(level|0)-1);
 
 const QUEST_XP=Object.freeze({
   M00:60,M01:40,M02:70,M03:100,M04:160,M05:180,M06:220,M07:240,M08:300,M09:180,

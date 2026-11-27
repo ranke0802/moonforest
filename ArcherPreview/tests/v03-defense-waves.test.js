@@ -54,7 +54,7 @@ test('the stage scale tunes HP once and every hit (elite on top)',()=>{
  assert.equal(enc.attackDamage({damage:18}),Math.round(18*1.35));assert.equal(enc.profile.damage,Math.round(18*1.35),'arrows and spells read the profile');
  assert.equal(CHAPTER_COMBAT['goblin-warrior'].damage,18,'the shared profile is untouched');
  const boss={profile:{...CHAPTER_COMBAT['hobgoblin-boss']},brain:{hp:780,maxHp:780}};tuneWaveFoe(boss,'hobgoblin-boss',plan);
- assert.equal(boss.brain.maxHp,Math.round(780*1.6*WAVE_ELITE.hp));assert.equal(boss.attackDamage({damage:48}),Math.round(48*1.35*WAVE_ELITE.damage));assert.ok(boss.waveElite);
+ assert.equal(boss.brain.maxHp,Math.round(CHAPTER_COMBAT['hobgoblin-boss'].hp*1.6*WAVE_ELITE.hp));assert.equal(boss.attackDamage({damage:48}),Math.round(48*1.35*WAVE_ELITE.damage));assert.ok(boss.waveElite);
 });
 
 // A stand-in for the chapter foe factory: same create/dispose shape, no engine.

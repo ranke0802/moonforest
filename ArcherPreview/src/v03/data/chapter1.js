@@ -442,7 +442,7 @@ export const QUESTS=Object.freeze([
  {id:'M04',reward:{gold:120,armor:'leather'},choice:{line:'jeffrey-bear-reward',options:[{id:'leather',reward:{gold:120,armor:'leather'}},{id:'potions',reward:{gold:120,potions:3}},{id:'gold',reward:{gold:240}}]},title:'대평원의 곰',steps:[
   {id:'father',text:'양아버지에게 그날 일 여쭙기',type:'talk',targets:['foster-father'],dialogues:{'foster-father':'instructor-joachim'}},
   {id:'ask',text:'정찰병 제프리 찾아가기',type:'talk',targets:['youth'],dialogues:{youth:'jeffrey-bear'}},
-  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},tune:{hp:650,damage:.7},intro:'bear-start',arrival:'대평원의 곰이 모습을 드러냈다'},
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},tune:{hp:580,damage:.6,rest:.75,telegraph:.3},intro:'bear-start',arrival:'대평원의 곰이 모습을 드러냈다'},
   {id:'report',text:'제프리에게 알리기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'jeffrey-truth'}},
  ]},
  {id:'M11',reward:{gold:40},title:'마비된 듯한 움직임',steps:[
@@ -555,4 +555,7 @@ export const TIPS=Object.freeze([
  {id:'stamina',when:'low-stamina',title:'스태미나',keys:'노란 막대가 스태미나입니다.',touch:'노란 막대가 스태미나입니다.',text:'공격·회피·방패·질주에 쓰고, 멈추면 찹니다.'},
  {id:'rest',when:'effect:rest',title:'휴식과 기록',keys:'여관 주인에게 말을 걸면 쉴 수 있습니다.',touch:'여관 주인에게 말을 걸면 쉴 수 있습니다.',text:'체력·회복약이 차고 여정이 기록됩니다.'},
  {id:'clues',when:'step:M07/clues',title:'살펴보기',keys:'수상한 물건 가까이에서 E 키로 살펴봅니다.',touch:'가까이 가면 뜨는 버튼으로 살펴봅니다.',text:'찾은 것은 목표에 표시됩니다.'},
+ // 1127-combat: the heavy attack again once the hunt has only used plain hits; the dodge counter the first time it opens.
+ {id:'heavy-hunt',when:'light-streak',title:'강공격',target:'#attack-button',keys:'J · 좌클릭을 길게 눌렀다 떼세요.',touch:'검 버튼을 길게 눌렀다 떼세요.',text:'강공격으로 마무리하면 경험치 +50%.'},
+ {id:'counter',when:'dodge-counter',title:'회피 반격',target:'#attack-button',keys:'피한 직후 J로 반격하세요.',touch:'피한 직후 검 버튼으로 반격하세요.',text:'2초 동안 세 번까지 피해가 커집니다.'},
 ]);

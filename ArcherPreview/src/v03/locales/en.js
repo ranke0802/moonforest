@@ -118,6 +118,8 @@ export default {
   'settings.playerTexture':'Character textures','settings.playerTexture2k':'2K (default)','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K (not supported here)','settings.playerTextureNote':'4K is sharper and downloads more. A change applies from your next visit.','settings.playerTextureNext':'Your change applies from your next visit.','settings.playerTextureNote4kOff':'This device can’t use 4K textures, so 2K is used.',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K (default)',
  'waves.start':'Stage {n} raid!','waves.cleared':'Stage {n} cleared!','waves.allCleared':'All {n} stages held!','waves.lost':'Pushed back from the palisade · Talk again to retry this stage','waves.cancelled':'You left the village · The defense has stopped','waves.unavailable':'The defense can’t start right now','waves.objective.fight':'Stage {n}/{total} · Fiends left: {left}','waves.objective.idle':'Stage {n}/{total} · Talk to {who}','waves.objective.report':'All {total} stages held · Tell {who}',
+  // 1127-combat: dodge counter, heavy finish, level growth.
+  'combat.counter':'Counter!','combat.heavyFinish':'Heavy finish! +50% XP','levelup.growth':'Max HP +{hp} · Attack +{attack}','levelup.hp':'Max HP +{n}','levelup.attack':'Attack +{n}',
  },
  story:{
   speakers:{
@@ -250,6 +252,8 @@ export default {
    stamina:{title:'Stamina',keys:'The yellow bar is stamina.',touch:'The yellow bar is stamina.',text:'Every action uses it. Stop to refill.'},
    rest:{title:'Rest and record',keys:'Talk to the innkeeper to rest.',touch:'Talk to the innkeeper to rest.',text:'Refills health and potions, and saves.'},
    clues:{"title":"Search","keys":"Press E near something odd to look.","touch":"Get close and tap the button to look.","text":"What you find is marked in the goal."},
+   'heavy-hunt':{title:'Heavy attack',keys:'Hold J or left click, then release.',touch:'Hold the sword button, then release.',text:'Finish a foe with it for +50% XP.'},
+   'counter':{title:'Dodge counter',keys:'Right after a dodge, strike with J.',touch:'Right after a dodge, tap the sword.',text:'Up to three hits within 2 s deal more.'},
   },
  },
  legacy:{

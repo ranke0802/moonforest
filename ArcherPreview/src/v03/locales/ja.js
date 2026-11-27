@@ -110,6 +110,8 @@ export default {
   'settings.playerTexture':'キャラクターのテクスチャ','settings.playerTexture2k':'2K（標準）','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K（この端末は非対応）','settings.playerTextureNote':'4Kはより鮮明ですが、ダウンロード量が増えます。変更は次回の起動から反映されます。','settings.playerTextureNext':'変更は次回の起動から反映されます。','settings.playerTextureNote4kOff':'この端末では4Kテクスチャを使えないため、2Kを使います。',
   'settings.playerTexture2kPlain':'2K','settings.playerTexture4kDefault':'4K（標準）',
  'waves.start':'第{n}段階 襲撃！','waves.cleared':'第{n}段階 突破！','waves.allCleared':'全{n}段階を守り抜いた！','waves.lost':'柵から押し戻された · もう一度話しかけると同じ段階から','waves.cancelled':'村を離れたため防衛を中断した','waves.unavailable':'今は防衛を始められません','waves.objective.fight':'{n}/{total}段階 · 残りの魔物 {left}','waves.objective.idle':'{n}/{total}段階 · {who}に話しかける','waves.objective.report':'{total}/{total}段階突破 · {who}に知らせる',
+  // 1127-combat: dodge counter, heavy finish, level growth.
+  'combat.counter':'カウンター！','combat.heavyFinish':'強攻撃でとどめ！ 経験値+50%','levelup.growth':'最大HP +{hp} · 攻撃力 +{attack}','levelup.hp':'最大HP +{n}','levelup.attack':'攻撃力 +{n}',
  },
  story:{
   speakers:{
@@ -242,6 +244,8 @@ export default {
    stamina:{title:'スタミナ',keys:'黄色いゲージがスタミナです。',touch:'黄色いゲージがスタミナです。',text:'攻撃や回避で減り、止まると回復します。'},
    rest:{title:'休息と記録',keys:'宿の主人に話しかけると休めます。',touch:'宿の主人に話しかけると休めます。',text:'体力と回復薬が戻り、旅が記録されます。'},
    clues:{"title":"調べる","keys":"怪しい物の近くでEキーで調べます。","touch":"近づくと出るボタンで調べます。","text":"見つけた物は目標に表示されます。"},
+   'heavy-hunt':{title:'強攻撃',keys:'J・左クリックを長押しして離します。',touch:'剣ボタンを長押しして離します。',text:'強攻撃でとどめを刺すと経験値+50%。'},
+   'counter':{title:'回避カウンター',keys:'回避した直後にJで反撃します。',touch:'回避した直後に剣ボタンで反撃します。',text:'2秒以内の3回まで与ダメージが増えます。'},
   },
  },
  legacy:{

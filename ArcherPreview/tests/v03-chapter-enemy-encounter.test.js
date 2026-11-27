@@ -16,6 +16,7 @@ import {readBinaryMapContainer} from '../src/map-container.js';
 import {acquireFoeWeapon,mountEnemyWeapon} from '../src/v03/foe-weapons.js';
 import {CHAPTER_MONSTER_MODELS} from '../src/v03/chapter-monster-models.js';
 import {CHAPTER_COMBAT,ChapterEnemyBrain} from '../src/v03/chapter-enemy-brain.js';
+import {CHAPTER_BOSS_ATTACKS} from '../src/v03/chapter-boss-attacks.js';
 import {createChapterEnemyFactory} from '../src/v03/chapter-enemy-encounter.js';
 
 const clips={idle:1,walk:1,hit:1,death:3.5,attack:2};
@@ -24,7 +25,9 @@ test('all six chapter rigs telegraph before one contact and can be interrupted',
   for(const [kind,profile] of Object.entries(CHAPTER_COMBAT)){
     const brain=new ChapterEnemyBrain(profile,clips,kind);brain.engaged=true;brain.hasSight=true;
     brain.update(.36,1);assert.equal(brain.mode,'attack');
-    assert.deepEqual(brain.update(profile.windup-.02,1).events,[]);
+    // A heavy first blow holds its telegraph (profile.telegraph) before contact (1127-combat).
+    const hold=CHAPTER_BOSS_ATTACKS[kind]?.[0]?.hits[0]?.heavy?profile.telegraph??0:0;
+    assert.deepEqual(brain.update(profile.windup-.02+hold,1).events,[]);
     assert.equal(brain.update(.03,1).events.length,1);
     assert.deepEqual(brain.update(.03,1).events,[]);
     brain.hit({damage:1,heavy:true});assert.equal(brain.mode,'hit');
@@ -302,7 +305,7 @@ test('the fitted club uses distinct overhead and sweeping poses and damages a st
     'the held club moves from the overhead pose '+overhead+' to the lateral pose '+sweep);
   pose('club-double',1.82);
   assert.deepEqual(observed,[
-    ['club-crush',1,55],['club-sweep',1,46],['club-double',1,39],['club-double',2,53],
+    ['club-crush',1,51],['club-sweep',1,42],['club-double',1,36],['club-double',2,48],
   ]);
 });
 test('the ghoul commits its moving blade to the approach line, exposes its back during a brace, and resets a pending return cut on summon',async t=>{
@@ -374,7 +377,7 @@ test('forest and cave champions use boss vitality and priority beside an ordinar
   const add=(await f.factory.create(f.params('goblin-warrior','add'))).encounter;
   add.territoryState.engaged=true;
   assert.equal(primaryHealthBoss([add],f.player.position),null);
-  for(const [kind,hp,damage] of [['hobgoblin-boss',780,48],['ghoul-warrior',720,42]]){
+  for(const [kind,hp,damage] of [['hobgoblin-boss',700,44],['ghoul-warrior',720,42]]){
     const handle=await f.factory.create(f.params(kind,kind,3)),champion=handle.encounter;
     assert.equal(champion.brain.hp,hp);assert.equal(champion.brain.maxHp,hp);assert.equal(champion.profile.damage,damage);
     assert.equal(primaryHealthBoss([add,champion],f.player.position),null);

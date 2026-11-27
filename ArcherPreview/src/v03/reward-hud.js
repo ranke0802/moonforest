@@ -18,7 +18,7 @@ export function createRewardHud({doc,mount=doc.body,icon=townItemIcon}){
  const title=make('strong','v03-lvup-title',banner),level=make('span','v03-lvup-level',banner);
  const bar=make('div','v03-lvup-bar',banner),fill=make('i','v03-lvup-fill',bar);make('i','v03-lvup-flare',bar);
  bar.setAttribute('aria-hidden','true');
- const stats=make('ul','v03-lvup-stats',banner),statRows=[make('li','',stats),make('li','',stats)];
+ const stats=make('ul','v03-lvup-stats',banner),statRows=[make('li','',stats),make('li','',stats),make('li','',stats)];
  const hint=make('small','v03-lvup-hint',banner);
  const strip=make('section','v03-reward',root);strip.hidden=true;strip.setAttribute('aria-hidden','true');
  make('div','v03-reward-rays',strip);
@@ -33,10 +33,12 @@ export function createRewardHud({doc,mount=doc.body,icon=townItemIcon}){
  const number=n=>n.toLocaleString(language());
  let ratioFrom=-1,ratioTo=-1,countAge=0,counting=false;
 
- function setLevel({level:value,points=0,cap=20,ratio=0,fromRatio=0}){
+ // hp, attack: what the reached levels added (1127-combat); a row only for a value that rose.
+ function setLevel({level:value,points=0,cap=20,ratio=0,fromRatio=0,hp=0,attack=0}){
   write(title,t('levelup.title'));
   write(level,t('levelup.level',{level:value}));
   const rows=[];
+  if(hp>0&&attack>0)rows.push(t('levelup.growth',{hp,attack}));else if(hp>0)rows.push(t('levelup.hp',{n:hp}));else if(attack>0)rows.push(t('levelup.attack',{n:attack}));
   if(points>0)rows.push(t('levelup.points',{n:points}));
   if(value>=cap)rows.push(t('levelup.max'));
   for(let i=0;i<statRows.length;i++){const text=rows[i]??'';write(statRows[i],text);statRows[i].hidden=!text;}
