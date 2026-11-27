@@ -115,7 +115,7 @@ import {ShieldHoldSources,bindShieldHoldButton} from './shield-hold-input.js';
 import { dodgeDirection, dodgeDistanceAt } from './dodge.js';
 import { constrainDodge } from './dodge-collision.js';
 import { AdaptivePerformance,resumeAdaptiveLevel } from './adaptive-performance.js';
-import {inspectActorSourceCache} from './actor-source-cache.js';
+import {inspectActorSourceCache,setActorSourceCacheBudget} from './actor-source-cache.js';
 import { setupMotionSpeedControls } from './motion-speed-controls.js';
 import { setupDeathScreen } from './death-screen.js';
 import { FrameLoop } from './frame-loop.js';
@@ -1321,6 +1321,7 @@ try {
   if(combatTrail)engine.onContextLostObservable.add(()=>gameplayTrail()?.fault(world.mapId,'webgl-context-lost',boss?.playerHp));
   engine.maxFPS=renderActivity.limit();
   setAnimationCompaction(!!versionRoute.edition&&!fullAnimationKeys);
+  if(!versionRoute.edition)setActorSourceCacheBudget(0);// 0.2 keeps releasing actor sources
   if(versionRoute.edition&&splitUploadOverride===true){
     enableSplitTextureUpload(engine,{bytesPerFrame:()=>loadingAsset?16<<20:touchDevice?1<<20:4<<20});
   }else if(versionRoute.edition==='moonforest-0.3'&&touchDevice&&splitUploadOverride===null){
