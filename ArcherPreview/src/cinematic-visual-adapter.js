@@ -13,15 +13,21 @@ import {getNpcSource,getNpcCatalog} from './npc-library.js';
 import {applyNpcLook} from './npc-look.js';
 import {prepareNpcInteriorInk} from './character-interior-ink.js';
 import {createBossPreparation} from './boss-preparation.js';
+import {parkActorSource,reviveActorSource,releaseActorSources} from './actor-source-cache.js';
 
 // A visual-only, scoped container cache. Independent rigs/animation targets,
 // shared original geometry/textures, no brain, collision, rewards or battle list.
-export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,readNpcContainer=readMapContainer,resolveNpcSource=getNpcSource,resolveCatalog=getNpcCatalog,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},prepareShaders=prepareBossShaders,prepareInterior=prepareNpcInteriorInk}={}){
- const scene=world.scene,entries=new Map(),adapters=new Set();let disposed=false,initialized;
+let factorySerial=0;
+export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest=readMapManifest,loadContainer=loadMapContainer,readNpcContainer=readMapContainer,resolveNpcSource=getNpcSource,resolveCatalog=getNpcCatalog,initialize=async()=>{await initializeVillageKtx2();await initializeVillageMeshopt();},prepareShaders=prepareBossShaders,prepareInterior=prepareNpcInteriorInk,keepSources=true}={}){
+ const scene=world.scene,entries=new Map(),adapters=new Set(),owner={id:++factorySerial};let disposed=false,initialized;
  const rootUrl=new URL(baseUrl??import.meta.env?.BASE_URL??'/',globalThis.location?.href??'http://localhost/');
- function release(entry){if(--entry.refs>0)return;entries.delete(entry.key);entry.controller.abort(mapLoadAbortError());const finish=()=>{entry.container?.dispose();for(const material of entry.derived)material.dispose(false,false);entry.derived.clear();};finish();entry.pending.finally(finish).catch(()=>{});}
+ function release(entry){if(--entry.refs>0)return;entries.delete(entry.key);
+  // A finished source is parked (actor-source-cache.js) for the next visit; a pending one is cancelled.
+  if(keepSources&&!disposed&&entry.ready&&entry.container&&parkActorSource(scene,owner,entry.key,entry,()=>{entry.container?.dispose();for(const material of entry.derived)material.dispose(false,false);entry.derived.clear();}))return;
+  entry.controller.abort(mapLoadAbortError());const finish=()=>{entry.container?.dispose();for(const material of entry.derived)material.dispose(false,false);entry.derived.clear();};finish();entry.pending.finally(finish).catch(()=>{});}
  function sourceFor(definition){
   const key=definition.assetId+'@'+definition.assetVersion;let entry=entries.get(key);if(entry){entry.refs++;return entry;}
+  entry=reviveActorSource(scene,owner,key);if(entry){entry.refs=1;entries.set(key,entry);return entry;}
   const asset=resolveCatalog(catalog).entries.find(row=>row.assetId===definition.assetId&&row.version===definition.assetVersion);if(!asset)throw new Error('Unknown cinematic catalog asset/version');
   entry={key,asset,refs:1,controller:new AbortController(),container:null,derived:new Set()};entries.set(key,entry);
   entry.pending=(async()=>{const lifetime=new MapLoadLifetime({signal:entry.controller.signal,stage:'cinematic-visual-source'});let container,npcSource;try{
@@ -32,7 +38,7 @@ export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest
    for(const group of container.animationGroups)group.stop();const before=new Set(container.meshes.map(mesh=>mesh.material));
    if(asset.geometry.skinned||asset.geometry.clips||asset.geometry.morphTargets)applyMonsterToon(container);else applyVillageToon(container.meshes,world.lighting??{direction:new Vector3(0,1,0),shadowsActive:false});if(config.npc)applyNpcLook(container,config.npc.look);
    for(const mesh of container.meshes)if(mesh.material&&!before.has(mesh.material))entry.derived.add(mesh.material);
-   entry.config=config;entry.container=container;container=null;return entry;
+   entry.config=config;entry.container=container;container=null;entry.ready=true;return entry;
   }finally{container?.dispose();npcSource?.release();lifetime.close();}})();entry.pending.catch(()=>{});return entry;
  }
  function create(definition,context={}){
@@ -72,5 +78,5 @@ export function createCinematicVisualFactory({world,catalog,baseUrl,readManifest
   encounter.setShadowCasting=enabled=>{for(const mesh of asset?.meshes??[])if(mesh.getTotalVertices()&&!isRuntimeOutline(mesh)){if(enabled)world.shadows?.addShadowCaster(mesh,false);else world.shadows?.removeShadowCaster(mesh,false);}};
   adapters.add(adapter);return adapter;
  }
- create.inspect=()=>({actors:adapters.size,sources:entries.size});create.dispose=async()=>{if(disposed)return;disposed=true;await Promise.allSettled([...adapters].map(adapter=>adapter.dispose()));};return create;
+ create.inspect=()=>({actors:adapters.size,sources:entries.size});create.dispose=async()=>{if(disposed)return;disposed=true;await Promise.allSettled([...adapters].map(adapter=>adapter.dispose()));releaseActorSources(scene,owner);};return create;
 }
