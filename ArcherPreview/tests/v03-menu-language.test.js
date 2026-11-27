@@ -62,8 +62,8 @@ test('every village item, use and supply note has a name in all five languages',
  assert.equal(itemNote('wolf-fang'),null);
  const economy=createTownEconomy(new GoldLoot({storage:store()}));economy.grant('stamina-tonic');economy.register('stamina-tonic');
  assert.ok(economy.drink());assert.equal(economy.state.boost,BOOSTS['stamina-tonic'].seconds);assert.equal(economy.regen,BOOSTS['stamina-tonic'].rate);
- assert.deepEqual([.5,.35,.24,0].map(gradeStrike).map(gradeLabel),['대성공','성공','보통','실패']);
- setPack('en',en);assert.equal(itemName('cave-fang'),'Black Wolf Fangblade');assert.equal(gradeLabel('Near miss'),'Fair');assert.equal(gradeLabel('Perfect'),'Great success');
+ assert.deepEqual([.5,.35,.24,0].map(gradeStrike).map(gradeLabel),['대성공','성공','아쉬움','실패'],'2026-11-27: the grey ring grade is a near miss');
+ setPack('en',en);assert.equal(itemName('cave-fang'),'Black Wolf Fangblade');assert.equal(gradeLabel('Near miss'),'Near miss');assert.equal(gradeLabel('Perfect'),'Great success');
  setPack('ko',ko);
 });
 
@@ -105,10 +105,11 @@ for(const id of Object.keys(PACKS))test(`village shops and the forge read ${id}`
    // The smith's bench is its own view (2026-11-26: reached from "temper equipment" in the talk menu).
    const closed=shop.show('smith','forge');expectLanguage(id,readable(dialog),'bench');
    assert.equal(dialog.dataset.mode,'forge');assert.equal(dialog.querySelector('.mf-shop-tabs'),null);assert.equal(dialog.querySelector('.mf-shop-act'),null);
-   const limits={maxLevel:FORGE_RULES.maxLevel,minDurability:FORGE_RULES.minDurability,...FORGE_WEAR_RANGE};
+   // 2026-11-27: the wear now depends on the grade; the note gives the cap and the floor, the grades list the wear.
+   const limits={maxLevel:FORGE_RULES.maxLevel,minDurability:FORGE_RULES.minDurability};
    for(const gear of ['field-sword','leather-coat','field-shield']){
     const picker=dialog.querySelector('select');[...picker.options].find(o=>o.value===gear).selected=true;picker.dispatchEvent(new window.Event('change'));
-    const note=byText(dialog,'.mf-shop-row small',t('shop.temperNote',limits));
+    const note=byText(dialog,'.mf-shop-row small',t('forge.temperNote',limits));
     for(const value of Object.values(limits))assert.ok(note.textContent.includes(String(value)),id+' temper note: '+value);
     assert.equal(dialog.querySelector('.mf-shop-row .mf-forge-saved').textContent,PACKS[id].ui['shop.forgeSaved']);
    }
@@ -120,17 +121,18 @@ for(const id of Object.keys(PACKS))test(`village shops and the forge read ${id}`
    const forge=byText(dialog,'button',t('shop.forge',{cost:economy.forgeCost(target)}));
    assert.ok(forge&&!forge.disabled,'forge is offered');forge.click();expectLanguage(id,readable(dialog),'forge');
    assert.equal(dialog.querySelector('h2').textContent,t('shop.temperTitle',{name:itemName(target)}));
-   const zones=[...dialog.querySelectorAll('.mf-forge-legend li')];
+   const zones=[...dialog.querySelectorAll('.mf-bench-legend li')];
    assert.deepEqual(zones.map(zone=>zone.querySelector('b').textContent),['Perfect','Success','Near miss','Failed'].map(gradeLabel));
    // A shield grows at half the blade's rate: 2, 1, 0, 0.
    assert.deepEqual(zones.map(zone=>zone.querySelector('span').textContent),[2,1,0,0].map(n=>t('shop.gradeGain',{stat:t('char.defense'),n})));
-   assert.equal(dialog.querySelector('[role="img"]').getAttribute('aria-label'),PACKS[id].ui['shop.gauge']);
-   assert.equal(dialog.querySelector('.mf-forge').getAttribute('aria-label'),PACKS[id].ui['shop.forgeTap']);
-   assert.equal(dialog.querySelector('.mf-forge-play .mf-forge-saved').textContent,PACKS[id].ui['shop.forgeSaved']);
+   assert.equal(dialog.querySelector('.mf-bench-focus[role="img"]').getAttribute('aria-label'),PACKS[id].ui['forge.ring']);
+   assert.equal(dialog.querySelector('.mf-bench').getAttribute('aria-label'),PACKS[id].ui['forge.tap']);
+   assert.equal(dialog.querySelector('.mf-bench-saved').textContent,PACKS[id].ui['shop.forgeSaved']);
+   assert.deepEqual(zones.map(zone=>zone.querySelector('small').textContent),[t('forge.noWear'),t('forge.wearRange',{min:3,max:6}),t('forge.wearRange',{min:2,max:3}),t('forge.wearRange',{min:3,max:6})]);
    // No strike button: a tap anywhere on the temper view strikes.
    assert.equal([...dialog.querySelectorAll('button')].some(b=>b.textContent===t('shop.strike')),false);
-   dialog.querySelector('.mf-forge-gauge').dispatchEvent(new window.Event('pointerdown',{bubbles:true}));
-   const grade=dialog.querySelector('.mf-forge-result strong').textContent;
+   dialog.querySelector('.mf-bench-focus').dispatchEvent(new window.Event('pointerdown',{bubbles:true}));
+   const grade=dialog.querySelector('.mf-bench-result strong').textContent;
    assert.ok(['Perfect','Success','Near miss','Failed'].some(value=>gradeLabel(value)===grade),id+' forge result: '+grade);
    assert.equal(economy.gear(target).level,1,'the attempt counted');
    expectLanguage(id,readable(dialog),'forge result');

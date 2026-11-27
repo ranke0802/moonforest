@@ -1,4 +1,4 @@
-import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,FORGE_MATERIALS,gradeStrike,forgeMax,forgeResult,forgeGain,forgeWear,legacyForgeBonus} from './town-items.js';
+import {TOWN_ITEMS,STOCK,RECIPES,BOOSTS,FORGE_RULES,FORGE_MATERIALS,gradeStrike,forgeGradeWear,forgeMax,forgeResult,forgeGain,forgeWear,legacyForgeBonus} from './town-items.js';
 import {validateItemDrop} from '../item-drop-data.js';
 import {MAX_TOTAL_XP,PASSIVE_LIMITS,SKILL_REFUND_GOLD,normalizeProgression,progressionStatus,questExperience,weaponWearInterval} from './character-progression.js';
 export const MAX_GROUND_DROPS=128;
@@ -223,9 +223,10 @@ export function createTownEconomy(wallet,legacy={},{random=Math.random}={}){
   repair(id=state.equipped.sword){const cost=api.repairCost(id);return told(cost>0&&transact(-cost,s=>{s.condition[id].hp=gear(id).max;delete s.condition[id].wearUnits;}),'repair',id);},
   forgeCost(id){return 12+4*(gear(id)?.level??0);},
   canForge(id){const w=gear(id);return !!w&&w.level<FORGE_RULES.maxLevel&&wallet.balance>=api.forgeCost(id)&&FORGE_MATERIALS.some(key=>own(state,key));},
-  // Every attempt counts towards +N and is written at once, whatever its grade.
+  // Every attempt counts towards +N and is written at once, whatever its grade; the grade
+  // decides the gain and how much of the rolled wear it takes (FORGE_RULES.gradeWear).
   forge(position,id=state.equipped.sword){if(!Number.isFinite(position)||!api.canForge(id))return null;
-   const grade=gradeStrike(position),wear=forgeWear(random);
+   const grade=gradeStrike(position,gear(id).level),wear=forgeGradeWear(grade,forgeWear(random));
    const material=FORGE_MATERIALS.find(key=>own(state,key));
    return told(transact(-api.forgeCost(id),s=>{
     take(s,material,1);const w=s.condition[id];

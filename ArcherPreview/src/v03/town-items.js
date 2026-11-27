@@ -106,17 +106,37 @@ export const FORGE_RULES=Object.freeze({
  // The zones keep their size; the hammer sweeps faster with each attempt already made
  // (900 ms at +0, about 460 ms at +19).
  sweepMs:900,speedPerLevel:.05,
+ // 2026-11-27 (user review: a ring pulses on the blade): what each grade takes of the
+ // rolled wear. A great success costs no maximum durability, a near miss half (rounded up).
+ gradeWear:Object.freeze({Perfect:0,Success:1,'Near miss':.5,Failed:1}),
+ // Narrowing of the great/success zones per attempt already made (0 = fixed zones, the
+ // 2026-11-26 rule; .03 = the 2026-11-25 rule). The near-miss edge never moves.
+ zoneShrink:0,minZoneScale:.4,
 });
 // What a temper consumes: the first of these the bag holds (town-economy forge()).
 export const FORGE_MATERIALS=Object.freeze(['iron-scrap','wolf-fang','boar-tusk','grave-dust','tainted-fang','rune-shard']);
 // Zone edges as the distance from the centre (0 centre .. 1 either end of the bar).
 const ZONE_EDGES=Object.freeze({perfect:.12,success:.39,near:.69,scale:1});
-export function forgeZones(){return ZONE_EDGES;}
-export function gradeStrike(position){
- const error=Math.abs(Math.max(0,Math.min(1,position))-.5)*2;
- return error<=ZONE_EDGES.perfect?'Perfect':error<=ZONE_EDGES.success?'Success':error<=ZONE_EDGES.near?'Near miss':'Failed';
-}
 const forgeLevel=level=>Math.max(0,Math.min(FORGE_RULES.maxLevel,level|0));
+const scaledZones=new Map();
+// The zones at this many attempts made; one shared object per level.
+export function forgeZones(level=0,shrink=FORGE_RULES.zoneShrink){
+ const scale=Math.max(FORGE_RULES.minZoneScale,1-shrink*forgeLevel(level));
+ if(scale===1)return ZONE_EDGES;
+ let zone=scaledZones.get(scale);
+ if(!zone){zone=Object.freeze({perfect:ZONE_EDGES.perfect*scale,success:ZONE_EDGES.success*scale,near:ZONE_EDGES.near,scale});scaledZones.set(scale,zone);}
+ return zone;
+}
+// Grade of a ring size (0 = closed on the centre .. 1 = widest).
+export function gradeRing(error,level=0){
+ const zone=forgeZones(level),e=Math.max(0,Math.min(1,error));
+ return e<=zone.perfect?'Perfect':e<=zone.success?'Success':e<=zone.near?'Near miss':'Failed';
+}
+// position: the old bar's 0..1 (centre .5); the ring size is its distance from the centre.
+export const forgeError=position=>Math.abs(Math.max(0,Math.min(1,position))-.5)*2;
+export function gradeStrike(position,level=0){return gradeRing(forgeError(position),level);}
+// Maximum durability this grade takes of the rolled wear.
+export function forgeGradeWear(grade,wear){return Math.ceil(wear*(FORGE_RULES.gradeWear[grade]??1));}
 // Stat gained by one attempt of this grade on a piece in `slot`.
 export function forgeGain(slot,grade,blessed=false){
  const gain=(slot==='sword'?FORGE_RULES.attackGains:FORGE_RULES.defenseGains)[grade]??0;
@@ -141,9 +161,13 @@ export function forgeResult(level,max,wear){
  return {level:Math.min(FORGE_RULES.maxLevel,level+1),max:Math.min(max,Math.max(FORGE_RULES.minDurability,max-wear))};
 }
 // gradeStrike returns stable ids (saved and tested); this is what the player reads.
-const GRADE_KEYS={Perfect:'perfect',Success:'success','Near miss':'near',Failed:'failed'};
-export const gradeLabel=grade=>t('shop.grade.'+GRADE_KEYS[grade]);
+export const GRADE_KEYS=Object.freeze({Perfect:'perfect',Success:'success','Near miss':'near',Failed:'failed'});
+// 2026-11-27: the grey grade reads "near miss" (아쉬움), not "fair" (forge.grade.*).
+export const gradeLabel=grade=>t('forge.grade.'+GRADE_KEYS[grade]);
 // One sweep of the hammer across the bar at this many attempts already made.
 export function forgeSweepMs(level=0){return FORGE_RULES.sweepMs/(1+FORGE_RULES.speedPerLevel*forgeLevel(level));}
 // Position of the hammer mark (0..1..0).
 export function forgeCursor(elapsed,level=0){const sweep=forgeSweepMs(level),phase=((elapsed%(2*sweep))+2*sweep)%(2*sweep)/sweep;return phase<=1?phase:2-phase;}
+// The ring's size at this time: widest at the start, closed on the centre every sweep
+// (the moment the old mark crossed the middle), so the timing is unchanged.
+export function forgePulse(elapsed,level=0){return forgeError(forgeCursor(elapsed,level));}

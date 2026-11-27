@@ -1596,7 +1596,7 @@ try {
     if(paused)world.firstPerson?.exit();
     if(paused){input.reset();cancelAttackInput();world.hudRaster?.clear();boss?.combat?.passiveRecovery?.reset();}frameLoop.setPaused(paused);
     if(paused){if((!characterMenuOpening&&!characterMenu?.open)||frameLoop.failed)text('#live-fps',compactMeterEnabled?(frameLoop.failed?'Error':'Paused'):(frameLoop.failed?'실행 오류':'일시정지'));frameDiagnostics.suspend({preserveBossBaseline:summonOpen&&!otherSettings&&!document.hidden&&!deathScreen.isOpen()&&frameLoop.failed!==true});}
-    audio.setSuspended(document.hidden||settingsOpen||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
+    audio.setSuspended(document.hidden||(settingsOpen&&!townServices?.forgeAudible)||!!world.gameExited||frameLoop.failed===true||mapTransition?.failed===true||frameLoop.loadingFailed===true||contextRecovery?.blocked===true||!!(world.toolLease?.active&&!world.toolLease.audioEnabled));
     world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();world.developmentToolSettings?.refresh();
   };
   const dialogObserver=new MutationObserver(syncPlayback);
@@ -1947,7 +1947,7 @@ try {
         usePotion:actions.potion,canOpenPotionPicker:()=>actions.potionSlotsEnabled()&&ready&&!input.suspended&&!document.hidden&&!document.querySelector('dialog[open]')&&allowed('potion')&&!controller.dead&&!controller.captured&&!controller.groggy,onPotionLayout:()=>hudLayout?.refresh(),
         legacy:()=>v03Save.meta().used?{...equipmentChoices,armor:journeyStorage.getItem(V03_ARMOR_KEY)}:{},
         canInteract:()=>!!world.v03?.playing&&!world.v03.blocksGame&&!world.v03.story?.sceneActive&&!world.v03.story?.dialogueOpen&&!loadingAsset&&!mapTransition?.busy&&boss.playerAlive&&!boss.combatCount&&!controller?.captured&&!controller?.groggy&&!document.querySelector('dialog[open]'),
-        onPause:()=>reconcilePlayback(),notify:message=>toast(message),sound:cue=>audio.play(cue),onLevelUp:event=>world.v03?.celebrateLevel?.(event)===true});
+        onPause:()=>reconcilePlayback(),notify:message=>toast(message),sound:(cue,options)=>audio.play(cue,options),onLevelUp:event=>world.v03?.celebrateLevel?.(event)===true});
       world.scene.onDisposeObservable.addOnce(()=>{townServices?.dispose();townServices=null;});
     }
     if(world.gameplayV03){

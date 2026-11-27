@@ -19,10 +19,10 @@ test('smith trades are atomic with gold; every attempt counts and each of the fo
  // an attempt wears the maximum by 3..6 and tempering never restores durability.
  const storage=store(),gold=wallet(storage),rolls=[.3,.75,.95,.05],town=createTownEconomy(gold,{},{random:()=>rolls.shift()??.3});
  assert.equal(town.gear().max,180);assert.equal(town.attack,3);assert.equal(town.buy('smith','iron-scrap'),true);
- assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:176,max:176,level:1,bonus:3,blessed:false,attack:6,defense:0});
+ assert.equal(town.forge(forgeCursor(450)),'Perfect');assert.deepEqual(town.gear(),{hp:180,max:180,level:1,bonus:3,blessed:false,attack:6,defense:0},'a great success wears nothing (2026-11-27)');
  for(const grade of ['Success','Near miss','Failed']){town.grant('wolf-fang');assert.equal(town.forge({Success:.36,'Near miss':.24,Failed:0}[grade]),grade);}
- // +1 176 -> success +2 (wears 5) 171 -> fair +3 (wears 6) 165 -> failed +4 (wears 3) 162.
- assert.deepEqual(town.gear(),{hp:162,max:162,level:4,bonus:6,blessed:false,attack:9,defense:0});
+ // +1 180 -> success +2 (wears 5) 175 -> near miss +3 (rolls 6, wears half: 3) 172 -> failed +4 (wears 3) 169.
+ assert.deepEqual(town.gear(),{hp:169,max:169,level:4,bonus:6,blessed:false,attack:9,defense:0});
  for(let action=0;action<10;action++){town.damageWeapon(action);town.damageWeapon(action);}
  assert.equal(town.gear().hp,town.gear().max-1);
  assert.equal(town.repair(),true);assert.equal(town.gear().hp,town.gear().max);
@@ -38,7 +38,7 @@ test('craft, wear, repair armor; register and persist stamina consumables',()=>{
  assert.equal(a.state.bag.potion,4);assert.equal(a.state.bag['moon-herb'],undefined);
  a.grant('fox-pelt');a.grant('wolf-pelt',2);assert.ok(a.craft('smith','hunter-coat'));a.equip('hunter-coat');
  a.grant('iron-scrap');assert.equal(a.forge(.5,'hunter-coat'),'Perfect');assert.equal(a.defense,8);
- a.wearDefense(false);assert.equal(a.gear('hunter-coat').hp,115);assert.ok(a.repair('hunter-coat'));
+ a.wearDefense(false);assert.equal(a.gear('hunter-coat').hp,119);assert.ok(a.repair('hunter-coat'));
  a.grant('bear-bile');assert.ok(a.register('bear-bile'));assert.ok(a.drink());assert.equal(a.regen,1.75);
  a.tick(15);const again=createTownEconomy(new GoldLoot({storage}));assert.equal(again.state.boost,75);again.tick(75);assert.equal(again.regen,1);
 });

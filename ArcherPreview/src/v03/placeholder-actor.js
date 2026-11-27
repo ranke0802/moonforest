@@ -7,6 +7,11 @@ import {MeshBuilder} from '@babylonjs/core/Meshes/meshBuilder.js';
 import {StandardMaterial} from '@babylonjs/core/Materials/standardMaterial.js';
 import {Color3} from '@babylonjs/core/Maths/math.color.js';
 import {TransformNode} from '@babylonjs/core/Meshes/transformNode.js';
+import {Mesh} from '@babylonjs/core/Meshes/mesh.js';
+import {Matrix,Quaternion,Vector3} from '@babylonjs/core/Maths/math.vector.js';
+import {CreateBoxVertexData} from '@babylonjs/core/Meshes/Builders/boxBuilder.js';
+import {CreateCylinderVertexData} from '@babylonjs/core/Meshes/Builders/cylinderBuilder.js';
+import '@babylonjs/core/Meshes/mesh.vertexData.js';
 
 export const ACTOR_VISUALS=Object.freeze({
  smith:{label:'대장장이',color:'#8c5743',height:1.75},
@@ -71,4 +76,75 @@ export function createActorVisual(scene,key,{id=key}={}){
   },
   dispose(){for(const mesh of meshes)mesh.dispose(false,false);root.dispose();},
  };
+}
+
+// Temporary props (2026-11-27, forge bench). Each entry is one merged mesh of
+// shaded blocks in one shared vertex-colour material: one draw call per prop.
+// When a real model exists, add `model:'<asset url>'` to its entry; the forge
+// bench then loads that file through its model loader instead of the blocks.
+// Units are metres; the axes are the prop's own (see forge-bench.js).
+const box=(w,h,d,x,y,z,color,rot)=>({box:[w,h,d],at:[x,y,z],color,rot});
+const cyl=(height,top,bottom,x,y,z,color,rot,tess=10)=>({cyl:[height,top,bottom,tess],at:[x,y,z],color,rot});
+const GLOVE='#6b4a2f',GLOVE_DARK='#4b3220',SLEEVE='#2f3d55',IRON='#585d66',IRON_TOP='#7d838c',WOOD='#7a5131';
+const HALF_TURN=Math.PI/2;
+export const PROP_VISUALS=Object.freeze({
+ // Anvil on a stump; the face top is y=0, the horn points to +x.
+ 'forge-anvil':{label:'모루',parts:[
+  box(.56,.075,.21,0,-.0375,0,IRON_TOP),box(.07,.055,.15,-.31,-.035,0,IRON),
+  cyl(.2,.012,.15,.38,-.045,0,IRON,[0,0,-HALF_TURN]),
+  box(.26,.13,.13,0,-.14,0,'#41454c'),box(.42,.06,.24,0,-.235,0,'#4a4e55'),
+  cyl(.36,.5,.54,0,-.445,0,'#5b3d26',null,12),
+ ]},
+ // Left glove gripping along x (the hilt); the forearm runs to -z (towards the eye).
+ 'forge-hand-left':{label:'왼손(장갑)',parts:[
+  box(.1,.075,.1,0,.02,0,GLOVE),box(.1,.035,.03,0,-.005,.055,GLOVE_DARK),
+  box(.03,.03,.07,.06,.01,-.02,GLOVE,[0,.5,0]),
+  box(.11,.1,.1,-.01,.01,-.1,GLOVE_DARK),box(.1,.095,.36,-.02,.01,-.32,SLEEVE),
+ ]},
+ // Right glove on a hammer. Origin = elbow, the arm along -x: fist at x=-.4, head at x=-.76.
+ 'forge-hammer':{label:'망치와 오른손(장갑)',parts:[
+  box(.32,.095,.1,-.16,0,0,SLEEVE),box(.08,.11,.11,-.33,0,0,GLOVE_DARK),
+  box(.09,.095,.1,-.41,0,0,GLOVE),box(.03,.03,.06,-.43,.04,-.04,GLOVE),
+  cyl(.34,.028,.032,-.6,0,0,WOOD,[0,0,HALF_TURN]),
+  box(.06,.15,.065,-.765,-.02,0,IRON),box(.064,.02,.069,-.765,-.1,0,IRON_TOP),
+ ]},
+ // Stand-ins for a piece that is not worn (its live model is not loaded).
+ 'forge-blade':{label:'임시 검',parts:[
+  box(.5,.012,.055,.12,0,0,'#c9ccd2'),box(.02,.03,.16,-.14,0,0,'#8f7a45'),
+  box(.12,.03,.03,-.21,0,0,'#5b3a24'),box(.03,.04,.04,-.28,0,0,'#8f7a45'),
+ ]},
+ 'forge-shield':{label:'임시 방패',parts:[cyl(.035,.42,.42,0,0,0,'#7b5a37',null,16),cyl(.045,.1,.1,0,0,0,'#a3a7ad',null,10)]},
+ 'forge-armor':{label:'임시 갑옷',parts:[box(.38,.05,.3,0,0,0,'#6d5a44'),box(.12,.05,.14,-.24,0,.04,'#5d4c39'),box(.12,.05,.14,.24,0,.04,'#5d4c39')]},
+});
+const LIGHT=[-.35,.85,-.4],LIGHT_LENGTH=Math.hypot(...LIGHT);
+function propMaterial(scene){
+ let cache=caches.get(scene);if(!cache){cache=new Map();caches.set(scene,cache);scene.onDisposeObservable?.addOnce(()=>caches.delete(scene));}
+ let material=cache.get('prop');
+ if(!material){
+  material=new StandardMaterial('v03-prop-shaded',scene);material.disableLighting=true;material.emissiveColor=Color3.White();
+  material.diffuseColor=Color3.Black();material.specularColor=Color3.Black();material.freeze();cache.set('prop',material);
+ }
+ return material;
+}
+// One mesh for a PROP_VISUALS entry: blocks baked into one buffer, shaded by a fixed
+// light in their vertex colours (no lights, no shadow pass).
+export function createPropVisual(scene,key,{name='v03-prop-'+key}={}){
+ const spec=PROP_VISUALS[key];if(!spec)throw new Error('Unknown prop: '+key);
+ let merged=null;const matrix=new Matrix(),rotation=new Quaternion(),one=Vector3.One(),at=new Vector3(),colors=[];
+ for(const part of spec.parts){
+  const data=part.box?CreateBoxVertexData({width:part.box[0],height:part.box[1],depth:part.box[2]})
+   :CreateCylinderVertexData({height:part.cyl[0],diameterTop:part.cyl[1],diameterBottom:part.cyl[2],tessellation:part.cyl[3]});
+  Quaternion.FromEulerAnglesToRef(...(part.rot??[0,0,0]),rotation);at.set(...part.at);
+  Matrix.ComposeToRef(one,rotation,at,matrix);data.transform(matrix);
+  const base=Color3.FromHexString(part.color),normals=data.normals;
+  for(let i=0;i<normals.length;i+=3){
+   const light=(normals[i]*LIGHT[0]+normals[i+1]*LIGHT[1]+normals[i+2]*LIGHT[2])/LIGHT_LENGTH,shade=.42+.58*Math.max(0,light);
+   colors.push(base.r*shade,base.g*shade,base.b*shade,1);
+  }
+  if(merged)merged.merge(data);else merged=data;
+ }
+ merged.colors=colors;
+ const mesh=new Mesh(name,scene);merged.applyToMesh(mesh,false);
+ mesh.material=propMaterial(scene);mesh.isPickable=false;mesh.doNotSyncBoundingInfo=true;mesh.metadata={moonforestPlaceholder:true,prop:key};
+ return {key,label:spec.label,placeholder:!spec.model,model:spec.model??null,mesh,dispose(){mesh.dispose(false,false);}};
 }

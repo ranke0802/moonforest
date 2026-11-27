@@ -69,11 +69,23 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   select:slot=>economy.selectQuickSlot(slot),onPause,onLayout:onPotionLayout}):null;
  function reset(keepOld){generation++;xpRatio=null;shop?.close();potionHud?.clear();treasure?.clear();economy.reset(keepOld?legacy():{});lastGear=null;wasPlaying=false;apply();}
  function getTreasure(){return treasure??=createTownTreasure({root,world,economy,player,canInteract,sound});}
+ // The 3D smith's bench: the game's scene and camera, and the worn mesh of the piece
+ // when it is the one worn (other pieces get a stand-in block; their model is not loaded).
+ function forgeStage(){
+  const scene=world.scene,camera=world.camera,canvas=scene?.getEngine?.()?.getRenderingCanvas?.();
+  if(!scene||scene.isDisposed||!camera||!canvas)return null;
+  return {scene,camera,canvas,piece(id){
+   const slot=TOWN_ITEMS[id]?.slot,worn=appearance()?.slots?.[slot]?.mesh;
+   return (slot==='sword'||slot==='shield')&&items().equipped[slot]===id&&worn?.geometry?{mesh:worn}:null;
+  }};
+ }
  return {economy,bag,canDrink,apply,
   collectGold(amount){getTreasure().collectGold(amount);},
   updatePotionHud(playing,unlocked){potionHud?.update(playing,unlocked);},
   get remaining(){const s=items();return s.bag[s.quickSlots[s.selectedQuickSlot]]??0;},
-  get open(){return !!shop?.open||!!potionHud?.open;},get armorDefense(){return economy.gear(items().equipped.armor)?.defense??0;},
+  get open(){return !!shop?.open||!!potionHud?.open;},
+  // The smith's bench keeps the game's sound while the world is paused (2026-11-27).
+  get forgeAudible(){return !!shop?.forging;},get armorDefense(){return economy.gear(items().equipped.armor)?.defense??0;},
   get equippedFinishes(){const e=items().equipped;return {sword:TOWN_ITEMS[e.sword].finish,shield:TOWN_ITEMS[e.shield].finish};},
   drink(slot=items().selectedQuickSlot){
    if(!canDrink(slot))return false;
@@ -104,9 +116,9 @@ export function setupTownServices({root,world,wallet,legacy,player,battle,contro
   // view: 'shop' (buy, sell, make) or 'forge' (the smith's bench: repair and temper).
   async openShop(id,view='shop'){
    if(!['smith','herbalist'].includes(id)||!world.v03?.playing||world.mapId!=='village')return;
-   const token=generation;const [{createTownShop}]=await Promise.all([import('./town-shop.js'),import('./town-shop.css')]);
+   const token=generation;const [{createTownShop}]=await Promise.all([import('./town-shop.js'),import('./town-shop.css'),import('./forge-bench.css')]);
    if(disposed||generation!==token||!world.v03?.playing||world.mapId!=='village')return;
-   shop??=createTownShop({root,economy,onPause,onChange:apply});await shop.show(id,view);
+   shop??=createTownShop({root,economy,onPause,onChange:apply,sound,stage:forgeStage});await shop.show(id,view);
   },
   creditQuestExperience(ids,quiet=false,chapter=null){
    const previous=economy.progression.level,gain=economy.creditQuests(ids,quiet,chapter);

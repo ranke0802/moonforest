@@ -1,0 +1,138 @@
+/* The smith's bench in first person (2026-11-27, forge-bench.js / town-shop.js).
+   The 3D bench is drawn into the game canvas behind this dialog (.is-3d); .is-flat on
+   the view shows the 2D bench. The ring moves by transform and stroke colour only. */
+#app[data-forge-bench]>:not(#viewport):not(.mf-town-shop):not(#loading){visibility:hidden}
+html:has(#app[data-forge-bench]) .v03-hud{visibility:hidden}
+#app[data-forge-bench]:not([data-forge-drawn]) #viewport,#app[data-forge-stale] #viewport{visibility:hidden}
+.mf-town-shop.is-bench{
+  --bench-yellow:#ffd23a;--bench-green:#4fc256;--bench-grey:#9b9b9b;--bench-black:#000;--bench-panel:#120c08d9;
+  position:fixed;inset:0;box-sizing:border-box;width:100vw;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;
+  border:0;border-radius:0;overflow:hidden;color:var(--mf-text-2);font-family:var(--v03-font);
+  background:radial-gradient(ellipse at 50% 64%,#6a3414 0,#2a160b 46%,#0c0705 100%);
+}
+.mf-town-shop.is-bench[open]{display:grid;grid-template-rows:auto minmax(0,1fr)}
+.mf-town-shop.is-bench::backdrop{background:#0c0705}
+.mf-town-shop.is-bench.is-3d{background:radial-gradient(ellipse at 50% 60%,transparent 40%,#0c070599 100%)}
+.mf-town-shop.is-bench.is-3d::backdrop{background:transparent}
+.mf-town-shop.is-bench>header{position:relative;z-index:3;display:flex;align-items:center;gap:.8rem;padding:.35rem .8rem;
+  background:linear-gradient(#0c0705f0,#0c070500)}
+.mf-town-shop.is-bench>header h2{flex:1 1 auto;min-width:0;margin:0;color:var(--mf-gold-hi);font-size:1.15rem;font-weight:400;text-shadow:0 1px 2px #000}
+.mf-town-shop.is-bench button{min-height:44px;padding:.35rem 1rem;border:1px solid var(--mf-line-mid);border-radius:var(--mf-radius);
+  color:#fff3d8;background:var(--mf-panel-raised);font:inherit;cursor:pointer;white-space:normal;max-width:100%}
+.mf-town-shop.is-bench button:disabled{opacity:var(--mf-disabled)}
+.mf-town-shop.is-bench button:focus-visible{outline:2px solid var(--mf-focus);outline-offset:2px}
+.mf-bench{position:relative;display:grid;min-height:0;box-sizing:border-box;padding:.3rem .8rem .8rem;gap:.6rem;outline:none;
+  grid-template-columns:minmax(13rem,18rem) minmax(0,1fr) minmax(11rem,15rem);grid-template-rows:minmax(0,1fr) auto;
+  grid-template-areas:"side focus legend" "side foot legend";touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.mf-bench-side{display:contents}
+.mf-bench .mf-forge-item{grid-area:side;align-self:start;position:relative;z-index:2;padding:.6rem .7rem;border:1px solid var(--mf-line-soft);
+  border-radius:var(--mf-radius-lg);background:var(--bench-panel)}
+.mf-bench .mf-forge-item strong{display:block;font-size:1.02rem;color:#fff3d8}
+.mf-bench .mf-forge-item small{display:block;margin-top:.25rem;color:var(--mf-text-3);font-size:.82rem}
+.mf-bench .mf-forge-item dl{margin:.3rem 0 0;display:grid;gap:.12rem;font-size:.88rem}
+.mf-bench .mf-forge-item dl>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 .6rem}
+.mf-bench .mf-forge-item dt{color:var(--mf-text-3)}.mf-bench .mf-forge-item dd{margin:0;color:#f6e9d0;font-variant-numeric:tabular-nums}
+.mf-bench .mf-forge-item dd strong{display:inline;font-size:inherit;color:#8df3b1}.mf-bench .mf-forge-item dd small{display:inline;margin:0;color:#e8c45f}
+.mf-bench-legend{grid-area:legend;align-self:start;position:relative;z-index:2;list-style:none;margin:0;padding:.45rem .55rem;display:grid;gap:.3rem;
+  border:1px solid var(--mf-line-soft);border-radius:var(--mf-radius-lg);background:var(--bench-panel)}
+.mf-bench-legend li{display:grid;grid-template-columns:1.1rem minmax(0,1fr);column-gap:.45rem;align-items:center;font-size:.88rem;line-height:1.3}
+.mf-bench-legend i{grid-row:span 3;align-self:center;width:1.1rem;height:1.1rem;box-sizing:border-box;border-radius:50%;border:3px solid var(--bench-black);box-shadow:0 0 0 1px #fff2c870}
+.mf-bench-legend li[data-zone=perfect] i{border-color:var(--bench-yellow)}.mf-bench-legend li[data-zone=success] i{border-color:var(--bench-green)}
+.mf-bench-legend li[data-zone=near] i{border-color:var(--bench-grey)}
+.mf-bench-legend b{color:#f6e9d0;font-weight:400}.mf-bench-legend span{color:#f0d9a6}.mf-bench-legend small{color:var(--mf-text-3);font-size:.8rem}
+.mf-bench-focus{grid-area:focus;position:relative;min-width:0;min-height:0}
+.mf-bench-flat{position:absolute;inset:0;display:none}
+.mf-bench.is-flat .mf-bench-flat{display:block}
+.mf-bench-anvil{position:absolute;left:18%;right:18%;top:53%;height:30%;background:linear-gradient(#80868f,#4a4e55 30%,#2f3237);
+  clip-path:polygon(0 0,74% 0,100% 7%,76% 26%,68% 26%,62% 58%,78% 100%,22% 100%,38% 58%,32% 26%,0 26%);filter:drop-shadow(0 6px 10px #000a)}
+.mf-bench-piece{position:absolute;left:50%;top:50%;width:min(26%,8rem);height:auto;aspect-ratio:1;transform:translate(-50%,-50%);
+  filter:drop-shadow(0 0 10px #ff7a2a99)}
+.mf-bench-foot{grid-area:foot;position:relative;z-index:2;display:grid;gap:.2rem;justify-items:center;text-align:center;text-shadow:0 1px 3px #000}
+.mf-bench-foot[hidden]{display:none}
+.mf-bench-hint{margin:0;color:#ffe9b0;font-size:1rem}
+.mf-bench-saved{margin:0;color:var(--mf-text-3);font-size:.82rem}
+/* The ring: its centre is placed by translate (set when the view opens or resizes). */
+.mf-forge-aim{position:absolute;left:0;top:0;width:0;height:0;z-index:1;pointer-events:none;--ring:120px}
+.mf-forge-rings{position:absolute;left:calc(-1*var(--ring));top:calc(-1*var(--ring));width:calc(2*var(--ring));height:calc(2*var(--ring));overflow:visible}
+.mf-forge-rings circle{fill:none;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center}
+.mf-forge-guide{stroke-width:1.5px;stroke-dasharray:5 6;opacity:.6}
+.mf-forge-guide.is-near{stroke:var(--bench-grey)}.mf-forge-guide.is-success{stroke:var(--bench-green)}
+.mf-forge-guide.is-perfect{stroke:var(--bench-yellow);fill:#ffd23a2e;stroke-dasharray:none;opacity:.9}
+.mf-forge-halo{stroke:#fff2c8;stroke-opacity:.5;stroke-width:11px}
+.mf-forge-ring{stroke:#000;stroke-width:6px}
+.mf-bench.is-struck .mf-forge-ring{stroke-width:8px}
+.mf-bench.is-struck .mf-forge-guide{opacity:.35}
+/* Result. */
+.mf-bench-result{grid-area:focus;align-self:end;justify-self:center;position:relative;z-index:3;display:grid;justify-items:center;gap:.35rem;
+  box-sizing:border-box;width:min(100%,26rem);padding:.7rem 1rem .8rem;text-align:center;border:1px solid var(--mf-line-mid);
+  border-radius:var(--mf-radius-lg);background:#0c0705e6;box-shadow:0 10px 30px #000b;animation:mf-bench-rise .28s ease-out}
+.mf-bench-result[hidden]{display:none}
+.mf-bench-result>strong{font-size:clamp(1.9rem,6.5vmin,3.2rem);line-height:1.05;letter-spacing:.04em;font-weight:400;color:#f6e9d0}
+.mf-bench-result>span{color:var(--mf-text-3);font-size:.88rem}
+.mf-bench-change{display:grid;gap:.15rem;margin:0;font-size:1rem;font-variant-numeric:tabular-nums}
+.mf-bench-change>div{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:0 .55rem}
+.mf-bench-change dt{color:var(--mf-text-3)}.mf-bench-change dd{margin:0;color:#f6e9d0}
+.mf-bench-change dd b{font-size:1.3rem;font-weight:400;color:#fff3d8}.mf-bench-change dd small{color:#e8c45f;font-size:.82rem}
+.mf-bench-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;max-width:100%}
+.mf-bench[data-grade=perfect] .mf-bench-result>strong{color:#ffe27a;text-shadow:0 0 14px #ffc93c,0 0 2px #000}
+.mf-bench[data-grade=perfect] .mf-bench-result{border-color:var(--bench-yellow)}
+.mf-bench[data-grade=success] .mf-bench-result>strong{color:#8fe39a;text-shadow:0 0 10px #2e9a3c}
+.mf-bench[data-grade=success] .mf-bench-result{border-color:var(--bench-green)}
+.mf-bench[data-grade=near] .mf-bench-result>strong{color:#d4d4d4}
+.mf-bench[data-grade=near] .mf-bench-result{border-color:var(--bench-grey)}
+.mf-bench[data-grade=failed] .mf-bench-result>strong{padding:0 .5em;color:#efe6da;background:#000;border:1px solid #6a5a50;border-radius:.3em;text-shadow:0 0 6px #a0301e}
+@keyframes mf-bench-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+/* Result effects around the ring centre. */
+.mf-bench-burst{position:absolute;left:0;top:0;width:0;height:0}
+.mf-bench-burst>i{position:absolute;left:calc(-1*var(--ring));top:calc(-1*var(--ring));width:calc(2*var(--ring));height:calc(2*var(--ring));opacity:0;border-radius:50%}
+.mf-bench-glow{background:radial-gradient(circle,#fff6d0 0,#ffd23a99 22%,#ffb02e33 45%,transparent 68%)}
+.mf-bench-rays{background:repeating-conic-gradient(from 8deg,#ffe48a66 0 5deg,transparent 5deg 22deg);
+  -webkit-mask:radial-gradient(circle,transparent 18%,#000 30%,transparent 70%);mask:radial-gradient(circle,transparent 18%,#000 30%,transparent 70%)}
+.mf-bench-smoke{background:radial-gradient(circle at 38% 60%,#9a9a9acc 0,transparent 26%),radial-gradient(circle at 62% 52%,#7d7d7dbb 0,transparent 24%),radial-gradient(circle at 50% 38%,#b0b0b099 0,transparent 22%)}
+.mf-bench-crack{border-radius:0;background:no-repeat center/100% 100% url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M58 104 78 92 88 108 104 88 116 104 132 94 146 102' stroke='%23000' stroke-width='7'/%3E%3Cpath d='M58 104 78 92 88 108 104 88 116 104 132 94 146 102M88 108 92 124M116 104 122 82' stroke='%23b23a24' stroke-width='2.5'/%3E%3C/svg%3E")}
+.mf-bench-burst[data-grade=perfect] .mf-bench-glow{animation:mf-bench-burst 1s ease-out forwards}
+.mf-bench-burst[data-grade=perfect] .mf-bench-rays{animation:mf-bench-rays 1.2s ease-out forwards}
+.mf-bench-burst[data-grade=success] .mf-bench-glow{filter:hue-rotate(68deg) saturate(1.2);animation:mf-bench-glow .9s ease-out forwards}
+.mf-bench-burst[data-grade=near] .mf-bench-smoke{animation:mf-bench-smoke 1.6s ease-out forwards}
+.mf-bench-burst[data-grade=failed] .mf-bench-crack{animation:mf-bench-crack .35s steps(4,end) forwards}
+@keyframes mf-bench-burst{0%{opacity:1;transform:scale(.2)}60%{opacity:.85}100%{opacity:0;transform:scale(2.2)}}
+@keyframes mf-bench-rays{0%{opacity:0;transform:scale(.4) rotate(0)}25%{opacity:1}100%{opacity:0;transform:scale(1.9) rotate(40deg)}}
+@keyframes mf-bench-glow{0%{opacity:.95;transform:scale(.4)}100%{opacity:0;transform:scale(1.5)}}
+@keyframes mf-bench-smoke{0%{opacity:.85;transform:translateY(0) scale(.5)}100%{opacity:0;transform:translateY(-28%) scale(1.25)}}
+@keyframes mf-bench-crack{0%{opacity:0;transform:scaleX(.2)}100%{opacity:1;transform:none}}
+.mf-bench-spark{position:absolute;left:0;top:0;width:6px;height:6px;margin:-3px;border-radius:50%;background:#ffe08a;box-shadow:0 0 8px #ff9a2e;
+  animation:mf-bench-spark .75s ease-out forwards}
+@keyframes mf-bench-spark{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}
+.mf-bench.is-struck[data-grade=failed] .mf-forge-rings{animation:mf-bench-shake .3s linear 1}
+@keyframes mf-bench-shake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+/* Reduced motion: no burst, shake or smoke movement; the crack and the ring stay. */
+html[data-mf-motion] .mf-bench-burst>i{animation:none!important;opacity:0}
+html[data-mf-motion] .mf-bench-burst[data-grade=failed] .mf-bench-crack{opacity:1}
+html[data-mf-motion] .mf-bench-result,html[data-mf-motion] .mf-bench .mf-forge-rings{animation:none}
+/* Short landscape screens (phones): the card and the grades share the left column. */
+@media (max-height:500px) and (orientation:landscape){
+  .mf-town-shop.is-bench>header{padding:.15rem .6rem}
+  .mf-town-shop.is-bench>header h2{font-size:1rem}
+  .mf-bench{grid-template-columns:minmax(12rem,16.5rem) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;
+    grid-template-areas:"side focus" "legend focus" "legend foot";padding:.15rem .6rem .45rem;gap:.35rem .6rem}
+  .mf-bench .mf-forge-item{padding:.35rem .5rem}.mf-bench .mf-forge-icon{width:2.6rem}
+  .mf-bench .mf-forge-item dl{font-size:.82rem}.mf-bench .mf-forge-item>div>small{display:none}
+  .mf-bench-legend{align-self:stretch;overflow:auto;padding:.3rem .45rem;gap:.15rem}
+  .mf-bench-legend li{grid-template-columns:.9rem auto minmax(0,1fr);column-gap:.35rem;font-size:.8rem}
+  .mf-bench-legend i{grid-row:span 2;width:.9rem;height:.9rem;border-width:2px}
+  .mf-bench-legend small{grid-column:2/4}
+  /* After the strike the result takes the left column, so the bench stays in view. */
+  .mf-bench.is-struck .mf-forge-item,.mf-bench.is-struck .mf-bench-legend{display:none}
+  .mf-bench-result{grid-area:1/1/-1/2;align-self:center;justify-self:stretch;width:auto;padding:.4rem .6rem .5rem;gap:.2rem}
+  .mf-bench-result>strong{font-size:clamp(1.6rem,9vmin,2.4rem)}
+  .mf-bench-change{font-size:.88rem}.mf-bench-change dd b{font-size:1.1rem}
+  .mf-bench-saved{display:none}
+}
+/* Narrow portrait: the bench on top, the panels below. */
+@media (orientation:portrait) and (max-width:700px){
+  .mf-bench{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(14rem,1fr) auto auto auto;grid-template-areas:"focus" "foot" "side" "legend";overflow-y:auto}
+}
+@media (pointer:coarse){
+  .mf-bench-legend li,.mf-bench .mf-forge-item dl,.mf-bench-change{font-size:max(13px,.82rem)}
+  .mf-bench-legend small,.mf-bench-saved,.mf-bench .mf-forge-item small{font-size:max(13px,.8rem)}
+}
