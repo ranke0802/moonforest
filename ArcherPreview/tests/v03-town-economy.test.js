@@ -50,7 +50,8 @@ test('existing saves retain selected gear, new games have a sturdy low-strike sw
 test('animal trophies roll independently, themed monster weapons can be equipped, and chest rewards survive reopening',()=>{
  for(const kind of ['boar','bear','wolf','gray-wolf','fox','goblin-warrior','goblin-archer','goblin-shaman','hobgoblin','zombie','ghoul-warrior','black-bear','black-wolf']){
   for(const id of Object.keys(monsterRewards(kind,()=>0)))assert.ok(TOWN_ITEMS[id],kind+' '+id);
-  assert.ok(Object.keys(monsterRewards(kind,()=>0)).length);assert.deepEqual(monsterRewards(kind,()=>.9999),kind==='wolf'?{'alpha-wolf-fang':1}:{});
+  assert.ok(Object.keys(monsterRewards(kind,()=>0)).length);// Sure drops: the alpha's fang; the ghoul's mail link (S06, 1127-chapter: one cave trip).
+  assert.deepEqual(monsterRewards(kind,()=>.9999),kind==='wolf'?{'alpha-wolf-fang':1}:kind==='ghoul-warrior'?{'ghoul-mail':1}:{});
  }
  assert.deepEqual(monsterRewards('boar',()=>.5),{'boar-meat':1});assert.equal(Object.keys(monsterRewards('bear',()=>0)).length,4);
  const storage=store(),a=createTownEconomy(wallet(storage)),point={x:0,y:0,z:0},sample={id:'chest:one',mapId:'village',model:'clue-satchel',origin:point,position:point,rewards:treasureRewards(5,()=>0)};

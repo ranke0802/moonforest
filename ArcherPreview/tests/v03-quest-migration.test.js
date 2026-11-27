@@ -25,7 +25,8 @@ const EXPECT={
  'M06/2':['M11','herbalist',{step:1,count:0}],'M07/0':['M11','herbalist','finished'],'M07/1':['M07','goblins','finished'],
  'M07/2':['M07','clues','finished'],'M08/0':['M08','saint','finished'],'M09/0':['M09','report','finished'],
 };
-const eventsFor=step=>step.type==='defeat'?Array.from({length:step.count},()=>({type:'defeat',kind:step.kind??'boar',map:step.map})):
+// A quota hunt (1127-chapter) is fed its parts' first kinds.
+const eventsFor=step=>step.type==='defeat'&&step.quota?step.quota.flatMap(part=>Array.from({length:part.count},()=>({type:'defeat',kind:part.kinds[0],map:step.map}))):step.type==='defeat'?Array.from({length:step.count},()=>({type:'defeat',kind:step.kind??'boar',map:step.map})):
  step.type==='talk'?step.targets.map(npc=>({type:'talk',npc})):[{type:'reach',map:step.map}];
 
 test('every old checkpoint lands on the nearest step of the new line',()=>{

@@ -9,7 +9,10 @@ export const CHAPTER_CAMPS = Object.freeze({
     ...camp('camp-west',0,1,[['goblin-warrior',-2,-.3],['goblin-warrior',.7,.3],['goblin-archer',2,2.7]]),
     ...camp('camp-east',28,12,[['goblin-warrior',1,-1],['goblin-archer',-1.8,.6]]),
     ...camp('grove',-20,-27,[['goblin-shaman',0,0],['goblin-warrior',-1.5,1.5]]),
-    ...camp('inner-guard',26,-32,[['hobgoblin-boss',-1,0],['goblin-shaman',2,1.7]]),
+    // 2026-11-27 (1127-chapter): was 26,-32, 6 m from the cave arrival (28,-38) and 2-3 m off every
+    // route to the cave portal (28,-41): each pass fought it again and the fight shut the portal.
+    // The clearing west of the cave mouth is 14.6 m or more off those routes (navigation paths, place checks).
+    ...camp('inner-guard',8,-33,[['hobgoblin-boss',-1,0],['goblin-shaman',2,1.7]]),
   ]),
   'witch-cave': Object.freeze([
     ...camp('drowned-road',-15,34,[['zombie',0,0]]),

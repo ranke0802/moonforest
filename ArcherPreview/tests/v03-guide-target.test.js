@@ -17,7 +17,7 @@ const EXTRA=[
  {id:'T-odd',giver:'chief',title:'e',steps:[{id:'odd',text:'e',type:'town',action:'pray'}]},
  {id:'T-far',giver:'youth',title:'f',steps:[{id:'hunt',text:'f',type:'defeat',map:'nowhere',count:1}]},
 ];
-function run({active,page,quest='M07',step=0}){
+function run({active,page,quest='M07',step=0,items={}}){
  setPack('ko',ko);
  const {document}=parseHTML('<html><body><main id="app"></main></body></html>');
  const values=new Map(),journey={getItem:k=>values.get(k)??null,setItem:(k,v)=>values.set(k,String(v)),removeItem:k=>values.delete(k)};
@@ -27,13 +27,13 @@ function run({active,page,quest='M07',step=0}){
  if(page)journey.setItem('v03-quest-page-v1',page);
  const player={position:{x:0,z:0}},shown=[];
  const world={scene:{isDisposed:false},mapId:'village',terrain:{heightAt:()=>0},navigation:{free:()=>true,path:()=>null}};
- const api={world,battle:{encounters:[],combatCount:0},input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null,creditGold:(_s,n)=>n,addPotions:n=>n,toast(){},itemCount:()=>0};
+ const api={world,battle:{encounters:[],combatCount:0},input:{setSuspended(){}},getPlayer:()=>player,getController:()=>null,creditGold:(_s,n)=>n,addPotions:n=>n,toast(){},itemCount:id=>items[id]??0};
  const story=createStory({api,doc:document,save:{journey,touch:()=>true},content:{QUESTS,NPCS,DIALOGUES,ERRANDS:[...ERRANDS,...EXTRA],ROUTES},
   createVisual:()=>({place(x,y,z){this.position={x,y,z};},dispose(){}}),
   createGuide:()=>({show(x,y,z){shown.push({x,z});},hide(){},dispose(){}})});
  story.start();
  const at=(map,frames=3)=>{const character=map==='village'?'warrior-v3':map==='great-plains'?'warrior-plains':'warrior-v4';for(let i=0;i<frames;i++)story.update(1/60,{ready:true,mapId:map,character});return story.inspect().guide;};
- return {story,values,player,shown,at,document};
+ return {story,values,player,shown,at,document,items};
 }
 const ALL={S01:{step:0,count:0},S02:{step:0,count:0},S03:{step:0,count:0},S04:{step:0,count:0}};
 
@@ -44,7 +44,9 @@ test('the main quest by default; each errand page leads to its own step',()=>{
   assert.equal(r.at('village'),'exit:monster-forest','main: M07 into the forest');
   r.story.selectPage('S04');assert.equal(r.at('village'),'npc:smith','forge: the smith');
   r.story.selectPage('S02');assert.equal(r.at('village'),'npc:herbalist','craft: the herbalist');
-  r.story.selectPage('S03');assert.equal(r.at('village'),'npc:elder','deliver: the one to hand it to');
+  // 2026-11-27 (1127-chapter): without the meat the light goes where boars drop it, with it to the elder.
+  r.story.selectPage('S03');assert.equal(r.at('village'),'exit:great-plains','deliver, bag empty: out to where it drops');
+  r.items['boar-meat']=1;assert.equal(r.at('village'),'npc:elder','deliver: the one to hand it to');delete r.items['boar-meat'];
   r.story.selectPage('S01');assert.equal(r.at('village'),'exit:great-plains','defeat on another map: its way out');
   assert.ok(r.shown.length>0,'the light is shown');
   r.story.selectPage(null);assert.equal(r.at('village'),'exit:monster-forest','back to main');
@@ -84,4 +86,17 @@ test('the driver\u2019s alpha errand (M06, 2026-11-27): out to the plains, the s
 test('with the chapter done, an errand page still has its light',()=>{
  const r=run({active:{S04:{step:0,count:0}},page:'S04',quest:'done'});
  try{assert.equal(r.story.log.step(),null);assert.equal(r.at('village'),'npc:smith');}finally{r.story.dispose();}
+});
+
+test('deliver errands without the item (1127-chapter): S03 to the boars on the plains, S06 into the cave for the ghoul',()=>{
+ const r=run({active:{S03:{step:0,count:0},S06:{step:0,count:0}},page:'S03'});
+ try{
+  r.player.position={x:-60,z:-30};
+  assert.equal(r.at('great-plains'),'spot:S03-boar','on the plains: the boar bank');
+  r.player.position={x:66,z:-12};assert.equal(r.at('great-plains'),null,'at the bank: the light circles the player');
+  r.items['boar-meat']=1;assert.equal(r.at('great-plains'),'exit:village','with the meat: back to the elder');
+  r.story.selectPage('S06');assert.equal(r.at('village'),'exit:witch-cave','the ghoul mail: the way to the cave');
+  r.player.position={x:0,z:46};assert.equal(r.at('monster-forest'),'exit:witch-cave','through the forest');
+  r.items['ghoul-mail']=1;assert.equal(r.at('monster-forest'),'exit:village','with the link: back to the smith');
+ }finally{r.story.dispose();}
 });

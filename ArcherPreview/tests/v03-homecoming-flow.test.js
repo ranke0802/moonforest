@@ -73,7 +73,8 @@ test('forest clues stand only while their step waits on them; a boss felled earl
   await h.talk('clue-poison');await h.talk('clue-armor');
   // The hobgoblin already fell on this visit: the step passes at once, and the trace appears.
   h.frame();h.frame();assert.equal(h.story.log.step().id,'trace');assert.deepEqual(h.castIds(),['clue-cave']);
-  await h.talk('clue-cave');assert.equal(h.story.log.step().id,'report');assert.deepEqual(h.castIds(),[]);
+  // 1127-chapter: Jeffrey has followed to the cave mouth for the report (NPCS during).
+  await h.talk('clue-cave');assert.equal(h.story.log.step().id,'report');assert.deepEqual(h.castIds(),['youth']);
   assert.equal(JSON.parse(h.journey.getItem('v03-greeted-v1')??'[]').length,0,'clues are not people');
  }finally{h.story.dispose();}
 });

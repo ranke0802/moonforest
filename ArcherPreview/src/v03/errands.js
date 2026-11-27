@@ -57,7 +57,8 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
   // Active errands in the order they were accepted (the quest panel's pages, 2026-11-27).
   accepted:()=>Object.keys(state.active).map(id=>byId.get(id)),
   // An errand this NPC can offer now (mainDone: id => boolean).
-  offerFor(npc,mainDone){return errands.find(errand=>errand.giver===npc&&!isActive(errand.id)&&!isFinished(errand.id)&&(!errand.after||mainDone(errand.after)))??null;},
+  // skip: errands this NPC entry does not take (story.js: no palisade stages at the cave mouth).
+  offerFor(npc,mainDone,skip=null){return errands.find(errand=>errand.giver===npc&&!isActive(errand.id)&&!isFinished(errand.id)&&(!errand.after||mainDone(errand.after))&&!skip?.(errand))??null;},
   accept(id){if(!byId.has(id)||isActive(id)||isFinished(id))return false;state.active[id]={step:0,count:0};save();return true;},
   // An old save moved to the 11/27 line (quest-migration.js): the errand that took over a
   // main quest takes its state, once. 'finished', or {step,count} if not yet taken or done.
@@ -70,7 +71,7 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
   // The active errand whose current step waits on talking to this NPC.
   waitingOn(npc){return errands.find(errand=>pendingTalk(stepOf(errand.id),npc,errand.id))??null;},
   // The active errand this NPC gave whose current step is elsewhere.
-  givenBy(npc){return errands.find(errand=>errand.giver===npc&&isActive(errand.id))??null;},
+  givenBy(npc,skip=null){return errands.find(errand=>errand.giver===npc&&isActive(errand.id)&&!skip?.(errand))??null;},
   // Text for the tracker, e.g. "대평원에서 짐승 두 마리 쫓아내기 (1/2)".
   objective(id,have=null){
    const step=stepOf(id);if(!step)return '';
@@ -86,7 +87,7 @@ export function createErrandLog({errands=[],storage=null,key=STORE_KEY,settle=nu
    for(const errand of errands){
     const step=stepOf(errand.id);if(!step)continue;
     let done=false;
-    if(step.type==='defeat'&&event.type==='defeat'&&(!step.kind||event.kind===step.kind||event.family===step.kind||event.source===step.kind)&&(!step.map||!event.map||event.map===step.map)){
+    if(step.type==='defeat'&&event.type==='defeat'&&(!step.kind||event.kind===step.kind||event.family===step.kind||event.source===step.kind)&&(!step.actor||!event.actor||event.actor===step.actor)&&(!step.map||!event.map||event.map===step.map)){
      const row=state.active[errand.id];row.count++;done=row.count>=step.count;if(!done){save();results.push({id:errand.id,stepDone:false,errandDone:false});continue;}
     }else if(step.type==='reach'&&event.type==='reach'&&event.map===step.map)done=true;
     else if(step.type==='town'&&event.type==='town'&&event.action===step.action&&(!step.item||event.item===step.item))done=true;

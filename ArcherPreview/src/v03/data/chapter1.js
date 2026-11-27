@@ -35,7 +35,13 @@ export const NPCS=Object.freeze([
  {id:'herbalist',name:'약초사',visual:'herbalist',map:'village',x:-4.4,z:-2.8,yaw:.9,idle:'herbalist-idle',greet:'herbalist-greet',menu:'herbalist-menu'},
  {id:'chief',name:'촌장',visual:'chief',map:'village',x:7.2,z:9.4,yaw:-2.2,idle:'chief-idle',greet:'chief-greet'},
  // The village scout (was "청년" until 2026-11-27). The id stays youth (saves, errands, portraits).
- {id:'youth',name:'제프리',visual:'youth',map:'village',x:-5.2,z:5.6,yaw:1.6,idle:'youth-idle',greet:'youth-greet'},
+ // 2026-11-27 (1127-chapter): -5.2,5.6 stood inside the crate pile (findFreeSpot moved him 0.7 m);
+ // -5.8,6.3 is clear at 0.7 m. absent/during: quest steps ('M07/report') he is elsewhere for
+ // (story.js npcHere): he follows the warrior to the cave mouth, so the forest report needs no walk home,
+ // and stays there until the warrior has gone in. waves:false: the palisade stages
+ // (W01) are not started there; his other errands are.
+ {id:'youth',name:'제프리',visual:'youth',map:'village',x:-5.8,z:6.3,yaw:1.6,idle:'youth-idle',greet:'youth-greet',absent:['M07/report','M12/cave']},
+ {id:'youth',name:'제프리',visual:'youth',map:'monster-forest',x:22,z:-34,yaw:.8,roam:false,waves:false,idle:'youth-cave-wait',greet:'youth-greet',during:['M07/report','M12/cave']},
  // clue: things to look at in the forest (M07). They stand only while their step waits on
  // them; temporary blocks from placeholder-actor.js until models exist (ASSETS.md).
  {id:'clue-poison',name:'고블린의 약병',visual:'clue-poison',map:'monster-forest',x:2.8,z:4.6,yaw:.4,roam:false,clue:true},
@@ -309,14 +315,15 @@ export const DIALOGUES=Object.freeze({
  ],
  'instructor-call':[
   {who:'양아버지',text:'기별 받고 바로 왔구나. 요즘 짐승들이 울타리 코앞까지 내려온다. 이 다리로는 목책에 설 수가 없어서 너를 불렀다.'},
-  {who:'나',text:'교회 편지도 받았어요. 엘레나 성녀님이 여섯 달째 소식이 없대요. 무슨 일이 있었던 거예요?'},
-  {who:'양아버지',text:'나도 끝난 뒤에 들은 게 전부다. 들은 말을 옮기면 너만 헷갈린다.'},
+  {who:'나',text:'성녀님 일도 여쭤보려고요. 아버지도 그분을 아셨어요?'},
+  {who:'양아버지',text:'비 오는 날이면 묻지도 않고 와서 이 다리에 약을 갈아 주던 아이다. …그 아이 얘기는 아직 쉽게 안 나오는구나.'},
+  {who:'양아버지',text:'그날 일은 나도 끝난 뒤에 들은 게 전부다. 들은 말을 옮기면 너만 헷갈린다.'},
   {who:'양아버지',text:'촌장부터 찾아가라. 마을 일은 그 사람이 제일 잘 안다. 짐승 일로도 네 손이 필요할 게다.'},
  ],
  'instructor-joachim':[
-  {who:'나',text:'촌장님은 성녀님이 요아힘이라는 사람과 가까웠고, 그가 죽은 뒤 사라졌다고만 하셨어요. 뭔가 숨기시는 것 같았어요.'},
-  {who:'양아버지',text:'…그날 나는 이 다리로 집에 누워 있었다. 다 끝난 뒤에야 이야기를 들었지.'},
-  {who:'양아버지',text:'요아힘은 네가 떠난 뒤에 내가 받은 제자다. 검은 누구보다 빨리 늘었고, 성품은 나보다 나았다.'},
+  {who:'나',text:'촌장님이 뭔가 숨기시는 것 같아요. 요아힘은 어떤 사람이었어요?'},
+  {who:'양아버지',text:'네가 떠난 뒤에 내가 받은 제자다. 검은 누구보다 빨리 늘었고, 성품은 나보다 나았다.'},
+  {who:'양아버지',text:'네가 두고 간 목검을 물려 썼지. 손잡이 매듭까지 네 식으로 감더구나.'},
   {who:'양아버지',text:'그런 아이가 고블린 몇 마리에… 아직도 믿기지가 않는다.'},
   {who:'양아버지',text:'제프리를 찾아가 봐라. 요아힘, 성녀님과 가장 가까웠던 녀석이다. 지금은 마을 정찰을 맡고 있다.'},
  ],
@@ -325,6 +332,7 @@ export const DIALOGUES=Object.freeze({
   {who:'제프리',text:'다 말해 줄게요. 그런데 그 전에 부탁이 있어요. 평원 언덕에 곰이 한 마리 눌러앉았어요.'},
   {who:'제프리',text:'그냥 곰이 아니에요. 나무를 상대로 주먹질을 하는데, 꼭 격투술을 수련하는 것 같아요. 저 혼자서는 어림도 없어요.'},
   {who:'제프리',text:'그놈 때문에 정찰로를 못 돌고 있어요. 도와주면 뭐든 대답할게요.'},
+  {who:'제프리',text:'주먹을 크게 젖혔다가 내리쳐요. 정면에서 받지 말고, 헛치게 한 다음에 치세요.'},
   {who:'나',text:'알았어. 언덕이라고 했지?'},
  ],
  'jeffrey-truth':[
@@ -358,11 +366,23 @@ export const DIALOGUES=Object.freeze({
  ],
  'clue-sword':[
   {who:'나',text:'(이 검… 손잡이에 감긴 붉은 끈. 할리안이 어릴 때부터 차고 다니던 검이야.)'},
+  {who:'나',text:'(목책 아래서 같이 목검을 휘두르던 때, 할리안은 지고 나면 늘 이 끈을 풀었다 다시 감았지. "촌장 아들은 지면 안 된대.")'},
   {who:'나',text:'(마물이 시신을 가져갔다고 했지. 그런데 왜 검이 고블린 야영지에 있지?)'},
  ],
  'clue-armor':[
   {who:'나',text:'(가죽 갑옷이야. 어깨에 새긴 마을 문장… 할리안이 즐겨 입던 거야.)'},
+  {who:'나',text:'(안감에 구겨진 쪽지가 끼여 있어. 촌장님 글씨야. "목책 지휘는 요아힘에게 맡긴다.")'},
   {who:'나',text:'(가죽이 그을리고 찢겨 있어. 여기서 무슨 일이 있었던 걸까.)'},
+ ],
+ // 2026-11-27 (1127-chapter): the bear's arrival (M04 bear intro) and Jeffrey's thanks (M04 choice line).
+ 'bear-start':[
+  {who:'나',text:'(크다. 저 주먹에 맞서 버티지 말자. 젖히면 피하고, 헛친 뒤에 벤다.)'},
+ ],
+ 'jeffrey-bear-reward':[
+  {who:'제프리',text:'약속한 답례예요. 정찰대 창고에서 하나 골라 가세요.'},
+ ],
+ 'youth-cave-wait':[
+  {who:'제프리',text:'저는 여기서 기다릴게요. …꼭 돌아와요, 누나.'},
  ],
  'hobgoblin-start':[
   {who:'나',text:'(저 덩치… 고블린들을 부리던 놈이야.)'},
@@ -370,12 +390,12 @@ export const DIALOGUES=Object.freeze({
  'clue-cave':[
   {who:'나',text:'(고블린과 홉고블린까지 쓰러뜨렸는데, 할리안의 흔적은 더 없어.)'},
   {who:'나',text:'(발자국이 숲 안쪽 동굴로 이어져. 동굴 입구에서 검은 기운이 새어 나오고 있어.)'},
-  {who:'나',text:'(아무것도 모르고 들어가기엔 위험해. 숲을 아는 제프리에게 먼저 물어보자.)'},
+  {who:'나',text:'(…뒤에서 발소리가 들려. 낯익은 걸음이야. 제프리?)'},
  ],
  'jeffrey-witch':[
-  {who:'제프리',text:'숲에 다녀왔어요? 얼굴을 보니 뭘 찾긴 찾았네요.'},
-  {who:'나',text:'할리안의 검이랑 갑옷이 고블린 야영지에 있었어. 흔적은 숲 안쪽 동굴로 이어졌고.'},
-  {who:'제프리',text:'그 동굴… 저도 숲 깊숙이는 못 들어가 봤어요. 그런데 멀리서 본 게 있어요.'},
+  {who:'제프리',text:'누나! 혼자 보내 놓고 마음이 안 놓여서 따라왔어요. …할리안 형 물건, 찾았어요?'},
+  {who:'나',text:'검이랑 갑옷이 야영지에 있었어. 발자국은 저 동굴로 이어지고.'},
+  {who:'제프리',text:'그 동굴… 저도 이 안쪽까지는 처음이에요. 그런데 멀리서 본 게 있어요.'},
   {who:'제프리',text:'거기 홉고블린들은 누군가의 명령을 따르고 있었어요. 마치… 마녀 같은 모습이었어요.'},
   {who:'제프리',text:'숲 마물들이 대평원까지 내려온 것도 그 마녀 때문이 아닐까 싶어요.'},
   {who:'제프리',text:'누나, 그 동굴은 혼자 가기엔 너무 위험해요. 가지 마세요.'},
@@ -412,13 +432,17 @@ export const QUESTS=Object.freeze([
  ]},
  {id:'M03',reward:{gold:60,potions:1},title:'마을의 부탁',steps:[
   {id:'ask',text:'촌장 찾아가기',type:'talk',targets:['chief'],dialogues:{chief:'chief-request'}},
-  {id:'hunt',text:'윈드몬 대평원의 짐승 쫓아내기',type:'defeat',map:'great-plains',count:3},
+  // 3a (1127-chapter): two kinds of beast, so the first hunt shows two ways to fight. quota: kill
+  // kinds that fill each part (quests.js); the near ones: lone wolves -57,-50 / -82,8, foxes -72,-10 / -77,-52.
+  {id:'hunt',text:'대평원의 늑대 둘과 여우 하나 쫓아내기',type:'defeat',map:'great-plains',count:3,quota:[{id:'wolf',count:2,kinds:['gray-wolf','stylized-wolf','wolf-3','wolf']},{id:'fox',count:1,kinds:['fox']}]},
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true,dialogues:{chief:'chief-report'}},
  ]},
- {id:'M04',reward:{gold:120,armor:'leather'},title:'대평원의 곰',steps:[
+ // choice (1127-chapter): the report ends with a pick (dialogue menu); the id is saved (story.js
+ // rewardOf) and pays that reward. reward stays the first one for readers that know no choice.
+ {id:'M04',reward:{gold:120,armor:'leather'},choice:{line:'jeffrey-bear-reward',options:[{id:'leather',reward:{gold:120,armor:'leather'}},{id:'potions',reward:{gold:120,potions:3}},{id:'gold',reward:{gold:240}}]},title:'대평원의 곰',steps:[
   {id:'father',text:'양아버지에게 그날 일 여쭙기',type:'talk',targets:['foster-father'],dialogues:{'foster-father':'instructor-joachim'}},
   {id:'ask',text:'정찰병 제프리 찾아가기',type:'talk',targets:['youth'],dialogues:{youth:'jeffrey-bear'}},
-  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},tune:{hp:650,damage:.7},arrival:'대평원의 곰이 모습을 드러냈다'},
+  {id:'bear',text:'평원 언덕의 곰 쓰러뜨리기',type:'defeat',kind:'bear',count:1,map:'great-plains',at:{x:-25,z:-16,radius:15},tune:{hp:650,damage:.7},intro:'bear-start',arrival:'대평원의 곰이 모습을 드러냈다'},
   {id:'report',text:'제프리에게 알리기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'jeffrey-truth'}},
  ]},
  {id:'M11',reward:{gold:40},title:'마비된 듯한 움직임',steps:[
@@ -429,9 +453,9 @@ export const QUESTS=Object.freeze([
   {id:'forest',text:'평원 동쪽 끝에서 마물의 숲으로 들어가기',type:'reach',map:'monster-forest'},
   {id:'goblins',text:'숲의 두 야영지에서 고블린 물리치기',type:'defeat',kind:'goblin',count:5,map:'monster-forest',at:{x:0,z:1,radius:10},intro:'forest-camp',arrival:'고블린 야영지다!'},
   {id:'clues',text:'야영지 주변 살펴보기',type:'talk',targets:['clue-poison','clue-sword','clue-armor'],dialogues:{'clue-poison':'clue-poison','clue-sword':'clue-sword','clue-armor':'clue-armor'}},
-  {id:'hobgoblin',text:'숲 안쪽의 홉고블린 쓰러뜨리기',type:'defeat',kind:'hobgoblin-boss',count:1,map:'monster-forest',at:{x:26,z:-32,radius:12},early:true,intro:'hobgoblin-start',arrival:'홉고블린이 앞을 막아선다'},
+  {id:'hobgoblin',text:'숲 안쪽의 홉고블린 쓰러뜨리기',type:'defeat',kind:'hobgoblin-boss',count:1,map:'monster-forest',at:{x:8,z:-33,radius:12},early:true,intro:'hobgoblin-start',arrival:'홉고블린이 앞을 막아선다'},
   {id:'trace',text:'동굴 쪽으로 이어진 흔적 살피기',type:'talk',targets:['clue-cave'],dialogues:{'clue-cave':'clue-cave'}},
-  {id:'report',text:'마을로 돌아가 제프리에게 묻기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'jeffrey-witch'}},
+  {id:'report',text:'따라온 제프리와 이야기하기',type:'talk',targets:['youth'],turnIn:true,dialogues:{youth:'jeffrey-witch'}},
  ]},
  {id:'M12',reward:{gold:50},title:'마녀의 동굴 조사',steps:[
   {id:'cave',text:'숲 깊은 곳의 동굴로 들어가기',type:'reach',map:'witch-cave'},
@@ -458,7 +482,7 @@ export const ERRANDS=Object.freeze([
   {id:'report',text:'약초사에게 알리기',type:'talk',targets:['herbalist'],turnIn:true},
  ]},
  {id:'S03',giver:'elder',after:'M03',reward:{gold:20,potions:1},title:'빈 광주리',offer:'elder-errand',wait:'elder-errand-wait',done:'elder-errand-done',steps:[
-  {id:'meat',text:'할머니께 멧돼지 고기 한 덩이 가져다드리기',type:'deliver',item:'boar-meat',count:1,targets:['elder']},
+  {id:'meat',text:'할머니께 멧돼지 고기 한 덩이 가져다드리기',type:'deliver',item:'boar-meat',count:1,targets:['elder'],source:{id:'S03-boar',map:'great-plains',kind:'boar',at:{x:66,z:-13,radius:10}}},
  ]},
  {id:'S04',giver:'smith',after:'M04',reward:{gold:30},title:'무딘 날',offer:'smith-errand',wait:'smith-errand-wait',done:'smith-errand-done',steps:[
   {id:'temper',text:'대장장이 작업대에서 검을 한 번 단련하기',type:'town',action:'forge'},
@@ -469,12 +493,12 @@ export const ERRANDS=Object.freeze([
   {id:'report',text:'촌장에게 알리기',type:'talk',targets:['chief'],turnIn:true},
  ]},
  {id:'S06',giver:'smith',after:'M07',reward:{gold:50},title:'구울의 사슬',offer:'smith-chain',wait:'smith-chain-wait',done:'smith-chain-done',steps:[
-  {id:'link',text:'구울 사슬 고리 하나를 대장장이에게 가져가기',type:'deliver',item:'ghoul-mail',count:1,targets:['smith']},
+  {id:'link',text:'구울 사슬 고리 하나를 대장장이에게 가져가기',type:'deliver',item:'ghoul-mail',count:1,targets:['smith'],source:{id:'S06-ghoul',map:'witch-cave',kind:'ghoul-warrior',at:{x:31,z:10,radius:8}}},
  ]},
  // The alpha wolf: main quest M06 until 2026-11-27, now the driver's errand once his wagon is
  // mended (after the bear). Same id and gold ledger entry, so an old save is never paid twice.
  {id:'M06',giver:'driver',after:'M04',goldSource:'v03-quest-M06',reward:{gold:250},title:'우두머리 늑대',offer:'driver-alpha',wait:'driver-alpha-wait',done:'driver-alpha-done',steps:[
-  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',count:1,map:'great-plains',at:{x:29,z:37,radius:28}},
+  {id:'alpha',text:'초원 한가운데의 우두머리 늑대 쓰러뜨리기',type:'defeat',kind:'wolf',actor:'alpha-wolf.r8',count:1,map:'great-plains',at:{x:29,z:37,radius:28}},
   {id:'report',text:'마부에게 알리기',type:'talk',targets:['driver'],turnIn:true},
  ]},
  // Jeffrey's defense errand (2026-11-27, user): ten stronger stages at the palisade, each started by

@@ -215,7 +215,9 @@ function createPlayer(h,{lang='ko',notes}){
   return {title,objective};
  }
  async function talk(id,{choose='talk'}={}){
-  const npc=NPCS.find(row=>row.id===id);
+  // NPCS during/absent (1127-chapter): Jeffrey waits at the cave mouth for the M07 report.
+  const key=`${log().quest()?.id}/${log().step()?.id}`,here=row=>(!row.during||row.during.includes(key))&&!row.absent?.includes(key);
+  const npc=NPCS.find(row=>row.id===id&&here(row))??NPCS.find(row=>row.id===id);
   if(!await goTo(npc.map))return false;
   frames(2);
   if(!castIds().includes(id)){note('막힘',`${id}가 ${npc.map} 출연진에 없음 (${castIds().join(',')})`);return false;}
@@ -236,6 +238,12 @@ function createPlayer(h,{lang='ko',notes}){
   if(all.length===0){note('막힘',`${map}에 ${step.kind??'짐승'} 소환 경로가 없음`);return false;}
   if(step.at&&!source&&!spot.length)note('막힘',`${step.kind}가 목표 지점(${step.at.x},${step.at.z} 반경 ${step.at.radius}m)에 없음`);
   const rows=[...spot,...all.filter(row=>!spot.includes(row))];
+  // A quota hunt (1127-chapter, M03: two wolves and a fox): the foes of each part still open, from the map's real packs.
+  if(step.quota&&!source){
+   const done=log().snapshot().done,picked=[];
+   for(const part of step.quota){const left=part.count-done.filter(id=>id===part.id).length,of=all.filter(row=>part.kinds.includes(row.kind));if(left>0&&!of.length)note('막힘',`${map}에 ${part.kinds.join('/')} 없음`);for(let i=0;i<left&&of.length;i++)picked.push(of[i%of.length]);}
+   rows.splice(0,rows.length,...picked);count=Math.min(count,picked.length);
+  }
   if(!rows.some(row=>row.respawn)&&rows.length<count)note('주의',`${map}의 ${step.kind??'짐승'} ${rows.length}마리 < 필요 ${count} (한 방문에 다 못 잡음)`);
   Object.assign(h.player.position,ARRIVAL[map]);
   h.battle.encounters=standing(map,h.player.position);

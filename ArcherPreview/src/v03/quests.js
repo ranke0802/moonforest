@@ -24,6 +24,18 @@ export function readCursor(value,quests){
  if(quest&&value.step>=(quest.steps?.length??Infinity))return null;
  return {quest:value.quest,step:value.step,count,done};
 }
+// A defeat step's actor (2026-11-27, 1127-chapter): the spawn definition the kill must come
+// from (the plains alpha, not any wolf). Kills without a definition id (story summons) pass.
+export function actorMatches(step,event){return !step.actor||!event.actor||event.actor===step.actor;}
+// The quota part this kill fills, or null: its kind is listed and the part is not full yet.
+export function openPart(step,event,done){
+ for(const part of step.quota){
+  if(!part.kinds.includes(event.kind)&&!part.kinds.includes(event.source))continue;
+  let n=0;for(const id of done)if(id===part.id)n++;
+  if(n<part.count)return part;
+ }
+ return null;
+}
 export function createQuestLog({quests,storage=null,key=STORE_KEY,settle=null}){
  const state={quest:0,step:0,count:0,done:[]};
  // Set by load() when an old record was moved: {errand} for the caller to apply, then save().
@@ -75,14 +87,20 @@ export function createQuestLog({quests,storage=null,key=STORE_KEY,settle=null}){
   // Returns {changed, stepDone, questDone} for one event.
   notify(event){
    const current=step(),result={changed:false,stepDone:false,questDone:null};if(!current||!event)return result;
-   if(current.type==='defeat'&&event.type==='defeat'&&(!current.kind||event.kind===current.kind)&&(!current.map||!event.map||event.map===current.map)){
-    state.count++;result.changed=true;if(state.count>=current.count)result.stepDone=true;else save();
+   if(current.type==='defeat'&&event.type==='defeat'&&(!current.kind||event.kind===current.kind)&&actorMatches(current,event)&&(!current.map||!event.map||event.map===current.map)){
+    // quota: each kill fills its kind's part; the parts filled go in done (a count saved before
+    // the quota, 2026-11-27, keeps counting toward the total).
+    const part=current.quota?openPart(current,event,state.done):null;
+    if(!current.quota||part){
+     if(part)state.done.push(part.id);
+     state.count++;result.changed=true;if(state.count>=current.count)result.stepDone=true;else save();
+    }
    }else if(current.type==='talk'&&event.type==='talk'&&current.targets.includes(event.npc)&&!state.done.includes(event.npc)){
     state.done.push(event.npc);result.changed=true;if(state.done.length>=current.targets.length)result.stepDone=true;else save();
    }else if(current.type==='reach'&&event.type==='reach'&&event.map===current.map){result.changed=true;result.stepDone=true;}
    if(result.stepDone){
     if(settle&&state.step===quest().steps.length-1&&!settle(quest(),current)){
-     if(current.type==='defeat')state.count--;
+     if(current.type==='defeat'){state.count--;if(current.quota)state.done.pop();}
      if(current.type==='talk')state.done.pop();
      return {changed:false,stepDone:false,questDone:null};
     }

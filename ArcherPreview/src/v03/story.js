@@ -31,6 +31,8 @@ import {pinScreenArea,unpinScreenArea} from './zoom-lod-pin.js';
 import {MapLoadLifetime,mapLoadAbortError} from '../map-load-lifetime.js';
 
 const TALK_RANGE=2.7,TALK_RANGE_SQ=TALK_RANGE*TALK_RANGE;
+// The kinds living in each plains den (spawn definition 'fox.r1' -> 'fox'; the alpha's kind is 'wolf').
+const DEN_KINDS=new Map(PLAINS_MONSTER_GROUPS.map(group=>[group.id,group.members.map(([id])=>id==='alpha-wolf.r8'?'wolf':id.split('.')[0])]));
 // A walkable spot at or near the authored point: the point itself, then rings.
 export function findFreeSpot(navigation,point,radius=.42){
  if(!navigation?.free||navigation.free(point,radius))return {x:point.x,z:point.z};
@@ -46,8 +48,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  let log=createQuestLog({quests:content.QUESTS,storage:save.journey}),replaying=false,onChapterEnd=null;
  // Optional errands (errands.js) and who has been greeted once (NPCS greet), per slot.
  let errands=createErrandLog({errands:content.ERRANDS??[],storage:save.journey});
- const GREET_KEY='v03-greeted-v1',greeted=new Set(),errandMarks=new Map();let greetKey=GREET_KEY,errandPoll=0;
+ const GREET_KEY='v03-greeted-v1',greeted=new Set(),errandMarks=new Map(),quietMarks=new Map();let greetKey=GREET_KEY,errandPoll=0;// quietMarks: errandMarks without the palisade (NPCS waves:false)
  // The quest panel's page (quest-pages.js): an errand id, or null for the main quest. Saved per record.
+ // A quest's reward pick (QUESTS choice, 2026-11-27): {questId: optionId}, per record.
+ const PICK_KEY='v03-reward-pick-v1';let pickKey=PICK_KEY;
  const PAGE_KEY='v03-quest-page-v1';let pageKey=PAGE_KEY,questPage=null,firstErrand=null;// firstErrand: the panel's first errand page (refreshErrands)
  const dialogue=createDialogue({doc,portraitFor});
  // Warm the art cache so the first line never shows an empty frame.
@@ -76,9 +80,34 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  // Commit the 0.3 reward (and any final delivery) before advancing the log.
  // If the log write is interrupted its wallet receipt restores the completion.
+ function readPicks(){try{const value=JSON.parse(save.journey.getItem(pickKey)??'{}');return value&&typeof value==='object'&&!Array.isArray(value)?value:{};}catch{return {};}}
+ // The quest with the reward its saved pick names (the first option until one is picked).
+ function rewardOf(quest){
+  const options=quest?.choice?.options;if(!options?.length)return quest;
+  const id=readPicks()[quest.id],pick=options.find(option=>option.id===id)??options[0];
+  return pick.reward===quest.reward?quest:{...quest,reward:pick.reward};
+ }
+ function rewardLabel(reward){
+  const parts=[];
+  if(reward.armor)parts.push(t('reward.armor.'+reward.armor));
+  if(reward.potions)parts.push(t('reward.potions',{n:reward.potions}));
+  if(reward.gold)parts.push(t('reward.gold',{n:reward.gold}));
+  return parts.join(' · ');
+ }
+ // Before the report that ends a quest with a choice: the giver's line and the options in the
+ // dialogue menu (WASD/E, taps). A closed menu takes the first option; the id is saved.
+ async function pickReward(quest){
+  const options=quest.choice.options,picks=readPicks();
+  if(options.some(option=>option.id===picks[quest.id])||!dialogue.choose)return;
+  const hello=content.DIALOGUES[quest.choice.line]?.[0];
+  const id=await dialogue.choose(options.map(option=>({id:option.id,label:rewardLabel(option.reward)})),{who:hello?.who??null,line:hello?.text??null});
+  picks[quest.id]=options.some(option=>option.id===id)?id:options[0].id;
+  try{save.journey.setItem(pickKey,JSON.stringify(picks));}catch{/* the first option is paid */}
+  stageMark?.('pick:'+quest.id+':'+picks[quest.id]);
+ }
  function settleQuest(quest,step){
   if(!quest.giver)stageMark?.('reward:'+quest.id);
-  const paid=api.settleQuest(quest,step);
+  const paid=api.settleQuest(rewardOf(quest),step);
   if(!paid){api.toast?.(t('toast.failed'));return false;}
   const parts=[];
   if(paid.xp)parts.push(t('reward.xp',{n:paid.xp}));
@@ -95,7 +124,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  function grantReward(quest){
   if(!quest||replaying||api.settleQuest)return;
-  const reward=quest.reward??{},parts=[],summary={xp:0,gold:0,potions:0,armor:null};
+  const reward=rewardOf(quest).reward??{},parts=[],summary={xp:0,gold:0,potions:0,armor:null};
   const xp=api.creditQuestExperience?.([quest.id]);if(xp>0){parts.push(t('reward.xp',{n:xp}));summary.xp=xp;}
   try{if(reward.gold&&api.creditGold?.('v03-quest-'+quest.id,reward.gold)){parts.push(t('reward.gold',{n:reward.gold}));summary.gold=reward.gold;}}catch(error){console.warn('[MoonForest 0.3] gold reward',error);}
   try{if(reward.potions){const n=api.addPotions?.(reward.potions)??0;if(n>0){parts.push(t('reward.potions',{n}));summary.potions=n;}}}catch(error){console.warn('[MoonForest 0.3] potion reward',error);}
@@ -105,7 +134,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function refresh(){
   const quest=log.quest();
   if(quest)hud.setQuest(quest.title,log.objective());else hud.setQuest(t('hud.chapterNext'),content.CHAPTER_END_NOTE);
-  refreshErrands();syncClues();
+  syncOpenKinds();refreshErrands();syncClues();
  }
  // ----- optional errands (선택 의뢰, errands.js) -----
  // The panel's pages: the main quest, then every active errand in the order it was
@@ -124,11 +153,11 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(questPage&&!errands.isActive(questPage)){questPage=null;storePage();}
   const pages=errands.accepted().map(errand=>{const step=errands.step(errand.id);return {id:errand.id,title:errand.title,step:waves.objective(errand.id)??errands.objective(errand.id,step?.type==='deliver'?api.itemCount?.(step.item)??0:null)};});
   hud.setQuestPages(pages,questPage);firstErrand=pages[0]?.id??null;
-  errandMarks.clear();
+  errandMarks.clear();quietMarks.clear();
   for(const npc of content.NPCS??[]){
    const waiting=errands.waitingOn(npc.id);
-   if(waiting&&(errands.step(waiting.id).type==='talk'||deliverReady(waiting)))errandMarks.set(npc.id,'!');
-   else if(errands.offerFor(npc.id,mainDone))errandMarks.set(npc.id,'+');
+   if(waiting&&(errands.step(waiting.id).type==='talk'||deliverReady(waiting))){errandMarks.set(npc.id,'!');quietMarks.set(npc.id,'!');}
+   else{if(errands.offerFor(npc.id,mainDone))errandMarks.set(npc.id,'+');if(errands.offerFor(npc.id,mainDone,isWaves))quietMarks.set(npc.id,'+');}
   }
   waves.mark(errandMarks);
  }
@@ -150,16 +179,20 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function errandEvent(event){if(started&&event)errandResults(errands.notify(event));}
  // What an NPC says for an errand now, or null: hand-in first, then a new
  // offer, then a reminder from the giver.
- function errandTalk(npc){
+ // NPCS waves:false (Jeffrey at the cave mouth, 2026-11-27): his other errands go on there, the
+ // palisade stages (W01, village) do not.
+ const isWaves=errand=>errand?.steps?.[0]?.type==='waves';
+ function errandTalk(npc,{withWaves=true}={}){
   const waiting=errands.waitingOn(npc);
   if(waiting){
    const step=errands.step(waiting.id);
    if(step.type==='deliver')return deliverReady(waiting)?{kind:'deliver',errand:waiting,dialogue:waiting.done}:{kind:'wait',errand:waiting,dialogue:waiting.wait};
    return {kind:'turnIn',errand:waiting,dialogue:waiting.steps.indexOf(step)===waiting.steps.length-1?waiting.done:waiting.wait};
   }
-  const wave=waves.talk(npc,mainDone);if(wave)return wave;
-  const offer=errands.offerFor(npc,mainDone);if(offer)return {kind:'offer',errand:offer,dialogue:offer.offer};
-  const given=errands.givenBy(npc);return given?{kind:'wait',errand:given,dialogue:given.wait}:null;
+  if(withWaves){const wave=waves.talk(npc,mainDone);if(wave)return wave;}
+  const skip=withWaves?null:isWaves;
+  const offer=errands.offerFor(npc,mainDone,skip);if(offer)return {kind:'offer',errand:offer,dialogue:offer.offer};
+  const given=errands.givenBy(npc,skip);return given?{kind:'wait',errand:given,dialogue:given.wait}:null;
  }
  function afterErrandTalk(talk,npc){
   if(!talk||talk.kind!=='offer'&&waves.after(talk))return;
@@ -203,9 +236,17 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  // Straight hop from the player to a point, used only for the short orbit.
  const clearLine=(from,x,z)=>{for(let i=1;i<=3;i++){const k=i/3;if(!walkable(from.x+(x-from.x)*k,from.z+(z-from.z)*k))return false;}return true;};
  const guide={visual:null,track:createGuideTrack(),key:null,originX:0,originZ:0,age:0,time:0,failed:false,shown:false,x:0,y:0,z:0,sway:0,lift:1.25},guidePoint={x:0,z:0};
- function nearestDen(player){
+ // A quota hunt (QUESTS defeat quota): the kinds whose part is still open, worked out on changes.
+ let openKinds=null;
+ function syncOpenKinds(){
+  const step=log.step();openKinds=null;if(!step?.quota)return;
+  const done=log.snapshot().done;openKinds=new Set();
+  for(const part of step.quota){let n=0;for(const id of done)if(id===part.id)n++;if(n<part.count)for(const kind of part.kinds)openKinds.add(kind);}
+ }
+ function denHas(id,kinds){for(const kind of DEN_KINDS.get(id)??[])if(kinds.has(kind))return true;return false;}
+ function nearestDen(player,kinds=null){
   let den=null,bestSq=Infinity;
-  for(const group of PLAINS_MONSTER_GROUPS){const {x,z}=group.territory,sq=(x-player.x)**2+(z-player.z)**2;if(sq<64||sq>=bestSq)continue;bestSq=sq;den={id:group.id,x,z};}
+  for(const group of PLAINS_MONSTER_GROUPS){if(kinds&&!denHas(group.id,kinds))continue;const {x,z}=group.territory,sq=(x-player.x)**2+(z-player.z)**2;if(sq<64||sq>=bestSq)continue;bestSq=sq;den={id:group.id,x,z};}
   return den;
  }
  // A defeat step's way: out toward its map, its spot, the nearest living foe of
@@ -215,20 +256,21 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   if(step.at&&!livingFoe(step.kind,step.phase)){if((step.at.x-player.x)**2+(step.at.z-player.z)**2<16)return null;guidePoint.x=step.at.x;guidePoint.z=step.at.z;return {key:'spot:'+step.id,direct:false,stopShort:1};}
   // Lead toward the nearest living foe, stopping short of it.
   let best=null,bestSq=Infinity;
-  for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||!matchesFoe(foe,step.kind,step.phase))continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
+  const quota=step.quota&&openKinds;
+  for(const foe of api.battle.encounters??[]){if(!foe.active||!(foe.brain?.hp>0)||!matchesFoe(foe,step.kind,step.phase)||quota&&!openKinds.has(foe.summonKind??foe.kind))continue;const p=foe.actor.position,sq=(p.x-player.x)**2+(p.z-player.z)**2;if(sq<bestSq){best=p;bestSq=sq;}}
   if(best&&bestSq<16)return null;
   if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'foe',chase:true,stopShort:2.6};}
   // No beast awake nearby: lead to the nearest plains den instead of vanishing.
-  const den=!step.kind&&mapId==='great-plains'?nearestDen(player):null;if(!den)return null;
+  const den=!step.kind&&mapId==='great-plains'?nearestDen(player,quota?openKinds:null):null;if(!den)return null;
   guidePoint.x=den.x;guidePoint.z=den.z;return {key:'den:'+den.id,direct:false,stopShort:3};
  }
  // The nearest of these people on this map, else the way out toward the first one's map.
- function npcTarget(player,ids){
+ function npcTarget(player,ids,noWaves=false){
   let best=null,bestSq=Infinity,away=null;
   for(const id of ids??[]){
-   const member=cast.find(row=>row.npc.id===id);
+   const member=cast.find(row=>row.npc.id===id&&!(noWaves&&row.npc.waves===false));
    if(member){const sq=(member.x-player.x)**2+(member.z-player.z)**2;if(sq<bestSq){best=member;bestSq=sq;}}
-   else away??=content.NPCS?.find(npc=>npc.id===id);
+   else away??=noWaves?content.NPCS?.find(npc=>npc.id===id&&npc.waves!==false):npcHome(id);
   }
   if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'npc:'+best.npc.id,direct:false,stopShort:1.4};}
   const exit=away&&content.ROUTES?.[mapId]?.[away.map];if(!exit)return null;
@@ -247,6 +289,8 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function errandTarget(player,errand){
   const step=errands.step(errand.id);if(!step)return null;
   if(step.type==='defeat'&&(!step.map||step.map===mapId||content.ROUTES?.[mapId]?.[step.map]))return defeatTarget(player,step);
+  // deliver source (2026-11-27): while the bag lacks the item, the way to where it drops.
+  if(step.type==='deliver'&&step.source&&!deliverReady(errand)&&(step.source.map===mapId||content.ROUTES?.[mapId]?.[step.source.map]))return defeatTarget(player,step.source);
   let target=null;
   if(step.type==='talk'||step.type==='deliver')target=npcTarget(player,step.targets);
   else if(step.type==='town'){const host=townHost(step);if(host)target=npcTarget(player,[host]);}
@@ -257,7 +301,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    if(goal&&!goal.npc&&goal.map===mapId){if((goal.x-player.x)**2+(goal.z-player.z)**2<16)return null;guidePoint.x=goal.x;guidePoint.z=goal.z;target={key:'spot:'+errand.id,direct:false,stopShort:1};}
    else if(goal&&!goal.npc){const exit=content.ROUTES?.[mapId]?.[goal.map];if(exit){guidePoint.x=exit.x;guidePoint.z=exit.z;target={key:'exit:'+goal.map,direct:false,stopShort:0};}}
   }
-  return target??npcTarget(player,[errand.giver]);
+  return target??npcTarget(player,[errand.giver],isWaves(errand));
  }
  // The main line is over and the panel shows its end (2026-11-27 playtest: the light went out while
  // errands were still open): it leads to the first errand taken. Only read once log.step() is null.
@@ -274,7 +318,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(!log.isTarget(id))continue;
     const member=cast.find(row=>row.npc.id===id);
     if(member){const sq=(member.x-player.x)**2+(member.z-player.z)**2;if(sq<bestSq){best=member;bestSq=sq;}}
-    else away??=content.NPCS.find(npc=>npc.id===id);
+    else away??=npcHome(id);
    }
    if(best){guidePoint.x=best.x;guidePoint.z=best.z;return {key:'npc:'+best.npc.id,direct:false,stopShort:1.4};}
    const exit=away&&content.ROUTES?.[mapId]?.[away.map];if(!exit)return null;
@@ -428,13 +472,13 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  }
  // ----- quest markers: ? = quest waiting, ! = report back -----
  let markers=null,markerKey='';const mapMarks=[];
- function markFor(id){const step=log.step();return step?.type==='talk'&&log.isTarget(id)?(step.turnIn?'!':'?'):errandMarks.get(id)??null;}
+ function markFor(id,npc=null){const step=log.step();return step?.type==='talk'&&log.isTarget(id)?(step.turnIn?'!':'?'):(npc?.waves===false?quietMarks:errandMarks).get(id)??null;}
  function updateMarkers(){
   if(createMarkers&&!markers&&cast.length){try{markers=createMarkers(api.world.scene);}catch(error){console.warn('[MoonForest 0.3] quest markers unavailable',error);createMarkers=null;}}
   mapMarks.length=0;let key=mapId??'';
   for(const member of cast){
    // No quest mark over a head that has a speech bubble on it.
-   const glyph=dialogue.open||bubble.member===member?null:markFor(member.npc.id);
+   const glyph=dialogue.open||bubble.member===member?null:markFor(member.npc.id,member.npc);
    if(glyph){
     markers?.set(member.npc.id,glyph,member.x,(api.world.terrain?.heightAt?.(member.x,member.z)??0)+2.55,member.z);
     member.showingQuestMark=true;mapMarks.push({x:member.x,z:member.z,glyph});key+=`|${member.npc.id}${glyph}`;
@@ -443,7 +487,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }
   }
   // Goals on another map: mark the way out instead.
-  const step=log.step(),away=step&&(step.type==='reach'?step.map:step.type==='defeat'?step.map:step.type==='talk'?step.targets.map(id=>log.isTarget(id)&&!cast.some(row=>row.npc.id===id)?content.NPCS.find(npc=>npc.id===id)?.map:null).find(Boolean):null);
+  const step=log.step(),away=step&&(step.type==='reach'?step.map:step.type==='defeat'?step.map:step.type==='talk'?step.targets.map(id=>log.isTarget(id)&&!cast.some(row=>row.npc.id===id)?npcHome(id)?.map:null).find(Boolean):null);
   const exit=away&&away!==mapId?content.ROUTES?.[mapId]?.[away]:null;
   if(exit){mapMarks.push({x:exit.x,z:exit.z,glyph:'>'});key+=`|exit:${away}`;}
   if(key!==markerKey){markerKey=key;api.setMapMarkers?.(mapMarks.slice());}
@@ -502,19 +546,31 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    }
   }
  }
+ // NPCS during/absent (2026-11-27): 'quest/step' keys a person is only (during) or not (absent)
+ // here for, as Jeffrey at the cave mouth for the M07 report.
+ function npcHere(npc){
+  if(!npc.during&&!npc.absent)return true;
+  const quest=log.quest(),step=log.step(),key=quest&&step?quest.id+'/'+step.id:'';
+  return (!npc.during||npc.during.includes(key))&&!npc.absent?.includes(key);
+ }
+ // Where a person is now (the entry for this step), for the way out to another map.
+ const npcHome=id=>content.NPCS?.find(npc=>npc.id===id&&npcHere(npc))??content.NPCS?.find(npc=>npc.id===id);
+ function addMember(npc,world,scene,openingSignal){
+  const visual=createVisual(scene,npc.visual,{id:npc.id,requireModel:!!openingSignal&&npc.id==='driver'}),spot=findFreeSpot(world.navigation,npc);
+  visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);
+  // Village folk stroll a little around their spot; the driver stays by his wagon.
+  if(!npc.clue&&npc.roam!==false&&npc.id!=='driver')visual.roam?.({radius:npc.roam??2.2,free:(x,z)=>{try{return world.navigation?.free?.({x,z},.4)??true;}catch{return true;}},heightAt:(x,z)=>world.terrain?.heightAt?.(x,z)??0,player:()=>api.getPlayer?.()?.position??null});
+  const member={npc,visual,x:spot.x,z:spot.z};cast.push(member);return member;
+ }
  function buildCast(id,openingSignal){
   // The prologue may have imported both GLBs already, or still be importing
   // them on a skip. Transfer ownership for this map visit in either case.
   clearCast(wagonMap===id&&wagonScene===api.world?.scene);placeProps(id,openingSignal);
   const world=api.world,scene=world.scene;if(!scene||scene.isDisposed)return;
   for(const npc of content.NPCS){
-   if(npc.map!==id||npc.clue&&!log.isTarget(npc.id))continue;
+   if(npc.map!==id||npc.clue&&!log.isTarget(npc.id)||!npcHere(npc))continue;
    try{
-    const visual=createVisual(scene,npc.visual,{id:npc.id,requireModel:!!openingSignal&&npc.id==='driver'}),spot=findFreeSpot(world.navigation,npc);
-    visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);
-    // Village folk stroll a little around their spot; the driver stays by his wagon.
-    if(npc.roam!==false&&npc.id!=='driver')visual.roam?.({radius:npc.roam??2.2,free:(x,z)=>{try{return world.navigation?.free?.({x,z},.4)??true;}catch{return true;}},heightAt:(x,z)=>world.terrain?.heightAt?.(x,z)??0,player:()=>api.getPlayer?.()?.position??null});
-    cast.push({npc,visual,x:spot.x,z:spot.z});if(npc.id==='driver')driverMember=cast[cast.length-1];
+    const member=addMember(npc,world,scene,openingSignal);if(npc.id==='driver')driverMember=member;
    }catch(error){console.warn('[MoonForest 0.3] cast member unavailable',npc.id,error);}
   }
   castMap=id;castSettled=Promise.allSettled(cast.map(member=>member.visual.settled).filter(Boolean));
@@ -524,10 +580,10 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
  function syncClues(){
   const world=api.world,scene=world?.scene;if(!castMap||castMap!==mapId||!scene||scene.isDisposed)return;
   for(const npc of content.NPCS){
-   if(!npc.clue||npc.map!==castMap)continue;
-   const index=cast.findIndex(member=>member.npc===npc),want=log.isTarget(npc.id);
+   if(!npc.clue&&!npc.during&&!npc.absent||npc.map!==castMap)continue;
+   const index=cast.findIndex(member=>member.npc===npc),want=npc.clue?log.isTarget(npc.id):npcHere(npc);
    if(want&&index<0){
-    try{const visual=createVisual(scene,npc.visual,{id:npc.id}),spot=findFreeSpot(world.navigation,npc);visual.place(spot.x,world.terrain?.heightAt?.(spot.x,spot.z)??0,spot.z,npc.yaw??0);cast.push({npc,visual,x:spot.x,z:spot.z});}
+    try{addMember(npc,world,scene);}
     catch(error){console.warn('[MoonForest 0.3] clue unavailable',npc.id,error);}
    }else if(!want&&index>=0){
     const [member]=cast.splice(index,1);if(near===member){near=null;hud.setPrompt(null);}
@@ -631,7 +687,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   const services=!!(dialogue.choose&&menu&&(api.openTownShop||menu.every(id=>STORY_SERVICES.includes(id))));
   const restInMenu=services&&menu.includes('rest');
   const script=()=>{
-   const questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc);
+   const questLine=log.dialogueFor(npc),errand=questLine?null:errandTalk(npc,{withWaves:member.npc.waves!==false});
    // The first meeting in a save is a reunion (NPCS greet, 2026-11-27): it comes once,
    // before the quest or errand line when there is one (service folk hear it before their menu).
    const greeting=content.REUNIONS!==false&&!greeted.has(npc)&&!member.npc.clue&&!services?content.DIALOGUES[member.npc.greet]:null;
@@ -656,6 +712,9 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     runEffects(played,{rest:!restInMenu});
     // Setting the wagon up: the step completes when it stands again (updateLift).
     const heave=played.some(line=>line.effects?.includes('right-wagon'));
+    const ending=questLine&&!replaying&&log.quest()?.choice&&log.step()===log.quest().steps.at(-1)?log.quest():null;
+    if(ending)await pickReward(ending);
+    if(disposed)return;
     if(heave&&startLift(member)){}else if(questLine)emit({type:'talk',npc:member.npc.id});
     if(!member.npc.clue)markGreeted(npc);afterErrandTalk(errand,npc);
     if(member.npc.id==='driver'&&(questLine==='driver-thanks'||log.quest()?.id!=='M00'||log.step()?.id==='road'))api.offerMount?.();
@@ -1651,6 +1710,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
    errandPoll=0;greetKey=key?key+':greeted':GREET_KEY;loadGreeted();
    if(fresh){greeted.clear();try{save.journey.removeItem(greetKey);}catch{/* optional */}}
    pageKey=key?key+':page':PAGE_KEY;loadPage();if(fresh){questPage=null;storePage();}
+   pickKey=key?key+':picks':PICK_KEY;if(fresh){try{save.journey.removeItem(pickKey);}catch{/* optional */}}
    api.onTownEvent?.(event=>errandEvent(event));
    // A new game opens on the wolf at the wagon (once the cast is placed).
    scene.pending=fresh===true&&log.quest()?.id==='M00';scene.pendingFor=0;
@@ -1687,7 +1747,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
   get waves(){return waves;},
   defeat(event){
    if(!started||!event)return;
-   const step=log.step(),row={type:'defeat',kind:event.family&&step?.kind===event.family?event.family:event.kind,family:event.family??null,source:event.kind,map:mapId};
+   const step=log.step(),row={type:'defeat',kind:event.family&&step?.kind===event.family?event.family:event.kind,family:event.family??null,source:event.kind,actor:event.actorDefinitionId??null,map:mapId};
    if(event.kind)visitKills.add(event.kind);
    if(!step?.phase||event.phase===step.phase)emit(row);else errandEvent(row);
   },
@@ -1736,7 +1796,7 @@ export function createStory({api,doc,save,content,createVisual,createGuide=null,
     if(blocked)near=null;
     if(blocked&&(blocked.npc.clue===true||log.isTarget(blocked.npc.id)||errandMarks.has(blocked.npc.id))){const name=speaker(blocked.npc.name);hud.setPrompt({key:null,name,action:t('prompt.clearFoes'),mark:null,label:t('prompt.clearFoes'),blocked:true});}
     else if(near){
-     const quest=log.isTarget(near.npc.id)||errandMarks.has(near.npc.id),name=speaker(near.npc.name),clue=near.npc.clue===true;
+     const quest=log.isTarget(near.npc.id)||(near.npc.waves===false?quietMarks:errandMarks).has(near.npc.id),name=speaker(near.npc.name),clue=near.npc.clue===true;
      // No ? or ! after the button (2026-11-20, user): the mark over the actor's head says it.
      hud.setPrompt({key:touch?null:'E',name,action:t(clue?'prompt.actionInspect':quest?'prompt.actionQuest':'prompt.actionIdle'),mark:null,label:t(clue?'prompt.inspect':quest?'prompt.talkQuest':'prompt.talkIdle',{name}),act:'talk'});
     }else hud.setPrompt(null);

@@ -603,7 +603,11 @@ test('quest log: defeat counts, multi-target talks in any order, reach, persiste
  assert.equal(log.notify({type:'talk',npc:'chief'}).changed,false,'the father first');assert.equal(log.notify({type:'talk',npc:'foster-father'}).questDone,'M10');
  assert.equal(log.notify({type:'talk',npc:'chief'}).stepDone,true);
  assert.equal(log.notify({type:'defeat',kind:'wolf',map:'village'}).changed,false,'M03 hunts only count on the plains');
- for(let i=0;i<3;i++)log.notify({type:'defeat',kind:'boar',map:'great-plains'});
+ // 1127-chapter: two wolves and a fox (quota). A boar does not count, nor a third wolf.
+ assert.equal(log.notify({type:'defeat',kind:'boar',map:'great-plains'}).changed,false,'a boar is not in the hunt');
+ for(let i=0;i<3;i++)log.notify({type:'defeat',kind:'gray-wolf',map:'great-plains'});
+ assert.equal(log.objective(),'대평원의 늑대 둘과 여우 하나 쫓아내기 (2/3)','the third wolf does not count');
+ log.notify({type:'defeat',kind:'fox',map:'great-plains'});
  assert.equal(log.objective(),'촌장에게 알리기');assert.equal(log.notify({type:'talk',npc:'chief'}).questDone,'M03');
  assert.equal(log.notify({type:'talk',npc:'youth'}).changed,false,'the father sends you to Jeffrey');assert.equal(log.notify({type:'talk',npc:'foster-father'}).stepDone,true);
  assert.equal(log.dialogueFor('youth'),'jeffrey-bear');assert.equal(log.notify({type:'talk',npc:'youth'}).stepDone,true);
