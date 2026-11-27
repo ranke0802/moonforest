@@ -64,7 +64,10 @@ export function mapNavigation({cave,forest,plains,village,placements,gameplayV03
   const training=TRAINING_OBSTACLES.map(o=>plains?{...o,x:-55,z:37}:cave?{...o,x:caveTrainingSpawn.x,z:caveTrainingSpawn.z}:o);
   if(gameplayV03&&placements&&!cave)fitOutdoorRockBodies(obstacles,placements);
   const Navigation=cave?CaveNavigation:village?VillageNavigation:ArenaNavigation;
-  return new Navigation([...obstacles,...training]);
+  const navigation=new Navigation([...obstacles,...training]);
+  // 0.3 builds its route grids on the faster, byte-identical path (village-navigation.js).
+  if(gameplayV03)navigation.fastRouteGrids=true;
+  return navigation;
 }
 
 export function createWorld(engine, {village=false,forest=false,cave=false,plains=false,gameplayV03=false,warrior=village||forest||cave||plains,touchDevice=matchMedia('(pointer:coarse)').matches}={}) {

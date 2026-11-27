@@ -19,17 +19,24 @@ import {createWagonHorse} from '../src/v03/wagon-horse.js';
 import {createStarfallAura} from '../src/v03/starfall-aura.js';
 // PROBE_MODE (comma list, default none): horse = a mounted riding horse per visit,
 // left after the next map loads like riding-horse.js; aura = one scene-lifetime
-// Starfall aura bound to that horse root each visit (2026-11-27).
+// Starfall aura bound to that horse root each visit (2026-11-27); v03 = the 0.3 world
+// (gameplayV03: settlement scenery, fast route grids) instead of 0.2 (2026-11-28).
 const MODES=new Set((process.env.PROBE_MODE??'').split(',').map(s=>s.trim()).filter(Boolean));
 // Only these are read; any other word (CLAUDE.md once listed resources,ground,frames,materials,cast)
 // would otherwise pass silently as if it had been checked (2026-11-27 audit).
-const KNOWN_MODES=new Set(['horse','aura']),unknownModes=[...MODES].filter(mode=>!KNOWN_MODES.has(mode));
+const KNOWN_MODES=new Set(['horse','aura','v03']),unknownModes=[...MODES].filter(mode=>!KNOWN_MODES.has(mode));
 
 const base=new URL('../public/assets/',import.meta.url),tick=()=>new Promise(r=>setTimeout(r,0));
 const rounds=Number(process.argv[2]??3),snapshot=process.argv[3]??null;
 globalThis.location={href:'https://leak.test/game/?character=warrior-plains'};
 globalThis.fetch=async url=>{if(String(url).startsWith('file:'))return new Response(readFileSync(new URL(String(url))));const name=new URL(url).pathname.split('/').at(-1);return new Response(readFileSync(new URL(name,base)));};
-const engine=new NullEngine({renderWidth:1560,renderHeight:720}),world=createWorld(engine,{plains:true,village:true,touchDevice:true}),scene=world.scene;
+if(MODES.has('v03')){
+ globalThis.matchMedia??=()=>({matches:true});
+ const ctx=new Proxy({},{get:(t,k)=>k==='measureText'?()=>({width:10}):k==='getImageData'?(x,y,w,h)=>({data:new Uint8ClampedArray(w*h*4),width:w,height:h}):typeof k==='string'?(t[k]??(()=>{})):undefined,set:(t,k,v)=>{t[k]=v;return true;}});
+ globalThis.OffscreenCanvas??=class{constructor(w,h){this.width=w;this.height=h;}getContext(){return ctx;}};
+ await (await import('../src/fixed-layouts.js')).prepareFixedLayouts(['village','great-plains']);
+}
+const engine=new NullEngine({renderWidth:1560,renderHeight:720}),world=createWorld(engine,{plains:true,village:true,touchDevice:true,gameplayV03:MODES.has('v03')}),scene=world.scene;
 engine.getCaps().instancedArrays=true;scene.defaultMaterial;scene.getOutlineRenderer();
 await MeshoptDecoder.ready;MeshoptCompression._Default={decodeGltfBufferAsync:async(data,count,stride,mode,filter)=>{const out=new Uint8Array(count*stride);MeshoptDecoder.decodeGltfBuffer(out,count,stride,data,mode,filter);return out;}};
 const readyRaw=()=>{for(const texture of scene.textures)if(texture.getInternalTexture())texture.getInternalTexture().isReady=true;};
@@ -56,9 +63,9 @@ for(let visit=0;visit<rounds*2;visit++){
  let horseRoot=null;if(MODES.has('horse')||MODES.has('aura')){horse=createWagonHorse({scene,heightAt:(x,z)=>world.terrain.heightAt(x,z),wagon:{x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z},shadows:world.shadows,mounted:true});await horse.ready;horse.play('Horse_Gallop');horseRoot=horse.root;
   if(aura){await aura.bind(horseRoot);aura.update({actionId:visit,charging:true,chargeProgress:.6,level:2});}readyRaw();scene.render();}
  const loaded={visit,map:world.mapId,meshes:scene.meshes.length,geos:scene.geometries.length,...mb()};
- const refs={visit,map:world.mapId,prepared:new WeakRef(world.villagePrepared),visibility:new WeakRef(world.villageVisibility),streaming:new WeakRef(world.villageStreaming),owner:new WeakRef(world.villageLoadOwner),root:new WeakRef(world.villagePrepared.records[0].root),ground:new WeakRef(world.ground),...(horseRoot?{horse:new WeakRef(horseRoot)}:{})};weak.push(refs);
+ const refs={visit,map:world.mapId,prepared:new WeakRef(world.villagePrepared),visibility:new WeakRef(world.villageVisibility),streaming:new WeakRef(world.villageStreaming),owner:new WeakRef(world.villageLoadOwner),root:new WeakRef(world.villagePrepared.records[0].root),ground:new WeakRef(world.ground),navigation:new WeakRef(world.navigation),grid:new WeakRef(world.navigation.grids.values().next().value),...(horseRoot?{horse:new WeakRef(horseRoot)}:{})};weak.push(refs);
  await world.releaseEnvironment();await tick();await tick();
- loaded.released=mb();loaded.survivors=weak.map(r=>r.visit+':'+['prepared','visibility','streaming','owner','root','ground','horse'].filter(k=>r[k]?.deref()).join(','));log.push(loaded);say(JSON.stringify(loaded));
+ loaded.released=mb();loaded.survivors=weak.map(r=>r.visit+':'+['prepared','visibility','streaming','owner','root','ground','navigation','grid','horse'].filter(k=>r[k]?.deref()).join(','));log.push(loaded);say(JSON.stringify(loaded));
 }
 if(snapshot){globalThis.__probeTargets=weak.slice(0,-1).map(r=>r[process.env.PROBE_TARGET??'prepared']?.deref()).filter(Boolean);say('targets',globalThis.__probeTargets.length);for(const t of globalThis.__probeTargets)t.__LEAK_PROBE_MARK__='leak-probe-mark';globalThis.__probeTargets=null;globalThis.gc();say('snapshot',v8.writeHeapSnapshot(snapshot));}
 engine.dispose();

@@ -1,4 +1,4 @@
-import { ArenaNavigation, linksOf, navigationWork } from './navigation.js';
+import { ArenaNavigation, linksOf, navigationWork, gridLinks, setLinks, GRID_DIRECTIONS } from './navigation.js';
 import { ARENA_RADIUS, enemyLimitAt, offEnemyTravelShape } from './world-limits.js';
 import { obstacleClearance, sweepObstacle } from './village-collision.js';
 import {visitSegmentCells} from './navigation-segment-cells.js';
@@ -60,7 +60,7 @@ export class VillageNavigation extends ArenaNavigation {
   // unchanged — only the waypoint search is a little more conservative).
   grid(radius,limit){
     if(this.sharedRouteGrids!==false)radius=routeGridRadius(radius);
-    const nodes=super.grid(radius,limit);
+    const nodes=this.fastRouteGrids&&this.fastRouteGridReady(radius,limit)?this.buildRouteGrid(radius,limit):super.grid(radius,limit);
     if(!this.gridMetadata.has(nodes)){
       const component=new Int32Array(nodes.length),{mask,offsets}=linksOf(nodes);component.fill(-1);
       let count=0;
@@ -76,6 +76,105 @@ export class VillageNavigation extends ArenaNavigation {
       this.gridMetadata.set(nodes,{component,n:Math.sqrt(nodes.length),step:nodes[1].x-nodes[0].x});
     }
     return nodes;
+  }
+  // 0.3 (2026-11-28): the plains build three ~80k-node route grids while the
+  // map loads; ArenaNavigation.grid took about 0.54 s on PC there, mostly in
+  // per-edge Sets, string cell keys and garbage. This makes the same decisions
+  // with this class's own free/segmentClear rules: a numeric cell index, and an
+  // enclosing-circle test (1e-6 margin) that only skips obstacles which cannot
+  // touch the point or segment, before the exact clearance and sweep. Anything
+  // else (overridden rules, unsafe legacy boxes, odd radii) uses the original.
+  fastRouteGridReady(radius,limit){
+    const own=VillageNavigation.prototype;
+    return !this.grids.has(`${radius}:${limit}`)&&this.segmentCellPruningSafe&&Number.isFinite(radius)&&radius>=0&&Number.isFinite(limit)&&limit>0&&
+      this.free===own.free&&this.segmentClear===own.segmentClear&&this.segmentObstacles===own.segmentObstacles&&this.nearby===own.nearby;
+  }
+  routeCellIndex(){
+    if(this.routeCells)return this.routeCells;
+    const obstacles=this.obstacles,index=new Map(obstacles.map((o,i)=>[o,i]));
+    let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity;const parsed=[];
+    for(const [k,list] of this.cells){const at=k.indexOf(':'),x=+k.slice(0,at),z=+k.slice(at+1);parsed.push([x,z,list]);if(x<minX)minX=x;if(x>maxX)maxX=x;if(z<minZ)minZ=z;if(z>maxZ)maxZ=z;}
+    const width=parsed.length?maxX-minX+1:0,depth=parsed.length?maxZ-minZ+1:0,start=new Int32Array(width*depth+1);
+    for(const [x,z,list] of parsed)start[(z-minZ)*width+(x-minX)+1]=list.length;
+    for(let i=1;i<start.length;i++)start[i]+=start[i-1];
+    const items=new Int32Array(start[start.length-1]),fill=start.slice(0,-1);
+    for(const [x,z,list] of parsed){const c=(z-minZ)*width+(x-minX);for(const o of list)items[fill[c]++]=index.get(o);}
+    const ox=new Float64Array(obstacles.length),oz=new Float64Array(obstacles.length),bound=new Float64Array(obstacles.length);
+    // Each obstacle's cell range, exactly as the constructor listed it.
+    const cellX0=new Float64Array(obstacles.length),cellX1=new Float64Array(obstacles.length),cellZ0=new Float64Array(obstacles.length),cellZ1=new Float64Array(obstacles.length);
+    obstacles.forEach((o,i)=>{
+      ox[i]=o.x;oz[i]=o.z;bound[i]=o.shape==='box'?Math.hypot(o.halfWidth,o.halfDepth):o.radius;
+      const extent=o.radius+1.5;cellX0[i]=Math.floor((o.x-extent)/CELL);cellX1[i]=Math.floor((o.x+extent)/CELL);cellZ0[i]=Math.floor((o.z-extent)/CELL);cellZ1[i]=Math.floor((o.z+extent)/CELL);
+    });
+    // Summed counts: an empty rectangle of cells answers 'clear' without visiting it.
+    const sums=new Int32Array((width+1)*(depth+1));
+    for(let z=0;z<depth;z++)for(let x=0;x<width;x++){const c=z*width+x;sums[(z+1)*(width+1)+x+1]=start[c+1]-start[c]+sums[z*(width+1)+x+1]+sums[(z+1)*(width+1)+x]-sums[z*(width+1)+x];}
+    const count=(x0,x1,z0,z1)=>{
+      x0=Math.max(x0,minX)-minX;z0=Math.max(z0,minZ)-minZ;x1=Math.min(x1,minX+width-1)-minX;z1=Math.min(z1,minZ+depth-1)-minZ;
+      if(x0>x1||z0>z1)return 0;
+      const w=width+1;return sums[(z1+1)*w+x1+1]-sums[z0*w+x1+1]-sums[(z1+1)*w+x0]+sums[z0*w+x0];
+    };
+    return this.routeCells={minX,minZ,width,depth,start,items,ox,oz,bound,count,cellX0,cellX1,cellZ0,cellZ1};
+  }
+  buildRouteGrid(radius,limit){
+    const began=performance.now(),step=limit>12?.75:.5,n=Math.floor(limit*2/step)+1,nodes=[],links=gridLinks(n,step),mask=links.mask;
+    const {minX,minZ,width,depth,start,items,ox,oz,bound,count,cellX0,cellX1,cellZ0,cellZ1}=this.routeCellIndex(),obstacles=this.obstacles;
+    // Node test: free(p,radius+.035,limit). One cell below 1.5, the rectangle above.
+    const R=radius+.035,need=R+EPS,single=R<=1.5;
+    for(let z=0;z<n;z++)for(let x=0;x<n;x++){
+      const node={x:x*step-limit,z:z*step-limit,free:false};nodes.push(node);
+      if(Math.hypot(node.x,node.z)>limit+1e-6||offEnemyTravelShape(node,limit))continue;
+      const x0=Math.floor((single?node.x:node.x-R)/CELL),x1=single?x0:Math.floor((node.x+R)/CELL),z0=Math.floor((single?node.z:node.z-R)/CELL),z1=single?z0:Math.floor((node.z+R)/CELL);
+      let free=true;
+      for(let cz=z0;free&&cz<=z1;cz++){
+        if(cz<minZ||cz>=minZ+depth)continue;
+        for(let cx=x0;free&&cx<=x1;cx++){
+          if(cx<minX||cx>=minX+width)continue;
+          const c=(cz-minZ)*width+(cx-minX);
+          for(let k=start[c];k<start[c+1];k++){
+            const o=items[k],dx=node.x-ox[o],dz=node.z-oz[o],reach=bound[o]+need+1e-6;
+            if(dx*dx+dz*dz>reach*reach)continue;
+            if(!(obstacleClearance(node,obstacles[o])>=need)){free=false;break;}
+          }
+        }
+      }
+      node.free=free;
+    }
+    // Edge test: segmentClear(a,b,radius+.025), whose candidates are nearby()'s rectangle.
+    const r=radius+.025,rr=r+EPS,delta={x:0,z:0},near=step*1.5,stamp=new Int32Array(obstacles.length),found=new Int32Array(obstacles.length);
+    for(let z=0;z<n;z++)for(let x=0;x<n;x++){
+      const i=z*n+x,a=nodes[i];if(!a.free)continue;
+      // Every neighbour lies within one step: gather once the obstacles of the
+      // cells around that square which could reach any of the eight edges.
+      const reach=step+r+1e-9,ux0=Math.floor((a.x-reach)/CELL),ux1=Math.floor((a.x+reach)/CELL),uz0=Math.floor((a.z-reach)/CELL),uz1=Math.floor((a.z+reach)/CELL);
+      let candidates=0;
+      if(count(ux0,ux1,uz0,uz1))for(let cz=Math.max(uz0,minZ);cz<=Math.min(uz1,minZ+depth-1);cz++)for(let cx=Math.max(ux0,minX);cx<=Math.min(ux1,minX+width-1);cx++){
+        const c=(cz-minZ)*width+(cx-minX);
+        for(let k=start[c];k<start[c+1];k++){
+          const o=items[k];if(stamp[o]===i+1)continue;stamp[o]=i+1;
+          const dx=ox[o]-a.x,dz=oz[o]-a.z,limitReach=bound[o]+rr+near+1e-6;
+          if(!(dx*dx+dz*dz>limitReach*limitReach))found[candidates++]=o;
+        }
+      }
+      for(let d=0;d<8;d++){
+        const xx=x+GRID_DIRECTIONS[d][0],zz=z+GRID_DIRECTIONS[d][1],j=zz*n+xx;if(xx<0||xx>=n||zz<0||zz>=n||!nodes[j].free)continue;
+        if(!candidates){mask[i]|=1<<d;continue;}
+        const b=nodes[j],x0=Math.floor((Math.min(a.x,b.x)-r)/CELL),x1=Math.floor((Math.max(a.x,b.x)+r)/CELL),z0=Math.floor((Math.min(a.z,b.z)-r)/CELL),z1=Math.floor((Math.max(a.z,b.z)+r)/CELL);
+        if((x1-x0+1)*(z1-z0+1)>16&&a.x!==b.x&&a.z!==b.z){if(this.segmentClear(a,b,r))mask[i]|=1<<d;continue;}
+        const sx=b.x-a.x,sz=b.z-a.z,length=sx*sx+sz*sz;let clear=true;
+        for(let k=0;k<candidates;k++){
+          const o=found[k];
+          // segmentClear only sees obstacles listed in a cell of this edge's rectangle.
+          if(cellX1[o]<x0||cellX0[o]>x1||cellZ1[o]<z0||cellZ0[o]>z1)continue;
+          const px=ox[o]-a.x,pz=oz[o]-a.z,t=length>0?Math.max(0,Math.min(1,(px*sx+pz*sz)/length)):0,ex=px-sx*t,ez=pz-sz*t,edgeReach=bound[o]+rr+1e-6;
+          if(ex*ex+ez*ez>edgeReach*edgeReach)continue;
+          const obstacle=obstacles[o];delta.x=sx;delta.z=sz;
+          if(obstacleClearance(a,obstacle)<rr||obstacleClearance(b,obstacle)<rr||sweepObstacle(a,delta,obstacle,rr)){clear=false;break;}
+        }
+        if(clear)mask[i]|=1<<d;
+      }
+    }
+    setLinks(nodes,links);this.grids.set(`${radius}:${limit}`,nodes);navigationWork.gridMs+=performance.now()-began;return nodes;
   }
   nearestNode(p,nodes,radius){
     const {n,step}=this.gridMetadata.get(nodes),origin=nodes[0];
