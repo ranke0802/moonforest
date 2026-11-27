@@ -37,6 +37,7 @@ import { Engine, SceneLoader, SharpenPostProcess, TransformNode, Vector3, Vertex
 import '@babylonjs/loaders/glTF';
 import './serial-player-textures.js';
 import {selectPlayerTextureProfile,playerTextureCapabilities} from './player-texture-profile.js';
+import {selectV03PlayerTextures} from './v03/player-texture-choice.js';
 import {setupPlayerTextureSettings} from './player-texture-settings.js';
 import {setupBuildingTextureSettings} from './building-texture-settings.js';
 import {setFrameWorkContext,frameWorkSnapshot} from './frame-work-coordinator.js';
@@ -363,7 +364,8 @@ const sceneDiagnostics=new SceneDiagnostics({uploadContext:()=>({map:world?.mapI
 const mapResourceInspector=createMapResourceInspector({getWorld:()=>world,getLoad:()=>loadDiagnostics.snapshot()});
 if(import.meta.hot)import.meta.hot.dispose(()=>mapResourceInspector.dispose());
 let playerTextureSelection=null;
-const playerTextureSettings=setupPlayerTextureSettings({host:$('.settings-display-options'),storage:equipmentStorage,release:versionRoute.release,compressedSize:versionRoute.edition?4096:8192,onApply:async()=>{
+// 0.3 has its own 2K/4K row (v03/player-texture-choice.js): the 0.2 PC list stays in 0.2.
+const playerTextureSettings=setupPlayerTextureSettings({host:$('.settings-display-options'),storage:equipmentStorage,release:versionRoute.edition?null:versionRoute.release,compressedSize:versionRoute.edition?4096:8192,onApply:async()=>{
   const selectedWorld=world,selectedCharacter=character,position=actor?.position.clone(),rotation=actor?.rotation.clone(),camera=world?.camera;
   const view=camera?{alpha:camera.alpha,beta:camera.beta,radius:camera.radius,target:camera.target.clone()}:null;
   $('#motion-speed-dialog').close();await retryLoading();
@@ -825,7 +827,8 @@ async function loadCharacter() {
     const caps=engine.getCaps();
     // Retain the exact gate inputs even if selection fails before downloads.
     playerTextureSelection={status:'selecting',capabilities:playerTextureCapabilities(caps)};
-    const selectedProfile=selectPlayerTextureProfile(character,caps,undefined,{release:versionRoute.release,desktopPreference:playerTextureSettings.value,desktopCompressedSize:versionRoute.edition?4096:8192});
+    const selectedProfile=versionRoute.edition?selectV03PlayerTextures(character,caps,undefined,{storage:v03RawStorage,legacyStorage:equipmentStorage,search:location.search})
+      :selectPlayerTextureProfile(character,caps,undefined,{release:versionRoute.release,desktopPreference:playerTextureSettings.value,desktopCompressedSize:versionRoute.edition?4096:8192});
     playerTextureSelection={status:'selected',...selectedProfile};
     playerTextureSettings.sync(selectedProfile);
     const manifestName=selectedProfile.manifest;

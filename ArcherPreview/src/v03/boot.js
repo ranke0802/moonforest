@@ -19,6 +19,7 @@ import {createCursors} from './cursors.js';
 import {createOrientationGate,isIos} from './orientation-gate.js';
 import {setupUiScale} from './ui-scale.js';
 import {setupAccessibility,disposeAccessibility,mountAccessibilitySettings} from './accessibility.js';
+import {mountPlayerTextureSettings} from './player-texture-choice.js';
 import {createHudBlurDiagnostic} from './hud-blur-diagnostic.js';
 import {createVitalityHud} from './vitality-hud.js';
 import {createCombatTarget} from './combat-target.js';
@@ -522,6 +523,7 @@ export function setupV03(api){
   const host=dialog.querySelector('.settings-sections');if(!host)return;
   mountSlowFxSettings({doc,host,fx:slowFx,t});
   mountAccessibilitySettings({doc,host,t});
+  mountPlayerTextureSettings({doc,host,t,storage:prefs});
   hudBlur.mount({host:dialog.querySelector('#frame-diagnostics-options'),t});
   const credits=dialog.querySelector('#v03-audio-credits');
   if(credits)host.append(credits);

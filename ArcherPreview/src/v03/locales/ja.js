@@ -100,6 +100,7 @@ export default {
   'hud.errand':'依頼','errand.accepted':'依頼 · {title}','errand.done':'依頼達成','errand.received':'受け取った · {items}',
   'hud.errandCount':'依頼 {n}','hud.questPage':'依頼 {n}/{total}ページ',
   'talk.menu.rest':'泊まる',
+  'settings.playerTexture':'キャラクターのテクスチャ','settings.playerTexture2k':'2K（標準）','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K（この端末は非対応）','settings.playerTextureNote':'4Kはより鮮明ですが、ダウンロード量が増えます。変更は次回の起動から反映されます。','settings.playerTextureNext':'変更は次回の起動から反映されます。','settings.playerTextureNote4kOff':'この端末では4Kテクスチャを使えないため、2Kを使います。',
  },
  story:{
   speakers:{'대장장이':'鍛冶屋','양아버지':'父さん','나':'私','마부':'御者','여관 주인':'宿の主人','노년 여성':'老婦人','약초사':'薬草師','촌장':'村長','청년':'青年','요아힘':'ヨアヒム','비비앙':'ヴィヴィアン','엘레나':'エレナ'},

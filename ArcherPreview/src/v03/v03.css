@@ -812,3 +812,8 @@ html[data-mf-motion="reduce"] .v03-quest-count.is-new{animation:v03-count-new-st
 .v03-quest-turn:disabled{opacity:.3;cursor:default}
 .v03-quest-turn:not(:disabled):hover{border-color:#ece6ffaa}
 @media (pointer:coarse){.v03-quest-pager{font-size:13px}}
+/* ----- 2026-11-27 questui: the character texture row (player-texture-choice.js) takes the
+   display group's full width, its note under it. ----- */
+.settings-display-options .v03-texture-row{flex:1 1 100%}
+.v03-texture-note{flex:1 1 100%;font-size:12px}
+@media (pointer:coarse){.v03-texture-note{font-size:13px}}

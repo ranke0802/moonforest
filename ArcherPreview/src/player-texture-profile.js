@@ -9,6 +9,8 @@ const estimates={
     maxImageRgbaBytes:8192**2*4,maxImageUploadBytes:mipBytes(8192,true)},
   compressed4k:{estimatedGpuBytes:3*mipBytes(4096,true)+3*mipBytes(2048,true),
     maxImageRgbaBytes:4096**2*4,maxImageUploadBytes:mipBytes(4096,true)},
+  compressed2k:{estimatedGpuBytes:6*mipBytes(2048,true),
+    maxImageRgbaBytes:2048**2*4,maxImageUploadBytes:mipBytes(2048,true)},
   rgba2k:{estimatedGpuBytes:6*mipBytes(2048,false),
     maxImageRgbaBytes:2048**2*4,maxImageUploadBytes:mipBytes(2048,false)},
   original:{estimatedGpuBytes:2*mipBytes(8192,false)+3*mipBytes(2048,false)+mipBytes(4096,false),
@@ -70,4 +72,36 @@ export function selectPlayerTextureProfile(character,caps,navigator=globalThis.n
 // Keep the existing integration API: main.js selects before its download plan.
 export function playerTextureManifest(character,caps,navigator=globalThis.navigator,options){
   return selectPlayerTextureProfile(character,caps,navigator,options).manifest;
+}
+
+// 0.3 character texture detail (2026-11-27, user: "플레이어 2K (모바일,피시 공통 기본값) 4K는
+// 선택 옵션"). 2K on phones and PC unless 4K was chosen and the device can hold the 4K KTX2 set
+// (4096 textures and a GPU-compressed format). The one 2K set built so far is
+// warrior-v3-mobile2k-rgba (PNG/WebP, uncompressed RGBA on the GPU, about 128 MiB against about
+// 80 MiB for the 4K KTX2 set); a GPU-compressed 2K set (scripts/pack-player-mobile2k-ktx2.py,
+// about 32 MiB) has not been converted. Name its manifest here once it is published: devices with
+// a compressed format then take it, the rest keep the RGBA set. 0.2 never calls this.
+export const PLAYER_2K_KTX2=null;
+export const PLAYER_TEXTURE_DETAILS=Object.freeze(['2k','4k']);
+export function playerTexture4kSupported(caps){
+  const {maxTextureSize,formats}=playerTextureCapabilities(caps);
+  return maxTextureSize!==null&&maxTextureSize>=4096&&Object.values(formats).some(Boolean);
+}
+// detail: '2k' | '4k' as chosen; source: where the choice came from (default, user, url, legacy-original).
+export function selectEditionPlayerTextureProfile(character,caps,navigator=globalThis.navigator,{detail='2k',source='default',ktx2Manifest=PLAYER_2K_KTX2}={}){
+  const capabilities=playerTextureCapabilities(caps);
+  if(!playerAliases.has(character))return {manifest:character==='archer'?'character':character,mobile:false,capabilities};
+  const mobile=isMobilePlayerTextureDevice(navigator),requested=detail==='4k'?'4k':'2k',fourK=playerTexture4kSupported(caps);
+  // Below 2048 nothing here fits: the existing rules decide (phones stop with their message).
+  if(capabilities.maxTextureSize===null||capabilities.maxTextureSize<2048){
+    const fallback=selectPlayerTextureProfile(character,caps,navigator,{release:'moonforest-0.2',desktopCompressedSize:4096});
+    return {...fallback,textureDetail:{value:'original',requested,source,fourKAvailable:false}};
+  }
+  const use4k=requested==='4k'&&fourK,compressed2k=!use4k&&!!ktx2Manifest&&Object.values(capabilities.formats).some(Boolean);
+  const plan=use4k?{manifest:'warrior-v3-mobile4k',maxSize:4096,encoding:'ktx2-uastc',gpuCompressed:true,...estimates.compressed4k}
+    :compressed2k?{manifest:ktx2Manifest,maxSize:2048,encoding:'ktx2-uastc',gpuCompressed:true,...estimates.compressed2k}
+    :{manifest:'warrior-v3-mobile2k-rgba',maxSize:2048,encoding:'rgba',gpuCompressed:false,...estimates.rgba2k};
+  return {...plan,mobile,preserveSourceResolution:false,estimateScope,capabilities,
+    selectionReason:use4k?'chosen-4k':requested==='4k'?'4k-unsupported-2k':source==='default'?'default-2k':'chosen-2k',
+    textureDetail:{value:use4k?'4k':'2k',requested,source,fourKAvailable:fourK}};
 }

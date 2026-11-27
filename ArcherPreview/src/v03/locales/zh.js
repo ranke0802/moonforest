@@ -99,6 +99,7 @@ export default {
   'hud.errand':'委托','errand.accepted':'委托 · {title}','errand.done':'委托完成','errand.received':'获得 · {items}',
   'hud.errandCount':'委托 {n}','hud.questPage':'任务第 {n}/{total} 页',
   'talk.menu.rest':'住宿',
+  'settings.playerTexture':'角色贴图','settings.playerTexture2k':'2K（默认）','settings.playerTexture4k':'4K','settings.playerTexture4kOff':'4K（此设备不支持）','settings.playerTextureNote':'4K 更清晰，但下载量更大。更改将在下次进入时生效。','settings.playerTextureNext':'更改将在下次进入时生效。','settings.playerTextureNote4kOff':'此设备无法使用 4K 贴图，因此使用 2K。',
  },
  story:{
   speakers:{'대장장이':'铁匠','양아버지':'父亲','나':'我','마부':'车夫','여관 주인':'旅店老板','노년 여성':'老妇人','약초사':'草药师','촌장':'村长','청년':'青年','요아힘':'约阿希姆','비비앙':'薇薇安','엘레나':'艾莲娜'},
