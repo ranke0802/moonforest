@@ -5,7 +5,7 @@ const emptyRoot=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&mesh.isReady===
  !mesh.geometry&&!mesh.material&&!mesh.subMeshes?.length&&!mesh.skeleton&&!mesh.morphTargetManager&&!mesh.hasThinInstances&&!mesh.actionManager;
 const disabledInstance=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&!mesh.isEnabled()&&mesh.isReady===InstancedMesh.prototype.isReady;
 // Guard modes for the per-query re-check of owned records (2026-11-24).
-// 'full' (default): every disabled instance and every empty root is checked
+// 'full': every disabled instance and every empty root is checked
 // on every query (S23 plains: ~2,500 checks, 0.4-0.5 ms a frame).
 // 'events' (?candidates=events): enable/disable notifications keep the omit
 // flags; a sweep re-checks 1/SWEEP_FRAMES of the records each query, so an
@@ -15,9 +15,9 @@ const disabledInstance=mesh=>mesh.isEnabled===Node.prototype.isEnabled&&!mesh.is
 // record the events path had wrong in stats.mismatches (and fixing it).
 const SWEEP_FRAMES=32;
 const GUARDS=new Set(['full','events','verify']);
-export function candidateGuardFromLocation(){
+export function candidateGuardFromLocation(fallback='full'){
  const value=new URLSearchParams(globalThis.location?.search??'').get('candidates');
- return GUARDS.has(value)?value:'full';
+ return GUARDS.has(value)?value:fallback;
 }
 
 // Only native frozen map instances are registered. Dynamic actors, quest

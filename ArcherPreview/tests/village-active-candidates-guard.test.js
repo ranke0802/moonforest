@@ -35,6 +35,9 @@ test('the URL flag picks the guard; anything else keeps the full guard', () => {
   }
   globalThis.location = undefined;
   assert.equal(candidateGuardFromLocation(), 'full');
+  assert.equal(candidateGuardFromLocation('events'), 'events');
+  globalThis.location = {search:'?candidates=full'};
+  assert.equal(candidateGuardFromLocation('events'), 'full');
  } finally { globalThis.location = saved; }
 });
 

@@ -19,7 +19,7 @@ import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
 import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
-import {VillageActiveCandidates} from './village-active-candidates.js';
+import {VillageActiveCandidates,candidateGuardFromLocation} from './village-active-candidates.js';
 import {VillageWorkBudget} from './village-work-budget.js';
 import {prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
@@ -196,7 +196,8 @@ export function loadStreamedVillage(world,{
     const {url,manifest,assets,records,plan}=prepared,recordsByAsset=prepared.recordsByAsset??groupVillageRecords(records),containers=[];
     const instanceOptions={transformGltfRoot:world.mapId==='village'&&world.edition==='moonforest-0.3'};
     const stats=world.environment={ready:false,mode:world.mapId??'village',sourceAssets:assets.size,loadedAssets:0,homes:world.mapId==='village'?20:0,instances:0,missing:[],loadedLods:{0:0,1:0,2:0},largestTexture:0,geometryLod:true,textureTier:'근거리 최대 4K / 중거리 1K / 원거리 512·256',geometryPending:0,geometryError:null,modelFailure:null,initialLodModels:plan.length};
-    const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats),candidates=new VillageActiveCandidates(world.scene,{holdLod:true});stats.activeMeshCandidates=candidates.stats;
+    const guard=candidateGuardFromLocation(world.edition==='moonforest-0.3'?'events':'full');
+    const visibility=new VillageVisibility(world,records,{touch:world.touchDevice}),outlines=new VillageOutlines(world,[],stats),candidates=new VillageActiveCandidates(world.scene,{holdLod:true,guard});stats.activeMeshCandidates=candidates.stats;
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
     const has=r=>hasVillageGeometry(assets.get(r.id),r.level);
