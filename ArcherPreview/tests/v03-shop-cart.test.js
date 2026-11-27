@@ -248,7 +248,11 @@ test('the list scrolls inside the dialog and the bottom bar stays in view; the t
  assert.equal(value(frame+'>.mf-shop-scroll','flex'),'1 1 auto');assert.equal(value(frame+'>.mf-shop-scroll','min-height'),'0');
  assert.equal(value('.mf-shop-scroll','overflow'),'auto');
  assert.equal(value('.mf-shop-bar','flex'),'none');
- assert.equal(value('.mf-town-shop.is-forging','overflow-y'),'auto');
+ // The temper view is the bench since 2026-11-27: its dialog layout lives in forge-bench.css (the old .is-forging rules are gone).
+ assert.equal(css.toString().includes('.is-forging{'),false);
+ const bench=postcss.parse(readFileSync(new URL('../src/v03/forge-bench.css',import.meta.url),'utf8'));let benchDisplay;
+ bench.walkRules(rule=>{if(rule.selector==='.mf-town-shop.is-bench[open]')rule.walkDecls('display',decl=>{benchDisplay=decl.value;});});
+ assert.equal(benchDisplay,'grid');
  // Thumb-sized steppers: at least 2.65rem tall (every shop button) and 2.75rem wide.
  assert.equal(value('.mf-town-shop .mf-shop-step button','min-width'),'2.75rem');
  // 2026-11-26 readability pass: the base rule stays 2.65rem; on touch (pointer:coarse) every shop button is 44 px (2.75rem).

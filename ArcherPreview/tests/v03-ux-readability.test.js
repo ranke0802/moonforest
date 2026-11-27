@@ -9,7 +9,7 @@ import fs from 'node:fs';
 import {releaseRoute} from '../src/release-route.js';
 
 const read=path=>fs.readFileSync(new URL(`../src/${path}`,import.meta.url),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
-const V03=read('v03/v03.css'),MENU=read('v03/character-menu.css'),SHOP=read('v03/town-shop.css'),CARD=read('v03/equipment-card.css');
+const V03=read('v03/v03.css'),MENU=read('v03/character-menu.css'),SHOP=read('v03/town-shop.css'),CARD=read('v03/equipment-card.css'),BENCH=read('v03/forge-bench.css');
 const EDITION='html[data-edition="moonforest-0.3"]';
 // Every rule with its selector and the media query it sits in ('' at top level).
 function rules(text){
@@ -63,13 +63,17 @@ test('pressed things are 44 px on phones',()=>{
 
 test('the bag detail labels and the forge cells read at the body size',()=>{
  assert.match(MENU,/\.mf-menu-item \.mf-equipment-card small,\.mf-menu-item \.mf-menu-quantity\{[^}]*font-size:inherit/);
- const body=+/\.mf-forge-item dl\{[^}]*font-size:([\d.]+)rem/.exec(SHOP)[1];
- const cells=rules(SHOP).filter(r=>r.selector.includes('.mf-forge-legend li')).map(r=>/font-size:([\d.]+)rem/.exec(r.body)?.[1]).filter(Boolean).map(Number);
+ // The forge is the bench since 2026-11-27 (forge-bench.css); the old gauge view's rules are gone.
+ const sizes=(selector,media='')=>rules(BENCH).filter(r=>r.media===media&&r.selector.split(',').includes(selector)).map(r=>/font-size:([^;}]+)/.exec(r.body)?.[1]).filter(Boolean);
+ const body=+/([\d.]+)rem/.exec(sizes('.mf-bench .mf-forge-item dl')[0])[1];
+ const cells=sizes('.mf-bench-legend li').map(v=>+/([\d.]+)rem/.exec(v)[1]);
  assert.ok(cells.length&&cells.every(v=>v>=body),`forge cells ${cells} ≥ the card's ${body}rem`);
- // On short landscape screens the cells sit under the gauge (no shrink rule there).
- const short=rules(SHOP).filter(r=>r.media.includes('max-height:500px'));
- assert.ok(short.some(r=>r.selector==='.mf-forge-side,.mf-forge-play'&&/display:contents/.test(r.body)));
- assert.ok(short.some(r=>/\.mf-forge-legend\{grid-area:legend\}/.test(`${r.selector}{${r.body}}`)));
+ // On touch screens both read at the same 13 px floor.
+ assert.ok(rules(BENCH).some(r=>r.media.includes('pointer:coarse')&&/\.mf-bench-legend li/.test(r.selector)&&/\.mf-bench \.mf-forge-item dl/.test(r.selector)&&/font-size:max\(13px/.test(r.body)));
+ // On short landscape screens the card and the cells share the left column beside the bench.
+ const short=rules(BENCH).filter(r=>r.media.includes('max-height:500px'));
+ assert.ok(short.some(r=>r.selector==='.mf-bench'&&/grid-template-areas:"side focus" "legend focus" "legend foot"/.test(r.body)));
+ assert.equal(/\.mf-forge-(gauge|legend|track|rail)\b/.test(SHOP),false,'no old gauge rules left in town-shop.css');
 });
 
 test('shared stylesheets are overridden only under the 0.3 edition',()=>{

@@ -226,8 +226,10 @@ test('forge limits in shop copy match a real near-broken sword at the attempt ca
  assert.equal(economy.canForge(id),false);assert.equal(economy.forge(.5,id),null);
  for(const [lang,pack] of Object.entries(PACKS)){
   setPack(lang,pack);
-  const note=t('shop.temperNote',{maxLevel:FORGE_RULES.maxLevel,minDurability:FORGE_RULES.minDurability,...FORGE_WEAR_RANGE});
-  for(const value of ['+20','32','3','6'])assert.ok(note.includes(value),lang+': '+value);
+  // The bench's note (forge.temperNote) and its per-grade wear line (forge.wearRange); the old gauge's shop.temperNote is gone (2026-11-27 audit).
+  const note=t('forge.temperNote',{maxLevel:FORGE_RULES.maxLevel,minDurability:FORGE_RULES.minDurability}),wear=t('forge.wearRange',FORGE_WEAR_RANGE);
+  for(const value of ['+20','32'])assert.ok(note.includes(value),lang+': '+value);
+  for(const value of ['3','6'])assert.ok(wear.includes(value),lang+': wear '+value);
   assert.equal(t('shop.forgeMaxed',FORGE_RULES).includes('+20'),true,lang);
  }
  setPack('ko',ko);

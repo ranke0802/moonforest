@@ -140,6 +140,6 @@ test('menus and shop: one font, the green-ink panel family, colours through the 
  assert.match(shop,/\.mf-town-shop button,\.mf-treasure-prompt\{[^}]*background:var\(--mf-panel-raised\)/);
  assert.match(menu,/--line:var\(--mf-line-mid\);--gold:var\(--mf-gold-hi\)/);
  assert.match(menu,/\.mf-skill-icon svg\{[^}]*stroke-width:2\.2;/);
- assert.match(shop,/\.mf-forge:focus-visible\{box-shadow:0 0 0 2px var\(--mf-focus\)/);
+ assert.match(strip(read('v03/forge-bench.css')),/\.mf-bench:focus-visible\{box-shadow:inset 0 0 0 2px var\(--mf-focus\)/);
  assert.match(strip(v03),/html\[data-edition="moonforest-0\.3"\] #app\[data-commercial-ui\] :is\(button,select,input\):focus-visible\{outline-color:var\(--mf-focus\)\}/);
 });

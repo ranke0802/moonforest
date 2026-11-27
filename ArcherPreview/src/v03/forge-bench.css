@@ -136,3 +136,6 @@ html[data-mf-motion] .mf-bench-result,html[data-mf-motion] .mf-bench .mf-forge-r
   .mf-bench-legend li,.mf-bench .mf-forge-item dl,.mf-bench-change{font-size:max(13px,.82rem)}
   .mf-bench-legend small,.mf-bench-saved,.mf-bench .mf-forge-item small{font-size:max(13px,.8rem)}
 }
+/* 2026-11-27 audit: the bench takes keyboard focus (tabIndex 0, focused on open); it keeps the
+   focus ring the old gauge view had (.mf-forge:focus-visible, v03-ui-tone). */
+.mf-bench:focus-visible{box-shadow:inset 0 0 0 2px var(--mf-focus)}
