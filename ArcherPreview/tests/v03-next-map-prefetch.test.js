@@ -65,7 +65,7 @@ test('arrival plan: unknown screen size asks for the coarsest level only; cave s
 
 // ---- runtime -------------------------------------------------------------
 const MODEL=n=>`https://prefetch.test/assets/content/${String(n).padStart(64,'0')}.gltf`;
-function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null,warmTerrain=async()=>true,holdable=true}={}){
+function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null,warmTerrain=async()=>true,holdable=true,cover=undefined}={}){
   let clock=0;const calls=[],queues=[],containers=[],lost=[];
   // The still picture of the map being left (held-frame.js), as a record of what was asked of it.
   const frame={held:false,holds:0,rendered:0,released:[],holdable,hold(render){this.holds++;if(!this.holdable)return false;render();this.held=true;return true;},release(fadeMs){if(this.held)this.released.push(fadeMs);this.held=false;},dispose(){this.held=false;}};
@@ -75,7 +75,7 @@ function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageByte
     // From this model on the read never finishes by itself; only an abort ends it.
     if(holdFrom!==null&&containers.length>=holdFrom)await new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
     const container={model:model.href,disposed:0,textures:[{getInternalTexture:()=>({width:1024,height:1024,format:37808,generateMipMaps:true})}],dispose(){this.disposed++;}};containers.push(container);return container;};
-  const prefetch=createNextMapPrefetch({world,base:new URL('https://prefetch.test/assets/'),now:()=>clock,allowed,loadContainer,stageBytes,pause:async()=>{},warmTerrain,heldFrame:frame,renderFrame:()=>{frame.rendered++;},
+  const prefetch=createNextMapPrefetch({world,base:new URL('https://prefetch.test/assets/'),now:()=>clock,allowed,loadContainer,stageBytes,pause:async()=>{},warmTerrain,heldFrame:frame,renderFrame:()=>{frame.rendered++;},...(cover?{cover}:null),
     resources:async(w,portal,base,{signal})=>{calls.push({portal,signal});await null;if(fail?.())throw new Error('network down');return {paths:['./content/'+'a'.repeat(64)+'.gltf','./content/'+'b'.repeat(64)+'.ktx2'],sizes:{},index:null,models};},
     downloads:()=>{const queue={cancelled:0,paths:null,release:null,cancel(){this.cancelled++;this.release?.(Object.assign(new Error('aborted'),{name:'AbortError'}));},
       prepare(paths,onProgress){this.paths=paths;onProgress({total:10,cached:4,loaded:0});return new Promise((resolve,reject)=>{this.finish=()=>resolve({total:10,cached:4,loaded:10,storageAvailable:true});this.release=reject;});}};queues.push(queue);return queue;}});
@@ -381,6 +381,45 @@ test('a road crossed in play with its map staged, whose last change was short, g
   const blind=await stagedHarness(2,{holdable:false});crossed(blind,500);assert.equal(blind.prefetch.quietFor('warrior-plains',road),0);assert.equal(blind.prefetch.quietActive,false);
   const empty=harness();crossed(empty,500);assert.equal(empty.prefetch.quietFor('warrior-plains',road),0,'not staged: the screen as before');
   assert.equal(quietBudget(''),QUIET_TRAVEL_MS);assert.equal(quietBudget('?quiet=0'),0);assert.equal(quietBudget('?quiet=300'),300);assert.equal(quietBudget('?quiet=99999'),5000);assert.equal(quietBudget('?quiet=x'),QUIET_TRAVEL_MS);
+});
+
+test('while a map change is covered, preparations yield tasks and not frames; the moment it is shown they wait on frames again',async()=>{
+  // Its own copy of the module: other tests leave map changes unfinished, and the cover with them.
+  const {createBossPreparation,coverPreparation,preparationCovered,COVERED_BUDGET_MS}=await import('../src/boss-preparation.js?covered-test');
+  assert.equal(preparationCovered(),false);
+  let frames=0;const had=[globalThis.requestAnimationFrame,globalThis.cancelAnimationFrame];
+  globalThis.requestAnimationFrame=fn=>{frames++;return setTimeout(()=>fn(0),1);};globalThis.cancelAnimationFrame=id=>clearTimeout(id);
+  try{
+    // 40 boundaries with work between them that overruns the 1.5 ms play budget every time.
+    let clock=0;const work=async job=>{for(let i=0;i<40;i++){await job.pause();clock+=2;}};
+    const open=createBossPreparation({now:()=>clock});await work(open);
+    assert.equal(frames,40,'in play every overrun waits a frame');assert.equal(open.stats.yields,40);
+    frames=0;const uncover=coverPreparation();assert.equal(preparationCovered(),true);
+    const covered=createBossPreparation({now:()=>clock});await work(covered);
+    assert.equal(frames,0,'covered: no frame is waited for');
+    assert.ok(covered.stats.yields>=40*2/COVERED_BUDGET_MS-1&&covered.stats.yields<=40*2/COVERED_BUDGET_MS+2,'it still yields, once a covered slice ('+covered.stats.yields+')');
+    // A generator run: many blocks a slice, no frame between slices.
+    const rows=function*(){for(let i=0;i<600;i++)yield i;return 'done';};
+    const run=createBossPreparation({now:()=>clock});assert.equal(await run.run(rows()),'done');assert.equal(frames,0);assert.ok(run.stats.slices<=4,'600 blocks in a few slices ('+run.stats.slices+')');
+    // A caller's own frame is kept; a preparation that is not incremental never yielded anyway.
+    let own=0;const custom=createBossPreparation({now:()=>clock,frame:async()=>{own++;}});await work(custom);assert.equal(own,40);assert.equal(frames,0);
+    // Shown: the same preparation, still running, is gentle again at its next boundary.
+    const late=createBossPreparation({now:()=>clock});await late.pause();clock+=2;uncover();uncover();assert.equal(preparationCovered(),false);
+    await late.pause();assert.equal(frames,1);
+    // Two holders: covered until both let go.
+    const a=coverPreparation(),b=coverPreparation();a();assert.equal(preparationCovered(),true);b();assert.equal(preparationCovered(),false);
+  }finally{[globalThis.requestAnimationFrame,globalThis.cancelAnimationFrame]=had;if(!had[0]){delete globalThis.requestAnimationFrame;delete globalThis.cancelAnimationFrame;}}
+});
+
+test('a map change covers preparations from its start until the arrival is shown or it fails',async()=>{
+  let held=0;const h=harness({cover:()=>{held++;let mine=true;return ()=>{if(mine){mine=false;held--;}};}});
+  assert.equal(held,0);
+  h.prefetch.travel('warrior-plains');assert.equal(held,1);
+  h.prefetch.travel('warrior-plains');assert.equal(held,1,'a retry holds one cover, not two');
+  h.prefetch.arrived(true);assert.equal(held,0);
+  h.prefetch.travel('warrior-v4');h.prefetch.cancel();assert.equal(held,0,'a failed change');
+  h.prefetch.travel('warrior-v4');h.prefetch.dispose();assert.equal(held,0,'the scene went');
+  assert.match(readFileSync(new URL('../src/v03/next-map-prefetch.js',import.meta.url),'utf8'),/cover=coverPreparation,/,'the game holds the real one');
 });
 
 test('the held picture: one still copy over the game canvas, under the HUD, emptied when it goes',async()=>{

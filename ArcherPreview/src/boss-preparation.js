@@ -13,6 +13,18 @@ export function bossPreparationFrame(signal){
     signal?.addEventListener('abort',abort,{once:true});frame=requestAnimationFrame(()=>finish());timer=setTimeout(()=>finish(),50);
   });
 }
+// While a map change keeps its loading screen (or the held picture of the map being left)
+// up, no frame reaches the player. A preparation then yields a task and not a frame, works in
+// COVERED_BUDGET_MS slices and leaves the per-frame work budget alone. Measured on the forest
+// camp (Node, 60 Hz frames simulated, 2026-11-28): four foe kinds took 1,017 ms with 48 frame
+// waits, 248 ms without them. Read at every boundary: the moment the cover goes, a preparation
+// still running is as gentle as before. A caller that brings its own `frame` keeps it.
+// 0.3 road travel holds it (v03/next-map-prefetch.js travel -> arrived/cancel).
+let covers=0;
+export const COVERED_BUDGET_MS=8,COVERED_BLOCKS=256;
+export function coverPreparation(){covers++;let held=true;return ()=>{if(held){held=false;covers--;}};}
+export const preparationCovered=()=>covers>0;
+const coveredTask=()=>new Promise(resolve=>setTimeout(resolve,0));
 export function runPreparationSync(work){let next;do{next=work.next();}while(!next.done);return next.value;}
 export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationFrame,now=()=>performance.now(),incremental=true,budgetMs=1.5,maxBlocks=4,timeoutMs=45000,scene,coordinator}={}){
   const stats={yields:0,slices:0,blocks:0,maxSliceMs:0,coalescedPauses:0,frameWaitMs:0,steps:[]};
@@ -22,6 +34,7 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
   // as 'after <that boundary>' (or the label its caller gives), so a recording names the code that
   // ran long between two boundaries; before 2026-11-22 they were all 'unlabelled'.
   let last='start';
+  const fast=()=>covers>0&&incremental&&frame===bossPreparationFrame,blockLimit=()=>fast()?Math.max(maxBlocks,COVERED_BLOCKS):maxBlocks,budget=()=>fast()?Math.max(budgetMs,COVERED_BUDGET_MS):budgetMs,due=()=>!fast()&&!!shared?.due();
   const checkpoint=(label='after '+last)=>{if(sharedStarted)shared?.checkpoint(label);else{shared?.reset();sharedStarted=true;}};
   const cancel=(error=bossPreparationCancelled())=>{if(reason)return;reason=error;controller.abort(error);for(const reject of [...waiters])reject(error);};
   const check=()=>{if(!reason&&!isCurrent())cancel();if(!reason&&now()-started>=timeoutMs)cancel(bossPreparationTimeout());if(reason)throw reason;};
@@ -43,14 +56,14 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
       const delay=new Promise((resolve,reject)=>{let timer;const abort=()=>{clearTimeout(timer);signal.removeEventListener('abort',abort);reject(signal.reason??bossPreparationCancelled());};signal.addEventListener('abort',abort,{once:true});timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},ms);});
       return this.wait(delay,last);
     },
-    async nextFrame(){check();checkpoint();stats.yields++;const start=now(),token=shared?.beforeWait();await this.wait(frame(controller.signal),last);shared?.afterWait(token);stats.frameWaitMs+=Math.max(0,now()-start);sliceStarted=now();sliceBlocks=0;firstFrame=false;},
+    async nextFrame(){check();checkpoint();stats.yields++;const start=now(),token=shared?.beforeWait();await this.wait(fast()?coveredTask():frame(controller.signal),last);shared?.afterWait(token);stats.frameWaitMs+=Math.max(0,now()-start);sliceStarted=now();sliceBlocks=0;firstFrame=false;},
     async pause(){
       check();if(!incremental)return;checkpoint();
       // Cheap preparation boundaries can share one task slice. The first
       // boundary still gives UI/cancellation a frame, and either the existing
       // time budget or block ceiling forces the next scheduling opportunity.
-      if(firstFrame||sliceBlocks>=maxBlocks||now()-sliceStarted>=budgetMs||shared?.due())await this.nextFrame();else stats.coalescedPauses++;
-      while(shared?.due())await this.nextFrame();
+      if(firstFrame||sliceBlocks>=blockLimit()||now()-sliceStarted>=budget()||due())await this.nextFrame();else stats.coalescedPauses++;
+      while(due())await this.nextFrame();
       sliceBlocks++;
     },
     async step(name,fn){await this.pause();const start=now();let value;try{value=fn();}finally{shared?.charge(Math.max(0,now()-start),name);}stats.steps.push({name,ms:Math.max(0,now()-start)});last=name;check();return value;},
@@ -58,8 +71,8 @@ export function createBossPreparation({isCurrent=()=>true,frame=bossPreparationF
       check();if(!incremental)return runPreparationSync(work);checkpoint();
       let next;
       do{
-        check();if(firstFrame||sliceBlocks>=maxBlocks||now()-sliceStarted>=budgetMs||shared?.due())await this.nextFrame();while(shared?.due())await this.nextFrame();const start=now();let blocks=0;
-        do{const blockStarted=now();try{next=work.next();}finally{shared?.charge(Math.max(0,now()-blockStarted),'run');}blocks++;stats.blocks++;sliceBlocks++;}while(!next.done&&blocks<maxBlocks&&sliceBlocks<maxBlocks&&now()-sliceStarted<budgetMs&&!shared?.due());
+        check();if(firstFrame||sliceBlocks>=blockLimit()||now()-sliceStarted>=budget()||due())await this.nextFrame();while(due())await this.nextFrame();const start=now();let blocks=0;
+        do{const blockStarted=now();try{next=work.next();}finally{shared?.charge(Math.max(0,now()-blockStarted),'run');}blocks++;stats.blocks++;sliceBlocks++;}while(!next.done&&blocks<blockLimit()&&sliceBlocks<blockLimit()&&now()-sliceStarted<budget()&&!due());
         stats.slices++;stats.maxSliceMs=Math.max(stats.maxSliceMs,Math.max(0,now()-start));
         if(!next.done)await this.nextFrame();
       }while(!next.done);

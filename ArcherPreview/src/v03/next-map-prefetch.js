@@ -38,7 +38,7 @@ import {sceneryManifestFor} from '../village-streamed-environment.js';
 import {mapScenePlacements} from '../world.js';
 import {mapTerrainFactory} from '../map-terrain-factory.js';
 import {warmMapTerrain,adoptMapTerrain,mapTerrainCached} from '../map-terrain-cache.js';
-import {createBossPreparation} from '../boss-preparation.js';
+import {createBossPreparation,coverPreparation} from '../boss-preparation.js';
 import {createHeldFrame,HELD_FRAME_FADE_MS} from './held-frame.js';
 import {prepareFixedLayouts,fixedLayoutsForCharacter} from '../fixed-layouts.js';
 import {stacklessError} from '../map-load-lifetime.js';
@@ -157,7 +157,7 @@ export async function nextMapResources(world,portal,base,{signal,pause=nextTask}
 }
 
 export function createNextMapPrefetch({world,base,now=()=>performance.now(),resources=nextMapResources,allowed=prefetchAllowed,loadContainer=loadMapContainer,pause=nextTask,warmTerrain=warmNextMapTerrain,
-  heldFrame=createHeldFrame({canvas:world.scene?.getEngine?.()?.getRenderingCanvas?.()??null}),renderFrame=()=>world.scene.render(!world.caveCamera?.applied),
+  heldFrame=createHeldFrame({canvas:world.scene?.getEngine?.()?.getRenderingCanvas?.()??null}),renderFrame=()=>world.scene.render(!world.caveCamera?.applied),cover=coverPreparation,
   stageBytes=stageBudget(globalThis.location?.search,world.touchDevice),quietMs=quietBudget(globalThis.location?.search),
   downloads=(sizes,root,index)=>new ResourceDownloads(sizes,root,{index,adaptiveCacheKeys:true})}={}){
   const done=new Set(),retried=new Set(),last=[],closing=[],away=[],history=[],stats={runs:0,skipped:0,cancelled:0,failed:0,completed:0,staged:0,taken:0,dropped:0,quietTravels:0,quietArrivals:0,quietCurtains:0};
@@ -183,7 +183,10 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     }
     stagedBytes=0;stagedFor=null;dropAt=Infinity;
   }
-  function cancel(){stop();drop();verified=null;quiet=false;travelStarted=null;heldFrame.release(0);}
+  // From travel() until the arrival is shown (or the change fails) no frame reaches the player:
+  // every preparation in that stretch works without waiting on frames (boss-preparation.js).
+  let uncover=null;
+  function cancel(){stop();drop();verified=null;quiet=false;travelStarted=null;heldFrame.release(0);uncover?.();uncover=null;}
   const containerBytes=container=>{let bytes=0;for(const texture of container?.textures??[])bytes+=textureBytes(texture?.getInternalTexture?.()??texture);return bytes;};
   async function stage(current,models){
     const {record,controller}=current,signal=controller.signal;
@@ -298,13 +301,13 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     },
     get quietActive(){return quiet;},
     // Travel to `destination` begins: stop working, keep what is staged for it.
-    travel(destination){stop();if(stagedFor!==destination)drop();else dropAt=Infinity;if(verified&&verified.destination!==destination)verified=null;travelStarted=now();travelTo=destination;},
+    travel(destination){stop();if(stagedFor!==destination)drop();else dropAt=Infinity;if(verified&&verified.destination!==destination)verified=null;travelStarted=now();travelTo=destination;uncover?.();uncover=cover();},
     // The destination is up: the loader's streaming may still take a few more.
     // screenShown: whether the loading screen came on during a quiet travel after all.
     arrived(screenShown){
       if(travelStarted!==null){travelMs.set(travelTo,Math.round(now()-travelStarted));travelStarted=null;}
       if(quiet){quiet=false;if(screenShown===true)stats.quietCurtains++;else stats.quietArrivals++;}
-      heldFrame.release(screenShown===true?0:HELD_FRAME_FADE_MS);
+      heldFrame.release(screenShown===true?0:HELD_FRAME_FADE_MS);uncover?.();uncover=null;
       verified=null;if(staged.size)dropAt=now()+STAGE_LINGER_MS;
     },
     // A staged container for this model URL, handed over for good; null if none.
