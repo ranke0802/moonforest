@@ -7,12 +7,25 @@ const prepared=new WeakMap();
 // Owned static scenery only. Babylon packs every registered custom attribute
 // for every draw, including attributes absent from the bound shader. Keep its
 // native matrix/batch/per-pass processing and omit only those unused streams.
-export function prepareVillageInstanceAttributes(mesh){
+export function prepareVillageInstanceAttributes(mesh,{repairPassCapacity=false}={}){
  if(prepared.has(mesh)||mesh.isDisposed()||mesh._processInstancedBuffers!==nativeProcess||mesh.skeleton||mesh.morphTargetManager||mesh.animations?.length||mesh.hasThinInstances)return;
  const descriptor=Object.getOwnPropertyDescriptor(mesh,'_processInstancedBuffers');
  if(descriptor&&(!descriptor.configurable||!Object.hasOwn(descriptor,'value')))return;
  const buffers=mesh.instancedBuffers,engine=mesh.getEngine(),userStorage=mesh._userInstancedBuffersStorage,instanceStorage=mesh._instanceDataStorage;
  if(!buffers||Object.getPrototypeOf(buffers)!==Object.prototype)return;
+ const upload=repairPassCapacity&&engine.webGLVersion>0&&!engine.isWebGPU?function(visibleInstances,renderSelf){
+  if(!instanceStorage.useMonoDataStorageRenderPass){
+   const pass=userStorage.renderPasses?.[engine.currentRenderPassId];
+   if(pass)for(const kind in mesh.instancedBuffers){
+    const vertexBuffer=pass[kind],capacity=vertexBuffer?.getBuffer()?.capacity;
+    // Babylon grows the shared CPU array but only resizes the VBO in the
+    // current pass. Remove stale VBOs on reuse so native packing can rebuild
+    // and invalidate the VAO before uploading the now larger array.
+    if(capacity!==undefined&&capacity<userStorage.data[kind].byteLength){vertexBuffer.dispose();delete pass[kind];}
+   }
+  }
+  return nativeProcess.call(mesh,visibleInstances,renderSelf);
+ }:nativeProcess;
  let views=new WeakMap(),disposed=false,inFlight=false;
  function process(visibleInstances,renderSelf){
   const current=Mesh.prototype._processInstancedBuffers,fallback=current===process?nativeProcess:current;
@@ -23,12 +36,12 @@ export function prepareVillageInstanceAttributes(mesh){
   const effect=engine._currentEffect;
   if(disposed||mesh._processInstancedBuffers!==process||current!==nativeProcess||mesh.getEngine()!==engine||
      mesh.instancedBuffers!==buffers||mesh.skeleton||mesh.morphTargetManager||mesh.animations?.length||mesh.hasThinInstances||
-     mesh._userInstancedBuffersStorage!==userStorage||mesh._instanceDataStorage!==instanceStorage||instanceStorage.engine!==engine||
-     !(effect instanceof Effect)||effect.getAttributesNames!==nativeAttributeNames||effect.isReady!==Effect.prototype.isReady||!effect.isReady())return fallback.call(mesh,visibleInstances,renderSelf);
+     mesh._userInstancedBuffersStorage!==userStorage||mesh._instanceDataStorage!==instanceStorage||instanceStorage.engine!==engine)return fallback.call(mesh,visibleInstances,renderSelf);
+  if(!(effect instanceof Effect)||effect.getAttributesNames!==nativeAttributeNames||effect.isReady!==Effect.prototype.isReady||!effect.isReady())return upload.call(mesh,visibleInstances,renderSelf);
   const names=effect.getAttributesNames();
-  if(!Array.isArray(names)||!names.length)return fallback.call(mesh,visibleInstances,renderSelf);
+  if(!Array.isArray(names)||!names.length)return upload.call(mesh,visibleInstances,renderSelf);
   let unused=false;for(const kind in buffers)if(!names.includes(kind)){unused=true;break;}
-  if(!unused)return fallback.call(mesh,visibleInstances,renderSelf);
+  if(!unused)return upload.call(mesh,visibleInstances,renderSelf);
   let view=views.get(effect);
   if(!view){view=Object.create(null);views.set(effect,view);}
   // Recheck the live schema and values, including late tint registration and
@@ -36,7 +49,7 @@ export function prepareVillageInstanceAttributes(mesh){
   for(const kind in view)if(!Object.hasOwn(buffers,kind)||!names.includes(kind))delete view[kind];
   for(const kind in buffers)if(names.includes(kind))view[kind]=buffers[kind];
   inFlight=true;mesh.instancedBuffers=view;
-  try{return nativeProcess.call(mesh,visibleInstances,renderSelf);}
+  try{return upload.call(mesh,visibleInstances,renderSelf);}
   finally{if(mesh.instancedBuffers===view)mesh.instancedBuffers=buffers;inFlight=false;}
  }
  mesh._processInstancedBuffers=process;prepared.set(mesh,process);

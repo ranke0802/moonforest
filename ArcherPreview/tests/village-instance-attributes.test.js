@@ -166,3 +166,64 @@ test('0.3 WebGL restore rebuilds detached scenery and refreshes native custom bu
  detached.dispose();scene.dispose();
  assert.equal(engine.onContextRestoredObservable.observers.filter(observer=>!observer._willBeUnregistered).length,initialObservers);
 });
+
+test('0.3 grows an undersized WebGL pass VBO after another pass expands the shared array',async t=>{
+ const engine=new NullEngine(),scene=new Scene(engine);
+ engine.getCaps().instancedArrays=true;
+ t.after(()=>engine.dispose());
+ const create=engine.createDynamicVertexBuffer;
+ engine.createDynamicVertexBuffer=function(data){
+  const buffer=create.call(this,data);
+  buffer.capacity=typeof data==='number'?data:data.byteLength;
+  return buffer;
+ };
+ new ArcRotateCamera('camera',0,1.1,8,Vector3.Zero(),scene);
+ new HemisphericLight('ambient',Vector3.Up(),scene);
+ const update=engine.updateDynamicVertexBuffer;
+ const overruns=[];
+ engine.updateDynamicVertexBuffer=function(buffer,data,offset,length){
+  if(data.byteLength>buffer.capacity)overruns.push([buffer.capacity,data.byteLength]);
+  return update.call(this,buffer,data,offset,length);
+ };
+
+ for(const recoverContext of [false,true]){
+  const source=MeshBuilder.CreateBox('source-'+recoverContext,{},scene);
+  source.material=new PBRMaterial('paint-'+recoverContext,scene);
+  source.isVisible=false;
+  prepareVillageInstancing([source],{recoverContext});
+  prepareTreeOcclusion([source]);
+  const instance=source.createInstance('placement');
+  instance.instancedBuffers.treeCoverage=1;
+  await source.material.forceCompilationAsync(source,{useInstances:true});
+  scene.render();
+  const base=source.subMeshes[0].effect;
+  assert.ok(base.getAttributesNames().includes('treeCoverage'));
+  const storage=source._userInstancedBuffersStorage;
+  const small=engine.currentRenderPassId,large=engine.createRenderPassId('many placements');
+  const upload=(pass,effect,instances)=>{
+   engine.currentRenderPassId=pass;
+   engine._currentEffect=effect;
+   source._processInstancedBuffers(instances,false);
+  };
+  // Set up an unused stream as part of native, unknown-effect preparation.
+  upload(small,null,[instance]);
+  const oldCoverage=storage.renderPasses[small].treeCoverage,oldShadow=storage.renderPasses[small].villageShadowFade;
+  assert.equal(oldCoverage.getBuffer().capacity,128);
+  upload(large,null,Array(40).fill(instance));
+  const largeCoverage=storage.renderPasses[large].treeCoverage;
+  assert.equal(largeCoverage.getBuffer().capacity,256);
+
+  overruns.length=0;
+  upload(small,base,[instance]);
+  assert.equal(overruns.length,recoverContext?0:1);
+  assert.equal(storage.renderPasses[small].treeCoverage===oldCoverage,!recoverContext);
+  assert.equal(storage.renderPasses[small].villageShadowFade,oldShadow,'unused streams are still skipped');
+  assert.equal(storage.renderPasses[large].treeCoverage,largeCoverage,'the other pass owns its allocation');
+  overruns.length=0;
+  upload(small,null,[instance]);
+  assert.equal(overruns.length,recoverContext?0:2,'unknown effect still uploads every native attribute');
+  assert.equal(storage.renderPasses[small].villageShadowFade===oldShadow,!recoverContext);
+  if(recoverContext)assert.equal(storage.renderPasses[small].treeCoverage.getBuffer().capacity,256);
+  source.dispose();
+ }
+});

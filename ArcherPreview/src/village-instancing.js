@@ -41,7 +41,7 @@ function recoverVillageSourceOnRestore(mesh){
 
 export function prepareVillageInstancing(meshes,{recoverContext=false}={}){
   for(const mesh of meshes)if(mesh.getTotalVertices?.()>0){
-    mesh._instanceDataStorage.useMonoDataStorageRenderPass=false;prepareShadowFade(mesh);prepareVillageInstanceAttributes(mesh);
+    mesh._instanceDataStorage.useMonoDataStorageRenderPass=false;prepareShadowFade(mesh);prepareVillageInstanceAttributes(mesh,{repairPassCapacity:recoverContext});
     if(recoverContext)recoverVillageSourceOnRestore(mesh);
   }
 }
