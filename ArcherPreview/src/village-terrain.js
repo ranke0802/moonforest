@@ -26,4 +26,7 @@ export function villageHeight(x,z){
   const plaza=1-smooth((Math.hypot(x,z)-7.2)/3.5);
   return y*(1-plaza)+.12*plaza;
 }
-export function createVillageTerrain(){return new TerrainHeightField({size:160,subdivisions:160,height:villageHeight});}
+const VILLAGE_FIELD=Object.freeze({size:160,subdivisions:160,height:villageHeight});
+export function createVillageTerrain(){return new TerrainHeightField(VILLAGE_FIELD);}
+// The same terrain a row at a time (map-terrain-cache.js warmMapTerrain).
+createVillageTerrain.sliced=()=>TerrainHeightField.rows(VILLAGE_FIELD);

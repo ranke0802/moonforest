@@ -22,6 +22,21 @@ export class TerrainHeightField {
     const n=subdivisions+1;this.heights=new Float32Array(n*n);
     for(let row=0;row<n;row++)for(let col=0;col<n;col++)this.heights[row*n+col]=height(col*this.step-this.half,this.half-row*this.step);
   }
+  // The same field as the constructor makes, one row per step (0.3 builds the next map's
+  // terrain while the current one is played: map-terrain-cache.js warmMapTerrain). Yields
+  // after every row and returns the finished field. Keep it in step with the constructor;
+  // tests/v03-next-map-prefetch.test.js compares the two on every shipped map.
+  static *rows({size=70,subdivisions=64,height=forestHeight}={}){
+    const terrain=Object.create(TerrainHeightField.prototype);
+    terrain.size=size;terrain.subdivisions=subdivisions;terrain.step=size/subdivisions;terrain.half=size/2;
+    terrain.surfaceHeight=null;
+    const n=subdivisions+1,heights=terrain.heights=new Float32Array(n*n),step=terrain.step,half=terrain.half;
+    for(let row=0;row<n;row++){
+      for(let col=0;col<n;col++)heights[row*n+col]=height(col*step-half,half-row*step);
+      if(row<n-1)yield row;
+    }
+    return terrain;
+  }
   heightAt(x,z){
     const n=this.subdivisions,stride=n+1;
     const gx=clamp01((x+this.half)/this.size)*n,gz=clamp01((this.half-z)/this.size)*n;

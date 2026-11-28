@@ -36,7 +36,10 @@ export function witchCaveHeight(x,z){
   const ridge=9*smooth((distance-.15)/3.2)*(1-water);
   return channelBed(x,z,ground+ridge,distance);
 }
-export const createWitchCaveTerrain=()=>applyLaboratoryTerrain(new TerrainHeightField({size:160,subdivisions:192,height:witchCaveHeight}));
+const CAVE_FIELD=Object.freeze({size:160,subdivisions:192,height:witchCaveHeight});
+export const createWitchCaveTerrain=()=>applyLaboratoryTerrain(new TerrainHeightField(CAVE_FIELD));
+// The same terrain a row at a time (map-terrain-cache.js warmMapTerrain).
+createWitchCaveTerrain.sliced=function*(){return applyLaboratoryTerrain(yield* TerrainHeightField.rows(CAVE_FIELD));};
 // A cached conservative distance field keeps collision work independent of
 // the number of repeated rock meshes and of camera rotation.
 let field;

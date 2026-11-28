@@ -13,4 +13,7 @@ export function monsterForestHeight(x,z){
   }
   return height;
 }
-export const createMonsterForestTerrain=()=>new TerrainHeightField({size:160,subdivisions:160,height:monsterForestHeight});
+const FOREST_FIELD=Object.freeze({size:160,subdivisions:160,height:monsterForestHeight});
+export const createMonsterForestTerrain=()=>new TerrainHeightField(FOREST_FIELD);
+// The same terrain a row at a time (map-terrain-cache.js warmMapTerrain).
+createMonsterForestTerrain.sliced=()=>TerrainHeightField.rows(FOREST_FIELD);

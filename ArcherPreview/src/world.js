@@ -32,6 +32,7 @@ import {CaveNavigation} from './witch-cave-navigation.js';
 import {configureCaveAtmosphere} from './witch-cave-atmosphere.js';
 import {cachedMapTerrain} from './map-terrain-cache.js';
 import {warmMapNavigation} from './map-navigation-cache.js';
+import {mapTerrainFactory} from './map-terrain-factory.js';
 import {configureCaveFog} from './cave-fog-runtime.js';
 import {CAMERA_LOWER_BETA,ARCHER_UPPER_BETA,WARRIOR_UPPER_BETA} from './camera-pitch.js';
 // The village and its prebuilt plains outskirts, one frozen list per page (the
@@ -185,7 +186,7 @@ export function replaceWorldMap(world,character){
   world.caveFog?.dispose();world.caveFog=null;
   retainMapEffect(world.floorMaterial.getEffect());
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
-  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?(world.gameplayV03?createGreatPlainsV03Terrain:createGreatPlainsTerrain):cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
+  Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),mapTerrainFactory(plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village',world.gameplayV03)));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
   Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:mapPlacements(mapId),trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
   installSettlementLayout(world);

@@ -8,8 +8,10 @@ globalThis.matchMedia??=()=>({matches:true});
  globalThis.OffscreenCanvas??=class{constructor(w,h){this.width=w;this.height=h;}getContext(){return ctx;}};}
 
 const {arrivalSceneryPlan,planResources,ARRIVAL_PLAN_SLICE}=await import('../src/v03/next-map-plan.js');
-const {createNextMapPrefetch,nextMapResources,stageBudget,quietBudget,QUIET_TRAVEL_MS,STAGE_BYTES_TOUCH,STAGE_BYTES_DESKTOP,PREFETCH_NEAR,PREFETCH_APPROACH,PREFETCH_CHECK_SECONDS,PREFETCH_RETRY_MS,STAGE_LINGER_MS,STAGE_IDLE_MS,STAGE_DROP_PER_CHECK}=await import('../src/v03/next-map-prefetch.js');
+const {createNextMapPrefetch,nextMapResources,stageBudget,quietBudget,QUIET_TRAVEL_MS,QUIET_EXPECTED_SHARE,STAGE_BYTES_TOUCH,STAGE_BYTES_DESKTOP,PREFETCH_NEAR,PREFETCH_APPROACH,PREFETCH_CHECK_SECONDS,PREFETCH_RETRY_MS,STAGE_LINGER_MS,STAGE_IDLE_MS,STAGE_DROP_PER_CHECK}=await import('../src/v03/next-map-prefetch.js');
 const {VILLAGE_LOD_COVERAGE}=await import('../src/village-lod.js');
+const {HELD_FRAME_FADE_MS}=await import('../src/v03/held-frame.js');
+const {parseHTML}=await import('linkedom');
 const {MAP_PORTALS,mapPortals,mapForCharacter}=await import('../src/map-route.js');
 
 const finish=work=>{let step=work.next(),yields=0;while(!step.done){yields++;step=work.next();}return {plan:step.value,yields};};
@@ -63,20 +65,22 @@ test('arrival plan: unknown screen size asks for the coarsest level only; cave s
 
 // ---- runtime -------------------------------------------------------------
 const MODEL=n=>`https://prefetch.test/assets/content/${String(n).padStart(64,'0')}.gltf`;
-function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null}={}){
+function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null,warmTerrain=async()=>true,holdable=true}={}){
   let clock=0;const calls=[],queues=[],containers=[],lost=[];
+  // The still picture of the map being left (held-frame.js), as a record of what was asked of it.
+  const frame={held:false,holds:0,rendered:0,released:[],holdable,hold(render){this.holds++;if(!this.holdable)return false;render();this.held=true;return true;},release(fadeMs){if(this.held)this.released.push(fadeMs);this.held=false;},dispose(){this.held=false;}};
   const world={mapId,gameplayV03:true,v03:{playing:true,story:{sceneActive:false}},scene:{onDisposeObservable:{addOnce:fn=>fn,remove(){}},getEngine:()=>({onContextLostObservable:{add:fn=>{lost.push(fn);return fn;},remove(){}}})}};
   // Each staged model carries one 1024x1024 texture at 8 bits a pixel with mips.
   const loadContainer=async(model,scene,{signal})=>{await null;if(signal.aborted)throw signal.reason;
     // From this model on the read never finishes by itself; only an abort ends it.
     if(holdFrom!==null&&containers.length>=holdFrom)await new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
     const container={model:model.href,disposed:0,textures:[{getInternalTexture:()=>({width:1024,height:1024,format:37808,generateMipMaps:true})}],dispose(){this.disposed++;}};containers.push(container);return container;};
-  const prefetch=createNextMapPrefetch({world,base:new URL('https://prefetch.test/assets/'),now:()=>clock,allowed,loadContainer,stageBytes,pause:async()=>{},
+  const prefetch=createNextMapPrefetch({world,base:new URL('https://prefetch.test/assets/'),now:()=>clock,allowed,loadContainer,stageBytes,pause:async()=>{},warmTerrain,heldFrame:frame,renderFrame:()=>{frame.rendered++;},
     resources:async(w,portal,base,{signal})=>{calls.push({portal,signal});await null;if(fail?.())throw new Error('network down');return {paths:['./content/'+'a'.repeat(64)+'.gltf','./content/'+'b'.repeat(64)+'.ktx2'],sizes:{},index:null,models};},
     downloads:()=>{const queue={cancelled:0,paths:null,release:null,cancel(){this.cancelled++;this.release?.(Object.assign(new Error('aborted'),{name:'AbortError'}));},
       prepare(paths,onProgress){this.paths=paths;onProgress({total:10,cached:4,loaded:0});return new Promise((resolve,reject)=>{this.finish=()=>resolve({total:10,cached:4,loaded:10,storageAvailable:true});this.release=reject;});}};queues.push(queue);return queue;}});
   const step=(position,busy=false)=>{clock+=PREFETCH_CHECK_SECONDS*1000;prefetch.update(PREFETCH_CHECK_SECONDS,position,busy);};
-  return {world,prefetch,calls,queues,containers,lost,step,advance:ms=>{clock+=ms;},settle:async()=>{for(let i=0;i<40;i++)await null;}};
+  return {world,prefetch,calls,queues,containers,lost,frame,step,advance:ms=>{clock+=ms;},settle:async()=>{for(let i=0;i<40;i++)await null;}};
 }
 const road=MAP_PORTALS.village,toward=d=>({x:road.x,z:road.z-d});
 
@@ -97,7 +101,7 @@ test('prefetch starts once on approach, downloads on its own queue, and reports 
   h.queues[0].finish();await h.settle();
   const report=h.prefetch.inspect();
   assert.equal(report.completed,1);assert.equal(report.active,null);
-  assert.deepEqual({...report.recent[0],startedAtMs:0,ms:0},{destination:'warrior-plains',state:'complete',startedAtMs:0,ms:0,files:2,bytes:10,cachedBytes:4,loadedBytes:10,stored:true,staged:0,stagedBytes:0,stageFull:false,error:null});
+  assert.deepEqual({...report.recent[0],startedAtMs:0,ms:0},{destination:'warrior-plains',state:'complete',startedAtMs:0,ms:0,files:2,bytes:10,cachedBytes:4,loadedBytes:10,stored:true,terrain:true,staged:0,stagedBytes:0,stageFull:false,error:null});
   assert.equal(h.queues[0].cancelled,1,'the finished queue is released');
   h.step(toward(30));h.step(toward(5));
   assert.equal(h.calls.length,1,'once per destination per visit');
@@ -251,28 +255,174 @@ test('the road being left is measured in the same check as the road approached, 
   h.step(at(PREFETCH_APPROACH+1.5));await h.settle();assert.equal(h.prefetch.inspect().active,'warrior-plains');
 });
 
+// ---- terrain ahead -----------------------------------------------------------
+test('every shipped terrain built a row at a time equals the one built in one call',async()=>{
+  const {mapTerrainFactory}=await import('../src/map-terrain-factory.js');
+  for(const [mapId,edition] of [['village',true],['great-plains',true],['great-plains',false],['monster-forest',true],['witch-cave',true]]){
+    const factory=mapTerrainFactory(mapId,edition),whole=factory(),work=factory.sliced();
+    let step=work.next(),rows=0;while(!step.done){rows++;step=work.next();}
+    const sliced=step.value;
+    assert.equal(rows,whole.subdivisions,`${mapId}: one step a row`);
+    assert.deepEqual(Object.keys(sliced),Object.keys(whole),mapId+': same fields in the same order (the cache checks them)');
+    for(const key of Object.keys(whole))if(key!=='heights')assert.equal(sliced[key],whole[key],mapId+' '+key);
+    assert.equal(sliced.heights.length,whole.heights.length);
+    let differing=0;for(let i=0;i<whole.heights.length;i++)if(sliced.heights[i]!==whole.heights[i])differing++;
+    assert.equal(differing,0,mapId+': identical heights');
+    assert.equal(sliced.heightAt(3,-7),whole.heightAt(3,-7));
+  }
+});
+
+test('a warmed terrain is the one the map change reads from the cache; no row form or a refusal leaves the old path',async()=>{
+  const {cachedMapTerrain,warmMapTerrain}=await import('../src/map-terrain-cache.js'),{TerrainHeightField}=await import('../src/terrain.js');
+  const engine={isDisposed:false,onDisposeObservable:{addOnce(){}}},field={size:8,subdivisions:8,height:(x,z)=>x*2+z};
+  let whole=0;const factory=()=>{whole++;return new TerrainHeightField(field);};factory.sliced=()=>TerrainHeightField.rows(field);
+  let steps=0;const run=async work=>{let step=work.next();while(!step.done){steps++;await null;step=work.next();}return step.value;};
+  assert.equal(await warmMapTerrain(engine,factory,run),true);assert.equal(steps,8);
+  const read=cachedMapTerrain(engine,factory);
+  assert.equal(whole,0,'the map change did not build it again');assert.equal(read.heightAt(1,1),new TerrainHeightField(field).heightAt(1,1));
+  read.heights[0]=99;assert.notEqual(cachedMapTerrain(engine,factory).heights[0],99,'every reader gets its own array');
+  steps=0;assert.equal(await warmMapTerrain(engine,factory,run),true);assert.equal(steps,0,'already cached: nothing to do');
+  const plain=()=>new TerrainHeightField(field);assert.equal(await warmMapTerrain(engine,plain,run),false);
+  const other=()=>new TerrainHeightField(field);other.sliced=()=>TerrainHeightField.rows(field);
+  await assert.rejects(warmMapTerrain(engine,other,async()=>{throw new Error('stopped');}),/stopped/);
+  assert.equal(cachedMapTerrain(engine,other).heights.length,81,'a stopped build leaves the normal path');
+});
+
+test('a terrain built by the worker is adopted as the one the map change reads; anything else is refused',async()=>{
+  const {mapTerrainFactory,terrainMessage}=await import('../src/map-terrain-factory.js'),{cachedMapTerrain,adoptMapTerrain,mapTerrainCached}=await import('../src/map-terrain-cache.js');
+  for(const mapId of ['village','great-plains','monster-forest','witch-cave']){
+    const engine={isDisposed:false,onDisposeObservable:{addOnce(){}}},factory=mapTerrainFactory(mapId,true),whole=factory();
+    const sent=terrainMessage(mapId,true),posted=structuredClone(sent,{transfer:[sent.heights.buffer]});
+    assert.equal(sent.heights.length,0,'the heights leave the worker without a copy');
+    assert.equal(adoptMapTerrain(engine,factory,posted),true,mapId);assert.equal(mapTerrainCached(engine,factory),true);
+    const read=cachedMapTerrain(engine,factory);
+    assert.deepEqual(Object.keys(read),Object.keys(whole));
+    for(const key of Object.keys(whole))if(key!=='heights')assert.equal(read[key],whole[key],mapId+' '+key);
+    assert.deepEqual(read.heights,whole.heights,mapId+': identical heights');
+    assert.equal(read.constructor,whole.constructor);assert.equal(read.heightAt(-12.3,40.1),whole.heightAt(-12.3,40.1));
+  }
+  const engine={isDisposed:false,onDisposeObservable:{addOnce(){}}},factory=mapTerrainFactory('village',true),good=()=>terrainMessage('village',true);
+  assert.equal(adoptMapTerrain(engine,factory,null),false);
+  assert.equal(adoptMapTerrain(engine,factory,{...good(),heights:new Float32Array(9)}),false,'wrong size');
+  assert.equal(adoptMapTerrain(engine,factory,{...good(),heights:[1,2,3]}),false);
+  const bent=good();bent.entries=bent.entries.map(([key,value])=>[key,key==='step'?value*2:value]);assert.equal(adoptMapTerrain(engine,factory,bent),false,'fields that disagree');
+  const extra=good();extra.entries.push(['hook',{}]);assert.equal(adoptMapTerrain(engine,factory,extra),false,'only plain numbers are kept');
+  assert.equal(mapTerrainCached(engine,factory),false);
+  assert.equal(adoptMapTerrain({isDisposed:true,onDisposeObservable:{addOnce(){}}},factory,good()),false);
+});
+
+test('the worker is asked once and ended; a failed, late or stopped worker leaves the row-by-row build or nothing',async()=>{
+  const {warmNextMapTerrain}=await import('../src/v03/next-map-prefetch.js'),{mapTerrainFactory,terrainMessage}=await import('../src/map-terrain-factory.js'),{mapTerrainCached}=await import('../src/map-terrain-cache.js');
+  const frames=[],scene={isDisposed:false,getEngine:()=>engine,onBeforeRenderObservable:{addOnce(fn){frames.push(fn);}}};
+  let engine;const fresh=()=>{engine={isDisposed:false,onDisposeObservable:{addOnce(){}}};return {scene,gameplayV03:true};};
+  const fake=answer=>{const made=[];return {made,create:()=>{const worker={ended:0,asked:[],terminate(){this.ended++;},postMessage(message){this.asked.push(message);queueMicrotask(()=>answer(this,message));}};made.push(worker);return worker;}};};
+  let world=fresh(),ok=fake((worker,message)=>worker.onmessage?.({data:terrainMessage(message.mapId,message.gameplayV03)}));
+  assert.equal(await warmNextMapTerrain(world,'monster-forest',{createWorker:ok.create}),true);
+  assert.deepEqual(ok.made[0].asked,[{mapId:'monster-forest',gameplayV03:true}]);assert.equal(ok.made[0].ended,1);
+  assert.equal(mapTerrainCached(engine,mapTerrainFactory('monster-forest',true)),true);
+  assert.equal(await warmNextMapTerrain(world,'monster-forest',{createWorker:()=>{throw new Error('must not start another');}}),true,'already cached');
+  // A stop ends the worker and builds nothing.
+  world=fresh();const silent=fake(()=>{}),stop=new AbortController(),stopped=warmNextMapTerrain(world,'village',{signal:stop.signal,createWorker:silent.create});
+  await null;stop.abort();await assert.rejects(stopped,{name:'AbortError'});
+  assert.equal(silent.made[0].ended,1);assert.equal(mapTerrainCached(engine,mapTerrainFactory('village',true)),false);
+  // No worker, a worker error, a wrong answer or a late one: the row form on the frame budget.
+  const drive=setInterval(()=>{for(const frame of frames.splice(0))frame();},1);
+  try{
+    for(const [name,options] of [['no worker',{createWorker:()=>{throw new Error('no Worker here');}}],
+      ['worker error',{createWorker:fake(worker=>worker.onerror?.({preventDefault(){}})).create}],
+      ['wrong map',{createWorker:fake(worker=>worker.onmessage?.({data:terrainMessage('witch-cave',true)})).create}],
+      ['late',{createWorker:silent.create,timeoutMs:5}]]){
+      world=fresh();assert.equal(await warmNextMapTerrain(world,'village',options),true,name);
+      assert.equal(mapTerrainCached(engine,mapTerrainFactory('village',true)),true,name);
+    }
+  }finally{clearInterval(drive);}
+  assert.ok(silent.made.every(worker=>worker.ended===1),'every worker was ended');
+});
+
+test('the run builds the destination terrain beside the transfer; its failure does not fail the run',async()=>{
+  const seen=[];const h=await stagedHarness(1,{warmTerrain:async(world,mapId,{signal})=>{seen.push([mapId,signal.aborted]);return true;}});
+  assert.deepEqual(seen,[['great-plains',false]]);assert.equal(h.prefetch.inspect().recent[0].terrain,true);
+  const broken=await stagedHarness(1,{warmTerrain:async()=>{throw new Error('no terrain');}});
+  const record=broken.prefetch.inspect().recent[0];
+  assert.equal(record.state,'complete');assert.equal(record.terrain,false);assert.equal(record.staged,1);
+});
+
 // ---- travel without the loading screen ---------------------------------------
-test('a road crossed in play with its map staged may go without the loading screen; anything else shows it at once',async()=>{
+// One change to the map, taking `ms`, with the loading screen (what the first crossing of a session is).
+const crossed=(h,ms,destination='warrior-plains')=>{h.prefetch.travel(destination);h.advance(ms);h.prefetch.arrived(true);};
+test('a road crossed in play with its map staged, whose last change was short, goes without the loading screen; anything else shows it at once',async()=>{
   const road={boundary:{to:'warrior-plains'}};
   const h=await stagedHarness(2);
+  assert.equal(h.prefetch.quietFor('warrior-plains',road),0,'no change to that map timed yet this session: the screen');
+  assert.equal(h.frame.holds,0,'and the picture is not copied for nothing');
+  crossed(h,QUIET_TRAVEL_MS*QUIET_EXPECTED_SHARE+1);
+  assert.equal(h.prefetch.quietFor('warrior-plains',road),0,'the last change ran too long to promise a quiet one');
+  crossed(h,QUIET_TRAVEL_MS*QUIET_EXPECTED_SHARE);
+  assert.deepEqual(h.prefetch.inspect().lastTravelMs,{'warrior-plains':QUIET_TRAVEL_MS*QUIET_EXPECTED_SHARE});
   assert.equal(h.prefetch.quietFor('warrior-plains',{minimap:true,playerTravelFrom:'warrior-v3'}),0,'the minimap is not a road walked across');
   assert.equal(h.prefetch.quietFor('warrior-v4',{boundary:{to:'warrior-v4'}}),0,'nothing staged for that map');
   h.world.v03.story.sceneActive=true;assert.equal(h.prefetch.quietFor('warrior-plains',road),0,'a story scene keeps its screen');h.world.v03.story.sceneActive=false;
   h.world.v03.playing=false;assert.equal(h.prefetch.quietFor('warrior-plains',road),0);h.world.v03.playing=true;
-  assert.equal(h.prefetch.quietActive,false);
+  assert.equal(h.prefetch.quietActive,false);assert.equal(h.frame.holds,0);
+  // The picture being left is drawn once more and held before anything is taken apart.
   assert.equal(h.prefetch.quietFor('warrior-plains',road),QUIET_TRAVEL_MS);assert.equal(h.prefetch.quietActive,true);
-  h.prefetch.travel('warrior-plains');h.prefetch.arrived(false);
-  assert.equal(h.prefetch.quietActive,false);
-  let report=h.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,1,0]);
-  const slow=await stagedHarness(2);slow.prefetch.quietFor('warrior-plains',road);slow.prefetch.travel('warrior-plains');slow.prefetch.arrived(true);
-  report=slow.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,0,1],'the screen came on after all');
-  const failed=await stagedHarness(2);failed.prefetch.quietFor('warrior-plains',road);failed.prefetch.cancel();assert.equal(failed.prefetch.quietActive,false);
-  const empty=harness();assert.equal(empty.prefetch.quietFor('warrior-plains',road),0,'not staged: the screen as before');
+  assert.deepEqual([h.frame.holds,h.frame.rendered,h.frame.held,h.prefetch.inspect().heldFrame],[1,1,true,true]);
+  h.prefetch.travel('warrior-plains');h.advance(700);h.prefetch.arrived(false);
+  assert.equal(h.prefetch.quietActive,false);assert.deepEqual(h.frame.released,[HELD_FRAME_FADE_MS],'it dissolves into the finished arrival');
+  let report=h.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,1,0]);assert.equal(report.lastTravelMs['warrior-plains'],700);
+  // The screen came on after all: the still goes at once, under it.
+  const slow=await stagedHarness(2);crossed(slow,500);slow.prefetch.quietFor('warrior-plains',road);slow.prefetch.travel('warrior-plains');slow.advance(3000);slow.prefetch.arrived(true);
+  report=slow.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,0,1]);assert.deepEqual(slow.frame.released,[0]);
+  assert.equal(slow.prefetch.quietFor('warrior-plains',road),0,'and the next change to that map shows its screen at once');
+  // A failed change, or leaving the game, takes the still down with it.
+  const failed=await stagedHarness(2);crossed(failed,500);assert.equal(failed.prefetch.quietFor('warrior-plains',road),QUIET_TRAVEL_MS);failed.prefetch.cancel();
+  assert.equal(failed.prefetch.quietActive,false);assert.deepEqual(failed.frame.released,[0]);
+  // No picture can be held (no canvas, a refused copy): the screen as before.
+  const blind=await stagedHarness(2,{holdable:false});crossed(blind,500);assert.equal(blind.prefetch.quietFor('warrior-plains',road),0);assert.equal(blind.prefetch.quietActive,false);
+  const empty=harness();crossed(empty,500);assert.equal(empty.prefetch.quietFor('warrior-plains',road),0,'not staged: the screen as before');
   assert.equal(quietBudget(''),QUIET_TRAVEL_MS);assert.equal(quietBudget('?quiet=0'),0);assert.equal(quietBudget('?quiet=300'),300);assert.equal(quietBudget('?quiet=99999'),5000);assert.equal(quietBudget('?quiet=x'),QUIET_TRAVEL_MS);
 });
 
+test('the held picture: one still copy over the game canvas, under the HUD, emptied when it goes',async()=>{
+  const {createHeldFrame,HELD_FRAME_PIXELS}=await import('../src/v03/held-frame.js');
+  const {document}=parseHTML('<html><body><div id="app"><canvas id="viewport"></canvas><div class="hud"></div><section id="loading"></section></div></body></html>');
+  const canvas=document.getElementById('viewport');canvas.width=1688;canvas.height=780;
+  const drawn=[];let context2d=true;
+  const create=document.createElement.bind(document);
+  document.createElement=name=>{const node=create(name);if(name==='canvas')node.getContext=(kind,options)=>context2d?{drawImage:(...args)=>drawn.push([kind,options.alpha,args[0]===canvas,...args.slice(1)])}:null;return node;};
+  const timers=[];const frame=createHeldFrame({canvas,setTimer:(fn,ms)=>{timers.push({fn,ms});return timers.length;},clearTimer:id=>{if(timers[id-1])timers[id-1].cleared=true;}});
+  const order=[];
+  assert.equal(frame.hold(()=>order.push('render')),true);assert.equal(frame.held,true);
+  assert.deepEqual(order,['render'],'the canvas is drawn in the same task, before the copy');
+  assert.deepEqual(drawn,[['2d',false,true,0,0,1688,780]]);
+  const still=canvas.nextElementSibling;
+  assert.equal(still.tagName,'CANVAS');assert.equal(still.nextElementSibling.className,'hud','the HUD and the loading screen stay above');
+  assert.equal(still.getAttribute('aria-hidden'),'true');assert.match(still.getAttribute('style'),/pointer-events:\s*none/);assert.match(still.getAttribute('style'),/position:\s*absolute/);
+  assert.deepEqual([still.width,still.height],[1688,780]);
+  // Dissolve: only opacity changes; the copy is emptied after the fade.
+  frame.release(180);assert.equal(frame.held,false);
+  assert.match(still.getAttribute('style'),/opacity:\s*0/);assert.match(still.getAttribute('style'),/transition:\s*opacity 180ms linear/);
+  assert.equal(still.parentNode.id,'app');assert.equal(timers[0].ms,214);
+  timers[0].fn();assert.equal(still.parentNode,null);assert.deepEqual([still.width,still.height],[0,0]);
+  // At once (the loading screen covers it); a new hold replaces one still fading; reduced motion never fades.
+  frame.hold();frame.release(0);assert.equal(document.querySelectorAll('canvas').length,1);
+  frame.hold();frame.release(180);frame.hold();assert.equal(document.querySelectorAll('canvas').length,2,'the fading one went when the next was taken');
+  document.documentElement.dataset.mfMotion='reduced';frame.release(180);assert.equal(document.querySelectorAll('canvas').length,1);delete document.documentElement.dataset.mfMotion;
+  // Nothing to hold: no size yet, a refused context, a render that throws, no canvas.
+  canvas.width=0;assert.equal(frame.hold(),false);canvas.width=1688;
+  context2d=false;assert.equal(frame.hold(),false);context2d=true;
+  assert.equal(frame.hold(()=>{throw new Error('context lost');}),false);assert.equal(frame.held,false);
+  assert.equal(document.querySelectorAll('canvas').length,1);
+  assert.equal(createHeldFrame({canvas:null}).hold(),false);
+  // A very large drawing buffer is copied smaller.
+  canvas.width=4000;canvas.height=3000;drawn.length=0;assert.equal(frame.hold(),true);
+  const big=canvas.nextElementSibling;assert.ok(big.width*big.height<=HELD_FRAME_PIXELS*1.01);assert.ok(Math.abs(big.width/big.height-4/3)<.01);
+  frame.dispose();assert.equal(document.querySelectorAll('canvas').length,1);
+});
+
+
 test('the loading screen can be held back: a short load never shows it, a long one shows it from then on, a failure at once',async()=>{
-  const {parseHTML}=await import('linkedom'),{createLoadingView}=await import('../src/loading-view.js');
+  const {createLoadingView}=await import('../src/loading-view.js');
   const {document}=parseHTML(readFileSync(new URL('../moonforest-0.3.html',import.meta.url),'utf8')),view=createLoadingView(document,{clipboard:null});
   const overlay=document.getElementById('loading'),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   let generation=view.begin('warrior-plains');

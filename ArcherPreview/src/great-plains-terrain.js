@@ -40,6 +40,11 @@ function sampleGreatPlainsHeight(x,z,streamDistance){
  return h;
 }
 export const greatPlainsHeight=(x,z)=>sampleGreatPlainsHeight(x,z,plainsStreamDistance);
-const createHeightField=height=>new TerrainHeightField({size:PLAINS_SPAN,subdivisions:216,height});
+const plainsField=height=>({size:PLAINS_SPAN,subdivisions:216,height});
+const createHeightField=height=>new TerrainHeightField(plainsField(height));
+const v03Height=(x,z)=>sampleGreatPlainsHeight(x,z,boundedStreamDistance);
 export const createGreatPlainsTerrain=()=>createHeightField(greatPlainsHeight);
-export const createGreatPlainsV03Terrain=()=>createHeightField((x,z)=>sampleGreatPlainsHeight(x,z,boundedStreamDistance));
+export const createGreatPlainsV03Terrain=()=>createHeightField(v03Height);
+// The same terrain a row at a time (map-terrain-cache.js warmMapTerrain).
+createGreatPlainsTerrain.sliced=()=>TerrainHeightField.rows(plainsField(greatPlainsHeight));
+createGreatPlainsV03Terrain.sliced=()=>TerrainHeightField.rows(plainsField(v03Height));
