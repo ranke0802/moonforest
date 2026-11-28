@@ -28,6 +28,9 @@ export const dreamSeconds=()=>.5+INTRO.seconds+FADE_SECONDS+DREAM_BEATS.reduce((
 const MOTES=14;
 // Captions: 60 ms a character (talk is 25), starting once the line is up.
 export const TYPE_PACE=2.4,TYPE_DELAY_MS=450;
+// 2026-11-28 user: a skip still shows the dream's last words ("그 아이를 찾아라", the last beat),
+// typed at the caption pace and kept 2 s once whole; taps cannot hurry or cut it.
+export const FINAL_HOLD_MS=2000;
 // The wait after the dream (skipped or not) for the wagon, the driver and the first wolf
 // (2026-11-28, user: no "preparing" sentence, only a progress bar). Steps come from the
 // shell (progress(done,total)); inside a step the bar eases toward the next one so it never
@@ -90,7 +93,8 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
  // A tap (or Enter/Space) while a caption types shows all of it; the next one
  // moves on to the next caption without waiting out its hold (user, 2026-11-21).
  let advance=false,shownAt=-Infinity;
- const hurry=event=>{if(layer.hidden||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;if(event.type==='keydown'&&event.repeat)return;if(!typewriter.complete()){if(trusted(event)&&holding(shownAt,now()))return;advance=true;}};
+ let locked=false;
+ const hurry=event=>{if(layer.hidden||locked||skip.contains(event.target))return;if(event.type==='keydown'&&event.code!=='Enter'&&event.code!=='Space')return;if(event.type==='keydown'&&event.repeat)return;if(!typewriter.complete()){if(trusted(event)&&holding(shownAt,now()))return;advance=true;}};
  layer.addEventListener('click',hurry);
  function setPicture(p,url){
   if(url){if(p.sharp.getAttribute('src')!==url)p.sharp.setAttribute('src',url);}
@@ -144,7 +148,9 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
   get active(){return !layer.hidden;},
   // Resolves 'done' or 'skipped'. The layer stays black until release().
   async play(){
-   const id=++run;let skipped=false;const onSkip=()=>{skipped=true;typewriter.stop();};
+   const id=++run;let skipped=false,onFinal=false,finalTyped=null,finalShownAt=null,finalHeld=false;
+   // On the last beat a skip lets its caption finish typing (the line is kept below).
+   const onSkip=()=>{if(skipped)return;skipped=true;skip.hidden=true;if(!onFinal)typewriter.stop();};
    skip.addEventListener('click',onSkip);doc.addEventListener('keydown',hurry);
    // The blip's audio starts now, so it runs by the first caption's first character.
    blip?.prime?.();
@@ -152,6 +158,9 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
    // hold: a caption's reading time, cut short by the second tap. pause: fades and the wake, never cut.
    const hold=async ms=>{for(let left=ms;left>0&&!skipped&&!advance&&id===run;left-=100)await wait(Math.min(100,left));};
    const pause=async ms=>{for(let left=ms;left>0&&!skipped&&id===run;left-=100)await wait(Math.min(100,left));};
+   // fixed: neither a skip nor a tap shortens it (the last words after a skip).
+   const fixed=async ms=>{for(let left=ms;left>0&&id===run;left-=100)await wait(Math.min(100,left));};
+   const last=DREAM_BEATS[DREAM_BEATS.length-1];
    // Types the caption; resolves when it is fully shown (or skipped).
    const caption=key=>{advance=false;shownAt=now();const text=key?t(key):'';said.textContent=text;const typed=typewriter.start(line,text,{who:null,pace:TYPE_PACE,delay:key?TYPE_DELAY_MS:0});line.classList.remove('is-in');if(key){void line.offsetWidth;line.classList.add('is-in');}return typed;};
    try{
@@ -168,11 +177,25 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
     for(const [index,beat] of DREAM_BEATS.entries()){
      if(skipped||id!==run)break;
      onCut(beat.tone);layer.dataset.tone=beat.tone;show({...beat,seconds:beat.seconds+typeMs(beat.key)/1000},DREAM_BEATS[index+1]?.image??INTRO.image);layer.classList.remove('is-shading');
-     await caption(beat.key);
+     if(beat===last){onFinal=true;locked=true;finalTyped=caption(beat.key);await finalTyped;finalShownAt=now();}
+     else await caption(beat.key);
      // Poll in short steps so a skip never waits for a whole caption.
      await hold(beat.seconds*1000);
+     if(beat===last&&!skipped)finalHeld=true;
      line.classList.remove('is-in');
      await pause(FADE_SECONDS*1000);
+    }
+    // A skip: the last words still appear at their own pace and stay FINAL_HOLD_MS once whole.
+    if(skipped&&id===run&&!finalHeld){
+     locked=true;
+     if(!onFinal){
+      onFinal=true;onCut(last.tone);layer.dataset.tone=last.tone;layer.classList.remove('is-shading');
+      show({...last,seconds:(FINAL_HOLD_MS+typeMs(last.key))/1000},INTRO.image);
+      finalTyped=caption(last.key);
+     }
+     await finalTyped;finalShownAt??=now();
+     if(id===run)await fixed(Math.max(0,FINAL_HOLD_MS-(now()-finalShownAt)));
+     if(id===run)line.classList.remove('is-in');
     }
     // 2. The wake: the table stabs back, rushes at the fork, whites out.
     if(!skipped&&id===run){
@@ -184,7 +207,7 @@ export function createOpening({doc,mount=doc.body,flat=false,onCut=()=>{},wait=m
      if(!skipped&&id===run)layer.dataset.woke='1';
     }
    }finally{
-    skip.removeEventListener('click',onSkip);
+    skip.removeEventListener('click',onSkip);locked=false;
     if(id===run){typewriter.stop();doc.removeEventListener('keydown',hurry);line.textContent='';said.textContent='';line.classList.remove('is-in');layer.classList.remove('is-shading');}
    }
    if(skipped&&id===run)layer.dataset.woke='1';

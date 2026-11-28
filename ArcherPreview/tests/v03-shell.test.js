@@ -7,7 +7,7 @@ import {parseHTML} from 'linkedom';
 import {createAttractPilot} from '../src/v03/attract-pilot.js';
 import {t,setPack,localizeChapter,cloneChapter,tr} from '../src/v03/i18n.js';
 import {createTitleScreen,slotSummary,formatPlayTime} from '../src/v03/title-screen.js';
-import {createOpening,dreamSeconds,DREAM_BEATS,INTRO} from '../src/v03/opening.js';
+import {createOpening,dreamSeconds,DREAM_BEATS,INTRO,FINAL_HOLD_MS} from '../src/v03/opening.js';
 import {setupV03,AMBUSH,TITLE_FOE,OPENING_STAGE} from '../src/v03/boot.js';
 import {createSaveSession,readIntent} from '../src/v03/save-slots.js';
 import {setTypewriterEnabled} from '../src/v03/typewriter.js';
@@ -110,8 +110,9 @@ test('prologue lasts 30 to 40 seconds, shows the entrance and every beat and can
  const opening=createOpening({doc:document,wait:async()=>{const text=document.querySelector('.v03-opening-line').textContent;if(text&&seen.at(-1)!==text)seen.push(text);}});
  assert.equal(await opening.play(),'done');assert.deepEqual(seen,[...INTRO.lines.map(row=>t(row.key)),...DREAM_BEATS.map(beat=>t(beat.key))]);assert.equal(opening.active,true);
  await opening.release();assert.equal(opening.active,false);
- let waits=0;const quick=createOpening({doc:document,wait:async()=>{if(++waits===3)document.querySelectorAll('.v03-opening-skip')[1].dispatchEvent(new document.defaultView.Event('click'));}});
- assert.equal(await quick.play(),'skipped');assert.ok(waits<12);
+ // A skip still shows the last words for FINAL_HOLD_MS (2026-11-28 user), then ends.
+ let waits=0;const quick=createOpening({doc:document,wait:async()=>{if(++waits===3)document.querySelectorAll('.v03-opening-skip')[1].dispatchEvent(new document.defaultView.Event('click'));const text=document.querySelectorAll('.v03-opening-line')[1].textContent;if(text)seen.push(text);}});
+ seen.length=0;assert.equal(await quick.play(),'skipped');assert.ok(waits<12+FINAL_HOLD_MS/100,String(waits));assert.equal(seen.at(-1),t(DREAM_BEATS.at(-1).key));
 });
 
 test('village quest markers sample only visible heads; talk range drops out immediately in combat',async t=>{
@@ -332,7 +333,8 @@ for(const entry of ['title','new-intent']){
   if(entry==='title'){h.finishSplash();await h.reveal();await newGame(h);}
   else{await settle();h.shell.update(.016);}
   await settle();
-  h.click('.v03-opening-skip');endBeat?.();await settle();
+  // The skip still shows the last words for 2 s (100 ms steps), then the wait screen.
+  h.click('.v03-opening-skip');for(let i=0;i<60&&h.document.querySelector('.v03-opening-preparation').hidden;i++){endBeat?.();await settle();}
   assert.equal(h.shell.screen,'opening');assert.equal(h.document.querySelector('.v03-opening-preparation').hidden,false);
   if(entry==='title')readyCast();else readyWolf();
   await settle();assert.equal(h.shell.screen,'opening');assert.equal(h.shell.story.started,false);

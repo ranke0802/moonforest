@@ -56,7 +56,9 @@ test('legacy checkpoints, optional hunts and named kills restore only directly e
  assert.deepEqual(f.sections()[1].entries.map(row=>row.label),['고블린 궁수']);
  assert.equal(f.sections()[0].entries.length,0);
 });
-test('skipping a running dream records the displayed painting only; translations name the discovered entries',async()=>{
+// 2026-11-28: a skip still shows the last words over their painting (opening.js FINAL_HOLD_MS), so
+// that painting is displayed, and recorded, too.
+test('skipping a running dream records the displayed paintings only; translations name the discovered entries',async()=>{
  const f=fixture();f.save.commit({});const {document}=parseHTML('<html><body></body></html>');
  const opening=createOpening({doc:document,onCut:f.gallery.scene,typing:()=>false,wait:async()=>{
   if(document.querySelector('.v03-opening-plane.is-in'))document.querySelector('.v03-opening-skip').click();
@@ -69,7 +71,8 @@ test('skipping a running dream records the displayed painting only; translations
   const title=createTitleScreen({doc:document,wait:async()=>{}});title.show();
   const done=title.showGallery({sections:f.gallery.sections(localized,elenaJournal(lang))});
   const scenes=title.element.querySelector('[data-category=scenes]'),bestiary=title.element.querySelector('[data-category=bestiary]');
-  assert.equal(scenes.querySelectorAll('li').length,1);assert.match(scenes.querySelector('img').src,/00\.webp/);
+  const shown=[...scenes.querySelectorAll('img')].map(img=>img.src);
+  assert.equal(shown.length,2,shown.join());assert.match(shown[0],/00\.webp/);assert.match(shown[1],/05\.webp/);
   assert.equal(scenes.querySelector('li').textContent,t('meta.dream'));
   assert.equal(bestiary.querySelector('li').textContent,tr('구울 전사'));
   if(lang!=='ko')assert.doesNotMatch(title.element.querySelector('.v03-gallery').textContent,/[가-힣]/);

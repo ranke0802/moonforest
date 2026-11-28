@@ -206,7 +206,8 @@ test('first prologue caption: the blip audio is started with the dream, so its f
  c.advance(2000);
  assert.equal(sounded[0],true,'the first visible character of the first caption sounds');
  tw.complete();document.querySelector('.v03-opening-skip').dispatchEvent(new document.defaultView.Event('click'));
- const drain=setInterval(()=>{while(pending.length)pending.shift()();},1);await played;clearInterval(drain);
+ // The skip types the last words at their pace (manual clock) and keeps them 2 s.
+ const drain=setInterval(()=>{c.advance(100);while(pending.length)pending.shift()();},1);await played;clearInterval(drain);
  resetTextBlip();
 });
 
