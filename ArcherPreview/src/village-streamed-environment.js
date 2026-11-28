@@ -236,9 +236,15 @@ export function loadStreamedVillage(world,{
       // A retry after installation resumes preparation using the existing tier.
       // In particular, do not replace or duplicate a tier when only ink stalled.
       if(!retry||!has(request)){
-        await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();
+        // 0.3: a container the previous map staged for this model while the player
+        // walked up to the road (v03/next-map-prefetch.js). Taking it hands it over
+        // for good: from here it is owned and disposed like one loaded below.
+        lifetime.check();
+        const model=new URL(config.model,url),staged=world.nextMapPrefetch?.take?.(model)??null;
+        if(!staged){await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();}
         step('container');
-        const model=new URL(config.model,url),container=await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime,wait}),{onLate:container=>container?.dispose()});
+        const container=staged??await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime,wait}),{onLate:container=>container?.dispose()});
+        if(staged)stats.stagedModels=(stats.stagedModels??0)+1;
         step('setup');
         beforeInstall=container;lifetime.check();containers.push(container);
         since=performance.now();

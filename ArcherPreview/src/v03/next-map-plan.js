@@ -37,9 +37,13 @@ function levelFor(levels,wanted){
 }
 
 // Generator: yields between slices so the caller can spread ~1,400 plains
-// placements over several tasks. Returns [{id,level,priority,resources}],
-// most wanted first.
-export function* arrivalSceneryPlan({assets,placements,arrival,view,range,cave=false,slice=ARRIVAL_PLAN_SLICE}){
+// placements over several tasks. Returns [{id,level,priority,ahead,model,resources}],
+// most wanted first. heading (optional unit {x,z}): the way the player walks in.
+// `ahead` marks what stands in front of the arrival camera on that heading or
+// right beside the player; it only orders work that is done ahead of the map
+// (staging), never what is fetched.
+const AHEAD_COS=Math.cos(65*Math.PI/180),AHEAD_CLOSE=18;
+export function* arrivalSceneryPlan({assets,placements,arrival,view,range,cave=false,heading=null,slice=ARRIVAL_PLAN_SLICE}){
   const wanted=new Map(),reach=Math.max(0,view.reach??0),scale=(view.scale??1)**2,known=Number.isFinite(view.screenArea)&&view.screenArea>0&&view.minZ>0;
   const coverageAt=(radius,distance)=>{if(!known)return 0;const projected=radius*view.minZ/distance;return Math.PI*projected*projected/view.screenArea*scale;};
   let count=0;
@@ -53,11 +57,15 @@ export function* arrivalSceneryPlan({assets,placements,arrival,view,range,cave=f
     const near=Math.max(flat-reach,.001),far=flat+reach+CAMERA_RISE;
     const coverage=coverageAt(radius,near),least=coverageAt(radius,far);
     const finest=villageLodTier(coverage),coarsest=asset.config.essentialStructural===true&&cave?2:villageLodTier(least);
+    // The arrival camera stands its arm's length behind the player, looking along the heading.
+    let ahead=!heading||flat-radius<AHEAD_CLOSE;
+    if(!ahead){const dx=placement.x-(arrival.x-heading.x*reach),dz=placement.z-(arrival.z-heading.z*reach),length=Math.hypot(dx,dz);ahead=length<=radius||(dx*heading.x+dz*heading.z)/length>AHEAD_COS-radius/length;}
     const request=level=>{
       const source=levelFor(asset.levels,level);if(!source)return;
       const key=placement.asset+':'+source.level,priority=coverage*100-near;
       const previous=wanted.get(key);
-      if(!previous||previous.priority<priority)wanted.set(key,{id:placement.asset,level:source.level,priority,resources:source.resources});
+      if(!previous)wanted.set(key,{id:placement.asset,level:source.level,priority,ahead,model:source.model,resources:source.resources});
+      else{if(previous.priority<priority)previous.priority=priority;if(ahead)previous.ahead=true;}
     };
     for(let level=finest;level<=coarsest;level++)request(level);
     // The demand rule fetches the next finer level just before its threshold.

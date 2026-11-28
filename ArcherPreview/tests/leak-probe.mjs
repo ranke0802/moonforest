@@ -20,11 +20,13 @@ import {createStarfallAura} from '../src/v03/starfall-aura.js';
 // PROBE_MODE (comma list, default none): horse = a mounted riding horse per visit,
 // left after the next map loads like riding-horse.js; aura = one scene-lifetime
 // Starfall aura bound to that horse root each visit (2026-11-27); v03 = the 0.3 world
-// (gameplayV03: settlement scenery, fast route grids) instead of 0.2 (2026-11-28).
+// (gameplayV03: settlement scenery, fast route grids) instead of 0.2 (2026-11-28);
+// stage (with v03) = before each departure the next map's arrival models are staged by
+// v03/next-map-prefetch.js and the loader takes them (2026-11-28).
 const MODES=new Set((process.env.PROBE_MODE??'').split(',').map(s=>s.trim()).filter(Boolean));
 // Only these are read; any other word (CLAUDE.md once listed resources,ground,frames,materials,cast)
 // would otherwise pass silently as if it had been checked (2026-11-27 audit).
-const KNOWN_MODES=new Set(['horse','aura','v03']),unknownModes=[...MODES].filter(mode=>!KNOWN_MODES.has(mode));
+const KNOWN_MODES=new Set(['horse','aura','v03','stage']),unknownModes=[...MODES].filter(mode=>!KNOWN_MODES.has(mode));
 
 const base=new URL('../public/assets/',import.meta.url),tick=()=>new Promise(r=>setTimeout(r,0));
 const rounds=Number(process.argv[2]??3),snapshot=process.argv[3]??null;
@@ -55,17 +57,40 @@ const services={initialize:async()=>{},ground:async world=>{const material=world
 const place=()=>{const p=world.plains?{x:-55,z:37}:{x:0,z:70};world.camera.setTarget(new Vector3(p.x,world.terrain.heightAt(p.x,p.z)+WARRIOR_DIMENSIONS.stableFocusHeight,p.z));world.camera.alpha=1.2;world.camera.beta=.95;world.camera.radius=13;world.camera.getViewMatrix();world.camera.getProjectionMatrix();readyRaw();return p;};
 const mb=()=>{globalThis.gc();const m=process.memoryUsage();return {heap:Math.round(m.heapUsed/1e6),ext:Math.round(m.external/1e6),ab:Math.round(m.arrayBuffers/1e6)};};
 const weak=[];const log=[];let horse=null;const aura=MODES.has('aura')?createStarfallAura({scene}):null;say('modes',[...MODES].join(',')||'none');if(unknownModes.length)say('unknown modes (not checked):',unknownModes.join(','),'- known:',[...KNOWN_MODES].join(','));
+// Staging owner as main.js makes it, with the probe's container reader and no Cache Storage.
+let stageClock=0;const stagedWeak=[];
+if(MODES.has('stage')){
+ const {createNextMapPrefetch}=await import('../src/v03/next-map-prefetch.js');
+ world.nextMapPrefetch=createNextMapPrefetch({world,base:new URL('/assets/',location.href),now:()=>stageClock,stageBytes:Infinity,pause:tick,
+  loadContainer:async(model,scene,options)=>{const container=await services.loadContainer(model,scene,options);stagedWeak.push(new WeakRef(container));return container;},
+  downloads:()=>({prepare:async()=>({total:0,cached:0,loaded:0,complete:true,storageAvailable:true}),cancel(){}})});
+}
+const {mapPortals}=await import('../src/map-route.js');
 for(let visit=0;visit<rounds*2;visit++){
  const character=visit%2?'warrior-v3':'warrior-plains';if(visit)replaceWorldMap(world,character);const p=place();
  say('load',character,Date.now()-T0);let n=0;const svc={...services,loadContainer:async(...a)=>{n++;return services.loadContainer(...a);}};
- await loadStreamedVillage(world,svc);say('loaded',character,Date.now()-T0,'containers',n);await tick();readyRaw();world.lighting.follow(new Vector3(p.x,world.terrain.heightAt(p.x,p.z),p.z),true);world.villageVisibility.update(world.camera.globalPosition,new Vector3(p.x,0,p.z),.1);scene.render();readyRaw();
+ // A taken container skips the probe's reader, which is where its stand-in textures are marked ready.
+ const marking=world.nextMapPrefetch?setInterval(readyRaw,2):null;
+ try{await loadStreamedVillage(world,svc);}finally{clearInterval(marking);}
+ say('loaded',character,Date.now()-T0,'containers',n,...(world.nextMapPrefetch?['staged-taken',world.environment.stagedModels??0]:[]));
+ if(world.nextMapPrefetch){world.nextMapPrefetch.arrived();stageClock+=60000;world.nextMapPrefetch.update(1,{x:p.x+300,z:p.z},false);say('after arrival',JSON.stringify((({staged,taken,dropped,stagedModels})=>({staged,taken,dropped,stagedModels}))(world.nextMapPrefetch.inspect())));}
+await tick();readyRaw();world.lighting.follow(new Vector3(p.x,world.terrain.heightAt(p.x,p.z),p.z),true);world.villageVisibility.update(world.camera.globalPosition,new Vector3(p.x,0,p.z),.1);scene.render();readyRaw();
  if(horse){horse.dispose();horse=null;}
  let horseRoot=null;if(MODES.has('horse')||MODES.has('aura')){horse=createWagonHorse({scene,heightAt:(x,z)=>world.terrain.heightAt(x,z),wagon:{x:p.x,y:world.terrain.heightAt(p.x,p.z),z:p.z},shadows:world.shadows,mounted:true});await horse.ready;horse.play('Horse_Gallop');horseRoot=horse.root;
   if(aura){await aura.bind(horseRoot);aura.update({actionId:visit,charging:true,chargeProgress:.6,level:2});}readyRaw();scene.render();}
  const loaded={visit,map:world.mapId,meshes:scene.meshes.length,geos:scene.geometries.length,...mb()};
  const refs={visit,map:world.mapId,prepared:new WeakRef(world.villagePrepared),visibility:new WeakRef(world.villageVisibility),streaming:new WeakRef(world.villageStreaming),owner:new WeakRef(world.villageLoadOwner),root:new WeakRef(world.villagePrepared.records[0].root),ground:new WeakRef(world.ground),navigation:new WeakRef(world.navigation),grid:new WeakRef(world.navigation.grids.values().next().value),...(horseRoot?{horse:new WeakRef(horseRoot)}:{})};weak.push(refs);
+ if(world.nextMapPrefetch&&visit<rounds*2-1){
+  // Walk up to the road to the next map, let the staging finish, then travel.
+  const next=visit%2?'warrior-plains':'warrior-v3',portal=mapPortals(world.mapId).find(candidate=>candidate.destination===next);
+  stageClock+=1000;world.nextMapPrefetch.update(1,{x:portal.x,z:portal.z},false);
+  for(let i=0;i<4000&&world.nextMapPrefetch.inspect().active;i++)await tick();
+  const report=world.nextMapPrefetch.inspect();say('staged for',next,report.stagedModels,'models',report.recent.at(-1)?.state,report.recent.at(-1)?.error??'');
+  world.nextMapPrefetch.travel(next);
+ }
  await world.releaseEnvironment();await tick();await tick();
  loaded.released=mb();loaded.survivors=weak.map(r=>r.visit+':'+['prepared','visibility','streaming','owner','root','ground','navigation','grid','horse'].filter(k=>r[k]?.deref()).join(','));log.push(loaded);say(JSON.stringify(loaded));
 }
 if(snapshot){globalThis.__probeTargets=weak.slice(0,-1).map(r=>r[process.env.PROBE_TARGET??'prepared']?.deref()).filter(Boolean);say('targets',globalThis.__probeTargets.length);for(const t of globalThis.__probeTargets)t.__LEAK_PROBE_MARK__='leak-probe-mark';globalThis.__probeTargets=null;globalThis.gc();say('snapshot',v8.writeHeapSnapshot(snapshot));}
+if(world.nextMapPrefetch){world.nextMapPrefetch.cancel();await tick();globalThis.gc();await tick();globalThis.gc();say('staged containers ever',stagedWeak.length,'still alive after the last release',stagedWeak.filter(ref=>ref.deref()).length,'(the last map was released; none should remain)');}
 engine.dispose();

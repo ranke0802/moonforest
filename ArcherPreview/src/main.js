@@ -1524,7 +1524,7 @@ try {
       boss.hide();releaseNpcInteriorInkResources(world.scene);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;meleeAim?.reset();lungeState.id=null;lungeState.foe=null;strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
-      world.nextMapPrefetch?.cancel();world.cancelResourceDownloads?.();
+      world.nextMapPrefetch?.travel(new URL(href,location.href).searchParams.get('character'));world.cancelResourceDownloads?.();
       prepareFixedLayouts(fixedLayoutsForCharacter(new URL(href,location.href).searchParams.get('character'))).catch(()=>{});
     },
     release:async()=>{await boss.trimDormantModels();await world.releaseEnvironment?.();world.releaseResourceDownloads?.();},
@@ -1577,10 +1577,10 @@ try {
         const safe=safeRoadArrival(world,position,Math.max(.64,playerDimensions(actor).moveRadius),movementLimit);
         return {...safe,y:world.terrain.heightAt(safe.x,safe.z)};
       }))syncCameraFocus(0,{snap:true});
-      loadingView.reveal(mapLoadingGeneration);showMinimap();
+      loadingView.reveal(mapLoadingGeneration);showMinimap();world.nextMapPrefetch?.arrived();
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
-    onError:error=>{travelResume=false;loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
+    onError:error=>{travelResume=false;loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.nextMapPrefetch?.cancel();world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},
   });
   minimapTravel=setupMinimapTravel({element:$('#dot-minimap'),root:$('#app'),
     getState:()=>({character,ready:ready&&!loadingAsset&&!mapTransition?.busy,loading:boss.loading,busy:mapTransition?.failed||frameLoop?.failed||frameLoop?.loadingFailed,dead:controller?.dead||boss.playerHp<=0,captured:controller?.captured||controller?.groggy,healing:boss.potions.active,enemies:travelCombatCount()}),

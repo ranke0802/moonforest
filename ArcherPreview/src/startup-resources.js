@@ -32,8 +32,14 @@ async function prepareDownloads(world,base,sizes,resources,plan,onProgress,onStr
   world.cancelResourceDownloads=cancel;
   world.releaseResourceDownloads=release;
   const progress=callback=>state=>{try{check();if(!released)callback?.(state);}catch{/* Old traffic cannot report into a new foreground load. */}};
-  let state;try{state=await lifetime.run(()=>downloads.prepare(resources,progress(onProgress)));check();}catch(error){release();throw error;}
-  if(state.complete&&state.storageAvailable)for(const path of resources)preparedUrls.add(resourceUrl(path,base));
+  // 0.3: files the next-map prefetch stored a moment ago in this document are not
+  // looked up again (S23 2026-11-27: one listing of the cache took 2.4 s). A file
+  // lost since then is fetched by the model loader's normal cache/network read.
+  const verified=world.nextMapPrefetch?.verifiedUrls?.(world.mapId)??null;let checked=resources;
+  if(verified){checked=[];for(const path of resources){const url=resourceUrl(path,base);if(verified.has(url))preparedUrls.add(url);else checked.push(path);}}
+  let state;try{state=await lifetime.run(()=>downloads.prepare(checked,progress(onProgress)));check();}catch(error){release();throw error;}
+  if(state.complete&&state.storageAvailable)for(const path of checked)preparedUrls.add(resourceUrl(path,base));
+  downloads.stats.prefetchVerifiedFiles=resources.length-checked.length;
   downloads.stats.initialPrefetchReusedFiles=0;
   world.prefetchResources=(requested,{initial=false}={})=>lifetime.run(()=>{
     check();
