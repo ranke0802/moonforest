@@ -21,7 +21,7 @@ import {applyVillageGround} from './village-ground.js';
 import {prepareVillageInstancing} from './village-instancing.js';
 import {VillageActiveCandidates,candidateGuardFromLocation} from './village-active-candidates.js';
 import {VillageWorkBudget} from './village-work-budget.js';
-import {createMapMaterialPreparation,prepareMapMaterials,retainMapEffect} from './map-shader-cache.js';
+import {createMapMaterialPreparation,prepareMapMaterials,retainMapEffect,INITIAL_PREPARATION_MS,INITIAL_PREPARATION_TIMEOUT_MS} from './map-shader-cache.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {MapLoadLifetime,mapLoadAbortError,MAP_MODEL_TIMEOUT_MS,mapLoadSnapshot,checkMapLoadSnapshot,stacklessError} from './map-load-lifetime.js';
 import {runtimeTimers} from './runtime-timers.js';
@@ -77,8 +77,7 @@ export function sceneryManifestFor(world,original){
     world.gameplayV03&&world.plains?{...original,assets:{...original.assets,...plainsGateAssets}}:original;
 }
 
-// First load of a map (0.3): work per slice before yielding a task, and the whole load's limit.
-export const INITIAL_PREPARATION_MS=8,INITIAL_PREPARATION_TIMEOUT_MS=600000;
+export {INITIAL_PREPARATION_MS,INITIAL_PREPARATION_TIMEOUT_MS};
 export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timers}={}){
   if(world.villagePrepared)return world.villagePrepared;
   const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers,stage:'map-plan'});const snapshot=mapLoadSnapshot(world);

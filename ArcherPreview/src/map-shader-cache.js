@@ -21,6 +21,12 @@ export function createMapMaterialPreparation(scene,{cancelled=()=>false,now,wait
   return createBossPreparation({scene,now,frame:wait,maxBlocks:256,isCurrent:()=>!cancelled()&&!scene?.isDisposed,...(budgetMs>0?{budgetMs}:null),...(timeoutMs>0?{timeoutMs}:null)});
 }
 
+// First load of a map (0.3): the map is behind its loading screen and no frame is drawn, so
+// checks share slices of INITIAL_PREPARATION_MS and yield a task, not a frame; one preparation
+// spans the whole load (see village-streamed-environment.js for the measurement).
+export const INITIAL_PREPARATION_MS=8,INITIAL_PREPARATION_TIMEOUT_MS=600000;
+export const createInitialMapPreparation=(scene,{cancelled}={})=>createMapMaterialPreparation(scene,{cancelled,budgetMs:INITIAL_PREPARATION_MS,timeoutMs:INITIAL_PREPARATION_TIMEOUT_MS,wait:()=>new Promise(resolve=>setTimeout(resolve,0))});
+
 // Warm the actual instanced submesh variant. Material.forceCompilationAsync
 // creates temporary PBR submeshes, and warms ShaderMaterial without INSTANCES;
 // neither guarantees the first real draw is ready.

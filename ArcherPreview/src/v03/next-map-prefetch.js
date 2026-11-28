@@ -118,7 +118,7 @@ export async function nextMapResources(world,portal,base,{signal,pause=nextTask}
 export function createNextMapPrefetch({world,base,now=()=>performance.now(),resources=nextMapResources,allowed=prefetchAllowed,loadContainer=loadMapContainer,pause=nextTask,
   stageBytes=stageBudget(globalThis.location?.search,world.touchDevice),quietMs=quietBudget(globalThis.location?.search),
   downloads=(sizes,root,index)=>new ResourceDownloads(sizes,root,{index,adaptiveCacheKeys:true})}={}){
-  const done=new Set(),retried=new Set(),last=[],away=[],history=[],stats={runs:0,skipped:0,cancelled:0,failed:0,completed:0,staged:0,taken:0,dropped:0,quietTravels:0,quietArrivals:0,quietCurtains:0};
+  const done=new Set(),retried=new Set(),last=[],closing=[],away=[],history=[],stats={runs:0,skipped:0,cancelled:0,failed:0,completed:0,staged:0,taken:0,dropped:0,quietTravels:0,quietArrivals:0,quietCurtains:0};
   // key (model URL) -> {container,bytes}; all for one destination.
   const staged=new Map();
   let visit=null,portals=[],elapsed=PREFETCH_CHECK_SECONDS,job=null,retryAt=-Infinity,disposed=false;
@@ -167,9 +167,9 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     if(stagedFor&&mapForCharacter(stagedFor)!==mapId)drop();
     // arrived() shortens this; without it they still cannot outlive the idle limit.
     else if(staged.size)dropAt=Math.min(dropAt,now()+STAGE_IDLE_MS);
-    done.clear();retried.clear();visit=mapId;portals=mapPortals(mapId);last.length=away.length=portals.length;
+    done.clear();retried.clear();visit=mapId;portals=mapPortals(mapId);last.length=closing.length=away.length=portals.length;
     for(let i=0;i<portals.length;i++){
-      last[i]=NaN;
+      last[i]=NaN;closing[i]=NaN;
       // The road back: its map's files were in use until a moment ago.
       away[i]=!(previous&&mapForCharacter(portals[i].destination)===previous);
     }
@@ -214,13 +214,20 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
       if(world.mapId!==visit)enter(world.mapId);
       if(staged.size&&now()>=dropAt)trim();
       if(!position)return;
+      // Every road is measured before any decision: the choice between two roads
+      // must not read one of them a check late (Astra 2026-11-28).
       for(let i=0;i<portals.length;i++){
-        const portal=portals[i],distance=Math.hypot(position.x-portal.x,position.z-portal.z),closing=last[i]-distance;last[i]=distance;
+        const portal=portals[i],distance=Math.hypot(position.x-portal.x,position.z-portal.z);
+        closing[i]=last[i]-distance;last[i]=distance;
         if(distance>PREFETCH_APPROACH)away[i]=true;
         // Still by the road the containers were staged for: keep them.
         else if(staged.size&&portal.destination===stagedFor)dropAt=now()+STAGE_IDLE_MS;
-        if(busy||!away[i]||done.has(portal.destination)||globalThis.document?.hidden||now()<retryAt)continue;
-        if(!(distance<PREFETCH_NEAR||(distance<PREFETCH_APPROACH&&closing>=PREFETCH_CLOSING)))continue;
+      }
+      if(busy||globalThis.document?.hidden||now()<retryAt)return;
+      for(let i=0;i<portals.length;i++){
+        const portal=portals[i],distance=last[i];
+        if(!away[i]||done.has(portal.destination))continue;
+        if(!(distance<PREFETCH_NEAR||(distance<PREFETCH_APPROACH&&closing[i]>=PREFETCH_CLOSING)))continue;
         if(job){
           // Work for a road the player has since left must not hold up this one
           // (Astra 2026-11-28: a cave run kept the plains road from being staged).

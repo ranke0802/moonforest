@@ -15,7 +15,7 @@ import {VillageVisibility,cellKey} from './village-visibility.js';
 import {VillageOutlines} from './village-outlines.js';
 import {initializeVillageKtx2} from './village-ktx2.js';
 import {initializeVillageMeshopt} from './village-meshopt.js';
-import {prepareMapMaterials} from './map-shader-cache.js';
+import {prepareMapMaterials,createInitialMapPreparation} from './map-shader-cache.js';
 import {villageObstacles} from './village-layout-base.js';
 import {laboratoryLegacySource} from './cave-laboratory-geometry.js';
 import {GRID_DIRECTIONS,linksOf,setLinks} from './navigation.js';
@@ -118,6 +118,17 @@ export class AuthoredPlacementRuntime {
  }
  _current(generation=this.generation){return !this.disposed&&generation===this.generation&&!this.scene.isDisposed&&this.world.scene===this.scene&&this.world.mapId===this.mapId&&this.world.ground===this.ground;}
  _check(generation){if(!this._current(generation))throw mapLoadAbortError();}
+ // 0.3: while the map is still behind its loading screen (its scenery streaming not yet
+ // switched on) every placement model shares one preparation with long slices, as the
+ // scenery's first load does. The shipped plains layout took 1.1-1.8 s here with each
+ // model waiting on its own frame-paced preparation (Astra 2026-11-28). In play: undefined,
+ // and each load keeps the frame rule. Holds a generation number, no map object.
+ _loadPreparation(generation){
+  const world=this.world;
+  if(!world.gameplayV03||!world.villageStreaming||world.villageStreaming.active){this._initialPreparation=null;return undefined;}
+  if(this._initialPreparation?.generation!==generation)this._initialPreparation={generation,job:createInitialMapPreparation(this.scene,{cancelled:()=>!this._current(generation)})};
+  return this._initialPreparation.job;
+ }
  _baseRecord(id){return this.world.villageRenderRecords?.find(record=>record.placement.id===id);}
  _baseFacing(id){const record=this._baseRecord(id);if(!record?.root||record.root.isDisposed())throw new Error('기존 소품을 준비하고 있어요. 잠시 뒤 다시 선택해 주세요.');return record.facing??record.root.getChildren().find(node=>node.name===record.root.name+'-front')??record.root;}
  _baseVisualFrame(id){return this._baseFacing(id).computeWorldMatrix(true);}
@@ -202,9 +213,9 @@ export class AuthoredPlacementRuntime {
      mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:this.world.cave,assetId:entry.catalog.assetId,category:entry.config.category,level,r2Geometry:entry.config.r2Geometry,approvedVillageExterior:entry.config.approvedVillageExterior});
      this.world.caveAtmosphere?.attachMaterial(mesh.material);this.world.caveFog?.attach(mesh.material);
     }
-    this.world.lighting?.registerMeshes(meshes);await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled:()=>entry.disposed||!this._current(generation)}));
+    this.world.lighting?.registerMeshes(meshes);const preparation=this._loadPreparation(generation);await lifetime.run(()=>prepareMapMaterials(meshes,{cancelled:()=>entry.disposed||!this._current(generation),preparation}));
     this._check(generation);lifetime.check();entry.containers.add(container);installVillageGeometry(entry,container,level,this.world);this.stats.sourceLoads++;container=null;
-    if(this.outlines){for(const source of this._sources(entry))this.outlines.sourceFor(source);await this.outlines.prepare(this._sources(entry),{cancelled:()=>entry.disposed||!this._current(generation)});}
+    if(this.outlines){for(const source of this._sources(entry))this.outlines.sourceFor(source);await this.outlines.prepare(this._sources(entry),{cancelled:()=>entry.disposed||!this._current(generation),preparation});}
     if(this.records.size){for(const record of this.records.values())if(record.entry===entry)this._setTransform(record,record.instance);this._rebuildVisibility();}
    }catch(error){container?.dispose();throw error;}
    finally{lifetime.close();this.lifetimes.delete(lifetime);entry.loads.delete(level);}

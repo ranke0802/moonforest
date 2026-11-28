@@ -234,6 +234,23 @@ test('work for a road the player has left gives way to the road being approached
   const report=h.prefetch.inspect();assert.equal(report.active,'warrior-v4');assert.notEqual(report.stagedFor,'warrior-v3');
 });
 
+test('the road being left is measured in the same check as the road approached, whichever comes first in the list',async()=>{
+  // Forest: the plains road is listed before the cave portal. A run for the cave is under way
+  // and the player crosses out of its approach distance in the very check that the plains road
+  // comes into reach, then stands still.
+  const h=harness({mapId:'monster-forest',models:[MODEL(0),MODEL(1)],stageBytes:ONE*20,holdFrom:1});
+  const [plains,cave]=mapPortals('monster-forest');
+  h.step({x:cave.x,z:cave.z+PREFETCH_NEAR-2});await h.settle();h.queues[0].finish();await h.settle();
+  assert.equal(h.prefetch.inspect().active,'warrior-v5');
+  const dx=plains.x-cave.x,dz=plains.z-cave.z,length=Math.hypot(dx,dz),at=d=>({x:cave.x+dx/length*d,z:cave.z+dz/length*d});
+  assert.ok(length-PREFETCH_APPROACH-1<PREFETCH_APPROACH,'both roads can be within reach of one spot');
+  h.step(at(PREFETCH_APPROACH-1));await h.settle();
+  assert.equal(h.prefetch.inspect().active,'warrior-v5','still near the cave');
+  h.step(at(PREFETCH_APPROACH+1.5));await h.settle();
+  assert.equal(h.prefetch.inspect().active,'warrior-plains','given way in this check, not the next');
+  h.step(at(PREFETCH_APPROACH+1.5));await h.settle();assert.equal(h.prefetch.inspect().active,'warrior-plains');
+});
+
 // ---- travel without the loading screen ---------------------------------------
 test('a road crossed in play with its map staged may go without the loading screen; anything else shows it at once',async()=>{
   const road={boundary:{to:'warrior-plains'}};
@@ -357,6 +374,21 @@ test('a map\'s first load shares one preparation with long slices; streaming dur
   assert.match(loader,/const initialPreparation=world\.gameplayV03\?createMapMaterialPreparation\(world\.scene,\{cancelled:\(\)=>disposed,budgetMs:INITIAL_PREPARATION_MS,timeoutMs:INITIAL_PREPARATION_TIMEOUT_MS,/);
   assert.match(loader,/if\(initializing&&initialPreparation\)materialOptions\.preparation=initialPreparation;/,'only while the map first loads');
   assert.equal(loader.split('createMapMaterialPreparation(').length-1,1,'no per-model preparation is made for the first load');
+});
+
+test('shipped placements loaded behind the loading screen share one long-slice preparation; in play each load keeps the frame rule',async()=>{
+  const source=readFileSync(new URL('../src/authored-placement-runtime.js',import.meta.url),'utf8');
+  const method=source.match(/\n _loadPreparation\(generation\)\{[\s\S]*?\n \}\n/)?.[0];assert.ok(method,'the runtime decides per load');
+  const {createInitialMapPreparation}=await import('../src/map-shader-cache.js');
+  const make=new Function('createInitialMapPreparation','return ({'+method.trim().replace(/^_loadPreparation/,'_loadPreparation')+'});')(createInitialMapPreparation);
+  const runtime={...make,generation:3,scene:null,_current(generation){return generation===this.generation;},world:{gameplayV03:true,villageStreaming:{active:false}}};
+  const first=runtime._loadPreparation(3);
+  assert.ok(first&&typeof first.pause==='function');assert.equal(runtime._loadPreparation(3),first,'one preparation for every model of this load');
+  runtime.generation=4;const next=runtime._loadPreparation(4);assert.notEqual(next,first,'a new map load gets its own');
+  runtime.world.villageStreaming.active=true;assert.equal(runtime._loadPreparation(4),undefined,'in play: the frame rule');assert.equal(runtime._initialPreparation,null);
+  runtime.world.villageStreaming.active=false;runtime.world.gameplayV03=false;assert.equal(runtime._loadPreparation(4),undefined,'0.2 unchanged');
+  assert.match(source,/const preparation=this\._loadPreparation\(generation\);await lifetime\.run\(\(\)=>prepareMapMaterials\(meshes,\{cancelled:\(\)=>entry\.disposed\|\|!this\._current\(generation\),preparation\}\)\);/);
+  assert.match(source,/this\.outlines\.prepare\(this\._sources\(entry\),\{cancelled:\(\)=>entry\.disposed\|\|!this\._current\(generation\),preparation\}\);/);
 });
 
 test('main connects the prefetch behind the 0.3 edition; travel keeps staged models, reload and failure drop them',()=>{
