@@ -1,6 +1,7 @@
 // Tiếng Việt. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'graphicsRecovery.title':'Đang khôi phục đồ họa','graphicsRecovery.waiting':'Kết nối đồ họa tạm thời bị gián đoạn. Trò chơi sẽ tạm dừng cho đến khi khôi phục.','graphicsRecovery.failed':'Không thể khôi phục đồ họa','graphicsRecovery.retryBody':'Hãy tải lại để thử lại. Tiến trình đã lưu và các tệp trò chơi đã tải xuống sẽ được giữ lại.','graphicsRecovery.reload':'Tải lại',
   'potion.slots':'Ô thuốc','potion.slot':'Ô {n}','potion.empty':'Ô trống','potion.choose':'Chọn thuốc mặc định cho ô 1','potion.remove':'Gỡ khỏi ô','potion.gesture':'Chạm để dùng. Nhấn giữ để chọn thuốc.',
   'char.skill.greatAttack':'Trọng kích tinh quang',
   'char.skillText.greatAttack':'Giữ nút đánh để tụ ánh sao trên lưỡi kiếm, sau 3 giây sẽ đầy. Thả nút để lao tới mục tiêu và đánh ba lần vào vùng xung quanh. Nếu không có mục tiêu, đòn đánh giáng thẳng về phía trước. Mỗi đòn gây từ 100% đến {percent}% sát thương của đòn đánh mạnh cơ bản tùy mức tụ lực. Bán kính đạt {percent}% bán kính cơ bản. Vẫn nhận sát thương khi tụ lực. Bị đánh ngã hoặc bị tóm sẽ hủy chiêu.',

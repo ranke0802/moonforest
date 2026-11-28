@@ -1,6 +1,7 @@
 // 简体中文. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'graphicsRecovery.title':'正在恢复画面','graphicsRecovery.waiting':'图形连接暂时中断。游戏将暂停，直至画面恢复。','graphicsRecovery.failed':'无法恢复画面','graphicsRecovery.retryBody':'请重新加载后重试。已保存的进度和已下载的游戏文件将保留。','graphicsRecovery.reload':'重新加载',
   'potion.slots':'药水栏','potion.slot':'栏位 {n}','potion.empty':'空栏位','potion.choose':'选择第 1 栏的默认药水','potion.remove':'取消登记','potion.gesture':'轻点使用，长按选择药水。',
   'char.skill.greatAttack':'星辉重击',
   'char.skillText.greatAttack':'按住攻击将星光汇聚于剑刃，3秒蓄满。松开后冲向目标，对其周围造成三连击。没有目标时向正前方劈下。每一击的伤害随蓄力从普通重击的 100% 提升至最高 {percent}%。范围半径为基础半径的 {percent}%。蓄力时仍会受伤，倒地或被抓会中断蓄力。',

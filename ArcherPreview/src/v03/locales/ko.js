@@ -3,6 +3,7 @@
 import {particle} from '../korean.js';
 export default {
  ui:{
+  'graphicsRecovery.title':'화면을 복구하고 있습니다','graphicsRecovery.waiting':'그래픽 연결이 일시적으로 끊겼습니다. 복구하는 동안 게임을 멈춥니다.','graphicsRecovery.failed':'화면을 복구하지 못했습니다','graphicsRecovery.retryBody':'다시 불러오기를 눌러 주세요. 브라우저에 저장된 진행과 리소스는 지우지 않습니다.','graphicsRecovery.reload':'다시 불러오기',
   'potion.slots':'물약 슬롯','potion.slot':'{n}번 슬롯','potion.empty':'빈 슬롯','potion.choose':'1번 슬롯에 둘 기본 물약','potion.remove':'등록 해제','potion.gesture':'짧게 눌러 사용하고 길게 눌러 물약을 선택합니다.',
   'char.skill.greatAttack':'별빛 강타',
   'char.skillText.greatAttack':'공격을 길게 누르면 3초에 검의 별빛이 가득 찬다. 손을 떼면 대상에게 달려들어 주변을 세 번 타격한다. 대상이 없으면 정면을 내려찍는다. 차징량에 따라 각 타의 피해가 기본 강공격의 100%에서 최대 {percent}%까지 오른다. 범위 반경은 {percent}%. 차징 중에도 피해를 받으며 넘어지거나 붙잡히면 취소된다.',

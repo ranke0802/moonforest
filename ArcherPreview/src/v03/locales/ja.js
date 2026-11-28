@@ -1,6 +1,7 @@
 // 日本語. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'graphicsRecovery.title':'画面を復旧しています','graphicsRecovery.waiting':'グラフィックの接続が一時的に切れました。復旧するまでゲームを一時停止します。','graphicsRecovery.failed':'画面を復旧できませんでした','graphicsRecovery.retryBody':'再読み込みしてください。保存データとダウンロード済みのゲームファイルは保持されます。','graphicsRecovery.reload':'再読み込み',
   'potion.slots':'ポーションスロット','potion.slot':'スロット{n}','potion.empty':'空きスロット','potion.choose':'スロット1のポーションを選択','potion.remove':'登録を解除','potion.gesture':'タップで使用、長押しでポーションを選択します。',
   'char.skill.greatAttack':'星光強撃',
   'char.skillText.greatAttack':'攻撃を長押しすると剣に星の光が集まり、3秒で最大になる。離すと標的に踏み込み、周囲に3連撃を放つ。標的がいなければ正面に振り下ろす。各打撃の威力は溜め具合に応じて通常の強攻撃の100%から最大{percent}%まで上がる。効果半径は{percent}%。溜め中もダメージを受け、転倒や拘束で中断する。',

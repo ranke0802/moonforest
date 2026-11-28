@@ -78,6 +78,7 @@ import { equipmentStats, equipmentLabel } from './equipment-stats.js';
 import { initializeResourceCache, migrateCachedGlb } from './resource-cache.js';
 import {createLoadingView} from './loading-view.js';
 import {createContextRecovery,createContextRecoveryNotice} from './context-recovery.js';
+import {villageContextRestoreError} from './village-instancing.js';
 import {prepareStartupResources,prepareMapResources} from './startup-resources.js';
 import {createMapResourceInspector} from './map-resource-inspector.js';
 import {inspectContentRuntimeBudget} from './content-runtime-budget.js';
@@ -1628,9 +1629,10 @@ try {
   const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!minimapTravel?.isOpen()&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
-  if(versionRoute.release==='moonforest-0.2'){
-    const notice=createContextRecoveryNotice(document);let inputWasSuspended=false;
+  if(versionRoute.release==='moonforest-0.2'||world.gameplayV03){
+    const notice=createContextRecoveryNotice(document,world.gameplayV03?{translate:t}:undefined);let inputWasSuspended=false;
     contextRecovery=createContextRecovery(engine,{
+      restoreReady:world.gameplayV03?()=>!engine._contextWasLost&&!engine._gl?.isContextLost?.()&&villageContextRestoreError(world.scene)===null:null,
       onLost:()=>{inputWasSuspended=input.suspended===true;input.setSuspended(true);cancelAttackInput();frameDiagnostics.suspend();notice.show();syncPlayback();},
       onRestored:()=>{const toolRecovery=world.toolRecovery;world.toolRecovery=null;const toolRestored=toolRecovery?.recover()===true;if(!toolRestored)input.setSuspended((!toolRecovery&&inputWasSuspended)||cinematicAuthoringPreview||!!world.gameExited);notice.hide();restorePlayback();},
       onTimeout:()=>{input.setSuspended(true);syncPlayback();notice.fail();},

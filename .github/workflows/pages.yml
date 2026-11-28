@@ -43,6 +43,7 @@ jobs:
           ArcherPreview/tests/v03-adaptive-shadow-warmup.test.js
           ArcherPreview/tests/village-outline-render.test.js
           ArcherPreview/tests/village-instance-attributes.test.js
+          ArcherPreview/tests/village-context-restore.test.js
           ArcherPreview/tests/village-occlusion-query-draws.test.js
           ArcherPreview/tests/village-stream-retry.test.js
           ArcherPreview/tests/v03-chapter-wildlife.test.js
@@ -51,6 +52,9 @@ jobs:
           ArcherPreview/tests/actor-encounter-adapter.test.js
           ArcherPreview/tests/resource-downloads.test.js
           ArcherPreview/tests/v03-talk-stage-trail.test.js
+          ArcherPreview/tests/v03-dialog-1128.test.js
+          ArcherPreview/tests/v03-opening-final-line.test.js
+          ArcherPreview/tests/v03-audio-liveness.test.js
           ArcherPreview/tests/shader-birth-watch.test.js
           ArcherPreview/tests/v03-gallery.test.js
           ArcherPreview/tests/v03-quest-settlement.test.js

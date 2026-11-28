@@ -1,6 +1,7 @@
 // English. Keys mirror ko.js (ui) and data/chapter1.js (story ids).
 export default {
  ui:{
+  'graphicsRecovery.title':'Restoring graphics','graphicsRecovery.waiting':'The graphics connection was interrupted. The game is paused while it recovers.','graphicsRecovery.failed':'Graphics could not be restored','graphicsRecovery.retryBody':'Reload to try again. Your saved progress and downloaded game files will be kept.','graphicsRecovery.reload':'Reload',
   'potion.slots':'Potion slots','potion.slot':'Slot {n}','potion.empty':'Empty slot','potion.choose':'Choose a potion for slot 1','potion.remove':'Remove from slot','potion.gesture':'Tap to use. Hold to choose a potion.',
   'char.skill.greatAttack':'Starfall Strike',
   'char.skillText.greatAttack':'Hold attack to gather starlight. The blade reaches full charge in 3 seconds. Release to rush the target and hit the area three times, or strike straight ahead without a target. Charge scales each hit from 100% to {percent}% of normal heavy attack damage. Radius is {percent}% of the base radius. You still take damage while charging. Knockdown or capture cancels the charge.',

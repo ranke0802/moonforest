@@ -71,5 +71,5 @@ test('entry no-response deadline is bounded; successful or late module entry rem
  const success=startup();success.window.__moonforestStartup.entered();assert.equal(success.timers.size,0);assert.equal(success.window.__moonforestStartup,undefined);
 });
 test('main integrates recovery without unpausing settings/death or changing 0.1 restore behavior',()=>{
- const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');assert.match(main,/if\(versionRoute.release==='moonforest-0.2'\)\{/);assert.match(main,/paused=document.hidden\|\|settingsOpen\|\|deathScreen.isOpen\(\)[^;]+contextRecovery\?\.blocked===true/);assert.match(main,/function render\(dt\) \{\s*if\(contextRecovery\?\.blocked\)return;/);assert.match(main,/else engine.onContextRestoredObservable.add/);
+ const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');assert.match(main,/if\(versionRoute.release==='moonforest-0.2'\|\|world.gameplayV03\)\{/);assert.match(main,/restoreReady:world.gameplayV03\?[^,]+villageContextRestoreError\(world.scene\)===null:null/);assert.match(main,/paused=document.hidden\|\|settingsOpen\|\|deathScreen.isOpen\(\)[^;]+contextRecovery\?\.blocked===true/);assert.match(main,/function render\(dt\) \{\s*if\(contextRecovery\?\.blocked\)return;/);assert.match(main,/else engine.onContextRestoredObservable.add/);
 });
