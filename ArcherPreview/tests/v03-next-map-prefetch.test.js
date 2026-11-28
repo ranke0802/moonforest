@@ -8,7 +8,7 @@ globalThis.matchMedia??=()=>({matches:true});
  globalThis.OffscreenCanvas??=class{constructor(w,h){this.width=w;this.height=h;}getContext(){return ctx;}};}
 
 const {arrivalSceneryPlan,planResources,ARRIVAL_PLAN_SLICE}=await import('../src/v03/next-map-plan.js');
-const {createNextMapPrefetch,nextMapResources,stageBudget,STAGE_BYTES_TOUCH,STAGE_BYTES_DESKTOP,PREFETCH_NEAR,PREFETCH_APPROACH,PREFETCH_CHECK_SECONDS,PREFETCH_RETRY_MS,STAGE_LINGER_MS,STAGE_IDLE_MS,STAGE_DROP_PER_CHECK}=await import('../src/v03/next-map-prefetch.js');
+const {createNextMapPrefetch,nextMapResources,stageBudget,quietBudget,QUIET_TRAVEL_MS,STAGE_BYTES_TOUCH,STAGE_BYTES_DESKTOP,PREFETCH_NEAR,PREFETCH_APPROACH,PREFETCH_CHECK_SECONDS,PREFETCH_RETRY_MS,STAGE_LINGER_MS,STAGE_IDLE_MS,STAGE_DROP_PER_CHECK}=await import('../src/v03/next-map-prefetch.js');
 const {VILLAGE_LOD_COVERAGE}=await import('../src/village-lod.js');
 const {MAP_PORTALS,mapPortals,mapForCharacter}=await import('../src/map-route.js');
 
@@ -65,7 +65,7 @@ test('arrival plan: unknown screen size asks for the coarsest level only; cave s
 const MODEL=n=>`https://prefetch.test/assets/content/${String(n).padStart(64,'0')}.gltf`;
 function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null}={}){
   let clock=0;const calls=[],queues=[],containers=[],lost=[];
-  const world={mapId,gameplayV03:true,scene:{onDisposeObservable:{addOnce:fn=>fn,remove(){}},getEngine:()=>({onContextLostObservable:{add:fn=>{lost.push(fn);return fn;},remove(){}}})}};
+  const world={mapId,gameplayV03:true,v03:{playing:true,story:{sceneActive:false}},scene:{onDisposeObservable:{addOnce:fn=>fn,remove(){}},getEngine:()=>({onContextLostObservable:{add:fn=>{lost.push(fn);return fn;},remove(){}}})}};
   // Each staged model carries one 1024x1024 texture at 8 bits a pixel with mips.
   const loadContainer=async(model,scene,{signal})=>{await null;if(signal.aborted)throw signal.reason;
     // From this model on the read never finishes by itself; only an abort ends it.
@@ -234,6 +234,45 @@ test('work for a road the player has left gives way to the road being approached
   const report=h.prefetch.inspect();assert.equal(report.active,'warrior-v4');assert.notEqual(report.stagedFor,'warrior-v3');
 });
 
+// ---- travel without the loading screen ---------------------------------------
+test('a road crossed in play with its map staged may go without the loading screen; anything else shows it at once',async()=>{
+  const road={boundary:{to:'warrior-plains'}};
+  const h=await stagedHarness(2);
+  assert.equal(h.prefetch.quietFor('warrior-plains',{minimap:true,playerTravelFrom:'warrior-v3'}),0,'the minimap is not a road walked across');
+  assert.equal(h.prefetch.quietFor('warrior-v4',{boundary:{to:'warrior-v4'}}),0,'nothing staged for that map');
+  h.world.v03.story.sceneActive=true;assert.equal(h.prefetch.quietFor('warrior-plains',road),0,'a story scene keeps its screen');h.world.v03.story.sceneActive=false;
+  h.world.v03.playing=false;assert.equal(h.prefetch.quietFor('warrior-plains',road),0);h.world.v03.playing=true;
+  assert.equal(h.prefetch.quietActive,false);
+  assert.equal(h.prefetch.quietFor('warrior-plains',road),QUIET_TRAVEL_MS);assert.equal(h.prefetch.quietActive,true);
+  h.prefetch.travel('warrior-plains');h.prefetch.arrived(false);
+  assert.equal(h.prefetch.quietActive,false);
+  let report=h.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,1,0]);
+  const slow=await stagedHarness(2);slow.prefetch.quietFor('warrior-plains',road);slow.prefetch.travel('warrior-plains');slow.prefetch.arrived(true);
+  report=slow.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,0,1],'the screen came on after all');
+  const failed=await stagedHarness(2);failed.prefetch.quietFor('warrior-plains',road);failed.prefetch.cancel();assert.equal(failed.prefetch.quietActive,false);
+  const empty=harness();assert.equal(empty.prefetch.quietFor('warrior-plains',road),0,'not staged: the screen as before');
+  assert.equal(quietBudget(''),QUIET_TRAVEL_MS);assert.equal(quietBudget('?quiet=0'),0);assert.equal(quietBudget('?quiet=300'),300);assert.equal(quietBudget('?quiet=99999'),5000);assert.equal(quietBudget('?quiet=x'),QUIET_TRAVEL_MS);
+});
+
+test('the loading screen can be held back: a short load never shows it, a long one shows it from then on, a failure at once',async()=>{
+  const {parseHTML}=await import('linkedom'),{createLoadingView}=await import('../src/loading-view.js');
+  const {document}=parseHTML(readFileSync(new URL('../moonforest-0.3.html',import.meta.url),'utf8')),view=createLoadingView(document,{clipboard:null});
+  const overlay=document.getElementById('loading'),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  let generation=view.begin('warrior-plains');
+  assert.equal(overlay.hidden,false);assert.equal(view.shown,true,'as before without the option');view.reveal(generation);assert.equal(overlay.hidden,true);
+  generation=view.begin('warrior-plains',{deferMs:40});
+  assert.equal(overlay.hidden,true);assert.equal(view.shown,false);assert.equal(document.documentElement.dataset.loading,undefined);
+  view.preparing(undefined,generation);assert.equal(overlay.hidden,true,'progress updates do not bring it on');
+  assert.equal(view.reveal(generation),true);await sleep(70);
+  assert.equal(overlay.hidden,true,'revealed in time: never shown');assert.equal(view.shown,false);
+  generation=view.begin('warrior-plains',{deferMs:20});await sleep(60);
+  assert.equal(overlay.hidden,false,'ran long: shown from then on');assert.equal(view.shown,true);assert.equal(document.documentElement.dataset.loading,'true');
+  view.reveal(generation);assert.equal(overlay.hidden,true);
+  generation=view.begin('warrior-plains',{deferMs:5000});view.fail('맵 이동을 완료하지 못했습니다','x',{error:new Error('x')});
+  assert.equal(overlay.hidden,false,'a failure is shown at once');assert.equal(view.shown,true);
+  view.begin('warrior-v3');assert.equal(overlay.hidden,false);
+});
+
 test('the staging budget is smaller on a phone and can be set or switched off from the address',()=>{
   assert.equal(stageBudget('',true),STAGE_BYTES_TOUCH);assert.equal(stageBudget('?character=warrior-v3',false),STAGE_BYTES_DESKTOP);
   assert.ok(STAGE_BYTES_TOUCH<STAGE_BYTES_DESKTOP);
@@ -324,7 +363,10 @@ test('main connects the prefetch behind the 0.3 edition; travel keeps staged mod
   const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
   assert.equal(main.split('world.nextMapPrefetch?.cancel();world.cancelResourceDownloads?.();').length-1,2,'full reload and transition error');
   assert.match(main,/world\.nextMapPrefetch\?\.travel\(new URL\(href,location\.href\)\.searchParams\.get\('character'\)\);world\.cancelResourceDownloads\?\.\(\);/);
-  assert.match(main,/loadingView\.reveal\(mapLoadingGeneration\);showMinimap\(\);world\.nextMapPrefetch\?\.arrived\(\);/);
+  assert.match(main,/loadingView\.reveal\(mapLoadingGeneration\);showMinimap\(\);world\.nextMapPrefetch\?\.arrived\(loadingView\.shown\);/);
+  assert.match(main,/const quiet=world\.nextMapPrefetch\?\.quietFor\?\.\(new URL\(href,location\.href\)\.searchParams\.get\('character'\),context\)\?\?0;/);
+  assert.match(main,/loadingView\.begin\(new URL\(href,location\.href\)\.searchParams\.get\('character'\),quiet\?\{deferMs:quiet\}:undefined\);/);
+  assert.match(main,/if\(!quiet\)input\.reset\(\);cancelAttackInput\(\);/,'a held stick keeps moving the player across the road');
   assert.match(main,/if\(world\.gameplayV03\)\(world\.nextMapPrefetch\?\?=createNextMapPrefetch\(\{world,base:/);
   assert.match(main,/nextMapPrefetch:world\?\.nextMapPrefetch\?\.inspect\(\)\?\?null/);
   const loader=readFileSync(new URL('../src/village-streamed-environment.js',import.meta.url),'utf8');

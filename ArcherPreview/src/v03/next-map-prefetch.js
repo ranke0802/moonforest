@@ -58,6 +58,13 @@ export function stageBudget(search,touch){
 // Unused containers go this long after arriving, or this long after the player
 // was last near the road without travelling.
 export const STAGE_LINGER_MS=12000,STAGE_IDLE_MS=45000;
+// A road crossed with its map staged shows no loading screen for this long; a change that
+// takes longer shows it from then on. `?quiet=<ms>` sets it for a test, `?quiet=0` turns it off.
+export const QUIET_TRAVEL_MS=1200;
+export function quietBudget(search){
+  const raw=new URLSearchParams(search??'').get('quiet'),ms=raw===null||raw===''?NaN:Number(raw);
+  return Number.isFinite(ms)&&ms>=0?Math.min(ms,5000):QUIET_TRAVEL_MS;
+}
 // Leftovers are let go during play, so only a few at each check (twice a second).
 export const STAGE_DROP_PER_CHECK=2;
 const CAMERA_REACH_LIMIT=24,HISTORY=4;
@@ -109,13 +116,13 @@ export async function nextMapResources(world,portal,base,{signal,pause=nextTask}
 }
 
 export function createNextMapPrefetch({world,base,now=()=>performance.now(),resources=nextMapResources,allowed=prefetchAllowed,loadContainer=loadMapContainer,pause=nextTask,
-  stageBytes=stageBudget(globalThis.location?.search,world.touchDevice),
+  stageBytes=stageBudget(globalThis.location?.search,world.touchDevice),quietMs=quietBudget(globalThis.location?.search),
   downloads=(sizes,root,index)=>new ResourceDownloads(sizes,root,{index,adaptiveCacheKeys:true})}={}){
-  const done=new Set(),retried=new Set(),last=[],away=[],history=[],stats={runs:0,skipped:0,cancelled:0,failed:0,completed:0,staged:0,taken:0,dropped:0};
+  const done=new Set(),retried=new Set(),last=[],away=[],history=[],stats={runs:0,skipped:0,cancelled:0,failed:0,completed:0,staged:0,taken:0,dropped:0,quietTravels:0,quietArrivals:0,quietCurtains:0};
   // key (model URL) -> {container,bytes}; all for one destination.
   const staged=new Map();
   let visit=null,portals=[],elapsed=PREFETCH_CHECK_SECONDS,job=null,retryAt=-Infinity,disposed=false;
-  let stagedFor=null,stagedBytes=0,dropAt=Infinity,verified=null;
+  let stagedFor=null,stagedBytes=0,dropAt=Infinity,verified=null,quiet=false;
   function stop(){
     if(!job)return;
     const current=job;job=null;current.controller.abort(released());current.downloads?.cancel();
@@ -132,7 +139,7 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     }
     stagedBytes=0;stagedFor=null;dropAt=Infinity;
   }
-  function cancel(){stop();drop();verified=null;}
+  function cancel(){stop();drop();verified=null;quiet=false;}
   const containerBytes=container=>{let bytes=0;for(const texture of container?.textures??[])bytes+=textureBytes(texture?.getInternalTexture?.()??texture);return bytes;};
   async function stage(current,models){
     const {record,controller}=current,signal=controller.signal;
@@ -223,10 +230,22 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
         start(portal,i);
       }
     },
+    // How long this travel may go without a loading screen; 0 = show it at once. Only a road
+    // walked across in play (not the minimap, a menu or a story scene) with models staged for it.
+    quietFor(destination,context){
+      quiet=quietMs>0&&!!world.v03?.playing&&!world.v03.story?.sceneActive&&context?.boundary?.to===destination&&stagedFor===destination&&staged.size>0;
+      if(quiet)stats.quietTravels++;
+      return quiet?quietMs:0;
+    },
+    get quietActive(){return quiet;},
     // Travel to `destination` begins: stop working, keep what is staged for it.
     travel(destination){stop();if(stagedFor!==destination)drop();else dropAt=Infinity;if(verified&&verified.destination!==destination)verified=null;},
     // The destination is up: the loader's streaming may still take a few more.
-    arrived(){verified=null;if(staged.size)dropAt=now()+STAGE_LINGER_MS;},
+    // screenShown: whether the loading screen came on during a quiet travel after all.
+    arrived(screenShown){
+      if(quiet){quiet=false;if(screenShown===true)stats.quietCurtains++;else stats.quietArrivals++;}
+      verified=null;if(staged.size)dropAt=now()+STAGE_LINGER_MS;
+    },
     // A staged container for this model URL, handed over for good; null if none.
     // Only the map they were staged for may take: the map being left also streams
     // models, some from the same URL, and must not empty the next map's stage
@@ -241,7 +260,7 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     verifiedUrls(mapId){return verified&&mapForCharacter(verified.destination)===mapId?verified.urls:null;},
     cancel,
     dispose(){if(disposed)return;disposed=true;cancel();done.clear();retried.clear();portals=[];world.scene?.onDisposeObservable?.remove(observer);engine?.onContextLostObservable?.remove(lost);},
-    inspect(){return {...stats,active:job?job.record.destination:null,stageLimit:stageBytes,stagedFor,stagedModels:staged.size,stagedBytes,recent:history.map(record=>({...record}))};},
+    inspect(){return {...stats,active:job?job.record.destination:null,quietLimitMs:quietMs,stageLimit:stageBytes,stagedFor,stagedModels:staged.size,stagedBytes,recent:history.map(record=>({...record}))};},
   };
   const observer=world.scene?.onDisposeObservable?.addOnce(()=>api.dispose());
   // A lost context takes the staged GPU objects with it; the map loads them the normal way.

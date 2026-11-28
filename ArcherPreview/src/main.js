@@ -1508,6 +1508,9 @@ try {
   let mapLoadingGeneration;
   mapTransition=createMapTransition({
     prepare:(href,context)=>{
+      // 0.3: a road crossed with the next map staged keeps the last frame up and brings the
+      // loading screen on only if the change runs long (v03/next-map-prefetch.js quietFor).
+      const quiet=world.nextMapPrefetch?.quietFor?.(new URL(href,location.href).searchParams.get('character'),context)??0;
       world.v03?.story?.cancelRaidWarning?.();
       world.v03?.resetGreatAttackFx?.();townServices?.clear();world.firstPerson?.exit();world.storyboardEvents?.leaveMap();world.toolRecovery=null;world.toolGeneration=(world.toolGeneration??0)+1;world.toolLease?.cancel('map-change',{restore:false});world.developmentEditor?.leaveMap();world.developmentCinema?.leaveMap();world.authoredDataLifetime?.abort();world.authoredPlacements?.leaveMap();
       world.chapterResidents?.leave();
@@ -1515,12 +1518,12 @@ try {
         world.riding?.beginTravel(mapForCharacter(new URL(href,location.href).searchParams.get('character')));
       }else world.riding?.leave();
       world.developmentActors?.leaveMap();world.authoredMonsters?.leaveMap();world.developmentActorEditor?.leaveMap();world.npcWorld?.leaveMap();
-      if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();minimap.hide();chapterQuests?.releaseMap();
+      if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();if(!quiet)minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();mapResourceInspector.begin();effectReviewGeneration++;world.effectWorld?.clear();world.sceneryStrikes?.leave();setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});loadDiagnostics.begin('지역 이동');
-      ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'));updateButtons();input.reset();cancelAttackInput();
+      ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'),quiet?{deferMs:quiet}:undefined);updateButtons();if(!quiet)input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
-      frameLoop?.setPaused(true);frameDiagnostics.suspend();audio.stopAll();audio.play('portal_depart');actionAudio.reset();
+      frameLoop?.setPaused(true);frameDiagnostics.suspend();if(!quiet){audio.stopAll();audio.play('portal_depart');}actionAudio.reset();
       boss.hide();releaseNpcInteriorInkResources(world.scene);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
       goldLoot.clearDrops();goldLootView.clear();projectiles.clear();training.setSelected(null);
       combatResult=null;meleeAim?.reset();lungeState.id=null;lungeState.foe=null;strikeSampler.reset();swordTrail?.clear();mapPortal?.dispose();mapPortal=null;
@@ -1564,7 +1567,7 @@ try {
     },
     finish:async()=>{
       assertFrameHealthy();
-      loadingAsset=false;ready=true;audio.setEnvironment(character);audio.play('portal_arrive');updateButtons();
+      loadingAsset=false;ready=true;audio.setEnvironment(character);if(!world.nextMapPrefetch?.quietActive)audio.play('portal_arrive');updateButtons();
       world.storyboardEvents?.emit('map-enter',{mapId:world.mapId});
       await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
       assertFrameHealthy();
@@ -1577,7 +1580,7 @@ try {
         const safe=safeRoadArrival(world,position,Math.max(.64,playerDimensions(actor).moveRadius),movementLimit);
         return {...safe,y:world.terrain.heightAt(safe.x,safe.z)};
       }))syncCameraFocus(0,{snap:true});
-      loadingView.reveal(mapLoadingGeneration);showMinimap();world.nextMapPrefetch?.arrived();
+      loadingView.reveal(mapLoadingGeneration);showMinimap();world.nextMapPrefetch?.arrived(loadingView.shown);
       if(!document.hidden)canvas.focus({preventScroll:true});world.developmentCinema?.notifyReady();world.developmentEditor?.notifyReady?.();world.authoringNavigation?.notifyReady();
     },
     onError:error=>{travelResume=false;loadingAsset=false;ready=false;frameLoop?.setPaused(true);audio.setSuspended(true);world.nextMapPrefetch?.cancel();world.cancelResourceDownloads?.();loadDiagnostics.finish(error.message);console.error('[Map transition]',error);const timedOut=error.name==='TimeoutError'||/시간.*초과/.test(error.message);loadingView.fail(timedOut?'맵 이동 시간이 초과되었습니다':'맵 이동을 완료하지 못했습니다',frameFailure?'게임 실행 오류: '+frameFailure.message:timedOut?'준비 작업의 응답이 없어 이동을 중단했습니다. 아래 버튼으로 다시 시도해 주세요.':'아래 오류 내용과 진단 복사 버튼으로 기록을 전달할 수 있습니다.',{retryLabel:frameFailure?'다시 불러오기':'맵 이동 다시 시도',error:frameFailure??error,phase:loadDiagnostics.snapshot()?.failedPhase??'map-transition'});},

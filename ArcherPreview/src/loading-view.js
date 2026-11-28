@@ -41,6 +41,11 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
   const detail=get('loading-error'),summary=get('loading-error-message'),stack=get('loading-error-stack'),copy=get('copy-loading-diagnostics'),status=get('loading-copy-status'),fallback=get('loading-diagnostics-export');
   const art=get('loading-art');
   let failed=false,reloadRequired=false,reloadRequested=false,generation=0,diagnostics=()=>({}),report=null,phase='download',progress=0;
+  // begin({deferMs}): the screen is prepared but stays off until that long has passed
+  // (0.3 road travel with the next map staged: a short change shows nothing at all).
+  let deferred=null,shown=false;
+  const cancelDeferred=()=>{if(deferred!==null){clearTimeout(deferred);deferred=null;}};
+  const show=()=>{shown=true;doc.documentElement.dataset.loading='true';overlay.hidden=false;};
   const progressTo=value=>{progress=Math.max(progress,Math.max(0,Math.min(100,value)));get('loading-progress').style.width=progress+'%';track.setAttribute('aria-valuenow',String(Math.round(progress)));};
   const current=expected=>!failed&&(expected===undefined||expected===generation);
   // The model stage reports no counts. With enableEstimate() the bar moves through it by how
@@ -82,9 +87,12 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
     enableEstimate({now=()=>performance.now(),setInterval:every=(fn,ms)=>setInterval(fn,ms),clearInterval:cancel=id=>clearInterval(id),storage,fallbackMs=5000,tickMs=100}={}){
       estimate={now,setInterval:every,clearInterval:cancel,storage,fallbackMs,tickMs};
     },
-    begin(character){
-      stopCreep(false);counted=false;creepKey='card:'+String(character??'');
-      failed=false;resetError();phase='download';progress=0;doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.remove('error');
+    // Whether the screen is (or was, for the load just revealed) actually on.
+    get shown(){return shown;},
+    begin(character,{deferMs=0}={}){
+      stopCreep(false);counted=false;creepKey='card:'+String(character??'');cancelDeferred();
+      failed=false;resetError();phase='download';progress=0;overlay.classList.remove('error');
+      if(deferMs>0){shown=false;const id=generation;deferred=setTimeout(()=>{deferred=null;if(id===generation&&!failed)show();},deferMs);}else show();
       get('retry-load').hidden=true;get('retry-load').textContent=tr('다시 불러오기');get('loading-title').textContent=tr('불러오는 중');get('loading-text').textContent=tr('불러오는 중');get('loading-bytes').textContent=tr('0.0 / 0.0 MB');get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
       if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';overlay.dataset.art='pending';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');overlay.dataset.art='none';}
         // Which place the art shows (0.3 adds its name and a line about it).
@@ -104,13 +112,13 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
       if(Number.isFinite(state?.completed)&&Number.isFinite(state?.total)&&state.total>0&&state.completed>=0){const total=Math.floor(state.total),completed=Math.min(total,Math.floor(state.completed));if(total>0){get('loading-text').textContent=tr(`화면 준비하는 중 (${completed}/${total})`);counted=true;stopCreep(true);progressTo(s.model+(99-s.model)*completed/total);return;}}
       get('loading-text').textContent=tr('화면 준비하는 중');startCreep();
     },
-    reveal(expectedGeneration){if(!current(expectedGeneration))return false;stopCreep(true);progressTo(100);overlay.hidden=true;if(art){art.hidden=true;art.removeAttribute('src');}delete overlay.dataset.art;delete doc.documentElement.dataset.loading;return true;},
+    reveal(expectedGeneration){if(!current(expectedGeneration))return false;cancelDeferred();stopCreep(true);progressTo(100);overlay.hidden=true;if(art){art.hidden=true;art.removeAttribute('src');}delete overlay.dataset.art;delete doc.documentElement.dataset.loading;return true;},
     fail(title,message,{retry=true,retryLabel='다시 불러오기',error,phase}={}){
       resetError();const failure={...loadingErrorRecord(error??message),phase:phase??null,at:new Date().toISOString()};
       reloadRequired=needsModuleReload(error);
       if(reloadRequired){title='실행 파일을 불러오지 못했습니다';message='페이지를 새로 불러와 다시 시도해 주세요. 저장된 리소스는 유지됩니다.';retryLabel='페이지 새로 불러오기';failure.recovery='reload-page';}
       let context;try{context=diagnostics();report=JSON.stringify({...context,kind:'loading-failure',failure},null,2);}catch(captureError){report=JSON.stringify({kind:'loading-failure',failure,diagnosticCaptureError:loadingErrorRecord(captureError)},null,2);}
-      failed=true;stopCreep(false);
+      failed=true;stopCreep(false);cancelDeferred();shown=true;
       doc.documentElement.dataset.loading='true';overlay.hidden=false;overlay.classList.add('error');
       // A deploy replaces every hashed chunk: a page whose cached HTML/main
       // still names the previous build fails its lazy import. Reload once on
