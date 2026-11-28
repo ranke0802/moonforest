@@ -145,7 +145,11 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
       const container=await loadContainer(new URL(key),world.scene,{signal});
       // Stopped while this one loaded: nobody will take it.
       if(signal.aborted||disposed||stagedFor!==record.destination){try{container?.dispose();}catch{/* released with the context */}throw signal.reason??released();}
-      const bytes=containerBytes(container);staged.set(key,{container,bytes});stagedBytes+=bytes;stats.staged++;
+      const bytes=containerBytes(container);
+      // A model's size is only known once it is read. One that would pass the limit is
+      // let go at once, so what is kept never exceeds it (Astra 2026-11-28: 35.83 of 32 MiB).
+      if(stagedBytes+bytes>stageBytes){try{container?.dispose();}catch{/* released with the context */}record.stageFull=true;break;}
+      staged.set(key,{container,bytes});stagedBytes+=bytes;stats.staged++;
       record.staged++;record.stagedBytes=stagedBytes;dropAt=now()+STAGE_IDLE_MS;
       await pause();
     }
@@ -174,14 +178,14 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     if(state.complete!==false&&record.stored){const urls=new Set();for(const path of list.paths)urls.add(resourceUrl(path,base));verified={destination:record.destination,urls};}
     if(stageBytes>0&&list.models?.length){record.state='staging';await stage(current,list.models);check();}
   }
-  function start(portal){
+  function start(portal,index){
     const destination=portal.destination;done.add(destination);
     const reason=allowed();
     const record={destination,state:'planning',startedAtMs:Math.round(now()),ms:null,files:0,bytes:0,cachedBytes:0,loadedBytes:0,stored:null,staged:0,stagedBytes:0,stageFull:false,error:null};
     history.push(record);if(history.length>HISTORY)history.shift();
     if(reason!==true){record.state='skipped';record.error=String(reason);stats.skipped++;return;}
     stats.runs++;
-    const current=job={controller:new AbortController(),downloads:null,record,visit};
+    const current=job={controller:new AbortController(),downloads:null,record,visit,index};
     run(current,portal).then(()=>{record.state='complete';stats.completed++;},error=>{
       if(current.controller.signal.aborted){record.state='cancelled';stats.cancelled++;return;}
       record.state='failed';record.error=String(error?.message??error).slice(0,160);stats.failed++;
@@ -208,8 +212,15 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
         if(distance>PREFETCH_APPROACH)away[i]=true;
         // Still by the road the containers were staged for: keep them.
         else if(staged.size&&portal.destination===stagedFor)dropAt=now()+STAGE_IDLE_MS;
-        if(busy||job||!away[i]||done.has(portal.destination)||globalThis.document?.hidden||now()<retryAt)continue;
-        if(distance<PREFETCH_NEAR||(distance<PREFETCH_APPROACH&&closing>=PREFETCH_CLOSING))start(portal);
+        if(busy||!away[i]||done.has(portal.destination)||globalThis.document?.hidden||now()<retryAt)continue;
+        if(!(distance<PREFETCH_NEAR||(distance<PREFETCH_APPROACH&&closing>=PREFETCH_CLOSING)))continue;
+        if(job){
+          // Work for a road the player has since left must not hold up this one
+          // (Astra 2026-11-28: a cave run kept the plains road from being staged).
+          if(job.index===i||!(last[job.index]>PREFETCH_APPROACH))continue;
+          done.delete(job.record.destination);stop();drop();
+        }
+        start(portal,i);
       }
     },
     // Travel to `destination` begins: stop working, keep what is staged for it.
@@ -217,9 +228,13 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
     // The destination is up: the loader's streaming may still take a few more.
     arrived(){verified=null;if(staged.size)dropAt=now()+STAGE_LINGER_MS;},
     // A staged container for this model URL, handed over for good; null if none.
-    take(model){
+    // Only the map they were staged for may take: the map being left also streams
+    // models, some from the same URL, and must not empty the next map's stage
+    // (Astra 2026-11-28: that also failed the run still filling it).
+    take(model,mapId){
+      if(!stagedFor||mapForCharacter(stagedFor)!==mapId)return null;
       const key=typeof model==='string'?model:model?.href,entry=key?staged.get(key):null;if(!entry)return null;
-      staged.delete(key);stagedBytes-=entry.bytes;stats.taken++;if(!staged.size){stagedFor=null;dropAt=Infinity;}
+      staged.delete(key);stagedBytes-=entry.bytes;stats.taken++;if(!staged.size&&!job){stagedFor=null;dropAt=Infinity;}
       return entry.container;
     },
     // Content URLs a finished run stored for this map, or null.

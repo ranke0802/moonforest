@@ -14,9 +14,11 @@ export function retainMapEffect(effect){
 }
 export function mapShaderCacheSize(engine){return caches.get(engine)?.size??0;}
 
-export function createMapMaterialPreparation(scene,{cancelled=()=>false,now,wait=()=>new Promise(resolve=>setTimeout(resolve,16))}={}){
+// budgetMs/timeoutMs: left out, the actor preparation defaults apply (1.5 ms of work, then a
+// 16 ms wait; 45 s in all). A map's first load passes its own (village-streamed-environment.js).
+export function createMapMaterialPreparation(scene,{cancelled=()=>false,now,wait=()=>new Promise(resolve=>setTimeout(resolve,16)),budgetMs,timeoutMs}={}){
   // Hot checks can share a slice, bounded by the same CPU budget as actor preparation.
-  return createBossPreparation({scene,now,frame:wait,maxBlocks:256,isCurrent:()=>!cancelled()&&!scene?.isDisposed});
+  return createBossPreparation({scene,now,frame:wait,maxBlocks:256,isCurrent:()=>!cancelled()&&!scene?.isDisposed,...(budgetMs>0?{budgetMs}:null),...(timeoutMs>0?{timeoutMs}:null)});
 }
 
 // Warm the actual instanced submesh variant. Material.forceCompilationAsync

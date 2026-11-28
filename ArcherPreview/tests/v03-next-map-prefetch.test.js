@@ -156,27 +156,30 @@ async function stagedHarness(count,options={}){
 
 test('after the files, arrival models are staged most wanted first up to the byte limit; the loader takes them for good',async()=>{
   const h=await stagedHarness(6);
-  assert.deepEqual(h.containers.map(c=>c.model),[MODEL(0),MODEL(1),MODEL(2)],'three fit the limit, in plan order');
+  assert.deepEqual(h.containers.map(c=>c.model),[MODEL(0),MODEL(1),MODEL(2)],'read in plan order');
+  assert.deepEqual(h.containers.map(c=>c.disposed),[0,0,1],'the one that would pass the limit is let go at once');
   const report=h.prefetch.inspect();
-  assert.equal(report.stagedModels,3);assert.equal(Math.round(report.stagedBytes),4194304);assert.equal(report.stagedFor,'warrior-plains');
-  assert.equal(report.recent[0].state,'complete');assert.equal(report.recent[0].staged,3);assert.equal(report.recent[0].stageFull,true);
-  assert.equal(h.prefetch.take(new URL(MODEL(9))),null);
-  const taken=h.prefetch.take(new URL(MODEL(1)));
-  assert.equal(taken,h.containers[1]);assert.equal(h.prefetch.take(MODEL(1)),null,'handed over once');
-  assert.equal(Math.round(h.prefetch.inspect().stagedBytes),Math.round(ONE*2));assert.equal(taken.disposed,0,'the taker owns it now');
+  assert.equal(report.stagedModels,2);assert.ok(report.stagedBytes<=report.stageLimit,'never above the limit');assert.equal(report.stagedFor,'warrior-plains');
+  assert.equal(report.recent[0].state,'complete');assert.equal(report.recent[0].staged,2);assert.equal(report.recent[0].stageFull,true);
+  assert.equal(h.prefetch.take(new URL(MODEL(1)),'village'),null,'the map being left streams models too and must not take the next map\'s');
+  assert.equal(h.prefetch.take(new URL(MODEL(1))),null);assert.equal(h.prefetch.inspect().stagedModels,2);
+  assert.equal(h.prefetch.take(new URL(MODEL(9)),'great-plains'),null);
+  const taken=h.prefetch.take(new URL(MODEL(1)),'great-plains');
+  assert.equal(taken,h.containers[1]);assert.equal(h.prefetch.take(MODEL(1),'great-plains'),null,'handed over once');
+  assert.equal(Math.round(h.prefetch.inspect().stagedBytes),Math.round(ONE));assert.equal(taken.disposed,0,'the taker owns it now');
   assert.ok(h.prefetch.verifiedUrls('great-plains').has('https://prefetch.test/assets/content/'+'a'.repeat(64)+'.gltf'));
   assert.equal(h.prefetch.verifiedUrls('village'),null);
 });
 
 test('travel keeps what is staged for that destination; leftovers are disposed a little after arrival',async()=>{
-  const h=await stagedHarness(3);
+  const h=await stagedHarness(3,{stageBytes:ONE*20});
   h.prefetch.travel('warrior-plains');
   h.world.mapId='great-plains';h.advance(STAGE_IDLE_MS-2000);h.step({x:0,z:0});
   assert.equal(h.prefetch.inspect().stagedModels,3,'kept through the load');
-  assert.equal(h.prefetch.take(MODEL(0)),h.containers[0]);
+  assert.equal(h.prefetch.take(MODEL(0),'great-plains'),h.containers[0]);
   h.prefetch.arrived();assert.equal(h.prefetch.verifiedUrls('great-plains'),null);
   h.advance(STAGE_LINGER_MS-1000);h.step({x:0,z:0});assert.equal(h.prefetch.inspect().stagedModels,2);
-  assert.equal(h.prefetch.take(MODEL(1)),h.containers[1],'streaming may still take one');
+  assert.equal(h.prefetch.take(MODEL(1),'great-plains'),h.containers[1],'streaming may still take one');
   h.advance(2000);h.step({x:0,z:0});
   assert.equal(h.prefetch.inspect().stagedModels,0);
   assert.deepEqual(h.containers.map(c=>c.disposed),[0,0,1],'only the untaken one is disposed');
@@ -215,6 +218,20 @@ test('travel during staging stops it and disposes the model that was still loadi
   assert.equal(report.recent[0].state,'cancelled');assert.equal(report.active,null);
   assert.equal(report.stagedModels,1,'the finished one stays for the loader');
   assert.deepEqual(h.containers.map(c=>c.disposed),[0]);
+});
+
+test('work for a road the player has left gives way to the road being approached',async()=>{
+  const h=harness({mapId:'great-plains',models:[MODEL(0),MODEL(1)],stageBytes:ONE*20,holdFrom:1});
+  const [home,forest]=mapPortals('great-plains');
+  h.step({x:home.x,z:home.z+PREFETCH_NEAR-2});await h.settle();h.queues[0].finish();await h.settle();
+  assert.equal(h.prefetch.inspect().active,'warrior-v3');assert.equal(h.prefetch.inspect().stagedModels,1);
+  // Still near the first road: the second cannot interrupt.
+  assert.ok(Math.hypot(forest.x-home.x,forest.z-home.z)>PREFETCH_APPROACH*2,'the two plains roads are far apart');
+  h.step({x:forest.x,z:forest.z+PREFETCH_NEAR-2});await h.settle();
+  assert.equal(h.calls.at(-1).portal.destination,'warrior-v4');
+  assert.equal(h.calls[0].signal.aborted,true,'the run for the road left behind was stopped');
+  assert.deepEqual(h.containers.slice(0,1).map(c=>c.disposed),[1],'and its staged model disposed');
+  const report=h.prefetch.inspect();assert.equal(report.active,'warrior-v4');assert.notEqual(report.stagedFor,'warrior-v3');
 });
 
 test('the staging budget is smaller on a phone and can be set or switched off from the address',()=>{
@@ -288,6 +305,21 @@ test('on the shipped maps the prefetch list covers the real start plan from ever
   }
 });
 
+test('a map\'s first load shares one preparation with long slices; streaming during play keeps the frame rule',async()=>{
+  const {createMapMaterialPreparation}=await import('../src/map-shader-cache.js');
+  const {INITIAL_PREPARATION_MS,INITIAL_PREPARATION_TIMEOUT_MS}=await import('../src/village-streamed-environment.js');
+  // 60 checks of 1 ms each: how many times does the preparation stop and wait?
+  const waits=async options=>{let clock=0,count=0;const job=createMapMaterialPreparation(null,{now:()=>clock,wait:()=>{count++;return Promise.resolve();},...options});for(let i=0;i<60;i++){await job.pause();clock+=1;}return count;};
+  const play=await waits({}),load=await waits({budgetMs:INITIAL_PREPARATION_MS,timeoutMs:INITIAL_PREPARATION_TIMEOUT_MS});
+  assert.ok(play>=25,'during play: about 1.5 ms of work, then a wait ('+play+')');
+  assert.ok(load<=play/3,'first load: '+load+' waits against '+play);
+  assert.ok(INITIAL_PREPARATION_TIMEOUT_MS>=300000,'one preparation spans the whole load, slow first visits included');
+  const loader=readFileSync(new URL('../src/village-streamed-environment.js',import.meta.url),'utf8');
+  assert.match(loader,/const initialPreparation=world\.gameplayV03\?createMapMaterialPreparation\(world\.scene,\{cancelled:\(\)=>disposed,budgetMs:INITIAL_PREPARATION_MS,timeoutMs:INITIAL_PREPARATION_TIMEOUT_MS,/);
+  assert.match(loader,/if\(initializing&&initialPreparation\)materialOptions\.preparation=initialPreparation;/,'only while the map first loads');
+  assert.equal(loader.split('createMapMaterialPreparation(').length-1,1,'no per-model preparation is made for the first load');
+});
+
 test('main connects the prefetch behind the 0.3 edition; travel keeps staged models, reload and failure drop them',()=>{
   const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
   assert.equal(main.split('world.nextMapPrefetch?.cancel();world.cancelResourceDownloads?.();').length-1,2,'full reload and transition error');
@@ -296,7 +328,7 @@ test('main connects the prefetch behind the 0.3 edition; travel keeps staged mod
   assert.match(main,/if\(world\.gameplayV03\)\(world\.nextMapPrefetch\?\?=createNextMapPrefetch\(\{world,base:/);
   assert.match(main,/nextMapPrefetch:world\?\.nextMapPrefetch\?\.inspect\(\)\?\?null/);
   const loader=readFileSync(new URL('../src/village-streamed-environment.js',import.meta.url),'utf8');
-  assert.match(loader,/lifetime\.check\(\);\r?\n\s+const model=new URL\(config\.model,url\),staged=world\.nextMapPrefetch\?\.take\?\.\(model\)\?\?null;/,'never take after the load was released');
+  assert.match(loader,/lifetime\.check\(\);\r?\n\s+const model=new URL\(config\.model,url\),staged=world\.nextMapPrefetch\?\.take\?\.\(model,world\.mapId\)\?\?null;/,'never take after the load was released');
   const source=readFileSync(new URL('../src/v03/next-map-prefetch.js',import.meta.url),'utf8');
   for(const forbidden of ['SceneLoader','instantiateModelsToScene','new Texture','createEffect','requestAnimationFrame','setInterval','setEnabled'])assert.ok(!source.includes(forbidden),forbidden);
 });

@@ -77,6 +77,8 @@ export function sceneryManifestFor(world,original){
     world.gameplayV03&&world.plains?{...original,assets:{...original.assets,...plainsGateAssets}}:original;
 }
 
+// First load of a map (0.3): work per slice before yielding a task, and the whole load's limit.
+export const INITIAL_PREPARATION_MS=8,INITIAL_PREPARATION_TIMEOUT_MS=600000;
 export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timers}={}){
   if(world.villagePrepared)return world.villagePrepared;
   const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers,stage:'map-plan'});const snapshot=mapLoadSnapshot(world);
@@ -212,6 +214,14 @@ export function loadStreamedVillage(world,{
     world.villageVisibility=visibility;stats.visibility=visibility.stats;world.treeOcclusion=new TreeOcclusion([]);
     let textures,disposed=false,initializing=true;const pendingLoads=new Set();
     const retryTimeouts=world.gameplayV03&&(world.mapId==='village'||world.mapId==='great-plains');
+    // 0.3: one preparation for the whole first load of a map. That load runs behind the
+    // loading screen with no frame being drawn, yet each model's material check and each
+    // outline check started its own preparation: a 16 ms wait before the first check, then
+    // 1.5 ms of work per 16 ms (the rule for work done during play). With the models already
+    // read that was 85-92 % of the scenery phase, 2.5-4.8 s (Astra, Chrome and WebKit,
+    // 2026-11-28). Here the checks share slices of INITIAL_PREPARATION_MS and yield a task,
+    // not a frame, between them. Streaming during play keeps the frame rule.
+    const initialPreparation=world.gameplayV03?createMapMaterialPreparation(world.scene,{cancelled:()=>disposed,budgetMs:INITIAL_PREPARATION_MS,timeoutMs:INITIAL_PREPARATION_TIMEOUT_MS,wait:()=>new Promise(resolve=>setTimeout(resolve,0))}):null;
     const has=r=>hasVillageGeometry(assets.get(r.id),r.level);
     // Main-thread time of each synchronous stretch of a streamed load once the map is up
     // (diagnostics; phone recording 2026-11-20: long frames while scenery is prepared, with
@@ -240,7 +250,7 @@ export function loadStreamedVillage(world,{
         // walked up to the road (v03/next-map-prefetch.js). Taking it hands it over
         // for good: from here it is owned and disposed like one loaded below.
         lifetime.check();
-        const model=new URL(config.model,url),staged=world.nextMapPrefetch?.take?.(model)??null;
+        const model=new URL(config.model,url),staged=world.nextMapPrefetch?.take?.(model,world.mapId)??null;
         if(!staged){await lifetime.run(()=>world.prefetchResources?.(config.resources,{initial:initializing}));lifetime.check();}
         step('container');
         const container=staged??await lifetime.run(()=>loadContainer(model,world.scene,{signal:lifetime.signal,lifetime,wait}),{onLate:container=>container?.dispose()});
@@ -255,9 +265,9 @@ export function loadStreamedVillage(world,{
         for(const mesh of meshes){world.caveAtmosphere?.attachMaterial(mesh.material);world.caveFog?.attach(mesh.material);}
         for(const mesh of meshes){mesh.isPickable=false;mesh.metadata={...mesh.metadata,villageLodLevel:level};configureVillageSurfaceCulling(mesh,{cave:world.cave,assetId:id,category:asset.config.category,level,r2Geometry:asset.config.r2Geometry,approvedVillageExterior:asset.config.approvedVillageExterior});}
         world.lighting.registerMeshes(meshes);stageTime('setup',since,id,level);
-        // During cave entry the surface and its outlines belong to the same LOD.
-        // Installation time between them counts against the remaining preparation slice.
-        if(initializing&&world.cave&&world.gameplayV03)materialOptions.preparation=createMapMaterialPreparation(world.scene,{cancelled});
+        // The surface and its outlines belong to the same LOD: installation time
+        // between them counts against the remaining preparation slice.
+        if(initializing&&initialPreparation)materialOptions.preparation=initialPreparation;
         step('materials');await lifetime.run(()=>prepareMapMaterials(meshes,materialOptions));lifetime.check();
         step('install');since=performance.now();beforeInstall=null;
         installVillageGeometry(asset,container,level,world);stageTime('install',since,id,level);
@@ -276,7 +286,7 @@ export function loadStreamedVillage(world,{
           try{world.meadow??=createMeadow();world.meadow.add(createScatterLayer(world,{name:id,sources:asset.baseMeshes,spec:layerSpec,amount:world.touchDevice?.75:1}));stats.meadow=world.meadow.layers.map(layer=>layer.stats);}
           catch(error){console.warn('[MoonForest 0.4] scattered vegetation unavailable',id,error);}
         }
-        if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);step('detail-materials');await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled,signal}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
+        if(asset.detailLods.length){world.lighting.registerMeshes(asset.detailLods);step('detail-materials');await lifetime.run(()=>prepareMapMaterials(asset.detailLods,{cancelled,signal,preparation:materialOptions.preparation}));lifetime.check();stats.detailLods=(stats.detailLods??0)+asset.detailLods.length;}
       }
       step('instances');
       for(const record of instances)if(!record.meshes.length){
