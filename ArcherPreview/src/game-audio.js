@@ -13,6 +13,9 @@ const SETTINGS={
  low_health:{volume:.3,priority:3,cooldown:5},
 };
 
+// Liveness guard: seconds the output stays up after the last painted frame, its fade, and
+// how often a beat is written to the audio clock at most.
+export const GUARD_HOLD=3,GUARD_FADE=.4,GUARD_BEAT=.5;
 export class GameAudio {
   constructor({contextFactory=()=>new (globalThis.AudioContext||globalThis.webkitAudioContext)({latencyHint:'interactive',sampleRate:32000}),fetcher=(...args)=>fetch(...args),maxVoices=12,manifestUrl,audioSession=globalThis.navigator?.audioSession,now=()=>Date.now(),loadTimeoutMs=20000,retryDelayMs=5000,timers}={}){
     this.contextFactory=contextFactory;this.fetcher=fetcher;this.maxVoices=maxVoices;
@@ -20,7 +23,7 @@ export class GameAudio {
     this.musicWanted=false;this.beds=new AudioBeds(this);this.environment=null;this.combatMode=null;this.bossTheme=null;
     this.manifestUrl=manifestUrl;
     this.audioSession=audioSession;this.now=now;this.resumeAttempts=0;this.resumePending=null;this.gestureCleanup=null;
-    this.suspended=false;this.sfxMuted=false;this.score=null;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
+    this.suspended=false;this.requestedSuspended=false;this.starved=false;this.liveGuard=false;this.guard=null;this.beatAt=-Infinity;this.sfxMuted=false;this.score=null;this.played=0;this.dropped=0;this.failed=0;this.peakVoices=0;this.disposed=false;
     this.loadTimeoutMs=loadTimeoutMs;this.retryDelayMs=retryDelayMs;this.timers=timers;this.audioGeneration=0;this.audioLifetimes=new Set();this.sfxSources=new Map();this.sfxDecodeJobs=new Set();this.sfxLoading=null;
   }
   bindUnlock(target){
@@ -30,13 +33,45 @@ export class GameAudio {
     this.gestureCleanup=()=>{for(const type of types)target.removeEventListener(type,listener,true);this.gestureCleanup=null;};
     return this.gestureCleanup;
   }
+  // Liveness guard (audio-liveness.js, 0.3). The output passes through one more gain whose
+  // fade to silence is always scheduled GUARD_HOLD seconds ahead on the audio clock. beat()
+  // (called from painted frames) pushes it back; a page that stops painting, even one whose
+  // main thread is stuck and can run no handler, goes quiet by itself.
+  enableLiveGuard(){
+    if(this.liveGuard)return;this.liveGuard=true;
+    if(this.context&&this.master&&!this.guard){try{this.master.disconnect();}catch{}this.wireGuard();}
+  }
+  wireGuard(){
+    const context=this.context;
+    if(!context?.createGain){this.master.connect(context.destination);return;}
+    this.guard=context.createGain();this.guard.gain.value=1;this.master.connect(this.guard);this.guard.connect(context.destination);this.beatAt=-Infinity;this.beat();
+  }
+  beat(){
+    const context=this.context,gain=this.guard?.gain;
+    if(!gain||context.state!=='running')return;
+    const at=context.currentTime;
+    if(at-this.beatAt<GUARD_BEAT)return;
+    this.beatAt=at;
+    try{gain.cancelScheduledValues(at);gain.setValueAtTime(1,at);gain.setValueAtTime(1,at+GUARD_HOLD);gain.linearRampToValueAtTime(0,at+GUARD_HOLD+GUARD_FADE);}catch{/* the watchdog still suspends the context */}
+  }
+  // The page is not painting (audio-liveness.js): suspend whatever the game asked for, and
+  // hand the "playback" session back so the system does not keep the page alive for it.
+  setStarved(value){
+    value=!!value;if(this.starved===value)return;this.starved=value;
+    if(value)this.releaseAudioSession();
+    this.applySuspended(this.requestedSuspended||value);
+  }
+  releaseAudioSession(){
+    try{if(this.audioSession&&this.previousSessionType!==undefined&&this.audioSession.type==='playback')this.audioSession.type=this.previousSessionType||'auto';}catch{}
+  }
   selectAudioSession(){
     // Safari's default Web Audio session may be silent with the hardware mute
     // switch. Request playback for this user-started music/effects session.
     try{if(this.audioSession){this.previousSessionType??=this.audioSession.type;if(this.audioSession.type!=='playback')this.audioSession.type='playback';}}catch{}
   }
   makeContext(){
-    this.context=this.contextFactory();this.master=this.context.createGain();this.master.gain.value=.75;this.master.connect(this.context.destination);
+    this.context=this.contextFactory();this.master=this.context.createGain();this.master.gain.value=.75;this.guard=null;this.beatAt=-Infinity;
+    if(this.liveGuard)this.wireGuard();else this.master.connect(this.context.destination);
     const context=this.context;
     this.contextStateChanged=()=>{if(!this.disposed&&this.context===context&&context.state==='running'&&!this.suspended)this.syncMusic();};
     context.addEventListener?.('statechange',this.contextStateChanged);
@@ -117,7 +152,8 @@ export class GameAudio {
     }})).finally(()=>{if(this.sfxLoading===pending)this.sfxLoading=null;});
     this.sfxLoading=pending;return pending;
   }
-  setSuspended(value){
+  setSuspended(value){this.requestedSuspended=!!value;this.applySuspended(!!value||this.starved);}
+  applySuspended(value){
     this.suspended=value;
     if(value){this.resumePending=null;this.stopVoices();this.context?.suspend().catch(()=>{});}
     // A rejected resume is retried by the next pointer/key gesture.

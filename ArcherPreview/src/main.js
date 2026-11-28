@@ -154,7 +154,9 @@ import {runBeforePageReload} from './page-reload-hooks.js';
 import {DodgeSprintGesture} from './dodge-sprint-input.js';
 // Shared-game text in the 0.3 player's language (identity in Korean / 0.2).
 import {t,tr,startLanguage} from './v03/i18n.js';
-import {trackRenderTargetHealth,inspectSceneRenderTarget,inspectVillageInk} from './render-target-diagnostics.js';
+import {trackRenderTargetHealth,inspectSceneRenderTarget,inspectVillageInk,contextHealth} from './render-target-diagnostics.js';
+import {createAudioLiveness} from './audio-liveness.js';
+import {suspendTextBlip} from './v03/text-blip.js';
 import hudLandscapeV03 from './v03/data/hud-landscape.json' with {type:'json'};
 // 0.3 only (its splash defines __moonforestSplash): load the language before the loading card.
 if(globalThis.__moonforestSplash)void startLanguage();
@@ -1621,6 +1623,8 @@ try {
   for(const selector of ['#motion-speed-dialog','#character-style-dialog'])for(const event of ['click','change','input'])$(selector).addEventListener(event,()=>{if(!mapDeparture?.departing&&!mapTransition?.busy)frameLoop.invalidate();});
   document.addEventListener('visibilitychange',()=>{syncPlayback();if(!document.hidden)frameLoop.restart();});
   window.addEventListener('pagehide',()=>{combatTrail?.flush();staminaNoticeAnchor.reset();frameLoop.setPaused(true);frameDiagnostics.suspend();audio.setSuspended(true);});
+  // 0.3: sound only while the page paints (audio-liveness.js; iPhone kept playing after the app was closed).
+  if(versionRoute.edition&&!world.audioLiveness){audio.enableLiveGuard();world.audioLiveness=createAudioLiveness({onStarve:()=>{audio.setStarved(true);suspendTextBlip();},onRevive:()=>audio.setStarved(false),onBeat:()=>audio.beat()});}
   const restorePlayback=()=>{syncPlayback();frameLoop.restart();frameDiagnostics.suspend({preserveBossBaseline:$('#summon-dialog').open&&!minimapTravel?.isOpen()&&!document.hidden&&!motionSpeedControls.isOpen()&&!$('#help-dialog').open&&!$('#boss-pattern-dialog').open&&!$('#character-style-dialog').open&&!$('#diagnostic-detail-dialog').open&&!deathScreen.isOpen()&&frameLoop.failed!==true});};
   window.addEventListener('pageshow',restorePlayback);
   window.addEventListener('focus',restorePlayback);
@@ -1981,6 +1985,8 @@ try {
       getState:()=>({ready:ready&&!loadingAsset&&!mapTransition?.busy,failed:frameLoop?.failed===true||frameLoop?.loadingFailed===true||mapTransition?.failed===true,character,mapId:world.mapId,
         // Scenery still streaming in (models and higher-resolution textures).
         pending:(world.environment?.geometryPending??0)+(world.environment?.highTexturePending??0)}),
+      // Run-trail vitals (boot.js, every 5 s): small numbers only.
+      vitals:()=>{const health=contextHealth(world.scene?.getEngine?.());return {map:world.mapId??null,frames:frameLoop?.frames??0,gapMs:Math.round(frameLoop?.intervalMs??0),level:adaptivePerformance.level,lost:health?.lost??null,restored:health?.restored??null,meshes:world.scene?.meshes.length??0,textures:world.scene?.textures.length??0,audio:audio.context?.state??null,starves:world.audioLiveness?.inspect().starves??null};},
       resetStage:v03ResetStage,openSettings:()=>$('#motion-speed-toggle').click(),
       // resume: continuing a record that was saved on another map. The player arrives where the
       // record left them, not at the road's end, and the place stood on now is not written into that record.

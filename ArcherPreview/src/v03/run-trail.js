@@ -4,6 +4,9 @@
 // The next run reads it (diagnostic record: previousRun). A run that ended
 // with ended=false and hidden=false was killed while it was on screen.
 // One small localStorage write per stage change, none per frame.
+// 2026-11-28 (iPhone froze in the village; the record of the stuck run had only its stage):
+// vitals() adds a snapshot every few seconds, so the next run's diagnostic shows the map,
+// frame guard level, WebGL context losses and frame gap just before a freeze or kill.
 const KEY='moonforest:run-trail:v1',KEEP=12;
 
 export function createRunTrail({storage=null,now=()=>Date.now()}={}){
@@ -35,6 +38,9 @@ export function createRunTrail({storage=null,now=()=>Date.now()}={}){
    if(state.trail.length>KEEP)state.trail.splice(0,state.trail.length-KEEP);
    write();
   },
+  // A small snapshot every few seconds (boot.js): what the page looked like shortly before it
+  // stopped, and (beatAt) how long it lived after its last stage. One write per call.
+  vitals(value){state.vitals=value??null;state.beatAt=now();write();},
   // The page was put in the background (a later discard there is not a crash).
   setHidden(hidden){hidden=!!hidden;if(state.hidden===hidden)return;state.hidden=hidden;write();},
   // The page is leaving normally.

@@ -707,6 +707,7 @@ export function setupV03(api){
  const loadingWatch=loadingCard&&Observer?new Observer(()=>{if(loadingCard.classList.contains('error'))fail();}):null;
  loadingWatch?.observe(loadingCard,{attributes:true,attributeFilter:['class']});
  const onPageHide=()=>{trail.end();if(state.screen==='play')save.touch(metaPatch());};
+ const VITALS_SECONDS=5;
  const onVisibility=()=>trail.setHidden(doc.hidden===true);
  doc.addEventListener?.('visibilitychange',onVisibility);
  view?.addEventListener?.('pagehide',onPageHide);
@@ -806,6 +807,8 @@ export function setupV03(api){
     if(!s.ready||state.screen!=='play'||greatAttackMap!==s.mapId)resetGreatAttackFx();
     else{greatAttackFx?.tick();starfallAura?.tick();}
    }
+   // Run-trail vitals: one small write every VITALS_SECONDS (kept across a freeze or kill).
+   state.vitalsIn=(state.vitalsIn??0)-dt;if(state.vitalsIn<=0){state.vitalsIn=VITALS_SECONDS;const vitals=api.vitals?.();if(vitals){vitals.screen=state.screen;trail.vitals(vitals);}}
    if(s.failed&&!state.failed){fail();return;}
    if(s.ready)bindCape();
    if(state.screen==='title'){

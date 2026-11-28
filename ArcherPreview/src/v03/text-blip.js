@@ -29,6 +29,9 @@ export function setTextBlipEnabled(on,{view=globalThis,persist=true}={}){
  return enabled;
 }
 // Test hook: forget the cached switch and the shared context.
+// The page is not painting (audio-liveness.js): the blips' own context must not hold the
+// audio device either. play()/prime() resume it with the next line.
+export function suspendTextBlip(){try{if(shared?.context?.state==='running')shared.context.suspend?.()?.catch?.(()=>{});}catch{/* nothing to stop */}}
 export function resetTextBlip(){enabled=null;shared?.context?.close?.().catch?.(()=>{});shared=null;armedView=null;}
 
 // A stable pitch per speaker: hash of the key onto a pentatonic-ish range.

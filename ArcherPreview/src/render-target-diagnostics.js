@@ -5,6 +5,8 @@
 const health=new WeakMap();
 const now=()=>Math.round(globalThis.performance?.now?.()??0);
 
+// {lost,restored} counts so far, or null before tracking (run-trail vitals).
+export const contextHealth=engine=>health.get(engine)??null;
 export function trackRenderTargetHealth(engine){
  if(!engine||health.has(engine))return;
  const state={lost:0,restored:0,lastLostAtMs:null,lastRestoredAtMs:null};
