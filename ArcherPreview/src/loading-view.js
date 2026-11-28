@@ -89,10 +89,11 @@ export function createLoadingView(doc=document,{clipboard=globalThis.navigator?.
     },
     // Whether the screen is (or was, for the load just revealed) actually on.
     get shown(){return shown;},
-    begin(character,{deferMs=0}={}){
+    // onShow: called when a deferred screen comes on after all (the held picture under it goes).
+    begin(character,{deferMs=0,onShow}={}){
       stopCreep(false);counted=false;creepKey='card:'+String(character??'');cancelDeferred();
       failed=false;resetError();phase='download';progress=0;overlay.classList.remove('error');
-      if(deferMs>0){shown=false;const id=generation;deferred=setTimeout(()=>{deferred=null;if(id===generation&&!failed)show();},deferMs);}else show();
+      if(deferMs>0){shown=false;const id=generation;deferred=setTimeout(()=>{deferred=null;if(id===generation&&!failed){show();onShow?.();}},deferMs);}else show();
       get('retry-load').hidden=true;get('retry-load').textContent=tr('다시 불러오기');get('loading-title').textContent=tr('불러오는 중');get('loading-text').textContent=tr('불러오는 중');get('loading-bytes').textContent=tr('0.0 / 0.0 MB');get('loading-progress').style.width='0%';track.setAttribute('aria-valuenow','0');
       if(art){let image;try{image=loadingArtFor(character);}catch{image=null;}if(image?.url){art.hidden=false;art.style.objectPosition=image.position||'center';overlay.dataset.art='pending';art.src=image.url;}else{art.hidden=true;art.removeAttribute('src');overlay.dataset.art='none';}
         // Which place the art shows (0.3 adds its name and a line about it).

@@ -374,6 +374,10 @@ test('a road crossed in play with its map staged, whose last change was short, g
   const slow=await stagedHarness(2);crossed(slow,500);slow.prefetch.quietFor('warrior-plains',road);slow.prefetch.travel('warrior-plains');slow.advance(3000);slow.prefetch.arrived(true);
   report=slow.prefetch.inspect();assert.deepEqual([report.quietTravels,report.quietArrivals,report.quietCurtains],[1,0,1]);assert.deepEqual(slow.frame.released,[0]);
   assert.equal(slow.prefetch.quietFor('warrior-plains',road),0,'and the next change to that map shows its screen at once');
+  // The screen comes on while the change is still running: the still goes then, not at the arrival.
+  const late=await stagedHarness(2);crossed(late,500);late.prefetch.quietFor('warrior-plains',road);late.prefetch.travel('warrior-plains');late.advance(QUIET_TRAVEL_MS);
+  late.prefetch.screenShown();assert.deepEqual([late.frame.held,late.frame.released],[false,[0]]);
+  late.advance(9000);late.prefetch.arrived(true);assert.deepEqual(late.frame.released,[0],'nothing left to take down at the arrival');assert.equal(late.prefetch.inspect().quietCurtains,1);
   // A failed change, or leaving the game, takes the still down with it.
   const failed=await stagedHarness(2);crossed(failed,500);assert.equal(failed.prefetch.quietFor('warrior-plains',road),QUIET_TRAVEL_MS);failed.prefetch.cancel();
   assert.equal(failed.prefetch.quietActive,false);assert.deepEqual(failed.frame.released,[0]);
@@ -466,17 +470,18 @@ test('the loading screen can be held back: a short load never shows it, a long o
   const overlay=document.getElementById('loading'),sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
   let generation=view.begin('warrior-plains');
   assert.equal(overlay.hidden,false);assert.equal(view.shown,true,'as before without the option');view.reveal(generation);assert.equal(overlay.hidden,true);
-  generation=view.begin('warrior-plains',{deferMs:40});
+  let told=0;generation=view.begin('warrior-plains',{deferMs:40,onShow:()=>{told++;}});
   assert.equal(overlay.hidden,true);assert.equal(view.shown,false);assert.equal(document.documentElement.dataset.loading,undefined);
   view.preparing(undefined,generation);assert.equal(overlay.hidden,true,'progress updates do not bring it on');
   assert.equal(view.reveal(generation),true);await sleep(70);
-  assert.equal(overlay.hidden,true,'revealed in time: never shown');assert.equal(view.shown,false);
-  generation=view.begin('warrior-plains',{deferMs:20});await sleep(60);
+  assert.equal(overlay.hidden,true,'revealed in time: never shown');assert.equal(view.shown,false);assert.equal(told,0);
+  generation=view.begin('warrior-plains',{deferMs:20,onShow:()=>{told++;}});await sleep(60);
+  assert.equal(told,1,'the caller is told once when the deferred screen comes on');
   assert.equal(overlay.hidden,false,'ran long: shown from then on');assert.equal(view.shown,true);assert.equal(document.documentElement.dataset.loading,'true');
   view.reveal(generation);assert.equal(overlay.hidden,true);
-  generation=view.begin('warrior-plains',{deferMs:5000});view.fail('맵 이동을 완료하지 못했습니다','x',{error:new Error('x')});
+  generation=view.begin('warrior-plains',{deferMs:5000,onShow:()=>{told++;}});view.fail('맵 이동을 완료하지 못했습니다','x',{error:new Error('x')});
   assert.equal(overlay.hidden,false,'a failure is shown at once');assert.equal(view.shown,true);
-  view.begin('warrior-v3');assert.equal(overlay.hidden,false);
+  view.begin('warrior-v3',{onShow:()=>{told++;}});assert.equal(overlay.hidden,false);assert.equal(told,1,'a failure, or a screen shown at once, tells nobody');
 });
 
 test('the staging budget is smaller on a phone and can be set or switched off from the address',()=>{
@@ -586,7 +591,7 @@ test('main connects the prefetch behind the 0.3 edition; travel keeps staged mod
   assert.match(main,/world\.nextMapPrefetch\?\.travel\(new URL\(href,location\.href\)\.searchParams\.get\('character'\)\);world\.cancelResourceDownloads\?\.\(\);/);
   assert.match(main,/loadingView\.reveal\(mapLoadingGeneration\);showMinimap\(\);world\.nextMapPrefetch\?\.arrived\(loadingView\.shown\);/);
   assert.match(main,/const quiet=world\.nextMapPrefetch\?\.quietFor\?\.\(new URL\(href,location\.href\)\.searchParams\.get\('character'\),context\)\?\?0;/);
-  assert.match(main,/loadingView\.begin\(new URL\(href,location\.href\)\.searchParams\.get\('character'\),quiet\?\{deferMs:quiet\}:undefined\);/);
+  assert.match(main,/loadingView\.begin\(new URL\(href,location\.href\)\.searchParams\.get\('character'\),quiet\?\{deferMs:quiet,onShow:\(\)=>world\.nextMapPrefetch\?\.screenShown\?\.\(\)\}:undefined\);/,'the screen coming on takes the held picture down');
   assert.match(main,/if\(!quiet\)input\.reset\(\);cancelAttackInput\(\);/,'a held stick keeps moving the player across the road');
   assert.match(main,/if\(world\.gameplayV03\)\(world\.nextMapPrefetch\?\?=createNextMapPrefetch\(\{world,base:/);
   assert.match(main,/nextMapPrefetch:world\?\.nextMapPrefetch\?\.inspect\(\)\?\?null/);

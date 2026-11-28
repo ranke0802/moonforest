@@ -300,6 +300,9 @@ export function createNextMapPrefetch({world,base,now=()=>performance.now(),reso
       return quiet?quietMs:0;
     },
     get quietActive(){return quiet;},
+    // The loading screen came on over a quiet travel: the still under it is no longer seen
+    // and goes now, not when the arrival is ready (Astra 2026-11-28: it stayed 11 s more).
+    screenShown(){heldFrame.release(0);},
     // Travel to `destination` begins: stop working, keep what is staged for it.
     travel(destination){stop();if(stagedFor!==destination)drop();else dropAt=Infinity;if(verified&&verified.destination!==destination)verified=null;travelStarted=now();travelTo=destination;uncover?.();uncover=cover();},
     // The destination is up: the loader's streaming may still take a few more.

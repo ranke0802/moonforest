@@ -1521,7 +1521,7 @@ try {
       if(!travelResume)saveMapPosition(true);resumePose=null;hudLayout?.close();minimapTravel?.close();if(!quiet)minimap.hide();chapterQuests?.releaseMap();
       leaveElenaReview();
       frameDiagnostics.mapChanged();mapResourceInspector.begin();effectReviewGeneration++;world.effectWorld?.clear();world.sceneryStrikes?.leave();setFrameWorkContext(world.scene,{active:false,frameId:engine.frameId,generation:world.toolGeneration??0});loadDiagnostics.begin('지역 이동');
-      ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'),quiet?{deferMs:quiet}:undefined);updateButtons();if(!quiet)input.reset();cancelAttackInput();
+      ready=false;loadingAsset=true;staminaNoticeAnchor.reset();staminaFeedback.reset(controller);mapLoadingGeneration=loadingView.begin(new URL(href,location.href).searchParams.get('character'),quiet?{deferMs:quiet,onShow:()=>world.nextMapPrefetch?.screenShown?.()}:undefined);updateButtons();if(!quiet)input.reset();cancelAttackInput();
       boss.combat?.passiveRecovery?.reset();
       frameLoop?.setPaused(true);frameDiagnostics.suspend();if(!quiet){audio.stopAll();audio.play('portal_depart');}actionAudio.reset();
       boss.hide();releaseNpcInteriorInkResources(world.scene);applyPlayerFlash(container?.meshes,boss?.playerReaction,staminaFeedback);for(const enemy of boss.allPooled)enemy.routeState={};
