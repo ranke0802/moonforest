@@ -67,6 +67,9 @@ export function stageBudget(search,touch){
 export const STAGE_LINGER_MS=12000,STAGE_IDLE_MS=45000;
 // A road crossed with its map staged shows no loading screen for this long; a change that
 // takes longer shows it from then on. `?quiet=<ms>` sets it for a test, `?quiet=0` turns it off.
+// `?cover=0` leaves preparations on the in-play frame rule during a map change, for comparing
+// the two on a device (boss-preparation.js coverPreparation).
+export const coverFor=search=>new URLSearchParams(search??'').get('cover')==='0'?()=>()=>{}:coverPreparation;
 // A travel goes quiet only when the last change to that map, this session, took at most
 // this share of the limit: a quiet travel that runs long holds a still picture and then
 // brings the loading screen on anyway, which is worse than the screen at once.
@@ -157,7 +160,7 @@ export async function nextMapResources(world,portal,base,{signal,pause=nextTask}
 }
 
 export function createNextMapPrefetch({world,base,now=()=>performance.now(),resources=nextMapResources,allowed=prefetchAllowed,loadContainer=loadMapContainer,pause=nextTask,warmTerrain=warmNextMapTerrain,
-  heldFrame=createHeldFrame({canvas:world.scene?.getEngine?.()?.getRenderingCanvas?.()??null}),renderFrame=()=>world.scene.render(!world.caveCamera?.applied),cover=coverPreparation,
+  heldFrame=createHeldFrame({canvas:world.scene?.getEngine?.()?.getRenderingCanvas?.()??null}),renderFrame=()=>world.scene.render(!world.caveCamera?.applied),cover=coverFor(globalThis.location?.search),
   stageBytes=stageBudget(globalThis.location?.search,world.touchDevice),quietMs=quietBudget(globalThis.location?.search),
   downloads=(sizes,root,index)=>new ResourceDownloads(sizes,root,{index,adaptiveCacheKeys:true})}={}){
   const done=new Set(),retried=new Set(),last=[],closing=[],away=[],history=[],stats={runs:0,skipped:0,cancelled:0,failed:0,completed:0,staged:0,taken:0,dropped:0,quietTravels:0,quietArrivals:0,quietCurtains:0};

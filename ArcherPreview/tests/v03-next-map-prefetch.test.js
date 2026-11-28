@@ -423,7 +423,10 @@ test('a map change covers preparations from its start until the arrival is shown
   h.prefetch.arrived(true);assert.equal(held,0);
   h.prefetch.travel('warrior-v4');h.prefetch.cancel();assert.equal(held,0,'a failed change');
   h.prefetch.travel('warrior-v4');h.prefetch.dispose();assert.equal(held,0,'the scene went');
-  assert.match(readFileSync(new URL('../src/v03/next-map-prefetch.js',import.meta.url),'utf8'),/cover=coverPreparation,/,'the game holds the real one');
+  const {coverFor}=await import('../src/v03/next-map-prefetch.js'),real=await import('../src/boss-preparation.js');
+  assert.equal(coverFor(''),real.coverPreparation,'the game holds the real one');assert.equal(coverFor(undefined),real.coverPreparation);assert.equal(coverFor('?cover=1'),real.coverPreparation);
+  const before=real.preparationCovered(),off=coverFor('?cover=0')();assert.equal(real.preparationCovered(),before,'?cover=0: the in-play rule stays');off();
+  assert.match(readFileSync(new URL('../src/v03/next-map-prefetch.js',import.meta.url),'utf8'),/cover=coverFor\(globalThis\.location\?\.search\),/);
 });
 
 test('the held picture: one still copy over the game canvas, under the HUD, emptied when it goes',async()=>{
