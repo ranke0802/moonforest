@@ -412,6 +412,15 @@ export class AuthoredPlacementRuntime {
  _publishNavigation(obstacles,revision,clearance){
   const replaced=[...this.document.instances.map(row=>row.sourceInstanceId).filter(Boolean),...(this.document.removedBaseIds??[])];
   const removedIds=replaced.flatMap(id=>this._originalObstacles(id).map(obstacle=>obstacle.id));
+  // 0.3: a commit that changes no collider keeps the navigation it already published. The
+  // story's wagon (collision 'none') is placed a moment after the plains' own layout, and that
+  // second commit decided every route grid again: 79-110 ms on a desktop and 326-389 ms at 3x
+  // CPU throttle, inside the frames the arrival waits on (Astra 2026-11-29, 417-700 ms frames).
+  // Same solids, same removed base colliders, no cave clearance: nothing a route can see changed.
+  let signature=null;
+  if(this.world.gameplayV03&&!clearance&&!this.world.cave)try{signature=JSON.stringify([removedIds,obstacles]);}catch{signature=null;}
+  if(signature!==null&&signature===this.navigationSignature&&this.navigation&&this.world.navigation===this.navigation){this.stats.navigationReused=(this.stats.navigationReused??0)+1;return replaced;}
+  this.navigationSignature=signature;
   this.navigation=createAuthoredPlacementNavigation(this.baseNavigation,obstacles,revision,{removedIds,force:!!clearance});
   if(clearance)this.navigation.clearanceAt=clearance.clearanceAt;
   this.world.navigation=this.navigation;

@@ -69,6 +69,23 @@ test('preview changes one instance without navigation/revision work; commits mov
  f.runtime.leaveMap();assert.equal(f.world.navigation,original);assert.equal(original.obstacles.length,0);assert.equal(f.runtime.assets.size,0);
 });
 
+test('0.3: a commit that changes no collider keeps the published navigation; a moved solid publishes a new one',async t=>{
+ const f=await fixture(t);f.world.gameplayV03=true;
+ const visual={...row(9,4),instanceId:'overlay-wagon',collision:'none'};
+ let doc={...createEmptyPlacementDocument(f.runtime.baseManifest),revision:1,instances:[row()]};await f.runtime.apply(doc);
+ const published=f.world.navigation,grid=published.grid(.34,20);assert.equal(published.free({x:3,z:0},.2),false);
+ doc={...doc,revision:2,instances:[row(),visual]};await f.runtime.apply(doc);
+ assert.equal(f.world.navigation,published,'the same navigation object');assert.equal(f.world.navigation.grid(.34,20),grid,'and its route grids');
+ assert.equal(f.runtime.stats.navigationReused,1);assert.equal(f.world.placementRevision,2,'the placement revision still moves');assert.equal(f.runtime.records.size,2);
+ doc={...doc,revision:3,instances:[row(),{...visual,transform:{...visual.transform,position:[12,0,6]}}]};await f.runtime.apply(doc);
+ assert.equal(f.world.navigation,published);assert.equal(f.runtime.stats.navigationReused,2);
+ doc={...doc,revision:4,instances:[row(8,0),visual]};await f.runtime.apply(doc);
+ assert.notEqual(f.world.navigation,published,'a moved solid is a new navigation');assert.equal(f.world.navigation.free({x:3,z:0},.2),true);assert.equal(f.world.navigation.free({x:8,z:0},.2),false);
+ doc={...doc,revision:5,instances:[visual]};await f.runtime.apply(doc);assert.equal(f.world.navigation.free({x:8,z:0},.2),true,'a removed solid frees its ground');
+ // 0.2 keeps publishing on every commit.
+ const old=await fixture(t);let plain={...createEmptyPlacementDocument(old.runtime.baseManifest),revision:1,instances:[row()]};await old.runtime.apply(plain);
+ const first=old.world.navigation;await old.runtime.apply({...plain,revision:2,instances:[row(),visual]});assert.notEqual(old.world.navigation,first);assert.equal(old.runtime.stats.navigationReused,undefined);
+});
 test('real mesh wall and ceiling anchors preserve normal offset and add no ground collision',async t=>{
  const f=await fixture(t),original=f.world.navigation;
  for(const [surface,position,normal]of [['wall',[0,4,5.5],[0,0,-1]],['ceiling',[0,2,6],[0,-1,0]]]){
