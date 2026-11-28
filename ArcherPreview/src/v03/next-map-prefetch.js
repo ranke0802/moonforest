@@ -74,10 +74,14 @@ export const coverFor=search=>new URLSearchParams(search??'').get('cover')==='0'
 // this share of the limit: a quiet travel that runs long holds a still picture and then
 // brings the loading screen on anyway, which is worse than the screen at once.
 export const QUIET_EXPECTED_SHARE=.85;
-export const QUIET_TRAVEL_MS=1200;
+// Off unless asked for (user, 2026-11-29: keep the loading screen; no rebuild of the map change
+// to hide it). It only ever fitted the limit on a desktop, on one road, and the HUD changed
+// over the held picture. `?quiet=<ms>` turns it on for a review; QUIET_TRAVEL_MS is the limit
+// the reviews used.
+export const QUIET_TRAVEL_MS=1200,QUIET_TRAVEL_DEFAULT_MS=0;
 export function quietBudget(search){
   const raw=new URLSearchParams(search??'').get('quiet'),ms=raw===null||raw===''?NaN:Number(raw);
-  return Number.isFinite(ms)&&ms>=0?Math.min(ms,5000):QUIET_TRAVEL_MS;
+  return Number.isFinite(ms)&&ms>=0?Math.min(ms,5000):QUIET_TRAVEL_DEFAULT_MS;
 }
 // Leftovers are let go during play, so only a few at each check (twice a second).
 export const STAGE_DROP_PER_CHECK=2;

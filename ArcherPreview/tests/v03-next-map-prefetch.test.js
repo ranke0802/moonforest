@@ -65,7 +65,7 @@ test('arrival plan: unknown screen size asks for the coarsest level only; cave s
 
 // ---- runtime -------------------------------------------------------------
 const MODEL=n=>`https://prefetch.test/assets/content/${String(n).padStart(64,'0')}.gltf`;
-function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null,warmTerrain=async()=>true,holdable=true,cover=undefined}={}){
+function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageBytes=0,holdFrom=null,warmTerrain=async()=>true,holdable=true,cover=undefined,quietMs=QUIET_TRAVEL_MS}={}){
   let clock=0;const calls=[],queues=[],containers=[],lost=[];
   // The still picture of the map being left (held-frame.js), as a record of what was asked of it.
   const frame={held:false,holds:0,rendered:0,released:[],holdable,hold(render){this.holds++;if(!this.holdable)return false;render();this.held=true;return true;},release(fadeMs){if(this.held)this.released.push(fadeMs);this.held=false;},dispose(){this.held=false;}};
@@ -75,7 +75,7 @@ function harness({mapId='village',allowed=()=>true,fail=null,models=[],stageByte
     // From this model on the read never finishes by itself; only an abort ends it.
     if(holdFrom!==null&&containers.length>=holdFrom)await new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(signal.reason),{once:true}));
     const container={model:model.href,disposed:0,textures:[{getInternalTexture:()=>({width:1024,height:1024,format:37808,generateMipMaps:true})}],dispose(){this.disposed++;}};containers.push(container);return container;};
-  const prefetch=createNextMapPrefetch({world,base:new URL('https://prefetch.test/assets/'),now:()=>clock,allowed,loadContainer,stageBytes,pause:async()=>{},warmTerrain,heldFrame:frame,renderFrame:()=>{frame.rendered++;},...(cover?{cover}:null),
+  const prefetch=createNextMapPrefetch({world,base:new URL('https://prefetch.test/assets/'),now:()=>clock,allowed,loadContainer,stageBytes,pause:async()=>{},warmTerrain,heldFrame:frame,renderFrame:()=>{frame.rendered++;},...(cover?{cover}:null),...(quietMs===null?null:{quietMs}),
     resources:async(w,portal,base,{signal})=>{calls.push({portal,signal});await null;if(fail?.())throw new Error('network down');return {paths:['./content/'+'a'.repeat(64)+'.gltf','./content/'+'b'.repeat(64)+'.ktx2'],sizes:{},index:null,models};},
     downloads:()=>{const queue={cancelled:0,paths:null,release:null,cancel(){this.cancelled++;this.release?.(Object.assign(new Error('aborted'),{name:'AbortError'}));},
       prepare(paths,onProgress){this.paths=paths;onProgress({total:10,cached:4,loaded:0});return new Promise((resolve,reject)=>{this.finish=()=>resolve({total:10,cached:4,loaded:10,storageAvailable:true});this.release=reject;});}};queues.push(queue);return queue;}});
@@ -384,7 +384,10 @@ test('a road crossed in play with its map staged, whose last change was short, g
   // No picture can be held (no canvas, a refused copy): the screen as before.
   const blind=await stagedHarness(2,{holdable:false});crossed(blind,500);assert.equal(blind.prefetch.quietFor('warrior-plains',road),0);assert.equal(blind.prefetch.quietActive,false);
   const empty=harness();crossed(empty,500);assert.equal(empty.prefetch.quietFor('warrior-plains',road),0,'not staged: the screen as before');
-  assert.equal(quietBudget(''),QUIET_TRAVEL_MS);assert.equal(quietBudget('?quiet=0'),0);assert.equal(quietBudget('?quiet=300'),300);assert.equal(quietBudget('?quiet=99999'),5000);assert.equal(quietBudget('?quiet=x'),QUIET_TRAVEL_MS);
+  // The game: off unless a review asks for it (user 2026-11-29: the loading screen stays).
+  assert.equal(quietBudget(''),0);assert.equal(quietBudget(undefined),0);assert.equal(quietBudget('?quiet=0'),0);assert.equal(quietBudget('?quiet=1200'),QUIET_TRAVEL_MS);assert.equal(quietBudget('?quiet=300'),300);assert.equal(quietBudget('?quiet=99999'),5000);assert.equal(quietBudget('?quiet=x'),0);
+  const plain=harness({models:[MODEL(0),MODEL(1)],stageBytes:ONE*2.5,quietMs:null});plain.step(toward(PREFETCH_NEAR-1));await plain.settle();plain.queues[0].finish();await plain.settle();crossed(plain,300);
+  assert.equal(plain.prefetch.inspect().stagedModels,2);assert.equal(plain.prefetch.quietFor('warrior-plains',road),0,'by default every road shows its loading screen');assert.equal(plain.frame.holds,0);
 });
 
 test('while a map change is covered, preparations yield tasks and not frames; the moment it is shown they wait on frames again',async()=>{
