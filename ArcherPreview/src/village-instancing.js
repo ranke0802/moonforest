@@ -8,6 +8,23 @@ import {prepareShadowFade} from './village-shadow-fade.js';
 import {prepareVillageInstanceAttributes} from './village-instance-attributes.js';
 
 const contextSources=new WeakMap();
+const contextRestoreErrors=new WeakMap();
+
+export function villageContextRestoreError(scene){return contextRestoreErrors.get(scene)??null;}
+
+const restoreFailureMessage=error=>String(error?.message??error).slice(0,160)||'Unable to rebuild village scenery';
+
+function rebuildDetached(resource,engine,retryIndex=false){
+  try{resource._rebuild();return null;}
+  catch(error){
+    const message=restoreFailureMessage(error);
+    // A detached geometry creates its index buffer before its vertex buffers.
+    // Retry only that first allocation; a later failure can leave partial GPU work.
+    if(!retryIndex||message!=='Unable to create index buffer'||engine._gl?.isContextLost?.()!==false)return message;
+    try{resource._rebuild();return null;}
+    catch(retryError){return restoreFailureMessage(retryError);}
+  }
+}
 
 function recoverVillageSourceOnRestore(mesh){
   const scene=mesh.getScene(),engine=scene.getEngine();
@@ -16,23 +33,33 @@ function recoverVillageSourceOnRestore(mesh){
   if(!sources){
     sources=new Set();contextSources.set(scene,sources);
     const observer=engine.onContextRestoredObservable.add(()=>{
-      const attachedMeshes=new Set(scene.meshes),restoredGeometry=new Set(scene.geometries);
+      contextRestoreErrors.delete(scene);
+      const attachedMeshes=new Set(scene.meshes),visitedGeometry=new Set(scene.geometries);
+      let firstFailure=null;
       for(const source of sources){
         const geometry=source.geometry;
         if(source.isDisposed()||!geometry)continue;
         // AssetContainer sources and their geometry can remain detached from
         // the scene even when their live instances or LODs draw every frame.
-        if(!restoredGeometry.has(geometry)){geometry._rebuild();restoredGeometry.add(geometry);}
-        if(!attachedMeshes.has(source))source._rebuild();
+        // Never throw from this observer: Babylon clears its context-lost flag
+        // only after all observers return. Report failures without retaining resources.
+        if(!visitedGeometry.has(geometry)){
+          visitedGeometry.add(geometry);
+          const failure=rebuildDetached(geometry,engine,true);firstFailure??=failure;
+        }
+        if(!attachedMeshes.has(source)){
+          const failure=rebuildDetached(source,engine);firstFailure??=failure;
+        }
         // Babylon 9.31 rebuilds matrix buffers but leaves these custom VBOs
         // pointing at the dead context. The next native draw creates them
         // from the stored instance data. Old GL handles are already invalid.
         const custom=source._userInstancedBuffersStorage;
         if(custom?.renderPasses)custom.renderPasses={};
       }
+      if(firstFailure!==null)contextRestoreErrors.set(scene,firstFailure);
     });
     scene.onDisposeObservable.addOnce(()=>{
-      engine.onContextRestoredObservable.remove(observer);contextSources.delete(scene);sources.clear();
+      engine.onContextRestoredObservable.remove(observer);contextSources.delete(scene);contextRestoreErrors.delete(scene);sources.clear();
     });
   }
   if(sources.has(mesh))return;

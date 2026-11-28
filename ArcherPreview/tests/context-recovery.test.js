@@ -5,10 +5,10 @@ import {runInNewContext} from 'node:vm';
 import {parseHTML} from 'linkedom';
 import {createContextRecovery,createContextRecoveryNotice} from '../src/context-recovery.js';
 
-function fixture(){
+function fixture(options={}){
  const observable=()=>{const items=new Set();return {add:fn=>(items.add(fn),fn),remove:fn=>items.delete(fn),emit(){for(const fn of [...items])fn();},get size(){return items.size;}};};
  const engine={onContextLostObservable:observable(),onContextRestoredObservable:observable()},calls=[],timers=new Map();let next=0;
- const recovery=createContextRecovery(engine,{setTimer:fn=>(timers.set(++next,fn),next),clearTimer:id=>timers.delete(id),onLost:()=>calls.push('lost'),onRestored:()=>calls.push('restored'),onTimeout:()=>calls.push('timeout')});
+ const recovery=createContextRecovery(engine,{setTimer:fn=>(timers.set(++next,fn),next),clearTimer:id=>timers.delete(id),onLost:()=>calls.push('lost'),onRestored:()=>calls.push('restored'),onTimeout:()=>calls.push('timeout'),...options});
  return {engine,calls,timers,recovery,expire(){for(const fn of [...timers.values()])fn();}};
 }
 
@@ -21,6 +21,30 @@ test('context loss pauses once, restore cancels deadline, repeated cycles do not
 test('timeout remains paused even after late restore, disposal releases pending timer',()=>{
  const f=fixture();f.engine.onContextLostObservable.emit();f.expire();assert.equal(f.recovery.snapshot().state,'failed');f.engine.onContextRestoredObservable.emit();assert.deepEqual(f.calls,['lost','timeout']);assert.equal(f.recovery.blocked,true);
  const fresh=fixture();fresh.engine.onContextLostObservable.emit();fresh.recovery.dispose();assert.equal(fresh.timers.size,0);fresh.engine.onContextRestoredObservable.emit();assert.deepEqual(fresh.calls,['lost']);
+});
+
+test('owned resource failure is read after all native restore observers and stops playback', async()=>{
+ let ready=true;
+ const success=fixture({restoreReady:()=>ready});
+ ready=false;
+ success.engine.onContextRestoredObservable.add(()=>{ready=true;});
+ success.engine.onContextLostObservable.emit();
+ success.engine.onContextRestoredObservable.emit();
+ assert.equal(success.recovery.blocked,true);
+ await Promise.resolve();
+ assert.deepEqual(success.calls,['lost','restored']);
+ assert.equal(success.recovery.blocked,false);
+ assert.equal(success.timers.size,0);
+
+ const failure=fixture({restoreReady:()=>ready});
+ failure.engine.onContextRestoredObservable.add(()=>{ready=false;});
+ failure.engine.onContextLostObservable.emit();
+ failure.engine.onContextRestoredObservable.emit();
+ await Promise.resolve();
+ assert.deepEqual(failure.calls,['lost','timeout']);
+ assert.equal(failure.recovery.snapshot().state,'failed');
+ assert.equal(failure.recovery.blocked,true);
+ assert.equal(failure.timers.size,0);
 });
 
 test('recovery notice blocks dismissal, offers explicit retry only after failure, and owns its DOM lifetime',()=>{

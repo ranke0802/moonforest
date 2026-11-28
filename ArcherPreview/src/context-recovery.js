@@ -1,5 +1,5 @@
 // Event-only recovery: no per-frame polling, GPU waits, or extra render pass.
-export function createContextRecovery(engine,{timeoutMs=20000,setTimer=setTimeout,clearTimer=clearTimeout,onLost=()=>{},onRestored=()=>{},onTimeout=()=>{}}={}){
+export function createContextRecovery(engine,{timeoutMs=20000,setTimer=setTimeout,clearTimer=clearTimeout,onLost=()=>{},onRestored=()=>{},onTimeout=()=>{},restoreReady=null}={}){
  let state='ready',timer=null,losses=0,disposed=false;
  const clear=()=>{if(timer!==null)clearTimer(timer);timer=null;};
  const lost=()=>{
@@ -7,10 +7,17 @@ export function createContextRecovery(engine,{timeoutMs=20000,setTimer=setTimeou
   state='recovering';losses++;onLost();
   timer=setTimer(()=>{timer=null;if(disposed||state!=='recovering')return;state='failed';onTimeout();},timeoutMs);
  };
- const restored=()=>{
+ const finishRestore=()=>{
   // A late restoration after the deadline must not silently resume combat.
   if(disposed||state!=='recovering')return;
-  clear();state='ready';onRestored();
+  clear();
+  if(restoreReady&&!restoreReady()){state='failed';onTimeout();return;}
+  state='ready';onRestored();
+ };
+ const restored=()=>{
+  // Babylon fires its observers before clearing its loss flag. The 0.3
+  // scenery owners also finish rebuilding in that notification.
+  if(restoreReady)queueMicrotask(finishRestore);else finishRestore();
  };
  const lostObserver=engine.onContextLostObservable.add(lost),restoredObserver=engine.onContextRestoredObservable.add(restored);
  return {get blocked(){return state!=='ready';},snapshot(){return {state,losses,timeoutMs};},dispose(){if(disposed)return;disposed=true;clear();engine.onContextLostObservable.remove(lostObserver);engine.onContextRestoredObservable.remove(restoredObserver);}};
