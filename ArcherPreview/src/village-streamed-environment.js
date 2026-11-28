@@ -69,6 +69,14 @@ export function attachModelWait(error,wait,now){
 }
 export function caveStructuralRecord(record,asset){return record.placement.kind==='rock'||asset?.config?.category==='rock';}
 
+// The asset graph a map streams from: its own manifest plus the scenery this
+// document adds to it. Shared with the next-map prefetch (0.3), which must
+// name the same files before that map exists.
+export function sceneryManifestFor(world,original){
+  return world.mapId==='village'?{...original,assets:{...original.assets,...outskirtsManifest.assets}}:
+    world.gameplayV03&&world.plains?{...original,assets:{...original.assets,...plainsGateAssets}}:original;
+}
+
 export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timers}={}){
   if(world.villagePrepared)return world.villagePrepared;
   const ownLifetime=!lifetime;lifetime??=new MapLoadLifetime({signal,timeoutMs,timers,stage:'map-plan'});const snapshot=mapLoadSnapshot(world);
@@ -79,8 +87,7 @@ export async function prepareVillageStart(world,{signal,lifetime,timeoutMs,timer
   const original=await lifetime.run(()=>readMapManifest(url,{timeoutMs,timers}));checkMapLoadSnapshot(world,snapshot,lifetime);
   // The village's approved 25-asset graph stays intact. A bounded reciprocal
   // vista reuses its sources and this same streaming/lifetime path, town only.
-  const manifest=world.mapId==='village'?{...original,assets:{...original.assets,...outskirtsManifest.assets}}:
-    world.gameplayV03&&world.plains?{...original,assets:{...original.assets,...plainsGateAssets}}:original;
+  const manifest=sceneryManifestFor(world,original);
   if(world.villagePrepared)return world.villagePrepared;
   if(!manifest.complete||manifest.developmentFixture)throw new Error('완성된 마을 에셋이 필요합니다.');
   const assets=new Map(Object.entries(manifest.assets).map(([id,config])=>[id,{config,levels:villageLodSources(config,world.touchDevice,world.gameplayV03),tiers:new Map(),baseLevel:Infinity,cover:['building','tree','rock'].includes(config.category)||tallProps.has(id)}]));

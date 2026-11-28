@@ -42,6 +42,11 @@ function villageWithOutskirts(){
   if(villageLayoutSource!==placements){villageLayoutSource=placements;villageLayout=Object.freeze([...placements,...VILLAGE_PLAINS_OUTSKIRTS_PLACEMENTS]);}
   return villageLayout;
 }
+// Placements a world map starts from (replaceWorldMap) and, for 0.3, the ones it
+// draws after the settlement layout. The next-map prefetch reads the latter
+// before the map is installed; both must come from this one place.
+function mapPlacements(mapId){return mapId==='great-plains'?plainsPlacements():mapId==='witch-cave'?CAVE_PLACEMENTS:mapId==='monster-forest'?FOREST_PLACEMENTS:villageWithOutskirts();}
+export function mapScenePlacements(mapId,gameplayV03=false){const base=mapPlacements(mapId);return gameplayV03?settlementPlacements(mapId,base):base;}
 function installSettlementLayout(world){
   if(world.gameplayV03)world.placements=settlementPlacements(world.mapId,world.placements);
 }
@@ -182,7 +187,7 @@ export function replaceWorldMap(world,character){
   world.releaseGround?.();world.ground.dispose();world.floorMaterial.dispose(true,true);
   Object.assign(world.terrain,cachedMapTerrain(world.scene.getEngine(),plains?(world.gameplayV03?createGreatPlainsV03Terrain:createGreatPlainsTerrain):cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain));
   const mapId=plains?'great-plains':cave?'witch-cave':forest?'monster-forest':'village';
-  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:plains?plainsPlacements():cave?CAVE_PLACEMENTS:forest?FOREST_PLACEMENTS:villageWithOutskirts(),trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
+  Object.assign(world,{forest,cave,plains,mapId,environmentManifest:mapId,groundManifest:mapId+'-ground',placements:mapPlacements(mapId),trainingSpawn:plains?{x:-55,z:37}:cave?caveTrainingSpawn:null,environment:null});
   installSettlementLayout(world);
   configureOutdoorVista(world,{village:true,plains,villageNotch:!forest&&!cave&&!plains});
   world.setMotesVisible(!cave);
