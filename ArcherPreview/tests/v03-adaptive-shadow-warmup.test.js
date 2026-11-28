@@ -92,3 +92,58 @@ test('map generation change cancels attached temporary preparation and allows th
   scene.dispose();
   assert.equal(inspectPreparedEffects(engine).liveEffects,0);
 });
+
+test('a timed-out warmup releases detached draw wrappers and the retry keeps only its prepared effect',async t=>{
+  const {engine,scene,meshes,world,pass}=await fixture(t);
+  const source=meshes[3],sub=source.subMeshes[0];
+  scene.removeMesh(source);
+  try{
+    for(const mesh of meshes)if(mesh!==source)mesh.setEnabled(false);
+    scene.render();
+    const visible=sub._getDrawWrapper(pass,false).effect;
+    assert.ok(visible.defines.includes('#define SHADOWS'));
+    const released=[],release=engine.releaseRenderPassId.bind(engine);
+    t.mock.method(engine,'releaseRenderPassId',id=>{released.push(id);release(id);});
+    const prepared=[],create=engine.createEffect.bind(engine);
+    let now=1,first=true,forcedTimeout=false;
+    t.mock.method(engine,'createEffect',(...args)=>{
+      const effect=create(...args);
+      if(!scene.shadowsEnabled&&!prepared.includes(effect)){
+        prepared.push(effect);
+        if(first){
+          const ready=effect.isReady.bind(effect);
+          effect.isReady=()=>!first&&ready();
+        }
+      }
+      return effect;
+    });
+    const update=createAdaptiveShadowWarmup({now:()=>now,frame:async()=>{
+      await tick();
+      if(first&&prepared.length&&!forcedTimeout){forcedTimeout=true;now+=1501;}
+    }});
+    const finishDeferredDisposals=async()=>{
+      await new Promise(resolve=>setTimeout(resolve,0));
+      engine.endFrame();
+    };
+    await update(world,true);
+    assert.ok(forcedTimeout);
+    assert.equal(released.length,1);
+    assert.equal(sub._getDrawWrapper(released[0],false),undefined);
+    await finishDeferredDisposals();
+    assert.equal(prepared.length,1);
+    assert.equal(engine._compiledEffects[prepared[0].key],undefined);
+    assert.equal(inspectPreparedEffects(engine).liveEffects,0);
+
+    first=false;
+    now+=2001;
+    await update(world,true);
+    assert.equal(released.length,2);
+    assert.equal(sub._getDrawWrapper(released[1],false),undefined);
+    await finishDeferredDisposals();
+    assert.equal(prepared.length,2);
+    assert.equal(engine._compiledEffects[prepared[1].key],prepared[1]);
+    assert.equal(prepared[1]._refCount,1);
+    assert.equal(inspectPreparedEffects(engine).liveEffects,1);
+    assert.equal(sub._getDrawWrapper(pass,false).effect,visible);
+  }finally{source.dispose();}
+});

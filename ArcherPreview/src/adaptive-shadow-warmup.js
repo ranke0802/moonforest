@@ -30,7 +30,7 @@ async function prepareNoShadowVariants(scene,state,job,ownsScene){
   const pending=visibleShadowVariants(scene,state);
   if(!pending.length)return;
   const engine=scene.getEngine(),temporaryPass=engine.createRenderPassId('adaptive-no-shadows');
-  const lease=createPreparedEffectLease();
+  const lease=createPreparedEffectLease(),temporarySubMeshes=new Set();
   try{
     for(let round=0;pending.length&&round<3&&state.count<MAX_VARIANTS;round++){
       for(let i=0;i<pending.length&&state.count<MAX_VARIANTS;){
@@ -44,6 +44,7 @@ async function prepareNoShadowVariants(scene,state,job,ownsScene){
           const shadows=scene._shadowsEnabled;
           try{
             scene._shadowsEnabled=false;
+            temporarySubMeshes.add(sub);
             result=readMaterialVariant(mesh,sub,{material,instances,pass:temporaryPass});
           }finally{scene._shadowsEnabled=shadows;}
           job.checkpoint('adaptive-no-shadow:'+mesh.name);
@@ -61,6 +62,9 @@ async function prepareNoShadowVariants(scene,state,job,ownsScene){
   }finally{
     if(ownsScene())lease.commit();
     else lease.rollback();
+    // Asset-container sources can render through instances while detached from
+    // scene.meshes. Babylon only clears wrappers for meshes in that array.
+    for(const sub of temporarySubMeshes)sub._removeDrawWrapper(temporaryPass);
     engine.releaseRenderPassId(temporaryPass);
   }
 }

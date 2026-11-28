@@ -81,8 +81,8 @@ export function installShadowCasterCulling(shadows,lighting){
 }
 
 export class SceneLighting {
-  constructor(scene, { ambient, key, rim, shadows, touchDevice, village=false }) {
-    Object.assign(this, { scene, ambient, key, rim, shadows, touchDevice, village });
+  constructor(scene, { ambient, key, rim, shadows, touchDevice, village=false, gameplayV03=false }) {
+    Object.assign(this, { scene, ambient, key, rim, shadows, touchDevice, village, gameplayV03 });
     this.high = true;
     this.shadowsActive=true;this.lightDistance=village?45:25;
     this.baseDirection=key.direction.clone();
@@ -154,6 +154,25 @@ export class SceneLighting {
     for(const material of dirty)material.markDirty(true);
   }
   invalidateStaticShadows(){this.staticShadows?.invalidate();}
+  setSceneShadows(enabled){
+    if(this.scene.shadowsEnabled===enabled)return;
+    this.scene.shadowsEnabled=enabled;
+    if(!this.gameplayV03)return;
+    // An imported receiver or its material can stay in an AssetContainer
+    // while its instances draw. Babylon's scene-wide dirty pass misses it.
+    for(const mesh of this.receivers){
+      for(const sub of mesh.subMeshes??[])for(const draw of sub._drawWrappers??[]){
+        const defines=draw?.defines;
+        if(!defines?.markAsLightDirty)continue;
+        // The SDK uses the light-disposal flag to reject the previous shader
+        // while the replacement compiles. It can no longer sample shadows.
+        defines.markAsLightDirty(!enabled&&defines.SHADOWS===true);
+        defines._renderId=-1;
+        draw._wasPreviouslyReady=false;
+      }
+    }
+    this.scene.resetCachedMaterial();
+  }
   refreshReceivers() {
     // Assets arrive after the first frame. Frozen receivers may have compiled
     // while the cast list was empty, so explicitly rebuild those shader defines.
@@ -190,7 +209,7 @@ export class SceneLighting {
     this.key.direction.copyFrom(this.high?this.highDirection:this.baseDirection);
     this.follow(this.requestedFocus,true);
     this.direction.copyFrom(this.key.direction).negateInPlace().normalize();
-    this.scene.shadowsEnabled = this.shadowsActive;
+    this.setSceneShadows(this.shadowsActive);
     this.ambient.intensity = this.high ? .65 : 1.05;
     this.key.intensity = this.high ? 1.65 : 1.8;
     // One directional source plus sky fill in high quality: no extra light pass.

@@ -112,7 +112,7 @@ export function createWorld(engine, {village=false,forest=false,cave=false,plain
   shadows.filteringQuality = ShadowGenerator.QUALITY_MEDIUM;
   shadows.bias = .0008; shadows.normalBias = .02;
   shadows.setDarkness(.35);
-  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village});
+  const lighting=new SceneLighting(scene,{ambient,key,rim,shadows,touchDevice,village,gameplayV03});
   configureOutdoorVista({mountains,sky,lighting,camera},{village,plains,villageNotch:village&&!forest&&!cave&&!plains});
 
   const terrain=village?cachedMapTerrain(engine,plains?(gameplayV03?createGreatPlainsV03Terrain:createGreatPlainsTerrain):cave?createWitchCaveTerrain:forest?createMonsterForestTerrain:createVillageTerrain):new TerrainHeightField();

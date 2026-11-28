@@ -23,6 +23,10 @@ function queryShaderReady(renderer,mesh,engine){
   finally{engine.currentRenderPassId=previous;}
 }
 
+function isSingleCameraVillage({scene,camera,mapId,edition}){
+  return mapId==='village'&&edition==='moonforest-0.3'&&scene.activeCamera===camera&&!scene.frameGraph&&!(scene.activeCameras?.length>1);
+}
+
 const indexRecoveryScenes=new WeakSet();
 function installQueryIndexRecovery(scene,engine){
   if(indexRecoveryScenes.has(scene))return;
@@ -42,7 +46,7 @@ function installQueryIndexRecovery(scene,engine){
 export class VillageOcclusion {
   constructor(world,records,stats){
     this.world=world;this.engine=world.scene.getEngine();this.stats=stats;this.groups=[];
-    this.view=null;this.epoch=0;this.stableFrames=0;this.cursor=0;this.disabled=false;this.contextLost=false;this.near=new Plane(0,0,0,0);
+    this.view=null;this.epoch=0;this.stableFrames=0;this.cursor=0;this.disabled=false;this.contextLost=false;this.sharpenSuspended=false;this.near=new Plane(0,0,0,0);
     stats.occludedProps=0;stats.occlusionQueries=0;
     if(!this.engine.getCaps().supportOcclusionQuery)return;
     if(world.gameplayV03)installQueryIndexRecovery(world.scene,this.engine);
@@ -63,13 +67,9 @@ export class VillageOcclusion {
     if(world.gameplayV03&&this.groups.length){
       this.contextLost=this.engine._contextWasLost;
       this.lostObserver=this.engine.onContextLostObservable.add(()=>{
-        this.contextLost=true;this.epoch++;this.stableFrames=0;this.cursor=0;
-        this.stats.occludedProps=0;
-        for(const group of this.groups){
-          // Lost-context handles cannot be polled, reused, or deleted.
-          group.query=null;group.pending=false;group.lastQuery=-Infinity;
-          this.reveal(group);
-        }
+        this.contextLost=true;
+        // Lost-context handles cannot be polled, reused, or deleted.
+        this.discardQueries(false);
       });
       this.restoredObserver=this.engine.onContextRestoredObservable.add(()=>{this.contextLost=false;});
     }
@@ -82,8 +82,28 @@ export class VillageOcclusion {
     group.hiddenSamples=0;
     for(const r of group.items){r.occluded=false;r.root.setEnabled(caveFogRootEnabled(r));}
   }
+  discardQueries(canDelete){
+    this.epoch++;this.stableFrames=0;this.cursor=0;this.stats.occludedProps=0;
+    for(const group of this.groups){
+      if(canDelete&&group.query)this.engine.deleteQuery(group.query);
+      group.query=null;group.pending=false;group.lastQuery=-Infinity;
+      this.reveal(group);
+    }
+  }
+  queryDepthUnavailable(){
+    const {scene,camera,gameplayV03}=this.world;
+    // Phone sharpen draws the scene into its first input. AfterRender restores
+    // the output framebuffer without copying scene depth, so these queries
+    // cannot test the scenery that was drawn.
+    const suspended=!!(gameplayV03&&isSingleCameraVillage(this.world)&&scene.postProcessesEnabled&&
+      scene.postProcessManager&&!scene.prePass&&!camera._multiviewTexture&&camera._getFirstPostProcess()?.name==='phone-sharpen');
+    if(suspended===this.sharpenSuspended)return suspended;
+    this.sharpenSuspended=suspended;this.view=null;
+    if(suspended)this.discardQueries(!this.engine._contextWasLost);
+    return suspended;
+  }
   beforeRender(){
-    if(!this.groups.length||this.disabled||this.contextLost)return;
+    if(!this.groups.length||this.disabled||this.contextLost||this.queryDepthUnavailable())return;
     const view=this.world.camera.getTransformationMatrix().m;
     const changed=!this.view||view.some((n,i)=>Math.abs(n-this.view[i])>.00001);
     if(changed){this.epoch++;this.stableFrames=0;for(const g of this.groups)this.reveal(g);}
@@ -96,10 +116,9 @@ export class VillageOcclusion {
     this.stats.occludedProps=occludedProps;
   }
   afterRender(){
-    if(this.disabled||this.contextLost||this.stableFrames<3||!this.groups.length)return;
+    if(this.disabled||this.contextLost||!this.groups.length||this.queryDepthUnavailable()||this.stableFrames<3)return;
     const now=performance.now(),engine=this.engine,renderer=this.world.scene.getBoundingBoxRenderer(),camera=this.world.camera;
-    const scene=this.world.scene;
-    const screenOnly=this.world.mapId==='village'&&this.world.edition==='moonforest-0.3'&&scene.activeCamera===camera&&!scene.frameGraph&&!(scene.activeCameras?.length>1);
+    const screenOnly=isSingleCameraVillage(this.world);
     const planes=screenOnly?sceneryProjection(camera).planes:null;
     if(!planes)Frustum.GetNearPlaneToRef(camera.getTransformationMatrix(),this.near);
     const near=planes?planes[0]:this.near;

@@ -279,7 +279,17 @@ let adaptiveStoredLevel=0;try{adaptiveStoredLevel=Number(globalThis.localStorage
 const adaptivePerformance=new AdaptivePerformance({enabled:touchDevice&&!!versionRoute.edition,level:resumeAdaptiveLevel(adaptiveStoredLevel)});
 const warmAdaptiveShadows=createAdaptiveShadowWarmup();
 function effectivePlainsView(value){const cap=adaptivePerformance.settings.viewCap;return cap?Math.min(value,cap):value;}
-function applyAdaptiveShadows(){const guard=adaptivePerformance.settings;if(world?.lighting){const restore=qualityRestore.value;world.lighting.actorShadowRange=restore.farActorShadows&&!guard.forceActorShadowRange?Infinity:guard.actorShadowRange??32;const map=world.lighting.shadows?.getShadowMap?.();if(map)map.refreshRate=restore.steadyShadows?1:guard.shadowRefresh??1;}if(world)world.detailCullRange=adaptivePerformance.settings.detailRange??0;if(world?.scene&&world.lighting)world.scene.shadowsEnabled=!!world.lighting.shadowsActive&&adaptivePerformance.settings.shadows;}
+function applyAdaptiveShadows(){
+  if(!world)return;
+  const guard=adaptivePerformance.settings,lighting=world.lighting;
+  world.detailCullRange=guard.detailRange??0;
+  if(!lighting)return;
+  const restore=qualityRestore.value;
+  lighting.actorShadowRange=restore.farActorShadows&&!guard.forceActorShadowRange?Infinity:guard.actorShadowRange??32;
+  const map=lighting.shadows?.getShadowMap?.();
+  if(map)map.refreshRate=restore.steadyShadows?1:guard.shadowRefresh??1;
+  lighting.setSceneShadows(!!lighting.shadowsActive&&guard.shadows);
+}
 function applyAdaptivePerformance(){try{globalThis.localStorage?.setItem(ADAPTIVE_LEVEL_KEY,String(adaptivePerformance.level));}catch{/* storage optional */}applyRenderQuality();if(world){applyPlainsViewDistance(world,effectivePlainsView(plainsViewDistanceControl.value));applyAdaptiveRange(world,adaptivePerformance.settings.rangeScale);world.detailCullRange=adaptivePerformance.settings.detailRange??0;}applyAdaptiveShadows();}
 let rollDirection={x:0,z:1};
 const strikeSampler=new PlayerStrikeSampler();

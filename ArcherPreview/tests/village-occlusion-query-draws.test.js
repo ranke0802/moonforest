@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
-import {AbstractMesh,FreeCamera,Frustum,MeshBuilder,NullEngine,Plane,Scene,TransformNode,Vector3} from '@babylonjs/core';
+import {AbstractMesh,FreeCamera,Frustum,MeshBuilder,NullEngine,Plane,Scene,SharpenPostProcess,TransformNode,Vector3} from '@babylonjs/core';
 import {VillageOcclusion} from '../src/village-occlusion.js';
 import {caveFogRootEnabled} from '../src/cave-fog-of-war.js';
 
@@ -81,6 +81,50 @@ test('the 0.3 village skips offscreen proxy draws and resumes querying when the 
   for(let i=0;i<4;i++)current.step((i+1)*50,{visible:true});
   assert.equal(current.stats.occlusionQueries,2);
   assert.ok(current.records.every(r=>r.root.isEnabled()&&!r.occluded));
+});
+
+test('phone sharpen skips 0.3 village queries without scene depth and discards pending results',async t=>{
+  const clock={now:0};t.mock.method(performance,'now',()=>clock.now);
+  const f=fixture(t,{clock,gameplayV03:true});
+  f.world.edition='moonforest-0.3';f.world.mapId='village';
+  await f.warm();f.step(0,{available:false});
+  const oldQueries=f.queries.slice(),draws=f.draws.length;
+  assert.ok(oldQueries.length>0);
+  const available=f.engine.isQueryResultAvailable;
+  f.engine.isQueryResultAvailable=query=>{assert.ok(!oldQueries.includes(query),'discarded queries must never be polled');return available(query);};
+  for(const r of f.records){r.occluded=true;r.root.setEnabled(false);}
+  f.records[1].fogVisible=false;f.records[2].cellActive=false;
+  const sharpen=new SharpenPostProcess('phone-sharpen',1,f.camera);
+  for(let i=1;i<=5;i++)f.step(i*50);
+  assert.equal(f.stats.occludedProps,0);
+  assert.deepEqual(f.records.map(record=>record.root.isEnabled()),[true,false,false]);
+  assert.ok(f.records.every(record=>!record.occluded));
+  assert.deepEqual(f.deleted,oldQueries.map(query=>query.id));
+  assert.equal(f.queries.length,oldQueries.length);
+  assert.equal(f.draws.length,draws);
+  assert.ok(f.occlusion.groups.every(group=>!group.pending&&group.query===null&&group.hiddenSamples===0));
+
+  sharpen.dispose(f.camera);
+  for(let i=6;i<=8;i++)f.step(i*50);
+  assert.equal(f.queries.length,oldQueries.length,'wait for fresh stable frames after switching back');
+  f.step(450);
+  assert.equal(f.queries.length,oldQueries.length+1);
+  assert.ok(f.draws.length>draws);
+  f.step(500,{visible:true});
+  assert.equal(f.records[0].root.isEnabled(),true);
+});
+
+test('unsharpened target and 0.2 keep their existing query path',async t=>{
+  const clock={now:0};t.mock.method(performance,'now',()=>clock.now);
+  const older=fixture(t,{clock}),current=fixture(t,{clock,gameplayV03:true});
+  older.world.edition='moonforest-0.2';older.world.mapId='village';
+  current.world.edition='moonforest-0.3';current.world.mapId='village';
+  current.scene.postProcessesEnabled=false;
+  for(const f of [older,current]){
+    new SharpenPostProcess('phone-sharpen',1,f.camera);
+    await f.warm();f.step(0);
+    assert.equal(f.stats.occlusionQueries,2);
+  }
 });
 
 test('a cold dedicated query pass cannot be approved by a ready ordinary scene pass',async t=>{
